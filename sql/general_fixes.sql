@@ -1171,3 +1171,5 @@ replace into gameobject_template (entry, patch, type, displayId, name, faction, 
 
 update item_template set script_name = '' where sentry = 50056;
 update item_template set spellid_1 = 46035 where entry = 50056;
+
+delete from gameobject_template where script_name = 'go_orb_of_the_bronze_dragonflight';
