@@ -705,3 +705,15 @@ update quest_template set requiredraces = 1101 where entry = 40149;
 update creature_template set script_name = 'npc_captain_saltbeard' where entry = 92144;
 update creature_template set script_name = 'npc_captain_blackeye' where entry = 92143;
 update creature_template set script_name = 'npc_captain_ironhoof' where entry = 92142;
+
+-- Insom'ni <The Great Hermit>, display ID 4534, level 61 ELITE BOSS, has 12000 mana, has 65151 hp, NEUTRAL both factions cannot be attacked, greeting text : "A great power lurks, and I seek to combat it. Those who wronged me shall pay the ultimate price, and I will make sure they suffer. You are going to be the one who helps me, and perhaps I shall reward you for your efforts. \n\n Well, make yourself at home, there is much to do and much to discuss."
+
+REPLACE INTO creature_template VALUES 
+(60446, 0, 4534, 0, 0, 0, 'Insom\'ni', 'The Great Hermit', 0, 61, 61, 65151, 65151, 12000, 12000, 3791, 31, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 873, 1039, 0, 278, 1, 2000, 2000, 2, 2, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 503, 2517, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 53106; set @magic_number = 60446;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'A great power lurks, and I seek to combat it. Those who wronged me shall pay the ultimate price, and I will make sure they suffer. You are going to be the one who helps me, and perhaps I shall reward you for your efforts.\n\nWell, make yourself at home, there is much to do and much to discuss.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
