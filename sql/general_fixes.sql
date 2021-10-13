@@ -1150,3 +1150,15 @@ replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minleve
 replace into creature_questrelation (id, quest) values (40049, 39000);
 replace into creature_involvedrelation (id, quest) values (40049, 39000);
 
+-- Curiosity Leads Us Forward
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,39001,1,11,6,0,0,'Curiosity Leads Us Forward','This modish Senator over there won\'t fool anyone! Part of Explorers\' League, sure thing! Bah! What a bluster!\n\nTell ya what, ye can never call yerself an Explorer unless ya go and check every nook \'n cranny by yerself!\n\nOf course he never gone any farther than this quarry here. But I see I won\'t hafta talk ye down fer some poking around and find things out by yerself, eh?\n\nGood. I\'d like ya ta tell me what you\'ll find out in that cave with all those troggs.\n\nThey must\'ve come from somewhere, right?','Explore the cave of Gol\'bolar Quarry.','If only we had some mages cooperating with our reasearch here instead of fiddling with all those trinkets they seem to be glued to like a goblin to gold!\n\nBah… Frustrations won\'t bring us anywhere, right? So… be sure to have your rest once you\'re done \'ere.','Do tell! Were there any signes of where they come from? Any artifacts?\n\nTools they might\'ve used? Anything? Wha… That\'s it?\n\nJust a cave?? This is time wasted then I guess. Let me give ya sum coins though, you did the job well no matter what.\n\nHere, not much, but it is a good start, kid.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1650,475,47,125,54,75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (1255, 39001);
+replace into creature_involvedrelation (id, quest) values (1255, 39001);
+
+update quest_template set objectivetext1 = 'Explore the cave of Gol\'bolar Quarry', reqcreatureorgoid1 = 20120, reqcreatureorgocount1 = 1 where entry = 39001;
+update creature_template set npc_flags = 2 where entry = 1255;
+
+REPLACE INTO `creature_template` (`entry`, `name`, `display_id1`) VALUES
+(20120, 'Quest 39001 Custom Trigger', 328);
