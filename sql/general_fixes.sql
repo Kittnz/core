@@ -1168,3 +1168,6 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 replace into gameobject_template (entry, patch, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (3000102, 0, 5, 381, 'Quest 39001 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_exploration_trigger');
+
+update item_template set script_name = '' where sentry = 50056;
+update item_template set spellid_1 = 46035 where entry = 50056;

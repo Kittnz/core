@@ -6190,8 +6190,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 }
                 else if (m_spellInfo->Id == 46012) // Portable Wormhole Generator
                 {
-                    if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() ||
-                       (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
+                    if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() || (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
                     {
                         m_caster->ToPlayer()->GetSession()->SendNotification("Cannot use it right now.");
                         return SPELL_FAILED_DONT_REPORT;
@@ -6202,12 +6201,16 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }
-                else if (m_spellInfo->Id == 46002 || m_spellInfo->Id == 46010 || m_spellInfo->Id == 46200) // Goblin Brainwashing Device || Teleport to Guild House
+                else if (m_spellInfo->Id == 46002 || m_spellInfo->Id == 46010 || m_spellInfo->Id == 46200 || m_spellInfo->Id == 46035) 
                 {
-                    if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() ||
-                        (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
+                    if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() || (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
                     {
-                        m_caster->ToPlayer()->GetSession()->SendNotification("Cannot use it right now.");
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You cannot use this right now.");
+                        return SPELL_FAILED_DONT_REPORT;
+                    }
+                    if (m_spellInfo->Id == 46035 && !m_caster->ToPlayer()->IsCityProtector())
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You cannot use this right now.");
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }

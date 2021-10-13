@@ -112,66 +112,6 @@ bool ItemUseSpell_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool ItemUseSpell_city_protector_scroll(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer->IsCityProtector() || pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE))
-    {
-        ChatHandler(pPlayer).PSendSysMessage("|cffff8040You are not a City Protector anymore.|r");
-        pPlayer->RemoveSpellCooldown(7794, true);
-        return false;
-    }
-    else
-    {
-        switch (pPlayer->GetRace())
-        {
-        case RACE_HUMAN:
-            // Stormwind City
-            pPlayer->TeleportTo(0, -8828.231445f, 627.927490f, 94.055664f, 0.0f);
-            break;
-        case RACE_GNOME:
-            // Ironforge
-            pPlayer->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
-            break;
-        case RACE_DWARF:
-            // Ironforge
-            pPlayer->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
-            break;
-        case RACE_NIGHTELF:
-            // Darnassus
-            pPlayer->TeleportTo(1, 9962.712891f, 2280.142822f, 1341.394409f, 0.0f);
-            break;
-        case RACE_ORC:
-            // Orgrimmar
-            pPlayer->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
-            break;
-        case RACE_TAUREN:
-            // Thunder Bluff
-            pPlayer->TeleportTo(1, -1272.703735f, 116.886490f, 131.016861f, 0.0f);
-            break;
-        case RACE_TROLL:
-            // Orgrimmar
-            pPlayer->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
-            break;
-        case RACE_UNDEAD:
-            //Undercity
-            pPlayer->TeleportTo(0, 1822.0999f, 238.638855f, 60.694809f, 0.0f);
-            break;
-        case RACE_GOBLIN:
-            // Mudsprocket
-            pPlayer->TeleportTo(1, -4594.56f, -3208.2f, 34.9253f, 4.65f);
-            break;
-        case RACE_HIGH_ELF:
-            // Alah'Thalas
-            pPlayer->TeleportTo(0, 4226.82f, -2722.43f, 121.874f, 5.3f);
-            break;
-        default:
-            break;
-        }
-
-        return true;
-    }
-}
-
 bool ItemUseSpell_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
@@ -8062,11 +8002,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_summer_vestment";
     newscript->pItemUseSpell = &ItemUseSpell_summer_vestment;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_city_portal";
-    newscript->pItemUseSpell = &ItemUseSpell_city_protector_scroll;
     newscript->RegisterSelf();
 
     newscript = new Script;
