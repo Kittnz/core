@@ -1613,60 +1613,6 @@ GameObjectAI* GetAI_go_survival_tent(GameObject* gameobject)
     return new go_survival_tent(gameobject);
 }
 
-struct go_custom_rested : public GameObjectAI
-{
-    explicit go_custom_rested(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_bUsed = false;
-        m_uiJustUsedTimer = 1;
-        m_uiUpdateTimer = 1000;
-    }
-
-    bool m_bUsed;
-    uint32 m_uiJustUsedTimer;
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiJustUsedTimer < uiDiff)
-        {
-            if (m_uiUpdateTimer < uiDiff)
-            {
-                std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 22.0f);
-                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-                if (me->GetEntry() == 1000465) // Large distance for Alah'Thalas.
-                    Cell::VisitWorldObjects(me, searcher, 100.0f);
-                else
-                    Cell::VisitWorldObjects(me, searcher, 22.0f);
-
-                for (Player* pPlayer : players)
-                {
-                    pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-                    pPlayer->SetRestType(REST_TYPE_IN_TAVERN);
-                }
-                m_uiUpdateTimer = 2500;
-            }
-            else
-            {
-                m_uiUpdateTimer -= uiDiff;
-            }
-            m_bUsed = true;
-        }
-        else
-        {
-            m_uiJustUsedTimer -= uiDiff;
-        }
-    }
-};
-
-GameObjectAI* GetAI_go_custom_rested(GameObject* gameobject)
-{
-    return new go_custom_rested(gameobject);
-}
-
-
 struct go_campfire_rested : public GameObjectAI
 {
     explicit go_campfire_rested(GameObject* pGo) : GameObjectAI(pGo)
@@ -4264,66 +4210,6 @@ bool QuestAccept_npc_kathy_wake(Player* pPlayer, Creature* pQuestGiver, Quest co
         pQuestGiver->MonsterSayToPlayer("Do not be frightened, these troggs are small and weak. They're easy to take out alone. However, if they swarm the caravans, people could get hurt, and we cannot spare more men to deal with them while keeping the other threats out there away from the lodge.", pPlayer);
     }
     return false;
-}
-
-struct go_exploration_trigger : public GameObjectAI
-{
-    explicit go_exploration_trigger(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_bUsed = false;
-        m_uiJustUsedTimer = 1;
-        m_uiUpdateTimer = 1000;
-    }
-
-    bool m_bUsed;
-    uint32 m_uiJustUsedTimer;
-    uint32 m_uiUpdateTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiJustUsedTimer < uiDiff)
-        {
-            if (m_uiUpdateTimer < uiDiff)
-            {
-                std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 30.0f);
-                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-                Cell::VisitWorldObjects(me, searcher, 30.0f);
-
-                for (Player* pPlayer : players)
-                {
-                    if (pPlayer->GetQuestStatus(QUEST_GATHERING_INTEL) == QUEST_STATUS_INCOMPLETE)
-                    {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_GATHERING_INTEL);
-                        if (cInfo != nullptr)
-                            pPlayer->KilledMonster(cInfo, ObjectGuid());
-                    }
-                    if (pPlayer->GetQuestStatus(70029) == QUEST_STATUS_INCOMPLETE) // What We Know (Ashenvale)
-                    {
-                        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(70028);
-                        if (cInfo != nullptr)
-                            pPlayer->KilledMonster(cInfo, ObjectGuid());
-                    }
-                }
-                m_uiUpdateTimer = 2500;
-            }
-            else
-            {
-                m_uiUpdateTimer -= uiDiff;
-            }
-            m_bUsed = true;
-        }
-        else
-        {
-            m_uiJustUsedTimer -= uiDiff;
-        }
-    }
-};
-
-GameObjectAI* GetAI_go_exploration_trigger(GameObject* gameobject)
-{
-    return new go_exploration_trigger(gameobject);
 }
 
 #define EMPTY_BARREL  80209
@@ -7834,11 +7720,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_exploration_trigger";
-    newscript->GOGetAI = &GetAI_go_exploration_trigger;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_kathy_wake";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_kathy_wake;
     newscript->RegisterSelf();
@@ -8070,11 +7951,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "go_survival_tent";
     newscript->GOGetAI = &GetAI_go_survival_tent;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_custom_rested";
-    newscript->GOGetAI = &GetAI_go_custom_rested;
     newscript->RegisterSelf();
 
     newscript = new Script;

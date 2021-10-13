@@ -1158,7 +1158,7 @@ replace into creature_involvedrelation (id, quest) values (1255, 39001);
 update quest_template set objectivetext1 = 'Explore the cave of Gol\'bolar Quarry', reqcreatureorgoid1 = 20120, reqcreatureorgocount1 = 1 where entry = 39001;
 update creature_template set npc_flags = 3 where entry = 1255;
 
-REPLACE INTO `creature_template` (`entry`, `name`, `display_id1`) VALUES
+REPLACE INTO creature_template (entry, name, display_id1) VALUES
 (20120, 'Quest 39001 Custom Trigger', 328);
 
 set @gossip_menu_id = 53118; set @magic_number = 1255;
@@ -1167,4 +1167,4 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Exploring
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-
+replace into gameobject_template (entry, patch, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (3000102, 0, 5, 381, 'Quest 39001 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_exploration_trigger');
