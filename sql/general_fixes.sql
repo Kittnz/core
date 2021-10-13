@@ -693,14 +693,14 @@
 	 set @world_rare_id = 49010;
 	update creature_template set loot_id = @world_rare_id where entry = @world_rare_id; 
 	replace into creature_loot_template values 
-	(@world_rare_id, 83270, 100, 1, 1, 1, 0, 0, 10),
-	(@world_rare_id, 83271, 100, 1, 1, 1, 0, 0, 10),
-	(@world_rare_id, 83272, 100, 1, 1, 1, 0, 0, 10),
+	(@world_rare_id, 51023, 100, 1, 1, 1, 0, 0, 10),
+	(@world_rare_id, 51024, 100, 1, 1, 1, 0, 0, 10),
+	(@world_rare_id, 51024, 100, 1, 1, 1, 0, 0, 10),
 	(@world_rare_id, 83273, 100, 1, 1, 1, 0, 0, 10),
 	(@world_rare_id, 83274, 0.5, 2, 1, 1, 0, 0, 10);
 	 
 	 replace into item_template values
-	 ('83270', '0', '4', '2', 'Vilebranch Grips', '', '16711', '3', '0', '1', '45832', '11458', '10', '-1', '-1', '55',
+	 ('51023', '0', '4', '2', 'Vilebranch Grips', '', '16711', '3', '0', '1', '45832', '11458', '10', '-1', '-1', '55',
 	 '50', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '3', '6',
 	 '6', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
 	 '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '109', '0', '0', '0',
@@ -710,7 +710,7 @@
 	 '0', '1', NULL);
 	 
 	 replace into item_template values
-	 ('83271', '0', '4', '0', 'Cursed Idol', 'Laced with corrupting power', '1401', '3', '0', '1', '12976', '3244', '12', '-1', '-1', '52',
+	 ('51024', '0', '4', '0', 'Cursed Idol', 'Laced with corrupting power', '1401', '3', '0', '1', '12976', '3244', '12', '-1', '-1', '52',
 	 '50', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
 	 '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
 	 '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -720,7 +720,7 @@
 	 '0', '1', NULL);
 	 
 	 replace into item_template values
-	 ('83272', '0', '4', '1', 'Vilebranch Seer\'s Dress', 'Ceremonial and sacred leggings', '5928', '3', '0', '1', '55496', '13874', '7', '-1', '-1', '55',
+	 ('51025', '0', '4', '1', 'Vilebranch Seer\'s Dress', 'Ceremonial and sacred leggings', '5928', '3', '0', '1', '55496', '13874', '7', '-1', '-1', '55',
 	 '50', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '12', '3', '5',
 	 '6', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
 	 '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '68', '0', '0', '0',
@@ -1104,7 +1104,49 @@
 
 -- Steamwheedle quartermaster:
 
-replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (40049, 0, 18670, 0, 0, 0, 'Vizlow', 'Steamwheedle Blood Ring Quartermaster', 0, 11, 11, 456, 456, 0, 0, 20, 12, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, '');
+replace into creature_template (entry, patch, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (40049, 0, 18670, 0, 0, 0, 'Vizlow', 'Blood Ring', 0, 11, 11, 456, 456, 0, 0, 20, 12, 16388, 1.1, 1.14286, 0, 20, 5, 0, 0, 1, 12, 14, 0, 64, 1, 2000, 2090, 1, 4864, 0, 0, 0, 0, 0, 0, 18.392, 25.289, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, '');
 
-update creature_template set faction = 1008 where entry = 40049;
+update creature_template set faction = 1008, npc_flags = 7 where entry = 40049;
 replace into creature_display_info_addon (display_id) values (18670);
+
+
+
+replace item_template (entry, patch, class, subclass, name, description, display_id, quality, flags, buy_count, buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level, required_level, required_skill, required_skill_rank, required_spell, required_honor_rank, required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable, container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2, dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block, armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material, start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound, duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry, script_name) VALUES (83270, 0, 15, 0, 'Anniversary Gift', 'It\'s Turtle WoW\'s 3rd anniversary! Many thanks for being the best gaming community in the world!', 29445, 1, 4, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into item_template (entry, patch, class, subclass, name, description, display_id, quality, flags, buy_count, buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level, required_level, required_skill, required_skill_rank, required_spell, required_honor_rank, required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable, container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2, dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block, armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material, start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound, duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry, script_name) VALUES (83271, 6, 0, 0, 'Delicious Birthday Cake', 'Happy Birthday, Turtle WoW!', 34581, 1, 0, 5, 4000, 0, 0, 32767, -1, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25990, 0, -1, 0, 0, 11, 1000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into item_template values (83272, 0, 15, 0, 'Mr. Tails', 'Save up on acorns along the way and share some undivided attention & love with Mr.Tails and he\'ll be the best companion on your long journey through Azeroth.',  6417, 1, 0, 1, 6000, 1500, 0, -1, -1, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28505, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, null);
+replace into creature_template values (70019, 0, 18376, 0, 0, 0, 'Mr. Tails', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 2, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+replace into custom_pet_entry_relation values (83272, 70019); 
+
+replace into creature_display_info_addon (display_id) values (18376);
+
+update item_template set bonding = 1, quality = 3 where entry = 83270;
+update item_template set bonding = 1, quality = 3 where entry = 83271;
+update item_template set bonding = 1, quality = 3 where entry = 83272;
+update item_template set name = 'Strawberry Schnapps', description = 'Party means presents! Also party means a lot of joy. What joy is there with no schnapps?' where entry = 51020;
+
+update item_template set sell_price = 0, buy_price = 0 where entry = 83270;
+update item_template set sell_price = 0, buy_price = 0 where entry = 83271;
+update item_template set sell_price = 0, buy_price = 0 where entry = 83272;
+update item_template set sell_price = 0, buy_price = 0 where entry = 51020;
+
+replace into item_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount, condition_id, patch_min, patch_max) values 
+
+(83270, 9312, 100, 1, 1, 1, 0, 0, 10),   
+(83270, 9313, 100, 1, 1, 1, 0, 0, 10),   
+(83270, 9318, 100, 1, 1, 1, 0, 0, 10),  
+(83270, 51020, 100, 2, 1, 1, 0, 0, 10),  
+(83270, 83271, 100, 3, 1, 1, 0, 0, 10),   
+(83270, 83272, 100, 4, 1, 1, 0, 0, 10),
+(83270, 83272, 100, 4, 1, 1, 0, 0, 10);
+
+update item_template set max_count = 1 where entry = 83270;
+update item_template set max_count = 1 where entry = 83271;
+update item_template set max_count = 1 where entry = 83272;
+
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,39000,977,60,50,0,0,'Goblin Brainwashing Device','Come on up folks and behold, Vizlows magical ahm... MIST machine!\n\n<Vizlow sizes you up and down.>\n\nAh, a potential customer! You must have come from across the world to see the wonders that my machines do.\n\nNo? Oh well, it doesn\'t matter, THEN, it must be fate or whatever deity you believe in that has brought you to me. Listen, this machine can do wonders kid, it can expand your physical and mental capabilities!\n\nAnd all you need to do is insert gold in it to make it work, so what do you say pay 10 gold to activate it and of course, I will need 340, for ahm... materials, yes materials!','Give Vizlow 350 gold coins to buy and activate the mysterious machine.','Got the gold yet?','You actually want to buy it?!\n\nI mean of course you do it\'s a great oportunity. Oh and sign this paper, it\'s just say that you own the machine now, and uhm...\n\n<Vizlow mumbles.>\n\nThat you are aware of the risks.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-3500000,1040,0,0,0,0,0,0,0,0,0,0,0,51715,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+replace into creature_questrelation (id, quest) values (40049, 39000);
+replace into creature_involvedrelation (id, quest) values (40049, 39000);
+
