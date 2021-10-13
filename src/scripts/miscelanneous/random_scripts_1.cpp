@@ -1473,14 +1473,6 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 	return true;
 }
 
-
-bool GOHello_go_orb_of_the_bronze_dragonflight(Player* pPlayer, GameObject* pGo)
-{
-    pPlayer->TeleportTo(1, -8156.288086f, -4809.846191f, 35.879276f, 5.267656f);
-
-    return true;
-}
-
 bool GOHello_go_portable_wormhole(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())
@@ -1709,22 +1701,6 @@ bool GOHello_go_portal_to_darnassus(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetTeam() == ALLIANCE)
         pPlayer->TeleportTo(1, 9962.712891f, 2280.142822f, 1341.394409f, 0.0f);
-
-    return true;
-}
-
-bool GOHello_go_portal_to_ironforge(Player* pPlayer, GameObject* pGo)
-{
-    if (pPlayer->GetTeam() == ALLIANCE)
-        pPlayer->TeleportTo(0, -4917.0f, -955.0f, 502.0f, 0.0f);
-
-    return true;
-}
-
-bool GOHello_go_portal_to_orgrimmar(Player* pPlayer, GameObject* pGo)
-{
-    if (pPlayer->GetTeam() == HORDE)
-        pPlayer->TeleportTo(1, 1437.0f, -4421.0f, 25.24f, 1.65f);
 
     return true;
 }
@@ -2365,24 +2341,6 @@ bool ItemUseSpell_item_picnic_umbrella(Player* pPlayer, Item* pItem, const Spell
     return false;
 }
 
-bool GossipHello_npc_dirge_the_bouncer(Player* p_Player, Creature* p_Creature)
-{
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is this place?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why do they call you Dirge?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-    p_Player->SEND_GOSSIP_MENU(90200, p_Creature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_dirge_the_bouncer(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-        p_Creature->MonsterSay("This be tha Grey Raven lad. Ye better have coin ta pay for yer drinks. There's no handouts here.", 7, 0);
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
-        p_Creature->MonsterSay("They call me Dirge, 'cause I'm tha last thing ye hear before they put ye in tha ground.", 7, 0);
-    p_Player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Ardent Watch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -2400,26 +2358,6 @@ bool GossipSelect_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creatur
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
 }
-
-bool GossipHello_npc_joshua_westfield(Player* p_Player, Creature* p_Creature)
-{
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Redwater Syndicate?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    p_Player->SEND_GOSSIP_MENU(90341, p_Creature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_joshua_westfield(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        p_Creature->MonsterSay("We are a syndicate, we make profit, we work for ourselves and we fight like brothers in arms. Do you think you have what it takes to join a syndicate? Talk to Grohkan!", 7, 0);
-        p_Creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-    }
-
-    p_Player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 
 bool GossipHello_npc_terry_palin(Player* pPlayer, Creature* pCreature)
 {
@@ -2812,25 +2750,6 @@ bool GossipSelect_title_masker(Player* player, Creature* creature, uint32 sender
             ChatHandler(player).PSendSysMessage("|cffff8040You carefully place 5 gold coins in the dealer's hand.|r");
         }
         ChatHandler(player).SendSysMessage("Please logout and login again!");
-    }
-    player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-bool GossipHello_birthday_dragon(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(60000) == QUEST_STATUS_INCOMPLETE)
-        if (!pPlayer->GetQuestRewardStatus(60000))
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Speedy is having a Birthday Party today!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-    pPlayer->SEND_GOSSIP_MENU(90301, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_birthday_dragon(Player* player, Creature* creature, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF) {
-        creature->PMonsterSay("A birthday party? Why would HE need such a ... Nevermind. Since it's Speedy, I'm going to bring some joy to old friend no matter the reason.");
-        player->AddItem(51022, 1);
     }
     player->CLOSE_GOSSIP_MENU();
     return true;
@@ -7744,21 +7663,9 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_joshua_westfield";
-    newscript->pGossipHello = &GossipHello_npc_joshua_westfield;
-    newscript->pGossipSelect = &GossipSelect_npc_joshua_westfield;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_lost_farm_sheep";
     newscript->pGossipHello = &GossipHello_npc_lost_farm_sheep;
     newscript->pGossipSelect = &GossipSelect_npc_lost_farm_sheep;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_dirge_the_bouncer";
-    newscript->pGossipHello = &GossipHello_npc_dirge_the_bouncer;
-    newscript->pGossipSelect = &GossipSelect_npc_dirge_the_bouncer;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -7834,12 +7741,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "birthday_dragon";
-    newscript->pGossipHello = &GossipHello_birthday_dragon;
-    newscript->pGossipSelect = &GossipSelect_birthday_dragon;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "mining_enchanter";
     newscript->pGossipHello = &GossipHello_MiningEnchanter;
     newscript->pGossipSelect = &GossipSelect_MiningEnchanter;
@@ -7884,11 +7785,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_orb_of_the_bronze_dragonflight";
-    newscript->pGOHello = &GOHello_go_orb_of_the_bronze_dragonflight;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "go_survival_tent";
     newscript->GOGetAI = &GetAI_go_survival_tent;
     newscript->RegisterSelf();
@@ -7897,26 +7793,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "go_radio";
     newscript->pGOHello = &GOHello_go_radio;
     newscript->pGOGossipSelect = &GOSelect_go_radio;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_portal_to_darnassus";
-    newscript->pGOHello = &GOHello_go_portal_to_darnassus;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_portal_to_ironforge";
-    newscript->pGOHello = &GOHello_go_portal_to_darnassus;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_portal_to_stormwind";
-    newscript->pGOHello = &GOHello_go_portal_to_stormwind;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_portal_to_orgrimmar";
-    newscript->pGOHello = &GOHello_go_portal_to_orgrimmar;
     newscript->RegisterSelf();
 
     newscript = new Script;
