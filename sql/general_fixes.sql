@@ -307,61 +307,59 @@
 	replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 	update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-	replace into creature_loot_template values (91844, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91844, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91844, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91844, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91844, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (91845, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91845, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91845, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91845, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91845, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (91846, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91846, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91846, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91846, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91846, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (91847, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91847, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91847, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91847, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (91847, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (92135, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92135, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92135, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92135, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92135, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (92136, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92136, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92136, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92136, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92136, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (92138, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92138, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92138, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92138, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92138, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (92139, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92139, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92139, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92139, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92139, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-	replace into creature_loot_template values (92140, 83240, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92140, 83241, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92140, 83242, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92140, 83243, 3, 1, 1, 1, 0, 0, 10);
-	replace into creature_loot_template values (92140, 83244, 3, 1, 1, 1, 0, 0, 10);
-
-
+	replace into creature_loot_template values (91844, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91844, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91844, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91844, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91844, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (91845, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91845, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91845, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91845, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91845, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (91846, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91846, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91846, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91846, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91846, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (91847, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91847, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91847, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91847, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (91847, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (92135, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92135, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92135, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92135, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92135, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (92136, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92136, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92136, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92136, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92136, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (92138, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92138, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92138, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92138, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92138, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (92139, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92139, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92139, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92139, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92139, 83244, 1, 1, 1, 1, 0, 0, 10);
+															  
+	replace into creature_loot_template values (92140, 83240, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92140, 83241, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92140, 83242, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92140, 83243, 1, 1, 1, 1, 0, 0, 10);
+	replace into creature_loot_template values (92140, 83244, 1, 1, 1, 1, 0, 0, 10);
 
 	set @creature_loot_id = 91844; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
 	set @creature_loot_id = 91845; update creature_template set loot_id = @creature_loot_id where entry = @creature_loot_id;
@@ -1158,7 +1156,15 @@ replace into creature_questrelation (id, quest) values (1255, 39001);
 replace into creature_involvedrelation (id, quest) values (1255, 39001);
 
 update quest_template set objectivetext1 = 'Explore the cave of Gol\'bolar Quarry', reqcreatureorgoid1 = 20120, reqcreatureorgocount1 = 1 where entry = 39001;
-update creature_template set npc_flags = 2 where entry = 1255;
+update creature_template set npc_flags = 3 where entry = 1255;
 
 REPLACE INTO `creature_template` (`entry`, `name`, `display_id1`) VALUES
 (20120, 'Quest 39001 Custom Trigger', 328);
+
+set @gossip_menu_id = 53118; set @magic_number = 1255;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Exploring is like tasting a new ale or a fresh brew! Of course you get drunk eventually.\n\nExploring is way more healthy though. Unless you get some troggs intead of a good grog.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+

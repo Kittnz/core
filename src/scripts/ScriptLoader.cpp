@@ -280,6 +280,7 @@ void AddSC_random_scripts_2();
 void AddSC_random_scripts_3();
 
 void AddSC_custom_teleports();
+void AddSC_custom_exploration_triggers();
 
 void AddSC_boss_abbendis();
 void AddSC_boss_ardaeus();
@@ -563,6 +564,7 @@ void AddScripts()
     AddSC_random_scripts_3();
 
     AddSC_custom_teleports();
+    AddSC_custom_exploration_triggers();
 
     AddSC_boss_abbendis();
     AddSC_boss_ardaeus();
