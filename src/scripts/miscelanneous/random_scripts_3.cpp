@@ -864,67 +864,80 @@ bool QuestAccept_npc_arnold_boran(Player* pPlayer, Creature* pQuestGiver, Quest 
     return false;
 }
 
-bool GossipHello_npc_boran_brothers(Player* pPlayer, Creature* pCreature)
+bool GossipHello_npc_samuel_boran(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(40141) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(40141) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60205, 1, false))
     {
-        if (pCreature->GetEntry() == 1242 || pCreature->GetEntry() == 92936)
-        {
-            if (pPlayer->HasItemCount(60204, 1, false) || pPlayer->HasItemCount(60205, 1, false))
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have a letter from your brother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        }
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have a letter from your brother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    pPlayer->SEND_GOSSIP_MENU(53113, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(92936, pCreature->GetGUID());
     return true;
 }
 
-bool GossipSelect_npc_boran_brothers(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_npc_samuel_boran(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        switch (pCreature->GetEntry())
-        {
-        case 1242:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-            if (pPlayer->HasItemCount(60204, 1, false))
-                pPlayer->RemoveItemCurrency(60204, 1);
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSayToPlayer("A letter from Arnold... I thought he died at sea, I haven't heard from him in such a long time.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSayToPlayer("This is splendid news, here, please, take this to him.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                player->AddItem(60202, 1);
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60325))
-                    player->KilledMonster(cInfo, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-            break;
-        case 92936:
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-            if (pPlayer->HasItemCount(60205, 1, false))
-                pPlayer->RemoveItemCurrency(60205, 1);
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSayToPlayer("I knew Arnold was still out there somewhere, though I cannot imagine what it would be like stranded on some island at sea. Hopefully he returns home safely.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->MonsterSayToPlayer("I have a letter for you, deliver it to him and with haste.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                player->AddItem(60203, 1);
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60326))
-                    player->KilledMonster(cInfo, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-            break;
-        }
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        if (pPlayer->HasItemCount(60205, 1, false))
+            pPlayer->RemoveItemCurrency(60205, 1);
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("I knew Arnold was still out there somewhere, though I cannot imagine what it would be like stranded on some island at sea. Hopefully he returns home safely.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("I have a letter for you, deliver it to him and with haste.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            player->AddItem(60203, 1);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60326))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_karl_boran(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40141) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60204, 1, false))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have a letter from your brother.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(1042, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_karl_boran(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        if (pPlayer->HasItemCount(60204, 1, false))
+            pPlayer->RemoveItemCurrency(60204, 1);
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("A letter from Arnold... I thought he died at sea, I haven't heard from him in such a long time.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("This is splendid news, here, please, take this to him.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            player->AddItem(60202, 1);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60325))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -947,7 +960,7 @@ bool GossipHello_npc_chef_jenkel(Player* pPlayer, Creature* pCreature)
         }
     }
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(91950, pCreature->GetGUID());
     return true;
 }
 
@@ -961,7 +974,7 @@ bool GossipSelect_npc_chef_jenkel(Player* pPlayer, Creature* pCreature, uint32 u
         pPlayer->AddItem(60207);
         if (pPlayer->HasItemCount(60207, 1, false))
         {
-            pCreature->MonsterSayToPlayer("Fine! Spare me please, here is the recipe!", pPlayer);
+            pCreature->MonsterSayToPlayer("Alright, fine, but he owes me, make sure you tell him!", pPlayer);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -987,7 +1000,7 @@ bool GossipHello_npc_marty_moonshine(Player* pPlayer, Creature* pCreature)
         }
     }
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(92137, pCreature->GetGUID());
     return true;
 }
 
@@ -1014,9 +1027,78 @@ bool GossipSelect_npc_marty_moonshine(Player* pPlayer, Creature* pCreature, uint
     return true;
 }
 
+struct npc_captain_saltbeardAI : public ScriptedAI
+{
+    npc_captain_saltbeardAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("We got company on the ship! Push back these mainlanders!");
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_captain_saltbeard(Creature* _Creature) { return new npc_captain_saltbeardAI(_Creature); }
+
+struct npc_captain_blackeyeAI : public ScriptedAI
+{
+    npc_captain_blackeyeAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("Who are you? You think you can take my ship without a fight?!");
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_captain_blackeye(Creature* _Creature) { return new npc_captain_blackeyeAI(_Creature); }
+
+struct npc_captain_ironhoofAI : public ScriptedAI
+{
+    npc_captain_ironhoofAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("You wont stand a chance against me scurvy dog!");
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_captain_ironhoof(Creature* _Creature) { return new npc_captain_ironhoofAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_captain_ironhoof";
+    newscript->GetAI = &GetAI_npc_captain_ironhoof;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_captain_blackeye";
+    newscript->GetAI = &GetAI_npc_captain_blackeye;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_captain_saltbeard";
+    newscript->GetAI = &GetAI_npc_captain_saltbeard;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_marty_moonshine";
@@ -1031,9 +1113,15 @@ void AddSC_random_scripts_3()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_boran_brothers";
-    newscript->pGossipHello = &GossipHello_npc_boran_brothers;
-    newscript->pGossipSelect = &GossipSelect_npc_boran_brothers;
+    newscript->Name = "npc_samuel_boran";
+    newscript->pGossipHello = &GossipHello_npc_samuel_boran;
+    newscript->pGossipSelect = &GossipSelect_npc_samuel_boran;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_karl_boran";
+    newscript->pGossipHello = &GossipHello_npc_karl_boran;
+    newscript->pGossipSelect = &GossipSelect_npc_karl_boran;
     newscript->RegisterSelf();
 
     newscript = new Script;
