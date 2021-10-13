@@ -332,56 +332,6 @@ bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const Spel
     return true;
 }
 
-bool ItemUseSpell_bg_tabard(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pItem)
-        return false;
-
-    // Some spell checks might be obsolete, check it later.
-    if (pPlayer->IsInCombat() || pPlayer->InBattleGround() || pPlayer->IsBeingTeleported() || pPlayer->HasSpellCooldown(20939) || pPlayer->HasSpellCooldown(26013) || (pPlayer->GetDeathState() == CORPSE))
-        ChatHandler(pPlayer).PSendSysMessage("You are not meeting the conditions to queue for BGs!");
-    else
-    {
-        pPlayer->SetBattleGroundEntryPoint();
-
-        static constexpr uint32 cui_BattleTabardDefilers = 20131;
-        static constexpr uint32 cui_BattleTabardArathor = 20132;
-        static constexpr uint32 cui_BattleTabardFrostworlf = 19031;
-        static constexpr uint32 cui_BattleTabardSilverwing = 19506;
-        static constexpr uint32 cui_BattleTabardStormpike = 19032;
-        static constexpr uint32 cui_BattleTabardWarsong = 19505;
-
-        switch (pItem->GetEntry())
-        {
-            case cui_BattleTabardWarsong:
-            case cui_BattleTabardSilverwing:
-            {
-                pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_WS);
-                pPlayer->SetBGQueueAllowed(true);
-                break;
-            }
-            case cui_BattleTabardDefilers:
-            case cui_BattleTabardArathor:
-            {
-                pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_AB);
-                pPlayer->SetBGQueueAllowed(true);
-                break;
-            }
-            case cui_BattleTabardFrostworlf:
-            case cui_BattleTabardStormpike:
-            {
-                pPlayer->GetSession()->SendBattlegGroundList(pPlayer->GetObjectGuid(), BATTLEGROUND_AV);
-                pPlayer->SetBGQueueAllowed(true);
-                break;
-            }
-            default:
-                sLog.outError("Player::IsAllowedToQueueBGDueToTabard(): Player %s [GUID: %u] is trying to queue BG with an unintentional item.", pPlayer->GetName(), pPlayer->GetGUIDLow());
-        }
-    }
-
-    return false;
-}
-
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
@@ -5324,49 +5274,6 @@ bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const Spe
     }
 
 }
-bool ItemUseSpell_item_item_thunder_ale_drink(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    pPlayer->SetDrunkValue(10000);
-
-    DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer]() {
-        player->AddAura(17743);
-        player->SetDrunkValue(23000);
-    });
-
-    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer]() { 
-        player->TeleportTo(0, -1852.873535f, -4091.622314f, 9.815960f, 4.762068f);
-    });
-
-    DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer]() {
-        player->RemoveAurasDueToSpell(17743);
-        player->CastSpell(player, 12533, true);
-        player->SetDrunkValue(10000);
-
-        std::list<Creature *> sleeper;
-        player->GetCreatureListWithEntryInGrid(sleeper, 12998, 10.0f);
-
-        for (const auto& bedDude : sleeper)
-        {
-            bedDude->SetStandState(UNIT_STAND_STATE_SIT);
-            bedDude->PMonsterSay("Hey you, you're finally awake. You just tried the thunder ale reserve right? Blacked out and ended up here same as us and that dwarf over there. We're all brothers and sisters with brews now.");
-        }
-
-    });
-
-    DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer]() {
-
-        player->SetDrunkValue(256);
-
-        std::list<Creature *> sleeper;
-        player->GetCreatureListWithEntryInGrid(sleeper, 12998, 15.0f);
-
-        for (const auto& bedDude : sleeper)
-            bedDude->SetStandState(UNIT_STAND_STATE_SLEEP);
-
-    });
-
-    return true;
-}
 
 bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
 {
@@ -7906,11 +7813,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "item_bg_tabard";
-    newscript->pItemUseSpell = &ItemUseSpell_bg_tabard;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "item_radio";
     newscript->pItemUseSpell = &ItemUseSpell_item_radio;
     newscript->RegisterSelf();
@@ -7959,11 +7861,5 @@ void AddSC_random_scripts_1()
 	newscript->Name = "item_warlock_soulwell_ritual";
 	newscript->pItemUseSpell = &ItemUseSpell_item_warlock_soulwell_ritual;
 	newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_thunder_ale_drink";
-    newscript->pItemUseSpell = &ItemUseSpell_item_item_thunder_ale_drink;
-    newscript->RegisterSelf();
-
     
 }
