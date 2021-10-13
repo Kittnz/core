@@ -1832,6 +1832,31 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46035: // City Protector's Teleport
+                {
+                    using namespace std;
+
+                    array<pair<uint32, WorldLocation>, 10> races_and_locations =
+                    { {
+                        { RACE_HUMAN, WorldLocation{0, -8828.23F, 627.92F, 94.05F, 0.0F} },
+                        { RACE_GNOME, WorldLocation{0, -4917.00F, -955.0F, 502.0F, 0.0F} },
+                        { RACE_DWARF, WorldLocation{0, -4917.0F, -955.0F, 502.0F, 0.0F} },
+                        { RACE_NIGHTELF, WorldLocation{1, 9962.71F, 2280.14F, 1341.39F, 0.0F} },
+                        { RACE_ORC, WorldLocation{1, 1437.0F, -4421.0F, 25.24F, 1.65F} },
+                        { RACE_TAUREN, WorldLocation{1, -1272.70F, 116.88F, 131.01F, 0.0F} },
+                        { RACE_TROLL, WorldLocation{1, 1437.0F, -4421.0F, 25.24F, 1.65F} },
+                        { RACE_UNDEAD, WorldLocation{0, 1822.09F, 238.63F, 60.69F, 0.0F} },
+                        { RACE_GOBLIN, WorldLocation{1, -4594.56F, -3208.2F, 34.9253F, 4.65F} },
+                        { RACE_HIGH_ELF, WorldLocation{0, 4226.82F, -2722.43F, 121.87F, 5.3F} },
+                    } };
+
+                    for (auto const& data : races_and_locations)
+                    {
+                        if (m_caster->ToPlayer()->GetRace() == data.first)
+                            m_caster->ToPlayer()->TeleportTo(data.second);
+                    }
+                    return;
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)
