@@ -22976,8 +22976,7 @@ bool Player::SaveTalentSpec(int primaryOrSecondary)
 bool Player::ActivateTalentSpec(int primaryOrSecondary)
 {
 
-    if (!ResetTalents(GetQuestRewardStatus(70010))) // money check
-        return false;
+    ResetTalents(true);
 
 	QueryResult *talents = CharacterDatabase.PQuery("SELECT spell "
 		"FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);

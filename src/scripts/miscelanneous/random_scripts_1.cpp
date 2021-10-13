@@ -2062,26 +2062,22 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Reset my talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-		if (sWorld.getConfig(CONFIG_BOOL_DUAL_SPEC)) {
-			// primary
-			if (pPlayer->HasSavedTalentSpec(1))
-			{
-				activateText = "Activate Primary Specialization " + pPlayer->SpecTalentPoints(1);
-				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-			}
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-
-			// secondary
-			if (pPlayer->HasSavedTalentSpec(2))
-			{
-				activateText = "Activate Secondary Specialization " + pPlayer->SpecTalentPoints(2);
-				pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
-			}
-			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
-
-            if (!pPlayer->GetQuestRewardStatus(70010))
-			    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_MONEY_BAG, "Unlock Free Specialization Switch (500g).", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+		// primary
+		if (pPlayer->HasSavedTalentSpec(1))
+		{
+			activateText = "Activate Primary Specialization " + pPlayer->SpecTalentPoints(1);
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 		}
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+
+		// secondary
+		if (pPlayer->HasSavedTalentSpec(2))
+		{
+			activateText = "Activate Secondary Specialization " + pPlayer->SpecTalentPoints(2);
+			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+		}
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+
 	}
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
     return true;
@@ -2102,17 +2098,6 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 se
 		pPlayer->SaveTalentSpec(1);
 	else if (action == GOSSIP_ACTION_INFO_DEF + 5)
 		pPlayer->SaveTalentSpec(2);
-    else if (action == GOSSIP_ACTION_INFO_DEF + 6)
-    {
-        if (pPlayer->GetMoney() < 5000000)
-            pPlayer->SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, 0, 0, 0);
-        else
-        {
-            pPlayer->ModifyMoney(-(int32)5000000);
-            CharacterDatabase.DirectPExecute("REPLACE INTO character_queststatus (guid,quest,status,rewarded) VALUES ('%u', 70010, 1, 1)", pPlayer->GetGUIDLow());
-            ChatHandler(pPlayer).SendSysMessage("Please logout and login again!");
-        }
-    }
 
 	pPlayer->CLOSE_GOSSIP_MENU();
     return true;
