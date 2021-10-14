@@ -1042,3 +1042,38 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (6378,60231,-10,1,1,0,10),
 (6379,60231,-12,1,1,0,10),
 (6380,60231,-14,1,1,0,10);
+
+-- Rumors of the Great Fire Plume --
+delete from quest_template where entry = 40159;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40158,40159,2,409,55,45,0,0,'Rumors of the Great Fire Plume','Long ago I heard rumors of a deep jungle in a crater of the earth. It was filled with dinosaurs, raptors, and other massive, strange creatures that I have not seen. I long to visit such a paradise one day, but for now, it holds something I seek.\n\nIn this foreign landscape there be a great volcano at its center. It is holds some of the hottest substance in the world, and is protected by elemental beings of flame! From these very flaming elementals I seek a Pure Volcanic Ember, hot enough to burn for many long years. It is with this, that my people can regain access to magic that has been lost for a long time\n\nGo to this place, get me what I seek.','Bring a Pure Volcanic Ember to Head-Primalist Manaz\'ago in the Hazzuri Glade.','This jungle, you find it yet?','This be it mon, it radiates a heat that is almost unbearable, and when lit, should go up in a mighty fire hotter then anything we can produce. You done me well, and thank you mon, your efforts here may bring back our old magics.',60232,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,5600,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60233,1,60234,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91871, 40159);
+replace into creature_involvedrelation (id, quest) values (91871, 40159);
+
+delete from item_template where entry = 60232;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60232,23727,'Pure Volcanic Ember',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into item_template values
+ ('60233', '0', '4', '2', 'Hazzuri Primalist Headdress', '', '13259', '2', '0', '1', '64816', '16204', '1', '-1', '-1', '59',
+ '', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '7', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '124', '0', '0', '0',
+ '0', '0', '0', '9360', '1', '0', '0', '-1', '0', '-1', '7680', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60234', '0', '4', '6', 'Hazzuri Primalist Defender', '', '23847', '2', '0', '1', '104416', '26104', '14', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '4', '7', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '33', '1826', '0', '0', '0',
+ '0', '0', '0', '7517', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '85', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(6520,60232,-5,1,1,0,10),
+(6521,60232,-7,1,1,0,10);
