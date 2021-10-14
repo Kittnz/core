@@ -1077,3 +1077,25 @@ replace into item_template values
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (6520,60232,-5,1,1,0,10),
 (6521,60232,-7,1,1,0,10);
+
+-- Bengal Fangs --
+delete from quest_template where entry = 40160;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40160,2,409,52,45,0,0,'Bengal Fangs','The Bengal Tigers of the region are a capable predator, one you should not dismiss easily mon. They stalk for their prey and attack with a vicious speed that cannot be matched. It is from these tigers that I have produced many a potent elixir.\n\nYou see, the Hazzuri use this battle elixir made from Bengal Fangs to enhance their battle capabilities. It is we the Primalists who came up with this long ago mon. Go out into the jungle, and gather me 5 Bengal Fangs, our camp needs some of this elixir.','Gather 5 Bengal Fangs for Primalist Palaz in the Hazzuri Glade.','You be havin\' trouble?','I expected the Bengals be to much for you, with these fangs I will be creating the elixirs for our people, thanks again mon.',60235,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91869, 40160);
+replace into creature_involvedrelation (id, quest) values (91869, 40160);
+
+delete from item_template where entry = 60235;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60235,1227,'Bengal Fang',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91825 where entry = 91825;
+update creature_template set loot_id = 91826 where entry = 91826;
+update creature_template set loot_id = 91827 where entry = 91827;
+update creature_template set loot_id = 91828 where entry = 91828;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(91825,60235,-15,1,1,0,10),
+(91826,60235,-44,1,1,0,10),
+(91827,60235,-24,1,1,0,10),
+(91828,60235,-34,1,1,0,10);
