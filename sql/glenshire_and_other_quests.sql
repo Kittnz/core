@@ -1099,3 +1099,31 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (91826,60235,-44,1,1,0,10),
 (91827,60235,-24,1,1,0,10),
 (91828,60235,-34,1,1,0,10);
+
+-- Hazu Leaf --
+delete from quest_template where entry = 40161;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40161,2,409,52,45,0,0,'Hazu Leaf','On dis island there be a powerful herb that we use in many of our most ancient recipes mon. This herb has been harder to get since we left Zul\'Hazu and founded our own destiny. You see, hidin\' up here, we cannot leave the safety of the Glade for long.\n\nI speak of the Hazu Leaf, that only grows upon this island and can send someone who uses it into a dream like state. I need you to get us this mon, to help our ability to see things. You can find it all over the island, get me 10 of them, and that should be enough.','Gather 10 Hazu Leaf for Primalist Yango in the Hazzuri Glade.','Any luck finding Hazu Leaf out there mon?','Excellent work, without the Hazu Leaf it would be much harder to make many of the recipes that we do. That, and make it much harder to just as simply relax mon, take this, as a reward for my gratitude.',60236,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4800,0,0,0,0,0,0,0,0,0,0,0,60237,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91870, 40161);
+replace into creature_involvedrelation (id, quest) values (91870, 40161);
+
+delete from item_template where entry = 60236;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60236,7346,'Hazu Leaf',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into item_template values
+ ('60237', '0', '4', '1', 'Shawl of the Hazu Leaf', '', '15820', '2', '0', '1', '52428', '13107', '5', '-1', '-1', '57',
+ '52', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '12', '6', '6',
+ '3', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '74', '0', '0', '6',
+ '0', '0', '0', '21362', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+delete from gameobject_template where entry = 2010832;
+replace into gameobject_template values
+(2010832, 0, 3, 27136, 'Hazu Leaf', 0, 4, 0.5, 43, 2010832, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010832;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010832,60236,-100,1,1,0,10);
