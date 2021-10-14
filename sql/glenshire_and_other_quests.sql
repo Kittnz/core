@@ -978,6 +978,7 @@ delete from item_template where entry = 60227;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60227,15492,'Tyrants Crown',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
+delete from item_template where entry = 60228;
 replace into item_template values
  ('60228', '0', '4', '2', 'Mantle of the Ogre Slayer', '', '25734', '2', '0', '1', '57068', '14267', '3', '-1', '-1', '58',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '7', '4',
@@ -988,6 +989,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
 
+delete from item_template where entry = 60229;
 replace into item_template values
  ('60229', '0', '4', '2', 'Tyrant Cuffs', '', '28013', '2', '0', '1', '38012', '9503', '9', '-1', '-1', '58',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '7', '6', '3',
@@ -1002,3 +1004,23 @@ update creature_template set loot_id = 91853 where entry = 91853;
 
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (91853,60227,-100,1,1,0,10);
+
+-- Hazzuri Dark Vessels --
+delete from quest_template where entry = 40157;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40157,2,409,54,45,0,0,'Hazzuri Dark Vessels','We come from the great city of Zul\'Hazu to the south west, it is where our ancestors called home. Though, now we are nothing more then outcasts, our people have turned away from the roots of our past. They are swayed by a great shadowy magic that taints their minds and twists them to madness. We primalists have lost our way in the past while, and with whispering shadows, and a great magic to wield, Chieftain Woh\'zo chose the darkness, over our heritage.\n\nOur people may have turned their back on us, but perhaps there may be a chance to save them. All across the city are Hazzuri Dark Vessels, they are hidden away in small baskets and pouches around the city. These Dark Vessels are used in ceremonies, rituals, and contain shadowy energies that can twist minds.\n\nGo into Zul\'Hazu, get me these Dark Vessels, but be careful mon, they wont let you in, and they wont just let you leave.','Gather 8 Hazzuri Dark Vessels, and bring them to Primalist Jongi in the Hazzuri Glade.','I would suggest bringing friends for such a task, the city will be hard to enter.','<Primalist Jongi lets a small sigh escape from him, and nods his head>. I know what I had to be done to gather these mon. It was neccesary for my people, and eventually, the wounds may heal once more. Thanks for what you have done.',60230,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10000,6000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91867, 40157);
+replace into creature_involvedrelation (id, quest) values (91867, 40157);
+
+update quest_template set type = 1 where entry = 40157;
+
+delete from item_template where entry = 60230;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60230,1257,'Hazzuri Dark Vessel',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010831;
+replace into gameobject_template values
+(2010831, 0, 3, 25452, 'Hazzuri Basket', 0, 4, 1, 43, 2010831, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010831;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010831,60230,-100,1,1,0,10);
