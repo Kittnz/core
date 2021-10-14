@@ -3,6 +3,8 @@
 -- creature_template		60300-60500
 -- gameobject_template		2010700-2010900
 -- item_template			60000-60200
+-- gossip_menu				41000-43000
+-- creature_equip_template	20000-21000
 
 -- In Need of Assistance --
 delete from quest_template where entry = 40080;
@@ -169,7 +171,7 @@ replace into gameobject_template values
 (2010827, 0, 3, 33051, 'Mechagnome Head', 0, 4, 1, 43, 2010827, 0, 0.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from gameobject_loot_template where entry between 2010825 and 2010827;
-replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (2010825,60192,-100,1,1,0,10),
 (2010826,60193,-100,1,1,0,10),
 (2010827,60194,-100,1,1,0,10);
@@ -190,7 +192,7 @@ replace into gameobject_template values
 (2010828, 0, 3, 259, 'Ancient Treasures Chest', 0, 4, 1, 43, 2010828, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from gameobject_loot_template where entry = 2010828;
-replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (2010828,60195,-100,1,1,0,10);
 
 -- A Profitable Aquisition --
@@ -345,7 +347,7 @@ update quest_template set rewchoiceitemcount3 = 1 where entry = 40134;
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '42', '0', '0', '0',
  '0', '1', NULL);
- 
+
 update quest_template set rewchoiceitemid1 = 60201 where entry = 40135;
 update quest_template set rewchoiceitemcount1 = 1 where entry = 40135;
 
@@ -463,7 +465,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
- 
+
 replace into item_template values
  ('60210', '0', '4', '1', 'Hydromancer Sash', '', '16704', '2', '0', '1', '27608', '6902', '6', '-1', '-1', '59',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '11', '0', '0',
@@ -473,7 +475,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '25', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
- 
+
 replace into item_template values
  ('60211', '0', '4', '2', 'Rowdy Sailor Wraps', '', '16816', '2', '0', '1', '40508', '10127', '9', '-1', '-1', '59',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '11', '4', '8',
@@ -523,7 +525,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '120', '0', '0', '0', '0', '43', '0', '0', '0',
  '0', '1', NULL);
- 
+
 replace into item_template values
  ('60214', '0', '4', '0', 'Cloak of Loruk', '', '23554', '3', '0', '1', '14816', '3704', '16', '-1', '-1', '40',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '12', '6', '4',
@@ -533,7 +535,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '43', '0', '0', '0',
  '0', '1', NULL);
- 
+
 replace into item_template values
  ('60215', '0', '4', '2', 'Shoulders of Loruk', '', '16519', '3', '0', '1', '20824', '5206', '3', '-1', '-1', '40',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '14', '3', '8',
@@ -543,7 +545,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '60', '0', '0', '0', '0', '43', '0', '0', '0',
  '0', '1', NULL);
- 
+
 replace into item_template values
  ('60216', '0', '4', '1', 'Hat of Loruk', '', '18414', '3', '0', '13624', '3406', '3406', '1', '-1', '-1', '40',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '10', '6', '6',
@@ -616,7 +618,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '50', '0', '0', '0', '0', '8', '0', '0', '0',
  '0', '1', NULL);
- 
+
 replace into item_template values
  ('60221', '0', '4', '4', 'Tidehunter Girdle', '', '22678', '2', '0', '1', '31444', '7861', '6', '-1', '-1', '58',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '10', '4', '6',
@@ -666,7 +668,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '40', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
- 
+
 -- Faelon\'s Folly --
 delete from quest_template where entry = 40152;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40152,2,409,51,45,0,0,'Faelon\'s Folly','Our fleet was accompanied by a squadron of High Elf vessels, they traveled to the islands with us for a mission that was somewhat secretive. I had many friends within their crew, of which I met from Kul Tiras. The High Elves are a good people, but their leader, Faelon was a rather shady character, one who traded illegal goods and dealt with unsavory individuals.\n\nIt is sad to say that many of those people I once called good friends are now haunting the shores of Faelon\'s Folly on the island of Gillijim. They were slain by the Deeptide Naga, though one of the items Faelon coveted in hopes to trade now has left them restless.\n\nGo there, and free the souls of the dead, you will find them on the western coast of Gillijim\'s Island, south of Lapidis.','Travel to Faelon\'s Folly on Gillijim\'s Island and slay 7 Forgotten Swordsman, 7 Drowned Souls, and 7 Forgotten Crew.','Have the crew been put to rest?.','It is a shame what happened to the elves, but I know if we Kul Tirans were in a similar state, they would offer us the same kindness.',0,0,0,0,0,0,0,0,92166,7,92164,7,92165,7,0,0,0,0,1500,4900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
@@ -708,7 +710,7 @@ update creature_template set script_name = 'npc_captain_ironhoof' where entry = 
 
 -- Insom'ni <The Great Hermit>, display ID 4534, level 61 ELITE BOSS, has 12000 mana, has 65151 hp, NEUTRAL both factions cannot be attacked, greeting text : "A great power lurks, and I seek to combat it. Those who wronged me shall pay the ultimate price, and I will make sure they suffer. You are going to be the one who helps me, and perhaps I shall reward you for your efforts. \n\n Well, make yourself at home, there is much to do and much to discuss."
 
-REPLACE INTO creature_template VALUES 
+REPLACE INTO creature_template VALUES
 (60446, 0, 4534, 0, 0, 0, 'Insom\'ni', 'The Great Hermit', 0, 61, 61, 65151, 65151, 12000, 12000, 3791, 31, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 873, 1039, 0, 278, 1, 2000, 2000, 2, 2, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 503, 2517, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @gossip_menu_id = 53106; set @magic_number = 60446;
@@ -717,3 +719,202 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'A great p
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+-- Fishface Joe <Fisherman> , display ID 18706, level 25, weapon 6256, greeting line: "You're going to scare off all the fish!" , faction 119
+-- Dirty Jacob <Bloodsail Buccaneers>, display ID 18703, level 30, weapon 2092, weapon 2 12745, greeting line : "You wouldn't happen to have a few coin on you, huh? I need it for the next time we stop somewhere." , faction 119
+-- Sark Blacktooth <Bloodsail Buccaneers> , display ID 18717, level 50, weapon1 4562, greeting line : "Don't cause any trouble around here newcomer, the last freshfish we had caused all sorts of issues." , faction 119
+-- Gold-Tooth Gary <Bloodsail Buccaneers> , display ID 18708, level 46, weapon 15396, greeting line : "Hey there friend, Gary is the name! If you're looking to spend your coin then heres the place, you could potentially even triple your money through me if you got luck on your side! So, what say you swashbuckler, got the heart for it?", IS A GAMBLER NPC , faction 119
+-- Jessie Sugar-Tongue <Ship Bard> , display ID 18710, level 49, no weapon , faction 119
+-- First Mate McCoy <Bloodsail Buccaneers> , display ID 18705, level 52, weapon1 4560, greeting line : "Welcome aboard, we Bloodsail treat eachother well at the least, if you remain loyal." , faction 119
+-- Garfield Sparkblast <Admiral of the Bloodsail Buccaneers> , display ID 18707, level 54 elite , faction 119
+-- Old-Tide Sam <Bloodsail Helmsman>, display ID 18713, level 52, weapon 13820, weapon 2 13079, greeting like : "Just because I'm old don't think I'm weak, ye understand young one? Ye let yer guard down for but a moment and Old-Tide Sam will pull you under." , faction 119
+-- Fazzle 'The Slick' <Innkeeper> , display ID 8847, level 30, no weapon, greeting line : "No better place to rest up then on the ship! The rocking of the waves is almost gentle don't you agree?", INNKEEPER , faction 119
+-- Belgrush Daggerfist <General Goods> , display ID 18701, level 45, NO WEAPONS  , SELLS GENERAL GOODS , faction 119
+-- Mabel 'The Hook' <Blacksmith> , display ID 1522, level 48, weapon 5956, IS A BLACKSMITH, MAKE HER SELL BLACKSMITHING SUPPLIES AND REPAIR , faction 119
+-- One-Ear Nellie <Bartender> , display ID 18714, level 43, no weapons, SELLS FOOOOD AND WATER , faction 119
+-- Vil'do One-Tusk <Pirate Booty> , display ID 18722, level 45, no weapons , greeting line : "Ey mon, you be looking like you could use a few trinkets, let Vil'do tell you what you be needing.", sells junk will make later, faction 119
+-- 'Ale Saint' Grida <Brewer> , display ID 18709, level 42, weapon1 2717, greeting line : "Looking for the good stuff huh? You'll find it no where else." SELLS DIFFERENT ALE , faction 119
+
+REPLACE INTO creature_template VALUES
+(60447, 0, 18706, 0, 0, 0, 'Fishface Joe', 'Fisherman', 0, 25, 25, 712, 712, 0, 0, 1026, 119, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 34, 50, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60448, 0, 18703, 0, 0, 0, 'Dirty Jacob', 'Bloodsail Buccaneers', 0, 30, 30, 1002, 1002, 0, 0, 1200, 119, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 43, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 62, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60449, 0, 18717, 0, 0, 0, 'Sark Blacktooth', 'Bloodsail Buccaneers', 0, 50, 50, 2879, 2879, 0, 0, 2999, 119, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 88, 107, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 103, 140, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60450, 0, 18708, 0, 0, 0, 'Gold-Tooth Gary', 'Gambler', 0, 46, 46, 2398, 2398, 0, 0, 2780, 119, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 87, 119, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_agne_gambler'),
+(60451, 0, 18710, 0, 0, 0, 'Jessie Sugar-Tongue', 'Ship Bard', 0, 49, 49, 2672, 2672, 0, 0, 2944, 119, 2, 1, 1.14286, 1, 20, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 98, 133, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60452, 0, 18705, 0, 0, 0, 'First Mate McCoy', 'Bloodsail Buccaneers', 0, 52, 52, 3082, 3082, 0, 0, 2669, 119, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60453, 0, 18707, 0, 0, 0, 'Garfield Sparkblast', 'Admiral of the Bloodsail Buccaneers', 0, 54, 54, 14182, 14182, 0, 0, 2641, 119, 3, 1, 1.14286, 1, 20, 5, 0, 1, 1, 344, 444, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.3256, 81.5727, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1279, 1675, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60454, 0, 18713, 0, 0, 0, 'Old-Tide Sam', 'Bloodsail Helmsman', 0, 52, 52, 3082, 3082, 0, 0, 2669, 119, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60455, 0, 8847, 0, 0, 0, 'Fazzle \'The Slick\'', 'Innkeeper', 0, 30, 30, 1002, 1002, 0, 0, 1200, 119, 135, 1, 1.14286, 1, 20, 5, 0, 0, 1, 43, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 62, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60456, 0, 18701, 0, 0, 0, 'Belgrush Daggerfist', 'General Goods', 0, 45, 45, 2200, 2200, 0, 0, 2600, 119, 6, 1, 1.14286, 1, 20, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60457, 0, 1522, 0, 0, 0, 'Mabel \'The Hook\'', 'Blacksmith', 0, 48, 48, 2672, 2672, 0, 0, 2944, 119, 16390, 1, 1.14286, 1, 20, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 98, 133, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60458, 0, 18714, 0, 0, 0, 'One-Ear Nellie', 'Bartender', 0, 43, 43, 2059, 2059, 0, 0, 2246, 119, 6, 1, 1.14286, 1, 20, 5, 0, 0, 1, 146, 179, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 104, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60459, 0, 18722, 0, 0, 0, 'Vil\'do One-Tusk', 'Pirate Booty', 0, 45, 45, 2200, 2200, 0, 0, 2600, 119, 7, 1, 1.14286, 1, 20, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60460, 0, 18709, 0, 0, 0, '\'Ale Saint\' Grida', 'Brewer', 0, 42, 42, 2001, 2001, 0, 0, 2199, 119, 7, 1, 1.14286, 1, 20, 5, 0, 0, 1, 146, 179, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 104, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20000; set @weapon_1 = 6256; set @weapon_2 = 0; set @creature = 60447;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20001; set @weapon_1 = 2092; set @weapon_2 = 12745; set @creature = 60448;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20002; set @weapon_1 = 4562; set @weapon_2 = 0; set @creature = 60449;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20003; set @weapon_1 = 15396; set @weapon_2 = 0; set @creature = 60450;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20004; set @weapon_1 = 4560; set @weapon_2 = 0; set @creature = 60452;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20005; set @weapon_1 = 13820; set @weapon_2 = 13079; set @creature = 60454;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20006; set @weapon_1 = 5956; set @weapon_2 = 0; set @creature = 60457;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20007; set @weapon_1 = 2717; set @weapon_2 = 0; set @creature = 60460;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41000; set @magic_number = 60447;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You\'re going to scare off all the fish!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41001; set @magic_number = 60448;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You wouldn\'t happen to have a few coin on you, huh? I need it for the next time we stop somewhere.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41002; set @magic_number = 60449;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Don\'t cause any trouble around here newcomer, the last freshfish we had caused all sorts of issues.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41003; set @magic_number = 60450;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hey there friend, Gary is the name! If you\'re looking to spend your coin then heres the place, you could potentially even triple your money through me if you got luck on your side! So, what say you swashbuckler, got the heart for it?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41004; set @magic_number = 60452;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome aboard, we Bloodsail treat eachother well at the least, if you remain loyal.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41005; set @magic_number = 60454;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Just because I\'m old don\'t think I\'m weak, ye understand young one? Ye let yer guard down for but a moment and Old-Tide Sam will pull you under.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41006; set @magic_number = 60455;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'No better place to rest up then on the ship! The rocking of the waves is almost gentle don\'t you agree?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41007; set @magic_number = 60459;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ey mon, you be looking like you could use a few trinkets, let Vil\'do tell you what you be needing.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41008; set @magic_number = 60460;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Looking for the good stuff huh? You\'ll find it no where else.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES
+-- Fazzle 'The Slick' <Innkeeper>
+(60455,2287,0,0,0,0),
+(60455,1205,0,0,0,0),
+(60455,1708,0,0,0,0),
+(60455,3770,0,0,0,0),
+(60455,117,0,0,0,0),
+(60455,3771,0,0,0,0),
+(60455,8952,0,0,0,0),
+(60455,1179,0,0,0,0),
+(60455,159,0,0,0,0),
+(60455,4599,0,0,0,0),
+(60455,1645,0,0,0,0),
+(60455,18046,0,0,0,0),
+(60455,8766,0,0,0,0),
+-- Belgrush Daggerfist <General Goods>
+(60456, 117, 0, 0, 0, 0),
+(60456, 159, 0, 0, 0, 0),
+(60456, 1179, 0, 0, 0, 0),
+(60456, 1205, 0, 0, 0, 0),
+(60456, 1645, 0, 0, 0, 0),
+(60456, 1708, 0, 0, 0, 0),
+(60456, 2287, 0, 0, 0, 0),
+(60456, 2515, 0, 0, 0, 0),
+(60456, 2519, 0, 0, 0, 0),
+(60456, 3030, 0, 0, 0, 0),
+(60456, 3033, 0, 0, 0, 0),
+(60456, 3770, 0, 0, 0, 0),
+(60456, 3771, 0, 0, 0, 0),
+(60456, 4470, 0, 0, 0, 0),
+(60456, 4471, 0, 0, 0, 0),
+(60456, 4497, 0, 0, 0, 0),
+(60456, 4498, 0, 0, 0, 0),
+(60456, 4599, 0, 0, 0, 0),
+(60456, 8766, 0, 0, 0, 0),
+(60456, 8952, 0, 0, 0, 0),
+(60456, 11284, 0, 0, 0, 0),
+(60456, 11285, 0, 0, 0, 0),
+(60456, 15758, 0, 0, 0, 0),
+-- Mabel 'The Hook' <Blacksmith>
+(60457, 2880, 0, 0, 0, 0),
+(60457, 2901, 0, 0, 0, 0),
+(60457, 3466, 0, 0, 0, 0),
+(60457, 3857, 0, 0, 0, 0),
+(60457, 5956, 0, 0, 0, 0),
+(60457, 18567, 0, 0, 0, 0),
+-- One-Ear Nellie <Bartender>
+(60458, 117, 0, 0, 0, 0),
+(60458, 159, 0, 0, 0, 0),
+(60458, 414, 0, 0, 0, 0),
+(60458, 422, 0, 0, 0, 0),
+(60458, 1179, 0, 0, 0, 0),
+(60458, 1205, 0, 0, 0, 0),
+(60458, 1645, 0, 0, 0, 0),
+(60458, 1707, 0, 0, 0, 0),
+(60458, 1708, 0, 0, 0, 0),
+(60458, 2070, 0, 0, 0, 0),
+(60458, 2287, 0, 0, 0, 0),
+(60458, 2665, 1, 300, 0, 0),
+(60458, 2678, 0, 0, 0, 0),
+(60458, 2692, 0, 0, 0, 0),
+(60458, 3770, 0, 0, 0, 0),
+(60458, 3771, 0, 0, 0, 0),
+(60458, 3927, 0, 0, 0, 0),
+(60458, 4540, 0, 0, 0, 0),
+(60458, 4541, 0, 0, 0, 0),
+(60458, 4542, 0, 0, 0, 0),
+(60458, 4544, 0, 0, 0, 0),
+(60458, 4599, 0, 0, 0, 0),
+(60458, 4601, 0, 0, 0, 0),
+(60458, 8766, 0, 0, 0, 0),
+(60458, 8932, 0, 0, 0, 0),
+(60458, 8950, 0, 0, 0, 0),
+(60458, 8952, 0, 0, 0, 0),
+(60458, 17194, 1, 300, 0, 0),
+(60458, 30817, 0, 0, 0, 0),
+(60458, 40000, 0, 0, 0, 0),
+-- 'Ale Saint' Grida <Brewer>
+(60460, 83008, 0, 0, 0, 0),
+(60460, 2686, 0, 0, 0, 0),
+(60460, 17402, 0, 0, 0, 0);
+-- Vil'do One-Tusk <Pirate Booty> sells junk will make later.
