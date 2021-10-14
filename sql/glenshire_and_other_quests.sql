@@ -921,7 +921,7 @@ REPLACE INTO npc_vendor VALUES
 
 -- An Extravagent Book --
 delete from quest_template where entry = 40153;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40153,2,409,52,45,0,0,'An Extravagent Book','<The barrel appears to still be held together quite well and looks to be quite sturdy. Upon searching further you find an extravagent book, it is certainly old, but still has golden thread on the spine. It has the label \'Great Virtue - Father Ben.\' written upon the front, perhaps this belongs to someone>.','Find the owner of the book.','Yes child? Are you here to learn about the light?','Oh... I had left this book upon an elvish vessel quite some time ago, you managed to recover it? I must say, I had considered this lost after the news of what happened, thank you so much my child, for returning this book.',60225,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60225,1,0,4650,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40153,2,409,52,45,0,0,'An Extravagent Book','<The barrel appears to still be held together quite well and looks to be quite sturdy. Upon searching further you find an extravagent book, it is certainly old, but still has golden thread on the spine. It has the label \'Great Virtue - Father Ben.\' written upon the front, perhaps this belongs to someone>.','Find the owner of the book.','Yes child? Are you here to learn about the light?','Oh... I had left this book upon an elvish vessel quite some time ago, you managed to recover it? I must say, I had considered this lost after the news of what happened, thank you so much my child, for returning this book.',60225,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60225,1,0,4650,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into gameobject_questrelation (id, quest) values (2010830, 40153);
 replace into creature_involvedrelation (id, quest) values (91953, 40153);
@@ -935,3 +935,27 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from gameobject_template where entry = 2010830;
 replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010830, 2, 23262, 1, 'Half Buried Barrel', 32, '');
+
+-- Wallowfin Claws --
+delete from quest_template where entry = 40154;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40154,2,409,51,45,0,0,'Wallowfin Claws','Murlocs, the true dread to a fisherman on a rainy day especially when the water begins to get restless. The Wallowfin have been occupying the Wallowing Coast for some time now to the south east and have only been growing in numbers. I feel its only a matter of time before one of the sailors ends up getting attacked in a late night walk or some drunken stupor.\n\nTo look out for my lads I\'d like you you to go to the Wallowing coast and clear the bastards out. Ten claws should be just enough to at the least remind them we should not be bothered.','Travel to the Wallowing Coast and gather Wallowfin Claws for Sailor Percy in Caelan\'s Rest.','You have any trouble with those gilled freaks?','Splendid, I\'m sure everyone will be sleeping much easier from now on with less of those muckdwellers around, here, some coin for the trouble.',60226,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92025, 40154);
+replace into creature_involvedrelation (id, quest) values (92025, 40154);
+
+delete from item_template where entry = 60226;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60226,1499,'Wallowfin Claw',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91857 where entry = 91857;
+update creature_template set loot_id = 91858 where entry = 91858;
+update creature_template set loot_id = 91860 where entry = 91860;
+update creature_template set loot_id = 91861 where entry = 91861;
+update creature_template set loot_id = 91862 where entry = 91862;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(91857,60226,-40,1,1,0,10),
+(91858,60226,-40,1,1,0,10),
+(91860,60226,-40,1,1,0,10),
+(91861,60226,-40,1,1,0,10),
+(91862,60226,-40,1,1,0,10);
