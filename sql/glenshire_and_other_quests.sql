@@ -1188,3 +1188,13 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (5461,60241,-9,1,1,0,10),
 (5462,60241,-9,1,1,0,10);
+
+-- The Tower of Lapidis IV --
+delete from quest_template where entry = 40166;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40165,40166,2,409,55,45,0,0,'The Tower of Lapidis IV','Now, to begin, I will transmute some of the energy from the Pure Aqua Orb and enchant the key with the magic that once was present. This may take a few moments to do, and I require precise concentration. Give me but a moment, and I will be done.','Wait for Archmage Ansirem Runeweaver to finish his magic.','I think I\'ve done it.','There.. It is done, the key has had its magical properties manipulated, and should contain similar enchantment.',0,0,0,0,0,0,0,0,60327,1,0,0,0,0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Archmage Ansirem finished enchanting');
+
+replace into creature_questrelation (id, quest) values (2543, 40166);
+replace into creature_involvedrelation (id, quest) values (2543, 40166);
+
+delete from creature_template where entry = 60327;
+replace into creature_template (entry, name, display_id1) values (60327, 'quest_40166_dummy_triger', 328);
