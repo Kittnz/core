@@ -6155,6 +6155,36 @@ bool QuestAccept_npc_shalgrig(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40166) // The Tower of Lapidis IV
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->CastSpell(npc, 1449, false);
+            });
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("That certainly was challenging, but I have finished my work, the key should be enchanted.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60327))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+
+        return true;
+    }
+    return false;
+}
 
 bool QuestRewarded_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
@@ -7247,6 +7277,7 @@ void AddSC_random_scripts_1()
 
     newscript = new Script;
     newscript->Name = "npc_ansirem";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_ansirem;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_ansirem;
     newscript->RegisterSelf();
 
