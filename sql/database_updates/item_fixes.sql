@@ -1,0 +1,1 @@
+update item_template set sheath = 2 where entry = 80642;
