@@ -1225,3 +1225,23 @@ replace into creature_questrelation (id, quest) values (92938, 40169);
 replace into creature_involvedrelation (id, quest) values (60446, 40169);
 
 update creature_template set npc_flags = 3 where entry = 60446;
+
+-- The Tower of Lapidis VIII --
+delete from quest_template where entry = 40170;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40169,40170,2,409,55,45,0,0,'The Tower of Lapidis VIII','<It would only take a single glance at the key with inquisitive eyes for the troll to crack a small smirk>.\n\nI can do this, though I must wonder why I would help you, especially for free, and at no cost.\n\nIf you want me to work the magic of this key, and attune it for you, I will need a favor from you. There is a satyr of whom I knew a long time ago, one who still walks this world today. Let us say that me and him are not on the best of standing and I want you to bring me one of his gnarled horns from his battered corpse.\n\nTravel to Felwood, to the Ruins of Constellas, you will find Pethax Blackhorn there, it is his horn I desire.','Obtain Pethax\'s Horn for Insom\'ni on Kazon Island.','Have you found that blackhearted mongrel yet?','<The troll looks almost filled with glee>. You have done well, this wretch had much worse coming to him, but this shall do, especially given my current state. Fine, give me that key, I will do as you asked, my word is my bond.',60243,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60446, 40170);
+replace into creature_involvedrelation (id, quest) values (60446, 40170);
+
+-- Pethax Blackhorn, display ID 2880, scale 1.5, faction 90, level 53
+
+delete from creature_template where entry = 60461;
+REPLACE INTO creature_template VALUES
+(60461, 0, 2880, 0, 0, 0, 'Pethax Blackhorn', '', 0, 53, 53, 3282, 3282, 0, 0, 2739, 90, 0, 1, 1.14286, 1.5, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 3, 0, 60461, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from item_template where entry = 60243;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60243,1225,'Pethax\'s Horn',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(60461,60243,-100,1,1,0,10);
