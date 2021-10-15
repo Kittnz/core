@@ -1198,3 +1198,14 @@ replace into creature_involvedrelation (id, quest) values (2543, 40166);
 
 delete from creature_template where entry = 60327;
 replace into creature_template (entry, name, display_id1) values (60327, 'quest_40166_dummy_triger', 328);
+
+-- The Tower of Lapidis V --
+delete from quest_template where entry = 40167;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40166,40167,2,409,55,45,0,0,'The Tower of Lapidis V','With the key enchanted, one piece of the puzzle has been put into place. I however, do not possess the skillset able to give this key an attunement of that who created it. The power that once attuned this key is incredibly potent, and complex, and will need someone of greater skill then I to do this. You may return the key to Hydromancer Flakereef, perhaps he may know of another.','Return the Enchanted Brass Key to Hydromancer Flakereef.','Have you learned anything new about the key?','Hmm. So there is still more to be done, who knew that Lapidis had such potent magic that not even Dalaran could crack it. There must be some other way.',60242,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60242,1,0,400,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (2543, 40167);
+replace into creature_involvedrelation (id, quest) values (92001, 40167);
+
+delete from item_template where entry = 60242;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60242,9153,'Enchanted Brass key',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Swirls with powerful arcana',0);
