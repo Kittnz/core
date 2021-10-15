@@ -58,6 +58,7 @@
 #include "Weather.h"
 #include "BattleGround.h"
 #include "BattleGroundAV.h"
+#include "BattleGroundSV.h"
 #include "BattleGroundMgr.h"
 #include "Chat.h"
 #include "Database/DatabaseImpl.h"
@@ -7980,7 +7981,12 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                     bones->loot.m_personal = true; // Everyone can loot the corpse
                     if (BattleGround* bg = GetBattleGround())
                     {
-                        if (bg->GetTypeID() == BATTLEGROUND_AV)
+                        if (bg->GetTypeID() == BATTLEGROUND_SV)
+                        {
+                            LootStoreItem storeitem = LootStoreItem(81390, 100, 0, 0, 1, 1);
+                            bones->loot.AddItem(storeitem);
+                        }
+                        else if (bg->GetTypeID() == BATTLEGROUND_AV)
                         {
                             uint8 race = pVictim->GetRace();
                             uint32 rank = pVictim->GetHonorMgr().GetHighestRank().visualRank;
@@ -21741,6 +21747,12 @@ void Player::OnReceivedItem(Item* item)
 {
     if (item->GetProto()->Quality >= sWorld.getConfig(CONFIG_UINT32_ITEM_INSTANTSAVE_QUALITY))
         SetSaveTimer(1);
+
+    if (BattleGround* bg = GetBattleGround())
+    {
+        if (bg->GetTypeID() == BATTLEGROUND_SV)
+            ((BattleGroundSV*)bg)->HandleLootItem(this);
+    }
 }
 
 
@@ -22981,8 +22993,8 @@ bool Player::ApplyTransmogrifications(uint8 slot, uint32 itemID)
         if (slot > EQUIPMENT_SLOT_END)
             return false;
 
-        if (!_collectionMgr->HasTransmog(itemID))
-            return false;
+        //if (!_collectionMgr->HasTransmog(itemID))
+            //return false;
 
         ItemPrototype const* srcItemProto = sObjectMgr.GetItemPrototype(itemID);
 

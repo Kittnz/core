@@ -368,6 +368,9 @@ class BattleGround
         void StartBattleGround();
         void StopBattleGround();
 
+        GameObject* GetBGObject(uint32 type);
+        Creature* GetBGCreature(uint32 type);
+
         /* Location */
         void SetMapId(uint32 MapID) { m_MapId = MapID; }
         uint32 GetMapId() const { return m_MapId; }
@@ -489,13 +492,16 @@ class BattleGround
         void HandleTriggerBuff(ObjectGuid go_guid);
 
         // TODO: make this protected:
-        typedef std::vector<ObjectGuid> BGObjects;
-        typedef std::vector<ObjectGuid> BGCreatures;
-        // TODO drop m_BGObjects
-        BGObjects m_BgObjects;
+        typedef std::vector<ObjectGuid> GuidVector;
+        // TODO drop m_BGObjects, WTF??
+        GuidVector m_BgObjects;
+        GuidVector m_BgCreatures;
         void SpawnBGObject(ObjectGuid guid, uint32 respawntime);
         bool AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime = 0);
         void SpawnBGCreature(ObjectGuid guid, BattleGroundCreatureSpawnMode mode);
+        virtual Creature* AddCreature(uint32 entry, uint32 type, float x, float y, float z, float o, TeamId teamId = TEAM_NEUTRAL, uint32 respawntime = 0, Transport* transport = nullptr);
+        Creature* AddCreature(uint32 entry, uint32 type, Position const& pos, TeamId teamId = TEAM_NEUTRAL, uint32 respawntime = 0, Transport* transport = nullptr);
+        bool DelCreature(uint32 type);
         bool DelObject(uint32 type);
 
         void DoorOpen(ObjectGuid guid);
@@ -514,8 +520,8 @@ class BattleGround
 
         struct EventObjects
         {
-            BGObjects gameobjects;
-            BGCreatures creatures;
+            GuidVector gameobjects;
+            GuidVector creatures;
         };
 
         // cause we create it dynamicly i use a map - to avoid resizing when

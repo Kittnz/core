@@ -1138,11 +1138,14 @@ void BattleGround::UpdatePlayerScore(Player *Source, uint32 type, uint32 value)
 
 bool BattleGround::AddObject(uint32 type, uint32 entry, float x, float y, float z, float o, float rotation0, float rotation1, float rotation2, float rotation3, uint32 /*respawnTime*/)
 {
+    Map* map = GetBgMap();
+    if (!map)
+        return false;
     // must be created this way, adding to godatamap would add it to the base map of the instance
     // and when loading it (in go::LoadFromDB()), a new guid would be assigned to the object, and a new object would be created
     // so we must create it specific for this instance
     GameObject * go = new GameObject;
-    if (!go->Create(GetBgMap()->GenerateLocalLowGuid(HIGHGUID_GAMEOBJECT), entry, GetBgMap(),
+    if (!go->Create(map->GenerateLocalLowGuid(HIGHGUID_GAMEOBJECT), entry, map,
                     x, y, z, o, rotation0, rotation1, rotation2, rotation3, GO_ANIMPROGRESS_DEFAULT, GO_STATE_READY))
     {
         sLog.outErrorDb("Gameobject template %u not found in database! BattleGround not created!", entry);
@@ -1152,7 +1155,8 @@ bool BattleGround::AddObject(uint32 type, uint32 entry, float x, float y, float 
     }
 
     // add to world, so it can be later looked up from HashMapHolder
-    go->AddToWorld();
+    //go->AddToWorld();
+    map->Add(go);
     m_BgObjects[type] = go->GetObjectGuid();
     return true;
 }
@@ -1208,7 +1212,7 @@ void BattleGround::OnObjectDBLoad(Creature* creature)
 
 ObjectGuid BattleGround::GetSingleCreatureGuid(uint8 event1, uint8 event2)
 {
-    BGCreatures::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
+    GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
     if (itr != m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.end())
         return *itr;
     return ObjectGuid();
@@ -1216,7 +1220,7 @@ ObjectGuid BattleGround::GetSingleCreatureGuid(uint8 event1, uint8 event2)
 
 ObjectGuid BattleGround::GetSingleGameObjectGuid(uint8 event1, uint8 event2)
 {
-    BGObjects::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
+    GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
     if (itr != m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.end())
         return *itr;
     return ObjectGuid();
@@ -1271,7 +1275,7 @@ void BattleGround::OpenDoorEvent(uint8 event1, uint8 event2 /*=0*/)
         sLog.outError("BattleGround:OpenDoorEvent this event isn't active event1:%u event2:%u", event1, event2);
         return;
     }
-    BGObjects::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
+    GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.end(); ++itr)
         DoorOpen(*itr);
 }
@@ -1284,13 +1288,31 @@ void BattleGround::StartingEventDespawnDoors()
     if (!IsActiveEvent(BG_EVENT_DOOR, 0))                 // maybe already despawned (eye)
         return;
 
-    BGObjects::const_iterator itr = m_EventObjects[MAKE_PAIR32(BG_EVENT_DOOR, 0)].gameobjects.begin();
+    GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(BG_EVENT_DOOR, 0)].gameobjects.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(BG_EVENT_DOOR, 0)].gameobjects.end(); ++itr)
     {
         GameObject *obj = GetBgMap()->GetGameObject(*itr);
         if (obj)
             obj->AddObjectToRemoveList();
     }
+}
+
+GameObject* BattleGround::GetBGObject(uint32 type)
+{
+    GameObject* obj = GetBgMap()->GetGameObject(m_BgObjects[type]);
+    if (!obj)
+        sLog.outError("Battleground::GetBGObject: gameobject (type: %u, %s) not found for BG (map: %u, instance id: %u)!", type, m_BgObjects[type].GetString().c_str(), m_MapId, m_ClientInstanceID);
+
+    return obj;
+}
+
+Creature* BattleGround::GetBGCreature(uint32 type)
+{
+    Creature* creature = GetBgMap()->GetCreature(m_BgCreatures[type]);
+    if (!creature)
+        sLog.outError("Battleground::GetBGCreature: creature (type: %u, %s) not found for BG (map: %u, instance id: %u)!", type, m_BgCreatures[type].GetString().c_str(), m_MapId, m_ClientInstanceID);
+
+    return creature;
 }
 
 void BattleGround::ReturnPlayersToHomeGY()
@@ -1330,7 +1352,7 @@ void BattleGround::SpawnEvent(uint8 event1, uint8 event2, bool spawn, bool force
     else
         m_ActiveEvents[event1] = BG_EVENT_NONE;             // no event active if event2 gets despawned
 
-    BGCreatures::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
+    GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.end(); ++itr)
     {
         std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
@@ -1350,7 +1372,7 @@ void BattleGround::SpawnEvent(uint8 event1, uint8 event2, bool spawn, bool force
         SpawnBGCreature(*itr, spawnThisCreature ? RESPAWN_FORCED : (forced_despawn ? DESPAWN_FORCED : RESPAWN_STOP));
     }
 
-    BGObjects::const_iterator itr2 = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
+    GuidVector::const_iterator itr2 = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
     for (; itr2 != m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.end(); ++itr2)
         SpawnBGObject(*itr2, (spawn) ? delay : RESPAWN_ONE_DAY);
 
@@ -1363,7 +1385,7 @@ void BattleGround::SetSpawnEventMode(uint8 event1, uint8 event2, BattleGroundCre
         return;
 
     bool isSpawnMode = mode == RESPAWN_FORCED;
-    BGCreatures::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
+    GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.begin();
     for (; itr != m_EventObjects[MAKE_PAIR32(event1, event2)].creatures.end(); ++itr)
     {
         std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(itr->GetCounter());
@@ -1460,22 +1482,93 @@ void BattleGround::SpawnBGCreature(ObjectGuid guid, BattleGroundCreatureSpawnMod
     }
 }
 
+Creature* BattleGround::AddCreature(uint32 entry, uint32 type, float x, float y, float z, float o, TeamId /*teamId = TEAM_NEUTRAL*/, uint32 respawntime /*= 0*/, Transport* transport)
+{
+    // If the assert is called, means that BgCreatures must be resized!
+    //MANGOS_ASSERT(type < m_BgCreatures.size());
+
+    Map* map = GetBgMap();
+    if (!map)
+        return nullptr;
+
+    /*if (transport)
+    {
+        if (Creature* creature = transport->SummonPassenger(entry, { x, y, z, o }, TEMPSUMMON_MANUAL_DESPAWN))
+        {
+            m_BgCreatures[type] = creature->GetGUID();
+            return creature;
+        }
+
+        return nullptr;
+    }*/
+
+    Creature* creature = new Creature();
+
+    CreatureInfo const* cinfo = sObjectMgr.GetCreatureTemplate(entry);
+    if (!cinfo)
+    {
+        sLog.outError("Battleground::AddCreature: creature template (entry: %u) does not exist for BG (map: %u, instance id: %u)!", entry, m_MapId, m_ClientInstanceID);
+        delete creature;
+        return nullptr;
+    }
+
+    CreatureCreatePos pos(map, x, y, z, o);
+
+    if (!creature->Create(map->GenerateLocalLowGuid(HIGHGUID_UNIT), pos, cinfo, TEAM_NONE, entry))
+    {
+        sLog.outError("Battleground::AddCreature: cannot create creature (entry: %u) for BG (map: %u, instance id: %u)!", entry, m_MapId, m_ClientInstanceID);
+        delete creature;
+        return nullptr;
+    }
+
+    creature->SetHomePosition(x, y, z, o);
+
+    map->Add(creature);
+    m_BgCreatures[type] = creature->GetGUID();
+
+    if (respawntime)
+        creature->SetRespawnDelay(respawntime);
+
+    return creature;
+}
+
+Creature* BattleGround::AddCreature(uint32 entry, uint32 type, Position const& pos, TeamId teamId /*= TEAM_NEUTRAL*/, uint32 respawntime /*= 0*/, Transport* transport)
+{
+    return AddCreature(entry, type, pos.x, pos.y, pos.z, pos.o, teamId, respawntime, transport);
+}
+
+bool BattleGround::DelCreature(uint32 type)
+{
+    if (!m_BgCreatures[type])
+        return true;
+
+    if (Creature* creature = GetBgMap()->GetCreature(m_BgCreatures[type]))
+    {
+        creature->AddObjectToRemoveList();
+        m_BgCreatures[type].Clear();
+        return true;
+    }
+
+    sLog.outError("Battleground::DelCreature: creature (type: %u, %s) not found for BG (map: %u, instance id: %u)!", type, m_BgCreatures[type].GetString().c_str(), m_MapId, m_ClientInstanceID);
+    m_BgCreatures[type].Clear();
+    return false;
+}
+
 bool BattleGround::DelObject(uint32 type)
 {
     if (!m_BgObjects[type])
         return true;
 
-    GameObject *obj = GetBgMap()->GetGameObject(m_BgObjects[type]);
-    if (!obj)
+    if (GameObject* obj = GetBgMap()->GetGameObject(m_BgObjects[type]))
     {
-        sLog.outError("Can't find gobject: %s", m_BgObjects[type].GetString().c_str());
-        return false;
+        obj->SetRespawnTime(0);                                 // not save respawn time
+        obj->Delete();
+        m_BgObjects[type].Clear();
+        return true;
     }
-
-    obj->SetRespawnTime(0);                                 // not save respawn time
-    obj->Delete();
+    sLog.outError("Battleground::DelObject: gameobject (type: %u, %s) not found for BG (map: %u, instance id: %u)!", type, m_BgObjects[type].GetString().c_str(), m_MapId, m_ClientInstanceID);
     m_BgObjects[type].Clear();
-    return true;
+    return false;
 }
 
 void BattleGround::SendMessageToAll(int32 entry, ChatMsg type, Player const* source)
