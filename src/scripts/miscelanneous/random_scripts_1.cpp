@@ -2379,8 +2379,11 @@ bool GossipSelect_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature, ui
         pCreature->MonsterTextEmote(90319);
         pCreature->SendPlaySpellVisual(SPELL_VISUAL_KIT_DRINK);
         pPlayer->AddItem(51248); // Add Snow Covered Feather
-        pPlayer->DestroyItemCount(EGGNOG_ITEM, 1, true);
-        pPlayer->SaveInventoryAndGoldToDB();
+        if (pPlayer->HasItemCount(EGGNOG_ITEM, 1, false))
+        {
+            pPlayer->DestroyItemCount(EGGNOG_ITEM, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
         pCreature->AddAura(MOONKIN_FED);
 
         SpellAuraHolder* holder = pCreature->GetSpellAuraHolder(MOONKIN_FED);
@@ -2625,8 +2628,11 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
         pCreature->MonsterTextEmote("The sheep scarfs down the truffle, and then it jumps into your bags to rifle around for more!");
         pCreature->ForcedDespawn();
         pPlayer->AddItem(LOST_FARM_SHEEP_ITEM);
-        pPlayer->DestroyItemCount(DELICIOUS_ELWYNN_TRUFFLE, 1, true);
-        pPlayer->SaveInventoryAndGoldToDB();
+        if (pPlayer->HasItemCount(DELICIOUS_ELWYNN_TRUFFLE, 1, false))
+        {
+            pPlayer->DestroyItemCount(DELICIOUS_ELWYNN_TRUFFLE, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
@@ -7022,7 +7028,6 @@ bool ItemUseSpell_dispelling_scroll(Player* pPlayer, Item* pItem, const SpellCas
     pPlayer->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
     pPlayer->DestroyItemCount(pItem->GetEntry(), 1, true);
     pPlayer->SaveInventoryAndGoldToDB();
-
     return true;
 }
 
