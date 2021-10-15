@@ -1127,3 +1127,31 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010832;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010832,60236,-100,1,1,0,10);
+
+-- The Evil Deeptide --
+delete from quest_template where entry = 40162;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40162,2,408,52,45,0,0,'The Evil Deeptide','Hello! My name is Tinyfin, I was once apart of the Murlocs, all until we came here, and they joined with the slithery naga! They go by the name Deeptide now, and attack any who come near, they even stole my necklaces!\n\nThose were mine, that I made, and that I gave to friends, and they stole each and every one of them. I tried to ask nicely but they hurt me, and I want them back. Could you please, oh very please get me some my necklaces back? I don\'t need all of them, just a few, maybe six? I know that the other murlocs around here have them, so, make sure you ask nicely.','Collect 6 Lovely Shell Necklace\'s for Tinyfin in Gillijim\'s Island.','Any luck with getting back my Shell Necklace\'s?','They had it coming for stealing all of my stuff and being so mean to me! Thanks for getting some of them back, it means a lot, here, for the hard work, one for you!',60238,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4650,0,0,0,0,0,0,0,0,0,0,0,60239,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92145, 40162);
+replace into creature_involvedrelation (id, quest) values (92145, 40162);
+
+delete from item_template where entry = 60238;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60238,9858,'Lovely Shell Necklace',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0);
+
+replace into item_template values
+ ('60239', '0', '4', '0', 'Tinyfin\'s Shell Necklace', '', '9858', '2', '0', '1', '27648', '6912', '2', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '16', '5', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+update creature_template set loot_id = 92159 where entry = 92159;
+update creature_template set loot_id = 92160 where entry = 92160;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(92159,60238,-20,1,1,0,10),
+(92160,60238,-25,1,1,0,10);
