@@ -1106,8 +1106,6 @@ class Player final: public Unit
             return StoreItem(dest, pItem, update);
         }
         void RemoveItem(uint8 bag, uint8 slot, bool update);
-        // Turtle WoW, we use items as currency:
-        bool RemoveItemCurrency(uint32 itemId, uint32 count);
         void MailHardcoreModeRewards(uint32 level);
         void AnnounceHardcoreModeLevelUp(uint32 level);
         // Titles

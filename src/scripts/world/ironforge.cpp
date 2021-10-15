@@ -110,7 +110,10 @@ bool GossipSelect_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature, u
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("As someone who has lost their home, I can deeply emphasise with the elves.", pPlayer);
         if (pPlayer->HasItemCount(83015, 1, false))
-            pPlayer->RemoveItemCurrency(83015, 1);
+        {
+            pPlayer->DestroyItemCount(83015, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("You can count on the gnomes to support the high elven ascension into the Alliance!", player);
@@ -270,7 +273,10 @@ bool GossipSelect_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature, u
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("The Senate will need to discuss this matter in detail.", pPlayer);
         if (pPlayer->HasItemCount(83015, 1, false))
-            pPlayer->RemoveItemCurrency(83015, 1);
+        {
+            pPlayer->DestroyItemCount(83015, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("However King Bronzebeard has been very supportive of the Quel'dorei ascension to the Alliance.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);

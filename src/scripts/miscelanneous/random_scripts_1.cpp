@@ -556,10 +556,7 @@ bool ItemUseSpell_item_elwynn_coin(Player* pPlayer, Item* pItem, const SpellCast
         {
             pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_KNEEL);
             pPlayer->PlayDirectSound(1204, pPlayer);
-
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301);
-
-            if (cInfo != nullptr)
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51301))
             {
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
                 pPlayer->DestroyItemCount(51425, 1, true);
@@ -2382,7 +2379,8 @@ bool GossipSelect_npc_shivering_moonkin(Player* pPlayer, Creature* pCreature, ui
         pCreature->MonsterTextEmote(90319);
         pCreature->SendPlaySpellVisual(SPELL_VISUAL_KIT_DRINK);
         pPlayer->AddItem(51248); // Add Snow Covered Feather
-        pPlayer->RemoveItemCurrency(EGGNOG_ITEM, 1);
+        pPlayer->DestroyItemCount(EGGNOG_ITEM, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
         pCreature->AddAura(MOONKIN_FED);
 
         SpellAuraHolder* holder = pCreature->GetSpellAuraHolder(MOONKIN_FED);
@@ -2627,7 +2625,8 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
         pCreature->MonsterTextEmote("The sheep scarfs down the truffle, and then it jumps into your bags to rifle around for more!");
         pCreature->ForcedDespawn();
         pPlayer->AddItem(LOST_FARM_SHEEP_ITEM);
-        pPlayer->RemoveItemCurrency(DELICIOUS_ELWYNN_TRUFFLE, 1);
+        pPlayer->DestroyItemCount(DELICIOUS_ELWYNN_TRUFFLE, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
@@ -2825,7 +2824,8 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
             p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18274);
             p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
             p_Player->SetFlying(true);
-            p_Player->RemoveItemCurrency(422, 1);
+            p_Player->DestroyItemCount(422, 1, true);
+            p_Player->SaveInventoryAndGoldToDB();
             p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
         }
         else
@@ -3061,8 +3061,9 @@ bool GossipSelect_MiningEnchanter(Player* player, Creature* creature, uint32 sen
 
     if (!error)
     {
-        player->RemoveItemCurrency(ORNATE_SPLYGLASS, 1);
-        player->RemoveItemCurrency(LIGHT_LEATHER, 10);
+        player->DestroyItemCount(ORNATE_SPLYGLASS, 1, true);
+        player->DestroyItemCount(LIGHT_LEATHER, 10, true);
+        player->SaveInventoryAndGoldToDB();
 
         creature->SendSpellGo(creature, SPELL_VISUAL);
 
@@ -3701,7 +3702,10 @@ bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender,
         pPlayer->CastSpell(pPlayer, 130, true);
 
         if (pPlayer->HasItemCount(6948, 1, 0))
-            pPlayer->RemoveItemCurrency(6948, 1);
+        {
+            pPlayer->DestroyItemCount(6948, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
     }
     return true;
 }
@@ -4028,7 +4032,9 @@ bool GOHello_go_farstrider_well(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->HasItemCount(EMPTY_BARREL, 1))
     {
-        pPlayer->RemoveItemCurrency(EMPTY_BARREL, 1);
+        pPlayer->DestroyItemCount(EMPTY_BARREL, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
+
         pPlayer->AddItem(FILLED_BARREL);
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
     }
@@ -4340,7 +4346,10 @@ bool GOHello_go_portal_goldshire(Player* pPlayer, GameObject* pGo)
             pPlayer->KilledMonster(cInfo, ObjectGuid());
         // Remove Hearthstone:
         if (pPlayer->HasItemCount(6948, 1, 0))
-            pPlayer->RemoveItemCurrency(6948, 1);
+        {
+            pPlayer->DestroyItemCount(6948, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
     }
 
     return true;
@@ -6543,7 +6552,10 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("So the Quel'dorei wish to formally join the Alliance?", pPlayer);
             if (pPlayer->HasItemCount(83015, 1, false))
-                pPlayer->RemoveItemCurrency(83015, 1);
+            {
+                pPlayer->DestroyItemCount(83015, 1, true);
+                pPlayer->SaveInventoryAndGoldToDB();
+            }
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
                 c->MonsterSayToPlayer("I have no objections. During the Second war the high elves were instrumental in beating back the Orcish Horde.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6568,7 +6580,10 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("Ten thousand years ago, the Highborne first summoned the Legion to this world.", pPlayer);
             if (pPlayer->HasItemCount(83015, 1, false))
-                pPlayer->RemoveItemCurrency(83015, 1);
+            {
+                pPlayer->DestroyItemCount(83015,  1, true);
+                pPlayer->SaveInventoryAndGoldToDB();
+            }
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
                 c->MonsterSayToPlayer("Some defected long after their atrocities, we took pity and welcome them in our fold, only for them to betray us and unleashing a magical storm on Ashenvale itself.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6593,7 +6608,10 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("Ogrim told me stories about the Forest Trolls, how he trampled on Khaz Modan with them and brought fear to the Alliance.", pPlayer);
             if (pPlayer->HasItemCount(83020, 1, false))
-                pPlayer->RemoveItemCurrency(83020, 1);
+            {
+                pPlayer->DestroyItemCount(83020, 1, true);
+                pPlayer->SaveInventoryAndGoldToDB();
+            }
             DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
                 c->MonsterSayToPlayer("I wasn�t always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quel�thalas.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6610,7 +6628,10 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             pCreature->MonsterSayToPlayer("Da trolls were at one time just one people, no matter da tribe they cared and respected each other.", pPlayer);
             if (pPlayer->HasItemCount(83020, 1, false))
-                pPlayer->RemoveItemCurrency(83020, 1);
+            {
+                pPlayer->DestroyItemCount(83020, 1, true);
+                pPlayer->SaveInventoryAndGoldToDB();
+            }
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
                 c->MonsterSayToPlayer("We are not dat close anymore, not as we used to.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6638,7 +6659,10 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
 
             if (pPlayer->HasItemCount(60154, 1, false))
-                pPlayer->RemoveItemCurrency(60154, 1);
+            {
+                pPlayer->DestroyItemCount(60154, 1, true);
+                pPlayer->SaveInventoryAndGoldToDB();
+            }
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
                 c->MonsterSayToPlayer("Can this be? The elusive Felstar is finally no more? I am impressed, but if you think that changes my opinion of the Quel'dorei you are sorely mistaken.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6669,7 +6693,10 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
         case 1748: // Stormwind
             pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
             if (pPlayer->HasItemCount(60155, 1, false))
-                pPlayer->RemoveItemCurrency(60155, 1);
+            {
+                pPlayer->DestroyItemCount(60155, 1, true);
+                pPlayer->SaveInventoryAndGoldToDB();
+            }
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->MonsterSayToPlayer("Then there is consent. With the Darnassian Endorsement, the Alliance has agreed for the Quel'dorei of Alah'thalas to formally join the Alliance.", player);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6993,7 +7020,8 @@ bool ItemUseSpell_dispelling_scroll(Player* pPlayer, Item* pItem, const SpellCas
         pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
 
     pPlayer->SummonGameObject(2010804, spitelash_shrine->GetPositionX(), spitelash_shrine->GetPositionY(), spitelash_shrine->GetPositionZ() + 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
-    pPlayer->RemoveItemCurrency(pItem->GetEntry(), 1);
+    pPlayer->DestroyItemCount(pItem->GetEntry(), 1, true);
+    pPlayer->SaveInventoryAndGoldToDB();
 
     return true;
 }
