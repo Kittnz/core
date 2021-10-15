@@ -21977,60 +21977,6 @@ bool Player::InGurubashiArena(bool checkOutsideArea) const
     return GetAreaId() == 2177 /* Gurubashi Arena Battle Ring*/ || (checkOutsideArea && GetAreaId() == 1741 /* Gurubashi Arena*/);
 }
 
-bool Player::RemoveItemCurrency(uint32 itemId, uint32 count)
-{
-    uint32 LastCount = count;
-
-    auto RemoveCompletelyOrPartialFunc = [&LastCount](Player* player, Item* pItem)
-    {
-        if (pItem->GetCount() > LastCount)
-        {
-            pItem->SetCount(pItem->GetCount() - LastCount);
-            LastCount = 0;
-            if (player->IsInWorld())
-            {
-                pItem->SendCreateUpdateToPlayer(player);
-            }
-            pItem->SetState(ITEM_CHANGED, player);
-        }
-        else
-        {
-            LastCount -= pItem->GetCount();
-            player->RemoveItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
-        }
-    };
-
-    for (int i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_ITEM_END; ++i)
-    {
-        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-        if (pItem != nullptr && pItem->GetEntry() == itemId)
-        {
-            RemoveCompletelyOrPartialFunc(this, pItem);
-            if (LastCount == 0) return true;
-        }
-    }
-    for (int i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
-    {
-        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-        if (pItem != nullptr && pItem->GetEntry() == itemId)
-        {
-            RemoveCompletelyOrPartialFunc(this, pItem);
-            if (LastCount == 0) return true;
-        }
-    }
-    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
-    {
-        Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i);
-        if (pBag != nullptr)
-        {
-            LastCount -= pBag->RemoveItems(itemId, LastCount);
-            if (LastCount == 0) return true;
-        }
-    }
-
-    return false;
-}
-
 void Player::MailHardcoreModeRewards(uint32 level)
 {
     // Speak to Speedy and get an item that will reduce your Creature.Kill XP to x0.5 (hardcore mode).

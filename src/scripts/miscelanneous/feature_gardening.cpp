@@ -111,10 +111,13 @@ bool GOSelect_go_simple_wooden_planter(Player* pPlayer, GameObject* pGo, uint32 
         default:
             break;
     }
-
-    pPlayer->RemoveItemCurrency(currency, 1);
-    pPlayer->SummonGameObject(static_go, x, y, z + 0.4F, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
-    pGo->UseDoorOrButton();
+    if (pPlayer->HasItemCount(currency, 1, false))
+    {
+        pPlayer->DestroyItemCount(currency, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
+        pPlayer->SummonGameObject(static_go, x, y, z + 0.4F, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_GROWING, true);
+        pGo->UseDoorOrButton();
+    }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -300,18 +303,21 @@ bool GOHello_go_farm_grow_activate(Player* pPlayer, GameObject* pGo)
         break;
     }
 
-    if (!pPlayer->HasItemCount(currency, 1))
+    if (pPlayer->HasItemCount(currency, 1))
+    {
+        pPlayer->DestroyItemCount(currency, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
+        pPlayer->SummonGameObject(static_go, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, harvest == false ? LIFESPAN_GROWING : LIFESPAN_BUTTON, true);
+        pPlayer->SummonGameObject(currency == REFRESHING_SPRING_WATER ? WATER_SPLASH : DUST_CLOUD, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_SPLASH, true);
+        pGo->Despawn();
+        pGo->UpdateObjectVisibility();
+        return true;
+    }
+    else
     {
         ChatHandler(pPlayer).PSendSysMessage(currency == REFRESHING_SPRING_WATER ? "You're out of Refreshing Spring Water! Find more." : "You're out of Un'Goro Soil! Find more.");
         return false;
     }
-
-    pPlayer->RemoveItemCurrency(currency, 1);
-    pPlayer->SummonGameObject(static_go, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, harvest == false ? LIFESPAN_GROWING : LIFESPAN_BUTTON, true);
-    pPlayer->SummonGameObject(currency == REFRESHING_SPRING_WATER ? WATER_SPLASH : DUST_CLOUD, x, y, z, 0.0F, 0.0f, 0.0f, 0.0f, 0.0f, LIFESPAN_SPLASH, true);
-    pGo->Despawn();
-    pGo->UpdateObjectVisibility();
-    return true;
 }
 
 void AddSC_gardening()

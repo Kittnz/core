@@ -165,7 +165,10 @@ bool GossipSelect_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature, uin
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("The Revantusk Trolls are allies I never imagined we would have after hearing the history they and the Old Horde had.", pPlayer);
         if (pPlayer->HasItemCount(83020, 1, false))
-            pPlayer->RemoveItemCurrency(83020, 1);
+        {
+            pPlayer->DestroyItemCount(83020, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("If they are at least half of what the Darkspear are they will not only be dependable allies but also dear friends.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
