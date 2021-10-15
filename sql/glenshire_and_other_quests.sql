@@ -1216,3 +1216,12 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (92001, 40168);
 replace into creature_involvedrelation (id, quest) values (92938, 40168);
+
+-- The Tower of Lapidis VII --
+delete from quest_template where entry = 40169;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40168,40169,2,409,55,45,0,0,'The Tower of Lapidis VII','<After studying the Enchanted Brass Key it would appear that Magus Valgon is stumped>. I do not think I can assist with this friend, the complexities of the magic may take many weeks to begin to crack, and I think you do not have such time to wait.\n\nI do know one who knows a great deal of magic, hidden away from the world. There is a hermit that remains somewhat hidden upon the island of Kazon, nestled in between both Gillijim and Lapidis Isle. Go there, and find Insom\'ni, he is a powerful troll , much more powerful then any I have met. If there is any who could attune this key, it would be him.','Travel to Kazon Island and speak with the troll hermit Insom\'ni.','What do you need from me, adventurer?','Magus Valgon sent you, interesting, let me have a look then and I will see what I can do.',60242,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60242,1,0,450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92938, 40169);
+replace into creature_involvedrelation (id, quest) values (60446, 40169);
+
+update creature_template set npc_flags = 3 where entry = 60446;
