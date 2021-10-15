@@ -2361,6 +2361,7 @@ void GameObject::SendGameObjectReset()
 void GameObject::Despawn()
 {
     SendObjectDeSpawnAnim(GetObjectGuid());
+
     if (GameObjectData const* data = GetGOData())
     {
         if (m_spawnedByDefault)

@@ -291,7 +291,7 @@ void BattleGroundAV::HandleKillUnit(Creature *creature, Player *killer)
             // Despawn all landmines
             uint8 eventIdx = creature->GetEntry() == NPC_LANDMINES_EXPERT_A2 ? BG_AV_LANDMINES_ALLIANCE : BG_AV_LANDMINES_HORDE;
             Map* map = GetBgMap();
-            BGObjects::const_iterator itr = m_EventObjects[MAKE_PAIR32(eventIdx, 0)].gameobjects.begin();
+            GuidVector::const_iterator itr = m_EventObjects[MAKE_PAIR32(eventIdx, 0)].gameobjects.begin();
             for (; itr != m_EventObjects[MAKE_PAIR32(eventIdx, 0)].gameobjects.end(); ++itr)
                 if (GameObject* gobj = map->GetGameObject(*itr))
                     gobj->AddObjectToRemoveList();
