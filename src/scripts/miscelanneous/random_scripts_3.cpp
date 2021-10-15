@@ -1081,9 +1081,53 @@ struct npc_captain_ironhoofAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_captain_ironhoof(Creature* _Creature) { return new npc_captain_ironhoofAI(_Creature); }
 
+bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40171) // The Tower of Lapidis IX
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 13236, false);
+
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->CastSpell(npc, 5906, false);
+            });
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            player->AddItem(60244);
+            if (player->HasItemCount(60244, 1, false))
+            {
+                npc->MonsterSayToPlayer("There, it is done, the key is attuned, do with it what you must. I hope whatever purpose you are using this for, serves you well.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                return true;
+            }
+            else
+                player->RemoveQuest(40171);
+                player->SetQuestStatus(40171, QUEST_STATUS_NONE);
+                player->GetSession()->SendNotification("Your bags are full!");
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            return false;
+            });
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_insomni";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_insomni;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_captain_ironhoof";
