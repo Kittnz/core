@@ -422,8 +422,11 @@ bool GossipSelect_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature, uin
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60317))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-        pPlayer->DestroyItemCount(60156, 1, true);
-        pPlayer->SaveInventoryAndGoldToDB();
+        if (pPlayer->HasItemCount(60156, 1, false))
+        {
+            pPlayer->DestroyItemCount(60156, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
     }
     return true;
 }
@@ -581,17 +584,18 @@ bool QuestAccept_npc_grelda(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
 bool GOHello_go_pile_of_dirt(Player* pPlayer, GameObject* pGo)
 {
-    if (!pPlayer->HasItemCount(60189, 1, false))
-    {
-        pPlayer->GetSession()->SendNotification("Need Lordaeron Banner.");
-    }
-    else
+    if (pPlayer->HasItemCount(60189, 1, false))
     {
         pGo->SummonGameObject(2010303, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
         pPlayer->DestroyItemCount(60189, 1, true);
         pPlayer->SaveInventoryAndGoldToDB();
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    else
+    {
+        pPlayer->GetSession()->SendNotification("Need Lordaeron Banner.");
+        return false;
     }
     return true;
 }
