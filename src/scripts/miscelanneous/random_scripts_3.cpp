@@ -7,15 +7,15 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
-class DemorphAfterTime : public BasicEvent 
+class DemorphAfterTime : public BasicEvent
 {
 public:
     explicit DemorphAfterTime(uint64 player_guid) : BasicEvent(), player_guid(player_guid) {}
 
-    bool Execute(uint64 e_time, uint32 p_time) override 
+    bool Execute(uint64 e_time, uint32 p_time) override
     {
         Player* player = ObjectAccessor::FindPlayer(player_guid);
-        if (player) 
+        if (player)
             player->DeMorph();
         return false;
     }
@@ -210,7 +210,7 @@ private:
     uint32 m_uiWarstompTimer;
 };
 
-CreatureAI* GetAI_the_cow_king(Creature* pCreature){ return new the_cow_kingAI(pCreature); }
+CreatureAI* GetAI_the_cow_king(Creature* pCreature) { return new the_cow_kingAI(pCreature); }
 
 bool GossipHello_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature)
 {
@@ -248,35 +248,35 @@ bool GossipSelect_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature, u
 
         if (pPlayer->GetRace() == RACE_HIGH_ELF)
         {
-        DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild our people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
-            });
-        DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. As you know, we are still so few. I am truly glad that you managed to survive, you are an inspiration to us all.", player);
+            DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild our people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
+                });
+            DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. As you know, we are still so few. I am truly glad that you managed to survive, you are an inspiration to us all.", player);
 
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60314))
-                player->KilledMonster(cInfo, ObjectGuid());
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            });
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60314))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                });
         }
         else
         {
-        DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild my people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
-            });
-        DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. There's so few left of us that every life we save is a miracle. Thus your assistance here is very welcome and I salute you.", player);
+            DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild my people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
+                });
+            DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. There's so few left of us that every life we save is a miracle. Thus your assistance here is very welcome and I salute you.", player);
 
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60314))
-                player->KilledMonster(cInfo, ObjectGuid());
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            });
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60314))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                });
         }
         pPlayer->CLOSE_GOSSIP_MENU();
     }
@@ -421,7 +421,9 @@ bool GossipSelect_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature, uin
         pPlayer->SEND_GOSSIP_MENU(60315, pCreature->GetGUID());
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60317))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
-        pPlayer->RemoveItemCurrency(60156, 1);
+
+        pPlayer->DestroyItemCount(60156, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
     }
     return true;
 }
@@ -586,7 +588,8 @@ bool GOHello_go_pile_of_dirt(Player* pPlayer, GameObject* pGo)
     else
     {
         pGo->SummonGameObject(2010303, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-        pPlayer->RemoveItemCurrency(60189, 1);
+        pPlayer->DestroyItemCount(60189, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
@@ -884,7 +887,10 @@ bool GossipSelect_npc_samuel_boran(Player* pPlayer, Creature* pCreature, uint32 
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
         if (pPlayer->HasItemCount(60205, 1, false))
-            pPlayer->RemoveItemCurrency(60205, 1);
+        {
+            pPlayer->DestroyItemCount(60205, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             npc->MonsterSayToPlayer("I knew Arnold was still out there somewhere, though I cannot imagine what it would be like stranded on some island at sea. Hopefully he returns home safely.", player);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -924,7 +930,10 @@ bool GossipSelect_npc_karl_boran(Player* pPlayer, Creature* pCreature, uint32 ui
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
         if (pPlayer->HasItemCount(60204, 1, false))
-            pPlayer->RemoveItemCurrency(60204, 1);
+        {
+            pPlayer->DestroyItemCount(60204, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             npc->MonsterSayToPlayer("A letter from Arnold... I thought he died at sea, I haven't heard from him in such a long time.", player);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -1021,7 +1030,7 @@ bool GossipSelect_npc_marty_moonshine(Player* pPlayer, Creature* pCreature, uint
         }
         else
             pPlayer->GetSession()->SendNotification("Your bags are full!");
-            return false;
+        return false;
     }
 
     return true;
