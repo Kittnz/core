@@ -14,3 +14,14 @@ replace into `creature_template` values('93006','0','18118','0','0','0','Orc Gru
 replace into `creature_template` values('93007','0','3736','0','0','0','Orc Spearman','','0','60','60','15260','15260','0','0','4610','1687','0','1.1','1.14286','0','20','5','0','0','1','106','137','0','272','1','2000','2000','1','36864','0','0','0','0','0','0','0','1','0','7','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','','0','3','0','0','3','15442','0','0','0','0','524288','0','');
 replace into `creature_template` values('93008','0','9609','0','0','0','Orc Necrolyte','','0','60','60','15260','15260','0','0','4610','1687','0','1.1','1.14286','0','20','5','0','0','1','106','137','0','272','1','2000','2000','1','36864','0','0','0','0','0','0','0','1','0','7','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','','0','3','0','0','3','15442','0','0','0','0','524288','0','');
 replace into `creature_template` values('93009','0','11439','0','0','0','Orc Warlock','','0','60','60','15260','15260','0','0','4610','1687','0','1.1','1.14286','0','20','5','0','0','1','106','137','0','272','1','2000','2000','1','36864','0','0','0','0','0','0','0','1','0','7','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','','0','3','0','0','3','15442','0','0','0','0','524288','0','');
+
+UPDATE `creature_template` SET script_name = 'SV_human_leader' WHERE entry = 93000;
+UPDATE `creature_template` SET script_name = 'SV_human_footman' WHERE entry = 93001;
+UPDATE `creature_template` SET script_name = 'SV_human_archer' WHERE entry = 93002;
+UPDATE `creature_template` SET script_name = 'SV_human_conjurer' WHERE entry = 93003;
+UPDATE `creature_template` SET script_name = 'SV_human_cleric' WHERE entry = 93004;
+UPDATE `creature_template` SET script_name = 'SV_orc_leader' WHERE entry = 93005;
+UPDATE `creature_template` SET script_name = 'SV_orc_grunt' WHERE entry = 93006;
+UPDATE `creature_template` SET script_name = 'SV_orc_spearman' WHERE entry = 93007;
+UPDATE `creature_template` SET script_name = 'SV_orc_necrolyte' WHERE entry = 93008;
+UPDATE `creature_template` SET script_name = 'SV_orc_warlock' WHERE entry = 93009;
