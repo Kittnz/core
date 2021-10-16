@@ -2,7 +2,7 @@
 
 /* boss_taranaszz */
 
-enum
+enum RaresSpells
 {
     /* boss_tarangos */
     SPELL_ICE_BREATH = 16350,
@@ -57,7 +57,7 @@ enum
     SPELL_DEM_SHOUT        = 11556,
 };
 
-enum Events
+enum RaresEvents
 {
     /* boss_tarangos */
     EVENT_ICE_BREATH = 1,

@@ -10,6 +10,7 @@ void AddSC_generic_spell_ai();
 //battlegrounds
 void AddSC_battleground();
 void AddSC_bg_alterac();
+void AddSC_bg_sunnyglade();
 
 //custom
 void AddSC_ubrs_trash();
@@ -296,6 +297,7 @@ void AddScripts()
     //battlegrounds
     AddSC_battleground();
     AddSC_bg_alterac();
+    AddSC_bg_sunnyglade();
 
     //custom
     AddSC_ubrs_trash();
