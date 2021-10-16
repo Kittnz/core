@@ -10,6 +10,7 @@ scriptPCH.h
 
 battlegrounds/battleground.cpp
 battlegrounds/battleground_alterac.cpp
+battlegrounds/battleground_sunnyglade.cpp
 dungeons/blackfathom_deeps/blackfathom_deeps.h
 dungeons/blackfathom_deeps/instance_blackfathom_deeps.cpp
 dungeons/blackrock_depths/arena_challenge_ai.cpp
