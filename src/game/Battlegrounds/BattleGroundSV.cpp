@@ -14,9 +14,9 @@
 BattleGroundSV::BattleGroundSV()
 {
     m_StartMessageIds[BG_STARTING_EVENT_FIRST] = 0;
-    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_WS_START_ONE_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_THIRD] = LANG_BG_WS_START_HALF_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_WS_HAS_BEGUN;
+    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_SV_START_ONE_MINUTE;
+    m_StartMessageIds[BG_STARTING_EVENT_THIRD] = LANG_BG_SV_START_HALF_MINUTE;
+    m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_SV_HAS_BEGUN;
 
     m_BgObjects.resize(BG_SV_OBJECT_MAX);
     m_BgCreatures.resize(BG_SV_CREATURE_MAX);
@@ -347,9 +347,9 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
         m_NodeTimers[node] = BG_SV_FLAG_CAPTURING_TIME;
 
         if (teamIndex == 0)
-            SendMessage2ToAll(LANG_BG_AB_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node), LANG_BG_ALLY);
+            SendMessage2ToAll(LANG_BG_SV_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node), LANG_BG_ALLY);
         else
-            SendMessage2ToAll(LANG_BG_AB_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_HORDE, source, GetTowerNameId(node), LANG_BG_HORDE);
+            SendMessage2ToAll(LANG_BG_SV_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_HORDE, source, GetTowerNameId(node), LANG_BG_HORDE);
 
         sound = BG_SV_SOUND_NODE_CLAIMED;
     }
@@ -368,9 +368,9 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
             m_NodeTimers[node] = BG_SV_FLAG_CAPTURING_TIME;
 
             if (teamIndex == BG_TEAM_ALLIANCE)
-                SendMessage2ToAll(LANG_BG_AB_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node));
+                SendMessage2ToAll(LANG_BG_SV_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node));
             else
-                SendMessage2ToAll(LANG_BG_AB_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_HORDE, source, GetTowerNameId(node));
+                SendMessage2ToAll(LANG_BG_SV_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_HORDE, source, GetTowerNameId(node));
         }
         // If contested, change back to occupied
         else
@@ -385,9 +385,9 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
             NodeOccupied(node, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
 
             if (teamIndex == BG_TEAM_ALLIANCE)
-                SendMessage2ToAll(LANG_BG_AB_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node));
+                SendMessage2ToAll(LANG_BG_SV_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node));
             else
-                SendMessage2ToAll(LANG_BG_AB_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_HORDE, source, GetTowerNameId(node));
+                SendMessage2ToAll(LANG_BG_SV_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_HORDE, source, GetTowerNameId(node));
         }
         sound = (teamIndex == TEAM_ALLIANCE) ? BG_SV_SOUND_NODE_ASSAULTED_ALLIANCE : BG_SV_SOUND_NODE_ASSAULTED_HORDE;
     }
@@ -444,9 +444,9 @@ void BattleGroundSV::CheckResources()
 {
     // SendWorldStateUpdate
 
-    if (m_HumanResources >= 250)
+    if (m_HumanResources >= RESIDUE_MAX_COUNT)
         StartFinalEvent(ALLIANCE);
-    else if (m_OrcResources >= 250)
+    else if (m_OrcResources >= RESIDUE_MAX_COUNT)
         StartFinalEvent(HORDE);
 }
 

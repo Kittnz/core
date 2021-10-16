@@ -3,6 +3,9 @@
 
 #include "BattleGround.h"
 
+// For testing!
+constexpr uint8 RESIDUE_MAX_COUNT = 20;
+
 enum BG_SV_BattlegroundNodes
 {
     BG_SV_HUMAN_TOWER = 0,
@@ -92,16 +95,6 @@ enum BG_SV_NPC
     NPC_ORC_SPEARMAN = 93007,
     NPC_ORC_NECROLYTE = 93008,
     NPC_ORC_WARLOCK = 93009
-};
-
-enum BG_SV_Langs
-{
-    LANG_BG_SV_NODE_TAKEN = 50000,
-    LANG_BG_SV_DEFEAT_TEXT = 50001,
-    LANG_BG_SV_END_TEXT = 50002,
-    LANG_BG_SV_SUMMON_DRAGON = 50003,
-    LANG_BG_SV_HUMAN_TOWER = 50004,
-    LANG_BG_SV_ORC_TOWER = 50005
 };
 
 enum BG_SV_Sounds
