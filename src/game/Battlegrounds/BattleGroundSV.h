@@ -20,16 +20,27 @@ enum BG_SV_ObjectTypes
     BG_SV_OBJECTID_BANNER_CONT_H = 180061,
 };
 
+enum BG_SV_BuffObjects
+{
+    BG_SV_OBJECTID_SPEEDBUFF = 179871,
+    BG_SV_OBJECTID_REGENBUFF = 179904,
+    BG_SV_OBJECTID_BERSERKERBUFF = 179905
+};
+
 enum BG_SV_ObjectType
 {
-    // 5*2
+    // nodes * 2
     BG_SV_OBJECT_BANNER_NEUTRAL = 0,
     BG_SV_OBJECT_BANNER_CONT_A  = 1,
     BG_SV_OBJECT_BANNER_CONT_H  = 2,
     BG_SV_OBJECT_BANNER_ALLY    = 3,
     BG_SV_OBJECT_BANNER_HORDE   = 4,
+    // buffs * 6
+    BG_SV_OBJECT_SPEEDBUFF      = 10,
+    BG_SV_OBJECT_REGENBUFF      = 11,
+    BG_SV_OBJECT_BERSERKBUFF    = 12,
     // 2 gates possible
-    BG_SV_OBJECT_MAX            = 10
+    BG_SV_OBJECT_MAX            = 28
 };
 
 enum BG_SV_CreatureType
@@ -45,8 +56,8 @@ enum BG_SV_CreatureType
     BG_SV_CREATURE_LEADER_GUARDS_A = 16,
     BG_SV_CREATURE_LEADER_GUARDS_H = 22,
     BG_SV_CREATURE_HUMAN_ARMY      = 28,
-    BG_SV_CREATURE_ORC_ARMY        = 29,
-    BG_SV_CREATURE_MAX             = 30
+    BG_SV_CREATURE_ORC_ARMY        = 32,
+    BG_SV_CREATURE_MAX             = 36
 };
 
 enum BG_SV_Timers
@@ -70,17 +81,17 @@ enum BG_SV_NPC
     NPC_HERALD = 13760,
     NPC_AEONUS = 13761,
 
-    NPC_MARSHAL_GREYWALL = 250000,
-    NPC_HUMAN_FOOTMAN = 250001,
-    NPC_HUMAN_ARCHER = 250002,
-    NPC_HUMAN_CONJURER = 250003,
-    NPC_HUMAN_CLERIC = 250004,
+    NPC_MARSHAL_GREYWALL = 93000,
+    NPC_HUMAN_FOOTMAN = 93001,
+    NPC_HUMAN_ARCHER = 93002,
+    NPC_HUMAN_CONJURER = 93003,
+    NPC_HUMAN_CLERIC = 93004,
 
-    NPC_WARLORD_BLACKSKULL = 250005,
-    NPC_ORC_GRUNT = 250006,
-    NPC_ORC_SPEARMAN = 250007,
-    NPC_ORC_NECROLYTE = 250008,
-    NPC_ORC_WARLOCK = 250009
+    NPC_WARLORD_BLACKSKULL = 93005,
+    NPC_ORC_GRUNT = 93006,
+    NPC_ORC_SPEARMAN = 93007,
+    NPC_ORC_NECROLYTE = 93008,
+    NPC_ORC_WARLOCK = 93009
 };
 
 enum BG_SV_Langs
@@ -116,41 +127,98 @@ Position const BG_SV_NodePositions[BG_SV_DYNAMIC_NODES_COUNT] =
     {1013.34f, 249.37f, 117.43f, 4.76f},            // orc tower
 };
 
+Position const BG_SV_BuffPositions[6] =
+{
+    {1632.22f, 143.54f, 103.7f, 0.79f},  // tree
+    {1356.95f, -117.16f, 102.5f, 1.19f}, // mine
+    {1240.48f, 178.16f, 66.6f, 3.98f},   // stables
+    {1077.14f, 412.6f, 92.7f, 5.38f},    // well
+    {1324.09f, 578.5f, 104.2f, 3.95f},   // mine 2
+    {1444.28f, 306.99f, 70.9f, 0.23f},   // wind
+};
+
 Position const BG_SV_SpiritGuidePos[2] =
 {
     {1697.1f, 504.9f, 122.9f, 0.7f},                 // human graveyard
     {926.7f, 77.4f, 129.7f, 0.5f}                    // orc graveyard
 };
 
-Position const TowerGuardsPos[2][5] =
+Position const BG_SV_TowerGuardsPos[2][5] =
+{
+    {
+        {1683.88f, 310.95f, 108.7f, 0.02f},
+        {1683.14f, 321.88f, 108.7f, 0.07f},
+        {1658.05f, 322.5f, 143.9f, 1.77f},
+        {1652.53f, 312.7f, 143.9f, 3.4f},
+        {1667.07f, 316.8f, 143.9f, 0.18f}
+    },
+    {
+        {1003.6f, 250.1f, 96.0f, 1.7f},
+        {1011.9f, 251.16f, 96.0f, 1.7f},
+        {1015.3f, 241.0f, 111.0f, 4.8f},
+        {1012.47f, 257.9f, 117.5f, 1.6f},
+        {1014.05f, 240.2f, 117.5f, 4.8f}
+    }
+};
+
+Position const BG_SV_LeaderPos[2]
+{
+    {1673.8f, 423.3f, 114.9f, 4.66f},
+    {968.35f, 175.64f, 100.5f, 0.55f},
+};
+
+struct NPCData
+{
+    uint32 entry = 0;
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+    float o = 0.0f;
+};
+
+NPCData const BG_SV_LeaderGuardsPos[2][6] =
+{
+    // footman. conjurer, cleric
+    {
+        {93001, 1678.05f, 422.08f, 115.0f, 4.66f},
+        {93001, 1669.69f, 422.52f, 115.0f, 4.66f},
+        {93003, 1679.98f, 424.64f, 115.0f, 4.66f},
+        {93003, 1668.3f, 425.0f, 115.0f, 4.66f},
+        {93004, 1676.1f, 424.46f, 115.0f, 4.66f},
+        {93004, 1671.1f, 424.5f, 115.0f, 4.66f}
+    },
+    // grunt, warlock, necrolyte
+    {
+        {93006, 967.55f, 178.71f, 100.5f, 0.55f},
+        {93006, 970.25f, 172.6f, 100.5f, 0.55f},
+        {93009, 970.45f, 169.9f, 100.5f, 0.55f},
+        {93009, 964.44f, 179.4f, 100.5f, 0.55f},
+        {93008, 965.9f, 177.0f, 100.5f, 0.55f},
+        {93008, 967.8f, 173.0f, 100.5f, 0.55f}
+    }
+};
+
+Position const BG_SV_FightPos[2][4] =
 {
     {
         {1697.1f, 504.9f, 122.9f, 0.7f},
         {1697.1f, 504.9f, 122.9f, 0.7f},
         {1697.1f, 504.9f, 122.9f, 0.7f},
         {1697.1f, 504.9f, 122.9f, 0.7f},
-        {1697.1f, 504.9f, 122.9f, 0.7f}
     },
     {
         {1697.1f, 504.9f, 122.9f, 0.7f},
         {1697.1f, 504.9f, 122.9f, 0.7f},
         {1697.1f, 504.9f, 122.9f, 0.7f},
         {1697.1f, 504.9f, 122.9f, 0.7f},
-        {1697.1f, 504.9f, 122.9f, 0.7f}
     }
-};
-
-Position const Leader[2]
-{
-    {1697.1f, 504.9f, 122.9f, 0.7f},
-    {1697.1f, 504.9f, 122.9f, 0.7f},
 };
 
 struct BG_SV_BannerTimer
 {
-    uint32      timer;
-    uint8       type;
-    uint8       teamIndex;
+    uint32 timer = 0;
+    uint8 type = 0;
+    uint8 teamIndex = 0;
 };
 
 class BattleGroundSVScore : public BattleGroundScore

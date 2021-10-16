@@ -1381,10 +1381,10 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         // TEMP Overrdie for Sunnyglade Valley
         else if (start2 == 701)
         {
-            AStartLoc[0] = 956.5f;
-            AStartLoc[1] = 157.1f;
-            AStartLoc[2] = 100.2f;
-            AStartLoc[3] = 0.5f;
+            HStartLoc[0] = 956.5f;
+            HStartLoc[1] = 157.1f;
+            HStartLoc[2] = 100.2f;
+            HStartLoc[3] = 0.5f;
         }
         else if (start2 == 9001)
         {
