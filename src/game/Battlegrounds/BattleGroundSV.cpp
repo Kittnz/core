@@ -137,6 +137,12 @@ void BattleGroundSV::Update(uint32 diff)
 
 void BattleGroundSV::StartingEventCloseDoors()
 {
+    // despawn all banners
+    for (uint8 obj = BG_SV_OBJECT_BANNER_NEUTRAL; obj < BG_SV_DYNAMIC_NODES_COUNT * 5; ++obj)
+        SpawnBGObject(m_BgObjects[obj], RESPAWN_ONE_DAY);
+    // despawn all buffs
+    for (uint8 i = 0; i < 6 * 3; ++i)
+        SpawnBGObject(m_BgObjects[BG_SV_OBJECT_SPEEDBUFF + i], RESPAWN_ONE_DAY);
 }
 
 void BattleGroundSV::StartingEventOpenDoors()
@@ -144,8 +150,14 @@ void BattleGroundSV::StartingEventOpenDoors()
     OpenDoorEvent(BG_EVENT_DOOR);
 
     // spawn neutral banners
-    for (int banner = BG_SV_OBJECT_BANNER_NEUTRAL, i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; banner += 5, ++i)
-        SpawnBGObject(banner, RESPAWN_IMMEDIATELY);
+    for (uint8 banner = BG_SV_OBJECT_BANNER_NEUTRAL, i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; banner += 5, ++i)
+        SpawnBGObject(m_BgObjects[banner], RESPAWN_IMMEDIATELY);
+    // spawn random buffs
+    for (uint8 i = 0; i < 6; ++i)
+    {
+        uint8 buff = urand(0, 2);
+        SpawnBGObject(m_BgObjects[BG_SV_OBJECT_SPEEDBUFF + buff + i * 3], RESPAWN_IMMEDIATELY);
+    }
 
     m_endTimer = 60 * MINUTE * IN_MILLISECONDS;
 }
@@ -190,13 +202,24 @@ bool BattleGroundSV::SetupBattleGround()
     /*banners*/
     for (uint8 i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; ++i)
     {
-        if (!AddObject(BG_SV_OBJECT_BANNER_NEUTRAL + 5 * i, BG_SV_OBJECTID_BANNER_0, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2), RESPAWN_ONE_DAY)
-            || !AddObject(BG_SV_OBJECT_BANNER_CONT_A + 5 * i, BG_SV_OBJECTID_BANNER_CONT_A, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2), RESPAWN_ONE_DAY)
-            || !AddObject(BG_SV_OBJECT_BANNER_CONT_H + 5 * i, BG_SV_OBJECTID_BANNER_CONT_H, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2), RESPAWN_ONE_DAY)
-            || !AddObject(BG_SV_OBJECT_BANNER_ALLY + 5 * i, BG_SV_OBJECTID_BANNER_A, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2), RESPAWN_ONE_DAY)
-            || !AddObject(BG_SV_OBJECT_BANNER_HORDE + 5 * i, BG_SV_OBJECTID_BANNER_H, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2), RESPAWN_ONE_DAY))
+        if (!AddObject(BG_SV_OBJECT_BANNER_NEUTRAL + 5 * i, BG_SV_OBJECTID_BANNER_0, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2))
+            || !AddObject(BG_SV_OBJECT_BANNER_CONT_A + 5 * i, BG_SV_OBJECTID_BANNER_CONT_A, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2))
+            || !AddObject(BG_SV_OBJECT_BANNER_CONT_H + 5 * i, BG_SV_OBJECTID_BANNER_CONT_H, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2))
+            || !AddObject(BG_SV_OBJECT_BANNER_ALLY + 5 * i, BG_SV_OBJECTID_BANNER_A, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2))
+            || !AddObject(BG_SV_OBJECT_BANNER_HORDE + 5 * i, BG_SV_OBJECTID_BANNER_H, BG_SV_NodePositions[i].x, BG_SV_NodePositions[i].y, BG_SV_NodePositions[i].z, BG_SV_NodePositions[i].o, 0, 0, sin(BG_SV_NodePositions[i].o / 2), cos(BG_SV_NodePositions[i].o / 2)))
         {
-            sLog.outError("BatteGroundSV: Failed to spawn some object. Battleground not created!");
+            sLog.outError("BatteGroundSV: Failed to spawn banners. Battleground not created!");
+            return false;
+        }
+    }
+    /*buffs*/
+    for (uint8 i = 0; i < 6; ++i)
+    {
+        if (!AddObject(BG_SV_OBJECT_SPEEDBUFF + 3 * i, BG_SV_OBJECTID_SPEEDBUFF, BG_SV_BuffPositions[i].x, BG_SV_BuffPositions[i].y, BG_SV_BuffPositions[i].z, BG_SV_BuffPositions[i].o, 0, 0, sin(BG_SV_BuffPositions[i].o / 2), cos(BG_SV_BuffPositions[i].o / 2))
+            || !AddObject(BG_SV_OBJECT_REGENBUFF + 3 * i, BG_SV_OBJECTID_REGENBUFF, BG_SV_BuffPositions[i].x, BG_SV_BuffPositions[i].y, BG_SV_BuffPositions[i].z, BG_SV_BuffPositions[i].o, 0, 0, sin(BG_SV_BuffPositions[i].o / 2), cos(BG_SV_BuffPositions[i].o / 2))
+            || !AddObject(BG_SV_OBJECT_BERSERKBUFF + 3 * i, BG_SV_OBJECTID_BERSERKERBUFF, BG_SV_BuffPositions[i].x, BG_SV_BuffPositions[i].y, BG_SV_BuffPositions[i].z, BG_SV_BuffPositions[i].o, 0, 0, sin(BG_SV_BuffPositions[i].o / 2), cos(BG_SV_BuffPositions[i].o / 2)))
+        {
+            sLog.outError("BatteGroundSV: Failed to spawn buffs. Battleground not created!");
             return false;
         }
     }
@@ -214,20 +237,45 @@ bool BattleGroundSV::SetupBattleGround()
         return false;
     }
     /*human leader*/
-    if (!AddCreature(NPC_MARSHAL_GREYWALL, BG_SV_CREATURE_HUMAN_LEADER, BG_SV_SpiritGuidePos[0].x, BG_SV_SpiritGuidePos[0].y, BG_SV_SpiritGuidePos[0].z, BG_SV_SpiritGuidePos[0].o))
+    if (!AddCreature(NPC_MARSHAL_GREYWALL, BG_SV_CREATURE_HUMAN_LEADER, BG_SV_LeaderPos[0].x, BG_SV_LeaderPos[0].y, BG_SV_LeaderPos[0].z, BG_SV_LeaderPos[0].o, TEAM_ALLIANCE, 10*MINUTE*IN_MILLISECONDS))
     {
         sLog.outError("BatteGroundSV: Failed to spawn human leader. Battleground not created!");
         return false;
     }
     /*human leader guards*/
-
+    for (uint8 i = 0; i < 6; ++i)
+    {
+        if (!AddCreature(BG_SV_LeaderGuardsPos[0][i].entry, BG_SV_CREATURE_LEADER_GUARDS_A + i, BG_SV_LeaderGuardsPos[0][i].x, BG_SV_LeaderGuardsPos[0][i].y, BG_SV_LeaderGuardsPos[0][i].z, BG_SV_LeaderGuardsPos[0][i].o, TEAM_ALLIANCE, 10 * MINUTE * IN_MILLISECONDS))
+        {
+            sLog.outError("BatteGroundSV: Failed to spawn human guards. Battleground not created!");
+            return false;
+        }
+    }
     /*orc leader*/
-    if (!AddCreature(NPC_WARLORD_BLACKSKULL, BG_SV_CREATURE_ORC_LEADER, BG_SV_SpiritGuidePos[0].x, BG_SV_SpiritGuidePos[0].y, BG_SV_SpiritGuidePos[0].z, BG_SV_SpiritGuidePos[0].o))
+    if (!AddCreature(NPC_WARLORD_BLACKSKULL, BG_SV_CREATURE_ORC_LEADER, BG_SV_LeaderPos[1].x, BG_SV_LeaderPos[1].y, BG_SV_LeaderPos[1].z, BG_SV_LeaderPos[1].o, TEAM_HORDE, 10 * MINUTE * IN_MILLISECONDS))
     {
         sLog.outError("BatteGroundSV: Failed to spawn orc leader. Battleground not created!");
         return false;
     }
     /*orc leader guards*/
+    for (uint8 i = 0; i < 6; ++i)
+    {
+        if (!AddCreature(BG_SV_LeaderGuardsPos[1][i].entry, BG_SV_CREATURE_LEADER_GUARDS_H + i, BG_SV_LeaderGuardsPos[1][i].x, BG_SV_LeaderGuardsPos[1][i].y, BG_SV_LeaderGuardsPos[1][i].z, BG_SV_LeaderGuardsPos[1][i].o, TEAM_HORDE, 10 * MINUTE * IN_MILLISECONDS))
+        {
+            sLog.outError("BatteGroundSV: Failed to spawn orc guards. Battleground not created!");
+            return false;
+        }
+    }
+    /*fights*/
+    /*for (uint8 i = 0; i < 4; ++i)
+    {
+        if (!AddCreature(NPC_HUMAN_FOOTMAN, BG_SV_CREATURE_HUMAN_ARMY + i, BG_SV_LeaderGuardsPos[1][i].x, BG_SV_LeaderGuardsPos[1][i].y, BG_SV_LeaderGuardsPos[1][i].z, BG_SV_LeaderGuardsPos[1][i].o, TEAM_ALLIANCE, 5 * MINUTE * IN_MILLISECONDS)
+            || !AddCreature(NPC_ORC_GRUNT, BG_SV_CREATURE_ORC_ARMY + i, BG_SV_LeaderGuardsPos[1][i].x, BG_SV_LeaderGuardsPos[1][i].y, BG_SV_LeaderGuardsPos[1][i].z, BG_SV_LeaderGuardsPos[1][i].o, TEAM_HORDE, 5 * MINUTE * IN_MILLISECONDS))
+        {
+            sLog.outError("BatteGroundSV: Failed to spawn army. Battleground not created!");
+            return false;
+        }
+    }*/
 
     return true;
 }
@@ -264,9 +312,6 @@ void BattleGroundSV::HandleKillPlayer(Player *player, Player *killer)
         return;
 
     BattleGround::HandleKillPlayer(player, killer);
-
-    // Applied above but remove here instead.
-    player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
 }
 
 void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*target_obj*/)
@@ -445,13 +490,12 @@ void BattleGroundSV::NodeOccupied(uint8 node, Team team)
     for (uint8 i = 0; i < 5; ++i)
     {
         DelCreature(guardType+i);
-        AddCreature(guardEntry, guardType+i, TowerGuardsPos[node][i].x, TowerGuardsPos[node][i].y, TowerGuardsPos[node][i].z, TowerGuardsPos[node][i].o, TEAM_NEUTRAL, 5*MINUTE*IN_MILLISECONDS);
+        AddCreature(guardEntry, guardType+i, BG_SV_TowerGuardsPos[node][i].x, BG_SV_TowerGuardsPos[node][i].y, BG_SV_TowerGuardsPos[node][i].z, BG_SV_TowerGuardsPos[node][i].o, TEAM_NEUTRAL, 5*MINUTE*IN_MILLISECONDS);
     }
 }
 
 void BattleGroundSV::NodeDeOccupied(uint8 node)
 {
-    //only dynamic nodes, no start points
     if (node >= BG_SV_DYNAMIC_NODES_COUNT)
         return;
 
