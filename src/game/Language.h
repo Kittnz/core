@@ -804,7 +804,7 @@ enum MangosStrings
     LANG_BG_AV_H_NEAR_LOSE              = 788,
     LANG_BG_AV_H_GENERAL_DEAD           = 789,
     LANG_BG_AV_A_GENERAL_DEAD           = 790,
-    // Room for battleground/arena strings 791-799 not used
+    // 793-799 not used
 
     // in game strings
     //                                  = 800, not used
@@ -1131,16 +1131,29 @@ enum MangosStrings
     LANG_OPVP_EP_CAPTURE_CGT_A          = 10038,
     LANG_OPVP_EP_CAPTURE_PWT_H          = 10039,
     LANG_OPVP_EP_CAPTURE_PWT_A          = 10040,
-    LANG_OPVP_EP_LOSE_NPT_H            = 10041,
-    LANG_OPVP_EP_LOSE_NPT_A            = 10042,
-    LANG_OPVP_EP_LOSE_EWT_H            = 10043,
-    LANG_OPVP_EP_LOSE_EWT_A            = 10044,
-    LANG_OPVP_EP_LOSE_CGT_H            = 10045,
-    LANG_OPVP_EP_LOSE_CGT_A            = 10046,
-    LANG_OPVP_EP_LOSE_PWT_H            = 10047,
-    LANG_OPVP_EP_LOSE_PWT_A            = 10048,
+    LANG_OPVP_EP_LOSE_NPT_H             = 10041,
+    LANG_OPVP_EP_LOSE_NPT_A             = 10042,
+    LANG_OPVP_EP_LOSE_EWT_H             = 10043,
+    LANG_OPVP_EP_LOSE_EWT_A             = 10044,
+    LANG_OPVP_EP_LOSE_CGT_H             = 10045,
+    LANG_OPVP_EP_LOSE_CGT_A             = 10046,
+    LANG_OPVP_EP_LOSE_PWT_H             = 10047,
+    LANG_OPVP_EP_LOSE_PWT_A             = 10048,
     // opvp si
     LANG_OPVP_SI_CAPTURE_H              = 10049,
     LANG_OPVP_SI_CAPTURE_A              = 10050,
+    // sunnyglade
+    LANG_BG_SV_START_ONE_MINUTE         = 10051,
+    LANG_BG_SV_START_HALF_MINUTE        = 10052,
+    LANG_BG_SV_HAS_BEGUN                = 10053,
+    LANG_BG_SV_NODE_TAKEN               = 10054,
+    LANG_BG_SV_NODE_DEFENDED            = 10055,
+    LANG_BG_SV_NODE_ASSAULTED           = 10056,
+    LANG_BG_SV_NODE_CLAIMED             = 10057,
+    LANG_BG_SV_DEFEAT_TEXT              = 10058,
+    LANG_BG_SV_END_TEXT                 = 10059,
+    LANG_BG_SV_SUMMON_DRAGON            = 10060,
+    LANG_BG_SV_HUMAN_TOWER              = 10061,
+    LANG_BG_SV_ORC_TOWER                = 10062
 };
 #endif
