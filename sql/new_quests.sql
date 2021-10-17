@@ -44,6 +44,6 @@ delete from creature_template where entry = 60328;
 replace into creature_template (entry, name, display_id1) values (60328, 'quest_40174_dummy_triger', 328);
 
 delete from gameobject_template where entry = 2010834;
-replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010834, 2, 24163, 1, 'Blast Powder Keg', 32, 'go_blast_powder_keg');
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010834, 1, 24163, 1, 'Blast Powder Keg', 32, 'go_blast_powder_keg');
 
 
