@@ -151,3 +151,24 @@ update creature_template set script_name = 'npc_morgan_the_storm' where entry = 
 
 delete from creature_loot_template where entry = 51607 and item = 60253;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (51607,60253,-100,1,1,0,10);
+
+-- Making a Statement --
+-- delete from quest_template where entry = 40180;
+-- replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40179,40180,2,35,48,45,0,0,'Making a Statement','Here mate, put Morgan\'s head in this Jolly Roger. Ye ain\'t about to like what ye\'re goin\' to do next, but that shall only prove how insane \'n courageous ye be. Ye\'re goin\' to toss the head at the feet of\' the Baron \'n the First Mate \'n make a damn run fer it! Ye\'re gonna find us on Jaguero Island, I hope ye make it thar alive, ye\'d be a great asset to the crew. If ye do come, I will officially make ye a crewmate.','Make a statement.','Shiver me timbers, ye actually made it. Were they mad?','Haha idiots! Now they know what\'s gonna happen when they try to mess with us next, great job. And welcome aboard.',0,0,0,0,0,0,0,0,60330,1,0,0,0,0,0,0,60254,1,12435,1250,87,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+-- replace into creature_questrelation (id, quest) values (60453, 40180);
+-- replace into creature_involvedrelation (id, quest) values (60453, 40180);
+
+-- delete from creature_template where entry = 60330;
+-- replace into creature_template (entry, name, display_id1) values (60330, 'quest_40180_dummy_triger', 328);
+
+-- delete from item_template where entry = 60254;
+-- replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+-- (60254,0000,'Jolly Roger',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Taking over Faldir\'s Cove --
+delete from quest_template where entry = 40181;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40180,40181,2,45,48,45,0,0,'Taking over Faldir\'s Cove','Now that we\'ve let \'em know who they be dealin\' with it\'s also time to hit \'em when they\'d less expect. I hear thar be some fools that set anchor in to Faldir\'s Cove in Arathi Highlands, I wants ye to scuttle \'em, all of \'em.','Invade Faldir\'s Cove and kill everything in your way.','Been a long road, eh?','The Harbinger was sent fer some reason in Arathi Highlands, we dunno why, \'n we mighty don\'t care that much either, all we care about right now be that they be dead, \'n we\'ve laid once again a blow to the Blackwater Pirates.',0,0,0,0,0,0,0,0,2610,1,2769,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60453, 40181);
+replace into creature_involvedrelation (id, quest) values (60453, 40181);
