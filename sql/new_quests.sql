@@ -134,3 +134,20 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from gameobject_template where entry = 2010836;
 replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010836, 2, 24058, 1.75, 'Huge Keg of Rum', 32, 'go_keg_of_rum');
+
+-- Exterminate the Rat --
+delete from quest_template where entry = 40179;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40178,40179,2,35,48,45,0,0,'Exterminate the Rat','So it seems these Blackwater fools sent some rat to keep track of our mates, he already asked someone to scuttle one of our new captains, although to be fair that orc was an idiot. Blood fer blood! I wants ye to go meet Morgan the Storm \'n spit in his face, bring me his head. Ye can find him on the Eastern beach where most of me mates set anchor.','Kill Morgan the Storm and bring his head to Garfield \'The Fox\' Sparkleblast.','Don\'t got all day.','The rat finally lays dead. Put that bag down fer now, I\'ll tell ye what ye gotta do next afore we get the deck all bloody.',60253,1,0,0,0,0,0,0,51607,1,0,0,0,0,0,0,0,0,5545,1250,87,1000,21,-500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The rum is poisoned');
+
+replace into creature_questrelation (id, quest) values (60453, 40179);
+replace into creature_involvedrelation (id, quest) values (60453, 40179);
+
+delete from item_template where entry = 60253;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60253,3918,'Morgan\'s Severed Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 51607 where entry = 51607;
+update creature_template set script_name = 'npc_morgan_the_storm' where entry = 51607;
+
+delete from creature_loot_template where entry = 51607 and item = 60253;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (51607,60253,-100,1,1,0,10);
