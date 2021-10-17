@@ -5321,6 +5321,7 @@ bool GossipSelect_npc_custodian_of_time(Player* pPlayer, Creature* pCreature, ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        pPlayer->AddAura(52004, 0, pPlayer);
         pCreature->MonsterSayToPlayer("I would wish you luck, if such a thing existed.");
         pPlayer->TeleportTo(1, -8170.67F, -4758.11F, 33.33F, 4.8F);
     }
