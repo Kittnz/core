@@ -172,3 +172,25 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60453, 40181);
 replace into creature_involvedrelation (id, quest) values (60453, 40181);
+
+-- South Sea Losers --
+delete from quest_template where entry = 40182;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40181,40182,2,408,50,48,0,0,'South Sea Losers','Now that we be done with the mongrels from Blackwater, we have time to focus on a different kind of enemy.I hear the South Sea Pirates anchored on the Isle of Lapidis, a mysterious Island that be known to\' hide some sort o\' booty from wha\' me mates tell me, although I say it\'s just\' fairy tales. Go pick a fight with \'em, \'n here, it\'s about time ye represent the Jolly Roger, tie this red bandana over yer wrist, ye\'re a Bloodsail after all.','Travel to Lapidis and pick a fight with the local pirates.','Still as weak as they used to be?','So they be thar after all. Good, some of me scallywags be trackin\' behind ye to see if they can get any kind of information while ye be wreakin\' havoc, \'n it seems we did get what we needs.',0,0,0,0,0,0,0,0,2610,1,2769,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60453, 40182);
+replace into creature_involvedrelation (id, quest) values (60453, 40182);
+
+Main description: 
+Short objective:
+
+Progress text: 
+Completion: 
+Required creature kills: Southsea Buccaneer 0/10
+Southsea Corsair 0/10
+Required items: 
+— Rewards 
+Money: 55s 35c
+Reputation: 750 Bloodsail Buccaneers
+XP: 1250
+Items:... Red Bloodsail Bandana (Make it a trinket please)
+Additional notes: 
