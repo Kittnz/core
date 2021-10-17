@@ -1857,6 +1857,22 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 56044: // Debug: Previous DisplayID (commands will become obsolete in 1.15.2)
+                {
+                    uint16 display_id = m_caster->ToPlayer()->GetDisplayId();
+                    display_id--;
+                    m_caster->ToPlayer()->SetDisplayId(display_id);
+                    ChatHandler(unitTarget->ToPlayer()).PSendSysMessage("|cffff8040Current DisplayID: %u|r", m_caster->ToPlayer()->GetDisplayId());
+                    return;
+                }
+                case 56043: // Debug: Next DisplayID (commands will become obsolete in 1.15.2)
+                {
+                    uint16 display_id = m_caster->ToPlayer()->GetDisplayId();
+                    display_id++;
+                    m_caster->ToPlayer()->SetDisplayId(display_id);
+                    ChatHandler(unitTarget->ToPlayer()).PSendSysMessage("|cffff8040Current DisplayID: %u|r", m_caster->ToPlayer()->GetDisplayId());
+                    return;
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)
