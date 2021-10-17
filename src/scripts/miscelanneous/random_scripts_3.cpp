@@ -1185,9 +1185,36 @@ bool GOSelect_go_keg_of_rum(Player* pPlayer, GameObject* pGo, uint32 sender, uin
     return false;
 }
 
+bool GossipHello_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40179) == QUEST_STATUS_INCOMPLETE) // Exterminate the Rat
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Spit in Morgan's face.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        //pCreature->MonsterSayToPlayer("Prepare to die!", pPlayer);
+        pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_morgan_the_storm";
+    newscript->pGossipHello = &GossipHello_npc_morgan_the_storm;
+    newscript->pGossipSelect = &GossipSelect_npc_morgan_the_storm;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_keg_of_rum";
