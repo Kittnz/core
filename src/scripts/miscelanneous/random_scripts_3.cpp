@@ -1133,9 +1133,41 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
     return false;
 }
 
+bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_blast_powder_keg(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010834)
+        {
+            //pGo->SummonGameObject(2010699, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 60, true); /*invisible trigger obj*/
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60328))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            pGo->UseDoorOrButton(60); // 1min
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_blast_powder_keg";
+    newscript->pGOHello = &GOHello_go_blast_powder_keg;
+    newscript->pGOGossipSelect = &GOSelect_go_blast_powder_keg;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_insomni";
