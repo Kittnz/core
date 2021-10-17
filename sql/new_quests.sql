@@ -179,18 +179,3 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60453, 40182);
 replace into creature_involvedrelation (id, quest) values (60453, 40182);
-
-Main description: 
-Short objective:
-
-Progress text: 
-Completion: 
-Required creature kills: Southsea Buccaneer 0/10
-Southsea Corsair 0/10
-Required items: 
-— Rewards 
-Money: 55s 35c
-Reputation: 750 Bloodsail Buccaneers
-XP: 1250
-Items:... Red Bloodsail Bandana (Make it a trinket please)
-Additional notes: 
