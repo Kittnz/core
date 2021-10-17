@@ -1159,9 +1159,41 @@ bool GOSelect_go_blast_powder_keg(Player* pPlayer, GameObject* pGo, uint32 sende
     return false;
 }
 
+bool GOHello_go_keg_of_rum(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(40178) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60252, 1, false))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison the rum.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_keg_of_rum(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010836)
+        {
+            pPlayer->DestroyItemCount(60252, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60329))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_keg_of_rum";
+    newscript->pGOHello = &GOHello_go_keg_of_rum;
+    newscript->pGOGossipSelect = &GOSelect_go_keg_of_rum;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_blast_powder_keg";
