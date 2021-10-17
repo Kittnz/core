@@ -241,18 +241,18 @@ bool GossipSelect_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature, u
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             npc->MonsterSayToPlayer("Ah my family name. I always lived in the shadows of my sisters. Alleria sacrificed herself to stop the Orcish Horde, Sylvanas she... Became the Ranger-General of Silvermoon. I have always been proud of my sisters but I never managed to reach their level, I guess I was lacking the conviction they had, but that has changed. Seeing what happened to my people.\t", player);
             });
-        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             npc->MonsterSayToPlayer("How broken they are, how much they suffer and struggle. I couldn't idle in Dalaran anymore, I reached out to the surviving Elven lodges and acquired the support from several Elven citizen and magi of Dalaran. I searched the Dalarani records and found records pertaining to this ancient outpost.\t", player);
             });
 
         if (pPlayer->GetRace() == RACE_HIGH_ELF)
         {
-            DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            DoAfterTime(pPlayer, 17 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild our people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
                 });
-            DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. As you know, we are still so few. I am truly glad that you managed to survive, you are an inspiration to us all.", player);
 
@@ -264,11 +264,11 @@ bool GossipSelect_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature, u
         }
         else
         {
-            DoAfterTime(pPlayer, 11 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            DoAfterTime(pPlayer, 17 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild my people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
                 });
-            DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. There's so few left of us that every life we save is a miracle. Thus your assistance here is very welcome and I salute you.", player);
 
