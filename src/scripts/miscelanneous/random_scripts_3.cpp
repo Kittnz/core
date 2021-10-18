@@ -1226,9 +1226,60 @@ bool GossipSelect_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature, uin
     return true;
 }
 
+bool GossipHello_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40187) == QUEST_STATUS_INCOMPLETE) // Captain of the Bloodsail Buccaneers
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("Well done, Cap'n!", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("Set yer veils high 'n conquer this world under yer name 'n the Jolly Roger o' the Bloodsail Buccaneers!", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterYell("Ahoy! Now let\'s get some rum \'n party.");
+            npc->HandleEmote(EMOTE_ONESHOT_APPLAUD);
+            });
+        DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterYell("Yo-ho-ho!");
+            npc->HandleEmote(EMOTE_ONESHOT_CHEER);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60331))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_garfield_sparkblast";
+    newscript->pGossipHello = &GossipHello_npc_garfield_sparkblast;
+    newscript->pGossipSelect = &GossipSelect_npc_garfield_sparkblast;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_morgan_the_storm";
