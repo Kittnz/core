@@ -179,3 +179,19 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60453, 40182);
 replace into creature_involvedrelation (id, quest) values (60453, 40182);
+
+-- First Mate McCoy --
+delete from quest_template where entry = 40183;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40182,40183,2,408,50,48,0,0,'First Mate McCoy','Right, the information. Well ye see, I\'ve been huntin\' this First Mate since me early days of piracy, he took me eye and I want his head. He be areal pain in the gut, I tell ye. Once we were at sea through the vast cold areas close to Northrend, the wind blew so harshly that when we was fighting at sea the ships eventually hit one another and we had to fight through the coldest rain I\'ve ever had to witness, we\'ve barely made it alive on rowboats to Eastern Kingdoms, only to meet again on land and swear to claim each other\'s head. With ye here, a long grudge will be fulfilled.','Kill First Mate McCoy.','Bah, as ugly as it used to be.','Aye, toss it on the floor over there, I\'ll be mountin\' it on me wall in the room I sleep.',60255,1,0,0,0,0,0,0,60452,1,0,0,0,0,0,0,0,0,5545,1000,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60453, 40183);
+replace into creature_involvedrelation (id, quest) values (60453, 40183);
+
+update creature_template set loot_id = 60452 where entry = 60452;
+
+delete from item_template where entry = 60255;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60255,3486,'McCoy\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where entry = 60452 and item = 60255;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (60452,60255,-100,1,1,0,10);
