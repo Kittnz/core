@@ -236,3 +236,14 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from creature_template where entry = 60330;
 replace into creature_template (entry, name, display_id1) values (60330, 'quest_40186_dummy_triger', 328);
 
+-- Captain of the Bloodsail Buccaneers --
+delete from quest_template where entry = 40187;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40186,40187,2,408,50,48,0,0,'Captain of the Bloodsail Buccaneers','Mate at this point, I can nah even argue wit\' the fact that ye\'re a mighty resourceful individual. That bein\' said, I be givin\' ye, yer owns wee crew. Ye won\'t have to do much other than live a free damn live \'n go search fer adventure, gold, rum \'n wenches. It\'s been a fun run, \'n it\'s \'cause of ye that we be here. Speak with me when ye\'re ready to claim yer new title \'n yer crew.','Talk to the Garfield \'The Fox\' Sparkleblast when you\'re ready.','It be no great honour mate, this ain\'t a knight ceremony.','Yo-ho-ho!',0,0,0,0,0,0,0,0,60331,1,0,0,0,0,0,0,60257,1,3035,750,87,2000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Become the captain of the Bloodsail Buccaneers');
+
+replace into creature_questrelation (id, quest) values (60453, 40187);
+replace into creature_involvedrelation (id, quest) values (60453, 40187);
+
+delete from creature_template where entry = 60331;
+replace into creature_template (entry, name, display_id1) values (60331, 'quest_40187_dummy_triger', 328);
+
+update creature_template set script_name = 'npc_garfield_sparkblast' where entry = 60453;
