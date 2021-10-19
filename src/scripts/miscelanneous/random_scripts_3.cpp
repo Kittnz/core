@@ -1228,21 +1228,36 @@ bool GossipSelect_npc_morgan_the_storm(Player* pPlayer, Creature* pCreature, uin
 
 bool GossipHello_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature)
 {
+    if (pPlayer->GetQuestStatus(40172) == QUEST_STATUS_INCOMPLETE) // Red Flag over the Sea
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I want to join you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pPlayer->GetQuestStatus(40187) == QUEST_STATUS_INCOMPLETE) // Captain of the Bloodsail Buccaneers
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    if (pPlayer->GetQuestStatus(40187) == QUEST_STATUS_INCOMPLETE) // Captain of the Bloodsail Buccaneers
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-
     return true;
 }
 
 bool GossipSelect_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        auto faction1 = sObjectMgr.GetFactionEntry(87); // Bloodsail Buccaneers
+        auto faction2 = sObjectMgr.GetFactionEntry(21); // Booty Bay
+        if (faction1 && faction2)
+        {
+            pPlayer->GetReputationMgr().SetReputation(faction1, 0);
+            pPlayer->GetReputationMgr().SetReputation(faction2, -3000);
+            pCreature->HandleEmote(EMOTE_ONESHOT_APPLAUD);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60332))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
 
