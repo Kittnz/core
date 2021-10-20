@@ -1318,7 +1318,7 @@ struct npc_thiraelAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         if(!m_creature->FindNearestCreature(60464, 5.0F))
-        m_creature->SummonCreature(60464, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120 * IN_MILLISECONDS);
+        m_creature->SummonCreature(60464, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 115 * IN_MILLISECONDS);
     }
 };
 
@@ -1330,7 +1330,9 @@ bool QuestRewarded_npc_thirael_ghost(Player* pPlayer, Creature* pQuestGiver, Que
 
     if (pQuest->GetQuestId() == 40184) // No Hope for Tomorrow
     {
-        pQuestGiver->ForcedDespawn();
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->ForcedDespawn();
+            });
     }
 
     return false;
