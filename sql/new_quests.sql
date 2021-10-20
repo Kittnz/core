@@ -246,3 +246,19 @@ replace into creature_involvedrelation (id, quest) values (60453, 40187);
 
 delete from creature_template where entry = 60331;
 replace into creature_template (entry, name, display_id1) values (60331, 'quest_40187_dummy_triger', 328);
+
+-- No Hope for Tomorrow --
+delete from quest_template where entry = 40184;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40184,2,2557,50,45,0,0,'No Hope for Tomorrow','It\'s been so long, so long ago that we\'ve decided to let go of our principles. So long ago we cared for anyone but us, we\'ve given up on our lives in favor of the demons, we are nothing but shadows of memories from the past. I can no longer do this, I can no longer wait.\n\nI wish days would return when we, the Highborne, were the ones standing atop the Night Elves, all we are now are shadows of what we used to be, hunted by the ogres and demons that took residence in the lands we used to call Eldre\'thalas.\n\nPlease, spare me, end my suffering, I want to go to my mother Moon and join the afterlife that I\'ve courted for so many years. Please end my torment.','"Free" Thirael Blistersong.','<Thirael\'s broken corpse lays before your eyes>.','<Thirael lays dead, you\'ve fulfilled your promise to him, all that is left of him is a bag of coins you pick up>.',0,0,0,0,0,0,0,0,60463,1,0,0,0,0,0,0,0,0,5045,500,809,-100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60463, 40184);
+replace into creature_involvedrelation (id, quest) values (60464, 40184);
+
+delete from creature_template where entry = 60463;
+REPLACE INTO creature_template VALUES (60463, 0, 14386, 0, 0, 0, 'Thirael Blistersong', '', 0, 50, 50, 1, 1, 0, 0, 980, 1354, 3, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 88, 107, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_thirael');
+
+delete from creature_template where entry = 60464;
+REPLACE INTO creature_template VALUES (60464, 0, 14386, 0, 0, 0, 'Thirael Blistersong', '', 0, 50, 50, 1800, 1800, 0, 0, 980, 1354, 3, 1.05, 1.14286, 0, 20, 5, 0, 0, 1, 88, 107, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_thirael_ghost');
+
+replace into creature_template_addon values (60463,0,0,1,0,0,0,0,0);
+replace into creature_template_addon values (60464,0,0,0,0,0,0,0,9617);

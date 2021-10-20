@@ -1286,9 +1286,71 @@ bool GossipSelect_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature, 
     return true;
 }
 
+bool GossipHello_npc_thirael(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40184) == QUEST_STATUS_INCOMPLETE) // No Hope for Tomorrow
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I will end your pain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_thirael(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+struct npc_thiraelAI : public ScriptedAI
+{
+    npc_thiraelAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() { }
+    void JustDied(Unit*) override
+    {
+        if(!m_creature->FindNearestCreature(60464, 5.0F))
+        m_creature->SummonCreature(60464, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 120 * IN_MILLISECONDS);
+    }
+};
+
+CreatureAI* GetAI_npc_thirael(Creature* _Creature) { return new npc_thiraelAI(_Creature); }
+
+bool QuestRewarded_npc_thirael_ghost(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40184) // No Hope for Tomorrow
+    {
+        pQuestGiver->ForcedDespawn();
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_thirael_ghost";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_thirael_ghost;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_thirael";
+    newscript->pGossipHello = &GossipHello_npc_thirael;
+    newscript->pGossipSelect = &GossipSelect_npc_thirael;
+    newscript->GetAI = &GetAI_npc_thirael;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_garfield_sparkblast";
