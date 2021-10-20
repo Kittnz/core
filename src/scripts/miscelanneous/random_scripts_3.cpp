@@ -1246,11 +1246,9 @@ bool GossipSelect_npc_garfield_sparkblast(Player* pPlayer, Creature* pCreature, 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         auto faction1 = sObjectMgr.GetFactionEntry(87); // Bloodsail Buccaneers
-        auto faction2 = sObjectMgr.GetFactionEntry(21); // Booty Bay
-        if (faction1 && faction2)
+        if (faction1)
         {
             pPlayer->GetReputationMgr().SetReputation(faction1, 0);
-            pPlayer->GetReputationMgr().SetReputation(faction2, -3000);
             pCreature->HandleEmote(EMOTE_ONESHOT_APPLAUD);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60332))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());

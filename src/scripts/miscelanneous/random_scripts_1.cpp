@@ -2467,6 +2467,17 @@ bool GossipHello_npc_vip_invite(Player* pPlayer, Creature* pCreature)
             break;
         }
     }
+
+    if (pPlayer->GetQuestStatus(40180) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60254, 1, false))
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 2496: // Baron Revilgaz
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "A present for you Baron.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            break;
+        }
+    }
+
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     return true;
@@ -2485,6 +2496,20 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
         pCreature->MonsterSay("You're telling me there's a beach party?! I get the feelin' that if I'm being invited this is no small get-together. Normally I'd say I'm too busy but I'm sensing an opportunity here - rest, relaxation, and revenue! I'll be there for sure, ya can bet on that.");
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81001);
         pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->DestroyItemCount(60254, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
+        pCreature->MonsterYell("You dare? You're not getting out of here alive bub!");
+        auto faction1 = sObjectMgr.GetFactionEntry(21); // Booty Bay
+        if (faction1)
+        {
+            pPlayer->GetReputationMgr().SetReputation(faction1, -12000);
+
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60333))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
