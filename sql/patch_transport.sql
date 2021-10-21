@@ -7,13 +7,16 @@ replace into gameobject_template (entry, patch, type, displayId, name, faction, 
 -- Orgrimmar <> Thunder Bluff
 (190549, 0, 15, 3031, 'The Zephyr', 0, 40, 1, 1221, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 -- Sparkwater Port <> Revantusk Village
-(190550, 0, 15, 3015, 'The Sparkrunner', 0, 60, 1, 1500, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(190550, 0, 15, 3015, 'The Sparkrunner', 0, 60, 1, 1500, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 -- Reserved for a future use.
 -- (190551, 0, 15, 7087, 'Crescent Moon', 0, 40, 1, 1600, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+-- Zeppelin: Orgrimmar - Kargath
+(190552, 0, 15, 3031, 'Zeppelin - Orgrimmar to Kargath', 0, 40, 1, 1501, 30, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into transports (guid, entry, name, period) values (9, 181646, 'Stormwind and Auberdine', 350818);
 replace into transports (guid, entry, name, period) values (10, 190549, 'Orgrimmar and Thunder Bluff', 350818);
-replace into transports (guid, entry, name, period) values (11, 190550, 'Sparkwater Port and Revantusk Village', 150818); 
+replace into transports (guid, entry, name, period) values (11, 190550, 'Sparkwater Port and Revantusk Village', 150818);
+replace into transports (guid, entry, name, period) values (12, 190552, 'Orgrimmar and Kargath', 150818);
 -- replace into transports (guid, entry, name, period) values (4, 190551, 'Reserved.', 150818);
 
 -- Update Teldrassil <> Auberdine boat model:
