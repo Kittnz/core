@@ -344,6 +344,11 @@ struct ossirian_crystalAI : public GameObjectAI
                                             TEMPSUMMON_TIMED_DESPAWN,
                                             8000);
 
+        //add extra range check here for https://github.com/slowtorta/turtlewow-bug-tracker/issues/110
+        //eyeball 15 yards from videos.
+        if (triggerCrystalPylons->GetDistance2d(ossirian) > 15.0f)
+            return false;
+
         if (triggerCrystalPylons)
             triggerCrystalPylons->CastSpell(ossirian, SpellWeakness[urand(0, 4)], true);
 
