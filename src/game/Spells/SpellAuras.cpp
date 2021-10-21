@@ -7841,6 +7841,7 @@ void Aura::CalculatePeriodic(Player * modOwner, bool create)
         case 8515:  // Windfury Totem Passive (Rank 1)
         case 10609: // Windfury Totem Passive (Rank 2)
         case 10612: // Windfury Totem Passive (Rank 3)
+        case 12654: // Ignite
         case 13797: // Immolation Trap Effect (Rank 1)
         case 14298: // Immolation Trap Effect (Rank 2)
         case 14299: // Immolation Trap Effect (Rank 3)
