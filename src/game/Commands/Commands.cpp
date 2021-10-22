@@ -2062,7 +2062,7 @@ bool ChatHandler::HandleReviveCommand(char* args)
 
     if (target)
     {
-        target->ResurrectPlayer(0.5f);
+        target->ResurrectPlayer(1.f);
         target->SpawnCorpseBones();
         PSendSysMessage(LANG_CHARACTER_REVIVED_ONLINE, playerLink(target->GetName()).c_str());
     }
@@ -11904,6 +11904,64 @@ bool ChatHandler::HandleTransferCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleQuestTestCommand(char* args)
+{
+    auto player = GetSession()->GetPlayer();
+    player->SetByteValue(UNIT_FIELD_BYTES_0, 0, RACE_HUMAN);
+    GetSession()->GetPlayer()->SetFactionForRace(RACE_HUMAN);
+    player->ForceValuesUpdateAtIndex(UNIT_FIELD_FACTIONTEMPLATE);
+    player->DirectSendPublicValueUpdate(UNIT_FIELD_FACTIONTEMPLATE);
+    FactionStateList const& targetFSL = player->GetReputationMgr().GetStateList();
+    for (auto& itr : targetFSL)
+    {      
+        uint32 count = 1;
+
+        auto faction = &itr.second;
+
+        WorldPacket data(SMSG_SET_FACTION_STANDING, (16));
+        size_t p_count = data.wpos();
+        data << (uint32)count;
+
+        data << (uint32)faction->ReputationListID;
+        data << (uint32)80000;
+
+        data.put<uint32>(p_count, count);
+        player->SendDirectMessage(&data);
+        player->SendFactionAtWar(faction->ReputationListID, false);
+    }
+
+
+    PlayerInfo const* info = sObjectMgr.GetPlayerInfo(RACE_HUMAN, GetSession()->GetPlayer()->GetClass());
+    if (!info)
+        return false;
+
+    uint8 gender = GetSession()->GetPlayer()->GetGender();
+
+    switch (gender)
+    {
+    case GENDER_FEMALE:
+        player->SetByteValue(PLAYER_BYTES, 0, 1);
+        player->SetByteValue(PLAYER_BYTES, 1, 1);
+        player->SetByteValue(PLAYER_BYTES, 2, 1);
+        player->SetByteValue(PLAYER_BYTES, 3, 1);
+        player->SetDisplayId(info->displayId_f);
+        player->SetNativeDisplayId(info->displayId_f);
+
+        break;
+    case GENDER_MALE:
+        player->SetByteValue(PLAYER_BYTES, 0, 1);
+        player->SetByteValue(PLAYER_BYTES, 1, 1);
+        player->SetByteValue(PLAYER_BYTES, 2, 1);
+        player->SetByteValue(PLAYER_BYTES, 3, 1);
+        player->SetDisplayId(info->displayId_m);
+        player->SetNativeDisplayId(info->displayId_m);
+
+        break;
+    }
+    //player->GetMap()->ExistingPlayerLogin(player);
+    return true;
+}
+
 bool ChatHandler::HandleQueueWsgCommand(char* args)
 {
     auto player = GetSession()->GetPlayer();
@@ -11929,6 +11987,23 @@ bool ChatHandler::HandleQueueAvCommand(char* args)
     WorldPacket pckt{ CMSG_BATTLEMASTER_JOIN };
     pckt << uint64(1337); // player->GetObjectGuid();
     pckt << 30; // map id.
+    pckt << 0; // instance id, 0 always.
+    pckt << uint8(0); // join as group, 0 = false.
+    GetSession()->HandleBattlemasterJoinOpcode(pckt);
+
+    return true;
+}
+
+bool ChatHandler::HandleQueueArathiBasinCommand(char* args)
+{
+    auto player = GetSession()->GetPlayer();
+    if (!player || !player->IsInWorld())
+        return false;
+
+
+    WorldPacket pckt{ CMSG_BATTLEMASTER_JOIN };
+    pckt << uint64(1337); // player->GetObjectGuid();
+    pckt << 529; // map id.
     pckt << 0; // instance id, 0 always.
     pckt << uint8(0); // join as group, 0 = false.
     GetSession()->HandleBattlemasterJoinOpcode(pckt);
