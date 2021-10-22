@@ -515,7 +515,7 @@ struct go_darkmoon_faire_music : public GameObjectAI
                     if (sGameEventMgr.IsActiveEvent(GAME_EVENT_DARKMOON_FAIRE_ELWYNN) || sGameEventMgr.IsActiveEvent(GAME_EVENT_DARKMOON_FAIRE_THUNDER))
                         me->PlayDistanceSound(MUSIC_DARKMOON_FAIRE_MUSIC);
 
-                    _events.ScheduleEvent(EVENT_DFM_START_MUSIC, Seconds(5)); 
+                    _events.ScheduleEvent(EVENT_DFM_START_MUSIC, Seconds(300)); // 5 min.
                     break;
                 default:
                     break;
