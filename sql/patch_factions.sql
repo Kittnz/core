@@ -1,4 +1,4 @@
-replace into `faction_template` VALUES 
+replace into faction_template values 
 (1, 5875, 1, 72, 3, 2, 12, 0, 0, 0, 0, 0, 0, 0, 0),
 (2, 5875, 2, 72, 5, 4, 10, 0, 0, 0, 0, 0, 0, 0, 0),
 (3, 5875, 3, 72, 3, 2, 12, 0, 0, 0, 0, 0, 0, 0, 0),
@@ -323,17 +323,19 @@ replace into `faction_template` VALUES
 (1683, 5875, 1002, 37, 0, 0, 15, 269, 893, 0, 0, 1002, 73, 0, 0),
 (1684, 5875, 1003, 1, 0, 0, 0, 73, 0, 0, 0, 1003, 609, 0, 0),
 (1685, 5875, 72, 0, 2, 2, 4, 14, 16, 0, 0, 72, 371, 0, 0),
-(1686, 5875, 1004, 1, 0, 0, 0, 1005, 0, 0, 0, 1004, 0, 0, 0),
-(1687, 5875, 1005, 1, 0, 0, 0, 1004, 0, 0, 0, 1005, 0, 0, 0),
+(1686, 5875, 1004, 1, 2, 2, 4, 1005, 0, 0, 0, 1004, 0, 0, 0),
+(1687, 5875, 1005, 2081, 5, 4, 10, 1004, 0, 0, 0, 1005, 0, 0, 0),
 (1688, 5875, 1006, 1, 0, 0, 0, 249, 0, 0, 0, 1006, 0, 0, 0),
 (1689, 5875, 1007, 1, 0, 0, 0, 1009, 0, 0, 0, 1007, 910, 531, 311),
 (1690, 5875, 1008, 1, 0, 0, 0, 0, 0, 0, 0, 1008, 169, 0, 0),
 (1691, 5875, 1009, 1, 0, 0, 0, 1007, 910, 531, 0, 1009, 0, 0, 0),
 (1692, 5875, 1010, 1, 0, 0, 0, 60, 0, 0, 0, 1010, 0, 0, 0),
 (1693, 5875, 1011, 33, 2, 2, 4, 0, 0, 0, 0, 1011, 73, 0, 0),
-(1694, 5875, 1012, 0, 4, 4, 2, 0, 0, 0, 0, 1012, 76, 0, 0);
+(1694, 5875, 1012, 0, 4, 4, 2, 0, 0, 0, 0, 1012, 76, 0, 0),
+(1695, 5875, 71, 33, 2, 2, 12, 0, 0, 0, 0, 71, 0, 0, 0),
+(1696, 5875, 1013, 16, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0);
 
-replace into `faction` VALUES 
+replace into faction values
 (1, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'PLAYER, Human', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (2, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'PLAYER, Orc', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
 (3, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'PLAYER, Dwarf', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
@@ -539,4 +541,5 @@ replace into `faction` VALUES
 (1009, 5875, -1, 1023, 0, 0, 0, 0, 0, 0, 0, -42000, 0, 0, 0, 0, 0, 0, 0, 0, 'Infinite Dragonflight', '', '', '', '', '', '', '', 'Mysterious corrupted Dragons bent on corrupting the timeways.', '', '', '', '', '', '', ''),
 (1010, 5875, 31, 1023, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 'Kazamatsuri', '', '', '', '', '', '', '', 'Kazamatsuri is the largest populated settlement on Kamio. The people of Kazamatsuri look to help from the rest of the world as the Naga encroach upon their civilization.', '', '', '', '', '', '', ''),
 (1011, 5875, 32, 589, 434, 0, 0, 0, 0, 0, 0, 0, -42000, 0, 0, 16, 2, 0, 0, 0, 'Kul Tiran Exploratory Fleet', '', '', '', '', '', '', '', 'Remnants of Admiral Daelin Proudmoore\'s Exploratory Fleet, these few survivors that have not been killed by the Horde eke out a dangerous existence.', '', '', '', '', '', '', ''),
-(1012, 5875, 26, 589, 434, 0, 0, 0, 0, 0, 0, -42000, 0, 0, 0, 16, 2, 0, 0, 0, 'Stonemaul Tribe', '', '', '', '', '', '', '', 'The Stonemaul Ogres joined the Horde under the auspices of the Mok\'nathal Rexxar. They have since been welcoming and friendly to the Horde.', '', '', '', '', '', '', '');
+(1012, 5875, 26, 589, 434, 0, 0, 0, 0, 0, 0, -42000, 0, 0, 0, 16, 2, 0, 0, 0, 'Stonemaul Tribe', '', '', '', '', '', '', '', 'The Stonemaul Ogres joined the Horde under the auspices of the Mok\'nathal Rexxar. They have since been welcoming and friendly to the Horde.', '', '', '', '', '', '', ''),
+(1013, 5875, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Beast - Fox', '', '', '', '', '', '', '', 'Kon', '', '', '', '', '', '', '');
