@@ -504,9 +504,6 @@ REPLACE INTO creature_ai_scripts VALUES
 REPLACE INTO broadcast_text VALUES
 (30001, 'You know.. Nothing... I was more powerful then all of you.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-NPC Eliza Caldwell needs to be made to give quests
-Shang — Сегодня, в 3:15
-
 -- 'Wincing' Willy, display ID 1699, level 45, faction 119, weapon 15245, greeting text : "Hey there, I'm Wincing Willy Pal! Heard good things about you, the only reason we're talking right now. My job is to oversee supplies coming from the great seas and keep them here until we can allocate them elsewhere."
 -- Falgig Wazzlewrench , display ID 7109, level 42, faction 119, weapon 1911, greeting text : "You look familiar, you one of the new crew members?"
 -- Raga Darkeye, display ID 12392, level 44 , faction 119, weapon 3488, greeting text : "Another Bloodsail huh? Not often someone wanders around out here and just shows up, what you looking to help?"
@@ -622,3 +619,32 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (92166,60260,-7,1,1,0,10),
 (92165,60260,-8,1,1,0,10),
 (92164,60260,-10,1,1,0,10);
+
+-- In Search of Corruption --
+delete from quest_template where entry = 40192;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40192,2,331,20,10,0,0,'In Search of Corruption','There was a time in which the Kaldorei and the Furbolgs lived in harmony, they were our ally against the darkness, and worked with us to keep the balance in nature. We traded, we offered assistance to one another, and we even fought aside one another.\n\nThat time has passed, and it seems with each passing day more and more furbolg abandon their homes to join the larger tribes. These large tribes of furbolg have collected to gather strength and deem the outside world as hostile entirely.\n\nIn the end, they have become nothing but ruthless stalkers, murderers and agents of madness. This change has only puzzled us druids, and has brought up more questions then answers, but hopefully today, we can find some. Across the water no the north are some of their camps, abandoned by their kind. I want you to search them, and try to find some clues as to why they would potentially be corrupted.','Search the furbolg camps across the water for clues of their corruption.','Remember to be careful, there may still be some lurking about, or even other potential dangers.','<Faldan would take some time mulling over the items, his gaze remained somber, and somewhat steeled>. These items surely paint a rather dark picture, if the furbolg have been relying off the land, and the land itself has become tainted it would make sense as to what has happened.\n\nTheir creations reflect upon their mind state, and in the past of dealing with them I have never come across any such ornaments or carved rocks. I must prepare a letter to Darnassus, to be delivered with haste.',60261,1,60262,1,60263,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1030,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60471, 40192);
+replace into creature_involvedrelation (id, quest) values (60471, 40192);
+
+delete from item_template where entry between 60261 and 60263;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60261,1275,'Furbolg Clue #1',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A vial of foul smelling, and tainted sap.',0),
+(60262,34261,'Furbolg Clue #2',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A twisted ornament that looks to draw abhorrent energy.',0),
+(60263,1168,'Furbolg Clue #3',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A bag filled with various carved rocks containing unknown symbols.',0);
+
+update creature_template set loot_id = 60469 where entry = 60469;
+
+delete from creature_loot_template where item = 60262 and entry = 60469;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(60469,60262,-100,1,1,0,10);
+
+delete from gameobject_template where entry = 2010838 and 2010839;
+replace into gameobject_template values
+(2010838, 0, 3, 24754, 'Tainted Sap', 0, 4, 1, 43, 2010838, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010839, 0, 3, 24638, 'Hanging Bag', 0, 4, 1, 43, 2010839, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010838 and 2010839;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(2010838,60261,-100,1,1,0,10),
+(2010839,60263,-100,1,1,0,10);
