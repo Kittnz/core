@@ -592,3 +592,12 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 update creature_template set loot_id = 91838 where entry = 91838;
 delete from creature_loot_template where entry = 91838 and item = 60259;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (91838,60259,-9,1,1,0,10);
+
+-- The Blazno Touch --
+delete from quest_template where entry = 40190;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40189,40190,2,408,52,45,0,0,'The Blazno Touch','You see, to be smart like me requires thinking outside of the box, something that goblins and gnomes have been in forever - a box! But me, I\'m outside of it, and now with this turtle shell I can make great things happen!\n\n The last step for what I need will require a single golden bar, the sheer properties of the gold will be enough to make pure magic happen, and when I say magic I mean MAGIC. You can find a gold bar anywhere on Azeroth, but I need a real one, not no fake crap! \n\n Get me a golden bar, and I will be able to remake my fortune!','Gather a Gold Bar for Blazno Blastpipe in Gillijim\'s Isle.','The Gold Bar is the last ingredient for this recipe, hurry up, and get one pal!','Now, we can unlock true riches!',3577,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4700,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92191, 40190);
+replace into creature_involvedrelation (id, quest) values (92191, 40190);
+
+update creature_template set script_name = 'npc_blazno' where entry = 92191;
