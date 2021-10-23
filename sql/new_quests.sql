@@ -559,3 +559,14 @@ delete from creature_questrelation where quest = 40072;
 delete from creature_involvedrelation where quest = 40072;
 replace into creature_questrelation (id, quest) values (92018, 40072);
 replace into creature_involvedrelation (id, quest) values (92018, 40072);
+replace into item_template values
+ ('60258', '0', '4', '2', 'Crown of Corruption', 'Sealed in demonic magics.', '17269', '4', '0', '1', '40856', '10214', '1', '-1', '-1', '48',
+ '35', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '22', '7', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '102', '0', '0', '0',
+ '0', '5', '0', '9140', '1', '0', '0', '-1', '0', '-1', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '60', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+delete from creature_loot_template where entry = 92110 and item = 60258;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (92110,60258,0.5,1,1,0,10);
