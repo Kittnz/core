@@ -503,3 +503,45 @@ REPLACE INTO creature_ai_scripts VALUES
 (2200001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30001, 0, 0, 0, 0, 0, 0, 0, 0, 'Arch Hydromancer Lapidis - Say on Death');
 REPLACE INTO broadcast_text VALUES
 (30001, 'You know.. Nothing... I was more powerful then all of you.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+NPC Eliza Caldwell needs to be made to give quests
+Shang — Сегодня, в 3:15
+
+-- 'Wincing' Willy, display ID 1699, level 45, faction 119, weapon 15245, greeting text : "Hey there, I'm Wincing Willy Pal! Heard good things about you, the only reason we're talking right now. My job is to oversee supplies coming from the great seas and keep them here until we can allocate them elsewhere."
+-- Falgig Wazzlewrench , display ID 7109, level 42, faction 119, weapon 1911, greeting text : "You look familiar, you one of the new crew members?"
+-- Raga Darkeye, display ID 12392, level 44 , faction 119, weapon 3488, greeting text : "Another Bloodsail huh? Not often someone wanders around out here and just shows up, what you looking to help?"
+
+REPLACE INTO creature_template VALUES
+(60479, 0, 1699, 0, 0, 0, '\'Wincing\' Willy', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 119, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60480, 0, 7109, 0, 0, 0, 'Falgig Wazzlewrench', '', 0, 42, 42, 2059, 2059, 0, 0, 3568, 119, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 67, 82, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 78, 107, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60481, 0, 7109, 0, 0, 0, 'Raga Darkeye', '', 0, 44, 44, 2159, 2159, 0, 0, 3568, 119, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 67, 82, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 78, 107, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20015; set @weapon_1 = 15245; set @weapon_2 = 0; set @creature = 60479;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20016; set @weapon_1 = 1911; set @weapon_2 = 0; set @creature = 60480;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20017; set @weapon_1 = 3488; set @weapon_2 = 0; set @creature = 60481;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41018; set @magic_number = 60479;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hey there, I\'m Wincing Willy Pal! Heard good things about you, the only reason we\'re talking right now. My job is to oversee supplies coming from the great seas and keep them here until we can allocate them elsewhere.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41019; set @magic_number = 60480;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You look familiar, you one of the new crew members?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41020; set @magic_number = 60481;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Another Bloodsail huh? Not often someone wanders around out here and just shows up, what you looking to help?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
