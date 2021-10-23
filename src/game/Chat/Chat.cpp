@@ -342,6 +342,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "complete",       SEC_GAMEMASTER, false, &ChatHandler::HandleQuestCompleteCommand,       "", nullptr },
         { "status",         SEC_GAMEMASTER,  false, &ChatHandler::HandleQuestStatusCommand,         "", nullptr },
         { "remove",         SEC_GAMEMASTER,  false, &ChatHandler::HandleQuestRemoveCommand,         "", nullptr },
+        { "test",           SEC_GAMEMASTER,  false, &ChatHandler::HandleQuestTestCommand,           "", nullptr },
         { nullptr,          0,               false, nullptr,                                        "", nullptr }
     };
 
@@ -642,8 +643,9 @@ ChatCommand * ChatHandler::getCommandTable()
         { "sendpacket",     SEC_ADMINISTRATOR,  false,  &ChatHandler::HandleSendPacketCommand,                  "", nullptr },
         { "shop",           SEC_GAMEMASTER,     true,  nullptr,                                         "", shopCommandTable },
         { "path",           SEC_GAMEMASTER,     true,  nullptr,                                         "", pathCommandTable },
-        { "wsg",             SEC_PLAYER,        false, &ChatHandler::HandleQueueWsgCommand,             "", nullptr},
-        { "alterac",         SEC_PLAYER,        false, &ChatHandler::HandleQueueAvCommand,             "", nullptr },
+        { "wsg",            SEC_PLAYER,         false, &ChatHandler::HandleQueueWsgCommand,                     "", nullptr},
+        { "alterac",        SEC_PLAYER,         false, &ChatHandler::HandleQueueAvCommand,                      "", nullptr },
+        { "arathi",         SEC_PLAYER,         false, &ChatHandler::HandleQueueArathiBasinCommand,             "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
