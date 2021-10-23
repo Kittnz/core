@@ -5,6 +5,9 @@
 -- item_template			60000-60200
 -- gossip_menu				41000-43000
 -- creature_equip_template	20000-21000
+-- broadcast_text			30000-31000
+-- creature_ai_events		2200000-2201000
+-- creature_ai_scripts		2200000-2201000
 
 -- Red Flag over the Sea --
 delete from quest_template where entry = 40172;
@@ -262,3 +265,241 @@ REPLACE INTO creature_template VALUES (60464, 0, 14386, 0, 0, 0, 'Thirael Bliste
 
 replace into creature_template_addon values (60463,0,0,1,0,0,0,0,0);
 replace into creature_template_addon values (60464,0,0,0,0,0,0,0,9617);
+
+-- Malos Lunarspear - display ID 3300, level 35 elite, weapon 13061 , faction 80, greeting line : "What are you doing here, is there anything you need from me?"
+-- Treant Protector <Malos Lunarspear's Minion>, display ID 9591, level 20, faction 80
+-- Arch Hydromancer Lapidis , display ID 3387, level 55 elite, scale 1.3, faction 16, HP 20181, MANA 20000, need a basic script where he casts 25304 every 6 seconds, and 8398 every 20 seconds, when engaged, says the following line : "Who let you in this tower?! Do you know who you are messing with?!" , and when dead, says the following "You know.. Nothing... I was more powerful then all of you."
+-- Twisted Water Elemental, display ID 5561, level 53 elite, scale 1.3, faction 16, HP 6105, MANA 3000, casts 25304
+-- Thistlefur Recluse , display ID 6823, level 19, faction 82, weapon 2092
+-- Old Greypaw, display ID 6804, level 20, has 2000 mana, neutral to both factions cannot be attacked, casts spell 915 , has greeting text : "Who are you?! Begone, this is my home, you do not belong here!"
+-- Faldan Moonshatter , display ID 3301, level 35, faction 80, has weapon 4122 , weapon2 : 12743, greeting line : "The forests beauty is unmatched, the winds flowing through the trees, the moonlight dotting the landscape. Yet, beneath it all, there is a darkness that lurks, hidden beneath the veil of it all. This place used to be so full of life and harmony, but now there is more predators then we can count, and our allies in the forest have turned to nothing more then roaming thugs. \n\n You can sense it, can't you, as if you could wake from the dream at any moment."
+-- Hadanos Greenblade, display ID 3789, faction 80, weapon 18957, greeting line : "Ashenvale is growing more and more dangerous by the day"
+-- Adaena Oakleaf <High Sentinel of Darnassus> , display ID 1980 , faction 80, greeting line : "We must continue to act boldly in order to keep the people safe, Teldrassil has become more hostile and it has required continued patrolling of our roads."
+-- Sentinel Danala , display ID 11729 , level 50 , weapon 5598 , faction 80 , greeting line "Welcome to Darnassus! We call this place home now, and for good reason, its beauty matches that of our legacy."
+-- Distorted Treant, display ID 6351, level 11, faction 16 
+-- Embergut , display ID 10704, level 54, scale 1.5, weapon 5201, has 3000 mana, faction 29, greeting line : "What you doing all the way out here $R?"
+-- Lagg'osh <Innkeeper> , display ID 3193, level 54, scale 1.5, faction 29, greeting line : "Be comfy, the fire pits here are warm, and you be warm too!" HE IS INNKEEPER
+-- Borhgk , display ID 10704, level 50, scale 1.3 , faction 29, greeting line : "We Maul'ogg have been here for long time, and we gonna stay here for long time! Just cause others think they can push us around doesn't mean anything! With Lord Cruk'Zogg we can do anything that we want on the island. \n\n We're stronger then all of them, and we're gonna be pushing them around soon! 
+
+REPLACE INTO creature_template VALUES
+(60465, 0, 3300, 0, 0, 0, 'Malos Lunarspear', '', 0, 35, 35, 2805, 2805, 0, 0, 751, 80, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 193, 249, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 44.84, 61.655, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60466, 0, 9591, 0, 0, 0, 'Treant Protector', 'Malos Lunarspear\'s Minion', 0, 20, 20, 493, 493, 0, 0, 888, 80, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 31, 38, 0, 94, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60467, 0, 3387, 0, 0, 0, 'Arch Hydromancer Lapidis', '', 0, 55, 55, 20181, 20181, 20000, 20000, 2899, 16, 0, 1, 1.14286, 1.3, 20, 5, 0, 3, 1, 491, 601, 0, 262, 1, 1300, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 432, 594, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 988, 1295, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60468, 0, 5561, 0, 0, 0, 'Twisted Water Elemental', '', 0, 53, 53, 6105, 6105, 3000, 3000, 2522, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 198, 256, 2, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 56.7312, 78.0054, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25304, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60469, 0, 6823, 0, 0, 0, 'Thistlefur Recluse', '', 0, 19, 19, 379, 379, 1118, 1118, 432, 82, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 19, 25, 0, 88, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 32, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60470, 0, 6804, 0, 0, 0, 'Old Greypaw', '', 0, 20, 20, 580, 580, 2000, 2000, 852, 15, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 37, 45, 0, 90, 1, 2000, 2000, 2, 2, 0, 0, 0, 0, 0, 0, 32.8944, 45.2298, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 915, 0, 0, 0, 0, 0, 27, 40, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60471, 0, 3301, 0, 0, 0, 'Faldan Moonshatter', '', 0, 35, 35, 1403, 1403, 0, 0, 1427, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 50, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 84, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60472, 0, 3789, 0, 0, 0, 'Hadanos Greenblade', '', 0, 35, 35, 1403, 1403, 0, 0, 1427, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 50, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 84, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60473, 0, 1980, 0, 0, 0, 'Adaena Oakleaf', 'High Sentinel of Darnassus', 0, 50, 50, 2768, 2768, 0, 0, 2999, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60474, 0, 11729, 0, 0, 0, 'Sentinel Danala', '', 0, 50, 50, 2768, 2768, 0, 0, 2999, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60475, 0, 6351, 0, 0, 0, 'Distorted Treant', '', 0, 11, 11, 222, 222, 0, 0, 538, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 14, 19, 0, 64, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 18, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60476, 0, 10704, 0, 0, 0, 'Embergut', '', 0, 54, 54, 3292, 3292, 3000, 3000, 3216, 29, 3, 1, 1.14286, 1.5, 20, 5, 0, 0, 1, 282, 345, 0, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 153, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60477, 0, 3193, 0, 0, 0, 'Lagg\'osh', 'Innkeeper', 0, 54, 54, 3292, 3292, 0, 0, 3216, 29, 135, 1, 1.14286, 1.5, 20, 5, 0, 0, 1, 282, 345, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 153, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60478, 0, 10704, 0, 0, 0, 'Borhgk', '', 0, 50, 50, 2768, 2768, 0, 0, 2999, 29, 3, 1, 1.14286, 1.3, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 66.44, 91.355, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20009; set @weapon_1 = 13061; set @weapon_2 = 0; set @creature = 60465;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20010; set @weapon_1 = 2092; set @weapon_2 = 0; set @creature = 60469;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20011; set @weapon_1 = 4122; set @weapon_2 = 12743; set @creature = 60471;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20013; set @weapon_1 = 5598; set @weapon_2 = 0; set @creature = 60474;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20014; set @weapon_1 = 5201; set @weapon_2 = 0; set @creature = 60476;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41009; set @magic_number = 60465;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What are you doing here, is there anything you need from me?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41010; set @magic_number = 60470;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Who are you?! Begone, this is my home, you do not belong here!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41010; set @magic_number = 60470;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Who are you?! Begone, this is my home, you do not belong here!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41011; set @magic_number = 60471;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The forests beauty is unmatched, the winds flowing through the trees, the moonlight dotting the landscape. Yet, beneath it all, there is a darkness that lurks, hidden beneath the veil of it all. This place used to be so full of life and harmony, but now there is more predators then we can count, and our allies in the forest have turned to nothing more then roaming thugs.\n\nYou can sense it, can\'t you, as if you could wake from the dream at any moment.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41012; set @magic_number = 60472;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ashenvale is growing more and more dangerous by the day.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41013; set @magic_number = 60473;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We must continue to act boldly in order to keep the people safe, Teldrassil has become more hostile and it has required continued patrolling of our roads.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41014; set @magic_number = 60474;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Darnassus! We call this place home now, and for good reason, its beauty matches that of our legacy.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41015; set @magic_number = 60476;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What you doing all the way out here $R?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41016; set @magic_number = 60477;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Be comfy, the fire pits here are warm, and you be warm too!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41017; set @magic_number = 60478;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We Maul\'ogg have been here for long time, and we gonna stay here for long time! Just cause others think they can push us around doesn\'t mean anything! With Lord Cruk\'Zogg we can do anything that we want on the island.\n\nWe\'re stronger then all of them, and we\'re gonna be pushing them around soon!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES
+-- Lagg'osh <Innkeeper>
+(60477, 159, 0, 0, 0, 0),
+(60477, 787, 0, 0, 0, 0),
+(60477, 1179, 0, 0, 0, 0),
+(60477, 1205, 0, 0, 0, 0),
+(60477, 1645, 0, 0, 0, 0),
+(60477, 1708, 0, 0, 0, 0),
+(60477, 4592, 0, 0, 0, 0),
+(60477, 4593, 0, 0, 0, 0),
+(60477, 4594, 0, 0, 0, 0),
+(60477, 8766, 0, 0, 0, 0),
+(60477, 8957, 0, 0, 0, 0),
+(60477, 21552, 0, 0, 0, 0);
+
+set @creature_entry = 60467;
+set @description = 'Lapidis Tower: Arch Hydromancer Lapidis';
+set @spell_list_id = 180000;
+
+set @spellid_1 = 25304; -- 25304 every 6 seconds
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 0;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 6; 
+set @delayrepeatmax_1 = 6;
+
+set @spellid_2 = 8398; -- 8398 every 20 seconds
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 4; 
+set @delayinitialmax_2 = 4; 
+set @delayrepeatmin_2 = 20; 
+set @delayrepeatmax_2 = 20;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 25304, spell_id2 = 8398, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+REPLACE INTO creature_ai_events VALUES
+(2200000, 60467, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200000, 0, 0, 'Arch Hydromancer Lapidis - Say on Aggro');
+REPLACE INTO creature_ai_scripts VALUES
+(2200000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30000, 0, 0, 0, 0, 0, 0, 0, 0, 'Arch Hydromancer Lapidis - Say on Aggro');
+REPLACE INTO broadcast_text VALUES
+(30000, 'Who let you in this tower?! Do you know who you are messing with?!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+REPLACE INTO creature_ai_events VALUES
+(2200001, 60467, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200001, 0, 0, 'Arch Hydromancer Lapidis - Say on Death');
+REPLACE INTO creature_ai_scripts VALUES
+(2200001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30001, 0, 0, 0, 0, 0, 0, 0, 0, 'Arch Hydromancer Lapidis - Say on Death');
+REPLACE INTO broadcast_text VALUES
+(30001, 'You know.. Nothing... I was more powerful then all of you.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
