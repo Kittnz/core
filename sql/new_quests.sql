@@ -601,3 +601,24 @@ replace into creature_questrelation (id, quest) values (92191, 40190);
 replace into creature_involvedrelation (id, quest) values (92191, 40190);
 
 update creature_template set script_name = 'npc_blazno' where entry = 92191;
+
+-- The Ghostly Charm --
+delete from quest_template where entry = 40191;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40191,2,408,53,45,0,0,'The Ghostly Charm','There was a time when we could roam freely around the island, a time when the Kalkor and the Razzari lived at peace, and even cooperated. During those times, I would often venture up and down the Silver Strand to admire the beauty of this island, and to explore.\n\nOn my last trip to the beaches, I had found ships torn apart upon the sand, and was shocked at the whispers of humanoid figures. It grasped upon my neck, and pulled free the charm I had bound there, taking it from my body as I raced back here.\n\nThat Charm is one of the only things I have left of the place we once came from, and I would ask you to get it back. You can find these wrecked ships to the north west, along the Silver Strand, my Charm must still be held by one of the ghosts there.','Find and Recover the Ghostly Charm for Tarokar in Kalkor Point.','The Silver Strand can be a dangerous place now, be careful when you go find my Charm.','This is my charm, but, something doesn\'t seem right about it, too much time within the hands of a ghost may have, cursed it!',60260,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4650,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92174, 40191);
+replace into creature_involvedrelation (id, quest) values (92174, 40191);
+
+delete from item_template where entry = 60260;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60260,34204,'Ghostly Charm',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Has an odd energy lingering upon it.',0);
+
+update creature_template set loot_id = 92166 where entry = 92166;
+update creature_template set loot_id = 92165 where entry = 92165;
+update creature_template set loot_id = 92164 where entry = 92164;
+
+delete from creature_loot_template where item = 60260 and entry between 92164 and 92166;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(92166,60260,-7,1,1,0,10),
+(92165,60260,-8,1,1,0,10),
+(92164,60260,-10,1,1,0,10);
