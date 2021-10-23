@@ -545,3 +545,17 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Another Bloodsail huh? Not often someone wanders around out here and just shows up, what you looking to help?'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update quest_template set title = 'Alpha Aggression' where entry = 40121;
+update quest_template set details = 'The Alpha of the Ghostpaw Wolves in the area is named Ghoststalker. He is a ferocious beast that leads packs of wolves in the region with dangerous intent. If a balance of nature is to be brought, then the beast must be slain.\n\nYou should find him in the hills north west of Lake Falathim, and southeast of the Zoram Strand. I wish you luck in your hunt, Ghoststalker is a clever beast that has eluded me to this day.' where entry = 40121;
+update creature_template set display_id1 = 7039 where entry = 92218;
+update creature_template set npc_flags = 2 where entry = 91890;
+delete from creature_questrelation where quest = 40150;
+delete from creature_involvedrelation where quest = 40150;
+replace into creature_questrelation (id, quest) values (91890, 40150);
+replace into creature_involvedrelation (id, quest) values (91890, 40150);
+update creature_template set npc_flags = 2 where entry = 92018;
+delete from creature_questrelation where quest = 40072;
+delete from creature_involvedrelation where quest = 40072;
+replace into creature_questrelation (id, quest) values (92018, 40072);
+replace into creature_involvedrelation (id, quest) values (92018, 40072);
