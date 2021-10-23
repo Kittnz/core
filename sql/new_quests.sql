@@ -577,3 +577,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (92188, 40188);
 replace into creature_involvedrelation (id, quest) values (92191, 40188);
+
+-- To Make A Fortune --
+delete from quest_template where entry = 40189;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40188,40189,2,408,52,45,0,0,'To Make A Fortune','That crash was a massive setback! Heh, set me back a whole bunch, I had trade deals all over Azeroth, one of the richest goblins, all in that zeppelin. Theres gotta be atleast a million gold showered around where that zeppelin is, and I can\'t even go and pick it up, damn basilisks!\n\nBut, I\'m smart, the smartest goblin of all goblins in the world, and I got a strategy to make my wealth back, see?! Turtles live such long lives that I\'m gonna harness the power of a turtle, with the wealth of gold to make either alot of gold, or make some serum that extends life!\n\nGenius, you see, genius! Now, go to the Silver Strand, its just to the west of here, and find me an Uncracked Turtle Shell, it NEEDS to be uncracked, if I see a single crack, you aint getting anything!','Gather a single Uncracked Turtle Shell for Blazno Blastpipe in Gillijim\'s Isle.','Look pal, I can\t just tell you what I got planned or else you\'ll steal my idea! Now find that Shell!','Hey, this might be it, I swear if theres a single crack on here, you\'re gonna go and have to get another one, understand? Hmm... Seems spotless, good, this shall do just fine, now the final step!',60259,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92191, 40189);
+replace into creature_involvedrelation (id, quest) values (92191, 40189);
+
+delete from item_template where entry = 60259;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60259,22805,'Uncracked Turtle Shell',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91838 where entry = 91838;
+delete from creature_loot_template where entry = 91838 and item = 60259;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (91838,60259,-9,1,1,0,10);
