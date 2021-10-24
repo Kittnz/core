@@ -1358,9 +1358,77 @@ bool QuestRewarded_npc_blazno(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool QuestRewarded_npc_daela_evermoon(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40197) // Old Greypaw
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_old_greypaw(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40197) == QUEST_STATUS_INCOMPLETE) // Old Greypaw
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Daela Evermoon was asking if you were okay.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(60470, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_old_greypaw(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("WHO?! Evermoon asking if I am weak?! Evermoon want to kill me huh?! Who are you, messenger, scout?", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("You think you can probe me for weakness?!", player);
+            npc->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            npc->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+struct npc_old_greypawAI : public ScriptedAI
+{
+    npc_old_greypawAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() { }
+    void JustDied(Unit*) override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFactionTemporary(15, TEMPFACTION_RESTORE_COMBAT_STOP);
+    }
+};
+
+CreatureAI* GetAI_npc_old_greypaw(Creature* _Creature) { return new npc_old_greypawAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_daela_evermoon";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_daela_evermoon;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_old_greypaw";
+    newscript->pGossipHello = &GossipHello_npc_old_greypaw;
+    newscript->pGossipSelect = &GossipSelect_npc_old_greypaw;
+    newscript->GetAI = &GetAI_npc_old_greypaw;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_blazno";
