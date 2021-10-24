@@ -662,3 +662,36 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 REPLACE INTO page_text VALUES
 (50511, 'To Fandral Staghelm, Arch Druid\n\nThere is corruption present within Ashenvale, with each passing day the wildlife grows more aggresive and the furbolg more brazen. They are no longer our friends within the forest and have taken to arms against any who dare show themselves.\n\nWithin their abandoned villages lay trinkets of a dark intent, rocks carved in crude runes, and the very sap in which they indulge has been tainted.\n\nThey have lost their way, and we must find a way to solve this issue, lest all of the forest be lost to such madness.\n\nFaldan Moonshatter', 0);
+
+-- Razzari Madness --
+delete from quest_template where entry = 40194;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40194,2,408,53,45,0,0,'Razzari Madness','My people have a long and rich history upon this island, we once came from Stranglethorn, as part of the Gurubashi. But we looked for a new destiny when the wars stared, it was here that we called home. This island has been a place of refuge for our kind, and we have lived here in harmony with nature around us.\n\nAs of recently, my people have begun to betray their heritage, and their past. They use a foreign magic from our brothers the Hazzuri, one that is of an evil source, and tainted to the core. Instead of practicing the ways of the voodoo, they now are lost within the ways of shadow, mon.\n\nMy people are not what they used to be, and attack any who dare go close, their very essence be tainted. I ask of you to do me a favor friend, you need to go to Zul\'Razar, it is located to the northwest on the isle. Kill the trolls there, gather me their Tainted Mojo, perhaps I may find a source of how to help them.','Gather 15 Tainted Mojo from trolls in Zul\'Razar for Jubo in Maul\'ogg Refuge.','There be no time to waste! Each second that we remain idle and speak with one another, is another second that their minds rot away to this foreign evil.','This Mojo doesn\'t look normal, it is dark, and thick, swirling with the seeds of evil deep within it. The Hazzuri tribe did the same long ago, and abandoned this past for a new fate. Now, they sent speakers and emmisaries to Zul\'Razar in hopes to bring the Razzari into the fold.\n\nI had thought our leaders better then to listen to the words of madmen, to buy wares from the peddlers of evil misdeeds.',60265,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4900,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92190, 40194);
+replace into creature_involvedrelation (id, quest) values (92190, 40194);
+
+delete from item_template where entry = 60265;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60265,17898,'Tainted Mojo',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 92148 where entry = 92148;
+update creature_template set loot_id = 92149 where entry = 92149;
+update creature_template set loot_id = 92150 where entry = 92150;
+update creature_template set loot_id = 92151 where entry = 92151;
+update creature_template set loot_id = 92152 where entry = 92152;
+update creature_template set loot_id = 92153 where entry = 92153;
+update creature_template set loot_id = 92154 where entry = 92154;
+update creature_template set loot_id = 92155 where entry = 92155;
+update creature_template set loot_id = 92156 where entry = 92156;
+
+delete from creature_loot_template where item = 60265 and entry between 92148 and 92156;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(92148,60265,-60,1,1,0,10),
+(92149,60265,-60,1,1,0,10),
+(92150,60265,-60,1,1,0,10),
+(92151,60265,-60,1,1,0,10),
+(92152,60265,-60,1,1,0,10),
+(92153,60265,-60,1,1,0,10),
+(92154,60265,-60,1,1,0,10),
+(92155,60265,-60,1,1,0,10),
+(92156,60265,-100,1,1,0,10);
