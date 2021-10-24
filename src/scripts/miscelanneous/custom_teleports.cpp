@@ -47,7 +47,11 @@ struct custom_dungeon_portal : public GameObjectAI
                     {
                         if (me->GetEntry() == teleport.first)
                             player->TeleportTo(teleport.second);
-                    }                  
+                    }    
+
+                    // Temporary locked portal:
+                    if (me->GetEntry() == 112920)
+                        player->GetSession()->SendNotification("This raid is currently not available.");
                 }
             }
             m_uiUpdateTimer = 1000;
