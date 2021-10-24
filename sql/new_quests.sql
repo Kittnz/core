@@ -731,3 +731,23 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '40', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
+ 
+-- Lykourgos --
+delete from quest_template where entry = 40196;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40196,2,408,53,45,0,0,'Lykourgos',' It has been long since our people have seen the sands of Kalimdor. We left our tribe for the promise of riches, and now, the man who led us here betrayed us for his own prosper. Those riches that we fought and worked so hard to gain were taken, and we were left to rot.\n\nIt is a centaur named Lykourgos who had insturmented such a betrayal with the Southseas Pirates. I had my suspicions of him, but I hadn\'t suspected his honor was so cheap. Everyone within this camp wants revenge, but we have no means to kill him. I hate to speak anything good of such a snake, but he is if anything, a ruthless murderer with a great skill in arms.\n\nHe is known as \'The Reaver\' for his brutality, and you should not take him lightly. Find him, kill him, for all of us here, and for his betrayal. I know not where he is, but he is still a pirate through and through, if anything, he should around fellow Southsea Freebooters.','Slay Lykourgos the Reaver.','Have you had any success in finding Lykourgos?','It is done, you have gotten revenge for each and every one of us. I cannot thank you enough for smiting him down, if only the fates had been different, if only he acted with honor and kept his word, perhaps we would be back home.\n\nIt is not something to dwell on, but we Kalkor will find our place in the world. You have earned esteem within our community, and restored our spirits, I wish you the best in your future.',0,0,0,0,0,0,0,0,91968,1,0,0,0,0,0,0,0,0,0,6100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60270,1,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92168, 40196);
+replace into creature_involvedrelation (id, quest) values (92168, 40196);
+
+update quest_template set type = 1 where entry = 40196;
+
+delete from item_template where entry = 60270;
+replace into item_template values
+ ('60270', '0', '2', '1', 'The Reaver', '', '28573', '2', '0', '1', '208416', '52104', '17', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3600', '0',
+ '0', '140', '193', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '14049', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '85', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
