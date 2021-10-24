@@ -763,3 +763,39 @@ update creature_template set script_name = 'npc_old_greypaw' where entry = 60470
 update creature_template set script_name = 'npc_daela_evermoon' where entry = 91287;
 update creature_template set faction = 79 where entry = 91287;
 update creature_template set faction = 79 where entry = 91288;
+
+-- Smuggling Ale --
+delete from quest_template where entry = 40198;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40198,2,33,37,30,0,0,'Smuggling Ale','Hey, you! I be needing a bit of work that is off the boat if you think you can be a hand. When we get moving all that people really got to do is either drink, or work to keep the ship clean and orderly. I\'ve found it always good to keep a good reserve of ale on hand, and a good variety of it too!\n\nWhat I\'m gonna ask you to do is bring some ale from various sources, some of which might require you to have some friends, or connections with the opposite faction at that!\n\nFirst, I need a Barrel of Steamwheedle Wine, which can be found at the port, steal it. Secondly, I\'ll need some common ales, 5 Flask of Port, 5 Flagon of Mead, and 5 Jug of Bourbon, should be able to find them at most vendors. Finally, get me a Cask of Merlot from Stormwind at the Gallina Winery, and a Jug of Orgrimmar Brown from the Tavern in Orgrimmar.','Gather a Barrel of Steemwheedle Wine, 5 Flasks of Port, 5 Flagons of Mead, 5 Jugs of Bourbon, a Cask of Merlot, and a Jug of Orgrimmar Brown for Fazzle \'The Slick\' in Bloodsail Retreat.','If you want to be a real smuggler , let me tell you, you need connections, and those connections need to be trustworthy.','All this variety, you know what they say, variety is the spice of life! When we make our next journey this will all surely keep everyone in good spirits.\n\nLast time we ventured out, we barely had any ale left over, most of the barrels were destroyed, and let me tell you, Garfield would have my neck if anything like that ever happened again! Thanks for the hard work ye scurvy dog, take this money as a thanks.',60270,1,60271,1,2593,5,2595,5,0,0,0,0,0,0,0,0,0,0,20000,3350,87,500,21,-300,0,0,0,0,0,0,0,60272,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+-- need to add to req items
+-- 5 Flagon of Mead
+-- 1 Cask of merlot
+replace into creature_questrelation (id, quest) values (60455, 40198);
+replace into creature_involvedrelation (id, quest) values (60455, 40198);
+
+delete from item_template where entry = 60270;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, buy_price, sell_price, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60270,8381,'Barrel of Steamwheedle Wine',12,1,2048,1,0,0,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60271,18099,'Jug of Orgrimmar Brown',12,1,2048,1,500,250,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010840;
+replace into gameobject_template values
+(2010840, 0, 3, 23262, 'Steamwheedle Barrel', 0, 4, 1, 43, 2010840, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010840;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(2010840,60270,-100,1,1,0,10);
+
+REPLACE INTO npc_vendor VALUES
+-- Lagg'osh <Innkeeper>
+(5611, 60271, 0, 0, 0, 0);
+
+replace into item_template values
+ ('60272', '0', '4', '2', 'Smuggler\'s Sash', '', '27520', '2', '0', '1', '13628', '3407', '6', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '11', '7', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '30', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
