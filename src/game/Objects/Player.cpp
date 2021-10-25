@@ -22606,7 +22606,7 @@ bool Player::SuspendWorldBuffs()
 				if (!suspended_cleared)
 				{
 					// found at least one world buff, clear character_aura_suspended 
-					CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+					CharacterDatabase.DirectPExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
 					ChatHandler(this).PSendSysMessage("All previously suspended world effects have been cleared.");
 					suspended_cleared = true;
 				}
