@@ -15,3 +15,9 @@ replace into item_template values
 (83413, 0, 4, 4, 'Steel Plate Armor', '', 27932, 2, 0, 1, 37664, 9416, 5, -1, -1, 52, 45, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 15, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 512, 0, 0, 0, 0, 0, 0, 13384, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 2, 0, 0, 0, 0, 0, 6, 1, 0, 0, 115, 0, 0, 0, 0, 27, 0, 0, 0, 0, 1, NULL),
 (83414, 0, 4, 4, 'Steel Plate Pauldrons', '', 27940, 2, 0, 1, 29380, 7345, 3, -1, -1, 52, 45, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 14, 4, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 372, 0, 0, 0, 0, 0, 0, 13669, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 6, 1, 0, 0, 70, 0, 0, 0, 0, 27, 0, 0, 0, 0, 1, NULL),
 (83415, 0, 4, 4, 'Steel Plate Helm', '', 32900, 3, 0, 1, 36524, 9131, 1, -1, -1, 53, 45, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 17, 4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 426, 0, 0, 0, 0, 0, 0, 13665, 1, 0, 0, -1, 0, -1, 13383, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 2, 0, 0, 0, 0, 0, 6, 1, 0, 0, 80, 0, 0, 0, 0, 45, 0, 0, 0, 0, 1, NULL);
+
+set @gossip_menu_id = 59151; set @magic_number = 40049;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I only sell my wares to the best of the champions, you think the spectators like you enough?\n\nIf so, step up, if not, back off pal!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
