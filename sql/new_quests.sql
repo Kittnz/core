@@ -907,3 +907,20 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60474, 40204);
 replace into creature_involvedrelation (id, quest) values (60473, 40204);
+
+-- Securing Darnassus --
+delete from quest_template where entry = 40205;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40204,40205,2,141,11,5,0,0,'Securing Darnassus','The Furbolg of Teldrassil have become a more active threat then I would have ever imagined. I had simply envisioned them as our ally to stand against whatever would come to bring harm to Teldrassil, not to be fighting against them.\n\nMoon Priestess Amara has tasked herself with patrolling the roads to keep traveler\'s safe but I fear it is not enough. If we wish to secure our borders we must take a more proactive approach, and stop the buildup of a much larger threat.\n\nThe Furbolg have been gathering to the south east for some time now. It shouldn\'t be long now until they are bold enough to begin probing attacks against Dolanaar, or Shadowglen. Should they succeed, their courage will only be bolstered to do even greater harm.\n\nTravel to Gnarlpine Hold, and slay the Pathstalkers and Avengers there to keep Darnassus safe.','Slay 10 Gnarlpine Avengers and 5 Gnarlpine Pathfinders for Adaena Oakleaf in Teldrassil.','Has it been done, have you finished your task? Should you fail, I fear only greater harm will come to the Kaldorei.','What has been done here today has only strengthened our defences, and kept our people from harm. The Furbolg have been rather blunt in their actions and have spurred on the wrath of Elune. For your efforts, you are to be rewarded, thank you.',0,0,0,0,0,0,0,0,2013,10,2012,5,0,0,0,0,0,0,0,900,69,125,0,0,0,0,0,0,0,0,0,60279,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60473, 40205);
+replace into creature_involvedrelation (id, quest) values (60473, 40205);
+
+replace into item_template values
+ ('60279', '0', '4', '0', 'Adaena\'s Loop', '', '28733', '2', '0', '1', '1604', '401', '11', '-1', '-1', '20',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '3', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
