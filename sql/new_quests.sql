@@ -806,3 +806,42 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (92180, 40199);
 replace into creature_involvedrelation (id, quest) values (92180, 40199);
+
+-- Tanglemoss --
+delete from quest_template where entry = 40200;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40200,2,408,53,45,0,0,'Tanglemoss','When we batled with the Razzari we were able to deal quite a lot of damage to Zul\'Razar, and even occupied part of the city. Until a large lot of Creepers came in, led by a massive beast named Tanglemoss, who drove us out.\n\nTanglemoss is a lurking, horrific beast that patrols the ruins of Zul\'Razar and has slain many ogres. We have always thought of him in stories, and rumors as a beast that lingered within the shadows and made those that traveled alone dissapear. I think I speak for many of us when I say that I prefer the story of Tanglemoss to be just that, a story.\n\nTravel to the Ruins of Zul\'Razar to the west, and slay Tanglemoss, bring its foul heart to me.','Bring the Heart of Tanglemoss to Blatarg in Maul\'ogg Refuge.','Have you found Tanglemoss? It may require more then just yourself for this to be done.','So, you actually are stronger then I first thought. So many big ogre thing they are tough just because they think they are and then they get smashed. You are tough, and strong, and you prove it, maybe you are a real ogre. War must continue, it is the only way we can go forward.',60273,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60274,1,60275,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92176, 40200);
+replace into creature_involvedrelation (id, quest) values (92176, 40200);
+
+update quest_template set type = 1 where entry = 40200;
+
+delete from item_template where entry = 60273;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60273,3422,'Heart of Tanglemoss',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into item_template values
+ ('60274', '0', '4', '4', 'Maul\'ogg Thighguards', '', '19720', '2', '0', '1', '64816', '16204', '7', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '13', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '484', '0', '0', '0',
+ '0', '0', '0', '9141', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '85', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60275', '0', '4', '3', 'Blatarg\'s Mantle', '', '26194', '2', '0', '1', '63348', '15837', '3', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '15', '7', '6',
+ '6', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '234', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '60', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+update creature_template set loot_id = 92204 where entry = 92204;
+
+delete from creature_loot_template where item = 60273 and entry = 92204;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(92204,60273,-100,1,1,0,10);
