@@ -863,3 +863,40 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60482, 40202);
 replace into creature_involvedrelation (id, quest) values (60465, 40202);
+
+-- Rooting Out Corruption --
+delete from quest_template where entry = 40203;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40202,40203,2,141,11,5,0,0,'Rooting Out Corruption','There is only one course of action left, the Treant must be dispatched, lest it cause harm to any of our kind, or that of nature. From its corrupted form take a sample of its Withered Roots.\n\nWith the information Tasala has offered, we can deduce that it should be walking upon the eastern side of the Wellspring Lake. Search with caution and make sure to keep your guard up, if it is hostile, then no doubt it will only offer aggresion should you interact with it.\n\nBe swift, the treant could hold answers that tackle the very heart of problems here in Teldrassil.','Destroy the Distorted Treant, and bring its Withered Roots to Malos Lunarspear in Teldrassil.','Have you found the treant, have you done what was needed for the balance of nature?','<Malos Lunarspear would take some time looking over the roots, his face somewhat disturbed by the sight>. It would appear that the roots are decayed, as if the creature had been in a state of dying, or had been deceased before you had reached it.\n\nI would hope no horrible fate on any being of nature I carry under my control, but this, is somewhat disturbing to gaze upon. I am afraid this has only made my research bring more questions, but still, you have helped me.\n\nAs a thanks for your help, please, take one of these items.',60276,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,900,69,125,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60277,1,60278,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60465, 40203);
+replace into creature_involvedrelation (id, quest) values (60465, 40203);
+
+delete from item_template where entry = 60276;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60276,1464,'Withered Roots',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 60475 where entry = 60475;
+
+delete from creature_loot_template where item = 60276 and entry = 60475;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(60475,60276,-100,1,1,0,10);
+
+replace into item_template values
+ ('60277', '0', '4', '3', 'Deepfrond Leggings', '', '22687', '2', '0', '1', '1988', '497', '7', '-1', '-1', '16',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '3', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '132', '0', '0', '2',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '55', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60278', '0', '4', '1', 'Deepfrond Gloves', '', '16970', '2', '0', '1', '636', '159', '10', '-1', '-1', '16',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '3', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '18', '0', '0', '2',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '18', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
