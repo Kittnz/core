@@ -1592,7 +1592,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (982, 40206);
 replace into creature_involvedrelation (id, quest) values (982, 40206);
 
-update creature_template set npc_flags = 6 where entry = 982;
+update creature_template set npc_flags = 7 where entry = 982;
 
 -- A Pinch of Venom --
 delete from quest_template where entry = 40207;
@@ -1616,7 +1616,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (983, 40208);
 replace into creature_involvedrelation (id, quest) values (983, 40208);
 
-update creature_template set npc_flags = 6 where entry = 983;
+update creature_template set npc_flags = 7 where entry = 983;
 
 update quest_template set type = 1 where entry = 40208;
 
@@ -1704,3 +1704,37 @@ replace into creature_involvedrelation (id, quest) values (60446, 40210);
 
 delete from creature_template where entry = 60334;
 replace into creature_template (entry, name, display_id1) values (60334, 'quest_40210_dummy_triger', 328);
+
+-- Bakarsh <Kargath Expeditionary Force> , display ID 4382, level 48, weapon 1 : 12259, greeting line : "Kargath is one of the farthest frontiers that the Horde has."
+replace into creature_template values
+(60495, 3, 4382, 0, 0, 0, 'Bakarsh', 'Kargath Expeditionary Force', 0, 48, 48, 6186, 6186, 0, 0, 680, 29, 3, 1.1, 1.14286, 1, 20, 5, 0, 0, 1, 77, 101, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.6272, 88.8624, 100, 7, 0, 60495, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20024; set @weapon_1 = 12259; set @weapon_2 = 0; set @creature = 60495;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41027; set @magic_number = 60495;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Kargath is one of the farthest frontiers that the Horde has.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41028; set @magic_number = 982;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Food can get scarce in the swamp if you don\'t know what to search for'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41029; set @magic_number = 983;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There are many secrets in this swamp, it just takes a keen eye to search for it.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41030; set @magic_number = 8176;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Blacksmithing is a refined art, I spent quite some time in Hammerfall before I was assigned here working on practicing it.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update creature_template set npc_flags = 16391 where entry = 8176;
