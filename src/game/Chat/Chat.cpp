@@ -366,7 +366,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "custom_pets",                  SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadCustomPetEntries,               "", nullptr },
         { "custom_mounts",                SEC_ADMINISTRATOR, true,  &ChatHandler::HandleReloadCustomMountEntries,               "", nullptr },
         { "mangos_string",                SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadMangosStringCommand,            "", nullptr },
-        { "bgplayers",                     SEC_ADMINISTRATOR, true, &ChatHandler::HandleReloadBgAmounts,                      "", nullptr},
+        { "bgplayers",                    SEC_ADMINISTRATOR, true, &ChatHandler::HandleReloadBgAmounts,                      "", nullptr}
+        { "gmlevels",                     SEC_ADMINISTRATOR, true,& ChatHandler::HandleReloadGmLevelsCommand,                   "", nullptr},
         { nullptr,                       0,                 false, nullptr,                                                  "", nullptr }
     };
 
@@ -497,6 +498,7 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "close",         SEC_GAMEMASTER,  true,  &ChatHandler::HandleGMTicketCloseByIdCommand,        "", nullptr },
         { "list",          SEC_GAMEMASTER,  true,  &ChatHandler::HandleGMTicketListCommand,             "", nullptr },
+        { "onlinelist",    SEC_GAMEMASTER,  true,  &ChatHandler::HandleGMTicketsOnlineListCommand,      "", nullptr},
         { "",              SEC_GAMEMASTER,  true,  &ChatHandler::HandleGMTicketGetByIdOrNameCommand,    "", nullptr },
         { nullptr,         0,                   false, nullptr,                                             "", nullptr }
     };
