@@ -624,7 +624,7 @@ struct infinite_timeripperAI : public ScriptedAI
         if (!m_creature->HasAura(AURA_SHADOWGUARD))
             m_creature->AddAura(AURA_SHADOWGUARD);
 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
 
         if (!doOnce)
         {
@@ -632,13 +632,13 @@ struct infinite_timeripperAI : public ScriptedAI
             {
                 dragonSpawns.push_back(spawn1);
                 dragonSpawn1 = spawn1->GetGUIDLow();
-                spawn1->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                spawn1->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             }
             if (Creature* spawn2 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1401.54f, 6905.29f, -138.01f, 0.46f, TEMPSUMMON_MANUAL_DESPAWN))
             {
                 dragonSpawns.push_back(spawn2);
                 dragonSpawn2 = spawn2->GetGUIDLow();
-                spawn2->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PASSIVE);
+                spawn2->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             }
             doOnce = true;
         }
