@@ -230,9 +230,14 @@ bool WorldSession::ForcePlayerLogoutDelay()
     if (!sWorld.IsStopped() && GetPlayer() && GetPlayer()->FindMap() && GetPlayer()->IsInWorld() && sPlayerBotMgr.ForceLogoutDelay())
     {
         sLog.out(LOG_CHAR, "Account: %d (IP: %s) Lost socket for character:[%s] (guid: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
+
+        if (GetPlayer()->isHardcore())
+            m_disconnectTimer = 10000;
+        else
+            m_disconnectTimer = 20000;
+
         GetPlayer()->OnDisconnected();
         SetDisconnectedSession();
-        m_disconnectTimer = 120000;
         return true;
     }
     return false;
