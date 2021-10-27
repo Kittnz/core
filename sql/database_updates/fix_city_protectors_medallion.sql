@@ -1,0 +1,1 @@
+update item_template set duration = -604800 where entry = 50056;
