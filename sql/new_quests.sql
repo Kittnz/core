@@ -1632,3 +1632,65 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (745,60281,-11,1,1,0,10),
 (746,60281,-12,1,1,0,10);
 
+-- The Hunt for Sorrowclaw --
+delete from quest_template where entry = 40209;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40209,2,8,41,34,0,0,'The Hunt for Sorrowclaw','Many long months I have spent in this hellscape hunting for a large jaguar. I have given it the nickname Sorrowclaw, for its ferocity and where it comes from. I have attempted to catch it, fight it, and even stalk Sorrowclaw, but every time I have been outsmarted.\n\nIt is as if the beast is three steps ahead of me at all times and I long to see its terror within the swamp come to an end. Perhaps you are a better hunter then me, and perhaps you can track down Sorrowclaw, and slay the beast once and for all.\n\nI assure you, it will not be an easy task, and I recommend you bring help should you truly wish to take after where I have failed.','Bring the Paw of Sorrowclaw to Zun\'dartha in Stonard.','Deathstrike Venom can be fatal if used improperly, be careful in handling it!','Potent, extremely potent, it would appear that the Deathstrike Tarantula have been growing more strong over the past months. I will still attempt what I can, thank you again, perhaps I can best such a venom one day.',60282,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3250,76,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60283,1,60284,1,60285,1,60286,1,0,0,'');
+
+replace into creature_questrelation (id, quest) values (1775, 40209);
+replace into creature_involvedrelation (id, quest) values (1775, 40209);
+
+-- Sorrowclaw, display ID 6082, scale 1.3, level 41 elite, casts rend, faction 16
+replace into creature_template values
+(60494, 0, 6082, 0, 0, 0, 'Sorrowclaw', NULL, 0, 41, 41, 4900, 4900, 0, 0, 2011, 16, 0, 1, 1.42857, 1.3, 20, 5, 0, 1, 1, 174, 224, 0, 156, 1, 1500, 2000, 1, 64, 0, 2, 0, 0, 0, 0, 47.2, 64.9, 100, 1, 1, 60494, 0, 728, 0, 0, 0, 0, 0, 0, 6016, 3147, 0, 0, 7280, 8279, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+update quest_template set type = 1 where entry = 40209;
+
+delete from item_template where entry = 60282;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60282,1496,'Paw of Sorrowclaw',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60282 and entry = 60494;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(60494,60282,-100,1,1,0,10);
+
+delete from item_template where entry between 60283 and 60286;
+replace into item_template values
+ ('60283', '0', '4', '1', 'Swamphunter\'s Eye', '', '21701', '2', '0', '1', '31216', '7804', '1', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '15', '4', '6',
+ '5', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '103', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60284', '0', '4', '3', 'Swamplink Harness', '', '18382', '2', '0', '1', '47628', '11907', '5', '-1', '-1', '47',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '7', '5',
+ '3', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '258', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '100', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60285', '0', '4', '4', 'Swampguard Girdle', '', '27323', '2', '0', '1', '12284', '3071', '6', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '4', '5',
+ '5', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '224', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '40', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60286', '0', '4', '1', 'Swampseeker\'s Kilt', '', '26238', '2', '0', '1', '27896', '6974', '7', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '15', '6', '7',
+ '7', '7', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '52', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '55', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
