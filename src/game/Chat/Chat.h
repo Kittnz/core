@@ -476,6 +476,7 @@ class ChatHandler
         bool ViewTicketByIdOrName(char* ticketId, char* name);
         bool ViewTicket(GmTicket* ticket);
         bool HandleGMTicketListCommand(char* args);
+        bool HandleGMTicketsOnlineListCommand(char* args);
         bool HandleGMTicketGetByIdOrNameCommand(char* args);
         bool HandleGMTicketCloseByIdCommand(char* args);
 
@@ -495,6 +496,7 @@ class ChatHandler
         bool HandleMailboxCommand(char* args);
         bool HandleSaleCommand(char* args);
         bool HandleReloadBgAmounts(char* args);
+        bool HandleReloadGmLevelsCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);

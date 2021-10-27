@@ -4811,6 +4811,13 @@ bool ChatHandler::HandleGMTicketListCommand(char* args)
     return true;
 }
 
+
+bool ChatHandler::HandleGMTicketsOnlineListCommand(char* args)
+{
+    sTicketMgr->ShowList(*this, true);
+    return true;
+}
+
 bool ChatHandler::ViewTicketByIdOrName(char* ticketId_c, char* name_c)
 {
     GmTicket* ticket = nullptr;
@@ -12017,6 +12024,13 @@ bool ChatHandler::HandleReloadBgAmounts(char* args)
 {
     sBattleGroundMgr.ReloadBGPlayerCounts();
     SendSysMessage("Player counts reloaded.");
+    return true;
+}
+
+bool ChatHandler::HandleReloadGmLevelsCommand(char* args)
+{
+    sAccountMgr.Load();
+    SendSysMessage("GM account levels and ban list reloaded.");
     return true;
 }
 
