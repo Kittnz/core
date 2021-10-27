@@ -1593,3 +1593,18 @@ replace into creature_questrelation (id, quest) values (982, 40206);
 replace into creature_involvedrelation (id, quest) values (982, 40206);
 
 update creature_template set npc_flags = 6 where entry = 982;
+
+-- A Pinch of Venom --
+delete from quest_template where entry = 40207;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40207,2,8,41,34,0,0,'A Pinch of Venom','The Deathstrike Tarantula are a formidable foe out within the swamps that lurk just southeast of Stonard. They can be found creeping about the swamps and laying traps for those they hunt.\n\n It is from these Tarantula that I ask you to gather their poison. I have been attempting to mix the tang of poison, once nullified, into food. In truth, I do have ulterior motives of attempting make such recipes work.\n\nPerhaps one day I may be a known cook within Orgrimmar, and no stuck to the Swamp of Sorrow. Travel into the swamp, and collect me 5 Deathstrike Venom! ','Collect 5 Deathstrike Venom for Thultash in Stonard.','Deathstrike Venom can be fatal if used improperly, be careful in handling it!','Potent, extremely potent, it would appear that the Deathstrike Tarantula have been growing more strong over the past months. I will still attempt what I can, thank you again $N, perhaps I can best such a venom one day.',60280,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2250,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (982, 40207);
+replace into creature_involvedrelation (id, quest) values (982, 40207);
+
+delete from item_template where entry = 60280;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60280,1507,'Deathstrike Venom',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60280 and entry = 769;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(769,60280,-30,1,1,0,10);
