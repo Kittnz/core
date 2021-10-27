@@ -370,6 +370,7 @@ class ChatHandler
         bool HandleQuestRemoveCommand(char* args);
         bool HandleQuestCompleteCommand(char* args);
         bool HandleQuestStatusCommand(char* args);
+        bool HandleQuestTestCommand(char* args);
 
         bool HandlePetListCommand(char* args);
         bool HandlePetRenameCommand(char* args);

@@ -1873,6 +1873,29 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     ChatHandler(unitTarget->ToPlayer()).PSendSysMessage("|cffff8040Current DisplayID: %u|r", m_caster->ToPlayer()->GetDisplayId());
                     return;
                 }
+                case 56046: // GM Flight Mode (commands will become obsolete in 1.15.2)
+                {
+                    m_caster->ToPlayer()->CastSpell(m_caster->ToPlayer(), 14867, true);
+
+                    if (m_caster->ToPlayer()->GetDisplayId() == 6299 || m_caster->ToPlayer()->GetDisplayId() == 4566)
+                    {
+                        m_caster->ToPlayer()->SetFlying(false);
+                        m_caster->ToPlayer()->SetObjectScale(m_caster->ToPlayer()->GetNativeScale());
+                        m_caster->ToPlayer()->UpdateSpeed(MOVE_SWIM, false, 1.0F);
+                        m_caster->ToPlayer()->UpdateSpeed(MOVE_RUN, false, 1.0F);
+                        m_caster->ToPlayer()->UpdateSpeed(MOVE_WALK, false, 1.0F);
+                        m_caster->ToPlayer()->DeMorph();
+                    }
+                    else
+                    {
+                        m_caster->ToPlayer()->SetFlying(true);
+                        m_caster->ToPlayer()->SetDisplayId(m_caster->ToPlayer()->GetTeam() == ALLIANCE ? 6299 : 4566); // Black and Brown Owls
+                        m_caster->ToPlayer()->SetObjectScale(0.7F);
+                        m_caster->ToPlayer()->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+                        m_caster->ToPlayer()->NearLandTo(m_caster->ToPlayer()->GetPositionX(), m_caster->ToPlayer()->GetPositionY(), m_caster->ToPlayer()->GetPositionZ() + 4.0F, m_caster->ToPlayer()->GetOrientation());
+                    }   
+                    return;
+                }
             }
             // All IconID Check in there
             switch (m_spellInfo->SpellIconID)

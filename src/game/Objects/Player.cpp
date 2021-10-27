@@ -14956,10 +14956,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     m_honorMgr.SetStoredHK(fields[43].GetUInt32());
     m_honorMgr.SetStoredDK(fields[44].GetUInt32());
 
-    // Setting City Rank
-    if (fields[59].GetBool())
-        SetByteValue(PLAYER_BYTES_3, 2, GetRace());
-
     m_honorMgr.Load(holder->GetResult(PLAYER_LOGIN_QUERY_LOADHONORCP));
     _LoadBoundInstances(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBOUNDINSTANCES));
     _LoadBGData(holder->GetResult(PLAYER_LOGIN_QUERY_LOADBGDATA));
@@ -15374,22 +15370,31 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // Titles
 
-    // Load all titles from theh db
+    // Load all titles from the db
     m_playerTitles.clear();
     QueryResult *titlesQuery = CharacterDatabase.PQuery("SELECT title, active "
         "FROM character_titles "
         "WHERE guid = '%u'", GetGUIDLow());
 
-    if (titlesQuery && titlesQuery->GetRowCount() > 0)
-        do
-        {
-            Field *fields = titlesQuery->Fetch();
-            uint8 titleID = fields[0].GetUInt8();
-            uint8 active = fields[1].GetUInt8();
+	if (titlesQuery && titlesQuery->GetRowCount() > 0)
+	{
+		do
+		{
+			Field *fields = titlesQuery->Fetch();
+			uint8 titleID = fields[0].GetUInt8();
+			uint8 active = fields[1].GetUInt8();
 
-            m_playerTitles[titleID] = active;
+			m_playerTitles[titleID] = active;
 
-        } while (titlesQuery->NextRow());
+			// city protector scroll/medalion
+			if (titleID == GetRace())
+				MailCityProtectorMedallion();
+
+		} while (titlesQuery->NextRow());
+	}
+
+	// Award or take away City Protector Rank
+	AwardTitle(fields[59].GetBool() ? GetRace() : -GetRace());
 
     SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); // set active title on logon
 
@@ -22058,11 +22063,11 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
     }
 }
 
-bool Player::IsCityProtector() { return GetByteValue(PLAYER_BYTES_3, 2) == GetRace(); }
+bool Player::IsCityProtector() { return HasTitle(GetRace()); /*GetByteValue(PLAYER_BYTES_3, 2) == GetRace();*/ }
 bool Player::IsImmortal() { return GetByteValue(PLAYER_BYTES_3, 2) == 52; }
 bool Player::IsScarabLord() { return HasItemCount(21176, 1, 0); }
 
-void Player::MailCityProtectorScroll()  
+void Player::MailCityProtectorMedallion()
 {
     std::string subject = "City Protector";
     std::string message = "Defend the weak, protect both young and old, never desert your friends. Give justice to all, be fearless in battle and always ready to defend the right.";
@@ -22606,7 +22611,7 @@ bool Player::SuspendWorldBuffs()
 				if (!suspended_cleared)
 				{
 					// found at least one world buff, clear character_aura_suspended 
-					CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+					CharacterDatabase.DirectPExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
 					ChatHandler(this).PSendSysMessage("All previously suspended world effects have been cleared.");
 					suspended_cleared = true;
 				}

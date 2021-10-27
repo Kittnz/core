@@ -1226,7 +1226,11 @@ void Aura::TriggerSpell()
                     }
                     case 27808:                             // Frost Blast
                     {
-                        int32 bpDamage = triggerTarget->GetMaxHealth() * 26 / 100;
+						// https://youtu.be/mU_i07YVEbs?t=489
+						// Frost blast ticks 4 times on classic for 26% of player's max hp, resulting in 104% total damage
+						// here, in dbc it the duration is 5s and it ticks 5 times, resulting in 130% total damage
+						// lowering the percentage to 21 will result in 105% total damage, closer to classic/vanilla values
+                        int32 bpDamage = triggerTarget->GetMaxHealth() * 21 / 100;
                         triggerTarget->CastCustomSpell(triggerTarget, 29879, &bpDamage, nullptr, nullptr, true, nullptr, this, casterGUID);
                         return;
                     }

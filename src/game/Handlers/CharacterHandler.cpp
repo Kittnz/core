@@ -785,8 +785,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             pCurrChar->AddItem(83270, 1);
     }
 
-    if (pCurrChar->IsCityProtector())
-        pCurrChar->MailCityProtectorScroll();
 
     // show time before shutdown if shutdown planned.
     if (sWorld.IsShutdowning())

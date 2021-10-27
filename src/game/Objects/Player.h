@@ -1113,7 +1113,7 @@ class Player final: public Unit
         bool IsScarabLord();
         bool IsImmortal();
         // ---
-        void MailCityProtectorScroll();
+        void MailCityProtectorMedallion();
         void MailRidingTurtleGift();
         void MailOpenHouseGift();
         bool IsIgnoringTitles();
