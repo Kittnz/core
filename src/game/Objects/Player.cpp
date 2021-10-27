@@ -20,7 +20,7 @@
  */
 
 #include <unordered_map>
-
+#include <cmath>
 #include <iostream>
 #include <ctime>
 
@@ -71,10 +71,7 @@
 #include "MasterPlayer.h"
 #include "MovementPacketSender.h"
 #include "miscelanneous/feature_transmog.h"
-
-/* Nostalrius */
 #include "Config/Config.h"
-#include <cmath>
 #include "ZoneScript.h"
 #include "ZoneScriptMgr.h"
 #include "PlayerBotMgr.h"
@@ -811,13 +808,18 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     // original spells
     LearnDefaultSpells();
 
+    if (GetSession()->GetSecurity() > SEC_PLAYER)
+    {
+        LearnGameMasterSpells(); // Add some GM-Spells to new created toons
+    }
+
     if (GetSession()->GetSecurity() == SEC_PLAYER)
     {
         // Starting items
         for (const auto& item_id_itr : info->item)
             StoreNewItemInBestSlots(item_id_itr.item_id, item_id_itr.item_amount);
     }
-    else if (GetSession()->GetSecurity() >= SEC_GAMEMASTER)
+    else
     {
         StoreNewItemInBestSlots(4500, 4);  // 4 x Traveler's Backpack
         StoreNewItemInBestSlots(12064, 1); // Gamemaster Hood
@@ -19275,6 +19277,33 @@ void Player::LearnQuestRewardedSpells()
             continue;
 
         LearnQuestRewardedSpells(quest);
+    }
+}
+
+void Player::LearnGameMasterSpells()
+{
+    const std::size_t aGameMasterSpellList[] =
+    {
+        56043, // Debug: Next DisplayID
+        56044, // Debug: Previous DisplayID
+        56045, // Debug: Reset DisplayID
+        56046, // GM Flight Mode
+        56047  // Toggle GM Visibility
+    };
+
+    try
+    {
+        for (const auto& spell : aGameMasterSpellList)
+        {
+            if (!IsInWorld())
+                AddSpell(spell, true, true, true, false);
+            else
+                LearnSpell(spell, true);
+        }
+    }
+    catch (const std::exception &e)
+    {
+        sLog.outError("Player::LearnGameMasterSpells() generated an exception: %s", e.what());
     }
 }
 
