@@ -1706,8 +1706,119 @@ delete from creature_template where entry = 60334;
 replace into creature_template (entry, name, display_id1) values (60334, 'quest_40210_dummy_triger', 328);
 
 -- Bakarsh <Kargath Expeditionary Force> , display ID 4382, level 48, weapon 1 : 12259, greeting line : "Kargath is one of the farthest frontiers that the Horde has."
+-- entry 91739, 91740, 91741, 91760, 91763, 91772, 91773 nerfed.
+delete from creature_template where entry between 91739 and 91741;
+delete from creature_template where entry = 91760;
+delete from creature_template where entry = 91763;
+delete from creature_template where entry = 91772;
+delete from creature_template where entry = 91773;
 replace into creature_template values
-(60495, 3, 4382, 0, 0, 0, 'Bakarsh', 'Kargath Expeditionary Force', 0, 48, 48, 6186, 6186, 0, 0, 680, 29, 3, 1.1, 1.14286, 1, 20, 5, 0, 0, 1, 77, 101, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.6272, 88.8624, 100, 7, 0, 60495, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(60495, 3, 4382, 0, 0, 0, 'Bakarsh', 'Kargath Expeditionary Force', 0, 48, 48, 6186, 6186, 0, 0, 680, 29, 3, 1.1, 1.14286, 1, 20, 5, 0, 0, 1, 77, 101, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.6272, 88.8624, 100, 7, 0, 60495, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91739, 0, 729, 0, 0, 0, 'Tirisclaw Scavenger', '', 0, 14, 16, 328, 370, 0, 0, 528, 16, 0, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91740, 0, 91740, 0, 0, 0, 'Tirisclaw Ravager', '', 0, 14, 15, 300, 328, 0, 0, 660, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91741, 0, 11180, 0, 0, 0, 'Tirisclaw Shadowcaster', '', 0, 14, 14, 263, 263, 710, 710, 528, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 15, 21, 0, 74, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 1896, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 55026, 0, 0, 0, 0, 0, 0, ''),
+(91760, 0, 11180, 0, 0, 0, 'Tirisclaw Ambusher', '', 0, 16, 16, 356, 356, 0, 0, 713, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 25, 31, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91763, 0, 3960, 0, 0, 0, 'Rogue Arcanist', '', 0, 17, 19, 354, 379, 1020, 1118, 432, 17, 0, 0.95, 1.14286, 0, 20, 5, 0, 0, 1, 19, 25, 0, 88, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 619, 619, 0, 0, 10, 10, 10, 10, 10, 1449, 5143, 0, 0, 6190, 0, 20, 60, 'EventAI', 1, 3, 0, 0, 3, 619, 0, 0, 1, 0, 0, 0, ''),
+(91772, 0, 5784, 0, 0, 0, 'Remnants Sentry', 'The Army of Lordaeron', 0, 15, 17, 356, 386, 0, 0, 731, 210, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 80, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 634, 634, 0, 0, 10, 10, 10, 10, 10, 5115, 0, 0, 0, 6340, 0, 10, 50, 'EventAI', 0, 3, 0, 0, 3, 55001, 0, 0, 0, 0, 0, 0, ''),
+(91773, 0, 3264, 0, 0, 0, 'Remnants Scout', 'The Army of Lordaeron', 0, 15, 17, 356, 386, 0, 0, 731, 210, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 24, 31, 0, 80, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 634, 634, 0, 0, 10, 10, 10, 10, 10, 5115, 0, 0, 0, 6340, 0, 10, 50, 'EventAI', 0, 3, 0, 0, 3, 55158, 0, 0, 0, 0, 0, 0, '');
+
+set @creature_entry = 91741;
+set @description = 'Tirisclaw Shadowcaster';
+set @spell_list_id = 180001;
+
+set @spellid_1 = 705; -- Shadow Bolt every 5 seconds
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 0;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 5; 
+set @delayrepeatmax_1 = 5;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 705, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
 set @equip_template = 20024; set @weapon_1 = 12259; set @weapon_2 = 0; set @creature = 60495;
 replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
@@ -1738,3 +1849,18 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 update creature_template set npc_flags = 16391 where entry = 8176;
+
+-- Head of The Pack --
+delete from quest_template where entry = 40083;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40082,40083,2,85,15,14,0,0,'Head of The Pack','With their forces at the tower weakened, it is time for us to kill their leader. Yes, when I say us, I mean you. Their leader invaded the mine recently, and he has taken his bigger worgen down there with him. The Gracestone mine is a top priority. Without its resources, Glenshire doesn\'t stand a chance against the Humans, not to mention that the mines provide a perfect ambush point for worgens to attack any travelers between Silverpine and the Uplands.\n\nGo down there and bring me the head of their leader. Oh, and feel free to kill as many of his followers as you can.','Apothecary Volgrin has asked you to bring him the head of the Pack Leader Sharn and kill 5 Tirisclaw Ambushers and 4 Tirisclaw Scavengers.','How goes the attack?','Oh, I can smell the blood coming from your bag. Is that the head of the mongrel? Good, very good. If you keep going likes this, you might even earn the Duchess\'s favor.',60172,1,0,0,0,0,0,0,91760,5,91739,4,0,0,0,0,0,0,1000,1250,68,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91713, 40083);
+replace into creature_involvedrelation (id, quest) values (91713, 40083);
+
+delete from item_template where entry = 60172;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values (60172,36431,'Sharn\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Severed Head of the Pack Leader Sharn',0);
+
+delete from creature_loot_template where entry = 1923 and item = 60172;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (1923,60172,-100,1,1,0,10);
+
+--Pile of Dirt 2010824 for set banner.
