@@ -1133,6 +1133,49 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
     return false;
 }
 
+bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40210) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60446, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("I come from a land far away, shrouded in mystery and green mist. I am blessed by those you would not understand, and those that inhabit this mystical land. I am an outcast of my kin, and have only come here to seek new purpose. This purpose was found upon these islands.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("Slowly, day by day, a darkness came, a power much like myself that dared to challenge the rule I had established. Little by little I would lose this pitiful match of displaying power to attempt to keep the locals swayed to my side.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("In the end, I could not offer the secrets of my power to those that followed me. Eventually, most of my followers and worshippers stepped aside to bask in the glory of this dark energy. Now, I am seeking revenge, I am seeking to once again reclaim my throne upon these lands, do you understand mortal?");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 56 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60334))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
@@ -1336,9 +1379,104 @@ bool QuestRewarded_npc_thirael_ghost(Player* pPlayer, Creature* pQuestGiver, Que
     return false;
 }
 
+bool QuestRewarded_npc_blazno(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40190) // The Blazno Touch
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("Now, behold my brilliance, my sheer wit and power of mind! With these items, I will be rich again! Haha!", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("Huh... Maybe its supposed to take a while, I'll think of a new method to make this work, thanks again pal!", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_daela_evermoon(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40197) // Old Greypaw
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CRY);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_old_greypaw(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40197) == QUEST_STATUS_INCOMPLETE) // Old Greypaw
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Daela Evermoon was asking if you were okay.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(60470, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_old_greypaw(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("WHO?! Evermoon asking if I am weak?! Evermoon want to kill me huh?! Who are you, messenger, scout?", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("You think you can probe me for weakness?!", player);
+            npc->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            npc->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+struct npc_old_greypawAI : public ScriptedAI
+{
+    npc_old_greypawAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() { }
+    void JustDied(Unit*) override
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFactionTemporary(15, TEMPFACTION_RESTORE_COMBAT_STOP);
+    }
+};
+
+CreatureAI* GetAI_npc_old_greypaw(Creature* _Creature) { return new npc_old_greypawAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_daela_evermoon";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_daela_evermoon;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_old_greypaw";
+    newscript->pGossipHello = &GossipHello_npc_old_greypaw;
+    newscript->pGossipSelect = &GossipSelect_npc_old_greypaw;
+    newscript->GetAI = &GetAI_npc_old_greypaw;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_blazno";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_blazno;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_thirael_ghost";
@@ -1379,6 +1517,8 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_insomni";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_insomni;
+    newscript->pGossipHello = &GossipHello_npc_insomni;
+    newscript->pGossipSelect = &GossipSelect_npc_insomni;
     newscript->RegisterSelf();
 
     newscript = new Script;
