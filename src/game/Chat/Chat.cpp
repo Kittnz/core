@@ -644,6 +644,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "path",           SEC_GAMEMASTER,     true,  nullptr,                                         "", pathCommandTable },
         { "wsg",             SEC_PLAYER,        false, &ChatHandler::HandleQueueWsgCommand,             "", nullptr},
         { "alterac",         SEC_PLAYER,        false, &ChatHandler::HandleQueueAvCommand,             "", nullptr },
+        { "ab",         SEC_PLAYER,        false, &ChatHandler::HandleQueueArathiBasinCommand,             "", nullptr },
+        {"questtest", SEC_PLAYER, false, &ChatHandler::HandleQuestTestCommand, "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
