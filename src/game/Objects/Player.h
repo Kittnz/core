@@ -19,8 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _PLAYER_H
-#define _PLAYER_H
+#pragma once
 
 #include "Common.h"
 #include "ItemPrototype.h"
@@ -47,6 +46,7 @@
 #include <string>
 #include <vector>
 #include <functional>
+#include <cstddef>
 
 struct Mail;
 class Channel;
@@ -1491,6 +1491,7 @@ class Player final: public Unit
         void LearnDefaultSpells();
         void LearnQuestRewardedSpells();
         void LearnQuestRewardedSpells(Quest const* quest);
+        void LearnGameMasterSpells();
         void LearnSpellHighRank(uint32 spellid);
 
         void CastItemCombatSpell(Unit* Target, WeaponAttackType attType);
@@ -2703,5 +2704,3 @@ template <class T> T Player::ApplySpellMod(uint32 spellId, SpellModOp op, T &bas
     basevalue = T((float)basevalue + diff);
     return T(diff);
 }
-
-#endif

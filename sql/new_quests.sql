@@ -1944,3 +1944,62 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '1', '1', '0', '0', '65', '0', '0', '0', '0', '27', '0', '0', '0',
  '0', '1', NULL);
+
+update creature_template set subname = 'The Fox' where entry = 60453;
+delete from creature_template where entry = 60496 and 60497;
+replace into creature_template VALUES
+(60496, 0, 18707, 0, 0, 0, 'Garfield Sparkblast', 'Admiral of the Bloodsail Buccaneers', 0, 54, 54, 14182, 14182, 0, 0, 2641, 119, 3, 1, 1.14286, 1, 20, 5, 0, 1, 1, 344, 444, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.3256, 81.5727, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1279, 1675, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_garfield_sparkblast'),
+(60497, 0, 18705, 0, 0, 0, 'First Mate McGillicuddy', 'Bloodsail Buccaneers', 0, 52, 52, 3082, 3082, 0, 0, 2669, 16, 3, 1, 1.14286, 1, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 60497, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 20004, 0, 0, 0, 0, 0, 0, '');
+
+update quest_template set details = 'So listen here mate, ye see these foul sea tailed imps? These Blackwater Pirates are naught but a joke, hiding in their port. They even have thar weapons laying around in crates, truly a disgrace to all pirates around.\n\n<Garfield spits on the ground>.\n\nSo that\'s exactly why ye are going to collect them and bring them to a special someone in the city, what, ye thought these sea tailed imps wouldn\'t have a rat? Outrageous, but hilarious, in it? Narkk be the name.' where entry = 40173;
+update quest_template set objectives = 'Bring five weapon crates to Narkk.' where entry = 40173;
+update quest_template set offerrewardtext = 'Not so loud! You want the whole bruiser brigade on our hands? Just put that crate in and keep them coming.\n\n<After you bring each crate one by one you turn your attention towards Narkk>.\n\nFine work mate, here\'s your pay now leave and don\'t worry about it, you were never here today.' where entry = 40173;
+
+update quest_template set objectivetext1 = 'Spat in Morgan\'s face.' where entry = 40179;
+
+delete from creature_involvedrelation where quest between 40180 and 40183;
+delete from creature_involvedrelation where quest between 40185 and 40187;
+
+replace into creature_involvedrelation (id, quest) values
+(60496, 40180),
+(60496, 40181),
+(60496, 40182),
+(60496, 40183),
+(60496, 40185),
+(60496, 40186),
+(60496, 40187);
+
+delete from creature_questrelation where quest between 40181 and 40183;
+delete from creature_questrelation where quest between 40185 and 40187;
+
+replace into creature_questrelation (id, quest) values
+(60496, 40181),
+(60496, 40182),
+(60496, 40183),
+(60496, 40185),
+(60496, 40186),
+(60496, 40187);
+
+update quest_template set reqcreatureorgoid1 = 92139 where entry = 40182;
+update quest_template set reqcreatureorgocount1 = 10 where entry = 40182;
+update quest_template set reqcreatureorgoid2 = 91847 where entry = 40182;
+update quest_template set reqcreatureorgocount2 = 10 where entry = 40182;
+update quest_template set minlevel = 45 where entry = 40182;
+update quest_template set questlevel = 52 where entry = 40182;
+
+update quest_template set reqcreatureorgoid1 = 60497 where entry = 40183;
+update quest_template set reqcreatureorgocount1 = 1 where entry = 40183;
+update quest_template set title = 'First Mate McGillicuddy' where entry = 40183;
+update quest_template set objectives = 'Kill First Mate McGillicuddy.' where entry = 40183;
+update item_template set name = 'McGillicuddy\'s Head' where entry = 60255;
+delete from creature_loot_template where entry = 60255;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (60497,60255,-100,1,1,0,10);
+
+update gameobject_template set name = 'Captain Blackeye\'s Footlocker' where entry = 2010837;
+
+update quest_template set minlevel = 45 where entry = 40183;
+update quest_template set questlevel = 52 where entry = 40183;
+update quest_template set minlevel = 45 where entry = 40185;
+update quest_template set questlevel = 52 where entry = 40185;
+update quest_template set minlevel = 45 where entry = 40186;
+update quest_template set questlevel = 52 where entry = 40186;
