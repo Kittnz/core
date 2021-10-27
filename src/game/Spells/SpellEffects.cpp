@@ -1832,6 +1832,20 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 56047: // Toggle GM Invisibility
+                {
+                    if (!m_caster->ToPlayer()->GetVisibility() == VISIBILITY_OFF)
+                    {
+                        m_caster->ToPlayer()->SetGMVisible(false);
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You're now invisible.");
+                    }
+                    else
+                    {
+                        m_caster->ToPlayer()->GetSession()->SendNotification("You're now visible.");
+                        m_caster->ToPlayer()->SetGMVisible(true);
+                    }
+                    return;
+                }
                 case 46035: // City Protector's Teleport
                 {
                     using namespace std;
