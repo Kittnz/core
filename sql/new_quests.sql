@@ -1694,3 +1694,13 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '55', '0', '0', '0', '0', '27', '0', '0', '0',
  '0', '1', NULL);
+
+-- The Hermit --
+delete from quest_template where entry = 40210;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40210,2,409,51,40,0,0,'The Hermit','I did not always call this place home, infact I come from far away lands, and have only recently settled here. I have many tales to tell and should you wish to truly serve me, you will need to listen to my tale and understand why I do what I do.\n\nSo , mortal, are you ready for what is presented before you, will you step into the abyss?','Listen to the tale of Insom\'ni.','Open your mind, and listen, wisdom can be found anywhere.','So, now you know what is at stake, and you will help me retake these islands, if not for your own selfish whims of \'virtue\' to stop some evil.',0,0,0,0,0,0,0,0,60334,1,0,0,0,0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Insom\'ni\'s story has been listened to');
+
+replace into creature_questrelation (id, quest) values (60446, 40210);
+replace into creature_involvedrelation (id, quest) values (60446, 40210);
+
+delete from creature_template where entry = 60334;
+replace into creature_template (entry, name, display_id1) values (60334, 'quest_40210_dummy_triger', 328);

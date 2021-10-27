@@ -1133,6 +1133,49 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
     return false;
 }
 
+bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40210) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60446, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("I come from a land far away, shrouded in mystery and green mist. I am blessed by those you would not understand, and those that inhabit this mystical land. I am an outcast of my kin, and have only come here to seek new purpose. This purpose was found upon these islands.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("Slowly, day by day, a darkness came, a power much like myself that dared to challenge the rule I had established. Little by little I would lose this pitiful match of displaying power to attempt to keep the locals swayed to my side.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("In the end, I could not offer the secrets of my power to those that followed me. Eventually, most of my followers and worshippers stepped aside to bask in the glory of this dark energy. Now, I am seeking revenge, I am seeking to once again reclaim my throne upon these lands, do you understand mortal?");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 56 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60334))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
@@ -1474,6 +1517,8 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_insomni";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_insomni;
+    newscript->pGossipHello = &GossipHello_npc_insomni;
+    newscript->pGossipSelect = &GossipSelect_npc_insomni;
     newscript->RegisterSelf();
 
     newscript = new Script;
