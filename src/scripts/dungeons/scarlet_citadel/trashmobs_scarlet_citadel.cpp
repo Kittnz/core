@@ -83,13 +83,13 @@ struct npc_areatriggerAI : public ScriptedAI
 
         for (; ui_ITR < ui_TrashMob; ui_ITR++)
         {
-            m_creature->SummonCreature(NPC_FIRST_WING_TRASH, vf_SpawnPoint[0].m_fX, vf_SpawnPoint[0].m_fY, vf_SpawnPoint[0].m_fZ, vf_SpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
+            m_creature->SummonCreature(ScarletCitadelUnit::NPC_FIRST_WING_TRASH, vf_SpawnPoint[0].m_fX, vf_SpawnPoint[0].m_fY, vf_SpawnPoint[0].m_fZ, vf_SpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
         }
     }
 
     void JustSummoned(Creature* p_Summoned) override
     {
-        if (p_Summoned->GetEntry() == NPC_FIRST_WING_TRASH)
+        if (p_Summoned->GetEntry() == ScarletCitadelUnit::NPC_FIRST_WING_TRASH)
         {
             p_Summoned->MonsterMoveWithSpeed(vf_LastWaypoint[ui_ITR].m_fX, vf_LastWaypoint[ui_ITR].m_fY, vf_LastWaypoint[ui_ITR].m_fZ, vf_LastWaypoint[ui_ITR].m_fO, 5, uint32(MOVE_PATHFINDING | MOVE_FORCE_DESTINATION));
         }

@@ -808,11 +808,6 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     // original spells
     LearnDefaultSpells();
 
-    if (GetSession()->GetSecurity() > SEC_PLAYER)
-    {
-        LearnGameMasterSpells(); // Add some GM-Spells to new created toons
-    }
-
     if (GetSession()->GetSecurity() == SEC_PLAYER)
     {
         // Starting items
@@ -15170,11 +15165,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // after spell load
     InitTalentForLevel();
 
-    if (GetSession()->GetSecurity() > SEC_PLAYER)
-    {
-        LearnGameMasterSpells(); // Add some GM-Spells to new created toons
-    }
-
     LearnDefaultSpells();
 
     // after spell load, learn rewarded spell if need also
@@ -19176,11 +19166,6 @@ void Player::ResetSpells()
     for (const auto& iter : smap)
         RemoveSpell(iter.first, false, false); // only iter->first can be accessed, object by iter->second can be deleted already
 
-    if (GetSession()->GetSecurity() > SEC_PLAYER)
-    {
-        LearnGameMasterSpells(); // Add some GM-Spells to new created toons
-    }
-
     LearnDefaultSpells();
     LearnQuestRewardedSpells();
 }
@@ -19199,6 +19184,11 @@ void Player::LearnDefaultSpells()
             AddSpell(spell, true, true, true, false);
         else                                                // but send in normal spell in game learn case
             LearnSpell(spell, true);
+    }
+
+    if (GetSession()->GetSecurity() > SEC_PLAYER)
+    {
+        LearnGameMasterSpells(); // Add some GM-Spells to new created toons
     }
 }
 
@@ -19306,9 +19296,13 @@ void Player::LearnGameMasterSpells()
         for (const auto& spell : aGameMasterSpellList)
         {
             if (!IsInWorld())
+            {
                 AddSpell(spell, true, true, true, false);
+            }
             else
+            {
                 LearnSpell(spell, true);
+            }
         }
     }
     catch (const std::exception &e)
@@ -21061,11 +21055,6 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
         CHANGERACE_LOG("New outfit data 2: Facial Hair: '%hhu'", facialHair);
         SetByteValue(PLAYER_BYTES_2, 0, facialHair);
-    }
-
-    if (GetSession()->GetSecurity() > SEC_PLAYER)
-    {
-        LearnGameMasterSpells(); // Add some GM-Spells to new created toons
     }
 
     LearnDefaultSpells();
