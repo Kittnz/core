@@ -21,7 +21,7 @@ struct boss_ardaeusAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        m_pInstance->SetData(TYPE_ARDAEUS, IN_PROGRESS);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
     }
 
@@ -30,7 +30,7 @@ struct boss_ardaeusAI : public ScriptedAI
         if (!m_pInstance)
             return;
         
-        m_pInstance->SetData(TYPE_ARDAEUS, FAIL);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, FAIL);
     }
 
     void JustDied(Unit* /*p_Killer*/) override
@@ -38,7 +38,7 @@ struct boss_ardaeusAI : public ScriptedAI
         if (!m_pInstance)
             return;
     
-        m_pInstance->SetData(TYPE_ARDAEUS, DONE);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, DONE);
     }
 
     void UpdateAI(const uint32 ui_Diff) override
