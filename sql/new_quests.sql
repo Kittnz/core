@@ -2099,7 +2099,7 @@ set @delayrepeatmax_1 = 45;
 
 set @spellid_2 = 20669; -- casts 20669 every minute
 set @probability_2 = 100; 
-set @casttarget_2 = 0; 
+set @casttarget_2 = 1; 
 set @castflags_2 = 0;
 set @delayinitialmin_2 = 1; 
 set @delayinitialmax_2 = 1; 
@@ -2108,7 +2108,7 @@ set @delayrepeatmax_2 = 60;
 
 set @spellid_3 = 25311; -- casts 25311 every 20 seconds on a random target
 set @probability_3 = 100; 
-set @casttarget_3 = 0; 
+set @casttarget_3 = 2; 
 set @castflags_3 = 0;
 set @delayinitialmin_3 = 1; 
 set @delayinitialmax_3 = 1; 
@@ -2182,9 +2182,10 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
-delete from gameobject_template where entry = 2010824;
+delete from gameobject_template where entry = 2010841;
 replace into gameobject_template values
-(2010824, 0, 3, 49, 'Pile of Dirt', 0, 4, 1, 43, 2010824, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2010841, 0, 3, 49, 'Dirt Mound', 0, 4, 1, 43, 2010841, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from gameobject_loot_template where entry = 2010824;
-replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010824,60191,-100,1,1,0,10);
+delete from gameobject_loot_template where entry = 2010841;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010841,60191,-100,1,1,0,10);
