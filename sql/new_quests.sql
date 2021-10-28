@@ -2068,3 +2068,116 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (91820,60297,-15,1,1,0,10),
 (91821,60297,-20,1,1,0,10),
 (91823,60297,-20,1,1,0,10);
+
+-- Uncovering Evil --
+delete from quest_template where entry = 40214;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40213,40214,2,409,55,40,0,0,'Uncovering Evil','With the Hazzuri slain, my heart burns with glee, retribution is such a fine wine, and one I would eagerly drink down again. It is time for the final task, we must drag free the shadow that has rooted itself upon the islands, and destroy it.\n\nWhen this is done I can began to rebuild my throne on these islands. The time is at hand, follow me to the center of the island, and await my summoning to be complete. When it is, you must do battle with this evil as I keep it bound to the island, only when it is weak enough, will I be able to join you. I suggest you bring friends, or others that may assist you, this should not be taken lightly, do not fail me.','Assist Insom\'ni in destroying the dark presence.','We must be cautious.','You have done well mortal, your help here, I must admit, has been insturmental. You have earned a place upon these islands as long as you desire to be here. As long as you understand that my rule here is now concrete.\n\nAs a token of my appreciation to enact revenge, and give me back my rightful throne, you are to be rewarded, as one should for noble deeds. May you find use for the treasure I offer, and may you prosper on whatever path you choose.',0,0,0,0,0,0,0,0,60499,1,0,0,0,0,0,0,0,0,0,6550,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60446, 40214);
+replace into creature_involvedrelation (id, quest) values (60446, 40214);
+
+-- Insomnius , display ID 7553, scale 1.5, level 62 elite, 65151 HP, 12000 mana, faction 31
+-- Fearoth <The Shadow> , display ID 18113 , level 55 elite, hp 26000 , mana 8000, 4121 armor, 100 shadow resistance, deals 1.5x normal damage for an elite level 55, casts 27831 every 45 seconds, casts 20669 every minute, and casts 25311 every 20 seconds on a random target.
+
+delete from creature_template where entry = 60498 and 60499;
+REPLACE INTO creature_template VALUES
+(60498, 0, 7553, 0, 0, 0, 'Insomnius', '', 53106, 62, 62, 65151, 65151, 12000, 12000, 3791, 31, 3, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 873, 1039, 0, 278, 1, 2000, 2000, 2, 2, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60499, 0, 18113, 0, 0, 0, 'Fearoth', 'The Shadow', 0, 55, 55, 26000, 26000, 8000, 8000, 4121, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 571, 737, 0, 272, 1, 1150, 1265, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 3, 0, 60499, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 168, 838, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @creature_entry = 60499;
+set @description = 'Kazon Island: Fearoth The Shadow';
+set @spell_list_id = 180002;
+
+set @spellid_1 = 27831; -- 27831 every 45 seconds
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 0;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 45; 
+set @delayrepeatmax_1 = 45;
+
+set @spellid_2 = 20669; -- casts 20669 every minute
+set @probability_2 = 100; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 1; 
+set @delayinitialmax_2 = 1; 
+set @delayrepeatmin_2 = 60; 
+set @delayrepeatmax_2 = 60;
+
+set @spellid_3 = 25311; -- casts 25311 every 20 seconds on a random target
+set @probability_3 = 100; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 1; 
+set @delayinitialmax_3 = 1; 
+set @delayrepeatmin_3 = 20; 
+set @delayrepeatmax_3 = 20;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 27831, spell_id2 = 20669, spell_id3 = 25311 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
