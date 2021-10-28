@@ -136,6 +136,7 @@ dungeons/scarlet_citadel/boss_ardaeus.cpp
 dungeons/scarlet_citadel/boss_daelus.cpp
 dungeons/scarlet_citadel/boss_mariella.cpp
 dungeons/scarlet_citadel/instance_scarlet_citadel.cpp
+dungeons/scarlet_citadel/trashmobs_scarlet_citadel.cpp
 dungeons/scarlet_citadel/scarlet_citadel.h
 dungeons/scarlet_monastery/boss_arcanist_doan.cpp
 dungeons/scarlet_monastery/boss_azshir_the_sleepless.cpp

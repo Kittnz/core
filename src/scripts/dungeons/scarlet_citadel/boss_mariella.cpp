@@ -21,7 +21,7 @@ struct boss_mariellaAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        m_pInstance->SetData(TYPE_MARIELLA, IN_PROGRESS);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
     }
 
@@ -30,7 +30,7 @@ struct boss_mariellaAI : public ScriptedAI
         if (!m_pInstance)
             return;
         
-        m_pInstance->SetData(TYPE_MARIELLA, FAIL);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
     }
 
     void JustDied(Unit* /*p_Killer*/) override
@@ -38,7 +38,7 @@ struct boss_mariellaAI : public ScriptedAI
         if (!m_pInstance)
             return;
     
-        m_pInstance->SetData(TYPE_MARIELLA, DONE);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, DONE);
     }
 
     void UpdateAI(const uint32 ui_Diff) override

@@ -21,7 +21,7 @@ struct boss_abbendisAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        m_pInstance->SetData(TYPE_ABBENDIS, IN_PROGRESS);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ABBENDIS, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
     }
 
@@ -30,7 +30,7 @@ struct boss_abbendisAI : public ScriptedAI
         if (!m_pInstance)
             return;
         
-        m_pInstance->SetData(TYPE_ABBENDIS, FAIL);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ABBENDIS, FAIL);
     }
 
     void JustDied(Unit* /*p_Killer*/) override
@@ -38,7 +38,7 @@ struct boss_abbendisAI : public ScriptedAI
         if (!m_pInstance)
             return;
     
-        m_pInstance->SetData(TYPE_ABBENDIS, DONE);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ABBENDIS, DONE);
     }
 
     void UpdateAI(const uint32 ui_Diff) override

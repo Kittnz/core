@@ -21,7 +21,7 @@ struct boss_daelusAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        m_pInstance->SetData(TYPE_DAELUS, IN_PROGRESS);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
     }
 
@@ -30,7 +30,7 @@ struct boss_daelusAI : public ScriptedAI
         if (!m_pInstance)
             return;
         
-        m_pInstance->SetData(TYPE_DAELUS, FAIL);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, FAIL);
     }
 
     void JustDied(Unit* /*p_Killer*/) override
@@ -38,7 +38,7 @@ struct boss_daelusAI : public ScriptedAI
         if (!m_pInstance)
             return;
     
-        m_pInstance->SetData(TYPE_DAELUS, DONE);
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, DONE);
     }
 
     void UpdateAI(const uint32 ui_Diff) override
