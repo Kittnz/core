@@ -2035,3 +2035,36 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60296,5924,'Necklace of Insomnius',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 update creature_template set script_name = 'npc_itharius' where entry = 5353;
+
+-- The Hermit\'s Wrath --
+delete from quest_template where entry = 40213;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40212,40213,2,409,55,40,0,0,'The Hermit\'s Wrath','This necklace has made me regain much of my former strength. If you were paying attention during your trip then you would have uncovered my true identity. Now you know truely who I am, and we will work toward my final goal.\n\nI was able to channel my energies and locate the source of corruption. While we could very well confront, and summon it to us with the powers of my necklace, I would first take revenge upon those that tossed aside their worship of me.\n\nZul\'Hazu was once a place I called home, it was there the trolls called me a diety. They practiced my magics, and would follow me to the ends of the world.\n\nTravel to Zul\'Hazu in the north-west, slay the leaders Darkmaster Haza\'gi, Champion Raggazi, and Chieftain Woh\'zo. The people should suffer as well, get from them 10 Hazzuri Charms, they will be nice decorations.','Slay the Hazzuri Leaders, and gather 10 Hazzuri Charms for Insom\'ni on Kazon Island.','Have you dealt with those rebellious insects yet?','Zul\'Hazu was a breeding ground for the corrupt, and the defiled. They swept aside my magic and my teachings for a chance to indulge in greater powers. They are nothing but harlots to the highest bidder, and it is retribution to dispense justice upon them.',60297,10,0,0,0,0,0,0,91813,1,91817,1,91818,1,0,0,0,0,0,6250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60446, 40213);
+replace into creature_involvedrelation (id, quest) values (60446, 40213);
+
+delete from item_template where entry = 60297;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60297,34261,'Hazzuri Charm',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91809 where entry = 91809;
+update creature_template set loot_id = 91810 where entry = 91810;
+update creature_template set loot_id = 91811 where entry = 91811;
+update creature_template set loot_id = 91812 where entry = 91812;
+update creature_template set loot_id = 91814 where entry = 91814;
+update creature_template set loot_id = 91815 where entry = 91815;
+update creature_template set loot_id = 91820 where entry = 91820;
+update creature_template set loot_id = 91821 where entry = 91821;
+update creature_template set loot_id = 91823 where entry = 91823;
+
+delete from creature_loot_template where item = 60295 and entry between 7105 and 7111;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(91809,60297,-15,1,1,0,10),
+(91810,60297,-25,1,1,0,10),
+(91811,60297,-15,1,1,0,10),
+(91812,60297,-40,1,1,0,10),
+(91814,60297,-45,1,1,0,10),
+(91815,60297,-40,1,1,0,10),
+(91820,60297,-15,1,1,0,10),
+(91821,60297,-20,1,1,0,10),
+(91823,60297,-20,1,1,0,10);
