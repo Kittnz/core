@@ -2003,3 +2003,22 @@ update quest_template set minlevel = 45 where entry = 40185;
 update quest_template set questlevel = 52 where entry = 40185;
 update quest_template set minlevel = 45 where entry = 40186;
 update quest_template set questlevel = 52 where entry = 40186;
+
+-- Jadefire Revenge --
+delete from quest_template where entry = 40211;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40210,40211,2,409,51,40,0,0,'Jadefire Revenge','Felwood.\n\nA place I recall with a bitter hatred that makes my face cowl in disgust. It is within this place I had first decided to travel upon leaving my kin. My reasons for being in such a place was for the betterment of Azeroth, and I only found deceit, malice, and corruption.\n\n<Insom\'ni would snort inward, his face warped with a bitter, deep anger>.\n\nWe will start here, travel to the twisted forest, and hunt the foul beings known as the \'satyr\' , more specifically, the Jadefire. I will need from them 5 Jadefire Felhorn , as well as 5 Purple Lotus that can be gathered by any skilled herbalist upon this world.','Gather 5 Jadefire Felhorn, and 5 Purple Lotus for Insom\'ni on K.','There is much work to do, and little time, get out there and do my bidding.','We move forward, as much as the satyr are nothing more then worthless agents of a fading order. They still had this coming, and much more should I ever have the agency to torment them.\n\nWith these horns and lotus I can begin to channel energy to locate this dark source with my own magics. Until then, there is any more to do before we can unveil the covers from the evil that taints the islands.',60295,5,8831,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60446, 40211);
+replace into creature_involvedrelation (id, quest) values (60446, 40211);
+
+delete from item_template where entry = 60295;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60295,2598,'Jadefire Felhorn',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60295 and entry between 7105 and 7111;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(7105,60295,-11,1,1,0,10),
+(7107,60295,-15,1,1,0,10),
+(7108,60295,-15,1,1,0,10),
+(7109,60295,-13,1,1,0,10),
+(7111,60295,-16,1,1,0,10);
