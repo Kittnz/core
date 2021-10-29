@@ -2219,3 +2219,36 @@ REPLACE INTO npc_trainer VALUES
 (91950, 6502, 100, 185, 50, 0, 0, 5875),
 (91950, 6503, 300, 185, 125, 0, 0, 5875),
 (91950, 21176, 4000, 185, 200, 0, 0, 5875);
+
+-- Shizwackle Tangrig , display ID 7182, level 15, faction 69, greeting text: " So much to do in such a short amount of time, not to mention all the competition, and those blasted Venture Co. lurking about." Give quest flags
+-- Glasseye, display ID 11713, level 53, faction 16, scale 1.4
+-- 'Slip' , display ID 18420, level 42, weapon : 2092, faction 120, greeting text : "Not many people come back here, you useful? Think you can do some handywork for a guy?" 
+-- Lorthiras, display ID 10543, level 50 elite, has 5000 mana, faction 554, scale 1.5, greeting text : "Interesting, I sense that you have created the runeblade you wield, try as you may but you will never replicate what we Dreadlords have mastered."   ((This npc is hostile, and needs to become friendly when the player has 'Untempered Runeblade' 
+
+REPLACE INTO creature_template VALUES
+(60500, 0, 7182, 0, 0, 0, 'Shizwackle Tangrig', '', 0, 15, 15, 328, 328, 0, 0, 660, 69, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 17, 28, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60501, 0, 11713, 0, 0, 0, 'Glasseye', '', 0, 53, 53, 3188, 3188, 0, 0, 3136, 16, 0, 1, 1.14286, 1.4, 20, 5, 0, 0, 1, 89, 111, 0, 238, 1, 2000, 2000, 1, 0, 0, 6, 0, 0, 0, 0, 69.0272, 94.9124, 100, 1, 1, 60501, 0, 1087, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60502, 0, 18420, 0, 0, 0, '\'Slip\'', '', 0, 42, 42, 1981, 1981, 0, 0, 2246, 120, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 103, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60503, 0, 10543, 0, 0, 0, 'Lorthiras', '', 0, 50, 50, 17720, 17720, 5000, 5000, 2888, 554, 3, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 292, 377, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 55.3248, 76.0716, 100, 7, 0, 60503, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 847, 1111, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20025; set @weapon_1 = 2092; set @weapon_2 = 0; set @creature = 60502;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41031; set @magic_number = 60500;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'So much to do in such a short amount of time, not to mention all the competition, and those blasted Venture Co. lurking about.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41032; set @magic_number = 60502;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Not many people come back here, you useful? Think you can do some handywork for a guy?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41033; set @magic_number = 60503;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Interesting, I sense that you have created the runeblade you wield, try as you may but you will never replicate what we Dreadlords have mastered.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
