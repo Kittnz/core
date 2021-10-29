@@ -2110,7 +2110,7 @@ set @delayrepeatmax_2 = 60;
 
 set @spellid_3 = 25311; -- casts 25311 every 20 seconds on a random target
 set @probability_3 = 100; 
-set @casttarget_3 = 2; 
+set @casttarget_3 = 1; 
 set @castflags_3 = 0;
 set @delayinitialmin_3 = 1; 
 set @delayinitialmax_3 = 1; 
@@ -2191,3 +2191,31 @@ replace into gameobject_template values
 delete from gameobject_loot_template where entry = 2010824;
 delete from gameobject_loot_template where entry = 2010841;
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010841,60191,-100,1,1,0,10);
+
+-- Indebted --
+delete from quest_template where entry = 40215;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext4) values (40099,40215,2,85,19,15,0,0,'Indebted','Well you certainly know how to get a job done. I promised that I would get you the information that you are looking for so here it is. In the Hills directly east of Garricks Stead, there is a place called Rogue Heights, it used to be a lawless area held by the unorganized band of thieves and murderers.\n\nHowever since not so long ago they appeared to have reformed their organization and have become a formidable force. Not only that but it appears that they have allied themselves with the Remnants of Lordaeron. My sources spoke of a man named Salorn, a former Kirin Tor mage who along with his rogue brethren appears to have taken over the Rogue Heights.\n\nAnd there you go, oh and be kind to remind the Duke that he still owes quite a bit.','I need to return to Duke Nargelas and inform him about the enemy in The Rogue Heights.','So? Tell me, what are the news?','Mages in The Rogue Heights? No wonder I heard nothing from Storn if he lost the leadership of his band of misfits. Anyways, good job on getting this information out of Norga. I envy that you won\'t have to deal with her after all of this is done.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,300,500,68,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where id = 91720 and quest = 40127;
+delete from creature_involvedrelation where id = 91712 and quest = 40127;
+replace into creature_questrelation (id, quest) values (91720, 40215);
+replace into creature_involvedrelation (id, quest) values (91712, 40215);
+
+update quest_template set prevquestid = 40215 where entry = 40134;
+
+-- The Dampening Must End --
+delete from quest_template where entry = 40127;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, type, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4, objectivetext2) values (40126,40127,2,16,52,40,1,0,0,'The Dampening Must End','It seems as though there is only one thing left. I cannot believe the Blue Dragonflight would be responsible for such a thing, if their enemy is magic then that means their enemy is Dalaran. We cannot allow their plans to take fruition and must deal with them now and with due haste in our actions.\n\nJust south of here is Lake Mennar it is where the Blue Dragonflight has gathered, the cause of which was unknown until now. Head there, slay their Magelords, and kill the leader, Lieutenant Azsalus.\n\nI would advise, the Blue Dragonflight is not a foe to be under-estimated, find a band of mercenaries, or like minded heroes. You will need them to battle with the dragonkin, or to stand a chance.','Slay 3 Draconic Magelord\'s and Kill Lieutenant Azsalus.','Have you ended the dampening upon Azshara?','It is done? Truly?\n\nYou have my thanks hero, your name shall go down with glory in Dalaran, a defender of magic is truly one that stands for virtue, please, take one of these artifacts, it is the least I can offer. May it serve you well.',0,0,0,0,0,0,0,0,91283,1,6129,3,0,0,0,0,0,0,0,7150,61,500,0,0,0,0,0,0,10157,10157,0,0,0,0,0,0,0,0,0,60116,1,60117,1,60118,1,0,0,'');
+
+-- Chef Jenkel
+REPLACE INTO npc_trainer VALUES
+(91950, 1290, 1, 0, 0, 0, 0, 5875),
+(91950, 2551, 100, 0, 0, 5, 0, 5875),
+(91950, 2559, 50, 185, 10, 0, 0, 5875),
+(91950, 2561, 100, 185, 50, 0, 0, 5875),
+(91950, 2562, 200, 185, 75, 0, 0, 5875),
+(91950, 2563, 150, 185, 80, 0, 0, 5875),
+(91950, 3412, 500, 185, 50, 10, 0, 5875),
+(91950, 6502, 100, 185, 50, 0, 0, 5875),
+(91950, 6503, 300, 185, 125, 0, 0, 5875),
+(91950, 21176, 4000, 185, 200, 0, 0, 5875);
