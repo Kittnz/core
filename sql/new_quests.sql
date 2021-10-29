@@ -2308,3 +2308,21 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
+
+-- Batskin Letter --
+delete from quest_template where entry = 40220;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext4) values (0,40220,2,85,2,1,0,0,'Batskin Letter','While you were aiding with the tasks of the Forsaken a fellow by the name of Morpheus Ribcage gave me this letter to be seen by your eyes only, you should find him close to the Graveyard.','Speak with Morpheus Ribcage.','What is it?','You carry that bow well, almost as if it was suited for you. Let us begin our training, I can teach you a thing or two about the path you’re aiming to take.',60301,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60301,1,30,50,68,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (1569, 40220);
+replace into creature_involvedrelation (id, quest) values (60483, 40220);
+
+update quest_template set requiredclasses = 4 where entry = 40220;
+update quest_template set requiredraces = 16 where entry = 40220;
+
+delete from item_template where entry = 60301;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60301,13002,'Batskin Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50512);
+
+REPLACE INTO page_text VALUES
+(50512, '$N, it was my pleasure to hear that a recruit shows passion for the art of hunting.\n\nAlthough in life we would\’ve never considered ourselves as great of a marksman as either the dwarves or the high elves we took our pride for the love we carried for the wilds, befriending animals into long loyal companions and feeling the rhythm and the call of nature in every gust of wind, every groan of the river was something that brought upmost joy into our lives.', 50513),
+(50513, 'Adapting to nature was one of our greatest and most noble of goals, yet as we\’ve experimented with what comes after a restless death, we can no longer adapt to nature, it seems that nature itself will need to adapt to us. Meet me by the graveyard, it\’s there I shall teach you of my past experiences and a few tricks for you to survive and claim your vengeance against the Lich King.\n\nFor the Banshee Queen, for the Forsaken.', 0);
