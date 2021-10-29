@@ -2281,3 +2281,30 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from creature_loot_template where item = 60298 and entry = 60501;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
 (60501,60298,-100,1,1,0,10);
+
+-- The Jade Mine --
+delete from quest_template where entry = 40219;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext4) values (40199,40219,2,408,53,45,0,0,'The Jade Mine','We Maul\'ogg used to hold many great riches, we were in the process of setting up a great mine of jade that is present upon Gillijim! Those dirty pirates came and stole all of our hard work and should be smashed! Those rich jades are ours, and that gold they make should be our gold!\n\nOn some of our first digs we uncovered a very large \'Star Emerald\', of course, in the chaos it wasn\'t taken to me! Now some Foreman named Darkskull has it, and I want it back! He oversee\'s The Jade Mine up to the north west along the coast, go there, kill him, and bring me my prize, maybe they will learn a lesson from this too.','Claim the Star Emerald for Lord Cruk\'Zogg in Maul\'ogg Refuge.','While you\'re talking, who knows what\'s happening to my emerald, go get it!','Those stupid pirates thought that they were so smart taking over that mine, now look at them, DEAD! Puny $R has done good for me, and I reward good work, here, take this, you\'re now an official mercenary for Maul\'ogg!',60299,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4950,0,0,0,0,0,0,0,0,0,0,0,60300,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92180, 40219);
+replace into creature_involvedrelation (id, quest) values (92180, 40219);
+
+delete from item_template where entry = 60299;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60299,6850,'Star Emerald',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 92141 where entry = 92141;
+
+delete from creature_loot_template where item = 60299 and entry = 92141;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(92141,60299,-100,1,1,0,10);
+
+replace into item_template values
+ ('60300', '0', '4', '0', 'Favor of Cruk\'Zogg', '', '32326', '2', '0', '1', '24312', '6078', '2', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '15', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
