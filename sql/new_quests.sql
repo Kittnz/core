@@ -2266,3 +2266,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (92176, 40217);
 replace into creature_involvedrelation (id, quest) values (60476, 40217);
+
+-- The Glass Eye --
+delete from quest_template where entry = 40218;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext4) values (0,40218,2,408,52,45,0,0,'The Glass Eye','Beneath Maul\'ogg lies a cavern system filled with basilisk, called Deepneck Cove, its entrance laying at the beach just to the north east. I have been having long nightmares of a great magical power during my sleep, as if something is calling out to me. A basilisk with an eye of glass and a mind of power, I have recognized its horrible appearance before.\n\nIt is this very magic that I search for now, and bid that you obtain. The magical gaze of a beast named Glasseye is the one responsible for my dreams, and the energy seeping beneath Maul\'ogg. Travel into the caverns and slay the beast, collect its eye, and bring it to me, perhaps its magical potency will bring me some gaze into the future.','','Glasseye may have strong, magical powers, be sure to keep your wits about you.','We meet again Glasseye, this is the eye that stared back at me in my dreams, and now I hold it within my fingers. I sense that I may be able to make great strides with this, and I thank you greatly. No longer will my dreams be haunted, you\'ve done me a great service.',60298,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92186, 40218);
+replace into creature_involvedrelation (id, quest) values (92186, 40218);
+
+delete from item_template where entry = 60298;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60298,12309,'The Glass Eye',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60298 and entry = 60501;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(60501,60298,-100,1,1,0,10);
