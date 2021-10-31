@@ -1810,6 +1810,24 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46001: // Portable Mailbox
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        GameObject* other_mailbox = m_caster->ToPlayer()->FindNearestGameObject(144112, 50.0F);
+                        if (other_mailbox) other_mailbox->SetRespawnTime(1);
+
+                        float dis{ 2.0F };
+                        float x, y, z;
+                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->ToPlayer()->GetOrientation());
+                        y += dis * sin(m_caster->ToPlayer()->GetOrientation());
+
+                        m_caster->ToPlayer()->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
+                        m_caster->ToPlayer()->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                    }
+                    return;
+                }
                 case 46010: // Teleport to Guild House
                 {
                     if (m_caster && m_caster->IsPlayer())
