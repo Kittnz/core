@@ -112,26 +112,6 @@ bool ItemUseSpell_summer_vestment(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool ItemUseSpell_remote_mail_terminal(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) return false;
-
-    GameObject* other_mailbox = pPlayer->FindNearestGameObject(144112, 50.0F);
-
-    if (other_mailbox)
-        other_mailbox->SetRespawnTime(1);
-
-    float dis{2.0F};
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    x += dis * cos(pPlayer->GetOrientation());
-    y += dis * sin(pPlayer->GetOrientation());
-
-    pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_CHEER);
-    pPlayer->SummonGameObject(144112, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
-    return true;
-}
-
 bool ItemUseSpell_sword_of_truth(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     ChatHandler(pPlayer).SendSysMessage(urand(50200, 50210));
@@ -7877,11 +7857,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_summer_vestment";
     newscript->pItemUseSpell = &ItemUseSpell_summer_vestment;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_portable_mailbox";
-    newscript->pItemUseSpell = &ItemUseSpell_remote_mail_terminal;
     newscript->RegisterSelf();
 
     newscript = new Script;
