@@ -1,0 +1,1 @@
+update item_template set spellid_1 = 46001, description = 'Mobile Oversized Letter and Literary Extractor.' where entry = 50011;
