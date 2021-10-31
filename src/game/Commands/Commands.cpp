@@ -4235,6 +4235,33 @@ bool ChatHandler::HandleGMListFullCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleGMOnlineListCommand(char* args)
+{
+    SendSysMessage("Online GMs:");
+    SendSysMessage("========================");
+    bool empty = true;
+    for (const auto& [accId, session] : sWorld.GetAllSessions())
+    {
+        if (!session || !session->GetPlayer() || session->GetSecurity() < SEC_GAMEMASTER)
+            continue;
+
+        if (empty)
+            empty = false;
+
+        std::string accName = "None";
+        sAccountMgr.GetName(session->GetAccountId(), accName);
+        PSendSysMessage("| Char: %15s | Level: %u | Acc: %15s|", session->GetPlayer()->GetName(), (uint32)session->GetSecurity(), accName.c_str());
+
+    }
+
+    if (empty)
+        SendSysMessage("No GMs");
+    else
+        SendSysMessage("========================");
+
+    return true;
+}
+
 /// Output list of character for account
 bool ChatHandler::HandleAccountCharactersCommand(char* args)
 {

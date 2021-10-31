@@ -163,6 +163,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand gmCommandTable[] =
     {
         { "list",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleGMListFullCommand,          "", nullptr },
+        { "onlinelist",     SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleGMOnlineListCommand,        "", nullptr },
         { "visible",        SEC_GAMEMASTER, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
 		// TURTLE TODO: Move all options from HandleGMOptionsCommand to separate commands
         { "options",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleGMOptionsCommand,           "", nullptr },
