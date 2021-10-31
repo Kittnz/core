@@ -22501,6 +22501,13 @@ bool Player::SetupHardcoreMode()
 
     SetMoney(0);
 
+    std::unordered_set<uint32> shopItems;
+
+    for (const auto& shopItem : sObjectMgr.GetShopEntriesList())
+    {
+        shopItems.insert(shopItem.second.Item);
+    }
+
     // handle equipped
     for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
     {
@@ -22513,6 +22520,9 @@ bool Player::SetupHardcoreMode()
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
             if (pItem->GetEntry() == 6948)  // Hearthstone
+                continue;
+
+            if (shopItems.find(pItem->GetEntry()) != shopItems.end()) // dont destroy twow token items.
                 continue;
 
             DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
@@ -22533,6 +22543,9 @@ bool Player::SetupHardcoreMode()
                         if (pItem->isProjectile())  // Arrows and Bullets
                             continue;
                     }
+
+                    if (shopItems.find(pItem->GetEntry()) != shopItems.end()) // dont destroy twow token items.
+                        continue;
 
                     DestroyItem(i, j, true);
                 }
@@ -22555,7 +22568,12 @@ bool Player::SetupHardcoreMode()
     for (int i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
     {
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            if (shopItems.find(pItem->GetEntry()) != shopItems.end()) // dont destroy twow token items.
+                continue;
+
             DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+        }
     }
     // destroy items from bank bags
     for (int i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
@@ -22565,7 +22583,12 @@ bool Player::SetupHardcoreMode()
             for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
             {
                 if (Item* pItem = pBag->GetItemByPos(j))
+                {
+                    if (shopItems.find(pItem->GetEntry()) != shopItems.end()) // dont destroy twow token items.
+                        continue;
+
                     DestroyItem(i, j, true);
+                }
             }
         }
     }
