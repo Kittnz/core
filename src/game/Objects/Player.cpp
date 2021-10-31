@@ -21020,7 +21020,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 	for (const auto& SkillElemPair : mSkillStatus)
 	{
 		uint32 SkillId = SkillElemPair.first;
-		SkillValues[SkillId] = GetSkillValue(SkillId);
+		SkillValues[SkillId] = GetSkillValuePure(SkillId);
 	}
 
     m_DbSaveDisabled = true;
