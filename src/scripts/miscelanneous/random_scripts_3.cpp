@@ -1094,88 +1094,6 @@ struct npc_captain_ironhoofAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_captain_ironhoof(Creature* _Creature) { return new npc_captain_ironhoofAI(_Creature); }
 
-bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
-{
-    if (!pQuestGiver)
-        return false;
-
-    if (!pPlayer)
-        return false;
-
-    if (pQuest->GetQuestId() == 40171) // The Tower of Lapidis IX
-    {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-        pQuestGiver->CastSpell(pQuestGiver, 13236, false);
-
-        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->HandleEmote(EMOTE_ONESHOT_YES);
-            npc->CastSpell(npc, 5906, false);
-            });
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            player->AddItem(60244);
-            if (player->HasItemCount(60244, 1, false))
-            {
-                npc->MonsterSayToPlayer("There, it is done, the key is attuned, do with it what you must. I hope whatever purpose you are using this for, serves you well.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                return true;
-            }
-            else
-                player->RemoveQuest(40171);
-                player->SetQuestStatus(40171, QUEST_STATUS_NONE);
-                player->GetSession()->SendNotification("Your bags are full!");
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            return false;
-            });
-    }
-    return false;
-}
-
-bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
-{
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    if (pPlayer->GetQuestStatus(40210) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
-    pPlayer->SEND_GOSSIP_MENU(60446, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSay("I come from a land far away, shrouded in mystery and green mist. I am blessed by those you would not understand, and those that inhabit this mystical land. I am an outcast of my kin, and have only come here to seek new purpose. This purpose was found upon these islands.");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSay("Slowly, day by day, a darkness came, a power much like myself that dared to challenge the rule I had established. Little by little I would lose this pitiful match of displaying power to attempt to keep the locals swayed to my side.");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSay("In the end, I could not offer the secrets of my power to those that followed me. Eventually, most of my followers and worshippers stepped aside to bask in the glory of this dark energy. Now, I am seeking revenge, I am seeking to once again reclaim my throne upon these lands, do you understand mortal?");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 56 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60334))
-                player->KilledMonster(cInfo, ObjectGuid());
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            });
-    }
-
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
@@ -1495,9 +1413,213 @@ bool GossipSelect_npc_itharius(Player* pPlayer, Creature* pCreature, uint32 /*ui
     return true;
 }
 
+bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40210) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60446, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("I come from a land far away, shrouded in mystery and green mist. I am blessed by those you would not understand, and those that inhabit this mystical land. I am an outcast of my kin, and have only come here to seek new purpose. This purpose was found upon these islands.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("Slowly, day by day, a darkness came, a power much like myself that dared to challenge the rule I had established. Little by little I would lose this pitiful match of displaying power to attempt to keep the locals swayed to my side.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("In the end, I could not offer the secrets of my power to those that followed me. Eventually, most of my followers and worshippers stepped aside to bask in the glory of this dark energy. Now, I am seeking revenge, I am seeking to once again reclaim my throne upon these lands, do you understand mortal?");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 56 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60334))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40171) // The Tower of Lapidis IX
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 13236, false);
+
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->CastSpell(npc, 5906, false);
+            });
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            player->AddItem(60244);
+            if (player->HasItemCount(60244, 1, false))
+            {
+                npc->MonsterSayToPlayer("There, it is done, the key is attuned, do with it what you must. I hope whatever purpose you are using this for, serves you well.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                return true;
+            }
+            else
+                player->RemoveQuest(40171);
+            player->SetQuestStatus(40171, QUEST_STATUS_NONE);
+            player->GetSession()->SendNotification("Your bags are full!");
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            return false;
+            });
+    }
+
+    if (pQuest->GetQuestId() == 40214) // Uncovering Evil
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->SetWalk(true);
+                npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 5.0F, 0.62F);
+            }
+            });
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->MonsterSay("We must travel to the center of Kazon Island, there, I can channel the energies of both Lapidis, and Gillijim. With the energies, and my own, I will be able to draw out the corruption that has plagued the land.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            }
+            });
+        DoAfterTime(pPlayer, 44 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->MonsterSay("Now then - this will take much concentration to bring the entity forward into physical form, it is up to you to weaken it! When it is weak enough, I will be free to join you, until then, protect me!");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            }
+            });
+        DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->CastSpell(npc, 13236, false);
+            }
+            });
+        DoAfterTime(pPlayer, 58 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->SummonCreature(60499, -12857.11F, 2914.41F, 10.39F, 3.83F, TEMPSUMMON_CORPSE_DESPAWN, 192 * IN_MILLISECONDS);
+            }
+            });
+        DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
+                {
+                    fearoth->MonsterSay("Who are you interlopers? Do you really think you can stop my plans?");
+                }
+            }
+            });
+        DoAfterTime(pPlayer, 240 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
+                {
+                    fearoth->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                    fearoth->CombatStop(true);
+                    fearoth->ClearInCombat();
+                    fearoth->AddAura(642);
+                    fearoth->MonsterSay("Ahahah lalki! Hasta la vista!");
+                }
+            }
+            });
+        DoAfterTime(pPlayer, 250 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                player->SetQuestStatus(40214, QUEST_STATUS_FAILED);
+                if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
+                {
+                    fearoth->ForcedDespawn();
+                }
+                if (Creature* insomni = player->FindNearestCreature(60446, 40.0F))
+                {
+                    insomni->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    insomni->SetVisibility(VISIBILITY_ON);
+                    insomni->ForcedDespawn();
+                }
+            }
+            });
+    }
+    return false;
+}
+
+struct npc_fearothAI : public ScriptedAI
+{
+    npc_fearothAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() { }
+    void UpdateAI(const uint32 diff)
+    {
+        Creature* insomni = m_creature->FindNearestCreature(60446, 40.0F);
+        Creature* insomnius = m_creature->FindNearestCreature(60498, 40.0F);
+        GameObject* sum_insomnius = m_creature->FindNearestGameObject(2010699, 40.0F);
+        if (m_creature->GetHealthPercent() > 90 && m_creature->GetHealthPercent() < 98)
+        {
+            if (!sum_insomnius)
+            {
+                m_creature->SummonGameObject(2010699, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+                insomnius = m_creature->SummonCreature(60498, insomni->GetPositionX(), insomni->GetPositionY(), insomni->GetPositionZ(), insomni->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+                insomni->SetVisibility(VISIBILITY_OFF);
+            }
+        }
+        DoMeleeAttackIfReady();
+    }
+
+    void JustDied(Unit*) override
+    {
+        Creature* insomni = m_creature->FindNearestCreature(60446, 40.0F);
+        Creature* insomnius = m_creature->FindNearestCreature(60498, 40.0F);
+        if (insomnius)
+        {
+            insomnius->MonsterSay("It is done! The darkness has faded, can you feel it, dissipating before your very eyes! I'll be returning to the cave, meet me there.");
+
+            insomni->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            insomni->SetVisibility(VISIBILITY_ON);
+            insomni->ForcedDespawn();
+        }
+    }
+    void EnterCombat() {}
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_fearoth(Creature* _Creature) { return new npc_fearothAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_fearoth";
+    newscript->GetAI = &GetAI_npc_fearoth;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_insomni";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_insomni;
+    newscript->pGossipHello = &GossipHello_npc_insomni;
+    newscript->pGossipSelect = &GossipSelect_npc_insomni;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_itharius";
@@ -1556,13 +1678,6 @@ void AddSC_random_scripts_3()
     newscript->Name = "go_blast_powder_keg";
     newscript->pGOHello = &GOHello_go_blast_powder_keg;
     newscript->pGOGossipSelect = &GOSelect_go_blast_powder_keg;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_insomni";
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_insomni;
-    newscript->pGossipHello = &GossipHello_npc_insomni;
-    newscript->pGossipSelect = &GossipSelect_npc_insomni;
     newscript->RegisterSelf();
 
     newscript = new Script;
