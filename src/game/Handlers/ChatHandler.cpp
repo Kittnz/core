@@ -286,7 +286,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             if (_player->IsInCombat() || _player->InBattleGround() || _player->IsBeingTeleported() || _player->GetDeathState() == CORPSE)
             {
-                ChatHandler(_player).PSendSysMessage("You are not meeting the conditions to queue for BGs!");
+                ChatHandler(_player).PSendSysMessage("You do not meet the conditions to queue for BGs!");
                 return;
             }
             if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac"))
