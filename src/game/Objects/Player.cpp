@@ -19286,9 +19286,13 @@ void Player::LearnGameMasterSpells()
     {
         56043, // Debug: Next DisplayID
         56044, // Debug: Previous DisplayID
-        56045, // Debug: Reset DisplayID
         56046, // GM Flight Mode
-        56047  // Toggle GM Visibility
+        56047, // Toggle GM Visibility
+        46028, // Teleport to GM Island
+        9454,  // GM tool to freeze players
+        1852,  // Silence
+        46012, // Wormhole
+        46001  // Portable Mailbox
     };
 
     try
