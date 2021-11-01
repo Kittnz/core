@@ -7,6 +7,26 @@
 -- Looks like the new leader of the Scarlet Crusade has ambitions protruding further than just instinct of other races in Azeroth:
 -- Multiple human SETtlements had been reporting of strangers appearing in their towns speaking to the young and trying to spread their influence over their minds. 
 
+-- New Display IDs
+-- 18671 Citadel Archwizard
+-- 18672 High General Abbendis
+-- 18673 Citadel Bishop
+-- 18674 Citadel Clergyman
+-- 18675 Citadel Footman
+-- 18676 Grand Inquisitor Boss
+-- 18677 Citadel High Cleric
+-- 18678 Illusion Boss
+-- 18679 Citadel Illusionist
+-- 18680 Citadel Inquisitor
+-- 18681 Citadel Interrogator
+-- 18682 Citadel Monk
+-- 18683 High Monk Daelus
+-- 18684 Paladin Halidus
+-- 18685 Citadel Praetorian
+-- 18686 Citadel Spellblade
+-- 18687 Citadel Valiant
+-- 18688 Citadel Watchman
+-- 18689 Citadel Zealot
 
 -- Teleport
 DELETE FROM `game_tele` WHERE `id` = 500;
@@ -79,7 +99,10 @@ INSERT INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display
 (2000010, 10529, 0, 0, 0, 'FIRST_VENDOR_PLACEHOLDER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
 (2000011, 10529, 0, 0, 0, 'SECOND_VENDOR_PLACEHOLDER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
 (2000012, 10529, 0, 0, 0, 'THIRD_VENDOR_PLACEHOLDER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, ''),
-(2000013, 10529, 0, 0, 0, 'FIRST_WING_TRIGGER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 'npc_areatrigger');
+(2000013, 10529, 0, 0, 0, 'FIRST_WING_TRIGGER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 'npc_areatrigger'),
+-- Trash OUTSIDE
+(2000014, 18680, 0, 0, 0, 'Citadel Inquisitor', 'The Scarlet Crusade', 0, 63, 63, 16250, 16250, 25680, 25680, 3555, 67, 0, 1, 1.14286, 1, 20, 5, 0, 3, 1, 2400, 3900, 0, 284, 1, 1150, 1265, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 2865, 3746, '', 0, 3, 0, 0, 3, 200000, 0, 0, 1022049875, 0, 0, 0, 'npc_citadel_inquisitor'),
+(2000015, 18687, 0, 0, 0, 'Citadel Valiant', 'The Scarlet Crusade', 0, 63, 63, 21125, 21125, 0, 0, 4190, 67, 0, 1, 1.14286, 1, 20, 5, 0, 3, 1, 3900, 4300, 0, 284, 1, 1150, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 2865, 3746, '', 0, 3, 0, 0, 3, 200001, 0, 0, 1022049875, 0, 0, 0, 'npc_citadel_valiant');
 
 
 DELETE FROM `creature` WHERE `id` BETWEEN 2000000 AND 2000013;
@@ -92,6 +115,33 @@ INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, 
 (3000005, 2000007, 0, 0, 0, 44, 0, 0, 185.997, -116.435, 18.6774, 3.18367, 25, 25, 0, 100, 100, 0, 0, 0), -- Bokkeum
 (3000006, 2000013, 0, 0, 0, 44, 0, 0, 299.84, -44.2053, 30.8232, 4.71381, 25, 25, 0, 100, 100, 2, 0, 0), -- Trash NPC Second Wing
 (3000007, 2000009, 0, 0, 0, 44, 0, 0, 151.724518, 2.139748, 18.007, 0.0, 25, 25, 0, 100, 100, 2, 0, 0); -- Areatrigger First Wing
+
+DELETE FROM `creature_equip_template` WHERE `entry` BETWEEN 200000 AND 200001;
+INSERT INTO `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES
+(200000, 0, 0, 0), -- PLACEHOLDER
+(200001, 0, 0, 0); -- PLACEHOLDER
+
+DELETE FROM `creature_display_info_addon` WHERE `display_id` BETWEEN 18671 AND 18690;
+INSERT INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`) VALUES
+(18671, 1, 1, 0), -- Citadel Archwizard
+(18672, 1, 1, 0), -- High General Abbendis
+(18673, 1, 1, 0), -- Citadel Bishop
+(18674, 1, 1, 0), -- Citadel Clergyman
+(18675, 1, 1, 0), -- Citadel Footman
+(18676, 1, 1, 0), -- Grand Inquisitor Boss
+(18677, 1, 1, 0), -- Citadel High Cleric
+(18678, 1, 1, 0), -- Illusion Boss
+(18679, 1, 1, 0), -- Citadel Illusionist
+(18680, 1, 1, 0), -- Citadel Inquisitor
+(18681, 1, 1, 0), -- Citadel Interrogator
+(18683, 1, 1, 0), -- Citadel Monk
+(18684, 1, 1, 0), -- High Monk Daelus
+(18685, 1, 1, 0), -- Paladin Halidus
+(18686, 1, 1, 0), -- Citadel Praetorian
+(18687, 1, 1, 0), -- Citadel Spellblade
+(18688, 1, 1, 0), -- Citadel Valiant
+(18689, 1, 1, 0), -- Citadel Watchman
+(18690, 1, 1, 0); -- Citadel Zealot
 
 -- Alliance attunement.
 

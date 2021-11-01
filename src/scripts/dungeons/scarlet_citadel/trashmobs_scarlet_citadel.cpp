@@ -2,6 +2,7 @@
 #include "scarlet_citadel.h"
 
 
+// Trash INSIDE
 struct Location
 {
     float m_fX, m_fY, m_fZ, m_fO;
@@ -122,12 +123,71 @@ CreatureAI* GetAI_npc_areatrigger(Creature* p_Creature)
     return new npc_areatriggerAI(p_Creature);
 }
 
+// Trash OUTSIDE
+struct npc_citadel_inquisitor_AI : public ScriptedAI
+{
+    npc_citadel_inquisitor_AI(Creature* p_Creature) : ScriptedAI(p_Creature)
+    {
+        Reset();
+    }
+
+    void Reset() override
+    {
+
+    }
+
+    void UpdateAI(uint32 const ui_Diff) override
+    {
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_citadel_inquisitor(Creature* p_Creature)
+{
+    return new npc_citadel_inquisitor_AI(p_Creature);
+}
+
+struct npc_citadel_valiant_AI : public ScriptedAI
+{
+    npc_citadel_valiant_AI(Creature* p_Creature) : ScriptedAI(p_Creature)
+    {
+        Reset();
+    }
+
+    void Reset() override
+    {
+
+    }
+
+    void UpdateAI(uint32 const ui_Diff) override
+    {
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_citadel_valiant(Creature* p_Creature)
+{
+    return new npc_citadel_valiant_AI(p_Creature);
+}
+
 void AddSC_trash_mobs_scarlet_citadel()
 {
     Script* p_Newscript;
 
+    // Trash INSIDE
     p_Newscript = new Script;
     p_Newscript->Name = "npc_areatrigger";
     p_Newscript->GetAI = &GetAI_npc_areatrigger;
+    p_Newscript->RegisterSelf();
+
+    // Trash OUTSIDE
+    p_Newscript = new Script;
+    p_Newscript->Name = "npc_citadel_inquisitor";
+    p_Newscript->GetAI = &GetAI_npc_citadel_inquisitor;
+    p_Newscript->RegisterSelf();
+
+    p_Newscript = new Script;
+    p_Newscript->Name = "npc_citadel_valiant";
+    p_Newscript->GetAI = &GetAI_npc_citadel_valiant;
     p_Newscript->RegisterSelf();
 }
