@@ -19756,6 +19756,7 @@ void Player::RemoveItemDependentAurasAndCasts(Item * pItem)
         case 5522:
         case 13602:
         case 13603:
+        case 21685:
             return;
     }
     SpellAuraHolderMap& auras = GetSpellAuraHolderMap();
