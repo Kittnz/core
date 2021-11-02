@@ -931,7 +931,7 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
         sWorld.SendGlobalText(oss.str().c_str(), this);
     }
 
-    /*if (cheatAction & CHEAT_ACTION_REPORT_GMS)
+    if (cheatAction & CHEAT_ACTION_REPORT_GMS)
     {
         std::stringstream oss;
         oss << "Player " << playerDesc << ", Cheat: " << reason;
@@ -940,7 +940,7 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
             oss << ", Penalty: " << action;
 
         sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, detector, oss.str().c_str());
-    }*/
+    }
 
     sLog.outAnticheat(detector, playerDesc.c_str(), reason, action);
 }
