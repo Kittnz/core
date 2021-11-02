@@ -180,7 +180,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     // client interface limit
     if (req->COD > 100000000)
     {
-        ProcessAnticheatAction("PassiveAnticheat", "Attempt to send more than 10000g COD mail", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+        ProcessAnticheatAction("PassiveAnticheat", "Attempt to send more than 10000g COD mail", CHEAT_ACTION_LOG);
         delete req;
         return;
     }
@@ -405,7 +405,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
 
         std::stringstream oss;
         oss << "Mail limit reached (\"" << req->body.substr(0, 30) << "...\") [log #" << logId << "]";
-        ProcessAnticheatAction("ChatSpam", oss.str().c_str(), CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+        ProcessAnticheatAction("ChatSpam", oss.str().c_str(), CHEAT_ACTION_LOG);
         SendMailResult(0, MAIL_SEND, MAIL_OK);
         return;
     }
