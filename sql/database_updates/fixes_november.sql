@@ -12,3 +12,8 @@ replace into gameobject_template (entry, patch, type, displayId, name, faction, 
 (142475, 0, 2, 2091, 'Matrix Punchograph 3005-B', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'matrix_punchograph'),
 (142476, 0, 2, 2091, 'Matrix Punchograph 3005-C', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'matrix_punchograph'),
 (142696, 0, 2, 2091, 'Matrix Punchograph 3005-D', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'matrix_punchograph');
+-- Gubber Blump will teach you fishing even if you already know:
+delete from conditions where condition_entry in (10219, 10216, 10218);
+replace into conditions (condition_entry, type, value1, value2, value3, value4, flags) values
+(10216, 29, 356, 1, 0, 0, 0),(10218, 8, 1141, 0, 0, 0, 0),(10219, -1, 10216, 10218, 0, 0, 0);
+update gossip_scripts set condition_id = 10219 where id = 256200;
