@@ -785,6 +785,11 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
             pCurrChar->AddItem(83270, 1);
     }
 
+    // Hackfix for existing gnome hunters missing this racial:
+    if (pCurrChar->GetRace() == RACE_GNOME && pCurrChar->GetClass() == CLASS_HUNTER && !pCurrChar->HasSpell(20592))
+    {
+        pCurrChar->LearnSpell(20592, false);
+    }
 
     // show time before shutdown if shutdown planned.
     if (sWorld.IsShutdowning())
