@@ -838,10 +838,7 @@ class WorldObject : public Object
         float GetAngle(const float x, const float y) const;
         bool HasInArc(const float arcangle, WorldObject const* obj, float offset = 0.0f) const;
         bool HasInArc(const float arcangle, const float x, const float y) const;
-        bool isInFrontInMap(WorldObject const* target,float distance, float arc = M_PI) const;
-        bool isInBackInMap(WorldObject const* target, float distance, float arc = M_PI) const;
-        bool isInFront(WorldObject const* target,float distance, float arc = M_PI) const;
-        bool isInBack(WorldObject const* target, float distance, float arc = M_PI) const;
+        bool IsFacingTarget(WorldObject const* target) const;
 
         bool CanReachWithMeleeSpellAttack(Unit const* pVictim, float flat_mod = 0.0f) const;
         float GetLeewayBonusRange(const Unit* target, bool ability) const;
