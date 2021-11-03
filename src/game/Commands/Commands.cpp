@@ -6558,6 +6558,18 @@ bool ChatHandler::HandleModifyDrunkCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleSetGMChatCommand(char* args)
+{
+    if (!m_session || !m_session->GetPlayer())
+        return false;
+
+    auto player = m_session->GetPlayer();
+
+    player->SetGMChat(!player->IsGMChat());
+    PSendSysMessage("GM Chat is now %s", player->IsGMChat() ? "on" : "off");
+    return true;
+}
+
 bool ChatHandler::HandleSetViewCommand(char* /*args*/)
 {
     if (Unit* unit = GetSelectedUnit())

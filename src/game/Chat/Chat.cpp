@@ -168,6 +168,7 @@ ChatCommand * ChatHandler::getCommandTable()
 		// TURTLE TODO: Move all options from HandleGMOptionsCommand to separate commands
         { "options",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleGMOptionsCommand,           "", nullptr },
         { "setview",        SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetViewCommand,             "", nullptr },
+        { "chat",           SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetGMChatCommand,          "", nullptr},
         { "",               SEC_GAMEMASTER, false, &ChatHandler::HandleGMCommand,                  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
