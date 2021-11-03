@@ -6254,31 +6254,35 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
 struct npc_baxxilAI : public ScriptedAI
 {
     npc_baxxilAI(Creature* c) : ScriptedAI(c) { Reset(); }
+    bool aggro_text = false;
 
     void Reset()
     {
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
     }
     void UpdateAI(const uint32 diff)
     {
-        if (m_creature->GetHealthPercent() < 10)
+        if (m_creature->GetHealthPercent() < 100 && !aggro_text)
+        {
+            m_creature->MonsterSay("You think I'm going to go back down there?! You're nuts!");
+            aggro_text = true;
+        }
+        if (m_creature->GetHealthPercent() < 30)
         {
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
+            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            if (!m_creature->IsInCombat() && !m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+            {
+                m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            }
         }
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
         DoMeleeAttackIfReady();
-    }
-    void EnterCombat()
-    {
-        m_creature->MonsterSay("You think I'm going to go back down there?! You're nuts!");
-    }
-    void OnCombatStop()
-    {
-        m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
     }
     void JustRespawned() { Reset(); }
 };
@@ -6289,7 +6293,6 @@ bool GossipHello_npc_baxxil(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You're coming back to Sparkwater to serve your sentence.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
     pPlayer->SEND_GOSSIP_MENU(91297, pCreature->GetGUID());
     return true;
 }
@@ -6305,6 +6308,7 @@ bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
         pCreature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         pCreature->UpdateSpeed(MOVE_RUN, false, pCreature->GetSpeedRate(MOVE_RUN) * 1.5);
         baxxil_following.push_back(pPlayer->GetObjectGuid());
+        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
