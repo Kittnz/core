@@ -6,3 +6,5 @@ update quest_template set details = 'My brother has recently been dispatched out
 update creature_template set faction = 120 where entry in (91282, 91281, 91280);
 -- When Keeper Ranathos is attacked, I need all Deranged Ancients to also aggro and help Keeper Ranathos.
 replace into creature_linking_template values (92117, 802, 92109, 1, 0);
+-- Fix Baxxil:
+update creature_template set faction = 189, npc_flags = 0 where entry = 91297;

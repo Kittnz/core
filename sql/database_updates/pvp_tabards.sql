@@ -1,1 +1,0 @@
-update item_template set script_name = '' where script_name = 'item_bg_tabard';
