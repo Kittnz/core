@@ -55,6 +55,7 @@
 #include "MoveMapSharedDefines.h"
 #include "GameEventMgr.h"
 #include "Chat.h"
+#include "CompanionManager.hpp"
 
 #include "InstanceData.h"
 #include "ScriptMgr.h"
@@ -1892,133 +1893,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 				case 46498: // Add Companion to Collection
 				{
 					using namespace std;
-					// Create pairs: ItemID & SpellID
-					array<pair<uint32, uint32>, 118> companions =
-					{ {
-                        { 8485, 46498 }, // Bombay
-                        { 8486, 10674 }, // Cornish Rex
-                        { 8487, 10676 }, // Orange Tabby
-                        { 8488, 10678 }, // Silver Tabby
-                        { 8489, 10679 }, // White Kitten
-                        { 8490, 10677 }, // Siamese
-                        { 8491, 10675 }, // Black Tabby
-                        { 8492, 10683 }, // Green Wing Macaw
-                        { 8494, 10682 }, // Hyacinth Macaw
-                        { 8495, 10684 }, // Senegal
-                        { 8496, 10680 }, // Cockatiel
-                        { 8497, 10711 }, // Snowshoe
-                        { 8498, 10698 }, // Emerald Whelpling
-                        { 8499, 10697 }, // Crimson Whelpling
-                        { 8500, 10707 }, // Great Horned Owl
-                        { 8501, 10706 }, // Hawk Owl
-                        { 10360, 10714 }, // Black Kingsnake
-                        { 10361, 10716 }, // Brown Snake
-                        { 10392, 10717 }, // Crimson Snake
-                        { 10393, 10688 }, // Undercity Cockroach
-                        { 10394, 10709 }, // Prairie Dog Whistle
-                        { 10398, 12243 }, // Mechanical Chicken
-                        { 10822, 10695 }, // Dark Whelpling
-                        { 11023, 10685 }, // Ancona Chicken
-                        { 11026, 10704 }, // Tree Frog
-                        { 11027, 10703 }, // Wood Frog
-                        { 11110, 13548 }, // Westfall Chicken
-                        { 11474, 15067 }, // Sprite Darter Hatchling
-                        { 12264, 15999 }, // Worg Pup
-                        { 12529, 16450 }, // Smolderweb Hatchling
-                        { 13582, 17709 }, // Zergling Leash
-                        { 13583, 17707 }, // Panda Collar
-                        { 19450, 23811 }, // A Jubling's Tiny Home
-                        { 20371, 24696 }, // Murky
-                        { 21301, 26532 }, // Green Helper Box
-                        { 21305, 26541 }, // Red Helper Box
-                        { 21308, 26528 }, // Jingling Bell
-                        { 21309, 26469 }, // Tiny Snowman
-                        { 22235, 27570 }, // Peddlefeet
-                        { 23002, 28738 }, // Speedy
-                        { 23007, 28739 }, // Piglet's Collar
-                        { 23015, 28740 }, // Whiskers the Rat
-                        { 81243, 28505 }, // Beaky
-                        { 81254, 28505 }, // Water Waveling
-                        { 51889, 46227 }, // Hyjal Bear Cub
-                        { 81248, 28505 }, // Finn the Shark
-                        { 81283, 28505 }, // Mr. Bigglesworth
-                        { 11903, 15648 }, // Corrupted Kitten
-                        { 18963, 23428 }, // Albino Snapjaw
-                        { 18964, 23429 }, // Loggerhead Snapjaw
-                        { 18965, 23432 }, // Hawksbill Snapjaw
-                        { 18966, 23431 }, // Leatherback Snapjaw
-                        { 18967, 23430 }, // Olive Snapjaw
-                        { 19054, 23530 }, // Red Dragon Orb
-                        { 19055, 23531 }, // Tiny Green Dragon
-                        { 20651, 25018 }, // Murki
-                        { 21168, 25849 }, // Baby Shark
-                        { 70016, 28505 }, // Infinite Whelpling
-                        { 22114, 27241 }, // Gurky
-                        { 22780, 28487 }, // Terky
-                        { 22781, 28505 }, // Poley
-                        { 23712, 30152 }, // White Tiger Cub
-                        { 23713, 30156 }, // Hippogryph Hatchling
-                        { 81207, 28505 }, // Whimsyshire Cloud
-                        { 13584, 17708 }, // Diablo Stone
-                        { 50005, 46457 }, // Field Repair Bot 75B
-                        { 50006, 46458 }, // Mini Krampus
-                        { 50007, 46459 }, // Forworn Mule
-                        { 50009, 46460 }, // Mechanical Auctioneer
-                        { 50013, 46461 }, // Bone Golem
-                        { 50014, 46462 }, // Blitzen
-                        { 50019, 46463 }, // Moonkin Hatchling
-                        { 50058, 46464 }, // Black Piglet
-                        { 50067, 10713 }, // Albino Snake
-                        { 50068, 10718 }, // Water Snake
-                        { 50069, 10720 }, // Scarlet Snake
-                        { 50070, 10699 }, // Bronze Whelpling
-                        { 50077, 10700 }, // Faeling Egg
-                        { 50078, 10701 }, // Dart Frog
-                        { 50079, 10702 }, // Island Frog
-                        { 50080, 10705 }, // Eagle Owl
-                        { 50081, 10710 }, // Cottontail Rabbit
-                        { 50082, 10708 }, // Snowy Owl
-                        { 50083, 10696 }, // Azure Whelpling
-                        { 50084, 46465 }, // Kirin Tor Familiar
-                        { 50085, 46466 }, // Frostwolf Ghostpup
-                        { 50200, 46467 }, // Darkmoon Tonk
-                        { 50202, 46468 }, // Egg of Turtlhu
-                        { 51002, 46473 }, // Green Steam Tonk
-                        { 51003, 46474 }, // Purple Steam Tonk
-                        { 51007, 46475 }, // Teldrassil Sproutling
-                        { 51220, 46476 }, // Lost Farm Sheep
-                        { 51221, 46477 }, // Lulu
-                        { 51251, 28505 }, // Hedwig
-                        { 51260, 46481 }, // Prince Herman II
-                        { 51259, 46480 }, // Little Pony
-                        { 51261, 46482 }, // Little Cow
-                        { 51421, 46483 }, // Caravan Kodo
-                        { 51433, 46848 }, // Little Fawn
-                        { 80000, 45021 }, // Golden Dragonhawk Hatchling
-                        { 80001, 45015 }, // Thalassian Tender
-                        { 80002, 45016 }, // Dryad Fawn
-                        { 80003, 45000 }, // Black-Footed Fox
-                        { 80004, 45023 }, // Cheeky Monkey
-                        { 80006, 45031 }, // Arcane Elemental
-                        { 80007, 45014 }, // Enchanted Broom
-                        { 80878, 28505 }, // Amani Eagle
-                        { 51700, 28505 }, // Cracked Raptor Egg
-                        { 51739, 46486 }, // Little Ball of Spider Web
-                        { 51858, 28505 }, // Tirisfal Bat
-                        { 51891, 28505 }, // Mysterious Fortune Teller
-                        { 80410, 45022 }, // High Elf Orphan Whistle
-                        { 50602, 46472 }, // Summon: Auctioneer
-                        { 81150, 28505 }, // Phoenix Hatchling
-                        { 81151, 28505 }, // Spirit Darter
-                        { 81152, 28505 }, // Tiny Pterodactyl
-                        { 81159, 28505 }, // Tiny Shore Crab
-                        { 81183, 28505 }, // Sunscale Hatchling
-					} };
-					for (auto const& data : companions)
-					{
-						if (m_CastItem->GetEntry() == data.first)
-							m_caster->ToPlayer()->LearnSpell(data.second, false);
-					}
+
+                    if (m_CastItem)
+                    {
+                        auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(m_CastItem->GetEntry());
+
+                        if (spellIdOpt && m_caster->IsPlayer())
+                            m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+                    }
 					return;
 				}
                 case 56044: // Debug: Previous DisplayID (commands will become obsolete in 1.15.2)
