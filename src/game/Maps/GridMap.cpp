@@ -39,8 +39,6 @@ char const* MAP_LIQUID_MAGIC  = "MLIQ";
 
 GridMap::GridMap()
 {
-    m_flags = 0;
-
     // Area data
     m_gridArea = 0;
     m_area_map = nullptr;
@@ -1205,9 +1203,9 @@ float TerrainInfo::GetWaterLevel(float x, float y, float z, float* pGround /*= n
 }
 
 //////////////////////////////////////////////////////////////////////////
-typedef MaNGOS::ClassLevelLockable<TerrainManager, ACE_Thread_Mutex> TerrainManagerLock;
+typedef MaNGOS::ClassLevelLockable<TerrainManager, std::mutex> TerrainManagerLock;
 INSTANTIATE_SINGLETON_2(TerrainManager, TerrainManagerLock);
-INSTANTIATE_CLASS_MUTEX(TerrainManager, ACE_Thread_Mutex);
+INSTANTIATE_CLASS_MUTEX(TerrainManager, std::mutex);
 
 TerrainManager::TerrainManager()
 {

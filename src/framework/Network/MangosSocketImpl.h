@@ -62,7 +62,7 @@ template <typename SessionType, typename SocketName, typename Crypt>
 void MangosSocket<SessionType, SocketName, Crypt>::CloseSocket(void)
 {
     {
-        ACE_GUARD(LockType, Guard, m_OutBufferLock);
+        GuardType lock(m_OutBufferLock);
 
         if (closing_)
             return;
@@ -72,7 +72,7 @@ void MangosSocket<SessionType, SocketName, Crypt>::CloseSocket(void)
     }
 
     {
-        ACE_GUARD(LockType, Guard, m_SessionLock);
+        GuardType lock(m_SessionLock);
 
         m_Session = nullptr;
     }
@@ -81,7 +81,7 @@ void MangosSocket<SessionType, SocketName, Crypt>::CloseSocket(void)
 template <typename SessionType, typename SocketName, typename Crypt>
 int MangosSocket<SessionType, SocketName, Crypt>::SendPacket(const WorldPacket& pct)
 {
-    ACE_GUARD_RETURN(LockType, Guard, m_OutBufferLock, -1);
+    GuardType lock(m_OutBufferLock);
 
     if (closing_)
         return -1;
@@ -204,7 +204,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::handle_input(ACE_HANDLE)
 template <typename SessionType, typename SocketName, typename Crypt>
 int MangosSocket<SessionType, SocketName, Crypt>::handle_output(ACE_HANDLE)
 {
-    ACE_GUARD_RETURN(LockType, Guard, m_OutBufferLock, -1);
+    GuardType lock(m_OutBufferLock);
 
     if (closing_)
         return -1;
@@ -212,7 +212,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::handle_output(ACE_HANDLE)
     const size_t send_len = m_OutBuffer->length();
 
     if (send_len == 0)
-        return cancel_wakeup_output(Guard);
+        return cancel_wakeup_output(lock);
 
 #ifdef MSG_NOSIGNAL
     ssize_t n = peer().send(m_OutBuffer->rd_ptr(), send_len, MSG_NOSIGNAL);
@@ -225,7 +225,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::handle_output(ACE_HANDLE)
     else if (n == -1)
     {
         if (errno == EWOULDBLOCK || errno == EAGAIN)
-            return schedule_wakeup_output(Guard);
+            return schedule_wakeup_output(lock);
 
         return -1;
     }
@@ -236,16 +236,16 @@ int MangosSocket<SessionType, SocketName, Crypt>::handle_output(ACE_HANDLE)
         // move the data to the base of the buffer
         m_OutBuffer->crunch();
 
-        return schedule_wakeup_output(Guard);
+        return schedule_wakeup_output(lock);
     }
     else //now n == send_len
     {
         m_OutBuffer->reset();
 
         if (!iFlushPacketQueue())
-            return cancel_wakeup_output(Guard);
+            return cancel_wakeup_output(lock);
         else
-            return schedule_wakeup_output(Guard);
+            return schedule_wakeup_output(lock);
     }
 
     ACE_NOTREACHED(return 0);
@@ -256,7 +256,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::handle_close(ACE_HANDLE h, ACE
 {
     // Critical section
     {
-        ACE_GUARD_RETURN(LockType, Guard, m_OutBufferLock, -1);
+        GuardType lock(m_OutBufferLock);
 
         closing_ = true;
 
@@ -266,7 +266,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::handle_close(ACE_HANDLE h, ACE
 
     // Critical section
     {
-        ACE_GUARD_RETURN(LockType, Guard, m_SessionLock, -1);
+        GuardType lock(m_SessionLock);
 
         m_Session = nullptr;
     }
@@ -447,7 +447,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::cancel_wakeup_output(GuardType
 
     m_OutActive = false;
 
-    g.release();
+    g.unlock();
 
     if (reactor()->cancel_wakeup
             (this, ACE_Event_Handler::WRITE_MASK) == -1)
@@ -468,7 +468,7 @@ int MangosSocket<SessionType, SocketName, Crypt>::schedule_wakeup_output(GuardTy
 
     m_OutActive = true;
 
-    g.release();
+    g.unlock();
 
     if (reactor()->schedule_wakeup
             (this, ACE_Event_Handler::WRITE_MASK) == -1)

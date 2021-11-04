@@ -40,6 +40,9 @@
 
 #include <ace/os_include/netinet/os_tcp.h>
 
+#include "Policies/SingletonImp.h"
+#include "Policies/ThreadingModel.h"
+
 #ifndef MSG_NOSIGNAL
 #define MSG_NOSIGNAL 0
 #endif
@@ -181,9 +184,13 @@ PatchCache::PatchCache()
     LoadPatchesInfo();
 }
 
+using PatchCacheLock = MaNGOS::ClassLevelLockable<PatchCache, std::mutex>;
+INSTANTIATE_SINGLETON_2(PatchCache, PatchCacheLock);
+INSTANTIATE_CLASS_MUTEX(PatchCache, std::mutex);
+
 PatchCache* PatchCache::instance()
 {
-    return ACE_Singleton<PatchCache, ACE_Thread_Mutex>::instance();
+    return &MaNGOS::Singleton<PatchCache, PatchCacheLock>::Instance();
 }
 
 void PatchCache::LoadPatchMD5(const char* szFileName)

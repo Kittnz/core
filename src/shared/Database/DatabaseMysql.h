@@ -27,8 +27,6 @@
 //#include "Common.h"
 #include "Database.h"
 #include "Policies/Singleton.h"
-#include "ace/Thread_Mutex.h"
-#include "ace/Guard_T.h"
 
 #ifdef WIN32
 #include <winsock2.h>
@@ -120,7 +118,7 @@ class DatabaseMysql : public Database
         void ThreadEnd() override;
 
     protected:
-        SqlConnection * CreateConnection() override;
+        SqlConnection* CreateConnection() override;
 
     private:
         static size_t db_count;
