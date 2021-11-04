@@ -80,6 +80,7 @@
 #include "DailyQuestHandler.h"
 #include "GuidObjectScaling.h"
 #include "Database/AutoUpdater.hpp"
+#include "CompanionManager.hpp"
 
 #include <chrono>
 
@@ -707,6 +708,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_BATTLEGROUND_GROUP_LIMIT,                  "BattleGround.GroupQueueLimit", 40);
     setConfig(CONFIG_BOOL_TAG_IN_BATTLEGROUNDS,                        "BattleGround.TagInBattleGrounds", true);
     setConfigMinMax(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT,           "BattleGround.QueuesCount", 0, 0, 3);
+    setConfig(CONFIG_BOOL_ENABLE_CROSSFACTION_BATTLEGROUNDS,           "BattleGround.Crossfaction", false);
+    setConfig(CONFIG_BOOL_ENABLE_GEAR_RATING_QUEUE,                    "BattleGround.GearQueue", false);
 
     // If max bg queues is at 0, decide based on patch.
     if (getConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT) == 0)
@@ -1540,6 +1543,8 @@ void World::SetInitialWorldSettings()
     sAuraRemovalMgr.LoadFromDB();
 
     sDailyQuestHandler->LoadFromDB(true);
+
+    sCompanionMgr->LoadFromDB();
 
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);
