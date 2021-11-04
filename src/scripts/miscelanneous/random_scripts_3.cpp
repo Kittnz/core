@@ -1628,9 +1628,35 @@ struct npc_lapidisAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_lapidis(Creature* _Creature) { return new npc_lapidisAI(_Creature); }
 
+bool GossipHello_npc_lorthiras(Player* pPlayer, Creature* pCreature)
+{
+    //if (pPlayer->GetQuestStatus(00000) == QUEST_STATUS_INCOMPLETE)
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am looking for a fight dreadlord.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(60503, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_lorthiras(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFactionTemporary(554, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_lorthiras";
+    newscript->pGossipHello = &GossipHello_npc_lorthiras;
+    newscript->pGossipSelect = &GossipSelect_npc_lorthiras;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_lapidis";
