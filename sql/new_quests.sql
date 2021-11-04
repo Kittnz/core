@@ -2386,3 +2386,24 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from gameobject_template where entry = 2010842;
 REPLACE INTO gameobject_template VALUES
 (2010842, 0, 0, 23913, 'Magically Sealed Door', 0, 32, 2.45983, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'magically_sealed_door');
+
+-- Intercepted Shipment --
+delete from quest_template where entry = 40222;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40222,2,33,30,25,0,0,'Intercepted Shipment','Hey there, we don\'t get many visitors back here, I suppose you\'re looking for work then. I got a shipment I am expecting that should have arrived today, think you can pick it up? Let\'s just say, I\'m not supposed to be seen around the docks to certain people.\n\nIt might not have my name on it, but it should be labeled as \'Refined Gem Shipment\'. Try not to ask any questions while you\'re down there either, just grab the crate and come back. If you look like you know what you\'re looking for, and have confidence, they wont ask any questions.\n\nYou get me the crate, and I\'ll have more work for you.','Collect the \'Refined Gem Shipment\' for \'Slip\' in Booty Bay.','Any luck? I can\'t be waiting around all day.','Yeah, this is it, those pesky rats think they could stop me? Hah! Good work pal, you certainly got some gumption.',60303,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1350,87,50,21,-100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60502, 40222);
+replace into creature_involvedrelation (id, quest) values (60502, 40222);
+
+update creature_template set npc_flags = 3 where entry = 60502;
+
+delete from item_template where entry = 60303;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60303,8928,'Refined Gem Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010843;
+replace into gameobject_template values
+(2010843, 0, 3, 31, 'Refined Gem Shipment', 0, 4, 1, 43, 2010843, 0, 1.6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010843;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values 
+(2010843,60303,-100,1,1,0,10);
