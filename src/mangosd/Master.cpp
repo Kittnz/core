@@ -56,49 +56,34 @@ INSTANTIATE_SINGLETON_1( Master );
 volatile uint32 Master::m_masterLoopCounter = 0;
 volatile bool Master::m_handleSigvSignals = false;
 
-class FreezeDetectorRunnable : public ACE_Based::Runnable
+void freezeDetector(uint32 _delaytime)
 {
-public:
-    FreezeDetectorRunnable() { _delaytime = 0; }
-    uint32 m_loops, m_lastchange;
-    uint32 w_loops, w_lastchange;
-    uint32 _delaytime;
-    void SetDelayTime(uint32 t) { _delaytime = t; }
-    void run(void)
+    if (!_delaytime)
+        return;
+
+    sLog.outString("Starting up anti-freeze thread (%u seconds max stuck time)...",_delaytime/1000);
+    uint32 loops = 0;
+    uint32 lastchange = 0;
+
+    while (!World::IsStopped())
     {
-        if(!_delaytime)
-            return;
-        sLog.outString("Starting up anti-freeze thread (%u seconds max stuck time)...",_delaytime/1000);
-        m_loops = 0;
-        w_loops = 0;
-        m_lastchange = 0;
-        w_lastchange = 0;
-        while(!World::IsStopped())
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        uint32 curtime = WorldTimer::getMSTime();
+
+        // normal work
+        if (loops != World::m_worldLoopCounter)
         {
-            ACE_Based::Thread::Sleep(1000);
-
-            uint32 curtime = WorldTimer::getMSTime();
-            //DEBUG_LOG("anti-freeze: time=%u, counters=[%u; %u]",curtime,Master::m_masterLoopCounter,World::m_worldLoopCounter);
-
-            // normal work
-            if (w_loops != World::m_worldLoopCounter)
-            {
-                w_lastchange = curtime;
-                w_loops = World::m_worldLoopCounter;
-            }
-            // possible freeze
-#ifdef NDEBUG
-            else if (WorldTimer::getMSTimeDiff(w_lastchange, curtime) > _delaytime)
-            {
-                sLog.outError("World Thread hangs, kicking out server!");
-                signal(SIGSEGV, 0);
-                Master::m_handleSigvSignals = false;        // disable anticrash
-                *((uint32 volatile*)nullptr) = 0;              // bang crash
-            }
-#endif
+            lastchange = curtime;
+            loops = World::m_worldLoopCounter;
         }
-        // Fix crash au shutdown du serv. sLog n'existe plus ici.
-        //sLog.outString("Anti-freeze thread exiting without problems.");
+        // possible freeze
+#ifdef NDEBUG
+        else if (WorldTimer::getMSTimeDiff(lastchange, curtime) > _delaytime)
+        {
+            sLog.outError("World Thread hangs, kicking out server!");
+            std::terminate(); // bang crash
+        }
+#endif
     }
 };
 
@@ -115,10 +100,10 @@ int Master::Run()
 {
     /// worldd PID file creation
     std::string pidfile = sConfig.GetStringDefault("PidFile", "");
-    if(!pidfile.empty())
+    if (!pidfile.empty())
     {
         uint32 pid = CreatePIDFile(pidfile);
-        if( !pid )
+        if (!pid)
         {
             sLog.outError( "Cannot create PID file %s.\n", pidfile.c_str() );
             Log::WaitBeforeContinueIfNeed();
@@ -151,8 +136,7 @@ int Master::Run()
     _HookSignals();
 
     ///- Launch WorldRunnable thread
-    ACE_Based::Thread world_thread(new WorldRunnable);
-    world_thread.setPriority(ACE_Based::Highest);
+    std::thread world_thread{WorldRunnable()};
 
     // set realmbuilds depend on mangosd expected builds, and set server online
     {
@@ -162,12 +146,12 @@ int Master::Run()
         LoginDatabase.PExecute("UPDATE realmlist SET realmflags = realmflags & ~(%u), population = 0, realmbuilds = '%s'  WHERE id = '%u'", REALM_FLAG_OFFLINE, builds.c_str(), realmID);
     }
 
-    ACE_Based::Thread* cliThread = nullptr;
+    std::thread* cliThread = nullptr;
 
     if (sConfig.GetBoolDefault("Console.Enable", true))
     {
         ///- Launch CliRunnable thread
-        cliThread = new ACE_Based::Thread(new CliRunnable);
+        cliThread = new std::thread(CliRunnable());
     }
 
     ///- Handle affinity for multiple processors and process priority on Windows
@@ -176,22 +160,22 @@ int Master::Run()
         HANDLE hProcess = GetCurrentProcess();
 
         uint32 Aff = sConfig.GetIntDefault("UseProcessors", 0);
-        if(Aff > 0)
+        if (Aff > 0)
         {
             ULONG_PTR appAff;
             ULONG_PTR sysAff;
 
-            if(GetProcessAffinityMask(hProcess,&appAff,&sysAff))
+            if (GetProcessAffinityMask(hProcess,&appAff,&sysAff))
             {
                 ULONG_PTR curAff = Aff & appAff;            // remove non accessible processors
 
-                if(!curAff )
+                if (!curAff)
                 {
                     sLog.outError("Processors marked in UseProcessors bitmask (hex) %x not accessible for mangosd. Accessible processors bitmask (hex): %x",Aff,appAff);
                 }
                 else
                 {
-                    if(SetProcessAffinityMask(hProcess,curAff))
+                    if (SetProcessAffinityMask(hProcess,curAff))
                         sLog.outString("Using processors (bitmask, hex): %x", curAff);
                     else
                         sLog.outError("Can't set used processors (hex): %x",curAff);
@@ -201,22 +185,15 @@ int Master::Run()
         }
 
         bool Prio = sConfig.GetBoolDefault("ProcessPriority", false);
-
-//        if(Prio && (m_ServiceStatus == -1)/* need set to default process priority class in service mode*/)
-        if(!Prio)
+        if (!Prio)
             sLog.outError("Can't set mangosd process priority class.");
     }
     #endif
 
     ///- Start up freeze catcher thread
-    ACE_Based::Thread* freeze_thread = nullptr;
-    if(uint32 freeze_delay = sConfig.GetIntDefault("MaxCoreStuckTime", 0))
-    {
-        FreezeDetectorRunnable *fdr = new FreezeDetectorRunnable();
-        fdr->SetDelayTime(freeze_delay*1000);
-        freeze_thread = new ACE_Based::Thread(fdr);
-        freeze_thread->setPriority(ACE_Based::Highest);
-    }
+    std::thread* freeze_thread = nullptr;
+    if (uint32 freeze_delay = sConfig.GetIntDefault("MaxCoreStuckTime", 0))
+        freeze_thread = new std::thread(std::bind(&freezeDetector,freeze_delay*1000));
 
     ///- Launch the world listener socket
     uint16 wsport = sWorld.getConfig (CONFIG_UINT32_PORT_WORLD);
@@ -236,13 +213,13 @@ int Master::Run()
         World::StopNow(ERROR_EXIT_CODE);
         // go down and shutdown the server
     }
+
     sWorldSocketMgr->Wait();
 
     ///- Stop freeze protection before shutdown tasks
     if (freeze_thread)
     {
-        sLog.outString("Stopping anti freeze thread...");
-        freeze_thread->destroy();
+        freeze_thread->join();
         delete freeze_thread;
     }
 
@@ -251,8 +228,7 @@ int Master::Run()
 
     // when the main thread closes the singletons get unloaded
     // since worldrunnable uses them, it will crash if unloaded after master
-    sLog.outString("Waiting for world thread to finish...");
-    world_thread.wait();
+    world_thread.join();
 
     ///- Clean account database before leaving
     sLog.outString("Cleaning character database...");
@@ -308,14 +284,11 @@ int Master::Run()
         b[3].Event.KeyEvent.wRepeatCount = 1;
         DWORD numb;
         WriteConsoleInput(hStdIn, b, 4, &numb);
-
-        cliThread->wait();
-
-        #else
-
-        cliThread->destroy();
-
-        #endif
+#else
+        fclose(stdin);
+#endif
+        if (cliThread->joinable())
+            cliThread->join();
 
         delete cliThread;
     }
@@ -385,7 +358,7 @@ bool Master::_StartDB()
 {
     ///- Get the realm Id from the configuration file
     realmID = sConfig.GetIntDefault("RealmID", 0);
-    if(!realmID)
+    if (!realmID)
     {
         sLog.outError("Realm ID not defined in configuration file");
         return false;
@@ -405,8 +378,6 @@ bool Master::_StartDB()
 
     ///- Clean the database before starting
     clearOnlineAccounts();
-
-    
     return true;
 }
 
@@ -428,10 +399,8 @@ void Master::clearOnlineAccounts()
 void createdump(void)
 {
 #ifndef WIN32
-    if (!fork()) { //child process
-                   // Crash the app
-        abort();
-    }
+    if (!fork())
+        abort(); // Crash the app
 #endif
     
 }
@@ -440,8 +409,10 @@ void Master::SigvSignalHandler()
 {
     if (m_handleSigvSignals)
         _OnSignal(SIGSEGV);
+
     exit(1);
 }
+
 void Master::_OnSignal(int s)
 {
     switch (s)
@@ -463,6 +434,7 @@ void Master::_OnSignal(int s)
             if (!m_handleSigvSignals)
                 return;
 
+            std::exception_ptr exc = std::current_exception();
             m_handleSigvSignals = false; // Desarm anticrash
             sWorld.SetAnticrashRearmTimer(sWorld.getConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER));
             uint32 anticrashOptions = sWorld.getConfig(CONFIG_UINT32_ANTICRASH_OPTIONS);
@@ -481,17 +453,17 @@ void Master::_OnSignal(int s)
                 else
                     sWorld.SendWorldText(LANG_SYSTEMMESSAGE, "Crash server occurred :(");
     
-                ACE_Based::Thread::Sleep(500);
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
 
             if (anticrashOptions & ANTICRASH_OPTION_SAVEALL)
             {
                 CharacterDatabase.ThreadStart();
                 sObjectAccessor.SaveAllPlayers();
-                ACE_Based::Thread::Sleep(25000); // Wait enough time to execute the SQL queries.
+                std::this_thread::sleep_for(std::chrono::seconds(25));
             }
 
-            *((volatile int*)nullptr) = 42; // Crash for real now.
+            std::rethrow_exception(exc); // Crash for real now.
             return;
         }
     }
@@ -512,7 +484,6 @@ void Master::_HookSignals()
 
 void Master::ArmAnticrash()
 {
-    //signal(SIGSEGV, _OnSignal);
     m_handleSigvSignals = true;
 }
 

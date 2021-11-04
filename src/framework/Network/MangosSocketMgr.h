@@ -2,9 +2,6 @@
 #define MANGOSSOCKETMGR_H
 
 #include <ace/Basic_Types.h>
-#include <ace/Singleton.h>
-#include <ace/Thread_Mutex.h>
-
 #include <string>
 
 template <typename T>

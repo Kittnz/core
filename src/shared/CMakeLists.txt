@@ -27,7 +27,7 @@ set (shared_SRCS
     Progression.h
     revision.h
     SystemConfig.h
-    Threading.h
+    ThreadPool.h
     Timer.h
     Util.h
     WorldPacket.h
@@ -64,7 +64,7 @@ set (shared_SRCS
     DelayExecutor.cpp
     Log.cpp
     PosixDaemon.cpp
-    Threading.cpp
+    ThreadPool.cpp
     Util.cpp
     Duration.h
     Auth/ARC4.cpp

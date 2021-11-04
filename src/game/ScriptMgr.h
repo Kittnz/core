@@ -24,8 +24,8 @@
 #include "Policies/Singleton.h"
 #include "ObjectGuid.h"
 #include "DBCEnums.h"
+#include <atomic>
 #include "SpellDefines.h"
-#include "ace/Atomic_Op.h"
 
 #include <memory>
 
@@ -1464,7 +1464,7 @@ class ScriptMgr
         QuestInstanceMultiMap m_questInstancies;
 
         //atomic op counter for active scripts amount
-        ACE_Atomic_Op<ACE_Thread_Mutex, int> m_scheduledScripts;
+        std::atomic<int> m_scheduledScripts;
 };
 
 #define sScriptMgr MaNGOS::Singleton<ScriptMgr>::Instance()

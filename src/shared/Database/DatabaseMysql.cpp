@@ -26,7 +26,6 @@
 #include "Util.h"
 #include "Policies/SingletonImp.h"
 #include "Platform/Define.h"
-#include "Threading.h"
 #include "DatabaseEnv.h"
 #include "Timer.h"
 
@@ -186,13 +185,17 @@ bool MySQLConnection::HandleMySQLError(uint32 errNo)
         // Outdated table or database structure - terminate core
         case ER_BAD_FIELD_ERROR:
         case ER_NO_SUCH_TABLE:
+        {
             sLog.outErrorDb("Your database structure is not up to date. Please make sure you have executed all the queries in the sql/updates folders.");
             ASSERT(false);
-            return false;
+            //return false; // Why return when ASSERT is called before anyways?
+        }
         case ER_PARSE_ERROR:
+        {
             sLog.outErrorDb("Error while parsing SQL. Core fix required.");
             ASSERT(false);
-            return false;
+            //return false; // Why return when ASSERT is called before anyways?
+        }
         default:
             sLog.outErrorDb("Unhandled MySQL errno %u. Unexpected behaviour possible.", errNo);
             return false;

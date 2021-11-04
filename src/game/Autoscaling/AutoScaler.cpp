@@ -28,20 +28,20 @@ void AutoScaler::LoadFromDB()
 class Read_Mutex_Guard
 {
 public:
-    explicit Read_Mutex_Guard(ACE_RW_Mutex& mut)
+    explicit Read_Mutex_Guard(std::shared_timed_mutex& mut)
         : mut(mut)
     {	// construct and lock
-        mut.acquire_read();
+        mut.lock_shared();
     }
     ~Read_Mutex_Guard() noexcept
     {	// unlock
-        mut.release();
+        mut.unlock();
     }
 
     Read_Mutex_Guard(const Read_Mutex_Guard&) = delete;
     Read_Mutex_Guard& operator=(const Read_Mutex_Guard&) = delete;
 private:
-    ACE_RW_Mutex& mut;
+    std::shared_timed_mutex& mut;
 };
 
 void AutoScaler::Scale(DungeonMap* map)
