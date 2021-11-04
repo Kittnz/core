@@ -1605,9 +1605,37 @@ struct npc_fearothAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_fearoth(Creature* _Creature) { return new npc_fearothAI(_Creature); }
 
+struct npc_lapidisAI : public ScriptedAI
+{
+    npc_lapidisAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("Who let you in this tower?! Do you know who you are messing with?!");
+    }
+    void JustDied(Unit*) override
+    {
+        m_creature->MonsterSay("You know.. Nothing... I was more powerful then all of you.");
+    }
+    void EnterCombat() {}
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_lapidis(Creature* _Creature) { return new npc_lapidisAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_lapidis";
+    newscript->GetAI = &GetAI_npc_lapidis;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_fearoth";

@@ -2326,3 +2326,8 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 REPLACE INTO page_text VALUES
 (50512, '$N, it was my pleasure to hear that a recruit shows passion for the art of hunting.\n\nAlthough in life we would\’ve never considered ourselves as great of a marksman as either the dwarves or the high elves we took our pride for the love we carried for the wilds, befriending animals into long loyal companions and feeling the rhythm and the call of nature in every gust of wind, every groan of the river was something that brought upmost joy into our lives.', 50513),
 (50513, 'Adapting to nature was one of our greatest and most noble of goals, yet as we\’ve experimented with what comes after a restless death, we can no longer adapt to nature, it seems that nature itself will need to adapt to us. Meet me by the graveyard, it\’s there I shall teach you of my past experiences and a few tricks for you to survive and claim your vengeance against the Lich King.\n\nFor the Banshee Queen, for the Forsaken.', 0);
+
+delete from creature_ai_events where id = 2200000 and 2200001;
+delete from creature_ai_scripts where id = 2200000 and 2200001;
+delete from broadcast_text where entry = 30000 and 30001;
+update creature_template set script_name = 'npc_lapidis' where entry = 60467;
