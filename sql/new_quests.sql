@@ -2346,3 +2346,34 @@ update creature_template set script_name = 'npc_lorthiras' where entry = 60503;
 
 update creature_template set health_min = 650 where entry = 60475;
 update creature_template set health_max = 650 where entry = 60475;
+
+-- Yig Oilfuse , display ID 7051, level 14, faction 69, greeting text : "You heard word from booty bay? I'm expecting a shipment."
+-- Thoregg, display ID 10704, level 32,  scale 1.3 , weapon 1158, faction 16, must have 1.5x normal hp and deal slightly more damage
+-- Wally Wisecrack, display ID 4338, level 36, weapon 1 :4564 , faction 87 (scale 1) 
+-- Conservationist Yalus, display ID 5071, level 30, faction 80, greeting text : "Stonetalon Peak may be a place of harmony, but we must be vigilant to keep it this way."
+
+replace into creature_template values
+(60504, 0, 7051, 0, 0, 0, 'Yig Oilfuse', '', 0, 14, 14, 328, 328, 0, 0, 528, 69, 3, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60505, 0, 10704, 0, 0, 0, 'Thoregg', '', 0, 32, 32, 1743, 1743, 0, 0, 1304, 16, 0, 1, 1.14286, 1.3, 20, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60505, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 70, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60506, 0, 4338, 0, 0, 0, 'Wally Wisecrack', '', 0, 36, 36, 1468, 1468, 0, 0, 1480, 87, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60506, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60507, 0, 5071, 0, 0, 0, 'Conservationist Yalus', '', 0, 30, 30, 1002, 1002, 0, 0, 1188, 80, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 61, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20026; set @weapon_1 = 1158; set @weapon_2 = 0; set @creature = 60505;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20027; set @weapon_1 = 4564; set @weapon_2 = 0; set @creature = 60506;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41034; set @magic_number = 60504;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You heard word from booty bay? I\'m expecting a shipment.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41035; set @magic_number = 60507;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Stonetalon Peak may be a place of harmony, but we must be vigilant to keep it this way.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
