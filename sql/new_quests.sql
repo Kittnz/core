@@ -2338,3 +2338,11 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (11536, 40221);
 replace into creature_involvedrelation (id, quest) values (11536, 40221);
+
+update broadcast_text set male_text = 'I sense something about you, something.. Different. Perhaps we will meet again, until then, leave me be, I have much work to do, and I do not desire to be interfered.\n\nUnless you\'re looking for a fight mortal, if so, it can be arranged.' where entry = 60503;
+update creature_template set faction = 31 where entry = 60503;
+update creature_template set unit_flags = 2 where entry = 60503;
+update creature_template set script_name = 'npc_lorthiras' where entry = 60503;
+
+update creature_template set health_min = 650 where entry = 60475;
+update creature_template set health_max = 650 where entry = 60475;
