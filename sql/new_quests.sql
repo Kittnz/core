@@ -2491,3 +2491,18 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '1', '0', '0', '65', '0', '0', '0', '0', '25', '0', '0', '0',
  '0', '1', NULL);
+
+-- Intercepted Shipment --
+delete from quest_template where entry = 40227;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40227,2,406,24,17,0,0,'Intercepted Shipment','Welcome to Stonetalon Peak, a place of harmony with nature, Keeper Albagorm has done well in maintaining the region despite setbacks. I have been working tirelessly for sometime in maintaining the wildlife around here, and I have been having some issues.\n\nThe Twilight Runners of the Peak have been growing more hostile with time, and I fear they may out hunt some of the other wildlife present here. I require from them a single Pristine Twilight Fang, which will be used to conduct research to find any sort of genetic problem, disease, or corruption that may be gripping the population.\n\nYou can find them about Stonetalon Peak, be quick.','Collect a single Pristine Twilight Fang for Conservationist Yalus in Stonetalon Peak.','The Twilight Runners can be aggresive, so keep your wits about you.','Interesting, there may be something developing between the Twilight Runners that has made them more aggresive, but it could also be due to the overpopulation and need for food, thanks again. This has dispelled some worry for me with all of the nightmares I hear about back in Teldrassil.',60310,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1850,69,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60507, 40227);
+replace into creature_involvedrelation (id, quest) values (60507, 40227);
+
+delete from item_template where entry = 60310;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60310,1227,'Pristine Twilight Fang',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where entry = 4067 and item = 60310;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(4067,60310,-10,1,1,0,10);
