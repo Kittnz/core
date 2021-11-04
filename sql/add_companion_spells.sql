@@ -7,7 +7,7 @@ COLLATE='utf8mb4_general_ci'
 ENGINE=InnoDB
 ;
 
-REPLACE INTO `companion_spells` VALUES(8485, 46498);
+REPLACE INTO `companion_spells` VALUES(8485, 10673);
 REPLACE INTO `companion_spells` VALUES(8486, 10674);
 REPLACE INTO `companion_spells` VALUES(8487, 10676);
 REPLACE INTO `companion_spells` VALUES(8488, 10678);
