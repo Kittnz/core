@@ -5841,7 +5841,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
         {
             if (m_targets.m_destX && m_targets.m_destY && m_targets.m_destZ)
             {
-                if (!m_caster->IsWithinLOS(m_targets.m_destX, m_targets.m_destY, m_targets.m_destZ))
+                if (!m_IsTriggeredSpell && !m_caster->IsWithinLOS(m_targets.m_destX, m_targets.m_destY, m_targets.m_destZ))
                     return SPELL_FAILED_LINE_OF_SIGHT;
             }
         }
