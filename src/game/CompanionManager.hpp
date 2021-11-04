@@ -30,7 +30,7 @@ public:
 	std::optional<uint32> GetCompanionSpellId(uint32 itemId) const
 	{
 		if (auto itr = m_companionSpells.find(itemId); itr != m_companionSpells.end())
-			return { itemId };
+			return { itr->second };
 		return {};
 	}
 
