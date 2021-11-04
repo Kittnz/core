@@ -2352,6 +2352,7 @@ update creature_template set health_max = 650 where entry = 60475;
 -- Wally Wisecrack, display ID 4338, level 36, weapon 1 :4564 , faction 87 (scale 1) 
 -- Conservationist Yalus, display ID 5071, level 30, faction 80, greeting text : "Stonetalon Peak may be a place of harmony, but we must be vigilant to keep it this way."
 
+delete from creature_template where entry between 60504 and 60507;
 replace into creature_template values
 (60504, 0, 7051, 0, 0, 0, 'Yig Oilfuse', '', 0, 14, 14, 328, 328, 0, 0, 528, 69, 3, 1, 1.19048, 0, 20, 5, 0, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60505, 0, 10704, 0, 0, 0, 'Thoregg', '', 0, 32, 32, 1743, 1743, 0, 0, 1304, 16, 0, 1, 1.14286, 1.3, 20, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60505, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 70, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -2377,3 +2378,11 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Stonetalon Peak may be a place of harmony, but we must be vigilant to keep it this way.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+delete from item_template where entry = 60302;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60302,8951,'Lapidis Tower Key',13,1,524288,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010842;
+REPLACE INTO gameobject_template VALUES
+(2010842, 0, 0, 23913, 'Magically Sealed Door', 0, 32, 2.45983, 0, 0, 196608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'magically_sealed_door');

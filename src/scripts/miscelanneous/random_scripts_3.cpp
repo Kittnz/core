@@ -1648,9 +1648,69 @@ bool GossipSelect_npc_lorthiras(Player* pPlayer, Creature* pCreature, uint32 uiS
     return true;
 }
 
+#define LAPIDIS_TOWER_KEY 60302
+#define MAGICALLY_SEALED_DOOR_RESET 1
+
+bool GOHello_magically_sealed_door(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->HasItemCount(LAPIDIS_TOWER_KEY, 1))
+    {
+        pGo->UseDoorOrButton(10);
+        pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+
+        if (GameObjectAI* gAI = pGo->AI())
+            gAI->SetData(MAGICALLY_SEALED_DOOR_RESET, 1);
+    }
+    else
+        pPlayer->GetSession()->SendNotification("Requires Lapidis Tower Key.");
+
+    return true;
+}
+
+struct magically_sealed_door : public GameObjectAI
+{
+    explicit magically_sealed_door(GameObject* pGo) : GameObjectAI(pGo) {}
+    uint32 BackTimer = 0;
+
+    virtual void UpdateAI(uint32 const uiDiff) override
+    {
+        if (BackTimer != 0)
+        {
+            if (BackTimer < uiDiff)
+            {
+                BackTimer = 0;
+                me->ResetDoorOrButton();
+            }
+            else
+            {
+                BackTimer -= uiDiff;
+                if (BackTimer == 0)
+                {
+                    me->ResetDoorOrButton();
+                }
+            }
+        }
+    }
+
+    virtual void SetData(uint32 id, uint32 value) override
+    {
+        if (id == MAGICALLY_SEALED_DOOR_RESET)
+            BackTimer = 25 * IN_MILLISECONDS;
+        GameObjectAI::SetData(id, value);
+    }
+};
+
+GameObjectAI* GetAI_magically_sealed_door(GameObject* Obj) { return new magically_sealed_door(Obj); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "magically_sealed_door";
+    newscript->pGOHello = &GOHello_magically_sealed_door;
+    newscript->GOGetAI = &GetAI_magically_sealed_door;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_lorthiras";
