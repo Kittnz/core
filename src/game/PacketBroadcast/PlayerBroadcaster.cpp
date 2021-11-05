@@ -119,15 +119,10 @@ void PlayerBroadcaster::FreeAtLogout()
         m_socket = nullptr;
     }
 
-    try {
-        const std::scoped_lock lock{ m_queue_lock, m_listeners_lock };
-        m_queue.clear();
-        m_listeners.clear();
-    }
-    catch (...)
-    {
-
-    }
+    const std::scoped_lock lock{ m_queue_lock, m_listeners_lock };
+    m_queue.clear();
+    m_listeners.clear();
+    
 }
 
 PlayerBroadcaster::~PlayerBroadcaster()
