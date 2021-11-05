@@ -61,9 +61,8 @@ void PlayerBroadcaster::ProcessQueue(uint32& num_packets)
     if (m_queue.empty())
         return;
 
-    std::unique_lock<std::mutex> q_g(m_queue_lock), v_g(m_listeners_lock);
+    std::scoped_lock lock{ m_queue_lock, m_listeners_lock };
     auto queue = std::move(m_queue);
-    q_g.unlock();
 
     lastUpdatePackets = queue.size() * m_listeners.size();
     num_packets += lastUpdatePackets;
@@ -91,7 +90,7 @@ void PlayerBroadcaster::QueuePacket(WorldPacket packet, bool self, ObjectGuid ex
     data.sendToSelf = self;
     data.except = except;
 
-    std::unique_lock<std::mutex> guard(m_queue_lock);
+    std::scoped_lock guard(m_queue_lock);
 
     // We need to drop a packet here - if possible
     if (m_queue.size() >= MAX_QUEUE_SIZE)
@@ -100,13 +99,11 @@ void PlayerBroadcaster::QueuePacket(WorldPacket packet, bool self, ObjectGuid ex
         if (CanSkipPacket(last_in_queue.packet.GetOpcode()) && CanSkipPacket(data.packet.GetOpcode()))
         {
             m_queue[m_queue.size() - 1] = std::move(data);
-            guard.unlock();
             return;
         }
     }
 
     m_queue.emplace_back(std::move(data));
-    guard.release();
 }
 
 ObjectGuid PlayerBroadcaster::GetGUID() const
@@ -122,9 +119,15 @@ void PlayerBroadcaster::FreeAtLogout()
         m_socket = nullptr;
     }
 
-    const std::lock_guard<std::mutex> q_g(m_queue_lock), v_g(m_listeners_lock);
-    m_queue.clear();
-    m_listeners.clear();
+    try {
+        const std::scoped_lock lock{ m_queue_lock, m_listeners_lock };
+        m_queue.clear();
+        m_listeners.clear();
+    }
+    catch (...)
+    {
+
+    }
 }
 
 PlayerBroadcaster::~PlayerBroadcaster()
