@@ -346,8 +346,8 @@ struct ossirian_crystalAI : public GameObjectAI
 
         //add extra range check here for https://github.com/slowtorta/turtlewow-bug-tracker/issues/110
         //eyeball 20 yards from videos.
-        if (triggerCrystalPylons->GetDistance2d(ossirian) > 20.0f)
-            return false;
+        if (triggerCrystalPylons->GetDistance2d(ossirian) > 22.0f)
+            return true;
 
         if (triggerCrystalPylons)
             triggerCrystalPylons->CastSpell(ossirian, SpellWeakness[urand(0, 4)], true);
