@@ -82,6 +82,7 @@
 #include "GuidObjectScaling.h"
 #include "Database/AutoUpdater.hpp"
 #include "CompanionManager.hpp"
+#include "MountManager.hpp"
 
 #include <chrono>
 
@@ -1542,6 +1543,7 @@ void World::SetInitialWorldSettings()
     sDailyQuestHandler->LoadFromDB(true);
 
     sCompanionMgr->LoadFromDB();
+    sMountMgr->LoadFromDB();
 
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);
