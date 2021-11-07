@@ -747,8 +747,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_ANTIFLOOD_SANCTION,       "Antiflood.Sanction", CHEAT_ACTION_KICK);
 
     setConfig(CONFIG_BOOL_BEGINNERS_GUILD, "BeginnersGuilds", 0);
-    setConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE, "BeginnersGuildHorde", 0);
-    setConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE, "BeginnersGuildAlliance", 0);
+    setConfig(CONFIG_UINT32_BEGINNERS_GUILD_HORDE, "BeginnersGuildHorde", 0);
+    setConfig(CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE, "BeginnersGuildAlliance", 0);
 
     setConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS, "Visibility.ForceActiveObjects", true);
     m_relocation_ai_notify_delay = sConfig.GetIntDefault("Visibility.AIRelocationNotifyDelay", 1000u);
