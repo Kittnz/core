@@ -56,6 +56,7 @@
 #include "GameEventMgr.h"
 #include "Chat.h"
 #include "CompanionManager.hpp"
+#include "MountManager.hpp"
 
 #include "InstanceData.h"
 #include "ScriptMgr.h"
@@ -1892,8 +1893,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 }
 				case 46498: // Add Companion to Collection
 				{
-					using namespace std;
-
                     if (m_CastItem)
                     {
                         auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(m_CastItem->GetEntry());
@@ -1903,6 +1902,17 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
 					return;
 				}
+                case 46499: // Add Mount to Collection
+                {
+                    if (m_CastItem)
+                    {
+                        auto spellIdOpt = sMountMgr->GetMountSpellId(m_CastItem->GetEntry());
+
+                        if (spellIdOpt && m_caster->IsPlayer())
+                            m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+                    }
+                    return;
+                }
                 case 56044: // Debug: Previous DisplayID (commands will become obsolete in 1.15.2)
                 {
                     uint16 display_id = m_caster->ToPlayer()->GetDisplayId();
