@@ -1386,7 +1386,6 @@ class Player final: public Unit
         ///- Turtle WoW custom feature to reward players who haven't played for a long time
         bool IsReturning();
         ///- Turtle WoW custom feature to auto invite players into a guild, helping them easily find players who are also just starting out fresh.
-        void CheckIfShouldBeInBeginnersGuild(uint32 level);
         void JoinBeginnersGuild();
         ///- Turtle WoW custom feature: Bloody Arena Tournament
         bool InGurubashiArena(bool checkOutsideArea) const;
