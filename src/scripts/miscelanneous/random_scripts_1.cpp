@@ -5311,14 +5311,11 @@ bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
 
 bool GossipHello_npc_custodian_of_time(Player* pPlayer, Creature* pCreature)
 {
-    if (sWorld.getConfig(CONFIG_BOOL_BETA))
+    switch (pCreature->GetEntry())
     {
-        switch (pCreature->GetEntry())
-        {
-        case 65000: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I wish to enter Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); break;
-        case 65015: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am leaving.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); break;
-        }
-    }    
+    case 65000: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I wish to enter Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1); break;
+    case 65015: pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am leaving.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); break;
+    }
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(51673, pCreature->GetGUID());
     return true;
