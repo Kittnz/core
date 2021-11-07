@@ -3094,9 +3094,6 @@ void Player::GiveLevel(uint32 level)
         sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, "LevelUpAlert", message.str().c_str());
     }
 
-    if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD))
-        CheckIfShouldBeInBeginnersGuild(level);
-
     if (bIsTurtle)
         MailHardcoreModeRewards(level);
 
@@ -21982,40 +21979,14 @@ bool Player::IsReturning()
 
 // Turtle WoW custom features:
 
-void Player::CheckIfShouldBeInBeginnersGuild(uint32 level)
-{
-    // In an effort to assist new players, the Turtle WoW team has decided to implement a new feature called "The Beginner’s Guild". 
-    // This new feature will auto invite players into a guild, helping them easily find players who are also just starting out fresh.
-    // Once players reach level 15 they will be removed from the guild, and thrown back into the wild!
-
-    const uint32 cui_GuildId = GetGuildId();
-    uint32 ui_BeginnersGuildId = 0;
-
-    ui_BeginnersGuildId = (GetTeam() == ALLIANCE) ? sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE) : sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE);
-    if (!ui_BeginnersGuildId)
-        return;
-
-    // Warn at level 14:
-    if (level == 14 && GetSession()->GetSecurity() == SEC_PLAYER && cui_GuildId == ui_BeginnersGuildId)
-        ChatHandler(this).PSendSysMessage("|cff00FF00You will be automatically removed from beginner's guild when you reach level 15!|r");
-
-    // Back into the wild:
-    if (level == 15 && GetSession()->GetSecurity() == SEC_PLAYER && cui_GuildId == ui_BeginnersGuildId)
-    {
-        if (Guild* pNoobSquad = sGuildMgr.GetGuildById(ui_BeginnersGuildId))
-        {
-            pNoobSquad->DelMember(GetGUIDLow());
-            ChatHandler(this).PSendSysMessage("|cff00FF00You've made it to the water, time for you to find your own way!|r");
-        }
-    }
-}
-
 void Player::JoinBeginnersGuild()
 {
     Guild* pBeginnersGuild = nullptr;
     pBeginnersGuild = (GetTeam() == ALLIANCE) ? sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_ALLIANCE)) : sGuildMgr.GetGuildById(sWorld.getConfig(CONFIG_INT32_BEGINNERS_GUILD_HORDE));
     if (pBeginnersGuild)
         pBeginnersGuild->AddMember(GetObjectGuid(), pBeginnersGuild->GetLowestRank());
+    else
+        sLog.outError("JoinBeginnersGuild: Beginner Guild %u not found!", reinterpret_cast<uint32>(pBeginnersGuild));
 }
 
 bool Player::InGurubashiArena(bool checkOutsideArea) const 
