@@ -331,3 +331,15 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (6200,60328,-10,1,1,0,10),
 (6201,60328,-12,1,1,0,10),
 (6202,60328,-14,1,1,0,10);
+
+-- Staff of Eldara --
+delete from quest_template where entry = 40247;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40246,40247,2,16,53,45,0,0,'Staff of Eldara','With the Eldarath Harmonization Gem, and the Aged Deep-Rod I can begin to construct a Staff of Eldara, it will take some channeling of my energy, and the tower to attune it with the region. I simply ask for your patience as I bind the two together.','Wait for Keeper Iselus to craft the Staff of Eldara.','I must concentrate.','Another chapter begins, the Keepers of Azshara may not fade into memory this early.',0,0,0,0,0,0,0,0,60335,1,0,0,0,0,0,0,0,0,0,370,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Keeper Iselus finished craft the Staff of Eldara.');
+
+replace into creature_questrelation (id, quest) values (91722, 40247);
+replace into creature_involvedrelation (id, quest) values (91722, 40247);
+
+delete from creature_template where entry = 60335;
+replace into creature_template (entry, name, display_id1) values (60335, 'quest_40247_dummy_triger', 328);
+
+update creature_template set script_name = 'npc_iselus' where entry = 91722;
