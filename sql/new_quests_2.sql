@@ -272,3 +272,21 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91722, 40243);
 replace into creature_involvedrelation (id, quest) values (91722, 40243);
+
+-- The Keepers Possession --
+delete from quest_template where entry = 40244;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40243,40244,2,16,53,45,0,0,'The Keepers Possession','Many months ago, an object of great importance was lost to me. I was fishing along the coastline and studying the patterns of magic behind the tower, a storm had begun to set in, and was getting quite intense. As I packed my belongings and prepared to leave I was ambushed by both murloc and thrasher alike, in the chaos a chest was swept out into the sea.\n\nI may have defeated my foes but I could not find the chest, I could only assume it was washed ashore in the heavy storm. Check along the north western shore, it was where the current would take it, try and recover this chest.','Search the shoreline for the lost Eldara Chest','Have you recovered my valueable items?','The Eldara Relay-Orb is one of its kind, and incredibly rare, without this my ability to study, and communicate with the last Keeper\'s of Azshara were both tampered. I cannot thank you enough for finding it.',60326,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91722, 40244);
+replace into creature_involvedrelation (id, quest) values (91722, 40244);
+
+delete from item_template where entry = 60326;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60326,16209,'Eldara Relay-Orb',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010848;
+replace into gameobject_template values
+(2010848, 0, 3, 1, 'Sealed Highborne Chest', 0, 4, 1, 43, 2010848, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010848;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010848,60326,-100,1,1,0,10);
