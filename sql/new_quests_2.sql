@@ -314,3 +314,20 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from creature_loot_template where item = 60327 and entry = 60509;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (60509,60327,-100,1,1,0,10);
+
+-- Aged Deep-Rod --
+delete from quest_template where entry = 40246;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40245,40246,2,16,53,45,0,0,'Aged Deep-Rod','The Harmonization Gem is something I had figured I would never retrieve, and now with it, we can begin to make a staff that can transport you to the others. I have lost full communication with them for some time, and even relaying messages, well, is a long process.\n\nThe Satyrs of Legash are a recent arrival, and they hold some magical ability. They have been known to carry Aged Deep-Rods, of which I will need one, being I do not have the materials readily available to enchant or imbue a staff for our purposes.\n\nYou can find those demons to the north west, find from them an Aged Deep-Rod, one of them must carry one.','Find an Aged Deep-Rod from Legash Satyrs for Keeper Iselus at the Tower of Eldara in Azshara.','Walk with caution, the Satyr are lackies of a much greater power.','Good work in finding one, I was beginning to have my doubts. The power the Satyr wield in such a rod is but a fraction of the power we used to have in our glory. The Ley-lines flowed with a power unimaginable, it was so strong that even now, after so much time has past, the energy still lingers.\n\nAs dampened as it is now, it still holds power we must preserve, and keep secret.',60328,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5650,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91722, 40246);
+replace into creature_involvedrelation (id, quest) values (91722, 40246);
+
+delete from item_template where entry = 60328;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60328,472,'Aged Deep-Rod',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60328 and entry between 6200 and 6202;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(6200,60328,-10,1,1,0,10),
+(6201,60328,-12,1,1,0,10),
+(6202,60328,-14,1,1,0,10);
