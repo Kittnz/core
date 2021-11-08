@@ -43,3 +43,6 @@ update quest_template set requiredraces = 516 where entry = 6064;
 update quest_template set requiredraces = 516 where entry = 6084;
 update quest_template set requiredraces = 516 where entry = 6085;
 update quest_template set requiredraces = 516 where entry = 6086;
+-- Gnome hunters can't speak gnomish but can speak dwarven:
+replace into playercreateinfo_spell values (7, 3, 7340, 0, 5875, 'Language: Gnomish');
+delete from playercreateinfo_spell where race = 7 and class = 3 and spell = 672;
