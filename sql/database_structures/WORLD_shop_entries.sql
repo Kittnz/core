@@ -18,8 +18,6 @@ create table shop_items (
   primary key (id)
 ) engine=innodb auto_increment=10 default charset=utf8;
 
-ALTER TABLE `shop_categories` ADD `icon` VARCHAR(32) NOT NULL DEFAULT 'default' AFTER `name`;
-ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `price`;
 
 replace into shop_categories values
 (1,  'Character: Name, Race & Look'),
@@ -36,6 +34,8 @@ replace into shop_categories values
 (12, 'Vanity: Companions'),
 (13, 'Vanity: Tabards'),
 (14, 'Vanity: Illusions');
+
+ALTER TABLE `shop_categories` ADD `icon` VARCHAR(32) NOT NULL DEFAULT 'default' AFTER `name`;
 
 replace into shop_items values
 -- Character: Name, Race & Look
@@ -196,3 +196,5 @@ replace into shop_items values
 (299, 14, 80694, 'Illusion: Scourge', 120),
 (300, 14, 50408, 'Illusion: Dryad', 120),
 (301, 14, 53008, 'Illusion: Ogre', 120);
+
+ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `price`;
