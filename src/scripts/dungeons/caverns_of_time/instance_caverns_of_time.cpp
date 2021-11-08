@@ -19,7 +19,12 @@ Creature* dragonSpawn1;
 Creature* dragonSpawn2;
 Creature* dragonSpawn3;
 
+ObjectGuid GOB_BARRIER_1;
+ObjectGuid GOB_SANDWALL_1;
+
 int dragonGuidCount = 0;
+int riftsClosed = 0;
+bool finalDialogue = false;
 
 static const SpawnLocation rotMawSpawns[4] =
 {
@@ -36,6 +41,12 @@ struct instance_caverns_of_time : public ScriptedInstance
         Initialize();
     };
 
+    void DespawnGuid(ObjectGuid& g)
+    {
+        if (GameObject* c = GetMap()->GetGameObject(g))
+            c->Despawn();
+        g.Clear();
+    }
     int deadDragonCount = 0;
 
     Creature* bronzeDefender1;
@@ -59,6 +70,8 @@ struct instance_caverns_of_time : public ScriptedInstance
         bronzeDefender3 = instance->SummonCreature(50110, -1889.18, 6640.18, -156.75, 0);
         bronzeDefender4 = instance->SummonCreature(50110, -1893.81, 6643.04, -156.24, 0);
         bronzeDefender5 = instance->SummonCreature(50110, -1897.60, 6646.52, -155.83, 0);
+
+        int riftsClosed = 0;
 
         // Fix later
         //deadDefender1 = instance->GetCreature(2563294);
@@ -93,6 +106,9 @@ struct instance_caverns_of_time : public ScriptedInstance
     {
         if (!pPlayer)
             return;
+
+        if (pPlayer->HasItemCount(80008, 1))
+            pPlayer->DestroyItemCount(80008, 1, true);
     }
 
     //void SetData(uint32 uiType, uint32 uiData)
@@ -154,8 +170,22 @@ struct instance_caverns_of_time : public ScriptedInstance
                 bronzeDefender5->MonsterMove(-1810.97f, 6706.42f, -187.79f);
             }
         }
+
+        switch (riftsClosed)
+        {
+        case 2:
+        {
+            if (GameObject* barrier = GetMap()->GetGameObject(GOB_BARRIER_1))
+                barrier->AddObjectToRemoveList();
+
+            if (GameObject* sandWall = GetMap()->GetGameObject(GOB_SANDWALL_1))
+                sandWall->AddObjectToRemoveList();
+            break;
+        }
+        }
     }
 };
+
 
 InstanceData* GetInstanceData_instance_caverns_of_time(Map* pMap)
 {
@@ -529,7 +559,7 @@ struct infinite_whelpAI : public ScriptedAI
         if (m_creature->GetPowerPercent(POWER_MANA) >= 75 && stage == 0)
         {
             stage = 1;
-            m_creature->MonsterTextEmote("begins vibrating with the energy it's absorbed!");
+            m_creature->MonsterTextEmote("The whelp begins vibrating with the energy it's absorbed!");
         }
 
         if (m_creature->GetPowerPercent(POWER_MANA) == 100)
@@ -596,7 +626,7 @@ struct infinite_timeripperAI : public ScriptedAI
 
     enum CreatureEntries
     {
-        NPC_TIME_RIFT = 81267,
+        NPC_TIME_RIFT = 91001,
         NPC_DRAGONSPAWN = 65123,
         NPC_HARBINGER = 65114
     };
@@ -677,7 +707,7 @@ struct infinite_timeripperAI : public ScriptedAI
                 {
                 case 1:
                 {
-                    if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, -1424.58f, 6895.75f, -131.0f, 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
+                    if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, -1424.58f, 6895.75f, -131.0f, 0, TEMPSUMMON_MANUAL_DESPAWN))
                     {
                         portal->PMonsterEmote("The Infinite Timeripper opens a rift in time!", nullptr, true);
 
@@ -1383,6 +1413,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
     bool shadeSummoned = false;
     bool enrageActive = false;
     uint32 summonEntry;
+    ObjectGuid chromieGuid;
 
     enum Spells
     {
@@ -1397,6 +1428,13 @@ struct epochronos_boss_cotAI : public ScriptedAI
         NPC_LICH_KING = 65117,
         NPC_KAELTHAS = 65118,
         NPC_VASHJ = 65119
+    };
+
+    enum
+    {
+        GOB_CHROMIE_PORTAL = 81048,
+        NPC_CHROMIE = 91003,
+        SPELL_TELEPORT = 26638
     };
 
     void Reset() override
@@ -1494,9 +1532,44 @@ struct epochronos_boss_cotAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         m_creature->PMonsterYell("We are infinite...");
+
+        if (GameObject* sandWall = m_creature->FindNearestGameObject(2002434, 20))
+            GOB_SANDWALL_1 = sandWall->GetObjectGuid();
+        if (GameObject* barrier1 = m_creature->FindNearestGameObject(180322, 20))
+            GOB_BARRIER_1 = barrier1->GetObjectGuid();
     }
 
 };
+
+void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
+{
+    enum
+    {
+        NPC_BOSS_CHROMIE = 65121,
+        SHADOW_AURA = 24674
+    };
+
+    pPlayer->RemoveItem(80008, 1, true);
+
+    DoAfterTime(pCreature, 2 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
+        pCreature->GetMotionMaster()->MovePoint(0, -1597.75, 7105.72, 23.76, true, 1.25, 6.25f);
+        });
+
+    DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
+        //pCreature->SetFacingTo(6.25f);
+        pCreature->PMonsterSay("By helping me close the rifts, you've ensured the success of our invasion.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+        });
+
+    DoAfterTime(pCreature, 10 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
+
+        pCreature->SetVisibility(VISIBILITY_OFF);
+        pCreature->ForcedDespawn(1000);
+
+        if (Creature* bossChromie = pCreature->SummonCreature(NPC_BOSS_CHROMIE, -1597.75f, 7105.72f, 23.76f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
+            bossChromie->AddAura(SHADOW_AURA); // shadow effect
+        });
+}
 
 struct shade_cotAI : public ScriptedAI
 {
@@ -1724,6 +1797,23 @@ struct shade_cotAI : public ScriptedAI
     //}
 };
 
+struct MoveLocation
+{
+    float m_fX, m_fY, m_fZ;
+};
+
+static const MoveLocation riftMoveLocation[8] =
+{
+    { -1598.93f, 7095.85f, 24.33f },
+    { -1596.64f, 7115.21f, 24.33f },
+    { -1597.06f, 7111.69f, 30.73f },
+    { -1598.41, 7100.27f, 30.73f },
+    { -1597.79f, 7105.53f, 34.99f },
+    { -1577.60f, 7098.29f, 33.77f },
+    { -1576.78f, 7108.26f, 33.77f },
+    { -1597.42f, 7100.14f, 30.84f}
+};
+
 
 struct chromie_boss_cotAI : public ScriptedAI
 {
@@ -1744,25 +1834,59 @@ struct chromie_boss_cotAI : public ScriptedAI
         NPC_TIME_RIFT = 81051,
         NPC_RIFT_GUARD = 65101,
         NPC_ROTMAW = 65122,
-        NPC_MOSSHEART = 65124
+        NPC_MOSSHEART = 65124,
+        NPC_TIME_RIFT_SMALL = 65129
     };
 
     uint32 manaBurnTimer;
     uint32 fearTimer;
     uint32 fumbleTimer;
+    uint32 riftTimer;
     uint32 phase;
-
+    uint32 riftPhase;
+    bool beginFight;
+    std::vector<Creature*> timeRifts;
 
     void Reset() override
     {
         manaBurnTimer = 18000;
         fearTimer = 45000;
         fumbleTimer = 12000;
+        riftTimer = 1000;
         phase = 1;
+        riftPhase = 0;
+        beginFight = false;
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        if (!beginFight && timeRifts.size() == 0)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                Creature* timeRift = m_creature->SummonCreature(NPC_TIME_RIFT_SMALL, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
+                timeRifts.push_back(timeRift);
+                timeRift->GetMotionMaster()->MovePoint(0, riftMoveLocation[i].m_fX, riftMoveLocation[i].m_fY, riftMoveLocation[i].m_fZ, true);
+            }
+
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+            //Player* pPlayer = m_creature->FindNearestPlayer(100);
+            m_creature->SetFactionTemporary(35);
+
+            Creature* largeRift = m_creature->SummonCreature(91001, -1607.04, 7107.48, 26.08, 0, TEMPSUMMON_DEAD_DESPAWN);
+            timeRifts.push_back(largeRift);
+
+            DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
+                beginFight = true;
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                m_creature->RestoreFaction();
+
+                });
+        }
+
+
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -1829,6 +1953,7 @@ struct chromie_boss_cotAI : public ScriptedAI
         }
 
         DoMeleeAttackIfReady();
+
     }
 
     void EnterCombat(Unit*) override
@@ -1840,16 +1965,15 @@ struct chromie_boss_cotAI : public ScriptedAI
     {
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
 
+        if (GameObject* sandWall = m_creature->FindNearestGameObject(2002434, 50)) // remove large sand wall
+            sandWall->AddObjectToRemoveList();
 
+        if (GameObject* ghostWall = m_creature->FindNearestGameObject(2010846, 50)) // remove ghost wall
+            ghostWall->AddObjectToRemoveList();
 
-        // Deprecated and put into DB
-        //uint32 spawnChance = urand(1, 100); // spawn rotmaw or mossheart or not
+        for (int i = 0; i < timeRifts.size(); i++) // remove rifts
+            timeRifts[i]->AddObjectToRemoveList();
 
-        //if (spawnChance <= 35)
-        //{
-        //    int randomSpawnLocation = irand(0, 3);
-        //    m_creature->SummonCreature(NPC_ROTMAW, rotMawSpawns[randomSpawnLocation].m_fX, rotMawSpawns[randomSpawnLocation].m_fY, rotMawSpawns[randomSpawnLocation].m_fZ, 0, TEMPSUMMON_DEAD_DESPAWN);
-        //}
     }
 };
 
@@ -2385,44 +2509,105 @@ struct injured_defender_cot : public ScriptedAI
 
 bool GossipHello_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature)
 {
-    if (!pPlayer->HasItemCount(80008, 1, true))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Take the Temporal Bronze Disc.", GOSSIP_SENDER_MAIN, 1);
+    if (riftsClosed < 3)
+    {
+        if (!pPlayer->HasItemCount(80008, 1, true))
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Take the Temporal Bronze Disc.", GOSSIP_SENDER_MAIN, 1);
 
-    pPlayer->SEND_GOSSIP_MENU(91974, pCreature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(91974, pCreature->GetGUID());
+    }
+    else
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+
+        if (pPlayer->HasItemCount(80008, 1, true))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Hand Chromie the Temporal Bronze Disc", GOSSIP_SENDER_MAIN, 2);
+            pPlayer->SEND_GOSSIP_MENU(91975, pCreature->GetGUID());
+        }
+        else
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yeah ... I lost it.", GOSSIP_SENDER_MAIN, 3);
+            pPlayer->SEND_GOSSIP_MENU(91975, pCreature->GetGUID());
+        }
+
+    }
 
     return true;
 }
 
 bool GossipSelect_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    if (uiAction == 1)
-    {
-        pPlayer->AddItem(80008);
-    }
     pPlayer->CLOSE_GOSSIP_MENU();
+
+    switch (uiAction)
+    {
+    case 1:
+        pPlayer->AddItem(80008);
+        break;
+    case 2:
+        pCreature->PMonsterEmote("Chromie breathes a sigh of relief.");
+        pCreature->PMonsterSay("Thank you. You've made this so much easier.");
+        ChromieBossAnim(pCreature, pPlayer);
+        break;
+    case 3:
+        pCreature->PMonsterEmote("Chromie pulls your Temporal Bronze Disc from her pouch.");
+        pCreature->PMonsterSay("I found this in the sand behind you. Thank you. You've made this so much easier.");
+        ChromieBossAnim(pCreature, pPlayer);
+        break;
+    }
     return true;
 }
 
 bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+    enum
+    {
+        GOB_CHROMIE_PORTAL = 81048,
+        NPC_CHROMIE = 91003,
+        SPELL_TELEPORT = 26638
+    };
+
+    bool spawnChromie = false;
+
     if (Creature* rift = pPlayer->FindNearestCreature(91001, 10, true))
     {
+        time_t now = time(nullptr);
+
         pPlayer->CastSpell(pPlayer, 23017, true);
         pPlayer->SetRooted(true);
-        GameObject* riftspell = pPlayer->SummonGameObject(7000035, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0);
+        //pPlayer->AddSpellCooldown(31726, pItem->GetEntry(), now + 30);
 
-        DoAfterTime(rift, 5 * IN_MILLISECONDS, [rift = rift, pPlayer = pPlayer, riftSpell = riftspell]() {
-            pPlayer->CastStop();
-            pPlayer->CastSpell(pPlayer, 22460, true);
-            pPlayer->SetRooted(false);
-            pPlayer->SummonGameObject(7000032, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0);
-            riftSpell->Despawn();
-            riftSpell->Delete();
-            rift->SetNativeScale(0.05);
-            rift->ForcedDespawn(2000);
-            });
+        if (GameObject* riftspell = pPlayer->SummonGameObject(7000035, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0))
+        {
+            DoAfterTime(rift, 5 * IN_MILLISECONDS, [rift = rift, pPlayer = pPlayer, riftSpell = riftspell, spawnChromie = spawnChromie]() {
+                pPlayer->CastStop();
+                pPlayer->CastSpell(pPlayer, 22460, true);
+                pPlayer->SetRooted(false);
+                pPlayer->SummonGameObject(7000032, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0);
+                riftSpell->Despawn();
+                riftSpell->Delete();
+                rift->SetNativeScale(0.05);
+                rift->ForcedDespawn(1500);
+                riftsClosed++;
+                });
+        }
+
+        if (riftsClosed == 3)
+        {
+            pPlayer->SummonCreature(GOB_CHROMIE_PORTAL, -1595.23, 7112.18, 23.72, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
+
+            DoAfterTime(rift, 2 * IN_MILLISECONDS, [pPlayer = pPlayer]() {
+                if (Creature* chromie = pPlayer->SummonCreature(NPC_CHROMIE, -1593.85, 7111.85, 23.72, 0, TEMPSUMMON_DEAD_DESPAWN))
+                {
+                    chromie->CastSpell(chromie, SPELL_TELEPORT, false);
+                    chromie->SetFacingTo(6.18f);
+                    chromie->HandleEmote(EMOTE_ONESHOT_WAVE);
+                    chromie->PMonsterSay("You did it!");
+                }
+                });
+        }
     }
-
     return true;
 }
 
