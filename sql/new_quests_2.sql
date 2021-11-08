@@ -135,7 +135,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (16376, 40234);
 replace into creature_involvedrelation (id, quest) values (16376, 40234);
 
-update quest_template set requiredskill = 164, requiredskillvalue = 200;
+update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40234;
 
 -- The Secrets of Darkforging --
 delete from quest_template where entry = 40235;
@@ -144,7 +144,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (16376, 40235);
 replace into creature_involvedrelation (id, quest) values (16376, 40235);
 
-update quest_template set requiredskill = 164, requiredskillvalue = 200;
+update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40235;
 
 -- Jacob Malwright, display ID 7847, level 58 faction 21, weapon 5956, undead
 delete from creature_template where entry = 60508;
