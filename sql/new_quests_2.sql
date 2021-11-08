@@ -232,3 +232,12 @@ replace into creature_loot_template (entry, item, chanceorquestchance, mincounto
 (10372,60322,-100,1,1,0,10),
 (11444,60323,-100,1,1,0,10),
 (8900,60324,-100,1,1,0,10);
+
+-- Knowledge of Lorthiras --
+delete from quest_template where entry = 40240;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40239,40240,2,139,58,55,0,0,'Knowledge of Lorthiras','Now then, mortal, it is time that we bid eachother goodbye. Once you let the magic I have given you flow from your hands, into the hammer that you will temper, it will no longer be of knowledge to you. I suggest you be careful in what you craft.\n\nI have felt a purpose about you ever since you first came, return to the one who sent you on this path. Inform him of your newfound ability, and you will be instructed of what to do next.','With your new found knowledge, return to Craftsman Wilhelm at Light\'s Hope Chapel.','Welcome back friend! What have you learned, was my friend of much help to you?','I must say, with how long you have been gone, I figured you were lost to the madness of some terrible curse! Hah! Phew, what a relief that is, knowing that you\'re still alive, so, I take it you learned something valueable?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60503, 40240);
+replace into creature_involvedrelation (id, quest) values (16376, 40240);
+
+update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40240;
