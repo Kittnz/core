@@ -28,3 +28,5 @@ update item_template set name = 'Black War Raptor' where entry = 18246;
 update item_template set allowable_race = 589 where entry in (18241, 18243, 18244, 18242, 19030);
 -- Horde PvP mounts are usable by horde:
 update item_template set allowable_race = 434 where entry in (19029);
+-- Booty Bay Alchemist willing to teach non-alchemists:
+update creature_template set trainer_spell = 2259 where entry = 2837;
