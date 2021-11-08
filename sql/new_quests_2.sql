@@ -77,3 +77,53 @@ replace into creature_involvedrelation (id, quest) values (92017, 40232);
 delete from item_template where entry = 60314;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60314,1037,'Scroll of Blessing',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Contains written scriptures in bright golden ink',0);
+
+-- The Orb of Kaladus --
+delete from quest_template where entry = 40233;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40232,40233,2,8,38,30,0,0,'The Orb of Kaladus','I would ask one last thing from you, my mentor came from Lordaeron, a kingdom far to the north that is now desecrated and torn beyond imagining. It is filled with the undead that roam freely upon the broken landscape.\n\nWithin this land is an order known as the Scarlet Crusade, remnants of an old paladin order. They are fanatical, and heartless to the core, it is from them I require something.\n\nWithin the Scarlet Monastery, in northern Tirisfal Glades is a mighty Cathedral, it was built well before these zealots time, and it is there my mentor studied the light.\n\nI would ask that you bring to me the Orb of Kaladus, a stone enfused with the power of the light. Ever since my mentor departed from Lordaeron, those holy brigands have kept it to themselves.\n\nEnter the Cathedral, and bring it to me, the light should be wielded by the true of heart, not the black of soul.','Venture within the Scarlet Monastery and find the Orb of Kaladus, retrieve it, and return to Watch Paladin Janathos at Sorrowguard Keep.','The Orb of Kaladus holds great power in the light. My mentors artifact should not be wielded by zealots.','<A smile would crest across Janathos\' face as he looks upon the orb>. My mentor would be proud of us to recover such an item. You truly are blessed of the light for your services here in this dark corner of Azeroth.\n\nPlease, take this as a token of my appreciation, and walk with swiftness upon this earth, as blessed by the light.',60315,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3550,72,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60316,1,60317,1,60318,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92017, 40233);
+replace into creature_involvedrelation (id, quest) values (92017, 40233);
+
+update quest_template set type = 81 where entry = 40233;
+
+delete from item_template where entry = 60315;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60315,24730,'Orb of Kaladus',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Glows brightly with holy energy',0);
+
+delete from gameobject_template where entry = 2010846;
+replace into gameobject_template values
+(2010846, 0, 3, 1, 'Aged Wooden Chest', 0, 4, 1, 43, 2010846, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010846;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010846,60315,-100,1,1,0,10);
+
+replace into item_template values
+ ('60316', '0', '4', '4', 'Truthkeeper Mantle', '', '26164', '3', '0', '1', '31924', '7981', '3', '-1', '-1', '47',
+ '40', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '7', '4', '8',
+ '6', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '332', '0', '0', '0',
+ '0', '0', '0', '21503', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '80', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60317', '0', '2', '4', 'Lightgraced Mallet', '', '5195', '3', '0', '1', '72536', '18134', '21', '-1', '-1', '45',
+ '40', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2800', '0',
+ '0', '58', '111', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '7676', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '90', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60318', '0', '4', '2', 'Sorrowguard Clutch', '', '27708', '3', '0', '1', '18348', '4587', '6', '-1', '-1', '45',
+ '40', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '12', '7', '8',
+ '3', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '75', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '35', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
