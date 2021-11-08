@@ -1660,6 +1660,30 @@ bool GossipSelect_npc_lorthiras(Player* pPlayer, Creature* pCreature, uint32 uiS
     return true;
 }
 
+bool QuestRewarded_npc_lorthiras(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40239) // The Will of Lorthiras
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 698, false); // Ritual of Summoning
+
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("You feel it, don't you, the knowledge swell within your mind, the very fabric of my magic clinging to your thoughts. You have been gifted knowledge which is forbidden to your kind, and once you craft the blade, it will be forgotten forever.", player);
+            npc->CastSpell(npc, 1456, false); // Life Tap
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+
+        DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+
+    return false;
+}
+
 #define LAPIDIS_TOWER_KEY 60302
 #define MAGICALLY_SEALED_DOOR_RESET 1
 
@@ -1728,6 +1752,7 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_lorthiras";
     newscript->pGossipHello = &GossipHello_npc_lorthiras;
     newscript->pGossipSelect = &GossipSelect_npc_lorthiras;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_lorthiras;
     newscript->RegisterSelf();
 
     newscript = new Script;
