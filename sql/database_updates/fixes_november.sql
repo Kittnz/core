@@ -26,3 +26,5 @@ update item_template set name = 'Black War Wolf' where entry = 18245;
 update item_template set name = 'Black War Kodo' where entry = 18247;
 update item_template set name = 'Black War Raptor' where entry = 18246;
 update item_template set allowable_race = 589 where entry in (18241, 18243, 18244, 18242, 19030);
+-- Horde PvP mounts are usable by horde:
+update item_template set allowable_race = 434 where entry in (19029);
