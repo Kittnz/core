@@ -285,10 +285,13 @@ void Object::BuildCreateUpdateBlockForPlayer(UpdateData *data, Player *target) c
     if (target == this)                                     // building packet for yourself
         updateFlags |= UPDATEFLAG_SELF;
 
+    if (IsUnit() && static_cast<Unit const*>(this)->HasUnitState(UNIT_STAT_MELEE_ATTACKING) && static_cast<Unit const*>(this)->GetVictim())
+        updateFlags |= UPDATEFLAG_MELEE_ATTACKING;
+
     if (m_isNewObject)
         updatetype = UPDATETYPE_CREATE_OBJECT2;
 
-    if (isType(TYPEMASK_GAMEOBJECT) && ((GameObject*)this)->GetGoType() == GAMEOBJECT_TYPE_TRANSPORT)
+    if (isType(TYPEMASK_GAMEOBJECT) && static_cast<GameObject const*>(this)->GetGoType() == GAMEOBJECT_TYPE_TRANSPORT)
         updateFlags |= UPDATEFLAG_TRANSPORT;
 
     //DEBUG_LOG("BuildCreateUpdate: update-type: %u, object-type: %u got updateFlags: %X", updatetype, m_objectTypeId, updateFlags);
@@ -451,7 +454,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint8 updateFlags) const
         *data << uint32(1);
     }
 
-    if (updateFlags & UPDATEFLAG_FULLGUID)
+    if (updateFlags & UPDATEFLAG_MELEE_ATTACKING)
     {
         if (Unit const* me = ToUnit())
         {
