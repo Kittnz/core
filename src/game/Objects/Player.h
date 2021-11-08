@@ -1383,11 +1383,7 @@ class Player final: public Unit
         bool HasAtLoginFlag(AtLoginFlags f) const { return m_atLoginFlags & f; }
         void SetAtLoginFlag(AtLoginFlags f) { m_atLoginFlags |= f; }
         void RemoveAtLoginFlag(AtLoginFlags f, bool in_db_also = false);
-        ///- Turtle WoW custom feature to reward players who haven't played for a long time
-        bool IsReturning();
-        ///- Turtle WoW custom feature to auto invite players into a guild, helping them easily find players who are also just starting out fresh.
         void JoinBeginnersGuild();
-        ///- Turtle WoW custom feature: Bloody Arena Tournament
         bool InGurubashiArena(bool checkOutsideArea) const;
   
         /*********************************************************/

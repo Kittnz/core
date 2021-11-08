@@ -21958,25 +21958,6 @@ void Player::CreatePacketBroadcaster()
     sWorld.GetBroadcaster()->RegisterPlayer(m_broadcaster);
 }
 
-bool Player::IsReturning()
-{
-    QueryResult *result = CharacterDatabase.PQuery("SELECT logout_time FROM characters WHERE guid = %u", GetGUIDLow());
-
-    Field* fields = result->Fetch();
-    uint64 last_login = fields[0].GetUInt64();
-
-    uint64 now = time(nullptr);
-
-    uint64 time_diff = now - last_login;
-
-    delete result;
-
-    if (time_diff > 1209600)
-        return true;
-
-    return false;
-}
-
 // Turtle WoW custom features:
 
 void Player::JoinBeginnersGuild()
