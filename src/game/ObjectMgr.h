@@ -77,11 +77,13 @@ struct ShopEntry
 	uint32 Item;
 	std::string Description;
 	uint32 Price;
+	std::string DescriptionLong;
 };
 
 struct ShopCategory
 {
 	std::string Name;
+	std::string Icon;
 };
 
 typedef std::map<uint32, ShopEntry> ShopEntriesMap;

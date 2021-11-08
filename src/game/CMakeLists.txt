@@ -201,6 +201,8 @@ set (game_SRCS
     vmap/VMapFactory.cpp
     vmap/VMapManager2.cpp
     vmap/WorldModel.cpp
+    Shop/ShopMgr.cpp
+
     AccountMgr.h
     AuraRemovalMgr.h
     AutoBroadCastMgr.h
@@ -389,6 +391,7 @@ set (game_SRCS
     vmap/VMapManager2.h
     vmap/VMapTools.h
     vmap/WorldModel.h
+    Shop/ShopMgr.h
 
 )
 

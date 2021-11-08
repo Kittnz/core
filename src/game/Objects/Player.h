@@ -2648,6 +2648,10 @@ class Player final: public Unit
         void ChangeTitle(uint8 title);
         // Titles System End
 
+		// General send addon message
+	public:
+		void SendAddonMessage(std::string message);
+
 };
 
 void AddItemsSetItem(Player*player,Item* item);

@@ -41,6 +41,7 @@
 #include "Anticheat.h"
 #include "AccountMgr.h"
 #include "Config/Config.h"
+#include "Shop/ShopMgr.h"
 
 #include <regex>
 
@@ -278,6 +279,97 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (a->isMuted(GetAccountId(), true, type))
                 return;
     }
+
+	// Shop Addon Coms
+	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+	{
+		if (strstr(msg.c_str(), "TW_SHOP"))
+		{
+			if (strstr(msg.c_str(), "Balance"))
+			{
+
+				uint32 balance = ShopMgr(_player).GetBalance();
+				_player->SendAddonMessage("TW_SHOP Balance:" + std::to_string(balance));
+			}
+
+			if (strstr(msg.c_str(), "Categories"))
+			{
+
+				std::string sText = "TW_SHOP Categories:";
+
+				for (auto &itr : sObjectMgr.GetShopCategoriesList())
+					sText += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
+
+				_player->SendAddonMessage(sText);
+
+			}
+
+			if (strstr(msg.c_str(), "Entries:"))
+			{
+
+				std::string categoryIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+				uint8 categoryID = 0;
+
+				if (categoryIDString.empty() || categoryIDString.length() > 3)
+					return;
+
+				try
+				{
+					categoryID = std::stoi(categoryIDString);
+				}
+				catch (...)
+				{
+					return;
+				}
+
+				_player->SendAddonMessage("TW_SHOP Entries:" + categoryIDString + "=start");
+
+				for (auto &itr : sObjectMgr.GetShopEntriesList())
+				{
+					if (itr.second.Category != categoryID)
+						continue;
+
+
+					_player->SendAddonMessage("TW_SHOP Entries:" + categoryIDString + "=" 
+						+ itr.second.Description + "=" 
+						+ std::to_string(itr.second.Price) + "=" 
+						+ itr.second.DescriptionLong + "=" 
+						+ std::to_string(itr.second.Item));
+
+				}
+
+				_player->SendAddonMessage("TW_SHOP Entries:" + categoryIDString + "=end");
+
+			}
+
+			if (strstr(msg.c_str(), "Buy:"))
+			{
+
+				std::string itemIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+				uint32 itemID = 0;
+
+				if (itemIDString.empty() || itemIDString.length() > 6)
+					return;
+
+				try
+				{
+					itemID = std::stoi(itemIDString);
+				}
+				catch (...)
+				{
+					return;
+				}
+
+				std::string sText = "TW_SHOP BuyResult:" + ShopMgr(_player).BuyItem(itemID);
+
+				_player->SendAddonMessage(sText);
+
+			}
+
+			return;
+
+		}
+	}
 
     // Minimap Battleground Queue System
     if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
