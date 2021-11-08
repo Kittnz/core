@@ -1162,6 +1162,8 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         if (unitTarget->GetVictim())
                             unitTarget->GetThreatManager().modifyThreatPercent(unitTarget->GetVictim(), -100);
                     }
+                    else
+                        return;
 
                     m_originalCaster->CastCustomSpell(unitTarget, 5255, &damage, nullptr, nullptr, true);
                     return;
