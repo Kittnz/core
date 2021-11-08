@@ -1640,6 +1640,10 @@ bool GossipHello_npc_lorthiras(Player* pPlayer, Creature* pCreature)
 {
     //if (pPlayer->GetQuestStatus(00000) == QUEST_STATUS_INCOMPLETE)
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am looking for a fight dreadlord.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
     pPlayer->SEND_GOSSIP_MENU(60503, pCreature->GetGUID());
     return true;
 }
