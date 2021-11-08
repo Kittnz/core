@@ -18,6 +18,9 @@ create table shop_items (
   primary key (id)
 ) engine=innodb auto_increment=10 default charset=utf8;
 
+ALTER TABLE `shop_categories` ADD `icon` VARCHAR(32) NOT NULL DEFAULT 'default' AFTER `name`;
+ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `price`;
+
 replace into shop_categories values
 (1,  'Character: Name, Race & Look'),
 (2,  'Character: Additional Skins I'),
