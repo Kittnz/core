@@ -250,3 +250,18 @@ replace into creature_questrelation (id, quest) values (16376, 40241);
 replace into creature_involvedrelation (id, quest) values (16376, 40241);
 
 update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40241;
+
+-- Shell Shields --
+delete from quest_template where entry = 40242;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40041,40242,2,16,53,46,0,0,'Shell Shields','Howdy, and welcome to Flaxwhisker Front newcomer! I am Genzil Spannerlight, in charge of starting new projects and archiving the success and failure of old ones.\n\nI have a new idea that may potentially work, a charged shell to act as either a shield, or barrier to be both protective, and resistant to magic! Of course, we will need some shells first, and we don\'t have a bunch of metal to waste, but there are turtles around!\n\nGo out, and gather me 3 Pristine Lurker Shells!','Gather 3 Pristine Lurker Shells for Genzil Spannerlight at the Flaxwhisker Front','We need more methods to shield our projects, have you had any luck?','Why look at these beauties! These shells could certainly be used for all sorts of things, thanks again, no wonder Gigno saw good things in you!',60325,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5650,54,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92219, 40242);
+replace into creature_involvedrelation (id, quest) values (92219, 40242);
+
+delete from item_template where entry = 60325;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60325,22805,'Pristine Lurker Shell',12,1,2048,1,-1,-1,1,3,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60324 and entry = 6352;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(6352,60325,-20,1,1,0,10);
