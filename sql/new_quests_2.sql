@@ -171,3 +171,24 @@ replace into creature_questrelation (id, quest) values (16376, 40236);
 replace into creature_involvedrelation (id, quest) values (6251, 40236);
 
 update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40236;
+
+-- A Favor for Farsan --
+delete from quest_template where entry = 40237;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40236,40237,2,139,58,55,0,0,'A Favor for Farsan','What you are dealing with here is quite interesting, this book seems to mention quite a lot of patterns all pertaining to Darkforging, of which you will gain very little use. The armor, and weapons the undead use are quite deeply entwined with the very magic that keeps their minions standing.\n\nIf you desire my help, then I would also desire yours, I can uncover what this text reads, and point you and Wilhelm in the correct direction, but this would require a favor.\n\nTravel to Scholomance, and venture deep within. Inside I am looking for an old book that was archived there some time ago, titled \'Fire Beckoning and Command\'.\n\nBring me this book, and I shall do as you have asked.','Venture into Scholomance and recover the book \'Fire Beckoning and Command\' for Strahad Farsan in Ratchet.','Have you procured what I have asked?','<Upon seeing the book, Farsan would smirk from ear to ear>. Excellent, as I have said, a favor for a favor then.',60320,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (6251, 40237);
+replace into creature_involvedrelation (id, quest) values (6251, 40237);
+
+update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40237;
+update quest_template set type = 81 where entry = 40237;
+
+delete from item_template where entry = 60320;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60320,1134,'Fire Beckoning and Command',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010847;
+replace into gameobject_template values
+(2010847, 0, 3, 430, 'Fire Beckoning and Command', 0, 4, 1, 43, 2010847, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010847;
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (2010847,60320,-100,1,1,0,10);
