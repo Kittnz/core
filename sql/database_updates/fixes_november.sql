@@ -17,3 +17,12 @@ delete from conditions where condition_entry in (10219, 10216, 10218);
 replace into conditions (condition_entry, type, value1, value2, value3, value4, flags) values
 (10216, 29, 356, 1, 0, 0, 0),(10218, 8, 1141, 0, 0, 0, 0),(10219, -1, 10216, 10218, 0, 0, 0);
 update gossip_scripts set condition_id = 10219 where id = 256200;
+-- Remove max.level values from Drakin Swiftaxe's quests:
+update quest_template set maxlevel = 0 where entry in (60071, 60072, 60073, 60074);
+-- Alliance PvP mounts are usable by horde:
+update item_template set name = 'Black War Steed' where entry = 18241;
+update item_template set name = 'Black War Tiger' where entry = 18242;
+update item_template set name = 'Black War Wolf' where entry = 18245;
+update item_template set name = 'Black War Kodo' where entry = 18247;
+update item_template set name = 'Black War Raptor' where entry = 18246;
+update item_template set allowable_race = 589 where entry in (18241, 18243, 18244, 18242, 19030);
