@@ -711,7 +711,7 @@ bool Map::ScriptCommand_SetMovementType(const ScriptInfo& script, WorldObject* s
         case WAYPOINT_MOTION_TYPE:
             if (script.movement.clear)
                 pSource->GetMotionMaster()->Clear(false, true);
-            pSource->GetMotionMaster()->MoveWaypoint(0, script.movement.intParam, 0, 0, 0, script.movement.boolParam);
+            pSource->GetMotionMaster()->MoveWaypoint(script.movement.intParam, 0, 0, 0, 0, script.movement.boolParam);
             break;
         case CONFUSED_MOTION_TYPE:
             pSource->GetMotionMaster()->MoveConfused();
@@ -1677,7 +1677,7 @@ bool Map::ScriptCommand_StartWaypoints(const ScriptInfo& script, WorldObject* so
         return ShouldAbortScript(script);
 
     pSource->GetMotionMaster()->Clear(false, true);
-    pSource->GetMotionMaster()->MoveWaypoint(script.startWaypoints.pathId, script.startWaypoints.startPoint, script.startWaypoints.wpSource, script.startWaypoints.initialDelay, script.startWaypoints.overwriteEntry, script.startWaypoints.canRepeat);
+    pSource->GetMotionMaster()->MoveWaypoint(script.startWaypoints.startPoint, script.startWaypoints.wpSource, script.startWaypoints.initialDelay, 0, script.startWaypoints.overwriteEntry, script.startWaypoints.canRepeat);
 
     return false;
 }
