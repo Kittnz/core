@@ -30,3 +30,5 @@ update item_template set allowable_race = 589 where entry in (18241, 18243, 1824
 update item_template set allowable_race = 434 where entry in (19029);
 -- Booty Bay Alchemist willing to teach non-alchemists:
 update creature_template set trainer_spell = 2259 where entry = 2837;
+-- Link Salfa's quests in chain to avoid bead drop confusion:
+update quest_template set prevquestid = 8464 where entry = 8469;
