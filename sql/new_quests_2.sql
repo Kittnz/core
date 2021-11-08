@@ -209,3 +209,26 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 REPLACE INTO page_text VALUES
 (50514, 'The temperance of great metal and the emboldening with dark magic is the key to much of our work. To channel such magic within the runes of blade takes vast amount of resources plentiful to our kin.\n\nDark Runes must be etched upon the surface of the blade, and heated to extreme temperature, these runes must be placed at the very center of the blade itself, lest the powers be diminished.\n\nEnchanted Leather must be bound and wrapped about the hilt, as to secure the magical potency and balance of the weapon itself.\n\n', 50515),
 (50515, 'These are the first techniques required to master for the true creation of the Runeblade, and if one is to master our great magic, then they too can learn such methods.\n\nFor those who have been loyal, and wish to seek such knowledge, they must seek me out at my study upon this mortal world. You can find me within the ravine, lackered in shadow, accompanied by those who I call servants.', 0);
+
+-- The Will of Lorthiras --
+delete from quest_template where entry = 40239;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40238,40239,2,139,58,55,0,0,'The Will of Lorthiras','My time here within Shadowbreak Ravine has been a period of thought, and research. I desire to gain knowledge within the fields of magic of the various factions on Azeroth, and see just how far they have come.\n\nAs much as I could infiltrate, and spend effort to gain access to each through time, to sow desent, and chaos, I would much rather recruit you, to do as such for me. If you truly desire to gain knowledge to temper this Runeblade, I will grant it to you temporarily.\n\nFirst, travel to the Upper Blackrock Spire, and from the Rage Talon Fire Tongues, gather me a Rage Talon Charm, Secondly, travel to Dire Maul, from the Ogre Mage-Lords bring me a set Gordok Beads. Finally, from the pits of the Blackrock Depths, gather from a Doomforge Arcanasmith their Doomforge Rod.','Gather a Rage Talon Charm from Upper Blackrock Spire, Gordok Beads from Dire Maul, and a Doomforge Rod from Blackrock Depths for Lorthiras in Shadowbreak Ravine.','Do my bidding mortal, and dispatch my enemies. It is for the greater good of this world for these magics to be taken from the hands of lesser beings.','You have done well, incredibly well, much more then I had originally expected, If you wish to learn how to create a Tempered Runeblade, I shall grant you such knowledge.',60322,1,60323,1,60324,1,0,0,0,0,0,0,0,0,0,0,0,0,0,8250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60503, 40239);
+replace into creature_involvedrelation (id, quest) values (60503, 40239);
+
+update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40239;
+
+delete from item_template where entry between 60322 and 60324;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60322,18816,'Rage Talon Charm',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60323,32326,'Gordok Beads',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60324,18368,'Doomforge Rod',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60322 and entry = 10372;
+delete from creature_loot_template where item = 60323 and entry = 11444;
+delete from creature_loot_template where item = 60324 and entry = 8900;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(10372,60322,-100,1,1,0,10),
+(11444,60323,-100,1,1,0,10),
+(8900,60324,-100,1,1,0,10);
