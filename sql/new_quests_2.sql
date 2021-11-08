@@ -136,3 +136,29 @@ replace into creature_questrelation (id, quest) values (16376, 40234);
 replace into creature_involvedrelation (id, quest) values (16376, 40234);
 
 update quest_template set requiredskill = 164, requiredskillvalue = 200;
+
+-- The Secrets of Darkforging --
+delete from quest_template where entry = 40235;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40234,40235,2,139,58,55,0,0,'The Secrets of Darkforging','I Wilhelm, am a dwarf of my word, and I will keep my word to unveil this new frontier ahead of us. The first place we should begin to look is Corin\'s Crossing, it is a place over-run by the scourge, and not somewhere I would travel!\n\nA book named \'The Secrets of Darkforging\' may be the first step to uncovering what we seek, it is held by a Jacob Malwright. He was a rather famed smith in his days amongst the living and now walks among the dead. No doubt he still has it on him, or keeps it close by, kill him, bring me the book, let us begin to learn their tricks!','Travel to Corin\'s Crossing and recover The Secrets of Darkforging, bring it to Craftsman Wilhelm at Light\'s Hope Chapel.','I would make sure to look over both shoulders while you are there, and bring some holy water, the place is cursed I tell ye!','I shudder to imagine traveling that deep into Corin\'s Crossing for a book- one that might not even have what we\'re looking for. You did good work either way, now, lets see if this book holds any knowledge that we can use!',60319,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5850,529,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (16376, 40235);
+replace into creature_involvedrelation (id, quest) values (16376, 40235);
+
+update quest_template set requiredskill = 164, requiredskillvalue = 200;
+
+-- Jacob Malwright, display ID 7847, level 58 faction 21, weapon 5956, undead
+delete from creature_template where entry = 60508;
+replace into creature_template values
+(60508, 0, 7847, 0, 0, 0, 'Jacob Malwright', '', 0, 58, 58, 3875, 3875, 0, 0, 3408, 21, 0, 0.888888, 1.14286, 0, 20, 5, 0, 0, 1, 101, 125, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 6, 0, 60508, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 128, 172, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20028; set @weapon_1 = 5956; set @weapon_2 = 0; set @creature = 60508;
+replace into creature_equip_template values (@equip_template, 0, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+delete from item_template where entry = 60319;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60319,8092,'Secrets of Darkforging',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Glows brightly with holy energy',0);
+
+delete from creature_loot_template where item = 60319 and entry = 60508;
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
+(60508,60319,-100,1,1,0,10);
