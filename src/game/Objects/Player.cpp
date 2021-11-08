@@ -1851,7 +1851,7 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
 
 
     Tokens data = StrSplit(fields[19].GetCppString(), " ");
-    for (uint8 slot = 0; slot < EQUIPMENT_SLOT_END; slot++)
+    for (uint8 slot = 0; slot < INVENTORY_SLOT_BAG_START + 1; ++slot)
     {
         uint32 visualbase = slot * 2;                       // entry, perm ench., temp ench.
         uint32 item_id = GetUInt32ValueFromArray(data, visualbase);
@@ -1866,8 +1866,6 @@ bool Player::BuildEnumData(QueryResult * result, WorldPacket * p_data)
         *p_data << uint32(proto->DisplayInfoID);
         *p_data << uint8(proto->InventoryType);
     }
-    *p_data << uint32(0);                                   // first bag display id
-    *p_data << uint8(0);                                    // first bag inventory type
 
     return true;
 }
@@ -16556,6 +16554,14 @@ void Player::SaveToDB(bool online, bool force)
         uint32 ench2 = GetUInt32Value(PLAYER_VISIBLE_ITEM_1_0 + i * MAX_VISIBLE_ITEM_OFFSET + 1 + TEMP_ENCHANTMENT_SLOT);
         ss << uint32(MAKE_PAIR32(ench1, ench2)) << " ";
     }
+
+    // 1 in vanilla/tbc - 4 in wotlk
+    for (uint32 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_START + 1; ++i) // string: item id, ench (perm/temp)
+    {
+        ss << (m_items[i] ? m_items[i]->GetEntry() : 0) << " ";
+        ss << uint32(MAKE_PAIR32(0, 0)) << " ";
+    }
+
     uberInsert.addString(ss);
 
     uberInsert.addUInt32(GetUInt32Value(PLAYER_AMMO_ID));
