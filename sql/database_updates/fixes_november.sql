@@ -46,3 +46,5 @@ update quest_template set requiredraces = 516 where entry = 6086;
 -- Gnome hunters can't speak gnomish but can speak dwarven:
 replace into playercreateinfo_spell values (7, 3, 7340, 0, 5875, 'Language: Gnomish');
 delete from playercreateinfo_spell where race = 7 and class = 3 and spell = 672;
+-- Remove hack for Buru Egg's Egg Explosion.
+DELETE FROM `spell_effect_mod` WHERE `Id`=19593;
