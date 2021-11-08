@@ -34,3 +34,7 @@ update creature_template set trainer_spell = 2259 where entry = 2837;
 update quest_template set prevquestid = 8464 where entry = 8469;
 -- Removed wrong gossip from creature 5637 (Roetten Stonehammer) because he was claiming that his Barren's wyverns were the fastest.
 update creature_template set gossip_menu_id = 0, npc_flags = 2 where entry = 5637;
+-- After a race change between Alliance and Horde attunements get lost:
+replace into player_factionchange_quests values (7848, 7487, 'Attunement to the Core');
+replace into player_factionchange_quests values (7761, 7761, 'Blackhand\'s Command');
+replace into player_factionchange_quests values (9123, 9123, 'The Dread Citadel - Naxxramas');
