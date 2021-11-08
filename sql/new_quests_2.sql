@@ -157,8 +157,17 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 
 delete from item_template where entry = 60319;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
-(60319,8092,'Secrets of Darkforging',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Glows brightly with holy energy',0);
+(60319,8092,'Secrets of Darkforging',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 delete from creature_loot_template where item = 60319 and entry = 60508;
 replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values
 (60508,60319,-100,1,1,0,10);
+
+-- The Secrets of Darkforging --
+delete from quest_template where entry = 40236;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40235,40236,2,139,58,55,0,0,'The Secrets of Darkforging','<Craftsman Wilhelm would take his time reading through the book, intrigue marks his features, and interest sparks his eyes>.\n\nThis book holds a lot of information, most of it doesn\'t seem to even relate to what we are doing, I mean, why would we even want Dark Binding Shackles in the first place?!\n\nThere are a few sections that may relate though, one of which is tainted, and twisted by a dark magic, making it unintelligable and frankly, unnerving. The other section seems to be written by a Dreadlord named Lorthiras, who could be of some use.\n\nI would first like to uncover the dark magic, and I believe I know someone who may be of help! Strahad Farsan used to be a friend of mine - we\'re not on the best terms, but he is quite deeply involved with shadowy magic, and demons both.\n\nHe is located in Ratchet, go and find him there, bring him the book.','Travel to Ratchet and speak with Strahad Farsan.','Yes, are you here to learn the deeper secrets of Arcana?','<Farsan\'s brow twitches upon hearing the name \'Wilhelm\'>. Him huh? Didn\'t he sign up to go and join those Argent fellows?',60319,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60319,1,0,450,529,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (16376, 40236);
+replace into creature_involvedrelation (id, quest) values (6251, 40236);
+
+update quest_template set requiredskill = 164, requiredskillvalue = 200 where entry = 40236;
