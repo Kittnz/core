@@ -6694,6 +6694,14 @@ GameObjectUseRequirement const* ObjectMgr::GetGameObjectUseRequirement(ObjectGui
     return nullptr;
 }
 
+void ObjectMgr::LoadGameObjectDisplayInfoAddon()
+{
+    sGameObjectDisplayInfoAddonStorage.Load();
+    sLog.outString();
+    sLog.outString(">> Loaded %u GameObject display based info", sGameObjectDisplayInfoAddonStorage.GetRecordCount());
+    sLog.outString();
+}
+
 void ObjectMgr::LoadExplorationBaseXP()
 {
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `level`, `basexp` FROM `exploration_basexp`"));

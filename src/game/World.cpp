@@ -1381,7 +1381,8 @@ void World::SetInitialWorldSettings()
 
     sObjectMgr.LoadGameobjectsRequirements();
 
-    
+    sObjectMgr.LoadGameObjectDisplayInfoAddon();
+
     sCreatureLinkingMgr.LoadFromDB();
 
     sPoolMgr.LoadFromDB();
