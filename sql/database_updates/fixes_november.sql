@@ -38,3 +38,8 @@ update creature_template set gossip_menu_id = 0, npc_flags = 2 where entry = 563
 replace into player_factionchange_quests values (7848, 7487, 'Attunement to the Core');
 replace into player_factionchange_quests values (7761, 7761, 'Blackhand\'s Command');
 replace into player_factionchange_quests values (9123, 9123, 'The Dread Citadel - Naxxramas');
+-- Gnome hunters should not be able to access Dwarf hunter quests. 
+update quest_template set requiredraces = 516 where entry = 6064;
+update quest_template set requiredraces = 516 where entry = 6084;
+update quest_template set requiredraces = 516 where entry = 6085;
+update quest_template set requiredraces = 516 where entry = 6086;
