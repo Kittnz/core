@@ -2626,10 +2626,8 @@ void Spell::EffectApplyAura(SpellEffectIndex eff_idx)
 
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "Spell: Aura is: %u [Spell%u:DiminishingGroup%u]", m_spellInfo->EffectApplyAuraName[eff_idx], m_spellInfo->Id, m_diminishGroup);
 
-    switch (m_spellInfo->Id) {
-    case 23768: // Sayge's Dark Fortune of Damage: +1-10% (random)
-        m_currentBasePoints[EFFECT_INDEX_0] = urand(1, 10);
-        break;
+    switch (m_spellInfo->Id)
+    {
     case 13278: // Gnomish Death Ray, rarely has a chance of dealing double damage, 14.29% chance (guess), for now we use linear level scaling, but this is likely incorrect (hp pools don't scale exactly linearly), there is some speculation that this should be tied to Engineering skill level, but since you don't need Engineering to use the item at all this seems doubtful
         m_currentBasePoints[eff_idx] = eff_idx == EFFECT_INDEX_0 ? int32(urand(600, 1200) * (caster->GetLevel() / 60.0f)) * (!urand(0, 6) ? 2 : 1) : m_currentBasePoints[EFFECT_INDEX_0] * 0.1249f;
         break;
