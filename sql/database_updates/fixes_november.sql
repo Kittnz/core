@@ -32,3 +32,5 @@ update item_template set allowable_race = 434 where entry in (19029);
 update creature_template set trainer_spell = 2259 where entry = 2837;
 -- Link Salfa's quests in chain to avoid bead drop confusion:
 update quest_template set prevquestid = 8464 where entry = 8469;
+-- Removed wrong gossip from creature 5637 (Roetten Stonehammer) because he was claiming that his Barren's wyverns were the fastest.
+update creature_template set gossip_menu_id = 0, npc_flags = 2 where entry = 5637;
