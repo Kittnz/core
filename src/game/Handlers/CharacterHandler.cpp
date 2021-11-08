@@ -786,9 +786,11 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     }
 
     // Hackfix for existing gnome hunters missing this racial:
-    if (pCurrChar->GetRace() == RACE_GNOME && pCurrChar->GetClass() == CLASS_HUNTER && !pCurrChar->HasSpell(20592))
+    if (pCurrChar->GetRace() == RACE_GNOME && pCurrChar->GetClass() == CLASS_HUNTER)
     {
-        pCurrChar->LearnSpell(20592, false);
+        if (!pCurrChar->HasSpell(20592)) pCurrChar->LearnSpell(20592, false); // Arcane Resistance
+        if (!pCurrChar->HasSpell(7340))  pCurrChar->LearnSpell(7340, false);  // Language: Gnomish
+        if  (pCurrChar->HasSpell(672))   pCurrChar->RemoveSpell(672, false);  // Langue: Dwarven (cleanup in DB later).
     }
 
     // show time before shutdown if shutdown planned.
