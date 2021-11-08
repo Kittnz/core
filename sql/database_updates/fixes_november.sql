@@ -57,3 +57,7 @@ INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalo
 UPDATE `creature_template` SET `unit_flags`=33555200, `flags_extra`=131074, `ai_name`='EventAI' WHERE `entry`=15964;
 -- Remove wrong unit flags from Buru Egg.
 UPDATE `creature_template` SET `unit_flags`=0, `flags_extra`=2228502 WHERE `entry`=15514;
+-- Remove attributes hack from Essence of the Red.
+DELETE FROM `spell_mod` WHERE `ID`=23513;
+-- Hack school instead.
+UPDATE `spell_template` SET `school`=1 WHERE `entry`=23513;
