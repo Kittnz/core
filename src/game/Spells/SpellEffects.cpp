@@ -1152,21 +1152,18 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (!m_originalCaster)
                         return;
 
-                    float tempDamage = 0.0f;
-                    float distance = m_originalCaster->GetDistance2d(unitTarget);
-                    distance = 1.0f - (distance / 25.0f);
-
-                    if (unitTarget->IsAlive())
+                    int32 damage;
+                    if (unitTarget->IsPlayer()) // damage from 100 - 500 based on proximity - max range 25
+                        damage = 100 + ((25 - std::min(m_originalCaster->GetCombatDistance(unitTarget), 25.f)) / 25.f) * 400;
+                    else if (unitTarget->GetEntry() == 15370) // buru
                     {
-                        if (unitTarget->IsPlayer())
-                        {
-                            tempDamage = 500 * distance;
-                            if (tempDamage < 100)
-                                tempDamage = 100;
-                        }
+                        damage = unitTarget->GetHealth() * 15 / 100; // 15% hp for buru
 
-                        m_originalCaster->DealDamage(unitTarget, tempDamage, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                        if (unitTarget->GetVictim())
+                            unitTarget->GetThreatManager().modifyThreatPercent(unitTarget->GetVictim(), -100);
                     }
+
+                    m_originalCaster->CastCustomSpell(unitTarget, 5255, &damage, nullptr, nullptr, true);
                     return;
                 }
                 case 20572:                                 // Blood Fury

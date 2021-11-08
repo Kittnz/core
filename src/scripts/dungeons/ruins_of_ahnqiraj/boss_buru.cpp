@@ -371,18 +371,6 @@ struct mob_buru_eggAI : public ScriptedAI
         {
             add->SetInCombatWithZone();
         }
-
-        // Inflict damage to Buru (should be handled in SpellEffects...)
-        if (Creature* pBuru = m_pInstance->GetCreature(m_pInstance->GetData64(DATA_BURU)))
-        {
-            float distance = m_creature->GetDistance2d(pBuru);
-            float damageFactor = 1.0f - (distance / 25.0f);
-            if (pBuru->IsAlive() && distance < 5.0f && pBuru->GetHealthPercent() >= 20)
-            {
-                pBuru->SetHealthPercent(pBuru->GetHealthPercent() - 10 * damageFactor);
-                static_cast<boss_buruAI*>(pBuru->AI())->OnEggExploded();
-            }
-        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
