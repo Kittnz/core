@@ -23179,3 +23179,13 @@ void Player::ChangeTitle(uint8 title)
 
     SendEarnedTitles();
 }
+
+void Player::SendAddonMessage(std::string message)
+{
+	WorldPacket data;
+	ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+		message.c_str(), Language(LANG_ADDON), GetChatTag(),
+		GetObjectGuid(), GetName());
+
+	GetSession()->SendPacket(&data);
+}
