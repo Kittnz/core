@@ -770,6 +770,8 @@ bool ChatHandler::HandleDeleteItemCommand(char* args)
         return false;
     }
 
+    uint32 countCopy = count;
+
     Player* player;
     ObjectGuid target_guid;
     std::string target_name;
@@ -880,7 +882,7 @@ bool ChatHandler::HandleDeleteItemCommand(char* args)
         }
     }
 
-    PSendSysMessage(LANG_REMOVEITEM, itemId, count, target_name.c_str());
+    PSendSysMessage(LANG_REMOVEITEM, itemId, countCopy, target_name.c_str());
     return true;
 }
 
