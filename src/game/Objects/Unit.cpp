@@ -8741,7 +8741,7 @@ void Unit::UpdateModelData()
                 break;
             case 1563: // Gnome Male
             case 1564: // Gnome Female
-                nativeScale = DEFAULT_POMPA_SCALE;
+                nativeScale = DEFAULT_GNOME_SCALE;
                 break;
             }
         }
@@ -10477,7 +10477,7 @@ static float GetDefaultPlayerScale(uint8 race, uint8 gender)
     if (race == RACE_TAUREN)
         return (gender == GENDER_FEMALE ? DEFAULT_TAUREN_FEMALE_SCALE : DEFAULT_TAUREN_MALE_SCALE);
     if (race == RACE_GNOME)
-        return DEFAULT_POMPA_SCALE;
+        return DEFAULT_GNOME_SCALE;
 
     return DEFAULT_OBJECT_SCALE;
 }
