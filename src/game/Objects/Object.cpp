@@ -3476,17 +3476,14 @@ void WorldObject::ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 
     // Now go on with a victim's events'n'auras
     // Not much to do if no flags are set or there is no victim
     if (pVictim && pVictim->IsAlive() && procVictim)
-
+    {
         // http://blue.cardplace.com/cache/wow-paladin/1069149.htm
         // "Charges will not generate off auto attacks or npc attacks by trying"
         // "to sit down and force a crit. However, ability crits from physical"
         // "abilities such as Sinister Strike, Hamstring, Auto-shot, Aimed shot,"
         // "etc will generate a charge if you're sitting."
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_7_1
         pVictim->ProcDamageAndSpellFor(true, IsUnit() ? static_cast<Unit*>(this) : pVictim, procVictim, !procSpell && !pVictim->IsStandingUpForProc() ? procExtra & ~PROC_EX_CRITICAL_HIT : procExtra, attType, procSpell, amount, procTriggered, spell);
-#else
-        pVictim->ProcDamageAndSpellFor(true, IsUnit() ? static_cast<Unit*>(this) : pVictim, procVictim, procExtra, attType, procSpell, amount, procTriggered, spell);
-#endif
+    }
 
     if (Unit* pUnit = ToUnit())
         pUnit->HandleTriggers(pVictim, procExtra, amount, procSpell, procTriggered);
@@ -3767,10 +3764,8 @@ float WorldObject::GetSpellResistChance(Unit const* victim, uint32 schoolMask, b
 
     float resistModHitChance = baseResistance + selfResistance;
 
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     if ((resistModHitChance < 0.0f) && (baseResistance >= 0.0f))
         resistModHitChance = 0.0f;
-#endif
 
     // Magic vulnerability calculation
     if (resistModHitChance < 0.0f)
@@ -3916,7 +3911,6 @@ int32 WorldObject::DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *s
 
 void WorldObject::SendHealSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, bool critical) const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     // we guess size
     WorldPacket data(SMSG_SPELLHEALLOG, (8 + 8 + 4 + 4 + 1));
     data << pVictim->GetPackGUID();
@@ -3926,7 +3920,6 @@ void WorldObject::SendHealSpellLog(Unit const* pVictim, uint32 SpellID, uint32 D
     data << uint8(critical ? 1 : 0);
     // data << uint8(0);                                    // [-ZERO]
     SendMessageToSet(&data, true);
-#endif
 }
 
 void WorldObject::EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, Powers powertype)
@@ -3938,7 +3931,6 @@ void WorldObject::EnergizeBySpell(Unit *pVictim, uint32 SpellID, uint32 Damage, 
 
 void WorldObject::SendEnergizeSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, Powers powertype) const
 {
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
     WorldPacket data(SMSG_SPELLENERGIZELOG, (8 + 8 + 4 + 4 + 4 + 1));
     data << pVictim->GetPackGUID();
     data << GetPackGUID();
@@ -3946,19 +3938,13 @@ void WorldObject::SendEnergizeSpellLog(Unit const* pVictim, uint32 SpellID, uint
     data << uint32(powertype);
     data << uint32(Damage);
     SendMessageToSet(&data, true);
-#endif
 }
 
 void WorldObject::SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log)
 {
     WorldPacket data(SMSG_SPELLNONMELEEDAMAGELOG, (16 + 4 + 4 + 1 + 4 + 4 + 1 + 1 + 4 + 4 + 1)); // we guess size
-#if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_8_4
     data << log->target->GetPackGUID();
     data << log->attacker->GetPackGUID();
-#else
-    data << log->target->GetGUID();
-    data << log->attacker->GetGUID();
-#endif
     data << uint32(log->SpellID);
     data << uint32(log->damage);                            // damage amount
     data << uint8(log->school);                             // damage school

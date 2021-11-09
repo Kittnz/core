@@ -417,12 +417,6 @@ void World::LoadConfigSettings(bool reload)
         }
     }
 
-    // Set the available content patch.
-    m_wowPatch = sConfig.GetIntDefault("WowPatch", WOW_PATCH_102);
-
-    if (m_wowPatch > MAX_CONTENT_PATCH)
-        m_wowPatch = MAX_CONTENT_PATCH;
-
     ///- Read the player limit and the Message of the day from the config file
     SetPlayerLimit(sConfig.GetIntDefault("PlayerLimit", DEFAULT_PLAYER_LIMIT), true);
     SetMotd(sConfig.GetStringDefault("Motd", "Welcome to the Massive Network Game Object Server."));
@@ -717,15 +711,6 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ENABLE_CROSSFACTION_BATTLEGROUNDS,           "BattleGround.Crossfaction", false);
     setConfig(CONFIG_BOOL_ENABLE_GEAR_RATING_QUEUE,                    "BattleGround.GearQueue", false);
 
-    // If max bg queues is at 0, decide based on patch.
-    if (getConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT) == 0)
-    {
-        if (GetWowPatch() >= WOW_PATCH_109)
-            setConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT, 3);
-        else
-            setConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT, 1);
-    }
-
     setConfig(CONFIG_BOOL_OUTDOORPVP_EP_ENABLE, "OutdoorPvP.EP.Enable", true);
     setConfig(CONFIG_BOOL_OUTDOORPVP_SI_ENABLE, "OutdoorPvP.SI.Enable", true);
 
@@ -914,15 +899,6 @@ void World::LoadConfigSettings(bool reload)
     sPlayerBotMgr.LoadConfig();
 
     setConfigMinMax(CONFIG_UINT32_SPELLS_CCDELAY, "Spells.CCDelay", 200, 0, 20000);
-    setConfigMinMax(CONFIG_UINT32_DEBUFF_LIMIT, "DebuffLimit", 0, 0, 40);
-    // If max debuff slots is at 0, decide based on patch.
-    if (getConfig(CONFIG_UINT32_DEBUFF_LIMIT) == 0)
-    {
-        if (GetWowPatch() >= WOW_PATCH_107)
-            setConfig(CONFIG_UINT32_DEBUFF_LIMIT, 16);
-        else
-            setConfig(CONFIG_UINT32_DEBUFF_LIMIT, 8);
-    }
 
     setConfig(CONFIG_UINT32_ANTICRASH_OPTIONS, "Anticrash.Options", 0);
     setConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER, "Anticrash.Rearm.Timer", 0);
@@ -1006,7 +982,6 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_NO_RESPEC_PRICE_DECAY, "Progression.NoRespecPriceDecay", true);
     setConfig(CONFIG_BOOL_NO_QUEST_XP_TO_GOLD, "Progression.NoQuestXpToGold", true);
     setConfig(CONFIG_BOOL_RESTORE_DELETED_ITEMS, "Progression.RestoreDeletedItems", true);
-    setConfig(CONFIG_BOOL_UNLINKED_AUCTION_HOUSES, "Progression.UnlinkedAuctionHouses", true);
 
     // Movement Anticheat
     setConfig(CONFIG_BOOL_AC_MOVEMENT_ENABLED, "Anticheat.Enable", true);
@@ -1175,37 +1150,6 @@ void charactersDatabaseWorkerThread()
         sObjectMgr.ReturnOrDeleteOldMails(true);
     }
     CharacterDatabase.ThreadEnd();
-}
-
-char const* World::GetPatchName() const
-{
-    switch(GetWowPatch())
-    {
-        case 0:
-            return "Patch 1.2: Mysteries of Maraudon";
-        case 1:
-            return "Patch 1.3: Ruins of the Dire Maul";
-        case 2:
-            return "Patch 1.4: The Call to War";
-        case 3:
-            return "Patch 1.5: Battlegrounds";
-        case 4:
-            return "Patch 1.6: Assault on Blackwing Lair";
-        case 5:
-            return "Patch 1.7: Rise of the Blood God";
-        case 6:
-            return "Patch 1.8: Dragons of Nightmare";
-        case 7:
-            return "Patch 1.9: The Gates of Ahn'Qiraj";
-        case 8:
-            return "Patch 1.10: Storms of Azeroth";
-        case 9:
-            return "Patch 1.11: Shadow of the Necropolis";
-        case 10:
-            return "Patch 1.12: Drums of War";
-    }
-
-    return "Invalid Patch!";
 }
 
 /// Initialize the World

@@ -54,7 +54,7 @@ void LoadRandomEnchantmentsTable()
     EnchantmentStore::const_iterator tab;
     uint32 entry, ench;
 
-    QueryResult* result = WorldDatabase.PQuery("SELECT entry, ench, chance FROM item_enchantment_template WHERE ((%u >= patch_min) && (%u <= patch_max))", sWorld.GetWowPatch(), sWorld.GetWowPatch());
+    QueryResult* result = WorldDatabase.Query("SELECT entry, ench, chance FROM item_enchantment_template");
 
     if (result)
     {

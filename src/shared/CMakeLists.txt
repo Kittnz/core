@@ -24,7 +24,6 @@ set (shared_SRCS
     LockedQueue.h
     Log.h
     PosixDaemon.h
-    Progression.h
     revision.h
     SystemConfig.h
     ThreadPool.h

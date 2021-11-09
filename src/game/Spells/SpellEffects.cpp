@@ -884,11 +884,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         8226u  // Fake Death
                     };
 
-                    // Had additional effects before BWL patch.
-                    if (sWorld.GetWowPatch() < WOW_PATCH_106 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_SPELL_EFFECTS))
-                        spell_id = spells[urand(0, 5)];
-                    else
-                        spell_id = spells[urand(0, 1)];
+                    spell_id = spells[urand(0, 1)];
 
                     pPlayer->CastSpell(pPlayer, spell_id, true, nullptr);
                     return;
@@ -5619,7 +5615,7 @@ void Spell::EffectSanctuary(SpellEffectIndex eff_idx)
 
     // World of Warcraft Client Patch 1.12.0 (2006-08-22)
     // - Neutral guards are now able to see through the rogue Vanish ability.
-    bool guard_check = m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_VANISH>() && (sWorld.GetWowPatch() >= WOW_PATCH_112);
+    bool guard_check = m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_VANISH>();
     bool no_guards = true;
 
     unitTarget->InterruptSpellsCastedOnMe(true);

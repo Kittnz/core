@@ -743,10 +743,6 @@ class World
         /// Get the current Message of the Day
         const char* GetMotd() const { return m_motd.c_str(); }
 
-        // Get current server's WoW Patch
-        uint8 GetWowPatch() const { return m_wowPatch; }
-        char const* GetPatchName() const;
-
         LocaleConstant GetDefaultDbcLocale() const { return m_defaultDbcLocale; }
 
         /// Get the path where data (dbc, maps) are stored on disk
@@ -971,7 +967,6 @@ class World
         bool m_configBoolValues[CONFIG_BOOL_VALUE_COUNT];
 
         int32 m_playerLimit;
-        uint8 m_wowPatch;
 
         LocaleConstant m_defaultDbcLocale;                     // from config for one from loaded DBC locales
         uint32 m_availableDbcLocaleMask = 0;                   // by loaded DBC

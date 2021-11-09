@@ -217,9 +217,6 @@ int32 Quest::GetRewMoneyMaxLevelAtComplete() const
     //    their experience reward converted to a healthy amount of gold, thus
     //    adding additional incentive to completing those quests in your log
     //    once you hit 60.
-    if (sWorld.getConfig(CONFIG_BOOL_NO_QUEST_XP_TO_GOLD) && (sWorld.GetWowPatch() < WOW_PATCH_110))
-        return 0;
-
     return int32(GetRewMoneyMaxLevel() * sWorld.getConfig(CONFIG_FLOAT_RATE_DROP_MONEY));
 }
 

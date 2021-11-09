@@ -2125,7 +2125,7 @@ static void RewardGroupAtKill_helper(Player* pGroupGuy, Unit* pVictim, uint32 co
         // World of Warcraft Client Patch 1.10.0 (2006-03-28)
         // - Frostwolf and Stormpike faction will now be gained by killing
         //   players of the opposite faction.
-        if (pGroupGuy->GetBattleGround() && (pGroupGuy->GetBattleGround()->GetTypeID() == BATTLEGROUND_AV) && (sWorld.GetWowPatch() >= WOW_PATCH_110))
+        if (pGroupGuy->GetBattleGround() && (pGroupGuy->GetBattleGround()->GetTypeID() == BATTLEGROUND_AV))
         {
             if (Player* pPlayerVictim = ToPlayer(pVictim))
             {

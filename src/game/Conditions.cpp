@@ -307,19 +307,6 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         {
             return target->ToPlayer()->HasItemCount(m_value1, m_value2, true);
         }
-        case CONDITION_WOW_PATCH:
-        {
-            switch (m_value2)
-            {
-                case 0:
-                    return sWorld.GetWowPatch() == m_value1;
-                case 1:
-                    return sWorld.GetWowPatch() >= m_value1;
-                case 2:
-                    return sWorld.GetWowPatch() <= m_value1;
-            }
-            return false;
-        }
         case CONDITION_ESCORT:
         {
             Creature const* pSource = ToCreature(source);
@@ -1020,20 +1007,6 @@ bool ConditionEntry::IsValid()
         }
         case CONDITION_ESCORT:
         {
-            break;
-        }
-        case CONDITION_WOW_PATCH:
-        {
-            if (m_value1 > 10)
-            {
-                sLog.outErrorDb("Patch condition (entry %u, type %u) has an invalid value in value1 (must be 0..10), skipping.", m_entry, m_condition, m_value1);
-                return false;
-            }
-            if (m_value2 > 2)
-            {
-                sLog.outErrorDb("Patch condition (entry %u, type %u) has invalid argument %u (must be 0..2), skipped.", m_entry, m_condition, m_value2);
-                return false;
-            }
             break;
         }
         case CONDITION_SOURCE_ENTRY:

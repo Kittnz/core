@@ -24,22 +24,17 @@ void DailyQuestHandler::LoadFromDB(bool quests)
     if (!quests)
         return;
 
-    //load quests with daily quest status flag if quests, initial load
+    // load quests with daily quest status flag if quests, initial load
+    auto questResult = std::unique_ptr<QueryResult>(WorldDatabase.PQuery(
+        "SELECT `entry` FROM `quest_template` WHERE `SpecialFlags` & %u = %u", QUEST_SPECIAL_FLAG_DAILY, QUEST_SPECIAL_FLAG_DAILY));
 
+    if (questResult)
     {
-        auto questResult = std::unique_ptr<QueryResult>(
-            WorldDatabase.PQuery(
-                "SELECT `entry` FROM `quest_template` t1 WHERE `patch`= (SELECT max(`patch`) FROM `quest_template` t2 WHERE t1.`entry`=t2.`entry` && `patch` <= %u)"
-                " AND (`SpecialFlags` & %u) = %u", sWorld.GetWowPatch(), QUEST_SPECIAL_FLAG_DAILY, QUEST_SPECIAL_FLAG_DAILY));
-
-        if (questResult)
+        do
         {
-            do {
-                m_questIds.push_back(questResult->Fetch()[0].GetUInt32());
-            } while (questResult->NextRow());
-        }
+            m_questIds.push_back(questResult->Fetch()[0].GetUInt32());
+        } while (questResult->NextRow());
     }
-
 }
 
 void DailyQuestHandler::Update(uint32 diff)

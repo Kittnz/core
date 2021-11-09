@@ -4041,9 +4041,8 @@ void Player::UpdateResetTalentsMultiplier() const
 
 uint32 Player::GetResetTalentsCost() const
 {
-    // decay respec cost
-    if (!sWorld.getConfig(CONFIG_BOOL_NO_RESPEC_PRICE_DECAY) || (sWorld.GetWowPatch() >= WOW_PATCH_111))
-        UpdateResetTalentsMultiplier();
+    // Decay respec cost
+    UpdateResetTalentsMultiplier();
 
     if (!m_resetTalentsMultiplier) // initial respec
     {
@@ -6647,7 +6646,7 @@ void Player::RewardReputation(Unit *pVictim, float rate)
 
     // World of Warcraft Client Patch 1.10.0 (2006-03-28)
     // - Pets no longer modify your reputation if you kill them.
-    if (pVictim->IsPet() && sWorld.GetWowPatch() >= WOW_PATCH_110)
+    if (pVictim->IsPet())
         return;
 
     ReputationOnKillEntry const* Rep = sObjectMgr.GetReputationOnKillEntry(((Creature*)pVictim)->GetEntry());
@@ -10397,9 +10396,7 @@ InventoryResult Player::CanUseItem(ItemPrototype const *pProto, bool not_loading
         if (pProto->RequiredSpell != 0 && !HasSpell(pProto->RequiredSpell))
             return EQUIP_ERR_NO_REQUIRED_PROFICIENCY;
 
-        auto playerRank = (sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_EQUIP_REQUIREMENTS) && sWorld.GetWowPatch() < WOW_PATCH_106) ? m_honorMgr.GetRank().rank : m_honorMgr.GetHighestRank().rank;
-
-        if (not_loading && playerRank < (uint8)pProto->RequiredHonorRank)
+        if (not_loading && m_honorMgr.GetHighestRank().rank < (uint8)pProto->RequiredHonorRank)
             return EQUIP_ERR_CANT_EQUIP_RANK;
 
         if (GetLevel() < pProto->RequiredLevel)
@@ -10407,6 +10404,7 @@ InventoryResult Player::CanUseItem(ItemPrototype const *pProto, bool not_loading
 
         return EQUIP_ERR_OK;
     }
+
     return EQUIP_ERR_ITEM_NOT_FOUND;
 }
 
@@ -15310,11 +15308,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     sBattleGroundMgr.PlayerLoggedIn(this); // Add to BG queue if needed
     CreatePacketBroadcaster();
 
-    if (sWorld.GetWowPatch() >= WOW_PATCH_112)
-        UpdateOldRidingSkillToNew(has_epic_mount);
+    UpdateOldRidingSkillToNew(has_epic_mount); // TODO: Remove later
 
     // Turtle Mode
-
     bIsTurtle = GetItemCount(50010, true) > 0;
 
     if (bIsTurtle)
@@ -15348,9 +15344,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // Load all titles from the db
     m_playerTitles.clear();
-    QueryResult *titlesQuery = CharacterDatabase.PQuery("SELECT title, active "
-        "FROM character_titles "
-        "WHERE guid = '%u'", GetGUIDLow());
+    QueryResult *titlesQuery = CharacterDatabase.PQuery("SELECT `title`, `active` FROM `character_titles` WHERE `guid` = '%u'", GetGUIDLow());
 
 	if (titlesQuery && titlesQuery->GetRowCount() > 0)
 	{
@@ -18404,11 +18398,8 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
         return false;
     }
 
-    auto playerRank = (sWorld.GetWowPatch() < WOW_PATCH_107) && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_PURCHASE_REQUIREMENTS) ?
-        m_honorMgr.GetHighestRank().rank : m_honorMgr.GetRank().rank;
-
     // do not check level requirement for normal items (PvP related bonus items is another case)
-    if (pProto->RequiredHonorRank && (playerRank < (uint8)pProto->RequiredHonorRank || GetLevel() < pProto->RequiredLevel))
+    if (pProto->RequiredHonorRank && (m_honorMgr.GetRank().rank < (uint8)pProto->RequiredHonorRank || GetLevel() < pProto->RequiredLevel))
     {
         SendBuyError(BUY_ERR_RANK_REQUIRE, pCreature, item, 0);
         return false;
@@ -21635,10 +21626,6 @@ void Player::LootMoney(int32 money, Loot* loot)
 
 void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
 {
-    // Honor System was added in 1.4.
-    if (sWorld.GetWowPatch() < WOW_PATCH_104 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_TIMELINE))
-        return;
-
     if (!uVictim)
         return;
 
@@ -21652,10 +21639,6 @@ void Player::RewardHonor(Unit* uVictim, uint32 groupSize)
         if (cVictim->IsCivilian() && !IsHonorOrXPTarget(cVictim))
         {
             if (!sWorld.getConfig(CONFIG_BOOL_ENABLE_DK))
-                return;
-
-            // Dishonorable kills were added in 1.5.
-            if (sWorld.GetWowPatch() < WOW_PATCH_105 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVP_TIMELINE))
                 return;
 
             m_honorMgr.Add(HonorMgr::DishonorableKillPoints(GetLevel()), DISHONORABLE, cVictim);

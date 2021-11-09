@@ -6495,11 +6495,6 @@ bool Unit::FindPendingMovementFlagChange(uint32 movementCounter, bool applyRecei
 {
     for (auto pendingChange = m_pendingMovementChanges.begin(); pendingChange != m_pendingMovementChanges.end(); pendingChange++)
     {
-
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-        movementCounter = pendingChange->movementCounter;
-#endif
-
         if (pendingChange->movementCounter != movementCounter || pendingChange->apply != applyReceived || pendingChange->movementChangeType != changeTypeReceived)
             continue;
 
@@ -6514,11 +6509,6 @@ bool Unit::FindPendingMovementRootChange(uint32 movementCounter, bool applyRecei
 {
     for (auto pendingChange = m_pendingMovementChanges.begin(); pendingChange != m_pendingMovementChanges.end(); pendingChange++)
     {
-
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-        movementCounter = pendingChange->movementCounter;
-#endif
-
         if (pendingChange->movementCounter != movementCounter || pendingChange->apply != applyReceived || pendingChange->movementChangeType != ROOT)
             continue;
 
@@ -6533,11 +6523,6 @@ bool Unit::FindPendingMovementTeleportChange(uint32 movementCounter)
 {
     for (auto pendingChange = m_pendingMovementChanges.begin(); pendingChange != m_pendingMovementChanges.end(); pendingChange++)
     {
-
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-        movementCounter = pendingChange->movementCounter;
-#endif
-
         if (pendingChange->movementCounter != movementCounter || pendingChange->movementChangeType != TELEPORT)
             continue;
 
@@ -6552,11 +6537,6 @@ bool Unit::FindPendingMovementKnockbackChange(MovementInfo& movementInfo, uint32
 {
     for (auto pendingChange = m_pendingMovementChanges.begin(); pendingChange != m_pendingMovementChanges.end(); pendingChange++)
     {
-
-#if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_9_4
-        movementCounter = pendingChange->movementCounter;
-#endif
-
         if (pendingChange->movementCounter != movementCounter || pendingChange->movementChangeType != KNOCK_BACK
             || std::fabs(pendingChange->knockbackInfo.speedXY - movementInfo.jump.xyspeed) > 0.01f
             || std::fabs(pendingChange->knockbackInfo.speedZ - movementInfo.jump.velocity) > 0.01f
@@ -6749,8 +6729,7 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced, float ratio)
     {
         // Before patch 1.9 pets should retain their wild speed, after that they are normalised
         Creature* pCreature = (Creature*)this;
-        if (!(pCreature->IsPet() && pCreature->GetOwnerGuid().IsPlayer()) || 
-            (sWorld.GetWowPatch() < WOW_PATCH_109 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PETS)))
+        if (!(pCreature->IsPet() && pCreature->GetOwnerGuid().IsPlayer()))
         {
             switch (mtype)
             {

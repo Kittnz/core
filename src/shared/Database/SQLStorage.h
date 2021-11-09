@@ -120,8 +120,6 @@ class SQLStorage : public SQLStorageBase
         }
 
         void Load(bool error_at_empty = true);
-        void LoadProgressive(uint32 wow_patch, std::string column_name = "patch", bool error_at_empty = true);
-
         void EraseEntry(uint32 id);
 
     protected:
@@ -252,7 +250,6 @@ class SQLStorageLoaderBase
 {
     public:
         void Load(StorageClass& storage, bool error_at_empty = true);
-        void LoadProgressive(StorageClass& storage, uint32 wow_patch, std::string column_name = "patch", bool error_at_empty = true);
 
         template<class S, class D>
         void convert(uint32 field_pos, S src, D& dst);
