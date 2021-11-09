@@ -63,16 +63,14 @@ struct boss_tendris_warpwoodAI : public ScriptedAI
         {
             // World of Warcraft Client Patch 1.10.0 (2006-03-28)
             // - Tendris Warpwood will now call upon any protectors still alive to aid him.
-            if (sWorld.GetWowPatch() >= WOW_PATCH_110)
+            std::list<Creature*> m_AggroList;
+            GetCreatureListWithEntryInGrid(m_AggroList, m_creature, NPC_IRONBARK_PROTECTOR, 1800.0f);
+            for (const auto& it : m_AggroList)
             {
-                std::list<Creature*> m_AggroList;
-                GetCreatureListWithEntryInGrid(m_AggroList, m_creature, NPC_IRONBARK_PROTECTOR, 1800.0f);
-                for (const auto& it : m_AggroList)
-                {
-                    if (it->IsAlive())
-                        it->SetInCombatWithZone();
-                }
+                if (it->IsAlive())
+                    it->SetInCombatWithZone();
             }
+
             m_uiAggroProtector = true;
             DoScriptText(SAY_TENDRIS_AGGRO, m_creature);
         }

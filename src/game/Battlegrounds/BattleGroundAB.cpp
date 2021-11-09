@@ -479,7 +479,7 @@ void BattleGroundAB::Reset()
     m_IsInformedNearVictory                 = false;
     bool isBGWeekend = BattleGroundMgr::IsBGWeekend(GetTypeID());
     m_HonorTics = (isBGWeekend) ? AB_WEEKEND_HONOR_INTERVAL : AB_NORMAL_HONOR_INTERVAL;
-    m_ReputationTics = (isBGWeekend) ? GET_AB_WEEKEND_REP_INTERVAL : GET_AB_NORMAL_REP_INTERVAL;
+    m_ReputationTics = (isBGWeekend) ? AB_WEEKEND_REPUTATION_INTERVAL : AB_NORMAL_REPUTATION_INTERVAL;
 
     for (uint8 i = 0; i < BG_AB_NODES_MAX; ++i)
     {

@@ -76,9 +76,6 @@ void LFGQueue::AddToQueue(Player* leader, uint32 queueAreaID)
     if (!leader)
         return;
 
-    if (sWorld.GetWowPatch() < WOW_PATCH_103 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_LFG))
-        return;
-
     Group* grp = leader->GetGroup();
 
     //add players from group to queue list & group to group list

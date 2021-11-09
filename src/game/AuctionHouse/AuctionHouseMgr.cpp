@@ -316,18 +316,6 @@ void AuctionHouseMgr::LoadAuctionHouses()
             m_mAuctionHouses.insert(std::make_pair(houseEntry->houseId, CrossFactionAuctionHouse));
         }
     }
-    // Non-Linked Auction Houses - Separate AH for every DBC entry
-    else if (sWorld.getConfig(CONFIG_BOOL_UNLINKED_AUCTION_HOUSES) && (sWorld.GetWowPatch() < WOW_PATCH_109))
-    {
-        for (uint32 i = 0; i < sAuctionHouseStore.GetNumRows(); i++)
-        {
-            AuctionHouseEntry const* houseEntry = sAuctionHouseStore.LookupEntry(i);
-            if (!houseEntry)
-                continue;
-
-            m_mAuctionHouses.insert(std::make_pair(houseEntry->houseId, MakeNewAuctionHouseObject()));
-        }
-    }
     // Linked Auction Houses - One per faction
     else
     {

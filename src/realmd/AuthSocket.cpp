@@ -545,8 +545,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     }
                     else
                     {
-                        if (_build > CLIENT_BUILD_1_10_2)
-                            pkt << uint8(0);
+                        pkt << uint8(0);
                     }
 
                     _localizationName.resize(4);
@@ -581,17 +580,8 @@ bool AuthSocket::_HandleLogonProof()
     sAuthLogonProof_C_1_11 lp;
     
     ///- Read the packet
-    if (_build < CLIENT_BUILD_1_11_2)
-    {
-        if (!recv((char *)&lp, sizeof(sAuthLogonProof_C_Base)))
-            return false;
-        lp.securityFlags = 0;
-    }
-    else
-    {
-        if (!recv((char *)&lp, sizeof(sAuthLogonProof_C_1_11)))
-            return false;  
-    }
+    if (!recv((char *)&lp, sizeof(sAuthLogonProof_C_1_11)))
+        return false;  
 
     PINData pinData;
 

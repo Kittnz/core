@@ -1354,13 +1354,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
     }
 
     SetLevel(petlevel);
-
-    // Before 1.9 pets retain their wild damage type
-    if (sWorld.GetWowPatch() < WOW_PATCH_109 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PETS))
-        SetMeleeDamageSchool(SpellSchools(cinfo->dmg_school));
-    else
-        SetMeleeDamageSchool(SPELL_SCHOOL_NORMAL);
-
+    SetMeleeDamageSchool(SPELL_SCHOOL_NORMAL);
     SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(petlevel * 50));
 
     // Nostalrius: pre-2.0: normalisation de la vitesse d'attaque des pets.
@@ -1383,19 +1377,6 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
         UpdateModelData();
     }
     m_bonusdamage = 0;
-
-    // http://wowwiki.wikia.com/wiki/Patch_1.3.0
-    // Before 1.3 pets retain their wild resistances, however it is mentioned as a bug.
-    // TODO: Do we keep it or remove it?
-    if (getPetType() != HUNTER_PET || (sWorld.GetWowPatch() < WOW_PATCH_103 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PETS)))
-    {
-        SetCreateResistance(SPELL_SCHOOL_HOLY, cinfo->holy_res);
-        SetCreateResistance(SPELL_SCHOOL_FIRE, cinfo->fire_res);
-        SetCreateResistance(SPELL_SCHOOL_NATURE, cinfo->nature_res);
-        SetCreateResistance(SPELL_SCHOOL_FROST, cinfo->frost_res);
-        SetCreateResistance(SPELL_SCHOOL_SHADOW, cinfo->shadow_res);
-        SetCreateResistance(SPELL_SCHOOL_ARCANE, cinfo->arcane_res);
-    }
 
     switch (getPetType())
     {

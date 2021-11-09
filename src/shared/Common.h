@@ -162,8 +162,6 @@ inline float finiteAlways(float f) { return finite(f) ? f : 0.0f; }
 #define PAIR32_HIPART(x)   (uint16)((uint32(x) >> 16) & 0x0000FFFF)
 #define PAIR32_LOPART(x)   (uint16)(uint32(x)         & 0x0000FFFF)
 
-#include "Progression.h"
-
 enum TimeConstants
 {
     MINUTE = 60,
@@ -174,7 +172,6 @@ enum TimeConstants
     YEAR   = MONTH*12,
     IN_MILLISECONDS = 1000
 };
-
 
 enum AccountTypes
 {
@@ -226,8 +223,8 @@ enum DBLocaleConstant : int
     DB_LOCALE_ruRU = 7
 };
 
-#define MAX_DBC_LOCALE 8
-#define MAX_LOCALE 9
+constexpr uint32 MAX_DBC_LOCALE = 8;
+constexpr uint32 MAX_LOCALE = 9;
 
 LocaleConstant GetLocaleByName(const std::string& name);
 LocaleConstant GetDbcLocaleFromDbLocale(DBLocaleConstant localeIndex);

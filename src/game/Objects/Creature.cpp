@@ -1467,9 +1467,7 @@ void Creature::SaveToDB(uint32 mapid)
        << data.mana_percent << ","                         // mana_percent
        << GetDefaultMovementType() << ","                  // default movement generator type
        << data.spawn_flags << ","
-       << m_visibilityModifier << ","
-       << "0,"                                             // patch_min
-       << "10)";                                           // patch_max
+       << m_visibilityModifier << ")";
 
     WorldDatabase.PExecuteLog("%s", ss.str().c_str());
 

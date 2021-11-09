@@ -111,24 +111,20 @@ bool GOHello_go_northern_crystal_pylon(Player* pPlayer, GameObject* pGo)
 
 bool GOHello_go_barov_journal(Player* pPlayer, GameObject* pGo)
 {
-    if (sWorld.GetWowPatch() > WOW_PATCH_108 && sWorld.getConfig(CONFIG_BOOL_ACCURATE_PVE_EVENTS))
+    if (pPlayer->HasSkill(SKILL_TAILORING) && pPlayer->GetSkillValueBase(SKILL_TAILORING) >= 285)
     {
-        if (pPlayer->HasSkill(SKILL_TAILORING) && pPlayer->GetSkillValueBase(SKILL_TAILORING) >= 285)
+        if (!pPlayer->HasSpell(26086))
         {
-            if (!pPlayer->HasSpell(26086))
-            {
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Learn recipe Felcloth Bag", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-                pPlayer->SEND_GOSSIP_MENU(8121, pGo->GetObjectGuid());
-            }
-            else
-                pPlayer->SEND_GOSSIP_MENU(8122, pGo->GetObjectGuid());
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Learn recipe Felcloth Bag", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+            pPlayer->SEND_GOSSIP_MENU(8121, pGo->GetObjectGuid());
         }
         else
-            pPlayer->SEND_GOSSIP_MENU(8120, pGo->GetObjectGuid());
-        return true;
+            pPlayer->SEND_GOSSIP_MENU(8122, pGo->GetObjectGuid());
     }
+    else
+        pPlayer->SEND_GOSSIP_MENU(8120, pGo->GetObjectGuid());
 
-    return false;
+    return true;
 }
 
 bool GossipSelect_go_barov_journal(Player* pPlayer, GameObject* pGo, uint32 uiSender, uint32 uiAction)
