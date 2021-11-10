@@ -330,11 +330,14 @@ void WorldSession::HandleLootReleaseOpcode(WorldPacket & recv_data)
 
 void WorldSession::DoLootRelease(ObjectGuid lguid)
 {
-    Player  *player = GetPlayer();
-    Loot    *loot;
+    Player* player = GetPlayer();
+    Loot* loot;
 
     player->SetLootGuid(ObjectGuid());
-    player->SendLootRelease(lguid);
+
+    // for disenchanted items first show loot as removed before release
+    if (lguid.GetHigh() != HIGHGUID_ITEM)
+        player->SendLootRelease(lguid);
 
     player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_LOOTING);
 
@@ -345,7 +348,7 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
     {
         case HIGHGUID_GAMEOBJECT:
         {
-            GameObject *go = GetPlayer()->GetMap()->GetGameObject(lguid);
+            GameObject* go = player->GetMap()->GetGameObject(lguid);
 
             // not check distance for GO in case owned GO (fishing bobber case, for example) or Fishing hole GO
             if (!go)
@@ -456,7 +459,7 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
         case HIGHGUID_CORPSE:                               // ONLY remove insignia at BG
         {
             Corpse *corpse = _player->GetMap()->GetCorpse(lguid);
-            if (!corpse || !corpse->IsWithinDistInMap(_player, INTERACTION_DISTANCE))
+            if (!corpse)
                 return;
 
             loot = &corpse->loot;
@@ -505,10 +508,8 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
         }
         case HIGHGUID_UNIT:
         {
-            Creature* creature = GetPlayer()->GetMap()->GetCreature(lguid);
-
-            bool ok_loot = creature && creature->IsAlive() == (player->GetClass() == CLASS_ROGUE && creature->lootForPickPocketed);
-            if (!ok_loot || !creature->IsWithinDistInMap(_player, INTERACTION_DISTANCE))
+            Creature* creature = player->GetMap()->GetCreature(lguid);
+            if (!creature)
                 return;
 
             loot = &creature->loot;
