@@ -2799,7 +2799,6 @@ void Aura::HandleForceReaction(bool apply, bool Real)
                     pScript->HandleDropFlag(player, GetId());
         }
     }
-
 }
 
 void Aura::HandleAuraModSkill(bool apply, bool /*Real*/)
