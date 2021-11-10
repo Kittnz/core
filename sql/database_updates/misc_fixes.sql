@@ -1,11 +1,11 @@
 
 -- Add spawn for Ritual Candle Aura.
-INSERT INTO gameobject (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `patch_min`) VALUES
-(262118, 179688, 429, -43.4643, 800.206, -29.5358, 0.698132, 0, 0, 0.34202, 0.939693, 900, 900, 0, 1, 2);
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`) VALUES
+(262118, 179688, 429, -43.4643, 800.206, -29.5358, 0.698132, 0, 0, 0.34202, 0.939693, 900, 900, 0, 1);
 
 -- Correct faction for Ritual Candle Aura.
 -- "Treasure" faction 1375 here is guessed based on when patch 1.4 was released, and the fact that it's hostile to Demon faction 90
-UPDATE gameobject_template SET `faction`=1375 WHERE entry=179688;
+UPDATE `gameobject_template` SET `faction`=1375 WHERE entry=179688;
 
 -- Correct faction for Wheel of the Black March.
 UPDATE `gameobject_template` SET `faction`=35 WHERE `entry`=179672;
@@ -14,9 +14,9 @@ UPDATE `gameobject_template` SET `faction`=35 WHERE `entry`=179673;
 -- Correct faction for Bell of Dethmoora.
 UPDATE `gameobject_template` SET `faction`=35 WHERE `entry`=179674;
 -- Correct faction for Xorothian Imp.
-UPDATE creature_template SET `faction`=90 WHERE `entry`=14482;
+UPDATE `creature_template` SET `faction`=90 WHERE `entry`=14482;
 -- Correct faction for Dread Guard.
-UPDATE creature_template SET `faction`=90 WHERE `entry`=14483;
+UPDATE `creature_template` SET `faction`=90 WHERE `entry`=14483;
 
 -- Remove custom trigger npc.
 DELETE FROM `creature_template` WHERE `entry`=1000001;
@@ -197,3 +197,17 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `posi
 
 -- Delete text from custom table.
 DELETE FROM `script_texts` WHERE `entry`=-1509002;
+
+-- Remove Speed limit from Traces of Silithyst (29534)
+DELETE FROM `spell_effect_mod` WHERE  `Id`=29534 AND `EffectIndex`=0;
+-- Buffs which are only active Silithus.
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29519, 1377, 0, 0, 0, 0, 0, 2, 0);
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29894, 1377, 0, 0, 0, 0, 0, 2, 0);
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29895, 1377, 0, 0, 0, 0, 0, 2, 0);
+INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (30754, 1377, 0, 0, 0, 0, 0, 2, 0);
+-- Fix gameobjects
+UPDATE `gameobject_template` SET `size`='0.3', `data10`='29518' WHERE `entry`=181597;
+UPDATE `gameobject_template` SET `data10`='29518' WHERE `entry`=181598;
+-- Silithyst-bring-in animation
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`) VALUES (29534, 0, 181603, 0, 0);
+INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`) VALUES (29534, 0, 181617, 0, 0);
