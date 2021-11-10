@@ -156,6 +156,7 @@ void MovementPacketSender::SendTeleportToController(Unit* unit, float x, float y
     WorldPacket data(MSG_MOVE_TELEPORT_ACK, 41);
     data << unit->GetPackGUID();
     data << mCounter; // this value increments every time
+    data << mi;
     mover->GetSession()->SendPacket(&data);
 }
 
