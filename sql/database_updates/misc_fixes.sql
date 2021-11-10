@@ -200,17 +200,9 @@ DELETE FROM `script_texts` WHERE `entry`=-1509002;
 
 -- Remove Speed limit from Traces of Silithyst (29534)
 DELETE FROM `spell_effect_mod` WHERE  `Id`=29534 AND `EffectIndex`=0;
--- Buffs which are only active Silithus.
-INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29519, 1377, 0, 0, 0, 0, 0, 2, 0);
-INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29894, 1377, 0, 0, 0, 0, 0, 2, 0);
-INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (29895, 1377, 0, 0, 0, 0, 0, 2, 0);
-INSERT INTO `spell_area` (`spell`, `area`, `quest_start`, `quest_start_active`, `quest_end`, `aura_spell`, `racemask`, `gender`, `autocast`) VALUES (30754, 1377, 0, 0, 0, 0, 0, 2, 0);
 -- Fix gameobjects
 UPDATE `gameobject_template` SET `size`='0.3', `data10`='29518' WHERE `entry`=181597;
 UPDATE `gameobject_template` SET `data10`='29518' WHERE `entry`=181598;
--- Silithyst-bring-in animation
-INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`) VALUES (29534, 0, 181603, 0, 0);
-INSERT INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`) VALUES (29534, 0, 181617, 0, 0);
 
 -- Use currect victim as target for Naxxramas Cultist and Acolyte AoE spells so that it fails if target is immune.
 REPLACE INTO `creature_spells` (`entry`, `name`, `spellId_1`, `probability_1`, `castTarget_1`, `targetParam1_1`, `targetParam2_1`, `castFlags_1`, `delayInitialMin_1`, `delayInitialMax_1`, `delayRepeatMin_1`, `delayRepeatMax_1`, `scriptId_1`, `spellId_2`, `probability_2`, `castTarget_2`, `targetParam1_2`, `targetParam2_2`, `castFlags_2`, `delayInitialMin_2`, `delayInitialMax_2`, `delayRepeatMin_2`, `delayRepeatMax_2`, `scriptId_2`, `spellId_3`, `probability_3`, `castTarget_3`, `targetParam1_3`, `targetParam2_3`, `castFlags_3`, `delayInitialMin_3`, `delayInitialMax_3`, `delayRepeatMin_3`, `delayRepeatMax_3`, `scriptId_3`, `spellId_4`, `probability_4`, `castTarget_4`, `targetParam1_4`, `targetParam2_4`, `castFlags_4`, `delayInitialMin_4`, `delayInitialMax_4`, `delayRepeatMin_4`, `delayRepeatMax_4`, `scriptId_4`, `spellId_5`, `probability_5`, `castTarget_5`, `targetParam1_5`, `targetParam2_5`, `castFlags_5`, `delayInitialMin_5`, `delayInitialMax_5`, `delayRepeatMin_5`, `delayRepeatMax_5`, `scriptId_5`, `spellId_6`, `probability_6`, `castTarget_6`, `targetParam1_6`, `targetParam2_6`, `castFlags_6`, `delayInitialMin_6`, `delayInitialMax_6`, `delayRepeatMin_6`, `delayRepeatMax_6`, `scriptId_6`, `spellId_7`, `probability_7`, `castTarget_7`, `targetParam1_7`, `targetParam2_7`, `castFlags_7`, `delayInitialMin_7`, `delayInitialMax_7`, `delayRepeatMin_7`, `delayRepeatMax_7`, `scriptId_7`, `spellId_8`, `probability_8`, `castTarget_8`, `targetParam1_8`, `targetParam2_8`, `castFlags_8`, `delayInitialMin_8`, `delayInitialMax_8`, `delayRepeatMin_8`, `delayRepeatMax_8`, `scriptId_8`) VALUES (159800, 'Naxxramas - Naxxramas Cultist', 28447, 75, 1, 0, 0, 0, 3, 3, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -218,3 +210,43 @@ REPLACE INTO `creature_spells` (`entry`, `name`, `spellId_1`, `probability_1`, `
 
 -- Bubbly Fissure should be type 8 (Spell Focus), yet has no linked trap assigned, so no way to trigger aura.
 UPDATE `gameobject_template` SET `type` = 6, `faction`=14, `data1` = 0, `data2` = 10, `data3` = 17775, `data5`=1 WHERE `entry` = 177524;
+
+-- Remove target hack from Earthgrab causing it to target friendlies.
+DELETE FROM `spell_effect_mod` WHERE `Id`=8377;
+
+-- Zul'Farrak zombies do not cast any spells.
+DELETE FROM `creature_spells` WHERE `entry`=7286;
+UPDATE `creature_template` SET `spell_list_id`=0 WHERE `entry`=7286;
+
+-- Zum'rah encounter in progress (begins when area trigger makes him hostile).
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (298, 34, 4, 1, 0, 0, 0);
+
+-- Events list for Zul'Farrak Zombie
+DELETE FROM `creature_ai_events` WHERE `creature_id`=7286;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (728601, 7286, 298, 11, 2, 100, 0, 0, 0, 0, 0, 728601, 0, 0, 'Zul\'Farrak Zombie - Move to Zum\'rah on Spawn');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (728602, 7286, 4018, 1, 2, 100, 0, 0, 0, 0, 0, 728602, 0, 0, 'Zul\'Farrak Zombie - Set In Combat with Zone on Spawn (After 1.10)');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (728603, 7286, 4018, 4, 2, 100, 0, 0, 0, 0, 0, 728602, 0, 0, 'Zul\'Farrak Zombie - Set In Combat with Zone on Aggro (After 1.10)');
+DELETE FROM `creature_ai_scripts` WHERE `id`=728601;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (728601, 0, 3, 2, 0, 69, 0, 81524, 0, 9, 0, 0, 0, 0, 0, 3, 0, 0, 6, 0, 'Zul\'Farrak Zombie - Move to Zum\'rah');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (728601, 0, 44, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Zul\'Farrak Zombie - Set Phase to 1');
+
+-- Events list for Zul'Farrak Dead Hero
+DELETE FROM `creature_ai_events` WHERE `creature_id`=7276;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (727601, 7276, 298, 11, 2, 100, 0, 0, 0, 0, 0, 727601, 0, 0, 'Zul\'Farrak Dead Hero - Move to Zum\'rah on Spawn');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (727602, 7276, 4018, 1, 2, 100, 0, 0, 0, 0, 0, 727602, 0, 0, 'Zul\'Farrak Dead Hero - Set In Combat with Zone on Spawn (After 1.10)');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (727603, 7276, 4018, 4, 2, 100, 0, 0, 0, 0, 0, 727602, 0, 0, 'Zul\'Farrak Dead Hero - Set In Combat with Zone on Aggro (After 1.10)');
+DELETE FROM `creature_ai_scripts` WHERE `id`=727601;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (727601, 0, 44, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Zul Farrak Dead Hero - Set Phase to 1');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (727601, 0, 3, 2, 0, 69, 0, 81524, 0, 9, 0, 0, 0, 0, 0, 3, 0, 0, 6, 0, 'Zul Farrak Dead Hero - Assist Zum\'rah');
+
+-- Events list for Witch Doctor Zum'rah
+DELETE FROM `creature_ai_events` WHERE `creature_id`=7271;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (727101, 7271, 0, 4, 0, 100, 0, 0, 0, 0, 0, 727101, 0, 0, 'Witch Doctor Zum\'rah - Yell on Aggro');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (727102, 7271, 0, 5, 0, 100, 1, 10000, 10000, 1, 0, 727102, 0, 0, 'Witch Doctor Zum\'rah - Yell on Killed Player');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (727103, 7271, 125, 0, 0, 100, 1, 1000, 5000, 18000, 18000, 727103, 0, 0, 'Witch Doctor Zum\'rah - Summon Zombies');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (727104, 7271, 0, 6, 0, 100, 0, 0, 0, 0, 0, 727104, 0, 0, 'Witch Doctor Zum\'rah - Set Data on Death');
+DELETE FROM `creature_ai_scripts` WHERE `id`=727104;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (727104, 0, 37, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Witch Doctor Zum\'rah - Set Data');
+
+-- Prevent Zum'rah from assisting zombies.
+UPDATE `creature_template` SET `flags_extra` = `flags_extra` | 65536 WHERE `entry`=7271;
