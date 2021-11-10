@@ -5625,7 +5625,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         return SPELL_FAILED_LOWLEVEL;
                 }
 
-                if (m_spellInfo->SpellFamilyName == SPELLFAMILY_MAGE && m_spellInfo->IsFitToFamilyMask<CF_MAGE_POLYMORPH>())
+                if (m_spellInfo->HasAttribute(SPELL_ATTR_EX2_CANT_TARGET_TAPPED))
                 {
                     // Mob tapped by another player or group.
                     if (Player* pCaster = m_caster->ToPlayer())
@@ -6868,12 +6868,6 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 if (int32(m_targets.getUnitTarget()->GetLevel()) > CalculateDamage(SpellEffectIndex(i), m_targets.getUnitTarget()))
                     return SPELL_FAILED_HIGHLEVEL;
 
-                // Mob tapped by another player or group.
-                if (Player* pCaster = m_caster->ToPlayer())
-                    if (Creature* pCreature = m_targets.getUnitTarget()->ToCreature())
-                        if (pCreature->GetLootGroupRecipientId() || pCreature->GetLootRecipientGuid())
-                            if (!pCreature->IsTappedBy(pCaster))
-                                return SPELL_FAILED_CANT_CAST_ON_TAPPED;
                 break;
             }
             case SPELL_AURA_MOD_POSSESS_PET:
