@@ -3023,9 +3023,16 @@ void Unit::ModPossess(Unit* pTarget, bool apply, AuraRemoveMode m_removeMode)
         pCaster->PossessSpellInitialize();
 
         if (Creature* pCreature = pTarget->ToCreature())
+        {
             if (!pCreature->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
                 if (pCreature->AI()->SwitchAiAtControl())
                     pCreature->AIM_Initialize();
+        }
+        else if (Player* pPlayer = pTarget->ToPlayer())
+        {
+            if (ObjectGuid lootGuid = pPlayer->GetLootGuid())
+                pPlayer->GetSession()->DoLootRelease(lootGuid);
+        }
 
         // Mobs should attack the target being mind controlled.
         // So we call 'MoveInLineOfSight' for nearby mobs.
@@ -3258,6 +3265,9 @@ void Aura::HandleModCharm(bool apply, bool Real)
         }
         else if (Player* pPlayer = target->ToPlayer())
         {
+            if (ObjectGuid lootGuid = pPlayer->GetLootGuid())
+                pPlayer->GetSession()->DoLootRelease(lootGuid);
+
             if (caster->IsCreature())
             {
                 pPlayer->SetControlledBy(caster);
@@ -3271,6 +3281,7 @@ void Aura::HandleModCharm(bool apply, bool Real)
                 pPlayer->i_AI = new PlayerControlledAI(pPlayer, caster);
             }
         }
+
         target->UpdateControl();
 
         if (caster->IsPlayer())

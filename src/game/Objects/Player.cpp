@@ -1681,6 +1681,9 @@ void Player::SetDeathState(DeathState s)
         // remove uncontrolled pets
         RemoveMiniPet();
 
+        if (ObjectGuid lootGuid = GetLootGuid())
+            GetSession()->DoLootRelease(lootGuid);
+
         // save value before aura remove in Unit::SetDeathState
         ressSpellId = GetUInt32Value(PLAYER_SELF_RES_SPELL);
 
@@ -2017,6 +2020,9 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
         m_movementInfo.ClearTransportData();
     }
 
+    if (ObjectGuid lootGuid = GetLootGuid())
+        GetSession()->DoLootRelease(lootGuid);
+
     // The player was ported to another map and looses the duel immediately.
     // We have to perform this check before the teleport, otherwise the
     // ObjectAccessor won't find the flag.
@@ -2349,6 +2355,7 @@ void Player::RemoveFromWorld()
 {
     if (m_transport)
         SendDestroyGroupMembers(true);
+
     if (IsInWorld())
     {
         ///- Release charmed creatures, unsummon totems and remove pets/guardians
@@ -2356,7 +2363,8 @@ void Player::RemoveFromWorld()
         RemoveMiniPet();
         sZoneScriptMgr.HandlePlayerLeaveZone(this, m_zoneUpdateId);
         TradeCancel(false);
-        DuelComplete(DUEL_INTERRUPTED);
+        if (ObjectGuid lootGuid = GetLootGuid())
+            GetSession()->DoLootRelease(lootGuid);
     }
 
     for (int i = PLAYER_SLOT_START; i < PLAYER_SLOT_END; ++i)
@@ -20406,6 +20414,7 @@ void Player::AutoStoreLoot(Loot& loot, bool broadcast, uint8 bag, uint8 slot)
             continue;
         }
 
+        SendNotifyLootItemRemoved(i);
         Item* pItem = StoreNewItem(dest, lootItem->itemid, true, lootItem->randomPropertyId);
         SendNewItem(pItem, lootItem->count, false, false, broadcast);
     }
