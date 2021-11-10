@@ -490,7 +490,7 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket & recv_data)
     // Update autoshot if need
     if (Spell *pSpell = _player->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
     {
-        if (!unit || unit == _player)
+        if (!unit || !_player->IsValidAttackTarget(unit))
         {
             pSpell->m_targets.setUnitTarget(nullptr);
             pSpell->cancel();
@@ -498,9 +498,6 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket & recv_data)
         }
 
         if (!unit->IsInWorld() || unit->GetMap() != _player->GetMap())
-            return;
-
-        if (!_player->IsValidAttackTarget(unit))
             return;
 
         pSpell->m_targets.setUnitTarget(unit);
