@@ -7139,6 +7139,10 @@ bool ChatHandler::HandleGoObjectCommand(char* args)
 bool ChatHandler::HandleGameObjectTargetCommand(char* args)
 {
     Player* pl = m_session->GetPlayer();
+
+    if (!pl)
+        return false;
+
     QueryResult* result;
     GameEventMgr::ActiveEvents const& activeEventsList = sGameEventMgr.GetActiveEventList();
     if (*args)
@@ -7265,11 +7269,28 @@ bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
     if (!lowguid)
         return false;
 
+    uint32 entry = 0;
+
+    if (!ExtractUInt32(&args, entry))
+        entry = 0;
+
+    auto player = GetSession()->GetPlayer();
+
+    if (!player)
+        return false;
+
+
+
     GameObject* obj = nullptr;
 
-    // by DB guid
-    if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
-        obj = GetGameObjectWithGuid(lowguid, go_data->id);
+    if (!entry)
+    {
+        // by DB guid
+        if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
+            obj = GetGameObjectWithGuid(lowguid, go_data->id);
+    }
+    else
+        obj = GetGameObjectWithGuid(lowguid, entry);
 
     if (!obj)
     {
@@ -7661,7 +7682,7 @@ bool ChatHandler::HandleGameObjectNearCommand(char* args)
     uint32 count = 0;
 
     Player* pl = m_session->GetPlayer();
-    QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, position_x, position_y, position_z, map, "
+    /*QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, position_x, position_y, position_z, map, "
         "(POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) AS order_ "
         "FROM gameobject WHERE map='%u' AND (POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) <= '%f' ORDER BY order_",
         pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(),
@@ -7690,6 +7711,19 @@ bool ChatHandler::HandleGameObjectNearCommand(char* args)
         }         while (result->NextRow());
 
         delete result;
+    }*/
+
+    MaNGOS::AllGameObjectsInRange check(pl, distance);
+    std::list<GameObject*> gameObjects;
+    MaNGOS::GameObjectListSearcher<MaNGOS::AllGameObjectsInRange> searcher(gameObjects, check);
+
+    Cell::VisitGridObjects(pl, searcher, distance);
+
+    for (const auto& go : gameObjects)
+    {
+        PSendSysMessage(LANG_GO_MIXED_LIST_CHAT, go->GetGUIDLow(), PrepareStringNpcOrGoSpawnInformation<GameObject>(go->GetGUIDLow()).c_str(), go->GetEntry(), go->GetGUIDLow()
+            , go->GetName(), go->GetPositionX(), go->GetPositionY(), go->GetPositionZ(), go->GetMapId());
+        ++count;
     }
 
     PSendSysMessage(LANG_COMMAND_NEAROBJMESSAGE, distance, count);
