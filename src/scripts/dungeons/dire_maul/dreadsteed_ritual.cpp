@@ -37,7 +37,6 @@ enum
     NPC_XOROTHIAN_DREADSTEED = 14502,
     NPC_LORD_HEL_NURATH = 14506,
     NPC_DREADSTEED_SPIRIT = 14504,
-    NPC_RITUAL_TRIGGER = 1000001, // Just created for this.
 
     SPELL_WHEEL_AURA = 23120,
     SPELL_BELL_AURA = 23117,
@@ -130,8 +129,11 @@ struct go_pedestal_of_immol_tharAI: public GameObjectAI
 
     bool EventStart(uint64 playerGuid)
     {
-		if (eventPhase!=0)
-			return false;
+        if (eventPhase != 0)
+            return false;
+
+        if (m_pInstance)
+            m_pInstance->SetData64(DATA_DREADSTEED_RITUAL_PLAYER, playerGuid);
         
         GenerateGlyphAndNodeGuids();
         eventPhase = 1;
@@ -764,31 +766,6 @@ bool
     return true;
 }
 
-struct npc_ritual_triggerAI : public ScriptedAI
-{
-    npc_ritual_triggerAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    void Reset() override
-    {
-        timer = 0;
-    }
-
-    void EnterCombat(Unit* enemy) override {}
-    void AttackedBy(Unit* attacker) override {}
-    void AttackStart(Unit * unit) override {}
-    void EnterEvadeMode() override {}
-    uint32 timer;
-    void UpdateAI(const uint32 uiDiff) override {}
-};
-
-CreatureAI* GetAI_npc_ritual_trigger(Creature* pCreature)
-{
-    return new npc_ritual_triggerAI(pCreature);
-}
-
 struct go_ritual_nodeAI: public GameObjectAI
 {
     go_ritual_nodeAI(GameObject* pGo, uint32 refreshTimer, uint32 spellId) : GameObjectAI(pGo)
@@ -808,8 +785,20 @@ struct go_ritual_nodeAI: public GameObjectAI
         {
             if (timer < uiDiff)
             {
-                if (Creature* trigger = me->FindNearestCreature(NPC_RITUAL_TRIGGER, 40.0f))
-                    trigger->CastSpell(trigger, spell, false);
+                if (instance_dire_maul* instance = (instance_dire_maul*)me->GetInstanceData())
+                {
+                    if (GameObject* candleAura = instance->GetGameObject(instance->GetData64(GO_RITUAL_CANDLE_AURA)))
+                    {
+                        if (Unit* target = instance->GetMap()->GetPlayer(instance->GetData64(DATA_DREADSTEED_RITUAL_PLAYER)))
+                        {
+                            if (spell == SPELL_CANDLE_AURA)
+                                candleAura->CastSpell(target, spell, true);
+                            else
+                                me->CastSpell(target, spell, true);
+                        }
+                    }
+                }
+
                 timer = refreshTime/*5000*/;
             }
             else
@@ -985,11 +974,6 @@ void AddSC_dreadsteed_ritual()
     newscript = new Script;
     newscript->Name = "event_dreadsteed_ritual_second_part";
     newscript->pProcessEventId = &ProcessEventId_event_dreadsteed_ritual_second_part;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_ritual_trigger";
-    newscript->GetAI = &GetAI_npc_ritual_trigger;
     newscript->RegisterSelf();
 
     newscript = new Script;
