@@ -1357,6 +1357,20 @@ namespace MaNGOS
             float m_fRange;
     };
 
+    class AllGameObjectsInRange
+    {
+    public:
+        AllGameObjectsInRange(const WorldObject* pObject, float fMaxRange) : m_pObject(pObject), m_fRange(fMaxRange) {}
+        bool operator() (GameObject* pGo)
+        {
+            return m_pObject->IsWithinDist(pGo, m_fRange, false);
+        }
+
+    private:
+        const WorldObject* m_pObject;
+        float m_fRange;
+    };
+
     class AllCreaturesOfEntryInRange
     {
     public:
