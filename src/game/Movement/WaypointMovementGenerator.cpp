@@ -529,6 +529,7 @@ void PatrolMovementGenerator::StartMove(Creature& creature)
 
     switch (leader->GetMotionMaster()->GetCurrentMovementGeneratorType())
     {
+        case RANDOM_MOTION_TYPE:
         case WAYPOINT_MOTION_TYPE:
         case HOME_MOTION_TYPE:
         case POINT_MOTION_TYPE:
