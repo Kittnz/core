@@ -776,7 +776,7 @@ struct npc_residual_montruosityAI : public ScriptedAI
                 {
                     if (itr != m_creature)
                     {
-                        if (!(itr->IsWithinDistInMap(m_creature, 45.0f) && itr->HasInArc(M_PI, m_creature)))
+                        if (!(itr->IsWithinDistInMap(m_creature, 45.0f) && itr->HasInArc(M_PI_F, m_creature)))
                         {
                             float distance = m_creature->GetDistance(itr);
                             if (distance < closestbefore)
