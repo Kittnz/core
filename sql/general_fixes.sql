@@ -192,5 +192,5 @@ delete from quest_template where title = 'Indebted';
 delete from quest_template where title = 'War On Two Fronts';
 delete from quest_template where title = 'Fall Of The Usurper';
 
-update creature_equip_template set equipentry1 = 2901 where entry = 55143
+update creature_equip_template set equipentry1 = 2901 where entry = 55143;
 update item_template set name = 'Eldarath Harmonization Gem' where name = 'Eldarath Harmonization';
