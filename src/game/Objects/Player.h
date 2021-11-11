@@ -2649,7 +2649,7 @@ class Player final: public Unit
 
 		// General send addon message
 	public:
-		void SendAddonMessage(std::string message);
+		void SendAddonMessage(std::string prefix, std::string message);
 
 };
 
