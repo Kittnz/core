@@ -274,7 +274,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 81206: bytes = 16; break; // High Elf: Dark Ranger
-            case 81209: bytes = 15; break; // High Elf: Blood Elf
+            case 81209: if (male) bytes = 17; else bytes = 15; break; // High Elf: Blood Elf
             }
             break;
         case RACE_TAUREN:
