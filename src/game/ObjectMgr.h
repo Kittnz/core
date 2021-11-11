@@ -1283,6 +1283,7 @@ class ObjectMgr
             return m_ExclusiveQuestGroups.equal_range(groupId);
         }
 
+        // Transmog
         ItemPrototype const* GetItemTransmogrifyTemplate(uint32 transmogrifyId) const
         {
             auto itr = m_itemTransmogs.find(transmogrifyId);
@@ -1290,8 +1291,15 @@ class ObjectMgr
             return itr->second;
         }
         ItemTransmogrifyTemplateMap const& GetItemTransmogrifyTemplateMap() const { return m_itemTransmogs; }
-        uint32 CreateItemTransmogrifyTemplate(uint32 sourceItemID, uint32 sourceDisplayID);
+        uint32 CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourceDisplayId, uint32 sourceId);
         void DeleteItemTransmogrifyTemplate(uint32 transmogrifyId);
+        std::map<uint32, std::map<uint32, std::map<uint32, std::map<uint32, TransmogContainer>>>> NumPossibleTransmogs;
+        bool IsItemTypeTransmoggable(uint32 invType);
+        bool IsItemSubClassTransmoggable(uint32 subClass);
+        void FillPossibleTransmogs();
+        void AddPossibleTransmog(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType, uint32 displayId);
+        uint32 GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType);
+
 
         // Deactivated Spells
         std::set<uint32>    m_DisabledSpells;

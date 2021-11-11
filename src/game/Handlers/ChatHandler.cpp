@@ -36,6 +36,7 @@
 #include "SpellAuras.h"
 #include "Language.h"
 #include "Util.h"
+#include "Unit.h"
 #include "GridNotifiersImpl.h"
 #include "CellImpl.h"
 #include "Anticheat.h"
@@ -498,10 +499,17 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     // Transmog System Comms
     if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
     {
-        if (strstr(msg.c_str(), "TW_XMOG")) // prefix
+        if (strstr(msg.c_str(), "TW_TRANSMOG")) // prefix
         {
+
+			std::string prefix = "TW_TRANSMOG";
+
             if (strstr(msg.c_str(), "DoTransmog:"))
             {
+
+                std::string result;
+				result = "TransmogResult:";
+
                 std::string delimiter = ":";
                 std::string command = msg.substr(0, msg.find(delimiter));
 
@@ -511,65 +519,31 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 msg = msg.substr(slotStr.length() + 1, msg.length());
                 std::string itemIDStr = msg.substr(0, msg.find(delimiter));
 
+                msg = msg.substr(itemIDStr.length() + 1, msg.length());
+                std::string slotIdStr = msg.substr(0, msg.find(delimiter));
+
                 try
                 {
                     uint8 slot = std::stoi(slotStr);
                     uint32 itemID = std::stoi(itemIDStr);
+                    uint32 slotId = std::stoi(slotIdStr);
 
-                    if (_player->ApplyTransmogrifications(slot, itemID))
-                    {
-                        std::string aText;
-
-                        aText = "TW_XMOG TransmogResult:" + slotStr + ":ok";
-                        WorldPacket data;
-                        ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-                            aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-                            _player->GetObjectGuid(), _player->GetName());
-
-                        _player->GetSession()->SendPacket(&data);
-                    }
+					result += slotStr + ":" + slotIdStr + ":" + std::to_string(_player->ApplyTransmogrifications(slot, itemID, slotId));
                 }
                 catch (...)
                 {
-                    return;
+					result += slotStr + ":" + slotIdStr + ":10"; // stoi failed
                 }
+
+				_player->SendAddonMessage(prefix, result.c_str());
+
+                return;
             }
             if (strstr(msg.c_str(), "ResetTransmog:"))
             {
-                std::string delimiter = ":";
-                std::string command = msg.substr(0, msg.find(delimiter));
 
-                msg = msg.substr(command.length() + 1, msg.length());
-                std::string slotStr = msg.substr(0, msg.find(delimiter));
-
-                try
-                {
-                    uint8 slot = std::stoi(slotStr);
-
-                    if (_player->ApplyTransmogrifications(slot, 0))
-                    {
-                        std::string aText;
-
-                        aText = "TW_XMOG ResetResult:" + slotStr + ":ok";
-                        WorldPacket data;
-                        ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-                            aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-                            _player->GetObjectGuid(), _player->GetName());
-
-                        _player->GetSession()->SendPacket(&data);
-                    }
-                }
-                catch (...)
-                {
-                    return;
-                }
-            }
-            if (strstr(msg.c_str(), "GetAvailableTransmogsItemIDs:"))
-            {
-                std::string slotString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
-
-                if (slotString.empty() || slotString.length() > 2)
-                    return;
+                std::string result;
+                result = "ResetResult:";
 
                 std::string delimiter = ":";
                 std::string command = msg.substr(0, msg.find(delimiter));
@@ -578,26 +552,46 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 std::string slotStr = msg.substr(0, msg.find(delimiter));
 
                 msg = msg.substr(slotStr.length() + 1, msg.length());
-                std::string t1 = msg.substr(0, msg.find(delimiter));
-
-                msg = msg.substr(t1.length() + 1, msg.length());
-                std::string t2 = msg.substr(0, msg.find(delimiter));
+                std::string slotId = msg.substr(0, msg.find(delimiter));
 
                 try
                 {
                     uint8 slot = std::stoi(slotStr);
-                    std::string aText;
+					result += slotStr + ":"+ slotId + ":" + std::to_string(_player->ApplyTransmogrifications(slot, 0, 0));
+                }
+                catch (...)
+                {
+					result += slotStr + ":" + slotId + ":10"; // stoi failed
+                }
 
-                    aText = "TW_XMOG AvailableTransmogs:" + slotString + ":" + _player->GetAvailableTransmogs(slot);
+				_player->SendAddonMessage(prefix, result.c_str());
 
-                    WorldPacket data;
-                    ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-                        aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-                        _player->GetObjectGuid(), _player->GetName());
+                return;
+            }
+            if (strstr(msg.c_str(), "GetAvailableTransmogsItemIDs:"))
+            {
+                std::string delimiter = ":";
+                std::string command = msg.substr(0, msg.find(delimiter));
 
-                    _player->GetSession()->SendPacket(&data);
+                msg = msg.substr(command.length() + 1, msg.length());
+                std::string InventorySlotIdStr = msg.substr(0, msg.find(delimiter));
 
-                    sLog.outInfo("send %s ", aText.c_str());
+                msg = msg.substr(InventorySlotIdStr.length() + 1, msg.length());
+                std::string invTypeStr = msg.substr(0, msg.find(delimiter));
+
+                msg = msg.substr(invTypeStr.length() + 1, msg.length());
+                std::string destItemIdStr = msg.substr(0, msg.find(delimiter));
+
+                try
+                {
+                    uint8 InventorySlotId = std::stoi(InventorySlotIdStr);
+                    uint8 invType = std::stoi(invTypeStr);
+                    uint32 destItemId = std::stoi(destItemIdStr);
+
+                    std::string available = "AvailableTransmogs:" + InventorySlotIdStr + ":" + _player->GetAvailableTransmogs(InventorySlotId, invType, destItemId);
+
+					_player->SendAddonMessage(prefix, available.c_str());
+
                 }
                 catch (...)
                 {
@@ -606,20 +600,60 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             }
             if (strstr(msg.c_str(), "GetTransmogStatus"))
             {
+                std::string status = "TransmogStatus:" + _player->GetTransmogStatus();
+
+				_player->SendAddonMessage(prefix, status.c_str());
+            }
+            if (strstr(msg.c_str(), "DoChangeGlow:"))
+            {
                 std::string aText;
+                aText = "TW_TRANSMOG ChangeGlowResult:";
 
-                aText = "TW_XMOG TransmogStatus";
+                std::string delimiter = ":";
+                std::string command = msg.substr(0, msg.find(delimiter));
 
-                aText += _player->GetTransmogStatus();
+                msg = msg.substr(command.length() + 1, msg.length());
+                std::string slotStr = msg.substr(0, msg.find(delimiter));
 
-                WorldPacket data;
-                ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-                    aText.c_str(), Language(LANG_ADDON), _player->GetChatTag(),
-                    _player->GetObjectGuid(), _player->GetName());
+                msg = msg.substr(slotStr.length() + 1, msg.length());
+                std::string glowIdStr = msg.substr(0, msg.find(delimiter));
 
-                _player->GetSession()->SendPacket(&data);
+                // 803 fiery
+                // 1900 crusader
+                // 2505 - white healing power
+                // 2504 - purple spellpower
+                // 1898 - lifestealing
+                // 912 - demonslay
+                // 1894 - icy
+                // 1897 - striking 5
+                // 853 - beastslaying
+                // 1899 - unholy
+                // 2564 - agility green
+                // 2568 - intelect yellow ?
+                // 2567 - spirit yellow ?
+                // 2563 - str
 
-                sLog.outInfo("send %s ", aText.c_str());
+                /*mangos > item->GetSlot() 15
+                    VisibleBase 440
+                    slot 0
+                    item->GetEnchantmentId(slot) 803*/
+                // GetSlot - mh 15, oh 16
+
+                try
+                {
+                    uint32 slot = std::stoi(slotStr);
+                    uint32 glowId = std::stoi(glowIdStr);
+                    int VisibleBase = PLAYER_VISIBLE_ITEM_1_0 + (slot * MAX_VISIBLE_ITEM_OFFSET);
+                    _player->SetUInt32Value(VisibleBase + 1 + 0, glowId);
+                    sLog.outInfo("slot = %u, glowId = %u", slot, glowId);
+                    //aText += slotStr + ":" + slotId + ":" + std::to_string(_player->ApplyTransmogrifications(slot, 0, 0));
+                }
+                catch (...)
+                {
+                    //aText += slotStr + ":" + slotId + ":10"; // stoi failed
+                }
+
+                return;
             }
         }
 

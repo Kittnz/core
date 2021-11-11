@@ -1561,7 +1561,7 @@ void World::SetInitialWorldSettings()
 
     sObjectMgr.LoadCinematicsWaypoints();
 
-    if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
+    if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED) || TRUE) //temp, idk if this is enabled on ptr
         sObjectMgr.LoadItemTransmogrifyTemplates();
 
     sSpellMgr.LoadSpellGroups();
@@ -1578,6 +1578,11 @@ void World::SetInitialWorldSettings()
                                               std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_FREQUENCY)));
 
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
+
+	uint32 uTransmogFillStartTime = WorldTimer::getMSTime();
+	sObjectMgr.FillPossibleTransmogs();
+	uint32 uTransmogFillDuration = WorldTimer::getMSTimeDiff(uTransmogFillStartTime, WorldTimer::getMSTime());
+	sLog.outString("[Transmog] FillPossibleTransmogs Loading time: %i minutes %i seconds", uTransmogFillDuration / 60000, (uTransmogFillDuration % 60000) / 1000);
 
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
     sLog.outString("World server is up and running! Loading time: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000);
@@ -3079,7 +3084,7 @@ void World::SendUpdateSingleItem(uint32 entry, WorldSession* self)
             int loc_idx = self->GetSessionDbLocaleIndex();
             if (loc_idx >= 0)
             {
-                ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->SourceItemId);
+                ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->DestItemId);
                 if (il)
                 {
                     if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
@@ -3101,7 +3106,7 @@ void World::SendUpdateSingleItem(uint32 entry, WorldSession* self)
                     int loc_idx = itr->second->GetSessionDbLocaleIndex();
                     if (loc_idx >= 0)
                     {
-                        ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->SourceItemId);
+                        ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->DestItemId);
                         if (il)
                         {
                             if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())
@@ -3248,7 +3253,7 @@ void World::SendUpdateMultipleItems(const std::vector<uint32>& items, WorldSessi
                 int loc_idx = self->GetSessionDbLocaleIndex();
                 if (loc_idx >= 0)
                 {
-                    ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->SourceItemId);
+                    ItemLocale const* il = sObjectMgr.GetItemLocale(pProto->DestItemId);
                     if (il)
                     {
                         if (il->Name.size() > size_t(loc_idx) && !il->Name[loc_idx].empty())

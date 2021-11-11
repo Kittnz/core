@@ -1,0 +1,1 @@
+ALTER TABLE `item_transmogrify_template` ADD `SourceID` INT NOT NULL AFTER `DisplayID`;
