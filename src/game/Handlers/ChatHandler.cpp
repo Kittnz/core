@@ -382,6 +382,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
             }
             if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac"))
+            if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac") || strstr(msg.c_str(), "Sunnyglade") || strstr(msg.c_str(), "Arena"))
             {
                 _player->SetBattleGroundEntryPoint();
 
@@ -391,6 +392,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_AB);
                 if (strstr(msg.c_str(), "Alterac"))
                     _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_AV);
+                if (strstr(msg.c_str(), "Sunnyglade"))
+                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_SV);
+                if (strstr(msg.c_str(), "Arena"))
+                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_BR);
 
                 _player->SetBGQueueAllowed(true);
             }
