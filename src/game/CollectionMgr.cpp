@@ -32,6 +32,7 @@
 #include "Policies/SingletonImp.h"
 #include "Player.h"
 #include "Chat.h"
+#include "ItemPrototype.h"
 
 CollectionMgr::CollectionMgr(Player* owner) : _owner(owner)
 {
