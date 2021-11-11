@@ -710,6 +710,10 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_ENABLE_CROSSFACTION_BATTLEGROUNDS,           "BattleGround.Crossfaction", false);
     setConfig(CONFIG_BOOL_ENABLE_GEAR_RATING_QUEUE,                    "BattleGround.GearQueue", false);
 
+        // If max bg queues is at 0, decide based on patch.
+    if (getConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT) == 0)
+            setConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT, 3);
+
     setConfig(CONFIG_BOOL_OUTDOORPVP_EP_ENABLE, "OutdoorPvP.EP.Enable", true);
     setConfig(CONFIG_BOOL_OUTDOORPVP_SI_ENABLE, "OutdoorPvP.SI.Enable", true);
 
@@ -898,6 +902,10 @@ void World::LoadConfigSettings(bool reload)
     sPlayerBotMgr.LoadConfig();
 
     setConfigMinMax(CONFIG_UINT32_SPELLS_CCDELAY, "Spells.CCDelay", 200, 0, 20000);
+    setConfigMinMax(CONFIG_UINT32_DEBUFF_LIMIT, "DebuffLimit", 0, 0, 40);
+
+    if (getConfig(CONFIG_UINT32_DEBUFF_LIMIT) == 0)
+        setConfig(CONFIG_UINT32_DEBUFF_LIMIT, 16);
 
     setConfig(CONFIG_UINT32_ANTICRASH_OPTIONS, "Anticrash.Options", 0);
     setConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER, "Anticrash.Rearm.Timer", 0);
