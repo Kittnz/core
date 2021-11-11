@@ -497,7 +497,7 @@ bool ItemUseSpell_item_holy_strike_book(Player* pPlayer, Item* pItem, const Spel
     if (pPlayer->IsMoving())
         return false;
 
-    if (!pPlayer->GetClass() == CLASS_PALADIN)
+    if (pPlayer->GetClass() != CLASS_PALADIN)
         return false;
 
     switch (pItem->GetEntry())
@@ -1812,7 +1812,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
         uint32 cost = pPlayer->GetLevel() * 100;
         if (pPlayer->GetMoney() >= cost)
         {
-            pPlayer->ModifyMoney(-cost);
+            pPlayer->ModifyMoney(cost);
             pPlayer->CastSpell(pPlayer, 130, true);
             pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
             pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18 * IN_MILLISECONDS));
@@ -3017,7 +3017,7 @@ bool GossipSelect_ArenaMaster(Player* player, Creature* creature, uint32 sender,
 #define MINING_ENCHANT_5 906
 #define SPELL_VISUAL 14867
 
-#define DEFAULT_TEXT 70000
+#define DEFAULT_MINER_TEXT 70000
 #define UNAVAILABLE_TEXT 70001
 #define ALREADY_INSTALLED_TEXT 70002
 
@@ -3036,7 +3036,7 @@ bool GossipHello_MiningEnchanter(Player* player, Creature* creature)
         {
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please, install the telescopic lens!", GOSSIP_SENDER_MAIN,
                 GOSSIP_ACTION_INFO_DEF + 2);
-            player->SEND_GOSSIP_MENU(DEFAULT_TEXT, creature->GetGUID());
+            player->SEND_GOSSIP_MENU(DEFAULT_MINER_TEXT, creature->GetGUID());
         }
 
         return true;
@@ -4611,7 +4611,7 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
         }
 
         pCreature->MonsterSay("About time The Rov gets to shut that idiot down, The Rov will beat him up.");
-        pCreature->GetMotionMaster()->MovePoint(1, 2025.37, -4633.34, 29.55, 0, 2.0F);
+        pCreature->GetMotionMaster()->MovePoint(1, 2025.37f, -4633.34f, 29.55f, 0, 2.0F);
         pCreature->SetWalk(true);
 
         DoAfterTime(pPlayer, 7 * IN_MILLISECONDS,
@@ -4638,7 +4638,7 @@ bool GossipSelect_npc_rov(Player* pPlayer, Creature* pCreature, uint32 /*uiSende
             Creature* sturk_mob = map->GetCreature(sturkGuid);
 
             sturk_mob->MonsterSay("Hey, hey, not the face man!");
-            sturk_mob->GetMotionMaster()->MovePoint(1, 2026.39, -4645.33, 29.66, 0, 5.0F);
+            sturk_mob->GetMotionMaster()->MovePoint(1, 2026.39f, -4645.33f, 29.66f, 0, 5.0F);
             sturk_mob->SetWalk(false);
         });
 

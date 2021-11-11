@@ -371,7 +371,7 @@ struct go_corrupted_crystal : public GameObjectAI
 
                     kheyna->MonsterMove(669.70f, -4094.36f, 100.70f);
                     kheyna->PMonsterSay("%s, you're early! What fortune! I believe I've finally tracked-", pPlayer->GetName());
-                    me->SummonCreature(GOB_CHROMIE_PORTAL, 667.73f, -4086.49f, 100.71, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
+                    me->SummonCreature(GOB_CHROMIE_PORTAL, 667.73f, -4086.49f, 100.71f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
                     m_uiDialogueTimer = 5000;
                     m_uiTick++;
                 }
@@ -426,7 +426,7 @@ struct go_corrupted_crystal : public GameObjectAI
                 break;
 
             case 5:
-                if (Creature* antnormi = me->SummonCreature(NPC_ANTNORMI, 704.01f, -4090.40f, 100.71, TEMPSUMMON_DEAD_DESPAWN))
+                if (Creature* antnormi = me->SummonCreature(NPC_ANTNORMI, 704.01f, -4090.40f, 100.71f, TEMPSUMMON_DEAD_DESPAWN))
                 {
                     Creature* antnormiPortalSummon = antnormi->SummonCreature(GOB_DRAGON_PORTAL, 726.33f, -4089.56f, 101, 0, TEMPSUMMON_MANUAL_DESPAWN);
 
@@ -626,7 +626,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         kheyna->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
 
                         chromie->MonsterSay(SAY_CHROMIE_4); // We have much to talk about Kheyna. Adventurer, return to Andorhal and speak to me.
-                        chromie->SummonCreature(GOB_CHROMIE_PORTAL, 673.74f, -4090.49, 100.71, 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
+                        chromie->SummonCreature(GOB_CHROMIE_PORTAL, 673.74f, -4090.49f, 100.71f, 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
                         kheyna->MonsterMove(chromie->GetPositionX() + 1, chromie->GetPositionY() + 1, chromie->GetPositionZ());
 
                         Player* pPlayer = me->GetMap()->GetPlayer(m_player);
@@ -758,7 +758,7 @@ bool GOHello_go_corrupted_crystal(Player* pPlayer, GameObject* pGO)
             gobAI->SetInUse();
             gobAI->PassPlayer(pPlayer);
 
-            pPlayer->SummonCreature(NPC_KHEYNA, 658.04, -4105.24, 99.43, 0, TEMPSUMMON_DEAD_DESPAWN);
+            pPlayer->SummonCreature(NPC_KHEYNA, 658.04f, -4105.24f, 99.43f, 0, TEMPSUMMON_DEAD_DESPAWN);
         }
     }
     return false;

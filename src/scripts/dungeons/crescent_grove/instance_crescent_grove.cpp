@@ -24,5 +24,5 @@ InstanceData* GetInstanceData_instance_crescent_grove(Map* p_Map) { return new i
 
 void AddSC_instance_crescent_grove()
 {
-    Script* newscript;
+   // Script* newscript;
 }

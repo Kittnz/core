@@ -1690,12 +1690,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (m_caster && m_caster->IsPlayer())
                     {
                         float dis{ 4.0F };
-                        float x, y, z, ang, p_r, o_r;
+                        float x, y, z, p_r, o_r;
                         m_caster->GetSafePosition(x, y, z);
                         x += dis * cos(m_caster->GetOrientation());
                         y += dis * sin(m_caster->GetOrientation());
                         p_r = m_caster->GetOrientation();
-                        o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
+                        o_r = remainderf(p_r + M_PI_F, M_PI_F * 2.0f);
                         float rot2 = sin(o_r / 2);
                         float rot3 = cos(o_r / 2);
 
@@ -1750,7 +1750,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                         float  p_r, o_r;
                         p_r = m_caster->GetOrientation();
-                        o_r = remainderf(p_r + M_PI, M_PI * 2.0f);
+                        o_r = remainderf(p_r + M_PI_F, M_PI_F * 2.0f);
                         float rot2 = sin(o_r / 2);
                         float rot3 = cos(o_r / 2);
 

@@ -138,6 +138,7 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
         sWorld.SendGMTicketText(LANG_COMMAND_TICKETNEW, GetPlayer()->GetName(), ticket->GetTicketCategoryName(TicketType(ticketType)), ticket->GetId());
 
         response = GMTICKET_RESPONSE_CREATE_SUCCESS;
+        ChatHandler(this).SendSysMessage("Please note that you do not have to be logged in for your ticket to be completed.");
     }
 
     WorldPacket data(SMSG_GMTICKET_CREATE, 4);

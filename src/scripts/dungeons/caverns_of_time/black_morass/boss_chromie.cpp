@@ -256,7 +256,7 @@ struct boss_chromieAI : public ScriptedAI
                 // Sleep AoE
                 if (m_uiAoESleepTimer < diff)
                 {
-                    DoCastAOE(SPELL_AOE_SLEEP, CF_FORCE_CAST);
+                    DoCastAOE(SPELL_AOE_SLEEP, false);
 
                     m_uiAoESleepTimer = 20000;
                 }

@@ -1650,7 +1650,7 @@ bool WorldObject::HasInArc(const float arcangle, WorldObject const* obj, float o
 
 bool WorldObject::IsFacingTarget(WorldObject const* target) const
 {
-    return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(M_PI, target);
+    return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(M_PI_F, target);
 }
 
 bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const
