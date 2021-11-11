@@ -1,1 +1,0 @@
-update creature_template set dmg_min = 90, dmg_max = 120 where entry = 1061;
