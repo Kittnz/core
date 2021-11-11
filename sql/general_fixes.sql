@@ -6,6 +6,10 @@ update creature_template set npc_flags = 16391 + 2 where entry = 4556;
 update creature_template set npc_flags = 135 + 2 where entry = 6739;
 update gameobject set spawntimesecsmin = 120, spawntimesecsmax = 120 where id = 2010816;
 delete from playercreateinfo_spell where class = 3 and race = 5 and spell = 26290;
+update playercreateinfo_item set itemid = 2092 where class = 3 and race = 5 and itemid = 37;
+replace into playercreateinfo_spell values (5, 3, 1180, 'Daggers');
+
+replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (80466, 1082, 1083, 0, 0, 'Tirisfal Plagued Bear', NULL, 0, 7, 9, 195, 220, 0, 0, 155, 44, 0, 1, 0.857143, 1, 20, 5, 0, 0, 1, 14, 19, 0, 60, 1, 2500, 2000, 1, 0, 0, 4, 0, 0, 0, 0, 13.4464, 18.4888, 100, 1, 1, 822, 0, 822, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5797, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 -- Red Flag over the Sea
 UPDATE quest_template
@@ -150,3 +154,43 @@ SET title = 'No Hope for Tomorrow',
     offerrewardtext = '<Thirael lays dead, you\'ve fulfilled your promise to him. All that is left of him is a bag of coins you pick up.>'
 WHERE entry = 40184;
 
+replace into item_template values
+ ('81060', '2', '8', 'Tempered Runeblade', 'You can feel a hunger to to inflict destruction deep inside.', '60983', '4', '0', '1', '722976', '180744', '17', '-1', '-1', '66',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '20', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3700', '0',
+ '0', '183', '278', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '20', '0', '21617', '1', '0', '0', '-1', '0', '-1', '9331', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '120', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+ 
+update quest_template set objectives = 'Gather 5 Jadefire Felhorns, and 5 Purple Lotus for Insom\'ni on Kazon Island.' where entry = 40211;
+update quest_template set objectives = 'Gather a Barrel of Steamwheedle Wine, 10 Flasks of Port, a Cast of Merlot, and a Jug of Orgrimmar Brown for Fazzle \'The Slick\' in Bloodsail Retreat.' where entry = 40198;
+update quest_template set details = 'Hey, you! I be needing a bit of work that is off the boat if you think you can be a hand. When we get moving all that people really got to do is either drink, or work to keep the ship clean and orderly. I\'ve found it always good to keep a good reserve of ale on hand, and a good variety of it too!\n\nWhat I\'m gonna ask you to do is bring some ale from various sources, some of which might require you to have some friends, or connections with the opposite faction at that!\n\nFirst, I need a Barrel of Steamwheedle Wine, which can be found at the port, steal it. Secondly I\'ll need common ale, 10 Flasks of Port. Finally get me a Cask of Merlot from Stormwind at the Gallina Winery, and a jug of Orgrimmar Brown from the Tavern in Orgrimmar.' where entry = 40198;
+update quest_template set reqitemid1 = 60270, reqitemcount1 = 1 where entry = 40198;
+update quest_template set reqitemid2 = 2593, reqitemcount2 = 10 where entry = 40198;
+update quest_template set reqitemid3 = 1941, reqitemcount3 = 1 where entry = 40198;
+update quest_template set reqitemid4 = 60271, reqitemcount4 = 1 where entry = 40198;
+
+update quest_template set details = 'The Dark Iron Dwarves have been a long standing rival of ours, their attacks against our people have been ruthless. I have come to attempt to bolster our strength in the region, and if we want that to be possible, then we must set our sights on Angor Fortress.\n\nThe place is run by Captain Barlgruf, he has been sent from Shadowforge City to oversee actions here within the Badlands, cut him down, and the rest of them will be aimless. He should be inside Angor Fortress, no doubt nestled with the rest of his lackeys.\n\nKill him, and return to me.' where entry = 40228;
+update quest_template set offerrewardtext = 'Great work, Ironforge would be proud of the actions you have done this day, please, take these coins, as a token of our gratitude.\n\nPerhaps one day we may resume our work here on a more larger scale!' where entry = 40228;
+
+delete from quest_template where title = 'In Need of Assistance';
+delete from quest_template where title = 'Dire Situation';
+delete from quest_template where title = 'Crumblepoint Tower';
+delete from quest_template where title = 'Head Of The Pack';
+delete from quest_template where title = 'Worthy Ally';
+delete from quest_template where title = 'Into The Uplands';
+delete from quest_template where title = 'Outnumbered';
+delete from quest_template where title = 'In The Dark';
+delete from quest_template where title = 'Cutting Them Off';
+delete from quest_template where title = 'Uncanny Allies';
+delete from quest_template where title = 'Divide and Conquer';
+delete from quest_template where title = 'Fresh Perspective';
+delete from quest_template where title = 'The Price';
+delete from quest_template where title = 'Indebted';
+delete from quest_template where title = 'War On Two Fronts';
+delete from quest_template where title = 'Fall Of The Usurper';
+
+update creature_equip_template set equipentry1 = 2901 where entry = 55143
+update item_template set name = 'Eldarath Harmonization Gem' where name = 'Eldarath Harmonization';
