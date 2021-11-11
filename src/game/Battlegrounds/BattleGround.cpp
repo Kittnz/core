@@ -971,9 +971,12 @@ void BattleGround::AddPlayer(Player *pPlayer)
     // Buff-like spell for free mana casts for 30 seconds
     pPlayer->AddAura(23513, 0, pPlayer);
 
-    SpellAuraHolder* holder = pPlayer->GetSpellAuraHolder(23513); 
-    holder->SetAuraDuration(30000);
-    holder->UpdateAuraDuration();
+    SpellAuraHolder* holder = pPlayer->GetSpellAuraHolder(23513);
+    if (holder)
+    {
+        holder->SetAuraDuration(30000);
+        holder->UpdateAuraDuration();
+    }
 
     if (IsArena())
         pPlayer->RemoveArenaAuras(false);
