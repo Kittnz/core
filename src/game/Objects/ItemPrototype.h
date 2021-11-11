@@ -421,9 +421,8 @@ struct _ItemSpell
 
 struct TransmogEntry
 {
-    uint32 displayid;
-    uint32 display_entry;
-    uint32 inventory_type;
+    uint32 DestItemId = 0;
+    uint32 SourceItemId = 0;
 };
 
 struct ItemPrototype
@@ -490,7 +489,8 @@ struct ItemPrototype
     uint32 ExtraFlags;                                      // see ItemExtraFlags
     uint32 OtherTeamEntry;
     uint32 ScriptId;                                        // Turtle WoW Services, such as: race/faction change, character rename etc, etc.
-    uint32 SourceItemId = 0;                                // Transmogrification
+    uint32 DestItemId = 0;                                  // Transmogrification
+    uint32 SourceItemId = 0;                                  // Transmogrification
 
     mutable bool m_bDiscovered = false;                     // has item been discovered by players
 

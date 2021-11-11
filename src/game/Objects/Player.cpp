@@ -793,7 +793,6 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     InitTalentForLevel();
     InitPrimaryProfessions(); // to max set before any spell added
     m_reputationMgr.LoadFromDB(nullptr);
-    // _collectionMgr->LoadFromDB(nullptr);
 
     // apply original stats mods before spell loading or item equipment that call before equip _RemoveStatsMods()
     UpdateMaxHealth();                                      // Update max Health (for add bonus from stamina)
@@ -10658,17 +10657,9 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
 
     Item *pItem2 = GetItemByPos(bag, slot);
 
-    // Transmog - disabled for now
-    // - learn item when equipping it
-    // - send it to player
-    /*ItemPrototype const *itemProto = pItem->GetProto();
-    WorldPacket data;
-    std::string aText;
-    aText = "TW_XMOG NewTransmog:" + std::to_string(itemProto->ItemId);
-    ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-        aText.c_str(), Language(LANG_ADDON), GetChatTag(),
-        GetObjectGuid(), GetName());
-    GetSession()->SendPacket(&data);*/
+    // Transmog 
+    // Larn item when equipping it, if not already learned
+    _collectionMgr->AddToCollection(pItem->GetEntry());
 
     if (!pItem2)
     {
@@ -15161,7 +15152,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // must be before inventory (some items required reputation check)
     m_reputationMgr.LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADREPUTATION));
 
-    //_collectionMgr->LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTRANSMOGS));
+    _collectionMgr->LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTRANSMOGS));
 
     bool has_epic_mount = false; // Needed for riding skill replacement in patch 1.12.
     _LoadInventory(holder->GetResult(PLAYER_LOGIN_QUERY_LOADINVENTORY), time_diff, has_epic_mount);
@@ -23002,32 +22993,43 @@ bool Player::ActivateTalentSpec(int primaryOrSecondary)
 	return true;
 }
 
-bool Player::ApplyTransmogrifications(uint8 slot, uint32 itemID)
+uint8 Player::ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId)
 {
+
+    uint32 transmogCurrencyItemId = 51217;
+
     Item* destItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
 
     if (!destItem || !destItem->GetProto())
-        return false;
+        return 1; // no dest item
 
     uint32 newItemId = 0;
 
-    if (itemID)
+    if (sourceItemID)
     {
+        if (GetItemCount(transmogCurrencyItemId) == 0)
+            return 11; // no coin
+
         if (slot > EQUIPMENT_SLOT_END)
-            return false;
+            return 2; // bad slot
 
-        //if (!_collectionMgr->HasTransmog(itemID))
-            //return false;
+        if (!_collectionMgr->HasTransmog(sourceItemID))
+            return 3; // transmog not learned
 
-        ItemPrototype const* srcItemProto = sObjectMgr.GetItemPrototype(itemID);
+        ItemPrototype const* srcItemProto = sObjectMgr.GetItemPrototype(sourceItemID);
 
         if (!srcItemProto)
-            return false;
+            return 4; // no source item proto
 
-        // transmog rules check HERE
+        // todo transmog rules check HERE
+        std::string possibleTransmogs = _collectionMgr->GetAvailableTransmogs(slotId, destItem->GetProto()->InventoryType, destItem->GetProto()->ItemId) + ":";
+        if (!strstr(possibleTransmogs.c_str(), std::to_string(sourceItemID).c_str()))
+            return 5; // source not valid for destination
 
         // create or get item replica
-        newItemId = sObjectMgr.CreateItemTransmogrifyTemplate(destItem->GetProto()->ItemId, srcItemProto->DisplayInfoID);
+        newItemId = sObjectMgr.CreateItemTransmogrifyTemplate(destItem->GetProto()->ItemId, srcItemProto->DisplayInfoID, sourceItemID);
+
+        DestroyItemCount(transmogCurrencyItemId, 1, true);
     }
     else
     {
@@ -23035,25 +23037,18 @@ bool Player::ApplyTransmogrifications(uint8 slot, uint32 itemID)
     }
 
     destItem->SetTransmogrification(newItemId);
+    if (!destItem->IsSoulBound())
+        destItem->SetBinding(true);
     // update on client
     SetVisibleItemSlot(slot, destItem);
     destItem->SetState(ITEM_CHANGED, this);
-    return true;
+    return 0;
 }
 
-void Player::AddTransmog(uint32 itemId)
+std::string Player::GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId)
 {
     if (_collectionMgr)
-    {
-        if (_collectionMgr->CanAddTransmog(itemId))
-            _collectionMgr->AddTransmog(itemId);
-    }
-}
-
-std::string Player::GetAvailableTransmogs(uint8 slot)
-{
-    if (_collectionMgr)
-        return _collectionMgr->GetAvailableTransmogs(slot);
+        return _collectionMgr->GetAvailableTransmogs(InventorySlotId, invType, destItemId);
 
     return {};
 }
@@ -23065,12 +23060,22 @@ std::string Player::GetTransmogStatus()
     {
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
         {
+
+            // serverSlot to inventorySlotId
+            uint8 InventorySlotId = _collectionMgr->ServerSlotToClientInventorySlotId(slot);
+
+            //tmogProto->InventoryType
             if (ItemPrototype const* tmogProto = ObjectMgr::GetItemPrototype(pItem->GetTransmogrification()))
-                status += ":" + std::to_string(slot) + ":" + std::to_string(tmogProto->SourceItemId);
+                status += std::to_string(InventorySlotId) + ":" + std::to_string(tmogProto->SourceItemId) + ",";
             else
-                status += ":" + std::to_string(slot) + ":0";
+                status += std::to_string(0) + ":0" + ","; // todo
         }
     }
+
+    if (status.empty())
+        return "0:0";
+
+    status.pop_back(); // remove last ","
 
     return status;
 }

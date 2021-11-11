@@ -8786,7 +8786,7 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
 {
     m_itemTransmogs.clear();
 
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `ID`, `ItemID`, `DisplayID` FROM `item_transmogrify_template`"));
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `ID`, `ItemID`, `DisplayID`, `SourceID` FROM `item_transmogrify_template`"));
 
     if (!result)
         return;
@@ -8798,6 +8798,7 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
         uint32 ID = fields[0].GetUInt32();
         uint32 ItemID = fields[1].GetUInt32();
         uint32 DisplayID = fields[2].GetUInt32();
+        uint32 SourceID = fields[3].GetUInt32();
 
         ItemPrototype* copy = new ItemPrototype;
         ItemPrototype const* base = GetItemPrototype(ItemID);
@@ -8809,13 +8810,14 @@ void ObjectMgr::LoadItemTransmogrifyTemplates()
 
         copy->ItemId = ID;
         copy->DisplayInfoID = DisplayID;
-        copy->SourceItemId = ItemID;
+        copy->DestItemId = ItemID;
+        copy->SourceItemId = SourceID;
 
         m_itemTransmogs[ID] = copy;
     } while (result->NextRow());
 }
 
-uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 sourceItemId, uint32 sourceDisplayId)
+uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 destItemId, uint32 sourceDisplayId, uint32 sourceItemId)
 {
     // find max id
     uint32 destId = 100000;
@@ -8829,7 +8831,8 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 sourceItemId, uint32 sou
     ++destId;
 
     ItemPrototype* copy = new ItemPrototype;
-    ItemPrototype const* base = GetItemPrototype(sourceItemId);
+    ItemPrototype const* base = GetItemPrototype(destItemId);
+    ItemPrototype const* source = GetItemPrototype(sourceItemId);
 
     if (!base)
         return false;
@@ -8838,12 +8841,15 @@ uint32 ObjectMgr::CreateItemTransmogrifyTemplate(uint32 sourceItemId, uint32 sou
 
     copy->ItemId = destId;
     copy->DisplayInfoID = sourceDisplayId;
+    copy->DestItemId = destItemId;
     copy->SourceItemId = sourceItemId;
+    //copy->Sheath = source->Sheath; // 3 hip, 1 back
 
     m_itemTransmogs[destId] = copy;
 
     sWorld.SendUpdateSingleItem(destId);
-    WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`) VALUES ('%u','%u','%u')", destId, sourceItemId, sourceDisplayId);
+    WorldDatabase.PExecuteLog("INSERT INTO `item_transmogrify_template` (`ID`, `ItemID`, `DisplayID`, `SourceID`) VALUES ('%u','%u','%u', '%u')", 
+        destId, destItemId, sourceDisplayId, sourceItemId);
 
     return destId;
 }
@@ -8853,4 +8859,275 @@ void ObjectMgr::DeleteItemTransmogrifyTemplate(uint32 transmogrifyId)
     m_itemTransmogs.erase(transmogrifyId);
     sWorld.SendSingleItemInvalidate(transmogrifyId);
     WorldDatabase.PExecuteLog("DELETE FROM `item_transmogrify_template` WHERE `ID`=%u", transmogrifyId);
+}
+
+bool ObjectMgr::IsItemTypeTransmoggable(uint32 invType)
+{
+    std::vector<uint32> TransmoggableItemTypes = {
+    INVTYPE_HEAD,
+    INVTYPE_SHOULDERS,
+    INVTYPE_CHEST,
+    INVTYPE_WAIST,
+    INVTYPE_LEGS,
+    INVTYPE_FEET,
+    INVTYPE_WRISTS,
+    INVTYPE_HANDS,
+    INVTYPE_WEAPON,
+    INVTYPE_SHIELD,
+    INVTYPE_RANGED,
+    INVTYPE_CLOAK,
+    INVTYPE_2HWEAPON,
+    INVTYPE_ROBE,
+    INVTYPE_WEAPONMAINHAND,
+    INVTYPE_WEAPONOFFHAND,
+    INVTYPE_HOLDABLE,
+    INVTYPE_THROWN,
+    INVTYPE_RANGEDRIGHT,
+    };
+
+    return std::find(TransmoggableItemTypes.begin(), TransmoggableItemTypes.end(), invType) != TransmoggableItemTypes.end();
+}
+
+bool ObjectMgr::IsItemSubClassTransmoggable(uint32 subClass)
+{
+    std::vector<uint32> TransmoggableWeaponSubClasses = {
+    ITEM_SUBCLASS_WEAPON_AXE,
+    ITEM_SUBCLASS_WEAPON_AXE2,
+    ITEM_SUBCLASS_WEAPON_BOW,
+    ITEM_SUBCLASS_WEAPON_GUN,
+    ITEM_SUBCLASS_WEAPON_MACE,
+    ITEM_SUBCLASS_WEAPON_MACE2,
+    ITEM_SUBCLASS_WEAPON_POLEARM,
+    ITEM_SUBCLASS_WEAPON_SWORD,
+    ITEM_SUBCLASS_WEAPON_SWORD2,
+    ITEM_SUBCLASS_WEAPON_STAFF,
+    ITEM_SUBCLASS_WEAPON_FIST,
+    ITEM_SUBCLASS_WEAPON_MISC, // flowers etc
+    ITEM_SUBCLASS_WEAPON_DAGGER,
+    //ITEM_SUBCLASS_WEAPON_THROWN = 16,
+    //ITEM_SUBCLASS_WEAPON_SPEAR,
+    ITEM_SUBCLASS_WEAPON_CROSSBOW,
+    ITEM_SUBCLASS_WEAPON_WAND,
+    //ITEM_SUBCLASS_WEAPON_FISHING_POLE = 20
+    };
+
+    return std::find(TransmoggableWeaponSubClasses.begin(), TransmoggableWeaponSubClasses.end(), subClass) != TransmoggableWeaponSubClasses.end();
+
+}
+
+void ObjectMgr::AddPossibleTransmog(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType, uint32 displayId)
+{
+    if (std::find(NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].begin(),
+        NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].end(), displayId) == NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].end())
+        NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].push_back(displayId);
+    return;
+}
+
+void ObjectMgr::FillPossibleTransmogs()
+{
+    for (uint32 i = 1; i < MAX_CLASSES; ++i)
+        for (uint32 j = 1; j < MAX_ITEM_CLASS; ++j)
+            for (uint32 k = 1; k < MAX_ITEM_SUBCLASS_WEAPON; ++k)
+                for (uint32 l = 1; l < MAX_INVTYPE; ++l)
+                    NumPossibleTransmogs[i][j][k][l].empty();
+
+    for (uint32 i = 1; i < sItemStorage.GetMaxEntry(); ++i)
+    {
+        ItemPrototype const* proto = sItemStorage.LookupEntry<ItemPrototype >(i);
+        if (!proto)
+            continue;
+        if (strstr(proto->Name1, "Monster - "))
+            continue;
+        if (strstr(proto->Name1, "OLDMonster - "))
+            continue;
+        if (!IsItemTypeTransmoggable(proto->InventoryType))
+            continue;
+        if (!IsItemSubClassTransmoggable(proto->SubClass))
+            continue;
+
+        // add chest / robe exception
+
+        for (uint32 pClass = 1; pClass < MAX_CLASSES; ++pClass)
+            AddPossibleTransmog(pClass, proto->Class, proto->SubClass, proto->InventoryType, proto->DisplayInfoID);
+    }
+    return;
+}
+
+uint32 ObjectMgr::GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType)
+{
+
+    uint32 numItems = 0;
+
+    if (itemClass == ITEM_CLASS_ARMOR && itemSubClass != ITEM_SUBCLASS_ARMOR_SHIELD)
+    {
+        if (pClass == CLASS_PRIEST || pClass == CLASS_WARLOCK || pClass == CLASS_MAGE)
+        {
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][invType].size();
+        }
+
+        if (pClass == CLASS_DRUID || pClass == CLASS_ROGUE)
+        {
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][invType].size();
+
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][invType].size();
+
+        }
+
+        if (pClass == CLASS_HUNTER || pClass == CLASS_SHAMAN)
+        {
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][invType].size();
+
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][invType].size();
+
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_MAIL][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_MAIL][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_MAIL][invType].size();
+
+        }
+            
+        if (pClass == CLASS_WARRIOR || pClass == CLASS_PALADIN)
+        {
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_CLOTH][invType].size();
+
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_LEATHER][invType].size();
+
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_MAIL][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_MAIL][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_MAIL][invType].size();
+
+            // no plate robes so far, but who knows what we'll add in the future
+            if (invType == INVTYPE_ROBE || invType == INVTYPE_CHEST) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_PLATE][INVTYPE_ROBE].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_PLATE][INVTYPE_CHEST].size();
+            }
+            else
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_ARMOR_PLATE][invType].size();
+
+        }
+    }
+
+    if (itemClass == ITEM_CLASS_ARMOR && itemSubClass == ITEM_SUBCLASS_ARMOR_SHIELD)
+    {
+        if (pClass == CLASS_SHAMAN || pClass == CLASS_PALADIN || pClass == CLASS_WARRIOR)
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].size();
+    }
+
+    if (itemClass == ITEM_CLASS_WEAPON)
+    {
+        // 1h axe/mace/sword
+        if (itemSubClass == ITEM_SUBCLASS_WEAPON_AXE || itemSubClass == ITEM_SUBCLASS_WEAPON_MACE || itemSubClass == ITEM_SUBCLASS_WEAPON_SWORD)
+        {
+            if (invType == INVTYPE_WEAPON)
+            {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPONOFFHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPONOFFHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPONOFFHAND].size();
+            }
+            if (invType == INVTYPE_WEAPONMAINHAND)
+            {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPONOFFHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPONOFFHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPONOFFHAND].size();
+            }
+            if (invType == INVTYPE_WEAPONOFFHAND) {
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE][INVTYPE_WEAPONOFFHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE][INVTYPE_WEAPONOFFHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPON].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPONMAINHAND].size();
+                numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD][INVTYPE_WEAPONOFFHAND].size();
+            }
+        }
+
+        // 2h axe/mace/sword
+        if (invType == INVTYPE_2HWEAPON && (itemSubClass == ITEM_SUBCLASS_WEAPON_AXE2 || itemSubClass == ITEM_SUBCLASS_WEAPON_MACE2 || itemSubClass == ITEM_SUBCLASS_WEAPON_SWORD2))
+        {
+            numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_AXE2][INVTYPE_2HWEAPON].size();
+            numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_MACE2][INVTYPE_2HWEAPON].size();
+            numItems += NumPossibleTransmogs[pClass][itemClass][ITEM_SUBCLASS_WEAPON_SWORD2][INVTYPE_2HWEAPON].size();
+        }
+
+        // fists
+        if (itemSubClass == ITEM_SUBCLASS_WEAPON_FIST && (invType == INVTYPE_WEAPON || invType == INVTYPE_WEAPONMAINHAND))
+        {
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][INVTYPE_WEAPON].size();
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][INVTYPE_WEAPONMAINHAND].size();
+        }
+        if (itemSubClass == ITEM_SUBCLASS_WEAPON_FIST && (invType == INVTYPE_WEAPONOFFHAND))
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][INVTYPE_WEAPONOFFHAND].size();
+            
+        // daggers
+        if (itemSubClass == ITEM_SUBCLASS_WEAPON_DAGGER && (invType == INVTYPE_WEAPON || invType == INVTYPE_WEAPONMAINHAND || invType == INVTYPE_WEAPONOFFHAND))
+        {
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][INVTYPE_WEAPON].size();
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][INVTYPE_WEAPONMAINHAND].size();
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][INVTYPE_WEAPONOFFHAND].size();
+        }
+
+        // staff polearm wand bow gun crossbow misc
+        if (itemSubClass == ITEM_SUBCLASS_WEAPON_STAFF || itemSubClass == ITEM_SUBCLASS_WEAPON_POLEARM || 
+            itemSubClass == ITEM_SUBCLASS_WEAPON_WAND ||
+            itemSubClass == ITEM_SUBCLASS_WEAPON_BOW || itemSubClass == ITEM_SUBCLASS_WEAPON_GUN ||
+            itemSubClass == ITEM_SUBCLASS_WEAPON_CROSSBOW || itemSubClass == ITEM_SUBCLASS_WEAPON_MISC)
+            numItems += NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].size();
+    }
+
+    return numItems;
+
 }

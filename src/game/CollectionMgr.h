@@ -34,18 +34,23 @@ class CollectionMgr
         explicit CollectionMgr(Player* owner);
 
         // General
-        void SaveToDB();
         void LoadFromDB(QueryResult* result);
 
         // Helpers
-        bool HasTransmog(uint32 itemId) { return std::find(_transmogs.begin(), _transmogs.end(), itemId) != _transmogs.end(); }
-        TransmogContainer& GetTransmogs() { return _transmogs; }
-        void AddTransmog(uint32 itemId);
-        bool CanAddTransmog(uint32 ItemId);
-        std::string GetAvailableTransmogs(uint8 slot);
+        bool HasTransmog(uint32 newItemId);
+        void AddToCollection(uint32 itemId);
+        bool ItemIsValidTransmogForDest(uint32 item, ItemPrototype const* destItemProto);
+
+        TransmogContainer GetTransmogs() { return _transmogs; }
+        
+        std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
+        
+        uint8 ServerSlotToClientInventorySlotId(uint8 InventorySlotId);
+
     private:
         Player* _owner;
         TransmogContainer _transmogs{};
+        
 };
 
 #endif
