@@ -286,22 +286,24 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	{
 		if (strstr(msg.c_str(), "TW_SHOP"))
 		{
+			std::string prefix = "TW_SHOP";
+
 			if (strstr(msg.c_str(), "Balance"))
 			{
 
 				uint32 balance = ShopMgr(_player).GetBalance();
-				_player->SendAddonMessage("TW_SHOP Balance:" + std::to_string(balance));
+				_player->SendAddonMessage(prefix, "Balance:" + std::to_string(balance));
 			}
 
 			if (strstr(msg.c_str(), "Categories"))
 			{
 
-				std::string sText = "TW_SHOP Categories:";
+				std::string categories = "Categories:";
 
 				for (auto &itr : sObjectMgr.GetShopCategoriesList())
-					sText += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
+					categories += std::to_string(itr.first) + "=" + itr.second.Name + "="+itr.second.Icon+";";
 
-				_player->SendAddonMessage(sText);
+				_player->SendAddonMessage(prefix, categories);
 
 			}
 
@@ -323,7 +325,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 					return;
 				}
 
-				_player->SendAddonMessage("TW_SHOP Entries:" + categoryIDString + "=start");
+				_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=start");
 
 				for (auto &itr : sObjectMgr.GetShopEntriesList())
 				{
@@ -331,7 +333,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 						continue;
 
 
-					_player->SendAddonMessage("TW_SHOP Entries:" + categoryIDString + "=" 
+					_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=" 
 						+ itr.second.Description + "=" 
 						+ std::to_string(itr.second.Price) + "=" 
 						+ itr.second.DescriptionLong + "=" 
@@ -339,7 +341,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 				}
 
-				_player->SendAddonMessage("TW_SHOP Entries:" + categoryIDString + "=end");
+				_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=end");
 
 			}
 
@@ -361,9 +363,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 					return;
 				}
 
-				std::string sText = "TW_SHOP BuyResult:" + ShopMgr(_player).BuyItem(itemID);
+				std::string result = "BuyResult:" + ShopMgr(_player).BuyItem(itemID);
 
-				_player->SendAddonMessage(sText);
+				_player->SendAddonMessage(prefix, result);
 
 			}
 
