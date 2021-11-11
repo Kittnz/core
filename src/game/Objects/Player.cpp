@@ -23107,15 +23107,11 @@ void Player::AwardTitle(int8 title)
     {
         CharacterDatabase.DirectPExecute("INSERT INTO character_titles (guid, title) VALUES ('%u', '%i')", GetGUIDLow(), title);
 
-        std::string newTiteText = "TWT_TITLES newTitle:" + std::to_string(title);
-        WorldPacket data;
-        ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-            newTiteText.c_str(), Language(LANG_ADDON), GetChatTag(),
-            GetObjectGuid(), GetName());
+        std::string newTiteText = "newTitle:" + std::to_string(title);
 
-        m_playerTitles[title] = 0;
+		SendAddonMessage("TWT_TITLES", newTiteText);
 
-        GetSession()->SendPacket(&data);
+		m_playerTitles[title] = 0;
 
         // check if this is the only title the player has, enable it if so
         if (m_playerTitles.size() == 1)
@@ -23139,7 +23135,7 @@ uint8 Player::GetActiveTitle()
 void Player::SendEarnedTitles()
 {
 
-    std::string titlesText = "TWT_TITLES TW_AVAILABLE_TITLES:0:";
+    std::string titlesText = "TW_AVAILABLE_TITLES:0:";
 
     if (GetByteValue(PLAYER_BYTES_3, 2) == 0)
         titlesText += "1;"; // "None" title, but active
@@ -23152,12 +23148,7 @@ void Player::SendEarnedTitles()
 
     titlesText.pop_back(); // remove last ;
 
-    WorldPacket data;
-    ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-        titlesText.c_str(), Language(LANG_ADDON), GetChatTag(),
-        GetObjectGuid(), GetName());
-
-    GetSession()->SendPacket(&data);
+	SendAddonMessage("TWT_TITLES", titlesText);
 }
 
 void Player::ChangeTitle(uint8 title)
