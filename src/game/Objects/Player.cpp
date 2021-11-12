@@ -17170,13 +17170,13 @@ void Player::ResetInstances(InstanceResetMethod method)
                 ++itr;
                 continue;
             }
-        }
 
-        // solo player cannot reset instance while inside
-        if (IsInWorld() && itr->first == GetMapId())
-        {
-            ++itr;
-            continue;
+            // solo player cannot reset instance while inside
+            if (IsInWorld() && itr->first == GetMapId())
+            {
+                ++itr;
+                continue;
+            }
         }
 
         // if the map is loaded, reset it
