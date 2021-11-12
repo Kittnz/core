@@ -312,7 +312,7 @@ world/stormwind_city.cpp
 
 if((${CMAKE_VERSION} VERSION_LESS "3.16") OR USE_PCH_OLD)
   list(APPEND SCRIPTS_SRCS
-        PrecompiledHeaders/scriptPCH.cpp
+        scriptPCH.cpp
     )
   # Enable precompiled headers when using the GCC compiler.
   if(USE_PCH)
@@ -397,11 +397,11 @@ if((${CMAKE_VERSION} VERSION_LESS "3.16") OR USE_PCH_OLD)
   if(USE_PCH)
     if(MSVC OR XCODE)
       if(MSVC)
-        set(scripts_pch "${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/scriptPCH.cpp")
+        set(scripts_pch "${CMAKE_CURRENT_SOURCE_DIR}/scriptPCH.cpp")
       endif()
-      add_native_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/scriptPCH.h)
+      add_native_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/scriptPCH.h)
     elseif(CMAKE_COMPILER_IS_GNUCXX)
-      add_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/PrecompiledHeaders/scriptPCH.h)
+      add_precompiled_header(scripts ${CMAKE_CURRENT_SOURCE_DIR}/scriptPCH.h)
     endif()
   endif()
 else()
@@ -433,7 +433,7 @@ else()
       ../game/World.h
       ../game/Weather.h
       ../game/AI/TotemAI.h
-      PrecompiledHeaders/scriptPCH.h
+      scriptPCH.h
       )
 
   if(WIN32)
