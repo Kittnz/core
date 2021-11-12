@@ -654,7 +654,7 @@ bool PetAI::CanAttack(Unit* target)
     if (!target)
         return false;
 
-    if (!m_creature->IsValidAttackTarget(target))
+    if (!m_creature->IsValidAttackTarget(target, false))
         return false;
 
     if (!target->IsAlive())

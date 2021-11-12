@@ -1393,7 +1393,7 @@ bool GossipHello_npc_itharius(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I was sent by Insom'ni to recover his necklace.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
-    pPlayer->SEND_GOSSIP_MENU(5353, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(3034, pCreature->GetGUID());
     return true;
 }
 
@@ -1756,7 +1756,7 @@ bool QuestAccept_npc_iselus(Player* pPlayer, Creature* pQuestGiver, Quest const*
             });
 
         DoAfterTime(pPlayer, 33 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->CastSpell(npc, 1449, false);
+            npc->CastSpell(npc, 24171, false);
             });
 
         DoAfterTime(pPlayer, 35 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {

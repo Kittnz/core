@@ -1232,6 +1232,9 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             if (CreatureInfo const *cinfo = pCreatureVictim->GetCreatureInfo())
                 if (cinfo->loot_id || cinfo->gold_max > 0)
                     pCreatureVictim->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+
+            if (pPlayerTap && (pCreatureVictim->IsGuard() || pCreatureVictim->HasExtraFlag(CREATURE_FLAG_EXTRA_PVP)))
+                pCreatureVictim->SendZoneUnderAttackMessage(pPlayerTap);
         }
 
         if (pCreatureVictim->AI())
@@ -7069,7 +7072,7 @@ Unit* Unit::GetTauntTarget() const
     Unit* caster = nullptr;
 
     // The last taunt aura caster is alive an we are happy to attack him
-    if ((caster = tauntAuras.back()->GetCaster()) && caster->IsAlive() && IsValidAttackTarget(caster))
+    if ((caster = tauntAuras.back()->GetCaster()) && IsValidAttackTarget(caster))
         return caster;
     else if (tauntAuras.size() > 1)
     {

@@ -2118,9 +2118,6 @@ class Player final: public Unit
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
-        bool isTurtle() const { return bIsTurtle; };
-        void EnableTurtleMode() { bIsTurtle = true; };
-
         void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
         bool isHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
@@ -2152,10 +2149,6 @@ class Player final: public Unit
         ObjectGuid     m_selectedGobj; // For GM commands
         ObjectGuid m_escortingGuid;
         uint32 customFlags;
-
-        // Turtle WoW custom feature: turtle mode (0.5x rates for Creature.Kill)
-        bool bIsTurtle = false;
-
         uint8 m_hardcoreStatus;
         uint32 m_hardcoreKickTimer;
         uint32 m_hardcoreInvGuildTimer;
