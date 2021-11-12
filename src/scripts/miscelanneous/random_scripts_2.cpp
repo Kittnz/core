@@ -165,11 +165,11 @@ bool GossipSelect_npc_battlemaster(Player* p_Player, Creature* p_Creature, uint3
     {
         p_Player->SetBattleGroundEntryPoint();
         if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-            p_Player->GetSession()->SendBattlegGroundList(p_Player->GetObjectGuid(), BATTLEGROUND_WS);
+            p_Player->GetSession()->SendBattleGroundList(p_Player->GetObjectGuid(), BATTLEGROUND_WS);
         else if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-            p_Player->GetSession()->SendBattlegGroundList(p_Player->GetObjectGuid(), BATTLEGROUND_AB);
+            p_Player->GetSession()->SendBattleGroundList(p_Player->GetObjectGuid(), BATTLEGROUND_AB);
         else if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
-            p_Player->GetSession()->SendBattlegGroundList(p_Player->GetObjectGuid(), BATTLEGROUND_AV);
+            p_Player->GetSession()->SendBattleGroundList(p_Player->GetObjectGuid(), BATTLEGROUND_AV);
         else if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
             p_Player->SEND_VENDORLIST(p_Creature->GetGUID());
     }

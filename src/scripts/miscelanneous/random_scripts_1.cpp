@@ -1447,7 +1447,7 @@ struct go_survival_tent : public GameObjectAI
                 for (Player* pPlayer : players)
                 {
                     pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING);
-                    if (pPlayer->isTurtle())
+                    if (pPlayer->IsTurtle())
                         pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000060)));
                     else
                         pPlayer->SetRestBonus(static_cast<float>(pPlayer->GetRestBonus() + (sObjectMgr.GetXPForLevel(pPlayer->GetLevel()) * 0.000125)));
