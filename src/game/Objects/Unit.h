@@ -512,6 +512,8 @@ class Unit : public WorldObject
     private:
         uint32 m_stateFlags; // Even derived shouldn't modify
         bool m_AINotifyScheduled;
+        // Turtle WoW custom feature: turtle mode (0.5x rates for Creature.Kill)
+        bool bIsTurtle = false;
     protected:
         DeathState m_deathState;
         uint32 m_transform;
@@ -624,6 +626,10 @@ class Unit : public WorldObject
         }
         uint32 GetDebugFlags() const { return m_debugFlags; }
         ObjectGuid GetDebuggerGuid() const { return m_debuggerGuid; }
+
+        bool IsTurtle() const { return bIsTurtle; };
+        void EnableTurtleMode() { bIsTurtle = true; };
+
     protected:
         mutable ObjectGuid m_debuggerGuid;
         mutable uint32 m_debugFlags;
