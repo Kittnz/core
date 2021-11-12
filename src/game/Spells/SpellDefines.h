@@ -919,6 +919,7 @@ enum SpellAttributesInternal
     SPELL_INTERNAL_DISMOUNT                 = 0x200,
     SPELL_INTERNAL_CHARM                    = 0x400,
     SPELL_INTERNAL_REFLECTABLE              = 0x800,
+    SPELL_INTERNAL_CUSTOM                   = 0x1000,
 };
 
 // original names, do not edit
