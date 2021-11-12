@@ -18,14 +18,18 @@
 project(MaNGOS)
 
 # CMake policies
-cmake_minimum_required(VERSION 3.0...3.20)
+cmake_minimum_required(VERSION 3.1...3.20)
+
+# Allow -DACE_ROOT, -DTBB_ROOT, etc.
+if(${CMAKE_VERSION} VERSION_GREATER "3.11")
+  cmake_policy(SET CMP0074 NEW)
+endif()
 
 set(CMAKE_MODULE_PATH
   ${CMAKE_MODULE_PATH}
   ${CMAKE_SOURCE_DIR}/cmake
 )
 
-option(DEBUG "Debug mode" OFF)
 set(SUPPORTED_CLIENT_BUILD "CLIENT_BUILD_1_12_1" CACHE STRING "Client version the core will support")
 option(USE_STD_MALLOC "Use standard malloc instead of TBB" OFF)
 option(TBB_DEBUG "Use TBB debug librairies" OFF)
@@ -33,7 +37,10 @@ option(USE_ANTICHEAT "Use anticheat" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
-option(DEBUG_SYMBOLS "Compile with debug symbols" ON)
+
+if(UNIX)
+  option(DEBUG_SYMBOLS "Include Debug Symbols" ON)
+endif()
 
 find_package(PCHSupport)
 if(${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.16")
@@ -60,7 +67,7 @@ endif()
 # Force out-of-source build
 string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" BUILDING_IN_SOURCE)
 if(BUILDING_IN_SOURCE)
-  message(FATAL_ERRO
+  message(FATAL_ERROR
     "This project requires an out of source build. Remove the file 'CMakeCache.txt' found in this directory before continuing, create a separate build directory and run 'cmake <srcs> [options]' from there."
   )
 endif()
@@ -101,17 +108,12 @@ message(STATUS
   Options that can be used in order to configure the process:
     PREFIX: Path where the server should be installed to
     USE_PCH: Use precompiled headers
-    DEBUG: Debug mode
   To set an option simply type -D<OPTION>=<VALUE> after 'cmake <srcs>'.
-  For example: cmake .. -DDEBUG=1 -DPREFIX=/opt/mangos\n"
+  For example: cmake .. -DPREFIX=/opt/mangos\n"
 ) # TODO: PLATFORM: Sets the architecture for compile (X86,X64)
 
-# Override configuration-types - we don't use anything else than debug and release
-if(CMAKE_CONFIGURATION_TYPES)
-  set(CMAKE_CONFIGURATION_TYPES Release Debug)
-  set(CMAKE_CONFIGURATION_TYPES "${CMAKE_CONFIGURATION_TYPES}" CACHE STRING
-    "Reset the configurations to what we need"
-    FORCE)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
 endif()
 
 # Find out what system we use to include the needed libs
@@ -234,6 +236,17 @@ if(UNIX)
   find_package(ZLIB REQUIRED)
 endif()
 
+# Add uninstall script and target
+#configure_file(
+#  "${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"
+#  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+#  IMMEDIATE @ONLY
+#)
+
+#add_custom_target(uninstall
+#  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+#)
+
 # Find core revision
 if(NOT GIT_EXECUTABLE)
   set(rev_date "1970-01-01 00:00:00 +0000")
@@ -309,25 +322,19 @@ endif()
 message(STATUS "Memory allocation     : ${ALLOC_LIB_INFO_STRING} ${TBB_LIBRARIES}")
 message(STATUS "Detected compiler     : ${CMAKE_CXX_COMPILER_ID}")
 
-if(DEBUG)
-  message(STATUS "Build in debug-mode   : Yes")
-  set(CMAKE_BUILD_TYPE Debug)
-else()
-  set(CMAKE_BUILD_TYPE Release)
-  message(STATUS "Build in debug-mode   : No  (default)")
-endif()
+message(STATUS "Build type            : ${CMAKE_BUILD_TYPE}")
 
 if(USE_ANTICHEAT)
-  message(STATUS "Use anticheat    : Yes")
+  message(STATUS "Use anticheat         : Yes")
   set(DEFINITIONS ${DEFINITIONS} USE_ANTICHEAT)
 else()
-  message(STATUS "Use anticheat    : No  (default)")
+  message(STATUS "Use anticheat         : No  (default)")
 endif()
 
 if(USE_SCRIPTS)
-  message(STATUS "Build scripts    : Yes (default)")
+  message(STATUS "Build scripts         : Yes (default)")
 else()
-  message(STATUS "Build scripts    : No")
+  message(STATUS "Build scripts         : No")
 endif()
 
 if(UNIX)
@@ -381,8 +388,8 @@ elseif(WIN32)
   endif()
 endif()
 
-set(DEFINITIONS_RELEASE ${DEFINITIONS_RELEASE} NDEBUG MANGOS_BUILD_OPTIONS="${CMAKE_CXX_FLAGS_RELEASE}")
-set(DEFINITIONS_DEBUG ${DEFINITIONS_DEBUG} _DEBUG MANGOS_BUILD_OPTIONS="${CMAKE_CXX_FLAGS_DEBUG}")
+set(DEFINITIONS_RELEASE ${DEFINITIONS_RELEASE} NDEBUG)
+set(DEFINITIONS_DEBUG ${DEFINITIONS_DEBUG} _DEBUG MANGOS_DEBUG)
 
 # Some small tweaks for Visual Studio 7 and above.
 if(MSVC)
@@ -439,11 +446,6 @@ if(XCODE)
   endif()
 endif()
 
-add_subdirectory(dep)
-
-if (USE_EXTRACTORS)
-    add_subdirectory(tools)
-endif()
 
 # Add definitions for all build types
 # Don't place this above 'dep' subdirectory! Because of defines build will crash.
@@ -467,11 +469,20 @@ if (USE_LIBCURL)
   set(DEFINITIONS ${DEFINITIONS} USE_SENDGRID)
 endif()
 
-set_directory_properties(PROPERTIES COMPILE_DEFINITIONS "${DEFINITIONS}")
-set_directory_properties(PROPERTIES COMPILE_DEFINITIONS_RELEASE "${DEFINITIONS_RELEASE}")
-set_directory_properties(PROPERTIES COMPILE_DEFINITIONS_DEBUG "${DEFINITIONS_DEBUG}")
+set_property(DIRECTORY PROPERTY COMPILE_DEFINITIONS ${DEFINITIONS})
+set_property(DIRECTORY APPEND PROPERTY
+  COMPILE_DEFINITIONS $<$<CONFIG:Debug>:${DEFINITIONS_DEBUG}>
+)
+set_property(DIRECTORY APPEND PROPERTY
+  COMPILE_DEFINITIONS $<$<CONFIG:Release>:${DEFINITIONS_RELEASE}>
+)
 
 message(STATUS "Build flags (RELEASE) : ${CMAKE_CXX_FLAGS_RELEASE}")
 message(STATUS "Build flags (DEBUG)   : ${CMAKE_CXX_FLAGS_DEBUG}")
 
 add_subdirectory(src)
+add_subdirectory(dep)
+
+if (USE_EXTRACTORS)
+    add_subdirectory(tools)
+endif()
