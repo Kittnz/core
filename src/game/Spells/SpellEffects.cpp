@@ -5560,7 +5560,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                         continue;
 
                     // found, remove seal
-                    m_casterUnit->RemoveAurasDueToSpell(aura->GetId());
+                    m_casterUnit->RemoveAurasDueToSpellByCancel(aura->GetId());
                     break;
                 }
 
