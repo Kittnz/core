@@ -11761,13 +11761,6 @@ bool ChatHandler::HandleBgTestCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleReloadCustomPetEntries(char* args)
-{
-    sObjectMgr.LoadCustomPetCreatureEntries();
-    SendSysMessage(">> Table `custom_pet_entry_relation` reloaded.");
-    return true;
-}
-
 bool ChatHandler::HandleReloadCustomMountEntries(char* args)
 {
     sObjectMgr.LoadCustomMountCreatureEntries();
