@@ -2472,11 +2472,18 @@ bool Creature::LoadCreatureAddon(bool reload)
 /// Send a message to LocalDefense channel for players opposition team in the zone
 void Creature::SendZoneUnderAttackMessage(Player* attacker)
 {
-    Team enemy_team = attacker->GetTeam();
+    uint32 areaId = GetAreaId();
+    time_t now = time(nullptr);
+    static std::unordered_map<uint32, time_t> areaAttackedCooldowns;
+    if (areaAttackedCooldowns[areaId] + 10 < now)
+    {
+        areaAttackedCooldowns[areaId] = now;
+        Team enemyTeam = attacker->GetTeam();
 
-    WorldPacket data(SMSG_ZONE_UNDER_ATTACK, 4);
-    data << uint32(GetZoneId());
-    sWorld.SendGlobalMessage(&data, nullptr, (enemy_team == ALLIANCE ? HORDE : ALLIANCE));
+        WorldPacket data(SMSG_ZONE_UNDER_ATTACK, 4);
+        data << uint32(areaId);
+        GetMap()->SendToPlayers(&data, (enemyTeam == ALLIANCE ? HORDE : ALLIANCE));
+    }
 }
 
 void Creature::SetInCombatWithZone(bool initialPulse)
