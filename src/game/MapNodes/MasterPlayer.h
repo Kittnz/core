@@ -41,8 +41,8 @@ public:
     void Whisper(std::string const& text, uint32 language, MasterPlayer* receiver);
     void ToggleDND();
     void ToggleAFK();
-    void JoinedChannel(Channel *c);
-    void LeftChannel(Channel *c);
+    void JoinedChannel(::Channel *c);
+    void LeftChannel(::Channel *c);
     void CleanupChannels();
 
     // SOCIAL SYSTEM
@@ -136,7 +136,7 @@ public:
     uint8 m_chatTag;
     time_t m_speakTime;
     uint32 m_speakCount;
-    typedef std::list<Channel*> JoinedChannelsList;
+    typedef std::list<::Channel*> JoinedChannelsList;
     JoinedChannelsList m_channels;
     // GM system variables
     uint8 m_gmInvisibilityLevel;

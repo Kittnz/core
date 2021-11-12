@@ -22516,6 +22516,9 @@ bool Player::SetupHardcoreMode()
         {
             if (pBag->IsQuiver())
                 continue;
+
+            if (shopItems.find(pBag->GetEntry()) != shopItems.end()) // dont destroy twow token items.
+                continue;
             
             DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
         }
