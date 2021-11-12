@@ -428,16 +428,20 @@ struct cthunTentacle : public ScriptedAI
 
         // First checking if we have some taunt on us
         const Unit::AuraList& tauntAuras = m_creature->GetAurasByType(SPELL_AURA_MOD_TAUNT);
-        for (auto it = tauntAuras.crbegin(); it != tauntAuras.crend(); it++) {
+        for (auto it = tauntAuras.crbegin(); it != tauntAuras.crend(); it++)
+        {
             Unit* caster = (*it)->GetCaster();
-            if (!caster) continue;
 
-            if (caster->IsInMap(m_creature) && caster->IsTargetableForAttack() && m_creature->CanReachWithMeleeAutoAttack(caster))
+            if (!caster)
+                continue;
+
+            if (caster->IsInMap(m_creature) && caster->IsTargetable(true, false) && m_creature->CanReachWithMeleeAutoAttack(caster))
             {
                 target = caster;
                 break;
             }
-            else {
+            else
+            {
                 // Target is not in melee and reset his threat
                 m_creature->GetThreatManager().modifyThreatPercent(caster, -100);
             }

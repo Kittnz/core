@@ -64,7 +64,7 @@ bool PetAI::_needToStop() const
     if (pOwner->IsCreature() && !pOwner->IsInCombat() && m_creature->IsOutOfThreatArea(m_creature->GetVictim()))
         return true;
 
-    return !m_creature->GetVictim()->IsTargetableForAttack(false, pOwner->IsPlayer());
+    return !m_creature->IsValidAttackTarget(m_creature->GetVictim());
 }
 
 void PetAI::_stopAttack()

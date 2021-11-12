@@ -47,7 +47,7 @@ void ReactorAI::MoveInLineOfSight(Unit* pWho)
     if (!m_creature->IsWithinDistInMap(pWho, m_creature->GetDetectionRange()))
         return;
 
-    if (m_creature->IsHostileTo(pWho) && pWho->IsTargetableForAttack() && m_creature->IsWithinLOSInMap(pWho))
+    if (m_creature->IsHostileTo(pWho) && pWho->IsTargetable(true, false) && m_creature->IsWithinLOSInMap(pWho))
         m_bCanSummonGuards = !sGuardMgr.SummonGuard(m_creature, static_cast<Player*>(pWho));
 }
 
@@ -72,7 +72,7 @@ void ReactorAI::AttackStart(Unit *p)
 
 void ReactorAI::UpdateAI(const uint32 uiDiff)
 {
-    if (!m_creature->SelectHostileTarget() || !m_creature->IsTargetableForAttack())
+    if (!m_creature->SelectHostileTarget() || !m_creature->IsTargetable(true, false))
         return;
 
     if (!m_CreatureSpells.empty())
