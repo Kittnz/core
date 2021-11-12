@@ -163,10 +163,12 @@ struct boss_four_horsemen_shared : public ScriptedAI
             
             if (m_creature->GetDistance3dToCenter(pPlayer) > 74.0f)
                 continue;
+
             bool alert;
             if (!pPlayer->IsVisibleForOrDetect(m_creature, m_creature, true, false, &alert))
                 return;
-            if (m_creature->CanInitiateAttack() && pPlayer->IsTargetableForAttack() && m_creature->IsHostileTo(pPlayer))
+
+            if (m_creature->CanInitiateAttack() && pPlayer->IsTargetable(true, false) && m_creature->IsHostileTo(pPlayer))
             {
                 if (pPlayer->IsInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pPlayer))
                 {
