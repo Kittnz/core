@@ -304,3 +304,6 @@ INSERT INTO `spell_mod` (`Id`, `procChance`, `procFlags`, `procCharges`, `Durati
 INSERT INTO `spell_effect_mod` (`Id`, `EffectIndex`, `Effect`, `EffectDieSides`, `EffectBaseDice`, `EffectDicePerLevel`, `EffectRealPointsPerLevel`, `EffectBasePoints`, `EffectAmplitude`, `EffectPointsPerComboPoint`, `EffectChainTarget`, `EffectMultipleValue`, `EffectMechanic`, `EffectImplicitTargetA`, `EffectImplicitTargetB`, `EffectRadiusIndex`, `EffectApplyAuraName`, `EffectItemType`, `EffectMiscValue`, `EffectTriggerSpell`, `Comment`) VALUES (33006, 0, 6, 1, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 42, 0, 0, 20424, 'Seal of Command: Seal Twisting Helper');
 -- Define proc chance for copy of Seal of Command used for seal twisting.
 INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`, `build_min`, `build_max`) VALUES (33006, 0, 0, 0, 0, 0, 0, 0, 7, 0, 1000, 0, 5875);
+
+-- Prevent Archmage Arugal from evading while teleported to platform.
+UPDATE `creature_template` SET `flags_extra`=`flags_extra`|67108864 WHERE `entry`=4275;
