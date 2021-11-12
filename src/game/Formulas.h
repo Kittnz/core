@@ -99,7 +99,7 @@ namespace MaNGOS
             return (pl_level * 5 + nBaseExp) * BaseGainLevelFactor(pl_level, mob_level);
         }
 
-        inline uint32 Gain(Player* pPlayer, Creature* pCreature)
+        inline uint32 Gain(Unit* pUnit, Creature* pCreature)
         {
             if (pCreature->GetUInt32Value(UNIT_CREATED_BY_SPELL) &&
                ((pCreature->GetCreatureInfo()->type == CREATURE_TYPE_CRITTER) ||
@@ -114,7 +114,7 @@ namespace MaNGOS
             if (pCreature->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
                 return 0;
 
-            float xp_gain = BaseGain(pPlayer->GetLevel(), pCreature->GetLevel());
+            float xp_gain = BaseGain(pUnit->GetLevel(), pCreature->GetLevel());
             if (!xp_gain)
                 return 0;
 
@@ -134,7 +134,7 @@ namespace MaNGOS
             xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
             xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
-            if (pPlayer->isTurtle())
+            if (pUnit->IsTurtle())
 			    xp_gain *= 0.5f;
 
             xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
