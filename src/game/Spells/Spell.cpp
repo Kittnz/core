@@ -5759,10 +5759,11 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
 						}
 						else
 						{
-							if (!m_caster->IsValidAttackTarget(target))
+                            if (!m_caster->IsValidAttackTarget(target, false))
 								return SPELL_FAILED_BAD_TARGETS;
 						}
                     }
+
                     explicit_target_mode = true;
                 }
             }
@@ -7639,36 +7640,35 @@ SpellCastResult Spell::CheckItems()
     // check reagents (ignore triggered spells with reagents processed by original spell) and special reagent ignore case.
     if (!IgnoreItemRequirements())
     {
+        for (uint32 i = 0; i < MAX_SPELL_REAGENTS; ++i)
         {
-            for (uint32 i = 0; i < MAX_SPELL_REAGENTS; ++i)
+            if (m_spellInfo->Reagent[i] <= 0)
+                continue;
+
+            uint32 itemid = m_spellInfo->Reagent[i];
+            uint32 itemcount = m_spellInfo->ReagentCount[i];
+
+            // if CastItem is also spell reagent
+            if (m_CastItem && m_CastItem->GetEntry() == itemid)
             {
-                if (m_spellInfo->Reagent[i] <= 0)
-                    continue;
+                ItemPrototype const* proto = m_CastItem->GetProto();
+                if (!proto)
+                    return SPELL_FAILED_ITEM_NOT_READY;
 
-                uint32 itemid    = m_spellInfo->Reagent[i];
-                uint32 itemcount = m_spellInfo->ReagentCount[i];
-
-                // if CastItem is also spell reagent
-                if (m_CastItem && m_CastItem->GetEntry() == itemid)
+                for (int s = 0; s < MAX_ITEM_PROTO_SPELLS; ++s)
                 {
-                    ItemPrototype const *proto = m_CastItem->GetProto();
-                    if (!proto)
-                        return SPELL_FAILED_ITEM_NOT_READY;
-                    for (int s = 0; s < MAX_ITEM_PROTO_SPELLS; ++s)
+                    // CastItem will be used up and does not count as reagent
+                    int32 charges = m_CastItem->GetSpellCharges(s);
+                    if (proto->Spells[s].SpellCharges < 0 && abs(charges) < 2 && itemcount > 1)
                     {
-                        // CastItem will be used up and does not count as reagent
-                        int32 charges = m_CastItem->GetSpellCharges(s);
-                        if (proto->Spells[s].SpellCharges < 0 && abs(charges) < 2 && itemcount > 1)
-                        {
-                            ++itemcount;
-                            break;
-                        }
+                        ++itemcount;
+                        break;
                     }
                 }
-
-                if (!p_caster->HasItemCount(itemid, itemcount))
-                    return SPELL_FAILED_ITEM_NOT_READY;
             }
+
+            if (!p_caster->HasItemCount(itemid, itemcount))
+                return SPELL_FAILED_ITEM_NOT_READY;
         }
 
         // check totem-item requirements (items presence in inventory)
@@ -7761,19 +7761,22 @@ SpellCastResult Spell::CheckItems()
         {
             case SPELL_EFFECT_CREATE_ITEM:
             {
-                if (Unit* target = m_targets.getUnitTarget())
+                if (i == EFFECT_INDEX_0)
                 {
-                    if (!target->IsPlayer())
-                        return SPELL_FAILED_BAD_TARGETS;
-
-                    const uint32 count = std::max(1, CalculateDamage(SpellEffectIndex(i), target));
-                    ItemPosCountVec dest;
-                    uint32 no_space = 0;
-                    InventoryResult msg = static_cast<Player*>(target)->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, m_spellInfo->EffectItemType[i], count, &no_space);
-                    if (msg != EQUIP_ERR_OK)
+                    if (Unit* target = m_targets.getUnitTarget())
                     {
-                        static_cast<Player*>(target)->SendEquipError(msg, nullptr, nullptr, m_spellInfo->EffectItemType[i]);
-                        return SPELL_FAILED_DONT_REPORT;
+                        if (!target->IsPlayer())
+                            return SPELL_FAILED_BAD_TARGETS;
+
+                        uint32 count = std::max(1, CalculateDamage(SpellEffectIndex(i), target));
+                        ItemPosCountVec dest;
+                        uint32 no_space = 0;
+                        InventoryResult msg = static_cast<Player*>(target)->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, m_spellInfo->EffectItemType[i], count, &no_space);
+                        if (msg != EQUIP_ERR_OK)
+                        {
+                            static_cast<Player*>(target)->SendEquipError(msg, nullptr, nullptr, m_spellInfo->EffectItemType[i]);
+                            return SPELL_FAILED_DONT_REPORT;
+                        }
                     }
                 }
 

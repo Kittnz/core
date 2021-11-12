@@ -4962,7 +4962,7 @@ bool RegisterPlayerToBG(WorldSession* sess, BattleGroundTypeId bgid)
         return false;
 
     pPlayer->SetBattleGroundEntryPoint(pPlayer->GetMapId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation());
-    sess->SendBattlegGroundList(pPlayer->GetObjectGuid(), bgid);
+    sess->SendBattleGroundList(pPlayer->GetObjectGuid(), bgid);
 
     return true;
 }
@@ -11758,13 +11758,6 @@ bool ChatHandler::HandleBalanceCommand(char* args)
 bool ChatHandler::HandleBgTestCommand(char* args)
 {
     sBattleGroundMgr.ToggleTesting();
-    return true;
-}
-
-bool ChatHandler::HandleReloadCustomPetEntries(char* args)
-{
-    sObjectMgr.LoadCustomPetCreatureEntries();
-    SendSysMessage(">> Table `custom_pet_entry_relation` reloaded.");
     return true;
 }
 

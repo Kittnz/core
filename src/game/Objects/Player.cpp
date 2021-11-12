@@ -12585,7 +12585,7 @@ void Player::OnGossipSelect(WorldObject* pSource, uint32 gossipListId)
                 return;
             }
 
-            GetSession()->SendBattlegGroundList(guid, bgTypeId);
+            GetSession()->SendBattleGroundList(guid, bgTypeId);
             break;
         }
     }
@@ -17170,13 +17170,13 @@ void Player::ResetInstances(InstanceResetMethod method)
                 ++itr;
                 continue;
             }
-        }
 
-        // solo player cannot reset instance while inside
-        if (IsInWorld() && itr->first == GetMapId())
-        {
-            ++itr;
-            continue;
+            // solo player cannot reset instance while inside
+            if (IsInWorld() && itr->first == GetMapId())
+            {
+                ++itr;
+                continue;
+            }
         }
 
         // if the map is loaded, reset it

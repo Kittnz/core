@@ -298,3 +298,12 @@ UPDATE `creature_display_info_addon` SET `bounding_radius`=0.306, `combat_reach`
 
 -- Troll Female
 UPDATE `creature_display_info_addon` SET `bounding_radius`=0.306, `combat_reach`=1.5 WHERE `display_id`=1479;
+
+-- Add custom aura to enable seal twisting with seal of command.
+INSERT INTO `spell_mod` (`Id`, `procChance`, `procFlags`, `procCharges`, `DurationIndex`, `Category`, `CastingTimeIndex`, `StackAmount`, `SpellIconID`, `activeIconID`, `manaCost`, `Attributes`, `AttributesEx`, `AttributesEx2`, `AttributesEx3`, `AttributesEx4`, `Custom`, `InterruptFlags`, `AuraInterruptFlags`, `ChannelInterruptFlags`, `Dispel`, `Stances`, `StancesNot`, `SpellVisual`, `ManaCostPercentage`, `StartRecoveryCategory`, `StartRecoveryTime`, `MaxAffectedTargets`, `MaxTargetLevel`, `DmgClass`, `rangeIndex`, `RecoveryTime`, `CategoryRecoveryTime`, `SpellFamilyName`, `SpellFamilyFlags`, `Mechanic`, `EquippedItemClass`, `Comment`) VALUES (33006, 100, 4, 1, 327, 0, 1, 0, 0, 0, 0, 328064, 1024, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 10, 0, 0, -1, 'Seal of Command: Seal Twisting Helper');
+INSERT INTO `spell_effect_mod` (`Id`, `EffectIndex`, `Effect`, `EffectDieSides`, `EffectBaseDice`, `EffectDicePerLevel`, `EffectRealPointsPerLevel`, `EffectBasePoints`, `EffectAmplitude`, `EffectPointsPerComboPoint`, `EffectChainTarget`, `EffectMultipleValue`, `EffectMechanic`, `EffectImplicitTargetA`, `EffectImplicitTargetB`, `EffectRadiusIndex`, `EffectApplyAuraName`, `EffectItemType`, `EffectMiscValue`, `EffectTriggerSpell`, `Comment`) VALUES (33006, 0, 6, 1, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, 42, 0, 0, 20424, 'Seal of Command: Seal Twisting Helper');
+-- Define proc chance for copy of Seal of Command used for seal twisting.
+INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`, `build_min`, `build_max`) VALUES (33006, 0, 0, 0, 0, 0, 0, 0, 7, 0, 1000, 0, 5875);
+
+-- Prevent Archmage Arugal from evading while teleported to platform.
+UPDATE `creature_template` SET `flags_extra`=`flags_extra`|67108864 WHERE `entry`=4275;

@@ -1199,9 +1199,6 @@ void World::SetInitialWorldSettings()
     ///- Loading shop tables
     sObjectMgr.LoadShop();
 
-    ///- Loading custom pets
-    sObjectMgr.LoadCustomPetCreatureEntries();
-
     ///- Loading custom mounts
     sObjectMgr.LoadCustomMountCreatureEntries();
 

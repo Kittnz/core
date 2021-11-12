@@ -6841,7 +6841,7 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-
+        pCreature->SetCastingTarget(pPlayer);
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("Executed?! Do you know who it is you speak to?", player);
             c->HandleEmote(EMOTE_ONESHOT_LAUGH);
@@ -6852,7 +6852,7 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
             });
         DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("I shall destroy you and all others who try to stop me!", player);
-            c->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+            c->SetFactionTemporary(14, TEMPFACTION_RESTORE_RESPAWN);
             c->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
             });
     }
