@@ -169,8 +169,8 @@ namespace MaNGOS
 			{
 				if (Owner->IsPlayer())
 				{
-					Player* plOwner = Owner->ToPlayer();
-					if (plOwner->isTurtle())
+					Unit* plOwner = Owner->ToPlayer();
+					if (plOwner->IsTurtle())
 					{
 						xp_gain *= 0.5f;
 					}
