@@ -191,6 +191,42 @@ delete from quest_template where title = 'The Price';
 delete from quest_template where title = 'Indebted';
 delete from quest_template where title = 'War On Two Fronts';
 delete from quest_template where title = 'Fall Of The Usurper';
+delete from quest_template where title = 'Quest An Old Friend';
 
 update creature_equip_template set equipentry1 = 2901 where entry = 55143;
 update item_template set name = 'Eldarath Harmonization Gem' where name = 'Eldarath Harmonization';
+
+-- Crumbling Allies
+UPDATE quest_template
+SET offerrewardtext = '<Eudokia looks toward the materials curiously.>\n\nThis should do, I will begin to prepare the spell now.'
+WHERE entry = 40176;
+
+update quest_template set title = 'Conserving Stonetalon Peak' where entry = 40227;
+
+update quest_template set details = 'As much as I appreciate this delivery I know what it means. I made a promise long ago to uphold an end of the bargain. I desired him to pillage the areas I gave him in return for some goods and information.\n\nHe is looking for the killer of Jade, the one who broke up our old crew some time ago, and now that he has fulfilled his end, I will do the same, I aint no rat, I keep my bond.\n\nThe person who organized the hit to break us up went by the name Wally Wisecrack, he now hangs out with those Syndicate Boys, though I am sure \'Slip\' knows that. Once you tell \'Slip\' this is the person who was behind it all, he will no doubt want revenge.' where entry = 40225;
+
+update item_template set display_id = 14443 where entry = 83403;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id) values 
+(7105,60295,-11,1,1,0),
+(7107,60295,-15,1,1,0),
+(7108,60295,-15,1,1,0),
+(7109,60295,-13,1,1,0),
+(7111,60295,-16,1,1,0);
+
+update creature_template set faction = 189 where name = 'Keeper Iselus';
+update creature_template set faction = 189 where name = 'Keeper Laena';
+
+-- Analyzer X-51 and X-48 cannot be spawned (wrong syntax?)
+replace into creature_display_info_addon (display_id) values (18691);
+replace into creature_display_info_addon (display_id) values (18692);
+
+update creature_template set faction = 35 where entry = 60443;
+
+update creature_template set faction = 189, unit_flags = 2 where entry = 91289;
+update creature_template set faction = 106, unit_flags = 2 where entry = 91290;
+
+update gameobject_template set name = 'Crate labelled "A"' where entry = 2010826;
+update gameobject_template set name = 'Crate labelled "B"' where entry = 2010825;
+
+update creature_template set unit_flags = 0, unit_class = 8, flags_extra = 0 where entry = 52119;
