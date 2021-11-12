@@ -422,3 +422,20 @@ replace into npc_vendor values
 (40049, 83434, 0, 0, 0, 0),
 (40049, 83435, 0, 0, 0, 0),
 (40049, 83436, 0, 0, 0, 0);
+
+replace into item_template values
+ ('70049', '2', '18', 'Worn Crossbow', '', '10671', '1', '0', '1', '4', '1', '26', '-1', '-1', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '100',
+ '2', '3', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '0', '20', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+update playercreateinfo_item set itemid = 70049 where class = 3 and race = 5 and itemid = 2504;
+update playercreateinfo_spell set spell = 5011 where class = 3 and race = 5 and spell = 264;
+
+update playercreateinfo_item set itemid = 49 where class = 3 and race = 5 and itemid = 127; -- Shirt
+update playercreateinfo_item set itemid = 48 where class = 3 and race = 5 and itemid = 6126; -- Pants
+update playercreateinfo_item set itemid = 48 where class = 3 and race = 5 and itemid = 6131; -- Pants
