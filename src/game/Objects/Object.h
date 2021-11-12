@@ -925,7 +925,7 @@ class WorldObject : public Object
         FactionTemplateEntry const* getFactionTemplateEntry() const;
         virtual ReputationRank GetReactionTo(WorldObject const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target);
-        virtual bool IsValidAttackTarget(Unit const* target) const { return false; }
+        bool IsValidAttackTarget(Unit const* target) const;
         virtual bool IsVisibleForOrDetect(WorldObject const* pDetector, WorldObject const* viewPoint, bool detect, bool inVisibleList = false, bool* alert = nullptr) const { return IsVisibleForInState(pDetector, viewPoint, inVisibleList); }
 
         bool IsControlledByPlayer() const;
@@ -1016,6 +1016,7 @@ virtual uint32 GetLevel() const = 0;
         uint32 GetDefenseSkillValue(WorldObject const* target = nullptr) const;
 
         virtual Player* GetAffectingPlayer() const { return nullptr; }
+        virtual bool IsCharmerOrOwnerPlayerOrPlayerItself() const { return IsPlayer(); }
         Unit* SelectMagnetTarget(Unit *victim, Spell* spell = nullptr, SpellEffectIndex eff = EFFECT_INDEX_0);
 
         SpellCastResult CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr, SpellEntry const* triggeredByParent = nullptr);
