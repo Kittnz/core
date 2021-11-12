@@ -390,15 +390,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 _player->SetBattleGroundEntryPoint();
 
                 if (strstr(msg.c_str(), "Warsong"))
-                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_WS);
+                    _player->GetSession()->SendBattleGroundList(_player->GetObjectGuid(), BATTLEGROUND_WS);
                 if (strstr(msg.c_str(), "Arathi"))
-                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_AB);
+                    _player->GetSession()->SendBattleGroundList(_player->GetObjectGuid(), BATTLEGROUND_AB);
                 if (strstr(msg.c_str(), "Alterac"))
-                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_AV);
+                    _player->GetSession()->SendBattleGroundList(_player->GetObjectGuid(), BATTLEGROUND_AV);
                 if (strstr(msg.c_str(), "Sunnyglade"))
-                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_SV);
+                    _player->GetSession()->SendBattleGroundList(_player->GetObjectGuid(), BATTLEGROUND_SV);
                 if (strstr(msg.c_str(), "Arena"))
-                    _player->GetSession()->SendBattlegGroundList(_player->GetObjectGuid(), BATTLEGROUND_BR);
+                    _player->GetSession()->SendBattleGroundList(_player->GetObjectGuid(), BATTLEGROUND_BR);
 
                 _player->SetBGQueueAllowed(true);
             }
