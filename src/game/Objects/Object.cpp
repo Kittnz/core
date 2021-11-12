@@ -5328,7 +5328,7 @@ void WorldObject::PMonsterEmote(int32 textId, Unit const* target, bool IsBossEmo
 }
 
 // function based on function Unit::CanAttack from 13850 client
-bool WorldObject::IsValidAttackTarget(Unit const* target) const
+bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
 {
     ASSERT(target);
 
@@ -5339,7 +5339,7 @@ bool WorldObject::IsValidAttackTarget(Unit const* target) const
     if (FindMap() != target->FindMap())
         return false;
 
-    if (!target->IsTargetable(true, IsCharmerOrOwnerPlayerOrPlayerItself()))
+    if (!target->IsTargetable(true, IsCharmerOrOwnerPlayerOrPlayerItself(), false, checkAlive))
         return false;
 
     Unit const* pThisUnit = ToUnit();
