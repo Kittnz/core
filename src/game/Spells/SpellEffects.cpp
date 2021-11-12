@@ -6531,32 +6531,7 @@ void Spell::EffectSummonCritter(SpellEffectIndex eff_idx)
     if (!pet_entry)
         return;
 
-    CreatureInfo const* cInfo;
-    // Custom pet handling (see table 'custom_pet_entry_relation')
-    if (m_spellInfo->Id == POLEY_DUMMY_SUMMON_SPELL && m_CastItem->GetEntry() != ACTUAL_POLEY_ITEM) { // Original item
-        uint32 creature_entry = sObjectMgr.GetCustomPetCreatureEntryFromItem(m_CastItem->GetEntry());
-        if (creature_entry) {
-            cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(creature_entry);
-        }
-        else {
-            sLog.outErrorDb("Spell::DoSummonCritter: (custom pet) creature entry not found for item %u.",
-                            m_CastItem->GetEntry());
-            return;
-        }
-
-        if (creature_entry == FIELD_REPAIR_BOT_75B)
-        {
-            if (player->GetMap() && player->GetMap()->IsRaid() && player->GetInstanceData() && player->GetInstanceData()->IsEncounterInProgress())
-            {
-                player->GetSession()->SendNotification("You can't summon the repair bot during raid encounters.");
-                return;
-            }
-        }
-
-        // End of Custom pet handling
-    } else {
-        cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(pet_entry);
-    }
+    CreatureInfo const* cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(pet_entry);
 
     if (!cInfo)
     {

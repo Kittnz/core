@@ -220,6 +220,7 @@ update creature_template set faction = 189 where name = 'Keeper Laena';
 -- Analyzer X-51 and X-48 cannot be spawned (wrong syntax?)
 replace into creature_display_info_addon (display_id) values (18691);
 replace into creature_display_info_addon (display_id) values (18692);
+replace into creature_display_info_addon (display_id) values (18625);
 
 update creature_template set faction = 35 where entry = 60443;
 
@@ -230,3 +231,27 @@ update gameobject_template set name = 'Crate labelled "A"' where entry = 2010826
 update gameobject_template set name = 'Crate labelled "B"' where entry = 2010825;
 
 update creature_template set unit_flags = 0, unit_class = 8, flags_extra = 0 where entry = 52119;
+
+replace into creature_template values 
+(89020, 18625, 0, 0, 0, 'Magic Broom', NULL, 0, 1, 1, 64, 64, 0, 0, 20, 35, 0, 1, 1.14286, 0.25, 20, 5, 0, 0, 1, 11, 11, 0, 44, 1, 2000, 2200, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, ''),
+(89021, 18624, 0, 0, 0, 'White Stag', NULL, 0, 1, 1, 64, 64, 0, 0, 20, 35, 0, 1, 1.14286, 0.25, 20, 5, 0, 0, 1, 11, 11, 0, 44, 1, 2000, 2200, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '', 0, 3, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, '');
+
+delete from companion_spells where spellid = 28505;
+
+replace into companion_spells values (81283,49503); 
+replace into companion_spells values (81254,49502); 
+replace into companion_spells values (81248,49501); 
+replace into companion_spells values (81243,46487); 
+replace into companion_spells values (81207,49500); 
+replace into companion_spells values (81183,46497); 
+replace into companion_spells values (46497,46496); 
+replace into companion_spells values (81152,46495); 
+replace into companion_spells values (22781,28505); 
+replace into companion_spells values (81151,46494); 
+replace into companion_spells values (81150,46493); 
+replace into companion_spells values (80878,46033); 
+replace into companion_spells values (70016,46492); 
+replace into companion_spells values (51891,46490); 
+replace into companion_spells values (51858,46491); 
+replace into companion_spells values (51700,46485); 
+replace into companion_spells values (51251,46479); 
