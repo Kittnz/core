@@ -234,7 +234,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     // hardcore players interaction (common check)
     if (GetPlayer()->isHardcore() && (req->money || req->COD || req->itemGuid))
     {
-        pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
+        SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
         GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
         delete req;
         return;
@@ -247,7 +247,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         {
             if (req->money || req->COD || req->itemGuid)
             {
-                pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
+                SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
                 GetPlayer()->GetSession()->SendNotification("Hardcore characters can not receive attachments and gold in mail.");
                 delete req;
                 return;
@@ -276,7 +276,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
         {
             if (req->money || req->COD || req->itemGuid)
             {
-                pl->SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
+                SendMailResult(0, MAIL_SEND, MAIL_ERR_RECIPIENT_NOT_FOUND);
                 GetPlayer()->GetSession()->SendNotification("Hardcore characters can not receive attachments and gold in mail.");
                 delete req;
                 return;
