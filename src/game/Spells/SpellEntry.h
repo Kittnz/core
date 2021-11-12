@@ -584,11 +584,6 @@ public:
         return mask;
     }
 
-    bool IsCustomSpell() const
-    {
-        return Internal & SPELL_INTERNAL_CUSTOM;
-    }
-
     bool HasAttribute(SpellAttributes attribute) const { return Attributes & attribute; }
     bool HasAttribute(SpellAttributesEx attribute) const { return AttributesEx & attribute; }
     bool HasAttribute(SpellAttributesEx2 attribute) const { return AttributesEx2 & attribute; }
@@ -675,6 +670,11 @@ public:
                 return false;
         
         return hasAura;
+    }
+
+    bool IsCustomSpell() const
+    {
+        return Internal & SPELL_INTERNAL_CUSTOM;
     }
 
     inline bool IsSealSpell() const
