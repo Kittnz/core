@@ -49,8 +49,8 @@ public:
     virtual WorldSession* GetSession() const = 0;
     virtual PlayerSocial* GetSocial() const = 0;
 
-    virtual void JoinedChannel(Channel *c) = 0;
-    virtual void LeftChannel(Channel *c) = 0;
+    virtual void JoinedChannel(::Channel *c) = 0;
+    virtual void LeftChannel(::Channel *c) = 0;
 
     virtual Player* ToPlayer() const = 0;
     virtual MasterPlayer* ToMasterPlayer() const = 0;
@@ -82,8 +82,8 @@ public:
     WorldSession* GetSession() const override;
     PlayerSocial* GetSocial() const override;
 
-    void JoinedChannel(Channel *c) override;
-    void LeftChannel(Channel *c) override;
+    void JoinedChannel(::Channel *c) override;
+    void LeftChannel(::Channel *c) override;
 
     Player* ToPlayer() const override;
     MasterPlayer* ToMasterPlayer() const override;
