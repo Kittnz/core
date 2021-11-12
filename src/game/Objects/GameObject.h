@@ -676,6 +676,8 @@ class GameObject : public WorldObject
 
         ObjectGuid const& GetOwnerGuid() const { return GetGuidValue(OBJECT_FIELD_CREATED_BY); }
         Unit* GetOwner() const;
+        Player* GetAffectingPlayer() const final;
+        bool IsCharmerOrOwnerPlayerOrPlayerItself() const final { return GetOwnerGuid().IsPlayer(); }
 
         void SetSpellId(uint32 id)
         {
@@ -829,7 +831,6 @@ class GameObject : public WorldObject
 
         uint32 GetFactionTemplateId() const final { return GetGOInfo()->faction; }
         uint32 GetLevel() const final;
-        bool IsValidAttackTarget(Unit const* target) const final;
 
         uint32 GetPhaseQuestId() const { return GetGOInfo()->PhaseQuestId; }
 
