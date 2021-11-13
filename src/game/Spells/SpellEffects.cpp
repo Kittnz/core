@@ -1925,6 +1925,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     ChatHandler(unitTarget->ToPlayer()).PSendSysMessage("|cffff8040Current DisplayID: %u|r", m_caster->ToPlayer()->GetDisplayId());
                     return;
                 }
+                case 56045: // Debug: Reset DisplayID
+                {
+                    m_caster->ToPlayer()->DeMorph();
+                    return;
+                }
                 case 56046: // GM Flight Mode (commands will become obsolete in 1.15.2)
                 {
                     m_caster->ToPlayer()->CastSpell(m_caster->ToPlayer(), 14867, true);
