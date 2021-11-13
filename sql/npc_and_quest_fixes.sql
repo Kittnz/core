@@ -65,3 +65,7 @@ REPLACE INTO npc_trainer VALUES
 (60511, 3821, 50, 165, 35, 0),
 (60511, 9061, 100, 165, 30, 0),
 (60511, 9063, 100, 165, 30, 0);
+
+update creature_template set unit_flags = 0 where entry = 60498;
+update creature_template set script_name = 'npc_fearoth' where entry = 60499;
+update quest_template set limittime = 194 where entry = 40214;
