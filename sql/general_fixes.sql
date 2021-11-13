@@ -439,3 +439,5 @@ update playercreateinfo_spell set spell = 5011 where class = 3 and race = 5 and 
 update playercreateinfo_item set itemid = 49 where class = 3 and race = 5 and itemid = 127; -- Shirt
 update playercreateinfo_item set itemid = 48 where class = 3 and race = 5 and itemid = 6126; -- Pants
 update playercreateinfo_item set itemid = 48 where class = 3 and race = 5 and itemid = 6131; -- Pants
+
+update creature_template set npc_flags = 3 where entry = 52030;
