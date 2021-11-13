@@ -1508,32 +1508,58 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
                 npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 5.0F, 0.62F);
+                npc->GetMotionMaster()->MovePoint(0, -12864.27F, 2809.63F, -6.85F, 0, 3.0F);
             }
             });
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 39 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
-                npc->MonsterSay("We must travel to the center of Kazon Island, there, I can channel the energies of both Lapidis, and Gillijim. With the energies, and my own, I will be able to draw out the corruption that has plagued the land.");
+                npc->MonsterSay("We must travel to the center of Kazon Island, there, I can channel the energies of both Lapidis, and Gillijim.");
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
             }
             });
-        DoAfterTime(pPlayer, 44 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 42 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
-                npc->MonsterSay("Now then - this will take much concentration to bring the entity forward into physical form, it is up to you to weaken it! When it is weak enough, I will be free to join you, until then, protect me!");
+                npc->GetMotionMaster()->MovePoint(0, -12865.99F, 2821.96F, -0.82F, 0, 3.0F);
+            }
+            });
+        DoAfterTime(pPlayer, 47 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->MonsterSay("With the energies, and my own, I will be able to draw out the corruption that has plagued the land.");
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
             }
             });
         DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
+                npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F);
+            }
+            });
+        DoAfterTime(pPlayer, 61 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->GetMotionMaster()->MovePoint(0, -12865.12F, 2873.97F, 1.67F, 0, 3.0F);
+            }
+            });
+        DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F, 0.62F);
+            }
+            });
+        DoAfterTime(pPlayer, 78 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->MonsterSay("Now then - this will take much concentration to bring the entity forward into physical form, it is up to you to weaken it! When it is weak enough, I will be free to join you, until then, protect me!");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            }
+            });
+        DoAfterTime(pPlayer, 82 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
                 npc->CastSpell(npc, 13236, false);
             }
             });
-        DoAfterTime(pPlayer, 58 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 92 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
-                npc->SummonCreature(60499, -12857.11F, 2914.41F, 10.39F, 3.83F, TEMPSUMMON_CORPSE_DESPAWN, 192 * IN_MILLISECONDS);
+                npc->SummonCreature(60499, -12857.11F, 2914.41F, 10.39F, 3.83F, TEMPSUMMON_CORPSE_DESPAWN, 102 * IN_MILLISECONDS);
             }
             });
-        DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 94 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
                 if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
                 {
@@ -1541,7 +1567,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 }
             }
             });
-        DoAfterTime(pPlayer, 240 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 184 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
                 if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
                 {
@@ -1549,19 +1575,17 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                     fearoth->CombatStop(true);
                     fearoth->ClearInCombat();
                     fearoth->AddAura(642);
-                    fearoth->MonsterSay("Ahahah lalki! Hasta la vista!");
+                    fearoth->MonsterSay("Moah ha ha ha!");
                 }
             }
             });
-        DoAfterTime(pPlayer, 250 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 194 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
-                player->SetQuestStatus(40214, QUEST_STATUS_FAILED);
-                if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
+                Creature* insomni = player->FindNearestCreature(60446, 40.0F);
+                Creature* fearoth = player->FindNearestCreature(60499, 40.0F);
+                if (fearoth && insomni)
                 {
                     fearoth->ForcedDespawn();
-                }
-                if (Creature* insomni = player->FindNearestCreature(60446, 40.0F))
-                {
                     insomni->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     insomni->SetVisibility(VISIBILITY_ON);
                     insomni->ForcedDespawn();
@@ -1582,7 +1606,7 @@ struct npc_fearothAI : public ScriptedAI
         Creature* insomni = m_creature->FindNearestCreature(60446, 40.0F);
         Creature* insomnius = m_creature->FindNearestCreature(60498, 40.0F);
         GameObject* sum_insomnius = m_creature->FindNearestGameObject(2010699, 40.0F);
-        if (m_creature->GetHealthPercent() > 90 && m_creature->GetHealthPercent() < 98)
+        if (m_creature->GetHealthPercent() > 30 && m_creature->GetHealthPercent() < 40)
         {
             if (!sum_insomnius)
             {
