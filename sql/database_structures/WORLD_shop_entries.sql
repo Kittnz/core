@@ -180,7 +180,7 @@ replace into shop_items values
 (279, 13, 81081, 'Tabard of Fury', 200),
 (280, 13, 23710, 'Darkmoon Faire Tabard', 200),
 (281, 13, 80314, 'Undead Scourge Tabard', 200),
-(282, 13, 50089, 'Dalaran Tabard', 160),
+(282, 13, 50089, 'Pilfered Dalaran Tabard', 160),
 (283, 13, 50086, 'Stromgarde Tabard', 160),
 (284, 13, 50087, 'Kul\'Tiras Tabard', 160),
 (285, 13, 50092, 'Crimson Legion Tabard', 160),
