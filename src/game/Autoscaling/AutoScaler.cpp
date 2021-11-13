@@ -35,7 +35,7 @@ public:
     }
     ~Read_Mutex_Guard() noexcept
     {	// unlock
-        mut.unlock();
+        mut.unlock_shared();
     }
 
     Read_Mutex_Guard(const Read_Mutex_Guard&) = delete;
