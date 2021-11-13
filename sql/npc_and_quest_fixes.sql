@@ -69,3 +69,7 @@ REPLACE INTO npc_trainer VALUES
 update creature_template set unit_flags = 0 where entry = 60498;
 update creature_template set script_name = 'npc_fearoth' where entry = 60499;
 update quest_template set limittime = 194 where entry = 40214;
+
+replace into creature_involvedrelation (id, quest) values (80178, 55013);
+
+-- Quest The Hermit's Wrath needs the previous quest requirement changed to Necklace of Insomnius
