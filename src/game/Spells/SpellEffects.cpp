@@ -6425,25 +6425,21 @@ void Spell::EffectQuestComplete(SpellEffectIndex eff_idx)
 
     uint32 quest_id = m_spellInfo->EffectMiscValue[eff_idx];
 
-    // Goblin hunter's Taming the Beast I:
-    if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6062 && unitTarget->ToPlayer()->GetQuestStatus(80331) == QUEST_STATUS_INCOMPLETE)
-        quest_id = 80331;
-    // Goblin hunter's Taming the Beast II:
-    if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6083 && unitTarget->ToPlayer()->GetQuestStatus(80332) == QUEST_STATUS_INCOMPLETE)
-        quest_id = 80332;
-    // Goblin hunter's Taming the Beast III:
-    if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6082 && unitTarget->ToPlayer()->GetQuestStatus(80333) == QUEST_STATUS_INCOMPLETE)
-        quest_id = 80333;
+    std::array<std::pair<uint32, uint32>, 6> custom =
+    { {
+        { 6062, 80331 }, // Goblin hunter's Taming the Beast I
+        { 6083, 80332 }, // Goblin hunter's Taming the Beast II
+        { 6082, 80333 }, // Goblin hunter's Taming the Beast III
+        { 6064, 80340 }, // Gnome hunter's Taming the Beast III
+        { 6084, 80341 }, // Gnome hunter's Taming the Beast III
+        { 6085, 80342 }, // Gnome hunter's Taming the Beast III
+    } };
 
-    // Gnome hunter's Taming the Beast I:
-    if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6064 && unitTarget->ToPlayer()->GetQuestStatus(80340) == QUEST_STATUS_INCOMPLETE)
-        quest_id = 80340;
-    // Gnome hunter's Taming the Beast II:
-    if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6084 && unitTarget->ToPlayer()->GetQuestStatus(80341) == QUEST_STATUS_INCOMPLETE)
-        quest_id = 80341;
-    // Gnome hunter's Taming the Beast III:
-    if (m_spellInfo->GetEffectMiscValue(eff_idx) == 6085 && unitTarget->ToPlayer()->GetQuestStatus(80342) == QUEST_STATUS_INCOMPLETE)
-        quest_id = 80342;
+    for (auto const& data : custom)
+    {
+        if (m_spellInfo->GetEffectMiscValue(eff_idx) == data.first && unitTarget->ToPlayer()->GetQuestStatus(data.second) == QUEST_STATUS_INCOMPLETE)
+            quest_id = data.second;
+    }
 
     ((Player*)unitTarget)->AreaExploredOrEventHappens(quest_id);
 }
