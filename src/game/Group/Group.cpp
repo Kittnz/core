@@ -2415,7 +2415,7 @@ bool Group::HandleHardcoreInteraction(Player * invitee)
 
             if (memberIsHardcore)
             {
-                if (!invitee->isHardcore())
+                if (!invitee->IsHardcore())
                     return false;
 
                 int32 diff = invitee->GetLevel() - level;
@@ -2425,7 +2425,7 @@ bool Group::HandleHardcoreInteraction(Player * invitee)
             }
             else
             {
-                if (invitee->isHardcore())
+                if (invitee->IsHardcore())
                     return false;
             }
         }

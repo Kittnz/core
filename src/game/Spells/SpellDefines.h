@@ -297,8 +297,8 @@ enum SpellCastResult
     SPELL_FAILED_CANT_BE_DISENCHANTED                 , // Item cannot be disenchanted
     SPELL_FAILED_CANT_BE_PROSPECTED                   , // There are no gems in this
     SPELL_FAILED_CANT_CAST_ON_TAPPED                  , // Target is tapped
-    SPELL_FAILED_CANT_DUEL_WHILE_INVISIBLE            , // You can't start a duel while invisible
-    SPELL_FAILED_CANT_DUEL_WHILE_STEALTHED            , // You can't start a duel while stealthed
+    SPELL_FAILED_CANT_DUEL_WHILE_INVISIBLE            , // You can't start a m_duel while invisible
+    SPELL_FAILED_CANT_DUEL_WHILE_STEALTHED            , // You can't start a m_duel while stealthed
     SPELL_FAILED_CANT_STEALTH                         , // You are too close to enemies
     SPELL_FAILED_CASTER_AURASTATE                     , // You can't do that yet
     SPELL_FAILED_CASTER_DEAD                          , // You are dead

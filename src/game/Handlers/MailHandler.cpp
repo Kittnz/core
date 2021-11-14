@@ -232,7 +232,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     req->receiverPtr = sObjectMgr.GetPlayer(req->receiver);
 
     // hardcore players interaction (common check)
-    if (GetPlayer()->isHardcore() && (req->money || req->COD || req->itemGuid))
+    if (GetPlayer()->IsHardcore() && (req->money || req->COD || req->itemGuid))
     {
         SendMailResult(0, MAIL_SEND, MAIL_ERR_DISABLED_FOR_TRIAL_ACC);
         GetPlayer()->GetSession()->SendNotification("Hardcore characters can use mail, but with no attachments.");
@@ -243,7 +243,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     if (req->receiverPtr)
     {
         // hardcore players interaction (additional checks for online receivers)
-        if (!GetPlayer()->isHardcore() && req->receiverPtr->isHardcore())
+        if (!GetPlayer()->IsHardcore() && req->receiverPtr->IsHardcore())
         {
             if (req->money || req->COD || req->itemGuid)
             {
@@ -272,7 +272,7 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
             delete result;
         }
         bool receiverIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
-        if (!GetPlayer()->isHardcore() && receiverIsHardcore)
+        if (!GetPlayer()->IsHardcore() && receiverIsHardcore)
         {
             if (req->money || req->COD || req->itemGuid)
             {

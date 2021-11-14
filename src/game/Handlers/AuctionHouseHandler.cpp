@@ -43,7 +43,7 @@ void WorldSession::HandleAuctionHelloOpcode(WorldPacket & recv_data)
     ObjectGuid auctioneerGuid;                              // NPC guid
     recv_data >> auctioneerGuid;
 
-    if (GetPlayer()->isHardcore())
+    if (GetPlayer()->IsHardcore())
     {
         SendNotification("Hardcore characters can not trade, nor buy on Auction House.");
         return;

@@ -2119,7 +2119,7 @@ class Player final: public Unit
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
         void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
-        bool isHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
+        bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
         bool HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
         bool SetupHardcoreMode();
@@ -2323,8 +2323,8 @@ class Player final: public Unit
         bool IsInInterFactionMode() const;
 
         // todo: -maybe move UpdateDuelFlag+DuelComplete to independent DuelHandler.
-        DuelInfo* duel;
-        bool IsInDuelWith(Player const* player) const { return duel && duel->opponent == player && duel->startTime != 0; }
+        DuelInfo* m_duel;
+        bool IsInDuelWith(Player const* player) const { return m_duel && m_duel->opponent == player && m_duel->startTime != 0; }
         void UpdateDuelFlag(time_t currTime);
         void CheckDuelDistance(time_t currTime);
         void DuelComplete(DuelCompleteType type);

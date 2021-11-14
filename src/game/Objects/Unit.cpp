@@ -741,12 +741,12 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     }
 
     uint32 health = pVictim->GetHealth();
-    // duel ends when player has 1 or less hp
+    // m_duel ends when player has 1 or less hp
     bool duel_hasEnded = false;
-    if (pVictim->IsPlayer() && ((Player*)pVictim)->duel && damage >= (health - 1))
+    if (pVictim->IsPlayer() && ((Player*)pVictim)->m_duel && damage >= (health - 1))
     {
-        // prevent kill only if killed in duel and killed by opponent or opponent controlled creature
-        if (((Player*)pVictim)->duel->opponent == this || ((Player*)pVictim)->duel->opponent->GetObjectGuid() == GetOwnerGuid())
+        // prevent kill only if killed in m_duel and killed by opponent or opponent controlled creature
+        if (((Player*)pVictim)->m_duel->opponent == this || ((Player*)pVictim)->m_duel->opponent->GetObjectGuid() == GetOwnerGuid())
             damage = health - 1;
 
         duel_hasEnded = true;
@@ -799,9 +799,9 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
     // hack for some bug damage from summons/pets
     // Summon Infernal
-    if (IsCreature() && GetEntry() == 89 && pVictim->IsPlayer() && pVictim->ToPlayer()->isHardcore())
+    if (IsCreature() && GetEntry() == 89 && pVictim->IsPlayer() && pVictim->ToPlayer()->IsHardcore())
         damage /= 10;
-    else if (IsPlayer() && ToPlayer()->isHardcore() && pVictim->IsCreature() && pVictim->GetEntry() == 89)
+    else if (IsPlayer() && ToPlayer()->IsHardcore() && pVictim->IsCreature() && pVictim->GetEntry() == 89)
         damage *= 10;
 
     if (health <= damage)
@@ -813,15 +813,15 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
         DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamage: victim just died");
         Kill(pVictim, spellProto, durabilityLoss); // Function too long, we cut
-        // last damage from non duel opponent or opponent controlled creature
+        // last damage from non m_duel opponent or opponent controlled creature
         if (duel_hasEnded)
         {
             MANGOS_ASSERT(pVictim->IsPlayer());
             Player *he = (Player*)pVictim;
 
-            MANGOS_ASSERT(he->duel);
+            MANGOS_ASSERT(he->m_duel);
 
-            he->duel->opponent->CombatStopWithPets(true);
+            he->m_duel->opponent->CombatStopWithPets(true);
             he->CombatStopWithPets(true);
 
             he->DuelComplete(DUEL_INTERRUPTED);
@@ -940,17 +940,17 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             }
         }
 
-        // last damage from duel opponent
+        // last damage from m_duel opponent
         if (duel_hasEnded)
         {
             MANGOS_ASSERT(pVictim->IsPlayer());
             Player *he = (Player*)pVictim;
 
-            MANGOS_ASSERT(he->duel);
+            MANGOS_ASSERT(he->m_duel);
 
             he->SetHealth(1);
 
-            he->duel->opponent->CombatStopWithPets(true);
+            he->m_duel->opponent->CombatStopWithPets(true);
             he->CombatStopWithPets(true);
 
             he->CastSpell(he, 7267, true);                  // beg
