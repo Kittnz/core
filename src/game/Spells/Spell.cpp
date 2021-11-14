@@ -1634,7 +1634,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
         }
         else
         {
-            // for delayed spells ignore negative spells (after duel end) for friendly targets
+            // for delayed spells ignore negative spells (after m_duel end) for friendly targets
             if (m_delayed && !m_spellInfo->IsPositiveSpell() && m_casterUnit->GetMountID() != GNOMECAR_DISPLAYID && m_casterUnit->GetMountID() != GOBLINCAR_DISPLAYID) // here!
             {
                 pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, SPELL_MISS_EVADE);
@@ -2840,7 +2840,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 {
                     Player* target = itr->getSource();
 
-                    // IsHostileTo check duel and controlled by enemy
+                    // IsHostileTo check m_duel and controlled by enemy
                     if (target && target->GetSubGroup() == subgroup && target->GetLevel() + 10 >= m_spellInfo->spellLevel && !m_caster->IsHostileTo(target))
                     {
                         if (pTarget->IsWithinDistInMap(target, radius))
@@ -2967,7 +2967,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 {
                     Player* Target = itr->getSource();
 
-                    // IsHostileTo check duel and controlled by enemy
+                    // IsHostileTo check m_duel and controlled by enemy
                     if (Target && targetPlayer->IsWithinDistInMap(Target, radius) &&
                             targetPlayer->GetClass() == Target->GetClass() &&
                             !m_caster->IsHostileTo(Target))
@@ -5642,18 +5642,18 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 if (strict && m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_TARGET_ONLY_PLAYER && target->GetTypeId() != TYPEID_PLAYER && !m_spellInfo->IsAreaOfEffectSpell())
                     return SPELL_FAILED_BAD_TARGETS;
             }
-            // Can't help a friend in duel   |  sorry, not enough time to figure out why this is necessary
+            // Can't help a friend in m_duel   |  sorry, not enough time to figure out why this is necessary
             if (m_spellInfo->IsPositiveSpell() && m_spellInfo->Id != 28697)
             {
                 Player* casterOwner = m_casterUnit ? m_casterUnit->GetCharmerOrOwnerPlayerOrPlayerItself() : nullptr;
                 Player* targetOwner = target->GetCharmerOrOwnerPlayerOrPlayerItself();
 
-                if (m_spellInfo->Id == 7266 && targetOwner && targetOwner->duel && casterOwner && !casterOwner->IsInDuelWith(targetOwner))
+                if (m_spellInfo->Id == 7266 && targetOwner && targetOwner->m_duel && casterOwner && !casterOwner->IsInDuelWith(targetOwner))
                 {
                     return SPELL_FAILED_TARGET_DUELING;
                 }
 
-                if (targetOwner && casterOwner != targetOwner && targetOwner->duel && targetOwner->duel->startTime && casterOwner && !casterOwner->IsInDuelWith(targetOwner))
+                if (targetOwner && casterOwner != targetOwner && targetOwner->m_duel && targetOwner->m_duel->startTime && casterOwner && !casterOwner->IsInDuelWith(targetOwner))
                     return SPELL_FAILED_TARGET_DUELING;
             }
         }
@@ -8080,7 +8080,7 @@ bool Spell::CheckTarget(Unit* target, SpellEffectIndex eff)
 
         Player* casterOwner = m_casterUnit->GetCharmerOrOwnerPlayerOrPlayerItself();
         Player* targetOwner = target->GetCharmerOrOwnerPlayerOrPlayerItself();
-        if (targetOwner && casterOwner != targetOwner && targetOwner->duel && casterOwner && !casterOwner->IsInDuelWith(targetOwner))
+        if (targetOwner && casterOwner != targetOwner && targetOwner->m_duel && casterOwner && !casterOwner->IsInDuelWith(targetOwner))
             return false;
     }
     // Check targets for creature type mask and remove not appropriate (skip explicit self target case, maybe need other explicit targets)
@@ -8618,7 +8618,7 @@ void Spell::FillRaidOrPartyTargets(UnitList &TagUnitMap, Unit* target, float rad
         {
             Player* target = itr->getSource();
 
-            // IsHostileTo check duel and controlled by enemy
+            // IsHostileTo check m_duel and controlled by enemy
             if (target && (raid || subgroup == target->GetSubGroup()) && target->GetLevel() + 10 >= m_spellInfo->spellLevel && !m_caster->IsHostileTo(target))
             {
                 if ((target == m_caster && withcaster) || (target != m_caster && m_caster->IsWithinDistInMap(target, radius)))

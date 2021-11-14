@@ -501,7 +501,7 @@ Player::Player(WorldSession *session) : Unit(),
     m_groupUpdateMask = 0;
     m_auraUpdateMask = 0;
 
-    duel = nullptr;
+    m_duel = nullptr;
 
     m_GuildIdInvited = 0;
 
@@ -1229,11 +1229,12 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     UpdatePvPContestedFlagTimer(update_diff);
 
     // Delay delete duel
-    if (duel && duel->finished)
+    if (m_duel && m_duel->finished)
     {
-        delete duel;
-        duel = nullptr;
+        delete m_duel;
+        m_duel = nullptr;
     }
+
     UpdateDuelFlag(now);
 
     CheckDuelDistance(now);
@@ -1476,7 +1477,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     }
 
     // Hardcore mode safe update
-    if (isHardcore())
+    if (IsHardcore())
     {
         if (m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD && m_hardcoreKickTimer)
         {
@@ -1933,7 +1934,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
         m_movementInfo.RemoveMovementFlag(MOVEFLAG_ONTRANSPORT);
     }
     // Stop duel
-    if (duel)
+    if (m_duel)
         if (GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
             DuelComplete(DUEL_FLED);
     // Fix movement flags
@@ -2025,7 +2026,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
     // The player was ported to another map and looses the duel immediately.
     // We have to perform this check before the teleport, otherwise the
     // ObjectAccessor won't find the flag.
-    if (duel && GetMapId() != mapid)
+    if (m_duel && GetMapId() != mapid)
         if (GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
             DuelComplete(DUEL_FLED);
 
@@ -3089,7 +3090,7 @@ void Player::GiveLevel(uint32 level)
     if (IsTurtle())
         MailHardcoreModeRewards(level);
 
-    if (isHardcore())
+    if (IsHardcore())
     {
         AnnounceHardcoreModeLevelUp(level);
         if (level == 60)
@@ -4695,7 +4696,7 @@ void Player::BuildPlayerRepop()
 
     Corpse* corpse = nullptr;
 
-    if (!isHardcore())
+    if (!IsHardcore())
     {
         // the player cannot have a corpse already, only bones which are not returned by GetCorpse
         if (corpse = GetCorpse())
@@ -4721,15 +4722,15 @@ void Player::BuildPlayerRepop()
     SetHealth(1);
 
     SetWaterWalking(true);
-    if (!GetSession()->isLogingOut() && !isHardcore())
+    if (!GetSession()->isLogingOut() && !IsHardcore())
         SetRooted(false);
-    else if (isHardcore())
+    else if (IsHardcore())
         SetRooted(true);
 
     // BG - remove insignia related
     RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
 
-    if (!isHardcore())
+    if (!IsHardcore())
         SendCorpseReclaimDelay();
 
     // to prevent cheating
@@ -4745,7 +4746,7 @@ void Player::BuildPlayerRepop()
 void Player::ResurrectPlayer(float restore_percent, bool applySickness)
 {
     // Don't ressurent permamently dead chracters.
-    if (isHardcore())
+    if (IsHardcore())
         return;
 
     // Interrupt resurrect spells
@@ -4828,7 +4829,7 @@ void Player::KillPlayer()
     //SetFlag( UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_IN_PVP );
 
     SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_NONE);
-    if (!isHardcore())
+    if (!IsHardcore())
         ApplyModByteFlag(PLAYER_FIELD_BYTES, 0, PLAYER_FIELD_BYTE_RELEASE_TIMER, !sMapStorage.LookupEntry<MapEntry>(GetMapId())->Instanceable());
     else
         ApplyModByteFlag(PLAYER_FIELD_BYTES, 0, PLAYER_FIELD_BYTE_NO_RELEASE_WINDOW, true);
@@ -4846,7 +4847,7 @@ void Player::KillPlayer()
     // Update total death count
     UpdateTotalDeathCount();
 
-    if (isHardcore())
+    if (IsHardcore())
     {
         SetHardcoreStatus(HARDCORE_MODE_STATUS_DEAD);
         if (GetLevel() >= 10)
@@ -6945,7 +6946,7 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
 //If players are too far way of duel flag... then player loose the duel
 void Player::CheckDuelDistance(time_t currTime)
 {
-    if (!duel || duel->finished)
+    if (!m_duel || m_duel->finished)
         return;
 
     GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER));
@@ -6957,16 +6958,16 @@ void Player::CheckDuelDistance(time_t currTime)
     }
 
     bool inRange = true;
-    if (duel->transportGuid)
-        inRange = GetTransport() && GetTransport()->GetGUIDLow() == duel->transportGuid;
-    else if (!IsWithinDistInMap(obj, duel->outOfBound ? 70.0f : 75.0f))
+    if (m_duel->transportGuid)
+        inRange = GetTransport() && GetTransport()->GetGUIDLow() == m_duel->transportGuid;
+    else if (!IsWithinDistInMap(obj, m_duel->outOfBound ? 70.0f : 75.0f))
         inRange = false;
-    if (duel->outOfBound == 0)
+    if (m_duel->outOfBound == 0)
     {
         // Nostalrius : modification de la distance de duel (50 -> 75m)
         if (!inRange)
         {
-            duel->outOfBound = currTime;
+            m_duel->outOfBound = currTime;
 
             WorldPacket data(SMSG_DUEL_OUTOFBOUNDS, 0);
             GetSession()->SendPacket(&data);
@@ -6977,16 +6978,16 @@ void Player::CheckDuelDistance(time_t currTime)
         // Nostalrius : modification de la distance de duel
         if (inRange)
         {
-            duel->outOfBound = 0;
+            m_duel->outOfBound = 0;
 
             WorldPacket data(SMSG_DUEL_INBOUNDS, 0);
             GetSession()->SendPacket(&data);
         }
-        else if (currTime >= (duel->outOfBound + 10))
+        else if (currTime >= (m_duel->outOfBound + 10))
         {
             CombatStopWithPets(true);
-            if (duel->opponent)
-                duel->opponent->CombatStopWithPets(true);
+            if (m_duel->opponent)
+                m_duel->opponent->CombatStopWithPets(true);
 
             DuelComplete(DUEL_FLED);
         }
@@ -7001,77 +7002,78 @@ bool Player::IsOutdoorPvPActive() const
 
 void Player::DuelComplete(DuelCompleteType type)
 {
-    // duel not requested
-    if (!duel || duel->finished)
+    // Duel not requested
+    if (!m_duel || m_duel->finished)
         return;
 
     WorldPacket data(SMSG_DUEL_COMPLETE, (1));
     data << (uint8)((type != DUEL_INTERRUPTED) ? 1 : 0);
     GetSession()->SendPacket(&data);
-    duel->opponent->GetSession()->SendPacket(&data);
+    m_duel->opponent->GetSession()->SendPacket(&data);
 
     if (type != DUEL_INTERRUPTED)
     {
-        data.Initialize(SMSG_DUEL_WINNER, (1 + 20));        // we guess size
-        data << (uint8)((type == DUEL_WON) ? 0 : 1);        // 0 = just won; 1 = fled
-        data << duel->opponent->GetName();
+        data.Initialize(SMSG_DUEL_WINNER, (1 + 20)); // Guessed size
+        data << (uint8)((type == DUEL_WON) ? 0 : 1); // 0 = just won; 1 = fled
+        data << m_duel->opponent->GetName();
         data << GetName();
         SendObjectMessageToSet(&data, true);
     }
 
-    //Remove Duel Flag object
+    // Remove Duel Flag object
     if (GameObject* obj = GetMap()->GetGameObject(GetGuidValue(PLAYER_DUEL_ARBITER)))
-        duel->initiator->RemoveGameObject(obj, true);
+        m_duel->initiator->RemoveGameObject(obj, true);
 
-    /* remove auras */
+    // Remove auras
     std::vector<uint32> auras2remove;
-    SpellAuraHolderMap const& vAuras = duel->opponent->GetSpellAuraHolderMap();
+    SpellAuraHolderMap const& vAuras = m_duel->opponent->GetSpellAuraHolderMap();
     for (const auto& itr : vAuras)
     {
-        if (!itr.second->IsPositive() && itr.second->GetCasterGuid() == GetObjectGuid() && itr.second->GetAuraApplyTime() >= duel->startTime)
+        if (!itr.second->IsPositive() && itr.second->GetCasterGuid() == GetObjectGuid() && itr.second->GetAuraApplyTime() >= m_duel->startTime)
             auras2remove.push_back(itr.second->GetId());
     }
 
     for (uint32 i : auras2remove)
-        duel->opponent->RemoveAurasDueToSpell(i);
+        m_duel->opponent->RemoveAurasDueToSpell(i);
 
     auras2remove.clear();
     SpellAuraHolderMap const& auras = GetSpellAuraHolderMap();
     for (const auto& aura : auras)
     {
-        if (!aura.second->IsPositive() && aura.second->GetCasterGuid() == duel->opponent->GetObjectGuid() && aura.second->GetAuraApplyTime() >= duel->startTime)
+        if (!aura.second->IsPositive() && aura.second->GetCasterGuid() == m_duel->opponent->GetObjectGuid() && aura.second->GetAuraApplyTime() >= m_duel->startTime)
             auras2remove.push_back(aura.second->GetId());
     }
+
     for (uint32 i : auras2remove)
         RemoveAurasDueToSpell(i);
 
-    // cleanup combo points
-    if (GetComboTargetGuid() == duel->opponent->GetObjectGuid())
+    // Cleanup combo points
+    if (GetComboTargetGuid() == m_duel->opponent->GetObjectGuid())
         ClearComboPoints();
-    else if (GetComboTargetGuid() == duel->opponent->GetPetGuid())
+    else if (GetComboTargetGuid() == m_duel->opponent->GetPetGuid())
         ClearComboPoints();
 
-    if (duel->opponent->GetComboTargetGuid() == GetObjectGuid())
-        duel->opponent->ClearComboPoints();
-    else if (duel->opponent->GetComboTargetGuid() == GetPetGuid())
-        duel->opponent->ClearComboPoints();
+    if (m_duel->opponent->GetComboTargetGuid() == GetObjectGuid())
+        m_duel->opponent->ClearComboPoints();
+    else if (m_duel->opponent->GetComboTargetGuid() == GetPetGuid())
+        m_duel->opponent->ClearComboPoints();
 
-    // reset extraAttacks counter
+    // Reset extraAttacks counter
     if (type != DUEL_INTERRUPTED)
     {
         ResetExtraAttacks();
-        duel->opponent->ResetExtraAttacks();
+        m_duel->opponent->ResetExtraAttacks();
     }
 
-    //cleanups
+    // Cleanups
     SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
     SetUInt32Value(PLAYER_DUEL_TEAM, 0);
-    duel->opponent->SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
-    duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 0);
+    m_duel->opponent->SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
+    m_duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 0);
 
-    if (duel->opponent->duel)
-        duel->opponent->duel->finished = true;;
-    duel->finished = true;
+    if (m_duel->opponent->m_duel)
+        m_duel->opponent->m_duel->finished = true;;
+    m_duel->finished = true;
 }
 
 //---------------------------------------------------------//
@@ -12416,22 +12418,6 @@ void Player::PrepareGossipMenu(WorldObject *pSource, uint32 menuId)
         if (pSource->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
             TalkedToCreature(pSource->GetEntry(), pSource->GetObjectGuid());
     }
-
-    // some gossips aren't handled in normal way ... so we need to do it this way .. TODO: handle it in normal way ;-)
-    /*if (pMenu->Empty())
-    {
-        if (pCreature->HasFlag(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_TRAINER))
-        {
-            // output error message if need
-            pCreature->IsTrainerOf(this, true);
-        }
-
-        if (pCreature->HasFlag(UNIT_NPC_FLAGS,UNIT_NPC_FLAG_BATTLEMASTER))
-        {
-            // output error message if need
-            pCreature->CanInteractWithBattleMaster(this, true);
-        }
-    }*/
 }
 
 void Player::SendPreparedGossip(WorldObject *pSource)
@@ -17271,18 +17257,19 @@ bool Player::IsInInterFactionMode() const
 
 void Player::UpdateDuelFlag(time_t currTime)
 {
-    if (!duel || duel->finished || duel->startTimer == 0 || currTime < duel->startTimer + 3)
+    if (!m_duel || m_duel->finished || m_duel->startTimer == 0 || currTime < m_duel->startTimer + 3)
         return;
 
     SetUInt32Value(PLAYER_DUEL_TEAM, 1);
-    duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 2);
+    m_duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 2);
 
-    duel->startTimer = 0;
-    duel->startTime  = currTime;
-    if (duel->opponent->duel)
+    m_duel->startTimer = 0;
+    m_duel->startTime  = currTime;
+
+    if (m_duel->opponent->m_duel)
     {
-        duel->opponent->duel->startTimer = 0;
-        duel->opponent->duel->startTime  = currTime;
+        m_duel->opponent->m_duel->startTimer = 0;
+        m_duel->opponent->m_duel->startTime  = currTime;
     }
 }
 
@@ -20188,8 +20175,7 @@ Player* Player::GetNextRandomRaidMember(float radius)
         Player* Target = itr->getSource();
 
         // IsHostileTo check duel and controlled by enemy
-        if (Target && Target != this && IsWithinDistInMap(Target, radius) &&
-                !Target->HasInvisibilityAura() && !IsHostileTo(Target))
+        if (Target && Target != this && IsWithinDistInMap(Target, radius) && !Target->HasInvisibilityAura() && !IsHostileTo(Target))
             nearMembers.push_back(Target);
     }
 
@@ -20612,7 +20598,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
                     damage = GetMaxHealth();
 
                 // handle hardcore potential fall damage
-                if (isHardcore())
+                if (IsHardcore())
                 {
                     sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
                     damage /= 10;
@@ -22394,9 +22380,9 @@ uint16 Player::GetPureMaxSkillValue(uint32 skill) const
 // for Hardcore mode
 bool Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
 {
-    if (isHardcore())
+    if (IsHardcore())
     {
-        if (!target->isHardcore())
+        if (!target->IsHardcore())
             return false;
 
         if (checkLevelDiff)
@@ -22409,7 +22395,7 @@ bool Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
     }
     else
     {
-        if (target->isHardcore())
+        if (target->IsHardcore())
             return false;
     }
 
@@ -22418,7 +22404,7 @@ bool Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
 
 bool Player::SetupHardcoreMode()
 {
-    if (isHardcore())
+    if (IsHardcore())
         return false;
 
     SetHardcoreStatus(HARDCORE_MODE_STATUS_ALIVE);

@@ -240,24 +240,6 @@ struct boss_jeklikAI : public ScriptedAI
             else
                 Charge_Timer -= diff;
 
-            // SCREECH
-            if (Screech_Timer < diff)
-            {
-                if (!skillStarted)
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SCREECH) == CAST_OK)
-                    {
-                        skillStarted   = true;
-                        Screech_Timer  = 30000;
-                        GlobalCooldown = 1000;
-                    }
-                    else
-                        Charge_Timer = 1000;
-                }
-            }
-            else
-                Screech_Timer -= diff;
-
             // SONICBURST
             if (SonicBurst_Timer < diff)
             {
@@ -383,6 +365,24 @@ struct boss_jeklikAI : public ScriptedAI
             }
             else
                 CurseOfBlood_Timer -= diff;
+
+            // SCREECH
+            if (Screech_Timer < diff)
+            {
+                if (!skillStarted)
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SCREECH) == CAST_OK)
+                    {
+                        skillStarted = true;
+                        Screech_Timer = 30000;
+                        GlobalCooldown = 1000;
+                    }
+                    else
+                        Charge_Timer = 1000;
+                }
+            }
+            else
+                Screech_Timer -= diff;
         }
     }
 };

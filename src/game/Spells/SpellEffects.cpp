@@ -5694,38 +5694,38 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
     Player *caster = (Player*)m_casterUnit;
     Player *target = (Player*)unitTarget;
 
-    // if the caster is already in a duel or has issued a challenge
-    if (caster->duel && caster->duel->opponent != target)
+    // if the caster is already in a m_duel or has issued a challenge
+    if (caster->m_duel && caster->m_duel->opponent != target)
     {
-        if (caster->duel->startTime)
+        if (caster->m_duel->startTime)
             caster->DuelComplete(DUEL_WON);
         else
             caster->DuelComplete(DUEL_INTERRUPTED);
 
-       delete caster->duel;
-       delete target->duel;
-       caster->duel = target->duel = nullptr;
+       delete caster->m_duel;
+       delete target->m_duel;
+       caster->m_duel = target->m_duel = nullptr;
     }
 
-    // if the caster attempts to duel somebody they're already in a duel with
-    if (caster->duel && caster->duel->opponent == target && caster->duel->startTime)
+    // if the caster attempts to m_duel somebody they're already in a m_duel with
+    if (caster->m_duel && caster->m_duel->opponent == target && caster->m_duel->startTime)
     {
         SendCastResult(SPELL_FAILED_TARGET_ENEMY);
         return;
     }
 
-    // if the target already has a pending duel/is dueling, reject the request
-    if (target->duel)
+    // if the target already has a pending m_duel/is dueling, reject the request
+    if (target->m_duel)
     {
         SendCastResult(SPELL_FAILED_TARGET_DUELING);
         return;
     }
 
-    // caster or target already have requested duel
-    if (caster->duel || !target->GetSocial() || target->GetSocial()->HasIgnore(caster->GetObjectGuid()) || target->FindMap() != caster->FindMap())
+    // caster or target already have requested m_duel
+    if (caster->m_duel || !target->GetSocial() || target->GetSocial()->HasIgnore(caster->GetObjectGuid()) || target->FindMap() != caster->FindMap())
         return;
 
-    // Players can only fight a duel with each other outside (=not inside dungeons and not in capital cities)
+    // Players can only fight a m_duel with each other outside (=not inside dungeons and not in capital cities)
     const auto *casterAreaEntry = AreaEntry::GetById(caster->GetAreaId());
     if (casterAreaEntry && !(casterAreaEntry->Flags & AREA_FLAG_DUEL))
     {
@@ -5781,12 +5781,12 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
     caster->GetSession()->SendPacket(&data);
     target->GetSession()->SendPacket(&data);
 
-    // create duel-info
-    DuelInfo *duel   = new DuelInfo;
-    duel->initiator  = caster;
-    duel->opponent   = target;
-    duel->startTime  = 0;
-    duel->startTimer = 0;
+    // create m_duel-info
+    DuelInfo *m_duel   = new DuelInfo;
+    m_duel->initiator  = caster;
+    m_duel->opponent   = target;
+    m_duel->startTime  = 0;
+    m_duel->startTimer = 0;
 
     DuelInfo *duel2   = new DuelInfo;
     duel2->initiator  = caster;
@@ -5796,11 +5796,11 @@ void Spell::EffectDuel(SpellEffectIndex eff_idx)
 
     if (Transport* t = caster->GetTransport())
     {
-        duel->transportGuid  = t->GetGUIDLow();
+        m_duel->transportGuid  = t->GetGUIDLow();
         duel2->transportGuid = t->GetGUIDLow();
     }
-    caster->duel     = duel;
-    target->duel      = duel2;
+    caster->m_duel     = m_duel;
+    target->m_duel      = duel2;
 
     caster->SetGuidValue(PLAYER_DUEL_ARBITER, pGameObj->GetObjectGuid());
     target->SetGuidValue(PLAYER_DUEL_ARBITER, pGameObj->GetObjectGuid());

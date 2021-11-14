@@ -26,19 +26,31 @@
 #include "Opcodes.h"
 #include "UpdateData.h"
 #include "Player.h"
+#include "Chat.h"
 
 void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
 {
     ObjectGuid guid;
     recvPacket >> guid;
 
-    if (!GetPlayer()->duel)                                 // ignore accept from duel-sender
+    if (!GetPlayer()->m_duel) // Ignore accept from m_duel-sender
         return;
 
-    Player *pl       = GetPlayer();
-    Player *plTarget = pl->duel->opponent;
+    Player *pl = GetPlayer();
+    Player *plTarget = pl->m_duel->opponent;
 
-    if (pl == pl->duel->initiator || !plTarget || !plTarget->duel || pl == plTarget || pl->duel->startTime != 0 || plTarget->duel->startTime != 0)
+    if (pl->IsHardcore())
+    {
+        ChatHandler(pl).SendSysMessage("Hardcore players are not allowed to duel.");
+        return;
+    }
+    else if (plTarget->IsHardcore())
+    {
+        ChatHandler(plTarget).SendSysMessage("Hardcore players are not allowed to duel.");
+        return;
+    }
+
+    if (pl == pl->m_duel->initiator || !plTarget || !plTarget->m_duel || pl == plTarget || pl->m_duel->startTime != 0 || plTarget->m_duel->startTime != 0)
         return;
 
     DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "WORLD: received CMSG_DUEL_ACCEPTED");
@@ -46,8 +58,8 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
     DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "Player 2 is: %u (%s)", plTarget->GetGUIDLow(), plTarget->GetName());
 
     time_t now = time(nullptr);
-    pl->duel->startTimer = now;
-    plTarget->duel->startTimer = now;
+    pl->m_duel->startTimer = now;
+    plTarget->m_duel->startTimer = now;
 
     pl->SendDuelCountdown(3000);
     plTarget->SendDuelCountdown(3000);
@@ -58,23 +70,23 @@ void WorldSession::HandleDuelCancelledOpcode(WorldPacket& recvPacket)
     //DEBUG_LOG( "WORLD: received CMSG_DUEL_CANCELLED" );
 
     auto pPlayer = GetPlayer();
-    // no duel requested
-    if (!pPlayer->duel)
+    // no m_duel requested
+    if (!pPlayer->m_duel)
         return;
 
-    // player surrendered in a duel using /forfeit
-    if (pPlayer->duel->startTime != 0)
+    // player surrendered in a m_duel using /forfeit
+    if (pPlayer->m_duel->startTime != 0)
     {
         pPlayer->CombatStopWithPets(true);
-        if (pPlayer->duel->opponent)
-            pPlayer->duel->opponent->CombatStopWithPets(true);
+        if (pPlayer->m_duel->opponent)
+            pPlayer->m_duel->opponent->CombatStopWithPets(true);
 
         pPlayer->CastSpell(GetPlayer(), 7267, true);    // beg
         pPlayer->DuelComplete(DUEL_WON);
         return;
     }
 
-    // player either discarded the duel using the "discard button"
+    // player either discarded the m_duel using the "discard button"
     // or used "/forfeit" before countdown reached 0
     ObjectGuid guid;
     recvPacket >> guid;

@@ -1889,7 +1889,7 @@ bool ChatHandler::HandleDieCommand(char* /*args*/)
             return false;
     }
 
-    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    if (target->ToPlayer() && target->ToPlayer()->IsHardcore())
     {
         SendSysMessage("Cannot kill a Hardcore Character.");
         SetSentErrorMessage(true);
@@ -1929,7 +1929,7 @@ bool ChatHandler::HandleFearCommand(char* /*args*/)
     if (!spellInfo)
         return false;
 
-    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    if (target->ToPlayer() && target->ToPlayer()->IsHardcore())
     {
         SendSysMessage("Cannot fear a Hardcore Character.");
         SetSentErrorMessage(true);
@@ -1991,7 +1991,7 @@ bool ChatHandler::HandleDamageCommand(char* args)
 
     uint32 damage = uint32(damage_int);
 
-    if (target->ToPlayer() && target->ToPlayer()->isHardcore())
+    if (target->ToPlayer() && target->ToPlayer()->IsHardcore())
     {
         SendSysMessage("Cannot damage a Hardcore Character.");
         SetSentErrorMessage(true);
@@ -8782,7 +8782,7 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
         return false;
 
     // [Hardcore] Prevent death caused by getting disconnected while in-fight
-    if (target->isHardcore())
+    if (target->IsHardcore())
     {
         SendSysMessage("Cannot kick a Hardcore Character.");
         SetSentErrorMessage(true);
