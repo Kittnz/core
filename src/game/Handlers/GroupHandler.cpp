@@ -370,6 +370,9 @@ void WorldSession::HandleLootMethodOpcode(WorldPacket & recv_data)
     if (lootMethod > 4)
         return;
 
+    if (lootThreshold < ITEM_QUALITY_UNCOMMON || lootThreshold > ITEM_QUALITY_LEGENDARY)
+        return;
+
     Group *group = GetPlayer()->GetGroup();
     if (!group || group->isBGGroup())
         group = GetPlayer()->GetOriginalGroup();
