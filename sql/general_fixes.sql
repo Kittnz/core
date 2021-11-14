@@ -441,3 +441,21 @@ update playercreateinfo_item set itemid = 48 where class = 3 and race = 5 and it
 update playercreateinfo_item set itemid = 48 where class = 3 and race = 5 and itemid = 6131; -- Pants
 
 update creature_template set npc_flags = 3 where entry = 52030;
+
+update item_template set name = 'Void-Linked Satchel of Goods' where entry = 83236;
+
+replace into item_loot_template values 
+(83236, 7076, 0, 2, 1, 2, 0),
+(83236, 7078, 0, 2, 1, 2, 0),
+(83236, 7080, 0, 2, 1, 2, 0),
+(83236, 7082, 0, 2, 1, 2, 0),
+(83236, 7971, 33, 1, 2, 3, 0),
+(83236, 11370, 23, 3, 3, 6, 0),
+(83236, 12361, 35, 1, 1, 2, 0),
+(83236, 12363, 35, 1, 1, 2, 0),
+(83236, 12364, 35, 1, 1, 2, 0),
+(83236, 12800, 35, 1, 1, 3, 0),
+(83236, 13468, 80, 3, 1, 3, 0),
+(83236, 14256, 23, 3, 2, 4, 0),
+(83236, 15416, 23, 3, 2, 5, 0),
+(83236, 20520, 23, 3, 2, 4, 0);
