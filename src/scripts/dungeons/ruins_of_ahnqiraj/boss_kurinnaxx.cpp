@@ -92,7 +92,7 @@ struct boss_kurinnaxxAI : public ScriptedAI
         {
             if (GameObject* pTrap = GetClosestGameObjectWithEntry(m_creature, GO_TRAP, DEFAULT_VISIBILITY_DISTANCE))
             {
-                m_creature->SendObjectDeSpawnAnim(pTrap->GetGUID());
+                pTrap->SendObjectDeSpawnAnim();
                 pTrap->Delete();
             }
         }
