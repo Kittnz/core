@@ -10369,10 +10369,11 @@ void Unit::WritePetSpellsCooldown(WorldPacket& data) const
     }
 }
 
-static float GetDefaultPlayerScale(uint8 race, uint8 gender)
+inline float GetDefaultPlayerScale(uint8 race, uint8 gender)
 {
     if (race == RACE_TAUREN)
         return (gender == GENDER_FEMALE ? DEFAULT_TAUREN_FEMALE_SCALE : DEFAULT_TAUREN_MALE_SCALE);
+
     if (race == RACE_GNOME)
         return DEFAULT_GNOME_SCALE;
 
