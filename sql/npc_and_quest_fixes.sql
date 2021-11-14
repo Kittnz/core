@@ -191,3 +191,10 @@ replace into creature_loot_template values
 (7027,60335,-40,1,1,1,0),
 (7028,60335,-40,1,1,1,0),
 (7029,60335,-45,1,1,1,0);
+
+-- Blackrock Slayers --
+delete from quest_template where entry = 40257;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40257,2,46,57,48,0,0,'Blackrock Slayers','The Slayers of the Blackrock Clan are a most fearsome foe. They have been known in the past for cleavage down entire regiments of human footmen during the old war. It is them I fear more then many on the field of battle.\n\nThey must be dealt with and be dealt with quickly, you shall find them all over the Burning Steppes, mostly concentrated to the west at the Blackrock Stronghold, but you may also see them in the Pillar of Ash as well.\n\nGo with honor, and kill them in the name of Thrall.','Kill 10 Blackrock Slayer\'s and return to Tarsokk in Flame Crest.','Have they been eliminated?','The Blackrock Slayers were a truly terrifying foe, you have done good work.',0,0,0,0,0,0,0,0,7027,10,0,0,0,0,0,0,0,0,0,5800,76,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91891, 40257);
+replace into creature_involvedrelation (id, quest) values (91891, 40257);
