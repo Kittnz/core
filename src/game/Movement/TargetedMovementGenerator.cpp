@@ -319,6 +319,7 @@ bool ChaseMovementGenerator<T>::Update(T &owner, const uint32 & time_diff)
             }
             else
             {
+                float allowed_dist = owner.GetMaxChaseDistance(i_target.getTarget()) - 0.5f;
                 bool targetMoved = false;
                 G3D::Vector3 dest(m_fTargetLastX, m_fTargetLastY, m_fTargetLastZ);
                 if (Transport* ownerTransport = owner.GetTransport())
