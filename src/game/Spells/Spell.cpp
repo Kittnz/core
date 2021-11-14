@@ -7755,13 +7755,14 @@ SpellCastResult Spell::CheckItems()
             }
         }
     }
+
     for (int i = 0; i < MAX_EFFECT_INDEX; ++i)
     {
         switch (m_spellInfo->Effect[i])
         {
             case SPELL_EFFECT_CREATE_ITEM:
             {
-                if (i == EFFECT_INDEX_0)
+                if (!m_IsTriggeredSpell && i == EFFECT_INDEX_0)
                 {
                     if (Unit* target = m_targets.getUnitTarget())
                     {
