@@ -1,0 +1,1 @@
+UPDATE `creature_spells` SET delayRepeatMin_1 = 16, delayRepeatMax_1 = 22 WHERE `entry` = 44800
