@@ -234,6 +234,8 @@ class CreatureAI
         Creature* const m_creature;
         bool SwitchAiAtControl() const { return !m_bUseAiAtControl; }
         void SetUseAiAtControl(bool v) { m_bUseAiAtControl = v; }
+
+        bool IsCombatMovement() { return m_bCombatMovement; }
     protected:
         ///== Fields =======================================
         bool   m_bUseAiAtControl;
