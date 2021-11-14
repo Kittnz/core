@@ -104,7 +104,25 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 -- Teleport the player to Keeper Laena at X:3814.92 , Y:-5526.18, Z: 131, Map:1
 delete from gameobject_template where entry = 2010849;
-replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010849, 1, 24516, 1, 'Way-Stone of Eldarath', 32, 'go_way_stone_of_eldarath');
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010849, 1, 24516, 1, 'Way-Stone of Eldarath', 32, 'go_way_stone');
 -- Teleport the player to X:4011.45 , Y:-7131.67 , Z:24.81, Map:1
 delete from gameobject_template where entry = 2010850;
-replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010850, 1, 24516, 1, 'Way-Stone of Dorath', 32, 'go_way_stone_of_dorath');
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010850, 1, 24516, 1, 'Way-Stone of Dorath', 32, 'go_way_stone');
+
+-- Restoring the Ley Lines --
+delete from quest_template where entry = 40253;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40252,40253,2,16,55,45,0,0,'Restoring the Ley Lines','Welcome to my humble abode, I have kept my duty upon this spire and will continue to do so. Now that the Way-Stones are restablished we can begin to make our presence within the region more known.\n\nTo the southwest is the Temple of Zin-Malor, nestled within the Ruins of Eldarath, it is currently inhabited by the twisted Naga. Within the Temple of Zin-Malor lays secrets that they will never figure out, and that I need you to uncover.\n\nDeep inside the Temple, you will find a distinct stone, etched with bright runes of an even more ancient language. This stone, is known as the Ashan Stone, when you see it, speak the following \'Tizah Ashan Dal\'asha\'. This magic will once again invigor the long inactive Ley-Lines that stretch through Azshara.','Enter the Temple of Zin-Malor and find the Ashan Stone, and activate the dormant Ley-Lines for Keeper Laena in Azshara.','When you have spoken the phrase the magic that once held the stone and made it dormant will be inactive. This spell was placed long ago to deter any outside entities from interfering, if we can act quickly, I will be able to do as I need.','I can feel the energy flowing once again, it will no doubt attract the attention of outside forces, or perhaps those who wish to uncover the secrets of Azshara for themselves. Our next step will be a crucial one, and will be required to keep the mysteries of this land from being uncovered.',0,0,0,0,0,0,0,0,60336,1,0,0,0,0,0,0,0,0,0,6500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Ashan Stone activated');
+
+replace into creature_questrelation (id, quest) values (60512, 40253);
+replace into creature_involvedrelation (id, quest) values (60512, 40253);
+
+delete from creature_template where entry = 60336;
+replace into creature_template (entry, name, display_id1) values (60336, 'quest_40253_dummy_triger', 328);
+
+-- Object Ashan Stone (Uses display ID 2652) , needs to be interactable to complete quest, open a dialogue box when right clicked that says the following '<This stone pulses lightly with a foreign magic>', when on this quest, a small clickable button should appear that says the following 'Tizah Ashan Dal'asha' , clicking this button will complete the quest.
+delete from gameobject_template where entry = 2010851;
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010851, 1, 2652, 1, 'Ashan Stone', 32, 'go_ashan_stone');
+
+REPLACE INTO broadcast_text VALUES 
+(100400, '<This stone pulses lightly with a foreign magic>.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into npc_text (id, broadcasttextid0) values (100400, 100400);
