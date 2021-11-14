@@ -4245,18 +4245,16 @@ void Aura::HandlePeriodicTriggerSpell(bool apply, bool /*Real*/)
     {
         switch (GetId())
         {
-            case 23620:                                     // Burning Adrenaline
+            case 23620: // Burning Adrenaline
                 if (m_removeMode == AURA_REMOVE_BY_DEATH)
                     target->CastSpell(target, 23478, true);
                 return;
-                /*
-                this is not needed. Might have been in the past, but if functions correct without this hack now.
-            case 29213:                                     // Curse of the Plaguebringer
-                if (m_removeMode != AURA_REMOVE_BY_DISPEL)
-                    // Cast Wrath of the Plaguebringer if not dispelled
-                    target->CastSpell(target, 29214, true, nullptr, this);
-                return;
-                */
+            case 9712:  // Thaumaturgy Channel
+            {
+                if (Unit* caster = GetCaster()) 
+                    caster->CastSpell(caster, 21029, true, 0, this); 
+                break;
+            }
             default:
                 break;
         }
