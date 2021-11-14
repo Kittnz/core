@@ -397,7 +397,7 @@ AutoAttackCheckResult Unit::CanAutoAttackTarget(Unit const* pVictim) const
 
     if (GetDistance2dToCenter(pVictim) > NO_FACING_CHECKS_DISTANCE)
     {
-        if (!HasInArc(2 * M_PI_F / 3, pVictim))
+        if (!HasInArc(pVictim, 2 * M_PI_F / 3))
             return ATTACK_RESULT_BAD_FACING;
     }
 
@@ -757,8 +757,6 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     {
         SetInCombatWithVictim(pVictim);
         pVictim->SetInCombatWithAggressor(this);
-        if (IsPlayer() && pVictim->IsCreature())
-            pVictim->ToCreature()->ResetLastDamageTakenTime();;
     }
     if (pVictim->IsCreature())
         pVictim->ToCreature()->CountDamageTaken(damage, GetCharmerOrOwnerOrOwnGuid().IsPlayer() || pVictim == this);
@@ -1693,7 +1691,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
     DealDamage(pVictim, damageInfo->totalDamage, &cleanDamage, DIRECT_DAMAGE, SpellSchoolMask(damageInfo->subDamage[0].damageSchoolMask), nullptr, durabilityLoss);
 
     // If this is a creature and it attacks from behind it has a probability to daze it's victim
-    if (damageInfo->totalDamage && !IsPlayer() && !((Creature*)this)->GetCharmerOrOwnerGuid() && !pVictim->HasInArc(M_PI_F, this))
+    if (damageInfo->totalDamage && !IsPlayer() && !((Creature*)this)->GetCharmerOrOwnerGuid() && !pVictim->HasInArc(this))
     {
         // -probability is between 0% and 40%
         // 20% base chance
@@ -2222,7 +2220,7 @@ MeleeHitOutcome Unit::RollMeleeOutcomeAgainst(Unit const* pVictim, WeaponAttackT
         return MELEE_HIT_CRIT;
     }
 
-    bool from_behind = !pVictim->HasInArc(M_PI_F, this);
+    bool from_behind = !pVictim->HasInArc(this);
 
     if (from_behind)
         DEBUG_FILTER_LOG(LOG_FILTER_COMBAT, "RollMeleeOutcomeAgainst: attack came from behind.");
@@ -2449,7 +2447,7 @@ void Unit::SendMeleeAttackStop(Unit* pVictim) const
 
 bool Unit::IsSpellBlocked(WorldObject* pCaster, Unit* pVictim, SpellEntry const* spellEntry, WeaponAttackType attackType) const
 {
-    if (!HasInArc(M_PI_F, pCaster))
+    if (!HasInArc(pCaster))
         return false;
 
     if (spellEntry)
@@ -2912,7 +2910,7 @@ bool Unit::IsBehindTarget(Unit const* pTarget, bool strict) const
         }
     }
 
-    return !pTarget->HasInArc(M_PI_F, this);
+    return !pTarget->HasInArc(this);
 }
 
 bool Unit::CantPathToVictim() const
@@ -4621,6 +4619,7 @@ void Unit::CombatStop(bool includingCast)
     {
         pCreature->UpdateCombatState(false);
         pCreature->UpdateCombatWithZoneState(false);
+        pCreature->ClearLastLeashExtensionTimePtr();
         pCreature->m_TargetNotReachableTimer = 0;
         if (pCreature->GetTemporaryFactionFlags() & TEMPFACTION_RESTORE_COMBAT_STOP)
             pCreature->ClearTemporaryFaction();
@@ -4731,6 +4730,20 @@ Unit* Unit::GetOwner() const
 {
     if (ObjectGuid ownerid = GetOwnerGuid())
         return ObjectAccessor::GetUnit(*this, ownerid);
+    return nullptr;
+}
+
+// Optimized version when we only want creature owner.
+// Check guid type before doing lookup for unit.
+Creature* Unit::GetOwnerCreature() const
+{
+    if (!IsInWorld())
+        return nullptr;
+
+    if (ObjectGuid ownerid = GetOwnerGuid())
+        if (ownerid.IsCreature())
+            return GetMap()->GetCreature(ownerid);
+
     return nullptr;
 }
 
@@ -5724,7 +5737,11 @@ void Unit::SetInCombatWithAggressor(Unit* pAggressor, bool touchOnly/* = false*/
     }
 
     if (!touchOnly)
+    {
         SetInCombatWith(pAggressor);
+        if (Creature* pCreature = ToCreature())
+            pCreature->UpdateLeashExtensionTime();
+    }
 }
 
 void Unit::SetInCombatWithAssisted(Unit* pAssisted)
@@ -6217,7 +6234,7 @@ bool Unit::CanDetectStealthOf(Unit const* target, float distance, bool *alert) c
     float visibleDistance = IsPlayer() ? MaxStealthDetectRange : ((Creature*)this)->GetAttackDistance(target);
 
     //Always invisible from back (when stealth detection is on), also filter max distance cases
-    bool isInFront = distance < visibleDistance && HasInArc(M_PI_F, target);
+    bool isInFront = distance < visibleDistance && HasInArc(target);
     if (!isInFront)
         return false;
 
@@ -6260,77 +6277,94 @@ void Unit::CheckPendingMovementChanges()
     if (!HasPendingMovementChange())
         return;
 
+    Player* pPlayer = ToPlayer();
+    if (pPlayer && pPlayer->IsBeingTeleportedFar())
+        return;
+
     Player* pController = GetPlayerMovingMe();
-    if (!pController || !pController->IsInWorld() || pController->IsBeingTeleportedFar())
+    if (!pController || !pController->IsInWorld() || !pController->GetSession()->IsConnected())
     {
-        ResolvePendingMovementChanges();
-
-        if (pController != this)
-            SendHeartBeat(true);
-
+        ResolvePendingMovementChanges(true, pPlayer != nullptr);
         return;
     }
 
-    PlayerMovementPendingChange& oldestChangeToAck = m_pendingMovementChanges.front();
-    if (WorldTimer::getMSTime() > oldestChangeToAck.time + sWorld.getConfig(CONFIG_UINT32_MOVEMENT_CHANGE_ACK_TIME))
+    PlayerMovementPendingChange& oldestChange = m_pendingMovementChanges.front();
+    uint32 waitTimeMultiplier = pPlayer && pPlayer->IsBeingTeleported() || pController->IsBeingTeleported() ? 5 : 1;
+    if (WorldTimer::getMSTime() > oldestChange.time + sWorld.getConfig(CONFIG_UINT32_MOVEMENT_CHANGE_ACK_TIME) * waitTimeMultiplier)
     {
-        // There is a new change for the same thing, don't resend old state.
-        if (oldestChangeToAck.movementCounter < GetLastCounterForMovementChangeType(oldestChangeToAck.movementChangeType))
+        // This shouldn't really happen but handle it anyway.
+        if (oldestChange.movementChangeType == INVALID)
         {
             PopPendingMovementChange();
             return;
         }
 
-        // Not resendable change.
-        if (oldestChangeToAck.movementChangeType == INVALID || oldestChangeToAck.movementChangeType == TELEPORT || oldestChangeToAck.movementChangeType == KNOCK_BACK)
+        // There is a new change for the same thing, don't resend old state.
+        if ((oldestChange.movementCounter < GetLastCounterForMovementChangeType(oldestChange.movementChangeType)))
         {
-            pController->GetCheatData()->OnFailedToAckChange();
             PopPendingMovementChange();
             return;
         }
 
         // Previous controller didn't ack a movement change. Not our fault.
-        if (oldestChangeToAck.controller != pController->GetObjectGuid())
+        if (oldestChange.controller != pController->GetObjectGuid())
         {
-            ResolvePendingMovementChange(oldestChangeToAck);
+            ResolvePendingMovementChange(oldestChange, true);
             PopPendingMovementChange();
-            SendHeartBeat(true);
             return;
         }
 
-        if (oldestChangeToAck.resent)
+        // Always resolve teleport, but don't apply penalty.
+        if (oldestChange.movementChangeType == TELEPORT)
+        {
+            ResolvePendingMovementChange(oldestChange, true);
+            PopPendingMovementChange();
+            return;
+        }
+
+        // Not resendable change.
+        if (oldestChange.movementChangeType == KNOCK_BACK)
+        {
+            pController->GetCheatData()->OnFailedToAckChange();
+            PopPendingMovementChange();
+            return;
+        }
+
+        if (oldestChange.resent)
         {
             // Change was resent but still no reply. Enforce the flags.
             pController->GetCheatData()->OnFailedToAckChange();
-            ResolvePendingMovementChange(oldestChangeToAck);
+            ResolvePendingMovementChange(oldestChange, true);
             PopPendingMovementChange();
-            SendHeartBeat(true);
         }
         else
         {
             // Send the change a second time and wait for reply.
-            oldestChangeToAck.resent = true;
-            oldestChangeToAck.time = WorldTimer::getMSTime();
+            oldestChange.resent = true;
+            oldestChange.time = WorldTimer::getMSTime();
 
-            if (oldestChangeToAck.movementCounter < GetMovementCounter())
-                oldestChangeToAck.movementCounter = GetMovementCounterAndInc();
+            if (oldestChange.movementCounter < GetMovementCounter())
+                oldestChange.movementCounter = GetMovementCounterAndInc();
 
-            switch (oldestChangeToAck.movementChangeType)
+            switch (oldestChange.movementChangeType)
             {
-                case ROOT:
-                case WATER_WALK:
-                case SET_HOVER:
-                case FEATHER_FALL:
-                    MovementPacketSender::SendMovementFlagChangeToController(this, pController, oldestChangeToAck);
-                    return;
-                case SPEED_CHANGE_WALK:
-                case SPEED_CHANGE_RUN:
-                case SPEED_CHANGE_RUN_BACK:
-                case SPEED_CHANGE_SWIM:
-                case SPEED_CHANGE_SWIM_BACK:
-                case RATE_CHANGE_TURN:
-                    MovementPacketSender::SendSpeedChangeToController(this, pController, oldestChangeToAck);
-                    return;
+            case ROOT:
+            case WATER_WALK:
+            case SET_HOVER:
+            case FEATHER_FALL:
+                MovementPacketSender::SendMovementFlagChangeToController(this, pController, oldestChange);
+                return;
+            case SPEED_CHANGE_WALK:
+            case SPEED_CHANGE_RUN:
+            case SPEED_CHANGE_RUN_BACK:
+            case SPEED_CHANGE_SWIM:
+            case SPEED_CHANGE_SWIM_BACK:
+            case RATE_CHANGE_TURN:
+                MovementPacketSender::SendSpeedChangeToController(this, pController, oldestChange);
+                return;
+            default:
+                sLog.outError("Unit::CheckPendingMovementChange - Unhandled resendable movement change type %u", oldestChange.movementChangeType);
+                return;
             }
         }
     }
@@ -6358,52 +6392,130 @@ bool Unit::HasPendingMovementChange(MovementChangeType changeType) const
     }) != m_pendingMovementChanges.end();
 }
 
-void Unit::ResolvePendingMovementChanges()
+void Unit::ResolvePendingMovementChanges(bool sendToClient, bool includingTeleport)
 {
     while (!m_pendingMovementChanges.empty())
     {
         auto change = m_pendingMovementChanges.begin();
-        ResolvePendingMovementChange(*change);
+        if ((change->movementChangeType != TELEPORT || includingTeleport) &&
+            change->movementCounter == GetLastCounterForMovementChangeType(change->movementChangeType))
+            ResolvePendingMovementChange(*change, sendToClient);
+
         m_pendingMovementChanges.erase(change);
     }
 }
 
-void Unit::ResolvePendingMovementChange(PlayerMovementPendingChange& change)
+void Unit::ResolvePendingMovementChange(PlayerMovementPendingChange& change, bool sendToClient)
 {
+    // returns true if heartbeat required
     switch (change.movementChangeType)
     {
         case ROOT:
+        {
             if (change.apply)
                 RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
+
             SetRootedReal(change.apply);
+
+            if (sendToClient)
+                MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_ROOT, change.apply);
+
             break;
+        }
         case WATER_WALK:
+        {
             SetWaterWalkingReal(change.apply);
+
+            if (sendToClient)
+                MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_WATERWALKING, change.apply);
+
             break;
+        }
         case SET_HOVER:
+        {
             SetHoverReal(change.apply);
+
+            if (sendToClient)
+                MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_HOVER, change.apply);
+
             break;
+        }
         case FEATHER_FALL:
+        {
             SetFeatherFallReal(change.apply);
+
+            if (sendToClient)
+                MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_SAFE_FALL, change.apply);
+
             break;
+        }
         case SPEED_CHANGE_WALK:
+        {
             SetSpeedRateReal(MOVE_WALK, change.newValue / baseMoveSpeed[MOVE_WALK]);
+
+            if (sendToClient)
+                MovementPacketSender::SendSpeedChangeToAll(this, MOVE_WALK, change.newValue / baseMoveSpeed[MOVE_WALK]);
+
             break;
+        }
         case SPEED_CHANGE_RUN:
+        {
             SetSpeedRateReal(MOVE_RUN, change.newValue / baseMoveSpeed[MOVE_RUN]);
+
+            if (sendToClient)
+                MovementPacketSender::SendSpeedChangeToAll(this, MOVE_RUN, change.newValue / baseMoveSpeed[MOVE_RUN]);
+
             break;
+        }
         case SPEED_CHANGE_RUN_BACK:
+        {
             SetSpeedRateReal(MOVE_RUN_BACK, change.newValue / baseMoveSpeed[MOVE_RUN_BACK]);
+
+            if (sendToClient)
+                MovementPacketSender::SendSpeedChangeToAll(this, MOVE_RUN_BACK, change.newValue / baseMoveSpeed[MOVE_RUN_BACK]);
+
             break;
+        }
         case SPEED_CHANGE_SWIM:
+        {
             SetSpeedRateReal(MOVE_SWIM, change.newValue / baseMoveSpeed[MOVE_SWIM]);
+
+            if (sendToClient)
+                MovementPacketSender::SendSpeedChangeToAll(this, MOVE_SWIM, change.newValue / baseMoveSpeed[MOVE_SWIM]);
+
             break;
+        }
         case SPEED_CHANGE_SWIM_BACK:
+        {
             SetSpeedRateReal(MOVE_SWIM_BACK, change.newValue / baseMoveSpeed[MOVE_SWIM_BACK]);
+
+            if (sendToClient)
+                MovementPacketSender::SendSpeedChangeToAll(this, MOVE_SWIM_BACK, change.newValue / baseMoveSpeed[MOVE_SWIM_BACK]);
+
             break;
+        }
         case RATE_CHANGE_TURN:
+        {
             SetSpeedRateReal(MOVE_TURN_RATE, change.newValue / baseMoveSpeed[MOVE_TURN_RATE]);
+
+            if (sendToClient)
+                MovementPacketSender::SendSpeedChangeToAll(this, MOVE_TURN_RATE, change.newValue / baseMoveSpeed[MOVE_TURN_RATE]);
+
             break;
+        }
+        case TELEPORT:
+        {
+            if (Player* pPlayer = ToPlayer())
+            {
+                if (pPlayer->IsBeingTeleportedNear())
+                {
+                    pPlayer->ExecuteTeleportNear();
+                    SendHeartBeat(sendToClient);
+                }
+            }
+
+            break;
+        }
     }
 }
 
@@ -8493,7 +8605,12 @@ void Unit::ModConfuseSpell(bool apply, ObjectGuid casterGuid, uint32 spellID, Mo
                 AttackedBy(caster);
 
             // restore appropriate movement generator
-            if (!SelectHostileTarget())
+            if (IsPet() && GetOwnerGuid().IsPlayer())
+            {
+                AttackStop();
+                return;
+            }
+            else if (!SelectHostileTarget())
                 return;
 
             if (GetVictim())
@@ -8757,7 +8874,7 @@ Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radiu
     // remove not LoS targets
     for (std::list<Unit*>::iterator tIter = targets.begin(); tIter != targets.end();)
     {
-        if ((!IsWithinLOSInMap(*tIter)) || (inFront && !this->HasInArc(M_PI_F / 2, *tIter)) || (isValidAttackTarget && !IsValidAttackTarget(*tIter)))
+        if ((!IsWithinLOSInMap(*tIter)) || (inFront && !this->HasInArc(*tIter, M_PI_F / 2)) || (isValidAttackTarget && !IsValidAttackTarget(*tIter)))
         {
             std::list<Unit*>::iterator tIter2 = tIter;
             ++tIter;
@@ -10143,7 +10260,8 @@ void Unit::RestoreMovement()
     // Need restore previous movement since we have no proper states system
     if (IsAlive() && !HasUnitState(UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING))
     {
-        if (Unit* victim = GetVictim())
+        Unit* victim = GetCharmInfo() && GetCharmInfo()->IsAtStay() ? nullptr : GetVictim();
+        if (victim)
             GetMotionMaster()->MoveChase(victim);
         else
             GetMotionMaster()->Initialize();

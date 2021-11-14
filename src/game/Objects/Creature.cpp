@@ -119,7 +119,14 @@ bool AssistDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
             {
                 assistant->SetNoCallAssistance(true);
                 if (assistant->AI())
+                {
                     assistant->AI()->AttackStart(victim);
+
+                    // When nearby mobs aggro from another mob's initial call for assistance
+                    // their leash timers become linked and attacking one will keep the rest from evading.
+                    if (assistant->GetVictim())
+                        assistant->SetLastLeashExtensionTimePtr(static_cast<Creature*>(&m_owner)->GetLastLeashExtensionTimePtr());
+                }
             }
         }
     }
@@ -180,7 +187,7 @@ Creature::Creature(CreatureSubtype subtype) :
     m_AI_locked(false), m_temporaryFactionFlags(TEMPFACTION_NONE),
     m_meleeDamageSchoolMask(SPELL_SCHOOL_MASK_NORMAL), m_originalEntry(0), m_creatureGroup(nullptr),
     m_combatStartX(0.0f), m_combatStartY(0.0f), m_combatStartZ(0.0f), m_reactState(REACT_PASSIVE),
-    m_lastDamageTakenForEvade(0), m_playerDamageTaken(0), m_nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
+    m_lastLeashExtensionTime(nullptr), m_playerDamageTaken(0), m_nonPlayerDamageTaken(0), m_creatureInfo(nullptr),
     m_detectionDistance(20.0f), m_callForHelpDist(5.0f), m_leashDistance(0.0f), m_mountId(0),
     m_reputationId(-1), m_castingTargetGuid(0)
 {
@@ -778,7 +785,6 @@ void Creature::Update(uint32 update_diff, uint32 diff)
             else
                 m_pacifiedTimer -= update_diff;
 
-            m_lastDamageTakenForEvade += update_diff;
             Unit::Update(update_diff, diff);
 
             if (GetVictim())
@@ -828,6 +834,10 @@ void Creature::Update(uint32 update_diff, uint32 diff)
             {
                 if (WorldTimer::tickTime() % 3000 <= update_diff)
                 {
+                    // Prevent mobs from evading while under crowd control.
+                    if (HasUnitState(UNIT_STAT_NO_FREE_MOVE))
+                        UpdateLeashExtensionTime();
+
                     // Leash prevents mobs from chasing any further than specified range
                     if (m_leashDistance && !IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, m_leashDistance))
                         leash = true;
@@ -2373,17 +2383,41 @@ bool Creature::IsOutOfThreatArea(Unit* pVictim) const
 
     if (pVictim->IsInMap(this))
     {
-        float AttackDist = GetAttackDistance(pVictim);
-        float ThreatRadius = sWorld.getConfig(CONFIG_FLOAT_THREAT_RADIUS);
-
-        //Use AttackDistance in distance check if threat radius is lower. This prevents creature bounce in and out of combat every update tick.
-        float threatAreaDistance = ThreatRadius > AttackDist ? ThreatRadius : AttackDist;
-        bool inThreatArea = pVictim->IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance);
-        if (!inThreatArea && m_lastDamageTakenForEvade > 12000)
+        // Use attack distance in distance check if threat radius is lower. This prevents creature bounce in and out of combat every update tick.
+        float threatAreaDistance = std::max(GetAttackDistance(pVictim) * 1.5f, sWorld.getConfig(CONFIG_FLOAT_THREAT_RADIUS));
+        bool inThreatArea = IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance) || pVictim->IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance);
+        if (!inThreatArea && (GetLastLeashExtensionTime() + 12 < time(nullptr)))
             return true;
     }
 
     return false;
+}
+
+std::shared_ptr<time_t> const& Creature::GetLastLeashExtensionTimePtr() const
+{
+    if (m_lastLeashExtensionTime == nullptr)
+        m_lastLeashExtensionTime = std::make_shared<time_t>(time(nullptr));
+    return m_lastLeashExtensionTime;
+}
+
+void Creature::SetLastLeashExtensionTimePtr(std::shared_ptr<time_t> const& timer)
+{
+    m_lastLeashExtensionTime = timer;
+}
+
+void Creature::ClearLastLeashExtensionTimePtr()
+{
+    m_lastLeashExtensionTime.reset();
+}
+
+time_t Creature::GetLastLeashExtensionTime() const
+{
+    return *GetLastLeashExtensionTimePtr();
+}
+
+void Creature::UpdateLeashExtensionTime()
+{
+    (*GetLastLeashExtensionTimePtr()) = time(nullptr);
 }
 
 CreatureDataAddon const* Creature::GetCreatureAddon() const
@@ -2580,24 +2614,7 @@ bool Creature::MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* 
         return false;
 
     if (pSpellInfo)
-    {
-        switch (pSpellInfo->rangeIndex)
-        {
-            case SPELL_RANGE_IDX_SELF_ONLY:
-                return false;
-            case SPELL_RANGE_IDX_ANYWHERE:
-                return true;
-            case SPELL_RANGE_IDX_COMBAT:
-                return CanReachWithMeleeAutoAttack(pTarget);
-        }
-
-        SpellRangeEntry const* srange = sSpellRangeStore.LookupEntry(pSpellInfo->rangeIndex);
-        float max_range = Spells::GetSpellMaxRange(srange);
-        float min_range = Spells::GetSpellMinRange(srange);
-        float dist = GetCombatDistance(pTarget);
-
-        return dist < max_range && dist >= min_range;
-    }
+        return pSpellInfo->IsTargetInRange(this, pTarget);
 
     return true;
 }
@@ -2712,8 +2729,14 @@ Unit* Creature::SelectAttackingTarget(AttackingTarget target, uint32 position, S
 
 bool Creature::IsInEvadeMode() const
 {
+    if (IsPet())
+        if (Creature const* pOwner = GetOwnerCreature())
+            if (pOwner->IsInEvadeMode())
+                return true;
+
     if (IsEvadeBecauseTargetNotReachable())
         return true;
+
     return !i_motionMaster.empty() && i_motionMaster.GetCurrentMovementGeneratorType() == HOME_MOTION_TYPE;
 }
 
@@ -3102,6 +3125,10 @@ void Creature::OnEnterCombat(Unit* pWho, bool notInCombat)
 
         if (pWho->IsPlayer() && CanSummonGuards())
             sGuardMgr.SummonGuard(this, static_cast<Player*>(pWho));
+
+        if (IsPet())
+            if (Creature* pOwner = GetOwnerCreature())
+                SetLastLeashExtensionTimePtr(pOwner->GetLastLeashExtensionTimePtr());
     }
 }
 
@@ -3404,7 +3431,7 @@ SpellCastResult Creature::TryToCast(Unit* pTarget, const SpellEntry* pSpellInfo,
         }
 
         // If the spell requires to be behind the target.
-        if (pSpellInfo->Custom & SPELL_CUSTOM_BEHIND_TARGET && pTarget->HasInArc(M_PI_F, this))
+        if (pSpellInfo->Custom & SPELL_CUSTOM_BEHIND_TARGET && pTarget->HasInArc(this))
             return SPELL_FAILED_UNIT_NOT_BEHIND;
 
         // If the spell requires the target having a specific power type.

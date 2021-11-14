@@ -326,6 +326,8 @@ enum SelectFlags
     SELECT_FLAG_NO_PET              = 0x2000
 };
 
+#define MAX_SELECT_FLAG_MASK (SELECT_FLAG_IN_LOS | SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA | SELECT_FLAG_POWER_RAGE | SELECT_FLAG_POWER_ENERGY | SELECT_FLAG_IN_MELEE_RANGE | SELECT_FLAG_NOT_IN_MELEE_RANGE | SELECT_FLAG_NO_TOTEM | SELECT_FLAG_PLAYER_NOT_GM | SELECT_FLAG_PET | SELECT_FLAG_NOT_PLAYER | SELECT_FLAG_POWER_NOT_MANA)
+
 enum RegenStatsFlags
 {
     REGEN_FLAG_HEALTH               = 0x001,
@@ -907,12 +909,16 @@ class Creature : public Unit
         // Auto evade timer (if target not reachable)
         // Tested on retail 5.4.0: Creatures evade after 3 seconds (but does not return to home position)
         bool IsEvadeBecauseTargetNotReachable() const { return m_TargetNotReachableTimer > 3000; }
-        uint32 GetLastDamageTakenTime() const { return m_lastDamageTakenForEvade; }
-        void   ResetLastDamageTakenTime() { m_lastDamageTakenForEvade = 0; }
         uint32 m_TargetNotReachableTimer;
 
-        bool IsTempPacified() const         { return m_pacifiedTimer > 0; }
-        void SetTempPacified(uint32 timer)  { if (m_pacifiedTimer < timer) m_pacifiedTimer = timer; }
+        std::shared_ptr<time_t> const& GetLastLeashExtensionTimePtr() const;
+        void SetLastLeashExtensionTimePtr(std::shared_ptr<time_t> const& timer);
+        void ClearLastLeashExtensionTimePtr();
+        time_t GetLastLeashExtensionTime() const;
+        void UpdateLeashExtensionTime();
+
+        bool IsTempPacified() const { return m_pacifiedTimer > 0; }
+        void SetTempPacified(uint32 timer) { if (m_pacifiedTimer < timer) m_pacifiedTimer = timer; }
         uint32 GetTempPacifiedTimer() const { return m_pacifiedTimer; }
         uint32 m_pacifiedTimer;
         uint32 m_manaRegen;
@@ -1036,7 +1042,9 @@ class Creature : public Unit
 
         Position m_summonPos;
 
-        uint32 m_lastDamageTakenForEvade;
+        // Shared timer between mobs who assist another.
+        // Damaging one extends leash range on all of them.
+        mutable std::shared_ptr<time_t> m_lastLeashExtensionTime;
         // Used to compute XP.
         uint32 m_playerDamageTaken;
         uint32 m_nonPlayerDamageTaken;

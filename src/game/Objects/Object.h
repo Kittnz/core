@@ -841,12 +841,13 @@ class WorldObject : public Object
 
         float GetAngle(WorldObject const* obj) const;
         float GetAngle(const float x, const float y) const;
-        bool HasInArc(const float arcangle, WorldObject const* obj, float offset = 0.0f) const;
+        bool HasInArc(WorldObject const* target, float const arcangle = M_PI, float offset = 0.0f) const;
         bool HasInArc(const float arcangle, const float x, const float y) const;
         bool IsFacingTarget(WorldObject const* target) const;
 
-        bool CanReachWithMeleeSpellAttack(Unit const* pVictim, float flat_mod = 0.0f) const;
-        float GetLeewayBonusRange(const Unit* target, bool ability) const;
+        bool CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float flat_mod = 0.0f) const;
+        float GetLeewayBonusRange(Unit const* target, bool ability) const;
+        static float GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability);
         float GetLeewayBonusRadius() const;
 
         // Gestion des positions

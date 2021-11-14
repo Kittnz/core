@@ -1837,6 +1837,7 @@ class Player final: public Unit
         void SetSemaphoreTeleportNear(bool semphsetting);
         void SetSemaphoreTeleportFar(bool semphsetting);
         void SetPendingFarTeleport(bool pending) { mPendingFarTeleport = pending; }
+        void ExecuteTeleportNear();
         void ProcessDelayedOperations();
 
         bool HasMovementFlag(MovementFlags f) const;        // for script access to m_movementInfo.HasMovementFlag
@@ -2146,7 +2147,8 @@ class Player final: public Unit
         void HandleSobering();
         uint32 m_deathTimer;
         time_t m_deathExpireTime;
-        ObjectGuid     m_selectedGobj; // For GM commands
+        bool m_repopAtGraveyardPending;
+        ObjectGuid m_selectedGobj; // For GM commands
         ObjectGuid m_escortingGuid;
         uint32 customFlags;
         uint8 m_hardcoreStatus;
@@ -2215,6 +2217,7 @@ class Player final: public Unit
         void ResurrectPlayer(float restore_percent, bool applySickness = false);
         void BuildPlayerRepop();
         void RepopAtGraveyard();
+        void ScheduleRepopAtGraveyard();
 
         // Nostalrius : Phasing
         void SetWorldMask(uint32 newMask) override;
