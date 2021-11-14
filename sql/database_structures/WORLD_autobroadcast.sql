@@ -7,7 +7,7 @@ replace into mangos_string (entry, content_default) values
 
 ('50001', 'If you want to help the server grow, check our shop for these donation rewards: exotic mounts, large bags, mysterious engineering devices, and much more: turtle-wow.org/donate'),
 
-('50002', 'Join /world to connect with the community around you!'),
+('50002', '/join world to connect with the community around you!'),
 
 ('50003', 'Read more about our special features here: turtle-wow.org/features'),
 
