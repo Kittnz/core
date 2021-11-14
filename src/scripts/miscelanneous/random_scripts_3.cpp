@@ -1518,7 +1518,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             });
         DoAfterTime(pPlayer, 92 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
-                npc->SummonCreature(60499, -12857.11F, 2914.41F, 10.39F, 3.83F, TEMPSUMMON_CORPSE_DESPAWN, 102 * IN_MILLISECONDS);
+                npc->SummonCreature(60499, -12857.11F, 2914.41F, 10.39F, 3.83F, TEMPSUMMON_CORPSE_DESPAWN, 192 * IN_MILLISECONDS);
             }
             });
         DoAfterTime(pPlayer, 94 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -1529,7 +1529,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 }
             }
             });
-        DoAfterTime(pPlayer, 184 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 274 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
                 if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
                 {
@@ -1541,7 +1541,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 }
             }
             });
-        DoAfterTime(pPlayer, 194 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pPlayer, 284 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             {
                 Creature* insomni = player->FindNearestCreature(60446, 40.0F);
                 Creature* fearoth = player->FindNearestCreature(60499, 40.0F);

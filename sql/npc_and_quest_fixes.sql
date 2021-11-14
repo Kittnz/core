@@ -230,3 +230,4 @@ update quest_template set requiredskill = 164, requiredskillvalue = 200 where en
 update gameobject_template set type = 2 where entry = 3000512;
 update gameobject_template set data0 = 0 where entry = 3000512;
 update gameobject_template set data1 = 0 where entry = 3000512;
+update quest_template set limittime = 0 where entry = 40214;
