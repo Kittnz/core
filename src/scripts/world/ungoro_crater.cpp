@@ -509,7 +509,7 @@ struct npc_precious_the_devourerAI : public ScriptedAI
         if (Creature* pSimone = m_creature->GetMap()->GetCreature(m_simoneGuid))
         {
             if (pSimone->IsAlive())
-                pSimone->ResetLastDamageTakenTime();
+                pSimone->UpdateLeashExtensionTime();
         }
     }
 
@@ -712,7 +712,7 @@ struct npc_simone_seductressAI : public ScriptedAI
         if (Creature* pPrecious = m_creature->GetMap()->GetCreature(m_preciousGuid))
         {
             if (pPrecious->IsAlive())
-                pPrecious->ResetLastDamageTakenTime();
+                pPrecious->UpdateLeashExtensionTime();
         }
     }
     

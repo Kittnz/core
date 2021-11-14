@@ -1272,6 +1272,7 @@ class Unit : public WorldObject
         CharmInfo* InitCharmInfo(Unit* charm);
 
         Unit* GetOwner() const;
+        Creature* GetOwnerCreature() const;
         ObjectGuid const& GetOwnerGuid() const { return  GetGuidValue(UNIT_FIELD_SUMMONEDBY); }
         void SetOwnerGuid(ObjectGuid owner) { SetGuidValue(UNIT_FIELD_SUMMONEDBY, owner); ForceValuesUpdateAtIndex(UNIT_FIELD_HEALTH); ForceValuesUpdateAtIndex(UNIT_FIELD_MAXHEALTH); }
         ObjectGuid const& GetCreatorGuid() const { return GetGuidValue(UNIT_FIELD_CREATEDBY); }
@@ -1409,8 +1410,8 @@ class Unit : public WorldObject
         void PushPendingMovementChange(PlayerMovementPendingChange newChange);
         bool HasPendingMovementChange() const { return !m_pendingMovementChanges.empty(); }
         bool HasPendingMovementChange(MovementChangeType changeType) const;
-        void ResolvePendingMovementChanges();
-        void ResolvePendingMovementChange(PlayerMovementPendingChange& change);
+        void ResolvePendingMovementChanges(bool sendToClient, bool includingTeleport);
+        void ResolvePendingMovementChange(PlayerMovementPendingChange& change, bool sendToClient);
         bool FindPendingMovementFlagChange(uint32 movementCounter, bool applyReceived, MovementChangeType changeTypeReceived);
         bool FindPendingMovementRootChange(uint32 movementCounter, bool applyReceived);
         bool FindPendingMovementTeleportChange(uint32 movementCounter);

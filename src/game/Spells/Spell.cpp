@@ -1590,7 +1590,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                     (m_spellInfo->Id == 6358 || // Exception to fix succubus seduction.
                      m_caster->IsVisibleForOrDetect(unit, unit, false)))
             {
-                if (!m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO))
+                if (!m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO) && !IsTriggeredByAura())
                 {
                     // use speedup check to avoid re-remove after above lines
                     if (m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_BREAK_STEALTH)
@@ -2715,7 +2715,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                             break;
                     }
 
-                    if (m_caster->HasInArc(arc, itr, angle))
+                    if (m_caster->HasInArc(itr, arc, angle))
                         targetUnitMap.push_back(itr);                
                 }
 
@@ -5794,14 +5794,14 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 return SPELL_FAILED_TARGET_AURASTATE;
 
         // Must be behind the target.
-        if (m_spellInfo->IsFromBehindOnlySpell() && m_casterUnit && target->HasInArc(M_PI_F, m_caster))
+        if (m_spellInfo->IsFromBehindOnlySpell() && m_casterUnit && target->HasInArc(m_caster))
         {
             SendInterrupted(2);
             return SPELL_FAILED_NOT_BEHIND;
         }
 
         //Target must be facing you.
-        if ((m_spellInfo->Attributes == 0x150010) && !target->HasInArc(M_PI_F, m_caster))
+        if ((m_spellInfo->Attributes == 0x150010) && !target->HasInArc(m_caster))
         {
             SendInterrupted(2);
             return SPELL_FAILED_NOT_INFRONT;
@@ -8537,38 +8537,38 @@ public:
             // we don't need to check InMap here, it's already done some lines above
             switch (i_push_type)
             {
-                case PUSH_IN_FRONT:
-                    if (i_castingObject->IsWithinDist(unit, i_radius) && i_castingObject->HasInArc(2 * M_PI_F / 3, unit))
-                        i_data->push_back(unit);
-                    break;
-                case PUSH_IN_FRONT_90:
-                    if (i_castingObject->IsWithinDist(unit, i_radius) && i_castingObject->HasInArc(M_PI_F / 2, unit))
-                        i_data->push_back(unit);
-                    break;
-                case PUSH_IN_FRONT_15:
-                    if (i_castingObject->IsWithinDist(unit, i_radius) && i_castingObject->HasInArc(M_PI_F / 12, unit))
-                        i_data->push_back(unit);
-                    break;
-                case PUSH_IN_BACK: // 75
-                    if (i_castingObject->IsWithinDist(unit, i_radius) && !i_castingObject->HasInArc(2 * M_PI_F - 5 * M_PI_F / 12, unit))
-                        i_data->push_back(unit);
-                    break;
-                case PUSH_SELF_CENTER:
-                    if (i_castingObject->IsWithinDist(unit, i_radius))
-                        i_data->push_back(unit);
-                    break;
-                case PUSH_SRC_CENTER:
-                    if (itr->getSource()->IsWithinDist3d(i_spell.m_targets.m_srcX, i_spell.m_targets.m_srcY, i_spell.m_targets.m_srcZ, i_radius))
-                        i_data->push_back(unit);
-                    break;
-                case PUSH_DEST_CENTER:
-                    if (itr->getSource()->IsWithinDist3d(i_spell.m_targets.m_destX, i_spell.m_targets.m_destY, i_spell.m_targets.m_destZ, i_radius))
-                        i_data->push_back(unit);
-                    break;
-                case PUSH_TARGET_CENTER:
-                    if (i_spell.m_targets.getUnitTarget() && i_spell.m_targets.getUnitTarget()->IsWithinDist(unit, i_radius))
-                        i_data->push_back(unit);
-                    break;
+            case PUSH_IN_FRONT:
+                if (i_castingObject->IsWithinDist(unit, i_radius) && i_castingObject->HasInArc(unit, 2 * M_PI_F / 3))
+                    i_data->push_back(unit);
+                break;
+            case PUSH_IN_FRONT_90:
+                if (i_castingObject->IsWithinDist(unit, i_radius) && i_castingObject->HasInArc(unit, M_PI_F / 2))
+                    i_data->push_back(unit);
+                break;
+            case PUSH_IN_FRONT_15:
+                if (i_castingObject->IsWithinDist(unit, i_radius) && i_castingObject->HasInArc(unit, M_PI_F / 12))
+                    i_data->push_back(unit);
+                break;
+            case PUSH_IN_BACK: // 75
+                if (i_castingObject->IsWithinDist(unit, i_radius) && !i_castingObject->HasInArc(unit, 2 * M_PI_F - 5 * M_PI_F / 12))
+                    i_data->push_back(unit);
+                break;
+            case PUSH_SELF_CENTER:
+                if (i_castingObject->IsWithinDist(unit, i_radius))
+                    i_data->push_back(unit);
+                break;
+            case PUSH_SRC_CENTER:
+                if (itr->getSource()->IsWithinDist3d(i_spell.m_targets.m_srcX, i_spell.m_targets.m_srcY, i_spell.m_targets.m_srcZ, i_radius))
+                    i_data->push_back(unit);
+                break;
+            case PUSH_DEST_CENTER:
+                if (itr->getSource()->IsWithinDist3d(i_spell.m_targets.m_destX, i_spell.m_targets.m_destY, i_spell.m_targets.m_destZ, i_radius))
+                    i_data->push_back(unit);
+                break;
+            case PUSH_TARGET_CENTER:
+                if (i_spell.m_targets.getUnitTarget() && i_spell.m_targets.getUnitTarget()->IsWithinDist(unit, i_radius))
+                    i_data->push_back(unit);
+                break;
             }
         }
     }

@@ -1537,12 +1537,13 @@ bool WorldObject::IsInRange3d(float x, float y, float z, float minRange, float m
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::CanReachWithMeleeSpellAttack(Unit const* pVictim, float flat_mod /*= 0.0f*/) const
+bool WorldObject::CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float flat_mod /*= 0.0f*/) const
 {
     if (!pVictim || !pVictim->IsInWorld())
         return false;
 
-    float reach = IsUnit() ? static_cast<Unit const*>(this)->GetCombatReach(pVictim, true, flat_mod) : ATTACK_DISTANCE;
+    float reach = IsUnit() && pVictim->IsUnit() ?
+        static_cast<Unit const*>(this)->GetCombatReach(static_cast<Unit const*>(pVictim), true, flat_mod) : ATTACK_DISTANCE;
 
     // This check is not related to bounding radius
     float dx = GetPositionX() - pVictim->GetPositionX();
@@ -1552,17 +1553,23 @@ bool WorldObject::CanReachWithMeleeSpellAttack(Unit const* pVictim, float flat_m
     return dx * dx + dy * dy < reach * reach;
 }
 
-float WorldObject::GetLeewayBonusRange(const Unit* target, bool ability) const
+float WorldObject::GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability)
 {
-    if (Player const* pPlayer = ToPlayer())
+    if (ability)
+        return (player->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
+
+    // auto attacks do not check speed, only flags
+    return (player->IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;
+}
+
+float WorldObject::GetLeewayBonusRange(Unit const* target, bool ability) const
+{
+    if (target && IsUnit())
     {
-        if (target)
-        {
-            if (ability)
-                return (pPlayer->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
-            else // auto attacks do not check speed, only flags
-                return (IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;
-        }
+        if (Player const* pPlayer = ToPlayer())
+            return GetLeewayBonusRangeForTargets(pPlayer, target, ability);
+        else if (Player const* pPlayer = target->ToPlayer())
+            return GetLeewayBonusRangeForTargets(pPlayer, static_cast<Unit const*>(this), ability);
     }
 
     return 0.0f;
@@ -1624,10 +1631,10 @@ bool WorldObject::HasInArc(const float arcangle, const float x, const float y) c
     return ((angle >= lborder) && (angle <= rborder));
 }
 
-bool WorldObject::HasInArc(const float arcangle, WorldObject const* obj, float offset) const
+bool WorldObject::HasInArc(WorldObject const* target, float const arcangle, float offset) const
 {
     // always have self in arc
-    if (obj == this)
+    if (target == this)
         return true;
 
     float arc = arcangle;
@@ -1635,7 +1642,7 @@ bool WorldObject::HasInArc(const float arcangle, WorldObject const* obj, float o
     // move arc to range 0.. 2*pi
     arc = MapManager::NormalizeOrientation(arc);
 
-    float angle = GetAngle(obj);
+    float angle = GetAngle(target);
     angle -= m_position.o + offset;
 
     // move angle to range -pi ... +pi
@@ -1650,7 +1657,7 @@ bool WorldObject::HasInArc(const float arcangle, WorldObject const* obj, float o
 
 bool WorldObject::IsFacingTarget(WorldObject const* target) const
 {
-    return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(M_PI_F, target);
+    return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(target, M_PI_F);
 }
 
 bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const
@@ -3601,7 +3608,7 @@ SpellMissInfo WorldObject::MeleeSpellHitResult(Unit* pVictim, SpellEntry const* 
     if (attType == RANGED_ATTACK)
         return SPELL_MISS_NONE;
 
-    bool from_behind = !pVictim->HasInArc(M_PI_F, this);
+    bool from_behind = !pVictim->HasInArc(this, M_PI_F);
 
     // Check for attack from behind
     if (from_behind)

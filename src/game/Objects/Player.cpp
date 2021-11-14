@@ -442,7 +442,7 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
-    m_currentTicketCounter(0), m_castingSpell(0),
+    m_currentTicketCounter(0), m_castingSpell(0), m_repopAtGraveyardPending(false),
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _collectionMgr(new CollectionMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
@@ -1115,7 +1115,7 @@ void Player::HandleDrowning(uint32 time_diff)
                     EnvironmentalDamage(DAMAGE_EXHAUSTED, damage);
                 }
                 else if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_GHOST))       // Teleport ghost to graveyard
-                    RepopAtGraveyard();
+                    ScheduleRepopAtGraveyard();
             }
             else if (!(m_MirrorTimerFlagsLast & UNDERWATER_INDARKWATER))
                 SendMirrorTimer(FATIGUE_TIMER, GetMaxTimer(FATIGUE_TIMER), m_MirrorTimer[FATIGUE_TIMER], -1);
@@ -1398,7 +1398,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         if (p_time >= m_deathTimer)
         {
             BuildPlayerRepop();
-            RepopAtGraveyard();
+            ScheduleRepopAtGraveyard();
         }
         else
             m_deathTimer -= p_time;
@@ -1430,6 +1430,12 @@ void Player::Update(uint32 update_diff, uint32 p_time)
 
     if (IsInWorld())
     {
+        if (m_repopAtGraveyardPending && !HasPendingMovementChange())
+        {
+            RepopAtGraveyard();
+            return;
+        }
+
         if (m_areaCheckTimer)
         {
             if (m_areaCheckTimer <= p_time)
@@ -1964,7 +1970,7 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     //remove auras before removing from map...
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_CHANGE_MAP | AURA_INTERRUPT_FLAG_MOVE | AURA_INTERRUPT_FLAG_TURNING);
     RemoveCharmAuras();
-    ResolvePendingMovementChanges();
+    ResolvePendingMovementChanges(false, false);
     DisableSpline();
     SetMover(this);
 
@@ -2347,8 +2353,8 @@ void Player::AddToWorld()
         if (m_items[i])
             m_items[i]->AddToWorld();
     }
+
     sPlayerBotMgr.OnPlayerInWorld(this);
-    GetCheatData()->InitSpeeds(this);
 }
 
 void Player::RemoveFromWorld()
@@ -4737,7 +4743,15 @@ void Player::BuildPlayerRepop()
     if (corpse)
         corpse->ResetGhostTime();
 
-    StopMirrorTimers();                                     //disable timers(bars)
+    // disable timers(bars)
+    StopMirrorTimers();
+
+    // interrupt resurrect spells
+    InterruptSpellsCastedOnMe(false, true);
+
+    // stop countdown until repop
+    m_deathTimer = 0;
+    SetDeathState(DEAD);
 
     // set and clear other
     SetByteValue(UNIT_FIELD_BYTES_1, 3, UNIT_BYTE1_FLAG_ALWAYS_STAND);
@@ -5159,11 +5173,20 @@ enum CustomGraveyardZones
     CGZ_DEEPRUN_TRAM            = 2257
 };
 
+void Player::ScheduleRepopAtGraveyard()
+{
+    if (IsInWorld() && GetSession()->IsConnected())
+        m_repopAtGraveyardPending = true;
+    else
+        RepopAtGraveyard();
+}
+
 void Player::RepopAtGraveyard()
 {
     // note: this can be called also when the player is alive
     // for example from WorldSession::HandleMovementOpcodes
 
+    m_repopAtGraveyardPending = false;
     WorldSafeLocsEntry const *ClosestGrave = nullptr;
 
     // Special handle for battleground maps
@@ -5188,100 +5211,109 @@ void Player::RepopAtGraveyard()
     {
         if (ClosestGrave)
             TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, 0, std::move(recover));
-
-        return;
     }
-
-    // Interrupt resurrect spells
-    InterruptSpellsCastedOnMe(false, true);
-
-    // stop countdown until repop
-    m_deathTimer = 0;
-    SetDeathState(DEAD);
-    bool isCustomGraveyard = false;
-
-    // Custom graveyards
-
-    switch (GetZoneId())
+    else
     {
-    case CGZ_STRANGLETHORN_VALE:
-        if (InGurubashiArena(true)) // (inside the whole arena)
+        // Custom graveyards
+        bool isCustomGraveyard = false;
+        switch (GetZoneId())
         {
-            if (GetTeam() == ALLIANCE)
-                TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
-            else
-                TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
-            isCustomGraveyard = true;
-        }
-        break;
-    case CGZ_CAVERNS_OF_TIME:
-    case CGZ_BLACK_MORASS:
-        {
-            TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
-            isCustomGraveyard = true;
-        }
-        break;
-    case CGZ_DUN_MOROGH:
-    case CGZ_WETLANDS:
-        if ((GetAreaId() == 1 || GetAreaId() == 2365) && GetPositionZ() > 380)
-        {
-            if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y)) // Only if Winter Veil Vale is nearer than the nearest graveyard
+            case CGZ_STRANGLETHORN_VALE:
             {
-                TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); // Winter Veil Vale
-                isCustomGraveyard = true;
+                if (InGurubashiArena(true)) // (inside the whole arena)
+                {
+                    if (GetTeam() == ALLIANCE)
+                        TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
+                    else
+                        TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
+
+                    isCustomGraveyard = true;
+                }
+
+                break;
             }
-        }
-        break;
-    case CGZ_STONETALON_MOUNTAINS:
-        if (GetAreaId() == 4011 || GetLevel() < 10) // Venture Camp
-        {
-            TeleportTo(1, 1788.58F, 1335.74F, 144.35F, 4.0F);
-            isCustomGraveyard = true;
-        }
-        if (GetAreaId() == 2041) // Amani'Alor
-        {
-            TeleportTo(1, 2947.03F, 2557.98F, 139.30F, 2.3F);
-            isCustomGraveyard = true;
-        }
-        break;
-    case CGZ_LOCH_MODAN:
-        if (GetAreaId() == 147 || GetLevel() < 10) // Farstrider's Lodge
-        {
-            TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F);
-            isCustomGraveyard = true;
-        }
-        break;
-    case CGZ_ALAH_THALAS:
-        if (GetAreaId() == 2040)
-        {
-            TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
-            isCustomGraveyard = true;
-        }
-        break;
-    case CGZ_DEEPRUN_TRAM:
-        {
-            isCustomGraveyard = true;
-        }
-        break;
-    };
+            case CGZ_CAVERNS_OF_TIME:
+            case CGZ_BLACK_MORASS:
+            {
+                TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
+                isCustomGraveyard = true;
+                break;
+            }
+            case CGZ_DUN_MOROGH:
+            case CGZ_WETLANDS:
+            {
+                if ((GetAreaId() == 1 || GetAreaId() == 2365) && GetPositionZ() > 380)
+                {
+                    if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y)) // Only if Winter Veil Vale is nearer than the nearest graveyard
+                    {
+                        TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); // Winter Veil Vale
+                        isCustomGraveyard = true;
+                    }
+                }
 
-    // if no grave found, stay at the current location
-    // and don't show spirit healer location
-    if (ClosestGrave && !isCustomGraveyard)
-    {
-        // Release spirit from transport => Teleport alive at nearest graveyard.
-        if (GetTransport())
+                break;
+            }
+            case CGZ_STONETALON_MOUNTAINS:
+            {
+                if (GetAreaId() == 4011 || GetLevel() < 10) // Venture Camp
+                {
+                    TeleportTo(1, 1788.58F, 1335.74F, 144.35F, 4.0F);
+                    isCustomGraveyard = true;
+                }
+
+                if (GetAreaId() == 2041) // Amani'Alor
+                {
+                    TeleportTo(1, 2947.03F, 2557.98F, 139.30F, 2.3F);
+                    isCustomGraveyard = true;
+                }
+
+                break;
+            }
+            case CGZ_LOCH_MODAN:
+            {
+                if (GetAreaId() == 147 || GetLevel() < 10) // Farstrider's Lodge
+                {
+                    TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F);
+                    isCustomGraveyard = true;
+                }
+
+                break;
+            }
+            case CGZ_ALAH_THALAS:
+            {
+                if (GetAreaId() == 2040)
+                {
+                    TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
+                    isCustomGraveyard = true;
+                }
+
+                break;
+            }
+            case CGZ_DEEPRUN_TRAM:
+            {
+                isCustomGraveyard = true;
+                break;
+            }
+        };
+
+        // If no grave found, stay at the current location
+        // and don't show spirit healer location
+        if (ClosestGrave)
         {
-            GetTransport()->RemovePassenger(this);
-            ResurrectPlayer(1.0f);
+            // Release spirit from transport => Teleport alive at nearest graveyard.
+            if (GetTransport())
+            {
+                GetTransport()->RemovePassenger(this);
+                ResurrectPlayer(1.0f);
+            }
+
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, 0, std::move(recover));
         }
 
-        TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, 0, std::move(recover));
+        // Fix invisible spirit healer if you die close to graveyard.
+        if (IsInWorld())
+            UpdateVisibilityAndView();
     }
-
-    // Fix invisible spirit healer if you die close to graveyard.
-    if (IsInWorld())
-        UpdateVisibilityAndView();
 }
 
 void Player::JoinedChannel(Channel *c)
@@ -7780,11 +7812,12 @@ void Player::RemovedInsignia(Player* looterPlr, Corpse *corpse)
     if (GetDeathState() != DEAD)
     {
         BuildPlayerRepop();
-        RepopAtGraveyard();
+        ScheduleRepopAtGraveyard();
     }
 
     if (!corpse)
         corpse = GetCorpse();
+
     if (!corpse)
         return;
 
@@ -18816,6 +18849,10 @@ void Player::UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateD
         if (!target->FindMap() || !target->isWithinVisibilityDistanceOf(this, viewPoint, inVisibleList) || !target->IsVisibleForInState(this, viewPoint, true))
         {
             ObjectGuid t_guid = target->GetObjectGuid();
+
+            if (target->IsCreature() && IsInCombat() && !GetMap()->IsDungeon())
+                if (((Creature*)target)->IsInCombat())
+                    ((Creature*)target)->GetThreatManager().modifyThreatPercent(this, -101);
 
             target->BuildOutOfRangeUpdateBlock(&data);
             std::unique_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
