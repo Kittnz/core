@@ -258,7 +258,8 @@ Movement.MaxPointsPerPacket = 80
 
 # Movement interpolation system - not stable now
 
-Movement.Interpolation = 0
+Movement.ExtrapolatePlayerPosition = 0
+Movement.ExtrapolatePetPosition = 1
 
 # Anticrash.Options. Flag values: 1 Announce, 2 Save all, 4 Crash instances, 8 Crash continents, Coredump 16.
 

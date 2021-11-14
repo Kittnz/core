@@ -93,10 +93,10 @@ namespace MaNGOS
             return 0;
         }
 
-        inline uint32 BaseGain(uint32 pl_level, uint32 mob_level)
+        inline uint32 BaseGain(uint32 ownerLevel, uint32 unitLevel, uint32 mob_level)
         {
-            const uint32 nBaseExp = 45;
-            return (pl_level * 5 + nBaseExp) * BaseGainLevelFactor(pl_level, mob_level);
+            uint32 const nBaseExp = 45;
+            return (ownerLevel * 5 + nBaseExp) * BaseGainLevelFactor(unitLevel, mob_level);
         }
 
         inline uint32 Gain(Unit* pUnit, Creature* pCreature)
@@ -114,7 +114,17 @@ namespace MaNGOS
             if (pCreature->HasUnitState(UNIT_STAT_NO_KILL_REWARD))
                 return 0;
 
-            float xp_gain = BaseGain(pUnit->GetLevel(), pCreature->GetLevel());
+            uint32 ownerLevel = pUnit->GetLevel();
+            uint32 unitLevel = pUnit->GetLevel();
+            if (pUnit->IsPet())
+            {
+                if (Unit* pOwner = pUnit->GetOwner())
+                {
+                    ownerLevel = pOwner->GetLevel();
+                }
+            }
+
+            float xp_gain = BaseGain(ownerLevel, unitLevel, pCreature->GetLevel());
             if (!xp_gain)
                 return 0;
 
@@ -140,43 +150,6 @@ namespace MaNGOS
             xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
 
             return std::nearbyint(xp_gain);
-        }
-
-        inline uint32 PetGain(Pet *pet, Unit *u)
-        {
-            bool isPet = u->GetTypeId() == TYPEID_UNIT && u->IsPet() &&
-                ((Creature*)u)->GetCreatureInfo()->type != CREATURE_TYPE_CRITTER &&
-                ((Creature*)u)->GetCreatureInfo()->type != CREATURE_TYPE_NOT_SPECIFIED &&
-                ((Creature*)u)->GetCreatureInfo()->type != CREATURE_TYPE_TOTEM &&
-                ((Creature*)u)->GetCreatureInfo()->health_min > 50;
-
-            if (u->GetTypeId()==TYPEID_UNIT && ((u->GetUInt32Value(UNIT_CREATED_BY_SPELL) && !isPet) ||
-                (((Creature*)u)->HasExtraFlag(CREATURE_FLAG_EXTRA_NO_XP_AT_KILL)) ||
-                u->HasUnitState(UNIT_STAT_NO_KILL_REWARD)))
-                return 0;
-
-            uint32 xp_gain= BaseGain(pet->GetLevel(), u->GetLevel());
-            if (xp_gain == 0)
-                return 0;
-
-            if (u->GetTypeId()==TYPEID_UNIT && ((Creature*)u)->IsElite())
-                xp_gain *= 2;
-
-            if (isPet)
-                xp_gain *= 0.75f;
-
-			if (Unit* Owner = pet->GetOwner())
-			{
-				if (Owner->IsPlayer())
-				{
-					Player* plOwner = Owner->ToPlayer();
-					if (plOwner->IsTurtle())
-					{
-						xp_gain *= 0.5f;
-					}
-				}
-			}
-            return (uint32)(xp_gain);
         }
 
         inline float xp_in_group_rate(uint32 count, bool /*isRaid*/)

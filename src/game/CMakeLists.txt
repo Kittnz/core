@@ -212,6 +212,7 @@ set (game_SRCS
     Formulas.h
     GuidObjectScaling.h
     GameEventMgr.h
+    Geometry.h
     GuardMgr.h
     GMTicketMgr.h
     GossipDef.h

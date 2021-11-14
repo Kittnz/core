@@ -327,6 +327,12 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recvData)
         }
     }
 
+    // This is required for proper movement extrapolation
+    if (opcode == MSG_MOVE_JUMP)
+        pMover->SetJumpInitialSpeed(7.95797334f);
+    else if (opcode == MSG_MOVE_FALL_LAND)
+        pMover->SetJumpInitialSpeed(-9.645f);
+
     // Interrupt spell cast at move
     if (movementInfo.HasMovementFlag(MOVEFLAG_MASK_MOVING))
     {
@@ -458,6 +464,9 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recvData)
             _player->GetCheatData()->OnWrongAckData();
         return;
     }
+
+    if (opcode == CMSG_MOVE_FEATHER_FALL_ACK)
+        pMover->SetJumpInitialSpeed(std::max(pMover->GetJumpInitialSpeed(), 7.0f));
 
     // Use fake loop here to handle movement position checks separately from change ACK.
     do
