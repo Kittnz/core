@@ -1756,9 +1756,77 @@ bool QuestAccept_npc_iselus(Player* pPlayer, Creature* pQuestGiver, Quest const*
     return false;
 }
 
+bool GOHello_go_way_stone_of_eldarath(Player* pPlayer, GameObject* pGo)
+{
+    if (!pPlayer->HasItemCount(60331, 1, false))
+    {
+        pPlayer->GetSession()->SendNotification("Require The Staff of Eldara");
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    else {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to Shattered Strand", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_way_stone_of_eldarath(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010849)
+        {
+            static const WorldLocation m_eldarath(1, 3814.92F, -5526.18F, 131.00f, 3.70F);
+            pPlayer->TeleportTo(m_eldarath);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GOHello_go_way_stone_of_dorath(Player* pPlayer, GameObject* pGo)
+{
+    if (!pPlayer->HasItemCount(60331, 1, false))
+    {
+        pPlayer->GetSession()->SendNotification("Require The Staff of Eldara");
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+    else {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Teleport to Temple of Arkkoran", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_way_stone_of_dorath(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010850)
+        {
+            static const WorldLocation m_dorath(1, 4011.45F, -7131.67F, 24.81f, 3.70F);
+            pPlayer->TeleportTo(m_dorath);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_way_stone_of_dorath";
+    newscript->pGOHello = &GOHello_go_way_stone_of_dorath;
+    newscript->pGOGossipSelect = &GOSelect_go_way_stone_of_dorath;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_way_stone_of_eldarath";
+    newscript->pGOHello = &GOHello_go_way_stone_of_eldarath;
+    newscript->pGOGossipSelect = &GOSelect_go_way_stone_of_eldarath;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_iselus";
