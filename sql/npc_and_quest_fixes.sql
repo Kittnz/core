@@ -170,3 +170,24 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (1444, 40255);
 replace into creature_involvedrelation (id, quest) values (92017, 40255);
+
+-- Blackrock and Roll --
+delete from quest_template where entry = 40256;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40256,2,46,57,48,0,0,'Blackrock and Roll','The Blackrock Clan belongs to the Old Horde, a very large and dangerous enemy to Orgrimmar. Do not be fooled by the distance between the Blackrock Mountain and Orgrimmar. Should the Blackrock Clan ever gain a sizeable amount of strength, they will come to destroy us as well. The Old Horde consists of many factions that remained here on the Eastern Kingdoms during their fights in the First and Second War\'s and are a grizzled enemy that should not be underestimated.\n\nI have been sent here directly from Orgrimmar to be a damper on the Blackrock Clan, and you shall help. It is the honor of the Horde that is at stake after all.\n\nGather me 20 Blackrock Signet\'s, they are worn by all of the Blackrock Clan in the region, kill them, and obtain these signets.','Gather 20 Blackrock Signet\'s from Blackrock Orcs for Tarsokk in Flame Crest.','Have you done as I asked?','We have dealt a blow to the Old Horde and delayed their progress. I have been ordered to pay you in gold for your duties. If you see more of our enemy, make sure to kill them.',60335,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10000,5800,76,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91891, 40256);
+replace into creature_involvedrelation (id, quest) values (91891, 40256);
+
+update creature_template set npc_flags = 3 where entry = 91891;
+
+delete from item_template where entry = 60335;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60335,20219,'Blackrock Signet',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'Covered in old orcish runes.',0);
+
+delete from creature_loot_template where item = 60335 and entry between 7025 and 7029;
+replace into creature_loot_template values
+(7025,60335,-40,1,1,1,0),
+(7026,60335,-40,1,1,1,0),
+(7027,60335,-40,1,1,1,0),
+(7028,60335,-40,1,1,1,0),
+(7029,60335,-45,1,1,1,0);
