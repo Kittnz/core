@@ -126,3 +126,40 @@ replace into gameobject_template (entry, type, displayid, size, name, flags, scr
 REPLACE INTO broadcast_text VALUES 
 (100400, '<This stone pulses lightly with a foreign magic>.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 replace into npc_text (id, broadcasttextid0) values (100400, 100400);
+
+-- Keeping Secrets --
+delete from quest_template where entry = 40254;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40253,40254,2,16,58,45,0,0,'Keeping Secrets','Our next course of action requires us to be more bold. If we are to deactivate many of the buried secrets of the lost city then we must gather a great source of Ley Energy to channel. Deep within the depths of Dire Maul my Highborne kin have been utilizating a great mass of arcane power. This arcane power from what I can detect is keeping a being of great evil contained. I believe they are using this being to feed whatever magical addiction they may be consumed by.\n\nVenture into the depths of Dire Maul, and slay this creature that is being imprisoned, it should hold Pure Ley Essence, of which we can use to direct a spell out into the buried city.\n\nWith the activation of the Ashan Stone, we will need to be quick, so do not waste time.','Travel to Dire Maul, and slay the great evil being that the Highborne are leeching energy upon, gather from it Pure Ley Essence, and return to Keeper Laena in Azshara.','The energy used in Dire Maul is truly fascinating, I can feel it from all the way here. I believe this will be our only chance of fulfilling our oath as Keepers.','Us Keepers could not fulfill the lengths of our duties, and I imagine we will not last forever, one day the Tower of Eldara will lose its master, and perhaps one day I may fall as well. I know not what has happened to the others, though I still hope they are alive and well.\n\nIf we are to fulfill atleast one of our duties, then we shall dispell much of the great magics buried beneath the waves, under the sands. The last thing we intended was for something much more foul to untangle the web of secrets we created.\n\nI must thank you again $N, for everything you have done, you have assisted us in a time of great need, and perhaps now we may last many more years, especially with the energy of the Ley-Lines flowing, and old secrets dispelled. Me and Keeper Iselus have only you to thank, without you, we would have been aimless in our goals.',60332,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60333,1,60334,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60512, 40254);
+replace into creature_involvedrelation (id, quest) values (60512, 40254);
+
+update quest_template set type = 81 where entry = 40254;
+
+delete from item_template where entry = 60332;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60332,34578,'Pure Ley Essence',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60332 and entry = 11496;
+replace into creature_loot_template values
+(11496,60332,-100,1,1,1,0);
+
+replace into item_template values
+ ('60333', '0', '2', '10', 'Azshara Keepers Staff', '', '33163', '3', '0', '1', '274856', '68714', '17', '-1', '-1',
+ '62', '57', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '20', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200',
+ '0', '0', '87', '144', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '20', '13604', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0',
+ '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1',
+ '0', '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '100', '0', '0', '0', '0', '48', '0', '0',
+ '0', '0', '1');
+
+replace into item_template values
+ ('60334', '0', '4', '0', 'Ring of Eldara', '', '31800', '3', '0', '1', '59468', '14867', '11', '-1', '-1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '3',
+ '3', '7', '6', '6', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0',
+ '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1',
+ '0', '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0',
+ '0', '0', '1');
