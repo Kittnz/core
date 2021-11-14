@@ -39,15 +39,18 @@ void WorldSession::HandleDuelAcceptedOpcode(WorldPacket& recvPacket)
     Player *pl = GetPlayer();
     Player *plTarget = pl->m_duel->opponent;
 
-    if (pl->IsHardcore())
+    if (sWorld.getConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL))
     {
-        ChatHandler(pl).SendSysMessage("Hardcore players are not allowed to duel.");
-        return;
-    }
-    else if (plTarget->IsHardcore())
-    {
-        ChatHandler(plTarget).SendSysMessage("Hardcore players are not allowed to duel.");
-        return;
+        if (pl->IsHardcore())
+        {
+            ChatHandler(pl).SendSysMessage("Hardcore players are not allowed to duel.");
+            return;
+        }
+        else if (plTarget->IsHardcore())
+        {
+            ChatHandler(plTarget).SendSysMessage("Hardcore players are not allowed to duel.");
+            return;
+        }
     }
 
     if (pl == pl->m_duel->initiator || !plTarget || !plTarget->m_duel || pl == plTarget || pl->m_duel->startTime != 0 || plTarget->m_duel->startTime != 0)

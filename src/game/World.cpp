@@ -1143,6 +1143,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_STATIC_OBJECT_LOS, "StaticObjectLOS", true);
     setConfig(CONFIG_BOOL_DUAL_SPEC, "DualSpec", false);
     setConfig(CONFIG_BOOL_BETA, "Beta", false);
+
+    setConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL, "Hardcore.Disable.Duel", false);
 }
 
 void charactersDatabaseWorkerThread()
