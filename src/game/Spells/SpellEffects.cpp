@@ -1894,7 +1894,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         auto spellIdOpt = sCompanionMgr->GetCompanionSpellId(m_CastItem->GetEntry());
 
                         if (spellIdOpt && m_caster->IsPlayer())
+                        {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+                            m_caster->ToPlayer()->DestroyItemCount(m_CastItem->GetEntry(), 1, true);
+                            m_caster->ToPlayer()->SaveInventoryAndGoldToDB();
+                        }
                     }
 					return;
 				}
@@ -1905,7 +1909,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         auto spellIdOpt = sMountMgr->GetMountSpellId(m_CastItem->GetEntry());
 
                         if (spellIdOpt && m_caster->IsPlayer())
+                        {
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
+                            m_caster->ToPlayer()->DestroyItemCount(m_CastItem->GetEntry(), 1, true);
+                            m_caster->ToPlayer()->SaveInventoryAndGoldToDB();
+                        }
                     }
                     return;
                 }
