@@ -198,3 +198,22 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (91891, 40257);
 replace into creature_involvedrelation (id, quest) values (91891, 40257);
+
+-- The Maul Orb --
+delete from quest_template where entry = 40258;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40258,2,408,53,45,0,0,'The Maul Orb','The Maul Orb was once a powerful artifact to our tribe, but we lost it a long time ago.\n\nIn olden days we were once apart of the larger Gor\'dosh tribe and dominated both Gillijim and Lapidis. The Maul Orb was created in those days, and since the tribes split, it has been lost in their hands.\n\nThere is no doubt that the Maul Orb still exists, tucked away within the Gor\'dosh Heights, the Heights are located on Lapidis Isle, far to the north, on its north western edge, go there, and recover it.','Reclaim The Maul Orb from Gor\'dosh Heights on Lapidis Isle and return to Embergut at Maul\'ogg Post.','Have you found the orb?','<A grin would spread from ear to ear across Emberguts face> So long it has been gone, and here it is!\n\nYou\'ve done well, I never thought I would see it again and it is in my hands. Maybe now Embergut can be the strongest ogre!',60336,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2500,5400,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60476, 40258);
+replace into creature_involvedrelation (id, quest) values (60476, 40258);
+
+delete from item_template where entry = 60336;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60336,23727,'The Maul Orb',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Covered in old orcish runes.',0);
+
+delete from gameobject_template where entry = 2010852;
+replace into gameobject_template values
+(2010852,3,25452,'Gor\'dosh Basket',0,4,1,43,2010852,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010852;
+replace into gameobject_loot_template values 
+(2010852,60336,-100,0,1,1,0);
