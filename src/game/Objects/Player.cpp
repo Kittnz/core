@@ -1415,7 +1415,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
 
     if (IsHasDelayedTeleport())
         TeleportTo(m_teleport_dest, m_teleport_options, m_teleportRecoverDelayed);
-    // Movement interpolation & cheat computation - only if not already kicked!
+    // Movement extrapolation & cheat computation - only if not already kicked!
     if (!GetSession()->IsConnected())
         return;
 
@@ -1466,7 +1466,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         }
 
         float x, y, z, o;
-        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_INTERP) && movespline->Finalized() && !GetCheatData()->ExtrapolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.time, x, y, z, o))
+        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_EXTRAPOLATION_PLAYER) && movespline->Finalized() && ExtrapolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.time, x, y, z, o))
         {
             GetMap()->DoPlayerGridRelocation(this, x, y, z, o);
             m_position.x = x;
@@ -2104,7 +2104,7 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
 				OnTeleportFinished();
 			}
         }
-        m_movementInfo.moveFlags &= ~MOVEFLAG_MASK_MOVING_OR_TURN; // For interpolation
+        m_movementInfo.moveFlags &= ~MOVEFLAG_MASK_MOVING_OR_TURN; // For extrapolation
     }
     else
     {
@@ -19913,10 +19913,11 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
         RewardReputation(pVictim, 1);
         GiveXP(xp, pVictim);
 
-        if (Pet* pet = GetPet())
+        // Pet should only gain XP if mob is not grey to Owner.
+        if (xp)
         {
-            uint32 XP = PvP ? 0 : MaNGOS::XP::PetGain(pet, static_cast<Creature*>(pVictim));
-            pet->GivePetXP(XP);
+            if (Pet* pet = GetPet())
+                pet->GivePetXP(MaNGOS::XP::Gain(pet, static_cast<Creature*>(pVictim)));
         }
 
         // normal creature (not pet/etc) can be only in !PvP case
@@ -19934,7 +19935,8 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
 
         // Turtle WoW custom feature:
         if (sWorld.getConfig(CONFIG_BOOL_BOUNTY))
-            RewardBountyHuntKill(pVictim);  
+            RewardBountyHuntKill(pVictim);
+
         RewardExpansionPvPQuest(pVictim);
     }    
 }
