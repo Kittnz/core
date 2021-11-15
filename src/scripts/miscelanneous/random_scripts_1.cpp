@@ -2787,11 +2787,11 @@ public:
             player->SetFlying(false);
             player->UpdateSpeed(MOVE_SWIM, false, 1.0F);
 
-            player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-            WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
-            stop_swim << player->GetPackGUID();
-            stop_swim << player->m_movementInfo;
-            player->SendMovementMessageToSet(std::move(stop_swim), true);
+            //player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+            //WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
+            //stop_swim << player->GetPackGUID();
+            //stop_swim << player->m_movementInfo;
+            //player->SendMovementMessageToSet(std::move(stop_swim), true);
         }
         return false;
     }
