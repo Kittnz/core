@@ -1812,6 +1812,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 case 19700:
                     finalSpellId = 19686;
                     break;
+               // Temporary hack for Undead Hunters:
+                case 50901:
+                case 50902:
+                case 50903:
+                    finalSpellId = 19681;
+                    break;
             }
 
             if (finalSpellId)
