@@ -7,6 +7,9 @@ EndScriptData */
 
 #include "scriptPCH.h"
 
+// For testing!
+constexpr uint8 SPARK_MAX_COUNT = 10;
+
 enum SV_Spells
 {
     /*human leader*/
@@ -45,6 +48,118 @@ enum SV_Events
     /*orc_warlock*/
     /*orc_necrolyte*/
 };
+
+struct SV_heraldAI : public ScriptedAI
+{
+    SV_heraldAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        me->SetVirtualItem(VIRTUAL_ITEM_SLOT_0, 13049);
+        Reset();
+    }
+
+    EventMap m_events;
+
+    void Reset() override
+    {
+        m_events.Reset();
+    }
+
+    void Aggro(Unit* pWho) override
+    {
+        m_events.ScheduleEvent(EVENT_HOLY_STRIKE, Seconds(urand(8, 15)));
+        m_events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, Seconds(urand(20, 45)));
+    }
+
+    void UpdateAI(uint32 const uiDiff)  override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        m_events.Update(uiDiff);
+        while (auto l_EventId = m_events.ExecuteEvent())
+        {
+            switch (l_EventId)
+            {
+            case EVENT_HOLY_STRIKE:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
+                    m_events.Repeat(Seconds(20));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_HAMMER_OF_JUSTICE:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HAMMER_OF_JUSTICE) == CAST_OK)
+                    m_events.Repeat(Seconds(30));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            }
+        }
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+bool GossipHello_SV_herald(Player* pPlayer, Creature* pCreature)
+{
+    if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(pCreature->GetMap()))
+    {
+        if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
+        {
+            if (bg->GetStatus() == STATUS_IN_PROGRESS && bg->GetHeraldControlledTeam() == pPlayer->GetTeam() && !bg->IsGeneralsActive())
+            {
+                uint32 sparkCount = pPlayer->GetItemCount(81390);
+
+                if (sparkCount)
+                {
+                    std::string text = "I'm bringing " + std::to_string(sparkCount) + " Time Sparks";
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, text.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                }
+            }
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_SV_herald(Player* player, Creature* creature, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF)
+    {
+        if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(creature->GetMap()))
+        {
+            if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
+            {
+                if (bg->GetStatus() == STATUS_IN_PROGRESS && !bg->IsGeneralsActive())
+                {
+                    uint32 sparkCount = player->GetItemCount(81390);
+                    player->DestroyItemCount(81390, sparkCount, true);
+
+                    bg->AddTeamSparks(player->GetTeamId(), sparkCount);
+
+                    // check here
+                    uint32 totalSparks = bg->GetTeamSparks(TEAM_ALLIANCE) + bg->GetTeamSparks(TEAM_HORDE);
+
+                    if (totalSparks >= SPARK_MAX_COUNT)
+                        bg->StartFinalEvent();
+
+                    // if we use npc flag gossip and created gossip with action bg start
+                    //player->CLOSE_GOSSIP_MENU();
+                    //return true;
+                }
+            }
+        }
+    }
+
+    player->CLOSE_GOSSIP_MENU();
+    return true;
+}
 
 struct SV_human_leaderAI : public ScriptedAI
 {
@@ -553,6 +668,11 @@ struct SV_orc_necrolyteAI : public ScriptedAI
     }
 };
 
+CreatureAI* GetAI_SV_herald(Creature* pCreature)
+{
+    return new SV_heraldAI(pCreature);
+}
+
 CreatureAI* GetAI_SV_human_leader(Creature* pCreature)
 {
     return new SV_human_leaderAI(pCreature);
@@ -607,52 +727,59 @@ void AddSC_bg_sunnyglade()
 {
     Script* newscript;
     newscript = new Script;
-    newscript->Name = "SV_human_leader";
+    newscript->Name = "npc_sv_herald";
+    newscript->GetAI = &GetAI_SV_herald;
+    newscript->pGossipHello = &GossipHello_SV_herald;
+    newscript->pGossipSelect = &GossipSelect_SV_herald;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_sv_human_leader";
     newscript->GetAI = &GetAI_SV_human_leader;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_orc_leader";
+    newscript->Name = "npc_sv_orc_leader";
     newscript->GetAI = &GetAI_SV_orc_leader;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_human_footman";
+    newscript->Name = "npc_sv_human_footman";
     newscript->GetAI = &GetAI_SV_human_footman;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_human_archer";
+    newscript->Name = "npc_sv_human_archer";
     newscript->GetAI = &GetAI_SV_human_archer;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_human_conjurer";
+    newscript->Name = "npc_sv_human_conjurer";
     newscript->GetAI = &GetAI_SV_human_conjurer;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_human_cleric";
+    newscript->Name = "npc_sv_human_cleric";
     newscript->GetAI = &GetAI_SV_human_cleric;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_orc_grunt";
+    newscript->Name = "npc_sv_orc_grunt";
     newscript->GetAI = &GetAI_SV_orc_grunt;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_orc_spearman";
+    newscript->Name = "npc_sv_orc_spearman";
     newscript->GetAI = &GetAI_SV_orc_spearman;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_orc_warlock";
+    newscript->Name = "npc_sv_orc_warlock";
     newscript->GetAI = &GetAI_SV_orc_warlock;
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "SV_orc_necrolyte";
+    newscript->Name = "npc_sv_orc_necrolyte";
     newscript->GetAI = &GetAI_SV_orc_necrolyte;
     newscript->RegisterSelf();
 }

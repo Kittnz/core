@@ -7995,7 +7995,14 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                     {
                         if (bg->GetTypeID() == BATTLEGROUND_SV)
                         {
-                            LootStoreItem storeitem = LootStoreItem(81390, 100, 0, 0, 1, 1);
+                            // real handle of item destroy
+                            uint32 sparkCount = pVictim->GetItemCount(81390);
+                            if (!sparkCount)
+                                sparkCount = 1;
+                            else
+                                pVictim->DestroyItemCount(81390, sparkCount, true);
+
+                            LootStoreItem storeitem = LootStoreItem(81390, 100, 0, 0, 0, sparkCount);
                             bones->loot.AddItem(storeitem);
                         }
                         else if (bg->GetTypeID() == BATTLEGROUND_AV)
@@ -21789,7 +21796,7 @@ void Player::OnReceivedItem(Item* item)
     if (BattleGround* bg = GetBattleGround())
     {
         if (bg->GetTypeID() == BATTLEGROUND_SV)
-            ((BattleGroundSV*)bg)->HandleLootItem(this);
+            ((BattleGroundSV*)bg)->HandleLootItem(this, item->GetCount());
     }
 }
 

@@ -3,15 +3,13 @@
 
 #include "BattleGround.h"
 
-// For testing!
-constexpr uint8 RESIDUE_MAX_COUNT = 20;
-
 enum BG_SV_BattlegroundNodes
 {
     BG_SV_HUMAN_TOWER = 0,
     BG_SV_ORC_TOWER = 1,
+    BG_SV_HERALD_POINT = 2,
 
-    BG_SV_DYNAMIC_NODES_COUNT = 2,                    // dynamic nodes that can be captured
+    BG_SV_DYNAMIC_NODES_COUNT = 3,                    // dynamic nodes that can be captured
 };
 
 enum BG_SV_ObjectTypes
@@ -27,23 +25,26 @@ enum BG_SV_BuffObjects
 {
     BG_SV_OBJECTID_SPEEDBUFF = 179871,
     BG_SV_OBJECTID_REGENBUFF = 179904,
-    BG_SV_OBJECTID_BERSERKERBUFF = 179905
+    BG_SV_OBJECTID_BERSERKERBUFF = 179905,
+    BG_SV_OBJECTID_CHEST = 179311,
 };
 
 enum BG_SV_ObjectType
 {
-    // nodes * 2
+    // banners[5] * 3
     BG_SV_OBJECT_BANNER_NEUTRAL = 0,
     BG_SV_OBJECT_BANNER_CONT_A  = 1,
     BG_SV_OBJECT_BANNER_CONT_H  = 2,
     BG_SV_OBJECT_BANNER_ALLY    = 3,
     BG_SV_OBJECT_BANNER_HORDE   = 4,
-    // buffs * 6
-    BG_SV_OBJECT_SPEEDBUFF      = 10,
-    BG_SV_OBJECT_REGENBUFF      = 11,
-    BG_SV_OBJECT_BERSERKBUFF    = 12,
+    // buffs[3] * 6
+    BG_SV_OBJECT_SPEEDBUFF      = 15,
+    BG_SV_OBJECT_REGENBUFF      = 16,
+    BG_SV_OBJECT_BERSERKBUFF    = 17,
+    // chest * 6
+    BG_SV_OBJECT_CHEST          = 33,
     // 2 gates possible
-    BG_SV_OBJECT_MAX            = 28
+    BG_SV_OBJECT_MAX            = 39
 };
 
 enum BG_SV_CreatureType
@@ -82,7 +83,6 @@ enum BG_SV_NodeStatus
 enum BG_SV_NPC
 {
     NPC_HERALD = 13760,
-    NPC_AEONUS = 13761,
 
     NPC_MARSHAL_GREYWALL = 93000,
     NPC_HUMAN_FOOTMAN = 93001,
@@ -118,7 +118,10 @@ Position const BG_SV_NodePositions[BG_SV_DYNAMIC_NODES_COUNT] =
 {
     {1661.94f, 307.334f, 143.662f, 1.798f},         // human tower
     {1013.34f, 249.37f, 117.43f, 4.76f},            // orc tower
+    {1315.50f, 266.75f, 75.96f, 4.8f},              // herald point
 };
+
+const uint8 BG_SV_CaptureNodesSparkTicks[3] = { 0, 1, 2 };
 
 Position const BG_SV_BuffPositions[6] =
 {
@@ -129,6 +132,8 @@ Position const BG_SV_BuffPositions[6] =
     {1324.09f, 578.5f, 104.2f, 3.95f},   // mine 2
     {1444.28f, 306.99f, 70.9f, 0.23f},   // wind
 };
+
+Position const BG_SV_HeraldPos = { 1318.8f, 255.87f, 75.6f, 1.68f };
 
 Position const BG_SV_SpiritGuidePos[2] =
 {
@@ -171,7 +176,7 @@ struct NPCData
 
 NPCData const BG_SV_LeaderGuardsPos[2][6] =
 {
-    // footman. conjurer, cleric
+    // footman, conjurer, cleric
     {
         {93001, 1678.05f, 422.08f, 115.0f, 4.66f},
         {93001, 1669.69f, 422.52f, 115.0f, 4.66f},
@@ -242,9 +247,8 @@ class BattleGroundSV : public BattleGround
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
         void HandleKillPlayer(Player *player, Player *killer);
         void HandleKillUnit(Creature* creature, Player* killer);
-        void HandleLootItem(Player* looter);
-        void CheckResources();
-        void StartFinalEvent(Team summoner);
+        void HandleLootItem(Player* looter, uint32 count);
+        void StartFinalEvent();
         virtual bool SetupBattleGround();
         virtual void Reset();
         void EndBattleGround(Team winner);
@@ -257,7 +261,12 @@ class BattleGroundSV : public BattleGround
         void UpdatePlayerScore(Player *Source, uint32 type, uint32 value);
         virtual void FillInitialWorldStates(WorldPacket& data, uint32& count);
 
-        int32 GetTowerNameId(uint8 node);
+        uint32 GetTowerNameId(uint8 node);
+        Team GetHeraldControlledTeam();
+        uint32 GetTeamSparks(TeamId team) { return m_resources[team]; }
+        void AddTeamSparks(TeamId team, uint32 count) { m_resources[team] += count; }
+        void SetGeneralsActive(bool set) { generalsActive = set; }
+        bool IsGeneralsActive() { return generalsActive; }
 
     private:
         /* Gameobject spawning/despawning */
@@ -268,16 +277,12 @@ class BattleGroundSV : public BattleGround
         void NodeOccupied(uint8 node, Team team);
         void NodeDeOccupied(uint8 node);
 
-        uint32 m_HumanResources = 0;
-        uint32 m_OrcResources = 0;
-        Team summoner = TEAM_NONE;
-        int32 m_defeatTimer = 0;
-        int32 m_endTimer = 0;
-        int32 m_closeTimer = 0;
-
         uint8 m_Nodes[BG_SV_DYNAMIC_NODES_COUNT];
         uint8 m_prevNodes[BG_SV_DYNAMIC_NODES_COUNT];
         BG_SV_BannerTimer m_BannerTimers[BG_SV_DYNAMIC_NODES_COUNT];
         uint32 m_NodeTimers[BG_SV_DYNAMIC_NODES_COUNT];
+        uint32 m_resources[BG_TEAMS_COUNT];
+        uint32 m_lastTick[BG_TEAMS_COUNT];
+        bool generalsActive;
 };
 #endif
