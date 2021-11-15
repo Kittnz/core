@@ -297,3 +297,22 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60484, 40262);
 replace into creature_involvedrelation (id, quest) values (60488, 40262);
+
+-- A Demonstration of Skill --
+delete from quest_template where entry = 40263;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40262,40263,2,-261,10,10,0,0,'A Demonstration of Skill','Dark Ranger Lanissa advised me to put you on this path after you’ve finished your training.\n\nBoth she and I wish for you to hunt a particular Scourge fiend, his name is Boltrus, he hides in Balnir Farmstead, inside the barn.\n\nBoltrus used to be the servant of our great mayor, here in Brill, the mayor asked us to put an end to his suffering, as it didn\’t seem Boltrus was sane anymore. He used to be sweet with one of the farmstead girls, and it seems that his only memory clings to the nights they spent in that barn.\n\nHunt him down and bring his head back to Dark Ranger Lanissa, then you will be rewarded.','Hunt Boltrus and bring his head back to Dark Ranger Lanissa in Brill.','How goes your task?','You’ve done well.\n\nSadly the Scourge took more than the sanity from some of us, I admire the fact that this creature was still clinging to its moral self, I sometimes wonder what would’ve happened to me if I was nothing more than a mindless husk.\n\nAlas, here, I have two weapons of choice.',60337,1,0,0,0,0,0,0,60513,1,0,0,0,0,0,0,0,0,250,1000,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60338,1,60339,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60484, 40263);
+replace into creature_involvedrelation (id, quest) values (81050, 40263);
+
+delete from creature_template where entry = 60513;
+REPLACE INTO creature_template VALUES
+(60513, 1198, 0, 0, 0, 'Boltrus', NULL, 0, 12, 12, 500, 500, 0, 0, 20, 14, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 17, 22, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 6, 0, 60513, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 20, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from item_template where entry = 60337;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60337,14023,'Boltrus`s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60337 and entry = 60513;
+replace into creature_loot_template values
+(60513,60337,-100,1,1,1,0);
