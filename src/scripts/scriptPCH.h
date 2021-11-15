@@ -29,6 +29,7 @@
 #include "NullCreatureAI.h"
 #include "Chat.h"
 #include "BattleGroundAV.h"
+#include "BattleGroundSV.h"
 #include "World.h"
 #include "Weather.h"
 #include "TotemAI.h"

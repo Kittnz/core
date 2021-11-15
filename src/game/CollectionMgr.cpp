@@ -98,7 +98,6 @@ void CollectionMgr::AddToCollection(uint32 itemId)
     stmtIns.PExecute(_owner->GetGUIDLow(), itemId);
 
 	_owner->SendAddonMessage("TW_TRANSMOG","NewTransmog:" + std::to_string(itemId));
-
 }
 
 std::string CollectionMgr::GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId)

@@ -1154,6 +1154,7 @@ enum MangosStrings
     LANG_BG_SV_END_TEXT                 = 10059,
     LANG_BG_SV_SUMMON_DRAGON            = 10060,
     LANG_BG_SV_HUMAN_TOWER              = 10061,
-    LANG_BG_SV_ORC_TOWER                = 10062
+    LANG_BG_SV_ORC_TOWER                = 10062,
+    LANG_BG_SV_HERALD_POINT             = 10063,
 };
 #endif
