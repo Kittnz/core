@@ -278,5 +278,15 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (60484, 40249);
 replace into creature_involvedrelation (id, quest) values (60484, 40249);
 
-update quest_template set questflags = 2 where entry = 40248;
-update quest_template set specialflags = 2 where entry = 40248;
+update quest_template set questflags = 2 where entry = 40249;
+update quest_template set specialflags = 2 where entry = 40249;
+
+-- Taming the Beast III --
+delete from quest_template where entry = 40250;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40249,40250,2,-261,10,10,0,0,'Taming the Beast III','As I\’ve mentioned before, our lands barely has any kind of alive creature, your next task will once again have you tame a beast that such as yourself fell prey to the Scourge.\n\nLordaeron used to have brown bears, they\’d often come from Silverpine in the summer, hiding in our forests, those that remained behind are now, here forever.\n\nDealing with an undead pet is quite harder since like yourself they are no longer part of the cycle of life and death. Lost and unaware.\n\nAs you grow in skill, so will your beasts and you will be able to train them in the future, remember that it takes time and dedication to train something that is no longer alive, but you already knew that as you’d need that for yourself.\n\nThe bear is a strong companion, they will stand in front of you and deal with your enemy will you stand back from afar and shoot them down, find one and bring it back to me.','Use the Taming Rod to tame a Plagued Bear. Practice your skills, then return the Taming Rod to Liott Maneskin in Brill.','Time and dedication, luckily you have both.','It seems this beast no longer feels lost, by showing it affection you’ve managed to activate certain emotions in it.\n\nRemember every beast has its own story and you may be the trigger that will either save them or bring them to an end.',60331,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60331,1,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60484, 40250);
+replace into creature_involvedrelation (id, quest) values (60484, 40250);
+
+update quest_template set questflags = 2 where entry = 40250;
+update quest_template set specialflags = 2 where entry = 40250;
