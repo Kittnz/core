@@ -8495,9 +8495,25 @@ public:
                         continue;
                     break;
                 case SPELL_TARGETS_FRIENDLY:
+                {
                     if (!i_originalCaster->IsFriendlyTo(unit))
                         continue;
-                    break;
+
+                    auto casterPlayer = i_originalCaster->ToPlayer();
+
+                    if (!casterPlayer && i_originalCaster->IsGameObject())
+                    {
+                        auto owner = i_originalCaster->ToGameObject()->GetOwner();
+                        casterPlayer = owner->ToPlayer();
+                    }
+                    //HC checks for friendly aoe buffs to check for PvP.
+                    if (casterPlayer && unit->IsPlayer() && casterPlayer->IsHardcore())
+                    {
+                        if (!casterPlayer->IsPvP() && unit->ToPlayer()->IsPvP())
+                            continue;
+                    }
+                }
+                   break;
                 case SPELL_TARGETS_AOE_DAMAGE:
                 {
                     if (unit->IsCreature() && static_cast<Creature*>(unit)->IsImmuneToAoe())
