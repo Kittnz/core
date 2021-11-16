@@ -89,6 +89,7 @@ void LFGQueue::AddToQueue(Player* leader, uint32 queueAreaID)
         i_Group.team = leader->GetTeam();
         i_Group.areaId = queueAreaID;
         i_Group.groupTimer = 5 * MINUTE * IN_MILLISECONDS; // Minute timer for SMSG_MEETINGSTONE_IN_PROGRESS
+        i_Group.isHardcore = leader->IsHardcore();
 
         grp->SetLFGAreaId(queueAreaID);
 
@@ -107,6 +108,7 @@ void LFGQueue::AddToQueue(Player* leader, uint32 queueAreaID)
         i_Player.hasQueuePriority = false;
         i_Player.CalculateRoles(static_cast<Classes>(leader->GetClass()));
         i_Player.name = leader->GetName();
+        i_Player.isHardcore = leader->IsHardcore();
 
         leader->GetSession()->SendMeetingstoneSetqueue(queueAreaID, MEETINGSTONE_STATUS_JOINED_QUEUE);
     }
@@ -275,7 +277,8 @@ void LFGQueue::Update(uint32 diff)
 
                 // Check here that players team and areaId they're in queue are same
                 if (qPlayer->second.team == qGroup->second.team &&
-                   qPlayer->second.areaId == qGroup->second.areaId)
+                   qPlayer->second.areaId == qGroup->second.areaId &&
+                    qPlayer->second.isHardcore == qGroup->second.isHardcore)
                 {
                     bool groupFound = false;
                     // Find any role that this player matches and that the group requires. If none,

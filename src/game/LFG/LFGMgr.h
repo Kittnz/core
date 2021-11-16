@@ -68,6 +68,7 @@ struct LFGPlayerQueueInfo
     uint32 areaId;
     uint32 timeInLFG;
     bool hasQueuePriority;
+    bool isHardcore = false;
     std::string name;
     std::list<std::pair<ClassRoles, RolesPriority>> rolePriority;
 
@@ -81,6 +82,7 @@ struct LFGGroupQueueInfo
     uint32 dpsCount;
     uint32 team;
     uint32 areaId;
+    bool isHardcore = false;
     uint32 groupTimer;
 };
 
