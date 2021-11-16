@@ -8504,7 +8504,8 @@ public:
                     if (!casterPlayer && i_originalCaster->IsGameObject())
                     {
                         auto owner = i_originalCaster->ToGameObject()->GetOwner();
-                        casterPlayer = owner->ToPlayer();
+                        if (owner)
+                            casterPlayer = owner->ToPlayer();
                     }
                     //HC checks for friendly aoe buffs to check for PvP.
                     if (casterPlayer && unit->IsPlayer() && casterPlayer->IsHardcore())
