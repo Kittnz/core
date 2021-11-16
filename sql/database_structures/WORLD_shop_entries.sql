@@ -69,7 +69,6 @@ replace into shop_items values
 (43, 3, 50208, 'Orc: Chaos', 160),
 (44, 3, 50209, 'Orc: Mag\'Har Clan', 160),
 (45, 3, 81255, 'Orc: Dreadskull Clan I', 160),
-(46, 3, 81256, 'Orc: Dreadskull Clan II', 160),
 (47, 3, 50210, 'Troll: Forest Troll', 160),
 (48, 3, 50211, 'Troll: Sandfury Troll', 160),
 (49, 3, 51010, 'Troll: Dark Troll', 160),
@@ -151,7 +150,6 @@ replace into shop_items values
 (222, 11, 81238, 'Turbo-Charged Flying Machine', 350), 
 (223, 11, 81239, 'Happy Whimsyshire Cloud', 200), 
 (224, 11, 81240, 'Sad Whimsyshire Cloud', 200), 
-(225, 11, 23720, 'Swift Riding Turtle', 0), 
 -- Vanity: Companions
 (241, 12, 13584, 'Diablo Stone', 80),
 (242, 12, 13583, 'Panda Collar', 80),
