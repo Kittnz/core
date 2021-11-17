@@ -634,3 +634,24 @@ replace into creature_loot_template values
 (6516, 60343,-15,1,1,1,0),
 (9622, 60343,-20,1,1,1,0),
 (6585, 60343,-20,1,1,1,0);
+
+-- The Maul'ogg Crisis VII --
+delete from quest_template where entry = 40270;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40269,40270,2,408,54,45,0,0,'The Maul\'ogg Crisis VII','I have had many encounters within the Temple of Atal\'Hakkar, long ages spent gazing upon its walls. It is a place of darkness and foul energies that have corrupted its once defenders. The Prophet Jammal\'an speaks his foul, misbegotten words into the decaying remains of his people that call this place home. I desire you to venture into the catacombs of this place, to find the Prophet and gather from him the Atal\'ai Rod. It should be kept close to where this troll channels his magic.\n\nThe Atal\'ai Rod holds power in the magic of control, and should assist us in subjugating Lord Cruk\'zogg.','Venture into the depths of the Temple of Atal\'Hakkar and gather the Atal\'ai Rod, bring it to Insom\'ni to finish the spell.','','<Insom\'ni would inspect the Ligment curiously, and nod his head>. This shall do just fine. This shall do just fine.',60344,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60446, 40270);
+replace into creature_involvedrelation (id, quest) values (60446, 40270);
+
+update quest_template set type = 81 where entry = 40270;
+
+delete from item_template where entry = 60344;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60344,18261,'Atal\'ai Rod',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010853;
+replace into gameobject_template values
+(2010853,3,23435,'Atal\'ai Chest',0,4,1,43,2010853,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010853;
+replace into gameobject_loot_template values 
+(2010853,60344,-100,0,1,1,0);
