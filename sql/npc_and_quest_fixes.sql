@@ -380,7 +380,7 @@ replace into item_template values
  '0', '1', NULL);
  
  
--- The Maul\'ogg Crisis I --
+-- The Maul'ogg Crisis I --
 delete from quest_template where entry = 40264;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40264,2,408,53,45,0,0,'The Maul\'ogg Crisis I','Hello, and welcome to Maul\'ogg Refuge, we are a battered people, stuck in a constant fight for dominance. I am Haz\'gorg, and I am the head of the seers.\n\nLong have I seen the desruction of my people, fortold in long fever dreams and visions within the dark hours of twilight. I fear that the constant state of warfare we are engulfed will do nothing but bring our end.\n\nI ask of you to speak with Lord Cruk\'Zogg on my behalf, tell him that I believe this foolhardy aggresion will bring nothing but suffering.','Convince Lord Cruk\'Zogg to end his foolhardly aggresion on behalf of Haz\'gorg the Great Seer.','So, have you spoken with him?','I see. Lord Cruk\'Zogg will bring us into ruin, I must come up with a new way to make him be convinced.',0,0,0,0,0,0,0,0,60337,1,0,0,0,0,0,0,0,0,0,450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Convince Lord Cruk\'Zogg to end his foolhardly aggresion');
 
@@ -391,3 +391,199 @@ update creature_template set script_name = 'npc_lord_crukzogg' where entry = 921
 
 delete from creature_template where entry = 60337;
 replace into creature_template (entry, name, display_id1) values (60337, 'quest_40264_dummy_triger', 328);
+
+-- The Maul'ogg Crisis II --
+delete from quest_template where entry = 40265;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40264,40265,2,408,53,45,0,0,'The Maul\'ogg Crisis II','If there is to be a chance for my people then I must conjure a great vision, to do as such will require materials from across the island. I ask of you to gather me the following items. 10 Basilisk Eye\'s from the Basilisks, 6 Crawler Pincers from the Crawlers, and 3 Deepsnap Tails from the crocolisks.\n\n Once you have gotten these materials for me, I can begin to see what must be done.','Gather 10 Basilisk Eyes, 6 Crawler Pincers and 3 Deepsnap Tails for Haz\'gorg the Great Seer in Maul\'ogg Refuge.','Have you had the opportunity to collect what it is I asked?','I see a great future in you, you have done well, now, let us begin.',60338,10,60339,6,60340,3,0,0,0,0,0,0,0,0,0,0,0,0,0,4800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92184, 40265);
+replace into creature_involvedrelation (id, quest) values (92184, 40265);
+
+delete from item_template where entry between 60338 and 60340;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60338,7986,'Basilisk Eye',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0),
+(60339,2627,'Crawler Pincer',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0),
+(60340,1225,'Deepsnap Tail',12,1,2048,1,-1,-1,1,3,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91964 where entry = 91964;
+update creature_template set loot_id = 91963 where entry = 91963;
+update creature_template set loot_id = 92147 where entry = 92147;
+update creature_template set loot_id = 92146 where entry = 92146;
+update creature_template set loot_id = 91962 where entry = 91962;
+
+delete from creature_loot_template where entry = 91964;
+replace into creature_loot_template values
+(91964, 770, 54.413, 0, 1, 3, 0),
+(91964, 3914, 0.097, 0, 1, 1, 0),
+(91964, 4637, 0.291, 0, 1, 1, 0),
+(91964, 7909, 0.097, 0, 1, 1, 0),
+(91964, 7910, 0.097, 0, 1, 1, 0),
+(91964, 30025, 0.5, 0, -30025, 1, 0),
+(91964, 30029, 0.5, 0, -30029, 1, 0),
+(91964, 30049, 0.5, 0, -30049, 1, 0),
+(91964, 30072, 0.5, 0, -30072, 1, 0),
+(91964, 60338,-55,1,1,1,0);
+
+delete from creature_loot_template where entry = 91963;
+replace into creature_loot_template values
+(91963, 770, 54.413, 0, 1, 3, 0),
+(91963, 3914, 0.097, 0, 1, 1, 0),
+(91963, 4637, 0.291, 0, 1, 1, 0),
+(91963, 7909, 0.097, 0, 1, 1, 0),
+(91963, 7910, 0.097, 0, 1, 1, 0),
+(91963, 30025, 0.5, 0, -30025, 1, 0),
+(91963, 30029, 0.5, 0, -30029, 1, 0),
+(91963, 30049, 0.5, 0, -30049, 1, 0),
+(91963, 30072, 0.5, 0, -30072, 1, 0),
+(91963, 60338,-65,1,1,1,0);
+
+delete from creature_loot_template where entry = 92147;
+replace into creature_loot_template values
+(92147, 1529, 0.02, 0, 1, 1, 0),
+(92147, 1645, 0.02, 0, 1, 1, 0),
+(92147, 1685, 0.02, 0, 1, 1, 0),
+(92147, 1708, 0.02, 0, 1, 1, 0),
+(92147, 1711, 0.02, 0, 1, 1, 0),
+(92147, 1725, 0.02, 0, 1, 1, 0),
+(92147, 2290, 0.02, 0, 1, 1, 0),
+(92147, 2772, 0.02, 0, 1, 1, 0),
+(92147, 2838, 0.02, 0, 1, 1, 0),
+(92147, 3010, 15.1718, 0, 1, 1, 0),
+(92147, 3357, 0.02, 0, 1, 1, 0),
+(92147, 3771, 0.02, 0, 1, 1, 0),
+(92147, 3827, 0.02, 0, 1, 1, 0),
+(92147, 3832, 0.02, 0, 1, 1, 0),
+(92147, 3858, 0.06, 0, 1, 1, 0),
+(92147, 3864, 0.0892, 0, 1, 1, 0),
+(92147, 3867, 0.02, 0, 1, 1, 0),
+(92147, 3868, 0.02, 0, 1, 1, 0),
+(92147, 3914, 0.02, 0, 1, 1, 0),
+(92147, 3927, 0.02, 0, 1, 1, 0),
+(92147, 4100, 0.02, 0, 1, 1, 0),
+(92147, 4101, 0.02, 0, 1, 1, 0),
+(92147, 4102, 0.04, 0, 1, 1, 0),
+(92147, 4544, 0.02, 0, 1, 1, 0),
+(92147, 4601, 0.02, 0, 1, 1, 0),
+(92147, 4602, 0.02, 0, 1, 1, 0),
+(92147, 4636, 0.1339, 0, 1, 1, 0),
+(92147, 4637, 0.12, 0, 1, 1, 0),
+(92147, 5498, 0.02, 0, 1, 1, 0),
+(92147, 5500, 0.02, 0, 1, 1, 0),
+(92147, 5569, 35.8768, 0, 1, 1, 0),
+(92147, 5774, 0.02, 0, 1, 1, 0),
+(92147, 5974, 0.02, 0, 1, 1, 0),
+(92147, 7084, 0.02, 0, 1, 1, 0),
+(92147, 7090, 0.02, 0, 1, 1, 0),
+(92147, 7909, 0.16, 0, 1, 1, 0),
+(92147, 7910, 0.06, 0, 1, 1, 0),
+(92147, 7912, 0.02, 0, 1, 1, 0),
+(92147, 7971, 0.04, 0, 1, 1, 0),
+(92147, 7973, 35.8768, 0, 1, 1, 0),
+(92147, 7992, 0.02, 0, 1, 1, 0),
+(92147, 8364, 0.02, 0, 1, 1, 0),
+(92147, 8386, 0.02, 0, 1, 1, 0),
+(92147, 8831, 0.02, 0, 1, 1, 0),
+(92147, 10300, 0.02, 0, 1, 1, 0),
+(92147, 10301, 0.02, 0, 1, 1, 0),
+(92147, 10315, 0.02, 0, 1, 1, 0),
+(92147, 10603, 0.02, 0, 1, 1, 0),
+(92147, 10605, 0.02, 0, 1, 1, 0),
+(92147, 10606, 0.02, 0, 1, 1, 0),
+(92147, 11202, 0.02, 0, 1, 1, 0),
+(92147, 12206, 36.0107, 0, 1, 1, 0),
+(92147, 13926, 0.02, 0, 1, 1, 0),
+(92147, 17057, 36.9032, 0, 1, 1, 0),
+(92147, 30025, 0.5, 0, -30025, 1, 0),
+(92147, 30026, 0.01, 0, -30026, 1, 0),
+(92147, 30027, 0.5, 0, -30027, 1, 0),
+(92147, 30028, 0.01, 0, -30028, 1, 0),
+(92147, 30029, 0.5, 0, -30029, 1, 0),
+(92147, 30030, 0.01, 0, -30030, 1, 0),
+(92147, 30031, 0.5, 0, -30031, 1, 0),
+(92147, 30033, 0.5, 0, -30033, 1, 0),
+(92147, 30034, 0.01, 0, -30034, 1, 0),
+(92147, 30035, 0.0025, 0, -30035, 1, 0),
+(92147, 81013, -40, 7, 1, 1, 0),
+(92147, 60339,-35,1,1,1,0);
+
+delete from creature_loot_template where entry = 92146;
+replace into creature_loot_template values
+(92146, 1529, 0.02, 0, 1, 1, 0),
+(92146, 1645, 0.02, 0, 1, 1, 0),
+(92146, 1685, 0.02, 0, 1, 1, 0),
+(92146, 1708, 0.02, 0, 1, 1, 0),
+(92146, 1711, 0.02, 0, 1, 1, 0),
+(92146, 1725, 0.02, 0, 1, 1, 0),
+(92146, 2290, 0.02, 0, 1, 1, 0),
+(92146, 2772, 0.02, 0, 1, 1, 0),
+(92146, 2838, 0.02, 0, 1, 1, 0),
+(92146, 3010, 15.1718, 0, 1, 1, 0),
+(92146, 3357, 0.02, 0, 1, 1, 0),
+(92146, 3771, 0.02, 0, 1, 1, 0),
+(92146, 3827, 0.02, 0, 1, 1, 0),
+(92146, 3832, 0.02, 0, 1, 1, 0),
+(92146, 3858, 0.06, 0, 1, 1, 0),
+(92146, 3864, 0.0892, 0, 1, 1, 0),
+(92146, 3867, 0.02, 0, 1, 1, 0),
+(92146, 3868, 0.02, 0, 1, 1, 0),
+(92146, 3914, 0.02, 0, 1, 1, 0),
+(92146, 3927, 0.02, 0, 1, 1, 0),
+(92146, 4100, 0.02, 0, 1, 1, 0),
+(92146, 4101, 0.02, 0, 1, 1, 0),
+(92146, 4102, 0.04, 0, 1, 1, 0),
+(92146, 4544, 0.02, 0, 1, 1, 0),
+(92146, 4601, 0.02, 0, 1, 1, 0),
+(92146, 4602, 0.02, 0, 1, 1, 0),
+(92146, 4636, 0.1339, 0, 1, 1, 0),
+(92146, 4637, 0.12, 0, 1, 1, 0),
+(92146, 5498, 0.02, 0, 1, 1, 0),
+(92146, 5500, 0.02, 0, 1, 1, 0),
+(92146, 5569, 35.8768, 0, 1, 1, 0),
+(92146, 5774, 0.02, 0, 1, 1, 0),
+(92146, 5974, 0.02, 0, 1, 1, 0),
+(92146, 7084, 0.02, 0, 1, 1, 0),
+(92146, 7090, 0.02, 0, 1, 1, 0),
+(92146, 7909, 0.16, 0, 1, 1, 0),
+(92146, 7910, 0.06, 0, 1, 1, 0),
+(92146, 7912, 0.02, 0, 1, 1, 0),
+(92146, 7971, 0.04, 0, 1, 1, 0),
+(92146, 7973, 35.8768, 0, 1, 1, 0),
+(92146, 7992, 0.02, 0, 1, 1, 0),
+(92146, 8364, 0.02, 0, 1, 1, 0),
+(92146, 8386, 0.02, 0, 1, 1, 0),
+(92146, 8831, 0.02, 0, 1, 1, 0),
+(92146, 10300, 0.02, 0, 1, 1, 0),
+(92146, 10301, 0.02, 0, 1, 1, 0),
+(92146, 10315, 0.02, 0, 1, 1, 0),
+(92146, 10603, 0.02, 0, 1, 1, 0),
+(92146, 10605, 0.02, 0, 1, 1, 0),
+(92146, 10606, 0.02, 0, 1, 1, 0),
+(92146, 11202, 0.02, 0, 1, 1, 0),
+(92146, 12206, 36.0107, 0, 1, 1, 0),
+(92146, 13926, 0.02, 0, 1, 1, 0),
+(92146, 17057, 36.9032, 0, 1, 1, 0),
+(92146, 30025, 0.5, 0, -30025, 1, 0),
+(92146, 30026, 0.01, 0, -30026, 1, 0),
+(92146, 30027, 0.5, 0, -30027, 1, 0),
+(92146, 30028, 0.01, 0, -30028, 1, 0),
+(92146, 30029, 0.5, 0, -30029, 1, 0),
+(92146, 30030, 0.01, 0, -30030, 1, 0),
+(92146, 30031, 0.5, 0, -30031, 1, 0),
+(92146, 30033, 0.5, 0, -30033, 1, 0),
+(92146, 30034, 0.01, 0, -30034, 1, 0),
+(92146, 30035, 0.0025, 0, -30035, 1, 0),
+(92146, 81013, -40, 7, 1, 1, 0),
+(92146, 60339,-30,1,1,1,0);
+
+delete from creature_loot_template where entry = 91962;
+replace into creature_loot_template values
+(91962, 770, 54.413, 0, 1, 3, 0),
+(91962, 3914, 0.097, 0, 1, 1, 0),
+(91962, 4637, 0.291, 0, 1, 1, 0),
+(91962, 7909, 0.097, 0, 1, 1, 0),
+(91962, 7910, 0.097, 0, 1, 1, 0),
+(91962, 30025, 0.5, 0, -30025, 1, 0),
+(91962, 30029, 0.5, 0, -30029, 1, 0),
+(91962, 30049, 0.5, 0, -30049, 1, 0),
+(91962, 30072, 0.5, 0, -30072, 1, 0),
+(91962, 60340,-20,1,1,1,0);
