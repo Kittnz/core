@@ -587,3 +587,15 @@ replace into creature_loot_template values
 (91962, 30049, 0.5, 0, -30049, 1, 0),
 (91962, 30072, 0.5, 0, -30072, 1, 0),
 (91962, 60340,-20,1,1,1,0);
+
+-- The Maul'ogg Crisis III --
+delete from quest_template where entry = 40266;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40265,40266,2,408,53,45,0,0,'The Maul\'ogg Crisis III','I have seen, a great many things, a great darkness that has enveloped not just this island, but all around us. My people did the bidding of a greater power, and followed it into the darkness willingly. We were nothing more then pawns until our demise.\n\nI did, however, see more then just misery, I saw the Seer of the Gor\'dosh ogres, a once old friend of mine. Perhaps it is he that can offer some wisdom, or suggestion on how to continue, maybe it is he, who has the answers.\n\nSeer Bol\'ukk resides within the Gor\'dosh Heights amongst the rest of his tribe, you should find him on Lapidis Isle far to the north, the Gor\'dosh Heights rest at its north western side.','Speak with Seer Bol\'ukk at the Gor\'dosh Heights, and return to Haz\'gorg the Great Seer with information.','Have you spoken with Seer Bol\'ukk?','A bold plan he has come up with, I would not have suspected Bol\'ukk to speak such words. But perhaps there is no other option, I will begin to work on an elixir.',0,0,0,0,0,0,0,0,60338,1,0,0,0,0,0,0,0,0,0,4800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak with Bol\'ukk');
+
+replace into creature_questrelation (id, quest) values (92184, 40266);
+replace into creature_involvedrelation (id, quest) values (92184, 40266);
+
+update creature_template set script_name = 'npc_seer_bolukk' where entry = 91854;
+
+delete from creature_template where entry = 60338;
+replace into creature_template (entry, name, display_id1) values (60338, 'quest_40266_dummy_triger', 328);
