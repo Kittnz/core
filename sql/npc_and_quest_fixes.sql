@@ -655,3 +655,14 @@ replace into gameobject_template values
 delete from gameobject_loot_template where entry = 2010853;
 replace into gameobject_loot_template values 
 (2010853,60344,-100,0,1,1,0);
+
+-- The Maul'ogg Crisis VIII --
+delete from quest_template where entry = 40271;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40270,40271,2,408,54,45,0,0,'The Maul\'ogg Crisis VIII','With the elements recovered, and the Atal\'ai Rod in posession, I can now begin to manifest my energies into the creation of an elixir. This elixir will bring the mind of Lord Cruk\'Zogg into the hands of Haz\'gorg to do as he pleases.\n\nThis will require some concentration on my part, so I do ask you mortal, to keep your mouth quiet while I work.','Wait for Insom\'ni to finish his magic, then return to Haz\'gorg the Great Seer.','Yes?','',60345,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60446, 40271);
+replace into creature_involvedrelation (id, quest) values (92184, 40271);
+
+delete from item_template where entry = 60345;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60345,21531,'The Elixir of Insom\'ni',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);

@@ -1463,6 +1463,35 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             });
     }
 
+    if (pQuest->GetQuestId() == 40271) // The Maul'ogg Crisis VIII --
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 13236, false);
+
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->CastSpell(npc, 5906, false);
+            });
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            player->AddItem(60345);
+            if (player->HasItemCount(60345, 1, false))
+            {
+                npc->MonsterSayToPlayer("I must confess something to you mortal, for I am not one to withhold information, nor am I one to outwardly lie without purpose. I had many reasonings for the death of the Prophet Jammal'an within the depths of the Sunken Temple.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                return true;
+            }
+            else
+                player->RemoveQuest(40271);
+            player->SetQuestStatus(40271, QUEST_STATUS_NONE);
+            player->GetSession()->SendNotification("Your bags are full!");
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            return false;
+            });
+    }
+
     if (pQuest->GetQuestId() == 40214) // Uncovering Evil
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
