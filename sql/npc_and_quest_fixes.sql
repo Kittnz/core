@@ -399,7 +399,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (92184, 40265);
 replace into creature_involvedrelation (id, quest) values (92184, 40265);
 
-delete from item_template where entry between 60338 and 60340;
+delete from item_template where entry between 60340 and 60342;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60341,7986,'Basilisk Eye',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0),
 (60342,2627,'Crawler Pincer',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0),
@@ -587,10 +587,3 @@ replace into creature_loot_template values
 (91962, 30049, 0.5, 0, -30049, 1, 0),
 (91962, 30072, 0.5, 0, -30072, 1, 0),
 (91962, 60340,-20,1,1,1,0);
-
--- The Maul'ogg Crisis III --
-delete from quest_template where entry = 40266;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40264,40265,2,408,53,45,0,0,'The Maul\'ogg Crisis III','If there is to be a chance for my people then I must conjure a great vision, to do as such will require materials from across the island. I ask of you to gather me the following items. 10 Basilisk Eye\'s from the Basilisks, 6 Crawler Pincers from the Crawlers, and 3 Deepsnap Tails from the crocolisks.\n\n Once you have gotten these materials for me, I can begin to see what must be done.','Gather 10 Basilisk Eyes, 6 Crawler Pincers and 3 Deepsnap Tails for Haz\'gorg the Great Seer in Maul\'ogg Refuge.','Have you had the opportunity to collect what it is I asked?','I see a great future in you, you have done well, now, let us begin.',60338,10,60339,6,60340,3,0,0,0,0,0,0,0,0,0,0,0,0,0,4800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
-
-replace into creature_questrelation (id, quest) values (92184, 40265);
-replace into creature_involvedrelation (id, quest) values (92184, 40265);
