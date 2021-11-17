@@ -658,7 +658,7 @@ replace into gameobject_loot_template values
 
 -- The Maul'ogg Crisis VIII --
 delete from quest_template where entry = 40271;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40270,40271,2,408,54,45,0,0,'The Maul\'ogg Crisis VIII','With the elements recovered, and the Atal\'ai Rod in posession, I can now begin to manifest my energies into the creation of an elixir. This elixir will bring the mind of Lord Cruk\'Zogg into the hands of Haz\'gorg to do as he pleases.\n\nThis will require some concentration on my part, so I do ask you mortal, to keep your mouth quiet while I work.','Wait for Insom\'ni to finish his magic, then return to Haz\'gorg the Great Seer.','Yes?','',60345,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40270,40271,2,408,54,45,0,0,'The Maul\'ogg Crisis VIII','With the elements recovered, and the Atal\'ai Rod in posession, I can now begin to manifest my energies into the creation of an elixir. This elixir will bring the mind of Lord Cruk\'Zogg into the hands of Haz\'gorg to do as he pleases.\n\nThis will require some concentration on my part, so I do ask you mortal, to keep your mouth quiet while I work.','Wait for Insom\'ni to finish his magic, then return to Haz\'gorg the Great Seer.','Yes?','',60345,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60346,1,60347,1,60348,1,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (60446, 40271);
 replace into creature_involvedrelation (id, quest) values (92184, 40271);
@@ -666,3 +666,43 @@ replace into creature_involvedrelation (id, quest) values (92184, 40271);
 delete from item_template where entry = 60345;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60345,21531,'The Elixir of Insom\'ni',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The Maul'ogg Crisis IX --
+delete from quest_template where entry = 40272;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40271,40272,2,408,54,45,0,0,'The Maul\'ogg Crisis IX','It would appear the time has come, you have done extremely well in everything I have asked, but now I must ask you to do what is required for the good of my people. Long have we suffered, not at the hands of our enemies, but at the hands of our leadership.\n\nIf there is to be a future for the Maul\'ogg then it must be a future of reasoning, we cannot secure ourselves a place within the Horde if we are constantly engaged in self destructive warfare.\n\nBring the Elixir of Insom\'ni to Lord Cruk\'zogg, inform him that it is a potion of great power that I created for him. When all is done, return to me.','Give the Elixir of Insom\'ni to Lord Cruk\'zogg to sway his mind, and then return to Haz\'gorg the Great Seer in Maul\'ogg Refuge.','Is it done?','<Haz\'gorg would let out a great sigh of relief> What has been done here today cannot be celebrated with great enthusiasm, we have done but a small evil for the good of the Maul\'ogg. Unknowingly, my kind will be thankful for your efforts, even if they do not know anything has transpired. I ask of you to keep your silence, and for your assistance, I offer you a gift from my kind.',0,0,0,0,0,0,0,0,60339,1,0,0,0,0,0,0,60345,1,0,6150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Lord Cruk\'zogg drank Elixir of Insom\'ni');
+
+replace into creature_questrelation (id, quest) values (92184, 40272);
+replace into creature_involvedrelation (id, quest) values (92184, 40272);
+
+delete from creature_template where entry = 60339;
+replace into creature_template (entry, name, display_id1) values (60339, 'quest_40272_dummy_triger', 328);
+
+replace into item_template values
+ ('60346', '4', '2', 'The Ogre Mantle', '', '14696', '3', '0', '1', '70152', '17538', '3', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '19', '7', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '126', '0', '0', '0',
+ '0', '0', '0', '9139', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '60', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60347', '2', '10', 'Staff of the Ogre Seer', '', '5540', '3', '0', '1', '231588', '57897', '17', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '21', '6', '21',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '0',
+ '0', '130', '168', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '100', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60348', '4', '0', 'Favor of Cruk\'Zogg', '', '9658', '3', '0', '1', '98936', '24734', '2', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '7', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '13384', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
