@@ -613,3 +613,24 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60446, 40268);
 replace into creature_involvedrelation (id, quest) values (60446, 40268);
+
+-- The Maul'ogg Crisis VI --
+delete from quest_template where entry = 40269;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40268,40269,2,408,53,45,0,0,'The Maul\'ogg Crisis VI','To create a spell of such magnitude will require a few items, the first of which shall be relatively easy to obtain. I require a Gorilla Ligment from Un\'goro Crater, its essence of power will be used to conduct the sheer strength of the spell and channel its abilities onto Lord Cruk\'Zogg.\n\nYou can find Un\'goro Crater deep within Kalimdor, it is a place of danger, so I would watch your step mortal. Return to me with a Gorilla Ligment from the apes there.','Obtain a Gorilla Ligment from Un\'goro Crater and return to Insom\'ni on Kazon Island.','Why are you here, you should be searching for a Ligment.','<Insom\'ni would inspect the Ligment curiously, and nod his head>. This shall do just fine.',60343,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60446, 40269);
+replace into creature_involvedrelation (id, quest) values (60446, 40269);
+
+delete from item_template where entry = 60343;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60343,25467,'Gorilla Ligment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60343 and entry between 6513 and 6516;
+delete from creature_loot_template where item = 60343 and entry = 9622 ;
+delete from creature_loot_template where item = 60343 and entry = 6585 ;
+replace into creature_loot_template values
+(6513, 60343,-10,1,1,1,0),
+(6514, 60343,-12,1,1,1,0),
+(6516, 60343,-15,1,1,1,0),
+(9622, 60343,-20,1,1,1,0),
+(6585, 60343,-20,1,1,1,0);
