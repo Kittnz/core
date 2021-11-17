@@ -351,7 +351,7 @@ struct mob_buru_eggAI : public ScriptedAI
             const float damageFactor = 1.0f - (distance / 25.f);
             if (pBuru->IsAlive() && distance < 5.f && pBuru->GetHealthPercent() > 20.f)
             {
-                pBuru->SetHealthPercent(pBuru->GetHealthPercent() - 10.f * damageFactor);
+                //pBuru->SetHealthPercent(pBuru->GetHealthPercent() - 10.f * damageFactor);
                 static_cast<boss_buruAI*>(pBuru->AI())->OnEggExploded();
             }
         }
