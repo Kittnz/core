@@ -291,6 +291,9 @@ class Item : public Object
         bool IsTargetValidForItemUse(Unit* pUnitTarget);
         bool IsLimitedToAnotherMapOrZone(uint32 cur_mapId, uint32 cur_zoneId) const;
 
+        Bag* ToBag() { if (IsBag()) return reinterpret_cast<Bag*>(this); return nullptr; }
+        const Bag* ToBag() const { if (IsBag()) return reinterpret_cast<const Bag*>(this); return nullptr; }
+
         uint32 GetCount() const { return GetUInt32Value (ITEM_FIELD_STACK_COUNT); }
         void SetCount(uint32 value) { SetUInt32Value (ITEM_FIELD_STACK_COUNT, value); }
         uint32 GetMaxStackCount() const { return GetProto()->GetMaxStackSize(); }
