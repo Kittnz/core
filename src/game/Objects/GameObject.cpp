@@ -251,34 +251,33 @@ bool GameObject::Create(uint32 guidlow, uint32 name_id, Map *map, float x, float
 class HunterTrapTargetSelectorCheck
 {
 public:
-    HunterTrapTargetSelectorCheck(GameObject const* obj, Unit const* funit, float range) : i_trap(obj), i_trapOwner(funit), i_range(range) {}
+    HunterTrapTargetSelectorCheck(GameObject const* pTrap, Unit const* pOwner, const float range) : i_trap(pTrap), i_trapOwner(pOwner), i_range(range) {}
     WorldObject const& GetFocusObject() const
     {
         return *i_trap;
     }
-    bool operator()(Unit* u)
+    bool operator()(Unit* pTarget)
     {
-        if (!i_trap->CanSeeInWorld(u))
+        if (!i_trap->CanSeeInWorld(pTarget))
             return false;
 
-        if (i_trapOwner->IsPlayer() && u->IsPlayer())
+        // don't trigger on enemy player if our owner is not flagged for pvp
+        if (Player const* pOwnerPlayer = i_trapOwner->ToPlayer())
         {
-            const Player* trapOwnerPlayer = i_trapOwner->ToPlayer();
-            const Player* targetPlayer = u->ToPlayer();
-            bool bothPvP = trapOwnerPlayer->IsPvP() && targetPlayer->IsPvP();
-            bool bothFFA = trapOwnerPlayer->IsFFAPvP() && targetPlayer->IsFFAPvP();
-
-            if(!bothPvP && !bothFFA && !trapOwnerPlayer->IsInDuelWith(targetPlayer))
-                return false;
+            if (Player const* pTargetPlayer = pTarget->GetCharmerOrOwnerPlayerOrPlayerItself())
+            {
+                if (!pOwnerPlayer->IsPvP() && !(pOwnerPlayer->IsFFAPvP() && pTargetPlayer->IsFFAPvP()) && !pOwnerPlayer->IsInDuelWith(pTargetPlayer))
+                    return false;
+            }
         }
 
-        bool _isTotem = u->GetTypeId() == TYPEID_UNIT && ((Creature*)u)->IsTotem();
-        if (u->IsAlive() && i_trap->IsWithinDistInMap(u, _isTotem ? i_range / 3.0f : i_range) && i_trapOwner->IsValidAttackTarget(u) &&
-            (u->IsInCombat() || i_trapOwner->IsHostileTo(u)))
+        const bool isTotem = pTarget->IsCreature() && ((Creature*)pTarget)->IsTotem();
+        if (i_trap->IsWithinDistInMap(pTarget, isTotem ? i_range / 3.0f : i_range) && i_trapOwner->IsValidAttackTarget(pTarget) && (pTarget->IsInCombat() || i_trapOwner->IsHostileTo(pTarget)))
         {
-            i_range = i_trap->GetDistance(u);
+            i_range = i_trap->GetDistance(pTarget);
             return true;
         }
+
         return false;
     }
 private:
