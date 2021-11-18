@@ -98,7 +98,7 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
                 if (i.event_flags & EFLAG_DEBUG_ONLY)
                     continue;
 #endif
-                m_CreatureEventAIList.push_back(CreatureEventAIHolder(i));
+                m_CreatureEventAIList.emplace_back(CreatureEventAIHolder(i));
             }
         }
     }

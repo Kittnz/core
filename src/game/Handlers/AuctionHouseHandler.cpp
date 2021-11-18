@@ -93,9 +93,9 @@ void WorldSession::SendAuctionCommandResult(AuctionEntry *auc, AuctionAction Act
             data << uint32(invError);
             break;
         case AUCTION_ERR_HIGHER_BID:
-            data << ObjectGuid(HIGHGUID_PLAYER, auc->bidder); // new bidder guid
-            data << uint32(auc->bid);                       // new bid
-            data << uint32(auc->GetAuctionOutBid());        // new AuctionOutBid?
+            data << ObjectGuid(HIGHGUID_PLAYER, auc ? auc->bidder : 0); // new bidder guid
+            data << uint32(auc ? auc->bid : 0);                       // new bid
+            data << uint32(auc ? auc->GetAuctionOutBid() : 0);        // new AuctionOutBid?
             break;
         default:
             break;
@@ -388,7 +388,7 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     AH->bidder = 0;
     AH->bid = 0;
     AH->buyout = buyout;
-    AH->lockedIpAddress = GetRemoteAddress().c_str();
+    AH->lockedIpAddress = GetRemoteAddress();
     AH->depositTime = time(nullptr);
     AH->expireTime = time(nullptr) + auction_time;
     AH->deposit = deposit;

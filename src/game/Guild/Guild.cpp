@@ -660,7 +660,7 @@ void Guild::CreateRank(std::string name_, uint32 rights)
 
 void Guild::AddRank(std::string const& name_, uint32 rights)
 {
-    m_Ranks.push_back(RankInfo(name_, rights));
+    m_Ranks.emplace_back(RankInfo(name_, rights));
 }
 
 void Guild::DelRank()

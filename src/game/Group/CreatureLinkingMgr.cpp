@@ -351,7 +351,7 @@ void CreatureLinkingHolder::AddSlaveToHolder(Creature* pCreature)
         tmp.linkedGuids.push_back(pCreature->GetObjectGuid());
         tmp.linkingFlag = pInfo->linkingFlag;
         tmp.searchRange = pInfo->searchRange;
-        m_holderMap.insert(HolderMap::value_type(pInfo->masterId, tmp));
+        m_holderMap.emplace(HolderMap::value_type(pInfo->masterId, tmp));
     }
 }
 
@@ -371,7 +371,7 @@ void CreatureLinkingHolder::AddMasterToHolder(Creature* pCreature)
         if (itr->second == pCreature->GetObjectGuid())
             return;                                         // Already added
 
-    m_masterGuid.insert(BossGuidMap::value_type(pCreature->GetEntry(), pCreature->GetObjectGuid()));
+    m_masterGuid.emplace(BossGuidMap::value_type(pCreature->GetEntry(), pCreature->GetObjectGuid()));
 }
 
 // Function to process actions for linked NPCs
