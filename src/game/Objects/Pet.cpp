@@ -1317,9 +1317,9 @@ bool Pet::CreateBaseAtCreature(Creature* creature)
     return true;
 }
 
-bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
+bool Pet::InitStatsForLevel(const uint32 petlevel, Unit* owner)
 {
-    CreatureInfo const *cinfo = GetCreatureInfo();
+    CreatureInfo const* cinfo = GetCreatureInfo();
     MANGOS_ASSERT(cinfo);
 
     if (!owner)
@@ -1332,14 +1332,17 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
         }
     }
 
-    uint32 creature_ID = (getPetType() == HUNTER_PET) ? 1 : cinfo->entry;
+    const uint32 creature_ID = (getPetType() == HUNTER_PET) ? 1 : cinfo->entry;
 
     switch (getPetType())
     {
         case SUMMON_PET:
+        {
             SetUInt32Value(UNIT_FIELD_FLAGS, UNIT_FLAG_NONE);
             break;
+        }
         case HUNTER_PET:
+        {
             SetByteValue(UNIT_FIELD_BYTES_0, 1, CLASS_WARRIOR);
             SetByteValue(UNIT_FIELD_BYTES_0, 2, GENDER_NONE);
             SetSheath(SHEATH_STATE_MELEE);
@@ -1348,6 +1351,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
             // this enables popup window (pet abandon, cancel), original value set in CreateBaseAtCreature
             SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PET_ABANDON);
             break;
+        }
         case GUARDIAN_PET:
         default:
             break;
@@ -1356,12 +1360,11 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
     SetLevel(petlevel);
     SetMeleeDamageSchool(SPELL_SCHOOL_NORMAL);
     SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(petlevel * 50));
-
-    // Nostalrius: pre-2.0: normalisation de la vitesse d'attaque des pets.
-    SetAttackTime(BASE_ATTACK, cinfo->base_attack_time); //BASE_ATTACK_TIME);
-    SetAttackTime(OFF_ATTACK, cinfo->base_attack_time); //BASE_ATTACK_TIME);
-    SetAttackTime(RANGED_ATTACK, cinfo->ranged_attack_time); //BASE_ATTACK_TIME);
+    SetAttackTime(BASE_ATTACK, cinfo->base_attack_time);
+    SetAttackTime(OFF_ATTACK, cinfo->base_attack_time);
+    SetAttackTime(RANGED_ATTACK, cinfo->ranged_attack_time);
     SetFloatValue(UNIT_MOD_CAST_SPEED, 1.0f);
+
     CreatureFamilyEntry const* cFamily = sCreatureFamilyStore.LookupEntry(cinfo->beast_family);
     if (cFamily && cFamily->minScale > 0.0f && getPetType() == HUNTER_PET)
     {
@@ -1376,13 +1379,24 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
         SetObjectScale(scale);
         UpdateModelData();
     }
+
     m_bonusdamage = 0;
+
+    if (getPetType() != HUNTER_PET)
+    {
+        SetCreateResistance(SPELL_SCHOOL_HOLY, cinfo->holy_res);
+        SetCreateResistance(SPELL_SCHOOL_FIRE, cinfo->fire_res);
+        SetCreateResistance(SPELL_SCHOOL_NATURE, cinfo->nature_res);
+        SetCreateResistance(SPELL_SCHOOL_FROST, cinfo->frost_res);
+        SetCreateResistance(SPELL_SCHOOL_SHADOW, cinfo->shadow_res);
+        SetCreateResistance(SPELL_SCHOOL_ARCANE, cinfo->arcane_res);
+    }
+
+    const float healthMod = owner->IsPlayer() ? 1.0f : _GetHealthMod(cinfo->rank);
+    const float damageMod = owner->IsPlayer() ? 1.0f : _GetDamageMod(cinfo->rank);
 
     switch (getPetType())
     {
-        const float healthMod = owner->IsPlayer() ? 1.0f : _GetHealthMod(cinfo->rank);
-        const float damageMod = owner->IsPlayer() ? 1.0f : _GetDamageMod(cinfo->rank);
-
         case SUMMON_PET:
         {
             // Formulas reviewed by Clank <Nostalrius>, from vanilla hunter pet tab screenshots.
@@ -1403,8 +1417,6 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
             }
             else // not exist in DB, use some default fake data
             {
-                // Erreur qui se declanche quand un mob invoque un add (squelette par exemple), et qui n'a
-                // donc pas de stats de pet.
                 DEBUG_LOG("Summoned pet (Entry: %u) not have pet stats data in DB", cinfo->entry);
 
                 // remove elite bonuses included in DB values
@@ -1424,8 +1436,8 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
         {
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr.GetXPForPetLevel(petlevel));
             // Formulas reviewed by Clank <Nostalrius>, from vanilla pet tab screenshots.
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(damageMod* (petlevel * 1.15 * 1.05)* (float)GetAttackTime(BASE_ATTACK) / 2000));
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(damageMod* (petlevel * 1.45 * 1.05)* (float)GetAttackTime(BASE_ATTACK) / 2000));
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(damageMod * (petlevel * 1.15 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(damageMod * (petlevel * 1.45 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
 
             //stored standard pet stats are entry 1 in pet_levelinfo
             PetLevelInfo const* pInfo = sObjectMgr.GetPetLevelInfo(creature_ID, petlevel);
@@ -1433,17 +1445,16 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
             {
                 SetCreateHealth(pInfo->health * healthMod);
                 SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor));
-                //SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, float(cinfo->attack_power));
 
                 for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
-                    SetCreateStat(Stats(i),  float(pInfo->stats[i]));
+                    SetCreateStat(Stats(i), float(pInfo->stats[i]));
             }
             else // not exist in DB, use some default fake data
             {
                 sLog.outErrorDb("Hunter pet levelstats missing in DB");
 
                 // remove elite bonuses included in DB values
-                SetCreateHealth(uint32(((float(cinfo->health_max) / cinfo->level_max) / (1 + 2 * cinfo->rank))* petlevel* healthMod));
+                SetCreateHealth(uint32(((float(cinfo->health_max) / cinfo->level_max) / (1 + 2 * cinfo->rank)) * petlevel * healthMod));
 
                 SetCreateStat(STAT_STRENGTH, 22);
                 SetCreateStat(STAT_AGILITY, 22);
@@ -1495,6 +1506,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
 
     return true;
 }
+
 
 bool Pet::HaveInDiet(ItemPrototype const* item) const
 {
