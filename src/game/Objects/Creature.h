@@ -85,13 +85,14 @@ enum CreatureFlagsExtra
 #pragma pack(push,1)
 #endif
 
-#define MAX_DISPLAY_IDS_PER_CREATURE 4                                // only single send to client in static data
-#define CREATURE_FLEE_TEXT 1150
+constexpr uint32 MAX_DISPLAY_IDS_PER_CREATURE = 4; // only single send to client in static data
+constexpr uint32 CREATURE_FLEE_TEXT = 1150;
+constexpr uint32 NPC_MOVEMENT_PAUSE_TIME = 180000;
 
-#define SPEED_REDUCTION_NONE   1.0f
-#define SPEED_REDUCTION_HP_15  0.7f
-#define SPEED_REDUCTION_HP_10  0.6f
-#define SPEED_REDUCTION_HP_5   0.5f
+constexpr float SPEED_REDUCTION_NONE = 1.0f;
+constexpr float SPEED_REDUCTION_HP_15 = 0.7f;
+constexpr float SPEED_REDUCTION_HP_10 = 0.6f;
+constexpr float SPEED_REDUCTION_HP_5 = 0.5f;
 
 // from `creature_template` table
 struct CreatureInfo
@@ -759,6 +760,7 @@ class Creature : public Unit
 
         MovementGeneratorType GetDefaultMovementType() const { return m_defaultMovementType; }
         void SetDefaultMovementType(MovementGeneratorType mgt) { m_defaultMovementType = mgt; }
+        void PauseOutOfCombatMovement();
 
         // for use only in LoadHelper, Map::Add Map::CreatureCellRelocation
         Cell const& GetCurrentCell() const { return m_currentCell; }
