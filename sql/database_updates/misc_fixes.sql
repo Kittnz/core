@@ -9,3 +9,8 @@ INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalo
 -- Correct auras used by Syndicate Highwayman.
 DELETE FROM `creature_addon` WHERE `guid` IN (SELECT `guid` FROM `creature` WHERE `id`=2586);
 UPDATE `creature_template` SET `auras`='7939 22766' WHERE `entry`=2586;
+
+-- Remove PvP flag from some mobs that shouldn't have it.
+UPDATE `creature_template` SET `flags_extra`= `flags_extra` - 524288 WHERE (`flags_extra` & 524288) && `entry` IN (3024, 3454, 3455, 10618, 10619, 10919, 11196, 11198, 11806, 11835, 14622, 15177, 16241, 16285, 16781, 17635, 17647);
+UPDATE `creature_template` SET `flags_extra`= `flags_extra` - 8 WHERE (`flags_extra` & 8) && `entry` IN (3024, 3454, 3455, 10618, 10619, 10919, 11196, 11198, 11806, 11835, 14622, 15177, 16241, 16285, 16781, 17635, 17647);
+
