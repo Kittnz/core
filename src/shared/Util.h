@@ -19,8 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef _UTIL_H
-#define _UTIL_H
+#pragma once
 
 #include "Common.h"
 #include "Duration.h"
@@ -438,4 +437,4 @@ void hexEncodeByteArray(uint8* bytes, uint32 arrayLen, std::string& result);
 std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = false);
 void HexStrToByteArray(std::string const& str, uint8* out, bool reverse = false);
 
-#endif
+uint32 dither(float v);
