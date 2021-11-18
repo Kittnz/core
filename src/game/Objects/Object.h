@@ -857,9 +857,6 @@ class WorldObject : public Object
         bool IsFacingTarget(WorldObject const* target) const;
 
         bool CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float flat_mod = 0.0f) const;
-        float GetLeewayBonusRange(Unit const* target, bool ability) const;
-        static float GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability);
-        float GetLeewayBonusRadius() const;
 
         // Gestion des positions
         void GetRelativePositions(float fForwardBackward, float fLeftRight, float fUpDown, float &x, float &y, float &z);

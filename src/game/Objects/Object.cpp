@@ -1553,39 +1553,6 @@ bool WorldObject::CanReachWithMeleeSpellAttack(WorldObject const* pVictim, float
     return dx * dx + dy * dy < reach * reach;
 }
 
-float WorldObject::GetLeewayBonusRangeForTargets(Player const* player, Unit const* target, bool ability)
-{
-    if (ability)
-        return (player->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
-
-    // auto attacks do not check speed, only flags
-    return (player->IsMovingButNotWalking() && target->IsMovingButNotWalking()) ? LEEWAY_BONUS_RANGE : 0.0f;
-}
-
-float WorldObject::GetLeewayBonusRange(Unit const* target, bool ability) const
-{
-    if (target && IsUnit())
-    {
-        if (Player const* pPlayer = ToPlayer())
-            return GetLeewayBonusRangeForTargets(pPlayer, target, ability);
-        else if (Player const* pPlayer = target->ToPlayer())
-            return GetLeewayBonusRangeForTargets(pPlayer, static_cast<Unit const*>(this), ability);
-    }
-
-    return 0.0f;
-}
-
-float WorldObject::GetLeewayBonusRadius() const
-{
-    if (Player const* pPlayer = ToPlayer())
-    {
-        if ((pPlayer->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) || pPlayer->m_movementInfo.HasMovementFlag(MOVEFLAG_JUMPING))
-            return LEEWAY_BONUS_RANGE;
-    }  
-
-    return 0.0f;
-}
-
 float WorldObject::GetAngle(WorldObject const* obj) const
 {
     if (!obj) return 0;

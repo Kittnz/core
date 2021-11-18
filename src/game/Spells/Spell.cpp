@@ -2002,7 +2002,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
         case TARGET_ENUM_UNITS_ENEMY_AOE_AT_SRC_LOC:
         case TARGET_ENUM_UNITS_PARTY_WITHIN_CASTER_RANGE:
         case TARGET_ENUM_UNITS_ENEMY_IN_CONE_24:
-            radius += m_caster->GetLeewayBonusRadius();
+            radius +=  GetAffectiveCaster() ? GetAffectiveCaster()->GetLeewayBonusRadius() : 0.0f;
             break;
         default:
             break;
@@ -7319,7 +7319,7 @@ SpellCastResult Spell::CheckRange(bool strict)
                         range_mod += modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_RANGE, base, this);
                     }
                 }
-
+                
                 // with additional 5 dist for non stricted case (some melee spells have delay in apply
                 return m_caster->CanReachWithMeleeSpellAttack(target, range_mod) ? SPELL_CAST_OK : SPELL_FAILED_OUT_OF_RANGE;
             }
@@ -7328,7 +7328,8 @@ SpellCastResult Spell::CheckRange(bool strict)
     }
 
     // Add up to ~5 yds "give" for non strict (landing) check and leeway bonus if both units are moving
-    float const range_mod = (strict ? (m_caster->IsPlayer() ? 1.25f : 0.0f) : (m_caster->IsPlayer() ? 6.25f : 2.25f)) + m_caster->GetLeewayBonusRange(target, true);
+    const float leeway = GetAffectiveCaster() ? GetAffectiveCaster()->GetLeewayBonusRange(target, true) : 0.0f;
+    float const range_mod = (strict ? (m_caster->IsPlayer() ? 1.25f : 0.0f) : (m_caster->IsPlayer() ? 6.25f : 2.25f)) + leeway;
 
     SpellRangeEntry const* srange = sSpellRangeStore.LookupEntry(m_spellInfo->rangeIndex);
     float max_range = GetSpellMaxRange(srange);
