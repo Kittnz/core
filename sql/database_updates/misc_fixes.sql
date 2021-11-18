@@ -6,3 +6,6 @@ INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_ty
 DELETE FROM `creature_ai_scripts` WHERE `id`=1308201;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (1308201, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8512, 0, 0, 0, 0, 0, 0, 0, 0, 'Milton Beats - Say Text');
 
+-- Correct auras used by Syndicate Highwayman.
+DELETE FROM `creature_addon` WHERE `guid` IN (SELECT `guid` FROM `creature` WHERE `id`=2586);
+UPDATE `creature_template` SET `auras`='7939 22766' WHERE `entry`=2586;
