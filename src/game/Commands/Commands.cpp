@@ -1803,8 +1803,6 @@ bool ChatHandler::HandleGuildRenameCommand(char* args)
     if (!currentName)
         return false;
 
-    std::string current(currentName);
-
     char* newName = ExtractQuotedArg(&args);
     if (!newName)
         return false;
@@ -4153,7 +4151,7 @@ bool ChatHandler::HandleInstanceGroupUnbindCommand(char* args)
     if (!*args)
         return false;
 
-    Player* player = player = GetSelectedPlayer();
+    Player* player = GetSelectedPlayer();
     if (!player || player->InBattleGround())
         return false;
 
@@ -4315,7 +4313,7 @@ bool ChatHandler::HandleSendItemsHelper(MailDraft& draft, char* args)
 
     // extract items
     typedef std::pair<uint32, uint32> ItemPair;
-    typedef std::list< ItemPair > ItemPairs;
+    typedef std::vector< ItemPair > ItemPairs;
     ItemPairs items;
 
     // get from tail next item str

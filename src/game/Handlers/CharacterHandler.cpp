@@ -590,7 +590,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         uint32 linecount = 0;
         std::string str_motd = sWorld.GetMotd();
         std::string::size_type pos, nextpos;
-        std::string motd;
 
         pos = 0;
         while ((nextpos = str_motd.find('@', pos)) != std::string::npos)

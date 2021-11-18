@@ -1492,8 +1492,8 @@ void Aura::TriggerSpell()
                 for (const auto& it : pList)
                 {
                     Player* pPlayer = it.getSource();
-                    if (pPlayer->GetGUID() == casterGUID) continue;
                     if (!pPlayer) continue;
+                    if (pPlayer->GetGUID() == casterGUID) continue;
                     if (pPlayer->IsDead()) continue;
                     // 2d distance should be good enough
                     if (pPlayer->HasAura(28084) && caster->GetDistance2d(pPlayer) < 13.0f) // 13.0f taken from dbc

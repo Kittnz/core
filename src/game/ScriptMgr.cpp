@@ -1831,7 +1831,7 @@ bool ScriptMgr::OnQuestRewardedByScript(Player* pPlayer, Quest const* pQuest)
 void ScriptMgr::RegisterQuestInstance(Script* pQuestScript, Player* pPlayer)
 {
     QuestInstance* pNewInstance = pQuestScript->GetQuestInstance(pPlayer->GetObjectGuid());
-    m_questInstancies.insert(std::pair < ObjectGuid, std::shared_ptr < QuestInstance > >(pPlayer->GetObjectGuid(), std::shared_ptr<QuestInstance>(pNewInstance)));
+    m_questInstancies.emplace(std::pair < ObjectGuid, std::shared_ptr < QuestInstance > >(pPlayer->GetObjectGuid(), std::shared_ptr<QuestInstance>(pNewInstance)));
     pNewInstance->OnQuestStarted();
 }
 

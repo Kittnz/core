@@ -105,8 +105,6 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
     // Player must not have ticket
     if (!ticket || ticket->IsClosed())
     {
-        std::string message;
-        std::string chatLog;
 
         uint8 ticketType;
         uint32 mapId;

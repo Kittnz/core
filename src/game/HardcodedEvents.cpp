@@ -591,13 +591,13 @@ ScourgeInvasionEvent::ScourgeInvasionEvent()
         winterspring.zoneId = 618;
         winterspring.remainingVar = VARIABLE_SI_WINTERSPRING_REMAINING;
         InvasionNecropolis winterspring_south(6239.81f, -4686.73f, 836.33f, 4.54077f);
-        winterspring_south.shards.push_back(InvasionXYZ(6103.85f, -4866.65f, 751.32f));
+        winterspring_south.shards.emplace_back(InvasionXYZ(6103.85f, -4866.65f, 751.32f));
 
         InvasionNecropolis winterspring_west(6556.0f, -3543.0f, 802.0f, 4.98462f);
-        winterspring_west.shards.push_back(InvasionXYZ(6713.51f, -3469.41f, 677.56f));
+        winterspring_west.shards.emplace_back(InvasionXYZ(6713.51f, -3469.41f, 677.56f));
 
         InvasionNecropolis winterspring_north(7719.0f, -3986.0f, 800.0f, 0.418224f);
-        winterspring_north.shards.push_back(InvasionXYZ(7923.70f, -3876.93f, 695.59f));
+        winterspring_north.shards.emplace_back(InvasionXYZ(7923.70f, -3876.93f, 695.59f));
 
         winterspring.points.push_back(winterspring_south);
         winterspring.points.push_back(winterspring_west);
@@ -610,19 +610,19 @@ ScourgeInvasionEvent::ScourgeInvasionEvent()
         tanaris.zoneId = 440;
         tanaris.remainingVar = VARIABLE_SI_TANARIS_REMAINING;
         InvasionNecropolis tanaris_north(-7340.0f, -3650.0f, 80.0f, 1.06578f);
-        tanaris_north.shards.push_back(InvasionXYZ(-7303.60f, -3955.87f, 11.22f));
-        tanaris_north.shards.push_back(InvasionXYZ(-7433.11f, -3775.77f, 11.00f));
-        tanaris_north.shards.push_back(InvasionXYZ(-7256.72f, -3560.59f, 11.01f));
+        tanaris_north.shards.emplace_back(InvasionXYZ(-7303.60f, -3955.87f, 11.22f));
+        tanaris_north.shards.emplace_back(InvasionXYZ(-7433.11f, -3775.77f, 11.00f));
+        tanaris_north.shards.emplace_back(InvasionXYZ(-7256.72f, -3560.59f, 11.01f));
 
         InvasionNecropolis tanaris_se(-8371.75f, -3905.45f, 89.935f, 2.56196f);
-        tanaris_se.shards.push_back(InvasionXYZ(-8221.29f, -3856.80f, 12.70f));
-        tanaris_se.shards.push_back(InvasionXYZ(-8490.22f, -3978.88f, 22.50f));
-        tanaris_se.shards.push_back(InvasionXYZ(-8337.22f, -4042.02f, 9.60f));
+        tanaris_se.shards.emplace_back(InvasionXYZ(-8221.29f, -3856.80f, 12.70f));
+        tanaris_se.shards.emplace_back(InvasionXYZ(-8490.22f, -3978.88f, 22.50f));
+        tanaris_se.shards.emplace_back(InvasionXYZ(-8337.22f, -4042.02f, 9.60f));
 
         InvasionNecropolis tanaris_sw(-8634.0f, -2457.0f, 110.0f, 3.98353f);
-        tanaris_sw.shards.push_back(InvasionXYZ(-8804.99f, -2568.08f, 12.13f));
-        tanaris_sw.shards.push_back(InvasionXYZ(-8434.97f, -2308.05f, 22.07f));
-        tanaris_sw.shards.push_back(InvasionXYZ(-8503.57f, -2652.94f, 35.16f));
+        tanaris_sw.shards.emplace_back(InvasionXYZ(-8804.99f, -2568.08f, 12.13f));
+        tanaris_sw.shards.emplace_back(InvasionXYZ(-8434.97f, -2308.05f, 22.07f));
+        tanaris_sw.shards.emplace_back(InvasionXYZ(-8503.57f, -2652.94f, 35.16f));
         
         tanaris.points.push_back(tanaris_north);
         tanaris.points.push_back(tanaris_se);
@@ -635,12 +635,12 @@ ScourgeInvasionEvent::ScourgeInvasionEvent()
         azshara.zoneId = 16;
         azshara.remainingVar = VARIABLE_SI_AZSHARA_REMAINING;
         InvasionNecropolis azshara_west(3312.67f, -4222.19f, 189.273f, 4.46068f);
-        azshara_west.shards.push_back(InvasionXYZ(3301.32f, -4412.29f, 106.27f));
-        azshara_west.shards.push_back(InvasionXYZ(3597.53f, -4130.86f, 103.94f));
-        azshara_west.shards.push_back(InvasionXYZ(3012.86f, -4129.63f, 101.63f));
+        azshara_west.shards.emplace_back(InvasionXYZ(3301.32f, -4412.29f, 106.27f));
+        azshara_west.shards.emplace_back(InvasionXYZ(3597.53f, -4130.86f, 103.94f));
+        azshara_west.shards.emplace_back(InvasionXYZ(3012.86f, -4129.63f, 101.63f));
 
         InvasionNecropolis azshara_east(3476.38f, -5894.99f, 65.3272f, 3.13728f);
-        azshara_east.shards.push_back(InvasionXYZ(3493.62f, -5714.52f, 6.25f));
+        azshara_east.shards.emplace_back(InvasionXYZ(3493.62f, -5714.52f, 6.25f));
         
         azshara.points.push_back(azshara_west);
         azshara.points.push_back(azshara_east);
@@ -652,14 +652,14 @@ ScourgeInvasionEvent::ScourgeInvasionEvent()
         blasted_lands.zoneId = 4;
         blasted_lands.remainingVar = VARIABLE_SI_BLASTED_LANDS_REMAINING;
         InvasionNecropolis west(-11165.0f, -2754.0f, 184.0f, 3.7687f);
-        west.shards.push_back(InvasionXYZ(-11023.10f, -2783.82f, 4.45f));
-        west.shards.push_back(InvasionXYZ(-11209.70f, -2996.59f, 3.60f));
-        west.shards.push_back(InvasionXYZ(-11392.05f, -2828.37f, -2.26f));
+        west.shards.emplace_back(InvasionXYZ(-11023.10f, -2783.82f, 4.45f));
+        west.shards.emplace_back(InvasionXYZ(-11209.70f, -2996.59f, 3.60f));
+        west.shards.emplace_back(InvasionXYZ(-11392.05f, -2828.37f, -2.26f));
 
         InvasionNecropolis east(-11405.4f, -3309.0f, 109.0f, 5.54368f);
-        east.shards.push_back(InvasionXYZ(-11524.50f, -3283.21f, 8.67f));
-        east.shards.push_back(InvasionXYZ(-11212.70f, -3350.82f, 5.10f));
-        east.shards.push_back(InvasionXYZ(-11255.01f, -3141.52f, 3.42f));
+        east.shards.emplace_back(InvasionXYZ(-11524.50f, -3283.21f, 8.67f));
+        east.shards.emplace_back(InvasionXYZ(-11212.70f, -3350.82f, 5.10f));
+        east.shards.emplace_back(InvasionXYZ(-11255.01f, -3141.52f, 3.42f));
 
         blasted_lands.points.push_back(west);
         blasted_lands.points.push_back(east);
@@ -671,14 +671,14 @@ ScourgeInvasionEvent::ScourgeInvasionEvent()
         epl.zoneId = 139;
         epl.remainingVar = VARIABLE_SI_EASTERN_PLAGUELANDS_REMAINING;
         InvasionNecropolis east(2137.01f, -4965.35f, 155.75f, 5.45317f);
-        east.shards.push_back(InvasionXYZ(2074.32f, -5136.34f, 82.55f));
-        east.shards.push_back(InvasionXYZ(2340.41f, -4965.81f, 70.44f));
-        east.shards.push_back(InvasionXYZ(1974.08f, -4731.53f, 98.30f));
+        east.shards.emplace_back(InvasionXYZ(2074.32f, -5136.34f, 82.55f));
+        east.shards.emplace_back(InvasionXYZ(2340.41f, -4965.81f, 70.44f));
+        east.shards.emplace_back(InvasionXYZ(1974.08f, -4731.53f, 98.30f));
 
         InvasionNecropolis west(1862.4f, -2973.06f, 139.255f, 2.49221f);
-        west.shards.push_back(InvasionXYZ(1727.18f, -3000.94f, 74.75f));
-        west.shards.push_back(InvasionXYZ(1844.59f, -2841.12f, 78.61f));
-        west.shards.push_back(InvasionXYZ(1931.41f, -3108.38f, 87.80f));
+        west.shards.emplace_back(InvasionXYZ(1727.18f, -3000.94f, 74.75f));
+        west.shards.emplace_back(InvasionXYZ(1844.59f, -2841.12f, 78.61f));
+        west.shards.emplace_back(InvasionXYZ(1931.41f, -3108.38f, 87.80f));
 
         epl.points.push_back(east);
         epl.points.push_back(west);
@@ -690,14 +690,14 @@ ScourgeInvasionEvent::ScourgeInvasionEvent()
         burning_steppes.zoneId = 46;
         burning_steppes.remainingVar = VARIABLE_SI_BURNING_STEPPES_REMAINING;
         InvasionNecropolis west(-8164.61f, -1080.49f, 214.897f, 3.19532f);
-        west.shards.push_back(InvasionXYZ(-8361.96f, -1229.09f, 189.17f));
-        west.shards.push_back(InvasionXYZ(-7976.42f, -980.56f, 130.40f));
-        west.shards.push_back(InvasionXYZ(-8406.90f, -987.45f, 190.22f));
+        west.shards.emplace_back(InvasionXYZ(-8361.96f, -1229.09f, 189.17f));
+        west.shards.emplace_back(InvasionXYZ(-7976.42f, -980.56f, 130.40f));
+        west.shards.emplace_back(InvasionXYZ(-8406.90f, -987.45f, 190.22f));
 
         InvasionNecropolis east(-7768.16f, -2474.53f, 208.228f, 5.58291f);
-        east.shards.push_back(InvasionXYZ(-7698.81f, -2245.05f, 140.10f));
-        east.shards.push_back(InvasionXYZ(-7573.12f, -2594.49f, 138.48f));
-        east.shards.push_back(InvasionXYZ(-7978.83f, -2389.21f, 123.36f));
+        east.shards.emplace_back(InvasionXYZ(-7698.81f, -2245.05f, 140.10f));
+        east.shards.emplace_back(InvasionXYZ(-7573.12f, -2594.49f, 138.48f));
+        east.shards.emplace_back(InvasionXYZ(-7978.83f, -2389.21f, 123.36f));
         
         burning_steppes.points.push_back(west);
         burning_steppes.points.push_back(east);
@@ -1514,7 +1514,7 @@ void WarEffortEvent::DisableAndStopEvent(uint16 event_id)
 void WarEffortEvent::UpdateHiveColossusEvents()
 {
     uint32 colossusMask = sObjectMgr.GetSavedVariable(VAR_WE_HIVE_REWARD, 0);
-    std::list<WarEffortGameEvents> events;
+    std::vector<WarEffortGameEvents> events;
 
     if (colossusMask & WAR_EFFORT_ASHI_REWARD)
         events.push_back(EVENT_WAR_EFFORT_BATTLE_ASHI);

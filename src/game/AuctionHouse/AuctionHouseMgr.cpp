@@ -73,8 +73,8 @@ void AuctionHouseObject::AddAuction(AuctionEntry *ah)
 {
     MANGOS_ASSERT(ah);
     AuctionsMap[ah->Id] = ah;
-    OrderedAuctionMap.insert(std::pair<uint32, AuctionEntry*>(ah->buyout, ah));
-    AccountAuctionMap.insert(std::pair<uint32, AuctionEntry*>(ah->ownerAccount, ah));
+    OrderedAuctionMap.emplace(std::pair<uint32, AuctionEntry*>(ah->buyout, ah));
+    AccountAuctionMap.emplace(std::pair<uint32, AuctionEntry*>(ah->ownerAccount, ah));
 }
 
 AuctionHouseMgr::AuctionHouseMgr()
