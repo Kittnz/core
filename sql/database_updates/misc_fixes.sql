@@ -14,3 +14,12 @@ UPDATE `creature_template` SET `auras`='7939 22766' WHERE `entry`=2586;
 UPDATE `creature_template` SET `flags_extra`= `flags_extra` - 524288 WHERE (`flags_extra` & 524288) && `entry` IN (3024, 3454, 3455, 10618, 10619, 10919, 11196, 11198, 11806, 11835, 14622, 15177, 16241, 16285, 16781, 17635, 17647);
 UPDATE `creature_template` SET `flags_extra`= `flags_extra` - 8 WHERE (`flags_extra` & 8) && `entry` IN (3024, 3454, 3455, 10618, 10619, 10919, 11196, 11198, 11806, 11835, 14622, 15177, 16241, 16285, 16781, 17635, 17647);
 
+-- Blasted Lands buffs from turning in quests shouldn't stack, just like the versions on the items.
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`, `build_min`, `build_max`) VALUES
+(1004, 3, 10671, 4695, 5875),
+(1004, 4, 10691, 4695, 5875),
+(1008, 5, 10670, 0, 5875),
+(1008, 6, 10671, 0, 5875),
+(1008, 7, 10672, 0, 5875),
+(1008, 8, 10690, 0, 5875),
+(1008, 9, 10691, 0, 5875);
