@@ -5754,15 +5754,16 @@ void Player::UpdateCombatSkills(Unit* pVictim, WeaponAttackType& attType, const 
     if (!defence && (GetShapeshiftForm() == FORM_TREE || IsInFeralForm()))
         return;
 
-    const int32 playerLevel = GetLevel();
-    const int32 currenSkillValue = defence ? GetBaseDefenseSkillValue() : GetBaseWeaponSkillValue(attType);
-    const int32 currentSkillMax = 5 * playerLevel;
-    const int32 skillDiff = currentSkillMax - currenSkillValue;
+    const uint32 playerLevel = GetLevel();
+    const uint32 currentSkillValue = defence ? GetBaseDefenseSkillValue() : GetBaseWeaponSkillValue(attType);
+    const uint32 currentSkillMax = 5 * playerLevel;
 
     // Max skill reached for level.
     // Can in some cases be less than 0: having max skill and then .level -1 as example.
-    if (skillDiff <= 0)
+    if (currentSkillMax <= currentSkillValue)
         return;
+
+    const uint32 skillDiff = currentSkillMax - currentSkillValue;
 
     // Calculate base chance to increase
     float chance = 0.0f;
@@ -5782,15 +5783,15 @@ void Player::UpdateCombatSkills(Unit* pVictim, WeaponAttackType& attType, const 
     }
     else // weapon skill https://classic.wowhead.com/guides/classic-wow-weapon-skills
     {
-        if (currentSkillMax * 0.9f > currenSkillValue)
+        if (currentSkillMax * 0.9f > currentSkillValue)
         {
             // Skill progress: 1% - 90% - chance decreases from 100% to 50%
-            chance = std::min(100.0f, float(currentSkillMax * 0.9f * 50) / currenSkillValue);
+            chance = std::min(100.0f, float(currentSkillMax * 0.9f * 50) / currentSkillValue);
         }
         else
         {
             // Skill progress: 90% - 100% - chance decreases from 50% to a minimum which is level dependent
-            chance = (0.5f - 0.0168966f * currenSkillValue * (300.0f / currentSkillMax) + 0.0152069f * currentSkillMax * (300.0f / currentSkillMax)) * 100.0f;
+            chance = (0.5f - 0.0168966f * currentSkillValue * (300.0f / currentSkillMax) + 0.0152069f * currentSkillMax * (300.0f / currentSkillMax)) * 100.0f;
             if (skillDiff <= 3)
                 chance *= (0.5f / (4 - skillDiff));
         }
@@ -5801,7 +5802,7 @@ void Player::UpdateCombatSkills(Unit* pVictim, WeaponAttackType& attType, const 
 
     chance = std::min(100.0f, chance);
 
-    DEBUG_LOG("Player::UpdateCombatSkills(defence=%d, playerLevel=%i) -> (%i/%i) chance to increase skill is %f ", defence, playerLevel, currenSkillValue, currentSkillMax, chance);
+    DEBUG_LOG("Player::UpdateCombatSkills(defence=%d, playerLevel=%i) -> (%i/%i) chance to increase skill is %f ", defence, playerLevel, currentSkillValue, currentSkillMax, chance);
 
     if (roll_chance_f(chance))
     {
