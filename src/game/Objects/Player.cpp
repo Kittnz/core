@@ -2570,6 +2570,14 @@ void Player::RegenerateHealth()
 
         if (!IsStandingUp())
             addvalue *= 1.5;
+
+        // Food
+        if (!IsInCombat())
+        {
+            AuraList const& lModHealthRegen = GetAurasByType(SPELL_AURA_MOD_REGEN);
+            for (const auto i : lModHealthRegen)
+                addvalue += i->GetModifier()->m_amount * (float(REGEN_TIME_FULL) / float(i->GetModifier()->periodictime));
+        }
     }
 
     // always regeneration bonus (including combat)
@@ -5807,7 +5815,11 @@ void Player::UpdateCombatSkills(Unit* pVictim, WeaponAttackType& attType, const 
         }
         else // Weapon
         {
-            const uint32 weapon_skill_gain = sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
+            bool exhausted = false;
+            if (HasItemCount(50521, 1, false)) // Glyph of Exhaustion
+                exhausted = true;
+
+            const uint32 weapon_skill_gain = exhausted ? (sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON) * 2) : sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
             Item* tmpitem = GetWeaponForAttack(attType, true, true);
 
             switch (attType)
