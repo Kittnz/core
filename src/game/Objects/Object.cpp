@@ -1404,20 +1404,20 @@ bool WorldObject::IsInMap(WorldObject const* obj) const
     return IsInWorld() && obj->IsInWorld() && (GetMap() == obj->GetMap());
 }
 
-bool WorldObject::_IsWithinDist(WorldObject const* obj, float dist2compare, bool is3D) const
+bool WorldObject::_IsWithinDist(WorldObject const* obj, const float dist2compare, const bool is3D, const bool useBoundingRadius) const
 {
     ASSERT(obj);
-    float dx = GetPositionX() - obj->GetPositionX();
-    float dy = GetPositionY() - obj->GetPositionY();
+    const float dx = GetPositionX() - obj->GetPositionX();
+    const float dy = GetPositionY() - obj->GetPositionY();
     float distsq = dx * dx + dy * dy;
     if (is3D)
     {
-        float dz = GetPositionZ() - obj->GetPositionZ();
+        const float dz = GetPositionZ() - obj->GetPositionZ();
         distsq += dz * dz;
     }
 
-    float sizefactor = GetObjectBoundingRadius() + obj->GetObjectBoundingRadius();
-    float maxdist = dist2compare + sizefactor;
+    const float sizefactor = useBoundingRadius ? GetObjectBoundingRadius() + obj->GetObjectBoundingRadius() : 0.0f;
+    const float maxdist = dist2compare + sizefactor;
 
     return distsq < maxdist * maxdist;
 }
