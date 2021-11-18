@@ -35,3 +35,7 @@ UPDATE `creature_template` SET `detection_range`=10 WHERE `entry` IN (6, 38, 69,
 
 -- Aggro range for most mobs in classic is around 3-4 yards lower than our current default.
 UPDATE `creature_template` SET `detection_range`=18 WHERE `detection_range`=20 && `rank`=0;
+
+-- Prevent triggers in ZG from aggroing players.
+UPDATE `creature_template` SET `ai_name`='NullAI', `flags_extra`=133122 WHERE `entry` IN (14758, 15091);
+REPLACE INTO `spell_script_target` (`entry`, `type`, `targetEntry`, `conditionId`, `inverseEffectMask`) VALUES (24211, 1, 15101, 0, 0);
