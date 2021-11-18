@@ -526,7 +526,7 @@ uint32 BattleGroundSV::GetTowerNameId(uint8 node)
         case BG_SV_ORC_TOWER:
             return LANG_BG_SV_ORC_TOWER;
         case BG_SV_HERALD_POINT:
-            return LANG_BG_SV_ORC_TOWER;
+            return LANG_BG_SV_HERALD_POINT;
         default:
             MANGOS_ASSERT(0);
     }

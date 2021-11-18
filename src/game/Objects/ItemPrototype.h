@@ -419,12 +419,6 @@ struct _ItemSpell
 #define MAX_ITEM_PROTO_SPELLS  5
 #define MAX_ITEM_PROTO_STATS  10
 
-struct TransmogEntry
-{
-    uint32 DestItemId = 0;
-    uint32 SourceItemId = 0;
-};
-
 struct ItemPrototype
 {
     uint32 ItemId;
@@ -490,7 +484,7 @@ struct ItemPrototype
     uint32 OtherTeamEntry;
     uint32 ScriptId;                                        // Turtle WoW Services, such as: race/faction change, character rename etc, etc.
     uint32 DestItemId = 0;                                  // Transmogrification
-    uint32 SourceItemId = 0;                                  // Transmogrification
+    uint32 SourceItemId = 0;                                // Transmogrification
 
     mutable bool m_bDiscovered = false;                     // has item been discovered by players
 
