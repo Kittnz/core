@@ -2386,7 +2386,7 @@ bool Creature::IsOutOfThreatArea(Unit* pVictim) const
         // Use attack distance in distance check if threat radius is lower. This prevents creature bounce in and out of combat every update tick.
         float threatAreaDistance = std::max(GetAttackDistance(pVictim) * 1.5f, sWorld.getConfig(CONFIG_FLOAT_THREAT_RADIUS));
         bool inThreatArea = IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance) || pVictim->IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance);
-        if (!inThreatArea && (GetLastLeashExtensionTime() + 12 < time(nullptr)))
+        if (!inThreatArea && (GetLastLeashExtensionTime() + 5 < time(nullptr)))
             return true;
     }
 

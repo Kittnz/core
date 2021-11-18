@@ -710,9 +710,10 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)
     {
         for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
         {
-            if (Bag *pBag = (Bag*)_player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            auto item = _player->GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+            if (item && item->ToBag())
             {
-                if (bagGuid == pBag->GetObjectGuid())
+                if (bagGuid == item->ToBag()->GetObjectGuid())
                 {
                     bag = i;
                     break;
