@@ -1672,9 +1672,7 @@ class Player final: public Unit
         uint32 GetBaseDefenseSkillValue() const { return GetSkillValueBase(SKILL_DEFENSE); }
         uint32 GetBaseWeaponSkillValue(WeaponAttackType attType) const;
 
-        void UpdateDefense();
-        void UpdateWeaponSkill(WeaponAttackType attType);
-        void UpdateCombatSkills(Unit* pVictim, WeaponAttackType attType, bool defence);
+        void UpdateCombatSkills(Unit* pVictim, WeaponAttackType& attType, const bool defence);
 
         void SetSkill(uint16 id, uint16 currVal, uint16 maxVal, uint16 step = 0);
         uint16 GetSkill(uint16 id, bool bonusPerm, bool bonusTemp, bool max = false) const;
