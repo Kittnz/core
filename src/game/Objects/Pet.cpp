@@ -1380,18 +1380,19 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
 
     switch (getPetType())
     {
+        const float healthMod = owner->IsPlayer() ? 1.0f : _GetHealthMod(cinfo->rank);
+        const float damageMod = owner->IsPlayer() ? 1.0f : _GetDamageMod(cinfo->rank);
+
         case SUMMON_PET:
         {
             // Formulas reviewed by Clank <Nostalrius>, from vanilla hunter pet tab screenshots.
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float((petlevel * 1.15 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float((petlevel * 1.45 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
-
-            //SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, float(cinfo->attack_power));
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(damageMod * (petlevel * 1.15 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(damageMod * (petlevel * 1.45 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
 
             PetLevelInfo const* pInfo = sObjectMgr.GetPetLevelInfo(creature_ID, petlevel);
-            if (pInfo)                                      // exist in DB
+            if (pInfo) // exist in DB
             {
-                SetCreateHealth(pInfo->health);
+                SetCreateHealth(pInfo->health * healthMod);
                 SetCreateMana(pInfo->mana);
 
                 if (pInfo->armor > 0)
@@ -1400,15 +1401,15 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
                 for (int stat = 0; stat < MAX_STATS; ++stat)
                     SetCreateStat(Stats(stat), float(pInfo->stats[stat]));
             }
-            else                                            // not exist in DB, use some default fake data
+            else // not exist in DB, use some default fake data
             {
                 // Erreur qui se declanche quand un mob invoque un add (squelette par exemple), et qui n'a
                 // donc pas de stats de pet.
                 DEBUG_LOG("Summoned pet (Entry: %u) not have pet stats data in DB", cinfo->entry);
 
                 // remove elite bonuses included in DB values
-                SetCreateHealth(uint32(((float(cinfo->health_max) / cinfo->level_max) / (1 + 2 * cinfo->rank)) * petlevel));
-                SetCreateMana(uint32(((float(cinfo->mana_max)   / cinfo->level_max) / (1 + 2 * cinfo->rank)) * petlevel));
+                SetCreateHealth(uint32(((float(cinfo->health_max) / cinfo->level_max) / (1 + 2 * cinfo->rank)) * petlevel * healthMod));
+                SetCreateMana(uint32(((float(cinfo->mana_max) / cinfo->level_max) / (1 + 2 * cinfo->rank)) * petlevel * healthMod));
 
                 SetCreateStat(STAT_STRENGTH, 22);
                 SetCreateStat(STAT_AGILITY, 22);
@@ -1416,32 +1417,33 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
                 SetCreateStat(STAT_INTELLECT, 28);
                 SetCreateStat(STAT_SPIRIT, 27);
             }
+
             break;
         }
         case HUNTER_PET:
         {
             SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, sObjectMgr.GetXPForPetLevel(petlevel));
             // Formulas reviewed by Clank <Nostalrius>, from vanilla pet tab screenshots.
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float((petlevel * 1.15 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float((petlevel * 1.45 * 1.05) * (float)GetAttackTime(BASE_ATTACK) / 2000));
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, float(damageMod* (petlevel * 1.15 * 1.05)* (float)GetAttackTime(BASE_ATTACK) / 2000));
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, float(damageMod* (petlevel * 1.45 * 1.05)* (float)GetAttackTime(BASE_ATTACK) / 2000));
 
             //stored standard pet stats are entry 1 in pet_levelinfo
             PetLevelInfo const* pInfo = sObjectMgr.GetPetLevelInfo(creature_ID, petlevel);
-            if (pInfo)                                      // exist in DB
+            if (pInfo) // exist in DB
             {
-                SetCreateHealth(pInfo->health);
+                SetCreateHealth(pInfo->health * healthMod);
                 SetCreateResistance(SPELL_SCHOOL_NORMAL, int32(pInfo->armor));
                 //SetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE, float(cinfo->attack_power));
 
                 for (int i = STAT_STRENGTH; i < MAX_STATS; ++i)
                     SetCreateStat(Stats(i),  float(pInfo->stats[i]));
             }
-            else                                            // not exist in DB, use some default fake data
+            else // not exist in DB, use some default fake data
             {
                 sLog.outErrorDb("Hunter pet levelstats missing in DB");
 
                 // remove elite bonuses included in DB values
-                SetCreateHealth(uint32(((float(cinfo->health_max) / cinfo->level_max) / (1 + 2 * cinfo->rank)) * petlevel));
+                SetCreateHealth(uint32(((float(cinfo->health_max) / cinfo->level_max) / (1 + 2 * cinfo->rank))* petlevel* healthMod));
 
                 SetCreateStat(STAT_STRENGTH, 22);
                 SetCreateStat(STAT_AGILITY, 22);
@@ -1449,6 +1451,7 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
                 SetCreateStat(STAT_INTELLECT, 28);
                 SetCreateStat(STAT_SPIRIT, 27);
             }
+
             break;
         }
         case GUARDIAN_PET:
@@ -1459,19 +1462,22 @@ bool Pet::InitStatsForLevel(uint32 petlevel, Unit* owner)
             SetUInt32Value(UNIT_FIELD_FLAGS, cinfo->unit_flags);
 
             SetCreateMana(cinfo->mana_max);
-            SetCreateHealth(cinfo->health_max);
+            SetCreateHealth(cinfo->health_max * healthMod);
 
             SetAttackTime(BASE_ATTACK, cinfo->base_attack_time);
             SetAttackTime(OFF_ATTACK, cinfo->base_attack_time);
             SetAttackTime(RANGED_ATTACK, cinfo->ranged_attack_time);
 
-            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, cinfo->dmg_min);
-            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, cinfo->dmg_max);
+            SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, damageMod * cinfo->dmg_min);
+            SetBaseWeaponDamage(BASE_ATTACK, MAXDAMAGE, damageMod * cinfo->dmg_max);
+
             break;
         }
         default:
+        {
             sLog.outError("Pet have incorrect type (%u) for levelup.", getPetType());
             break;
+        }
     }
 
     if (getPetType() != MINI_PET)
