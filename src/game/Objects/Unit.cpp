@@ -9868,6 +9868,55 @@ bool Unit::CanReachWithMeleeAutoAttackAtPosition(Unit const* pVictim, float x, f
     return (dx * dx + dy * dy < reach * reach) && ((dz * dz) < zReach);
 }
 
+float Unit::GetLeewayBonusRangeForTargets(Unit const* aggressor, Unit const* target, bool ability)
+{
+    if (!aggressor || !target)
+        return 0.0f;
+
+    const auto aggressorPlayer = aggressor->ToPlayer();
+    const auto targetPlayer = target->ToPlayer();
+
+
+    if (!aggressorPlayer && !targetPlayer)
+        return 0.0f;
+
+    if (ability)
+        return (aggressor->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
+
+
+    const bool moving = aggressor->IsMovingButNotWalking() && target->IsMovingButNotWalking();
+
+
+    if (aggressorPlayer && targetPlayer) // PvP, full effect.
+        return moving ? LEEWAY_BONUS_RANGE : 0.0f;
+
+    if (aggressorPlayer) // PvE with player as aggressor, full effect.
+        return moving ? LEEWAY_BONUS_RANGE : 0.0f;
+
+    // PvE with creature as aggressor, no effect.
+    return 0.0f;
+}
+
+float Unit::GetLeewayBonusRadius() const
+{
+    if (Player const* pPlayer = ToPlayer())
+    {
+        if ((pPlayer->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) || pPlayer->m_movementInfo.HasMovementFlag(MOVEFLAG_JUMPING))
+            return LEEWAY_BONUS_RANGE;
+    }
+
+    return 0.0f;
+}
+
+
+float Unit::GetLeewayBonusRange(Unit const* target, bool ability) const
+{
+    if (target)
+        return GetLeewayBonusRangeForTargets(this, target, ability);
+
+    return 0.0f;
+}
+
 Unit* Unit::GetUnit(WorldObject &obj, uint64 const &Guid)
 {
     if (obj.IsInWorld())

@@ -1095,6 +1095,11 @@ class Unit : public WorldObject
         float GetMeleeReach() const;
         float GetCombatReach(bool forMeleeRange /*=true*/) const;
         float GetCombatReach(Unit const* pVictim, bool ability, float flat_mod) const;
+
+        float GetLeewayBonusRange(Unit const* target, bool ability) const;
+        static float GetLeewayBonusRangeForTargets(Unit const* aggressor, Unit const* target, bool ability);
+        float GetLeewayBonusRadius() const;
+
         void SetMeleeZLimit(float newZLimit) { m_meleeZLimit = newZLimit; }
         float GetMeleeZLimit() const { return m_meleeZLimit; }
         void SetMeleeZReach(float newZReach) { m_meleeZReach = newZReach; }

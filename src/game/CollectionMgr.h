@@ -26,7 +26,7 @@
 typedef std::vector<uint32> TransmogContainer;
 
 class Player;
-class ItemPrototype;
+struct ItemPrototype;
 class QueryResult;
 
 class CollectionMgr
