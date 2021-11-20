@@ -2518,3 +2518,13 @@ replace into area_template values
 (5084, 0, 33, 2109, 0, 0, 'Bloodsail Retreat', 0, 0),
 (5085, 1, 4016, 2110, 0, 0, 'Kazamatsuri Market', 0, 0),
 (140594, 1, 405, 2076, 0, 0, 'Ronae\'Thalas', 0, 0);
+
+-- NPC Makrura Oilclaw, display ID 1246, level 8-9, scale 1, faction 16
+-- NPC Makrura Thresher, display ID 1940, level 7-8, scale 1, faction 16
+
+delete from creature_template where entry = 91194 and 91193;
+REPLACE INTO creature_template VALUES
+(91194, 1246, 0, 0, 0, 'Makrura Oilclaw', '', 0, 8, 9, 166, 166, 0, 0, 312, 16, 0, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 60514, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 15, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91193, 1940, 0, 0, 0, 'Makrura Thresher', '', 0, 7, 8, 148, 148, 0, 0, 312, 16, 0, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 60515, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 15, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update quest_template set objectives = 'Investigate the area to the southwest of the Farstrider Lodge.' where entry = 80204;
