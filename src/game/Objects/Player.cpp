@@ -165,16 +165,9 @@ static uint32 WorldBuffs[MAX_WORLD_BUFFS]
 static uint32 copseReclaimDelay[MAX_DEATH_COUNT] = { 30, 60, 120 };
 
 //== PlayerTaxi ================================================
-
-PlayerTaxi::PlayerTaxi()
-{
-    // Taxi nodes
-    memset(m_taximask, 0, sizeof(m_taximask));
-}
-
 void PlayerTaxi::InitTaxiNodes(uint32 race, uint32 level)
 {
-    memset(m_taximask, 0, sizeof(m_taximask));
+    m_taximask.fill(0);
     // capital and taxi hub masks
     ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(race);
     m_taximask[0] = rEntry->startingTaxiMask;

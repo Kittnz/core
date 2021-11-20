@@ -332,19 +332,24 @@ void LoadDBCStores(std::string const& dataPath)
 
     //## TaxiPathNode.dbc ## Loaded only for initialization different structures
     LoadDBC(availableDbcLocales, bad_dbc_files, sTaxiPathNodeStore,        dbcPath, "TaxiPathNode.dbc");
+
     // Calculate path nodes count
     std::vector<uint32> pathLength;
     pathLength.resize(pathCount);                           // 0 and some other indexes not used
     for (uint32 i = 1; i < sTaxiPathNodeStore.GetNumRows(); ++i)
+    {
         if (TaxiPathNodeEntry const* entry = sTaxiPathNodeStore.LookupEntry(i))
         {
             if (pathLength[entry->path] < entry->index + 1)
                 pathLength[entry->path] = entry->index + 1;
         }
+    }
+
     // Set path length
     sTaxiPathNodesByPath.resize(pathCount);                 // 0 and some other indexes not used
     for (uint32 i = 1; i < sTaxiPathNodesByPath.size(); ++i)
         sTaxiPathNodesByPath[i].resize(pathLength[i]);
+
     // fill data (pointers to sTaxiPathNodeStore elements
     for (uint32 i = 1; i < sTaxiPathNodeStore.GetNumRows(); ++i)
         if (TaxiPathNodeEntry const* entry = sTaxiPathNodeStore.LookupEntry(i))
@@ -360,7 +365,7 @@ void LoadDBCStores(std::string const& dataPath)
                     if (sInfo->Effect[j] == 123 /*SPELL_EFFECT_SEND_TAXI*/)
                         spellPaths.insert(sInfo->EffectMiscValue[j]);
 
-        memset(sTaxiNodesMask, 0, sizeof(sTaxiNodesMask));
+        sTaxiNodesMask.fill(0);
         for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
         {
             TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
@@ -385,8 +390,13 @@ void LoadDBCStores(std::string const& dataPath)
                     continue;
             }
 
-            // valid taxi network node
-            uint8  field   = (uint8)((i - 1) / 32);
+            // sanity check
+            uint32 limitNodeId = 8 * sizeof(uint32) * TaxiMaskSize;
+            if (i > limitNodeId)
+                continue;
+
+            // set taxi mask for node
+            uint8  field = (uint8)((i - 1) / 32);
             uint32 submask = 1 << ((i - 1) % 32);
             sTaxiNodesMask[field] |= submask;
         }
