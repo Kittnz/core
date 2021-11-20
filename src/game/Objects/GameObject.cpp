@@ -857,7 +857,7 @@ void GameObject::SaveToDB(uint32 mapid)
 
     // updated in DB
     std::ostringstream ss;
-    ss << "INSERT INTO gameobject VALUES ( "
+    ss << "INSERT INTO `gameobject` VALUES ( "
        << GetGUIDLow() << ", "
        << GetEntry() << ", "
        << mapid << ", "
@@ -874,12 +874,10 @@ void GameObject::SaveToDB(uint32 mapid)
        << uint32(GetGoAnimProgress()) << ", "
        << uint32(GetGoState()) << ", "
        << m_isActiveObject << ", "
-       << m_visibilityModifier << ", "
-       << 0 << ", "  // patch_min
-       << 10 << ")"; // patch_max
+       << m_visibilityModifier << ")";
 
     WorldDatabase.BeginTransaction();
-    WorldDatabase.PExecuteLog("DELETE FROM gameobject WHERE guid = '%u'", GetGUIDLow());
+    WorldDatabase.PExecuteLog("DELETE FROM `gameobject` WHERE `guid` = '%u'", GetGUIDLow());
     WorldDatabase.PExecuteLog("%s", ss.str().c_str());
     WorldDatabase.CommitTransaction();
 }
