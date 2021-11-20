@@ -709,7 +709,7 @@ replace into item_template values
  
 -- Karazhan Crypt Loot:
 -- MARROWSPIKE 
- 
+
  replace into item_template values
  ('83440', '2', '5', 'Boneshatter Maul', '', '9057', '3', '0', '1', '307236', '76809', '17', '-1', '-1', '65',
  '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '32', '0', '0',
@@ -771,7 +771,7 @@ replace into item_template values
  '0', '1', NULL);
  
  -- HIVAXXIS
- 
+
  replace into item_template values
  ('83446', '2', '15', 'Venom\'s Touch', '', '20273', '3', '0', '1', '237456', '59364', '13', '-1', '-1', '65',
  '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '0', '0',
@@ -893,7 +893,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
- 
+
  -- CORPSEMUNCHER
  
  replace into item_template values
@@ -955,7 +955,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '35', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
- 
+
  -- ALARUS ((ALARUS IS THE LAST BOSS, AND SHOULD DROP 2 ITEMS EVERY TIME HE IS KILLED! ALL ITEMS ALSO SHOULD HAVE THE SAME DROP % EXCEPT THE LAST ITEM POSTED THAT SAYS 0.25%))
 
 replace into item_template values
@@ -1047,7 +1047,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
- 
+
 replace into taxi_nodes values
 (300, 0, 0, 0, 0, 'Boat: Stormwind to Auberdine', 0, 0),
 (348, 1, 0, 0, 0, 'Zeppelin: Orgrimmar to Thunder Bluff', 0, 0),
@@ -2738,6 +2738,7 @@ replace into item_template (entry, name, description, class, subclass, material,
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property) VALUES (60338, 'Lordaeron Rusty Crossbow', '', 2, 18, 1, 2, 2462, 1, 0, 0, -1, -1, 2064, 516, 26, 0, 0, 0, 1, 1, 0, 12, 23, 3000, 0, 0, 40, 0, 0, 0, 15, 100, 7, 0, 0, 0, 0, 0, 0, 0);
 
 replace into npc_vendor values
+-- items rfom Vizlow Blood Ring
 (40049, 60350, 0, 0, 0, 0),
 (40049, 60351, 0, 0, 0, 0),
 (40049, 60352, 0, 0, 0, 0),
@@ -2757,3 +2758,61 @@ replace into npc_vendor values
 (40049, 60366, 0, 0, 0, 0),
 (40049, 60367, 0, 0, 0, 0),
 (40049, 60368, 0, 0, 0, 0);
+
+delete from creature_template where entry = 50026;
+delete from creature where id = 50026;
+
+update item_template set name = 'Broken Portable Wormhole Generator', quality = 0,  spellid_1 = 0, buy_price = 3500, sell_price = 1500 where entry = 51310;
+update item_template set name = 'Experimental Portable Wormhole Generator', quality = 0, spellid_1 = 0, buy_price = 3500, sell_price = 1500 where entry = 51808;
+
+update creature set spawntimesecsmin = 259200, spawntimesecsmax = 259200 where id = 91916;
+update creature set spawntimesecsmin = 259200, spawntimesecsmax = 259200 where id = 91917;
+update creature set spawntimesecsmin = 259200, spawntimesecsmax = 259200 where id = 91920;
+update creature set spawntimesecsmin = 259200, spawntimesecsmax = 259200 where id = 91928;
+update creature set spawntimesecsmin = 259200, spawntimesecsmax = 259200 where id = 91929;
+
+update creature_template set loot_id = 91916 where entry = 91916;
+update creature_template set loot_id = 91917 where entry = 91917;
+update creature_template set loot_id = 91920 where entry = 91920;
+update creature_template set loot_id = 91928 where entry = 91928;
+update creature_template set loot_id = 91929 where entry = 91929;
+
+replace into creature_loot_template values
+-- ARCHLICH ENKHRAZ
+(91916, 83452, 10, 1, 1, 1, 0),
+(91916, 83453, 18, 1, 1, 1, 0),
+(91916, 83454, 18, 1, 1, 1, 0),
+(91916, 83455, 18, 1, 1, 1, 0),
+(91916, 83456, 18, 1, 1, 1, 0),
+(91916, 83457, 18, 1, 1, 1, 0),
+-- CORPSEMUNCHER
+(91917, 83458, 10, 1, 1, 1, 0),
+(91917, 83459, 18, 1, 1, 1, 0),
+(91917, 83460, 18, 1, 1, 1, 0),
+(91917, 83461, 18, 1, 1, 1, 0),
+(91917, 83462, 18, 1, 1, 1, 0),
+(91917, 83463, 18, 1, 1, 1, 0),
+-- MARROWSPIKE
+(91920, 83440, 10, 1, 1, 1, 0),
+(91920, 83441, 18, 1, 1, 1, 0),
+(91920, 83442, 18, 1, 1, 1, 0),
+(91920, 83443, 18, 1, 1, 1, 0),
+(91920, 83444, 18, 1, 1, 1, 0),
+(91920, 83445, 18, 1, 1, 1, 0),
+-- ALARUS
+(91928, 83464, 12.5, 1, 1, 1, 0),
+(91928, 83465, 12.5, 1, 1, 1, 0),
+(91928, 83466, 12.5, 1, 1, 1, 0),
+(91928, 83467, 12.5, 1, 1, 1, 0),
+(91928, 83468, 12.5, 1, 1, 1, 0),
+(91928, 83469, 12.5, 1, 1, 1, 0),
+(91928, 83470, 12.5, 1, 1, 1, 0),
+(91928, 83471, 12.5, 1, 1, 1, 0),
+(91928, 83472, 0.25, 2, 1, 1, 0),
+-- HIVAXXIS
+(91929, 83446, 10, 1, 1, 1, 0),
+(91929, 83447, 18, 1, 1, 1, 0),
+(91929, 83448, 18, 1, 1, 1, 0),
+(91929, 83449, 18, 1, 1, 1, 0),
+(91929, 83450, 18, 1, 1, 1, 0),
+(91929, 83451, 18, 1, 1, 1, 0);
