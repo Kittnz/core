@@ -2524,8 +2524,8 @@ replace into area_template values
 
 delete from creature_template where entry = 91194 and 91193;
 REPLACE INTO creature_template VALUES
-(91194, 1246, 0, 0, 0, 'Makrura Oilclaw', '', 0, 8, 9, 166, 166, 0, 0, 312, 16, 0, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 60514, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 15, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(91193, 1940, 0, 0, 0, 'Makrura Thresher', '', 0, 7, 8, 148, 148, 0, 0, 312, 16, 0, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 60515, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 15, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(91194, 1246, 0, 0, 0, 'Makrura Oilclaw', '', 0, 8, 9, 166, 166, 0, 0, 312, 16, 0, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 91194, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 15, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91193, 1940, 0, 0, 0, 'Makrura Thresher', '', 0, 7, 8, 148, 148, 0, 0, 312, 16, 0, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 91193, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 15, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 update quest_template set objectives = 'Investigate the area to the southwest of the Farstrider Lodge.' where entry = 80204;
 
@@ -2562,3 +2562,22 @@ REPLACE INTO npc_trainer VALUES
 (60516, 1472, 10, 0, 0, 0),
 (60516, 2141, 100, 0, 0, 0),
 (60516, 5507, 100, 0, 0, 0);
+
+-- In Search of the Owner --
+delete from quest_template where entry = 40273;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40273,2,-161,1,1,0,0,'In Search of the Owner','<A gust of wind opens the enclosed journal>.\n\nSeeking stars down the ocean deep,\nLost grins down by the port\nTears drowned in tobacco smoke\nFalse hopes in cheers.\nI\'m cold, tired and I wish to sleep\nDeep and easy to walk through, the empty\nWhere should I begin so I can continue?\nI try to accept who I am\nWho I am and what I wish to be\nIn my hopeless need of love, I bear one single regret.\n\n<As you go through the pages the poetry seems to get darker and darker>.\n\nof slumber\nDarkness depth\nI was seeking apathy,\nDrowning in misery\nBeginning and end\nStuck in the middle\nNo purpose\nNo goal\nDark skies\nShy moon\nCold night\nWarm bed.\n\n<Turning to the last page you don\'t know what to make of it>.\n\nWHY\nwhy why why\nWhy me, what did I do wrong?\n\n<The page is scribbled with the word why, on top of all the repetition it\'s written once again all over the page. At the end of the journal a name and a message is relayed>.','Find the owner of the journal in Stormwind.','I can do for you bub?','<Roheg tears the journal from your hands>.\n\nI hope you had your laugh $r, thanks for bringing it back but I can\'t reward you anything.',60349,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60349,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation (id, quest) values (2010854, 40273);
+replace into creature_involvedrelation (id, quest) values (60517, 40273);
+
+delete from gameobject_template where entry = 2010854;
+REPLACE INTO gameobject_template VALUES
+(2010854, 2, 559, 'Uncommon Journal', 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from item_template where entry = 60349;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60349,1143,'Uncommon Journal',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_template where entry = 60517;
+REPLACE INTO creature_template VALUES
+(60517, 7011, 0, 0, 0, 'Roheg Clay', '', 0, 8, 9, 166, 166, 0, 0, 312, 12, 2, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 60514, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
