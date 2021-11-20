@@ -3130,9 +3130,6 @@ void Player::GiveLevel(uint32 level)
         LearnSpell(30174, false);
     }
 
-    if (level == 10 && sWorld.getConfig(CONFIG_BOOL_OPENHOUSE))
-        MailOpenHouseGift();
-
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(GetRace(), GetClass(), level, &info);
 
@@ -19952,10 +19949,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             AddItem(50015, 1);
         }
 
-        // Turtle WoW custom feature:
-        if (sWorld.getConfig(CONFIG_BOOL_BOUNTY))
-            RewardBountyHuntKill(pVictim);
-
+        RewardBountyHuntKill(pVictim);
         RewardExpansionPvPQuest(pVictim);
     }    
 }
@@ -22136,21 +22130,6 @@ void Player::MailRidingTurtleGift()
 
     {
         Item* ToMailItem = Item::CreateItem(23720, 1, this);
-        ToMailItem->SaveToDB();
-
-        MailDraft(subject, sObjectMgr.CreateItemText(message))
-            .AddItem(ToMailItem)
-            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
-    }
-}
-
-void Player::MailOpenHouseGift()
-{
-    std::string subject = "Open House 2021";
-    std::string message = "Thanks for joining the Open House event!\n\nWe hope you enjoy rest of the journey and continue being a part of our amazing community!";
-
-    {
-        Item* ToMailItem = Item::CreateItem(51893, 1, this);
         ToMailItem->SaveToDB();
 
         MailDraft(subject, sObjectMgr.CreateItemText(message))

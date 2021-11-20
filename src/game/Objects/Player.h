@@ -1115,7 +1115,6 @@ class Player final: public Unit
         // ---
         void MailCityProtectorMedallion();
         void MailRidingTurtleGift();
-        void MailOpenHouseGift();
         bool IsIgnoringTitles();
         void SetIgnoringTitles(bool shouldIgnore);
         void RewardBountyHuntKill(Unit* pVictim);
