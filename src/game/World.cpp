@@ -1194,10 +1194,8 @@ void World::SetInitialWorldSettings()
         exit(1);                                            // Error message displayed in function already
     }
 
-
     using namespace DBUpdater;
     sAutoUpdater->ProcessUpdates();
-
 
     ///- Loading shop tables
     sObjectMgr.LoadShop();
@@ -1210,7 +1208,6 @@ void World::SetInitialWorldSettings()
 
     ///- Chargements des variables (necessaire pour le OutdoorJcJ)
     sObjectMgr.LoadSavedVariable();
-
 
     ///- Update the realm entry in the database with the realm type from the config file
     //No SQL injection as values are treated as integers
@@ -1265,7 +1262,6 @@ void World::SetInitialWorldSettings()
     ///- Init highest guids before any guid using table loading to prevent using not initialized guids in some code.
     sObjectMgr.SetHighestGuids();                           // must be after packing instances
     
-
     sObjectMgr.LoadBroadcastTexts();
 
     sObjectMgr.LoadPageTexts();
