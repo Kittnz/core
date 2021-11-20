@@ -2736,3 +2736,24 @@ replace into item_template (entry, name, description, class, subclass, material,
  '0', '1', NULL);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property) VALUES (60339, 'High Elven Rotten Bow', '', 2, 2, 1, 2, 20549, 1, 0, 0, -1, -1, 2060, 515, 15, 0, 0, 0, 1, 1, 0, 9, 18, 2300, 0, 0, 40, 0, 0, 0, 15, 100, 7, 0, 0, 0, 0, 0, 0, 0);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property) VALUES (60338, 'Lordaeron Rusty Crossbow', '', 2, 18, 1, 2, 2462, 1, 0, 0, -1, -1, 2064, 516, 26, 0, 0, 0, 1, 1, 0, 12, 23, 3000, 0, 0, 40, 0, 0, 0, 15, 100, 7, 0, 0, 0, 0, 0, 0, 0);
+
+replace into npc_vendor values
+(40049, 60350, 0, 0, 0, 0),
+(40049, 60351, 0, 0, 0, 0),
+(40049, 60352, 0, 0, 0, 0),
+(40049, 60353, 0, 0, 0, 0),
+(40049, 60354, 0, 0, 0, 0),
+(40049, 60355, 0, 0, 0, 0),
+(40049, 60356, 0, 0, 0, 0),
+(40049, 60357, 0, 0, 0, 0),
+(40049, 60358, 0, 0, 0, 0),
+(40049, 60359, 0, 0, 0, 0),
+(40049, 60360, 0, 0, 0, 0),
+(40049, 60361, 0, 0, 0, 0),
+(40049, 60362, 0, 0, 0, 0),
+(40049, 60363, 0, 0, 0, 0),
+(40049, 60364, 0, 0, 0, 0),
+(40049, 60365, 0, 0, 0, 0),
+(40049, 60366, 0, 0, 0, 0),
+(40049, 60367, 0, 0, 0, 0),
+(40049, 60368, 0, 0, 0, 0);
