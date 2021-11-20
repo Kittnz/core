@@ -654,6 +654,23 @@ struct TaxiPathNodeEntry
     uint32    delay;                                        // 8        m_delay
 };
 
+struct WMOAreaTableTripple
+{
+    WMOAreaTableTripple(int32 r, int32 a, int32 g) : groupId(g), rootId(r), adtId(a)
+    {
+    }
+
+    bool operator <(const WMOAreaTableTripple& b) const
+    {
+        return memcmp(this, &b, sizeof(WMOAreaTableTripple)) < 0;
+    }
+
+    // ordered by entropy; that way memcmp will have a minimal medium runtime
+    int32 groupId;
+    int32 rootId;
+    int32 adtId;
+};
+
 struct WMOAreaTableEntry
 {
     uint32 Id;                                              // 0        m_ID index
@@ -670,6 +687,8 @@ struct WMOAreaTableEntry
     //char *Name[8];                                        //          m_AreaName_lang
     //uint32 nameFlags;
 };
+
+typedef std::map<WMOAreaTableTripple, WMOAreaTableEntry const*> WMOAreaInfoByTripple;
 
 struct WorldMapAreaEntry
 {
