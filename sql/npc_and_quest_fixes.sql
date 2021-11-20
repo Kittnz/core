@@ -2581,3 +2581,158 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from creature_template where entry = 60517;
 REPLACE INTO creature_template VALUES
 (60517, 7011, 0, 0, 0, 'Roheg Clay', '', 0, 8, 9, 166, 166, 0, 0, 312, 12, 2, 1, 1.14, 0, 20, 5, 0, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 60514, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Blood Ring Rep Items Part 2
+replace into item_template values
+ ('60350', '4', '3', 'Bloody Gladiator\'s Cord', '', '26541', '3', '0', '1', '32254', '8064', '6', '-1', '-1', '66', '60',
+ '0', '0', '0', '0', '0', '1008', '5', '0', '1', '0', '5', '10', '7', '14', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '257', '0', '0', '0', '0',
+ '0', '0', '9416', '1', '0', '0', '-1', '0', '-1', '9334', '1', '0', '0', '-1', '0', '-1', '0', '0', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60351', '4', '3', 'Bloody Gladiator\'s Handguards', '', '35542', '3', '0', '1', '30344', '7586', '10', '-1', '-1', '66', '60',
+ '0', '0', '0', '0', '0', '1008', '5', '0', '1', '0', '5', '8', '7', '12', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '282', '0', '0', '0', '0',
+ '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '9415', '1', '0', '0', '-1', '0', '-1', '9330', '1', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60352', '4', '3', 'Bloody Gladiator\'s Leggings', '', '4346', '3', '0', '1', '58084', '14521', '7', '-1', '-1', '68', '60',
+ '0', '0', '0', '0', '0', '1008', '6', '0', '1', '0', '5', '12', '7', '18', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '398', '0', '0', '0', '0',
+ '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '9342', '1', '0', '0', '-1', '0', '-1', '9336', '1', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '90', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60353', '4', '3', 'Bloody Gladiator\'s Trudgeons', '', '26090', '3', '0', '1', '45324', '11331', '8', '-1', '-1', '68', '60',
+ '0', '0', '0', '0', '0', '1008', '6', '0', '1', '0', '5', '10', '7', '14', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '314', '0', '0', '0', '0',
+ '0', '0', '9416', '1', '0', '0', '-1', '0', '-1', '9335', '1', '0', '0', '-1', '0', '-1', '0', '0', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '60', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60354', '4', '3', 'Bloody Gladiator\'s Wristguards', '', '6998', '3', '0', '1', '31140', '7785', '9', '-1', '-1', '68', '60',
+ '0', '0', '0', '0', '0', '1008', '6', '0', '1', '0', '5', '8', '7', '11', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '214', '0', '0', '0', '0',
+ '0', '0', '9398', '1', '0', '0', '-1', '0', '-1', '9330', '1', '0', '0', '-1', '0', '-1', '0', '0', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60355', '4', '3', 'Bloody Gladiator\'s Armor', '', '12966', '4', '0', '1', '68884', '17221', '5', '-1', '-1', '66', '60',
+ '0', '0', '0', '0', '0', '1008', '7', '0', '1', '0', '5', '14', '7', '18', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '484', '0', '0', '0', '0',
+ '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '9346', '1', '0', '0', '-1', '0', '-1', '15811', '1', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '140', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60356', '4', '3', 'Bloody Gladiator\'s Pauldrons', '', '27302', '4', '0', '1', '66492', '16623', '3', '-1', '-1', '66', '60',
+ '0', '0', '0', '0', '0', '1008', '7', '0', '1', '0', '5', '10', '7', '15', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '367', '0', '0', '0', '0',
+ '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '9417', '1', '0', '0', '-1', '0', '-1', '15806', '1', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60357', '4', '3', 'Bloody Gladiator\'s Helmet', '', '26098', '4', '0', '1', '58456', '14614', '1', '-1', '-1', '66', '60',
+ '0', '0', '0', '0', '0', '1008', '7', '0', '1', '0', '5', '14', '7', '20', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '393', '0', '0', '0', '0',
+ '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '7597', '1', '0', '0', '-1', '0', '-1', '9345', '1', '0',
+ '0', '-1', '0', '-1', '15808', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '85', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60358', '4', '4', 'Bloody Gladiator\'s Girdle', '', '25225', '3', '0', '1', '32324', '8081', '6', '-1', '-1', '66', '60',
+ '0', '0', '0', '0', '0', '1008', '5', '0', '1', '0', '4', '10', '7', '16', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '425', '0', '0', '0', '0',
+ '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '9329', '1', '0', '0', '-1', '0', '-1', '0', '0', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60359', '4', '4', 'Bloody Gladiator\'s Gauntlets', '', '35118', '3', '0', '1', '30432', '7608', '10', '-1', '-1', '66', '60',
+ '0', '0', '0', '0', '0', '1008', '5', '0', '1', '0', '4', '9', '7', '14', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '9330', '1', '0', '0', '-1', '0', '-1', '0', '0', '0',
+ '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1',
+ '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '1', NULL);
+ replace into item_template values
+ ('60360', '4', '4', 'Bloody Gladiator\'s Legguards', '', '35069', '3', '0', '1', '55168', '13792', '7', '-1', '-1', '68',
+ '60', '0', '0', '0', '0', '0', '1008', '6', '0', '1', '0', '4', '12', '7', '20',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '668', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '13669', '1', '0', '0', '-1', '0', '-1', '14027', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('60361', '4', '4', 'Bloody Gladiator\'s Greaves', '', '5928', '3', '0', '1', '45328', '11332', '8', '-1', '-1', '68',
+ '60', '0', '0', '0', '0', '0', '1008', '6', '0', '1', '0', '4', '8', '7', '18',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '526', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '9330', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '65', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('60362', '4', '4', 'Bloody Gladiator\'s Bracers', '', '5928', '3', '0', '1', '32408', '8102', '9', '-1', '-1', '68',
+ '60', '0', '0', '0', '0', '0', '1008', '6', '0', '1', '0', '4', '9', '7', '14',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '349', '0', '0', '0',
+ '0', '0', '0', '9142', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '45', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property) VALUES (60363, 'Bloody Gladiator\'s Breastplate', '', 4, 4, 6, 4, 34518, 1, 60, 0, -1, -1, 68896, 17224, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 165, 799, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 4, 14, 7, 24, 13670, 1, 0, 0, -1, 0, -1, 7597, 1, 0, 0, -1, 0, -1, 9335, 1, 0, 0, -1, 0, -1, 0);
+ update item_template set required_reputation_faction = 1008, required_reputation_rank = 7, max_durability = 140 where entry = 60363;
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property) VALUES (60364, 'Bloody Gladiator\'s Spaulders', '', 4, 4, 6, 4, 27403, 1, 60, 0, -1, -1, 66084, 16521, 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 612, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 4, 10, 7, 18, 15464, 1, 0, 0, -1, 0, -1, 13669, 1, 0, 0, 0, 0, 0, 14027, 1, 0, 0, -1, 0, -1, 0);
+ update item_template set required_reputation_faction = 1008, required_reputation_rank = 7, max_durability = 100 where entry = 60364;
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, random_property) VALUES (60365, 'Bloody Gladiator\'s Helm', '', 4, 4, 6, 4, 27943, 1, 60, 0, -1, -1, 58568, 14642, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 658, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 4, 15, 7, 24, 15464, 1, 0, 0, -1, 0, -1, 7597, 1, 0, 0, -1, 0, -1, 13669, 1, 0, 0, 0, 0, 0, 9336, 1, 0, 0, -1, 0, -1, 0);
+ update item_template set required_reputation_faction = 1008, required_reputation_rank = 7, max_durability = 100 where entry = 60365;
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property) VALUES (60366, 'Gore Ring of the Gladiator', '', 4, 0, 1, 3, 31657, 1, 60, 1, -1, -1, 32224, 8056, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 4, 9, 7, 12, 9331, 1, 0, 0, -1, 0, -1, 0);
+ update item_template set required_reputation_faction = 1008, required_reputation_rank = 4 where entry = 60366;
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property) VALUES (60367, 'Auspicious Ring of the Seer', '', 4, 0, 1, 3, 9840, 1, 60, 1, -1, -1, 32224, 8056, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 7, 9, 9342, 1, 0, 0, -1, 0, -1, 25975, 1, 0, 0, -1, 0, -1, 0);
+ update item_template set required_reputation_faction = 1008, required_reputation_rank = 4 where entry = 60367;
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property) VALUES (60368, 'Loop of Field Medicine', '', 4, 0, 1, 3, 23780, 1, 60, 1, -1, -1, 28864, 7216, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 6, 6, 7, 8, 9314, 1, 0, 0, -1, 0, -1, 21361, 1, 0, 0, -1, 0, -1, 0);
+ update item_template set required_reputation_faction = 1008, required_reputation_rank = 4 where entry = 60368;
+ 
+ -- Quest Rewards
+ -- Cleaning the Farm
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property) VALUES (60369, 'Farmhand\'s Cloak', '', 4, 1, 7, 2, 15215, 1, 0, 0, -1, -1, 788, 197, 16, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 19, 0, 0, 24, 0, 7, 0, 0, 0, 0, 0, 0, 5, 4, 6, 2, 0);
+ replace into item_template values
+ ('60370', '4', '0', 'Ring of Expertise', '', '31800', '2', '0', '1', '3360', '840', '11', '-1', '-1', '24',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '1', '4', '1',
+ '5', '1', '6', '1', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+ replace into item_template values
+ ('60371', '4', '2', 'Digger\'s Gloves', '', '972', '2', '0', '1', '3284', '821', '10', '-1', '-1', '24',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '4', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '52', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '25', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property) VALUES (60339, 'High Elven Rotten Bow', '', 2, 2, 1, 2, 20549, 1, 0, 0, -1, -1, 2060, 515, 15, 0, 0, 0, 1, 1, 0, 9, 18, 2300, 0, 0, 40, 0, 0, 0, 15, 100, 7, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property) VALUES (60338, 'Lordaeron Rusty Crossbow', '', 2, 18, 1, 2, 2462, 1, 0, 0, -1, -1, 2064, 516, 26, 0, 0, 0, 1, 1, 0, 12, 23, 3000, 0, 0, 40, 0, 0, 0, 15, 100, 7, 0, 0, 0, 0, 0, 0, 0);
