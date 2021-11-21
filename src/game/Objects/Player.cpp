@@ -1692,6 +1692,39 @@ void Player::SetDeathState(DeathState s)
 
         if (m_zoneScript)
             m_zoneScript->OnPlayerDeath(this);
+
+        if (IsHardcore())
+        {
+            static bool checkedTable = false;
+
+            if (!checkedTable)
+            {
+                CharacterDatabase.DirectExecute("CREATE TABLE IF NOT EXISTS `hardcore_deaths` (\
+                    `lowGuid` INT(10) UNSIGNED NOT NULL,\
+                    `race` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',\
+                    `class` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',\
+                    `level` INT(10) UNSIGNED NOT NULL,\
+                    `attackerEntry` INT(10) UNSIGNED NOT NULL,\
+                    `position_x` FLOAT(12) NOT NULL DEFAULT '0',\
+                    `position_y` FLOAT(12) NOT NULL DEFAULT '0',\
+                    `position_z` FLOAT(12) NOT NULL DEFAULT '0',\
+                    `mapId` INT(10) UNSIGNED NOT NULL DEFAULT '0',\
+                    PRIMARY KEY(`lowGuid`) USING BTREE\
+                    )\
+                    COLLATE = 'utf8_general_ci'\
+                    ENGINE = InnoDB\
+                    ;");
+                checkedTable = true;
+            }
+
+            auto attacker = GetAttackers().size() > 0 ? (*GetAttackers().begin()) : nullptr;
+            uint32 attackerEntry = 0;
+            if (attacker && attacker->ToCreature())
+                attackerEntry = attacker->ToCreature()->GetEntry();
+
+            CharacterDatabase.DirectPExecute("REPLACE INTO `hardcore_deaths` VALUES(%u, %u, %u, %u, %u, %f, %f, %f, %u)", GetGUIDLow(), GetRace(), GetClass(), GetLevel(), attackerEntry,
+                GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+        }
     }
 
     Unit::SetDeathState(s);
@@ -4865,10 +4898,11 @@ void Player::KillPlayer()
         if (GetLevel() >= 10)
             sWorld.SendWorldText(50300, GetName(), GetLevel());
         PlayDirectMusic(1171, this);
-        GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
-        ChatHandler(this).PSendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 60 seconds.");
+        GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 120 seconds.");
+        ChatHandler(this).SendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 120 seconds.");
 
         sLog.out(LOG_HARDCORE_MODE, "Player %s dead on %f %f %f %u, level %u", GetName(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetLevel());
+
 
         BuildPlayerRepop();
 
