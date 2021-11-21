@@ -4882,7 +4882,7 @@ void Player::KillPlayer()
 
         BuildPlayerRepop();
 
-        m_hardcoreKickTimer = 60 * IN_MILLISECONDS;
+        m_hardcoreKickTimer = 120 * IN_MILLISECONDS;
 
         // refund tokens on account
         QueryResult* Result = LoginDatabase.PQuery("SELECT SUM(price) FROM shop_logs WHERE guid = %u AND refunded <> 1", GetGUIDLow());
@@ -8316,7 +8316,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
 
     // add 'this' player as one of the players that are looting 'loot'
     if (permission != NONE_PERMISSION)
-        loot->AddLooter(GetObjectGuid());
+        loot->AddLooter(this);
 
     if (loot_type == LOOT_CORPSE && !guid.IsItem())
         SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_LOOTING);
