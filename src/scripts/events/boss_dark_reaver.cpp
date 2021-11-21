@@ -89,14 +89,20 @@ struct boss_dark_reaverAI : public ScriptedAI
         me->RemoveAurasDueToSpell(SPELL_MOUNT);
     }
 
+    void DespawnAdds()
+    {
+        // Despawn Lurking Shadow and Forlorn Spirit NPCs
+        std::list<Creature *> lCreature;
+        m_creature->GetCreatureListWithEntryInGrid(lCreature, MOB_LURKING_SHADOW, 200.0f);
+        m_creature->GetCreatureListWithEntryInGrid(lCreature, MOB_FORLORN_SPIRIT, 200.0f);
+        for (std::list<Creature *>::iterator itr = lCreature.begin(); itr != lCreature.end(); ++itr)
+            (*itr)->ForcedDespawn();
+    }
+
     void Reset() override
     {
         SetDefaults();
-        // Make sure we despawn all Lurking Shadows on Reset.
-        std::list<Creature *> lCreature;
-        m_creature->GetCreatureListWithEntryInGrid(lCreature, MOB_LURKING_SHADOW, 200.0f);
-        for (std::list<Creature *>::iterator itr = lCreature.begin(); itr != lCreature.end(); ++itr)
-            (*itr)->ForcedDespawn();
+        DespawnAdds();
     }
 
     void JustRespawned() override
@@ -115,7 +121,7 @@ struct boss_dark_reaverAI : public ScriptedAI
         if (victim->GetTypeId() != TYPEID_PLAYER)
             return;
 
-        if (urand(0, 1)) // don't spam on wipe
+        if (urand(0, 1)) // Don't spam on wipe.
             m_creature->MonsterYell("Join those below...");
     }
 
@@ -127,6 +133,8 @@ struct boss_dark_reaverAI : public ScriptedAI
         m_creature->SetRespawnDelay(m_respawn_delay_Timer);
         m_creature->SetRespawnTime(m_respawn_delay_Timer);
         m_creature->SaveRespawnTime();
+
+        DespawnAdds();
     }
 
     void DamageTaken(Unit* /*done_by*/, uint32& damage) override
