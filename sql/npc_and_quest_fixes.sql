@@ -3024,3 +3024,16 @@ replace into creature_loot_template values
 (91910, 30088, 0.025, 0, -30088, 1, 0),
 (91910, 30089, 1, 5, -30089, 1, 0),
 (91910, 30211, 0.025, 0, -30211, 1, 0);
+
+update creature_template set health_min = 2310, health_max = 2310 where entry = 91921;
+update creature_template set detection_range = 60 where entry = 91922;
+update creature_template set level_min = 62, level_max = 62 where entry = 92935;
+
+replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES ( 379545, 3, 23433, 'Half-Buried Treasure Chest', 0, 0, 1.5, 57,  379545, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount) values 
+(379545, 13456, 100, 2, 0), -- Greater Frost Protection Potion
+(379545, 5823, 100, 3, 0), -- Poisonous Mushroom
+(379545, 11938, 100, 4, 0); -- Sack of Gems
+
+update gameobject set id = 379545 where guid = 4013681;
