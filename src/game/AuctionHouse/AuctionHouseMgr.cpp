@@ -40,6 +40,23 @@
 
 INSTANTIATE_SINGLETON_1(AuctionHouseMgr);
 
+bool IsPlayerHardcore(uint32 lowGuid)
+{
+    QueryResult* result = CharacterDatabase.PQuery("SELECT mortality_status FROM characters WHERE guid='%u'", lowGuid);
+    uint32 hardcoreStatus = 0;
+    if (result)
+    {
+        Field* fields = result->Fetch();
+        hardcoreStatus = fields[1].GetUInt32();
+        delete result;
+        return false;
+    }
+
+    if (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD)
+        return true;
+    return false;
+}
+
 bool AuctionHouseObject::RemoveAuction(AuctionEntry* entry)
 {
     // Clean up multimaps before final erasure
@@ -164,8 +181,15 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
     else if (!bidder)
         bidder_accId = sObjectMgr.GetPlayerAccountIdByGUID(bidder_guid);
 
+    bool isHardcore = false;
+
+    if (bidder)
+        isHardcore = bidder->IsHardcore();
+    else
+        isHardcore = IsPlayerHardcore(auction->bidder);
+
     // receiver exist
-    if (bidder || bidder_accId)
+    if ((bidder || bidder_accId) && !isHardcore)
     {
         std::ostringstream msgAuctionWonSubject;
         msgAuctionWonSubject << auction->itemTemplate << ":0:" << AUCTION_WON;
@@ -212,6 +236,16 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry * auction)
     uint32 owner_accId = 0;
     if (!owner)
         owner_accId = sObjectMgr.GetPlayerAccountIdByGUID(owner_guid);
+
+    bool isHardcore = false;
+
+    if (owner)
+        isHardcore = owner->IsHardcore();
+    else
+        isHardcore = IsPlayerHardcore(auction->bidder);
+
+    if (isHardcore)
+        return;
 
     // owner exist
     if (owner || owner_accId)
@@ -267,8 +301,16 @@ void AuctionHouseMgr::SendAuctionExpiredMail(AuctionEntry * auction)
     if (!owner)
         owner_accId = sObjectMgr.GetPlayerAccountIdByGUID(owner_guid);
 
+    bool isHardcore = false;
+
+    if (owner)
+        isHardcore = owner->IsHardcore();
+    else
+        isHardcore = IsPlayerHardcore(auction->bidder);
+
+
     // owner exist
-    if (owner || owner_accId)
+    if ((owner || owner_accId) && !isHardcore)
     {
         std::ostringstream subject;
         subject << auction->itemTemplate << ":0:" << AUCTION_EXPIRED;

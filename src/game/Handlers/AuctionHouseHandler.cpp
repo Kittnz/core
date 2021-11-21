@@ -34,6 +34,7 @@
 #include "Chat.h"
 #include "Anticheat.h"
 
+extern bool IsPlayerHardcore(uint32 lowGuid);
 // please DO NOT use iterator++, because it is slower than ++iterator!!!
 // post-incrementation is always slower than pre-incrementation !
 
@@ -168,6 +169,7 @@ void WorldSession::SendAuctionRemovedNotification(AuctionEntry* auction)
     SendPacket(&data);
 }
 
+
 // this function sends mail to old bidder
 void WorldSession::SendAuctionOutbiddedMail(AuctionEntry *auction)
 {
@@ -177,6 +179,16 @@ void WorldSession::SendAuctionOutbiddedMail(AuctionEntry *auction)
     uint32 oldBidder_accId = 0;
     if (!oldBidder)
         oldBidder_accId = sObjectMgr.GetPlayerAccountIdByGUID(oldBidder_guid);
+
+    bool isHardcore = false;
+
+    if (oldBidder)
+        isHardcore = oldBidder->IsHardcore();
+    else
+        isHardcore = IsPlayerHardcore(auction->bidder);
+
+    if (isHardcore)
+        return; // let bid silently expire, don't mail money to now-HC chars.
 
     // old bidder exist
     if (oldBidder || oldBidder_accId)
@@ -202,6 +214,16 @@ void WorldSession::SendAuctionCancelledToBidderMail(AuctionEntry* auction)
     uint32 bidder_accId = 0;
     if (!bidder)
         bidder_accId = sObjectMgr.GetPlayerAccountIdByGUID(bidder_guid);
+
+    bool isHardcore = false;
+
+    if (bidder)
+        isHardcore = bidder->IsHardcore();
+    else
+        isHardcore = IsPlayerHardcore(auction->bidder);
+
+    if (isHardcore)
+        return; // let bid silently expire, don't mail money to now-HC chars.
 
     // bidder exist
     if (bidder || bidder_accId)
