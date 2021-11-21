@@ -679,6 +679,37 @@ void Loot::NotifyMoneyRemoved()
     }
 }
 
+void Loot::AddLooter(Player* player)
+{
+    if (player->GetGroup() && groupLeaderGuid.IsEmpty())
+        groupLeaderGuid = player->GetGroup()->GetLeaderGuid();
+
+    m_playersLooting.insert(player->GetObjectGuid());
+}
+
+void Loot::RemoveLooter(Player* player)
+{
+    bool reassign = false;
+    if (player->GetGroup() && player->GetGroup()->GetLeaderGuid() == groupLeaderGuid)
+    {
+        groupLeaderGuid = {};
+        reassign = true;
+    }
+
+    m_playersLooting.erase(player->GetObjectGuid());
+    if (reassign)
+    {
+        for (const auto& guid : m_playersLooting)
+        {
+            if (auto player = ObjectAccessor::FindPlayer(guid); player && player->GetGroup())
+            {
+                groupLeaderGuid = player->GetGroup()->GetLeaderGuid();
+                break;
+            }
+        }
+    }
+}
+
 void Loot::NotifyQuestItemRemoved(uint8 questIndex)
 {
     // when a free for all questitem is looted

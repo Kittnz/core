@@ -261,6 +261,7 @@ struct Loot
     LootItemList items;
     uint32 gold;
     uint8 unlootedCount;
+    ObjectGuid groupLeaderGuid;
     uint64 roundRobinPlayer;
     LootType loot_type;                                     // required for for proper item loot finish (store internal loot types in different from 3.x version, in fact this meaning that it send same loot types for interesting cases like 3.x version code, skip pre-3.x client loot type limitaitons)
 
@@ -318,9 +319,11 @@ struct Loot
     void NotifyItemRemoved(uint8 lootIndex);
     void NotifyQuestItemRemoved(uint8 questIndex);
     void NotifyMoneyRemoved();
-    void AddLooter(ObjectGuid guid) { m_playersLooting.insert(guid); }
-    void RemoveLooter(ObjectGuid guid) { m_playersLooting.erase(guid); }
+    void AddLooter(Player* player);
+    void RemoveLooter(Player* player);
     bool HasPlayersLooting() const { return !m_playersLooting.empty(); }
+    const auto& GetLootingPlayers() const { return m_playersLooting; }
+
 
     void generateMoneyLoot(uint32 minAmount, uint32 maxAmount);
     bool FillLoot(uint32 loot_id, LootStore const& store, Player* loot_owner, bool personal, bool noEmptyError = false, WorldObject const* looted = nullptr);
