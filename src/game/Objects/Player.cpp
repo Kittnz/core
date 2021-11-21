@@ -5264,10 +5264,10 @@ void Player::RepopAtGraveyard()
 
                 break;
             }
-            case CGZ_CAVERNS_OF_TIME:
             case CGZ_BLACK_MORASS:
+            case CGZ_CAVERNS_OF_TIME:
             {
-                TeleportTo(1, -8149.983398f, -4616.60887f, -126.431488f, 1.113609f);
+                TeleportTo(1, -8453.4F, -4690.7F, -202.9F, 4.9F);
                 isCustomGraveyard = true;
                 break;
             }

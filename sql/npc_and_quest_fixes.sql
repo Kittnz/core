@@ -1055,8 +1055,8 @@ replace into taxi_nodes values
 (401, 0, 0, 0, 0, 'Boat: Revanstusk to Sparkwater', 0, 0),
 (502, 0, -6657.53, -2219.37, 275.68, 'Zeppelin: Kargath to Orgrimmar', 0, 0),
 (503, 1, 1168.83, -4190, 50.34, 'Zeppelin: Orgrimmar to Kargath', 0, 0),
-(182, 0, -11864.9, 3188.4, 20, 'Ladipis, Caelan\'s Rest',0, 0),
-(183, 0, -14087.2, 2269.2, 67, 'Gilijim, Maul\'Ogg Refuge',0, 0);
+(182, 0, -11864.9, 3188.4, 20, 'Lapidis, Caelan\'s Rest',0, 541),
+(183, 0, -14087.2, 2269.2, 67, 'Gilijim, Maul\'Ogg Refuge',308, 0);
 
 replace into area_template values
 (1, 0, 0, 119, 65, 0, 'Dun Morogh', 2, 0),
@@ -3064,3 +3064,7 @@ update item_template set display_id = 26571 where name = 'Soul of the Spider';
 delete from creature where guid = 2567316;
 
 replace into `creature_display_info_addon` (`display_id`) VALUES (18697);
+
+-- Flightmasters Alliance / Horde
+replace into `creature_template` values ('92942','11553','0','0','0','[PH] Ogre Name',NULL,'0','55','55','15684','15684','0','0','4500','29','9','1.6','1.14286','1','20','5','0','1','1','344','444','0','248','1','2400','2000','1','4864','0','0','0','0','0','0','59.3256','81.5727','100','7','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','771','1011','','1','3','0','0','3','0','0','0','0','0','0','0','');
+replace into `creature_template` values ('92943','1408','0','0','0','[PH] KulTiras Name',NULL,'0','50','50','15684','15684','0','0','4500','15','9','1.6','1.14286','1','20','5','0','1','1','344','444','0','248','1','2400','2000','1','4864','0','0','0','0','0','0','59.3256','81.5727','100','7','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','771','1011','','1','3','0','0','3','0','0','0','0','0','0','0','');
