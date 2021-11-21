@@ -5284,19 +5284,13 @@ void Player::RepopAtGraveyard()
                     TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
                     isCustomGraveyard = true;
                 }
-
-                break;
-            }
-            case CGZ_DEEPRUN_TRAM:
-            {
-                isCustomGraveyard = true;
                 break;
             }
         };
 
         // If no grave found, stay at the current location
         // and don't show spirit healer location
-        if (ClosestGrave)
+        if (ClosestGrave && !isCustomGraveyard)
         {
             // Release spirit from transport => Teleport alive at nearest graveyard.
             if (GetTransport())
@@ -19318,6 +19312,7 @@ void Player::LearnGameMasterSpells()
         5,     // Death Touch
         11,    // Swiftness
         265,   // Area Death
+        7,     // Suicide
     };
 
     try

@@ -2776,7 +2776,7 @@ update creature_template set loot_id = 91917 where entry = 91917;
 update creature_template set loot_id = 91920 where entry = 91920;
 update creature_template set loot_id = 91928 where entry = 91928;
 update creature_template set loot_id = 91929 where entry = 91929;
-
+delete from creature_loot_template where entry = 91916;
 replace into creature_loot_template values
 -- ARCHLICH ENKHRAZ
 (91916, 83452, 10, 1, 1, 1, 0),
@@ -2800,7 +2800,7 @@ replace into creature_loot_template values
 (91920, 83444, 18, 1, 1, 1, 0),
 (91920, 83445, 18, 1, 1, 1, 0),
 -- ALARUS
-(91928, 83464, 12.5, 1, 1, 1, 0),
+(91928, 83472, 12.5, 1, 1, 1, 0),
 (91928, 83465, 12.5, 1, 1, 1, 0),
 (91928, 83466, 12.5, 1, 1, 1, 0),
 (91928, 83467, 12.5, 1, 1, 1, 0),
@@ -2808,7 +2808,7 @@ replace into creature_loot_template values
 (91928, 83469, 12.5, 1, 1, 1, 0),
 (91928, 83470, 12.5, 1, 1, 1, 0),
 (91928, 83471, 12.5, 1, 1, 1, 0),
-(91928, 83472, 0.25, 2, 1, 1, 0),
+(91928, 83464, 0.25, 2, 1, 1, 0),
 -- HIVAXXIS
 (91929, 83446, 10, 1, 1, 1, 0),
 (91929, 83447, 18, 1, 1, 1, 0),
