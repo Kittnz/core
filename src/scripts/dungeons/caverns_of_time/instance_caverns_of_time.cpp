@@ -1,4 +1,6 @@
 #include "scriptPCH.h"
+#include "instance_caverns_of_time.h"
+#include "Common.h"
 
 template <typename Functor>
 void DoAfterTime(Creature* creature, uint32 p_time, Functor&& function)
@@ -10,6 +12,8 @@ struct SpawnLocation
 {
     float m_fX, m_fY, m_fZ;
 };
+
+uint16 riftsClosed;
 
 ObjectGuid spawn1guid;
 ObjectGuid spawn2guid;
@@ -23,7 +27,6 @@ ObjectGuid GOB_BARRIER_1;
 ObjectGuid GOB_SANDWALL_1;
 
 int dragonGuidCount = 0;
-int riftsClosed = 0;
 bool finalDialogue = false;
 
 static const SpawnLocation rotMawSpawns[4] =
@@ -65,17 +68,21 @@ struct instance_caverns_of_time : public ScriptedInstance
     Creature* deadDefender2;
     Creature* deadDefender3;
 
+    int riftsClosed;
+
     std::list<Creature*> deadDragonsList;
 
     bool doOnce = false;
 
     void Initialize() override
     {
-        bronzeDefender1 = instance->SummonCreature(50110, -1880.02, 6635.72, -155.02, 0);
-        bronzeDefender2 = instance->SummonCreature(50110, -1884.82, 6637.66, -155.80, 0);
-        bronzeDefender3 = instance->SummonCreature(50110, -1889.18, 6640.18, -156.75, 0);
-        bronzeDefender4 = instance->SummonCreature(50110, -1893.81, 6643.04, -156.24, 0);
-        bronzeDefender5 = instance->SummonCreature(50110, -1897.60, 6646.52, -155.83, 0);
+        bronzeDefender1 = instance->SummonCreature(50110, -1880.02f, 6635.72f, -155.02f, 0);
+        bronzeDefender2 = instance->SummonCreature(50110, -1884.82f, 6637.66f, -155.80f, 0);
+        bronzeDefender3 = instance->SummonCreature(50110, -1889.18f, 6640.18f, -156.75f, 0);
+        bronzeDefender4 = instance->SummonCreature(50110, -1893.81f, 6643.04f, -156.24f, 0);
+        bronzeDefender5 = instance->SummonCreature(50110, -1897.60f, 6646.52f, -155.83f, 0);
+
+        riftsClosed = 0;
 
         // Fix later
         //deadDefender1 = instance->GetCreature(2563294);
@@ -167,19 +174,19 @@ struct instance_caverns_of_time : public ScriptedInstance
             {
                 bronzeDefender1->PMonsterYell("Squad! Move up and secure the landing!");
 
-                bronzeDefender1->MonsterMove(-1854.68, 6695.31, -181.19);
-                bronzeDefender2->MonsterMove(-1855.78, 6690.97, -180.85);
-                bronzeDefender3->MonsterMove(-1850.18, 6691.39, -181.61);
-                bronzeDefender4->MonsterMove(-1850.10, 6687.81, -181.30);
-                bronzeDefender5->MonsterMove(-1847.36, 6685.46, -181.37);
+                bronzeDefender1->MonsterMove(-1854.68f, 6695.31f, -181.19f);
+                bronzeDefender2->MonsterMove(-1855.78f, 6690.97f, -180.85f);
+                bronzeDefender3->MonsterMove(-1850.18f, 6691.39f, -181.61f);
+                bronzeDefender4->MonsterMove(-1850.10f, 6687.81f, -181.30f);
+                bronzeDefender5->MonsterMove(-1847.36f, 6685.46f, -181.37f);
 
                 DoAfterTime(bronzeDefender1, 12 * IN_MILLISECONDS, [bronzeDefender1 = bronzeDefender1, bronzeDefender2 = bronzeDefender2, bronzeDefender3 = bronzeDefender3, bronzeDefender4 = bronzeDefender4, bronzeDefender5 = bronzeDefender5]() {
 
-                    bronzeDefender1->MonsterMove(-1822.03f, 6689.86f, -186.14);
-                    bronzeDefender2->MonsterMove(-1820.43f, 6692.90f, -186.81);
-                    bronzeDefender3->MonsterMove(-1817.59f, 6696.38f, -187.69);
-                    bronzeDefender4->MonsterMove(-1815.76f, 6701.76f, -187.63);
-                    bronzeDefender5->MonsterMove(-1810.97f, 6706.42f, -187.79);
+                    bronzeDefender1->MonsterMove(-1822.03f, 6689.86f, -186.14f);
+                    bronzeDefender2->MonsterMove(-1820.43f, 6692.90f, -186.81f);
+                    bronzeDefender3->MonsterMove(-1817.59f, 6696.38f, -187.69f);
+                    bronzeDefender4->MonsterMove(-1815.76f, 6701.76f, -187.63f);
+                    bronzeDefender5->MonsterMove(-1810.97f, 6706.42f, -187.79f);
 
                     DoAfterTime(bronzeDefender1, 4 * IN_MILLISECONDS, [bronzeDefender1 = bronzeDefender1, bronzeDefender2 = bronzeDefender2, bronzeDefender3 = bronzeDefender3, bronzeDefender4 = bronzeDefender4, bronzeDefender5 = bronzeDefender5]() {
 
@@ -188,21 +195,18 @@ struct instance_caverns_of_time : public ScriptedInstance
                         bronzeDefender3->SetFacingTo(5.8f);
                         bronzeDefender4->SetFacingTo(5.8f);
                         bronzeDefender5->SetFacingTo(5.8f);
-
                         });
-
                     });
-
             }
         }
 
-        if (!finalDialogue && riftsClosed == 3)
+        if (!finalDialogue && riftsClosed == 5)
         {
             finalDialogue = true;
-            Creature* portal = instance->SummonCreature(GOB_CHROMIE_PORTAL, -1595.23, 7112.18, 23.72, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
+            Creature* portal = instance->SummonCreature(GOB_CHROMIE_PORTAL, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
 
             DoAfterTime(portal, 2 * IN_MILLISECONDS, [instance = instance]() {
-                if (Creature* chromie = instance->SummonCreature(NPC_CHROMIE, -1593.85, 7111.85, 23.72, 0, TEMPSUMMON_DEAD_DESPAWN))
+                if (Creature* chromie = instance->SummonCreature(NPC_CHROMIE, -1593.85f, 7111.85f, 23.72f, 0, TEMPSUMMON_DEAD_DESPAWN))
                 {
                     chromie->CastSpell(chromie, SPELL_TELEPORT, false);
                     chromie->SetFacingTo(6.18f);
@@ -698,13 +702,13 @@ struct infinite_timeripperAI : public ScriptedAI
 
         if (!doOnce)
         {
-            if (Creature* spawn1 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1412.98f, 6914.89f, -138.01f, 0.41f, TEMPSUMMON_MANUAL_DESPAWN))
+            if (Creature* spawn1 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1422.32f, 6910.95f, -138.01f, 0.41f, TEMPSUMMON_MANUAL_DESPAWN))
             {
                 dragonSpawns.push_back(spawn1);
                 dragonSpawn1 = spawn1->GetGUIDLow();
                 spawn1->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
             }
-            if (Creature* spawn2 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1401.54f, 6905.29f, -138.01f, 0.46f, TEMPSUMMON_MANUAL_DESPAWN))
+            if (Creature* spawn2 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1414.38f, 6896.57f, -138.07f, 0.46f, TEMPSUMMON_MANUAL_DESPAWN))
             {
                 dragonSpawns.push_back(spawn2);
                 dragonSpawn2 = spawn2->GetGUIDLow();
@@ -726,11 +730,13 @@ struct infinite_timeripperAI : public ScriptedAI
                             continue;
 
                         playerGroup->AddAura(SPELL_TIME_LAPSE);
+                        playerGroup->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
                     }
                 }
                 else
                 {
                     player->AddAura(SPELL_TIME_LAPSE);
+                    player->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
                 }
                 m_creature->PMonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, You’ve come far to stop us, but your advance stops here!");
 
@@ -747,12 +753,13 @@ struct infinite_timeripperAI : public ScriptedAI
                 {
                 case 1:
                 {
-                    if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, -1424.58f, 6895.75f, -131.0f, 0, TEMPSUMMON_MANUAL_DESPAWN))
+                    if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, -1424.58f, 6895.75f, -131.0f, 0, TEMPSUMMON_TIMED_DESPAWN, 10000))
                     {
                         portal->PMonsterEmote("The Infinite Timeripper opens a rift in time!", nullptr, true);
+                        m_creature->CastSpell(m_creature, 12380, true);
 
-                        DoAfterTime(m_creature, 9 * IN_MILLISECONDS, [m_creature = m_creature, portal = portal]() {
-                            portal->SummonCreature(NPC_HARBINGER, portal->GetPositionX(), portal->GetPositionY(), -138.0146f, 0, TEMPSUMMON_DEAD_DESPAWN);
+                        DoAfterTime(m_creature, 8 * IN_MILLISECONDS, [m_creature = m_creature, portal = portal]() {
+                            portal->SummonCreature(NPC_HARBINGER, -1416.87f, 6899.85f, -138.03f, 0, TEMPSUMMON_DEAD_DESPAWN);
                             });
                     }
 
@@ -803,7 +810,7 @@ struct infinite_timeripperAI : public ScriptedAI
 
     void EnterCombat(Unit*) override
     {
-        if (Player* player = m_creature->FindNearestHostilePlayer(20))
+        if (Player* player = m_creature->FindNearestHostilePlayer(50))
         {
             if (Group* group = player->GetGroup())
             {
@@ -814,11 +821,13 @@ struct infinite_timeripperAI : public ScriptedAI
                         continue;
 
                     playerGroup->AddAura(SPELL_TIME_LAPSE);
+                    playerGroup->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
                 }
             }
             else
             {
                 player->AddAura(SPELL_TIME_LAPSE);
+                player->SummonGameObject(3000513, -1389.85f, 6917.83f, -138.42f, 0, 0, 0, 0, 0, 9000);
             }
 
             m_creature->PMonsterYell("It seems the Bronze Dragonflight sent their pawns to fix what they could not, you’ve come far to stop us, but your advance stops here!");
@@ -1270,10 +1279,10 @@ struct chronar_boss_cotAI : public ScriptedAI
         m_creature->PMonsterSay("Too soon...");
 
         DoAfterTime(m_creature, 3 * IN_MILLISECONDS, [this]() {
-            me->SummonCreature(GOB_CHROMIE_PORTAL, -1423.45, 6990.50, -230.19, 0, TEMPSUMMON_TIMED_DESPAWN, 5000); });
+            me->SummonCreature(GOB_CHROMIE_PORTAL, -1423.45f, 6990.50f, -230.19f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000); });
 
         DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [this]() {
-            Creature* chromie = me->SummonCreature(NPC_CHROMIE, -1426.82, 6988.00, -230.20, 0, TEMPSUMMON_DEAD_DESPAWN);
+            Creature* chromie = me->SummonCreature(NPC_CHROMIE, -1426.82f, 6988.00f, -230.20f, 0, TEMPSUMMON_DEAD_DESPAWN);
             chromieGuid = chromie->GetGUIDLow();
             chromie->CastSpell(chromie, SPELL_TELEPORT, false);
             chromie->SetFacingTo(3.94f);
@@ -1321,6 +1330,9 @@ struct harbinger_boss_cotAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        if (GameObject* forceField = m_creature->FindNearestGameObject(3000513, 100))
+            forceField->AddObjectToRemoveList();
+        
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -1376,7 +1388,6 @@ struct harbinger_boss_cotAI : public ScriptedAI
         }
         DoMeleeAttackIfReady();
     }
-
 
     void EnterCombat(Unit*) override
     {
@@ -1598,7 +1609,7 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
     pPlayer->RemoveItem(80008, 1, true);
 
     DoAfterTime(pCreature, 2 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
-        pCreature->GetMotionMaster()->MovePoint(0, -1597.75, 7105.72, 23.76, true, 1.25, 6.25f);
+        pCreature->GetMotionMaster()->MovePoint(0, -1597.75f, 7105.72f, 23.76f, true, 1.25f, 6.25f);
         });
 
     DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
@@ -1853,7 +1864,7 @@ static const MoveLocation riftMoveLocation[8] =
     { -1598.93f, 7095.85f, 24.33f },
     { -1596.64f, 7115.21f, 24.33f },
     { -1597.06f, 7111.69f, 30.73f },
-    { -1598.41, 7100.27f, 30.73f },
+    { -1598.41f, 7100.27f, 30.73f },
     { -1597.79f, 7105.53f, 34.99f },
     { -1577.60f, 7098.29f, 33.77f },
     { -1576.78f, 7108.26f, 33.77f },
@@ -1920,7 +1931,7 @@ struct chromie_boss_cotAI : public ScriptedAI
             //Player* pPlayer = m_creature->FindNearestPlayer(100);
             m_creature->SetFactionTemporary(35);
 
-            Creature* largeRift = m_creature->SummonCreature(91001, -1607.04, 7107.48, 26.08, 0, TEMPSUMMON_DEAD_DESPAWN);
+            Creature* largeRift = m_creature->SummonCreature(91001, -1607.04f, 7107.48f, 26.08f, 0, TEMPSUMMON_DEAD_DESPAWN);
             timeRifts.push_back(largeRift);
 
             DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
@@ -2486,7 +2497,7 @@ struct injured_defender_cot : public ScriptedAI
             case 2:
             {
                 m_creature->PMonsterSay("Heroes! I must report whats happening! Keep them back!");
-                Creature* portal = m_creature->SummonCreature(CHROMIE_PORTAL, -1872.45, 6693.27, -177.26, 0, TEMPSUMMON_TIMED_DESPAWN, 10000);
+                Creature* portal = m_creature->SummonCreature(CHROMIE_PORTAL, -1872.45f, 6693.27f, -177.26f, 0, TEMPSUMMON_TIMED_DESPAWN, 10000);
                 portal->SetObjectScale(2);
                 dragonSpawn1 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1809.58f, 6708.89f, -187.67f, 0, TEMPSUMMON_DEAD_DESPAWN);
                 dragonSpawn2 = m_creature->SummonCreature(NPC_DRAGONSPAWN, -1808.60f, 6701.76f, -188.38f, 0, TEMPSUMMON_DEAD_DESPAWN);
@@ -2515,7 +2526,7 @@ struct injured_defender_cot : public ScriptedAI
                     dragonSpawn2->SaveHomePosition();
                     dragonSpawn3->SaveHomePosition();
 
-                    m_creature->MonsterMove(-1872.45, 6693.27, -177.26);
+                    m_creature->MonsterMove(-1872.45f, 6693.27f, -177.26f);
 
                     if (Creature* portal = m_creature->FindNearestCreature(CHROMIE_PORTAL, 3))
                     {
@@ -2541,7 +2552,10 @@ struct injured_defender_cot : public ScriptedAI
 
 bool GossipHello_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature)
 {
-    if (riftsClosed < 3)
+    ScriptedInstance* m_pInstance;
+    m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
+        
+        if (riftsClosed < 3)
     {
         if (!pPlayer->HasItemCount(80008, 1, true))
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Take the Temporal Bronze Disc.", GOSSIP_SENDER_MAIN, 1);
@@ -2606,32 +2620,44 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
         SPELL_TELEPORT = 26638
     };
 
-    bool spawnChromie = false;
+    time_t now = time(nullptr);
 
-    if (Creature* rift = pPlayer->FindNearestCreature(91001, 10, true))
+    if (cotData.m_itemTimer < now)
     {
-        time_t now = time(nullptr);
+        cotData.m_itemTimer = now + 30;
 
-        pPlayer->CastSpell(pPlayer, 23017, true);
-        pPlayer->SetRooted(true);
-        //pPlayer->AddSpellCooldown(31726, pItem->GetEntry(), now + 30);
+        bool spawnChromie = false;
 
-        if (GameObject* riftspell = pPlayer->SummonGameObject(7000035, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0))
+        if (Creature* rift = pPlayer->FindNearestCreature(91001, 10, true))
         {
-            DoAfterTime(rift, 5 * IN_MILLISECONDS, [rift = rift, pPlayer = pPlayer, riftSpell = riftspell, spawnChromie = spawnChromie]() {
-                pPlayer->CastStop();
-                pPlayer->CastSpell(pPlayer, 22460, true);
-                pPlayer->SetRooted(false);
-                pPlayer->SummonGameObject(7000032, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0);
-                riftSpell->Despawn();
-                riftSpell->Delete();
-                rift->SetNativeScale(0.05);
-                rift->ForcedDespawn(1500);
-                riftsClosed++;
-                });
+            if (Creature* chromie = pPlayer->FindNearestCreature(91003, 50, true))
+            {
+                chromie->CastSpell(chromie, SPELL_TELEPORT, false);
+                chromie->ForcedDespawn(500);
+            }
+
+            pPlayer->CastSpell(pPlayer, 23017, true);
+            pPlayer->SetRooted(true);
+
+            if (GameObject* riftspell = pPlayer->SummonGameObject(7000035, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0))
+            {
+                DoAfterTime(rift, 5 * IN_MILLISECONDS, [rift = rift, pPlayer = pPlayer, riftSpell = riftspell, spawnChromie = spawnChromie]() {
+                    pPlayer->CastStop();
+                    pPlayer->CastSpell(pPlayer, 22460, true);
+                    pPlayer->SetRooted(false);
+                    pPlayer->SummonGameObject(7000032, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0);
+                    riftSpell->Despawn();
+                    riftSpell->Delete();
+                    rift->SetNativeScale(0.05f);
+                    rift->ForcedDespawn(1500);
+                    riftsClosed++;
+                    });
+            }
         }
+        return true;
     }
-    return true;
+
+    return false;
 }
 
 CreatureAI* GetAI_infinite_dragonspawn(Creature* _Creature)
