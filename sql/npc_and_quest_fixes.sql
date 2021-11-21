@@ -3059,3 +3059,8 @@ replace into item_template values
  replace into `gameobject_template`  (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (379548, 23, 5494, 'Meeting Stone', 35, 0, 1, 58, 60, 717, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 update item_template set display_id = 34518 where entry = 60363;
+update item_template set display_id = 26571 where name = 'Soul of the Spider';
+
+delete from creature where guid = 2567316;
+
+replace into `creature_display_info_addon` (`display_id`) VALUES (18697);
