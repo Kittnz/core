@@ -35,6 +35,8 @@
 #include "Anticheat.h"
 #include "Item.h"
 
+#define MAX_UNCOMPRESSED_PACKET_SIZE 0x8000 
+
 //// MemberSlot ////////////////////////////////////////////
 void MemberSlot::SetMemberStats(Player* player)
 {
@@ -748,8 +750,12 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
 
     size_t onlineMembers = 0;
     size_t offlineMembers = 0;
-    std::vector<TempMemberInfo> memberCache;
-    memberCache.reserve(members.size());
+    std::vector<TempMemberInfo> onlineMemberCache;
+    std::vector<TempMemberInfo> offlineMemberCache;
+    onlineMemberCache.reserve(members.size() / 2);
+    offlineMemberCache.reserve(members.size() / 2);
+
+    uint32 totalSize = 0;
 
     for (auto itr = members.begin(); itr != members.end(); ++itr)
     {
@@ -759,11 +765,19 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
         info.Slot = &itr->second;
 
         if (info.Member)
+        {
+            onlineMemberCache.emplace_back(info);
             ++onlineMembers;
+        }
         else
+        {
+            offlineMemberCache.emplace_back(info);
             ++offlineMembers;
+        }
 
-        memberCache.emplace_back(info);
+
+        totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
+        totalSize += info.Slot->Pnote.length() + 1 + info.Slot->OFFnote.length() + 1;
     }
 
     size_t count = onlineMembers + offlineMembers;
@@ -772,10 +786,25 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
     onlineMembers = std::min(onlineMembers, size_t(GUILD_MAX_MEMBERS));
     offlineMembers = std::min(offlineMembers, size_t(GUILD_MAX_MEMBERS) - onlineMembers);
 
-    bool const sendNotes = count < GUILD_MAX_MEMBERS_WITH_NOTE;
+    const bool inPacketCap = totalSize < MAX_UNCOMPRESSED_PACKET_SIZE;
 
-    auto writeMemberData = [sendNotes](WorldPacket& data, TempMemberInfo const& member) -> void
+    if (!inPacketCap)
     {
+        // figure out how many we can send before having to apply pagination (soon tm).
+        // guild with notes is too big to show in one packet. We could for later add some UI to paginate the member list.
+        // For now just prefer online members, then ranks, then the rest.
+        // this if block is intentionally left empty.
+    }
+
+    auto writeMemberData = [inPacketCap](WorldPacket& data, TempMemberInfo const& member) -> void
+    {
+        if (!inPacketCap)
+        {
+            // if the packet is expected to be bigger than cap we filter otherwise we might send too much.
+            if (data.size() + GUILD_MEMBER_BLOCK_SIZE >= MAX_UNCOMPRESSED_PACKET_SIZE)
+                return;
+        }
+
         data << member.Guid;
         data << uint8(member.Member != nullptr);
         if (member.Member)
@@ -795,14 +824,8 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
             data << uint32(member.Slot->ZoneId);
             data << float(float(time(nullptr) - member.Slot->LogoutTime) / DAY);
         }
-
-        if (sendNotes)
-        {
-            data << member.Slot->Pnote;
-            data << member.Slot->OFFnote;
-        }
-        else
-            data << uint8(0) << uint8(0);
+        data << member.Slot->OFFnote;
+        data << member.Slot->Pnote;
     };
     // we can only guess size
     WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
@@ -814,30 +837,44 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
     for (RankList::const_iterator ritr = m_Ranks.begin(); ritr != m_Ranks.end(); ++ritr)
         data << uint32(ritr->Rights);
 
-    if (onlineMembers > 0)
-    {
-        for (TempMemberInfo const& member : memberCache)
-        {
-            if (!member.Member)
-                continue;
 
-            writeMemberData(data, member);
-            if (--onlineMembers == 0)
-                break;
-        }
-    }
-    if (offlineMembers > 0)
+    //sort the members from highest to lowest rank if over limit.
+    if (!inPacketCap)
     {
-        for (TempMemberInfo const& member : memberCache)
+        std::sort(onlineMemberCache.begin(), onlineMemberCache.end(), [](const TempMemberInfo& a, const TempMemberInfo& b)
         {
-            if (member.Member)
-                continue;
+            return a.Slot->RankId < b.Slot->RankId; // lowest ranks first, lowest rank ids -> highest actual rank
+        });
 
-            writeMemberData(data, member);
-            if (--offlineMembers == 0)
-                break;
-        }
+        std::sort(offlineMemberCache.begin(), offlineMemberCache.end(), [](const TempMemberInfo& a, const TempMemberInfo& b)
+        {
+            return a.Slot->RankId < b.Slot->RankId; // lowest ranks first, lowest rank ids -> highest actual rank
+        });
     }
+
+    //cull caches if they're too big.
+    if (onlineMembers < onlineMemberCache.size())
+        onlineMemberCache.resize(onlineMemberCache.size() - (onlineMemberCache.size() - onlineMembers));
+
+    if (offlineMembers < offlineMemberCache.size())
+        offlineMemberCache.resize(offlineMemberCache.size() - (offlineMemberCache.size() - offlineMembers));
+
+    for (const auto& member : onlineMemberCache)
+    {
+        if (!member.Member)
+            continue;
+
+        writeMemberData(data, member);
+    }
+
+    for (const auto& member : offlineMemberCache)
+    {
+        if (member.Member)
+            continue;
+
+        writeMemberData(data, member);
+    }
+
     if (session)
         session->SendPacket(&data);
     else
