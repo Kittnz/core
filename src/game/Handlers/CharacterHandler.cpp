@@ -754,13 +754,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         ChatHandler(this).PSendSysMessage("|cff00FF00We sincerely hope you enjoy your stay on Turtle WoW! We have the best community out there and are very happy to have you. |cff00FF00Please accept this adorable Riding Turtle as your companion during this long and difficult journey! Safe travels!");
         pCurrChar->LearnSpell(30174, false);
     }
-
-    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
-    {
-        if (pCurrChar->GetLevel() >= 5 && !pCurrChar->HasItemCount(83272) && !pCurrChar->HasItemCount(83270))
-            pCurrChar->AddItem(83270, 1);
-    }
-
     // Hackfix for existing gnome hunters missing this racial:
     if (pCurrChar->GetRace() == RACE_GNOME && pCurrChar->GetClass() == CLASS_HUNTER)
     {
