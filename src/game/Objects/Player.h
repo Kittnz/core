@@ -721,7 +721,7 @@ struct InstancePlayerBind
 class PlayerTaxi
 {
     public:
-        PlayerTaxi();
+        PlayerTaxi(): m_discount(0.0f) { m_taximask.fill(0); }
         ~PlayerTaxi() {}
         // Nodes
         void InitTaxiNodes(uint32 race, uint32 level);
@@ -730,13 +730,13 @@ class PlayerTaxi
         bool IsTaximaskNodeKnown(uint32 nodeidx) const
         {
             uint8  field   = uint8((nodeidx - 1) / 32);
-            uint32 submask = 1<<((nodeidx-1)%32);
+            uint32 submask = 1 << ((nodeidx - 1) % 32);
             return (m_taximask[field] & submask) == submask;
         }
         bool SetTaximaskNode(uint32 nodeidx)
         {
             uint8  field   = uint8((nodeidx - 1) / 32);
-            uint32 submask = 1<<((nodeidx-1)%32);
+            uint32 submask = 1 << ((nodeidx - 1) % 32);
             if ((m_taximask[field] & submask) != submask)
             {
                 m_taximask[field] |= submask;
@@ -1115,7 +1115,6 @@ class Player final: public Unit
         // ---
         void MailCityProtectorMedallion();
         void MailRidingTurtleGift();
-        void MailOpenHouseGift();
         bool IsIgnoringTitles();
         void SetIgnoringTitles(bool shouldIgnore);
         void RewardBountyHuntKill(Unit* pVictim);

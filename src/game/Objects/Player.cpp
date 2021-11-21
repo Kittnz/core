@@ -165,16 +165,9 @@ static uint32 WorldBuffs[MAX_WORLD_BUFFS]
 static uint32 copseReclaimDelay[MAX_DEATH_COUNT] = { 30, 60, 120 };
 
 //== PlayerTaxi ================================================
-
-PlayerTaxi::PlayerTaxi()
-{
-    // Taxi nodes
-    memset(m_taximask, 0, sizeof(m_taximask));
-}
-
 void PlayerTaxi::InitTaxiNodes(uint32 race, uint32 level)
 {
-    memset(m_taximask, 0, sizeof(m_taximask));
+    m_taximask.fill(0);
     // capital and taxi hub masks
     ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(race);
     m_taximask[0] = rEntry->startingTaxiMask;
@@ -3137,9 +3130,6 @@ void Player::GiveLevel(uint32 level)
         LearnSpell(30174, false);
     }
 
-    if (level == 10 && sWorld.getConfig(CONFIG_BOOL_OPENHOUSE))
-        MailOpenHouseGift();
-
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(GetRace(), GetClass(), level, &info);
 
@@ -5294,19 +5284,13 @@ void Player::RepopAtGraveyard()
                     TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
                     isCustomGraveyard = true;
                 }
-
-                break;
-            }
-            case CGZ_DEEPRUN_TRAM:
-            {
-                isCustomGraveyard = true;
                 break;
             }
         };
 
         // If no grave found, stay at the current location
         // and don't show spirit healer location
-        if (ClosestGrave)
+        if (ClosestGrave && !isCustomGraveyard)
         {
             // Release spirit from transport => Teleport alive at nearest graveyard.
             if (GetTransport())
@@ -19328,6 +19312,7 @@ void Player::LearnGameMasterSpells()
         5,     // Death Touch
         11,    // Swiftness
         265,   // Area Death
+        7,     // Suicide
     };
 
     try
@@ -19959,10 +19944,7 @@ void Player::RewardSinglePlayerAtKill(Unit* pVictim)
             AddItem(50015, 1);
         }
 
-        // Turtle WoW custom feature:
-        if (sWorld.getConfig(CONFIG_BOOL_BOUNTY))
-            RewardBountyHuntKill(pVictim);
-
+        RewardBountyHuntKill(pVictim);
         RewardExpansionPvPQuest(pVictim);
     }    
 }
@@ -22143,21 +22125,6 @@ void Player::MailRidingTurtleGift()
 
     {
         Item* ToMailItem = Item::CreateItem(23720, 1, this);
-        ToMailItem->SaveToDB();
-
-        MailDraft(subject, sObjectMgr.CreateItemText(message))
-            .AddItem(ToMailItem)
-            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
-    }
-}
-
-void Player::MailOpenHouseGift()
-{
-    std::string subject = "Open House 2021";
-    std::string message = "Thanks for joining the Open House event!\n\nWe hope you enjoy rest of the journey and continue being a part of our amazing community!";
-
-    {
-        Item* ToMailItem = Item::CreateItem(51893, 1, this);
         ToMailItem->SaveToDB();
 
         MailDraft(subject, sObjectMgr.CreateItemText(message))
