@@ -9,4 +9,10 @@ enum
     TYPE_CHRONORMU = 5
 };
 
+struct cotDataStruct
+{
+    time_t m_itemTimer;
+};
+
+static cotDataStruct cotData = {0};
 #endif
