@@ -1787,7 +1787,7 @@ bool QuestAccept_npc_iselus(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
 bool GOHello_go_way_stone(Player* pPlayer, GameObject* pGo)
 {
-    if (!pPlayer->HasItemCount(60331, 1, false))
+    if (!pPlayer->HasItemCount(60372, 1, false))
     {
         pPlayer->GetSession()->SendNotification("Require The Staff of Eldara");
         pPlayer->CLOSE_GOSSIP_MENU();

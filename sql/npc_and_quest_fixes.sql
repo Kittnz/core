@@ -3079,3 +3079,8 @@ update creature_template set display_id1 = 5908 where entry = 91303;
 update creature_loot_template SET ChanceOrQuestChance = 0.5 WHERE entry = 6329 AND item = 80798 AND groupid = 5;
 
 update quest_template set objectives = 'Venture within Deepneck Cove beneath Maul\'ogg Refuge and slay Glasseye to claim The Glass Eye for Seer Borgorr.' where entry = 40218;
+
+update quest_template set srcitemid = 60372 where entry = 40252;
+delete from item_template where entry = 60372;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60372,2482,'Staff of Eldara',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
