@@ -151,6 +151,12 @@ bool WorldSession::SendLearnNewTaxiNode(Creature* unit)
         update << uint8(1);
         SendPacket(&update);
 
+        // Discover Gilijim & Lapidis when discovering Booty Bay nodes:
+        if (curloc == 18) // Booty Bay, Horde
+            GetPlayer()->m_taxi.SetTaximaskNode(183);
+        else if (curloc == 19) // Booty Bay, Alliance
+            GetPlayer()->m_taxi.SetTaximaskNode(182);
+
         return true;
     }
     else
