@@ -63,9 +63,9 @@ class PlayerAI;
 class PlayerBroadcaster;
 class MapReference;
 
-#define PLAYER_MAX_SKILLS 127
-#define PLAYER_EXPLORED_ZONES_SIZE 64
-#define CORPSE_REPOP_TIME (6 * MINUTE * IN_MILLISECONDS)
+static constexpr uint8 PLAYER_MAX_SKILLS = 127;
+constexpr uint8 PLAYER_EXPLORED_ZONES_SIZE = 64;
+constexpr uint32 CORPSE_REPOP_TIME = (6 * MINUTE * IN_MILLISECONDS);
 
 // Note: SPELLMOD_* values is aura types in fact
 enum SpellModType
@@ -187,7 +187,7 @@ struct ActionButton
     }
 };
 
-#define  MAX_ACTION_BUTTONS 120   // TBC 132 checked in 2.3.0
+constexpr uint8 MAX_ACTION_BUTTONS = 120;   // TBC 132 checked in 2.3.0
 
 struct PlayerCreateInfoItem
 {
@@ -304,8 +304,6 @@ enum DrunkenState
     DRUNKEN_SMASHED = 3
 };
 
-#define MAX_DRUNKEN   4
-
 enum PlayerFlags
 {
     PLAYER_FLAGS_NONE                   = 0x00000000,
@@ -369,8 +367,9 @@ enum MirrorTimerType
     BREATH_TIMER       = 1,
     FIRE_TIMER         = 2
 };
-#define MAX_TIMERS      3
-#define DISABLED_MIRROR_TIMER   -1
+
+static constexpr uint8 MAX_TIMERS = 3;
+static constexpr int8 DISABLED_MIRROR_TIMER = -1;
 
 // 2^n values
 enum AtLoginFlags
@@ -408,7 +407,7 @@ enum QuestSlotOffsets
     QUEST_TIME_OFFSET         = 2
 };
 
-#define MAX_QUEST_OFFSET 3
+static constexpr uint8 MAX_QUEST_OFFSET = 3;
 
 enum QuestSlotStateMask
 {
@@ -434,8 +433,8 @@ struct SkillStatusData
 
 typedef std::unordered_map<uint32, SkillStatusData> SkillStatusMap;
 
-#define GNOMECAR_DISPLAYID 2490
-#define GOBLINCAR_DISPLAYID 10318
+constexpr uint32 GNOMECAR_DISPLAYID = 2490;
+constexpr uint32 GOBLINCAR_DISPLAYID = 10318;
 
 enum PlayerSlots
 {
@@ -446,7 +445,7 @@ enum PlayerSlots
     PLAYER_SLOTS_COUNT          = (PLAYER_SLOT_END - PLAYER_SLOT_START)
 };
 
-#define INVENTORY_SLOT_BAG_0    255
+constexpr uint8 INVENTORY_SLOT_BAG_0 = 255;
 
 enum EquipmentSlots                                         // 19 slots
 {
@@ -576,7 +575,7 @@ enum PlayedTimeIndex
     PLAYED_TIME_LEVEL = 1
 };
 
-#define MAX_PLAYED_TIME_INDEX 2
+static constexpr uint8 MAX_PLAYED_TIME_INDEX = 2;
 
 // used at player loading query list preparing, and later result selection
 enum PlayerLoginQueryIndex
@@ -703,8 +702,8 @@ enum PlayerTitles : uint8
 };
 
 // Player summoning auto-decline time (in secs)
-#define MAX_PLAYER_SUMMON_DELAY                   (2*MINUTE)
-#define MAX_MONEY_AMOUNT                       (0x7FFFFFFF-1)
+constexpr uint32 MAX_PLAYER_SUMMON_DELAY = (2 * MINUTE);
+constexpr uint32 MAX_MONEY_AMOUNT = (0x7FFFFFFF - 1);
 
 struct InstancePlayerBind
 {
@@ -716,7 +715,7 @@ struct InstancePlayerBind
     InstancePlayerBind() : state(nullptr), perm(false) {}
 };
 
-#define MAX_INSTANCE_PER_ACCOUNT_PER_HOUR 5
+static constexpr uint8 MAX_INSTANCE_PER_ACCOUNT_PER_HOUR = 5;
 
 class PlayerTaxi
 {
@@ -880,7 +879,7 @@ struct CinematicWaypointEntry
         Position position;
 };
 
-#define MAX_RACIAL_SPELLS 10
+static constexpr uint8 MAX_RACIAL_SPELLS = 10;
 
 struct RacialSpells
 {

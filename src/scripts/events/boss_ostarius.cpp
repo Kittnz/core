@@ -459,15 +459,10 @@ struct boss_ostariusAI : public ScriptedAI
 
     bool IsPortalAlreadySpawned(const std::size_t index)
     {
-        std::for_each(portals.begin(), portals.end(), [&](GameObject* portal)
+        return std::any_of(portals.begin(), portals.end(), [&](GameObject* portal)
         {
-            if (portal->GetDistanceSqr(portalLocs[index][0], portalLocs[index][1], portalLocs[index][2]) < .5f) // Never exactly on the same spot apparently?
-            {
-                return true;
-            }
+            return portal->GetDistanceSqr(portalLocs[index][0], portalLocs[index][1], portalLocs[index][2]) < .5f; // Never exactly on the same spot apparently?
         });
-
-        return false;
     }
 
     void SummonConstructs()
