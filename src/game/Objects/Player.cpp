@@ -137,8 +137,8 @@ enum CharacterFlags
     CHARACTER_FLAG_UNK32                = 0x80000000
 };
 
-// world buffs
-#define MAX_WORLD_BUFFS 15
+// World buffs
+static constexpr uint32 MAX_WORLD_BUFFS = 15;
 static uint32 WorldBuffs[MAX_WORLD_BUFFS]
 {
 	22888, // Rallying Cry of the Dragonslayer
@@ -158,9 +158,9 @@ static uint32 WorldBuffs[MAX_WORLD_BUFFS]
 	16609, // Warchief's Blessing
 };
 
-// corpse reclaim times
-#define DEATH_EXPIRE_STEP (5*MINUTE)
-#define MAX_DEATH_COUNT 3
+// Corpse reclaim times
+static constexpr uint32 DEATH_EXPIRE_STEP = (5 * MINUTE);
+static constexpr uint32 MAX_DEATH_COUNT = 3;
 
 static uint32 copseReclaimDelay[MAX_DEATH_COUNT] = { 30, 60, 120 };
 
