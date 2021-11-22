@@ -1056,7 +1056,7 @@ replace into taxi_nodes values
 (502, 0, -6657.53, -2219.37, 275.68, 'Zeppelin: Kargath to Orgrimmar', 0, 0),
 (503, 1, 1168.83, -4190, 50.34, 'Zeppelin: Orgrimmar to Kargath', 0, 0),
 (182, 0, -11864.9, 3188.4, 20, 'Lapidis, Caelan\'s Rest',0, 541),
-(183, 0, -14087.2, 2269.2, 67, 'Gilijim, Maul\'Ogg Refuge',308, 0);
+(183, 0, -14087.2, 2269.2, 67, 'Gilijim, Maul\'Ogg Refuge',9297, 0);
 
 replace into area_template values
 (1, 0, 0, 119, 65, 0, 'Dun Morogh', 2, 0),
