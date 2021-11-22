@@ -1654,6 +1654,17 @@ void Player::CinematicEnd()
     cinematic_elapsed_time = 0;
 }
 
+void Player::LogHCDeath()
+{
+    auto attacker = GetAttackers().size() > 0 ? (*GetAttackers().begin()) : nullptr;
+    uint32 attackerEntry = 0;
+    if (attacker && attacker->ToCreature())
+        attackerEntry = attacker->ToCreature()->GetEntry();
+
+    CharacterDatabase.DirectPExecute("REPLACE INTO `hardcore_deaths` VALUES(%u, %u, %u, %u, %u, %f, %f, %f, %u)", GetGUIDLow(), GetRace(), GetClass(), GetLevel(), attackerEntry,
+        GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+}
+
 void Player::SetDeathState(DeathState s)
 {
     uint32 ressSpellId = 0;
@@ -1692,39 +1703,6 @@ void Player::SetDeathState(DeathState s)
 
         if (m_zoneScript)
             m_zoneScript->OnPlayerDeath(this);
-
-        if (IsHardcore())
-        {
-            static bool checkedTable = false;
-
-            if (!checkedTable)
-            {
-                CharacterDatabase.DirectExecute("CREATE TABLE IF NOT EXISTS `hardcore_deaths` (\
-                    `lowGuid` INT(10) UNSIGNED NOT NULL,\
-                    `race` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',\
-                    `class` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0',\
-                    `level` INT(10) UNSIGNED NOT NULL,\
-                    `attackerEntry` INT(10) UNSIGNED NOT NULL,\
-                    `position_x` FLOAT(12) NOT NULL DEFAULT '0',\
-                    `position_y` FLOAT(12) NOT NULL DEFAULT '0',\
-                    `position_z` FLOAT(12) NOT NULL DEFAULT '0',\
-                    `mapId` INT(10) UNSIGNED NOT NULL DEFAULT '0',\
-                    PRIMARY KEY(`lowGuid`) USING BTREE\
-                    )\
-                    COLLATE = 'utf8_general_ci'\
-                    ENGINE = InnoDB\
-                    ;");
-                checkedTable = true;
-            }
-
-            auto attacker = GetAttackers().size() > 0 ? (*GetAttackers().begin()) : nullptr;
-            uint32 attackerEntry = 0;
-            if (attacker && attacker->ToCreature())
-                attackerEntry = attacker->ToCreature()->GetEntry();
-
-            CharacterDatabase.DirectPExecute("REPLACE INTO `hardcore_deaths` VALUES(%u, %u, %u, %u, %u, %f, %f, %f, %u)", GetGUIDLow(), GetRace(), GetClass(), GetLevel(), attackerEntry,
-                GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
-        }
     }
 
     Unit::SetDeathState(s);
