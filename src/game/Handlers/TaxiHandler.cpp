@@ -151,11 +151,14 @@ bool WorldSession::SendLearnNewTaxiNode(Creature* unit)
         update << uint8(1);
         SendPacket(&update);
 
-        // Discover Gilijim & Lapidis when discovering Booty Bay nodes:
         if (curloc == 18) // Booty Bay, Horde
-            GetPlayer()->m_taxi.SetTaximaskNode(183);
+            GetPlayer()->m_taxi.SetTaximaskNode(183); // Gilijim
         else if (curloc == 19) // Booty Bay, Alliance
-            GetPlayer()->m_taxi.SetTaximaskNode(182);
+            GetPlayer()->m_taxi.SetTaximaskNode(182); // Lapidis
+        else if (curloc == 7)  // Menethil Harbor 
+            GetPlayer()->m_taxi.SetTaximaskNode(175); // Hawk's Vigi
+        else if (curloc == 6)  // Ironforge 
+            GetPlayer()->m_taxi.SetTaximaskNode(176); // Ironforge Airfields
 
         return true;
     }
