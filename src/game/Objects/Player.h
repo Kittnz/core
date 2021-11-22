@@ -2034,6 +2034,8 @@ class Player final: public Unit
         void CinematicEnd();
         void CinematicStart(uint32 id);
 
+        void LogHCDeath();
+
         uint32 watching_cinematic_entry;
         Position cinematic_start;
         Position const* cinematic_current_waypoint;

@@ -1107,7 +1107,11 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
             pPlayerTap->RewardSinglePlayerAtKill(pVictim);
     }
     if (pPlayerVictim)
+    {
+        if (pPlayerVictim->IsHardcore())
+            pPlayerVictim->LogHCDeath();
         pPlayerVictim->RewardHonorOnDeath();
+    }
 
     // To be replaced if possible using ProcDamageAndSpell
     if (pVictim != this) // The one who has the fatal blow
