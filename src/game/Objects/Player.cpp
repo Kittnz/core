@@ -85,6 +85,8 @@
 #include "events/event_naxxramas.h"
 #include "events/event_wareffort.h"
 
+#include <sstream>
+
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
 #define PLAYER_SKILL_INDEX(x)       (PLAYER_SKILL_INFO_1_1 + ((x)*3))
@@ -22032,59 +22034,42 @@ bool Player::InGurubashiArena(bool checkOutsideArea) const
 
 void Player::MailHardcoreModeRewards(uint32 level)
 {
-    // Speak to Speedy and get an item that will reduce your Creature.Kill XP to x0.5 (hardcore mode).
-    // If player stays at 0.5, he/she will be able to receive special rewards evry 10 levels.
-    uint32 itemEntry = 0;
-    std::string subject = "";
-    std::string message = "";
-
-    switch (level)
+    static std::unordered_map<uint32, uint32> levelRewards
     {
-    case 10:
-        itemEntry = 50050;
-        subject = "Congratulations on level 10!";
-        message = "Your recent achievements on reaching level 10 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
-        break;
-    case 20:
-        itemEntry = 50051;
-        subject = "Congratulations on level 20!";
-        message = "Your recent achievements on reaching level 20 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
-        break;
-    case 30:
-        itemEntry = 50052;
-        subject = "Congratulations on level 30!";
-        message = "Your recent achievements on reaching level 30 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
-        break;
-    case 40:
-        itemEntry = 50053;
-        subject = "Congratulations on level 40!";
-        message = "Your recent achievements on reaching level 40 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
-        break;
-    case 50:
-        itemEntry = 50054;
-        subject = "Congratulations on level 50!";
-        message = "Your recent achievements on reaching level 50 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
-        break;
-    case 60:
-        itemEntry = 50055;
-        subject = "Congratulations on level 60!";
-        message = "Your recent achievements on reaching level 60 at the hardcore setting have not gone unnoticed. To commend you for your dedication and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
-        break;
-    default:
-        return;
-    }
+        {10, 50050},
+        {20, 50051},
+        {30, 50052},
+        {40, 50053},
+        {50, 50054},
+        {60, 50055},
+    };
 
-    Item* ToMailItem = Item::CreateItem(itemEntry, 1, this);
+    auto itr = levelRewards.find(level);
+
+    if (itr == levelRewards.end())
+        return;
+
+
+    std::ostringstream subject;
+    subject << "Congratulations on level " << level << "!";
+
+    std::ostringstream body;
+    body << "Your recent achievements on reaching level " << level << "in Turtle Mode "
+        << "have not gone unnoticed. To commend you for your dedication "
+        << "and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
+
+    
+    Item* ToMailItem = Item::CreateItem(itr->second, 1, this);
     ToMailItem->SaveToDB();
 
-    MailDraft(subject, sObjectMgr.CreateItemText(message))
+    MailDraft(subject.str(), sObjectMgr.CreateItemText(body.str()))
         .AddItem(ToMailItem)
         .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(16547), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
 
     if (level == 60 && GetSession()->GetSecurity() == SEC_PLAYER)
     {
         LoginDatabase.PExecute("UPDATE `shop_coins` SET `coins`=`coins`+200 WHERE `id`=%u", GetSession()->GetAccountId());
-        ChatHandler(this).PSendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 at the hardcore setting have not gone unnoticed. We've added additional 250 Turtle Tokes to your account balance!|r");
+        ChatHandler(this).SendSysMessage("|cffF58CBASpeedy whispers: Impressive! Your recent achievements on reaching level 60 in Turtle Mode have not gone unnoticed. We've added additional 200 Turtle Tokes to your account balance!|r");
     }
 }
 
