@@ -586,7 +586,7 @@ replace into creature_loot_template values
 (91962, 30029, 0.5, 0, -30029, 1, 0),
 (91962, 30049, 0.5, 0, -30049, 1, 0),
 (91962, 30072, 0.5, 0, -30072, 1, 0),
-(91962, 60340,-20,1,1,1,0);
+(91962, 60340,-25,1,1,1,0);
 
 -- The Maul'ogg Crisis III --
 delete from quest_template where entry = 40266;
@@ -629,15 +629,15 @@ delete from creature_loot_template where item = 60343 and entry between 6513 and
 delete from creature_loot_template where item = 60343 and entry = 9622 ;
 delete from creature_loot_template where item = 60343 and entry = 6585 ;
 replace into creature_loot_template values
-(6513, 60343,-10,1,1,1,0),
-(6514, 60343,-12,1,1,1,0),
-(6516, 60343,-15,1,1,1,0),
-(9622, 60343,-20,1,1,1,0),
-(6585, 60343,-20,1,1,1,0);
+(6513, 60343,-15,1,1,1,0),
+(6514, 60343,-17,1,1,1,0),
+(6516, 60343,-22,1,1,1,0),
+(9622, 60343,-25,1,1,1,0),
+(6585, 60343,-25,1,1,1,0);
 
 -- The Maul'ogg Crisis VII --
 delete from quest_template where entry = 40270;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40269,40270,2,408,54,45,0,0,'The Maul\'ogg Crisis VII','I have had many encounters within the Temple of Atal\'Hakkar, long ages spent gazing upon its walls. It is a place of darkness and foul energies that have corrupted its once defenders. The Prophet Jammal\'an speaks his foul, misbegotten words into the decaying remains of his people that call this place home. I desire you to venture into the catacombs of this place, to find the Prophet and gather from him the Atal\'ai Rod. It should be kept close to where this troll channels his magic.\n\nThe Atal\'ai Rod holds power in the magic of control, and should assist us in subjugating Lord Cruk\'zogg.','Venture into the depths of the Temple of Atal\'Hakkar and gather the Atal\'ai Rod, bring it to Insom\'ni to finish the spell.','','<Insom\'ni would inspect the Ligment curiously, and nod his head>. This shall do just fine. This shall do just fine.',60344,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40269,40270,2,408,54,45,0,0,'The Maul\'ogg Crisis VII','I have had many encounters within the Temple of Atal\'Hakkar, long ages spent gazing upon its walls. It is a place of darkness and foul energies that have corrupted its once defenders. The Prophet Jammal\'an speaks his foul, misbegotten words into the decaying remains of his people that call this place home. I desire you to venture into the catacombs of this place, to find the Prophet and gather from him the Atal\'ai Rod. It should be kept close to where this troll channels his magic.\n\nThe Atal\'ai Rod holds power in the magic of control, and should assist us in subjugating Lord Cruk\'zogg.','Venture into the depths of the Temple of Atal\'Hakkar and gather the Atal\'ai Rod, bring it to Insom\'ni to finish the spell.','Have you ventured within the Sunken Temple?','<Insom\'ni would inspect the Ligment curiously, and nod his head>. This shall do just fine. This shall do just fine.',60344,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (60446, 40270);
 replace into creature_involvedrelation (id, quest) values (60446, 40270);
@@ -658,7 +658,7 @@ replace into gameobject_loot_template values
 
 -- The Maul'ogg Crisis VIII --
 delete from quest_template where entry = 40271;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40270,40271,2,408,54,45,0,0,'The Maul\'ogg Crisis VIII','With the elements recovered, and the Atal\'ai Rod in posession, I can now begin to manifest my energies into the creation of an elixir. This elixir will bring the mind of Lord Cruk\'Zogg into the hands of Haz\'gorg to do as he pleases.\n\nThis will require some concentration on my part, so I do ask you mortal, to keep your mouth quiet while I work.','Wait for Insom\'ni to finish his magic, then return to Haz\'gorg the Great Seer.','Yes?','',60345,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40270,40271,2,408,54,45,0,0,'The Maul\'ogg Crisis VIII','With the elements recovered, and the Atal\'ai Rod in posession, I can now begin to manifest my energies into the creation of an elixir. This elixir will bring the mind of Lord Cruk\'Zogg into the hands of Haz\'gorg to do as he pleases.\n\nThis will require some concentration on my part, so I do ask you mortal, to keep your mouth quiet while I work.','Wait for Insom\'ni to finish his magic, then return to Haz\'gorg the Great Seer.','I see.. Then let us finish what we have set out to do.','',60345,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (60446, 40271);
 replace into creature_involvedrelation (id, quest) values (92184, 40271);
@@ -670,6 +670,8 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 -- The Maul'ogg Crisis IX --
 delete from quest_template where entry = 40272;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40271,40272,2,408,54,45,0,0,'The Maul\'ogg Crisis IX','It would appear the time has come, you have done extremely well in everything I have asked, but now I must ask you to do what is required for the good of my people. Long have we suffered, not at the hands of our enemies, but at the hands of our leadership.\n\nIf there is to be a future for the Maul\'ogg then it must be a future of reasoning, we cannot secure ourselves a place within the Horde if we are constantly engaged in self destructive warfare.\n\nBring the Elixir of Insom\'ni to Lord Cruk\'zogg, inform him that it is a potion of great power that I created for him. When all is done, return to me.','Give the Elixir of Insom\'ni to Lord Cruk\'zogg to sway his mind, and then return to Haz\'gorg the Great Seer in Maul\'ogg Refuge.','Is it done?','<Haz\'gorg would let out a great sigh of relief> What has been done here today cannot be celebrated with great enthusiasm, we have done but a small evil for the good of the Maul\'ogg. Unknowingly, my kind will be thankful for your efforts, even if they do not know anything has transpired. I ask of you to keep your silence, and for your assistance, I offer you a gift from my kind.',0,0,0,0,0,0,0,0,60339,1,0,0,0,0,0,0,60345,1,0,6150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60346,1,60347,1,60348,1,0,0,0,0,'Lord Cruk\'zogg drank Elixir of Insom\'ni');
+
+update quest_template set questflags = 512 where entry = 40272;
 
 replace into creature_questrelation (id, quest) values (92184, 40272);
 replace into creature_involvedrelation (id, quest) values (92184, 40272);
@@ -3084,3 +3086,106 @@ update quest_template set srcitemid = 60372 where entry = 40252;
 delete from item_template where entry = 60372;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60372,2482,'Staff of Eldara',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Misc. fixes 24/11/2021
+
+replace into creature_loot_template values (2574, 4278, 22, 6, 0, 0, 0);
+
+-- Shadowblade Spectre
+set @creature_entry = 91918;
+set @description = 'Karazhan Crypt: Shadowblade Spectre';
+set @spell_list_id = 201080;
+
+set @spellid_1 = 22574; -- Dark Strike
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 2; 
+set @delayinitialmax_1 = 2; 
+set @delayrepeatmin_1 = 8; 
+set @delayrepeatmax_1 = 8;
+
+set @spellid_2 = 28412; -- Death Coil
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 6; 
+set @delayinitialmax_2 = 6; 
+set @delayrepeatmin_2 = 18; 
+set @delayrepeatmax_2 = 20;
+
+set @spellid_3 = 7121; -- Anti-Magic Shell
+set @probability_3 = 100; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 4;
+set @delayinitialmin_3 = 10; 
+set @delayinitialmax_3 = 12; 
+set @delayrepeatmin_3 = 26; 
+set @delayrepeatmax_3 = 30;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
