@@ -3066,7 +3066,21 @@ delete from creature where guid = 2567316;
 replace into `creature_display_info_addon` (`display_id`) VALUES (18697);
 
 -- Flightmasters Alliance / Horde
-replace into `creature_template` values ('92942','11553','0','0','0','[PH] Ogre Name',NULL,'0','55','55','15684','15684','0','0','4500','29','9','1.6','1.14286','1','20','5','0','1','1','344','444','0','248','1','2400','2000','1','4864','0','0','0','0','0','0','59.3256','81.5727','100','7','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','771','1011','','1','3','0','0','3','0','0','0','0','0','0','0','');
-replace into `creature_template` values ('92943','1408','0','0','0','[PH] KulTiras Name',NULL,'0','50','50','15684','15684','0','0','4500','15','9','1.6','1.14286','1','20','5','0','1','1','344','444','0','248','1','2400','2000','1','4864','0','0','0','0','0','0','59.3256','81.5727','100','7','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','0','771','1011','','1','3','0','0','3','0','0','0','0','0','0','0','');
+replace into `creature_template` values 
+
+(92943, 7905, 0, 0, 0, 'Vifri Brent', 'Gryphon Master', 0, 55, 55, 7842, 7842, 0, 0, 4500, 1011, 8, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 1, 0, 524290, 0, ''),
+(92942, 1652, 0, 0, 0, 'Grommok', 'Wind Rider Master', 4323, 55, 55, 7842, 7842, 0, 0, 4500, 29, 11, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 56.7312, 78.0054, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 3615, 0, 0, 1, 0, 524290, 0, '');
 
 delete from quest_template where entry in (50228, 50229);
+
+update creature_template set display_id1 = 1878 where entry = 70027;
+update creature_template set display_id1 = 5908 where entry = 91303;
+
+update creature_loot_template SET ChanceOrQuestChance = 0.5 WHERE entry = 6329 AND item = 80798 AND groupid = 5;
+
+update quest_template set objectives = 'Venture within Deepneck Cove beneath Maul\'ogg Refuge and slay Glasseye to claim The Glass Eye for Seer Borgorr.' where entry = 40218;
+
+update quest_template set srcitemid = 60372 where entry = 40252;
+delete from item_template where entry = 60372;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60372,2482,'Staff of Eldara',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
