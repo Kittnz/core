@@ -4232,3 +4232,26 @@ update creature_template set script_name = '' where entry = 91711;
 delete from item_template where entry = 60174;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60174,5567,'Letter from Duke',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A sealed letter addressed to Duchess Grelda.',0);
+
+-- Attack From The Inside --
+delete from quest_template where entry = 40099;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext3) values (40098,40099,2,85,17,15,0,0,'Attack From The Inside','Are you aware of how the plague designed by the cult of the damned works? No? Well, it doesn\'t matter, what you need to know is that I have made something similar, tho not as powerful as the original one. This vial contains a plague that will severely reduce the life expectancy of the living who consume it.\n\nNow that is the part where you, my dear, come in. I need you to head north past The Whispering Forest to a Farmstead called The Garricks Stead. There you will slip a bit of this liquid onto the Human supplies. And make sure that there are no witnesses. Their main force needs to consider this a usual act of war, and when they salvage the plagued supplies. Well you get the picture.','Poison 6 grain crates, slay 10 Remnants Farmers and 7 Remnants Militia on Garricks Stead before returning to Duchess Grelda.','Back already?','I have received news that the Humans did their part precisely as planned and have brought our little gift into their main camp. You did marvelously, my dear.',0,0,0,0,0,0,0,0,91980,10,91981,7,60323,5,0,0,0,0,1200,1500,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'All the grain is poisoned');
+
+delete from creature_questrelation where quest = 40099;
+delete from creature_involvedrelation where quest = 40099;
+replace into creature_questrelation (id, quest) values (91711, 40099);
+replace into creature_involvedrelation (id, quest) values (91711, 40099);
+
+delete from creature_template where entry = 60323;
+replace into creature_template (entry, name, display_id1) values (60323, 'quest_40099_dummy_triger', 328);
+
+delete from gameobject_template where entry = 2010824;
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010824, 1, 24318, 1, 'Grain Sacks', 32, 'go_grain_sacks');
+
+delete from item_template where entry = 60173;
+delete from item_template where entry = 60175;
+delete from item_template where entry = 60189;
+delete from item_template where entry = 60190;
+delete from item_template where entry = 60191;
+delete from creature_loot_template where entry = 2503 and item = 60175;
+delete from gameobject_loot_template where entry = 2010824;
