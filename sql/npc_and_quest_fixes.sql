@@ -3189,3 +3189,431 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Crimson <Scarlet Executioner> , display ID 18682, level 61 elite, faction 67, weapon 3210, has 1.5x normal HP, is a mini boss
+-- High Judge Morice, display ID 18680, level 61 elite, faction 67, weapon 1197, has 1.5x normal HP, is a mini boss
+-- Lancaster Lightblessed, display ID 18673, level 61 elite, faction 67, weapon 25121 has 1.5x normal HP, is a mini boss
+-- Magistrate Aldous, display ID 10355, level 61 elite, faction 67, has 1.5x normal HP, is a mini boss
+-- High Captain Justus , display ID 10338, level 62 elite, faction 67, weapon 9602, has 1.5x normal HP, is a mini boss
+-- Lost Crewman , display ID 18418, level 60 elite, faction 16, HP 9771, casts 7074 every 20-30 seconds, casts 19778 every minute
+-- Wallowing Crewman , display ID 18419, level 60 elite, faction 16, HP 9745, mana 5000, casts 21369 every 6 seconds, casts 10230 every minute, casts 10220 when they first spawn and every 30 minutes after
+-- Admiral Barean Westwind, display ID 797, scale 1.1, faction 16, HP 141057, mana 12000, weapon 13061     (Needs scripting, will be a minor world boss : When pulled, pull all Lost Crewmen and Wallowing Crewmen to help fight with him. He will cast 8398 every 20 seconds, and cast 28479 every minute, and cast 30095 every 45 seconds.
+
+REPLACE INTO creature_template VALUES
+(60518, 18682, 0, 0, 0, 'Crimson', 'Scarlet Executioner', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60518, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60519, 18680, 0, 0, 0, 'High Judge Morice', '', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60519, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60520, 18673, 0, 0, 0, 'Lancaster Lightblessed', '', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60521, 10355, 0, 0, 0, 'Magistrate Aldous', '', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60521, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60522, 10338, 0, 0, 0, 'High Captain Justus', '', 0, 62, 62, 51000, 51000, 0, 0, 4391, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 60522, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2142, 2803, 'EventAI', 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60523, 18418, 0, 0, 0, 'Lost Crewman', '', 0, 60, 60, 9771, 9771, 0, 0, 2086, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60523, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60524, 18419, 0, 0, 0, 'Wallowing Crewman', '', 0, 60, 60, 9745, 9745, 5000, 5000, 2086, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60524, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60525, 797, 0, 0, 0, 'Admiral Barean Westwind', '', 0, 60, 60, 141057, 141057, 12000, 12000, 2086, 16, 0, 1, 1.14286, 1.1, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60525, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20034; set @weapon_1 = 3210; set @weapon_2 = 0; set @creature = 60518;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20035; set @weapon_1 = 1197; set @weapon_2 = 0; set @creature = 60519;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20036; set @weapon_1 = 25121; set @weapon_2 = 0; set @creature = 60520;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20037; set @weapon_1 = 9602; set @weapon_2 = 0; set @creature = 60522;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20038; set @weapon_1 = 13061; set @weapon_2 = 0; set @creature = 60525;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Lost Crewman
+set @creature_entry = 60523;
+set @description = ': Lost Crewman';
+set @spell_list_id = 180003;
+
+set @spellid_1 = 7074; -- Screams of the Past
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 30;
+
+set @spellid_2 = 19778; -- Demoralizing Shout
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 5; 
+set @delayinitialmax_2 = 5; 
+set @delayrepeatmin_2 = 58; 
+set @delayrepeatmax_2 = 60;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 7074, spell_id2 = 19778, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Wallowing Crewman
+set @creature_entry = 60524;
+set @description = ': Wallowing Crewman';
+set @spell_list_id = 180004;
+
+set @spellid_1 = 21369; -- Frostbolt
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 6; 
+set @delayrepeatmax_1 = 6;
+
+set @spellid_2 = 10230; -- Frost Nova
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 4; 
+set @delayinitialmax_2 = 6; 
+set @delayrepeatmin_2 = 58; 
+set @delayrepeatmax_2 = 60;
+
+set @spellid_3 = 10220; -- Ice Armor
+set @probability_3 = 100; 
+set @casttarget_3 = 2; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 1; 
+set @delayinitialmax_3 = 1; 
+set @delayrepeatmin_3 = 1800; 
+set @delayrepeatmax_3 = 1800;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 21369, spell_id2 = 10230, spell_id3 = 10220 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+
+-- cast 8398 every 20 seconds, and cast 28479 every minute, and cast 30095 every 45 seconds.
+-- Admiral Barean Westwind
+set @creature_entry = 60525;
+set @description = ': Admiral Barean Westwind';
+set @spell_list_id = 180005;
+
+set @spellid_1 = 8398; -- Frostbolt Volley
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 20;
+
+set @spellid_2 = 28479; -- Frostbolt
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 14; 
+set @delayinitialmax_2 = 16; 
+set @delayrepeatmin_2 = 58; 
+set @delayrepeatmax_2 = 60;
+
+set @spellid_3 = 30095; -- Cone of Cold
+set @probability_3 = 100; 
+set @casttarget_3 = 2; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 20; 
+set @delayinitialmax_3 = 22; 
+set @delayrepeatmin_3 = 45; 
+set @delayrepeatmax_3 = 45;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 8398, spell_id2 = 28479, spell_id3 = 30095 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Zareth Terrorblade, equip with weapon 83269
+-- Dunstan Whitereach <Brotherhood of the Light> , display ID 1616, level 58 weapon 1296, faction 814, greeting text: "It is in the fringes of the world that hope shines the brightest, never forget that even a dim torch is still burning.
+-- Taldran Salwright <Brotherhood of the Light>, display ID 5226, level 59 weapon 869, weapon 2 3656, faction 814, greeting text: "I am in my homeland, defending what is important to me, be it from those crazed zealots, or from the undead themselves, Light's Point will establish what once was."
+-- Orin Stonefury <Brotherhood of the Light>, display ID 16219, level 61 weapon 12774, weapon 2 4825, faction 814, greeting text: "My family called Lordaeron home once, heh, believe it or not. Valueable money was to be made from ore and jewelcrafting that we Stonefury were once known for many years ago! Known all thats left of my families legacy is smoldering ruins and piles of stone and burnt wood, not to mention the corpses!\n\n If I'm going to fight for anything, it may as well be here."
+-- Joshua Ambercrest <Brotherhood of the Light> , display ID 9792, level 62 elite weapon 22333, faction 814, greeting text: "Welcome to Light's Point, make yourself at home, should you not be tainted by either the plague of undeath, or the plague of zealotry.\n\n The Scarlet Crusade that occupy the region are fervored in a bloodlust against all things, both living and dead. They view the world around them as hostile, and will need to be put down should the true light of what once was to shine through."
+-- Andrea Paxton <Brotherhood of the Light> , display ID 10840, level 61, weapon 2488, weapon 2 3656, faction 814, greeting text: "Greetings, many folk around here have good reasons to be at the very frontier, I just hope yours is meaningful.\n\n It's interesting to see Lordaeron not touched by the grip of undeath, even if the people who wield this land are as vile as the scourge."
+-- Captain Haroldson, display ID 18713, level 55, faction 35, greeting text: "Well, you\'ve been a much more friendly face to us, not even our own comrades in arms were willing to simply come up and talk.\n\nA lot has changed since we left for Northrend, and already we have been speaking with inquisitors, and been stuck here at port.\n\nI thought we would be lauded as heroes, or at the least returned to with open arms, and here we are, treated as villains after surviving the expedition to the north on behalf of the crusade. It sickens me to know how many died to bring the fight to the undead just for things to have fallen apart as they have here.\n\nEither way, apologies for my rudeness, I am Captain Haroldson, of the Embertide in the Scarlet Fleet, or at the least, what is left of it, anyway, after everything that happened with that doomed expedition."
+-- Bartholos, display ID 18706, level 55, faction 35, greeting text: "Out of all the ships to make it back we were the only one, you believe that luck?...Hic!\n\n There were much better men then me, and honestly, I don't even want to be here after everything that happened up north. Just, toss me in the water already."
+-- First Mate Dorrul, display ID 18701, level 51, faction 35
+-- Embertide Crewman, display ID 11357, level 52-54, faction 35
+-- Scarlet Prisoner, display ID 1524, 1438, level 30, faction 35
+
+REPLACE INTO creature_template VALUES
+(60526, 1616, 0, 0, 0, 'Dunstan Whitereach', 'Brotherhood of the Light', 0, 58, 58, 3875, 3875, 0, 0, 1754, 814, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 101, 125, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 60526, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 130, 175, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60527, 5226, 0, 0, 0, 'Taldran Salwright', 'Brotherhood of the Light', 0, 59, 59, 3997, 3997, 0, 0, 3454, 814, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 60527, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60528, 16219, 0, 0, 0, 'Orin Stonefury', 'Brotherhood of the Light', 0, 61, 61, 3144, 3144, 0, 0, 4391, 814, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 101, 126, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60528, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 136, 182, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60529, 9792, 0, 0, 0, 'Joshua Ambercrest', 'Brotherhood of the Light', 0, 62, 62, 44000, 44000, 0, 0, 4391, 814, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 60529, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2142, 2803, 'EventAI', 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60530, 10840, 0, 0, 0, 'Andrea Paxton', 'Brotherhood of the Light', 0, 61, 61, 3500, 3500, 0, 0, 4091, 814, 3, 0, 1.14286, 0, 20, 5, 0, 1, 1, 110, 136, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60530, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60531, 18713, 0, 0, 0, 'Captain Haroldson', '', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60531, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 122, 164, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60532, 18706, 0, 0, 0, 'Bartholos', '', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60532, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 122, 164, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60533, 18701, 0, 0, 0, 'First Mate Dorrul', '', 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 60533, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60534, 11357, 0, 0, 0, 'Embertide Crewman', '', 0, 52, 54, 2466, 2633, 0, 0, 2445, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 136, 169, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60534, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 103, 139, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60535, 1524, 1438, 0, 0, 'Scarlet Prisoner', '', 0, 30, 30, 1002, 1002, 0, 0, 1200, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 43, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 44.616, 61.347, 100, 7, 0, 60535, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 62, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20039; set @weapon_1 = 1296; set @weapon_2 = 0; set @creature = 60526;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20040; set @weapon_1 = 869; set @weapon_2 = 3656; set @creature = 60527;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20041; set @weapon_1 = 12774; set @weapon_2 = 4825; set @creature = 60528;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20042; set @weapon_1 = 22333; set @weapon_2 = 0; set @creature = 60529;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20043; set @weapon_1 = 83269; set @weapon_2 = 0; set @creature = 49009;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20044; set @weapon_1 = 2488; set @weapon_2 = 3656; set @creature = 60530;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41039; set @magic_number = 60526;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It is in the fringes of the world that hope shines the brightest, never forget that even a dim torch is still burning.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41040; set @magic_number = 60527;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am in my homeland, defending what is important to me, be it from those crazed zealots, or from the undead themselves, Light\'s Point will establish what once was.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41041; set @magic_number = 60528;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'My family called Lordaeron home once, heh, believe it or not. Valueable money was to be made from ore and jewelcrafting that we Stonefury were once known for many years ago! Known all thats left of my families legacy is smoldering ruins and piles of stone and burnt wood, not to mention the corpses!\n\nIf I\'m going to fight for anything, it may as well be here.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41042; set @magic_number = 60529;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Light\'s Point, make yourself at home, should you not be tainted by either the plague of undeath, or the plague of zealotry.\n\nThe Scarlet Crusade that occupy the region are fervored in a bloodlust against all things, both living and dead. They view the world around them as hostile, and will need to be put down should the true light of what once was to shine through.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41043; set @magic_number = 60530;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings, many folk around here have good reasons to be at the very frontier, I just hope yours is meaningful.\n\nIt\'s interesting to see Lordaeron not touched by the grip of undeath, even if the people who wield this land are as vile as the scourge.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41044; set @magic_number = 60531;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well, you\'ve been a much more friendly face to us, not even our own comrades in arms were willing to simply come up and talk.\n\nA lot has changed since we left for Northrend, and already we have been speaking with inquisitors, and been stuck here at port.\n\nI thought we would be lauded as heroes, or at the least returned to with open arms, and here we are, treated as villains after surviving the expedition to the north on behalf of the crusade. It sickens me to know how many died to bring the fight to the undead just for things to have fallen apart as they have here.\n\nEither way, apologies for my rudeness, I am Captain Haroldson, of the Embertide in the Scarlet Fleet, or at the least, what is left of it, anyway, after everything that happened with that doomed expedition.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41045; set @magic_number = 60532;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Out of all the ships to make it back we were the only one, you believe that luck?... Hic!\n\nThere were much better men then me, and honestly, I don\'t even want to be here after everything that happened up north. Just, toss me in the water already.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
