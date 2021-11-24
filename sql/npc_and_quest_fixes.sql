@@ -4255,3 +4255,33 @@ delete from item_template where entry = 60190;
 delete from item_template where entry = 60191;
 delete from creature_loot_template where entry = 2503 and item = 60175;
 delete from gameobject_loot_template where entry = 2010824;
+
+-- Fall Of The Usurper --
+delete from quest_template where entry = 40277;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext3) values (40099,40277,2,85,20,15,0,0,'Fall Of The Usurper','With their forces weakened, it is as good as time as any to attack them directly. Before I changed into "this" <Duchess points at her undead features>.\n\nI was one of the commanders of the forces here in Tirisfal Uplands. That\'s why I know that even weakened their camp will prove to be a difficult challenge. I recommend that you find those willing to aid you when you launch an attack on their base. Beware that your primary goal is to end the lives of both Silas, the captain that is currently leading the human forces, and my usurper sister Faliona. Do this for me, and I promise that you will be well rewarded.','Slay Duchess Faliona, Captain Silas, 8 Remnants Footman 4 Remnants Priest and return to Duchess Grelda.','Is it done?','I wished I was there to see the look on her miserable face when she realized one last time that she was never able to beat me neither in life nor in death. And you, my dear, have proven to be quite an ally, from this day on, consider yourself welcome to my court... when I rebuild it, of course. Ah yes, I think this will prove to be a suitable reward for your efforts.',0,0,0,0,0,0,0,0,91352,8,91975,4,91721,1,91974,1,0,0,2500,1750,68,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60173,1,60175,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91711, 40277);
+replace into creature_involvedrelation (id, quest) values (91711, 40277);
+
+update quest_template set type = 1 where entry = 40277;
+
+replace into item_template values
+ ('60173', '4', '0', 'Ring of Darlthos', 'A symbol of bravery', '24087', '3', '0', '1', '9844', '2461', '11', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60175', '4', '0', 'Signet of Darlthos', 'A symbol of wisdom', '23728', '3', '0', '1', '9844', '2461', '11', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+
