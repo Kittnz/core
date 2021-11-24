@@ -555,22 +555,31 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
-bool GOHello_go_pile_of_dirt(Player* pPlayer, GameObject* pGo)
+bool GOHello_go_grain_sacks(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->HasItemCount(60189, 1, false))
+    if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE)
     {
-        pGo->SummonGameObject(2010303, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-        pPlayer->DestroyItemCount(60189, 1, true);
-        pPlayer->SaveInventoryAndGoldToDB();
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
     }
-    else
-    {
-        pPlayer->GetSession()->SendNotification("Need Lordaeron Banner.");
-        return false;
-    }
+
     return true;
+}
+
+bool GOSelect_go_grain_sacks(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010824)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            pGo->UseDoorOrButton(120); // 2min
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
 }
 
 bool GossipHello_npc_torble_and_kex(Player* pPlayer, Creature* pCreature)
@@ -2097,8 +2106,9 @@ void AddSC_random_scripts_3()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_pile_of_dirt";
-    newscript->pGOHello = &GOHello_go_pile_of_dirt;
+    newscript->Name = "go_grain_sacks";
+    newscript->pGOHello = &GOHello_go_grain_sacks;
+    newscript->pGOGossipSelect = &GOSelect_go_grain_sacks;
     newscript->RegisterSelf();
 
     newscript = new Script;
