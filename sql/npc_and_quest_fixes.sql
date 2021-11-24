@@ -3189,3 +3189,1119 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Crimson <Scarlet Executioner> , display ID 18682, level 61 elite, faction 67, weapon 3210, has 1.5x normal HP, is a mini boss
+-- High Judge Morice, display ID 18680, level 61 elite, faction 67, weapon 1197, has 1.5x normal HP, is a mini boss
+-- Lancaster Lightblessed, display ID 18673, level 61 elite, faction 67, weapon 25121 has 1.5x normal HP, is a mini boss
+-- Magistrate Aldous, display ID 10355, level 61 elite, faction 67, has 1.5x normal HP, is a mini boss
+-- High Captain Justus , display ID 10338, level 62 elite, faction 67, weapon 9602, has 1.5x normal HP, is a mini boss
+-- Lost Crewman , display ID 18418, level 60 elite, faction 16, HP 9771, casts 7074 every 20-30 seconds, casts 19778 every minute
+-- Wallowing Crewman , display ID 18419, level 60 elite, faction 16, HP 9745, mana 5000, casts 21369 every 6 seconds, casts 10230 every minute, casts 10220 when they first spawn and every 30 minutes after
+-- Admiral Barean Westwind, display ID 797, scale 1.1, faction 16, HP 141057, mana 12000, weapon 13061     (Needs scripting, will be a minor world boss : When pulled, pull all Lost Crewmen and Wallowing Crewmen to help fight with him. He will cast 8398 every 20 seconds, and cast 28479 every minute, and cast 30095 every 45 seconds.
+
+REPLACE INTO creature_template VALUES
+(60518, 18682, 0, 0, 0, 'Crimson', 'Scarlet Executioner', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60518, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60519, 18680, 0, 0, 0, 'High Judge Morice', '', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60519, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60520, 18673, 0, 0, 0, 'Lancaster Lightblessed', '', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60520, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60521, 10355, 0, 0, 0, 'Magistrate Aldous', '', 0, 61, 61, 38000, 38000, 0, 0, 4091, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 741, 982, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60521, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60522, 10338, 0, 0, 0, 'High Captain Justus', '', 0, 62, 62, 51000, 51000, 0, 0, 4391, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 60522, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2142, 2803, 'EventAI', 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60523, 18418, 0, 0, 0, 'Lost Crewman', '', 0, 60, 60, 9771, 9771, 0, 0, 2086, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60523, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60524, 18419, 0, 0, 0, 'Wallowing Crewman', '', 0, 60, 60, 9745, 9745, 5000, 5000, 2086, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60524, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60525, 797, 0, 0, 0, 'Admiral Barean Westwind', '', 0, 60, 60, 141057, 141057, 12000, 12000, 2086, 16, 0, 1, 1.14286, 1.1, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60525, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20034; set @weapon_1 = 3210; set @weapon_2 = 0; set @creature = 60518;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20035; set @weapon_1 = 1197; set @weapon_2 = 0; set @creature = 60519;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20036; set @weapon_1 = 25121; set @weapon_2 = 0; set @creature = 60520;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20037; set @weapon_1 = 9602; set @weapon_2 = 0; set @creature = 60522;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20038; set @weapon_1 = 13061; set @weapon_2 = 0; set @creature = 60525;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Lost Crewman
+set @creature_entry = 60523;
+set @description = ': Lost Crewman';
+set @spell_list_id = 180003;
+
+set @spellid_1 = 7074; -- Screams of the Past
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 30;
+
+set @spellid_2 = 19778; -- Demoralizing Shout
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 5; 
+set @delayinitialmax_2 = 5; 
+set @delayrepeatmin_2 = 58; 
+set @delayrepeatmax_2 = 60;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 7074, spell_id2 = 19778, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Wallowing Crewman
+set @creature_entry = 60524;
+set @description = ': Wallowing Crewman';
+set @spell_list_id = 180004;
+
+set @spellid_1 = 21369; -- Frostbolt
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 6; 
+set @delayrepeatmax_1 = 6;
+
+set @spellid_2 = 10230; -- Frost Nova
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 4; 
+set @delayinitialmax_2 = 6; 
+set @delayrepeatmin_2 = 58; 
+set @delayrepeatmax_2 = 60;
+
+set @spellid_3 = 10220; -- Ice Armor
+set @probability_3 = 100; 
+set @casttarget_3 = 2; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 1; 
+set @delayinitialmax_3 = 1; 
+set @delayrepeatmin_3 = 1800; 
+set @delayrepeatmax_3 = 1800;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 21369, spell_id2 = 10230, spell_id3 = 10220 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+
+-- cast 8398 every 20 seconds, and cast 28479 every minute, and cast 30095 every 45 seconds.
+-- Admiral Barean Westwind
+set @creature_entry = 60525;
+set @description = ': Admiral Barean Westwind';
+set @spell_list_id = 180005;
+
+set @spellid_1 = 8398; -- Frostbolt Volley
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 20;
+
+set @spellid_2 = 28479; -- Frostbolt
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 14; 
+set @delayinitialmax_2 = 16; 
+set @delayrepeatmin_2 = 58; 
+set @delayrepeatmax_2 = 60;
+
+set @spellid_3 = 30095; -- Cone of Cold
+set @probability_3 = 100; 
+set @casttarget_3 = 2; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 20; 
+set @delayinitialmax_3 = 22; 
+set @delayrepeatmin_3 = 45; 
+set @delayrepeatmax_3 = 45;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 8398, spell_id2 = 28479, spell_id3 = 30095 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Zareth Terrorblade, equip with weapon 83269
+-- Dunstan Whitereach <Brotherhood of the Light> , display ID 1616, level 58 weapon 1296, faction 814, greeting text: "It is in the fringes of the world that hope shines the brightest, never forget that even a dim torch is still burning.
+-- Taldran Salwright <Brotherhood of the Light>, display ID 5226, level 59 weapon 869, weapon 2 3656, faction 814, greeting text: "I am in my homeland, defending what is important to me, be it from those crazed zealots, or from the undead themselves, Light's Point will establish what once was."
+-- Orin Stonefury <Brotherhood of the Light>, display ID 16219, level 61 weapon 12774, weapon 2 4825, faction 814, greeting text: "My family called Lordaeron home once, heh, believe it or not. Valueable money was to be made from ore and jewelcrafting that we Stonefury were once known for many years ago! Known all thats left of my families legacy is smoldering ruins and piles of stone and burnt wood, not to mention the corpses!\n\n If I'm going to fight for anything, it may as well be here."
+-- Joshua Ambercrest <Brotherhood of the Light> , display ID 9792, level 62 elite weapon 22333, faction 814, greeting text: "Welcome to Light's Point, make yourself at home, should you not be tainted by either the plague of undeath, or the plague of zealotry.\n\n The Scarlet Crusade that occupy the region are fervored in a bloodlust against all things, both living and dead. They view the world around them as hostile, and will need to be put down should the true light of what once was to shine through."
+-- Andrea Paxton <Brotherhood of the Light> , display ID 10840, level 61, weapon 2488, weapon 2 3656, faction 814, greeting text: "Greetings, many folk around here have good reasons to be at the very frontier, I just hope yours is meaningful.\n\n It's interesting to see Lordaeron not touched by the grip of undeath, even if the people who wield this land are as vile as the scourge."
+-- Captain Haroldson, display ID 18713, level 55, faction 35, greeting text: "Well, you\'ve been a much more friendly face to us, not even our own comrades in arms were willing to simply come up and talk.\n\nA lot has changed since we left for Northrend, and already we have been speaking with inquisitors, and been stuck here at port.\n\nI thought we would be lauded as heroes, or at the least returned to with open arms, and here we are, treated as villains after surviving the expedition to the north on behalf of the crusade. It sickens me to know how many died to bring the fight to the undead just for things to have fallen apart as they have here.\n\nEither way, apologies for my rudeness, I am Captain Haroldson, of the Embertide in the Scarlet Fleet, or at the least, what is left of it, anyway, after everything that happened with that doomed expedition."
+-- Bartholos, display ID 18706, level 55, faction 35, greeting text: "Out of all the ships to make it back we were the only one, you believe that luck?...Hic!\n\n There were much better men then me, and honestly, I don't even want to be here after everything that happened up north. Just, toss me in the water already."
+-- First Mate Dorrul, display ID 18701, level 51, faction 35
+-- Embertide Crewman, display ID 11357, level 52-54, faction 35
+-- Scarlet Prisoner, display ID 1524, 1438, level 30, faction 35
+
+REPLACE INTO creature_template VALUES
+(60526, 1616, 0, 0, 0, 'Dunstan Whitereach', 'Brotherhood of the Light', 0, 58, 58, 3875, 3875, 0, 0, 1754, 814, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 101, 125, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 60526, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 130, 175, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60527, 5226, 0, 0, 0, 'Taldran Salwright', 'Brotherhood of the Light', 0, 59, 59, 3997, 3997, 0, 0, 3454, 814, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 60527, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60528, 16219, 0, 0, 0, 'Orin Stonefury', 'Brotherhood of the Light', 0, 61, 61, 3144, 3144, 0, 0, 4391, 814, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 101, 126, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60528, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 136, 182, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60529, 9792, 0, 0, 0, 'Joshua Ambercrest', 'Brotherhood of the Light', 0, 62, 62, 44000, 44000, 0, 0, 4391, 814, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 60529, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2142, 2803, 'EventAI', 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60530, 10840, 0, 0, 0, 'Andrea Paxton', 'Brotherhood of the Light', 0, 61, 61, 3500, 3500, 0, 0, 4091, 814, 3, 0, 1.14286, 0, 20, 5, 0, 1, 1, 110, 136, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60530, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1418, 1857, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60531, 18713, 0, 0, 0, 'Captain Haroldson', '', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60531, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 122, 164, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60532, 18706, 0, 0, 0, 'Bartholos', '', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60532, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 122, 164, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60533, 18701, 0, 0, 0, 'First Mate Dorrul', '', 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 60533, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60534, 11357, 0, 0, 0, 'Embertide Crewman', '', 0, 52, 54, 2466, 2633, 0, 0, 2445, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 136, 169, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60534, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 103, 139, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60535, 1524, 1438, 0, 0, 'Scarlet Prisoner', '', 0, 30, 30, 1002, 1002, 0, 0, 1200, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 43, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 44.616, 61.347, 100, 7, 0, 60535, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 62, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20039; set @weapon_1 = 1296; set @weapon_2 = 0; set @creature = 60526;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20040; set @weapon_1 = 869; set @weapon_2 = 3656; set @creature = 60527;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20041; set @weapon_1 = 12774; set @weapon_2 = 4825; set @creature = 60528;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20042; set @weapon_1 = 22333; set @weapon_2 = 0; set @creature = 60529;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20043; set @weapon_1 = 83269; set @weapon_2 = 0; set @creature = 49009;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20044; set @weapon_1 = 2488; set @weapon_2 = 3656; set @creature = 60530;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41039; set @magic_number = 60526;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It is in the fringes of the world that hope shines the brightest, never forget that even a dim torch is still burning.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41040; set @magic_number = 60527;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am in my homeland, defending what is important to me, be it from those crazed zealots, or from the undead themselves, Light\'s Point will establish what once was.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41041; set @magic_number = 60528;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'My family called Lordaeron home once, heh, believe it or not. Valueable money was to be made from ore and jewelcrafting that we Stonefury were once known for many years ago! Known all thats left of my families legacy is smoldering ruins and piles of stone and burnt wood, not to mention the corpses!\n\nIf I\'m going to fight for anything, it may as well be here.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41042; set @magic_number = 60529;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Light\'s Point, make yourself at home, should you not be tainted by either the plague of undeath, or the plague of zealotry.\n\nThe Scarlet Crusade that occupy the region are fervored in a bloodlust against all things, both living and dead. They view the world around them as hostile, and will need to be put down should the true light of what once was to shine through.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41043; set @magic_number = 60530;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings, many folk around here have good reasons to be at the very frontier, I just hope yours is meaningful.\n\nIt\'s interesting to see Lordaeron not touched by the grip of undeath, even if the people who wield this land are as vile as the scourge.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41044; set @magic_number = 60531;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well, you\'ve been a much more friendly face to us, not even our own comrades in arms were willing to simply come up and talk.\n\nA lot has changed since we left for Northrend, and already we have been speaking with inquisitors, and been stuck here at port.\n\nI thought we would be lauded as heroes, or at the least returned to with open arms, and here we are, treated as villains after surviving the expedition to the north on behalf of the crusade. It sickens me to know how many died to bring the fight to the undead just for things to have fallen apart as they have here.\n\nEither way, apologies for my rudeness, I am Captain Haroldson, of the Embertide in the Scarlet Fleet, or at the least, what is left of it, anyway, after everything that happened with that doomed expedition.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41045; set @magic_number = 60532;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Out of all the ships to make it back we were the only one, you believe that luck?... Hic!\n\nThere were much better men then me, and honestly, I don\'t even want to be here after everything that happened up north. Just, toss me in the water already.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- NPC with DisplayID: 5585 named "Mit'szi", level 1, 100 HP, Faction: Bloodsail Buccaneers
+-- NPC with DisplayID: 8818 named "Beaky", level 1, 100 HP, Faction: Bloodsail Buccaneers
+
+REPLACE INTO creature_template  VALUES
+(60536, 5585, 0, 0, 0, 'Mit\'szi', '', 0, 1, 1, 100, 100, 0, 0, 56, 119, 2, 1, 1.14, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 60536, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60537, 8818, 0, 0, 0, 'Beaky', '', 0, 1, 1, 100, 100, 0, 0, 56, 119, 2, 1, 1.14, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 60536, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set faction = 113 where entry = 60446;
+
+delete from gameobject_template where entry = 2010845;
+replace into gameobject_template values
+(2010845,3,24015,'Mucky Book',0,4,1,43,2010845,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from item_template where entry = 60373;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60373,18059,'Special Water',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+update quest_template set reqitemid1 = 60373, reqitemcount1 = 1 where entry = 40174;
+update quest_template set srcitemid = 60373, srcitemcount = 1 where entry = 40174;
+update quest_template set objectives = 'Speak to Garfield \‘The Fox\’ Sparkleblast if you wish to aid him.\n\n(This will make the Bloodsail Buccaneers not the see you as an enemy anymore.)' where entry = 40172;
+update quest_template set objectives = 'Make a statement.\n\n(This action will make the Blackwater Raiders and Booty Bay your enemy, if your life is not expandable do not attempt this mission.)' where entry = 40180;
+
+set @gossip_menu_id = 41046; set @magic_number = 2010834;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'This seems like one of the gunpowder kegs you\'re looking for.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- A Bad Day to Fish! --
+delete from quest_template where entry = 40274;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40274,2,14,11,6,0,0,'A Bad Day to Fish!','The Southfury river wasn\'t always so bad, at one point it was swarming with scorpids, another with harpies, and now look at it! The crocolisks have been an utter annoyance to me and all I want to do today is fish.\n\nYou think you could cull some of these beasts for me? At the least make it so I don\'t need to wield a weapon, and I can just relax? Before you ask, I\'ve done enough fighting for one lifetime from the Dark Portal, to Lordaeron, and now here. Go out, and secure me just a days rest!','Slay 8 Dreadmaw Crocolisks for Grubgar at Southfury River in Durotar.','So, have you had any trouble? There practically everywhere, so be careful.','Ahh, finally, at last. I can get to it, here, I\'ve got a spare rod now that the river should be a little bit more cleared up.\n\n If you don\'t know how to fish, try in Orgrimmar, no doubt they can help.',0,0,0,0,0,0,0,0,3110,8,0,0,0,0,0,0,0,0,0,880,76,100,0,0,0,0,0,0,0,0,0,6256,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60510, 40274);
+replace into creature_involvedrelation (id, quest) values (60510, 40274);
+
+-- Deeptide Sanctum --
+delete from quest_template where entry = 40275;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40275,2,408,53,45,0,0,'Deeptide Sanctum','It is good to meet a fellow explorer upon these lands, one who enjoys the same glory of finding the unknown and uncovering secrets. We share a bond in exploration and adventure and I feel obligated to warm you of a danger off the coast, one that perhaps you may assist with.\n\nThe Deeptide Naga are a menacing force, who came here for an unknown motive and currently hold an island off the coast of Gillijim to the south west. It is there that they have a sanctum they call home, and use it as a base of operations to strike out and attack people like you and me. I was lucky to escape the hands of these slithering marauders and live to tell the tale, but others are not so lucky.\n\nI ask you to travel to the Deep Tide Sanctum, and slay the Naga there, so that one day the horde may establish control on these islands, and so that we may continue our exploration unharmed. Bring me the bracelets they wear as proof.','Gather 10 Deeptide Bracelets from Deeptide Nana for Explorer Fangosh in Maul\'ogg Refuge.','Have you dealt with the Naga?','We are one step closer to uncovering the secrets of this place, but I feel there is moe to be done in order to secure ourselves here.',60219,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4700,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92182, 40275);
+replace into creature_involvedrelation (id, quest) values (92182, 40275);
+
+-- Destroying the Deeptide --
+delete from quest_template where entry = 40276;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40275,40276,2,408,55,45,0,0,'Destroying the Deeptide','You did well, you have the tenacity and strength of the most well rounded explorers. If we truly want the Deeptide gone, and to free these islands of their presence we must become more bold. Their leadership are nestled within the Deeptide Sanctum, and need to be rooted out.\n\nReturn to the sanctum, and bring retribution upon Princess Shasza, and Tidelord Hakash, they need to be slain for their crimes and hostility. Trust me, there is no reasoning, or diplomacy that can be done, finish this, and perhaps the Naga will disperse.','Slay Tidelord Hakash, and Princess Shasza for Explorer Fangosh in Maul\'ogg Refuge.','Have you had any progress with the Naga?','It is done then, with their leaders killed the Naga will be uncoherent, and nothing more then a disorganized mass. Even the largest army will always lose to one more disciplined, and focused. We have truly weakened their position this day, and perhaps forever.',0,0,0,0,0,0,0,0,92161,1,92162,1,0,0,0,0,0,0,7500,5100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92182, 40276);
+replace into creature_involvedrelation (id, quest) values (92182, 40276);
+
+-- Into the Uplands --
+delete from quest_template where entry = 40080;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40080,2,130,15,10,0,0,'Into the Uplands','Hey there traveler, I am currently looking for someone to run me a parcel, one that I have been needing to ship for quite a while now. With all of the comings and goings here at the sepulcher I have been somewhat unable to fulfill my obligations.\n\nUp north past Valgan\'s and The Dead Field is a passageway that leads into the Tirisfal Uplands. It is pressed against the mountains and somewhat hidden but should be spotted by the keen eye.\n\nOnce you make your way into the Uplands, I need this parcel delivered to Apothecary Volgrin, he should be located fairly close to the passage leading through the cliffs.','Deliver Volgrin\'s Parcel to Apothecary Volgrin near the entrance to the Tirisfal Uplands.','Hello, can I help you?','I have been waiting for these, it\'s about time, now I can finally get some work done.',60374,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60374,1,0,200,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40080;
+delete from creature_involvedrelation where quest = 40080;
+replace into creature_questrelation (id, quest) values (6739, 40080);
+replace into creature_involvedrelation (id, quest) values (91713, 40080);
+
+delete from item_template where entry = 60374;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60374,7913,'Volgrin\'s Parcel',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set npc_flags = 139 where entry = 6739;
+
+-- Pesterhide Pests --
+delete from quest_template where entry = 40081;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40081,2,85,17,11,0,0,'Pesterhide Pests','The Road between here and Glenshire has been cutoff, the gnolls of the Pesterhide are mostly to blame for that! They have been foraging in a more growing rate, no doubt due to the lack of food around here.\n\nIf we can\'t even control our roads then what are we hoping to achieve here in the Uplands?\n\nI need you to handle this pest problem, travel up the hill and go to the east, you should find Pesterhide all over The Jagged Hills.\n\nKill them, and bring me their Ragged Armbands.','Gather 7 Ragged Armbands from Pesterhide Gnolls for Deathguard Mike in Steepcliff Port.','These mongrels are nothing more then a stepping stone for the Forsaken, deal with them.','Good work out there $C, keeping the road safe, and thinning the pack of mongrels will only be for the greater good.',60375,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1150,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40081;
+delete from creature_involvedrelation where quest = 40081;
+replace into creature_questrelation (id, quest) values (91752, 40081);
+replace into creature_involvedrelation (id, quest) values (91752, 40081);
+
+update creature_template set npc_flags = 3 where entry = 91752;
+
+delete from item_template where entry = 60375;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60375,18366,'Ragged Armband',12,1,2048,1,-1,-1,1,7,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 91735 where entry = 91735;
+update creature_template set loot_id = 91736 where entry = 91736;
+update creature_template set loot_id = 91737 where entry = 91737;
+update creature_template set loot_id = 91738 where entry = 91738;
+
+REPLACE INTO creature_loot_template VALUES
+(91738, 60375, -35, 0, 1, 1, 0),
+(91738, 414, 0.02, 0, 1, 1, 0),
+(91738, 765, 0.02, 0, 1, 1, 0),
+(91738, 785, 0.02, 0, 1, 1, 0),
+(91738, 818, 0.14, 0, 1, 1, 0),
+(91738, 856, 0.02, 0, 1, 1, 0),
+(91738, 858, 1.3292, 0, 1, 1, 0),
+(91738, 954, 0.36, 0, 1, 1, 0),
+(91738, 955, 0.48, 0, 1, 1, 0),
+(91738, 1013, -80, 0, 1, 1, 0),
+(91738, 1179, 2.6717, 0, 1, 1, 0),
+(91738, 1180, 0.52, 0, 1, 1, 0),
+(91738, 1206, 0.16, 0, 1, 1, 0),
+(91738, 1210, 0.46, 0, 1, 1, 0),
+(91738, 1212, 10.4156, 0, 1, 1, 0),
+(91738, 1529, 0.02, 0, 1, 1, 0),
+(91738, 1705, 0.02, 0, 1, 1, 0),
+(91738, 2287, 4.573, 0, 1, 1, 0),
+(91738, 2406, 0.02, 0, 1, 1, 0),
+(91738, 2407, 0.02, 0, 1, 1, 0),
+(91738, 2408, 0.02, 0, 1, 1, 0),
+(91738, 2409, 0.02, 0, 1, 1, 0),
+(91738, 2447, 0.02, 0, 1, 1, 0),
+(91738, 2449, 0.02, 0, 1, 1, 0),
+(91738, 2450, 0.02, 0, 1, 1, 0),
+(91738, 2452, 0.02, 0, 1, 1, 0),
+(91738, 2453, 0.02, 0, 1, 1, 0),
+(91738, 2455, 0.7175, 0, 1, 1, 0),
+(91738, 2553, 0.02, 0, 1, 1, 0),
+(91738, 2555, 0.02, 0, 1, 1, 0),
+(91738, 2589, 18.2555, 0, 1, 3, 0),
+(91738, 2592, 18.9531, 0, 1, 2, 0),
+(91738, 2601, 0.02, 0, 1, 1, 0),
+(91738, 2657, 0.0099, 0, 1, 1, 0),
+(91738, 2700, 0.08, 0, 1, 1, 0),
+(91738, 2770, 0.04, 0, 1, 1, 0),
+(91738, 2771, 0.12, 0, 1, 1, 0),
+(91738, 2775, 0.02, 0, 1, 1, 0),
+(91738, 2835, 0.02, 0, 1, 1, 0),
+(91738, 2836, 0.04, 0, 1, 1, 0),
+(91738, 2856, -80, 0, 1, 1, 0),
+(91738, 2881, 0.02, 0, 1, 1, 0),
+(91738, 2882, 0.02, 0, 1, 1, 0),
+(91738, 2883, 0.02, 0, 1, 1, 0),
+(91738, 2996, 0.02, 0, 1, 1, 0),
+(91738, 3012, 0.36, 0, 1, 1, 0),
+(91738, 3393, 0.02, 0, 1, 1, 0),
+(91738, 3394, 0.02, 0, 1, 1, 0),
+(91738, 3610, 0.02, 0, 1, 1, 0),
+(91738, 4292, 0.02, 0, 1, 1, 0),
+(91738, 4293, 0.02, 0, 1, 1, 0),
+(91738, 4294, 0.02, 0, 1, 1, 0),
+(91738, 4345, 0.02, 0, 1, 1, 0),
+(91738, 4346, 0.02, 0, 1, 1, 0),
+(91738, 4347, 0.02, 0, 1, 1, 0),
+(91738, 4348, 0.02, 0, 1, 1, 0),
+(91738, 4349, 0.02, 0, 1, 1, 0),
+(91738, 4408, 0.02, 0, 1, 1, 0),
+(91738, 4409, 0.02, 0, 1, 1, 0),
+(91738, 4410, 0.02, 0, 1, 1, 0),
+(91738, 4537, 0.02, 0, 1, 1, 0),
+(91738, 4541, 0.02, 0, 1, 1, 0),
+(91738, 4592, 0.02, 0, 1, 1, 0),
+(91738, 4605, 0.02, 0, 1, 1, 0),
+(91738, 4694, 0.0132, 0, 1, 1, 0),
+(91738, 4698, 0.02, 0, 1, 1, 0),
+(91738, 4700, 0.0165, 0, 1, 1, 0),
+(91738, 5503, 0.02, 0, 1, 1, 0),
+(91738, 5573, 0.0265, 0, 1, 1, 0),
+(91738, 5574, 0.0066, 0, 1, 1, 0),
+(91738, 5578, 0.02, 0, 1, 1, 0),
+(91738, 5972, 0.02, 0, 1, 1, 0),
+(91738, 6271, 0.02, 0, 1, 1, 0),
+(91738, 6342, 0.04, 0, 1, 1, 0),
+(91738, 6344, 0.02, 0, 1, 1, 0),
+(91738, 6347, 0.02, 0, 1, 1, 0),
+(91738, 6348, 0.02, 0, 1, 1, 0),
+(91738, 6375, 0.02, 0, 1, 1, 0),
+(91738, 6390, 0.02, 0, 1, 1, 0),
+(91738, 6391, 0.02, 0, 1, 1, 0),
+(91738, 6716, 0.02, 0, 1, 1, 0),
+(91738, 7288, 0.02, 0, 1, 1, 0),
+(91738, 10316, 0.02, 0, 1, 1, 0),
+(91738, 10405, 0.0099, 0, 1, 1, 0),
+(91738, 10407, 0.02, 0, 1, 1, 0),
+(91738, 11038, 0.02, 0, 1, 1, 0),
+(91738, 11039, 0.02, 0, 1, 1, 0),
+(91738, 11081, 0.02, 0, 1, 1, 0),
+(91738, 14170, 0.02, 0, 1, 1, 0),
+(91738, 30009, 0.5, 0, -30009, 1, 0),
+(91738, 30022, 0.5, 0, -30022, 1, 0),
+(91738, 30037, 2.5, 0, -30037, 1, 0),
+(91738, 30038, 0.5, 0, -30038, 1, 0),
+(91738, 30041, 0.5, 5, -30041, 1, 0),
+(91738, 30042, 0.5, 7, -30042, 1, 0);
+
+REPLACE INTO creature_loot_template VALUES
+(91737, 60375, -45, 0, 1, 1, 0),
+(91737, 414, 0.02, 0, 1, 1, 0),
+(91737, 765, 0.02, 0, 1, 1, 0),
+(91737, 774, 0.02, 0, 1, 1, 0),
+(91737, 785, 0.02, 0, 1, 1, 0),
+(91737, 818, 0.12, 0, 1, 1, 0),
+(91737, 856, 0.0261, 0, 1, 1, 0),
+(91737, 858, 1.2103, 0, 1, 1, 0),
+(91737, 954, 0.36, 0, 1, 1, 0),
+(91737, 955, 0.5, 0, 1, 1, 0),
+(91737, 1013, -80, 0, 1, 1, 0),
+(91737, 1179, 2.2726, 0, 1, 1, 0),
+(91737, 1180, 0.48, 0, 1, 1, 0),
+(91737, 1206, 0.12, 0, 1, 1, 0),
+(91737, 1210, 0.42, 0, 1, 1, 0),
+(91737, 1212, 10.3531, 0, 1, 1, 0),
+(91737, 1214, 1, 0, 1, 1, 0),
+(91737, 2287, 4.6193, 0, 1, 1, 0),
+(91737, 2406, 0.02, 0, 1, 1, 0),
+(91737, 2407, 0.02, 0, 1, 1, 0),
+(91737, 2408, 0.02, 0, 1, 1, 0),
+(91737, 2409, 0.02, 0, 1, 1, 0),
+(91737, 2447, 0.02, 0, 1, 1, 0),
+(91737, 2449, 0.02, 0, 1, 1, 0),
+(91737, 2450, 0.02, 0, 1, 1, 0),
+(91737, 2452, 0.02, 0, 1, 1, 0),
+(91737, 2453, 0.02, 0, 1, 1, 0),
+(91737, 2455, 0.6879, 0, 1, 1, 0),
+(91737, 2553, 0.02, 0, 1, 1, 0),
+(91737, 2555, 0.02, 0, 1, 1, 0),
+(91737, 2589, 17.8893, 0, 1, 3, 0),
+(91737, 2592, 19.2041, 0, 1, 2, 0),
+(91737, 2601, 0.02, 0, 1, 1, 0),
+(91737, 2657, 0.0131, 0, 1, 1, 0),
+(91737, 2700, 0.08, 0, 1, 1, 0),
+(91737, 2770, 0.06, 0, 1, 1, 0),
+(91737, 2771, 0.06, 0, 1, 1, 0),
+(91737, 2775, 0.02, 0, 1, 1, 0),
+(91737, 2835, 0.04, 0, 1, 1, 0),
+(91737, 2836, 0.02, 0, 1, 1, 0),
+(91737, 2856, -80, 0, 1, 1, 0),
+(91737, 2881, 0.02, 0, 1, 1, 0),
+(91737, 2882, 0.02, 0, 1, 1, 0),
+(91737, 2883, 0.02, 0, 1, 1, 0),
+(91737, 2996, 0.02, 0, 1, 1, 0),
+(91737, 3012, 0.36, 0, 1, 1, 0),
+(91737, 3393, 0.02, 0, 1, 1, 0),
+(91737, 3394, 0.02, 0, 1, 1, 0),
+(91737, 3610, 0.02, 0, 1, 1, 0),
+(91737, 4292, 0.02, 0, 1, 1, 0),
+(91737, 4293, 0.02, 0, 1, 1, 0),
+(91737, 4294, 0.02, 0, 1, 1, 0),
+(91737, 4345, 0.02, 0, 1, 1, 0),
+(91737, 4346, 0.02, 0, 1, 1, 0),
+(91737, 4347, 0.02, 0, 1, 1, 0),
+(91737, 4348, 0.02, 0, 1, 1, 0),
+(91737, 4349, 0.02, 0, 1, 1, 0),
+(91737, 4408, 0.02, 0, 1, 1, 0),
+(91737, 4409, 0.02, 0, 1, 1, 0),
+(91737, 4410, 0.02, 0, 1, 1, 0),
+(91737, 4537, 0.02, 0, 1, 1, 0),
+(91737, 4541, 0.0044, 0, 2, 2, 0),
+(91737, 4592, 0.02, 0, 1, 1, 0),
+(91737, 4605, 0.02, 0, 1, 1, 0),
+(91737, 4698, 0.02, 0, 1, 1, 0),
+(91737, 4700, 0.0087, 0, 1, 1, 0),
+(91737, 5503, 0.02, 0, 1, 1, 0),
+(91737, 5573, 0.0131, 0, 1, 1, 0),
+(91737, 5574, 0.0131, 0, 1, 1, 0),
+(91737, 5578, 0.02, 0, 1, 1, 0),
+(91737, 5972, 0.02, 0, 1, 1, 0),
+(91737, 6271, 0.02, 0, 1, 1, 0),
+(91737, 6342, 0.02, 0, 1, 1, 0),
+(91737, 6344, 0.02, 0, 1, 1, 0),
+(91737, 6347, 0.02, 0, 1, 1, 0),
+(91737, 6348, 0.02, 0, 1, 1, 0),
+(91737, 6375, 0.02, 0, 1, 1, 0),
+(91737, 6390, 0.02, 0, 1, 1, 0),
+(91737, 6391, 0.02, 0, 1, 1, 0),
+(91737, 6716, 0.02, 0, 1, 1, 0),
+(91737, 7288, 0.02, 0, 1, 1, 0),
+(91737, 10316, 0.02, 0, 1, 1, 0),
+(91737, 10407, 0.02, 0, 1, 1, 0),
+(91737, 11038, 0.02, 0, 1, 1, 0),
+(91737, 11039, 0.02, 0, 1, 1, 0),
+(91737, 11081, 0.02, 0, 1, 1, 0),
+(91737, 30021, 0.5, 0, -30021, 1, 0),
+(91737, 30022, 0.5, 0, -30022, 1, 0),
+(91737, 30024, 0.5, 0, -30024, 1, 0),
+(91737, 30037, 2.5, 0, -30037, 1, 0),
+(91737, 30038, 0.5, 0, -30038, 1, 0);
+
+REPLACE INTO creature_loot_template VALUES
+(91736, 60375, -30, 0, 1, 1, 0),
+(91736, 414, 0.02, 0, 1, 1, 0),
+(91736, 765, 0.02, 0, 1, 1, 0),
+(91736, 774, 0.02, 0, 1, 1, 0),
+(91736, 785, 0.02, 0, 1, 1, 0),
+(91736, 818, 0.12, 0, 1, 1, 0),
+(91736, 856, 0.0261, 0, 1, 1, 0),
+(91736, 858, 1.2103, 0, 1, 1, 0),
+(91736, 954, 0.36, 0, 1, 1, 0),
+(91736, 955, 0.5, 0, 1, 1, 0),
+(91736, 1013, -80, 0, 1, 1, 0),
+(91736, 1179, 2.2726, 0, 1, 1, 0),
+(91736, 1180, 0.48, 0, 1, 1, 0),
+(91736, 1206, 0.12, 0, 1, 1, 0),
+(91736, 1210, 0.42, 0, 1, 1, 0),
+(91736, 1212, 10.3531, 0, 1, 1, 0),
+(91736, 1214, 1, 0, 1, 1, 0),
+(91736, 2287, 4.6193, 0, 1, 1, 0),
+(91736, 2406, 0.02, 0, 1, 1, 0),
+(91736, 2407, 0.02, 0, 1, 1, 0),
+(91736, 2408, 0.02, 0, 1, 1, 0),
+(91736, 2409, 0.02, 0, 1, 1, 0),
+(91736, 2447, 0.02, 0, 1, 1, 0),
+(91736, 2449, 0.02, 0, 1, 1, 0),
+(91736, 2450, 0.02, 0, 1, 1, 0),
+(91736, 2452, 0.02, 0, 1, 1, 0),
+(91736, 2453, 0.02, 0, 1, 1, 0),
+(91736, 2455, 0.6879, 0, 1, 1, 0),
+(91736, 2553, 0.02, 0, 1, 1, 0),
+(91736, 2555, 0.02, 0, 1, 1, 0),
+(91736, 2589, 17.8893, 0, 1, 3, 0),
+(91736, 2592, 19.2041, 0, 1, 2, 0),
+(91736, 2601, 0.02, 0, 1, 1, 0),
+(91736, 2657, 0.0131, 0, 1, 1, 0),
+(91736, 2700, 0.08, 0, 1, 1, 0),
+(91736, 2770, 0.06, 0, 1, 1, 0),
+(91736, 2771, 0.06, 0, 1, 1, 0),
+(91736, 2775, 0.02, 0, 1, 1, 0),
+(91736, 2835, 0.04, 0, 1, 1, 0),
+(91736, 2836, 0.02, 0, 1, 1, 0),
+(91736, 2856, -80, 0, 1, 1, 0),
+(91736, 2881, 0.02, 0, 1, 1, 0),
+(91736, 2882, 0.02, 0, 1, 1, 0),
+(91736, 2883, 0.02, 0, 1, 1, 0),
+(91736, 2996, 0.02, 0, 1, 1, 0),
+(91736, 3012, 0.36, 0, 1, 1, 0),
+(91736, 3393, 0.02, 0, 1, 1, 0),
+(91736, 3394, 0.02, 0, 1, 1, 0),
+(91736, 3610, 0.02, 0, 1, 1, 0),
+(91736, 4292, 0.02, 0, 1, 1, 0),
+(91736, 4293, 0.02, 0, 1, 1, 0),
+(91736, 4294, 0.02, 0, 1, 1, 0),
+(91736, 4345, 0.02, 0, 1, 1, 0),
+(91736, 4346, 0.02, 0, 1, 1, 0),
+(91736, 4347, 0.02, 0, 1, 1, 0),
+(91736, 4348, 0.02, 0, 1, 1, 0),
+(91736, 4349, 0.02, 0, 1, 1, 0),
+(91736, 4408, 0.02, 0, 1, 1, 0),
+(91736, 4409, 0.02, 0, 1, 1, 0),
+(91736, 4410, 0.02, 0, 1, 1, 0),
+(91736, 4537, 0.02, 0, 1, 1, 0),
+(91736, 4541, 0.0044, 0, 2, 2, 0),
+(91736, 4592, 0.02, 0, 1, 1, 0),
+(91736, 4605, 0.02, 0, 1, 1, 0),
+(91736, 4698, 0.02, 0, 1, 1, 0),
+(91736, 4700, 0.0087, 0, 1, 1, 0),
+(91736, 5503, 0.02, 0, 1, 1, 0),
+(91736, 5573, 0.0131, 0, 1, 1, 0),
+(91736, 5574, 0.0131, 0, 1, 1, 0),
+(91736, 5578, 0.02, 0, 1, 1, 0),
+(91736, 5972, 0.02, 0, 1, 1, 0),
+(91736, 6271, 0.02, 0, 1, 1, 0),
+(91736, 6342, 0.02, 0, 1, 1, 0),
+(91736, 6344, 0.02, 0, 1, 1, 0),
+(91736, 6347, 0.02, 0, 1, 1, 0),
+(91736, 6348, 0.02, 0, 1, 1, 0),
+(91736, 6375, 0.02, 0, 1, 1, 0),
+(91736, 6390, 0.02, 0, 1, 1, 0),
+(91736, 6391, 0.02, 0, 1, 1, 0),
+(91736, 6716, 0.02, 0, 1, 1, 0),
+(91736, 7288, 0.02, 0, 1, 1, 0),
+(91736, 10316, 0.02, 0, 1, 1, 0),
+(91736, 10407, 0.02, 0, 1, 1, 0),
+(91736, 11038, 0.02, 0, 1, 1, 0),
+(91736, 11039, 0.02, 0, 1, 1, 0),
+(91736, 11081, 0.02, 0, 1, 1, 0),
+(91736, 30021, 0.5, 0, -30021, 1, 0),
+(91736, 30022, 0.5, 0, -30022, 1, 0),
+(91736, 30024, 0.5, 0, -30024, 1, 0),
+(91736, 30037, 2.5, 0, -30037, 1, 0),
+(91736, 30038, 0.5, 0, -30038, 1, 0);
+
+REPLACE INTO creature_loot_template VALUES
+(91735, 60375, -30, 0, 1, 1, 0),
+(91735, 414, 0.0055, 0, 1, 1, 0),
+(91735, 765, 0.02, 0, 1, 1, 0),
+(91735, 774, 0.1, 0, 1, 1, 0),
+(91735, 785, 0.02, 0, 1, 1, 0),
+(91735, 818, 0.34, 0, 1, 1, 0),
+(91735, 856, 0.022, 0, 1, 1, 0),
+(91735, 858, 1.4747, 0, 1, 1, 0),
+(91735, 954, 0.36, 0, 1, 1, 0),
+(91735, 955, 0.56, 0, 1, 1, 0),
+(91735, 1179, 2.4212, 0, 1, 1, 0),
+(91735, 1180, 0.56, 0, 1, 1, 0),
+(91735, 1206, 0.08, 0, 1, 1, 0),
+(91735, 1210, 0.32, 0, 1, 1, 0),
+(91735, 1211, 1, 0, 1, 1, 0),
+(91735, 1212, 9.9818, 0, 1, 1, 0),
+(91735, 2287, 4.8258, 0, 1, 1, 0),
+(91735, 2406, 0.02, 0, 1, 1, 0),
+(91735, 2407, 0.02, 0, 1, 1, 0),
+(91735, 2408, 0.02, 0, 1, 1, 0),
+(91735, 2409, 0.02, 0, 1, 1, 0),
+(91735, 2447, 0.02, 0, 1, 1, 0),
+(91735, 2449, 0.02, 0, 1, 1, 0),
+(91735, 2450, 0.02, 0, 1, 1, 0),
+(91735, 2452, 0.02, 0, 1, 1, 0),
+(91735, 2453, 0.02, 0, 1, 1, 0),
+(91735, 2455, 0.7043, 0, 1, 1, 0),
+(91735, 2553, 0.02, 0, 1, 1, 0),
+(91735, 2555, 0.02, 0, 1, 1, 0),
+(91735, 2589, 18.3954, 0, 1, 3, 0),
+(91735, 2592, 19.4354, 0, 1, 2, 0),
+(91735, 2598, 0.02, 0, 1, 1, 0),
+(91735, 2601, 0.02, 0, 1, 1, 0),
+(91735, 2657, 0.022, 0, 1, 1, 0),
+(91735, 2700, 0.06, 0, 1, 1, 0),
+(91735, 2770, 0.2, 0, 1, 1, 0),
+(91735, 2771, 0.02, 0, 1, 1, 0),
+(91735, 2775, 0.02, 0, 1, 1, 0),
+(91735, 2835, 0.1, 0, 1, 1, 0),
+(91735, 2836, 0.02, 0, 1, 1, 0),
+(91735, 2881, 0.02, 0, 1, 1, 0),
+(91735, 2883, 0.02, 0, 1, 1, 0),
+(91735, 2971, 0.0385, 0, 1, 1, 0),
+(91735, 2972, 0.033, 0, 1, 1, 0),
+(91735, 2975, 0.0275, 0, 1, 1, 0),
+(91735, 2979, 0.0275, 0, 1, 1, 0),
+(91735, 2996, 0.02, 0, 1, 1, 0),
+(91735, 3012, 0.36, 0, 1, 1, 0),
+(91735, 3207, 0.0165, 0, 1, 1, 0),
+(91735, 3393, 0.02, 0, 1, 1, 0),
+(91735, 3394, 0.02, 0, 1, 1, 0),
+(91735, 3609, 0.02, 0, 1, 1, 0),
+(91735, 3610, 0.02, 0, 1, 1, 0),
+(91735, 3643, 0.044, 0, 1, 1, 0),
+(91735, 4292, 0.02, 0, 1, 1, 0),
+(91735, 4293, 0.02, 0, 1, 1, 0),
+(91735, 4345, 0.02, 0, 1, 1, 0),
+(91735, 4346, 0.02, 0, 1, 1, 0),
+(91735, 4347, 0.02, 0, 1, 1, 0),
+(91735, 4349, 0.02, 0, 1, 1, 0),
+(91735, 4408, 0.02, 0, 1, 1, 0),
+(91735, 4409, 0.02, 0, 1, 1, 0),
+(91735, 4410, 0.02, 0, 1, 1, 0),
+(91735, 4537, 0.02, 0, 1, 1, 0),
+(91735, 4541, 0.02, 0, 1, 1, 0),
+(91735, 4592, 0.02, 0, 1, 1, 0),
+(91735, 4605, 0.02, 0, 1, 1, 0),
+(91735, 4678, 0.0055, 0, 1, 1, 0),
+(91735, 5503, 0.02, 0, 1, 1, 0),
+(91735, 5504, 0.02, 0, 1, 1, 0),
+(91735, 5573, 0.022, 0, 1, 1, 0),
+(91735, 5574, 0.0165, 0, 1, 1, 0),
+(91735, 5578, 0.04, 0, 1, 1, 0),
+(91735, 6271, 0.02, 0, 1, 1, 0),
+(91735, 6342, 0.02, 0, 1, 1, 0),
+(91735, 6344, 0.02, 0, 1, 1, 0),
+(91735, 6347, 0.02, 0, 1, 1, 0),
+(91735, 6348, 0.02, 0, 1, 1, 0),
+(91735, 6549, 0.06, 0, 1, 1, 0),
+(91735, 6555, 0.08, 0, 1, 1, 0),
+(91735, 6716, 0.02, 0, 1, 1, 0),
+(91735, 6833, 0.673725, 0, 1, 1, 0),
+(91735, 7288, 0.02, 0, 1, 1, 0),
+(91735, 11038, 0.02, 0, 1, 1, 0),
+(91735, 11039, 0.02, 0, 1, 1, 0),
+(91735, 11081, 0.02, 0, 1, 1, 0),
+(91735, 30018, 2.5, 0, -30018, 1, 0),
+(91735, 30020, 0.5, 0, -30020, 1, 0),
+(91735, 30022, 0.5, 0, -30022, 1, 0),
+(91735, 30037, 2.5, 0, -30037, 1, 0),
+(91735, 30038, 0.5, 0, -30038, 1, 0),
+(91735, 30041, 0.5, 5, -30041, 1, 0),
+(91735, 30042, 0.5, 7, -30042, 1, 0);
+
+-- Pestering the Pesterhide --
+delete from quest_template where entry = 40082;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40081,40082,2,85,20,11,0,0,'Pestering the Pesterhide','From atop of The Jagged Hills Chief Rnarl rules over the conjoined tribes of the Pesterhide. He has been rather tenacious, even when we had tried to deal with him in the past. If we truly wish to scatter the Pesterhide Gnolls and send them into chaos, then we will need to strike at the heart of their leadership.\n\nChief Rnarl has been the one to unite the gnolls, and without him they will crumble. While you are there, be sure to kill Belgar as well, he is a shaman that has strengthened the critters and spurred their actions even more.\n\nWhen these two fall, the packs will scatter, bring me their paws and you will be rewarded in silver.','Bring the paw of Belgar and Chief Rnarl to Deathguard Mike in Steepcliff Port.','Have you slain the mongrels, or are you waiting for them to simply leave?','Chief Rnarl, you have eluded me for so long, and no longer. Well done $N, you have done what I could not. You are a skilled fighter, and worthy of praise. When Steepcliff Port gets more established, return, and we can share a corpse.',60376,1,60377,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,1450,68,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40082;
+delete from creature_involvedrelation where quest = 40082;
+replace into creature_questrelation (id, quest) values (91752, 40082);
+replace into creature_involvedrelation (id, quest) values (91752, 40082);
+
+
+delete from item_template where entry = 60376 and 60377;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60376,940,'Paw of Chief Rnarl',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60377,1496,'Paw of Belgar',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO creature_loot_template VALUES
+(1007,60376,-100,0,1,1,0),
+(1013,60377,-100,0,1,1,0);
+
+-- The Rogue Heights --
+delete from quest_template where entry = 40083;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40083,2,17,17,11,0,0,'The Rogue Heights','When Lordaeron was on the brink of collapse I found myself with a band of wandering wizards, and footpads who had a knack for Arcane Magic. They called themselves the Rogue Wizards and with them I met my end. Those who I considered friends left me for dead without even attempting to help me as I lay trapped beneath a fallen tree.\n\nI desire to punish these people, and you will help me do as such! I have sensed for some time now a growing power lingering on the Rogue Heights.\n\nThey are no doubt plotting something, as this arcane power I feel has grown. They need to be dealt with, and now, before they grow to strong to murder. You can find them just to the northeast of Glenshire, there is a small pathway through the Rogue Heights.\n\nTravel there, and slay them for me.','Travel to the Rogue Heights and slay 6 Rogue Enforcers and 6 Rogue Conjurers for Harry Upperson in Glenshire.','We must act quick, lest they begin to harness their magical power.','Excellent work, we have certainly put a dent in those Rogue Wizards, but I still feel there is more to be done.',0,0,0,0,0,0,0,0,91761,6,91762,6,0,0,0,0,0,0,0,950,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40083;
+delete from creature_involvedrelation where quest = 40083;
+replace into creature_questrelation (id, quest) values (91729, 40083);
+replace into creature_involvedrelation (id, quest) values (91729, 40083);
+
+-- Magical Interference --
+delete from quest_template where entry = 40084;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40083,40084,2,17,20,11,0,0,'Magical Interference','I\'ve been puzzled for a long time as to why the magic they now wield has been so familiar - it lays just on the tip of my finger. As you were out dealing with the rabble of enforcers and conjurers I studied harder and came up with an answer.\n\nThe magic is that of the Kirin Tor, I am certain, I spent quite a bit of time in my living life around mages of Dalaran and now that I think back and have checked my books I am certain.\n\nIf Dalaran is here then that means they must be attempting to check us in our expansion here within Tirisfal Uplands.\n\nReturn to the Rogue Heights, and scour the hillside, check for any source of the Kirin Tor\'s presence, and put an end to it. We cannot have our enemies doing as they please freely within the countryside.','Travel to the Rogue Heights and put an end to the Kirin Tor\'s influence once and for all.','Have you dealt with the wizard $N?','Excellent work, we have certainly put a dent in those Rogue Wizards, but I still feel there is more to be done.',60378,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1450,68,100,0,0,0,0,0,0,0,0,0,3385,3,0,0,0,0,0,0,60379,1,60380,1,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40084;
+delete from creature_involvedrelation where quest = 40084;
+replace into creature_questrelation (id, quest) values (91729, 40084);
+replace into creature_involvedrelation (id, quest) values (91729, 40084);
+
+update quest_template set type = 1 where entry = 40084;
+
+delete from item_template where entry = 60378;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60378,31800,'Salorn\'s Ring',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Encrusted with a large amethyst and bearing the mark of the Kirin Tor.',0);
+
+REPLACE INTO creature_loot_template VALUES
+(4064,60378,-100,0,1,1,0);
+
+replace into item_template values
+ ('60379', '4', '2', 'Whispering Cuffs', '', '17002', '2', '0', '1', '2804', '701', '9', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '4', '7', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '37', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '30', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60380', '4', '1', 'Sash of Upperson', '', '27614', '2', '0', '1', '2016', '504', '6', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Stealing Arcane Goods --
+delete from quest_template where entry = 40085;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40083,40085,2,17,18,11,0,0,'Stealing Arcane Goods','No doubt the Rogue Wizards have stashed all manner of Arcane trinkets and items up within the Rogue Heights. If we want to severly limit their abilities then we will need to take these items from them.\n\nAs a side effect, we may as well bolster our own knowledge. Return to the Rogue Heights, and steal Arcane Goods that can be found amongst their camps, return them to me and I will make sure you are well compensated.','Steal Arcane Goods from the camps within the Rogue Heights for Harry Upperson in Glenshire.','Have you found their tomes, books and trinkets $N?','Another victory, and more books to read, thanks again friend, take these coins for the hard work.',60381,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1050,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40085;
+delete from creature_involvedrelation where quest = 40085;
+replace into creature_questrelation (id, quest) values (91729, 40085);
+replace into creature_involvedrelation (id, quest) values (91729, 40085);
+
+delete from item_template where entry = 60381;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60381,4127,'Arcane Goods',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010855;
+replace into gameobject_template values
+(2010855,3,6035,'Arcane Goods',0,4,0.2,43,2010855,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010855;
+replace into gameobject_loot_template values 
+(2010855,60381,-100,0,1,1,0);
+
+-- A friend in Glenshire --
+delete from quest_template where entry = 40086;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40086,2,130,15,10,0,0,'A friend in Glenshire','You look like you know your way around the world. Just by the way you walk, with such a knowing foot. I\'m in need of someone like you, I got a friend located in Glenshire, its far to the west of Tirisfal and into the Uplands. He needs some metal delivered and you look like just the person.\n\nYou can find the entrance to the west of Solliden\'s Farmstead, go through the gate and follow the road straight until you reach Glenshire. It may not be the safest road, but you can handle that.\n\nThere might be a fork in the road, I think you take a left... If I am remembering correctly. Marlow Neggle should be located in town somewhere there, take this shipment to him.','Deliver Marlow\'s Ore Shipment to Marlow Neggle located in Glenshire.','Hello, can I help you?','Gordon must have sent you, and on time too. He has been a steady help here at Glenshire, without him, I would be quite out of luck working.',60382,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60382,1,0,200,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40086;
+delete from creature_involvedrelation where quest = 40086;
+replace into creature_questrelation (id, quest) values (4556, 40086);
+replace into creature_involvedrelation (id, quest) values (91728, 40086);
+
+update creature_template set npc_flags = 16391 where entry = 4556;
+update creature_template set npc_flags = 16391 where entry = 91728;
+
+delete from item_template where entry = 60382;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60382,11448,'Marlow\'s Ore Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Crumblepoint Tower --
+delete from quest_template where entry = 40087;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40087,2,85,15,14,0,0,'Crumblepoint Tower','I have no idea how they managed to slip past our forces in the Silverpine, but these Worgen came in great numbers. Without the tower in our control, our ability to monitor activity in the southern Tirisfal Uplands is slightly reduced, which is why I could use the help of an adventurer like you to help us reclaim it.\n\n<Volgrin sizes you up from the top down>.\n\nYou didn\'t run, well consider me impressed. Good, then head above and kill those flea-ridden wretches.','Slay 6 Tirisclaw Ravagers and 4 Tirislcaw Shadowcasters at Crumblepoint Tower before returning to Volgrin.','Back so soon?','You actually did it? Well... I was honestly not expecting you to return. I wish you have arrived a few days earlier we might have avoided this whole situation, to begin with.',0,0,0,0,0,0,0,0,91740,6,91741,6,0,0,0,0,0,0,700,980,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40087;
+delete from creature_involvedrelation where quest = 40087;
+replace into creature_questrelation (id, quest) values (91713, 40087);
+replace into creature_involvedrelation (id, quest) values (91713, 40087);
+
+-- Head Of The Pack --
+delete from quest_template where entry = 40088;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40087,40088,2,85,16,14,0,0,'Head Of The Pack','With their forces at the tower weakened, it is time for us to kill their leader. Yes, when I say us, I mean you. Their leader invaded the mine recently, and he has taken his bigger worgen down there with him. The Gracestone mine is a top priority. Without its resources, Glenshire doesn\'t stand a chance against the Humans, not to mention that the mines provide a perfect ambush point for worgens to attack any travelers between Silverpine and the Uplands.\n\nGo down there and bring me the head of their leader. Oh, and feel free to kill as many of his followers as you can.','Bring the head of the Pack Leader Sharn and slay 5 Tirisclaw Ambushers and 4 Tirisclaw Scavengers before returning to Volgrin.','How goes the attack?','Oh, I can smell the blood coming from your bag. Is that the head of the mongrel? Good, very good. With the mine and tower back in our control we are one step closer to achieving complete control over the Tirisfal Uplands.',60172,1,0,0,0,0,0,0,91760,5,91739,4,0,0,0,0,0,0,1000,1250,68,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40088;
+delete from creature_involvedrelation where quest = 40088;
+replace into creature_questrelation (id, quest) values (91713, 40088);
+replace into creature_involvedrelation (id, quest) values (91713, 40088);
+
+-- Outnumbered --
+delete from quest_template where entry = 40096;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40096,2,85,16,15,0,0,'Outnumbered','Ah, you look like someone who can get things done $c. Listen closely, as I do not like to repeat myself. The humans outnumber us five to one. However, they are not aware of this yet, and I would like to keep it that way. My servants informed me that the Lordaeron scouts are making their way towards Glenshire from the north. And you, my friend, are going to make sure that they never return to their masters.','Slay 8 Remnants Scouts In The Whispering Forest and return to Duke Nargelas.','Is it done?','Well done. With those scouts gone, they will think twice before sending an attack force on Glenshire.',0,0,0,0,0,0,0,0,91773,8,0,0,0,0,0,0,0,0,800,1150,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40096;
+delete from creature_involvedrelation where quest = 40096;
+replace into creature_questrelation (id, quest) values (91712, 40096);
+replace into creature_involvedrelation (id, quest) values (91712, 40096);
+
+-- In The Dark --
+delete from quest_template where entry = 40097;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40096,40097,2,85,16,15,0,0,'In The Dark','With their scouts gone, we can finally go on the offensive.  But before we can orchestrate an attack on their main camp, we need to reduce their ability to monitor our movement.\n\nJust north of The Whispering Woods, there is a tower called Shatteridge. Remnant\'s Sentries have made that tower their center of operation and are there to warn their main base of any potential danger. Their numbers at the Shatteridge are great, which is precisely the reason why they won\'t expect a single yet powerful foe to attack them directly. So are you up to the task?','Slay 10 Remnants Sentry at the Shateridge Tower and return to Duke Nargelas.','Tell me, how goes the attack?','Ah, my greatest asset returns, successful no less. With Sentries gone, we will have a much easier time dealing with the miserable Humans.',0,0,0,0,0,0,0,0,91772,10,0,0,0,0,0,0,0,0,900,1150,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40097;
+delete from creature_involvedrelation where quest = 40097;
+replace into creature_questrelation (id, quest) values (91712, 40097);
+replace into creature_involvedrelation (id, quest) values (91712, 40097);
+
+-- Rightful Heir --
+delete from quest_template where entry = 40098;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40097,40098,2,85,17,15,0,0,'Rightful Heir','I\'m glad I was right about you. With the imminent danger out of the way, it is time for you to learn about the House Darlthos. Before the scrouge ravaged these lands, our house was one of the most prominent houses in all of Lordaeron. Yet now, we are divided, for my sister-in-law acts as a ruler to those still living.\n\nAnd therein lies our problem, for my wife is the only true heir to this land. You are certainly capable, which is why you have earned a right to an audience with Duchess Grelda. Follow the road south of Glenshire past the gates of the Tirisfal Uplands, and you will find my wife in manor alongside the road.\n\nOh and make sure to give this letter to her, it\'s a... let\'s say a recommendation of sorts.','Talk to Duchess Grelda in her Mannor and give her the letter from Duke Nargelas.','Yes?','Hmmm, managed to impress my husband? Let\'s see if you will do the same for me.',60174,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60174,1,600,400,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40098;
+delete from creature_involvedrelation where quest = 40098;
+replace into creature_questrelation (id, quest) values (91712, 40098);
+replace into creature_involvedrelation (id, quest) values (91711, 40098);
+
+update creature_template set script_name = '' where entry = 91711;
+
+delete from item_template where entry = 60174;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60174,5567,'Letter from Duke',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A sealed letter addressed to Duchess Grelda.',0);
+
+-- Attack From The Inside --
+delete from quest_template where entry = 40099;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext3) values (40098,40099,2,85,17,15,0,0,'Attack From The Inside','Are you aware of how the plague designed by the cult of the damned works? No? Well, it doesn\'t matter, what you need to know is that I have made something similar, tho not as powerful as the original one. This vial contains a plague that will severely reduce the life expectancy of the living who consume it.\n\nNow that is the part where you, my dear, come in. I need you to head north past The Whispering Forest to a Farmstead called The Garricks Stead. There you will slip a bit of this liquid onto the Human supplies. And make sure that there are no witnesses. Their main force needs to consider this a usual act of war, and when they salvage the plagued supplies. Well you get the picture.','Poison 6 grain crates, slay 10 Remnants Farmers and 7 Remnants Militia on Garricks Stead before returning to Duchess Grelda.','Back already?','I have received news that the Humans did their part precisely as planned and have brought our little gift into their main camp. You did marvelously, my dear.',0,0,0,0,0,0,0,0,91980,10,91981,7,60323,5,0,0,0,0,1200,1500,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'All the grain is poisoned');
+
+delete from creature_questrelation where quest = 40099;
+delete from creature_involvedrelation where quest = 40099;
+replace into creature_questrelation (id, quest) values (91711, 40099);
+replace into creature_involvedrelation (id, quest) values (91711, 40099);
+
+delete from creature_template where entry = 60323;
+replace into creature_template (entry, name, display_id1) values (60323, 'quest_40099_dummy_triger', 328);
+
+delete from gameobject_template where entry = 2010824;
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010824, 1, 24318, 1, 'Grain Sacks', 32, 'go_grain_sacks');
+
+delete from item_template where entry = 60173;
+delete from item_template where entry = 60175;
+delete from item_template where entry = 60189;
+delete from item_template where entry = 60190;
+delete from item_template where entry = 60191;
+delete from creature_loot_template where entry = 2503 and item = 60175;
+delete from gameobject_loot_template where entry = 2010824;
+
+-- Fall Of The Usurper --
+delete from quest_template where entry = 40277;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext3) values (40099,40277,2,85,20,15,0,0,'Fall Of The Usurper','With their forces weakened, it is as good as time as any to attack them directly. Before I changed into "this" <Duchess points at her undead features>.\n\nI was one of the commanders of the forces here in Tirisfal Uplands. That\'s why I know that even weakened their camp will prove to be a difficult challenge. I recommend that you find those willing to aid you when you launch an attack on their base. Beware that your primary goal is to end the lives of both Silas, the captain that is currently leading the human forces, and my usurper sister Faliona. Do this for me, and I promise that you will be well rewarded.','Slay Duchess Faliona, Captain Silas, 8 Remnants Footman 4 Remnants Priest and return to Duchess Grelda.','Is it done?','I wished I was there to see the look on her miserable face when she realized one last time that she was never able to beat me neither in life nor in death. And you, my dear, have proven to be quite an ally, from this day on, consider yourself welcome to my court... when I rebuild it, of course. Ah yes, I think this will prove to be a suitable reward for your efforts.',0,0,0,0,0,0,0,0,91352,8,91975,4,91721,1,91974,1,0,0,2500,1750,68,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60173,1,60175,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91711, 40277);
+replace into creature_involvedrelation (id, quest) values (91711, 40277);
+
+update quest_template set type = 1 where entry = 40277;
+
+replace into item_template values
+ ('60173', '4', '0', 'Ring of Darlthos', 'A symbol of bravery', '24087', '3', '0', '1', '9844', '2461', '11', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60175', '4', '0', 'Signet of Darlthos', 'A symbol of wisdom', '23728', '3', '0', '1', '9844', '2461', '11', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Darlthos Heritage --
+delete from quest_template where entry = 40278;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40278,2,85,19,15,0,0,'Darlthos Heritage','$r, I have a task for you. A rather important one. <Nargelas shows you a well-decorated jewelry box>.\n\nIn here lays a key to respect and right to rule the Tirisfal Uplands. You see, before the scourge invaded, my wife Grelda was supposed to inherit these lands from her father. On the coronation day, the contents of this box were supposed to pass on into her possession.\n\nMany moons have passed, and yet my courtiers and I had no luck in opening the lock on this thing. But during my research, a name came up. Vathras Millson. A historian or some such, but I heard that he specializes in these kinds of things. That is why I need you to head to Steepcliff Port and find him. I heard he owns an Inn now.\n\nOh, and do be careful. The box is worth more than your life.','Bring the box to Vathras Millson in Steepcliff Port.','I\'m busy.','And who might you be? The Duke sent you? On with it then, I\'m a busy man.',60189,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60189,1,0,110,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91712, 40278);
+replace into creature_involvedrelation (id, quest) values (91753, 40278);
+
+delete from item_template where entry = 60189;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60189,16028,'Darthlos Jewelry Box',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A well-decorated jewelry box with an engraved sigil of House Darlthos on the top.',0);
+
+-- A Different Type of Lock --
+delete from quest_template where entry = 40279;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40279,2,85,19,15,0,0,'A Different Type of Lock','Do you realize what you are holding in your hands! <Vathras carefully snatches the box from you>. My, my, I wanted to inspect this beauty for a long time. No one aside from the royal family of House Darlthos has ever seen the contents of this box before. But what is this? <Vathras carefully inspects the sigil of the House Darlthos on top of the box> Ah, a shame. You see this sigil. It is an old yet powerful lock that protects the box from being harmed and opened in any way other than through the incantation and use of a special item by which it was sealed.\n\nSkilled as I\'m without the before mentioned method I will not be able to assist the Duke with this task. Send the Duke my regards and wish him luck in his endeavors, will you?','Return the Box to Duke Nargelas in Glenshire and inform him about your findings.','What did he say?','A magical lock? Of course, nothing can ever be so simple.',60189,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60189,1,0,110,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91753, 40279);
+replace into creature_involvedrelation (id, quest) values (91712, 40279);
+
+-- delete from item_template where entry = 60190;
+-- delete from item_template where entry = 60191;

@@ -555,49 +555,31 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
-bool QuestAccept_npc_grelda(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+bool GOHello_go_grain_sacks(Player* pPlayer, GameObject* pGo)
 {
-    if (!pQuestGiver)
-        return false;
-
-    if (!pPlayer)
-        return false;
-
-    bool first_item_added = false;
-    bool second_item_added = false;
-
-    if (pQuest->GetQuestId() == 40085) //Into The Uplands
+    if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE)
     {
-        if (pPlayer->AddItem(60173)) first_item_added = true;
-        if (pPlayer->AddItem(60174)) second_item_added = true;
-
-        if (!first_item_added || !second_item_added)
-        {
-            pPlayer->RemoveQuest(40085);
-            pPlayer->SetQuestStatus(40085, QUEST_STATUS_NONE);
-            pPlayer->GetSession()->SendNotification("Your bags are full!");
-            return false;
-        }
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
     }
-    return false;
+
+    return true;
 }
 
-bool GOHello_go_pile_of_dirt(Player* pPlayer, GameObject* pGo)
+bool GOSelect_go_grain_sacks(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
-    if (pPlayer->HasItemCount(60189, 1, false))
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pGo->SummonGameObject(2010303, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
-        pPlayer->DestroyItemCount(60189, 1, true);
-        pPlayer->SaveInventoryAndGoldToDB();
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        if (pGo->GetEntry() == 2010824)
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            pGo->UseDoorOrButton(120); // 2min
+        }
     }
-    else
-    {
-        pPlayer->GetSession()->SendNotification("Need Lordaeron Banner.");
-        return false;
-    }
-    return true;
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
 }
 
 bool GossipHello_npc_torble_and_kex(Player* pPlayer, Creature* pCreature)
@@ -1104,16 +1086,16 @@ CreatureAI* GetAI_npc_captain_ironhoof(Creature* _Creature) { return new npc_cap
 
 bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
+    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false)/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
 
     if (pPlayer->GetQuestStatus(40186) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60257, 1, false))
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ignite the gunpowder.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
 
     return true;
@@ -1436,7 +1418,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
 
     if (pQuest->GetQuestId() == 40171) // The Tower of Lapidis IX
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -1458,14 +1440,13 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             player->SetQuestStatus(40171, QUEST_STATUS_NONE);
             player->GetSession()->SendNotification("Your bags are full!");
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             return false;
             });
     }
 
     if (pQuest->GetQuestId() == 40271) // The Maul'ogg Crisis VIII --
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -1479,7 +1460,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 npc->MonsterSayToPlayer("I must confess something to you mortal, for I am not one to withhold information, nor am I one to outwardly lie without purpose. I had many reasonings for the death of the Prophet Jammal'an within the depths of the Sunken Temple.", player);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 return true;
             }
             else
@@ -1487,7 +1467,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             player->SetQuestStatus(40271, QUEST_STATUS_NONE);
             player->GetSession()->SendNotification("Your bags are full!");
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             return false;
             });
     }
@@ -1562,7 +1541,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             {
                 if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
                 {
-                    fearoth->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                    fearoth->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     fearoth->CombatStop(true);
                     fearoth->ClearInCombat();
                     fearoth->AddAura(642);
@@ -2127,13 +2106,9 @@ void AddSC_random_scripts_3()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_pile_of_dirt";
-    newscript->pGOHello = &GOHello_go_pile_of_dirt;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_grelda";
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_grelda;
+    newscript->Name = "go_grain_sacks";
+    newscript->pGOHello = &GOHello_go_grain_sacks;
+    newscript->pGOGossipSelect = &GOSelect_go_grain_sacks;
     newscript->RegisterSelf();
 
     newscript = new Script;
