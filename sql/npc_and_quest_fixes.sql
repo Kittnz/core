@@ -4106,3 +4106,42 @@ delete from creature_questrelation where quest = 40083;
 delete from creature_involvedrelation where quest = 40083;
 replace into creature_questrelation (id, quest) values (91729, 40083);
 replace into creature_involvedrelation (id, quest) values (91729, 40083);
+
+-- Magical Interference --
+delete from quest_template where entry = 40084;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40083,40084,2,17,20,11,0,0,'Magical Interference','I\'ve been puzzled for a long time as to why the magic they now wield has been so familiar - it lays just on the tip of my finger. As you were out dealing with the rabble of enforcers and conjurers I studied harder and came up with an answer.\n\nThe magic is that of the Kirin Tor, I am certain, I spent quite a bit of time in my living life around mages of Dalaran and now that I think back and have checked my books I am certain.\n\nIf Dalaran is here then that means they must be attempting to check us in our expansion here within Tirisfal Uplands.\n\nReturn to the Rogue Heights, and scour the hillside, check for any source of the Kirin Tor\'s presence, and put an end to it. We cannot have our enemies doing as they please freely within the countryside.','Travel to the Rogue Heights and put an end to the Kirin Tor\'s influence once and for all.','Have you dealt with the wizard $N?','Excellent work, we have certainly put a dent in those Rogue Wizards, but I still feel there is more to be done.',60378,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1450,68,100,0,0,0,0,0,0,0,0,0,3385,3,0,0,0,0,0,0,60379,1,60380,1,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40084;
+delete from creature_involvedrelation where quest = 40084;
+replace into creature_questrelation (id, quest) values (91729, 40084);
+replace into creature_involvedrelation (id, quest) values (91729, 40084);
+
+update quest_template set type = 1 where entry = 40084;
+
+delete from item_template where entry = 60378;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60378,31800,'Salorn\'s Ring',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Encrusted with a large amethyst and bearing the mark of the Kirin Tor.',0);
+
+REPLACE INTO creature_loot_template VALUES
+(4064,60378,-100,0,1,1,0);
+
+replace into item_template values
+ ('60379', '4', '2', 'Whispering Cuffs', '', '17002', '2', '0', '1', '2804', '701', '9', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '4', '7', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '37', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '30', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60380', '4', '1', 'Sash of Upperson', '', '27614', '2', '0', '1', '2016', '504', '6', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
