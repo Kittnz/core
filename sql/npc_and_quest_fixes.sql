@@ -4145,3 +4145,23 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
  '0', '1', NULL);
 
+-- Stealing Arcane Goods --
+delete from quest_template where entry = 40085;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40083,40085,2,17,18,11,0,0,'Stealing Arcane Goods','No doubt the Rogue Wizards have stashed all manner of Arcane trinkets and items up within the Rogue Heights. If we want to severly limit their abilities then we will need to take these items from them.\n\nAs a side effect, we may as well bolster our own knowledge. Return to the Rogue Heights, and steal Arcane Goods that can be found amongst their camps, return them to me and I will make sure you are well compensated.','Steal Arcane Goods from the camps within the Rogue Heights for Harry Upperson in Glenshire.','Have you found their tomes, books and trinkets $N?','Another victory, and more books to read, thanks again friend, take these coins for the hard work.',60381,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1050,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40085;
+delete from creature_involvedrelation where quest = 40085;
+replace into creature_questrelation (id, quest) values (91729, 40085);
+replace into creature_involvedrelation (id, quest) values (91729, 40085);
+
+delete from item_template where entry = 60381;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60381,4127,'Arcane Goods',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010855;
+replace into gameobject_template values
+(2010855,3,6035,'Arcane Goods',0,4,0.2,43,2010855,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010855;
+replace into gameobject_loot_template values 
+(2010855,60381,-100,0,1,1,0);
