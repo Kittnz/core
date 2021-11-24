@@ -3617,3 +3617,30 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Out of all the ships to make it back we were the only one, you believe that luck?... Hic!\n\nThere were much better men then me, and honestly, I don\'t even want to be here after everything that happened up north. Just, toss me in the water already.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- NPC with DisplayID: 5585 named "Mit'szi", level 1, 100 HP, Faction: Bloodsail Buccaneers
+-- NPC with DisplayID: 8818 named "Beaky", level 1, 100 HP, Faction: Bloodsail Buccaneers
+
+REPLACE INTO creature_template  VALUES
+(60536, 5585, 0, 0, 0, 'Mit\'szi', '', 0, 1, 1, 100, 100, 0, 0, 56, 119, 2, 1, 1.14, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 60536, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60537, 8818, 0, 0, 0, 'Beaky', '', 0, 1, 1, 100, 100, 0, 0, 56, 119, 2, 1, 1.14, 0, 20, 5, 0, 0, 1, 3, 5, 0, 50, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 5.2272, 7.1874, 100, 7, 0, 60536, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 8, '', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set faction = 113 where entry = 60446;
+
+delete from gameobject_template where entry = 2010845;
+replace into gameobject_template values
+(2010845,3,24015,'Mucky Book',0,4,1,43,2010845,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from item_template where entry = 60373;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60373,18059,'Special Water',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+update quest_template set reqitemid1 = 60373, reqitemcount1 = 1 where entry = 40174;
+update quest_template set srcitemid = 60373, srcitemcount = 1 where entry = 40174;
+update quest_template set objectives = 'Speak to Garfield \‘The Fox\’ Sparkleblast if you wish to aid him.\n\n(This will make the Bloodsail Buccaneers not the see you as an enemy anymore.)' where entry = 40172;
+update quest_template set objectives = 'Make a statement.\n\n(This action will make the Blackwater Raiders and Booty Bay your enemy, if your life is not expandable do not attempt this mission.)' where entry = 40180;
+
+set @gossip_menu_id = 41046; set @magic_number = 2010834;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'This seems like one of the gunpowder kegs you\'re looking for.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;

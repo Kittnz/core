@@ -1104,16 +1104,16 @@ CreatureAI* GetAI_npc_captain_ironhoof(Creature* _Creature) { return new npc_cap
 
 bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
+    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false)/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
 
     if (pPlayer->GetQuestStatus(40186) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60257, 1, false))
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ignite the gunpowder.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
 
     return true;
@@ -1436,7 +1436,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
 
     if (pQuest->GetQuestId() == 40171) // The Tower of Lapidis IX
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -1458,14 +1458,13 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             player->SetQuestStatus(40171, QUEST_STATUS_NONE);
             player->GetSession()->SendNotification("Your bags are full!");
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             return false;
             });
     }
 
     if (pQuest->GetQuestId() == 40271) // The Maul'ogg Crisis VIII --
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -1479,7 +1478,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 npc->MonsterSayToPlayer("I must confess something to you mortal, for I am not one to withhold information, nor am I one to outwardly lie without purpose. I had many reasonings for the death of the Prophet Jammal'an within the depths of the Sunken Temple.", player);
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                 return true;
             }
             else
@@ -1487,7 +1485,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             player->SetQuestStatus(40271, QUEST_STATUS_NONE);
             player->GetSession()->SendNotification("Your bags are full!");
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             return false;
             });
     }
@@ -1562,7 +1559,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             {
                 if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
                 {
-                    fearoth->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                    fearoth->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     fearoth->CombatStop(true);
                     fearoth->ClearInCombat();
                     fearoth->AddAura(642);
