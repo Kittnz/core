@@ -4199,3 +4199,12 @@ delete from creature_questrelation where quest = 40088;
 delete from creature_involvedrelation where quest = 40088;
 replace into creature_questrelation (id, quest) values (91713, 40088);
 replace into creature_involvedrelation (id, quest) values (91713, 40088);
+
+-- Outnumbered --
+delete from quest_template where entry = 40096;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40096,2,85,16,15,0,0,'Outnumbered','Ah, you look like someone who can get things done $c. Listen closely, as I do not like to repeat myself. The humans outnumber us five to one. However, they are not aware of this yet, and I would like to keep it that way. My servants informed me that the Lordaeron scouts are making their way towards Glenshire from the north. And you, my friend, are going to make sure that they never return to their masters.','Slay 8 Remnants Scouts In The Whispering Forest and return to Duke Nargelas.','Is it done?','Well done. With those scouts gone, they will think twice before sending an attack force on Glenshire.',0,0,0,0,0,0,0,0,91773,8,0,0,0,0,0,0,0,0,800,1150,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40096;
+delete from creature_involvedrelation where quest = 40096;
+replace into creature_questrelation (id, quest) values (91712, 40096);
+replace into creature_involvedrelation (id, quest) values (91712, 40096);
