@@ -3665,3 +3665,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (92182, 40276);
 replace into creature_involvedrelation (id, quest) values (92182, 40276);
+
+-- Into the Uplands --
+delete from quest_template where entry = 40080;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40080,2,130,15,10,0,0,'Into the Uplands','Hey there traveler, I am currently looking for someone to run me a parcel, one that I have been needing to ship for quite a while now. With all of the comings and goings here at the sepulcher I have been somewhat unable to fulfill my obligations.\n\nUp north past Valgan\'s and The Dead Field is a passageway that leads into the Tirisfal Uplands. It is pressed against the mountains and somewhat hidden but should be spotted by the keen eye.\n\nOnce you make your way into the Uplands, I need this parcel delivered to Apothecary Volgrin, he should be located fairly close to the passage leading through the cliffs.','Deliver Volgrin\'s Parcel to Apothecary Volgrin near the entrance to the Tirisfal Uplands.','Hello, can I help you?','I have been waiting for these, it\'s about time, now I can finally get some work done.',60374,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60374,1,0,200,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40080;
+delete from creature_involvedrelation where quest = 40080;
+replace into creature_questrelation (id, quest) values (6739, 40080);
+replace into creature_involvedrelation (id, quest) values (91713, 40080);
+
+delete from item_template where entry = 60374;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60374,7913,'Volgrin\'s Parcel',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set npc_flags = 139 where entry = 6739;
