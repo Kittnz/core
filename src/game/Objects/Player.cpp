@@ -2987,7 +2987,7 @@ void Player::GiveXP(uint32 xp, Unit* victim)
     // XP to money conversion processed in Player::RewardQuest
     // if (level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
     // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
-    if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, false)))
+    if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, false)) || !HasXPGainEnabled())
         return;
 
     // XP resting bonus for kill
@@ -6510,7 +6510,7 @@ void Player::CheckAreaExploreAndOutdoor()
             uint32 area = p->Id;
             // if (GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
             // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
-            if ((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, false)))
+            if ((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, false)) || !HasXPGainEnabled())
                 SendExplorationExperience(area, 0);
             else
             {
@@ -14830,8 +14830,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     //"honorRankPoints, honorRighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK,"
     // 45               46     47      48      49      50      51      52      53             54              55      56
     //"watchedFaction,  drunk, health, power1, power2, power3, power4, power5, exploredZones, equipmentCache, ammoId, actionBars,"
-    // 57                58                59              60               61                62
-    //"world_phase_mask, customFlags, city_protector, ignore_titles, mortality_status, total_deaths FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
+    // 57                58                59              60               61                62        63
+    //"world_phase_mask, customFlags, city_protector, ignore_titles, mortality_status, total_deaths, xp_gain FROM characters WHERE guid = '%u'", GUID_LOPART(m_guid));
 
     QueryResult *result = holder->GetResult(PLAYER_LOGIN_QUERY_LOADFROM);
 
@@ -14966,6 +14966,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     m_isIgnoringTitles = fields[60].GetBool();
     m_totalDeathCount = fields[62].GetUInt32();
+    m_xpGain = fields[63].GetBool();
 
     m_honorMgr.SetRankPoints(fields[38].GetFloat());
     m_honorMgr.SetHighestRank(fields[39].GetUInt32());
@@ -16473,7 +16474,7 @@ void Player::SaveToDB(bool online, bool force)
                               "honorRankPoints, honorHighestRank, honorStanding, honorLastWeekHK, honorLastWeekCP, honorStoredHK, honorStoredDK, "
                               "watchedFaction, drunk, health, power1, power2, power3, "
                               "power4, power5, exploredZones, equipmentCache, ammoId, actionBars, "
-                              "area, world_phase_mask, customFlags, city_protector, ignore_titles, mortality_status, total_deaths) "
+                              "area, world_phase_mask, customFlags, city_protector, ignore_titles, mortality_status, total_deaths, xp_gain) "
                               "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
                               "?, ?, ?, ?, ?, "
                               "?, ?, ?, "
@@ -16483,7 +16484,7 @@ void Player::SaveToDB(bool online, bool force)
                               "?, ?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
                               "?, ?, ?, ?, ?, ?, "
-                              "?, ?, ?, ?, ?, ?, ?) ");
+                              "?, ?, ?, ?, ?, ?, ?, ?) ");
 
     uberInsert.addUInt32(GetGUIDLow());
     uberInsert.addUInt32(GetSession()->GetAccountId());
@@ -16615,6 +16616,7 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt8(IsIgnoringTitles() ? 1 : 0);
     uberInsert.addUInt8(m_hardcoreStatus);
     uberInsert.addUInt32(GetTotalDeathCount());
+    uberInsert.addUInt8(HasXPGainEnabled());
     uberInsert.Execute();
 
     _SaveBGData();

@@ -2123,6 +2123,9 @@ class Player final: public Unit
         bool HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
         bool SetupHardcoreMode();
 
+        bool HasXPGainEnabled() const { return m_xpGain; }
+        void SetXPGain(bool value) { m_xpGain = value; }
+
         void UpdateTotalDeathCount();
         uint32 GetTotalDeathCount() const { return m_totalDeathCount; };
 
@@ -2150,6 +2153,7 @@ class Player final: public Unit
         ObjectGuid m_escortingGuid;
         uint32 customFlags;
         uint8 m_hardcoreStatus;
+        bool m_xpGain = true;
         uint32 m_hardcoreKickTimer;
         uint32 m_hardcoreInvGuildTimer;
         uint32 m_hardcoreSaveItemsTimer;

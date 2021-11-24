@@ -12050,6 +12050,23 @@ bool ChatHandler::HandleQuestTestCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleXPCommand(char* args)
+{
+    bool onOff = false;
+    if (!ExtractOnOff(&args, onOff))
+        return false;
+
+    auto player = GetSession()->GetPlayer();
+    if (!player || !player->IsInWorld())
+        return false;
+
+    player->SetXPGain(onOff);
+
+    PSendSysMessage("XP gain is now %s", onOff ? "ON" : "OFF");
+
+    return true;
+}
+
 bool ChatHandler::HandleQueueWsgCommand(char* args)
 {
     auto player = GetSession()->GetPlayer();
