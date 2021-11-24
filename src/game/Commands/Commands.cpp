@@ -12054,7 +12054,10 @@ bool ChatHandler::HandleXPCommand(char* args)
 {
     bool onOff = false;
     if (!ExtractOnOff(&args, onOff))
-        return false;
+    {
+        PSendSysMessage("XP gain is %s", onOff ? "ON" : "OFF");
+        return true;
+    }
 
     auto player = GetSession()->GetPlayer();
     if (!player || !player->IsInWorld())
