@@ -4217,3 +4217,18 @@ delete from creature_questrelation where quest = 40097;
 delete from creature_involvedrelation where quest = 40097;
 replace into creature_questrelation (id, quest) values (91712, 40097);
 replace into creature_involvedrelation (id, quest) values (91712, 40097);
+
+-- Rightful Heir --
+delete from quest_template where entry = 40098;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40097,40098,2,85,17,15,0,0,'Rightful Heir','I\'m glad I was right about you. With the imminent danger out of the way, it is time for you to learn about the House Darlthos. Before the scrouge ravaged these lands, our house was one of the most prominent houses in all of Lordaeron. Yet now, we are divided, for my sister-in-law acts as a ruler to those still living.\n\nAnd therein lies our problem, for my wife is the only true heir to this land. You are certainly capable, which is why you have earned a right to an audience with Duchess Grelda. Follow the road south of Glenshire past the gates of the Tirisfal Uplands, and you will find my wife in manor alongside the road.\n\nOh and make sure to give this letter to her, it\'s a... let\'s say a recommendation of sorts.','Talk to Duchess Grelda in her Mannor and give her the letter from Duke Nargelas.','Yes?','Hmmm, managed to impress my husband? Let\'s see if you will do the same for me.',60174,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60174,1,600,400,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40098;
+delete from creature_involvedrelation where quest = 40098;
+replace into creature_questrelation (id, quest) values (91712, 40098);
+replace into creature_involvedrelation (id, quest) values (91711, 40098);
+
+update creature_template set script_name = '' where entry = 91711;
+
+delete from item_template where entry = 60174;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60174,5567,'Letter from Duke',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A sealed letter addressed to Duchess Grelda.',0);
