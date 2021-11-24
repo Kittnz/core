@@ -4165,3 +4165,19 @@ replace into gameobject_template values
 delete from gameobject_loot_template where entry = 2010855;
 replace into gameobject_loot_template values 
 (2010855,60381,-100,0,1,1,0);
+
+-- A friend in Glenshire --
+delete from quest_template where entry = 40086;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40086,2,130,15,10,0,0,'A friend in Glenshire','You look like you know your way around the world. Just by the way you walk, with such a knowing foot. I\'m in need of someone like you, I got a friend located in Glenshire, its far to the west of Tirisfal and into the Uplands. He needs some metal delivered and you look like just the person.\n\nYou can find the entrance to the west of Solliden\'s Farmstead, go through the gate and follow the road straight until you reach Glenshire. It may not be the safest road, but you can handle that.\n\nThere might be a fork in the road, I think you take a left... If I am remembering correctly. Marlow Neggle should be located in town somewhere there, take this shipment to him.','Deliver Marlow\'s Ore Shipment to Marlow Neggle located in Glenshire.','Hello, can I help you?','Gordon must have sent you, and on time too. He has been a steady help here at Glenshire, without him, I would be quite out of luck working.',60382,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60382,1,0,200,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40086;
+delete from creature_involvedrelation where quest = 40086;
+replace into creature_questrelation (id, quest) values (4556, 40086);
+replace into creature_involvedrelation (id, quest) values (91728, 40086);
+
+update creature_template set npc_flags = 16391 where entry = 4556;
+update creature_template set npc_flags = 16391 where entry = 91728;
+
+delete from item_template where entry = 60382;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60382,11448,'Marlow\'s Ore Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
