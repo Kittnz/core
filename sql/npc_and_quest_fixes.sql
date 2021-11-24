@@ -4208,3 +4208,12 @@ delete from creature_questrelation where quest = 40096;
 delete from creature_involvedrelation where quest = 40096;
 replace into creature_questrelation (id, quest) values (91712, 40096);
 replace into creature_involvedrelation (id, quest) values (91712, 40096);
+
+-- In The Dark --
+delete from quest_template where entry = 40097;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40096,40097,2,85,16,15,0,0,'In The Dark','With their scouts gone, we can finally go on the offensive.  But before we can orchestrate an attack on their main camp, we need to reduce their ability to monitor our movement.\n\nJust north of The Whispering Woods, there is a tower called Shatteridge. Remnant\'s Sentries have made that tower their center of operation and are there to warn their main base of any potential danger. Their numbers at the Shatteridge are great, which is precisely the reason why they won\'t expect a single yet powerful foe to attack them directly. So are you up to the task?','Slay 10 Remnants Sentry at the Shateridge Tower and return to Duke Nargelas.','Tell me, how goes the attack?','Ah, my greatest asset returns, successful no less. With Sentries gone, we will have a much easier time dealing with the miserable Humans.',0,0,0,0,0,0,0,0,91772,10,0,0,0,0,0,0,0,0,900,1150,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40097;
+delete from creature_involvedrelation where quest = 40097;
+replace into creature_questrelation (id, quest) values (91712, 40097);
+replace into creature_involvedrelation (id, quest) values (91712, 40097);
