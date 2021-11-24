@@ -513,6 +513,7 @@ class ChatHandler
         bool HandleTransferCommand(char* args);
         bool HandleCopyCommand(char* args);
         bool HandleSendPacketCommand(char* args);
+        bool HandleXPCommand(char* args);
         bool HandleQueueWsgCommand(char* args);
         bool HandleQueueAvCommand(char* args);
         bool HandleQueueArathiBasinCommand(char* args);
