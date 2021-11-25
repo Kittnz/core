@@ -12052,16 +12052,17 @@ bool ChatHandler::HandleQuestTestCommand(char* args)
 
 bool ChatHandler::HandleXPCommand(char* args)
 {
-    bool onOff = false;
-    if (!ExtractOnOff(&args, onOff))
-    {
-        PSendSysMessage("XP gain is %s", onOff ? "ON" : "OFF");
-        return true;
-    }
-
     auto player = GetSession()->GetPlayer();
     if (!player || !player->IsInWorld())
         return false;
+
+    bool onOff = false;
+    if (!ExtractOnOff(&args, onOff))
+    {
+        PSendSysMessage("XP gain is %s", player->HasXPGainEnabled() ? "ON" : "OFF");
+        return true;
+    }
+
 
     player->SetXPGain(onOff);
 
