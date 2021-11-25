@@ -1,1 +1,0 @@
-delete from quest_template where entry in (80255, 80302);
