@@ -824,8 +824,8 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
             data << uint32(member.Slot->ZoneId);
             data << float(float(time(nullptr) - member.Slot->LogoutTime) / DAY);
         }
-        data << member.Slot->OFFnote;
         data << member.Slot->Pnote;
+        data << member.Slot->OFFnote;
     };
     // we can only guess size
     WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
