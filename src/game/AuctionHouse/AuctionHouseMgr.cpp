@@ -47,7 +47,7 @@ bool IsPlayerHardcore(uint32 lowGuid)
     if (result)
     {
         Field* fields = result->Fetch();
-        hardcoreStatus = fields[1].GetUInt32();
+        hardcoreStatus = fields[0].GetUInt32();
         delete result;
         return false;
     }
