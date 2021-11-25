@@ -3693,7 +3693,10 @@ void Spell::cast(bool skipCheck)
         if ((!m_caster->IsPlayer()) || ((m_casterUnit->GetCharmerGuid()) && (!m_casterUnit->HasUnitState(UNIT_STAT_POSSESSED))))
         {
             if (m_targets.getUnitTarget() && m_targets.getUnitTarget() != m_caster)
+            {
                 m_casterUnit->SetInFront(m_targets.getUnitTarget());
+                m_castOrientation = m_casterUnit->GetOrientation();
+            }
         }
     }
 
