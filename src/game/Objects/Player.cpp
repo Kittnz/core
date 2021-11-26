@@ -22474,8 +22474,17 @@ bool Player::SetupHardcoreMode()
     // handle equipped
     for (int i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
     {
-        //if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
-            //pItem->ClearEnchantment();
+        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        {
+            auto info = pItem->GetProto();
+            if (info && info->SellPrice > 1 * SILVER)
+            {
+                DestroyItem(INVENTORY_SLOT_BAG_0, i, true);
+            }
+            pItem->ClearEnchantment(TEMP_ENCHANTMENT_SLOT);
+            pItem->ClearEnchantment(PERM_ENCHANTMENT_SLOT);
+        }           
+        
     }
     // destroy backpack
     for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
