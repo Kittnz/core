@@ -5409,31 +5409,6 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
-
-bool GOHello_go_uldum_pedestal(Player* pPlayer, GameObject* pGo)
-{
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_SENDER_INFO, "Place Platinum Discs on the pedestal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);   
-
-    pPlayer->SEND_GOSSIP_MENU(1, pGo->GetGUID());
-    return true;
-}
-
-bool GOSelect_go_uldum_pedestal(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        if (sGameEventMgr.IsActiveEvent(162) || (!sGameEventMgr.IsEnabled(162)))
-            return false;
-        else
-        {
-            sGameEventMgr.StartEvent(162, true);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50663))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-        }
-    }
-    return true;
-}
-
 // Scarlet Monastery raid attunement quest scripts:
 
 bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
@@ -6982,6 +6957,13 @@ bool QuestAccept_npc_truthseeker_magellas(Player* pPlayer, Creature* pQuestGiver
     return false;
 }
 
+
+enum UldumQuestItems
+{
+    ITEM_ULDUM_FIRST_PLATE  = 60102,
+    ITEM_ULDUM_SECOND_PLATE = 60103,
+};
+
 bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Quest* pQuest)
 {
     if (!player)
@@ -6992,8 +6974,21 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
 
     if (pQuest->GetQuestId() == 40107 || pQuest->GetQuestId() == 40115) //Gate Keeper  //Guardian of the Gate
     {
-        if (player->AddItem(60102)) first_item_added = true;
-        if (player->AddItem(60103)) second_item_added = true;
+        if (!player->HasItemCount(ITEM_ULDUM_FIRST_PLATE, 1))
+        {
+            if (player->AddItem(ITEM_ULDUM_FIRST_PLATE))
+                first_item_added = true;
+        }
+        else
+            first_item_added = true;
+
+        if (!player->HasItemCount(ITEM_ULDUM_SECOND_PLATE, 1))
+        {
+            if (player->AddItem(ITEM_ULDUM_SECOND_PLATE))
+                second_item_added = true;
+        }
+        else
+            second_item_added = true;
 
         if (!first_item_added || !second_item_added)
         {
@@ -7003,6 +6998,13 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
             player->SetQuestStatus(40115, QUEST_STATUS_NONE);
             player->GetSession()->SendNotification("Your bags are full!");
             return false;
+        }
+
+        // Summon pedestal NPC to start encounter RP phase.
+        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
+        {
+            c->SetInCombatWith(player); // Used to pass along event invoker.
+            pGo->UseDoorOrButton();
         }
     }
     return false;
@@ -7448,12 +7450,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_questions_and_answers";
     newscript->pGossipHello = &GossipHello_npc_questions_and_answers;
     newscript->pGossipSelect = &GossipSelect_npc_questions_and_answers;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_uldum_pedestal";
-    newscript->pGOHello = &GOHello_go_uldum_pedestal;
-    newscript->pGOGossipSelect = &GOSelect_go_uldum_pedestal;
     newscript->RegisterSelf();
 
     newscript = new Script;
