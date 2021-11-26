@@ -242,7 +242,7 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry * auction)
     if (owner)
         isHardcore = owner->IsHardcore();
     else
-        isHardcore = IsPlayerHardcore(auction->bidder);
+        isHardcore = IsPlayerHardcore(auction->owner);
 
     if (isHardcore)
         return;
@@ -306,7 +306,7 @@ void AuctionHouseMgr::SendAuctionExpiredMail(AuctionEntry * auction)
     if (owner)
         isHardcore = owner->IsHardcore();
     else
-        isHardcore = IsPlayerHardcore(auction->bidder);
+        isHardcore = IsPlayerHardcore(auction->owner);
 
 
     // owner exist
