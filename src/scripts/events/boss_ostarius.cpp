@@ -1,76 +1,111 @@
-
-// Boss Ostarius
+// Ostarius
 // Author: Henhouse
-
-
 #include "scriptPCH.h"
+
+// Enable for development logs to help debug some things.
 //#define DEBUG_ON
+
+enum
+{
+    SPELL_SCAN_OF_OSTARIUS = 57000,
+    SPELL_MORTALITY_SCAN = 57005,
+    SPELL_CONFLAG = 16805,
+    SPELL_SANDSTORM = 57002,
+    SPELL_TARGET_CHANNEL = 57004,
+
+    SPELL_STOMP = 27993,
+    SPELL_EARTHQUAKE = 19798,
+
+    SPELL_SONIC_BURST = 23918,
+    SPELL_CHAIN_LIGHTNING = 28293,
+
+    SPELL_ROOT_FOREVER = 31366,
+    SPELL_TELEPORT_VISUAL = 26638,
+
+    MOB_ULDUM_CONSTRUCT = 80938,
+    MOB_DEFENSE_SENTRY = 80939,
+
+    GOB_PEDESTAL = 142343,
+    GOB_DEFENSE_PORTAL = 3000270,
+    GOB_DEBILITATING_DEVICE = 3000271,
+};
 
 enum PhaseStates
 {
     STATE_PHASE_1 = 1,
     STATE_PHASE_2 = 2,
-    STATE_ENRAGED = 4
+    STATE_PHASE_3 = 4,
+    STATE_PHASE_4 = 8,
+    STATE_ENRAGED = 16,
 };
 
 enum Events
 {
-    EVENT_PHASE_1_DELAY = 1,
-    EVENT_PHASE_2_DELAY = 2
+    EVENT_INTRO_RP_1 = 1,
+    EVENT_INTRO_RP_2,
+    EVENT_INTRO_RP_3,
+    EVENT_INTRO_RP_4,
+    EVENT_INTRO_RP_5,
+    EVENT_INTRO_RP_6,
+    EVENT_INTRO_RP_7,
+    EVENT_PHASE_1_DELAY,
+    EVENT_PHASE_3_DELAY,
 };
 
-constexpr float portalLocs[][4] =
+const float squareX = -9606.21484f;
+const float squareY = -2806.25635f;
+const float squareZ = 7.838724f;
+const float squareDiameter = 4.191733f;
+
+constexpr auto PED_TEXT_1 = "Initiating unlock sequence...";
+constexpr auto PED_TEXT_2 = "Plates present, scanning for item validation...";
+constexpr auto PED_TEXT_3 = "Plates authentication complete. Unlocking the gates...";
+constexpr auto PED_TEXT_4 = "Activating Gate Keeper to greet the guests...";
+
+constexpr auto INTRO_TEXT_1 = "Welcome, honored guests, to the research facility.";
+constexpr auto INTRO_TEXT_2 = "Please wait for the initial scanning...";
+constexpr auto INTRO_TEXT_3 = "WARNING! Curse of the flesh detected!";
+constexpr auto INTRO_TEXT_4 = "Initiating manual gate override... Gate locked successfully.";
+constexpr auto INTRO_TEXT_5 = "Activating defensive system for threat elimination.";
+
+constexpr auto PHASE_1_TEXT = "Guardians, awaken and smite these intruders!";
+constexpr auto PHASE_2_TEXT = "Fire will burn your corruption!";
+constexpr auto PHASE_3_TEXT = "Elusive... Then face the might of the frost!";
+constexpr auto PHASE_4_TEXT = "Still you persist, servants of the old ones? Very well.";
+constexpr auto ENRAGE_TEXT = "NO! I will not fail again!";
+
+constexpr auto PLAYER_DEATH_1 = "So fragile.";
+constexpr auto PLAYER_DEATH_2 = "You have failed!";
+constexpr auto PLAYER_DEATH_3 = "None shall pass!";
+constexpr auto PLAYER_DEATH_4 = "It had to be done.";
+
+constexpr auto DEATH_TEXT = "You will bring your own, undoing... it has already begun...";
+
+constexpr float sentryLocs[4][4] =
 {
-    {-9613.080f, -2828.020f, 11.20f, 1.145f},
-    {-9617.700f, -2743.983f, 15.30f, 5.265f},
-    {-9572.843f, -2840.130f, 10.62f, 4.650f},
-    {-9581.630f, -2728.220f, 13.02f, 1.700f}
+    {-9613.08f, -2828.02f, 10.7f, 1.145f},
+    {-9617.7f, -2743.983f, 14.8f, 5.265f},
+    {-9572.8427f, -2840.13f, 10.0f, 1.41f},
+    {-9581.63f, -2728.22f, 12.5f, 4.91f},
 };
 
-constexpr float sentryLocs[][4] =
-{
-    {-9592.858f, -2832.80f, 57.50f, 1.386f},
-    {-9552.556f, -2836.38f, 56.73f, 1.840f},
-    {-9632.440f, -2755.29f, 58.67f, 5.760f},
-    {-9602.155f, -2734.95f, 59.55f, 5.265f}
-};
-
-constexpr auto AGGRO_TEXT_1 = "THREAT DETECTED. INITIATING DEFENSE PROTOCOLS.";
-constexpr auto AGGRO_TEXT_2 = "DEFENSE SYSTEMS COMING ONLINE.";
-constexpr auto RESET_TEXT_1 = "THREATS NEUTRALIZED. DEFENSE PROTOCOLS RESET.";
-constexpr auto RESET_TEXT_2 = "THREAT SCAN RESULT: ZERO. DEFENSE PROTOCOLS: DEACTIVATED.";
-constexpr auto DEATH_TEXT_1 = "UNEXPECTED... shut...down.";
-constexpr auto DEATH_TEXT_2 = "DEFENSE... failure.";
-
-constexpr uint32 SPELL_STOMP = 27993;
-constexpr uint32 SPELL_EARTHQUAKE = 19798;
-constexpr uint32 SPELL_SONIC_BURST = 23918;
-constexpr uint32 SPELL_CHAIN_LIGHTNING = 28293;
-constexpr uint32 SPELL_ROOT_FOREVER = 31366;
-constexpr uint32 SPELL_TELEPORT_VISUAL = 26638;
-
-constexpr uint32 MOB_ULDUM_CONSTRUCT = 80938;
-constexpr uint32 MOB_DEFENSE_SENTRY = 80939;
-
-constexpr uint32 GOB_DEFENSE_PORTAL = 3000270;
-
-std::vector<Unit*> spawnedConstructs;
+std::vector<Unit*> constructSpawns;
+std::vector<Unit*> sentrySpawns;
 std::vector<GameObject*> portals;
+std::vector<GameObject*> devices;
 
-// Attempts to find nearby enemy player that is not the current aggro of the boss.
-Player* GetRandomNearbyEnemyPlayer(Unit* self, const float& dist, std::size_t attempt = 0)
+bool isFrostPhase;
+
+// Attempts to find nearby enemy player that is not the main target of the boss.
+Player* GetRandomNearbyEnemyPlayer(Unit* self, const float& dist, uint8 attempt = 0)
 {
     ++attempt;
     if (attempt > 10)
-    {
         return nullptr;
-    }
 
     Unit* random = self->SelectRandomUnfriendlyTarget(nullptr, dist);
     if (!random)
-    {
         return nullptr;
-    }
 
 #ifdef DEBUG_ON
     sLog.outString("Selected %s, is player: %u", random->GetName(), random->IsPlayer());
@@ -78,79 +113,56 @@ Player* GetRandomNearbyEnemyPlayer(Unit* self, const float& dist, std::size_t at
 
     // Recurse until we select a player (missing MaNGOS func to do this...)
     if (!random->IsPlayer())
-    {
         return GetRandomNearbyEnemyPlayer(self, dist, attempt);
-    }
 
     return random->ToPlayer();
 }
 
-SpellEntry* MakeCustomSpellEntry(uint32 spellId)
-{
-    const auto entry = sSpellMgr.GetSpellEntry(spellId);
-    if (entry)
-    {
-        return new SpellEntry(*entry);
-    }
-
-    return nullptr;
-}
-
 struct boss_ostariusAI : public ScriptedAI
 {
-    explicit boss_ostariusAI(Creature* c) : ScriptedAI(c)
+    explicit boss_ostariusAI(Creature *c) : ScriptedAI(c)
     {
         Reset();
     }
 
     EventMap m_events;
 
-    float fOriginalCombatReach;
-    float fHomeXPosition;
-    float fLastHealthPercentage;
+    uint8 CurrentPhase;
+    uint8 PhaseState;
+    uint8 LastHealthPercentage;
+    uint16 numOfPortalsToSpawn;
+    uint16 numOfDevicesToSpawn;
 
-    uint8 uiCurrentPhase;
-    uint8 uiPhaseState;
-
-    uint32 uiPortalCheck_Timer;
-    uint32 uiSetFlags_Timer;
-    uint32 uiSonicBurst_Timer;
-    uint32 uiChainLightning_Timer;
-    time_t aggroTime;
+    uint32 PortalCheck_Timer;
+    uint32 SonicBurst_Timer;
+    uint32 ChainLightning_Timer;
+    uint32 SpawnPortals_Timer;
+    uint32 SpawnDevices_Timer;
 
     void SetDefaults()
     {
         m_events.Reset();
 
-        fOriginalCombatReach = 3; // default value for model
+        PhaseState = 0;
+        CurrentPhase = 0;
+        isFrostPhase = false;
 
-        uiPhaseState = 0;
-        uiCurrentPhase = 0;
-        aggroTime = time(nullptr);
+        numOfPortalsToSpawn = 2;
+        numOfDevicesToSpawn = 2;
 
-        fLastHealthPercentage = 100;
+        LastHealthPercentage = 100;
 
-        uiPortalCheck_Timer = 30000;
-        uiSetFlags_Timer = 1000;
-        uiSonicBurst_Timer = 10000;
-        uiChainLightning_Timer = 15000;
+        PortalCheck_Timer = 30000;
+        SonicBurst_Timer = 10000;
+        ChainLightning_Timer = 15000;
+        SpawnPortals_Timer = 0;
+        SpawnDevices_Timer = 0;
 
-        // Make ranges larger so that casters can shoot from farther away.
-        me->SetFloatValue(UNIT_FIELD_COMBATREACH, fOriginalCombatReach * me->GetObjectScale() * 6);
-        me->ForceValuesUpdateAtIndex(UNIT_FIELD_COMBATREACH);
-
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_DISABLE_MOVE);
-        me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
-
-        me->AddAura(SPELL_ROOT_FOREVER); // core support for NPC rooting broken?
         me->SetAttackTimer(BASE_ATTACK, 1 * DAY); // never auto initially
 
-        // Immune to all physical damage in phase 1 (because behind door, but hitbox is HUGE).
-        me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, true);
-
-        float x, y, z, o;
-        me->GetHomePosition(x, y, z, o);
-        fHomeXPosition = x;
+        // Reset to neutral for RP intro.
+        me->SetFactionTemplateId(7); // Neutral (Creature)
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2);
     }
 
     void Reset()
@@ -158,68 +170,74 @@ struct boss_ostariusAI : public ScriptedAI
         SetDefaults();
 
         DespawnSummons();
+    }
 
-        me->MonsterYell(urand(0, 1) ? RESET_TEXT_1 : RESET_TEXT_2);
-
-        if (uiCurrentPhase >= 2)
-        {
-            float x, y, z, o;
-            me->GetHomePosition(x, y, z, o);
-            me->TeleportPositionRelocation(x, y, z, o);
-            me->NearTeleportTo(x, y, z, o);
-            me->SetFacingTo(o);
-
-            DoCast(me, SPELL_TELEPORT_VISUAL, true);
-        }
+    void JustRespawned() override
+    {
+        JustReachedHome();
+        DoCast(me, SPELL_TELEPORT_VISUAL, true);
     }
 
     void JustReachedHome() override
     {
-        float x, y, z, o;
-        me->GetHomePosition(x, y, z, o);
-        fHomeXPosition = x;
+        Reset();
+
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_DISABLE_MOVE);
+        me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
+
+        me->AddAura(SPELL_ROOT_FOREVER); // core support for NPC rooting broken?
     }
 
     void Aggro(Unit* who) override
     {
-        m_creature->MonsterYell(urand(0, 1) ? AGGRO_TEXT_1 : AGGRO_TEXT_2);
-        aggroTime = time(nullptr);
-
-        m_events.ScheduleEvent(Events::EVENT_PHASE_1_DELAY, Seconds(3));
+#ifdef DEBUG_ON
+        // Skip RP intro when debugging.
+        m_events.ScheduleEvent(EVENT_INTRO_RP_6, Seconds(0));
+#else
+        m_events.ScheduleEvent(EVENT_INTRO_RP_1, Seconds(0));
+#endif
     }
 
     void DespawnSummons()
     {
-        for (const auto& u : spawnedConstructs)
-        {
+        for (const auto& u : sentrySpawns)
             if (u)
-            {
                 u->DeleteLater();
-            }
-        }
+
+        for (const auto& u : constructSpawns)
+            if (u)
+                u->DeleteLater();
 
         for (const auto& g : portals)
-        {
             if (g)
-            {
                 g->DeleteLater();
-            }
-        }
+
+        for (const auto& d : devices)
+            if (d)
+                d->DeleteLater();
     }
 
     void KilledUnit(Unit* victim) override
     {
         if (victim->GetTypeId() != TYPEID_PLAYER)
-        {
             return;
-        }
 
         if (urand(0, 1)) // don't spam on wipe
         {
-            const std::size_t unitsLeft = me->GetThreatManager().getThreatList().size();
-            if (unitsLeft)
+            switch (urand(1, 4))
             {
-                me->PMonsterYell("THREAT ELIMINATED. %u REMAINING.", unitsLeft);
+            case 1:
+                me->MonsterSendTextToZone(PLAYER_DEATH_1, CHAT_MSG_MONSTER_YELL);
+                break;
+            case 2:
+                me->MonsterSendTextToZone(PLAYER_DEATH_2, CHAT_MSG_MONSTER_YELL);
+                break;
+            case 3:
+                me->MonsterSendTextToZone(PLAYER_DEATH_3, CHAT_MSG_MONSTER_YELL);
+                break;
+            case 4:
+                me->MonsterSendTextToZone(PLAYER_DEATH_4, CHAT_MSG_MONSTER_YELL);
+                break;
             }
         }
     }
@@ -228,25 +246,32 @@ struct boss_ostariusAI : public ScriptedAI
     {
         DespawnSummons();
 
-        m_creature->MonsterYell(urand(0, 1) ? DEATH_TEXT_1 : DEATH_TEXT_2);
+        me->MonsterSendTextToZone(DEATH_TEXT, CHAT_MSG_MONSTER_YELL);
 
-        uint32 m_respawn_delay_Timer = 3 * DAY;
-        m_creature->SetRespawnDelay(m_respawn_delay_Timer);
-        m_creature->SetRespawnTime(m_respawn_delay_Timer);
-        m_creature->SaveRespawnTime();
+        uint32 m_respawn_delay_Timer = 7 * DAY;
+        me->SetRespawnDelay(m_respawn_delay_Timer);
+        me->SetRespawnTime(m_respawn_delay_Timer);
+        me->SaveRespawnTime();
     }
 
     void MakeNormal()
     {
-        me->SetFloatValue(UNIT_FIELD_COMBATREACH, fOriginalCombatReach);
-        me->ForceValuesUpdateAtIndex(UNIT_FIELD_COMBATREACH);
-
         me->RemoveAurasDueToSpell(SPELL_ROOT_FOREVER);
-
-        me->ApplySpellImmune(0, IMMUNITY_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, false);
 
         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_DISABLE_MOVE);
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
+    }
+
+    void TogglePedestal()
+    {
+        auto ped = me->FindNearestGameObject(GOB_PEDESTAL, 100.0f);
+        if (ped)
+        {
+            if (ped->getLootState() == GO_READY || ped->getLootState() == GO_JUST_DEACTIVATED)
+                ped->UseDoorOrButton();
+            else
+                ped->ResetDoorOrButton();
+        }
     }
 
     void UpdateAI(const uint32 diff) override
@@ -254,162 +279,187 @@ struct boss_ostariusAI : public ScriptedAI
         m_events.Update(diff);
 
         // Anti-leash protection
-        if (me->GetPositionX() > (fHomeXPosition + 150))
-        {
+        if (me->GetPositionX() > (me->GetHomePosition().x + 150))
             EnterEvadeMode();
-        }
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-        {
+        if (!me->SelectHostileTarget() || !me->GetVictim())
             return;
-        }
 
         // Timer events
         while (uint32 eventId = m_events.ExecuteEvent())
         {
             switch (eventId)
             {
-                case Events::EVENT_PHASE_1_DELAY:
-                {
-                    uiCurrentPhase = 1;
-                    break;
-                }
-                case Events::EVENT_PHASE_2_DELAY:
-                {
-                    // Teleport in, remove physical immunity, reset combat reach, unroot, restore swing timer.
-                    DoCast(me, SPELL_TELEPORT_VISUAL, true);
-                    me->NearTeleportTo(-9615.06f, -2782.88f, 7.83f, 0.0f);
+            case EVENT_INTRO_RP_1:
+                // Initial delay.
+                m_events.ScheduleEvent(EVENT_INTRO_RP_2, Seconds(2));
+                break;
+            case EVENT_INTRO_RP_2:
+                me->MonsterSendTextToZone(INTRO_TEXT_1, CHAT_MSG_MONSTER_YELL);
+                m_events.ScheduleEvent(EVENT_INTRO_RP_3, Seconds(6));
+                break;
+            case EVENT_INTRO_RP_3:
+                me->MonsterSendTextToZone(INTRO_TEXT_2, CHAT_MSG_MONSTER_YELL);
+                m_events.ScheduleEvent(EVENT_INTRO_RP_4, Seconds(4));
+                break;
+            case EVENT_INTRO_RP_4:
+                me->CastSpell(me->GetVictim(), SPELL_SCAN_OF_OSTARIUS, true);
+                m_events.ScheduleEvent(EVENT_INTRO_RP_5, Seconds(6));
+                break;
+            case EVENT_INTRO_RP_5:
+                me->MonsterSendTextToZone(INTRO_TEXT_3, CHAT_MSG_MONSTER_YELL);
+                m_events.ScheduleEvent(EVENT_INTRO_RP_6, Seconds(4));
+                me->SetFactionTemplateId(14); // Hostile
+                break;
+            case EVENT_INTRO_RP_6:
+                me->CastSpell(me, SPELL_TARGET_CHANNEL, true);
+                me->MonsterSendTextToZone(INTRO_TEXT_4, CHAT_MSG_MONSTER_YELL);
+                m_events.ScheduleEvent(EVENT_INTRO_RP_7, Seconds(7));
+                break;
+            case EVENT_INTRO_RP_7:
+            {
+                TogglePedestal();
+                me->InterruptNonMeleeSpells(false, SPELL_TARGET_CHANNEL);
+                me->MonsterSendTextToZone(INTRO_TEXT_5, CHAT_MSG_MONSTER_YELL);
+                m_events.ScheduleEvent(EVENT_PHASE_1_DELAY, Seconds(5));
+                break;
+            }
+            case EVENT_PHASE_1_DELAY:
+                CurrentPhase = 1;
+                break;
+            case EVENT_PHASE_3_DELAY:
+                // Remove physical immunity, reset combat reach, unroot, restore swing timer.
+                MakeNormal();
 
-                    MakeNormal();
+                me->SetAttackTimer(BASE_ATTACK, 2000);
+                me->SetInCombatWith(me->GetVictim());
 
-                    me->SetAttackTimer(BASE_ATTACK, 2000);
-                    me->SetInCombatWith(me->GetVictim());
-
-                    break;
-                }
+                break;
             }
         }
 
-        if (uiCurrentPhase == 1 && !(uiPhaseState & PhaseStates::STATE_PHASE_1))
+        // Portal phase.
+        if (CurrentPhase == 1 && !(PhaseState & STATE_PHASE_1))
         {
+            DoCast(me, SPELL_SANDSTORM, true);
+
+            // Make attackable now once shield is up.
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2);
+            me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
+
+            me->MonsterSendTextToZone(PHASE_1_TEXT, CHAT_MSG_MONSTER_YELL);
+
             // Spawn portals so sentries enter battlefield.
             SpawnPortals();
 
-            me->MonsterYell("SENTRY TELEPORTATION VECTOR: ESTABLISHED.");
-
-            // Spawn sentry casters
-            SummonConstructs();
-
-            uiPhaseState |= PhaseStates::STATE_PHASE_1;
+            PhaseState |= STATE_PHASE_1;
         }
 
-        if (me->GetHealthPercent() < 40.f && !(uiPhaseState & PhaseStates::STATE_PHASE_2))
+        // Sentry phase (fire).
+        if (me->GetHealthPercent() < 70 && !(PhaseState & STATE_PHASE_2))
         {
+            me->MonsterSendTextToZone(PHASE_2_TEXT, CHAT_MSG_MONSTER_YELL);
+
+            SummonSentries();
+
+            CurrentPhase = 2;
+            PhaseState |= STATE_PHASE_2;
+        }
+
+        // Frost phase (changes spells on sentries and summons suppression devices)
+        if (me->GetHealthPercent() < 50 && !(PhaseState & STATE_PHASE_3))
+        {
+            isFrostPhase = true;
+
+            me->MonsterSendTextToZone(PHASE_3_TEXT, CHAT_MSG_MONSTER_YELL);
+
+            SpawnSupressionDevices();
+
+            CurrentPhase = 3;
+            PhaseState |= STATE_PHASE_3;
+        }
+
+        // Manual intervention phase.
+        if (me->GetHealthPercent() < 30 && !(PhaseState & STATE_PHASE_4))
+        {
+            me->MonsterSendTextToZone(PHASE_4_TEXT, CHAT_MSG_MONSTER_YELL);
+
             DespawnSummons();
 
-            me->MonsterYell("DEFAULT DEFENSE PARAMETERS PROVE INADEQUATE. COMMENCING MANUAL OVERRIDE.");
-            m_events.ScheduleEvent(Events::EVENT_PHASE_2_DELAY, Seconds(2));
+            m_events.ScheduleEvent(EVENT_PHASE_3_DELAY, Seconds(5));
+            me->RemoveAurasDueToSpell(SPELL_SANDSTORM); // Remove here so animation finishes before phase starts.
 
-            uiCurrentPhase = 2;
-            uiPhaseState |= PhaseStates::STATE_PHASE_2;
+            CurrentPhase = 4;
+            PhaseState |= STATE_PHASE_4;
         }
 
-        if (uiCurrentPhase == 1)
+        if (CurrentPhase == 1)
         {
-            // Check to occasionally reopen portals.
-            if (uiPortalCheck_Timer < diff)
+            if (SpawnPortals_Timer <= diff)
             {
-#ifdef DEBUG_ON
-                sLog.outString("portal vector size: %u", portals.size());
-#endif
+                SpawnPortals();
 
-                // Trigger respawn of missing portal if one or more have been destroyed.
-                if (portals.size() < (sizeof(portalLocs) / sizeof(portalLocs[0])))
-                {
-                    me->MonsterYell("PORTAL GRID: RE-ESTABLISHED.");
-                    SpawnPortals();
-                }
+                // Spawn more next time.
+                numOfPortalsToSpawn += 2;
 
-                uiPortalCheck_Timer = 30000;
+                SpawnPortals_Timer = 30 * IN_MILLISECONDS;
             }
             else
+                SpawnPortals_Timer -= diff;
+        }
+
+        // Frost phase
+        if (CurrentPhase == 3)
+        {
+            if (SpawnDevices_Timer <= diff)
             {
-                uiPortalCheck_Timer -= diff;
+                SpawnSupressionDevices();
+
+                // Spawn more next time.
+                numOfDevicesToSpawn += 2;
+
+                SpawnDevices_Timer = 20 * IN_MILLISECONDS;
             }
+            else
+                SpawnDevices_Timer -= diff;
         }
 
-        if (uiCurrentPhase < 2)
-        {
+        if (CurrentPhase < 4)
             return;
-        }
 
-        if (uiSetFlags_Timer < diff)
-        {
-            // But why?! Seems to be some client bug or server bug where the updates in this function
-            // do not always fully register with the client, causing the boss to skip around like he's
-            // teleporting instead of walk normally. My guess is something with the packet batching,
-            // but really, who knows. This will just keep reapplying the flags we want over and over
-            // in the hopes to keep everyone's clients aware that he can walk.
-            MakeNormal();
-            uiSetFlags_Timer = 1000;
-        }
-        else
-        {
-            uiSetFlags_Timer -= diff;
-        }
 
         // Stomp and Earthquake every 10% HP loss.
-        if (fLastHealthPercentage - me->GetHealthPercent() > 10.f)
+        if (LastHealthPercentage - me->GetHealthPercent() >= 10)
         {
-            const auto secondsDiff = time(nullptr) - aggroTime;
             if (DoCastSpellIfCan(me->GetVictim(), SPELL_STOMP) == CAST_OK)
             {
-                const float multiplier = 1 + (secondsDiff / 200.f);
-                const auto entry = MakeCustomSpellEntry(SPELL_EARTHQUAKE); 
-                entry->EffectBasePoints[EFFECT_0] *= multiplier;
-                me->CastCustomSpell(me, entry, true);
-                fLastHealthPercentage = me->GetHealthPercent();
+                DoCast(me, SPELL_EARTHQUAKE, true);
+                LastHealthPercentage = me->GetHealthPercent();
             }
         }
 
         // Sonic Burst
-        if (uiSonicBurst_Timer < diff)
+        if (SonicBurst_Timer < diff)
         {
             if (DoCastSpellIfCan(me, SPELL_SONIC_BURST) == CAST_OK)
-            {
-                uiSonicBurst_Timer = urand(25000, 53000);
-            }
+                SonicBurst_Timer = urand(25000, 53000);
         }
         else
-        {
-            uiSonicBurst_Timer -= diff;
-        }
+            SonicBurst_Timer -= diff;
         
         // Chain Lighting a far away target, but within their casting range.
-        if (uiChainLightning_Timer < diff)
+        if (ChainLightning_Timer < diff)
         {
             // WTB built-in functions for this :sob:. MaNGOS is lacking them... Messy, but oh well.
-            for (std::size_t i = 0; i < 20; ++i)
+            for (uint8 i = 0; i < 20; ++i)
             {
                 if (Player* target = GetRandomNearbyEnemyPlayer(me, 30))
                 {
                     // Target must be more than 15yrds away (we ideally want to target a caster).
-                    if (target->GetDistance2d(me) < 15.f)
-                    {
+                    if (target->GetDistance2d(me) < 15.0f)
                         continue;
-                    }
 
-                    uint32 addedValue = 0;
-
-                    if (target->GetPowerType() == POWER_MANA)
-                    {
-                        addedValue = (target->GetMaxPower(POWER_MANA) - target->GetPower(POWER_MANA)) / 4;
-                    }
-
-                    const auto entry = MakeCustomSpellEntry(SPELL_CHAIN_LIGHTNING);
-                    entry->EffectBasePoints[EFFECT_0] += addedValue;
-                    me->CastCustomSpell(target, entry, true);
-                    //DoCast(target, SPELL_CHAIN_LIGHTNING, true);
+                    DoCast(target, SPELL_CHAIN_LIGHTNING, true);
 
                     break;
                 }
@@ -417,22 +467,22 @@ struct boss_ostariusAI : public ScriptedAI
 
             // Reset timer even if our 20-attempt search fails.
             // Static so players can learn to avoid.
-            uiChainLightning_Timer = 15000;
+            ChainLightning_Timer = 15000;
         }
         else
-        {
-            uiChainLightning_Timer -= diff;
-        }
+            ChainLightning_Timer -= diff;
 
-        // Re-activate all defenses at 15%
-        if (me->GetHealthPercent() < 15.f && !(uiPhaseState & PhaseStates::STATE_ENRAGED))
+        // Reactivate all defenses at 15%
+        if (me->GetHealthPercent() < 15 && !(PhaseState & STATE_ENRAGED))
         {
             me->MonsterTextEmote("Ostarius reactivates all defenses out of desperation!", nullptr, true);
+            me->MonsterSendTextToZone(ENRAGE_TEXT, CHAT_MSG_MONSTER_YELL);
 
-            SummonConstructs();
+            SummonSentries();
             SpawnPortals();
+            SpawnSupressionDevices();
 
-            uiPhaseState |= PhaseStates::STATE_ENRAGED;
+            PhaseState |= STATE_ENRAGED;
         }
 
         DoMeleeAttackIfReady();
@@ -440,41 +490,132 @@ struct boss_ostariusAI : public ScriptedAI
 
     void SpawnPortals()
     {
-        for (std::size_t i = 0; i < (sizeof(portalLocs) / sizeof(portalLocs[0])); ++i)
+        for (uint8 i = 0; i < numOfPortalsToSpawn; ++i)
         {
-            // Check if portal is currently spawned (cheap way, but easy), skip if it is.
-            if (portals.size() && IsPortalAlreadySpawned(i))
-            {
-                continue;
-            }
+            // Generates random spawn within a square on the floor.
+            float spawnX = squareX + (squareDiameter * float(urand(0, 10)));
+            float spawnY = squareY + (squareDiameter * float(urand(0, 16)));
 
-            GameObject* portal = me->SummonGameObject(GOB_DEFENSE_PORTAL, portalLocs[i][0], portalLocs[i][1], portalLocs[i][2], portalLocs[i][3]);
-
+            GameObject* portal = me->SummonGameObject(GOB_DEFENSE_PORTAL,
+                spawnX,
+                spawnY,
+                squareZ,
+                0.0f
+            );
             portals.push_back(portal);
 
-            // Makes usable.
             portal->SetActiveObjectState(true);
         }
     }
 
-    bool IsPortalAlreadySpawned(const std::size_t index)
+    void SummonSentries()
     {
-        return std::any_of(portals.begin(), portals.end(), [&](GameObject* portal)
+        for (uint8 i = 0; i < (sizeof(sentryLocs) / sizeof(sentryLocs[0])); ++i)
         {
-            return portal->GetDistanceSqr(portalLocs[index][0], portalLocs[index][1], portalLocs[index][2]) < .5f; // Never exactly on the same spot apparently?
-        });
+            Creature* sentry = me->SummonCreature(
+                MOB_DEFENSE_SENTRY,
+                sentryLocs[i][0],
+                sentryLocs[i][1],
+                sentryLocs[i][2],
+                sentryLocs[i][3]
+            );
+
+            sentrySpawns.push_back(sentry);
+        }
     }
 
-    void SummonConstructs()
+    void SpawnSupressionDevices()
     {
-        for (std::size_t i = 0; i < (sizeof(sentryLocs) / sizeof(sentryLocs[0])); ++i)
+        for (uint8 i = 0; i < numOfDevicesToSpawn; ++i)
         {
-            Creature* sentry = me->SummonCreature(MOB_DEFENSE_SENTRY, sentryLocs[i][0], sentryLocs[i][1], sentryLocs[i][2], sentryLocs[i][3], TEMPSUMMON_MANUAL_DESPAWN);
-            spawnedConstructs.push_back(sentry);
+            // Generates random spawn within a square on the floor.
+            float spawnX = squareX + (squareDiameter * float(urand(0, 10)));
+            float spawnY = squareY + (squareDiameter * float(urand(0, 16)));
+
+            GameObject* device = me->SummonGameObject(
+                GOB_DEBILITATING_DEVICE,
+                spawnX,
+                spawnY,
+                squareZ,
+                0.0f
+            );
+            devices.push_back(device);
         }
     }
 };
 
+struct mob_uldum_constructAI : public ScriptedAI
+{
+    explicit mob_uldum_constructAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    bool channelStarted;
+    uint32 channelCheck_Timer;
+    uint32 encage_Timer;
+
+    void SetDefaults()
+    {
+        channelStarted = false;
+        channelCheck_Timer = 11 * IN_MILLISECONDS;
+        encage_Timer = 0;
+    }
+
+    void Reset()
+    {
+        SetDefaults();
+        me->CastStop(); // Stop any active encage spell channelling.
+    }
+
+    void KilledUnit(Unit* victim) override
+    {
+        // TODO: Add text about unit failing scan.
+    }
+
+    void EnterEvadeMode() override
+    {
+        me->CastStop();
+        me->DeleteLater();
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        if (!me->GetVictim())
+            return;
+
+        if (channelStarted)
+        {
+            if (channelCheck_Timer <= diff)
+            {
+                DoCast(me->GetVictim(), SPELL_CONFLAG, true);
+                channelCheck_Timer = 11 * IN_MILLISECONDS;
+                channelStarted = false;
+                encage_Timer = 5 * IN_MILLISECONDS;
+            }
+            else
+                channelCheck_Timer -= diff;
+        }
+
+        if (!channelStarted && encage_Timer <= diff)
+        {
+            if (DoCastSpellIfCan(me->GetVictim(), SPELL_MORTALITY_SCAN) == CAST_OK)
+            {
+                channelStarted = true;
+            }
+        }
+        else
+            encage_Timer -= diff;
+    }
+};
+
+enum SentrySpells
+{
+    SPELL_BLIZZARD = 21367,
+    SPELL_RAIN_OF_FIRE = 24669,
+
+    SPELL_FROST_BREATH  = 22479,
+};
 
 struct mob_uldum_sentryAI : public ScriptedAI
 {
@@ -484,26 +625,26 @@ struct mob_uldum_sentryAI : public ScriptedAI
     }
 
     uint32 AoE_Timer;
-    uint32 lastSpell;
-    float currentMultiplier;
-
-    static constexpr uint32 SPELL_BLIZZARD = 10187;
-    static constexpr uint32 SPELL_RAIN_OF_FIRE = 24669;
+    uint32 Breath_Timer;
+    bool canBreath;
 
     void SetDefaults()
     {
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_STUNNED | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_DISABLE_MOVE);
+        me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
         // Needed so our channeled spells have no issues casting.
         me->SetFloatValue(UNIT_FIELD_COMBATREACH, me->GetCombatReach() * 20);
         me->SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, me->GetObjectBoundingRadius() * 20);
+        me->ForceValuesUpdateAtIndex(UNIT_FIELD_COMBATREACH);
+        me->ForceValuesUpdateAtIndex(UNIT_FIELD_BOUNDINGRADIUS);
 
         me->AddAura(SPELL_ROOT_FOREVER); // core support for NPC rooting broken?
         DoCast(me, SPELL_TELEPORT_VISUAL);
 
-        lastSpell = 0;
-        currentMultiplier = 1.f;
         AoE_Timer = urand(0, 8000);
+        Breath_Timer = 0;
+        canBreath = false;
     }
 
     void Reset()
@@ -511,44 +652,44 @@ struct mob_uldum_sentryAI : public ScriptedAI
         SetDefaults();
     }
 
-    void JustSpawned()
-    {
-        Reset();
-    }
-
     void KilledUnit(Unit* victim) override {}
+
+    void EnterEvadeMode() override
+    {
+        me->CastStop();
+        me->DeleteLater();
+    }
 
     void UpdateAI(const uint32 diff) override
     {
         if (AoE_Timer < diff)
         {
-            Unit* randomTarget = GetRandomNearbyEnemyPlayer(me, 150.f);
+            Unit* randomTarget = GetRandomNearbyEnemyPlayer(me, 150.0f);
             if (!randomTarget)
-            {
                 return;
-            }
 
-            const uint32 spellId = urand(0, 1) ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE;
-
-            if (spellId == lastSpell)
+            uint32 spellToCast = isFrostPhase ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE;
+            DoCast(randomTarget, spellToCast, true);
+            if (spellToCast == SPELL_BLIZZARD)
             {
-                currentMultiplier += 1.f;
-            }
-            else
-            {
-                currentMultiplier = 1.f;
+                canBreath = true;
+                Breath_Timer = urand(2500, 3500);
             }
 
-            const auto entry = MakeCustomSpellEntry(spellId);
-            entry->EffectBasePoints[EFFECT_0] *= currentMultiplier;
-            me->CastCustomSpell(randomTarget, entry);
-
-            lastSpell = spellId;
             AoE_Timer = urand(15500, 25000);
         }
         else
-        {
             AoE_Timer -= diff;
+
+        if (canBreath)
+        {
+            if (Breath_Timer < diff)
+            {
+                DoCast(me, SPELL_FROST_BREATH, true);
+                canBreath = false;
+            }
+            else
+                Breath_Timer -= diff;
         }
     }
 };
@@ -560,9 +701,7 @@ bool GOOpen_go_uldum_portal(Player* pPlayer, GameObject* pGo)
     // Find and delete self from portal vector.
     std::vector<GameObject*>::const_iterator it = std::find(portals.begin(), portals.end(), pGo);
     if (it != portals.end())
-    {
         portals.erase(it);
-    }
 
     return true;
 }
@@ -591,11 +730,11 @@ struct go_uldum_portalAI : public GameObjectAI
                 me->GetPositionY(),
                 me->GetPositionZ(),
                 me->GetOrientation(),
-                TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN,
-                0
+                TEMPSUMMON_CORPSE_TIMED_DESPAWN,
+                5000
             );
 
-            Player* randomPlayer = GetRandomNearbyEnemyPlayer(spawn, 150.f);
+            Player* randomPlayer = GetRandomNearbyEnemyPlayer(spawn, 150.0f);
             if (!randomPlayer)
             {
                 // Hopefully we don't get here, but something must be wrong... so don't FLOOD
@@ -605,14 +744,152 @@ struct go_uldum_portalAI : public GameObjectAI
                 return;
             }
 
+            constructSpawns.push_back(spawn);
+
             spawn->SetInCombatWith(randomPlayer);
             spawn->GetMotionMaster()->MoveChase(randomPlayer);
 
-            Summon_Timer = urand(8000, 10000);
+            Summon_Timer = urand(8000, 15000);
         }
         else
-        {
             Summon_Timer -= diff;
+    }
+};
+
+constexpr auto SPELL_PIERCING_COLD = 57003;
+
+// aka debilitating device
+struct go_uldum_suppressionAI : public GameObjectAI
+{
+    go_uldum_suppressionAI(GameObject* pGo) : GameObjectAI(pGo), m_uiCheckTimer(500), m_bActive(true) {}
+
+    uint32 m_uiCheckTimer;
+    bool m_bActive;
+
+    bool OnUse(Unit* pUser) override
+    {
+        if (pUser->IsWithinDistInMap(me, 5.0f))
+        {
+            me->SetGoState(GO_STATE_ACTIVE);
+            m_bActive = false;
+            m_uiCheckTimer = 3000;
+            return true;
+        }
+        else
+            return false;
+    }
+
+    void ApplyAura()
+    {
+        me->SendGameObjectCustomAnim();
+        Map::PlayerList const& liste = me->GetMap()->GetPlayers();
+        for (const auto& i : liste)
+        {
+            if (me->GetDistance(i.getSource()) <= 10.0f)
+                if (!i.getSource()->HasStealthAura() && i.getSource()->IsAlive() && !i.getSource()->IsGameMaster())
+                    i.getSource()->AddAura(SPELL_PIERCING_COLD);
+        }
+    }
+
+    void RestoreGo()
+    {
+        me->SetGoState(GO_STATE_READY);
+        m_bActive = true;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (m_uiCheckTimer <= uiDiff)
+        {
+            if (m_bActive)
+                ApplyAura();
+            else
+                me->DeleteLater();
+
+            m_uiCheckTimer = 2000;
+            return;
+        }
+        else
+            m_uiCheckTimer -= uiDiff;
+    }
+};
+
+// Pedestal of Uldum NPC (RP intro)
+enum PedestalEvents
+{
+    PEDESTAL_EVENT_INTRO_1 = 1,
+    PEDESTAL_EVENT_INTRO_2,
+    PEDESTAL_EVENT_INTRO_3,
+    PEDESTAL_EVENT_INTRO_4,
+    PEDESTAL_EVENT_BOSS_SPAWN
+};
+
+struct npc_uldum_pedestalAI : public ScriptedAI
+{
+    explicit npc_uldum_pedestalAI(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 InitialDelay_Timer;
+    EventMap m_events;
+
+    void SetDefaults()
+    {
+        m_events.Reset();
+    }
+
+    void Reset()
+    {
+        SetDefaults();
+
+        m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_1, Seconds(2));
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        m_events.Update(diff);
+
+        if (!me->GetVictim())
+            return;
+
+        while (uint32 eventId = m_events.ExecuteEvent())
+        {
+            switch (eventId)
+            {
+            // "Initiating unlock sequence...";
+            // "Plates present, scanning for item validation...";
+            // "Plates authentication complete. Unlocking the gates...";
+            // "Activating Gate Keeper to greet the guests...";
+                case PEDESTAL_EVENT_INTRO_1:
+                    me->MonsterSay(PED_TEXT_1);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
+                    break;
+                case PEDESTAL_EVENT_INTRO_2:
+                    me->MonsterSay(PED_TEXT_2);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
+                    DoCast(nullptr, 25425, true);
+                    break;
+                case PEDESTAL_EVENT_INTRO_3:
+                    me->MonsterSay(PED_TEXT_3);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
+                    break;
+                case PEDESTAL_EVENT_INTRO_4:
+                    me->MonsterSay(PED_TEXT_4);
+                    m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
+                    break;
+                case PEDESTAL_EVENT_BOSS_SPAWN:
+                {
+                    if (Creature* ostarius = me->SummonCreature(80935, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
+                    {
+                        ostarius->AI()->JustRespawned();
+                        ostarius->SetInCombatWith(me->GetVictim());
+                    }
+
+                    me->DeleteLater();
+                    break;
+                }
+            }
         }
     }
 };
@@ -620,6 +897,11 @@ struct go_uldum_portalAI : public GameObjectAI
 CreatureAI* GetAI_boss_ostarius(Creature *creature)
 {
     return new boss_ostariusAI(creature);
+}
+
+CreatureAI* GetAI_mob_uldum_construct(Creature* creature)
+{
+    return new mob_uldum_constructAI(creature);
 }
 
 CreatureAI* GetAI_mob_uldum_sentry(Creature* creature)
@@ -632,12 +914,27 @@ GameObjectAI* GetAI_go_uldum_portal(GameObject* gameobject)
     return new go_uldum_portalAI(gameobject);
 }
 
+GameObjectAI* GetAIgo_uldum_suppression(GameObject* pGo)
+{
+    return new go_uldum_suppressionAI(pGo);
+}
+
+CreatureAI* GetAI_npc_uldum_pedestal(Creature* creature)
+{
+    return new npc_uldum_pedestalAI(creature);
+}
+
 void AddSC_boss_ostarius()
 {
     Script *newscript;
     newscript = new Script;
     newscript->Name = "boss_ostarius";
     newscript->GetAI = &GetAI_boss_ostarius;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "mob_uldum_construct";
+    newscript->GetAI = &GetAI_mob_uldum_construct;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -649,5 +946,15 @@ void AddSC_boss_ostarius()
     newscript->Name = "go_uldum_portal";
     newscript->GOGetAI = &GetAI_go_uldum_portal;
     newscript->GOOpen = &GOOpen_go_uldum_portal;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_uldum_suppression";
+    newscript->GOGetAI = &GetAIgo_uldum_suppression;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_uldum_pedestal";
+    newscript->GetAI = &GetAI_npc_uldum_pedestal;
     newscript->RegisterSelf();
 }
