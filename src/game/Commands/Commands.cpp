@@ -5338,6 +5338,26 @@ bool ChatHandler::HandleGMVisibleCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGMSocialsCommand(char* args)
+{
+    auto player = GetSession()->GetPlayer();
+    if (!player || !player->IsInWorld())
+        return false;
+
+    bool onOff = false;
+    if (!ExtractOnOff(&args, onOff))
+    {
+        PSendSysMessage("GM Socials is %s", player->HasGMDisabledSocials() ? "OFF" : "ON");
+        return true;
+    }
+    
+    player->SetGMSocials(onOff);
+
+    PSendSysMessage("GM Socials is now %s", onOff ? "ON" : "OFF");
+
+    return true;
+}
+
 bool ChatHandler::HandleGPSCommand(char* args)
 {
     WorldObject* obj = nullptr;
