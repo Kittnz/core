@@ -9397,7 +9397,7 @@ struct SetPvPHelper
 
 void Unit::SetPvP(bool state)
 {
-    if (state)
+    if (state || (IsPlayer() && ToPlayer()->HasChallenge(CHALLENGE_WAR_MODE)))
         SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
     else
         RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
