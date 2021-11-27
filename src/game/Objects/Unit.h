@@ -512,7 +512,6 @@ class Unit : public WorldObject
     private:
         uint32 m_stateFlags; // Even derived shouldn't modify
         bool m_AINotifyScheduled;
-        // Turtle WoW custom feature: turtle mode (0.5x rates for Creature.Kill)
         bool bIsTurtle = false;
     protected:
         DeathState m_deathState;
@@ -627,8 +626,46 @@ class Unit : public WorldObject
         uint32 GetDebugFlags() const { return m_debugFlags; }
         ObjectGuid GetDebuggerGuid() const { return m_debuggerGuid; }
 
-        bool IsTurtle() const { return bIsTurtle; };
+        // Turtle WoW modes & challenges:     
+
+        enum Challenges
+        {
+            CHALLENGE_SLOW_AND_STEADY = 0,
+            CHALLENGE_EXHAUSTION_MODE = 1,
+            CHALLENGE_WAR_MODE = 2,
+            CHALLENGE_HARDCORE = 3,
+        };
+
+        enum ChallengeSpells
+        {
+            SPELL_SLOW_AND_STEADY = 50004,
+            SPELL_EXHAUSTION_MODE = 50004,
+            SPELL_WAR_MODE        = 50012,
+            SPELL_HARDCORE        = 50001
+        };
+
+        bool IsTurtle() const { return bIsTurtle; }; // Change to spell later.
         void EnableTurtleMode() { bIsTurtle = true; };
+        bool IsExhausted() const { return HasSpell(SPELL_EXHAUSTION_MODE); };
+        bool IsAssasin() const { return HasSpell(SPELL_WAR_MODE); };
+
+        bool HasChallenge(Challenges challenge) 
+        { 
+            static std::unordered_map<uint32, uint32> challenge_spells
+            {
+                {CHALLENGE_SLOW_AND_STEADY, SPELL_SLOW_AND_STEADY},
+                {CHALLENGE_EXHAUSTION_MODE, SPELL_EXHAUSTION_MODE},
+                {CHALLENGE_WAR_MODE,        SPELL_WAR_MODE},
+                {CHALLENGE_HARDCORE,        SPELL_HARDCORE}
+            };
+
+            for (auto const& data : challenge_spells)
+            {
+                if (data.first && HasSpell(data.second))
+                    return true;
+            }
+            return false;
+        };
 
     protected:
         mutable ObjectGuid m_debuggerGuid;
