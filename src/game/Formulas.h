@@ -144,7 +144,7 @@ namespace MaNGOS
             xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
             xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
-            if (pUnit->IsTurtle())
+            if (pUnit->IsPlayer() && pUnit->ToPlayer()->IsTurtle())
 			    xp_gain *= 0.5f;
 
             xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);

@@ -111,6 +111,22 @@ struct PlayerSpell
     bool disabled          : 1;                             // first rank has been learned in result talent learn but currently talent unlearned, save max learned ranks
 };
 
+enum Challenges
+{
+    CHALLENGE_SLOW_AND_STEADY = 0,
+    CHALLENGE_EXHAUSTION_MODE = 1,
+    CHALLENGE_WAR_MODE = 2,
+    CHALLENGE_HARDCORE = 3,
+};
+
+enum ChallengeSpells
+{
+    SPELL_SLOW_AND_STEADY = 50004,
+    SPELL_EXHAUSTION_MODE = 50004,
+    SPELL_WAR_MODE = 50012,
+    SPELL_HARDCORE = 50001
+};
+
 typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 
 // Spell modifier (used to modify other spells)
@@ -2248,9 +2264,34 @@ class Player final: public Unit
         void SetTaxiDriverStatus(bool status) { bIsTaxiDriver = status; }
         void CancelTaxiRide(Player* passenger);
 
-        /*********************************************************/
-        /***                    CHAT SYSTEM                    ***/
-        /*********************************************************/
+// Turtle WoW modes & challenges:  
+
+private:
+    bool bIsTurtle = false;
+public:
+    bool IsTurtle() const { return bIsTurtle; }; // Change to spell later.
+    void EnableTurtleMode() { bIsTurtle = true; };
+    bool IsPvP() const override { return (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP) || (HasChallenge(CHALLENGE_WAR_MODE))); }
+
+    bool HasChallenge(Challenges challenge) const
+    {
+        static std::unordered_map<uint32, uint32> challenge_spells
+        {
+            {CHALLENGE_SLOW_AND_STEADY, SPELL_SLOW_AND_STEADY},
+            {CHALLENGE_EXHAUSTION_MODE, SPELL_EXHAUSTION_MODE},
+            {CHALLENGE_WAR_MODE,        SPELL_WAR_MODE},
+            {CHALLENGE_HARDCORE,        SPELL_HARDCORE}
+        };
+
+        for (auto const& data : challenge_spells)
+        {
+            if (data.first && HasSpell(data.second))
+                return true;
+        }
+        return false;
+    };
+
+// Chat system:
 
     private:
         typedef std::list<::Channel*> JoinedChannelsList;
@@ -2281,9 +2322,7 @@ class Player final: public Unit
         void Yell(std::string const& text, const uint32 language) const;
         void TextEmote(std::string const& text) const;
 
-        /*********************************************************/
-        /***                   FACTION SYSTEM                  ***/
-        /*********************************************************/
+// Faction system:
 
     private:
         Team m_team;
@@ -2310,9 +2349,7 @@ class Player final: public Unit
         bool ConvertSpell(uint32 oldSpellId, uint32 newSpellId);
         bool ChangeSpellsForRace(uint8 oldRace, uint8 newRace);
 
-        /*********************************************************/
-        /***                    PVP SYSTEM                     ***/
-        /*********************************************************/
+// PvP System
 
     private:
         HonorMgr  m_honorMgr;
@@ -2342,18 +2379,14 @@ class Player final: public Unit
         HonorMgr&       GetHonorMgr() { return m_honorMgr; }
         HonorMgr const& GetHonorMgr() const { return m_honorMgr; }
 
-        /*********************************************************/
-        /***               OUTDOOR PVP SYSTEM                  ***/
-        /*********************************************************/
+// Outdoor PvP system:
 
     public:
         ZoneScript* GetZoneScript() const;
         // returns true if the player is in active state for outdoor pvp objective capturing, false otherwise
         bool IsOutdoorPvPActive() const;
 
-        /*********************************************************/
-        /***               BATTLEGROUND SYSTEM                 ***/
-        /*********************************************************/
+// Battleground system:
 
     protected:
         /*
@@ -2475,23 +2508,18 @@ class Player final: public Unit
         bool GetBGAccessByLevel(BattleGroundTypeId bgTypeId) const;
         bool CanUseBattleGroundObject() const;
 
-        /*********************************************************/
-        /***                  ANTICHEAT SYSTEM                 ***/
-        /*********************************************************/
+// Anticheat system:
 
     public:
         bool CanSpeak() const;
         bool FallGround(uint8 fallMode);
 
-        /// Anticheat
         MovementAnticheat* GetCheatData() const { return m_session->GetCheatData(); }
         void OnDisconnected();
         void RelocateToLastClientPosition();
         void GetSafePosition(float &x, float &y, float &z, Transport* onTransport = nullptr) const override;
 
-        /*********************************************************/
-        /***                 PACKET BROADCASTER                ***/
-        /*********************************************************/
+// Packet broadcaster:
 
     public:
         std::shared_ptr<PlayerBroadcaster> m_broadcaster;
@@ -2499,9 +2527,7 @@ class Player final: public Unit
         void CreatePacketBroadcaster();
         std::shared_ptr<PlayerBroadcaster> GetPacketBroadcaster() { return m_broadcaster; }
 
-        /*********************************************************/
-        /***                 INSTANCE SYSTEM                   ***/
-        /*********************************************************/
+// Instance system:
 
     private:
         uint32 m_HomebindTimer;
@@ -2532,9 +2558,7 @@ class Player final: public Unit
         static void ConvertInstancesToGroup(Player* player, Group* group = nullptr, ObjectGuid player_guid = ObjectGuid());
         DungeonPersistentState* GetBoundInstanceSaveForSelfOrGroup(uint32 mapid);
 
-        /*********************************************************/
-        /***                   GROUP SYSTEM                    ***/
-        /*********************************************************/
+// Group system:
 
     private:
         GroupReference m_group;
@@ -2575,9 +2599,7 @@ class Player final: public Unit
         uint8 GetOriginalSubGroup() const { return m_originalGroup.getSubGroup(); }
         void SetOriginalGroup(Group* group, int8 subgroup = -1);
 
-        /*********************************************************/
-        /***                   GUILD SYSTEM                    ***/
-        /*********************************************************/
+// Guild system:
 
     private:
         uint32 m_GuildIdInvited;
@@ -2592,12 +2614,9 @@ class Player final: public Unit
         int GetGuildIdInvited() { return m_GuildIdInvited; }
         static void RemovePetitionsAndSigns(ObjectGuid guid);
 
-        /*********************************************************/
-        /***                       OTHER                       ***/
-        /*********************************************************/
-	protected:
+// Misc.
 
-	    // Giperion TURTLE SPECIFIC Begin
+	protected:
 	public:
 		//Giperion Elysium: Send message to upper place of player screen, even if he not in raid. Useful for scripts/events
 		void SendRaidWarning(uint32 textId);
@@ -2608,8 +2627,6 @@ class Player final: public Unit
 		void AddExclusiveVisibleObject(ObjectGuid guid);
 		void RemoveExclusiveVisibleObject(ObjectGuid guid);
 		std::list<ObjectGuid> m_exclusiveVisibleObjects;
-
-		// Giperion TURTLE SPECIFIC End
 
 		// Xerron Suspend World Buffs Start
 	public:
