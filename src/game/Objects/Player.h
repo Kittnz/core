@@ -2273,7 +2273,13 @@ private:
 public:
     bool IsTurtle() const { return bIsTurtle; }; // Change to spell later.
     void EnableTurtleMode() { bIsTurtle = true; };
-    bool IsPvP() const override { return (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP) || (HasChallenge(CHALLENGE_WAR_MODE))); }
+    bool IsPvP() const override
+    {
+        if (HasChallenge(CHALLENGE_WAR_MODE))
+            return true;
+
+        return Unit::IsPvP();
+    }
 
     bool HasChallenge(Challenges challenge) const
     {
