@@ -2268,11 +2268,7 @@ class Player final: public Unit
 
 // Turtle WoW modes & challenges:  
 
-private:
-    bool bIsTurtle = false;
 public:
-    bool IsTurtle() const { return bIsTurtle; }; // Change to spell later.
-    void EnableTurtleMode() { bIsTurtle = true; };
     bool IsPvP() const override
     {
         if (HasChallenge(CHALLENGE_WAR_MODE))
