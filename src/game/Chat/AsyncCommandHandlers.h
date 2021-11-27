@@ -53,6 +53,7 @@ struct PInfoData
     ObjectGuid target_guid;
     uint32 m_accountId;
     bool online = false;
+    bool isHardcore = false;
 
     bool hasAccount = false;
     std::string two_factor_enabled;

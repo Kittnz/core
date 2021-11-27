@@ -8788,6 +8788,10 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target))
         return false;
 
+    std::string extraArgs = "";
+    if (*args)
+        extraArgs = args;
+
     if (m_session && target == m_session->GetPlayer())
     {
         SendSysMessage(LANG_COMMAND_KICKSELF);
@@ -8799,8 +8803,10 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
     if (HasLowerSecurity(target))
         return false;
 
+    bool force = extraArgs.find("force") != std::string::npos;
+
     // [Hardcore] Prevent death caused by getting disconnected while in-fight
-    if (target->IsHardcore())
+    if (target->IsHardcore() && !force)
     {
         SendSysMessage("Cannot kick a Hardcore Character.");
         SetSentErrorMessage(true);
