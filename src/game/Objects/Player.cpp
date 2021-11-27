@@ -3122,7 +3122,7 @@ void Player::GiveLevel(uint32 level)
         sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, "LevelUpAlert", message.str().c_str());
     }
 
-    if (IsTurtle())
+    if (HasChallenge(CHALLENGE_SLOW_AND_STEADY))
         MailHardcoreModeRewards(level);
 
     if (IsHardcore())
@@ -15370,24 +15370,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     UpdateOldRidingSkillToNew(has_epic_mount); // TODO: Remove later
 
-    // Turtle Mode
-    if (GetItemCount(50010, true) > 0)
-        EnableTurtleMode();
-
-    if (IsTurtle())
-    {
-        if (!HasSpell(50000))
-            LearnSpell(50000, false, false);
-    }
-    else
-    {
-        if (HasSpell(50000))
-            RemoveSpell(50000, false, false);
-    }    
-
     m_hardcoreStatus = fields[61].GetUInt8();
-
-    // Titles
 
     // Load all titles from the db
     m_playerTitles.clear();
