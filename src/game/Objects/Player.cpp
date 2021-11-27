@@ -5814,7 +5814,7 @@ void Player::UpdateCombatSkills(Unit* pVictim, WeaponAttackType& attType, const 
         }
         else // Weapon
         {
-            const uint32 weapon_skill_gain = IsExhausted() ? (sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON) * 2) : sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
+            const uint32 weapon_skill_gain = HasChallenge(CHALLENGE_EXHAUSTION_MODE) ? (sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON) * 2) : sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
             Item* tmpitem = GetWeaponForAttack(attType, true, true);
 
             switch (attType)
@@ -17794,7 +17794,7 @@ void Player::RemovePetitionsAndSigns(ObjectGuid guid)
 void Player::SetRestBonus(float rest_bonus_new)
 {
     // Prevent resting on max level or with the Glyph og Exhaustion 
-    if (GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL) || IsExhausted())
+    if (GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL) || HasChallenge(CHALLENGE_EXHAUSTION_MODE))
         rest_bonus_new = 0;
 
     if (rest_bonus_new < 0)
