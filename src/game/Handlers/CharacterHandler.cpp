@@ -568,6 +568,11 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         m_masterPlayer->LoadMails(holder->GetResult(PLAYER_LOGIN_QUERY_LOADMAILS));
         m_masterPlayer->LoadMailedItems(holder->GetResult(PLAYER_LOGIN_QUERY_LOADMAILEDITEMS));
     }
+
+    bool hasDisabledSocials = (m_masterPlayer->m_ExtraFlags & PLAYER_EXTRA_GM_DISABLE_SOCIAL) == PLAYER_EXTRA_GM_DISABLE_SOCIAL;
+
+    GetPlayer()->SetGMSocials(!hasDisabledSocials, true);
+
     m_masterPlayer->UpdateNextMailTimeAndUnreads();
 
     sObjectAccessor.AddObject(m_masterPlayer);
@@ -690,7 +695,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     {
         GetMasterPlayer()->areaId = pCurrChar->GetCachedAreaId();
         GetMasterPlayer()->zoneId = pCurrChar->GetCachedZoneId();
-        sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
+        if (!pCurrChar->HasGMDisabledSocials())
+            sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
     }
 
     if (!alreadyOnline)

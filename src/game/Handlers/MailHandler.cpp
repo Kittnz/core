@@ -41,6 +41,8 @@
 #include "AccountMgr.h"
 #include "Database/DatabaseImpl.h"
 
+extern bool IsPlayerHardcore(uint32 lowGuid);
+
 void WorldSession::SendMailResult(uint32 mailId, MailResponseType mailAction, MailResponseResult mailError, uint32 equipError, uint32 item_guid, uint32 item_count)
 {
     WorldPacket data(SMSG_SEND_MAIL_RESULT, (4 + 4 + 4 + (mailError == MAIL_ERR_EQUIP_ERROR ? 4 : (mailAction == MAIL_ITEM_TAKEN ? 4 + 4 : 0))));
@@ -604,7 +606,7 @@ void WorldSession::HandleMailReturnToSender(WorldPacket& recv_data)
     pl->RemoveMail(mailId);
 
     // send back only to existing players and simple drop for other cases
-    if (m->messageType == MAIL_NORMAL && m->sender)
+    if (m->messageType == MAIL_NORMAL && m->sender && !IsPlayerHardcore(m->sender))
     {
         MailDraft draft;
         if (m->mailTemplateId)

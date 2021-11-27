@@ -2847,6 +2847,21 @@ void Player::SetGameMaster(bool on)
     RefreshBitsForVisibleUnits(&m, TYPEMASK_PLAYER);
 }
 
+void Player::SetGMSocials(bool on, bool init)
+{
+    if (!GetSession()->GetMasterPlayer())
+        return;
+
+    auto status = on ? FRIEND_ONLINE : FRIEND_OFFLINE;
+
+    on ? m_ExtraFlags &= ~PLAYER_EXTRA_GM_DISABLE_SOCIAL : m_ExtraFlags |= PLAYER_EXTRA_GM_DISABLE_SOCIAL;;
+
+    // only friend status requires immediate update, rest can wait, and only if not logging in.
+    if (!init)
+        sSocialMgr.SendFriendStatus(GetSession()->GetMasterPlayer(), status, GetObjectGuid(), true);
+
+}
+
 void Player::SetGMVisible(bool on)
 {
     // 'Invisibilite superieure'
@@ -15272,6 +15287,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // GM state
     if (GetSession()->GetSecurity() > SEC_PLAYER)
     {
+        if (extraflags & PLAYER_EXTRA_GM_DISABLE_SOCIAL)
+            m_ExtraFlags |= PLAYER_EXTRA_GM_DISABLE_SOCIAL;
+
         switch (sWorld.getConfig(CONFIG_UINT32_GM_LOGIN_STATE))
         {
             default:

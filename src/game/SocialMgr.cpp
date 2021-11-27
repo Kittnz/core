@@ -197,6 +197,9 @@ void SocialMgr::GetFriendInfo(MasterPlayer* player, uint32 friend_lowguid, Frien
         friendInfo.Area = player->GetZoneId();
         friendInfo.Level = player->GetLevel();
         friendInfo.Class = player->GetClass();
+
+        if (player->m_ExtraFlags & PLAYER_EXTRA_GM_DISABLE_SOCIAL)
+            friendInfo.Status = FRIEND_STATUS_OFFLINE;
         return;
     }
 
@@ -213,7 +216,8 @@ void SocialMgr::GetFriendInfo(MasterPlayer* player, uint32 friend_lowguid, Frien
         // PLAYER see his team only and PLAYER can't see MODERATOR, GAME MASTER, ADMINISTRATOR characters
         // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
         if (pFriend && pFriend->GetName() && (security > SEC_PLAYER ||
-            ((pFriend->GetTeam() == team || allowTwoSideWhoList) && (pFriend->GetSession()->GetSecurity() <= gmLevelInWhoList))) && pFriend->IsVisibleGloballyFor(player))
+            ((pFriend->GetTeam() == team || allowTwoSideWhoList) && (pFriend->GetSession()->GetSecurity() <= gmLevelInWhoList))) && pFriend->IsVisibleGloballyFor(player)
+            && (pFriend->m_ExtraFlags & PLAYER_EXTRA_GM_DISABLE_SOCIAL) == 0)
         {
             friendInfo.Status = FRIEND_STATUS_ONLINE;
 

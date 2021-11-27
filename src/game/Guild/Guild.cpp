@@ -764,7 +764,7 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
         info.Member = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
         info.Slot = &itr->second;
 
-        if (info.Member)
+        if (info.Member && !info.Member->HasGMDisabledSocials())
         {
             onlineMemberCache.emplace_back(info);
             ++onlineMembers;
@@ -805,8 +805,10 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
                 return;
         }
 
+        bool online = member.Member != nullptr && !member.Member->HasGMDisabledSocials();
+
         data << member.Guid;
-        data << uint8(member.Member != nullptr);
+        data << uint8((online)); // online / offline state, send 0 for GMS without socials enabled too
         if (member.Member)
         {
             data << member.Member->GetName();
@@ -869,7 +871,7 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
 
     for (const auto& member : offlineMemberCache)
     {
-        if (member.Member)
+        if (member.Member && !member.Member->HasGMDisabledSocials())
             continue;
 
         writeMemberData(data, member);
