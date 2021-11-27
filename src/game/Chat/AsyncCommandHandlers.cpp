@@ -55,6 +55,7 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
 
         data->target_guid = target->GetObjectGuid();
         data->online = true;
+        data->isHardcore = target->IsHardcore();
 
         HandleDataAfterPlayerLookup(data);
     }
@@ -62,8 +63,8 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
     {
         data->target_guid = target_guid;
         CharacterDatabase.AsyncPQuery(&PInfoHandler::HandlePlayerLookupResult, data,
-            //  0          1      2      3        4     5
-            "SELECT totaltime, level, money, account, race, class FROM characters WHERE guid = '%u'",
+                   //  0          1      2      3        4     5
+            "SELECT totaltime, level, money, account, race, class, mortality_status FROM characters WHERE guid = '%u'",
             target_guid.GetCounter());
     }
 }
@@ -83,6 +84,8 @@ void PInfoHandler::HandlePlayerLookupResult(QueryResult *result, PInfoData *data
     data->accId = fields[3].GetUInt32();
     data->race = fields[4].GetUInt8();
     data->class_ = fields[5].GetUInt8();
+    uint32 mort_status = fields[6].GetUInt32();
+    data->isHardcore = mort_status == HARDCORE_MODE_STATUS_ALIVE || mort_status == HARDCORE_MODE_STATUS_DEAD;
 
     delete result;
 
@@ -200,6 +203,8 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
         data->security, cHandler.playerLink(data->last_ip).c_str(),
         sAccountMgr.IsIPBanned(data->last_ip) ? " [BANIP]" : "", data->last_login.c_str(),
         data->latency, localeNames[data->loc], data->two_factor_enabled.c_str());
+
+    cHandler.PSendSysMessage("Is Hardcore: %s", data->isHardcore ? "YES" : "NO");
 
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);
     uint32 money = data->money;
