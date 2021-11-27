@@ -972,6 +972,8 @@ class Player final: public Unit
         bool IsTaxiCheater() const { return m_ExtraFlags & PLAYER_EXTRA_TAXICHEAT; }
         void SetTaxiCheater(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_TAXICHEAT; else m_ExtraFlags &= ~PLAYER_EXTRA_TAXICHEAT; }
         bool IsGMVisible() const { return !(m_ExtraFlags & PLAYER_EXTRA_GM_INVISIBLE); }
+        bool HasGMDisabledSocials() const { return m_ExtraFlags & PLAYER_EXTRA_GM_DISABLE_SOCIAL; }
+        void SetGMSocials(bool on, bool init = false);
         void SetGMVisible(bool on);
         void SetPvPDeath(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_PVP_DEATH; else m_ExtraFlags &= ~PLAYER_EXTRA_PVP_DEATH; }
         void SetGodMode(bool on) { SetOption(PLAYER_CHEAT_GOD, on); }

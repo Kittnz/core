@@ -126,6 +126,9 @@ public:
                 // player can see MODERATOR, GAME MASTER, ADMINISTRATOR only if CONFIG_GM_IN_WHO_LIST
                 if (pPlayer->GetSession()->GetSecurity() > gmLevelInWhoList)
                     continue;
+
+                if (pPlayer->HasGMDisabledSocials())
+                    continue;
             }
 
             // do not process players which are not in world
@@ -567,7 +570,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
         else
         {
             MasterPlayer* pFriend = ObjectAccessor::FindMasterPlayer(friendGuid);
-            if (pFriend && pFriend->IsVisibleGloballyFor(GetMasterPlayer()))
+            if (pFriend && pFriend->IsVisibleGloballyFor(GetMasterPlayer()) && (pFriend->m_ExtraFlags & PLAYER_EXTRA_GM_DISABLE_SOCIAL) == 0)
                 friendResult = FRIEND_ADDED_ONLINE;
             else
                 friendResult = FRIEND_ADDED_OFFLINE;

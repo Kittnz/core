@@ -466,6 +466,7 @@ void WorldSession::LogoutPlayer(bool Save)
     m_playerLogout = true;
     m_playerSave = Save;
     bool doBanPlayer = false;
+    bool disabledSocials = false;
 
     if (_player)
     {
@@ -474,6 +475,8 @@ void WorldSession::LogoutPlayer(bool Save)
         sLog.out(LOG_CHAR, "Account: %d (IP: %s) Logout Character:[%s] (guid: %u)", GetAccountId(), GetRemoteAddress().c_str(), _player->GetName() , _player->GetGUIDLow());
         if (ObjectGuid lootGuid = GetPlayer()->GetLootGuid())
             DoLootRelease(lootGuid);
+
+        disabledSocials = _player->HasGMDisabledSocials();
 
         ///- If the player just died before logging out, make him appear as a ghost
         if (inWorld && _player->GetDeathTimer())
@@ -624,7 +627,8 @@ void WorldSession::LogoutPlayer(bool Save)
         ///- Broadcast a logout message to the player's friends
         if (m_masterPlayer->GetSocial())
         {
-            sSocialMgr.SendFriendStatus(m_masterPlayer, FRIEND_OFFLINE, m_masterPlayer->GetObjectGuid(), true);
+            if(!disabledSocials)
+                sSocialMgr.SendFriendStatus(m_masterPlayer, FRIEND_OFFLINE, m_masterPlayer->GetObjectGuid(), true);
             sSocialMgr.RemovePlayerSocial(m_masterPlayer->GetGUIDLow());
             m_masterPlayer->SetSocial(nullptr);
         }
