@@ -5814,11 +5814,7 @@ void Player::UpdateCombatSkills(Unit* pVictim, WeaponAttackType& attType, const 
         }
         else // Weapon
         {
-            bool exhausted = false;
-            if (HasItemCount(50521, 1, false)) // Glyph of Exhaustion
-                exhausted = true;
-
-            const uint32 weapon_skill_gain = exhausted ? (sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON) * 2) : sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
+            const uint32 weapon_skill_gain = IsExhausted() ? (sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON) * 2) : sWorld.getConfig(CONFIG_UINT32_SKILL_GAIN_WEAPON);
             Item* tmpitem = GetWeaponForAttack(attType, true, true);
 
             switch (attType)
@@ -15371,20 +15367,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
             RemoveSpell(50000, false, false);
     }    
 
-    // Exhaustion Mode
-
-    if (GetItemCount(50521, true) > 0)
-    {
-        if (!HasSpell(50004))
-            LearnSpell(50004, false, false);
-    }
-    else
-    {
-        if (HasSpell(50004))
-            RemoveSpell(50004, false, false);
-    }
-
-    //bIsMortal = GetItemCount(80188, true) > 0;
     m_hardcoreStatus = fields[61].GetUInt8();
 
     // Titles
@@ -17811,8 +17793,8 @@ void Player::RemovePetitionsAndSigns(ObjectGuid guid)
 
 void Player::SetRestBonus(float rest_bonus_new)
 {
-    // Prevent resting on max level or with the Glyph og Exhaustion // Turtle WoW daily fose of hackfixes.
-    if (GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL) || HasItemCount(50521, 1, false))
+    // Prevent resting on max level or with the Glyph og Exhaustion 
+    if (GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL) || IsExhausted())
         rest_bonus_new = 0;
 
     if (rest_bonus_new < 0)
