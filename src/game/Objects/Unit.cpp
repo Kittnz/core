@@ -9332,7 +9332,7 @@ void Unit::TeleportPositionRelocation(float x, float y, float z, float orientati
     else if (crea)
     {
         if (!crea->GetMotionMaster()->empty())
-            if (MovementGenerator *movgen = crea->GetMotionMaster()->top())
+            if (MovementGenerator* movgen = crea->GetMotionMaster()->top())
                 movgen->Interrupt(*crea);
         GetMap()->CreatureRelocation(crea, x, y, z, orientation);
     }
@@ -9351,7 +9351,7 @@ void Unit::TeleportPositionRelocation(float x, float y, float z, float orientati
     else if (crea)
     {
         if (!crea->GetMotionMaster()->empty())
-            if (MovementGenerator *movgen = crea->GetMotionMaster()->top())
+            if (MovementGenerator* movgen = crea->GetMotionMaster()->top())
                 movgen->Reset(*crea);
     }
 }
