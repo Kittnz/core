@@ -4491,3 +4491,31 @@ replace into item_template values
 
 update creature_template set script_name = 'npc_duke_nargelas' where entry = 91712;
 update creature_template set script_name = 'npc_pierce_shackleton' where entry = 4567;
+
+-- Azsharan Front --
+delete from quest_template where entry = 40283;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40283,2,16,52,40,0,0,'Azsharan Front','It may not look like it, $c, but we are in middle of a warzone. Highborne ghosts that linger in the forests clash with the Naga, for reasons I don\'t understand, and I don\'t want to.n\n\One thing I know, that they are a danger for our outpost. They may be fighting each other for now, but it won\'t last forever. We should strike now, when they are weak.n\n\Go to Ruins of Eldranath. Kill the Naga, eliminate the Highborne. Show them, that Bloodfist Point is to be reckoned with.','Slay 6 Lingering Highborne, 10 Spitelash Serpent Guard, and 8 Spitelash Siren for Dag\'grak Bloodfist at Bloodfist Point in Azshara.','Bloodfist Point is at danger as long as the Naga slither and the Banshees wail in those forests.','Good. They will fear us.',0,0,0,0,0,0,0,0,7864,6,6194,10,6195,8,0,0,0,0,15000,4950,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60394,1,60395,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92024, 40283);
+replace into creature_involvedrelation (id, quest) values (92024, 40283);
+
+replace into item_template values
+ ('60394', '4', '2', 'Crown of Unstable Nature', '', '18921', '2', '0', '1', '48952', '12238', '1', '-1', '-1', '61',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '13', '6', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '124', '0', '0', '5',
+ '0', '0', '0', '9398', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60395', '4', '4', 'Bloodfist Vambracers', '', '26542', '2', '0', '1', '30552', '7638', '9', '-1', '-1', '61',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '249', '0', '0', '0',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '40', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
