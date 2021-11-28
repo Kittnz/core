@@ -26,6 +26,9 @@ UPDATE item_template SET required_reputation_faction = 1007, required_reputation
 UPDATE item_template SET required_reputation_faction = 1007, required_reputation_rank = 7, max_count = 1 WHERE entry = 61011; -- Flintlocke's Hand Cannon
 UPDATE item_template SET required_reputation_faction = 1007, required_reputation_rank = 7, max_count = 1 WHERE entry = 51043; -- Void-Linked Satchel
 UPDATE item_template SET required_reputation_faction = 1007, required_reputation_rank = 4, max_count = 1 WHERE entry = 61000; -- Time-Worn Rune
+UPDATE item_template SET required_reputation_faction = 1007, required_reputation_rank = 6, max_count = 1 WHERE entry = 50070; -- Bronze Whelpling
+UPDATE item_template SET required_reputation_faction = 1007, required_reputation_rank = 7, max_count = 1 WHERE entry = 51252; -- Bronze Drake
+UPDATE item_template SET required_reputation_faction = 1007, required_reputation_rank = 7, max_count = 1, buy_price = 50000, sell_price = 25000 WHERE entry = 80300; -- Wardens of Time Tabard
 
 REPLACE INTO npc_vendor VALUES (80943, 51043, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (80943, 61000, 0, 0, 0, 0);
@@ -40,6 +43,12 @@ REPLACE INTO npc_vendor VALUES (80943, 61010, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (80943, 61011, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (80943, 61012, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (80943, 61013, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (80943, 80300, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (80943, 51252, 0, 0, 0, 0);
+
+-- Time-lost Baubles:
+
+REPLACE INTO npc_vendor VALUES (65014, 50070, 0, 0, 0, 0); -- Bronze Whelpling
 
 UPDATE creature_template SET npc_flags = 7 where entry = 80943;
 
@@ -72,5 +81,12 @@ REPLACE INTO creature_onkill_reputation (creature_id, rewonkillrepfaction1, maxs
 REPLACE INTO creature_onkill_reputation (creature_id, rewonkillrepfaction1, maxstanding1, rewonkillrepvalue1) values (65107, 1007, 4, 5);
 REPLACE INTO creature_onkill_reputation (creature_id, rewonkillrepfaction1, maxstanding1, rewonkillrepvalue1) values (65115, 1007, 4, 2);
 
+DELETE FROM quest_template WHERE entry in (80600, 80601, 80602, 80603);
+DELETE FROM creature_questrelation WHERE quest in (80600, 80601, 80602, 80603);
+DELETE FROM creature_involvedrelation WHERE quest in (80600, 80601, 80602, 80603);
 
+UPDATE creature_template set subname = 'Wardens of Time' where subname = 'Keepers of Time';
+
+UPDATE item_template set buy_price = 7500, sell_price = 1500 where entry = 61000;
+UPDATE item_template set description = 'Lost time is never found again.' where entry = 51252;
 
