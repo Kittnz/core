@@ -4519,3 +4519,19 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '40', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
 
+-- Blood and Glory! --
+delete from quest_template where entry = 40284;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40284,2,16,52,42,0,0,'Blood and Glory!','South of Bloodfist Point, Satyrs have created an encampment. It has been a splinter in the eye for Bloodfist Point since the first day we arrived. Go, annihilate them, and bring me their horns.\n\nDo not be merciful, as they wouldn’t be for you. Kill all of them, leave no vile Satyr standing.','Obtain 12 Legashi Horns for Dag`grak Bloodfist at Bloodfist Point in Azshara.','The Legash Encampment is close to our base. I will be able to see you fighting, so don’t disappoint me. I want some fun.','Ha! I knew you had it! You are a strong $c, very strong. It reminds me of my youth, cutting down hordes of enemies!',60396,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4850,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92024, 40284);
+replace into creature_involvedrelation (id, quest) values (92024, 40284);
+
+delete from item_template where entry = 60396;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60396,1500,'Legashi Horns',12,1,2048,1,-1,-1,1,12,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60396 and entry between 6200 and 6202;
+replace into creature_loot_template values
+(6200,60396,-80,1,1,1,0),
+(6201,60396,-80,1,1,1,0),
+(6202,60396,-80,1,1,1,0);
