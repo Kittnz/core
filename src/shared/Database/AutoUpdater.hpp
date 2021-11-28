@@ -59,4 +59,4 @@ namespace DBUpdater
     };
 }
 
-#define sAutoUpdater AutoUpdater::Instance()
+#define sAutoUpdater DBUpdater::AutoUpdater::Instance()

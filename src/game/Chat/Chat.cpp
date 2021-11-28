@@ -179,6 +179,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "creature",       SEC_GAMEMASTER, false, &ChatHandler::HandleGoCreatureCommand,          "", nullptr },
         { "object",         SEC_GAMEMASTER, false, &ChatHandler::HandleGoObjectCommand,            "", nullptr },
         { "xyz",            SEC_GAMEMASTER, false, &ChatHandler::HandleGoXYZCommand,               "", nullptr },
+        { "corpse", SEC_GAMEMASTER, false, &ChatHandler::HandleGoCorpseCommand, "Teleports the user to their corpse.", nullptr },
         // Nostalrius
         { "forward",        SEC_GAMEMASTER, false, &ChatHandler::HandleGoForwardCommand,           "", nullptr },
         { "up",             SEC_GAMEMASTER, false, &ChatHandler::HandleGoUpCommand,                "", nullptr },

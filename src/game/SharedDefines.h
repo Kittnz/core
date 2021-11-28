@@ -1806,15 +1806,28 @@ struct Position
 
 struct WorldLocation
 {
-    uint16 mapId = 0;
+    uint32 mapId = 0;
     float x = 0.0f;
     float y = 0.0f;
     float z = 0.0f;
     float o = 0.0f;
-    explicit WorldLocation(uint16 _mapid = 0, float _x = 0, float _y = 0, float _z = 0, float _o = 0)
+    explicit WorldLocation(uint32 _mapid = 0, float _x = 0, float _y = 0, float _z = 0, float _o = 0)
         : mapId(_mapid), x(_x), y(_y), z(_z), o(_o) {}
     WorldLocation(WorldLocation const& loc)
         : mapId(loc.mapId), x(loc.x), y(loc.y), z(loc.z), o(loc.o) {}
+
+    /**
+       * \brief Copies values from another WorldLocation.
+       * \param other The WorldLocation to copy from.
+       */
+    void CopyFrom(const WorldLocation other)
+    {
+        mapId = other.mapId;
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        o = other.o;
+    }
 };
 
 #endif

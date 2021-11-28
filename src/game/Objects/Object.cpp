@@ -1692,6 +1692,41 @@ bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, floa
     }
 }
 
+/**
+ * \brief Gets a point behind the object.
+ * \param location The location to fill with the point behind the target.
+ * \param distance The distance away from the object.
+ */
+void WorldObject::GetPointBehindObject(WorldLocation& location, float distance) const
+{
+    // Get our current location.
+    WorldLocation myLocation, behindLocation;
+    GetPosition(myLocation);
+    GetPosition(behindLocation);
+
+    // Calculate an XY point behind us.
+    behindLocation.x -= distance * cos(myLocation.o);
+    behindLocation.y -= distance * sin(myLocation.o);
+
+    // Snap the Z axis to the correct level.
+    behindLocation.z = GetTerrain()->GetWaterOrGroundLevel(
+        behindLocation.x,
+        behindLocation.y,
+        behindLocation.z);
+
+    // Get the LOS hit point between our position and the generated point.
+    GetMap()->GetLosHitPosition(
+        myLocation.x,
+        myLocation.y,
+        myLocation.z,
+        behindLocation.x,
+        behindLocation.y,
+        behindLocation.z,
+        -0.5f);
+
+    location.CopyFrom(behindLocation);
+}
+
 void WorldObject::UpdateGroundPositionZ(float x, float y, float &z) const
 {
     float new_z = GetMap()->GetHeight(x, y, z, true);
@@ -3001,6 +3036,36 @@ void WorldObject::MonsterYell(int32 textId, uint32 language, Unit const* target)
     MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilder> say_do(say_build);
     MaNGOS::CameraDistWorker<MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilder> > say_worker(this, range, say_do);
     Cell::VisitWorldObjects(this, say_worker, range);
+}
+
+/**
+ * \brief Sends text from a monster to all players within a zone.
+ * \param text The text to send.
+ * \param messageType The type of message to send (say, yell, etc.)
+ * \param language The language to send. Defaults to LANG_UNIVERSAL.
+ * \param target The target of the message (used to fill name, class, gender, etc.)
+ * \param senderName The sender name to display (for message types that support it.) If nullptr, will use our name.
+ */
+void WorldObject::MonsterSendTextToZone(const char* text, const ChatMsg messageType, const Language language, Unit* const target, const char* senderName) const
+{
+    WorldPacket worldPacket;
+    ChatHandler::BuildChatPacket(
+        worldPacket,
+        messageType,
+        text,
+        language,
+        CHAT_TAG_NONE,
+        GetObjectGuid(),
+        senderName == nullptr ? GetName() : senderName,
+        target 
+            ? target->GetObjectGuid()
+            : ObjectGuid(),
+        target ? target->GetName() : "");
+
+    if (const auto &players = GetMap()->GetPlayers(); !players.isEmpty())
+    {
+        (*players.begin())->SendToPlayers(&worldPacket);
+    }
 }
 
 void WorldObject::MonsterYellToZone(int32 textId, uint32 language, Unit const* target) const
@@ -5310,6 +5375,27 @@ void WorldObject::PMonsterEmote(int32 textId, Unit const* target, bool IsBossEmo
     MaNGOS::CameraDistWorker<MaNGOS::LocalizedPacketDo<MaNGOS::MonsterChatBuilderFormat> > emote_worker(this, range, emote_do);
     Cell::VisitWorldObjects(this, emote_worker, range);
     va_end(ap);
+}
+
+bool WorldObject::isFacing(const Position location, const float tolerance) const {
+    const auto requiredAngle = atan2(location.y - m_position.y, location.x - m_position.x);
+    auto minAngle = requiredAngle - tolerance;
+    if (minAngle < 0) {
+        minAngle += (M_PI_F * 2);
+    }
+    auto maxAngle = requiredAngle + tolerance;
+    if (maxAngle > (M_PI_F * 2)) {
+        maxAngle -= M_PI_F;
+    }
+
+    bool isWithinTolerance = false;
+    if (maxAngle < minAngle) {
+        // We wrapped around.
+        isWithinTolerance = m_position.o <= maxAngle || m_position.o >= minAngle;
+    } else {
+        isWithinTolerance = m_position.o <= maxAngle && m_position.o >= minAngle;
+    }
+    return isWithinTolerance;
 }
 
 // function based on function Unit::CanAttack from 13850 client
