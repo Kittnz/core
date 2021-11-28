@@ -4437,4 +4437,23 @@ delete from item_template where entry = 60190;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60190,5567,'Nargelas\'s letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A tightly sealed letter addressed to Pierce.',0);
 
--- delete from item_template where entry = 60191;
+-- Into The Jaws --
+delete from quest_template where entry = 40281;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40280,40281,2,85,25,15,0,0,'Into The Jaws','I have certainly not seen this kind of lock for quite a while. And now I can see why House Darlthos surrounded this whole ordeal in secrecy. What we have here is a type of blood magic, tho not as dangerous as some of it can be, it certainly requires the blood of the family member to activate it. The issue is that not many know how to wield this magic. The last mage I knew who used this type of magic is long dead.\n\nMelenas used to have a section of his own in a library deep in the Shadowfang Keep. Perhaps there you can find something of use to learn how to open this box. But beware, that place is overrun by the savage Worgen, so it is better if I hold on to this box until your return. We wouldn\'t want to lose both you and the box should you fail, right?','Find Melenas\'s belongings in the Shadowfang Keep Library and return them to Pierce.','Hmm...','You are persistent, to say at least. Let\'s see what Melenas had in store for us.',60191,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1500,970,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (4567, 40281);
+replace into creature_involvedrelation (id, quest) values (4567, 40281);
+
+update quest_template set type = 81 where entry = 40281;
+
+delete from item_template where entry = 60191;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60191,7914,'Melenas\'s Belongings',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A dusty old box filled with various magical goods and texts.',0);
+
+delete from gameobject_template where entry = 2010856;
+replace into gameobject_template values
+(2010856,3,23432,'Melenas\'s Belongings',0,4,1,43,2010856,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010856;
+replace into gameobject_loot_template values 
+(2010856,60191,-100,0,1,1,0);
