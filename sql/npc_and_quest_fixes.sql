@@ -4712,8 +4712,14 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (92199, 40295);
 replace into creature_involvedrelation (id, quest) values (92199, 40295);
 
-update quest_template set type = 1 where entry = 40295
+update quest_template set type = 1 where entry = 40295;
 
 delete from creature_template where entry = 60343;
 replace into creature_template (entry, name, display_id1) values (60343, 'quest_40295_dummy_triger', 328);
 
+-- Report to the Archdruid --
+delete from quest_template where entry = 40296;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40295,40296,2,16,50,45,0,0,'Report to the Archdruid','Archdruid Runetotem needs to hear about this! He will know what to do and how we should approach them. Go, fly to Thunder Bluff and tell the Archdruid about what you have seen here. Make haste, time is of the essence.','Report to Hamuul Runetotem.','Blue Dragonflight in such numbers. This is really worrying.','Thank you, young one. Talom did well, advising you to come to me.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7000,750,81,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92199, 40296);
+replace into creature_involvedrelation (id, quest) values (1489, 40296);
