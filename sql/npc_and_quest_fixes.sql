@@ -4426,5 +4426,15 @@ replace into creature_loot_template values
 (60525, 60389, 15, 2, 1, 1, 0),
 (60525, 60390, 15, 2, 1, 1, 0);
 
+-- Ways of Magic --
+delete from quest_template where entry = 40280;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40279,40280,2,85,19,15,0,0,'Ways of Magic','Let me think for a second. Hmm... Why yes. <Nargelas starts writing a letter> I have an acquaintance of sorts in Undercity. The name is Pierce Shackelton calls himself a mage and is probably held up in the Magic Quarter. He owns me a favor, or rather he owns my wife a favor. Take this letter to him along with the box and find out what can be done with it.','Take the Box and letter to Pierce Shackleton in Undercity Magic Quarter.','And who might you be?','A letter for me? That ignorant son of a... Apologies, $c. That man certainly knows how to get on my nerves. I will do this for him, but this is the last time I deal with that accursed family.',60189,1,60190,1,0,0,0,0,0,0,0,0,0,0,0,0,60190,1,0,270,68,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91712, 40280);
+replace into creature_involvedrelation (id, quest) values (4567, 40280);
+
+delete from item_template where entry = 60190;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60190,5567,'Nargelas\'s letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'A tightly sealed letter addressed to Pierce.',0);
 
 -- delete from item_template where entry = 60191;
