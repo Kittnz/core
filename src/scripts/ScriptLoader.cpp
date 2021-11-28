@@ -260,7 +260,6 @@ void AddSC_arena_tournament();
 void AddSC_boss_rares();
 void AddSC_boss_avatar_of_pompa();
 void AddSC_boss_turtlhu();
-void AddSC_instance_stormwind_vaults();
 void AddSC_instance_karazhan_crypt();
 void AddSC_instance_crescent_grove();
 void AddSC_boss_xmas_wolf();
@@ -289,6 +288,15 @@ void AddSC_boss_daelus();
 void AddSC_boss_mariella();
 void AddSC_instance_scarlet_citadel();
 void AddSC_trash_mobs_scarlet_citadel();
+
+// Stormwind Vaults
+void AddSC_boss_aszosh_grimflame();
+void AddSC_boss_black_bride();
+void AddSC_boss_damian_the_ripper();
+void AddSC_boss_nazorna();
+void AddSC_boss_thamgrarr();
+void AddSC_boss_volkan_cruelblade();
+void AddSC_instance_stormwind_vaults();
 
 void AddScripts()
 {
@@ -541,12 +549,20 @@ void AddScripts()
     AddSC_ungoro_crater();
     AddSC_winterspring();
 
+    // Stormwind Vaults
+    AddSC_boss_aszosh_grimflame();
+    AddSC_boss_black_bride();
+    AddSC_boss_damian_the_ripper();
+    AddSC_boss_nazorna();
+    AddSC_boss_thamgrarr();
+    AddSC_boss_volkan_cruelblade();
+    AddSC_instance_stormwind_vaults();
+
     AddSC_shop();
     AddSC_arena_tournament();
     AddSC_boss_rares();
     AddSC_boss_avatar_of_pompa();
     AddSC_boss_turtlhu();
-    AddSC_instance_stormwind_vaults();
     AddSC_instance_karazhan_crypt();
     AddSC_instance_crescent_grove();
     AddSC_boss_xmas_wolf();
@@ -558,6 +574,7 @@ void AddScripts()
     AddSC_mirage_raceway();
     AddSC_gardening();
     AddSC_boss_dark_reaver();
+
     AddSC_boss_ostarius();
     AddSC_CUSTOM_SPELL();
 

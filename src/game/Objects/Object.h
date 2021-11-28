@@ -57,9 +57,9 @@
 #define VISIBILITY_DISTANCE_TINY 25.0f
 
 #define DEFAULT_WORLD_OBJECT_SIZE 0.388999998569489f // currently used (correctly?) for any non Unit world objects. This is actually the bounding_radius, like player/creature from creature_model_data
-#define DEFAULT_OBJECT_SCALE 1.0f // player/item scale as default, npc/go from database, pets from dbc
+#define DEFAULT_OBJECT_SCALE 1.0f                    // player/item scale as default, npc/go from database, pets from dbc
 #define DEFAULT_GNOME_SCALE 1.15f
-#define DEFAULT_TAUREN_MALE_SCALE 1.35f // Tauren Male Player Scale by default
+#define DEFAULT_TAUREN_MALE_SCALE 1.35f   // Tauren Male Player Scale by default
 #define DEFAULT_TAUREN_FEMALE_SCALE 1.25f // Tauren Female Player Scale by default
 
 #define MAX_STEALTH_DETECT_RANGE 45.0f
@@ -75,16 +75,16 @@
 
 enum TempSummonType
 {
-    TEMPSUMMON_TIMED_OR_DEAD_DESPAWN          = 1,             // despawns after a specified time (out of combat) OR when the creature disappears
-    TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN        = 2,             // despawns after a specified time (out of combat) OR when the creature dies
-    TEMPSUMMON_TIMED_DESPAWN                  = 3,             // despawns after a specified time
-    TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT    = 4,             // despawns after a specified time after the creature is out of combat
-    TEMPSUMMON_CORPSE_DESPAWN                 = 5,             // despawns instantly after death
-    TEMPSUMMON_CORPSE_TIMED_DESPAWN           = 6,             // despawns after a specified time after death
-    TEMPSUMMON_DEAD_DESPAWN                   = 7,             // despawns when the creature disappears
-    TEMPSUMMON_MANUAL_DESPAWN                 = 8,             // despawns when UnSummon() is called
-    TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN   = 9,             // despawns after a specified time (in or out of combat) OR when the creature disappears
-    TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN = 10,            // despawns after a specified time (in or out of combat) OR when the creature dies
+  TEMPSUMMON_TIMED_OR_DEAD_DESPAWN = 1,           // despawns after a specified time (out of combat) OR when the creature disappears
+  TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN = 2,         // despawns after a specified time (out of combat) OR when the creature dies
+  TEMPSUMMON_TIMED_DESPAWN = 3,                   // despawns after a specified time
+  TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT = 4,     // despawns after a specified time after the creature is out of combat
+  TEMPSUMMON_CORPSE_DESPAWN = 5,                  // despawns instantly after death
+  TEMPSUMMON_CORPSE_TIMED_DESPAWN = 6,            // despawns after a specified time after death
+  TEMPSUMMON_DEAD_DESPAWN = 7,                    // despawns when the creature disappears
+  TEMPSUMMON_MANUAL_DESPAWN = 8,                  // despawns when UnSummon() is called
+  TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN = 9,    // despawns after a specified time (in or out of combat) OR when the creature disappears
+  TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN = 10, // despawns after a specified time (in or out of combat) OR when the creature dies
 
 };
 
@@ -105,202 +105,207 @@ class Transport;
 class SpellEntry;
 class Spell;
 
+typedef std::unordered_map<Player *, UpdateData> UpdateDataMapType;
 struct FactionTemplateEntry;
-
-typedef std::unordered_map<Player*, UpdateData> UpdateDataMapType;
 
 //use this class to measure time between world update ticks
 //essential for units updating their spells after cells become active
 class WorldUpdateCounter
 {
-    public:
-        WorldUpdateCounter() : m_tmStart(0) {}
+public:
+  WorldUpdateCounter() : m_tmStart(0) {}
 
-        uint32 timeElapsed()
-        {
-            if(!m_tmStart)
-                m_tmStart = WorldTimer::tickPrevTime();
+  uint32 timeElapsed()
+  {
+    if (!m_tmStart)
+      m_tmStart = WorldTimer::tickPrevTime();
 
-            return WorldTimer::getMSTimeDiff(m_tmStart, WorldTimer::tickTime());
-        }
-        uint32 timeElapsed(uint32 now) const
-        {
-            if (!m_tmStart)
-                return 0;
-            return WorldTimer::getMSTimeDiff(m_tmStart, now);
-        }
+    return WorldTimer::getMSTimeDiff(m_tmStart, WorldTimer::tickTime());
+  }
+  uint32 timeElapsed(uint32 now) const
+  {
+    if (!m_tmStart)
+      return 0;
+    return WorldTimer::getMSTimeDiff(m_tmStart, now);
+  }
 
-        void Reset() { m_tmStart = WorldTimer::tickTime(); }
-        void ResetTo(uint32 lastUpdate) {  m_tmStart = lastUpdate; }
-    private:
-        uint32 m_tmStart;
+  void Reset() { m_tmStart = WorldTimer::tickTime(); }
+  void ResetTo(uint32 lastUpdate) { m_tmStart = lastUpdate; }
+
+private:
+  uint32 m_tmStart;
 };
-
 
 enum ObjectSpawnFlags
 {
-    SPAWN_FLAG_ACTIVE               = 0x01,
-    SPAWN_FLAG_DISABLED             = 0x02,
-    SPAWN_FLAG_RANDOM_RESPAWN_TIME  = 0x04,
-    SPAWN_FLAG_DYNAMIC_RESPAWN_TIME = 0x08,
-    SPAWN_FLAG_FORCE_DYNAMIC_ELITE  = 0x10, // creature only
-    SPAWN_FLAG_EVADE_OUT_HOME_AREA  = 0x20, // creature only
-    SPAWN_FLAG_NOT_VISIBLE          = 0x40, // creature only
-    SPAWN_FLAG_DEAD = 0x80, // creature only
+  SPAWN_FLAG_ACTIVE = 0x01,
+  SPAWN_FLAG_DISABLED = 0x02,
+  SPAWN_FLAG_RANDOM_RESPAWN_TIME = 0x04,
+  SPAWN_FLAG_DYNAMIC_RESPAWN_TIME = 0x08,
+  SPAWN_FLAG_FORCE_DYNAMIC_ELITE = 0x10, // creature only
+  SPAWN_FLAG_EVADE_OUT_HOME_AREA = 0x20, // creature only
+  SPAWN_FLAG_NOT_VISIBLE = 0x40,         // creature only
+  SPAWN_FLAG_DEAD = 0x80,                // creature only
 };
 
 // [-ZERO] Need check and update
 // used in most movement packets (send and received)
 enum MovementFlags
 {
-    MOVEFLAG_NONE               = 0x00000000,
-    MOVEFLAG_FORWARD            = 0x00000001,
-    MOVEFLAG_BACKWARD           = 0x00000002,
-    MOVEFLAG_STRAFE_LEFT        = 0x00000004,
-    MOVEFLAG_STRAFE_RIGHT       = 0x00000008,
-    MOVEFLAG_TURN_LEFT          = 0x00000010,
-    MOVEFLAG_TURN_RIGHT         = 0x00000020,
-    MOVEFLAG_PITCH_UP           = 0x00000040,
-    MOVEFLAG_PITCH_DOWN         = 0x00000080,
-    MOVEFLAG_WALK_MODE          = 0x00000100,               // Walking
-    //MOVEFLAG_ONTRANSPORT        = 0x00000200, // ??
-    MOVEFLAG_LEVITATING         = 0x00000400, // ?? Semble ne pas fonctionner
-    MOVEFLAG_FIXED_Z            = 0x00000800, // Hauteur fixee. Sauter => Defiler sur toute la map
-    MOVEFLAG_ROOT               = 0x00001000, // Fix Nostalrius
-    MOVEFLAG_JUMPING            = 0x00002000,
-    MOVEFLAG_FALLINGFAR         = 0x00004000,
-    // Fin TC
-    MOVEFLAG_SWIMMING           = 0x00200000, // Ok
-    MOVEFLAG_SPLINE_ENABLED     = 0x00400000, // Ok
-    // 0x00800000 = 'MOVEMENTFLAG_DESCENDING' pour TrinityCore
-    MOVEFLAG_CAN_FLY            = 0x00800000,               // [-ZERO] is it really need and correct value
-    MOVEFLAG_FLYING             = 0x01000000,               // [-ZERO] is it really need and correct value
-    MOVEFLAG_ONTRANSPORT        = 0x02000000,               // Used for flying on some creatures
-    MOVEFLAG_SPLINE_ELEVATION   = 0x04000000,               // used for flight paths
-    MOVEFLAG_WATERWALKING       = 0x10000000,               // prevent unit from falling through water
-    MOVEFLAG_SAFE_FALL          = 0x20000000,               // active rogue safe fall spell (passive)
-    MOVEFLAG_HOVER              = 0x40000000,
-    MOVEFLAG_INTERNAL           = 0x80000000,
+  MOVEFLAG_NONE = 0x00000000,
+  MOVEFLAG_FORWARD = 0x00000001,
+  MOVEFLAG_BACKWARD = 0x00000002,
+  MOVEFLAG_STRAFE_LEFT = 0x00000004,
+  MOVEFLAG_STRAFE_RIGHT = 0x00000008,
+  MOVEFLAG_TURN_LEFT = 0x00000010,
+  MOVEFLAG_TURN_RIGHT = 0x00000020,
+  MOVEFLAG_PITCH_UP = 0x00000040,
+  MOVEFLAG_PITCH_DOWN = 0x00000080,
+  MOVEFLAG_WALK_MODE = 0x00000100, // Walking
+  //MOVEFLAG_ONTRANSPORT        = 0x00000200, // ??
+  MOVEFLAG_LEVITATING = 0x00000400, // ?? Semble ne pas fonctionner
+  MOVEFLAG_FIXED_Z = 0x00000800,    // Hauteur fixee. Sauter => Defiler sur toute la map
+  MOVEFLAG_ROOT = 0x00001000,       // Fix Nostalrius
+  MOVEFLAG_JUMPING = 0x00002000,
+  MOVEFLAG_FALLINGFAR = 0x00004000,
+  // Fin TC
+  MOVEFLAG_SWIMMING = 0x00200000,       // Ok
+  MOVEFLAG_SPLINE_ENABLED = 0x00400000, // Ok
+  // 0x00800000 = 'MOVEMENTFLAG_DESCENDING' pour TrinityCore
+  MOVEFLAG_CAN_FLY = 0x00800000,          // [-ZERO] is it really need and correct value
+  MOVEFLAG_FLYING = 0x01000000,           // [-ZERO] is it really need and correct value
+  MOVEFLAG_ONTRANSPORT = 0x02000000,      // Used for flying on some creatures
+  MOVEFLAG_SPLINE_ELEVATION = 0x04000000, // used for flight paths
+  MOVEFLAG_WATERWALKING = 0x10000000,     // prevent unit from falling through water
+  MOVEFLAG_SAFE_FALL = 0x20000000,        // active rogue safe fall spell (passive)
+  MOVEFLAG_HOVER = 0x40000000,
+  MOVEFLAG_INTERNAL = 0x80000000,
 
-    // Can not be present with MOVEFLAG_ROOT (otherwise client freeze)
-    MOVEFLAG_MASK_MOVING        =
-        MOVEFLAG_FORWARD | MOVEFLAG_BACKWARD | MOVEFLAG_STRAFE_LEFT | MOVEFLAG_STRAFE_RIGHT |
-        MOVEFLAG_PITCH_UP | MOVEFLAG_PITCH_DOWN | MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR |
-        MOVEFLAG_SPLINE_ELEVATION,
-    MOVEFLAG_MASK_MOVING_OR_TURN= MOVEFLAG_MASK_MOVING | MOVEFLAG_TURN_LEFT | MOVEFLAG_TURN_RIGHT,
+  // Can not be present with MOVEFLAG_ROOT (otherwise client freeze)
+  MOVEFLAG_MASK_MOVING =
+      MOVEFLAG_FORWARD | MOVEFLAG_BACKWARD | MOVEFLAG_STRAFE_LEFT | MOVEFLAG_STRAFE_RIGHT |
+      MOVEFLAG_PITCH_UP | MOVEFLAG_PITCH_DOWN | MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR |
+      MOVEFLAG_SPLINE_ELEVATION,
+  MOVEFLAG_MASK_MOVING_OR_TURN = MOVEFLAG_MASK_MOVING | MOVEFLAG_TURN_LEFT | MOVEFLAG_TURN_RIGHT,
 
-    // MovementFlags mask that only contains flags for x/z translations
-    // this is to avoid that a jumping character that stands still triggers melee-leeway
-    MOVEFLAG_MASK_XZ = MOVEFLAG_FORWARD | MOVEFLAG_BACKWARD | MOVEFLAG_STRAFE_LEFT | MOVEFLAG_STRAFE_RIGHT
+  // MovementFlags mask that only contains flags for x/z translations
+  // this is to avoid that a jumping character that stands still triggers melee-leeway
+  MOVEFLAG_MASK_XZ = MOVEFLAG_FORWARD | MOVEFLAG_BACKWARD | MOVEFLAG_STRAFE_LEFT | MOVEFLAG_STRAFE_RIGHT
 };
 
 // used in SMSG_MONSTER_MOVE
 enum SplineFlags
 {
-    // Valeurs correctes et testees pour la 1.12.1
-    SPLINEFLAG_NONE           = 0x00000000,
-    SPLINEFLAG_WALKMODE       = 0x00000100,
-    SPLINEFLAG_FLYING         = 0x00000200,
+  // Valeurs correctes et testees pour la 1.12.1
+  SPLINEFLAG_NONE = 0x00000000,
+  SPLINEFLAG_WALKMODE = 0x00000100,
+  SPLINEFLAG_FLYING = 0x00000200,
 
-    SPLINEFLAG_SPLINE         = 0x00002000,               // spline n*(float x,y,z)
+  SPLINEFLAG_SPLINE = 0x00002000, // spline n*(float x,y,z)
 };
 
 class MovementInfo
 {
-    public:
-        MovementInfo() : moveFlags(MOVEFLAG_NONE), time(0), ctime(0),
-            t_time(0), s_pitch(0.0f), fallTime(0), splineElevation(0.0f) {}
+public:
+  MovementInfo() : moveFlags(MOVEFLAG_NONE), time(0), ctime(0),
+                   t_time(0), s_pitch(0.0f), fallTime(0), splineElevation(0.0f) {}
 
-        // Read/Write methods
-        void Read(ByteBuffer &data);
-        void Write(ByteBuffer &data) const;
-        void CorrectData(Unit* mover = nullptr);
+  // Read/Write methods
+  void Read(ByteBuffer &data);
+  void Write(ByteBuffer &data) const;
+  void CorrectData(Unit *mover = nullptr);
 
-        // Movement flags manipulations
-        void AddMovementFlag(int f) { moveFlags |= f; }
-        void RemoveMovementFlag(int f) { moveFlags &= ~f; }
-        bool HasMovementFlag(int f) const { return moveFlags & f; }
-        MovementFlags GetMovementFlags() const { return MovementFlags(moveFlags); }
-        void SetMovementFlags(MovementFlags f) { moveFlags = f; }
+  // Movement flags manipulations
+  void AddMovementFlag(int f) { moveFlags |= f; }
+  void RemoveMovementFlag(int f) { moveFlags &= ~f; }
+  bool HasMovementFlag(int f) const { return moveFlags & f; }
+  MovementFlags GetMovementFlags() const { return MovementFlags(moveFlags); }
+  void SetMovementFlags(MovementFlags f) { moveFlags = f; }
 
-        // Position manipulations
-        Position const *GetPos() const { return &pos; }
-        void SetTransportData(ObjectGuid guid, float x, float y, float z, float o, uint32 time)
-        {
-            t_guid = guid;
-            t_pos.x = x;
-            t_pos.y = y;
-            t_pos.z = z;
-            t_pos.o = o;
-            t_time = time;
-        }
-        void ClearTransportData()
-        {
-            t_guid = ObjectGuid();
-            t_pos.x = 0.0f;
-            t_pos.y = 0.0f;
-            t_pos.z = 0.0f;
-            t_pos.o = 0.0f;
-            t_time = 0;
-        }
-        ObjectGuid const& GetTransportGuid() const { return t_guid; }
-        Position const *GetTransportPos() const { return &t_pos; }
-        Position* GetTransportPos() { return &t_pos; }
-        uint32 GetTransportTime() const { return t_time; }
-        uint32 GetFallTime() const { return fallTime; }
-        void ChangeOrientation(float o) { pos.o = o; }
-        void ChangePosition(float x, float y, float z, float o) { pos.x = x; pos.y = y; pos.z = z; pos.o = o; }
-        void UpdateTime(uint32 _time) { time = _time; }
+  // Position manipulations
+  Position const *GetPos() const { return &pos; }
+  void SetTransportData(ObjectGuid guid, float x, float y, float z, float o, uint32 time)
+  {
+    t_guid = guid;
+    t_pos.x = x;
+    t_pos.y = y;
+    t_pos.z = z;
+    t_pos.o = o;
+    t_time = time;
+  }
+  void ClearTransportData()
+  {
+    t_guid = ObjectGuid();
+    t_pos.x = 0.0f;
+    t_pos.y = 0.0f;
+    t_pos.z = 0.0f;
+    t_pos.o = 0.0f;
+    t_time = 0;
+  }
+  ObjectGuid const &GetTransportGuid() const { return t_guid; }
+  Position const *GetTransportPos() const { return &t_pos; }
+  Position *GetTransportPos() { return &t_pos; }
+  uint32 GetTransportTime() const { return t_time; }
+  uint32 GetFallTime() const { return fallTime; }
+  void ChangeOrientation(float o) { pos.o = o; }
+  void ChangePosition(float x, float y, float z, float o)
+  {
+    pos.x = x;
+    pos.y = y;
+    pos.z = z;
+    pos.o = o;
+  }
+  void UpdateTime(uint32 _time) { time = _time; }
 
-        struct JumpInfo
-        {
-            JumpInfo() : velocity(0.f), sinAngle(0.f), cosAngle(0.f), xyspeed(0.f), startClientTime(0) {}
-            float   velocity, sinAngle, cosAngle, xyspeed;
-            Position start;
-            uint32 startClientTime;
-        };
+  struct JumpInfo
+  {
+    JumpInfo() : velocity(0.f), sinAngle(0.f), cosAngle(0.f), xyspeed(0.f), startClientTime(0) {}
+    float velocity, sinAngle, cosAngle, xyspeed;
+    Position start;
+    uint32 startClientTime;
+  };
 
-        JumpInfo const& GetJumpInfo() const { return jump; }
-    //private:
-        // common
-        uint32  moveFlags;                                  // see enum MovementFlags
-        uint32  time;
-        uint32  ctime; // Client time
-        Position pos;
-        // transport
-        ObjectGuid t_guid;
-        Position t_pos;
-        uint32  t_time;
-        // swimming and unknown
-        float   s_pitch;
-        // last fall time
-        uint32  fallTime;
-        // jumping
-        JumpInfo jump;
-        // spline
-        float splineElevation;
+  JumpInfo const &GetJumpInfo() const { return jump; }
+  //private:
+  // common
+  uint32 moveFlags; // see enum MovementFlags
+  uint32 time;
+  uint32 ctime; // Client time
+  Position pos;
+  // transport
+  ObjectGuid t_guid;
+  Position t_pos;
+  uint32 t_time;
+  // swimming and unknown
+  float s_pitch;
+  // last fall time
+  uint32 fallTime;
+  // jumping
+  JumpInfo jump;
+  // spline
+  float splineElevation;
 };
 
-inline ByteBuffer& operator<< (ByteBuffer& buf, MovementInfo const& mi)
+inline ByteBuffer &operator<<(ByteBuffer &buf, MovementInfo const &mi)
 {
-    mi.Write(buf);
-    return buf;
+  mi.Write(buf);
+  return buf;
 }
 
-inline ByteBuffer& operator>> (ByteBuffer& buf, MovementInfo& mi)
+inline ByteBuffer &operator>>(ByteBuffer &buf, MovementInfo &mi)
 {
-    mi.Read(buf);
-    return buf;
+  mi.Read(buf);
+  return buf;
 }
 
 enum ObjectDelayedAction
 {
-    OBJECT_DELAYED_MARK_CLIENT_UPDATE       = 0x1,
-    OBJECT_DELAYED_ADD_TO_RELOCATED_LIST    = 0x2,
-    OBJECT_DELAYED_ADD_TO_REMOVE_LIST       = 0x4,
+  OBJECT_DELAYED_MARK_CLIENT_UPDATE = 0x1,
+  OBJECT_DELAYED_ADD_TO_RELOCATED_LIST = 0x2,
+  OBJECT_DELAYED_ADD_TO_REMOVE_LIST = 0x4,
 };
 
-typedef void(*CreatureAiSetter) (Creature* pCreature);
+typedef void (*CreatureAiSetter)(Creature *pCreature);
 
 class Object
 {
@@ -636,61 +641,62 @@ struct WorldObjectChangeAccumulator;
 // At least some values expected fixed and used in auras field, other custom
 enum MeleeHitOutcome
 {
-    MELEE_HIT_EVADE = 0,
-    MELEE_HIT_MISS = 1,
-    MELEE_HIT_DODGE = 2,                                // used as misc in SPELL_AURA_IGNORE_COMBAT_RESULT
-    MELEE_HIT_BLOCK = 3,                                // used as misc in SPELL_AURA_IGNORE_COMBAT_RESULT
-    MELEE_HIT_PARRY = 4,                                // used as misc in SPELL_AURA_IGNORE_COMBAT_RESULT
-    MELEE_HIT_GLANCING = 5,
-    MELEE_HIT_CRIT = 6,
-    MELEE_HIT_CRUSHING = 7,
-    MELEE_HIT_NORMAL = 8,
-    MELEE_HIT_BLOCK_CRIT = 9,
+  MELEE_HIT_EVADE = 0,
+  MELEE_HIT_MISS = 1,
+  MELEE_HIT_DODGE = 2, // used as misc in SPELL_AURA_IGNORE_COMBAT_RESULT
+  MELEE_HIT_BLOCK = 3, // used as misc in SPELL_AURA_IGNORE_COMBAT_RESULT
+  MELEE_HIT_PARRY = 4, // used as misc in SPELL_AURA_IGNORE_COMBAT_RESULT
+  MELEE_HIT_GLANCING = 5,
+  MELEE_HIT_CRIT = 6,
+  MELEE_HIT_CRUSHING = 7,
+  MELEE_HIT_NORMAL = 8,
+  MELEE_HIT_BLOCK_CRIT = 9,
 };
 
 // Spell damage info structure based on structure sending in SMSG_SPELLNONMELEEDAMAGELOG opcode
-struct SpellNonMeleeDamage {
-    SpellNonMeleeDamage(WorldObject *_attacker, Unit *_target, uint32 _SpellID, SpellSchools _school)
-        : target(_target), attacker(_attacker), SpellID(_SpellID), damage(0), school(_school),
+struct SpellNonMeleeDamage
+{
+  SpellNonMeleeDamage(WorldObject *_attacker, Unit *_target, uint32 _SpellID, SpellSchools _school)
+      : target(_target), attacker(_attacker), SpellID(_SpellID), damage(0), school(_school),
         absorb(0), resist(0), periodicLog(false), unused(false), blocked(0), HitInfo(0), spell(nullptr)
-    {}
+  {
+  }
 
-    Unit   *target;
-    WorldObject   *attacker;
-    uint32 SpellID;
-    uint32 damage;
-    SpellSchools school;
-    uint32 absorb;
-    int32 resist;
-    bool   periodicLog;
-    bool   unused;
-    uint32 blocked;
-    uint32 HitInfo;
-    Spell *spell;
+  Unit *target;
+  WorldObject *attacker;
+  uint32 SpellID;
+  uint32 damage;
+  SpellSchools school;
+  uint32 absorb;
+  int32 resist;
+  bool periodicLog;
+  bool unused;
+  uint32 blocked;
+  uint32 HitInfo;
+  Spell *spell;
 };
 
 struct CleanDamage
 {
-    CleanDamage(uint32 _damage, WeaponAttackType _attackType, MeleeHitOutcome _hitOutCome, uint32 _Absorb, int32 _Resist) :
-    damage(_damage), attackType(_attackType), hitOutCome(_hitOutCome), absorb(_Absorb), resist(_Resist) {}
+  CleanDamage(uint32 _damage, WeaponAttackType _attackType, MeleeHitOutcome _hitOutCome, uint32 _Absorb, int32 _Resist) : damage(_damage), attackType(_attackType), hitOutCome(_hitOutCome), absorb(_Absorb), resist(_Resist) {}
 
-    uint32 damage;
-    WeaponAttackType attackType;
-    MeleeHitOutcome hitOutCome;
-    uint32 absorb;
-    int32 resist;
+  uint32 damage;
+  WeaponAttackType attackType;
+  MeleeHitOutcome hitOutCome;
+  uint32 absorb;
+  int32 resist;
 };
 
 enum CurrentSpellTypes
 {
-    CURRENT_MELEE_SPELL             = 0,
-    CURRENT_GENERIC_SPELL           = 1,
-    CURRENT_AUTOREPEAT_SPELL        = 2,
-    CURRENT_CHANNELED_SPELL         = 3
+  CURRENT_MELEE_SPELL = 0,
+  CURRENT_GENERIC_SPELL = 1,
+  CURRENT_AUTOREPEAT_SPELL = 2,
+  CURRENT_CHANNELED_SPELL = 3
 };
 
 #define CURRENT_FIRST_NON_MELEE_SPELL 1
-#define CURRENT_MAX_SPELL             4
+#define CURRENT_MAX_SPELL 4
 
 class WorldObject : public Object
 {
@@ -736,6 +742,8 @@ class WorldObject : public Object
 
         void SetOrientation(float orientation);
 
+        bool isFacing(const Position location, const float tolerance = (M_PI_F/2)) const;
+
         void SetRawPosition(Position&& pos) { m_position = std::move(pos); }
         Position const& GetPosition() const { return m_position; }
         float GetPositionX() const { return m_position.x; }
@@ -778,8 +786,9 @@ class WorldObject : public Object
 
         // Valeur de retour : false si aucun point correct trouve.
         bool GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const;
+    void GetPointBehindObject(WorldLocation& location, float distance) const;
 
-        uint32 GetMapId() const { return m_mapId; }
+    uint32 GetMapId() const { return m_mapId; }
         uint32 GetInstanceId() const { return m_InstanceId; }
 
         uint32 GetZoneId() const;
@@ -920,7 +929,9 @@ class WorldObject : public Object
         void MonsterSayToPlayer(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
         void MonsterSay(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterYell(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
-        void MonsterTextEmote(int32 textId, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
+    void MonsterSendTextToZone(const char* text, ChatMsg messageType, Language language = LANG_UNIVERSAL, Unit* target = nullptr,
+                               const char* senderName = nullptr) const;
+    void MonsterTextEmote(int32 textId, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
         void MonsterWhisper(int32 textId, Unit const* receiver, bool IsBossWhisper = false) const;
         void MonsterYellToZone(int32 textId, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterScriptToZone(int32 textId, ChatMsg type, uint32 language = 0, Unit const* target = nullptr) const;
@@ -1159,54 +1170,54 @@ virtual uint32 GetLevel() const = 0;
 };
 
 // Helper functions to cast between different Object pointers. Useful when unsure that your object* is valid at all.
-inline WorldObject* ToWorldObject(Object* object)
+inline WorldObject *ToWorldObject(Object *object)
 {
-    return object && object->isType(TYPEMASK_WORLDOBJECT) ? static_cast<WorldObject*>(object) : nullptr;
+  return object && object->isType(TYPEMASK_WORLDOBJECT) ? static_cast<WorldObject *>(object) : nullptr;
 }
 
-inline WorldObject const* ToWorldObject(const Object* object)
+inline WorldObject const *ToWorldObject(const Object *object)
 {
-    return object && object->isType(TYPEMASK_WORLDOBJECT) ? static_cast<WorldObject const*>(object) : nullptr;
+  return object && object->isType(TYPEMASK_WORLDOBJECT) ? static_cast<WorldObject const *>(object) : nullptr;
 }
 
-inline GameObject* ToGameObject(Object* object)
+inline GameObject *ToGameObject(Object *object)
 {
-    return object && object->GetTypeId() == TYPEID_GAMEOBJECT ? reinterpret_cast<GameObject*>(object) : nullptr;
+  return object && object->GetTypeId() == TYPEID_GAMEOBJECT ? reinterpret_cast<GameObject *>(object) : nullptr;
 }
 
-inline const GameObject* ToGameObject(const Object* object)
+inline const GameObject *ToGameObject(const Object *object)
 {
-    return object && object->GetTypeId() == TYPEID_GAMEOBJECT ? reinterpret_cast<const GameObject*>(object) : nullptr;
+  return object && object->GetTypeId() == TYPEID_GAMEOBJECT ? reinterpret_cast<const GameObject *>(object) : nullptr;
 }
 
-inline Unit* ToUnit(Object* object)
+inline Unit *ToUnit(Object *object)
 {
-    return object && object->isType(TYPEMASK_UNIT) ? reinterpret_cast<Unit*>(object) : nullptr;
+  return object && object->isType(TYPEMASK_UNIT) ? reinterpret_cast<Unit *>(object) : nullptr;
 }
 
-inline const Unit* ToUnit(const Object* object)
+inline const Unit *ToUnit(const Object *object)
 {
-    return object && object->isType(TYPEMASK_UNIT) ? reinterpret_cast<const Unit*>(object) : nullptr;
+  return object && object->isType(TYPEMASK_UNIT) ? reinterpret_cast<const Unit *>(object) : nullptr;
 }
 
-inline Creature* ToCreature(Object* object)
+inline Creature *ToCreature(Object *object)
 {
-    return object && object->GetTypeId() == TYPEID_UNIT ? reinterpret_cast<Creature*>(object) : nullptr;
+  return object && object->GetTypeId() == TYPEID_UNIT ? reinterpret_cast<Creature *>(object) : nullptr;
 }
 
-inline const Creature* ToCreature(const Object* object)
+inline const Creature *ToCreature(const Object *object)
 {
-    return object && object->GetTypeId() == TYPEID_UNIT ? reinterpret_cast<const Creature*>(object) : nullptr;
+  return object && object->GetTypeId() == TYPEID_UNIT ? reinterpret_cast<const Creature *>(object) : nullptr;
 }
 
-inline Player* ToPlayer(Object* object)
+inline Player *ToPlayer(Object *object)
 {
-    return object && object->GetTypeId() == TYPEID_PLAYER ? reinterpret_cast<Player*>(object) : nullptr;
+  return object && object->GetTypeId() == TYPEID_PLAYER ? reinterpret_cast<Player *>(object) : nullptr;
 }
 
-inline const Player* ToPlayer(const Object* object)
+inline const Player *ToPlayer(const Object *object)
 {
-    return object && object->GetTypeId() == TYPEID_PLAYER ? reinterpret_cast<const Player*>(object) : nullptr;
+  return object && object->GetTypeId() == TYPEID_PLAYER ? reinterpret_cast<const Player *>(object) : nullptr;
 }
 
 #endif

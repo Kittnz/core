@@ -164,6 +164,12 @@ dungeons/scholomance/instance_scholomance.cpp
 dungeons/scholomance/scholo_trash.cpp
 dungeons/scholomance/scholomance.h
 dungeons/shadowfang_keep/instance_shadowfang_keep.cpp
+dungeons/stormwind_vaults/boss_aszosh_grimflame.cpp
+dungeons/stormwind_vaults/boss_black_bride.cpp
+dungeons/stormwind_vaults/boss_damian_the_ripper.cpp
+dungeons/stormwind_vaults/boss_nazorna.cpp
+dungeons/stormwind_vaults/boss_thamgrarr.cpp
+dungeons/stormwind_vaults/boss_volkan_cruelblade.cpp
 dungeons/stormwind_vaults/instance_stormwind_vaults.cpp
 dungeons/stratholme/boss_atiesh.cpp
 dungeons/stratholme/boss_baroness_anastari.cpp
@@ -221,7 +227,6 @@ dungeons/zulgurub/boss_wushoolay.cpp
 dungeons/zulgurub/instance_zulgurub.cpp
 dungeons/zulgurub/zulgurub.h
 dungeons/zulgurub/zulgurub_trash.cpp
-
 events/boss_dark_reaver.cpp
 events/boss_emeriss.cpp
 events/boss_lethon.cpp

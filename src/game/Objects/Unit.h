@@ -628,11 +628,60 @@ class Unit : public WorldObject
     protected:
         mutable ObjectGuid m_debuggerGuid;
         mutable uint32 m_debugFlags;
-
+    public:
         /*********************************************************/
         /***                VISIBILITY SYSTEM                  ***/
         /*********************************************************/
 
+        bool HasStealthAura()      const { return HasAuraType(SPELL_AURA_MOD_STEALTH); }
+        bool HasInvisibilityAura() const { return HasAuraType(SPELL_AURA_MOD_INVISIBILITY); }
+        bool isFeared()  const { return HasAuraType(SPELL_AURA_MOD_FEAR); }
+        bool isInRoots() const { return HasAuraType(SPELL_AURA_MOD_ROOT); }
+        bool IsPolymorphed() const;
+        bool IsImmuneToSchoolMask(uint32 schoolMask) const;
+
+        bool isFrozen() const;
+
+        void RemoveSpellbyDamageTaken(AuraType auraType, uint32 damage);
+        void RemoveFearEffectsByDamageTaken(uint32 damage, uint32 exceptSpellId, DamageEffectType damagetype);
+
+        bool isTargetableForAttack(bool inversAlive = false, bool isAttackerPlayer = false) const;
+        bool isAttackableByAOE(bool requireDeadTarget = false, bool isCasterPlayer = false) const;
+        bool isPassiveToHostile() const { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC); }
+        
+        virtual bool IsInWater() const;
+        virtual bool IsUnderWater() const;
+        bool isInAccessablePlaceFor(Creature const* c) const;
+
+        void SendHealSpellLog(Unit *pVictim, uint32 SpellID, uint32 Damage, bool critical = false);
+        void SendEnvironmentalDamageLog(uint8 type, uint32 damage, uint32 absorb, int32 resist) const;
+        uint32 SpellNonMeleeDamageLog(Unit *pVictim, uint32 spellID, uint32 damage);
+        
+        void SendPlaySpellVisual(uint32 id) const;
+
+        void SendAttackStateUpdate(CalcDamageInfo *damageInfo) const;
+        void SendSpellMiss(Unit *target, uint32 spellID, SpellMissInfo missInfo);
+
+        void NearTeleportTo(WorldLocation location, uint32_t teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_UNSUMMON_PET);
+        void NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
+        void NearLandTo(float x, float y, float z, float orientation);
+        void TeleportPositionRelocation(float x, float y, float z, float o);
+        void MonsterMoveWithSpeed(float x, float y, float z, float o, float speed, uint32 options);
+        void MonsterMove(float x, float y, float z); // Utilise vitesse de course
+
+        // recommend use MonsterMove/MonsterMoveWithSpeed for most case that correctly work with movegens
+        // if used additional args in ... part then floats must explicitly casted to double
+        void SendHeartBeat(bool includingSelf = true);
+        bool IsRooted() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_ROOT); }
+        virtual void SetFly(bool enable);
+        void SetWalk(bool enable, bool asDefault = true);
+        void SetLevitate(bool enable);
+        virtual void SetFeatherFall(bool /*enabled*/);
+        virtual void SetHover(bool /*enabled*/);
+
+        virtual bool CanWalk() const = 0;
+        virtual bool CanFly() const = 0;
+        virtual bool CanSwim() const = 0;
     private:
         UnitVisibility m_Visibility;
         Position m_last_notified_position;
@@ -725,10 +774,7 @@ class Unit : public WorldObject
         void ClearDiminishings() { m_Diminishing.clear(); }
 
         void SendSpellGo(Unit* target, uint32 spellId) const;
-        void SendPlaySpellVisual(uint32 id) const;
         void SendPeriodicAuraLog(SpellPeriodicAuraLogInfo *pInfo, AuraType auraTypeOverride = SPELL_AURA_NONE) const;
-        void SendEnvironmentalDamageLog(uint8 type, uint32 damage, uint32 absorb, int32 resist) const;
-        uint32 SpellNonMeleeDamageLog(Unit* pVictim, uint32 spellID, uint32 damage);
 
         SpellAuraHolder* AddAura(uint32 spellId, uint32 addAuraFlags = 0, Unit* pCaster = nullptr);
         SpellAuraHolder* RefreshAura(uint32 spellId, int32 duration);
@@ -781,7 +827,6 @@ class Unit : public WorldObject
         void RemoveAllAurasOnDeath();
         void RemoveArenaAuras(bool onleave, AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
         bool RemoveAuraDueToDebuffLimit(SpellAuraHolder* currentAura); // Returns true if we remove 'currentAura'
-        void RemoveFearEffectsByDamageTaken(uint32 damage, uint32 exceptSpellId, DamageEffectType damagetype);
         uint32 GetNegativeAurasCount(); // Limit debuffs to 16
 
         // removing specific aura FROM stack by diff reasons and selections
@@ -849,12 +894,8 @@ class Unit : public WorldObject
         bool HasAura(uint32 spellId, SpellEffectIndex effIndex) const;
         bool HasAura(uint32 spellId) const { return m_spellAuraHolders.find(spellId) != m_spellAuraHolders.end(); }
         bool virtual HasSpell(uint32 /*spellID*/) const { return false; }
-        bool HasStealthAura()      const { return HasAuraType(SPELL_AURA_MOD_STEALTH); }
-        bool HasInvisibilityAura() const { return HasAuraType(SPELL_AURA_MOD_INVISIBILITY); }
         bool IsFeared()  const { return HasAuraType(SPELL_AURA_MOD_FEAR); }
         bool IsInRoots() const { return HasAuraType(SPELL_AURA_MOD_ROOT); }
-        bool IsPolymorphed() const;
-        bool IsImmuneToSchoolMask(uint32 schoolMask) const;
         bool IsImmuneToMechanic(Mechanics mechanic) const;
         bool IsFrozen() const { return HasAuraState(AURA_STATE_FROZEN); }
 
@@ -1052,7 +1093,6 @@ class Unit : public WorldObject
 		float GetSpeedRatePersistance(UnitMoveType mtype);
 
         void AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType = BASE_ATTACK, bool checkLoS = true, bool extra = false);
-        void SendAttackStateUpdate(CalcDamageInfo *damageInfo) const;
         void SendAttackStateUpdate(uint32 HitInfo, Unit* target, uint8 SwingType, SpellSchoolMask damageSchoolMask, uint32 Damage, uint32 AbsorbDamage, int32 Resist, VictimState TargetState, uint32 BlockedAmount) const;
         void SendMeleeAttackStop(Unit* victim) const;
         void SendMeleeAttackStart(Unit* pVictim) const;
@@ -1083,6 +1123,8 @@ class Unit : public WorldObject
         void AddExtraAttackOnUpdate() { m_doExtraAttacks = true; };
 
         bool CanAttack(Unit const* target, bool force = false) const;
+        bool IsTargetableForAttack(bool inversAlive = false, bool isAttackerPlayer = false) const;
+        bool IsAttackableByAOE(bool requireDeadTarget = false, bool isCasterPlayer = false) const;
         bool IsTargetable(bool forAttack, bool isAttackerPlayer, bool forAoE = false, bool checkAlive = true) const;
 
         bool CanReachWithMeleeAutoAttack(Unit const* pVictim, float flat_mod = 0.0f) const;
@@ -1370,27 +1412,21 @@ class Unit : public WorldObject
     protected:
         MotionMaster i_motionMaster;
     public:
-        void SendHeartBeat(bool includingSelf = true);
         void SendMovementPacket(uint16 opcode, bool includingSelf = true);
-        virtual void SetFly(bool enable);
         
         void SetRooted(bool apply);
         void SetRootedReal(bool apply);
-        bool IsRooted() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_ROOT); }
 
         void SetWaterWalking(bool apply);
         void SetWaterWalkingReal(bool apply);
         bool IsWaterWalking() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_WATERWALKING); }
-
-        void SetHover(bool apply);
+        
         void SetHoverReal(bool apply);
         bool IsHovering() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_HOVER); }
-
-        void SetFeatherFall(bool apply);
+        
         void SetFeatherFallReal(bool apply);
         bool IsFallingSlow() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_SAFE_FALL); }
-
-        void SetLevitate(bool apply);
+        
         bool IsLevitating() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_LEVITATING); }
 
         void KnockBackFrom(WorldObject* target, float horizontalSpeed, float verticalSpeed);
@@ -1419,8 +1455,7 @@ class Unit : public WorldObject
         bool FindPendingMovementKnockbackChange(MovementInfo& movementInfo, uint32 movementCounter);
         bool FindPendingMovementSpeedChange(float speedReceived, uint32 movementCounter, UnitMoveType moveType);
         void CheckPendingMovementChanges();
-
-        void SetWalk(bool enable, bool asDefault = true);
+        
         void SetSpeedRate(UnitMoveType mtype, float rate);
         void SetSpeedRateReal(UnitMoveType mtype, float rate);
         void UpdateSpeed(UnitMoveType mtype, bool forced, float ratio = 1.0f);
@@ -1435,15 +1470,8 @@ class Unit : public WorldObject
         float GetJumpInitialSpeed() const { return m_jumpInitialSpeed; }
 
         // Terrain checks
-        virtual bool IsInWater() const;
-        virtual bool IsUnderWater() const;
         bool IsReachableBySwmming() const;
         bool IsInAccessablePlaceFor(Creature const* c) const;
-
-        // Inhabit type checks
-        virtual bool CanWalk() const = 0;
-        virtual bool CanFly() const = 0;
-        virtual bool CanSwim() const = 0;
         
         void SetInFront(Unit const* pTarget);
         void SetFacingTo(float ori);
@@ -1457,13 +1485,8 @@ class Unit : public WorldObject
 
         template <class T>
         void NearTeleportTo(T const& pos, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET) { NearTeleportTo(pos.x, pos.y, pos.z, pos.o, teleportOptions); }
-        void NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);
-        void NearLandTo(float x, float y, float z, float orientation);
         template <class T>
         void TeleportPositionRelocation(T const& pos) { TeleportPositionRelocation(pos.x, pos.y, pos.z, pos.o); }
-        void TeleportPositionRelocation(float x, float y, float z, float o);
-        void MonsterMove(float x, float y, float z);
-        void MonsterMoveWithSpeed(float x, float y, float z, float o, float speed, uint32 options);
         bool IsStopped() const { return !(HasUnitState(UNIT_STAT_MOVING)); }
         void StopMoving(bool force = false);
         void DisableSpline();

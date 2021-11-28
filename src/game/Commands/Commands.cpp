@@ -6539,6 +6539,30 @@ bool ChatHandler::HandleGoCommand(char* args)
     return HandleGoHelper(pPlayer, mapid, x, y, &z);
 }
 
+/**
+ * \brief Teleports the player to their corpse.
+ * \return true if the command was successful
+ */
+bool ChatHandler::HandleGoCorpseCommand(char*)
+{
+    const auto player = m_session->GetPlayer();
+    if (player->IsAlive())
+    {
+        return false;
+    }
+
+    const auto corpse = player->GetCorpse();
+    if (!corpse)
+    {
+        return false;
+    }
+
+    WorldLocation corpseLocation;
+    corpse->GetPosition(corpseLocation);
+    player->TeleportTo(corpseLocation);
+    return true;
+}
+
 //teleport at coordinates, including Z
 bool ChatHandler::HandleGoXYZCommand(char* args)
 {
