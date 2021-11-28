@@ -4722,4 +4722,44 @@ delete from quest_template where entry = 40296;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40295,40296,2,16,50,45,0,0,'Report to the Archdruid','Archdruid Runetotem needs to hear about this! He will know what to do and how we should approach them. Go, fly to Thunder Bluff and tell the Archdruid about what you have seen here. Make haste, time is of the essence.','Report to Hamuul Runetotem.','Blue Dragonflight in such numbers. This is really worrying.','Thank you, young one. Talom did well, advising you to come to me.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7000,750,81,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (92199, 40296);
-replace into creature_involvedrelation (id, quest) values (1489, 40296);
+replace into creature_involvedrelation (id, quest) values (5769, 40296);
+
+-- Stop the Dragonflight --
+delete from quest_template where entry = 40297;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40296,40297,2,16,56,46,0,0,'Stop the Dragonflight','The Blue Dragonflight has been in Azshara since time immemorial, but their recent actions seem strange. They had been there to safeguard ancient artifacts, not drain the leylines of life and magic. In better, simpler times, I would advise you to contact them and try to negotiate.\n\nThose times are over, and we need to act. Go back to Azshara and gather a strong party. Venture to Lake Mennar, and slay their kin. This will thin the numbers in their ranks, and we will have time to prepare a better response to their actions.\n\nA sad thing that the Dragonflight has begun to mess with the very ways of Azshara`s natural magic. When it is done, return to Yharg`osh at Bloodfist Point.','Slay Tarangos.','So, have you done it?','The elements are calmed, for now. Thank you, $c. Your help will never be forgotten. We owe you much.',0,0,0,0,0,0,0,0,6130,7,6129,3,6131,7,0,0,0,0,25000,6800,81,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60405,1,60406,1,60407,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (5769, 40297);
+replace into creature_involvedrelation (id, quest) values (92197, 40297);
+
+update quest_template set type = 1 where entry = 40297;
+
+replace into item_template values
+ ('60405', '4', '4', 'Mantle of Dag\'grak', '', '5928', '3', '0', '1', '54668', '13667', '3', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '11', '6', '13',
+ '7', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '457', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '80', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60406', '4', '1', 'Spiritual Mitts', '', '16633', '3', '0', '1', '37472', '9368', '10', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '11', '7', '5',
+ '3', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '52', '0', '0', '0',
+ '0', '0', '0', '7677', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '30', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60407', '4', '3', 'Legplates of the Raider', '', '22481', '3', '0', '1', '102740', '25685', '7', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '10', '3', '18',
+ '5', '13', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '297', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '90', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
