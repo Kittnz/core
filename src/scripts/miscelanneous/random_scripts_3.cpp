@@ -1939,9 +1939,73 @@ bool GossipSelect_npc_seer_bolukk(Player* pPlayer, Creature* pCreature, uint32 u
     return true;
 }
 
+bool QuestAccept_npc_duke_nargelas(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40280) // Ways of Magic
+    {
+        if (pPlayer->AddItem(60189)) first_item_added = true;
+        if (pPlayer->AddItem(60190)) second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            pPlayer->RemoveQuest(40280);
+            pPlayer->SetQuestStatus(40280, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
+
+bool QuestAccept_npc_pierce_shackleton(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40282) // Darlthos Legacy
+    {
+        if (pPlayer->AddItem(60189)) first_item_added = true;
+        if (pPlayer->AddItem(60391)) second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            pPlayer->RemoveQuest(40282);
+            pPlayer->SetQuestStatus(40282, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_pierce_shackleton";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_pierce_shackleton;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_duke_nargelas";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_duke_nargelas;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_seer_bolukk";
