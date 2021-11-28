@@ -4564,3 +4564,22 @@ replace into gameobject_template values
 delete from gameobject_loot_template where entry = 2010857;
 replace into gameobject_loot_template values 
 (2010857,60197,-100,0,1,1,0);
+
+-- The Search for the Edge --
+delete from quest_template where entry = 40287;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40286,40287,2,16,52,45,0,0,'The Search for the Edge','Our Blades, they do not break easily. It was cut into two pieces on purpose.\n\nFrom all of the possible forces in Azshara, only the Naga have the technology to do so. Maybe, just maybe, they still have the second part\n\nIf it is anywhere, it must be located on the Shattered Strand, no doubt kept as some trophy, or prized possesion.  Locate it, and bring back the edge of the sword to me!','Search the Shattered Strand in search of the second part of the Blade for Katokar Bladewind at Bloodfist Point.','There is only sorrow to be found within Azshara.','You found it. This Blade will be whole again, mark my words $N.',60198,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5600,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92024, 40287);
+replace into creature_involvedrelation (id, quest) values (92024, 40287);
+
+delete from item_template where entry = 60198;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60198,23259,'Broken Blademaster’s Edge',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Orcish writings cover the blade: a language long forgotten, known only to the Blademasters of old.',0);
+
+delete from gameobject_template where entry = 2010858;
+replace into gameobject_template values
+(2010858,3,23432,'Naga Chest of Treasure',0,4,1,43,2010858,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010858;
+replace into gameobject_loot_template values 
+(2010858,60198,-100,0,1,1,0);
