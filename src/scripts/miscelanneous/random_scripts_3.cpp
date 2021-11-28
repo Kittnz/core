@@ -2020,9 +2020,43 @@ bool QuestAccept_npc_pierce_shackleton(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool GossipHello_npc_katokar_bladewind(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40289) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tak'gar Deephate.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(92196, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_katokar_bladewind(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("You have honored the dead, may his soul be guided safely to his fellow masters.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60341))
+                player->KilledMonster(dummy_bunny, ObjectGuid());
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_katokar_bladewind";
+    newscript->pGossipHello = &GossipHello_npc_katokar_bladewind;
+    newscript->pGossipSelect = &GossipSelect_npc_katokar_bladewind;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_pierce_shackleton";

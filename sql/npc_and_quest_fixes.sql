@@ -4540,8 +4540,8 @@ replace into creature_loot_template values
 delete from quest_template where entry = 40285;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40285,2,16,52,45,0,0,'A Blademaster’s Request','My name is Katokar. Katokar Bladewind. I was a Blademaster of the Burning Blade. Now, I am a Blademaster of the Horde.\n\nI came to Azshara to avenge the death of a fallen comrade. During the Third War, he was here, fighting the Burning Legion. In the end, we won. Archimonde was defeated. But my friend died in a glorious battle.\n\nI have killed hundreds of demons since I came here, yet I am still restless. I need to find a Blade that belonged to him, he was a Blademaster like myself. A Blademaster has to be buried with his blade. Yet, my progress thus far has been fruitless. I found his broken corpse near the eastern shore, I know of a great tower watched by a keeper on the far eastern coast of Azshara, perhaps he may know more.','Speak with the \'keeper\' on the far eastern coast of Azshara, and return to Katokar with news.','I will find his Blade.','He met with my friend? I know I should be cautious to heed the words of a stranger, but I trust him.\n\nIf he says the last place he remembers seeing him was at the Temple of Arrkoran, then that must be it.',0,0,0,0,0,0,0,0,60340,1,0,0,0,0,0,0,0,0,0,4600,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak with keeper Iselus');
 
-replace into creature_questrelation (id, quest) values (92024, 40285);
-replace into creature_involvedrelation (id, quest) values (92024, 40285);
+replace into creature_questrelation (id, quest) values (92196, 40285);
+replace into creature_involvedrelation (id, quest) values (92196, 40285);
 
 delete from creature_template where entry = 60340;
 replace into creature_template (entry, name, display_id1) values (60340, 'quest_40285_dummy_triger', 328);
@@ -4550,8 +4550,8 @@ replace into creature_template (entry, name, display_id1) values (60340, 'quest_
 delete from quest_template where entry = 40286;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40285,40286,2,16,52,45,0,0,'The Search for the Blade','The Temple of Arrkoran...\n\n<Katokar would seem almost distant for a moment as his mind thought>.\n\n This must be the place $N, it must be. I have no other leads, venture deep within the Temple, and seek out his blade, if it is anywhere, then it must be there. You can find this temple far to the south east, it is massive, and cannot be missed. Be careful in your searching, I am sure a terrible evil lurks inside.','Search for the sword that could have belonged to a fallen Blademaster inside the Temple of Arrkoran.','I will find his Blade.','It’s broken...',60397,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12000,5150,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
-replace into creature_questrelation (id, quest) values (92024, 40286);
-replace into creature_involvedrelation (id, quest) values (92024, 40286);
+replace into creature_questrelation (id, quest) values (92196, 40286);
+replace into creature_involvedrelation (id, quest) values (92196, 40286);
 
 delete from item_template where entry = 60397;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
@@ -4569,8 +4569,8 @@ replace into gameobject_loot_template values
 delete from quest_template where entry = 40287;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40286,40287,2,16,52,45,0,0,'The Search for the Edge','Our Blades, they do not break easily. It was cut into two pieces on purpose.\n\nFrom all of the possible forces in Azshara, only the Naga have the technology to do so. Maybe, just maybe, they still have the second part\n\nIf it is anywhere, it must be located on the Shattered Strand, no doubt kept as some trophy, or prized possesion.  Locate it, and bring back the edge of the sword to me!','Search the Shattered Strand in search of the second part of the Blade for Katokar Bladewind at Bloodfist Point.','There is only sorrow to be found within Azshara.','You found it. This Blade will be whole again, mark my words $N.',60398,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5600,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
-replace into creature_questrelation (id, quest) values (92024, 40287);
-replace into creature_involvedrelation (id, quest) values (92024, 40287);
+replace into creature_questrelation (id, quest) values (92196, 40287);
+replace into creature_involvedrelation (id, quest) values (92196, 40287);
 
 delete from item_template where entry = 60398;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
@@ -4588,8 +4588,8 @@ replace into gameobject_loot_template values
 delete from quest_template where entry = 40288;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40287,40288,2,16,52,45,0,0,'Refueling the Blade','Now, there is one last step, the Blade needs to be reforged.\n\nWe will need a powerful conduit, a source of unimaginable fel energy to make the blade whole again. This is the way of the Blademaster. Venture to the forests of Felwood where demons still lurk. Gather their Fel energies and return to me, so we can reforge the Blade.\n\nThe demonic sanctuary of Jaedenar will be a place that holds such energies, look there.','Gather 10 Fel Conduits from demons in Felwood for Katokar Bladewind at Bloodfist Point in Azshara.','The Fortress of Jaedenar is the most powerful bastion of the Legion in Felwood, strike them down.','<Katokar Bladewind would take his time studying the fel energy before a sigh of relief would escape him>.\n\nThis should be enough, you\'ve done well.',60399,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5250,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
-replace into creature_questrelation (id, quest) values (92024, 40288);
-replace into creature_involvedrelation (id, quest) values (92024, 40288);
+replace into creature_questrelation (id, quest) values (92196, 40288);
+replace into creature_involvedrelation (id, quest) values (92196, 40288);
 
 delete from item_template where entry = 60399;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
@@ -4600,3 +4600,26 @@ replace into creature_loot_template values
 (9862,60399,-100,1,1,1,0),
 (7126,60399,-100,1,1,1,0),
 (7125,60399,-100,1,1,1,0);
+
+-- To Honor the Forgotten --
+delete from quest_template where entry = 40289;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40288,40289,2,16,52,45,0,0,'To Honor the Forgotten','The last thing I require from you is to honor the dead, you have done much work, work that I could not fulfill, so I ask you to honor the forgotten for me. I will work to reforge the blade, though it will take quite a while until it is perfectly balanced.\n\nSpeak with me, and utter the name of the fallen so that his spirit may walk freely amongst his fellow warriors, so that you may pass on his warrior spirit.\n\nHe was named \'Tak\'gar Deephate\'.','Speak with Katokar Bladewind, and utter the name of the dead to honor them.','This is important to me $N.','It is done then, and with that, he shall walk freely with those he regarded as heroes. He shall be buried with his blade, I can guarentee that, you have put my mind, and my heart at rest $N. Take my Binding as thanks for the work I could not do.\n\nIt is not often that someone comes and offers to aid in such a manner, your spirit is truly that of great heroes, bear my Binding with pride, and honor.',0,0,0,0,0,0,0,0,60341,1,0,0,0,0,0,0,0,0,0,1500,76,150,0,0,0,0,0,0,0,0,0,60400,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Utter the name of the dead');
+
+replace into creature_questrelation (id, quest) values (92196, 40289);
+replace into creature_involvedrelation (id, quest) values (92196, 40289);
+
+update creature_template set script_name = 'npc_katokar_bladewind' where entry = 92196;
+
+delete from creature_template where entry = 60341;
+replace into creature_template (entry, name, display_id1) values (60341, 'quest_40289_dummy_triger', 328);
+
+replace into item_template values
+ ('60400', '4', '0', 'Blademaster\'s Binding', '', '24087', '2', '0', '1', '29068', '7267', '11', '-1', '-1', '57',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '7', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
