@@ -4548,14 +4548,14 @@ replace into creature_template (entry, name, display_id1) values (60340, 'quest_
 
 -- The Search for the Blade --
 delete from quest_template where entry = 40286;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40285,40286,2,16,52,45,0,0,'The Search for the Blade','The Temple of Arrkoran...\n\n<Katokar would seem almost distant for a moment as his mind thought>.\n\n This must be the place $N, it must be. I have no other leads, venture deep within the Temple, and seek out his blade, if it is anywhere, then it must be there. You can find this temple far to the south east, it is massive, and cannot be missed. Be careful in your searching, I am sure a terrible evil lurks inside.','Search for the sword that could have belonged to a fallen Blademaster inside the Temple of Arrkoran.','I will find his Blade.','It’s broken...',60197,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12000,5150,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40285,40286,2,16,52,45,0,0,'The Search for the Blade','The Temple of Arrkoran...\n\n<Katokar would seem almost distant for a moment as his mind thought>.\n\n This must be the place $N, it must be. I have no other leads, venture deep within the Temple, and seek out his blade, if it is anywhere, then it must be there. You can find this temple far to the south east, it is massive, and cannot be missed. Be careful in your searching, I am sure a terrible evil lurks inside.','Search for the sword that could have belonged to a fallen Blademaster inside the Temple of Arrkoran.','I will find his Blade.','It’s broken...',60397,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12000,5150,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (92024, 40286);
 replace into creature_involvedrelation (id, quest) values (92024, 40286);
 
-delete from item_template where entry = 60197;
+delete from item_template where entry = 60397;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
-(60197,40029,'Broken Blademaster’s Sword',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Broken, but still sharp.',0);
+(60397,40029,'Broken Blademaster’s Sword',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Broken, but still sharp.',0);
 
 delete from gameobject_template where entry = 2010857;
 replace into gameobject_template values
@@ -4563,18 +4563,18 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010857;
 replace into gameobject_loot_template values 
-(2010857,60197,-100,0,1,1,0);
+(2010857,60397,-100,0,1,1,0);
 
 -- The Search for the Edge --
 delete from quest_template where entry = 40287;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40286,40287,2,16,52,45,0,0,'The Search for the Edge','Our Blades, they do not break easily. It was cut into two pieces on purpose.\n\nFrom all of the possible forces in Azshara, only the Naga have the technology to do so. Maybe, just maybe, they still have the second part\n\nIf it is anywhere, it must be located on the Shattered Strand, no doubt kept as some trophy, or prized possesion.  Locate it, and bring back the edge of the sword to me!','Search the Shattered Strand in search of the second part of the Blade for Katokar Bladewind at Bloodfist Point.','There is only sorrow to be found within Azshara.','You found it. This Blade will be whole again, mark my words $N.',60198,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5600,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40286,40287,2,16,52,45,0,0,'The Search for the Edge','Our Blades, they do not break easily. It was cut into two pieces on purpose.\n\nFrom all of the possible forces in Azshara, only the Naga have the technology to do so. Maybe, just maybe, they still have the second part\n\nIf it is anywhere, it must be located on the Shattered Strand, no doubt kept as some trophy, or prized possesion.  Locate it, and bring back the edge of the sword to me!','Search the Shattered Strand in search of the second part of the Blade for Katokar Bladewind at Bloodfist Point.','There is only sorrow to be found within Azshara.','You found it. This Blade will be whole again, mark my words $N.',60398,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5600,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (92024, 40287);
 replace into creature_involvedrelation (id, quest) values (92024, 40287);
 
-delete from item_template where entry = 60198;
+delete from item_template where entry = 60398;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
-(60198,23259,'Broken Blademaster’s Edge',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Orcish writings cover the blade: a language long forgotten, known only to the Blademasters of old.',0);
+(60398,23259,'Broken Blademaster’s Edge',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Orcish writings cover the blade: a language long forgotten, known only to the Blademasters of old.',0);
 
 delete from gameobject_template where entry = 2010858;
 replace into gameobject_template values
@@ -4582,4 +4582,21 @@ replace into gameobject_template values
 
 delete from gameobject_loot_template where entry = 2010858;
 replace into gameobject_loot_template values 
-(2010858,60198,-100,0,1,1,0);
+(2010858,60398,-100,0,1,1,0);
+
+-- Refueling the Blade --
+delete from quest_template where entry = 40288;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40287,40288,2,16,52,45,0,0,'Refueling the Blade','Now, there is one last step, the Blade needs to be reforged.\n\nWe will need a powerful conduit, a source of unimaginable fel energy to make the blade whole again. This is the way of the Blademaster. Venture to the forests of Felwood where demons still lurk. Gather their Fel energies and return to me, so we can reforge the Blade.\n\nThe demonic sanctuary of Jaedenar will be a place that holds such energies, look there.','Gather 10 Fel Conduits from demons in Felwood for Katokar Bladewind at Bloodfist Point in Azshara.','The Fortress of Jaedenar is the most powerful bastion of the Legion in Felwood, strike them down.','<Katokar Bladewind would take his time studying the fel energy before a sigh of relief would escape him>.\n\nThis should be enough, you\'ve done well.',60399,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5250,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92024, 40288);
+replace into creature_involvedrelation (id, quest) values (92024, 40288);
+
+delete from item_template where entry = 60399;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60399,1364,'Fel Conduit',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60399 and entry between 7125 and 9862;
+replace into creature_loot_template values
+(9862,60399,-100,1,1,1,0),
+(7126,60399,-100,1,1,1,0),
+(7125,60399,-100,1,1,1,0);
