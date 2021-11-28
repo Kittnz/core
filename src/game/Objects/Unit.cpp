@@ -9913,8 +9913,8 @@ float Unit::GetLeewayBonusRangeForTargets(Unit const* aggressor, Unit const* tar
     if (aggressorPlayer && targetPlayer) // PvP, full effect.
         return moving ? LEEWAY_BONUS_RANGE : 0.0f;
 
-    if (aggressorPlayer) // PvE with player as aggressor, full effect.
-        return moving ? LEEWAY_BONUS_RANGE : 0.0f;
+   // if (aggressorPlayer) // PvE with player as aggressor, full effect.
+    //    return moving ? LEEWAY_BONUS_RANGE : 0.0f;
 
     // PvE with creature as aggressor, no effect.
     return 0.0f;
