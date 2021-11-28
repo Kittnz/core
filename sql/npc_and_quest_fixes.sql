@@ -4685,3 +4685,18 @@ replace into creature_loot_template values
 (6117,60404,-80,1,1,1,0),
 (6116,60404,-80,1,1,1,0),
 (7864,60404,-80,1,1,1,0);
+
+-- Ritual of the Farseer --
+delete from quest_template where entry = 40293;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40292,40293,2,16,50,45,0,0,'Ritual of the Farseer','I am ready, $c. Let us go outside to commune with the spirits.','Wait until Farseer Yharg’osh finishes the ritual.','The ritual must not be disturbed.','The vision gave us more questions than answers. The city must’ve been Zin-Azshari, the dying peoples must’ve been Highborne of the old. The wave represented the Sundering. It was a warning. A warning, that all of this can happen again.',0,0,0,0,0,0,0,0,60342,1,0,0,0,0,0,0,0,0,3000,1000,76,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The ritual has been performed');
+
+replace into creature_questrelation (id, quest) values (92197, 40293);
+replace into creature_involvedrelation (id, quest) values (92197, 40293);
+
+update creature_template set script_name = 'npc_yhargosh' where entry = 92197;
+
+delete from creature_template where entry = 60342;
+replace into creature_template (entry, name, display_id1) values (60342, 'quest_40293_dummy_triger', 328);
+
+
+
