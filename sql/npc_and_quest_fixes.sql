@@ -4535,3 +4535,13 @@ replace into creature_loot_template values
 (6200,60396,-80,1,1,1,0),
 (6201,60396,-80,1,1,1,0),
 (6202,60396,-80,1,1,1,0);
+
+-- A Blademaster’s Request --
+delete from quest_template where entry = 40285;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40285,2,16,52,45,0,0,'A Blademaster’s Request','My name is Katokar. Katokar Bladewind. I was a Blademaster of the Burning Blade. Now, I am a Blademaster of the Horde.\n\nI came to Azshara to avenge the death of a fallen comrade. During the Third War, he was here, fighting the Burning Legion. In the end, we won. Archimonde was defeated. But my friend died in a glorious battle.\n\nI have killed hundreds of demons since I came here, yet I am still restless. I need to find a Blade that belonged to him, he was a Blademaster like myself. A Blademaster has to be buried with his blade. Yet, my progress thus far has been fruitless. I found his broken corpse near the eastern shore, I know of a great tower watched by a keeper on the far eastern coast of Azshara, perhaps he may know more.','Speak with the \'keeper\' on the far eastern coast of Azshara, and return to Katokar with news.','I will find his Blade.','He met with my friend? I know I should be cautious to heed the words of a stranger, but I trust him.\n\nIf he says the last place he remembers seeing him was at the Temple of Arrkoran, then that must be it.',0,0,0,0,0,0,0,0,60340,1,0,0,0,0,0,0,0,0,0,4600,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak with keeper Iselus');
+
+replace into creature_questrelation (id, quest) values (92024, 40285);
+replace into creature_involvedrelation (id, quest) values (92024, 40285);
+
+delete from creature_template where entry = 60340;
+replace into creature_template (entry, name, display_id1) values (60340, 'quest_40285_dummy_triger', 328);
