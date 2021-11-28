@@ -89,4 +89,5 @@ UPDATE creature_template set subname = 'Wardens of Time' where subname = 'Keeper
 
 UPDATE item_template set buy_price = 7500, sell_price = 1500 where entry = 61000;
 UPDATE item_template set description = 'Lost time is never found again.' where entry = 51252;
+UPDATE item_template set name = 'Time Warden\'s Tabard', quality = 1 where entry = 80300;
 
