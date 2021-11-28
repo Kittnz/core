@@ -4639,3 +4639,22 @@ replace into creature_loot_template values
 (8759,60401,-60,1,1,1,0),
 (8761,60401,-60,1,1,1,0),
 (8760,60401,-60,1,1,1,0);
+
+-- Claws for Bloodfist Point --
+delete from quest_template where entry = 40291;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40290,40291,2,16,50,40,0,0,'Claws for Bloodfist Point','Anyone could kill a stag, they are but deers with sharp horns! Hippogryph, on the other hand, is a different thing. Do you think you have what it takes? If so then bring me a handful of Thunderhead Claws. Thunderheads are local Hippogryphs, so wild and ferocious, that even the accursed Elves stay away from them, their claws would make great improvised weapons should things get rough.','Obtain 16 Thunderhead Claws.','Scared already?','You impress me. It’s not easy to impress old Nulda. I`ll make sure to put the claws to good use, hope to see you around.',60402,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14000,4850,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92202, 40291);
+replace into creature_involvedrelation (id, quest) values (92202, 40291);
+
+delete from item_template where entry = 60402;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60402,16464,'Thunderhead Claw',12,1,2048,1,-1,-1,1,16,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60402 and entry between 6375 and 6380;
+replace into creature_loot_template values
+(6380,60402,-80,1,1,1,0),
+(6375,60402,-80,1,1,1,0),
+(6379,60402,-80,1,1,1,0),
+(6378,60402,-80,1,1,1,0),
+(6377,60402,-80,1,1,1,0);
