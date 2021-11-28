@@ -1764,6 +1764,33 @@ bool QuestAccept_npc_iselus(Player* pPlayer, Creature* pQuestGiver, Quest const*
     return false;
 }
 
+bool GossipHello_npc_iselus(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40285) == QUEST_STATUS_INCOMPLETE)
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I come asking for help in finding someone, have you met an orcish blademaster years ago?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(91722, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_iselus(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("Hmm, now that you've mentioned it, I recall such a figure, he was a muscular orc, though quite friendly. This was during the demonic invasion a few years back, he seeked battle within the Temple of Arrkoran the last I seen him, hopefully this helps your search.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60340))
+                player->KilledMonster(dummy_bunny, ObjectGuid());
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 bool GOHello_go_way_stone(Player* pPlayer, GameObject* pGo)
 {
     if (!pPlayer->HasItemCount(60372, 1, false))
@@ -2034,6 +2061,8 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_iselus";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_iselus;
+    newscript->pGossipHello = &GossipHello_npc_iselus;
+    newscript->pGossipSelect = &GossipSelect_npc_iselus;
     newscript->RegisterSelf();
 
     newscript = new Script;
