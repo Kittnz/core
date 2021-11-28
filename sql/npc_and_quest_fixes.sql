@@ -4623,3 +4623,19 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
 
+-- Food for Bloodfist Point --
+delete from quest_template where entry = 40290;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40290,2,16,50,40,0,0,'Food for Bloodfist Point','Bah! You, yes, you $c! Why are you standing there like a drunk peon? You want to stay here, get to work!\n\nWe need hides, weapons, wood, everything! But don\'t worry, old Nulda won\'t force you to build a second Orgrimmar here. Let\'s start small, bring me some meat from the local stag, let us see what you are made of.','Obtain 10 Stag Meat from the Mosshoof.','Got the meat? No? Then get moving.','This is some good game, $c. But I have more to ask from you.',60401,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4750,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92202, 40290);
+replace into creature_involvedrelation (id, quest) values (92202, 40290);
+
+delete from item_template where entry = 60401;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60401,25467,'Stag Flank',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60401 and entry between 8759 and 8761;
+replace into creature_loot_template values
+(8759,60401,-60,1,1,1,0),
+(8761,60401,-60,1,1,1,0),
+(8760,60401,-60,1,1,1,0);
