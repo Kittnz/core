@@ -4298,10 +4298,37 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 -- A Different Type of Lock --
 delete from quest_template where entry = 40279;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40279,2,85,19,15,0,0,'A Different Type of Lock','Do you realize what you are holding in your hands! <Vathras carefully snatches the box from you>. My, my, I wanted to inspect this beauty for a long time. No one aside from the royal family of House Darlthos has ever seen the contents of this box before. But what is this? <Vathras carefully inspects the sigil of the House Darlthos on top of the box> Ah, a shame. You see this sigil. It is an old yet powerful lock that protects the box from being harmed and opened in any way other than through the incantation and use of a special item by which it was sealed.\n\nSkilled as I\'m without the before mentioned method I will not be able to assist the Duke with this task. Send the Duke my regards and wish him luck in his endeavors, will you?','Return the Box to Duke Nargelas in Glenshire and inform him about your findings.','What did he say?','A magical lock? Of course, nothing can ever be so simple.',60189,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60189,1,0,110,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40278,40279,2,85,19,15,0,0,'A Different Type of Lock','Do you realize what you are holding in your hands! <Vathras carefully snatches the box from you>. My, my, I wanted to inspect this beauty for a long time. No one aside from the royal family of House Darlthos has ever seen the contents of this box before. But what is this? <Vathras carefully inspects the sigil of the House Darlthos on top of the box> Ah, a shame. You see this sigil. It is an old yet powerful lock that protects the box from being harmed and opened in any way other than through the incantation and use of a special item by which it was sealed.\n\nSkilled as I\'m without the before mentioned method I will not be able to assist the Duke with this task. Send the Duke my regards and wish him luck in his endeavors, will you?','Return the Box to Duke Nargelas in Glenshire and inform him about your findings.','What did he say?','A magical lock? Of course, nothing can ever be so simple.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60189,1,0,110,68,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (91753, 40279);
 replace into creature_involvedrelation (id, quest) values (91712, 40279);
 
--- delete from item_template where entry = 60190;
+-- Modopo <Wyvern Trainer> DisplayID: 2095, HP: 5000, Weapon: 3433, Faction: 104, Greetings text: I am a seasoned wyvern trainer, <class, it feels like yesterday when the Tauren and the Orcs united and aided them against the harpies. Since then they have been loyal friends to the Horde.
+-- Bristlefur, DisplayID: 18301, HP: 2500, Greetings text: Bristlefur snarls as it would lay eyes upon you, yet refrains from attacking. The beast appears to be quite bored on the ground, perhaps a snack would convince Bristlefur to take flight with you as its rider.
+
+REPLACE INTO creature_template VALUES
+(60538, 2095, 0, 0, 0, 'Modopo', 'Wyvern Trainer', 0, 58, 58, 5000, 5000, 0, 0, 3490, 104, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 374, 546, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60538, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 215, 286, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60539, 18301, 0, 0, 0, 'Bristlefur', '', 0, 58, 58, 2500, 2500, 0, 0, 3490, 104, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 374, 546, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 1, 0, 60539, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 215, 286, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20045; set @weapon_1 = 3433; set @weapon_2 = 0; set @creature = 60538;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41047; set @magic_number = 60538;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am a seasoned wyvern trainer, $c, it feels like yesterday when the Tauren and the Orcs united and aided them against the harpies. Since then they have been loyal friends to the Horde'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41048; set @magic_number = 60539;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Bristlefur snarls as it would lay eyes upon you, yet refrains from attacking. The beast appears to be quite bored on the ground, perhaps a snack would convince Bristlefur to take flight with you as its rider'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update creature_template set type = 6 where entry = 60524 and 60523;
+update item_template set name = 'Bone Chew Toy' where entry = 51751;
+update quest_template set objectives = 'Bring 5 Chunks of Boar Meat, 3 Dwarven Mild Cheese and 1 Chew Toy to Kelton\'s Riding Gryphon in the Goldshire.' where entry = 60070;
+
+
 -- delete from item_template where entry = 60191;

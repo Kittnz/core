@@ -232,7 +232,7 @@ struct npc_den_commanderAI : ScriptedAI
 
                 if (m_creature->GetPositionX() == -580.90f)
                 {
-                    m_creature->PMonsterSay("Brace for the attack! Watch your enemies movement!");
+                    m_creature->PMonsterSay("Brace for the attack! Watch your enemy's movement!");
                     m_uiDialogueTimer = 10000;
                     m_uiTick++;
                 }
@@ -285,7 +285,7 @@ struct npc_den_commanderAI : ScriptedAI
 
                 case 1:
                 {
-                    m_creature->PMonsterSay("The Night Elves are quick. Fire ahead of their movements!");
+                    m_creature->PMonsterSay("The night elves are quick. Fire ahead of their movements!");
                     uint32 rand = urand(25000, 60000);
                     m_uiDialogueTimer2 = rand;
                     m_uiTick2 = 0;
