@@ -8906,7 +8906,7 @@ void ObjectMgr::FillPossibleTransmogs()
         for (uint32 j = 1; j < MAX_ITEM_CLASS; ++j)
             for (uint32 k = 1; k < MAX_ITEM_SUBCLASS_WEAPON; ++k)
                 for (uint32 l = 1; l < MAX_INVTYPE; ++l)
-                    NumPossibleTransmogs[i][j][k][l].empty();
+                    NumPossibleTransmogs[i][j][k][l].clear();
 
     for (uint32 i = 1; i < sItemStorage.GetMaxEntry(); ++i)
     {
