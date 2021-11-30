@@ -1151,7 +1151,7 @@ void charactersDatabaseWorkerThread()
     CharacterDatabase.ThreadStart();
     while (!sWorld.IsStopped())
     {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::seconds(5));
         if (CharacterDatabase.HasAsyncQuery())
             continue;
         Player::DeleteOldCharacters();
