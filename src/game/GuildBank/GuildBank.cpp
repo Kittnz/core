@@ -1000,16 +1000,21 @@ void GuildBank::DepositItem(std::string msg) {
 	}
 
 	// change from game slots to server slots
+	// client bags = 0(backpack), 1, 2, 3, 4
+	// client slots = 1,2,3, ...
+	// server bags = 255(backpack), 19, 20, 21, 22
+	// server slots for bag 255 (backpack) = INVENTORY_SLOT_ITEM_START(23), INVENTORY_SLOT_ITEM_START + 1 + 2 + 3 ...
+	// server slots for other bags  = 0, 1, 2, 3...
 	if (playerBag == 0)
-		playerBag = 255;
+	{
+		playerBag = INVENTORY_SLOT_BAG_0; //255
+		playerSlot = playerSlot + INVENTORY_SLOT_ITEM_START - 1;
+	}
 	else
-		playerBag = playerBag + 18;
-
-	if (playerBag == 255)
-		playerSlot = playerSlot + 22;
-	else
+	{
+		playerBag = playerBag + INVENTORY_SLOT_BAG_START - 1;
 		playerSlot = playerSlot - 1;
-
+	}
 
 	Item* pItem = _player->GetItemByPos(playerBag, playerSlot);
 
