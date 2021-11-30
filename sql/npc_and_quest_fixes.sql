@@ -311,7 +311,7 @@ REPLACE INTO creature_template VALUES
 
 delete from item_template where entry = 60337;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
-(60337,14023,'Boltrus`s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+(60337,14023,'Boltrus\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 delete from creature_loot_template where item = 60337 and entry = 60513;
 replace into creature_loot_template values
@@ -2545,7 +2545,7 @@ delete from item_template where entry = 9572;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (9572,3669,'Glyphic Rune',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50516);
 
-REPLACE INTO page_text (`entry`, `text`, `next_page`) VALUES
+REPLACE INTO page_text (entry, text, next_page) VALUES
 (50516, 'Long ago high elves taught us the secrets of magic along with our human allies. They preached to us about rules and how magic can make ya go mad! But don\'t believe it. We\'re not like the elves; we don\'t have the same weaknesses. Just keep yourself on the right path and you\'ll find magic is as powerful a tool as it is a weapon.\n\nWhen you\'re ready, come find me inside Anvilmar. I\'ll be waiting for ya!\n\n- Marrek Stromnur, Mage Trainer.', 0);
 
 delete from creature_template where entry = 60516;
@@ -3054,21 +3054,21 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
  '0', '1', NULL);
  
- replace into `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (379546, 23, 5495, 'Meeting Stone', 35, 0, 1, 58, 60, 2562, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+ replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (379546, 23, 5495, 'Meeting Stone', 35, 0, 1, 58, 60, 2562, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
- replace into `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (379547, 23, 5495, 'Meeting Stone', 35, 0, 1, 32, 38, 5077, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+ replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (379547, 23, 5495, 'Meeting Stone', 35, 0, 1, 32, 38, 5077, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
- replace into `gameobject_template`  (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (379548, 23, 5494, 'Meeting Stone', 35, 0, 1, 58, 60, 717, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+ replace into gameobject_template  (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (379548, 23, 5494, 'Meeting Stone', 35, 0, 1, 58, 60, 717, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 update item_template set display_id = 34518 where entry = 60363;
 update item_template set display_id = 26571 where name = 'Soul of the Spider';
 
 delete from creature where guid = 2567316;
 
-replace into `creature_display_info_addon` (`display_id`) VALUES (18697);
+replace into creature_display_info_addon (display_id) VALUES (18697);
 
 -- Flightmasters Alliance / Horde
-replace into `creature_template` values 
+replace into creature_template values 
 
 (92943, 7905, 0, 0, 0, 'Vifri Brent', 'Gryphon Master', 0, 55, 55, 7842, 7842, 0, 0, 4500, 1011, 8, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 1, 0, 524290, 0, ''),
 (92942, 1652, 0, 0, 0, 'Grommok', 'Wind Rider Master', 4323, 55, 55, 7842, 7842, 0, 0, 4500, 29, 11, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 56.7312, 78.0054, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 3615, 0, 0, 1, 0, 524290, 0, '');
@@ -4521,7 +4521,7 @@ replace into item_template values
 
 -- Blood and Glory! --
 delete from quest_template where entry = 40284;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40284,2,16,52,42,0,0,'Blood and Glory!','South of Bloodfist Point, Satyrs have created an encampment. It has been a splinter in the eye for Bloodfist Point since the first day we arrived. Go, annihilate them, and bring me their horns.\n\nDo not be merciful, as they wouldn’t be for you. Kill all of them, leave no vile Satyr standing.','Obtain 12 Legashi Horns for Dag`grak Bloodfist at Bloodfist Point in Azshara.','The Legash Encampment is close to our base. I will be able to see you fighting, so don’t disappoint me. I want some fun.','Ha! I knew you had it! You are a strong $c, very strong. It reminds me of my youth, cutting down hordes of enemies!',60396,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4850,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40284,2,16,52,42,0,0,'Blood and Glory!','South of Bloodfist Point, Satyrs have created an encampment. It has been a splinter in the eye for Bloodfist Point since the first day we arrived. Go, annihilate them, and bring me their horns.\n\nDo not be merciful, as they wouldn’t be for you. Kill all of them, leave no vile Satyr standing.','Obtain 12 Legashi Horns for Dag\'grak Bloodfist at Bloodfist Point in Azshara.','The Legash Encampment is close to our base. I will be able to see you fighting, so don’t disappoint me. I want some fun.','Ha! I knew you had it! You are a strong $c, very strong. It reminds me of my youth, cutting down hordes of enemies!',60396,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4850,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (92024, 40284);
 replace into creature_involvedrelation (id, quest) values (92024, 40284);
@@ -4642,7 +4642,7 @@ replace into creature_loot_template values
 
 -- Claws for Bloodfist Point --
 delete from quest_template where entry = 40291;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40290,40291,2,16,50,40,0,0,'Claws for Bloodfist Point','Anyone could kill a stag, they are but deers with sharp horns! Hippogryph, on the other hand, is a different thing. Do you think you have what it takes? If so then bring me a handful of Thunderhead Claws. Thunderheads are local Hippogryphs, so wild and ferocious, that even the accursed Elves stay away from them, their claws would make great improvised weapons should things get rough.','Obtain 16 Thunderhead Claws.','Scared already?','You impress me. It’s not easy to impress old Nulda. I`ll make sure to put the claws to good use, hope to see you around.',60402,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14000,4850,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40290,40291,2,16,50,40,0,0,'Claws for Bloodfist Point','Anyone could kill a stag, they are but deers with sharp horns! Hippogryph, on the other hand, is a different thing. Do you think you have what it takes? If so then bring me a handful of Thunderhead Claws. Thunderheads are local Hippogryphs, so wild and ferocious, that even the accursed Elves stay away from them, their claws would make great improvised weapons should things get rough.','Obtain 16 Thunderhead Claws.','Scared already?','You impress me. It’s not easy to impress old Nulda. I\'ll make sure to put the claws to good use, hope to see you around.',60402,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14000,4850,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (92202, 40291);
 replace into creature_involvedrelation (id, quest) values (92202, 40291);
@@ -4661,7 +4661,7 @@ replace into creature_loot_template values
 
 -- Disturbance in the Air --
 delete from quest_template where entry = 40292;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40292,2,16,50,40,0,0,'Disturbance in the Air','Hail, $c, do you feel it? The magic, crackling around us, ever powerful, even after thousands of years. This place used to be Zin-Azshari, capital of the Night Elf Empire.\n\nNow, it`s nothing more than a wasteland, occupied by the Naga or even more sinister forces. However, I had a vision, great disturbance comes to this place, and if we do not stop it, the consequences will be... dire.\n\nUnfortunately, my vision was unclear, enveloped in the mists. I need to enter a shamanistic trance to see clearly. Yet, I lack proper ingredients to enter such a state. I would gather them myself, but I cannot leave the outpost for now. I don`t need much, only Mosshorn Antlers to pulverize, and a dozen Highborne Essence from the Highborne spirits.','Gather 5 Mosshorn Antlers and 12 Highborne Essences for Farseer Yharg`osh at Bloodfist Point in Azshara.','Have you found the ingredients yet?','Yes, this is all I need. Now, let me prepare the ritual.',60403,5,60404,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4650,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40292,2,16,50,40,0,0,'Disturbance in the Air','Hail, $c, do you feel it? The magic, crackling around us, ever powerful, even after thousands of years. This place used to be Zin-Azshari, capital of the Night Elf Empire.\n\nNow, it\'s nothing more than a wasteland, occupied by the Naga or even more sinister forces. However, I had a vision, great disturbance comes to this place, and if we do not stop it, the consequences will be... dire.\n\nUnfortunately, my vision was unclear, enveloped in the mists. I need to enter a shamanistic trance to see clearly. Yet, I lack proper ingredients to enter such a state. I would gather them myself, but I cannot leave the outpost for now. I don\'t need much, only Mosshorn Antlers to pulverize, and a dozen Highborne Essence from the Highborne spirits.','Gather 5 Mosshorn Antlers and 12 Highborne Essences for Farseer Yhargosh at Bloodfist Point in Azshara.','Have you found the ingredients yet?','Yes, this is all I need. Now, let me prepare the ritual.',60403,5,60404,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4650,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (92197, 40292);
 replace into creature_involvedrelation (id, quest) values (92197, 40292);
@@ -4726,7 +4726,7 @@ replace into creature_involvedrelation (id, quest) values (5769, 40296);
 
 -- Stop the Dragonflight --
 delete from quest_template where entry = 40297;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40296,40297,2,16,56,46,0,0,'Stop the Dragonflight','The Blue Dragonflight has been in Azshara since time immemorial, but their recent actions seem strange. They had been there to safeguard ancient artifacts, not drain the leylines of life and magic. In better, simpler times, I would advise you to contact them and try to negotiate.\n\nThose times are over, and we need to act. Go back to Azshara and gather a strong party. Venture to Lake Mennar, and slay their kin. This will thin the numbers in their ranks, and we will have time to prepare a better response to their actions.\n\nA sad thing that the Dragonflight has begun to mess with the very ways of Azshara`s natural magic. When it is done, return to Yharg`osh at Bloodfist Point.','Slay Tarangos.','So, have you done it?','The elements are calmed, for now. Thank you, $c. Your help will never be forgotten. We owe you much.',0,0,0,0,0,0,0,0,6130,7,6129,3,6131,7,0,0,0,0,25000,6800,81,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60405,1,60406,1,60407,1,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40296,40297,2,16,56,46,0,0,'Stop the Dragonflight','The Blue Dragonflight has been in Azshara since time immemorial, but their recent actions seem strange. They had been there to safeguard ancient artifacts, not drain the leylines of life and magic. In better, simpler times, I would advise you to contact them and try to negotiate.\n\nThose times are over, and we need to act. Go back to Azshara and gather a strong party. Venture to Lake Mennar, and slay their kin. This will thin the numbers in their ranks, and we will have time to prepare a better response to their actions.\n\nA sad thing that the Dragonflight has begun to mess with the very ways of Azshara\'s natural magic. When it is done, return to Y\'hargosh at Bloodfist Point.','Slay Tarangos.','So, have you done it?','The elements are calmed, for now. Thank you, $c. Your help will never be forgotten. We owe you much.',0,0,0,0,0,0,0,0,6130,7,6129,3,6131,7,0,0,0,0,25000,6800,81,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60405,1,60406,1,60407,1,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (5769, 40297);
 replace into creature_involvedrelation (id, quest) values (92197, 40297);
@@ -4769,3 +4769,167 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60538, 40298);
 replace into creature_involvedrelation (id, quest) values (60539, 40298);
+
+-- Fixes.
+
+update gameobject_template set size = 1.6 where entry = 2010858;
+update gameobject_template set size = 0.8 where entry = 2010855;
+
+update creature set spawntimesecsmin = 75600, spawntimesecsmax = 79200 where id = 60525;
+
+update item_template set display_id = 16545 where entry = 83244;
+
+UPDATE quest_template SET Objectives = 'Gather six Energized Scales from Lightning Hides and Thunder Lizards at Thunder Ridge to the west. Return to Tehnician Spuzzle in Sparkwater Port.' WHERE entry = 55003;
+UPDATE quest_template SET Objectives = 'Collect 5 Chunk of Boar Meat and 5 Scorpid Stinger and return to Hargosh in Sparkwater Port.' WHERE entry = 55004;
+UPDATE quest_template SET Objectives = 'Bring the Prototype Shredder X0-1 Schematic to Wrix Ozzlenut in Sparkwater Port.' WHERE entry = 55005;
+UPDATE quest_template SET Objectives = 'Bring the Megaflux Capacitor to Technician Grimzlow in Sparkwater Port.' WHERE entry = 55006;
+UPDATE quest_template SET Objectives = 'Kill 5 Venture Co. Mechanics at the Oil Platform near Lake Nazferiti and return to Baron Revilgaz in Booty Bay.' WHERE entry = 55027;
+UPDATE quest_template SET Objectives = 'Kill Sagepaw near the Mosshide Fen in the Wetlands and return to Gowlfang in Sparkwater Port.' WHERE entry = 55033;
+UPDATE quest_template SET Objectives = 'Slay Mosshide Gnolls and retrieve 10 Mosshide Gnollbands for Gowlfang in Sparkwater Port.' WHERE entry = 55034;
+UPDATE quest_template SET Objectives = 'Kill Foreman Klix and bring his Studded Ring to Shak in Sparkwater Port.' WHERE entry = 55042;
+UPDATE quest_template SET Objectives = 'Get the Brightwater Logbook from the sunken ship in Stranglethorn and return to Pazzle Brightwrench in Sparkwater Port.' WHERE entry = 55043;
+UPDATE quest_template SET Objectives = 'Find Agon Ore from the Troggs in Agmond\'s End and return to Big Fraggle in Sparkwater Port.' WHERE entry = 55046;
+UPDATE quest_template SET Objectives = 'Find the prisoner Baxxil at Farwatch Post in the Barrens. Return to Hizzle in Sparkwater Port.' WHERE entry = 55048;
+UPDATE quest_template SET Objectives = 'Find and slay Shazknock at Boulderlode Mine. Return to Tradesman Laz in Sparkwater Port.' WHERE entry = 55049;
+
+update quest_template set title = 'Breastplates of the Chromatic Flight', rewitemid1 = 0, rewitemcount1 = 0, rewchoiceitemid1 = 12895, rewchoiceitemid2 = 83416,  rewchoiceitemcount1 = 1, rewchoiceitemcount2 = 1  where entry = 5166;
+
+update item_template set spellid_2 = 18384 where entry = 83294;
+
+-- Blacksmithing
+update item_template set stat_type1 = 5 where entry = 12625;
+update item_template set stat_value1 = 18, spellid_1 = 13669, armor = 253 where entry = 19043;
+update item_template set stat_value1 = 21, spellid_1 = 13669, armor = 318 where entry = 19048;
+update item_template set stat_value1 = 22, stat_type1 = 7 where entry = 22197;
+update item_template set stat_value1 = 5, stat_type1 = 5, stat_value2 = 11 where entry = 12624;
+update item_template set fire_res = 15, stat_value1 = 10, stat_type1 = 7 where entry = 12631;
+update item_template set stat_value2 = 12, stat_value1 = 12, stat_type3 = 5, stat_value3 = 8, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 25036, spelltrigger_2 = 1 where entry = 19051;
+update item_template set stat_value2 = 14, stat_value1 = 12, stat_type3 = 5, stat_value3 = 9, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 23515, spelltrigger_2 = 1 where entry = 19051;
+update item_template set stat_type2 = 3, stat_type3 = 5 where entry = 16989;
+update item_template set stat_value1 = 10, stat_type3 = 3, stat_value3 = 10 where entry = 16988;
+update item_template set stat_value1 = 26, stat_type2 = 3, stat_value2 = 12, armor = 362, spellid_1 = 13384, spelltrigger_1 = 1 where entry = 12636;	
+update item_template set dmg_min1 = 155, dmg_max1 = 238, delay = 3300 where entry = 19167;
+update item_template set fire_res = 8, stat_value1 = 12 where entry = 17016;
+update item_template set spellid_1 = 13669, stat_value1 = 12, stat_type1 = 7 where entry = 12776;
+update item_template set spellid_1 = 18088, spelltrigger_1 = 2, spellppmRate_1 = 3 where entry = 12782;
+update item_template set dmg_min1 = 151, dmg_max1 = 227, delay = 3500, spellppmRate_1 = 1.2 where entry = 12790;
+-- Engineering (TBD)
+update item_template set dmg_min1 = 70, dmg_max1 = 106, delay = 3100 where entry = 16004;
+update item_template set dmg_min1 = 68, dmg_max1 = 126, delay = 3100 where entry = 16007;
+update item_template set dmg_min1 = 88, dmg_max1 = 146, delay = 3200 where entry = 18282;
+-- Leatherworking
+update item_template set stat_type4 = 3, stat_value4 = 16, stat_value3 = 13 where entry = 19688;
+update item_template set stat_type4 = 3, stat_value4 = 12, stat_value3 = 10 where entry = 19689;
+update item_template set stat_value1 = 10, stat_value2 = 24 where entry = 8349;
+update item_template set stat_value1 = 12, stat_value2 = 24, spellid_1 = 9343, spelltrigger_1 = 1 where entry = 15066;
+update item_template set stat_value1 = 18, stat_value2 = 6, spellid_1 = 9416, spelltrigger_1 = 1 where entry = 15067;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 15045;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 20296;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 15046;
+update item_template set stat_value1 = 17, spellid_1 = 21362, spelltrigger_1 = 1 where entry = 18504;
+-- Tailoring
+update item_template set stat_value1 = 18, armor = 107, spellid_1 = 9342, spelltrigger_1 = 1 where entry = 19056;
+update item_template set stat_value1 = 20, armor = 132, spellid_1 = 9344, spelltrigger_1 = 1 where entry = 19059;
+update item_template set stat_value1 = 17, spellid_1 = 18378 where entry = 19050;
+update item_template set stat_value1 = 17, spellid_1 = 18379 where entry = 19047;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 15802;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9316, spelltrigger_1 = 1 where entry = 14140;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 18029, spelltrigger_1 = 1 where entry = 14137;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 14139;
+update item_template set stat_value1 = 18, stat_value3 = 0, stat_type3 = 0, spellid_1 = 18034, spelltrigger_1 = 1 where entry = 18486;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_1 = 18378, spelltrigger_1 = 1 where entry = 14138;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1 where entry = 18405;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1, allowable_class = -1 where entry = 14146;
+-- World Drops
+update item_template set spellid_1 = 27867, spelltrigger_1 = 1 where entry = 1981;
+update item_template set spellid_1 = 25975, spelltrigger_1 = 1 where entry = 17007;
+update item_template set spellcooldown_1 = 300000 where entry = 17007;
+update item_template set spellcooldown_1 = 900000, spellid_2 = 21616 where entry = 833;
+update item_template set stat_value1 = 14, stat_value3 = 0, stat_type3 = 0, spellid_1 = 9316, spelltrigger_1 = 1, spellid_2 = 21360, spelltrigger_2 = 1 where entry = 14558;
+update item_template set stat_value2 = 8, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 9416, spelltrigger_1 = 1 where entry = 1443;
+update item_template set stat_value1 = 14, stat_value2 = 14, stat_value3 = 14, stat_value4 = 14, stat_value5 = 14, spellid_1 = 7597, spelltrigger_1 = 1, spellid_2 = 15464, spelltrigger_2 = 1 where entry = 2801;
+update item_template set stat_type4 = 5 where entry = 13028;
+-- Raid Boss Drops
+update item_template set stat_value4 = 15, stat_type4 = 7, stat_value5 = 0, stat_type5 = 0, spellid_1 = 9345 where entry = 20630;
+update item_template set stat_type1 = 5, stat_value2 = 20, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 23515, spelltrigger_1 = 1, spellid_2 = 13674, spelltrigger_2 = 2 where entry = 21481;
+update item_template set stat_value4 = 0, stat_type4 = 0, spellid_2 = 21626, spelltrigger_2 = 1 where entry = 20260;
+-- Dungeon Boss Drops
+update item_template set stat_type4 = 3 where entry = 18692;
+update item_template set stat_value1 = 12, stat_type1 = 4, stat_value2 = 29, stat_type2 = 7 where entry = 13498;
+update item_template set stat_value1 = 10, stat_type1 = 5, stat_value2 = 5, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 25109, spelltrigger_1 = 1 where entry = 13360;
+update item_template set stat_value1 = 12, stat_type1 = 5, stat_value3 = 0, stat_type3 = 0, spellid_2 = 13387, spelltrigger_2 = 1 where entry = 13498;
+update item_template set stat_type1 = 5, stat_value2 = 15, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 23515, spelltrigger_1 = 1 where entry = 12637;
+update item_template set stat_value1 = 7, stat_value2 = 12, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 23515, spelltrigger_1 = 1 where entry = 18741;
+update item_template set stat_value1 = 6, stat_value2 = 6, stat_type2 = 5, stat_value3 = 17, stat_type3 = 7 where entry = 18384;
+update item_template set stat_type3 = 5 where entry = 18718;
+update item_template set stat_type1 = 7 where entry = 18521;
+update item_template set stat_type1 = 3, stat_type2 = 7 where entry = 13260;
+update item_template set spellid_1 = 21109 where entry = 18760;
+
+update item_template set stat_type4 = 3 where entry = 14611;
+-- Tier 0.5 Improvements
+-- Warlock (Adds Pet Buffs to Epic Pieces)
+update item_template set spellid_3 = 27038, spelltrigger_3 = 1 where entry = 22074;
+update item_template set spellid_3 = 27225, spelltrigger_3 = 1 where entry = 22075;
+update item_template set spellid_2 = 27206, spelltrigger_2 = 1 where entry = 22076;
+update item_template set spellid_3 = 27043, spelltrigger_3 = 1 where entry = 22077;
+-- Shaman (Adds Haste and Adjusts Stats)
+update item_template set stat_value1 = 16, stat_value2 = 18, stat_value3 = 12, stat_type3 = 3, stat_value4 = 12, stat_type4 = 7, spellid_1 = 9346, spelltrigger_1 = 1, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22097;
+update item_template set stat_type2 = 4 where entry = 22095;
+update item_template set stat_value1 = 14, stat_value2 = 18, stat_value3 = 12, stat_type1 = 3, stat_value4 = 12, stat_type4 = 7, spellid_1 = 9346, spelltrigger_1 = 1, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22100;
+update item_template set stat_type3 = 3 where entry = 22101;
+update item_template set stat_type4 = 3, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22096;
+update item_template set stat_value1 = 15, stat_value2 = 16, stat_value3 = 15, stat_type3 = 3, stat_value2 = 15, stat_type4 = 7, stat_value4 = 14, spellid_1 = 9346, spelltrigger_1 = 1, spellid_2 = 18384, spelltrigger_2 = 1, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22102;
+-- Paladin (Changes Spirit into Agility)
+update item_template set stat_type4 = 3 where entry = 22087;
+update item_template set stat_type4 = 3 where entry = 22089;
+update item_template set stat_type4 = 3 where entry = 22092;
+update item_template set stat_type4 = 3 where entry = 22091;
+-- ZG Tier Sets
+-- Paladin (Chest and Neck Spirit --> Agility)
+update item_template set stat_type4 = 3 where entry = 19825;
+update item_template set stat_type4 = 3 where entry = 19588;
+update item_template set stat_type4 = 3 where entry = 19586;
+update item_template set stat_type4 = 3 where entry = 19585;
+update item_template set stat_type3 = 5 where entry = 19579;
+-- Shaman (Neck Spirit --> Agility)
+update item_template set stat_type4 = 3 where entry = 19609;
+update item_template set stat_type4 = 3 where entry = 19608;
+update item_template set stat_type4 = 3 where entry = 19607;
+update item_template set stat_type3 = 3 where entry = 19606;
+-- Druid (Neck Strength --> Extra Intellect)
+update item_template set stat_type1 = 0, stat_value1 = 0, stat_value3 = 13 where entry = 19613;
+update item_template set stat_type1 = 0, stat_value1 = 0, stat_value3 = 13 where entry = 19612;
+update item_template set stat_type1 = 0, stat_value1 = 0, stat_value3 = 11 where entry = 19611;
+-- New Pristine Hide of the Beast Quest Reward
+replace into item_template values
+ ('83417', '4', '4', 'Shoulderguards of the Lightbringer', '', '27414', '4', '0', '1', '125362', '31340', '3', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '12', '3', '9',
+ '5', '11', '7', '16', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '553', '0', '0', '0',
+ '0', '0', '0', '21511', '1', '0', '0', '-1', '0', '-1', '22912', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '100', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+-- New Chromatic Carapace Quest Reward
+replace into item_template values
+ ('83416', '4', '3', 'Breastplate of the Chromatic Flight', '', '28335', '4', '0', '1', '147308', '29461', '5', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '30', '3', '20',
+ '5', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '418', '0', '15', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '140', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+-- Epic Token Quest Reward Item Buffs (Item LeveL 62 -> 65)
+update item_template set item_level = 65, armor = 736, stat_value3 = 15, name = 'Chestplate of the Chromatic Flight' where entry = 12895;
+update item_template set item_level = 65, armor = 197, stat_value1 = 25, stat_value2 = 15 where entry = 12757;
+update item_template set item_level = 65, armor = 84, allowable_class = -1, stat_value1 = 28, spellid_2 = 23727, spelltrigger_2 = 1 where entry = 12752;
+update item_template set item_level = 65, armor = 174, spellid_1 = 24595, spellid_2 = 14521, spelltrigger_2 = 1 where entry = 12756;
+update item_template set item_level = 65, armor = 364, spellid_1 = 15714, spelltrigger_1 = 1, spellid_2 = 18379, spelltrigger_2 = 1, stat_value1 = 24, stat_value2 = 18, stat_type2 = 7, stat_type3 = 0, stat_value3 = 0 where entry = 12945;
+update item_template set item_level = 65, armor = 364, spellid_1 = 7597, spelltrigger_1 = 1, stat_value1 = 30 where entry = 12903;
+-- Dungeon Quest Reward
+update item_template set allowable_class = -1 where entry = 13968;
+
