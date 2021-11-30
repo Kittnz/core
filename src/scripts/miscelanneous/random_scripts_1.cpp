@@ -1811,7 +1811,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
         uint32 cost = pPlayer->GetLevel() * 100;
         if (pPlayer->GetMoney() >= cost)
         {
-            pPlayer->ModifyMoney(cost);
+            pPlayer->ModifyMoney(-cost);
             pPlayer->CastSpell(pPlayer, 130, true);
             pPlayer->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18510);
             pPlayer->m_Events.AddEvent(new DismountAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(18 * IN_MILLISECONDS));
