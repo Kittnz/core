@@ -4935,56 +4935,74 @@ update item_template set allowable_class = -1 where entry = 13968;
 
 -- Adjust new world rares's loot:
 
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49001 AND item = 81360 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49001 AND item = 81361 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49001 AND item = 81362 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49001 AND item = 81363 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49001 AND item = 81364 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49002 AND item = 81365 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49002 AND item = 81366 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49002 AND item = 81367 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49002 AND item = 81368 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49002 AND item = 81369 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49003 AND item = 81370 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49003 AND item = 81371 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49003 AND item = 81372 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49003 AND item = 81373 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49003 AND item = 81374 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49004 AND item = 81375 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49004 AND item = 81376 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49004 AND item = 81377 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49004 AND item = 81378 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49004 AND item = 81379 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49005 AND item = 81380 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49005 AND item = 81381 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49005 AND item = 81382 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49005 AND item = 81383 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49005 AND item = 81384 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49007 AND item = 83257 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49007 AND item = 83258 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49007 AND item = 83259 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49007 AND item = 83260 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49008 AND item = 83261 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49008 AND item = 83262 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49008 AND item = 83263 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49008 AND item = 83264 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49009 AND item = 83265 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49009 AND item = 83266 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49009 AND item = 83267 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49009 AND item = 83268 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49009 AND item = 83269 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 51023 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 51024 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83270 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83271 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83272 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83273 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83274 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0.5, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83275 AND groupid = 2;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83276 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83277 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83278 AND groupid = 1;
-UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83279 AND groupid = 1;
+delete from creature_loot_template where entry between 49001 and 49011;
+
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81360, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81361, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81362, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81364, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81363, 0.5, 2, 1, 1);
+								
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81365, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81366, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81367, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81368, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81369, 0.5, 2, 1, 1);
+								  
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81370, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81371, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81372, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81373, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81374, 0.5, 2, 1, 1);
+								    
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81375, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81376, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81377, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81378, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81379, 0.5, 2, 1, 1);
+								  
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81380, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81381, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81382, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81383, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81384, 0.5, 2, 1, 1);
+								  
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83257, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83258, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83259, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83260, 25, 1, 1, 1);
+								   
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83261, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83262, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83263, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83264, 25, 1, 1, 1);
+								  
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83265, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83266, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83267, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83268, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83269, 0.5, 2, 1, 1);
+								    
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  51023, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  51024, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  83273, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  51025, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  83274, 0.5, 2, 1, 1);
+								 
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83276, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83277, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83278, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83279, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83275, 0.5, 2, 1, 1);
 
 delete from item_template where entry = 50254;
 delete from npc_vendor where item = 50254;
+
+update item_template set display_id = 15402 where entry = 83285;
+
+-- PENGUINS!!!
+
+replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (70040, 18626, 18627, 0, 0, 'Glacier Penguin', '', 0, 5, 5, 1, 1, 0, 0, 20, 190, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into creature_display_info_addon (display_id) VALUES (18627);
+replace into creature_display_info_addon (display_id) VALUES (18626);
