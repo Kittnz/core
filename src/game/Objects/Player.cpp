@@ -23176,7 +23176,7 @@ void Player::SendAddonMessage(std::string prefix, std::string message)
 {
 	WorldPacket data;
 	ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
-		(prefix + " " + message).c_str(), Language(LANG_ADDON), GetChatTag(),
+		(prefix + "\t" + message).c_str(), Language(LANG_ADDON), GetChatTag(),
 		GetObjectGuid(), GetName());
 
 	GetSession()->SendPacket(&data);
