@@ -1142,6 +1142,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_DUAL_SPEC, "DualSpec", false);
 
     setConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL, "Hardcore.Disable.Duel", false);
+
+    m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
 }
 
 void charactersDatabaseWorkerThread()
@@ -1747,6 +1749,29 @@ void World::Update(uint32 diff)
         uint32 nextGameEvent = sGameEventMgr.Update();
         m_timers[WUPDATE_EVENTS].SetInterval(nextGameEvent);
         m_timers[WUPDATE_EVENTS].Reset();
+    }
+
+    if (m_timers[WUPDATE_CENSUS].Passed())
+    {
+        m_timers[WUPDATE_CENSUS].Reset();
+
+        uint32 alliancePlayers = 0, hordePlayers = 0;
+
+        const auto& players = sWorld.GetAllSessions();
+        for (const auto& [id, session] : players)
+        {
+            auto player = session->GetPlayer();
+            if (!player || !player->IsInWorld())
+                continue;
+
+            if (player->GetTeamId() == TEAM_HORDE)
+                ++hordePlayers;
+            else
+                ++alliancePlayers;
+        }
+
+        WorldDatabase.PExecute("INSERT INTO `player_census` (`alliance_players`, `horde_players`, `total_players`, `date_time`) VALUES (%u, %u, %u, NOW())", alliancePlayers,
+            hordePlayers, hordePlayers + alliancePlayers);
     }
 
     /// </ul>
