@@ -4937,63 +4937,65 @@ update item_template set allowable_class = -1 where entry = 13968;
 
 delete from creature_loot_template where entry between 49001 and 49011;
 
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49001,  81360, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49001,  81361, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49001,  81362, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49001,  81364, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49001,  81363, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81360, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81361, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81362, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81364, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49001,  81363, 0.5, 2, 1, 1);
 								
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49002,  81365, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49002,  81366, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49002,  81367, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49002,  81368, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49002,  81369, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81365, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81366, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81367, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81368, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49002,  81369, 0.5, 2, 1, 1);
 								  
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49003,  81370, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49003,  81371, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49003,  81372, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49003,  81373, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49003,  81374, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81370, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81371, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81372, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81373, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49003,  81374, 0.5, 2, 1, 1);
 								    
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49004,  81375, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49004,  81376, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49004,  81377, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49004,  81378, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49004,  81379, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81375, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81376, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81377, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81378, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49004,  81379, 0.5, 2, 1, 1);
 								  
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49005,  81380, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49005,  81381, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49005,  81382, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49005,  81383, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49005,  81384, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81380, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81381, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81382, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81383, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49005,  81384, 0.5, 2, 1, 1);
 								  
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49007,  83257, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49007,  83258, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49007,  83259, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49007,  83260, 0, 0);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83257, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83258, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83259, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49007,  83260, 25, 1, 1, 1);
 								   
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49008,  83261, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49008,  83262, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49008,  83263, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49008,  83264, 0, 0);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83261, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83262, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83263, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49008,  83264, 25, 1, 1, 1);
 								  
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49009,  83265, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49009,  83266, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49009,  83267, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49009,  83268, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49009,  83269, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83265, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83266, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83267, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83268, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49009,  83269, 0.5, 2, 1, 1);
 								    
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49010,  51023, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49010,  51024, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49010,  83273, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49010,  51025, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49010,  83274, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  51023, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  51024, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  83273, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  51025, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49010,  83274, 0.5, 2, 1, 1);
 								 
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49011,  83276, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49011,  83277, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49011,  83278, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49011,  83279, 0, 0);
-replace into creature_loot_template (entry, item, chanceorquestchance, groupid) values (49011,  83275, 0.5, 2);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83276, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83277, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83278, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83279, 25, 1, 1, 1);
+replace into creature_loot_template (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) values (49011,  83275, 0.5, 2, 1, 1);
 
 delete from item_template where entry = 50254;
 delete from npc_vendor where item = 50254;
+
+update item_template set display_id = 15402 where entry = 83285;
