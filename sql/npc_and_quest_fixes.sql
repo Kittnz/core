@@ -4985,3 +4985,6 @@ UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, ma
 UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83277 AND groupid = 1;
 UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83278 AND groupid = 1;
 UPDATE creature_loot_template SET ChanceOrQuestChance = 0, mincountOrRef = 1, maxcount = 1, condition_id = 0 WHERE entry = 49010 AND item = 83279 AND groupid = 1;
+
+delete from item_template where entry = 50254;
+delete from npc_vendor where item = 50254;
