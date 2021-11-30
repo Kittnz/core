@@ -1,0 +1,1 @@
+update creature_template set skinning_loot_id = 4397 where entry = 4396;
