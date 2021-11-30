@@ -4794,6 +4794,8 @@ UPDATE quest_template SET Objectives = 'Find and slay Shazknock at Boulderlode M
 
 update quest_template set title = 'Breastplates of the Chromatic Flight', rewitemid1 = 0, rewitemcount1 = 0, rewchoiceitemid1 = 12895, rewchoiceitemid2 = 83416,  rewchoiceitemcount1 = 1, rewchoiceitemcount2 = 1  where entry = 5166;
 
+update item_template set spellid_2 = 18384 where entry = 83294;
+
 -- Blacksmithing
 update item_template set stat_type1 = 5 where entry = 12625;
 update item_template set stat_value1 = 18, spellid_1 = 13669, armor = 253 where entry = 19043;
