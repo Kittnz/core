@@ -4791,3 +4791,143 @@ UPDATE quest_template SET Objectives = 'Get the Brightwater Logbook from the sun
 UPDATE quest_template SET Objectives = 'Find Agon Ore from the Troggs in Agmond\'s End and return to Big Fraggle in Sparkwater Port.' WHERE entry = 55046;
 UPDATE quest_template SET Objectives = 'Find the prisoner Baxxil at Farwatch Post in the Barrens. Return to Hizzle in Sparkwater Port.' WHERE entry = 55048;
 UPDATE quest_template SET Objectives = 'Find and slay Shazknock at Boulderlode Mine. Return to Tradesman Laz in Sparkwater Port.' WHERE entry = 55049;
+
+update quest_template set title = 'Breastplates of the Chromatic Flight', rewitemid1 = 0, rewitemcount1 = 0, rewchoiceitemid1 = 12895, rewchoiceitemid2 = 83416,  rewchoiceitemcount1 = 1, rewchoiceitemcount2 = 1  where entry = 5166;
+
+-- Blacksmithing
+update item_template set stat_type1 = 5 where entry = 12625;
+update item_template set stat_value1 = 18, spellid_1 = 13669, armor = 253 where entry = 19043;
+update item_template set stat_value1 = 21, spellid_1 = 13669, armor = 318 where entry = 19048;
+update item_template set stat_value1 = 22, stat_type1 = 7 where entry = 22197;
+update item_template set stat_value1 = 5, stat_type1 = 5, stat_value2 = 11 where entry = 12624;
+update item_template set fire_res = 15, stat_value1 = 10, stat_type1 = 7 where entry = 12631;
+update item_template set stat_value2 = 12, stat_value1 = 12, stat_type3 = 5, stat_value3 = 8, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 25036, spelltrigger_2 = 1 where entry = 19051;
+update item_template set stat_value2 = 14, stat_value1 = 12, stat_type3 = 5, stat_value3 = 9, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 23515, spelltrigger_2 = 1 where entry = 19051;
+update item_template set stat_type2 = 3, stat_type3 = 5 where entry = 16989;
+update item_template set stat_value1 = 10, stat_type3 = 3, stat_value3 = 10 where entry = 16988;
+update item_template set stat_value1 = 26, stat_type2 = 3, stat_value2 = 12, armor = 362, spellid_1 = 13384, spelltrigger_1 = 1 where entry = 12636;	
+update item_template set dmg_min1 = 155, dmg_max1 = 238, delay = 3300 where entry = 19167;
+update item_template set fire_res = 8, stat_value1 = 12 where entry = 17016;
+update item_template set spellid_1 = 13669, stat_value1 = 12, stat_type1 = 7 where entry = 12776;
+update item_template set spellid_1 = 18088, spelltrigger_1 = 2, spellppmRate_1 = 3 where entry = 12782;
+update item_template set dmg_min1 = 151, dmg_max1 = 227, delay = 3500, spellppmRate_1 = 1.2 where entry = 12790;
+-- Engineering (TBD)
+update item_template set dmg_min1 = 70, dmg_max1 = 106, delay = 3100 where entry = 16004;
+update item_template set dmg_min1 = 68, dmg_max1 = 126, delay = 3100 where entry = 16007;
+update item_template set dmg_min1 = 88, dmg_max1 = 146, delay = 3200 where entry = 18282;
+-- Leatherworking
+update item_template set stat_type4 = 3, stat_value4 = 16, stat_value3 = 13 where entry = 19688;
+update item_template set stat_type4 = 3, stat_value4 = 12, stat_value3 = 10 where entry = 19689;
+update item_template set stat_value1 = 10, stat_value2 = 24 where entry = 8349;
+update item_template set stat_value1 = 12, stat_value2 = 24, spellid_1 = 9343, spelltrigger_1 = 1 where entry = 15066;
+update item_template set stat_value1 = 18, stat_value2 = 6, spellid_1 = 9416, spelltrigger_1 = 1 where entry = 15067;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 15045;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 20296;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1 where entry = 15046;
+update item_template set stat_value1 = 17, spellid_1 = 21362, spelltrigger_1 = 1 where entry = 18504;
+-- Tailoring
+update item_template set stat_value1 = 18, armor = 107, spellid_1 = 9342, spelltrigger_1 = 1 where entry = 19056;
+update item_template set stat_value1 = 20, armor = 132, spellid_1 = 9344, spelltrigger_1 = 1 where entry = 19059;
+update item_template set stat_value1 = 17, spellid_1 = 18378 where entry = 19050;
+update item_template set stat_value1 = 17, spellid_1 = 18379 where entry = 19047;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 15802;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9316, spelltrigger_1 = 1 where entry = 14140;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 18029, spelltrigger_1 = 1 where entry = 14137;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 18409;
+update item_template set stat_value3 = 0, stat_type3 = 0, spellid_1 = 9407, spelltrigger_1 = 1 where entry = 14139;
+update item_template set stat_value1 = 18, stat_value3 = 0, stat_type3 = 0, spellid_1 = 18034, spelltrigger_1 = 1 where entry = 18486;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_1 = 18378, spelltrigger_1 = 1 where entry = 14138;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1 where entry = 18405;
+update item_template set stat_value2 = 0, stat_type2 = 0, spellid_2 = 9417, spelltrigger_2 = 1, allowable_class = -1 where entry = 14146;
+-- World Drops
+update item_template set spellid_1 = 27867, spelltrigger_1 = 1 where entry = 1981;
+update item_template set spellid_1 = 25975, spelltrigger_1 = 1 where entry = 17007;
+update item_template set spellcooldown_1 = 300000 where entry = 17007;
+update item_template set spellcooldown_1 = 900000, spellid_2 = 21616 where entry = 833;
+update item_template set stat_value1 = 14, stat_value3 = 0, stat_type3 = 0, spellid_1 = 9316, spelltrigger_1 = 1, spellid_2 = 21360, spelltrigger_2 = 1 where entry = 14558;
+update item_template set stat_value2 = 8, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 9416, spelltrigger_1 = 1 where entry = 1443;
+update item_template set stat_value1 = 14, stat_value2 = 14, stat_value3 = 14, stat_value4 = 14, stat_value5 = 14, spellid_1 = 7597, spelltrigger_1 = 1, spellid_2 = 15464, spelltrigger_2 = 1 where entry = 2801;
+update item_template set stat_type4 = 5 where entry = 13028;
+-- Raid Boss Drops
+update item_template set stat_value4 = 15, stat_type4 = 7, stat_value5 = 0, stat_type5 = 0, spellid_1 = 9345 where entry = 20630;
+update item_template set stat_type1 = 5, stat_value2 = 20, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 23515, spelltrigger_1 = 1, spellid_2 = 13674, spelltrigger_2 = 2 where entry = 21481;
+update item_template set stat_value4 = 0, stat_type4 = 0, spellid_2 = 21626, spelltrigger_2 = 1 where entry = 20260;
+-- Dungeon Boss Drops
+update item_template set stat_type4 = 3 where entry = 18692;
+update item_template set stat_value1 = 12, stat_type1 = 4, stat_value2 = 29, stat_type2 = 7 where entry = 13498;
+update item_template set stat_value1 = 10, stat_type1 = 5, stat_value2 = 5, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 25109, spelltrigger_1 = 1 where entry = 13360;
+update item_template set stat_value1 = 12, stat_type1 = 5, stat_value3 = 0, stat_type3 = 0, spellid_2 = 13387, spelltrigger_2 = 1 where entry = 13498;
+update item_template set stat_type1 = 5, stat_value2 = 15, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 23515, spelltrigger_1 = 1 where entry = 12637;
+update item_template set stat_value1 = 7, stat_value2 = 12, stat_type2 = 7, stat_value3 = 0, stat_type3 = 0, spellid_1 = 23515, spelltrigger_1 = 1 where entry = 18741;
+update item_template set stat_value1 = 6, stat_value2 = 6, stat_type2 = 5, stat_value3 = 17, stat_type3 = 7 where entry = 18384;
+update item_template set stat_type3 = 5 where entry = 18718;
+update item_template set stat_type1 = 7 where entry = 18521;
+update item_template set stat_type1 = 3, stat_type2 = 7 where entry = 13260;
+update item_template set spellid_1 = 21109 where entry = 18760;
+
+update item_template set stat_type4 = 3 where entry = 14611;
+-- Tier 0.5 Improvements
+-- Warlock (Adds Pet Buffs to Epic Pieces)
+update item_template set spellid_3 = 27038, spelltrigger_3 = 1 where entry = 22074;
+update item_template set spellid_3 = 27225, spelltrigger_3 = 1 where entry = 22075;
+update item_template set spellid_2 = 27206, spelltrigger_2 = 1 where entry = 22076;
+update item_template set spellid_3 = 27043, spelltrigger_3 = 1 where entry = 22077;
+-- Shaman (Adds Haste and Adjusts Stats)
+update item_template set stat_value1 = 16, stat_value2 = 18, stat_value3 = 12, stat_type3 = 3, stat_value4 = 12, stat_type4 = 7, spellid_1 = 9346, spelltrigger_1 = 1, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22097;
+update item_template set stat_type2 = 4 where entry = 22095;
+update item_template set stat_value1 = 14, stat_value2 = 18, stat_value3 = 12, stat_type1 = 3, stat_value4 = 12, stat_type4 = 7, spellid_1 = 9346, spelltrigger_1 = 1, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22100;
+update item_template set stat_type3 = 3 where entry = 22101;
+update item_template set stat_type4 = 3, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22096;
+update item_template set stat_value1 = 15, stat_value2 = 16, stat_value3 = 15, stat_type3 = 3, stat_value2 = 15, stat_type4 = 7, stat_value4 = 14, spellid_1 = 9346, spelltrigger_1 = 1, spellid_2 = 18384, spelltrigger_2 = 1, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 22102;
+-- Paladin (Changes Spirit into Agility)
+update item_template set stat_type4 = 3 where entry = 22087;
+update item_template set stat_type4 = 3 where entry = 22089;
+update item_template set stat_type4 = 3 where entry = 22092;
+update item_template set stat_type4 = 3 where entry = 22091;
+-- ZG Tier Sets
+-- Paladin (Chest and Neck Spirit --> Agility)
+update item_template set stat_type4 = 3 where entry = 19825;
+update item_template set stat_type4 = 3 where entry = 19588;
+update item_template set stat_type4 = 3 where entry = 19586;
+update item_template set stat_type4 = 3 where entry = 19585;
+update item_template set stat_type3 = 5 where entry = 19579;
+-- Shaman (Neck Spirit --> Agility)
+update item_template set stat_type4 = 3 where entry = 19609;
+update item_template set stat_type4 = 3 where entry = 19608;
+update item_template set stat_type4 = 3 where entry = 19607;
+update item_template set stat_type3 = 3 where entry = 19606;
+-- Druid (Neck Strength --> Extra Intellect)
+update item_template set stat_type1 = 0, stat_value1 = 0, stat_value3 = 13 where entry = 19613;
+update item_template set stat_type1 = 0, stat_value1 = 0, stat_value3 = 13 where entry = 19612;
+update item_template set stat_type1 = 0, stat_value1 = 0, stat_value3 = 11 where entry = 19611;
+-- New Pristine Hide of the Beast Quest Reward
+replace into item_template values
+ ('83417', '4', '4', 'Shoulderguards of the Lightbringer', '', '27414', '4', '0', '1', '125362', '31340', '3', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '12', '3', '9',
+ '5', '11', '7', '16', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '553', '0', '0', '0',
+ '0', '0', '0', '21511', '1', '0', '0', '-1', '0', '-1', '22912', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '100', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+-- New Chromatic Carapace Quest Reward
+replace into item_template values
+ ('83416', '4', '3', 'Breastplate of the Chromatic Flight', '', '28335', '4', '0', '1', '147308', '29461', '5', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '30', '3', '20',
+ '5', '15', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '418', '0', '15', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '140', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+-- Epic Token Quest Reward Item Buffs (Item LeveL 62 -> 65)
+update item_template set item_level = 65, armor = 736, stat_value3 = 15, name = 'Chestplate of the Chromatic Flight' where entry = 12895;
+update item_template set item_level = 65, armor = 197, stat_value1 = 25, stat_value2 = 15 where entry = 12757;
+update item_template set item_level = 65, armor = 84, allowable_class = -1, stat_value1 = 28, spellid_2 = 23727, spelltrigger_2 = 1 where entry = 12752;
+update item_template set item_level = 65, armor = 174, spellid_1 = 24595, spellid_2 = 14521, spelltrigger_2 = 1 where entry = 12756;
+update item_template set item_level = 65, armor = 364, spellid_1 = 15714, spelltrigger_1 = 1, spellid_2 = 18379, spelltrigger_2 = 1, stat_value1 = 24, stat_value2 = 18, stat_type2 = 7, stat_type3 = 0, stat_value3 = 0 where entry = 12945;
+update item_template set item_level = 65, armor = 364, spellid_1 = 7597, spelltrigger_1 = 1, stat_value1 = 30 where entry = 12903;
+-- Dungeon Quest Reward
+update item_template set allowable_class = -1 where entry = 13968;
+
