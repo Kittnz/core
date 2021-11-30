@@ -878,6 +878,8 @@ bool GOHello_matrix_punchograph(Player* pPlayer, GameObject* pGo)
             if (pPlayer->HasItemCount(9281, 1, false) && !pPlayer->HasItemCount(9316, 1, false)) // Red Punch Card and !Prismatic Punch Card
             {
                 pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Acquire Higher Level Access Card", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+                if (pPlayer->HasItemCount(9327) && pPlayer->GetSkillValue(SKILL_ENGINEERING) >= 160) // Security DELTA Data Access Card
+                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Use engineering to access hidden schematics!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
                 pPlayer->SEND_GOSSIP_MENU(1756, pGo->GetGUID());
             }
             pPlayer->SEND_GOSSIP_MENU(1651, pGo->GetGUID());
@@ -891,7 +893,11 @@ bool GOHello_matrix_punchograph(Player* pPlayer, GameObject* pGo)
         case 142345: pPlayer->SEND_GOSSIP_MENU(1643, pGo->GetGUID()); break;
         case 142475: pPlayer->SEND_GOSSIP_MENU(1647, pGo->GetGUID()); break;
         case 142476: pPlayer->SEND_GOSSIP_MENU(1649, pGo->GetGUID()); break;
-        case 142696: pPlayer->SEND_GOSSIP_MENU(1651, pGo->GetGUID()); break;
+        case 142696: 
+            if (pPlayer->HasItemCount(9327) && pPlayer->GetSkillValue(SKILL_ENGINEERING) >= 160) // Security DELTA Data Access Card
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Use engineering to access hidden schematics!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+            pPlayer->SEND_GOSSIP_MENU(1651, pGo->GetGUID()); 
+            break;
         }
     }
     return true;
@@ -903,6 +909,7 @@ bool GOSelect_matrix_punchograph(Player* pPlayer, GameObject* pGo, uint32 sender
     if (action == GOSSIP_ACTION_INFO_DEF + 2) { pPlayer->CastSpell(pPlayer, 11525, false); } // Create Blue Punch Card
     if (action == GOSSIP_ACTION_INFO_DEF + 3) { pPlayer->CastSpell(pPlayer, 11528, false); } // Create Red Punch Card
     if (action == GOSSIP_ACTION_INFO_DEF + 4) { pPlayer->CastSpell(pPlayer, 11545, false); } // Create Prismatic Punch Card
+    if (action == GOSSIP_ACTION_INFO_DEF + 5) { pPlayer->CastSpell(pPlayer, 4031, false); }  // Schematic: Discombobulator Ray
     pPlayer->CLOSE_GOSSIP_MENU();
     return false;
 }
