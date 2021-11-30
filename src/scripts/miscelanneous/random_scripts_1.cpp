@@ -1808,7 +1808,7 @@ bool GOSelect_go_airplane(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
         pPlayer->TeleportTo(mapid, x, y, z, o);
         return true;
     case 1000050: // Mirage Raceway's Outstanding Flying Machine BNX-92
-        uint32 cost = pPlayer->GetLevel() * 100;
+        int32 cost = pPlayer->GetLevel() * 100;
         if (pPlayer->GetMoney() >= cost)
         {
             pPlayer->ModifyMoney(-cost);
