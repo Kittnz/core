@@ -21,7 +21,6 @@ set (game_SRCS
     AutoBroadCastMgr.cpp
     Camera.cpp
     Conditions.cpp
-    CollectionMgr.cpp
     CreatureGroups.cpp
     DailyQuestHandler.cpp
     GameEventMgr.cpp
@@ -42,6 +41,7 @@ set (game_SRCS
     ScriptMgr.cpp
     SocialMgr.cpp
     StatSystem.cpp
+    TransmogMgr.cpp
     UnitAuraProcHandler.cpp
     Weather.cpp
     World.cpp
@@ -206,7 +206,6 @@ set (game_SRCS
     AuraRemovalMgr.h
     AutoBroadCastMgr.h
     Camera.h
-    CollectionMgr.h
     Conditions.h
     CreatureGroups.h
     Formulas.h
@@ -232,6 +231,7 @@ set (game_SRCS
     ScriptMgr.h
     SharedDefines.h
     SocialMgr.h
+    TransmogMgr.h
     UnitEvents.h
     Weather.h
     World.h

@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef COLLECTION_MGR_H
-#define COLLECTION_MGR_H
+#ifndef TRANSMOG_MGR_H
+#define TRANSMOG_MGR_H
 
 #include "Common.h"
 #include "SharedDefines.h"
@@ -29,13 +29,20 @@ class Player;
 struct ItemPrototype;
 class QueryResult;
 
-class CollectionMgr
+class TransmogMgr
 {
     public:
-        explicit CollectionMgr(Player* owner);
+        explicit TransmogMgr(Player* owner);
 
         // General
         void LoadFromDB(QueryResult* result);
+
+		void HandleAddonMessages(std::string msg);
+
+		void ApplyTransmog(std::string msg);
+		uint8  ApplyTransmog(uint8 slot, uint32 sourceItemID, uint32 slotId);
+
+		std::string GetTransmogStatus();
 
         // Helpers
         bool HasTransmog(uint32 newItemId);
@@ -44,12 +51,14 @@ class CollectionMgr
 
         TransmogContainer GetTransmogs() { return _transmogs; }
         
-        std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
+		std::vector<uint32> GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
+		void SendAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
         
-        uint8 ServerSlotToClientInventorySlotId(uint8 InventorySlotId);
+		uint8 ServerSlotToClientInventorySlotId(uint8 InventorySlotId);
 
     private:
         Player* _owner;
+        std::string prefix;
         TransmogContainer _transmogs{};
         
 };

@@ -8930,10 +8930,12 @@ void ObjectMgr::FillPossibleTransmogs()
     return;
 }
 
-uint32 ObjectMgr::GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType)
+uint32 ObjectMgr::GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType, bool stupid)
 {
+	if (stupid)
+		return NumPossibleTransmogs[pClass][itemClass][itemSubClass][invType].size();
 
-    uint32 numItems = 0;
+	uint32 numItems = 0;
 
     if (itemClass == ITEM_CLASS_ARMOR && itemSubClass != ITEM_SUBCLASS_ARMOR_SHIELD)
     {
