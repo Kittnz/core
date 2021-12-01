@@ -7184,9 +7184,51 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
     return false;
 }
 
+
+bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetLevel() < 6 && !pPlayer->HasSpell(SPELL_SLOW_AND_STEADY))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for Slow & Steady Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (!pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for Exhaustion Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I'd like to buy a glyph.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+
+    pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->HandleEmote(EMOTE_ONESHOT_CHEER);
+        pCreature->MonsterSayToPlayer("Stay safe on your journey, friend.", pPlayer);
+        pPlayer->LearnSpell(50000, false, false);
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        pCreature->MonsterSayToPlayer("Exhausted mind tends to optimize actions and practice makes perfect!", pPlayer);
+        pPlayer->LearnSpell(50004, false, false);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_1()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "glyph_master";
+    newscript->pGossipHello = &GossipHello_glyph_master;
+    newscript->pGossipSelect = &GossipSelect_glyph_master;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_magtoor";
