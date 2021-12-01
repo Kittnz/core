@@ -7188,10 +7188,10 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
 bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetLevel() < 6 && !pPlayer->HasSpell(SPELL_SLOW_AND_STEADY))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for Slow & Steady Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for the Slow & Steady Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (!pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for Exhaustion Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for the Exhaustion Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pCreature->IsVendor())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I'd like to buy a glyph.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
