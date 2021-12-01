@@ -5027,3 +5027,114 @@ update quest_template set rewitemid1 = 83417 where entry = 40299;
 update quest_template set rewitemcount1 = 1 where entry = 40299;
 
 update item_template set display_id = 15402 where entry = 83285;
+
+-- Item Reworks Fixes
+-- Shaman 
+update item_template set stat_value1 = 12, stat_value2 = 12, stat_value3 = 18, stat_value4 = 16, stat_type3 = 7, stat_type4 = 5, stat_type1 = 4, stat_type2 = 3 where entry = 22097;
+update item_template set stat_value1 = 16, stat_value2 = 12, stat_value3 = 15, stat_value4 = 17, stat_type3 = 5, stat_type4 = 7, stat_type1 = 4, stat_type2 = 3 where entry = 22102;
+update item_template set stat_type4 = 3 where entry = 19825;
+update item_template set stat_type3 = 3, stat_type4 = 7 where entry = 19588;
+update item_template set stat_type3 = 3, stat_type4 = 7 where entry = 19586;
+update item_template set stat_type3 = 3, stat_type4 = 7 where entry = 19585;
+update item_template set stat_type2 = 5, stat_type3 = 7 where entry = 19579;
+update item_template set stat_type1 = 3, stat_type3 = 4, stat_type4 = 7 where entry = 19609;
+update item_template set stat_type4 = 3, stat_type3 = 4, stat_type4 = 7 where entry = 19608;
+update item_template set stat_type4 = 3, stat_type3 = 4, stat_type4 = 7 where entry = 19607;
+update item_template set stat_type3 = 7, stat_type2 = 4 where entry = 19606;
+
+update item_template set stat_type1 = 5, stat_value1 = 13, stat_type2 = 7, stat_value2 = 10, stat_type3 = 6, stat_value3 = 9 where entry = 19613;
+update item_template set stat_type1 = 5, stat_value1 = 13, stat_type2 = 7, stat_value2 = 10, stat_type3 = 6, stat_value3 = 9 where entry = 19612;
+update item_template set stat_type1 = 5, stat_value1 = 11, stat_type2 = 7, stat_value2 = 8, stat_type3 = 6, stat_value3 = 7 where entry = 19611;
+
+-- Ostarius Drops
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property) VALUES (83480, 'Tome of Infalliable Truth', '', 4, 0, 1, 4, 34802, 1, 60, 0, -1, -1, 256323, 64080, 23, 6, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 5, 9, 7, 9, 6, 12, 18030, 1, 0, 0, -1, 0, -1, 0); -- Tome of Infalliable Truth 
+
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property) VALUES (83481, 'Failsafe Activation Key', 'Facility Defense Matrix integrity is at 12%, breach imminent.', 4, 0, 1, 4, 18714, 1, 60, 0, -1, -1, 256834, 64208, 23, 6, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 3, 9, 7, 14, 15464, 1, 0, 0, -1, 0, -1, 13669, 1, 0, 0, 0, 0, 0, 0); -- Failsafe Activation Key
+
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property) VALUES (83482, 'Distress Signal Pulser', 'ULDUM FACILITY COMPROMISED, SENDING DISTRESS SIGNAL TO ULDAMAN, UL- CRITICAL ERROR.', 4, 0, 1, 4, 17599, 1, 60, 0, -1, -1, 256462, 64115, 23, 6, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 5, 12, 7, 8, 23729, 1, 0, 0, -1, 0, -1, 0); -- Distress Signal Pulser
+
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property) VALUES (83483, 'Crown of Divine Justice', '', 4, 4, 6, 4, 15320, 1, 60, 0, -1, -1, 164462, 41115, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 100, 670, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 4, 19, 5, 14, 7, 25, 7597, 1, 0, 0, -1, 0, -1, 23727, 1, 0, 0, -1, 0, -1, 21518, 1, 0, 0, -1, 0, -1, 0); -- Crown of Divine Justice
+
+replace into item_template values
+ ('83484', '4', '0', 'Desert Wind Talisman', '', '32008', '4', '0', '1', '313888', '78472', '2', '-1', '-1', '73',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '13', '7', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '8815', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property) VALUES (83485, 'Fists of the Makers', '', 4, 4, 6, 4, 15320, 1, 60, 0, -1, -1, 94462, 23615, 10, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 55, 515, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 4, 16, 7, 24, 7597, 1, 0, 0, -1, 0, -1, 15760, 1, 0, 0, -1, 0, -1, 0); -- Fists of the Makers
+
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property) VALUES (83486, 'Sandstalker\'s Shroud', '', 4, 1, 7, 4, 33531, 1, 60, 0, -1, -1, 154718, 38679, 16, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 56, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 3, 19, 7, 12, 13669, 1, 0, 0, 0, 0, 0, 0); -- Sandstalker's Shroud
+update item_template set spellid_2 = 27037, spelltrigger_2 = 1 where entry = 83486; 
+
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property) VALUES (83487, 'Blade of the Fallen Star', 'Forged from the remnants of a fallen star eons ago.', 2, 7, 1, 4, 29097, 1, 60, 1, -1, -1, 488918, 122229, 21, 3, 0, 0, 1, 1, 0, 64, 142, 2400, 0, 0, 105, 0, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 5, 15, 7, 8, 18384, 1, 0, 0, -1, 0, -1, 26405, 1, 0, 0, -1, 0, -1, 0); -- Blade of the Fallen Sun
+
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property) VALUES (83488, 'Uldum Construct Stompers', '', 4, 3, 5, 4, 33863, 1, 60, 0, -1, -1, 235109, 58777, 8, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 70, 430, 0, 0, 73, 0, 65, 0, 5, 5, 5, 5, 5, 3, 15, 7, 28, 13669, 1, 0, 0, 0, 0, 0, 0); -- Uldum Construct Stompers
+
+-- Bloodsail Reputation Rewards
+replace into item_template values
+ ('83490', '4', '1', 'Pillager Captain\'s Hat', '', '35174', '3', '0', '1', '50000', '12500', '1', '-1', '-1', '50',
+ '45', '0', '0', '0', '0', '0', '87', '7', '0', '1', '0', '5', '9', '7', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '53', '0', '0', '0',
+ '0', '0', '0', '9345', '1', '0', '0', '-1', '0', '-1', '11789', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('83491', '4', '2', 'Swashbuckler Captain\'s Hat', '', '35174', '3', '0', '1', '50000', '12500', '1', '-1', '-1', '50',
+ '45', '0', '0', '0', '0', '0', '87', '7', '0', '1', '0', '3', '9', '7', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '109', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '11789', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '60', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('83492', '4', '3', 'Raider Captain\'s Hat', '', '35174', '3', '0', '1', '50000', '12500', '1', '-1', '-1', '50',
+ '45', '0', '0', '0', '0', '0', '87', '7', '0', '1', '0', '4', '9', '7', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '243', '0', '0', '0',
+ '0', '0', '0', '9332', '1', '0', '0', '-1', '0', '-1', '11789', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '70', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('83493', '4', '4', 'Enforcer Captain\'s Hat', '', '35174', '3', '0', '1', '50000', '12500', '1', '-1', '-1', '50',
+ '45', '0', '0', '0', '0', '0', '87', '7', '0', '1', '0', '4', '9', '7', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '389', '0', '0', '0',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '11789', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '80', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('83494', '4', '2', 'Captain\'s Overcoat', '', '66128', '3', '0', '1', '43500', '10875', '5', '-1', '-1', '47',
+ '42', '0', '0', '0', '0', '0', '87', '6', '0', '1', '0', '3', '12', '7', '15',
+ '6', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '136', '0', '0', '0',
+ '10', '0', '0', '8747', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('83495', '4', '1', 'Rogue Magus\' Boots', '', '66129', '3', '0', '1', '42500', '10625', '8', '-1', '-1', '48',
+ '43', '0', '0', '0', '0', '0', '87', '6', '0', '1', '0', '5', '10', '7', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '0', '0', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('83496', '2', '5', 'Enforcer\'s Blackjack', '', '19622', '3', '0', '1', '65000', '16250', '17', '-1', '-1', '48',
+ '43', '0', '0', '0', '0', '0', '87', '6', '0', '1', '0', '4', '10', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2800', '0',
+ '0', '86', '145', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '23454', '2', '0', '0.9', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
