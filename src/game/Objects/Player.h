@@ -41,7 +41,7 @@
 #include "SharedDefines.h"
 #include "SpellMgr.h"
 #include "HonorMgr.h"
-#include "CollectionMgr.h"
+#include "TransmogMgr.h"
 
 #include <string>
 #include <vector>
@@ -2649,11 +2649,11 @@ public:
 
         // Tanatos Transmog
     public:
-        uint8 ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId);
-        std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
-        std::string GetTransmogStatus();
+        //uint8 ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId);
+        //std::string GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId);
+		void TransmogSetVisibleItemSlot(uint8 slot, Item* pItem) { SetVisibleItemSlot(slot, pItem); }
     private:
-        CollectionMgr* _collectionMgr;
+		TransmogMgr* _transmogMgr;
         // Tanatos Transmog End
 
         // Titles System

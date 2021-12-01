@@ -1296,7 +1296,7 @@ class ObjectMgr
         bool IsItemSubClassTransmoggable(uint32 subClass);
         void FillPossibleTransmogs();
         void AddPossibleTransmog(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType, uint32 displayId);
-        uint32 GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType);
+        uint32 GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 itemSubClass, uint32 invType, bool stupid);
 
 
         // Deactivated Spells

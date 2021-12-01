@@ -438,7 +438,7 @@ UpdateMask Player::updateVisualBits;
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
     m_currentTicketCounter(0), m_castingSpell(0), m_repopAtGraveyardPending(false),
-    m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _collectionMgr(new CollectionMgr(this))
+    m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _transmogMgr(new TransmogMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
     m_objectTypeId = TYPEID_PLAYER;
@@ -641,7 +641,7 @@ Player::~Player()
     RemoveAI();
     CleanupsBeforeDelete();
 
-    delete _collectionMgr; _collectionMgr = nullptr;
+    delete _transmogMgr; _transmogMgr = nullptr;
 
     // Note: buy back item already deleted from DB when player was saved
     for (const auto& item : m_items)
@@ -10723,7 +10723,7 @@ Item* Player::EquipItem(uint16 pos, Item *pItem, bool update)
 
     // Transmog 
     // Larn item when equipping it, if not already learned
-    _collectionMgr->AddToCollection(pItem->GetEntry());
+    _transmogMgr->AddToCollection(pItem->GetEntry());
 
     if (!pItem2)
     {
@@ -15207,7 +15207,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
     // must be before inventory (some items required reputation check)
     m_reputationMgr.LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADREPUTATION));
 
-    _collectionMgr->LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTRANSMOGS));
+    _transmogMgr->LoadFromDB(holder->GetResult(PLAYER_LOGIN_QUERY_LOADTRANSMOGS));
 
     bool has_epic_mount = false; // Needed for riding skill replacement in patch 1.12.
     _LoadInventory(holder->GetResult(PLAYER_LOGIN_QUERY_LOADINVENTORY), time_diff, has_epic_mount);
@@ -22992,93 +22992,6 @@ bool Player::ActivateTalentSpec(int primaryOrSecondary)
 	SaveToDB();
 
 	return true;
-}
-
-uint8 Player::ApplyTransmogrifications(uint8 slot, uint32 sourceItemID, uint32 slotId)
-{
-
-    uint32 transmogCurrencyItemId = 51217;
-
-    Item* destItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
-
-    if (!destItem || !destItem->GetProto())
-        return 1; // no dest item
-
-    uint32 newItemId = 0;
-
-    if (sourceItemID)
-    {
-        if (GetItemCount(transmogCurrencyItemId) == 0)
-            return 11; // no coin
-
-        if (slot > EQUIPMENT_SLOT_END)
-            return 2; // bad slot
-
-        if (!_collectionMgr->HasTransmog(sourceItemID))
-            return 3; // transmog not learned
-
-        ItemPrototype const* srcItemProto = sObjectMgr.GetItemPrototype(sourceItemID);
-
-        if (!srcItemProto)
-            return 4; // no source item proto
-
-        // todo transmog rules check HERE
-        std::string possibleTransmogs = _collectionMgr->GetAvailableTransmogs(slotId, destItem->GetProto()->InventoryType, destItem->GetProto()->ItemId) + ":";
-        if (!strstr(possibleTransmogs.c_str(), std::to_string(sourceItemID).c_str()))
-            return 5; // source not valid for destination
-
-        // create or get item replica
-        newItemId = sObjectMgr.CreateItemTransmogrifyTemplate(destItem->GetProto()->ItemId, srcItemProto->DisplayInfoID, sourceItemID);
-
-        DestroyItemCount(transmogCurrencyItemId, 1, true);
-    }
-    else
-    {
-        sObjectMgr.DeleteItemTransmogrifyTemplate(destItem->GetTransmogrification());
-    }
-
-    destItem->SetTransmogrification(newItemId);
-    if (!destItem->IsSoulBound())
-        destItem->SetBinding(true);
-    // update on client
-    SetVisibleItemSlot(slot, destItem);
-    destItem->SetState(ITEM_CHANGED, this);
-    return 0;
-}
-
-std::string Player::GetAvailableTransmogs(uint8 InventorySlotId, uint8 invType, uint32 destItemId)
-{
-    if (_collectionMgr)
-        return _collectionMgr->GetAvailableTransmogs(InventorySlotId, invType, destItemId);
-
-    return {};
-}
-
-std::string Player::GetTransmogStatus()
-{
-    std::string status;
-    for (auto slot = 0; slot < EQUIPMENT_SLOT_END; ++slot)
-    {
-        if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, slot))
-        {
-
-            // serverSlot to inventorySlotId
-            uint8 InventorySlotId = _collectionMgr->ServerSlotToClientInventorySlotId(slot);
-
-            //tmogProto->InventoryType
-            if (ItemPrototype const* tmogProto = ObjectMgr::GetItemPrototype(pItem->GetTransmogrification()))
-                status += std::to_string(InventorySlotId) + ":" + std::to_string(tmogProto->SourceItemId) + ",";
-            else
-                status += std::to_string(0) + ":0" + ","; // todo
-        }
-    }
-
-    if (status.empty())
-        return "0:0";
-
-    status.pop_back(); // remove last ","
-
-    return status;
 }
 
 bool Player::HasTitle(uint8 title)
