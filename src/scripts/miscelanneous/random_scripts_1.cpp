@@ -7194,7 +7194,7 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for the Exhaustion Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I'd like to buy a glyph.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I'd like to buy a glyph.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;
@@ -7215,6 +7215,9 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
         pCreature->MonsterSayToPlayer("Exhausted mind tends to optimize actions and practice makes perfect!", pPlayer);
         pPlayer->LearnSpell(50004, false, false);
     }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+        pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
 
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
