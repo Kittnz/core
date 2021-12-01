@@ -5144,3 +5144,23 @@ update item_template set stat_value2 = 14, stat_value1 = 12, stat_type3 = 5, sta
 update item_template set stat_value1 = 26, stat_type2 = 3, stat_value2 = 12, armor = 362, spellid_1 = 13384, spelltrigger_1 = 1 where entry = 12636; 
 
 update item_template set bonding = 1, quality = 2 where entry = 12845;
+
+update item_template set stat_value2 = 12, stat_value1 = 12, stat_type3 = 5, stat_value3 = 8, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 25036, spelltrigger_2 = 1 where entry = 19051;
+
+update item_template set stat_value4 = 0 where entry = 19613;
+
+update item_template set stat_value4 = 0 where entry = 19612;
+
+update item_template set stat_value4 = 0 where entry = 19611;
+
+update item_template set stat_type1 = 3, stat_type3 = 4, stat_type4 = 7 where entry = 19609;
+
+update item_template set stat_type4 = 3, stat_type3 = 4, stat_type4 = 7 where entry = 19608;
+
+update item_template set stat_type4 = 3, stat_type3 = 4, stat_type4 = 7 where entry = 19607;
+
+update item_template set stat_value1 = 12, stat_type1 = 4, stat_value2 = 29, stat_type2 = 7, spellid_1 = 0 where entry = 13498;
+
+update item_template set stat_value1 = 12, stat_type1 = 5, stat_value3 = 0, stat_type3 = 0, spellid_2 = 13387, spelltrigger_2 = 1 where entry = 18312;
+
+UPDATE item_template SET stat_type3 = 0, stat_value3 = 0 WHERE entry = 12636;
