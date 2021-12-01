@@ -2287,12 +2287,12 @@ public:
             {CHALLENGE_HARDCORE,        SPELL_HARDCORE}
         };
 
-        for (auto const& data : challenge_spells)
-        {
-            if (data.first && HasSpell(data.second))
-                return true;
-        }
-        return false;
+        auto itr = challenge_spells.find(challenge);
+
+        if (itr == challenge_spells.end())
+            return false;
+
+        return HasSpell(itr->second);
     };
 
 // Chat system:
