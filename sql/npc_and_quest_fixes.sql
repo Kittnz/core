@@ -5138,3 +5138,9 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '100', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+update item_template set stat_value2 = 14, stat_value1 = 12, stat_type3 = 5, stat_value3 = 9, spellid_1 = 13674, spelltrigger_1 = 1, spellid_2 = 23515, spelltrigger_2 = 1 where entry = 19057;
+
+update item_template set stat_value1 = 26, stat_type2 = 3, stat_value2 = 12, armor = 362, spellid_1 = 13384, spelltrigger_1 = 1 where entry = 12636; 
+
+update item_template set bonding = 1, quality = 2 where entry = 12845;
