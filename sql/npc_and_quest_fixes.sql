@@ -5022,3 +5022,8 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (10637, 40299);
 replace into creature_involvedrelation (id, quest) values (10637, 40299);
+
+update quest_template set rewitemid1 = 83417 where entry = 40299;
+update quest_template set rewitemcount1 = 1 where entry = 40299;
+
+update item_template set display_id = 15402 where entry = 83285;
