@@ -5164,3 +5164,35 @@ update item_template set stat_value1 = 12, stat_type1 = 4, stat_value2 = 29, sta
 update item_template set stat_value1 = 12, stat_type1 = 5, stat_value3 = 0, stat_type3 = 0, spellid_2 = 13387, spelltrigger_2 = 1 where entry = 18312;
 
 UPDATE item_template SET stat_type3 = 0, stat_value3 = 0 WHERE entry = 12636;
+
+-- Aputuq, display ID 18502, level 38, faction 35, greeting text : "Well, not often we see outsiders! Come, shelter yourself, the winter can surely get harsh!"
+-- Tonlok , display ID 18502, level 38, faction 35, scale 0.7
+-- Panukuki, display ID 18502, level 39, faction 35, greeting text : "Welcome to Kaneq\'nuun, you certainly look much different than anything I\'ve seen, but as long as you\'re friendly, you are welcome. I am Panukuki, the elder here, if you have any questions, feel free to bring them to me."
+-- Inuksuk <Fisher> , display ID 18502, level 33, faction 35, weapon 6256 
+-- Tarqsiku, display ID 18641 , level 48, faction 16, scale 1.4
+-- Icepoint Whiteclaw, display ID 913 level 44-46, faction 16 , scale 1.3
+
+REPLACE INTO creature_template VALUES
+(60540, 18502, 0, 0, 0, 'Aputuq', '', 0, 38, 38, 1599, 1599, 0, 0, 1780, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60540, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 91, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60541, 18502, 0, 0, 0, 'Tonlok', '', 0, 38, 38, 1599, 1599, 0, 0, 1780, 35, 3, 1, 1.14286, 0.7, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60541, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 91, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60542, 18502, 0, 0, 0, 'Panukuki', '', 0, 39, 39, 1677, 1677, 0, 0, 1834, 51, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60542, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 91, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60543, 18502, 0, 0, 0, 'Inuksuk', 'Fisher', 0, 33, 33, 918, 918, 0, 0, 712, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 34, 43, 0, 132, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 52.7472, 72.5274, 100, 7, 0, 60543, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60544, 18641, 0, 0, 0, 'Tarqsiku', '', 0, 48, 48, 2577, 2577, 0, 0, 680, 16, 0, 1, 1.14286, 1.4, 18, 5, 0, 0, 1, 87, 112, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 60544, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60545, 913, 0, 0, 0, 'Icepoint Whiteclaw', '', 0, 44, 46, 2138, 2298, 0, 0, 2641, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 73, 93, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60545, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 81, 111, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+set @equip_template = 20047; set @weapon_1 = 6256; set @weapon_2 = 0; set @creature = 60543;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41049; set @magic_number = 60540;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well, not often we see outsiders! Come, shelter yourself, the winter can surely get harsh!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41050; set @magic_number = 60542;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Kaneq\'nuun, you certainly look much different than anything I\'ve seen, but as long as you\'re friendly, you are welcome. I am Panukuki, the elder here, if you have any questions, feel free to bring them to me.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
