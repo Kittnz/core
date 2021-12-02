@@ -9743,26 +9743,42 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name))
         return false;
 
-    if (target)
-    {
-        // check online security
-        if (HasLowerSecurity(target))
-            return false;
+    std::string extraArgs = args;
+    bool cancel = extraArgs.find("cancel") != std::string::npos;
 
-        PSendSysMessage(LANG_RENAME_PLAYER, GetNameLink(target).c_str());
-        target->SetAtLoginFlag(AT_LOGIN_RENAME);
-        CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '1' WHERE guid = '%u'", target->GetGUIDLow());
+    if (!cancel)
+    {
+        if (target)
+        {
+            // check online security
+            if (HasLowerSecurity(target))
+                return false;
+
+            PSendSysMessage(LANG_RENAME_PLAYER, GetNameLink(target).c_str());
+            target->SetAtLoginFlag(AT_LOGIN_RENAME);
+            CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '1' WHERE guid = '%u'", target->GetGUIDLow());
+        }
+        else
+        {
+            // check offline security
+            if (HasLowerSecurity(nullptr, target_guid))
+                return false;
+
+            std::string oldNameLink = playerLink(target_name);
+
+            PSendSysMessage(LANG_RENAME_PLAYER_GUID, oldNameLink.c_str(), target_guid.GetCounter());
+            CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '1' WHERE guid = '%u'", target_guid.GetCounter());
+        }
     }
     else
     {
-        // check offline security
-        if (HasLowerSecurity(nullptr, target_guid))
-            return false;
-
-        std::string oldNameLink = playerLink(target_name);
-
-        PSendSysMessage(LANG_RENAME_PLAYER_GUID, oldNameLink.c_str(), target_guid.GetCounter());
-        CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '1' WHERE guid = '%u'", target_guid.GetCounter());
+        if (target->HasAtLoginFlag(AT_LOGIN_RENAME))
+        {
+            target->RemoveAtLoginFlag(AT_LOGIN_RENAME, true);
+            SendSysMessage("At login rename removed in DB and memory.");
+        }
+        else
+            SendSysMessage("Player doens't have rename flag.");
     }
 
     return true;

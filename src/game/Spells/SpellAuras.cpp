@@ -5781,14 +5781,14 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             {
                 double d = (-1 + ((int)GetAuraTicks() - 1) / 4) * (spellProto->CalculateSimpleValue(EFFECT_INDEX_0) / 2.0);
                 d = std::max(d, 0.);
-                pdamage = std::max(0u, dither(pdamage + d));
+                pdamage = dither(pdamage + d);
             }
             // Starshards damage-per-tick calculation
             if (spellProto->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_STARSHARDS>())
             {
                 double d = (-1 + ((int)GetAuraTicks() - 1) / 2) * (spellProto->CalculateSimpleValue(EFFECT_INDEX_0) / 3.0);
                 d = std::max(d, 0.);
-                pdamage = std::max(0u, dither(pdamage + d));
+                pdamage = dither(pdamage + d);
             }
 
 
