@@ -335,6 +335,11 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
             }
 
             pCharmedUnit->ClearUnitState(UNIT_STAT_MOVING);
+            if (pCharmedUnit->HasSpellCooldown(spellid) || pCharmedUnit->HasSpellCategoryCooldown(spellInfo->Category))
+            {
+                pCharmedUnit->SendPetCastFail(spellid, SPELL_FAILED_NOT_READY);
+                return;
+            }
             auto result = pCharmedUnit->CastSpell(unit_target, spellInfo, false);
             if (result != SPELL_CAST_OK)
                 pCharmedUnit->SendPetCastFail(spellid, result);
