@@ -9772,13 +9772,16 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
     }
     else
     {
-        if (target->HasAtLoginFlag(AT_LOGIN_RENAME))
+        if (target)
         {
-            target->RemoveAtLoginFlag(AT_LOGIN_RENAME, true);
-            SendSysMessage("At login rename removed in DB and memory.");
+            if (target->HasAtLoginFlag(AT_LOGIN_RENAME))
+            {
+                target->RemoveAtLoginFlag(AT_LOGIN_RENAME, true);
+                SendSysMessage("At login rename removed in DB and memory.");
+            }
+            else
+                SendSysMessage("Player doens't have rename flag.");
         }
-        else
-            SendSysMessage("Player doens't have rename flag.");
     }
 
     return true;
