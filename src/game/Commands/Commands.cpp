@@ -6628,6 +6628,26 @@ bool ChatHandler::HandleSetViewCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleSetTimeCommand(char* args)
+{
+    auto player = GetSession()->GetPlayer();
+    if (!player || !player->IsInWorld())
+        return false;
+
+    uint32 hour;
+    if (!ExtractUInt32(&args, hour))
+        return false;
+
+    WorldPacket data;
+    data.Initialize(SMSG_GAMETIME_SET, 4 );
+    
+    tm* lt = localtime(&sWorld.GetGameTime());
+    lt->tm_hour = hour;
+    data << uint32(secsToTimeBitFields(mktime(lt)));
+    GetSession()->SendPacket(&data);
+    return true;
+}
+
 bool ChatHandler::HandleGoldRemoval(char* args)
 {
     std::string error("Illformed gold removal command. Format is: name #g #s #c"); // move?

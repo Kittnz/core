@@ -442,6 +442,8 @@ class ChatHandler
         bool HandleSetGMChatCommand(char* args);
         bool HandleSetViewCommand(char* args);
 
+        bool HandleSetTimeCommand(char* args);
+
         bool HandleItemMoveCommand(char* args);
         bool HandleDeMorphCommand(char* args);
         bool HandleGroupInfoCommand(char* args);
