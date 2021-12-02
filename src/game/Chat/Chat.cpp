@@ -653,6 +653,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "xp",             SEC_PLAYER,         false, &ChatHandler::HandleXPCommand,                     "", nullptr },
         { "alterac",        SEC_PLAYER,         false, &ChatHandler::HandleQueueAvCommand,                      "", nullptr },
         { "arathi",         SEC_PLAYER,         false, &ChatHandler::HandleQueueArathiBasinCommand,             "", nullptr },
+        { "settime",        SEC_GAMEMASTER,     false, &ChatHandler::HandleSetTimeCommand, "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
