@@ -281,6 +281,51 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
     }
 
+	// ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD
+	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+	{
+		if (strstr(msg.c_str(), "TW_CHAT_MSG_WHISPER"))
+		{
+			// syntax: SendAddonMessage("TW_CHAT_MSG_WHISPER<ToName>", "message", "GUILD")
+			// returns: TW_CHAT_MSG_WHISPER message (event has arg4 = from )
+			std::string to;
+			std::string message;
+
+			Tokenizer params(msg, '>', 2);
+			if (params.size() != 2)
+			{
+				// wrong syntax
+				_player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "SyntaxError:WrongDestination");
+				return;
+			}
+			message = params[1];
+
+			Tokenizer dest(params[0], '<', 2);
+			if (dest.size() != 2)
+			{
+				// wrong syntax
+				_player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "SyntaxError:WrongDestination");
+				return;
+			}
+			to = dest[1];
+			if (!normalizePlayerName(to))
+				return;
+
+			LoginDatabase.escape_string(to);
+
+			if (Player* pTargetPlayer = sObjectMgr.GetPlayer(to.c_str())) {
+				std::string playerName = _player->GetName();
+				pTargetPlayer->SendAddonMessage("TW_CHAT_MSG_WHISPER", message);
+			}
+			else
+			{
+				// wrong syntax
+				_player->SendAddonMessage("TW_CHAT_MSG_WHISPER", "Error:CantFindPlayer:" + to);
+				return;
+			}
+			return;
+		}
+	}
 	// Shop Addon Coms
 	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
 	{
