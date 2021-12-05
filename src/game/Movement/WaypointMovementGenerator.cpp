@@ -367,9 +367,11 @@ void FlightPathMovementGenerator::Reset(Player & player, float modSpeed)
     player.AddUnitState(UNIT_STAT_TAXI_FLIGHT);
     player.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 
-    Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
+    uint32 currentModeId = GetCurrentNode();
     uint32 end = GetPathAtMapEnd();
-    for (uint32 i = GetCurrentNode(); i != end; ++i)
+
+    Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
+    for (uint32 i = currentModeId; i != end; ++i)
     {
         G3D::Vector3 vertice((*i_path)[i].x, (*i_path)[i].y, (*i_path)[i].z);
         init.Path().push_back(vertice);
@@ -387,6 +389,13 @@ bool FlightPathMovementGenerator::Update(Player &player, uint32 const& /*diff*/)
     while (static_cast <int32>(i_currentNode) < pointId)
     {
         ++i_currentNode;
+        if ((*i_path)[i_currentNode].actionFlag & 4)
+        {
+            player.SaveTaxiFlightData(i_currentNode + 4);
+            player.PrepareTaxiFlightWithTeleport();
+            player.TeleportTo((*i_path)[i_currentNode + 4].mapid, (*i_path)[i_currentNode + 4].x + 1.0f, (*i_path)[i_currentNode + 4].y + 1.0f, (*i_path)[i_currentNode + 4].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
+            return false;
+        }
         if (MovementInProgress() && (*i_path)[i_currentNode + 1].path != (*i_path)[i_currentNode].path)
         {
             player.GetTaxi().NextTaxiDestination();

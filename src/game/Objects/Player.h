@@ -624,10 +624,11 @@ enum PlayerLoginQueryIndex
 
 enum PlayerDelayedOperations
 {
-    DELAYED_SAVE_PLAYER           = 0x01,
-    DELAYED_RESURRECT_PLAYER      = 0x02,
-    DELAYED_SPELL_CAST_DESERTER   = 0x04,
-    DELAYED_CAST_HONORLESS_TARGET = 0x08,
+    DELAYED_SAVE_PLAYER               = 0x01,
+    DELAYED_RESURRECT_PLAYER          = 0x02,
+    DELAYED_SPELL_CAST_DESERTER       = 0x04,
+    DELAYED_CAST_HONORLESS_TARGET     = 0x08,
+    DELAYED_TAXI_FLIGHT_WITH_TELEPORT = 0x10, // special case: it's not default restoring taxi flight
     DELAYED_END
 };
 
@@ -2669,6 +2670,20 @@ public:
 		// General send addon message
 	public:
 		void SendAddonMessage(std::string prefix, std::string message);
+
+        // For new taxi
+    public:
+        uint32 GetSaveTaxiData(uint8 index) { if (index > 2) return 0; return saveTaxiDataForTeleport[index]; }
+        void SaveTaxiFlightData(uint32 startNodeAfterTeleport)
+        {
+            saveTaxiDataForTeleport[0] = m_taxi.GetTaxiSource();
+            saveTaxiDataForTeleport[1] = m_taxi.GetTaxiDestination();
+            saveTaxiDataForTeleport[2] = startNodeAfterTeleport;
+        }
+        void PrepareTaxiFlightWithTeleport() { ScheduleDelayedOperation(DELAYED_TAXI_FLIGHT_WITH_TELEPORT); }
+    private:
+        uint32 saveTaxiDataForTeleport[3]{};
+
 
 };
 
