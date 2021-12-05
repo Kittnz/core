@@ -1475,6 +1475,15 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         uint32 cheatAction = GetCheatData()->Update(p_time, reason);
         if (cheatAction)
             GetSession()->ProcessAnticheatAction("MovementAnticheat", reason.str().c_str(), cheatAction, sWorld.getConfig(CONFIG_UINT32_AC_MOVEMENT_BAN_DURATION));
+    
+        if (GetZoneId() == 2366 && IsAlive()) // Black Morass
+        {
+            if (GetPositionZ() < -250.00f)
+            {
+                SetHealthPercent(0);
+                m_deathState = JUST_DIED;
+            }
+        }    
     }
 
     // Hardcore mode safe update
