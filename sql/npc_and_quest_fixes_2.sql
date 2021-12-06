@@ -1373,3 +1373,5 @@ replace into creature_loot_template values
 (3713, 60445, 40, 1, 1, 1, 0),
 (3715, 60445, 40, 1, 1, 1, 0),
 (3717, 60445, 40, 1, 1, 1, 0);
+
+update creature_template set faction = 1693 where subname = 'Kul Tiras';
