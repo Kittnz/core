@@ -1355,3 +1355,21 @@ replace into creature_involvedrelation (id, quest) values (6929, 40301);
 delete from item_template where entry = 60444;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60444,1297,'Sack of Flour',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Spiced, as all good things should be.',0);
+
+-- Torta's Egg --
+delete from quest_template where entry = 40302;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40302,2,0,22,20,512,0,'Torta\'s Egg','Hello there adventurer and welcome to the Darkmoon Faire!\n\nI\'d usually try and persuade you to quickly have a look at our attractions but this time I have a quest for you!\n\nAs you may know the Darkmoon Faire moves from Kalimdor to Eastern Kingdoms each week. In fact we are able to move through most cities without the faction barrier. With the new boat from Darkshore to Stormwind we have drastically changed our route.\n\nTo quickly be done with the explanation, this week we camped close to Zoram\'s Strand at night before reaching Darkshore, and one of those Nagas stole a very precious gift I once got in Tanaris!\n\nAh yes, it was in my days of searching for wonders and mystery that I found a curious turtle close to the shores, her name was Torta, and she could speak! Imagine, a speaking turtle, how marvelous!\n\nShe asked me to find her husband, Tooga. Apparently he got lost a lot, but he also was able to speak! Never in my life have I seen such a thing. But sadly they didn\'t wish to join the Faire, however Torta offered me one of her eggs and that\'s the precious gift I am talking about, I think it was about to hatch too.\n\nPlease $n, bring back my egg.','Find Torta\'s Egg in Zoram Strand.','Do you have it?','You found it!\n\nOh my, I think it\'s hatching $n! Quick what a beautiful little baby tu-- it\'s not a baby?!\n\n<The turtle seemed to have gotten a growth spurt and stares at you>.\n\nI think those Nagas used their magic on this poor baby turtle, it seems to believe you are its parent, there goes my chance to have a talking turtle in the Faire.\n\nWell, enjoy your new companion friend, and visit us from time to time, I really wonder if it will ever speak. ',60445,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2000,1555,250,0,0,0,0,0,0,0,0,0,23720,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (14823, 40302);
+replace into creature_involvedrelation (id, quest) values (14823, 40302);
+
+delete from item_template where entry = 60444;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60445,18050,'Torta\'s Egg',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- TORTA'S EGG DROP 
+replace into creature_loot_template values
+(3712, 60445, 40, 1, 1, 1, 0),
+(3713, 60445, 40, 1, 1, 1, 0),
+(3715, 60445, 40, 1, 1, 1, 0),
+(3717, 60445, 40, 1, 1, 1, 0);
