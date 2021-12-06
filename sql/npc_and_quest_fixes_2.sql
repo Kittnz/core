@@ -1331,3 +1331,16 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Moo.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- A Secret Admirer --
+delete from quest_template where entry = 40300;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40300,2,141,12,10,0,0,'A Secret Admirer','Hail young $c.\n\nAre you by chance aiming to visit the human city of Stormwind? If so, I have a favor to ask. Unlike many of my kinsman I have a great pleasure for fishing, it is very relaxing for someone with so much time like myself.\n\nAt times I gather clams from waters and they usually contain a pearl as purely white as Elune herself on darkest night, from those I have put together a necklace which I would like you to deliver to Shailiea. For many decades I have liked and courted her. Give her the necklace and tell her it\'s from her secret admirer.\n\nThe quickest way to get to Stormwind would be from the Auberdine dock, a boat will take you there, she should reside in the Park.\n\nLet me quickly wrap this in a piece of cloth.','Deliver Androl\'s Package to Shailiea in Stormwind City.','Elune be with you.','Secret admirer?\n\nOh poor Androl, I have known for years, I wish he\'d be more direct than this.\n\nThank you, $n.\n\nHere, for your troubles.',60443,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60443,1,535,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (3607, 40300);
+replace into creature_involvedrelation (id, quest) values (7295, 40300);
+
+update creature_template set npc_flags = 2 where entry = 7295;
+
+delete from item_template where entry = 60443;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60443,29445,'Perfectly Wrapped Gift',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Wrapped with care and love.',0);
