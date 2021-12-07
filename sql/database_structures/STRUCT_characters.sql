@@ -624,6 +624,7 @@ CREATE TABLE `characters`  (
   `ignore_titles` tinyint NOT NULL DEFAULT 0,
   `mortality_status` tinyint NOT NULL DEFAULT 0,
   `total_deaths` int NOT NULL DEFAULT 0,
+  `xp_gain` tinyint UNSIGNED NOT NULL DEFAULT 1,
   PRIMARY KEY (`guid`) USING BTREE,
   INDEX `idx_account`(`account`) USING BTREE,
   INDEX `idx_online`(`online`) USING BTREE,
@@ -1025,6 +1026,23 @@ CREATE TABLE `guild_rank`  (
   PRIMARY KEY (`guildid`, `rid`) USING BTREE,
   INDEX `idx_rid`(`rid`) USING BTREE
 ) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Guild System' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for hardcore_deaths
+-- ----------------------------
+DROP TABLE IF EXISTS `hardcore_deaths`;
+CREATE TABLE `hardcore_deaths`  (
+  `lowGuid` int UNSIGNED NOT NULL,
+  `race` mediumint UNSIGNED NOT NULL DEFAULT 0,
+  `class` mediumint UNSIGNED NOT NULL DEFAULT 0,
+  `level` int UNSIGNED NOT NULL,
+  `attackerEntry` int UNSIGNED NOT NULL,
+  `position_x` float NOT NULL DEFAULT 0,
+  `position_y` float NOT NULL DEFAULT 0,
+  `position_z` float NOT NULL DEFAULT 0,
+  `mapId` int UNSIGNED NOT NULL DEFAULT 0,
+  PRIMARY KEY (`lowGuid`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for instance
