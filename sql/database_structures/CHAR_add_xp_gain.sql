@@ -1,2 +1,0 @@
-ALTER TABLE `characters`
-	ADD COLUMN `xp_gain` TINYINT UNSIGNED NOT NULL DEFAULT 1 AFTER `total_deaths`;
