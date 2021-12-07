@@ -1375,3 +1375,5 @@ replace into creature_loot_template values
 (3717, 60445, 40, 1, 1, 1, 0);
 
 update creature_template set faction = 1693 where subname = 'Kul Tiras';
+
+replace  into taxi_nodes values (184,0,4321.99,-2806.02,5.1,'Quel\'Thalas, Alah\'Thalas',0,541); 
