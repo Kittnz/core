@@ -1425,3 +1425,29 @@ replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `displa
 replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93101, 7905, 0, 0, 0, 'Vanessa Porter	', 'Gryphon Master', 0, 55, 55, 7842, 7842, 0, 0, 4500, 12, 8, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 1, 0, 524290, 0, '');
 
 replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93102, 7904, 0, 0, 0, 'Nal\'rak', 'Wind Rider Master', 0, 55, 55, 7842, 7842, 0, 0, 4500, 29, 8, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 1, 0, 524290, 0, '');
+
+-- Set the respawn timer for the following rare-spawn world bosses to between 15-24 hours
+
+update creature_template set rank = 2 where name = 'Kin\'tozo';
+update creature_template set rank = 2 where name = 'Tarangos';
+update creature_template set rank = 2 where name = 'Blademaster Kargron';
+update creature_template set rank = 2 where name = 'Mallon the Moontouched';
+update creature_template set rank = 2 where name = 'Xalvic Blackclaw';
+update creature_template set rank = 2 where name = 'Grug\'thok the Seer';
+update creature_template set rank = 2 where name = 'The Wandering Knight';
+update creature_template set rank = 2 where name = 'Crusader Larsarius';
+update creature_template set rank = 2 where name = 'Zareth Terrorblade';
+update creature_template set rank = 2 where name = 'Jal\'akar';
+update creature_template set rank = 2 where name = 'Explorer Ashbeard';
+
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 80269;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49001;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49002;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49004;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49003;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49005;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49007;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49008;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49009;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49010;
+update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49011;
