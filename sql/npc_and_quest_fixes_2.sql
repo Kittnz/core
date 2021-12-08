@@ -1451,3 +1451,12 @@ update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id 
 update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49009;
 update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49010;
 update creature set spawntimesecsmin = 54000, spawntimesecsmax = 86400 where id = 49011;
+
+-- Reduce the damage of Blademaster Kargron by 25%
+
+update creature_template set dmg_min = 290, dmg_max = 320 where entry = 49002;
+
+-- Grovetender Engryss, Elder Blackmaw, and Elder 'One Eye' all pull together even if one is hit.
+
+replace into creature_linking_template values (92106, 802, 92107, 2, 0); 
+replace into creature_linking_template values (92105, 802, 92107, 2, 0); 
