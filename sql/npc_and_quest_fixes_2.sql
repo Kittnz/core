@@ -1386,3 +1386,42 @@ replace into creature_loot_template values
 (80269, 60440, 25, 1, 1, 1, 0),
 (80269, 60441, 25, 1, 1, 1, 0),
 (80269, 60442, 0.25, 2, 1, 1, 0);
+
+delete from creature_loot_template where entry = 91789 and item = 60438;
+delete from creature_loot_template where entry = 91789 and item = 60439;
+delete from creature_loot_template where entry = 91789 and item = 60440;
+delete from creature_loot_template where entry = 91789 and item = 60441;
+delete from creature_loot_template where entry = 91789 and item = 60442;
+
+-- the following NPCS need to be put into the faction Kul Tiran Exploratory Fleet
+
+update creature_template set faction = 1693 where name = 'Denia Hale';
+update creature_template set faction = 1693 where name = 'Sean Pinerock';
+update creature_template set faction = 1693 where name = 'Dudley';
+update creature_template set faction = 1693 where name = 'Valdarion Smite';
+update creature_template set faction = 1693 where name = 'Sailor \'Deepmug\'';
+update creature_template set faction = 1693 where name = 'Angela Goodwill';
+update creature_template set faction = 1693 where name = 'Chef Jenkel';
+update creature_template set faction = 1693 where name = 'Cook Lopperson';
+update creature_template set faction = 1693 where name = 'Marine Lockside';
+update creature_template set faction = 1693 where name = 'Cannoneer Hancock';
+
+-- Raise the level of Ansirem Runeweaver to 53 elite
+
+update creature_template set level_min = 53, level_max = 53, rank = 1 where entry = 2543;
+
+-- arcane protector should have 50000 mana
+
+update creature_template set mana_min = 50000, mana_max = 50000 where entry = 60596;
+
+UPDATE `quest_template` SET `Details` = 'Margon the Mighty and his son Hargul the Hardy are two sea giants that roam the island of Lapidis and the surrounding waters. Hargul especially has been something of a nuissance and attacked Caelan\'s Rest many weeks ago. Whilst no one was harmed he did make away with a few items of importance before the Marines had assembled and figured out a plan to stop him.\n\nOne such item was the Aqua Stone, a magically potent stone that has been channeled with the energy of powerful Hydromancers. With this stone we were able to more accurately channel our abilities.\n\nI would like you to slay Hargul the Hardy and reclaim this valuable treasure. Not just for us Hydromancers, but so that it does not fall in the wrong hands.\n\nYou should find Hargul somewhere off the coast of Lapidis, he was last seen on the Bright Coast, to the west.' WHERE `entry` = 40151;
+
+UPDATE `quest_template` SET `Objectives` = 'Find \'Water Rat\' Jorgy on Lapidis Isle and return his head to Sergeant Blackwell in Caelan\'s Rest.' WHERE `entry` = 40094;
+
+-- New gryphon masters: 371
+
+replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93100, 17168, 0, 0, 0, 'Voryn Skystrider', 'Gryphon Master', 0, 55, 55, 7842, 7842, 0, 0, 4500, 371, 8, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 1, 0, 524290, 0, '');
+
+replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93101, 7905, 0, 0, 0, 'Vanessa Porter	', 'Gryphon Master', 0, 55, 55, 7842, 7842, 0, 0, 4500, 12, 8, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 1, 0, 524290, 0, '');
+
+replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93102, 7904, 0, 0, 0, 'Nal\'rak', 'Wind Rider Master', 0, 55, 55, 7842, 7842, 0, 0, 4500, 29, 8, 1, 1.14286, 0, 20, 5, 0, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 1, 0, 524290, 0, '');
