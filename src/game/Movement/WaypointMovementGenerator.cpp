@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -317,8 +317,9 @@ uint32 FlightPathMovementGenerator::GetPathAtMapEnd() const
     return i_path->size();
 }
 
-void FlightPathMovementGenerator::Initialize(Player &player)
+void FlightPathMovementGenerator::Initialize(Player &player, uint32 StartNode)
 {
+    i_currentNode = StartNode;
     Reset(player);
 }
 
@@ -367,11 +368,11 @@ void FlightPathMovementGenerator::Reset(Player & player, float modSpeed)
     player.AddUnitState(UNIT_STAT_TAXI_FLIGHT);
     player.SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_TAXI_FLIGHT);
 
-    uint32 currentModeId = GetCurrentNode();
+    uint32 currentNodeId = GetCurrentNode();
     uint32 end = GetPathAtMapEnd();
 
     Movement::MoveSplineInit init(player, "FlightPathMovementGenerator::Reset");
-    for (uint32 i = currentModeId; i != end; ++i)
+    for (uint32 i = currentNodeId; i != end; ++i)
     {
         G3D::Vector3 vertice((*i_path)[i].x, (*i_path)[i].y, (*i_path)[i].z);
         init.Path().push_back(vertice);

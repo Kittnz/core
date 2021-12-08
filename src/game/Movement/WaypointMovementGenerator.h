@@ -133,7 +133,7 @@ class FlightPathMovementGenerator : public MovementGeneratorMedium< Player, Flig
             i_path = &pathnodes;
             i_currentNode = startNode;
         }
-        void Initialize(Player &);
+        void Initialize(Player &, uint32 StartNode = 0);
         void Finalize(Player &);
         void Interrupt(Player &);
         void Reset(Player &, float modSpeed = 1.0f);

@@ -174,7 +174,7 @@ void WorldSession::HandleMoveWorldportAckOpcode()
         {
             // short preparations to continue flight
             FlightPathMovementGenerator* flight = (FlightPathMovementGenerator*)(GetPlayer()->GetMotionMaster()->top());
-            flight->Reset(*GetPlayer());
+            flight->Initialize(*GetPlayer(), GetPlayer()->GetSaveTaxiData(2));
             return;
         }
 
