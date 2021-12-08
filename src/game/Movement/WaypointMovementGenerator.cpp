@@ -317,9 +317,8 @@ uint32 FlightPathMovementGenerator::GetPathAtMapEnd() const
     return i_path->size();
 }
 
-void FlightPathMovementGenerator::Initialize(Player &player, uint32 StartNode)
+void FlightPathMovementGenerator::Initialize(Player &player)
 {
-    i_currentNode = StartNode;
     Reset(player);
 }
 
@@ -392,6 +391,14 @@ bool FlightPathMovementGenerator::Update(Player &player, uint32 const& /*diff*/)
         ++i_currentNode;
         if ((*i_path)[i_currentNode].actionFlag & 4)
         {
+            // temporary hack 
+            uint32 nextNode = i_currentNode + 4;
+            switch ((*i_path)[i_currentNode].path)
+            {
+            case 1605: nextNode = 13; break;
+            case 1606: nextNode = 12; break;
+            }
+
             player.SaveTaxiFlightData(i_currentNode + 4);
             player.PrepareTaxiFlightWithTeleport();
             player.TeleportTo((*i_path)[i_currentNode + 4].mapid, (*i_path)[i_currentNode + 4].x + 1.0f, (*i_path)[i_currentNode + 4].y + 1.0f, (*i_path)[i_currentNode + 4].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
@@ -446,7 +453,6 @@ bool FlightPathMovementGenerator::GetResetPosition(Player&, float& x, float& y, 
     z = node.z;
     return true;
 }
-
 // ------------------------------------------------------
 // -- PATROLS SYSTEM
 bool PatrolMovementGenerator::InitPatrol(Creature& creature)

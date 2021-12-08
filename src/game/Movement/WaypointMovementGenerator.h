@@ -133,7 +133,7 @@ class FlightPathMovementGenerator : public MovementGeneratorMedium< Player, Flig
             i_path = &pathnodes;
             i_currentNode = startNode;
         }
-        void Initialize(Player &, uint32 StartNode = 0);
+        void Initialize(Player &);
         void Finalize(Player &);
         void Interrupt(Player &);
         void Reset(Player &, float modSpeed = 1.0f);
@@ -147,6 +147,7 @@ class FlightPathMovementGenerator : public MovementGeneratorMedium< Player, Flig
         void SkipCurrentNode() { ++i_currentNode; }
         void DoEventIfAny(Player& player, TaxiPathNodeEntry const& node, bool departure);
         bool GetResetPosition(Player&, float& x, float& y, float& z);
+        void UpdateCurrentNode(uint32 newNode) { i_currentNode = newNode; }
 };
 
 class PatrolMovementGenerator : public MovementGeneratorMedium<Creature, PatrolMovementGenerator >
