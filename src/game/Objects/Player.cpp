@@ -18197,7 +18197,7 @@ void Player::ContinueTaxiFlight()
         }
     }
 
-    if (!startNode && GetSaveTaxiData(2))
+    if (GetSaveTaxiData(2))
         startNode = GetSaveTaxiData(2);
 
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
