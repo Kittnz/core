@@ -176,6 +176,7 @@ void WorldSession::HandleMoveWorldportAckOpcode()
             FlightPathMovementGenerator* flight = (FlightPathMovementGenerator*)(GetPlayer()->GetMotionMaster()->top());
             if (GetPlayer()->GetSaveTaxiData(2))
                 flight->UpdateCurrentNode(GetPlayer()->GetSaveTaxiData(2));
+            GetPlayer()->ClearTaxiFlightData(2);
             flight->Initialize(*GetPlayer());
             return;
         }

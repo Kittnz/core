@@ -2680,6 +2680,7 @@ public:
             saveTaxiDataForTeleport[1] = m_taxi.GetTaxiDestination();
             saveTaxiDataForTeleport[2] = startNodeAfterTeleport;
         }
+        void ClearTaxiFlightData(uint8 i) { saveTaxiDataForTeleport[i] = 0; }
         void PrepareTaxiFlightWithTeleport() { ScheduleDelayedOperation(DELAYED_TAXI_FLIGHT_WITH_TELEPORT); }
     private:
         uint32 saveTaxiDataForTeleport[3]{};

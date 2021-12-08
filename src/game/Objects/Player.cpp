@@ -2357,6 +2357,10 @@ void Player::ProcessDelayedOperations()
         // restore taxi route
         m_taxi.AddTaxiDestination(GetSaveTaxiData(0));
         m_taxi.AddTaxiDestination(GetSaveTaxiData(1));
+
+        ClearTaxiFlightData(0);
+        ClearTaxiFlightData(1);
+
         ContinueTaxiFlight();
     }
 
@@ -18199,6 +18203,7 @@ void Player::ContinueTaxiFlight()
 
     if (GetSaveTaxiData(2))
         startNode = GetSaveTaxiData(2);
+    ClearTaxiFlightData(2);
 
     GetSession()->SendDoFlight(mountDisplayId, path, startNode);
 }
