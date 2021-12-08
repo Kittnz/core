@@ -1377,3 +1377,12 @@ replace into creature_loot_template values
 update creature_template set faction = 1693 where subname = 'Kul Tiras';
 
 replace  into taxi_nodes values (184,0,4321.99,-2806.02,5.1,'Quel\'Thalas, Alah\'Thalas',0,541); 
+
+-- Kin'Tozo loot fix:
+update creature_template set loot_id = 80269 where entry = 80269;
+replace into creature_loot_template values
+(80269, 60438, 25, 1, 1, 1, 0),
+(80269, 60439, 25, 1, 1, 1, 0),
+(80269, 60440, 25, 1, 1, 1, 0),
+(80269, 60441, 25, 1, 1, 1, 0),
+(80269, 60442, 0.25, 2, 1, 1, 0);
