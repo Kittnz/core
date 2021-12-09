@@ -1460,3 +1460,17 @@ update creature_template set dmg_min = 290, dmg_max = 320 where entry = 49002;
 
 replace into creature_linking_template values (92106, 802, 92107, 2, 0); 
 replace into creature_linking_template values (92105, 802, 92107, 2, 0); 
+
+-- Misc.
+
+update creature_template set name = 'Shadowblade Spectre' where entry = 91918;
+
+UPDATE `quest_template` SET `Details` = 'My brother has recently been dispatched out to the far reaches of our strength and posted within the encampment of Stonard.\n\nIt\'s not for me to question the Warchief\'s desires but I still do worry for my brother\'s safety out there, even if he is strong and good of health.\n\nIt has been months since we have last seen one another with all of the deployments, from one to the next, and now the Swamp of Sorrows of all places?\n\nThe only thing that has me at peace is that he had been promoted to a position of some power within the garrison there.\n\nIt\'s good knowing that maybe he is not on the very frontlines and is instead commanding his men.\n\nIt\'s an odd thing to watch a younger brother become more important then you but, well, duty calls and we must all do our part.\n\n Please find Zuul within Stonard in the Swamp of Sorrows and deliver him this letter.' WHERE `entry` = 55019;
+
+update creature_template set faction = 1693 where entry = 92938;
+update creature_template set faction = 1693 where entry = 92939;
+
+update creature_template set npc_flags = 2 where entry = 91233;
+update creature_template set npc_flags = 2 where entry = 91235;
+
+update item_template set display_id = 14957 where entry = 60437;
