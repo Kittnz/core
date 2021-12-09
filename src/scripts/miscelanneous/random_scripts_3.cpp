@@ -2148,9 +2148,55 @@ bool QuestAccept_npc_yhargosh(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool QuestRewarded_npc_colonel_hardinus(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40303) // The Tower of Lapidis X
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+        DoAfterTime(pPlayer, 1.75 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("It is done, the tyranny of Lapidis has come to an end! Admiral Caelan's soul is put to rest, cheers to $N for their heroic actions!", player);
+            npc->HandleEmote(EMOTE_ONESHOT_SHOUT);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+
+        Creature* NPC_cheer1 = pPlayer->FindNearestCreature(92004, 100.0F);
+        Creature* NPC_cheer2 = pPlayer->FindNearestCreature(91882, 100.0F);
+        Creature* NPC_cheer3 = pPlayer->FindNearestCreature(91889, 100.0F);
+        Creature* NPC_cheer4 = pPlayer->FindNearestCreature(92025, 100.0F);
+
+        if (NPC_cheer1)
+        {
+            DoAfterTime(pPlayer, 2.3 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
+                npc->HandleEmote(EMOTE_ONESHOT_CHEER);
+                });
+            DoAfterTime(pPlayer, 2.5 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
+                npc->HandleEmote(EMOTE_ONESHOT_CHEER);
+                });
+            DoAfterTime(pPlayer, 2.7 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer3]() {
+                npc->HandleEmote(EMOTE_ONESHOT_CHEER);
+                });
+            DoAfterTime(pPlayer, 2.9 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer4]() {
+                npc->HandleEmote(EMOTE_ONESHOT_CHEER);
+                });
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_colonel_hardinus";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_colonel_hardinus;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_yhargosh";

@@ -1582,3 +1582,50 @@ replace into creature_loot_template values
 (91911, 60449, 10, 1, 1, 1, 0),
 (91913, 60449, 10, 1, 1, 1, 0);
 
+-- The Tower of Lapidis X --
+delete from quest_template where entry = 40303;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40171,40303,2,409,55,45,0,0,'The Tower of Lapidis X','The Tower of Lapidis will not be an easy task to conquer, even with this key, this is only the entryway into the gates of hell. You must steel yourself for what is to come, Lapidis has been able to ally himself with the most unlikely friends for a reason. He is a powerful man, and extremely skilled in magic, not to mention surrounded by minions of his own conjuring.\n\nIf you are to conquer The Tower of Lapidis you will need a band of fellow adventurers. Plan for the mission ahead and slay Arch Hydromancer Lapidis for all of his lies, his deceit, and his crimes against Kul Tiras. If you succeed, bring his head to Colonel Hardinus, he would be the most eager to reward such heroic actions.','Venture into The Tower of Lapidis, and slay Arch Hydromancer Lapidis, and return his head to Colonel Hardinus in Caelan\'s Rest.','Hello again $N, what can I do for you?','This... This is the head of Lapidis! It is done, his horror has ceased?!\n\nWhat you have done here is truly heroic, truly worthy of legend. You have assured our survival upon this island, and triumphed over a great evil, a great evil that would have surely been our downfall. Kul Tiras and the Anchor have been given justice, for all of the crimes this man has caused against our people.\n\nPlease, as a token of our gratitude, and in Caelan\'s name, have a just reward.',60450,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60451,1,60452,1,60453,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92001, 40303);
+replace into creature_involvedrelation (id, quest) values (92002, 40303);
+
+delete from item_template where entry = 60450;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60450,2945,'Head of Lapidis',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set script_name = 'npc_colonel_hardinus' where entry = 92002;
+update creature_template set loot_id = 60467 where entry = 60467;
+
+-- Head of Lapidis DROP
+replace into creature_loot_template values
+(60467, 60450, -100, 1, 1, 1, 0);
+
+replace into item_template values
+ ('60451', '4', '4', 'Kul Tiras Marine Helmet', '', '28662', '3', '0', '1', '56432', '14108', '1', '-1', '-1', '59',
+ '54', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '17', '6', '8',
+ '3', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '494', '0', '0', '0',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '80', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60452', '4', '1', 'Hydromancer\'s Peak', '', '26302', '3', '0', '1', '55228', '13807', '1', '-1', '-1', '59',
+ '54', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '15', '6', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '68', '0', '0', '0',
+ '0', '0', '0', '9343', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '50', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60453', '4', '2', 'Sailor\'s Headband', '', '26308', '3', '0', '1', '62724', '15681', '1', '-1', '-1', '59',
+ '54', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '18', '6', '9',
+ '4', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '132', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '1', '0', '0', '60', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '1', NULL);
