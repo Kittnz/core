@@ -1474,3 +1474,111 @@ update creature_template set npc_flags = 2 where entry = 91233;
 update creature_template set npc_flags = 2 where entry = 91235;
 
 update item_template set display_id = 14957 where entry = 60437;
+
+update creature_template set faction = 113 where entry = 91303;
+
+-- Magus Ariden Dusktower <Kirin Tor> , display ID 3715 (placeholder), faction 76, weapon 20654, greeting text : "The growing magical energies surrounding Karazhan have been a great cause for concern within the Kirin Tor. I have ventured here of my own will to study the mysteries that seem to be growing more bold with the passing of time. Perhaps you are willing to assist the Kirin Tor in uncovering the unknown for the greater good?"
+-- Kor'gan, display ID , 2971 (placeholder)  , faction 29 , weapon 15444, greeting text : "I have traveled far in search of a great magic that crackles strong. I have sensed its power all the way from Orgrimmar, and I must know more.\n\n No doubt it is coming from the nearby Karazhan Tower, for what looms within is a mystery to all that must be uncovered. I could use your help, perhaps you are willing to lend assistance?"
+-- Captain Rothynn, level 61 elite, faction 21, weapon 13049, Undead (Is a ghost)
+-- Groundskeeper Jacoby, level 60 elite, faction 21, weapon 1938, weapon 2 13604, Humanoid 
+
+REPLACE INTO creature_template VALUES
+(60606, 3715, 0, 0, 0, 'Magus Ariden Dusktower', 'Kirin Tor', 0, 60, 60, 3296, 3296, 2434, 2434, 3075, 76, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 99, 121, 0, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 60606, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 162, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60607, 2971, 0, 0, 0, 'Kor\'gan', 'Kirin Tor', 0, 60, 60, 3496, 3496, 0, 0, 3175, 29, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 99, 121, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 60607, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 162, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60608, 797, 0, 0, 0, 'Captain Rothynn', '', 0, 61, 61, 14253, 14253, 0, 0, 4391, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 562, 562, 0, 284, 2, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 60608, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 517, 680, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60609, 3976, 0, 0, 0, 'Groundskeeper Jacoby', '', 0, 60, 60, 14652, 14652, 0, 0, 3075, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 544, 703, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.5576, 83.2667, 100, 7, 0, 60609, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 694, 911, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into creature_template_addon values (60608, 0, 0, 0, 0, 0, 0, 9617);
+
+set @equip_template = 20052; set @weapon_1 = 20654; set @weapon_2 = 0; set @creature = 60606;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20053; set @weapon_1 = 15444; set @weapon_2 = 0; set @creature = 60607;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20054; set @weapon_1 = 13049; set @weapon_2 = 0; set @creature = 60608;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20055; set @weapon_1 = 1938; set @weapon_2 = 13604; set @creature = 60609;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41052; set @magic_number = 60606;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The growing magical energies surrounding Karazhan have been a great cause for concern within the Kirin Tor. I have ventured here of my own will to study the mysteries that seem to be growing more bold with the passing of time. Perhaps you are willing to assist the Kirin Tor in uncovering the unknown for the greater good?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41053; set @magic_number = 60607;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I have traveled far in search of a great magic that crackles strong. I have sensed its power all the way from Orgrimmar, and I must know more.\n\n No doubt it is coming from the nearby Karazhan Tower, for what looms within is a mystery to all that must be uncovered. I could use your help, perhaps you are willing to lend assistance?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into item_template values
+ ('60446', '15', '0', 'Groveweald Mark', '', '32282', '0', '0', '1', '804', '201', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '2', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60447', '15', '0', 'Withered Bone', '', '1515', '0', '0', '1', '1724', '431', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60448', '15', '0', 'Rusty Amulet', '', '2624', '0', '0', '1', '4828', '1207', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60449', '15', '0', 'Faded Ghostly Essence', '', '2480', '0', '0', '1', '4552', '1138', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Groveweald Mark DROP
+replace into creature_loot_template values
+(92100, 60446, 10, 1, 1, 1, 0),
+(92101, 60446, 10, 1, 1, 1, 0),
+(92102, 60446, 10, 1, 1, 1, 0),
+(92103, 60446, 10, 1, 1, 1, 0);
+
+-- Withered Bone DROP
+replace into creature_loot_template values
+(91924, 60447, 8, 1, 1, 1, 0),
+(91925, 60447, 8, 1, 1, 1, 0),
+(92935, 60447, 8, 1, 1, 1, 0);
+
+-- Rusty Amulet DROP
+replace into creature_loot_template values
+(91925, 60448, 17, 1, 1, 1, 0),
+(91926, 60448, 17, 1, 1, 1, 0);
+
+-- Faded Ghostly Essence DROP
+replace into creature_loot_template values
+(91923, 60449, 10, 1, 1, 1, 0),
+(91911, 60449, 10, 1, 1, 1, 0),
+(91913, 60449, 10, 1, 1, 1, 0);
+
