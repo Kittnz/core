@@ -2010,3 +2010,15 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 replace into creature_loot_template values
 (60608, 60457, -100, 1, 1, 1, 0),
 (60609, 60458, -100, 1, 1, 1, 0);
+
+-- The Depths of Karazhan VI --
+delete from quest_template where entry = 40309;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40308,40309,2,8,60,58,0,0,'The Depths of Karazhan VI','Now then, you have done your deeds with honor intact, it is my time to uphold my end of the bargain. It will take some time, and great concentration, but I will work to reforge the Karazhan Crypt Key.\n\nWith everything in place, it should allow entry into the Crypts of Karazhan! Now, step back, and behold my power!','Wait for Kor\'gan to reforge the Karazhan Crypt Key.','Yes?','So, the stories were correct, the items have been obtained, with the Pendant of Ardan, the Mark of Karazhan, and the key itself, I can begin to work my magic.',0,0,0,0,0,0,0,0,60344,1,0,0,0,0,0,0,0,0,0,6150,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The Karazhan Crypt Key has been reforged');
+
+replace into creature_questrelation (id, quest) values (60607, 40309);
+replace into creature_involvedrelation (id, quest) values (60607, 40309);
+
+update creature_template set script_name = 'npc_korgan' where entry = 60607;
+
+delete from creature_template where entry = 60344;
+replace into creature_template (entry, name, display_id1) values (60344, 'quest_40309_dummy_triger', 328);
