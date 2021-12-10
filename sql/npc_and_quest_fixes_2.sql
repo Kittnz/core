@@ -1839,3 +1839,121 @@ replace into creature_display_info_addon VALUES
 (18474,0,0,0,0),
 (18475,0,0,0,0),
 (18476,0,0,0,0);
+
+-- The Depths of Karazhan I --
+delete from quest_template where entry = 40304;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40304,2,8,60,58,0,0,'The Depths of Karazhan I','I have been sent by a council of mages from Orgrimmar to look into the growing power that emits from Karazhan. I have done much research into the tower itself and the artifacts that once belonged in the ruins around it.\n\nI have some hunches, the first of which is that the energy that me, and the other mages have felt is coming from beneath Karazhan. In an old, and decrepid series of catacombs underneath the tower. If I am correct, then we will need an old Pendant which holds power enough to re-energize a key created by Medivh.\n\nThis artifact is known as the Pendant of Ardan, thought lost for some years now. My only hint is that of the ogres of Deadwind Pass, of which, their leader Var\'zhog has begun to exhibit magical prowess.\n\nFind Var\'zhog, and from him, reclaim the Pendant of Ardan.','Search for the Pendant of Ardan, rumored to be held by the ogre Var\'zhog, collect it, and return to Kor\'gan in Stonard.','The Pendant of Ardan will be required if we wish to proceed, find it.','<A smirk would press to Kor\'gan as he looks upon the Pendant>.\n\nThis is it, you\'ve done well, I\'ve always had some suspicions about Var\'zhog and his power, with this, we can continue.',60454,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6250,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60607, 40304);
+replace into creature_involvedrelation (id, quest) values (60607, 40304);
+
+delete from item_template where entry = 60454;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60454,1148,'Pendant of Ardan',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Var'zhog , display ID 655, level 60, mana 4000, scale 2.1, weapon 18534, casts 15208, faction 45
+REPLACE INTO creature_template VALUES
+(60610, 655, 0, 0, 0, 'Var\'zhog', '', 0, 60, 60, 3296, 3296, 4000, 4000, 3075, 45, 0, 1, 1.14286, 2.1, 18, 5, 0, 0, 1, 99, 121, 0, 272, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 60610, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 120, 162, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Pendant of Ardan DROP
+replace into creature_loot_template values
+(60610, 60454, -100, 1, 1, 1, 0);
+
+-- Var'zhog
+set @creature_entry = 60610;
+set @description = ' : Var\'zhog';
+set @spell_list_id = 180015;
+
+set @spellid_1 = 15208; -- Lightning Bolt
+set @probability_1 = 100; 
+set @casttarget_1 = 4; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 2; 
+set @delayinitialmax_1 = 2; 
+set @delayrepeatmin_1 = 9; 
+set @delayrepeatmax_1 = 10;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 15208, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
