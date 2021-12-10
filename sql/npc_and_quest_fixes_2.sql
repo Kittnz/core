@@ -2022,3 +2022,43 @@ update creature_template set script_name = 'npc_korgan' where entry = 60607;
 
 delete from creature_template where entry = 60344;
 replace into creature_template (entry, name, display_id1) values (60344, 'quest_40309_dummy_triger', 328);
+
+-- The Depths of Karazhan VII --
+delete from quest_template where entry = 40310;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40309,40310,2,8,60,58,0,0,'The Depths of Karazhan VII','There is only one step left for us, as honorable members of the Horde. We must step forth into the darkness, and vanquish this evil before it grows even stronger. If we were to let the humans deal with this, who knows if they could even stop it?\n\nAs Grom Hellscream slayed Mannoroth, we too much look upon something terrible and destroy it from this world. I ask of you to venture into the Karazhan Crypts, and put an end to this madness, for the good of this world.\n\nThis will not be a task you can handle alone, make sure you bring strong allies to journey with you.','Venture forth into the Karazhan Crypts, once inside slay Alarus, the watcher of the Crypts for Kor\'gan in Stonard.','Do not fear the darkness $N, stride with a great determination and you may still find glory.','Do you feel it? A great fog has been lifted over the area, and the foul blackness of magic is beginning to subside. You have done the work of great heroes, and have acted with a decisiveness I have not seen! You bring honor to your ancestors, please, take one of these items as a tribute of my thanks in helping me.',0,0,0,0,0,0,0,0,91928,1,0,0,0,0,0,0,0,0,0,6150,76,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60459,1,60460,1,60461,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60607, 40310);
+replace into creature_involvedrelation (id, quest) values (60607, 40310);
+
+update quest_template set type = 81 where entry = 40310;
+
+replace into item_template values
+ ('60459', '4', '0', 'Charged Arcane Ring', '', '31616', '3', '0', '1', '168432', '42108', '11', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '15', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '20', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60460', '4', '0', 'Tusk of Gardon', '', '3429', '3', '0', '1', '200792', '50198', '2', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '15', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '20', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60461', '4', '0', 'Blackfire Orb', '', '23727', '3', '0', '1', '200792', '50198', '12', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '5', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
