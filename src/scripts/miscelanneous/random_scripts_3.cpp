@@ -2222,9 +2222,47 @@ bool QuestAccept_npc_korgan(Player* pPlayer, Creature* pQuestGiver, Quest const*
     return false;
 }
 
+bool QuestAccept_npc_magus_ariden_dusktower(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40316) // The Mystery of Karazhan VI
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->CastSpell(npc, 1449, false);
+            });
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->MonsterSayToPlayer("There! It took a considerable amount of focus, but I was able to mimic the magic upon the key, now we can turn our attention to the evil present beneath Karazhan.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60345))
+                    player->KilledMonster(dummy_bunny, ObjectGuid());
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                return true;
+            }
+            });
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_magus_ariden_dusktower";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_magus_ariden_dusktower;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_korgan";
