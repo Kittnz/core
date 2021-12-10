@@ -1992,3 +1992,21 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (1497, 40307);
 replace into creature_involvedrelation (id, quest) values (60607, 40307);
+
+-- The Depths of Karazhan V --
+delete from quest_template where entry = 40308;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40307,40308,2,8,60,58,0,0,'The Depths of Karazhan V','If we are to reforge the key, then we will need the items that Gunther Arcanus had hinted to. I have no doubts in my mind that both of these items can be found lingering around the tower.\n\nThe first item we shall acquire is the key itself, there are rumors of a sickly, pale human who emerges when not a living soul is about, to tend the grounds around Karazhan. It would be from him, that the Old Crypt Key can be found, find him, and claim it for our purposes, he should be around.\n\nLastly, a Mark of Karazhan will be required, of which there are not many left on this mortal world. I have heard tales of a Captain lingering in the caves of The Master\'s Cellar. Captain Rothynn and his twin brother were both given one long ago, he should still have one.\n\nWhen these items are obtained, return to me, and I can forge the key.','Gather the Old Crypt Key, and the Mark of Karazhan from around the ruins of Karazhan for Kor\'gan in Stonard.','Be dedicated in your searching, if we are to destroy this evil, then we must act fast.','So, the stories were correct, the items have been obtained, with the Pendant of Ardan, the Mark of Karazhan, and the key itself, I can begin to work my magic.',60457,1,60458,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6150,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60607, 40308);
+replace into creature_involvedrelation (id, quest) values (60607, 40308);
+
+update quest_template set type = 1 where entry = 40308;
+
+delete from item_template where entry = 60457 and 60458;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60457,32831,'Mark of Karazhan',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60458,9153,'Old Crypt Key',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(60608, 60457, -100, 1, 1, 1, 0),
+(60609, 60458, -100, 1, 1, 1, 0);
