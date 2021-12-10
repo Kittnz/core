@@ -19,7 +19,7 @@ update item_template set display_id = 27119 where entry = 83485;
 replace into creature_template VALUES
 (60596, 14253, 0, 0, 0, 'Arcane Protector', '', 0, 61, 61, 14253, 14253, 0, 0, 4391, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 562, 562, 0, 284, 2, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 4, 0, 60596, 0, 0, 50, 50, 50, 50, 50, 50, 0, 0, 0, 0, 0, 0, 517, 680, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60597, 1048, 637, 0, 0, 'Maddened Vault Guard', '', 0, 61, 61, 10821, 10821, 0, 0, 3316, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 573, 573, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60597, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 738, 969, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60598, 1306, 0, 0, 0, 'Black Blood of the Demented', '', 0, 61, 61, 13756, 13756, 0, 0, 4091, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 623, 623, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 10, 0, 60598, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 738, 969, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60598, 1306, 0, 0, 0, 'Black Blood of the Demented', '', 0, 61, 61, 10756, 10756, 0, 0, 4091, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 623, 623, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 10, 0, 60598, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 738, 969, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60599, 18000, 0, 0, 0, 'Soulless Husk', '', 0, 61, 61, 10651, 10651, 0, 0, 3792, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 655, 655, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 6, 0, 60599, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 776, 1018, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60600, 18468, 0, 0, 0, 'Netherspawn Flayer', '', 0, 61, 61, 10892, 10892, 0, 0, 3316, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 722, 722, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60600, 0, 0, 12, 12, 12, 12, 12, 12, 0, 0, 0, 0, 0, 0, 738, 969, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
@@ -2154,3 +2154,61 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
 
+delete from creature_ai_scripts where id = 2200001;
+REPLACE INTO creature_ai_scripts VALUES
+(2200001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30001, 0, 0, 0, 0, 0, 0, 0, 0, 'Arch Hydromancer Lapidis - Say on Death');
+
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 16006, spell_id2 = 15501, spell_id3 = 15982 
+where entry = 91818;
+
+-- Sounds for NPCs Darkmster Haza'gi, Champion Raggazi, Chieftain Woh'zo.
+REPLACE INTO broadcast_text VALUES
+(30002, 'We embrace the darkness now... Come and be lettin\' me show you its power!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30003, 'Hahahaha! I be the Hazzuri Champion, what you be mon?!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30004, 'I rule over Zul\'Hazu... You shall never kill me...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+delete from creature_ai_scripts where id between 2200002 and 2200007;
+REPLACE INTO creature_ai_scripts VALUES
+(2200002, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30002, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkmster Haza\'gi - Say on Aggro'),
+(2200003, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30003, 0, 0, 0, 0, 0, 0, 0, 0, 'Champion Raggazi - Say on Aggro'),
+(2200004, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30004, 0, 0, 0, 0, 0, 0, 0, 0, 'Chieftain Woh\'zo - Say on Aggro'),
+(2200005, 0, 16, 30265, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkmster Haza\'gi - Say on Aggro (sound)'),
+(2200006, 0, 16, 30266, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Champion Raggazi - Say on Aggro (sound)'),
+(2200007, 0, 16, 30267, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Chieftain Woh\'zo - Say on Aggro (sound)');
+
+delete from creature_ai_events where id between 2200002 and 2200007;
+REPLACE INTO creature_ai_events VALUES
+(2200002, 91813, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200002, 0, 0, 'Darkmster Haza\'gi - Say on Aggro'),
+(2200003, 91817, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200003, 0, 0, 'Champion Raggazi - Say on Aggro'),
+(2200004, 91818, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200004, 0, 0, 'Chieftain Woh\'zo - Say on Aggro'),
+(2200005, 91813, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200005, 0, 0, 'Darkmster Haza\'gi - Say on Aggro (sound)'),
+(2200006, 91817, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200006, 0, 0, 'Champion Raggazi - Say on Aggro (sound)'),
+(2200007, 91818, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200007, 0, 0, 'Chieftain Woh\'zo - Say on Aggro (sound)');
+
+-- Sounds for Crescent Grove
+update creature_template set ai_name = 'EventAI' where entry = 92107;
+update creature_template set ai_name = 'EventAI' where entry = 92109;
+update creature_template set ai_name = 'EventAI' where entry = 92110;
+
+REPLACE INTO broadcast_text VALUES
+(30005, 'The Furbolg must survive! I will do anything to ensure it!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30006, 'The Grove must be protected! You won\'t stop me!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30007, 'Your interference will not stop us!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+delete from creature_ai_scripts where id between 2200008 and 2200013;
+REPLACE INTO creature_ai_scripts VALUES
+(2200008, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30005, 0, 0, 0, 0, 0, 0, 0, 0, 'Skittering Crustacean - Say at 50% HP'),
+(2200009, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30006, 0, 0, 0, 0, 0, 0, 0, 0, 'Keeper Ranathos - Say at 50% HP'),
+(2200010, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30007, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Raxxieth - Say at 50% HP'),
+(22000011, 0, 16, 30269, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Skittering Crustacean - Say at 50% HP (sound)'),
+(22000012, 0, 16, 30257, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Keeper Ranathos - Say at 50% HP (sound)'),
+(22000013, 0, 16, 30272, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Raxxieth - Say at 50% HP (sound)');
+
+delete from creature_ai_events where id between 2200008 and 2200013;
+REPLACE INTO creature_ai_events VALUES
+(2200008, 92107, 0, 2, 0, 100, 0, 50, 1, 0, 0, 2200008, 0, 0, 'Skittering Crustacean - Say at 50% HP'),
+(2200009, 92109, 0, 2, 0, 100, 0, 50, 1, 0, 0, 2200009, 0, 0, 'Keeper Ranathos - Say at 50% HP'),
+(2200010, 92110, 0, 2, 0, 100, 0, 50, 1, 0, 0, 2200010, 0, 0, 'Master Raxxieth - Say at 50% HP'),
+(2200011, 92107, 0, 2, 0, 100, 0, 50, 1, 0, 0, 2200011, 0, 0, 'Skittering Crustacean - Say at 50% HP (sound)'),
+(2200012, 92109, 0, 2, 0, 100, 0, 50, 1, 0, 0, 2200012, 0, 0, 'Keeper Ranathos - Say at 50% HP (sound)'),
+(2200013, 92110, 0, 2, 0, 100, 0, 50, 1, 0, 0, 2200013, 0, 0, 'Master Raxxieth - Say at 50% HP (sound)');
