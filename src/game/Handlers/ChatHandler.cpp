@@ -429,7 +429,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 ChatHandler(_player).PSendSysMessage("You do not meet the conditions to queue for BGs!");
                 return;
             }
-            if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac"))
             if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac") || strstr(msg.c_str(), "Sunnyglade") || strstr(msg.c_str(), "Arena"))
             {
                 _player->SetBattleGroundEntryPoint();
