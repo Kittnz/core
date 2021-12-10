@@ -1957,3 +1957,20 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- The Depths of Karazhan II --
+delete from quest_template where entry = 40305;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40304,40305,2,8,60,58,0,0,'The Depths of Karazhan II','With the Pendant of Ardan in our hands we can turn our attention to the tower itself, and what magic has begun to raise more ghosts around it. As of recently, the dead have begun to materialize, spirits and echoes of the past clinging around the tower as if they were still alive.\n\nTravel to the ruins around Karazhan, and from the ghosts and dead bring me 8 Ghostly Substance. It is from this substance I will be able to check what magic lingers upon the ethereal beings.\n\nBe careful, for there are also rumors of a Dark Reaver who guards the entrance to Karazhan.','Gather 8 Ghostly Substance from the ghosts around Karazhan, and return to Kor\'gan at Stonard.','Have you had any success in dealing with the ethereal?','Hmm.. It would appear that the Substance you have brought me is extremely potent, and quite magically powerful. Whatever being is at work here stirring these forces is quite certainly strong.',60455,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6250,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60607, 40305);
+replace into creature_involvedrelation (id, quest) values (60607, 40305);
+
+delete from item_template where entry = 60455;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60455,34561,'Ghostly Substance',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(12380, 60455, -45, 1, 1, 1, 0),
+(7370, 60455, -50, 1, 1, 1, 0),
+(12377, 60455, -50, 1, 1, 1, 0),
+(12379, 60455, -50, 1, 1, 1, 0);
