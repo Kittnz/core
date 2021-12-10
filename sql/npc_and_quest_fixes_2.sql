@@ -2114,3 +2114,43 @@ update creature_template set script_name = 'npc_magus_ariden_dusktower' where en
 
 delete from creature_template where entry = 60345;
 replace into creature_template (entry, name, display_id1) values (60345, 'quest_40316_dummy_triger', 328);
+
+-- The Mystery of Karazhan VII --
+delete from quest_template where entry = 40317;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40316,40317,2,41,60,58,0,0,'The Mystery of Karazhan VII','With the key created the door to the Karazhan Crypts is now open. I ask of you a great importance, to venture into the depths beneath Karazhan and slay Alarus in the name of all that is good.\n\nTo do such a task will require aid, for you will not be able to take this charge on your own. Hire a band of mercenaries, or gather folk of a good merit to join you, and rid the world of this evil so that it cannot spread further harm.\n\nThe Kirin Tor is with you in spirit, the fate of many are on your shoulders brave one.','Venture forth into the Karazhan Crypts, once inside slay Alarus, the watcher of the Crypts for Magus Ariden Dusktower in Deadwind Pass.','It is unknown how deep the Crypts may burrow within Azeroth, so tread carefully once you are inside.','A great evil has been vanquished this day, it is on the shoulders of heroes like yourself that this world remains uncorrupted by darkness!\n\nThe powers that once drew me here have begun to settle, I must thank you greatly for all of the work you have done in uncovering this mystery. Please, on behalf of the Kirin Tor, take one of these items as a thanks.',0,0,0,0,0,0,0,0,91928,1,0,0,0,0,0,0,0,0,0,7250,61,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60463,1,60464,1,60465,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60606, 40317);
+replace into creature_involvedrelation (id, quest) values (60606, 40317);
+
+update quest_template set type = 81 where entry = 40317;
+
+replace into item_template values
+ ('60463', '4', '0', 'Arcane Charged Pendant', '', '4127', '3', '0', '1', '168432', '42108', '2', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '15', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '20', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60464', '4', '0', 'Orb of Kaladoon', '', '3109', '3', '0', '1', '200792', '50198', '12', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '5', '23727', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60465', '4', '0', 'Arcane Strengthened Band', '', '35472', '3', '0', '1', '174724', '43681', '11', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '15', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '20', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '4', '1', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
