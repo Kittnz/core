@@ -1,6 +1,4 @@
-// Giperion April 2020
-// [EUREKA] 4.2
-// Turtle Server Project
+// Giperion for Turtle WoW
 
 #include <windows.h>
 #include <filesystem>
@@ -12,52 +10,35 @@
 
 #define fs std::filesystem
 
-//#TODO: Read from config blob at the end of the file
-#define NEW_BUILD 6010u
-#define NEW_VISUAL_BUILD "6010"
-#define NEW_VISUAL_VERSION "1.15.1"
-#define NEW_BUILD_DATE "Mar 15 2021"
-#define NEW_WEBSITE_FILTER "*.turtle-wow.org" // '*' symbol should be presented
-#define NEW_WEBSITE2_FILTER "*.discord.gg" // '*' symbol should be presented
+enum OriginalValues
+{
+OFFSET_NET_VERSION = 0x001B2122,               // 2 bytes.Original value : unsigned short "5875"
+OFFSET_PVP_RANK_CHECK = 0x002093B0,            // 6 bytes. Remove check for PvP rank for player's title field.
+OFFSET_VISUAL_VERSION = 0x00437C04,			   // String. Original value: "1.12.1"
+OFFSET_VISUAL_BUILD = 0x00437BFC,			   // String. Original value: "5875"
+OFFSET_VISUAL_BUILD_DATE = 0x00434798,		   // String. Original value: "Sep 19 2006"
+OFFSET_KOREAN_WEBSITE_FILTER = 0x0045CCD8,	   // String. Original value: "*.worldofwarcraft.co.kr"
+OFFSET_CHINA_WEBSITE_FILTER = 0x0045CC9C,	   // String. Original value: "*.wowchina.com"
+OFFSET_SHELLCODE_LOAD_DLL = 0x00004122,		   // A small storage for Discord DLL code.
+OFFSET_ORIGINAL_FOV_VALUE = 0x004089B4,		   // Original FoV value.
+OFFSET_DWARF_MAGE_VALUE_1 = 0x000706E5,		   // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_DWARF_MAGE_VALUE_2 = 0x000706EB,		   // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_DWARF_MAGE_VALUE_3 = 0x0007075D,		   // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_DWARF_MAGE_VALUE_4 = 0x00070763,		   // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_WINMAIN_CALL_PART = 0x0000999C,		   // 1 byte. Calling WinMain (replaced with Discord DLL)
+OFFSET_STR_DISCORD_OVERLAY = 0x003FFF60,	   // Original value is some kind of CRT error. 
+};
 
-#define PATCH_FILE "Data\\patch-U.mpq"
+#define NEW_BUILD 7000u
+#define NEW_VISUAL_BUILD "7000"
+#define NEW_VISUAL_VERSION "1.16.0"
+#define NEW_BUILD_DATE "Dec 20 2021"
+#define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
+#define NEW_WEBSITE2_FILTER "*.discord.gg" 
+#define PATCH_FILE "Data\\patch-V.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
-
-// 2 bytes. Original value: unsigned short "5875"
-#define OFFSET_NET_VERSION 0x001B2122
-
-// 6 bytes. Remove check for PvP rank for player's title field.
-#define OFFSET_PVP_RANK_CHECK 0x002093B0
-
-// string. Original value: "1.12.1"
-#define OFFSET_VISUAL_VERSION 0x00437C04
-
-// string. Original value: "5875"
-#define OFFSET_VISUAL_BUILD 0x00437BFC
-
-// string. Original value: "Sep 19 2006"
-#define OFFSET_VISUAL_BUILD_DATE 0x00434798
-
-// string. Original value: "*.worldofwarcraft.co.kr"
-#define OFFSET_KOREAN_WEBSITE_FILTER 0x0045CCD8
-
-//							*.discord.gg
-// string. Original value: "*.wowchina.com"
-#define OFFSET_CHINA_WEBSITE_FILTER 0x0045CC9C
-
-// A small storage for code. We write our code in that 10h pocket
-#define OFFSET_SHELLCODE_LOAD_DLL 0x00004122
-
-// Original fov value
-#define OFFSET_ORIGINAL_FOV_VALUE 0x004089B4
-
-// Hackfix Blizzard's hackfix for Dwarf Mages
-#define OFFSET_DWARF_MAGE_VALUE_1 0x000706E5
-#define OFFSET_DWARF_MAGE_VALUE_2 0x000706EB
-#define OFFSET_DWARF_MAGE_VALUE_3 0x0007075D
-#define OFFSET_DWARF_MAGE_VALUE_4 0x00070763
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -65,13 +46,6 @@ const unsigned char LoadDLLShellcode[] =
 	0xFF, 0x15, 0xB4, 0xF2, 0x7F, 0x00, // call ds:LoadLibraryA
 	0xEb, 0xD1,							// jmp short _WinMain
 };
-
-// That's one byte from command that calling WinMain
-// We just shift calling address to our code, in order to load DLL
-#define OFFSET_WINMAIN_CALL_PART 0x0000999C
-
-// Original value is some kind of CRT error. It's not happening anyway
-#define OFFSET_STR_DISCORD_OVERLAY 0x003FFF60
 
 const char DiscordOverlayDllStr[] = "DiscordOverlay.dll";
 
@@ -137,46 +111,41 @@ void PatchVisualVersion(
 	fwrite("\0", 1, 1, hWoW);
 }
 
-void PatchUIUnlock(FILE* hWoW)
+void PatchBinary(FILE* hWoW)
 {
 	fseek(hWoW, 0x2f113a, SEEK_SET);
-	char FirstPatch[] = { 0xeb, 0x19 };
-	fwrite(FirstPatch, sizeof(FirstPatch), 1, hWoW);
+	char patch_1[] = { 0xeb, 0x19 };
+	fwrite(patch_1, sizeof(patch_1), 1, hWoW);
 
-	char SecondPatch[] = { 0x03 };
+	char patch_2[] = { 0x03 };
 	fseek(hWoW, 0x2f1158, SEEK_SET);
-	fwrite(SecondPatch, sizeof(SecondPatch), 1, hWoW);
+	fwrite(patch_2, sizeof(patch_2), 1, hWoW);
 
-	char ThirdPatch[] = { 0x03 };
+	char patch_3[] = { 0x03 };
 	fseek(hWoW, 0x2f11a7, SEEK_SET);
-	fwrite(ThirdPatch, sizeof(ThirdPatch), 1, hWoW);
+	fwrite(patch_3, sizeof(patch_3), 1, hWoW);
 
-	char FourthPatch[] = { 0xeb, 0xb2 };
+	char patch_4[] = { 0xeb, 0xb2 };
 	fseek(hWoW, 0x2f11f0, SEEK_SET);
-	fwrite(FourthPatch, sizeof(FourthPatch), 1, hWoW);
+	fwrite(patch_4, sizeof(patch_4), 1, hWoW);
 
-	char FifthPatch[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+	char patch_5[] = { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
 	fseek(hWoW, OFFSET_PVP_RANK_CHECK, SEEK_SET);
-	fwrite(FifthPatch, sizeof(FifthPatch), 1, hWoW);
+	fwrite(patch_5, sizeof(patch_5), 1, hWoW);
 
-	char SixPatch[] = { 0x66, 0x66, 0xF6, 0x3F };
+	char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
 	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
-	fwrite(SixPatch, sizeof(SixPatch), 1, hWoW);
+	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
 
-	// Hackfix Blizzard's hackfix for Dwarf Mages
-
-	char SevenPatch[] = { 0xFE };
+	char patch_7[] = { 0xFE };
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_1, SEEK_SET);
-	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
-
+	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_2, SEEK_SET);
-	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
-
+	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_3, SEEK_SET);
-	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
-
+	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_4, SEEK_SET);
-	fwrite(SevenPatch, sizeof(SevenPatch), 1, hWoW);
+	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
 }
 
 constexpr int max_path = 260;
@@ -399,7 +368,7 @@ int PatchWoWExe()
 	// patch WoW.exe
 	if (FILE* hWoWBinary = fopen("WoW.exe", "r+b"))
 	{
-		PatchUIUnlock(hWoWBinary);
+		PatchBinary(hWoWBinary);
 		PatchNetVersion(hWoWBinary, NEW_BUILD);
 		PatchDiscordOverlayDLL(hWoWBinary);
 
