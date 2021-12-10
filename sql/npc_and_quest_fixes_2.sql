@@ -2076,3 +2076,13 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (60606, 40312);
 replace into creature_involvedrelation (id, quest) values (60606, 40312);
 
+-- The Mystery of Karazhan III --
+delete from quest_template where entry = 40313;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40312,40313,2,41,60,58,0,0,'The Mystery of Karazhan III','The energy of the substance is intense, and would take me considerable time to unweave. My master Archmage Ansirem Runeweaver within Dalaran is well versed within such magic, and would have a much easier time.\n\nI ask of you to bring him the Ghostly Substance and figure out the true potency and origin of the magic contained. Perhaps then, we can figure out how to best deal with the foreign energy lingering beneath Karazhan.','Take Ariden\'s Crate to Archmage Ansirem Runeweaver in Dalaran.','Yes?','Why hello there, you bring word from Magus Ariden? Why, he set out for Karazhan weeks ago, this must be of importance if he has sent you.',60462,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60462,1,0,3150,61,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60606, 40313);
+replace into creature_involvedrelation (id, quest) values (2543, 40313);
+
+delete from item_template where entry = 60462;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60462,7914,'Ariden\'s Crate',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Packed with Ghostly Substance.',0);
