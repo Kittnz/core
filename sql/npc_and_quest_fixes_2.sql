@@ -1974,3 +1974,14 @@ replace into creature_loot_template values
 (7370, 60455, -50, 1, 1, 1, 0),
 (12377, 60455, -50, 1, 1, 1, 0),
 (12379, 60455, -50, 1, 1, 1, 0);
+
+-- The Depths of Karazhan III --
+delete from quest_template where entry = 40306;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40305,40306,2,8,60,58,0,0,'The Depths of Karazhan III','<A look of annoyance would cover Kor\'gan as his attempts to study the Ghostly Substance fail>.\n\nIt would appear that what we are dealing with is beyond my power, it is intense in arcane energy, with something else that is not familiar to me...\n\nThere is one I know who may be of assistance, who was a member of the Kirin Tor in life, his name is Gunther Arcanus. He lives within the center of Brightwater Lake in Tirisfal Glades, just northeast of Brill.\n\nWith his knowledge within Dalaran, perhaps he can be of more assistance, seek him out and give him this crate.','Bring Kor\'gan\'s Crate to Gunther Arcanus at Brightwater Lake.','Yes?','Yes? What is it that you want with me? I can sense a powerful magic about you.\n\nFrom Karazhan, well, let me have a look then.',60456,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60456,1,0,3150,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60607, 40306);
+replace into creature_involvedrelation (id, quest) values (1497, 40306);
+
+delete from item_template where entry = 60456;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60456,7913,'Kor\'gan\'s Crate',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
