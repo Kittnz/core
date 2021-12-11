@@ -2240,7 +2240,7 @@ replace into `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 
 update gameobject_template set size = 1 where entry in (3000275, 3000276);
 
-update gameobject set state = 0, animprogress = 0 where guid in (5000697, 5000698);
+update gameobject set state = 0, animprogress = 100 where guid in (5000697, 5000698);
 
 update gameobject set id = 3000275 where guid = 5000697;
 update gameobject set id = 3000276 where guid = 5000698;
