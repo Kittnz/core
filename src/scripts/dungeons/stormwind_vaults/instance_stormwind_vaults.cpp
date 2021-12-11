@@ -60,7 +60,7 @@ struct stormwind_vault_rat_trap : public GameObjectAI
     explicit stormwind_vault_rat_trap(GameObject* pGo) : GameObjectAI(pGo)
     {
         m_uiJustUsedTimer = 1;
-        m_uiUpdateTimer = 1000;
+        m_uiUpdateTimer = 500;
     }
 
     uint32 m_uiJustUsedTimer;
@@ -70,7 +70,7 @@ struct stormwind_vault_rat_trap : public GameObjectAI
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            GameObject* rat_event_activated = me->FindNearestGameObject(3000274, 3.0f);
+            GameObject* rat_event_activated = me->FindNearestGameObject(3000274, 5.0f);
 
             if (!rat_event_activated)
             {
@@ -90,9 +90,14 @@ struct stormwind_vault_rat_trap : public GameObjectAI
 
                     if (rat_door_1 && rat_door_2)
                     {
-                        rat_door_1->UseDoorOrButton(60);
-                        rat_door_2->UseDoorOrButton(60);
+                        rat_door_1->UseDoorOrButton();
+                        rat_door_2->UseDoorOrButton();
                     }
+
+                    DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, door_1 = rat_door_1, door_2 = rat_door_2]() {
+                        door_1->ResetDoorOrButton();
+                        door_2->ResetDoorOrButton();
+                        });
 
                     DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer]() {
                         int n = 15;
@@ -102,7 +107,7 @@ struct stormwind_vault_rat_trap : public GameObjectAI
                         }
                         });
                 }
-                m_uiUpdateTimer = 2500;
+                m_uiUpdateTimer = 500;
             }
         }
         else
