@@ -14,10 +14,10 @@ enum mob_entries
     hungry_rat = 93105
 };
 
-enum object_guids
+enum object_entries
 {
-    rat_door_one_guid = 5000697,
-    rat_door_two_guid = 5000698
+    rat_door_one = 3000275,
+    rat_door_two = 3000276
 };
 
 const string dialog_lines[4] = { 
@@ -85,20 +85,20 @@ struct stormwind_vault_rat_trap : public GameObjectAI
                     me->SummonGameObject(3000274, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
                     pPlayer->PlayDirectMusic(8740);
 
-                    GameObject* rat_door_one = me->FindNearestGameObject(rat_door_one_guid, 20.0F);
-                    GameObject* rat_door_two = me->FindNearestGameObject(rat_door_two_guid, 20.0F);
+                    GameObject* rat_door_1 = me->FindNearestGameObject(rat_door_one, 20.0F);
+                    GameObject* rat_door_2 = me->FindNearestGameObject(rat_door_two, 20.0F);
 
-                    if (rat_door_one && rat_door_two)
+                    if (rat_door_1 && rat_door_2)
                     {
-                        rat_door_one->UseDoorOrButton(60);
-                        rat_door_two->UseDoorOrButton(60);
+                        rat_door_1->UseDoorOrButton(60);
+                        rat_door_2->UseDoorOrButton(60);
                     }
 
                     DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer]() {
                         int n = 15;
                         for (int i = 0; i < n; ++i)
                         {
-                            player->SummonCreature(93106, player->GetPositionX() + urand (1,4), player->GetPositionY() + urand(1,4), player->GetPositionZ(), player->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 150 * IN_MILLISECONDS);
+                            player->SummonCreature(93106, player->GetPositionX() + urand (1,4), player->GetPositionY() + urand(1,4), player->GetPositionZ(), player->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 350 * IN_MILLISECONDS);
                         }
                         });
                 }
