@@ -31,6 +31,8 @@ set @equip_template = 20051; set @weapon_1 = 80764; set @weapon_2 = 0; set @crea
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
+update creature_template set scale = 1.1, health_min = 22089, health_max = 22089, name = 'Runic Construct' where entry = 60596;
+
 -- Netherspawn Flayer
 set @creature_entry = 60600;
 set @description = ': Netherspawn Flayer';
@@ -929,6 +931,9 @@ replace into creature_template VALUES
 (60604, 18247, 0, 0, 0, 'Wicked Skitterer', '', 0, 61, 61, 10822, 10822, 0, 0, 3453, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 625, 625, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 1, 0, 60604, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 738, 969, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60605, 1001, 0, 0, 0, 'Ice Crawler', '', 0, 41, 43, 1981, 2059, 0, 0, 2397, 7, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 76, 97, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.984, 83.853, 100, 7, 0, 60605, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 75, 103, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
+update creature_template set scale = 0.9 where entry = 60601;
+update creature_template set scale = 0.9 where entry = 60602;
+update creature_template set scale = 0.8 where entry = 60604;
 
 -- Frostbitten Grellkin Sorcerer
 set @creature_entry = 60601;
@@ -1737,6 +1742,8 @@ values (@spell_list_id, @description,
 
 replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93105, 15937, 0, 0, 0, 'Shadow Creeper', '', 0, 61, 61, 10822, 10822, 0, 0, 3453, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 625, 625, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 1, 0, 60604, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 201085, 0, 738, 969, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
+update creature_template set scale = 0.8 where entry = 93105;
+
 -- Shadow Creeper
 set @creature_entry = 93105;
 set @description = 'Stormwind Vault: Shadow Creeper';
@@ -2228,7 +2235,7 @@ update creature_template set script_name = 'npc_flying_mount' where entry = 6053
 
 -- Stormwind vault rattrap:
 
-replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93106, 1141, 1418, 2176, 0, 'Hungry Vault Rat', NULL, 0, 55, 55, 784, 784, 0, 0, 3271, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 0.5, 11, 11, 0, 248, 2, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16448, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+replace into `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES (93106, 1141, 1418, 2176, 0, 'Hungry Vault Rat', NULL, 0, 60, 60, 784, 784, 0, 0, 3271, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 0.5, 11, 11, 0, 248, 2, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16448, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (3000273, 5, 381, 'stormwind_vault_rat_trap', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'stormwind_vault_rat_trap');
 
@@ -2244,3 +2251,5 @@ update gameobject set state = 0, animprogress = 100 where guid in (5000697, 5000
 
 update gameobject set id = 3000275 where guid = 5000697;
 update gameobject set id = 3000276 where guid = 5000698;
+
+update creature_template set health_min = 35247, health_max = 35247 where entry = 80851;
