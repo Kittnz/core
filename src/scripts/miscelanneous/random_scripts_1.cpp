@@ -2820,6 +2820,12 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Please guide me through Caverns of Time.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4); 
         pPlayer->SEND_GOSSIP_MENU(51674, pCreature->GetGUID());
         return true;
+    case 60539: // Durotar Wyvern
+        if (pPlayer->GetQuestRewardStatus(40298))
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Feed the wyvern and see what will happen.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+        pPlayer->SEND_GOSSIP_MENU(60539, pCreature->GetGUID());
+        return true;
     }
     return false;
 }
@@ -2853,6 +2859,21 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
         p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(45000));
         p_Player->SetFlying(true);
         p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        if (p_Player->HasItemCount(3770, 1)) // Durotar Quest wyvern
+        {
+            p_Player->GetSession()->SendNotification("You will be dismounted in 30 seconds.");
+            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);
+            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
+            p_Player->SetFlying(true);
+            p_Player->DestroyItemCount(3770, 1, true);
+            p_Player->SaveInventoryAndGoldToDB();
+            p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+        }
+        else
+            p_Player->PMonsterEmote("The wyvern recognizes you and doesn't seem to be satisfied. Perhaps a handful of Mutton Chops could do some good?", nullptr, false);
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;

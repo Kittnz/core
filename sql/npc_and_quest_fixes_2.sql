@@ -2221,3 +2221,7 @@ REPLACE INTO creature_ai_events VALUES
 -- Misc.
 
 update creature_template set display_id1 = 18013, scale = 1.3, subname = 'Eyes of the Legion' where name = 'Nazorna';
+
+update gameobject_template set name = 'Bone Chew Toy' where entry = 11000380;
+
+update creature_template set script_name = 'npc_flying_mount' where entry = 60539;
