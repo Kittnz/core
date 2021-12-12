@@ -15,14 +15,12 @@ struct boss_thamgrarrAI final : ScriptedAI {
 
     void Aggro(Unit *) override {
         _lastUpdateTick = 0;
-        _rainOfFirePhase = eRainOfFirePhases::PhaseOne;
-        _slamPhase = eSlamPhases::PhaseOne;
 
         _lastSpellEventProcessedAt = 0;
         _spellEventQueue.Reset();
-        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::RainOfFire), Milliseconds(400));
-        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::Fireball), Seconds(10), Seconds(20));
-        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::Slam), Milliseconds(400));
+        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::RainOfFire), Seconds(6));
+        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::Fireball), Seconds(10));
+        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::KnockAway), Seconds(12), Seconds(14));
         _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::IceBlock), Milliseconds(400));
 
         _lastTextEventProcessedAt = 0;
@@ -60,7 +58,7 @@ struct boss_thamgrarrAI final : ScriptedAI {
 
                 SpellEventFireballHandler();
                 break;
-            case eSpellEvents::Slam:
+            case eSpellEvents::KnockAway:
                 if (!SpellEventSlamPredicate()) {
                     _spellEventQueue.Repeat(Milliseconds(400));
                     break;
@@ -90,41 +88,17 @@ struct boss_thamgrarrAI final : ScriptedAI {
             case eTextEvents::AggroGrarr:
                 me->MonsterSendTextToZone("Kill them, kill them all!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameGrarr);
                 break;
-            case eTextEvents::RainOfFirePhaseOneTham:
+            case eTextEvents::RainOfFireTham:
                 me->MonsterSendTextToZone("Death comes from above.", CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, nullptr, _nameTham);
                 break;
-            case eTextEvents::RainOfFirePhaseOneGrarr:
-                me->MonsterSendTextToZone("Burn, burn!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameGrarr);
-                break;
-            case eTextEvents::RainOfFirePhaseTwoTham:
-                me->MonsterSendTextToZone("You cannot escape the flames of Tham.", CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, nullptr, _nameTham);
-                break;
-            case eTextEvents::RainOfFirePhaseTwoGrarr:
+            case eTextEvents::RainOfFireGrarr:
                 me->MonsterSendTextToZone("Grarr sees puny people dance! Dance more for Grarr!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameGrarr);
                 break;
-            case eTextEvents::RainOfFirePhaseThreeTham:
-                me->MonsterSendTextToZone("Your end is near, I will burn you to a crisp!", CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, nullptr, _nameTham);
-                break;
-            case eTextEvents::RainOfFirePhaseThreeGrarr:
-                me->MonsterSendTextToZone("Puny people boring, time to go!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameGrarr);
-                break;
-            case eTextEvents::SlamPhaseOneTham:
+            case eTextEvents::KnockAwayTham:
                 me->MonsterSendTextToZone("You're making me angry!", CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, nullptr, _nameTham);
                 break;
-            case eTextEvents::SlamPhaseOneGrarr:
+            case eTextEvents::KnockAwayGrarr:
                 me->MonsterSendTextToZone("Back, stay back!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameGrarr);
-                break;
-            case eTextEvents::SlamPhaseTwoTham:
-                me->MonsterSendTextToZone("Away, you ugly abomination!", CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, nullptr, _nameTham);
-                break;
-            case eTextEvents::SlamPhaseTwoGrarr:
-                me->MonsterSendTextToZone("Yes, ugly!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameGrarr);
-                break;
-            case eTextEvents::SlamPhaseThreeTham:
-                me->MonsterSendTextToZone("No, stay away!", CHAT_MSG_MONSTER_SAY, LANG_UNIVERSAL, nullptr, _nameTham);
-                break;
-            case eTextEvents::SlamPhaseThreeGrarr:
-                me->MonsterSendTextToZone("Leave us alone!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameGrarr);
                 break;
             case eTextEvents::IceBlockTham:
                 me->MonsterSendTextToZone("I will not fail!", CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, nullptr, _nameTham);
@@ -143,54 +117,32 @@ struct boss_thamgrarrAI final : ScriptedAI {
 
 private:
     enum eSpellIds {
-        SpellRainOfFire = 11678,
         SpellFireball = 25306,
-        SpellSlam = 27862,
+        SpellKnockAway = 18670,
         SpellIceBlock = 11958,
+        SpellRainOfFire = 19717,
     };
 
     enum class eSpellEvents {
         EventNone,
-        RainOfFire,
         Fireball,
-        Slam,
+        KnockAway,
         IceBlock,
+        RainOfFire,
     };
 
     enum class eTextEvents {
         EventNone,
         AggroTham,
         AggroGrarr,
-        RainOfFirePhaseOneTham,
-        RainOfFirePhaseOneGrarr,
-        RainOfFirePhaseTwoTham,
-        RainOfFirePhaseTwoGrarr,
-        RainOfFirePhaseThreeTham,
-        RainOfFirePhaseThreeGrarr,
-        SlamPhaseOneTham,
-        SlamPhaseOneGrarr,
-        SlamPhaseTwoTham,
-        SlamPhaseTwoGrarr,
-        SlamPhaseThreeTham,
-        SlamPhaseThreeGrarr,
+        RainOfFireTham,
+        RainOfFireGrarr,
+        KnockAwayTham,
+        KnockAwayGrarr,
         IceBlockTham,
         IceBlockGrarr,
         DeathTham,
         DeathGrarr,
-    };
-
-    enum class eRainOfFirePhases {
-        PhaseOne,
-        PhaseTwo,
-        PhaseThree,
-        Finished,
-    };
-
-    enum class eSlamPhases {
-        PhaseOne,
-        PhaseTwo,
-        PhaseThree,
-        Finished,
     };
 
     enum class eIceBlockPhases {
@@ -207,8 +159,6 @@ private:
     const uint32_t _minimumTicksBetweenTextEvents = 1250;
     const char *_nameTham = "Tham";
     const char *_nameGrarr = "Grarr";
-    eRainOfFirePhases _rainOfFirePhase = eRainOfFirePhases::PhaseOne;
-    eSlamPhases _slamPhase = eSlamPhases::PhaseOne;
     eIceBlockPhases _iceBlockPhase = eIceBlockPhases::PhaseOne;
 
     /**
@@ -255,22 +205,7 @@ private:
      */
     [[nodiscard]]
     bool SpellEventRainOfFirePredicate() const {
-        if (me->IsNonMeleeSpellCasted()) {
-            return false;
-        }
-
-        switch (_rainOfFirePhase) {
-            case eRainOfFirePhases::PhaseOne:
-                return me->GetHealthPercent() <= 85;
-            case eRainOfFirePhases::PhaseTwo:
-                return me->GetHealthPercent() <= 65;
-            case eRainOfFirePhases::PhaseThree:
-                return me->GetHealthPercent() <= 45;
-            case eRainOfFirePhases::Finished:
-                return false;
-        }
-
-        return false;
+        return !me->IsNonMeleeSpellCasted();
     }
 
     /**
@@ -278,29 +213,9 @@ private:
      */
     void SpellEventRainOfFireHandler() {
         DoCast(me->GetVictim(), SpellRainOfFire);
-        switch (_rainOfFirePhase) {
-            case eRainOfFirePhases::PhaseOne:
-                _rainOfFirePhase = eRainOfFirePhases::PhaseTwo;
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFirePhaseOneTham), Milliseconds(0));
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFirePhaseOneGrarr), Milliseconds(0));
-                break;
-            case eRainOfFirePhases::PhaseTwo:
-                _rainOfFirePhase = eRainOfFirePhases::PhaseThree;
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFirePhaseTwoTham), Milliseconds(0));
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFirePhaseTwoGrarr), Milliseconds(0));
-                break;
-            case eRainOfFirePhases::PhaseThree:
-                _rainOfFirePhase = eRainOfFirePhases::Finished;
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFirePhaseThreeTham), Milliseconds(0));
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFirePhaseThreeGrarr), Milliseconds(0));
-                break;
-            case eRainOfFirePhases::Finished:
-                break;
-        }
-
-        if (_rainOfFirePhase != eRainOfFirePhases::Finished) {
-            _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::RainOfFire), Milliseconds(400));
-        }
+        _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFireTham), Milliseconds(0));
+        _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::RainOfFireGrarr), Milliseconds(0));
+        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::RainOfFire), Seconds(18), Seconds(20));
     }
 
     /**
@@ -316,68 +231,40 @@ private:
      * \brief Event handler for the Fireball spell event.
      */
     void SpellEventFireballHandler() {
-        DoCast(me->GetVictim(), SpellFireball);
-        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::Fireball), Seconds(40), Seconds(60));
+        const auto randomPlayer = GetRandomPlayerInRange(30.f, true, nullptr);
+        if (randomPlayer == nullptr) {
+            // Failed to find a player, just return and try again.
+            _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::Fireball), Milliseconds(400));
+            return;
+        }
+        DoCast(randomPlayer, SpellFireball);
+        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::Fireball), Seconds(10));
     }
 
     /**
-     * \brief Predicate for the Slam spell event.
+     * \brief Predicate for the KnockAway spell event.
      * \return True if the event handler should fire, false if we should requeue the event.
      */
     [[nodiscard]]
     bool SpellEventSlamPredicate() const {
-        if (me->IsNonMeleeSpellCasted()) {
-            return false;
-        }
-
-        switch (_slamPhase) {
-            case eSlamPhases::PhaseOne:
-                return me->GetHealthPercent() <= 70;
-            case eSlamPhases::PhaseTwo:
-                return me->GetHealthPercent() <= 40;
-            case eSlamPhases::PhaseThree:
-                return me->GetHealthPercent() <= 10;
-            case eSlamPhases::Finished:
-                return false;
-        }
-
-        return false;
+        return !me->IsNonMeleeSpellCasted();
     }
 
     /**
-     * \brief Event handler for the Slam spell event.
+     * \brief Event handler for the KnockAway spell event.
      */
     void SpellEventSlamHandler() {
-        DoCast(me->GetVictim(), SpellSlam);
-        switch (_slamPhase) {
-            case eSlamPhases::PhaseOne:
-                _slamPhase = eSlamPhases::PhaseTwo;
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::SlamPhaseOneTham), Milliseconds(0));
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::SlamPhaseOneGrarr), Milliseconds(0));
-                break;
-            case eSlamPhases::PhaseTwo:
-                _slamPhase = eSlamPhases::PhaseThree;
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::SlamPhaseTwoTham), Milliseconds(0));
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::SlamPhaseTwoGrarr), Milliseconds(0));
-                break;
-            case eSlamPhases::PhaseThree:
-                _slamPhase = eSlamPhases::Finished;
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::SlamPhaseThreeTham), Milliseconds(0));
-                _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::SlamPhaseThreeGrarr), Milliseconds(0));
-                break;
-            case eSlamPhases::Finished:
-                break;
-        }
-
-        if (_slamPhase != eSlamPhases::Finished) {
-            _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::Slam), Milliseconds(400));
-        }
+        DoCast(me->GetVictim(), SpellKnockAway);
+        _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::KnockAwayTham), Milliseconds(0));
+        _textEventQueue.ScheduleEvent(static_cast<uint32_t>(eTextEvents::KnockAwayGrarr), Milliseconds(0));
+        _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::KnockAway), Seconds(12), Seconds(14));
     }
 
     /**
      * \brief Predicate for the IceBlock spell event.
      * \return True if the event handler should fire, false if we should requeue the event.
      */
+     [[nodiscard]]
     bool SpellEventIceBlockPredicate() const {
         if (me->IsNonMeleeSpellCasted()) {
             return false;
@@ -385,12 +272,11 @@ private:
 
         switch (_iceBlockPhase) {
             case eIceBlockPhases::PhaseOne:
-                return me->GetHealthPercent() <= 5;
+                return me->GetHealthPercent() <= 10;
             case eIceBlockPhases::Finished:
+            default:
                 return false;
         }
-
-        return false;
     }
 
     /**
@@ -407,11 +293,6 @@ private:
             case eIceBlockPhases::Finished:
                 break;
         }
-
-        // Right now this won't fire, as we only have one phase, but this makes it easier to modify in future.
-        if (_iceBlockPhase != eIceBlockPhases::Finished) {
-            _spellEventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellEvents::IceBlock), Milliseconds(400));
-        }
     }
 };
 
@@ -420,8 +301,8 @@ CreatureAI *GetAI_boss_thamgrarr(Creature *creature) {
 }
 
 void AddSC_boss_thamgrarr() {
-    Script *newscript = new Script;
-    newscript->Name = "boss_thamgrarr";
-    newscript->GetAI = &GetAI_boss_thamgrarr;
-    newscript->RegisterSelf();
+    auto pScript = new Script;
+    pScript->Name = "boss_thamgrarr";
+    pScript->GetAI = &GetAI_boss_thamgrarr;
+    pScript->RegisterSelf();
 }
