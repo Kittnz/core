@@ -2253,3 +2253,19 @@ update gameobject set id = 3000275 where guid = 5000697;
 update gameobject set id = 3000276 where guid = 5000698;
 
 update creature_template set health_min = 35247, health_max = 35247 where entry = 80851;
+
+-- A Call to Aid --
+delete from quest_template where entry = 40318;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40318,2,85,17,11,0,0,'A Call to Aid','An outsider, you\'re the first in quite a long time, welcome to The Remnants Camp. To state that our situation is bad would be an understatement of the highest regard. We are all that remains bearing the crest of Lordaeron as a sigil, tucked away within a remote corner of the Uplands.\n\n As the leader of the Remnants, and the commander of the Army of Lordaeron I would ask a favor from you. I have prepared a letter to be sent to Stormwind, one of the final bastions of human power. Take it to General Marcus Jonathan, Lordaeron demands soldiers, and supplies.','Deliver Captain Silas\' Letter to General Marcus Jonathan in Stormwind.','How can I help you?','What\'s this... The crest of Lordaeron, I must say, it\'s been some time since I received a letter with this mark.',60466,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60466,1,0,1150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91974, 40318);
+replace into creature_involvedrelation (id, quest) values (466, 40318);
+
+update creature_template set npc_flags = 3 where entry = 91974;
+
+delete from item_template where entry = 60466;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60466,3048,'Captain Silas\' Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50517);
+
+replace into page_text values
+(50517,'To General Marcus Jonathan of Stormwind\n\nThe days grow more dangerous with each passing hour, food has begun to get harder to find, and the numbers of our ranks is smaller then ever. If there is a hope for Lordaeron it is within the brave men and women who stand around me, fighting for what they believe in.\n\nAs the leader of the Alliance, I demand from you soldiers to assist the war in Lordaeron. I demand food and supplies to ease the troubles of our own gathering, do this and you shall be rewarded greatly when we achieve victory.\n\n Yours truly, Captain Silas, The Army of Lordaeron.',0);
