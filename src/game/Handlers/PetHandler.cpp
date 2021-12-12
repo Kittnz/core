@@ -303,8 +303,9 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
 
             bool const explicitlySelectedTarget = Spells::IsExplicitlySelectedUnitTarget(spellInfo->EffectImplicitTargetA[0]);
 
+            const bool hasDestLocationFlag = spellInfo->Targets & TARGET_FLAG_DEST_LOCATION;
 
-            if (!unit_target && explicitlySelectedTarget)
+            if (!unit_target && (explicitlySelectedTarget || hasDestLocationFlag))
             {
                 pCharmedUnit->SendPetCastFail(spellid, SPELL_FAILED_BAD_IMPLICIT_TARGETS);
                 return;
@@ -321,8 +322,9 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
                 return;
             }
 
+
             // remove not needed target
-            if (unit_target && unit_target != pCharmedUnit && !explicitlySelectedTarget)
+            if (unit_target && unit_target != pCharmedUnit && !explicitlySelectedTarget && !hasDestLocationFlag)
                 unit_target = nullptr;
 
             // make sure pet is facing target
