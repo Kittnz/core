@@ -2261,7 +2261,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (91974, 40318);
 replace into creature_involvedrelation (id, quest) values (466, 40318);
 
-update creature_template set npc_flags = 3 where entry = 91974;
+update creature_template set npc_flags = 2 where entry = 91974;
 
 delete from item_template where entry = 60466;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
@@ -2283,3 +2283,19 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 replace into page_text values
 (50518,'Dear Captain Silas of Lordaeron\n\nI regret to inform you that I cannot meet the requests that you make, as there is no reliable way to deliver supplies, or get men to the north, nor do I have the authority to make such a decision.\n\nI would advise you and your kin make your retreat to Stormwind, to save your lives from a pointless death. Should you choose to not heed my advice, I can only offer you blessings from the light.\n\nGeneral Marcus Jonathan of Stormwind.',0);
+
+-- A Call to Aid --
+delete from quest_template where entry = 40320;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40319,40320,2,85,17,11,0,0,'A Call to Aid','Hey there, I suppose you wouldn\'t mind helping me out, would you? Things are starting to get incredibly rough, we are suffering through a food shortage that won\'t even last more then a week.\n\nThere is a cave, directly to the east that is practically crammed with wolves. If you could get me 10 Graypaw Flanks I could make them last for quite a while, and help alleviate the lack of food.','Gather 10 Graypaw Flanks for Barkeep Clemens at The Remnants Camp in Tirisfal Uplands.','Have you gotten them yet?','Ahh, fine pieces, and they don\'t seem touch by the taint of the plague. They will do nicely, thanks again, it means alot.',60468,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,1350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91976, 40320);
+replace into creature_involvedrelation (id, quest) values (91976, 40320);
+
+update creature_template set loot_id = 91989 where entry = 91989;
+
+delete from item_template where entry = 60468;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60468,25466,'Graypaw Flank',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(91989, 60468, -75, 1, 1, 1, 0);
