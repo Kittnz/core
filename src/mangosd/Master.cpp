@@ -136,7 +136,7 @@ int Master::Run()
     ///- Catch termination signals
     _HookSignals();
 
-    sWorld.RestoreLostGOs();
+   // sWorld.RestoreLostGOs();
 
     ///- Launch WorldRunnable thread
     std::thread world_thread{WorldRunnable()};
