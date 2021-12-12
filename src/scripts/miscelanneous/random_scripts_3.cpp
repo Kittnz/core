@@ -2255,9 +2255,63 @@ bool QuestAccept_npc_magus_ariden_dusktower(Player* pPlayer, Creature* pQuestGiv
     return false;
 }
 
+bool GossipHello_npc_inunquaq(Player* pPlayer, Creature* pCreature)
+{
+    switch (pCreature->GetEntry())
+    {
+    case 81046: // Inunquaq in Darkshore
+        if (pPlayer->GetQuestRewardStatus(40321) || pPlayer->GetQuestStatus(40321) == QUEST_STATUS_COMPLETE)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am ready to travel Inunquaq, let us head out!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        if (pCreature->IsQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+        pPlayer->SEND_GOSSIP_MENU(81046, pCreature->GetGUID());
+        break;
+
+    case 60611: // Inunquaq in The Northeast Passage
+        if (pPlayer->GetQuestRewardStatus(40321) || pPlayer->GetQuestStatus(40321) == QUEST_STATUS_COMPLETE)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Inunquaq, I wish to return to Darkshore", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        }
+        if (pCreature->IsQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+        pPlayer->SEND_GOSSIP_MENU(60611, pCreature->GetGUID());
+        break;
+    }
+
+    return true;
+}
+
+bool GossipSelect_npc_inunquaq(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        static const WorldLocation m_the_northeast_passage(1, 13654.652344F, -6585.791504F, 0.609558F, 0);
+        pPlayer->TeleportTo(m_the_northeast_passage);
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        static const WorldLocation m_darkshore(1, 7831.624630F, -776.579773F, 1.205446F, 0);
+        pPlayer->TeleportTo(m_darkshore);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_inunquaq";
+    newscript->pGossipHello = &GossipHello_npc_inunquaq;
+    newscript->pGossipSelect = &GossipSelect_npc_inunquaq;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_magus_ariden_dusktower";

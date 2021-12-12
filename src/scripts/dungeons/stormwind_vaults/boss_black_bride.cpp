@@ -11,15 +11,13 @@ struct boss_black_brideAI final : ScriptedAI {
     }
 
     void Aggro(Unit *target) override {
-        _bansheesWailPhase = eBansheesWailPhases::PhaseOne;
-        _lichSlapPhase = eLichSlapPhases::PhaseOne;
         _lastUpdateTick = 0;
         _lastEventProcessedAt = 0;
 
         _eventQueue.Reset();
-        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastDemoralizingShout), Seconds(4), Seconds(6));
-        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastLichSlap), Seconds(10), Seconds(15));
-        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastBansheesWail), Seconds(30));
+        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastLichSlap), Seconds(16), Seconds(18));
+        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastScreamsOfThePast), Seconds(6));
+        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastShadowBoltVolley), Seconds(10));
         me->MonsterSendTextToZone("Come and meet your end.", CHAT_MSG_MONSTER_YELL);
     }
 
@@ -37,19 +35,6 @@ struct boss_black_brideAI final : ScriptedAI {
         _eventQueue.Update(diff);
 
         switch (const auto nextEvent = PopEvent(); nextEvent) {
-            case eBlackBrideEvents::EventCastDemoralizingShout: {
-                HandleEventCastDemoralizingShout();
-                break;
-            }
-            case eBlackBrideEvents::EventCastBansheesWail: {
-                if (!EventCastBansheesWailPredicate()) {
-                    _eventQueue.Repeat(Milliseconds(400));
-                    break;
-                }
-
-                EventCastBansheesWailHandler();
-                break;
-            }
             case eBlackBrideEvents::EventCastLichSlap: {
                 if (!EventCastLichSlapPredicate()) {
                     _eventQueue.Repeat(Milliseconds(400));
@@ -57,6 +42,24 @@ struct boss_black_brideAI final : ScriptedAI {
                 }
 
                 EventCastLichSlapHandler();
+                break;
+            }
+            case eBlackBrideEvents::EventCastScreamsOfThePast: {
+                if (!EventCastScreamsOfThePastPredicate()) {
+                    _eventQueue.Repeat(Milliseconds(400));
+                    break;
+                }
+
+                EventCastScreamsOfThePastHandler();
+                break;
+            }
+            case eBlackBrideEvents::EventCastShadowBoltVolley: {
+                if (!EventCastShadowBoltVolleyPredicate()) {
+                    _eventQueue.Repeat(Milliseconds(400));
+                    break;
+                }
+
+                EventCastShadowBoltVolleyHandler();
                 break;
             }
             case eBlackBrideEvents::EventNone: {
@@ -71,9 +74,9 @@ private:
      * \brief Contains all spell IDs for spells cast by the Black Bride.
      */
     enum eBlackBrideSpells {
-        SpellDemoralizingShout = 19778,
-        SpellBansheesWail = 10890,
-        SpellLichSlap = 28873
+        SpellLichSlap = 28873,
+        SpellScreamsOfThePast = 7074,
+        SpellShadowBoltVolley = 17228,
     };
 
     /**
@@ -81,34 +84,12 @@ private:
      */
     enum class eBlackBrideEvents {
         EventNone,
-        EventCastDemoralizingShout,
-        EventCastBansheesWail,
         EventCastLichSlap,
-    };
-
-    /**
-     * \brief Contains all phases for the Banshee's Wail attack.
-     */
-    enum class eBansheesWailPhases {
-        PhaseOne,
-        PhaseTwo,
-        PhaseThree,
-        Finished
-    };
-
-    /**
-     * \brief Contains all phases for the Lich Slap attack.
-     */
-    enum class eLichSlapPhases {
-        PhaseOne,
-        PhaseTwo,
-        PhaseThree,
-        Finished
+        EventCastScreamsOfThePast,
+        EventCastShadowBoltVolley,
     };
 
     EventMap _eventQueue;
-    eBansheesWailPhases _bansheesWailPhase = eBansheesWailPhases::PhaseOne;
-    eLichSlapPhases _lichSlapPhase = eLichSlapPhases::PhaseOne;
     uint32_t _lastUpdateTick = 0;
     uint32_t _lastEventProcessedAt = 0;
     const uint32_t _minimumTicksBetweenEvents = 2000;
@@ -133,77 +114,12 @@ private:
     }
 
     /**
-     * \brief Event handler for the EventCastDemoralizingShout event.
-     */
-    void HandleEventCastDemoralizingShout() {
-        me->MonsterYell("Infidels!");
-        DoCast(me->GetVictim(), SpellDemoralizingShout);
-        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastDemoralizingShout), Seconds(40), Seconds(60));
-    }
-
-    /**
-     * \brief Predicate for the EventCastBansheesWail event.
-     * \return True if the event handler should fire, false if we should requeue the event.
-     */
-    [[nodiscard]]
-    bool EventCastBansheesWailPredicate() const {
-        switch (_bansheesWailPhase) {
-            case eBansheesWailPhases::PhaseOne:
-                return me->GetHealthPercent() <= 75;
-            case eBansheesWailPhases::PhaseTwo:
-                return me->GetHealthPercent() <= 50;
-            case eBansheesWailPhases::PhaseThree:
-                return me->GetHealthPercent() <= 25;
-            case eBansheesWailPhases::Finished:
-                return false;
-        }
-        return false;
-    }
-
-    /**
-     * \brief Event handler for the EventCastBansheesWail event.
-     */
-    void EventCastBansheesWailHandler() {
-        DoCast(me->GetVictim(), SpellBansheesWail);
-        switch (_bansheesWailPhase) {
-            case eBansheesWailPhases::PhaseOne:
-                _bansheesWailPhase = eBansheesWailPhases::PhaseTwo;
-                me->MonsterSendTextToZone("You betrayed my trust!", CHAT_MSG_MONSTER_YELL);
-                break;
-            case eBansheesWailPhases::PhaseTwo:
-                _bansheesWailPhase = eBansheesWailPhases::PhaseThree;
-                me->MonsterSendTextToZone("I would've done anything for your love.", CHAT_MSG_MONSTER_YELL);
-                break;
-            case eBansheesWailPhases::PhaseThree:
-                _bansheesWailPhase = eBansheesWailPhases::Finished;
-                me->MonsterSendTextToZone("I still feel the cold steel of your dagger in my back.", CHAT_MSG_MONSTER_YELL);
-                break;
-            case eBansheesWailPhases::Finished:
-                break;
-        }
-
-        if (_bansheesWailPhase != eBansheesWailPhases::Finished) {
-            _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastBansheesWail), Seconds(30), Seconds(40));
-        }
-    }
-
-    /**
      * \brief Predicate for the EventCastLichSlap event.
      * \return True if the event handler should fire, false if we should requeue the event.
      */
     [[nodiscard]]
     bool EventCastLichSlapPredicate() const {
-        switch (_lichSlapPhase) {
-            case eLichSlapPhases::PhaseOne:
-                return me->GetHealthPercent() <= 70;
-            case eLichSlapPhases::PhaseTwo:
-                return me->GetHealthPercent() <= 50;
-            case eLichSlapPhases::PhaseThree:
-                return me->GetHealthPercent() <= 20;
-            case eLichSlapPhases::Finished:
-                return false;
-        }
-        return false;
+        return !me->IsNonMeleeSpellCasted();
     }
 
     /**
@@ -211,26 +127,44 @@ private:
      */
     void EventCastLichSlapHandler() {
         DoCast(me->GetVictim(), SpellLichSlap);
-        switch (_lichSlapPhase) {
-            case eLichSlapPhases::PhaseOne:
-                _lichSlapPhase = eLichSlapPhases::PhaseTwo;
-                me->MonsterSendTextToZone("No, stay away!", CHAT_MSG_MONSTER_YELL);
-                break;
-            case eLichSlapPhases::PhaseTwo:
-                _lichSlapPhase = eLichSlapPhases::PhaseThree;
-                me->MonsterSendTextToZone("Your touch defiles me, I am only his!", CHAT_MSG_MONSTER_YELL);
-                break;
-            case eLichSlapPhases::PhaseThree:
-                _lichSlapPhase = eLichSlapPhases::Finished;
-                me->MonsterSendTextToZone("I have to see him again!", CHAT_MSG_MONSTER_YELL);
-                break;
-            case eLichSlapPhases::Finished:
-                break;
-        }
+        me->MonsterSendTextToZone("Your touch defiles me, I am only his!", CHAT_MSG_MONSTER_YELL);
+        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastLichSlap), Seconds(16), Seconds(18));
+    }
 
-        if (_lichSlapPhase != eLichSlapPhases::Finished) {
-            _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastLichSlap), Milliseconds(400));
-        }
+    /**
+     * \brief Predicate for the EventCastScreamsOfThePast event.
+     * \return True if the event handler should fire, false if we should requeue the event.
+     */
+    [[nodiscard]]
+    bool EventCastScreamsOfThePastPredicate() const {
+        return !me->IsNonMeleeSpellCasted();
+    }
+
+    /**
+     * \brief Event handler for the EventCastScreamsOfThePast event.
+     */
+    void EventCastScreamsOfThePastHandler() {
+        DoCast(me->GetVictim(), SpellScreamsOfThePast);
+        me->MonsterSendTextToZone("I would've done anything for your love.", CHAT_MSG_MONSTER_YELL);
+        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastScreamsOfThePast), Seconds(20));
+    }
+
+    /**
+     * \brief Predicate for the EventCastShadowBoltVolley event.
+     * \return True if the event handler should fire, false if we should requeue the event.
+     */
+    [[nodiscard]]
+    bool EventCastShadowBoltVolleyPredicate() const {
+        return !me->IsNonMeleeSpellCasted();
+    }
+
+    /**
+     * \brief Event handler for the EventCastShadowBoltVolley event.
+     */
+    void EventCastShadowBoltVolleyHandler() {
+        DoCast(me->GetVictim(), SpellShadowBoltVolley);
+        me->MonsterSendTextToZone("Infidels!", CHAT_MSG_MONSTER_YELL);
+        _eventQueue.ScheduleEvent(static_cast<uint32_t>(eBlackBrideEvents::EventCastShadowBoltVolley), Seconds(15));
     }
 };
 

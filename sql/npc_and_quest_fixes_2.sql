@@ -2253,3 +2253,69 @@ update gameobject set id = 3000275 where guid = 5000697;
 update gameobject set id = 3000276 where guid = 5000698;
 
 update creature_template set health_min = 35247, health_max = 35247 where entry = 80851;
+
+-- A Call to Aid --
+delete from quest_template where entry = 40318;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40318,2,85,17,11,0,0,'A Call to Aid','An outsider, you\'re the first in quite a long time, welcome to The Remnants Camp. To state that our situation is bad would be an understatement of the highest regard. We are all that remains bearing the crest of Lordaeron as a sigil, tucked away within a remote corner of the Uplands.\n\n As the leader of the Remnants, and the commander of the Army of Lordaeron I would ask a favor from you. I have prepared a letter to be sent to Stormwind, one of the final bastions of human power. Take it to General Marcus Jonathan, Lordaeron demands soldiers, and supplies.','Deliver Captain Silas\' Letter to General Marcus Jonathan in Stormwind.','How can I help you?','What\'s this... The crest of Lordaeron, I must say, it\'s been some time since I received a letter with this mark.',60466,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60466,1,0,1150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91974, 40318);
+replace into creature_involvedrelation (id, quest) values (466, 40318);
+
+update creature_template set npc_flags = 2 where entry = 91974;
+
+delete from item_template where entry = 60466;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60466,3048,'Captain Silas\' Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50517);
+
+replace into page_text values
+(50517,'To General Marcus Jonathan of Stormwind\n\nThe days grow more dangerous with each passing hour, food has begun to get harder to find, and the numbers of our ranks is smaller then ever. If there is a hope for Lordaeron it is within the brave men and women who stand around me, fighting for what they believe in.\n\nAs the leader of the Alliance, I demand from you soldiers to assist the war in Lordaeron. I demand food and supplies to ease the troubles of our own gathering, do this and you shall be rewarded greatly when we achieve victory.\n\n Yours truly, Captain Silas, The Army of Lordaeron.',0);
+
+-- A Call to Aid --
+delete from quest_template where entry = 40319;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40318,40319,2,85,17,11,0,0,'A Call to Aid','Supplies, soldiers? Where am I supposed to get these, much less how am I supposed to send them so far north? Things must be desperate if a Captain of the Army of Lordaeron claims to be the Leader of the Alliance.\n\nI have prepared my response, and sadly there is no way to meet his request, as stretched thin as we are. Bring this back to him, and may the light bless those that remain there.','Deliver Marcus Jonathan\'s Letter to Captain Silas at the Remnants Camp in Tirisfal Uplands.','Any good news?','So, there is no help coming? It seems we must look to ourselves to keep the last torch within these lands alight.\n\nThanks for delivering the letter, you are dismissed.',60467,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60467,1,0,1150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (466, 40319);
+replace into creature_involvedrelation (id, quest) values (91974, 40319);
+
+delete from item_template where entry = 60467;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60467,5646,'Marcus Jonathan\'s Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50518);
+
+replace into page_text values
+(50518,'Dear Captain Silas of Lordaeron\n\nI regret to inform you that I cannot meet the requests that you make, as there is no reliable way to deliver supplies, or get men to the north, nor do I have the authority to make such a decision.\n\nI would advise you and your kin make your retreat to Stormwind, to save your lives from a pointless death. Should you choose to not heed my advice, I can only offer you blessings from the light.\n\nGeneral Marcus Jonathan of Stormwind.',0);
+
+-- A Call to Aid --
+delete from quest_template where entry = 40320;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40319,40320,2,85,17,11,0,0,'A Call to Aid','Hey there, I suppose you wouldn\'t mind helping me out, would you? Things are starting to get incredibly rough, we are suffering through a food shortage that won\'t even last more then a week.\n\nThere is a cave, directly to the east that is practically crammed with wolves. If you could get me 10 Graypaw Flanks I could make them last for quite a while, and help alleviate the lack of food.','Gather 10 Graypaw Flanks for Barkeep Clemens at The Remnants Camp in Tirisfal Uplands.','Have you gotten them yet?','Ahh, fine pieces, and they don\'t seem touch by the taint of the plague. They will do nicely, thanks again, it means alot.',60468,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,1350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91976, 40320);
+replace into creature_involvedrelation (id, quest) values (91976, 40320);
+
+update creature_template set loot_id = 91989 where entry = 91989;
+
+delete from item_template where entry = 60468;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60468,25466,'Graypaw Flank',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(91989, 60468, -75, 1, 1, 1, 0);
+
+-- The Northeast Passage --
+delete from quest_template where entry = 40321;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (80391,40321,148,85,45,40,0,0,'The Northeast Passage','You have been incredibly helpful, and for that I am grateful. This land I have found myself on seems to be full of dangers, those that I am not ready to encounter just yet. I have done some repairs upon the canoe, and should be ready to set off soon, back to where I am from.\n\nThe Northeast Passage is quite trecherous, many jagged icebergs are out there which makes sailing quite difficult! I know a way through though, if you\'d like to come with me, I need to be stopping at Kaneq\'nuun, and I wouldn\'t mind showing you.\n\nWhen you\'re ready to go, let me know.','Speak with Inunquaq and travel through the Northeast Passage to Kaneq\'nuun.','So, I take it you must be ready to go, yes?','Ahh, that took a bit, I told you I knew the way through. Welcome to Kaneq\'nuun!',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,1350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (81046, 40321);
+replace into creature_involvedrelation (id, quest) values (60611, 40321);
+
+update creature_template set npc_flags = 3 where entry = 81046;
+update creature_template set script_name = 'npc_inunquaq' where entry = 60611 and 81046;
+
+-- Inunquaq, display ID 18502 ,level 37, faction 35, greeting text : "Well, it sure is a nice place, isn't it?"
+REPLACE INTO creature_template VALUES
+(60611, 18502, 0, 0, 0, 'Inunquaq', '', 0, 37, 37, 2192, 2192, 0, 0, 1340, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, 'npc_inunquaq');
+
+set @gossip_menu_id = 41054; set @magic_number = 60611;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well, it sure is a nice place, isn\'t it?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
