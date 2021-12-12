@@ -776,6 +776,7 @@ class World
             return lvl > 60 ? 300 + ((lvl - 60) * 75) / 10 : lvl*5;
         }
 
+        void RestoreLostGOs();
         void SetInitialWorldSettings();
         void LoadConfigSettings(bool reload = false);
 

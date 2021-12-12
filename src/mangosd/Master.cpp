@@ -122,6 +122,7 @@ int Master::Run()
 
     ///- Initialize the World
     sWorld.SetInitialWorldSettings();
+    
 
     #ifndef WIN32
     detachDaemon();
@@ -134,6 +135,8 @@ int Master::Run()
 
     ///- Catch termination signals
     _HookSignals();
+
+    sWorld.RestoreLostGOs();
 
     ///- Launch WorldRunnable thread
     std::thread world_thread{WorldRunnable()};

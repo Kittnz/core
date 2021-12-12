@@ -84,6 +84,13 @@
 #include "CompanionManager.hpp"
 #include "MountManager.hpp"
 
+#include <filesystem>
+#include <fstream>
+#include <regex>
+#include <unordered_map>
+#include <string>
+#include <iostream>
+
 #include <chrono>
 
 volatile bool World::m_stopEvent = false;
@@ -1158,6 +1165,93 @@ void charactersDatabaseWorkerThread()
         sObjectMgr.ReturnOrDeleteOldMails(true);
     }
     CharacterDatabase.ThreadEnd();
+}
+
+void World::RestoreLostGOs()
+{
+    std::fstream file{ "log.txt" };
+
+    if (!file)
+        return;
+
+    std::regex pattern{ "gobject (add|delete|turn) (\\d+) +X: +([+-]?[0-9]*[.]?[0-9]+) +Y: +([+-]?[0-9]*[.]?[0-9]+) +Z: +([+-]?[0-9]*[.]?[0-9]+) +Map: +(\\d+)" };
+
+
+    const uint32 startingGuid = 5000095;
+    uint32 currentGuid = startingGuid;
+
+    std::unordered_map<uint32, GameObject*> guidLinkage;
+    std::string val;
+    while (std::getline(file, val))
+    {
+        std::smatch match;
+        if (!std::regex_search(val, match, pattern))
+            continue;
+
+        const std::string command = match[1].str();
+        const uint32 entryOrGuid =  atoi(match[2].str().c_str());
+        float xCoord = strtod(match[3].str().c_str(), nullptr);
+        float yCoord = strtod(match[4].str().c_str(), nullptr);
+        float zCoord = strtod(match[5].str().c_str(), nullptr);
+        uint32 mapId  = atoi(match[6].str().c_str());
+
+        if (command.find("add") != std::string::npos)
+        {
+            const GameObjectInfo* gInfo = ObjectMgr::GetGameObjectInfo(entryOrGuid);
+
+            if (!gInfo)
+            {
+                sLog.outError("ERROR WITH GO PROTO.");
+                continue;
+            }
+
+            Map* map = sMapMgr.FindMap(mapId);
+
+            if (!map)
+            {
+                sLog.outError("ERROR WITH MAP ID.");
+                continue;
+            }
+
+            GameObject* pGameObj = new GameObject;
+
+            // used guids from specially reserved range (can be 0 if no free values)
+            uint32 db_lowGUID = sObjectMgr.GenerateStaticGameObjectLowGuid();
+            if (!db_lowGUID)
+            {
+                sLog.outError("ERROR WITH lowGUID.");
+                continue;
+            }
+
+            if (!pGameObj->Create(db_lowGUID, gInfo->id, map, xCoord, yCoord, zCoord, 0.f, 0.0f, 0.0f, 0.0f, 0.0f, GO_ANIMPROGRESS_DEFAULT, GO_STATE_READY))
+            {
+                delete pGameObj;
+                continue;
+            }
+
+
+            pGameObj->SetRespawnTime(300); // Default 5 min.
+       
+            guidLinkage[currentGuid] = pGameObj;
+            ++currentGuid;
+        }
+
+        if (command.find("delete") != std::string::npos)
+        {
+            guidLinkage.erase(entryOrGuid);
+        }
+
+        if (command.find("turn") != std::string::npos)
+        {
+            //dont have orientation from logs so can't correct orientation for GOs
+        }
+
+        for (auto obj : guidLinkage)
+        {
+            obj.second->SaveToDB(obj.second->GetMapId());
+        } 
+    }
+
 }
 
 /// Initialize the World
