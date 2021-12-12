@@ -72,9 +72,6 @@ struct boss_damian_the_ripperAI final : ScriptedAI {
             // Attack
             AttackStart(randomPlayer);
             m_creature->AddThreat(randomPlayer, 300.f);
-            stringstream ss;
-            ss << "Health: " << randomPlayer->GetHealthPercent();
-            me->MonsterSendTextToZone(ss.str().c_str(), CHAT_MSG_MONSTER_SAY);
 
             // Special Attack Handling
             if (randomPlayer->GetHealthPercent() <= 40) {
@@ -83,6 +80,9 @@ struct boss_damian_the_ripperAI final : ScriptedAI {
             } else {
                 const auto damage = randomPlayer->GetHealth() / 50;
                 me->DealDamage(randomPlayer, damage, nullptr, SPELL_DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+
+                // Cast Backstab on the player
+                DoCast(randomPlayer, SpellBackstab, false);
             }
         }
 
@@ -147,6 +147,7 @@ struct boss_damian_the_ripperAI final : ScriptedAI {
 
 private:
     enum eSpellIds {
+        SpellBackstab = 22416,
         SpellDarkMending = 16588,
         SpellGouge = 11286,
         SpellSinisterStrike = 11294,
