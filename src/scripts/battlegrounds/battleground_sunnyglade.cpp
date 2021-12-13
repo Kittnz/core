@@ -283,6 +283,12 @@ struct SV_human_footmanAI : public ScriptedAI
     {
     }
 
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
+    {
+        if (pDoneBy && pDoneBy->GetEntry() == NPC_ORC_GRUNT)
+            uiDamage = 0;
+    }
+
     void UpdateAI(uint32 const uiDiff)  override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -467,6 +473,12 @@ struct SV_orc_gruntAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
+    }
+
+    void DamageTaken(Unit* pDoneBy, uint32& uiDamage) override
+    {
+        if (pDoneBy && pDoneBy->GetEntry() == NPC_HUMAN_FOOTMAN)
+            uiDamage = 0;
     }
 
     void UpdateAI(uint32 const uiDiff)  override

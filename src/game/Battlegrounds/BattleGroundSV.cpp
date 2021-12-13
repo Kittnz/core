@@ -267,16 +267,43 @@ bool BattleGroundSV::SetupBattleGround()
     //        return false;
     //    }
     //}
-    /*fights*/
-    //for (uint8 i = 0; i < 4; ++i)
-    //{
-    //    if (!AddCreature(NPC_HUMAN_FOOTMAN, BG_SV_CREATURE_HUMAN_ARMY + i, BG_SV_LeaderGuardsPos[1][i].x, BG_SV_LeaderGuardsPos[1][i].y, BG_SV_LeaderGuardsPos[1][i].z, BG_SV_LeaderGuardsPos[1][i].o, TEAM_ALLIANCE, 5 * MINUTE * IN_MILLISECONDS)
-    //        || !AddCreature(NPC_ORC_GRUNT, BG_SV_CREATURE_ORC_ARMY + i, BG_SV_LeaderGuardsPos[1][i].x, BG_SV_LeaderGuardsPos[1][i].y, BG_SV_LeaderGuardsPos[1][i].z, BG_SV_LeaderGuardsPos[1][i].o, TEAM_HORDE, 5 * MINUTE * IN_MILLISECONDS))
-    //    {
-    //        sLog.outError("BatteGroundSV: Failed to spawn army. Battleground not created!");
-    //        return false;
-    //    }
-    //}
+
+    SetupSkirmishes();
+
+    return true;
+}
+
+bool BattleGroundSV::SetupSkirmishes()
+{
+    for (uint8 i = 0; i < 40; ++i)
+    {
+        Creature* skHuman = AddCreature(NPC_HUMAN_FOOTMAN, BG_SV_CREATURE_HUMAN_ARMY + i, BG_SV_FightPos[0][i].x, BG_SV_FightPos[0][i].y, BG_SV_FightPos[0][i].z + 0.8f, BG_SV_FightPos[0][i].o, TEAM_ALLIANCE, 5 * MINUTE * IN_MILLISECONDS);
+        if (!skHuman)
+        {
+            sLog.outError("BatteGroundSV: Failed to spawn human fighters. Battleground not created!");
+            return false;
+        }
+
+        float randf[2] = { -5.0f, 5.0f };
+        Creature* skOrc = AddCreature(NPC_ORC_GRUNT, BG_SV_CREATURE_ORC_ARMY + i, BG_SV_FightPos[1][i].x + randf[urand(0, 1)], BG_SV_FightPos[1][i].y + randf[urand(0, 1)], BG_SV_FightPos[1][i].z + 0.8f, BG_SV_FightPos[1][i].o, TEAM_HORDE, 5 * MINUTE * IN_MILLISECONDS);
+        if (!skOrc)
+        {
+            sLog.outError("BatteGroundSV: Failed to spawn orc fighters. Battleground not created!");
+            return false;
+        }
+
+        skHuman->SetFacingToObject(skOrc);
+
+        if (skHuman->Attack(skOrc, true))
+        {
+            skHuman->AddThreat(skOrc);
+            skHuman->SetInCombatWith(skOrc);
+            skOrc->SetInCombatWith(skHuman);
+
+            skHuman->GetMotionMaster()->Clear();
+            skHuman->GetMotionMaster()->MoveChase(skOrc, MELEE_RANGE);
+        }
+    }
 
     return true;
 }
