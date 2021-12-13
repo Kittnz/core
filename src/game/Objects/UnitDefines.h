@@ -312,6 +312,7 @@ enum UnitState
 
     UNIT_STAT_ALLOW_INCOMPLETE_PATH = 0x08000000, // allow movement with incomplete or partial paths
     UNIT_STAT_ALLOW_LOS_ATTACK      = 0x10000000, // allow melee attacks without LoS
+	UNIT_STAT_CANT_ROTATE = 0x20000000,
     // masks (only for check)
 
     // can't move currently

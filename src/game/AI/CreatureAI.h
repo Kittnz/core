@@ -211,7 +211,7 @@ class CreatureAI
         CanCastResult DoCastSpellIfCan(Unit* pTarget, uint32 uiSpell, uint32 uiCastFlags = 0, ObjectGuid uiOriginalCasterGUID = ObjectGuid());
 
         // Helper functions for cast spell
-        virtual CanCastResult CanCastSpell(Unit* pTarget, const SpellEntry* pSpell, bool isTriggered);
+        virtual CanCastResult CanCastSpell(Unit* pTarget, const SpellEntry* pSpell, bool isTriggered, bool bCanIgnoreLOS = false);
 
         // Clears any group/raid icons this creature may have
         void ClearTargetIcon();

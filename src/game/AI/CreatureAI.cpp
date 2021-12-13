@@ -46,7 +46,7 @@ void CreatureAI::AttackedBy(Unit* attacker)
         AttackStart(attacker);
 }
 
-CanCastResult CreatureAI::CanCastSpell(Unit* pTarget, const SpellEntry *pSpell, bool isTriggered)
+CanCastResult CreatureAI::CanCastSpell(Unit* pTarget, const SpellEntry* pSpell, bool isTriggered, bool bCanIgnoreLOS /*= false*/)
 {
     if (!pTarget)
         return CAST_FAIL_OTHER;
@@ -68,8 +68,11 @@ CanCastResult CreatureAI::CanCastSpell(Unit* pTarget, const SpellEntry *pSpell, 
             return CAST_FAIL_POWER;
     }
 
-    if (pSpell->Custom & SPELL_CUSTOM_BEHIND_TARGET && pTarget->HasInArc(m_creature))
-        return CAST_FAIL_OTHER;
+	if (!bCanIgnoreLOS)
+	{
+		if (pSpell->Custom & SPELL_CUSTOM_BEHIND_TARGET && pTarget->HasInArc(m_creature))
+			return CAST_FAIL_OTHER;
+	}
 
     // If the spell requires the target having a specific power type
     if (!pSpell->IsAreaOfEffectSpell() && !pSpell->IsTargetPowerTypeValid(pTarget->GetPowerType()))
@@ -92,8 +95,11 @@ CanCastResult CreatureAI::CanCastSpell(Unit* pTarget, const SpellEntry *pSpell, 
     if (pSpell->rangeIndex == SPELL_RANGE_IDX_SELF_ONLY)
         return CAST_OK;
 
-    if (!(pSpell->AttributesEx2 & SPELL_ATTR_EX2_IGNORE_LOS) && !m_creature->IsWithinLOSInMap(pTarget))
-        return CAST_FAIL_NOT_IN_LOS;
+	if (!bCanIgnoreLOS)
+	{
+		if (!(pSpell->AttributesEx2 & SPELL_ATTR_EX2_IGNORE_LOS) && !m_creature->IsWithinLOSInMap(pTarget))
+			return CAST_FAIL_NOT_IN_LOS;
+	}
 
     if (const SpellRangeEntry *pSpellRange = sSpellRangeStore.LookupEntry(pSpell->rangeIndex))
     {
@@ -139,7 +145,7 @@ CanCastResult CreatureAI::DoCastSpellIfCan(Unit* pTarget, uint32 uiSpell, uint32
             // Check if cannot cast spell
             if (!(uiCastFlags & CF_FORCE_CAST))
             {
-                CanCastResult castResult = CanCastSpell(pTarget, pSpell, uiCastFlags & CF_TRIGGERED);
+                CanCastResult castResult = CanCastSpell(pTarget, pSpell, uiCastFlags & CF_TRIGGERED, uiCastFlags & CF_IGNORE_LOS);
 
                 if (castResult != CAST_OK)
                     return castResult;
@@ -152,7 +158,7 @@ CanCastResult CreatureAI::DoCastSpellIfCan(Unit* pTarget, uint32 uiSpell, uint32
             if ((uiCastFlags & CF_MAIN_RANGED_SPELL) && pCaster->IsMoving())
                 pCaster->StopMoving();
 
-            pCaster->CastSpell(pTarget, pSpell, uiCastFlags & CF_TRIGGERED, nullptr, nullptr, uiOriginalCasterGUID);
+            pCaster->CastSpell(pTarget, pSpell, uiCastFlags & CF_TRIGGERED, nullptr, nullptr, uiOriginalCasterGUID, nullptr, nullptr, uiCastFlags & CF_IGNORE_LOS);
             return CAST_OK;
         }
 

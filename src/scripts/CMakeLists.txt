@@ -167,6 +167,7 @@ dungeons/shadowfang_keep/instance_shadowfang_keep.cpp
 dungeons/stormwind_vaults/boss_aszosh_grimflame.cpp
 dungeons/stormwind_vaults/boss_black_bride.cpp
 dungeons/stormwind_vaults/boss_damian_the_ripper.cpp
+dungeons/stormwind_vaults/boss_arctiras.cpp
 dungeons/stormwind_vaults/boss_nazorna.cpp
 dungeons/stormwind_vaults/boss_thamgrarr.cpp
 dungeons/stormwind_vaults/boss_volkan_cruelblade.cpp
