@@ -244,6 +244,7 @@ set (game_SRCS
     AI/CreatureEventAI.h
     AI/CreatureEventAIMgr.h
     AI/CritterAI.h
+	AI/GenericSpellAI.h
     AI/GameObjectAI.h
     AI/GuardAI.h
     AI/GuardEventAI.h

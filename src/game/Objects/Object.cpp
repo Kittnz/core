@@ -5088,7 +5088,7 @@ void WorldObject::RemoveAllDynObjects()
     }
 }
 
-SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent)
+SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/)
 {
     SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
 
@@ -5101,7 +5101,7 @@ SpellCastResult WorldObject::CastSpell(Unit* pTarget, uint32 spellId, bool trigg
         return SPELL_FAILED_SPELL_UNAVAILABLE;
     }
 
-    return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent);
+    return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent, bCanIgnoreLOS);
 }
 
 SpellCastResult WorldObject::CastSpell(GameObject* pTarget, uint32 spellId, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent)
@@ -5120,7 +5120,7 @@ SpellCastResult WorldObject::CastSpell(GameObject* pTarget, uint32 spellId, bool
     return CastSpell(pTarget, spellInfo, triggered, castItem, triggeredByAura, originalCaster, triggeredBy, triggeredByParent);
 }
 
-SpellCastResult WorldObject::CastSpell(Unit* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent)
+SpellCastResult WorldObject::CastSpell(Unit* pTarget, SpellEntry const* spellInfo, bool triggered, Item* castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy, SpellEntry const* triggeredByParent, bool bCanIgnoreLOS /*= false*/)
 {
     if (!spellInfo)
     {
@@ -5145,9 +5145,9 @@ SpellCastResult WorldObject::CastSpell(Unit* pTarget, SpellEntry const* spellInf
     Spell* spell;
 
     if (Unit* pUnit = ToUnit())
-        spell = new Spell(pUnit, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent);
+        spell = new Spell(pUnit, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent, bCanIgnoreLOS);
     else if (GameObject* pGameObject = ToGameObject())
-        spell = new Spell(pGameObject, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent);
+        spell = new Spell(pGameObject, spellInfo, triggered, originalCaster, triggeredBy, nullptr, triggeredByParent, bCanIgnoreLOS);
     else
         return SPELL_FAILED_ERROR;
 

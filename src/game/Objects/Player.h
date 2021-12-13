@@ -2269,6 +2269,9 @@ class Player final: public Unit
 
 // Turtle WoW modes & challenges:  
 
+		// Giperion Turtle: Z limit should be customized
+		float ZFelldownLimit = -500.0f;
+
 public:
     bool IsPvP() const override
     {
