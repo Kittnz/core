@@ -2360,3 +2360,18 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '27', '0', '0', '0',
  '0', '1', NULL);
+
+-- Icepoint Whiteclaws --
+delete from quest_template where entry = 40325;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40323,40325,148,85,45,40,512,0,'Icepoint Whiteclaws','With our hunters gone away to gather food for the long winter, we have seen a growing amount of Whiteclaw Bears beginning to stalk the outside of their cave. Something has begun to stir them from hibernation, and we have seen them around.\n\nWe have lived in harmony with the Whiteclaw for some time, but now we must act to reduce their numbers. To the north is a deep cave the burrows into the mountain, go there, and gather 5 Whiteclaw Pelts.','Gather 5 Whiteclaw Pelt for Aputuq in Kaneq\'nuun at Icepoint Rock.','They are a ferocious beast, be careful when you are out there!','I must say, a southlander like yourself certainly is quite resourceful. These pelts you have gathered will be put to use, thanks again for keeping us safe.',60471,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60540, 40325);
+replace into creature_involvedrelation (id, quest) values (60540, 40325);
+
+delete from item_template where entry = 60471;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60471,1286,'Whiteclaw Pelt',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+-- WHITECLAW PELT DROP
+replace into creature_loot_template values
+(60545, 60471, -65, 2, 1, 1, 0);
