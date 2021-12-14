@@ -2339,3 +2339,24 @@ replace into creature_involvedrelation (id, quest) values (60542, 40323);
 delete from item_template where entry = 60469;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60469,8743,'Ice Crawler Claw',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0);
+
+-- ICE CRAWLER CLAW DROP
+replace into creature_loot_template values
+(60605, 60469, -100, 2, 1, 1, 0);
+
+-- The Legend of Tarqsiku --
+delete from quest_template where entry = 40324;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40323,40324,148,85,48,40,512,0,'The Legend of Tarqsiku','When my people first came to this island, we met a being named Tarqsiku. He was made of pure ice, and assisted us in our times of great need. Tarqsiku has long since fallen into a dark place, rumbling deep beneath the the ground, and sending the Whiteclaw into frenzy.\n\nAn evil has clouded his judgement, and his mind, already he has attacked our kind. Tarqsiku was a legend to my ancestors, but to me, Tarqsiku is a threat, and one that has me wondering what to do.\n\nI ask of you to venture deep into the earth, to find Tarqsiku, and to free him for his torment.','Find Tarqsiku deep beneath Kaneq\'nuun and slay him for Panukuki.','Tarqsiku should not be underestimated, be cautious.','You\'ve done it? Well, I do hope I made the correct decision, perhaps now he will watch over us favorably from wherever he is. For everything you\'ve done, I offer you this, as a thanks for my people, for freeing a most beloved spirit.',0,0,0,0,0,0,0,0,60544,1,0,0,0,0,0,0,0,0,1000,4050,0,0,0,0,0,0,0,0,0,0,0,60470,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60542, 40324);
+replace into creature_involvedrelation (id, quest) values (60542, 40324);
+
+replace into item_template values
+ ('60470', '4', '0', 'Ice Pearl of Kaneq\'nuun', 'A pearl of the far North Sea, glimmering with the essence of ice.', '12310', '2', '0', '1', '54980', '13745', '12', '-1', '-1', '50',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '10', '0', '0', '8747', '1', '0', '0', '-1', '0', '-1', '28766', '0', '0', '0', '1800000', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '27', '0', '0', '0',
+ '0', '1', NULL);
