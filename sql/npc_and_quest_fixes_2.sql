@@ -2375,3 +2375,260 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 -- WHITECLAW PELT DROP
 replace into creature_loot_template values
 (60545, 60471, -65, 2, 1, 1, 0);
+
+-- Say lines for NPCs Captain Rothynn, Groundskeeper Jacoby.
+REPLACE INTO broadcast_text VALUES
+(30008, 'I have served the Master faithfully! You shall not interfere!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30009, 'You... You aren\'t supposed to be here, get away!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30010, 'This is my domain, you are not allowed to be here!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30011, 'I can see through the veil... I was wrong... Thank you, brave one, I am free.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+delete from creature_ai_scripts where id between 2200014 and 2200017;
+REPLACE INTO creature_ai_scripts VALUES
+(2200014, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30008, 0, 0, 0, 0, 0, 0, 0, 0, 'Captain Rothynn - Say on Aggro'),
+(2200015, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30009, 0, 0, 0, 0, 0, 0, 0, 0, 'Groundskeeper Jacoby - Say on Aggro'),
+(2200016, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30010, 0, 0, 0, 0, 0, 0, 0, 0, 'Tarqsiku - Say on Aggro'),
+(2200017, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30011, 0, 0, 0, 0, 0, 0, 0, 0, 'Tarqsiku - Say upon Death');
+
+delete from creature_ai_events where id between 2200014 and 2200017;
+REPLACE INTO creature_ai_events VALUES
+(2200014, 60608, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200014, 0, 0, 'Captain Rothynn - Say on Aggro'),
+(2200015, 60609, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200015, 0, 0, 'Groundskeeper Jacoby - Say on Aggro'),
+(2200016, 60544, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200016, 0, 0, 'Tarqsiku - Say on Aggro'),
+(2200017, 60544, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200017, 0, 0, 'Tarqsiku - Say upon Death');
+
+delete from gameobject_template where entry = 2010859;
+REPLACE INTO gameobject_template VALUES
+(2010859, 9, 430, 'Weathered Journal', 0, 0, 1, 50519, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into page_text values
+(50519,'<The first page of the Journal is torn out>.',50520),
+(50520,'Day 31 : The weather is hostile, and the fuel has begun to freeze within the drums, working alone especially in this frigid weather has become extremely rough! I do hope Fizzlepipe returns soon to help out around here.\n\nDay 45 : Food provisions are starting to run somewhat low, I remain confined within my tent, the wind howling all around, buried beneath an assortment of blankets and furs just hoping the blizzards will end.\n\nDay 48 : Finally, a clear day, I\'ve had the chance to shovel some of the excessive snow out from around the tent, and had a cooked meal for the first time in a few weeks now, I do so hope the weather keeps up!',50521),
+(50521,'Day 52 : The good weather has come to an end, and once again the snow comes down, and it\'s angry alright! I\'ve been attempting to fix the flying machine, but to no luck, even with three days of sun I wasn\'t able to get it started, hopefully soon.\n\nDay 54 I braved the storm and was able to find a problem with the Spanflux Capacitor, it seems it wasn\'t built for the frigid temperatures and will require a deep de-freeze. I took it inside the tent, and am beginning to warm it, hopefully this will yield results.\n\nDay 53 : Damn you Fizzlepipe, where in the blazes are you? Who knew a single flip of a coin would bring me so much misery! When I get back to Gnomeregan you\'ll owe me all sorts of stuff.',50522),
+(50522,'Day 59 : Well, my efforts with the Spanflux Capacitor have been almost fruitless, with only a single day of \'good weather\' I wasn\'t able to get the flying machine to take off, even after hearing it begin to start.\n\nDay 62 : Hungry, so hungry, food has practically run out, I\'m living off crumbs. This mission has been a failure, and I haven\'t heard a word from Gnomeregan in forever. Tomorrow is the day, no matter what, that I will put the last of the fuel into the flying machine and try to start it, let us hope it works!\n\nDay 63 : Well, here we go, another bad day, with horrible snow! I\'ve been cold long enough, its time to fix this blasted flying machine, wish me luck old Fizzlepipe, wherever you are.',0);
+
+delete from item_template where entry = 51356;
+REPLACE INTO item_template VALUES
+(51356, 13, 0, 'Karazhan Crypt Key', 'Covered in rust.', 22071, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into creature_template VALUES
+(60612, 18641, 0, 0, 0, 'Frigid Guardian', '', 0, 61, 61, 8243, 8243, 0, 0, 3521, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 688, 710, 0, 284, 2, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 4, 0, 60612, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 517, 680, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60613, 16213, 0, 0, 0, 'Web Cocoon', '', 0, 60, 60, 100, 100, 0, 0, 500, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 100, 100, 0, 284, 2, 2000, 2000, 1, 33554434, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20056; set @weapon_1 = 80641; set @weapon_2 = 0; set @creature = 91928;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 10504; set @weapon_1 = 80775; set @weapon_2 = 80775; set @creature = 80854;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41055; set @magic_number = 60541;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Wow, what are you? Are you one of the people that Inunquaq was going to see in the southlands?!\n\nYou\'re lucky to come here, many travel to Kaneq\'nuun to see the great shiny spirit that flys through the sky, maybe you\'ll see it too!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41056; set @magic_number = 60543;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The fish are always biting out here'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Frigid Guardian
+set @creature_entry = 60612;
+set @description = 'Stormwind Vault: Frigid Guardian';
+set @spell_list_id = 180016;
+
+set @spellid_1 = 12548; -- Frost Shock
+set @probability_1 = 100; 
+set @casttarget_1 = 4; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 2; 
+set @delayinitialmax_1 = 2; 
+set @delayrepeatmin_1 = 11; 
+set @delayrepeatmax_1 = 12;	
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 12548, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Soulless Husk
+set @creature_entry = 60599;
+set @description = ': Soulless Husk';
+set @spell_list_id = 180017;
+
+set @spellid_1 = 12530; -- Frailty
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 1; 
+set @delayinitialmax_1 = 1; 
+set @delayrepeatmin_1 = 8; 
+set @delayrepeatmax_1 = 8;	
+
+set @spellid_2 = 12057; -- Strike
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 3; 
+set @delayinitialmax_2 = 3; 
+set @delayrepeatmin_2 = 10; 
+set @delayrepeatmax_2 = 10;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 12530, spell_id2 = 12057, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
