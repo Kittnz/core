@@ -7246,7 +7246,7 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
         pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
         if (pPlayer->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
         {
@@ -7254,7 +7254,10 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
             if (pPlayer->HasItemCount(50010, 1, true))
                 pPlayer->DestroyItemCount(50010, 1, true, false, true);
         }
+    }
 
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
         if (pPlayer->HasChallenge(CHALLENGE_EXHAUSTION_MODE))
             pPlayer->RemoveSpell(50004, false, false);
     }
