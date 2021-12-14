@@ -2660,6 +2660,321 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
     return false;
 }
 
+
+struct logistical_officer : public ScriptedAI
+{
+    logistical_officer(Creature* c) : ScriptedAI(c)
+    {
+        Reset();
+    }
+
+    uint32 m_uiUpdateTimer;
+    int phase;
+    int movementPhase;
+    int summonChoice;
+    int currentSummonChoice;
+    uint32 summonCreatureEntry;
+    bool doOnce;
+
+    GameObject* portalLeft;
+    GameObject* portalRight;
+    GameObject* portal;
+
+    enum Spells
+    {
+        SPELL_ARCANE_CHANNEL = 23017,
+        SPELL_TELEPORT = 26638,
+        SPELL_SUBTLETY = 28398
+    };
+
+    void Reset()
+    {
+        m_uiUpdateTimer = 1000;
+        phase = 0;
+        summonChoice = 0;
+        summonCreatureEntry = 0;
+        doOnce = false;
+
+        m_Map = m_creature->GetMap();
+        portalLeft = m_Map->GetGameObject(GOB_PORTAL_GROUND_LEFT);
+        portalRight = m_Map->GetGameObject(GOB_PORTAL_GROUND_RIGHT);
+    }
+
+    enum CreatureEntries
+    {
+        NPC_DEFENDER = 65001,
+        NPC_DRAGONSPAWN = 65100
+    };
+
+    enum GobGUID
+    {
+        GOB_PORTAL_GROUND_LEFT = 5000099,
+        GOB_PORTAL_GROUND_RIGHT = 5000101,
+
+    };
+
+    enum GobEntries
+    {
+        GOB_PORTAL_WATERFALL = 2002582,
+        GOB_PORTAL_AZSHARA_BUILDING = 2002578,
+        GOB_PORTAL_NAXX_ZIG = 2002588,
+        GOB_PORTAL_THUNDERBLUFF = 2002587,
+        GOB_PORTAL_STORMWIND = 2002585,
+        GOB_PORTAL_ORG = 2002583,
+        GOB_PORTAL_SUMMON = 2010853,
+        GOB_PORTAL_UC = 2002588
+    };
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiUpdateTimer < uiDiff)
+        {
+            switch (phase)
+            {
+            case 0:
+            {
+                doOnce = false;
+
+                m_creature->CastSpell(m_creature, SPELL_ARCANE_CHANNEL, true);
+                m_creature->PMonsterSay("Next up ... ");
+
+                if (GameObject* summonPortal = m_creature->FindNearestGameObject(GOB_PORTAL_SUMMON, 10))
+                    m_creature->SetFacingToObject(summonPortal);
+
+                m_uiUpdateTimer = 5000;
+                phase++;
+                break;
+            }
+            case 1:
+            {
+                m_creature->CastSpell(m_creature, SPELL_SUBTLETY, true);
+
+                summonChoice = urand(1, 6);
+                summonChoice = 1;
+               
+                do {summonChoice = urand(1, 6);} while (summonChoice == currentSummonChoice);
+
+                switch (summonChoice)
+                {
+                case 1:
+                    summonCreatureEntry = 65132; // Timbermaw
+                    break;
+                case 2:
+                    summonCreatureEntry = 65133; // Varian
+                    break;
+                case 3:
+                    summonCreatureEntry = 65134; // Baker
+                    break;
+                case 4:
+                    summonCreatureEntry = 65135; // Kobold
+                    break;
+                case 5:
+                    summonCreatureEntry = 65131; // Baby Thrall
+                    break;
+                case 6:
+                    summonCreatureEntry = 65137; // Tauren Primalist
+                    break;
+
+                    currentSummonChoice = summonChoice;
+                }
+
+                if (Creature* summon = m_creature->SummonCreature(summonCreatureEntry, -8473.43f, -4226.01f, -214.74f, 0))
+                {
+                    summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    summon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_CONFUSED);
+                    summon->SetFacingToObject(m_creature);
+                    summon->CastSpell(summon, SPELL_TELEPORT, true);
+                }
+
+                m_uiUpdateTimer = 2000;
+                phase++;
+                break;
+            }
+            case 2:
+            {
+                if (Creature* summon = m_creature->FindNearestCreature(summonCreatureEntry, 25, true))
+                {
+                    switch (summonChoice)
+                    {
+                    case 1:
+                        summon->PMonsterEmote("The Timbermaw sniffs the air.");
+                        summon->PMonsterSay("Where is this ...?");
+                        break;
+                    case 2:
+                        summon->PMonsterSay("What is this? I demand to know who you are!");
+                        break;
+                    case 3:
+                        summon->PMonsterSay(".. freshly baked ... What? What just happened?");
+                        break;
+                    case 4:
+                        summon->PMonsterEmote("The Kobold stares at George.");
+                        summon->PMonsterSay("You has candle?");
+                        summon->GetMotionMaster()->MoveCharge(m_creature);
+                        //summon->MonsterMoveWithSpeed(-8472.45f, -4222.05f, -214.35f, 0, 5, MOVE_RUN_MODE);
+                        summon->SetFacingToObject(m_creature);
+                        break;
+                    case 5:
+                        summon->PMonsterSay("Aedelas? Where are you? What is this place?");
+                        break;
+                    case 6:
+                        summon->PMonsterSay("Ancestors watch over me ... where am I?");
+                        break;
+                    }
+                }
+                m_uiUpdateTimer = 5000;
+                phase++;
+                break;
+            }
+            case 3:
+            {
+                if (Creature* summon = m_creature->FindNearestCreature(summonCreatureEntry, 25, true))
+                {
+                    switch (summonChoice)
+                    {
+                    case 1:
+                        m_creature->PMonsterSay("Ah yes. One of those Timbermaw creatures. This one is meant to be the first to resist demonic corruption and lead its tribe to freedom.");
+                        break;
+                    case 2:
+                        m_creature->PMonsterSay("My apologies, King Varian. We are protectors of the sacred timelines and are conducting a minor correction in yours. Please step into this portal.");
+                        break;
+                    case 3:
+                        m_creature->PMonsterSay("Hmmm ... I don't recognize this one. Assistant, I think we summoned the wrong human male.");
+                        break;
+                    case 4:
+                        m_creature->PMonsterSay("A simple Kobold. Funny, this particular Kobold is responsible for stealing a powerful lantern from Lady Sylvanas. The theft of this lantern led to many deaths and branched timelines.");
+                        break;
+                    case 5:
+                        m_creature->PMonsterSay("Welcome young one. This young orc will grow to be the mighty Warchief of the Horde!");
+                        break;
+                    case 6:
+                        m_creature->PMonsterSay("Greetings honored Tamaala, lifemate of Chieftain Cairne Bloodhoof. We are the the protectors of the sacred timelines. Please, let us guide you home to your ancestral spirits.");
+                        break;
+                    }
+                }
+
+                m_uiUpdateTimer = 6000;
+                phase++;
+                break;
+            }
+
+            case 4:
+            {
+                if (Creature* summon = m_creature->FindNearestCreature(summonCreatureEntry, 25, true))
+                {
+                    switch (summonChoice)
+                    {
+                    case 1:
+                        m_creature->PMonsterSay("Let's get you to your assigned timeline.");
+                        portal = m_creature->SummonGameObject(GOB_PORTAL_WATERFALL, -8480.77f, -4221.29f, -215.03f, 0, 0, 0, 0, 0, 10000);
+                        break;
+                    case 2:
+                        summon->PMonsterSay("Although I do not understand, I feel compelled to follow your instructions. Do not let this happen again.");
+                        summon->HandleEmote(EMOTE_ONESHOT_TALK);
+                        portal = m_creature->SummonGameObject(GOB_PORTAL_STORMWIND, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
+                        break;
+                    case 3:
+                        summon->PMonsterYell("OH MY GOD - IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
+                        summon->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+                        portal = m_creature->SummonGameObject(GOB_PORTAL_STORMWIND, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
+                        break;
+                    case 4:
+                        m_creature->PMonsterSay("Come now little Kobold. Your candle is in this portal here.");
+                        summon->PMonsterYell("CANDLE!!!");
+                        summon->HandleEmote(EMOTE_ONESHOT_APPLAUD);
+                        portal = m_creature->SummonGameObject(GOB_PORTAL_UC, -8480.77f, -4221.29f, -215.03f, 0, 0, 0, 0, 0, 10000);
+                        break;
+                    case 5:
+                        summon->PMonsterEmote("Go'el laughs to himself.");
+                        summon->HandleEmote(EMOTE_ONESHOT_LAUGH);
+                        summon->PMonsterSay("You've got a funny energy about you, Blood Elf.");
+                        portal = m_creature->SummonGameObject(GOB_PORTAL_ORG, -8480.77f, -4221.29f, -215.03f, 0, 0, 0, 0, 0, 10000);
+                        break;
+                    case 6:
+                        summon->PMonsterSay("I shall go where my ancestors command, but beware Bloodelf. I sense an evil lurking in this place.");
+                        portal = m_creature->SummonGameObject(GOB_PORTAL_THUNDERBLUFF, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
+                        break;
+                    }
+
+                    if (portal)
+                    {
+                        m_creature->SetFacingToObject(portal);
+
+                        if (summonChoice == 3)
+                            summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 3, MOVE_RUN);
+                        else
+                            summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1.5, MOVE_WALK);
+                    }
+                }
+                m_uiUpdateTimer = 1500;
+                phase++;
+                break;
+            }
+            case 5:
+            {
+                if (Creature* summon = m_creature->FindNearestCreature(summonCreatureEntry, 25, true))
+                {
+                    switch (summonChoice)
+                    {
+                    case 3:
+                        m_creature->PMonsterSay("Quickly little human! Run into the portal before the terrifying beast gets you!!");
+                        m_creature->PMonsterEmote("George chuckles.");
+                        break;
+                    case 5:
+                        m_creature->PMonsterSay("Your shamanistic powers are strong even now. Now into the portal, young warchief.");
+                        break;
+                    }
+
+                    m_creature->SetFacingToObject(portal);
+
+                    if (portal)
+                        summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1.5, MOVE_WALK);
+                }
+
+                m_uiUpdateTimer = 500;
+                phase++;
+                break;
+            }
+            case 6:
+            {
+                if (Creature* summon = m_creature->FindNearestCreature(summonCreatureEntry, 30, true))
+                {
+                    if (summon->FindNearestGameObject(3000205, 1))
+                    {
+                        summon->CastSpell(summon, SPELL_TELEPORT, true);
+                        summon->ForcedDespawn(500);
+
+                        switch (summonChoice)
+                        {
+                        case 2:
+                            if (!doOnce)
+                            {
+                                m_creature->PMonsterSay("Kings can be ... difficult.");
+                                doOnce = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    portal->AddObjectToRemoveList();
+                    phase = 0;
+                }
+                m_uiUpdateTimer = 1000;
+                break;
+            }
+            }
+        }
+        else m_uiUpdateTimer -= uiDiff;
+    }
+
+    private:
+        Map* m_Map;
+};
+
+
+
+
 CreatureAI* GetAI_infinite_dragonspawn(Creature* _Creature)
 {
     return new infinite_dragonspawnAI(_Creature);
@@ -2758,6 +3073,11 @@ CreatureAI* GetAI_antnormi_cot(Creature* _Creature)
 CreatureAI* GetAI_injured_defender_cot(Creature* _Creature)
 {
     return new injured_defender_cot(_Creature);
+}
+
+CreatureAI* GetAI_logistical_officer(Creature* _Creature)
+{
+    return new logistical_officer(_Creature);
 }
 
 void AddSC_instance_caverns_of_time()
@@ -2878,5 +3198,11 @@ void AddSC_instance_caverns_of_time()
     newscript->Name = "item_temporal_bronze_disc";
     newscript->pItemUseSpell = &ItemUseSpell_item_temporal_bronze_disc;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "logistical_officer";
+    newscript->GetAI = &GetAI_logistical_officer;
+    newscript->RegisterSelf();
+
 
 }
