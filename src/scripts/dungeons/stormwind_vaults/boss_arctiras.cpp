@@ -8,8 +8,10 @@ enum
 {
 	SPELL_FROSTBOLT = 17503,
 	SPELL_CAUSE_INSANITY = 12888,
-	SPELL_FROST_NOVA = 29849,
-	CREATURE_FRIGID_GUARDIAN = 93108,
+	SPELL_FROST_NOVA = 30094,
+	CREATURE_FRIGID_GUARDIAN = 60612,
+	GOBJ_OBSTRUCTION = 5001265,
+	GOBJ_TYPE_OBSTRUCTION = 2004982,
 };
 
 enum class eArctirasStages : uint32_t
@@ -34,10 +36,10 @@ struct boss_ArctirasAI : public GenericSpellMob
 		constexpr uint32_t FrostballCD = 2 * IN_MILLISECONDS + 100;
 		// ref: https://classicdb.ch/?spell=17503
 		GenericAISpell& Frostbolt = AddSpell(SPELL_FROSTBOLT, FrostballCD, FrostballCD, GENERIC_TARGET_VICTIM);
-		Frostbolt.SpellCastFlag = CF_FORCE_CAST + CF_IGNORE_LOS;
+		Frostbolt.SpellCastFlag = CF_TRIGGERED + CF_IGNORE_LOS;
 		// ref: https://classicdb.ch/?spell=12888
 		GenericAISpell& CauseInsanity = AddSpell(SPELL_CAUSE_INSANITY, 16 * IN_MILLISECONDS, 16 * IN_MILLISECONDS, GENERIC_TARGET_HOSTILE_RAND_NOT_TOP);
-		CauseInsanity.SpellCastFlag = CF_FORCE_CAST + CF_IGNORE_LOS;
+		CauseInsanity.SpellCastFlag = CF_TRIGGERED + CF_IGNORE_LOS;
 		Finalize();
 	}
 
@@ -47,14 +49,6 @@ struct boss_ArctirasAI : public GenericSpellMob
 		me->AddUnitState(UNIT_STAT_ROOT);
 		me->AddUnitState(UNIT_STAT_CANT_ROTATE);
 		Stage = eArctirasStages::Stage0_WaitFor60;
-	}
-
-	virtual void Aggro(Unit* unit) override
-	{
-		if (Player* player = unit->ToPlayer())
-		{
-			me->MonsterSayToPlayer("[PH] So you have choosen death...", unit, true);
-		}
 	}
 
 	virtual void UpdateAI(const uint32 uiDiff) override
@@ -98,8 +92,9 @@ struct boss_ArctirasAI : public GenericSpellMob
 		case eArctirasStages::Stage3_ActivateAdditionalSpell:
 			{
 				me->MonsterTextEmote("Arc'tiras is destabilizing!", nullptr, true);
-				GenericAISpell& FrostNova = AddSpell(SPELL_FROST_NOVA, 6 * IN_MILLISECONDS, 6 * IN_MILLISECONDS, GENERIC_TARGET_SELF);
-				FrostNova.SpellCastFlag = CF_FORCE_CAST;
+				constexpr uint32 FrostNovaCooldown = (4 * IN_MILLISECONDS) + 500;
+				GenericAISpell& FrostNova = AddSpell(SPELL_FROST_NOVA, FrostNovaCooldown, FrostNovaCooldown, GENERIC_TARGET_SELF);
+				FrostNova.SpellCastFlag = CF_TRIGGERED;
 				Stage = eArctirasStages::Stage4_Rest;
 			}
 			break;
@@ -108,6 +103,19 @@ struct boss_ArctirasAI : public GenericSpellMob
 			break;
 		}
 
+	}
+
+
+	virtual void JustDied(Unit*) override
+	{
+		me->MonsterTextEmote("You hear something shatter behind you!", nullptr, true);
+
+		ObjectGuid ObstructionGameObjectGuid(HIGHGUID_GAMEOBJECT, (uint32)GOBJ_TYPE_OBSTRUCTION, (uint32)GOBJ_OBSTRUCTION);
+
+		if (GameObject* ObstructionObj = me->GetMap()->GetGameObject(ObstructionGameObjectGuid))
+		{
+			ObstructionObj->Despawn();
+		}
 	}
 
 };
