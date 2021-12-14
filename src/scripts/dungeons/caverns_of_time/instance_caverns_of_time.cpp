@@ -2693,6 +2693,7 @@ struct logistical_officer : public ScriptedAI
         phase = 0;
         summonChoice = 0;
         summonCreatureEntry = 0;
+        currentSummonChoice = 0;
         doOnce = false;
 
         m_Map = m_creature->GetMap();
@@ -2774,9 +2775,9 @@ struct logistical_officer : public ScriptedAI
                 case 6:
                     summonCreatureEntry = 65137; // Tauren Primalist
                     break;
-
-                    currentSummonChoice = summonChoice;
                 }
+
+                currentSummonChoice = summonChoice;
 
                 if (Creature* summon = m_creature->SummonCreature(summonCreatureEntry, -8473.43f, -4226.01f, -214.74f, 0))
                 {
@@ -2805,12 +2806,13 @@ struct logistical_officer : public ScriptedAI
                         break;
                     case 3:
                         summon->PMonsterSay(".. freshly baked ... What? What just happened?");
+                        summon->UpdateSpeed(MOVE_RUN, true, 1);
                         break;
                     case 4:
                         summon->PMonsterEmote("The Kobold stares at George.");
                         summon->PMonsterSay("You has candle?");
-                        summon->GetMotionMaster()->MoveCharge(m_creature);
-                        //summon->MonsterMoveWithSpeed(-8472.45f, -4222.05f, -214.35f, 0, 5, MOVE_RUN_MODE);
+                        summon->UpdateSpeed(MOVE_RUN, true, 1);
+                        summon->GetMotionMaster()->MovePoint(0, -8472.93f, -4221.71f, -214.39f);
                         summon->SetFacingToObject(m_creature);
                         break;
                     case 5:
@@ -2875,6 +2877,7 @@ struct logistical_officer : public ScriptedAI
                     case 3:
                         summon->PMonsterYell("OH MY GOD - IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
                         summon->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+                        summon->GetMotionMaster()->MoveConfused();
                         portal = m_creature->SummonGameObject(GOB_PORTAL_STORMWIND, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
                         break;
                     case 4:
@@ -2896,14 +2899,8 @@ struct logistical_officer : public ScriptedAI
                     }
 
                     if (portal)
-                    {
                         m_creature->SetFacingToObject(portal);
 
-                        if (summonChoice == 3)
-                            summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 3, MOVE_RUN);
-                        else
-                            summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1.5, MOVE_WALK);
-                    }
                 }
                 m_uiUpdateTimer = 1500;
                 phase++;
@@ -2930,7 +2927,7 @@ struct logistical_officer : public ScriptedAI
                         summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1.5, MOVE_WALK);
                 }
 
-                m_uiUpdateTimer = 500;
+                m_uiUpdateTimer = 1000;
                 phase++;
                 break;
             }
@@ -2938,6 +2935,14 @@ struct logistical_officer : public ScriptedAI
             {
                 if (Creature* summon = m_creature->FindNearestCreature(summonCreatureEntry, 30, true))
                 {
+                    if (portal)
+                    {
+                        if (summonChoice == 3 || summonChoice == 4)
+                            summon->MonsterMove(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ());
+                        else
+                            summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1.5, MOVE_WALK);
+                    }
+
                     if (summon->FindNearestGameObject(3000205, 1))
                     {
                         summon->CastSpell(summon, SPELL_TELEPORT, true);
