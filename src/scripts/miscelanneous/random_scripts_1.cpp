@@ -7249,7 +7249,12 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
         if (pPlayer->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
+        {
             pPlayer->RemoveSpell(50000, false, false);
+            if (pPlayer->HasItemCount(50010, 1, true))
+                pPlayer->DestroyItemCount(50010, 1, true, false, true);
+        }
+
         if (pPlayer->HasChallenge(CHALLENGE_EXHAUSTION_MODE))
             pPlayer->RemoveSpell(50004, false, false);
     }
