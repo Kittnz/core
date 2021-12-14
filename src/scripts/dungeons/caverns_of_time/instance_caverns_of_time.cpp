@@ -2806,7 +2806,6 @@ struct logistical_officer : public ScriptedAI
                         break;
                     case 3:
                         summon->PMonsterSay(".. freshly baked ... What? What just happened?");
-                        summon->UpdateSpeed(MOVE_RUN, true, 1);
                         break;
                     case 4:
                         summon->PMonsterEmote("The Kobold stares at George.");
@@ -2902,7 +2901,7 @@ struct logistical_officer : public ScriptedAI
                         m_creature->SetFacingToObject(portal);
 
                 }
-                m_uiUpdateTimer = 1500;
+                m_uiUpdateTimer = 2500;
                 phase++;
                 break;
             }
@@ -2915,6 +2914,8 @@ struct logistical_officer : public ScriptedAI
                     case 3:
                         m_creature->PMonsterSay("Quickly little human! Run into the portal before the terrifying beast gets you!!");
                         m_creature->PMonsterEmote("George chuckles.");
+                        summon->UpdateSpeed(MOVE_RUN, true, 1);
+                        summon->GetMotionMaster()->MovementExpired(true);
                         break;
                     case 5:
                         m_creature->PMonsterSay("Your shamanistic powers are strong even now. Now into the portal, young warchief.");
@@ -2922,9 +2923,6 @@ struct logistical_officer : public ScriptedAI
                     }
 
                     m_creature->SetFacingToObject(portal);
-
-                    if (portal)
-                        summon->MonsterMoveWithSpeed(portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, 1.5, MOVE_WALK);
                 }
 
                 m_uiUpdateTimer = 1000;
