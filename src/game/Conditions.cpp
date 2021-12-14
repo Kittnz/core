@@ -679,43 +679,37 @@ bool ConditionEntry::IsValid()
             if (m_value1 >= m_entry)
             {
                 sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has invalid value1 %u, must be lower than entry, skipped", m_entry, m_condition, m_value1);
-                m_value1 = 0;
-                //return false;
+                return false;
             }
             if (m_value2 >= m_entry)
             {
                 sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has invalid value2 %u, must be lower than entry, skipped", m_entry, m_condition, m_value2);
-                m_value2 = 0;
-               // return false;
+                return false;
             }
             ConditionEntry const* condition1 = sConditionStorage.LookupEntry<ConditionEntry>(m_value1);
             if (!condition1)
             {
                 sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has value1 %u without proper condition, skipped", m_entry, m_condition, m_value1);
-                m_value1 = 0;
-                //return false;
+                return false;
             }
             ConditionEntry const* condition2 = sConditionStorage.LookupEntry<ConditionEntry>(m_value2);
             if (!condition2)
             {
                 sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has value2 %u without proper condition, skipped", m_entry, m_condition, m_value2);
-                m_value2 = 0;
-                //return false;
+                return false;
             }
             if (m_value3)
             {
                 if (m_value3 >= m_entry)
                 {
                     sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has invalid value3 %u, must be lower than entry, skipped", m_entry, m_condition, m_value3);
-                    m_value3 = 0;
-                   // return false;
+                    return false;
                 }
                 ConditionEntry const* condition3 = sConditionStorage.LookupEntry<ConditionEntry>(m_value3);
                 if (!condition3)
                 {
                     sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has value3 %u without proper condition, skipped", m_entry, m_condition, m_value3);
-                    m_value3 = 0;
-                   // return false;
+                    return false;
                 }
             }
             if (m_value4)
@@ -723,15 +717,13 @@ bool ConditionEntry::IsValid()
                 if (m_value4 >= m_entry)
                 {
                     sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has invalid value4 %u, must be lower than entry, skipped", m_entry, m_condition, m_value4);
-                    m_value4 = 0;
-                    //return false;
+                    return false;
                 }
                 ConditionEntry const* condition4 = sConditionStorage.LookupEntry<ConditionEntry>(m_value4);
                 if (!condition4)
                 {
                     sLog.outErrorDb("CONDITION _AND or _OR (entry %u, type %d) has value4 %u without proper condition, skipped", m_entry, m_condition, m_value4);
-                    m_value4 = 0;
-                   // return false;
+                    return false;
                 }
             }
             break;
