@@ -2319,3 +2319,12 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well, it sure is a nice place, isn\'t it?'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- The Kaneq'nuun Elder --
+delete from quest_template where entry = 40322;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40321,40322,148,85,45,40,0,0,'The Kaneq\'nuun Elder','Kaneq\'nuun is a large rock floating out at sea, some of my people live here. It is a required stop both on the way south, and on the way north. If you wish to truly be welcomed, you must speak with the village elder, for they have much knowledge!\n\nThey can be found just up the road, their name is Panukuki.','Speak with Panukuki in Kaneq\'nuun.','Yes?','Ahh, hello there, so it was Inunquaq who brought you here? I must say, I worried for him when he did not return from his journey to the southlands, but I am pleased that he has returned.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,1350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60611, 40322);
+replace into creature_involvedrelation (id, quest) values (60542, 40322);
+
+update creature_template set faction = 35 where entry = 60542;
