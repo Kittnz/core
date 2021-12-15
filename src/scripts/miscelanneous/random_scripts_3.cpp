@@ -2291,6 +2291,9 @@ bool GossipSelect_npc_inunquaq(Player* pPlayer, Creature* pCreature, uint32 /*ui
     {
         static const WorldLocation m_the_northeast_passage(1, 13654.652344F, -6585.791504F, 0.609558F, 0);
         pPlayer->TeleportTo(1, 13654.652344F, -6585.791504F, 0.609558F, 0);
+
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91195))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
