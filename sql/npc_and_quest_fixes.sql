@@ -2905,3 +2905,5 @@ update creature_template set dmg_max = dmg_max + 30 where dmg_min = dmg_max and 
 ,60601
 ,60601
 ,60601);
+
+update creature_template set mechanic_immune_mask = 1023393531  where entry = 91921;
