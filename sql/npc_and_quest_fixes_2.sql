@@ -2636,3 +2636,35 @@ values (@spell_list_id, @description,
 -- Fix custom meeting stones:
 
 update gameobject_template set data2 = 5086  where entry = 379546;
+
+-- Update portal models:
+update gameobject_template set displayid = 1327 where entry = 3000240;	
+
+-- Existing Vault Item Buffs:
+update item_template set stat_value2 = 18, armor = 75, item_level = 65, required_level = 60 where entry = 60408; -- Crown of Lost Memories
+update item_template set stat_value2 = 15, armor = 47, item_level = 65, required_level = 60 where entry = 60409; -- Banshee's Veil
+update item_template set dmg_min1 = 67, dmg_max1 = 122, spellid_1 = 9331, item_level = 65, required_level = 60 where entry = 60410; -- Willbreaker
+update item_template set spellid_1 = 9308, armor = 63, item_level = 65, required_level = 60 where entry = 60411; -- Boots of Crying Rivers
+update item_template set stat_value1 = 12, item_level = 65, required_level = 60 where entry = 60412; -- Blackteeth Necklace
+update item_template set dmg_min1 = 107, dmg_max1 = 182, item_level = 65, required_level = 60 where entry = 60413; -- The Cruel Blade
+update item_template set armor = 147, item_level = 65, required_level = 60 where entry = 60414; -- Blademaster's Blindfold
+update item_template set spellid_1 = 9416, item_level = 65, required_level = 60 where entry = 60415; -- Ring of Twin Regeneration
+update item_template set stat_value1 = 10, item_level = 65, required_level = 60, description = 'Hardhead in live, hardskull in death.' where entry = 60416; -- Skull of Grarr
+update item_template set stat_value1 = 10, display_id = 21612, item_level = 65, required_level = 60 where entry = 60417; -- Skull of Tham
+update item_template set stat_value2 = 8, item_level = 65, required_level = 60 where entry = 60418; -- Sealbrealer Staff
+update item_template set spellid_1 = 14127, armor = 75, item_level = 65, required_level = 60 where entry = 60419; -- Necrolyte's Visage
+update item_template set stat_value1 = 13, item_level = 65, required_level = 60 where entry = 60420; -- Amulet of Warding
+update item_template set stat_value1 = 22, spellid_2 = 15810, armor = 241, item_level = 65, required_level = 60 where entry = 60421; -- Damien's Sorrow
+update item_template set dmg_min1 = 47, dmg_max1 = 85, item_level = 65, required_level = 60 where entry = 60422; -- The Ripper
+update item_template set armor = 79, item_level = 65, required_level = 60 where entry = 60423; -- Bracers of Lost Souls
+update item_template set name = 'Grellskin Gloves', armor = 57, spellid_1 = 17747, item_level = 65, required_level = 60 where entry = 60424; -- Impskin Gloves
+update item_template set name = 'Shadowguard Robe', armor = 132, stat_value1 = 22, item_level = 65, required_level = 60 where entry = 60425; -- Robes of the Man'ari
+update item_template set item_level = 65, required_level = 60 where entry = 60426; -- Guard-Captain's Chestplate
+update item_template set name = 'Skullrattler', dmg_min1 = 98, dmg_max1 = 169, item_level = 65, required_level = 60 where entry = 60427; -- Twisted Draenei Rib
+update item_template set subclass = 4, armor = 281, item_level = 65, stat_value2 = 12, required_level = 60 where entry = 60429; -- Arcanite Shackles
+update item_template set armor = 112, stat_value1 = 16, item_level = 65, required_level = 60 where entry = 60430; -- Necrolyte's Boots 
+update item_template set item_level = 65, required_level = 60 where entry = 60431; -- Almanac of Savagery
+update item_template set name = 'Gauntlets of the Elite Guard', armor = 424, item_level = 65, required_level = 60 where entry = 60432; -- Gauntlets of the Elite  Guard
+update item_template set armor = 588, item_level = 65, required_level = 60 where entry = 60433; -- Pauldrons of the Elite Guard
+update item_template set armor = 466, item_level = 65, required_level = 60 where entry = 60434; -- Sabatons of the Elite Guard
+update item_template set armor = 147, item_level = 65, required_level = 60 where entry = 60434; -- Sightless Leather Hood
