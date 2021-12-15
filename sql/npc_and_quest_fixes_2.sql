@@ -2308,7 +2308,7 @@ replace into creature_questrelation (id, quest) values (81046, 40321);
 replace into creature_involvedrelation (id, quest) values (60611, 40321);
 
 update creature_template set npc_flags = 3 where entry = 81046;
-update creature_template set script_name = 'npc_inunquaq' where entry = 60611 and 81046;
+update creature_template set script_name = 'npc_inunquaq' where entry in (60611, 81046);
 
 -- Inunquaq, display ID 18502 ,level 37, faction 35, greeting text : "Well, it sure is a nice place, isn't it?"
 REPLACE INTO creature_template VALUES
@@ -2668,3 +2668,5 @@ update item_template set name = 'Gauntlets of the Elite Guard', armor = 424, ite
 update item_template set armor = 588, item_level = 65, required_level = 60 where entry = 60433; -- Pauldrons of the Elite Guard
 update item_template set armor = 466, item_level = 65, required_level = 60 where entry = 60434; -- Sabatons of the Elite Guard
 update item_template set armor = 147, item_level = 65, required_level = 60 where entry = 60434; -- Sightless Leather Hood
+
+update quest_template set zoneorsort = 148 where entry = 40321;
