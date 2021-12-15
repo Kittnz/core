@@ -2260,7 +2260,7 @@ bool GossipHello_npc_inunquaq(Player* pPlayer, Creature* pCreature)
     switch (pCreature->GetEntry())
     {
     case 81046: // Inunquaq in Darkshore
-        if (pPlayer->GetQuestRewardStatus(40321) || pPlayer->GetQuestStatus(40321) == QUEST_STATUS_COMPLETE)
+        if (!pPlayer->GetQuestStatus(40321) == QUEST_STATUS_NONE)
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I am ready to travel Inunquaq, let us head out!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
@@ -2290,7 +2290,7 @@ bool GossipSelect_npc_inunquaq(Player* pPlayer, Creature* pCreature, uint32 /*ui
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         static const WorldLocation m_the_northeast_passage(1, 13654.652344F, -6585.791504F, 0.609558F, 0);
-        pPlayer->TeleportTo(m_the_northeast_passage);
+        pPlayer->TeleportTo(1, 13654.652344F, -6585.791504F, 0.609558F, 0);
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
