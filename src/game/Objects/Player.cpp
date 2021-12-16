@@ -8037,19 +8037,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                     bones->loot.m_personal = true; // Everyone can loot the corpse
                     if (BattleGround* bg = GetBattleGround())
                     {
-                        if (bg->GetTypeID() == BATTLEGROUND_SV)
-                        {
-                            // real handle of item destroy
-                            uint32 sparkCount = pVictim->GetItemCount(81390);
-                            if (!sparkCount)
-                                sparkCount = 1;
-                            else
-                                pVictim->DestroyItemCount(81390, sparkCount, true);
-
-                            LootStoreItem storeitem = LootStoreItem(81390, 100, 0, 0, 0, sparkCount);
-                            bones->loot.AddItem(storeitem);
-                        }
-                        else if (bg->GetTypeID() == BATTLEGROUND_AV)
+                        if (bg->GetTypeID() == BATTLEGROUND_AV)
                         {
                             uint8 race = pVictim->GetRace();
                             uint32 rank = pVictim->GetHonorMgr().GetHighestRank().visualRank;
@@ -21825,12 +21813,6 @@ void Player::OnReceivedItem(Item* item)
 {
     if (item->GetProto()->Quality >= sWorld.getConfig(CONFIG_UINT32_ITEM_INSTANTSAVE_QUALITY))
         SetSaveTimer(1);
-
-    if (BattleGround* bg = GetBattleGround())
-    {
-        if (bg->GetTypeID() == BATTLEGROUND_SV)
-            ((BattleGroundSV*)bg)->HandleLootItem(this, item->GetCount());
-    }
 }
 
 

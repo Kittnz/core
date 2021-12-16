@@ -152,7 +152,7 @@ void BattleGroundAB::StartingEventCloseDoors()
 {
     // despawn buffs
     for (int i = 0; i < BG_AB_NODES_MAX * 3; ++i)
-        SpawnBGObject(m_BgObjects[BG_AB_OBJECT_SPEEDBUFF_STABLES + i], RESPAWN_ONE_DAY);
+        SpawnObject(m_BgObjects[BG_AB_OBJECT_SPEEDBUFF_STABLES + i], RESPAWN_ONE_DAY);
 }
 
 void BattleGroundAB::StartingEventOpenDoors()
@@ -161,7 +161,7 @@ void BattleGroundAB::StartingEventOpenDoors()
     {
         //randomly select buff to spawn
         uint8 buff = urand(0, 2);
-        SpawnBGObject(m_BgObjects[BG_AB_OBJECT_SPEEDBUFF_STABLES + buff + i * 3], RESPAWN_IMMEDIATELY);
+        SpawnObject(m_BgObjects[BG_AB_OBJECT_SPEEDBUFF_STABLES + buff + i * 3], RESPAWN_IMMEDIATELY);
     }
     OpenDoorEvent(BG_EVENT_DOOR);
 }
