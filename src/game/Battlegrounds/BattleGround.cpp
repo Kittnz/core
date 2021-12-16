@@ -1209,7 +1209,7 @@ void BattleGround::OnObjectDBLoad(Creature* creature)
     {
         m_EventObjects[MAKE_PAIR32(i.event1, i.event2)].creatures.push_back(creature->GetObjectGuid());
         if (!IsActiveEvent(i.event1, i.event2))
-            SpawnBGCreature(creature->GetObjectGuid(), DESPAWN_FORCED);
+            SpawnCreature(creature->GetObjectGuid(), DESPAWN_FORCED);
     }
 }
 
@@ -1242,7 +1242,7 @@ void BattleGround::OnObjectDBLoad(GameObject* obj)
     {
         m_EventObjects[MAKE_PAIR32(i.event1, i.event2)].gameobjects.push_back(obj->GetObjectGuid());
         if (!IsActiveEvent(i.event1, i.event2))
-            SpawnBGObject(obj->GetObjectGuid(), RESPAWN_ONE_DAY);
+            SpawnObject(obj->GetObjectGuid(), RESPAWN_ONE_DAY);
         else
         {
             // it's possible, that doors aren't spawned anymore (wsg)
@@ -1372,12 +1372,12 @@ void BattleGround::SpawnEvent(uint8 event1, uint8 event2, bool spawn, bool force
             }
         }
 
-        SpawnBGCreature(*itr, spawnThisCreature ? RESPAWN_FORCED : (forced_despawn ? DESPAWN_FORCED : RESPAWN_STOP));
+        SpawnCreature(*itr, spawnThisCreature ? RESPAWN_FORCED : (forced_despawn ? DESPAWN_FORCED : RESPAWN_STOP));
     }
 
     GuidVector::const_iterator itr2 = m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.begin();
     for (; itr2 != m_EventObjects[MAKE_PAIR32(event1, event2)].gameobjects.end(); ++itr2)
-        SpawnBGObject(*itr2, (spawn) ? delay : RESPAWN_ONE_DAY);
+        SpawnObject(*itr2, (spawn) ? delay : RESPAWN_ONE_DAY);
 
     OnEventStateChanged(event1, event2, spawn);
 }
@@ -1406,11 +1406,11 @@ void BattleGround::SetSpawnEventMode(uint8 event1, uint8 event2, BattleGroundCre
         }
 
         if (spawnThisCreature == isSpawnMode)
-            SpawnBGCreature(*itr, mode);
+            SpawnCreature(*itr, mode);
     }
 }
 
-void BattleGround::SpawnBGObject(ObjectGuid guid, uint32 respawntime)
+void BattleGround::SpawnObject(ObjectGuid guid, uint32 respawntime)
 {
     Map* map = GetBgMap();
 
@@ -1427,8 +1427,13 @@ void BattleGround::SpawnBGObject(ObjectGuid guid, uint32 respawntime)
             obj->SetGoState(GO_STATE_READY);
 
         obj->SetRespawnTime(respawntime);
+        // custom respawn delay after spawn
+        // BattleGroundAV, supplies
         if (obj->GetEntry() == 178786 || obj->GetEntry() == 178787 || obj->GetEntry() == 178788 || obj->GetEntry() == 178789)
-            obj->SetRespawnDelay(60);
+            obj->SetRespawnDelay(MINUTE); // ???
+        // BattleGroundSV, chests
+        if (obj->GetEntry() == 179311)
+            obj->SetRespawnDelay(10 * MINUTE);
 
         if (!obj->GetRespawnTime())
             map->Add(obj);
@@ -1443,7 +1448,7 @@ void BattleGround::SpawnBGObject(ObjectGuid guid, uint32 respawntime)
     }
 }
 
-void BattleGround::SpawnBGCreature(ObjectGuid guid, BattleGroundCreatureSpawnMode mode)
+void BattleGround::SpawnCreature(ObjectGuid guid, BattleGroundCreatureSpawnMode mode)
 {
     Map* map = GetBgMap();
 
@@ -1669,7 +1674,7 @@ void BattleGround::HandleTriggerBuff(ObjectGuid go_guid)
     if (m_BuffChange && entry != Buff_Entries[buff])
     {
         //despawn current buff
-        SpawnBGObject(m_BgObjects[index], RESPAWN_ONE_DAY);
+        SpawnObject(m_BgObjects[index], RESPAWN_ONE_DAY);
         //set index for new one
         for (uint8 currBuffTypeIndex = 0; currBuffTypeIndex < 3; ++currBuffTypeIndex)
         {
@@ -1681,7 +1686,7 @@ void BattleGround::HandleTriggerBuff(ObjectGuid go_guid)
         }
     }
 
-    SpawnBGObject(m_BgObjects[index], BUFF_RESPAWN_TIME);
+    SpawnObject(m_BgObjects[index], BUFF_RESPAWN_TIME);
 }
 
 void BattleGround::HandleKillPlayer(Player* pVictim, Player* pKiller)

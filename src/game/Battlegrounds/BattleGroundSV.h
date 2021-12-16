@@ -19,6 +19,7 @@ enum BG_SV_ObjectTypes
     BG_SV_OBJECTID_BANNER_CONT_A = 180059,
     BG_SV_OBJECTID_BANNER_H = 180060,
     BG_SV_OBJECTID_BANNER_CONT_H = 180061,
+    BG_SV_OBJECTID_FLAG_STAND = 2000381,
 };
 
 enum BG_SV_BuffObjects
@@ -32,19 +33,21 @@ enum BG_SV_BuffObjects
 enum BG_SV_ObjectType
 {
     // banners[5] * 3
-    BG_SV_OBJECT_BANNER_NEUTRAL = 0,
-    BG_SV_OBJECT_BANNER_CONT_A  = 1,
-    BG_SV_OBJECT_BANNER_CONT_H  = 2,
-    BG_SV_OBJECT_BANNER_ALLY    = 3,
-    BG_SV_OBJECT_BANNER_HORDE   = 4,
+    BG_SV_OBJECT_BANNER_NEUTRAL   = 0,
+    BG_SV_OBJECT_BANNER_CONT_A    = 1,
+    BG_SV_OBJECT_BANNER_CONT_H    = 2,
+    BG_SV_OBJECT_BANNER_ALLY      = 3,
+    BG_SV_OBJECT_BANNER_HORDE     = 4,
+    // flagstands * 3
+    BG_SV_OBJECT_BANNER_FLAGSTAND = 15,
     // buffs[3] * 6
-    BG_SV_OBJECT_SPEEDBUFF      = 15,
-    BG_SV_OBJECT_REGENBUFF      = 16,
-    BG_SV_OBJECT_BERSERKBUFF    = 17,
+    BG_SV_OBJECT_SPEEDBUFF        = 18,
+    BG_SV_OBJECT_REGENBUFF        = 19,
+    BG_SV_OBJECT_BERSERKBUFF      = 20,
     // chest * 6
-    BG_SV_OBJECT_CHEST          = 33,
+    BG_SV_OBJECT_CHEST            = 36,
     // 2 gates possible
-    BG_SV_OBJECT_MAX            = 39
+    BG_SV_OBJECT_MAX              = 42
 };
 
 enum BG_SV_CreatureType
@@ -319,7 +322,6 @@ class BattleGroundSV : public BattleGround
         void HandleAreaTrigger(Player *Source, uint32 Trigger);
         void HandleKillPlayer(Player *player, Player *killer);
         void HandleKillUnit(Creature* creature, Player* killer);
-        void HandleLootItem(Player* looter, uint32 count);
         void StartFinalEvent();
         virtual bool SetupBattleGround();
         virtual void Reset();
