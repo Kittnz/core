@@ -40,7 +40,7 @@ void WaypointMovementGenerator<Creature>::LoadPath(uint32 guid, uint32 entry, Wa
         i_path = sWaypointMgr.GetDefaultPath(entry, guid, &m_PathOrigin);
     else
     {
-        m_PathOrigin = wpOrigin == PATH_NO_PATH ? PATH_FROM_ENTRY : wpOrigin;
+        m_PathOrigin = wpOrigin;
         i_path = sWaypointMgr.GetPathFromOrigin(entry, guid, 0, m_PathOrigin);
     }
 
@@ -194,12 +194,10 @@ void WaypointMovementGenerator<Creature>::StartMove(Creature &creature)
 
     if (m_isArrivalDone)
     {
-        bool reachedLast = false;
         ++currPoint;
+
         if (currPoint == i_path->end())
         {
-            reachedLast = true;
-
             if (!m_repeating)
             {
                 creature.SetHomePosition(i_path->at(i_currentNode).x, i_path->at(i_currentNode).y, i_path->at(i_currentNode).z, i_path->at(i_currentNode).orientation);
