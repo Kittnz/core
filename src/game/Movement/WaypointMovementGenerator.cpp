@@ -387,21 +387,21 @@ bool FlightPathMovementGenerator::Update(Player &player, uint32 const& /*diff*/)
     while (static_cast <int32>(i_currentNode) < pointId)
     {
         ++i_currentNode;
-        //if ((*i_path)[i_currentNode].actionFlag & 4)
-        //{
-        //    // temporary hack 
-        //    uint32 nextNode = i_currentNode + 4;
-        //    switch ((*i_path)[i_currentNode].path)
-        //    {
-        //    case 1605: nextNode = 13; break;
-        //    case 1606: nextNode = 12; break;
-        //    }
+        if ((*i_path)[i_currentNode].actionFlag & 4)
+        {
+            // temporary hack 
+            uint32 nextNode = i_currentNode + 4;
+            switch ((*i_path)[i_currentNode].path)
+            {
+            case 1605: nextNode = 13; break;
+            case 1606: nextNode = 12; break;
+            }
 
-        //    player.SaveTaxiFlightData(i_currentNode + 4);
-        //    player.PrepareTaxiFlightWithTeleport();
-        //    player.TeleportTo((*i_path)[i_currentNode + 4].mapid, (*i_path)[i_currentNode + 4].x + 1.0f, (*i_path)[i_currentNode + 4].y + 1.0f, (*i_path)[i_currentNode + 4].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
-        //    return false;
-        //}
+            player.SaveTaxiFlightData(nextNode);
+            player.PrepareTaxiFlightWithTeleport();
+            player.TeleportTo((*i_path)[nextNode].mapid, (*i_path)[nextNode].x + 1.0f, (*i_path)[nextNode].y + 1.0f, (*i_path)[nextNode].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
+            return false;
+        }
         if (MovementInProgress() && (*i_path)[i_currentNode + 1].path != (*i_path)[i_currentNode].path)
         {
             player.GetTaxi().NextTaxiDestination();
