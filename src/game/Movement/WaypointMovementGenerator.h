@@ -70,7 +70,7 @@ class WaypointMovementGenerator<Creature>
   public PathMovementBase<Creature, WaypointPath const*>
 {
     public:
-        WaypointMovementGenerator(Creature &, bool repeating = true) : i_nextMoveTime(0), m_isArrivalDone(false), m_repeating(repeating), m_isWandering(false), m_lastReachedWaypoint(0) {}
+        explicit WaypointMovementGenerator(Creature &, bool repeating = true) : i_nextMoveTime(0), m_isArrivalDone(false), m_repeating(repeating), m_isWandering(false), m_lastReachedWaypoint(0), m_PathOrigin(PATH_NO_PATH) {}
         ~WaypointMovementGenerator() { i_path = nullptr; }
         void Initialize(Creature &u);
         void Interrupt(Creature &);
@@ -79,7 +79,7 @@ class WaypointMovementGenerator<Creature>
         bool Update(Creature &u, const uint32 &diff);
         void InitializeWaypointPath(Creature& creature, uint32 startPoint, WaypointPathOrigin wpSource, uint32 initialDelay, uint32 overwriteGuid, uint32 overwriteEntry, bool repeat);
 
-        MovementGeneratorType GetMovementGeneratorType() const { return WAYPOINT_MOTION_TYPE; }
+        MovementGeneratorType GetMovementGeneratorType() const override { return WAYPOINT_MOTION_TYPE; }
 
         // now path movement implementation
         bool GetResetPosition(Creature&, float& x, float& y, float& z);
@@ -138,7 +138,7 @@ class FlightPathMovementGenerator : public MovementGeneratorMedium< Player, Flig
         void Interrupt(Player &);
         void Reset(Player &, float modSpeed = 1.0f);
         bool Update(Player &, const uint32 &);
-        MovementGeneratorType GetMovementGeneratorType() const { return FLIGHT_MOTION_TYPE; }
+        MovementGeneratorType GetMovementGeneratorType() const override { return FLIGHT_MOTION_TYPE; }
 
         TaxiPathNodeList const& GetPath() { return *i_path; }
         uint32 GetPathAtMapEnd() const;
@@ -164,7 +164,7 @@ class PatrolMovementGenerator : public MovementGeneratorMedium<Creature, PatrolM
         void Reset(Creature &);
         bool Update(Creature &, const uint32 &);
         void StartMove(Creature&);
-        MovementGeneratorType GetMovementGeneratorType() const { return PATROL_MOTION_TYPE; }
+        MovementGeneratorType GetMovementGeneratorType() const override { return PATROL_MOTION_TYPE; }
 
         bool GetResetPosition(Creature&, float& x, float& y, float& z);
     private:
