@@ -537,6 +537,14 @@ WeaponAttackType SpellEntry::GetWeaponAttackType() const
     }
 }
 
+char* SpellEntry::GetIcon(uint32 ID) const
+{
+    SpellIconEntry const *spellIconEntry = sSpellIconStore.LookupEntry(ID);
+    if (!spellIconEntry)
+        return "";
+    return spellIconEntry->TextureFilename;
+}
+
 uint32 SpellEntry::GetCastTime(Spell* spell) const
 {
     if (spell)

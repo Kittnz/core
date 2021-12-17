@@ -3256,6 +3256,13 @@ void SpellMgr::LoadSpells()
             mSpellEntryMap[spellId]->Rank[5] = fields[11].GetCppString();
             mSpellEntryMap[spellId]->Rank[6] = fields[12].GetCppString();
 
+			mSpellEntryMap[spellId]->ToolTip[1] = fields[19].GetCppString();
+			mSpellEntryMap[spellId]->ToolTip[2] = fields[20].GetCppString();
+			mSpellEntryMap[spellId]->ToolTip[3] = fields[21].GetCppString();
+			mSpellEntryMap[spellId]->ToolTip[4] = fields[22].GetCppString();
+			mSpellEntryMap[spellId]->ToolTip[5] = fields[23].GetCppString();
+			mSpellEntryMap[spellId]->ToolTip[6] = fields[24].GetCppString();
+
         } while (result->NextRow());
     }
 }

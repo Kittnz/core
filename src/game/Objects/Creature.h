@@ -991,6 +991,8 @@ class Creature : public Unit
 
         uint32 GetPhaseQuestId() const { return GetCreatureInfo()->phase_quest_id; }
 
+		std::string GetDebuffs();
+
     protected:
         bool MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const;
 

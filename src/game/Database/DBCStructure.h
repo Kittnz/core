@@ -555,6 +555,12 @@ struct SpellRangeEntry
     //uint32 NameFlags;                                     // 21 string flags
 };
 
+struct SpellIconEntry
+{
+    uint32      ID;                                           
+    char*       TextureFilename;
+};
+
 struct SpellShapeshiftFormEntry
 {
     uint32 ID;                                              // 0        m_ID
