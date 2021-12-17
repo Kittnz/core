@@ -17,7 +17,7 @@ create table shop_items (
 
 alter table shop_categories add icon varchar(32) not null default 'default' after name;
 
-replace into shop_categories values
+replace into shop_categories (id, name) values
 (1,  'Miscellaneous'),
 (2,  'Skins'),
 (3,  'Gameplay'),
