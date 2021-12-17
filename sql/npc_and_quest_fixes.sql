@@ -2907,3 +2907,24 @@ update creature_template set dmg_max = dmg_max + 30 where dmg_min = dmg_max and 
 ,60601);
 
 update creature_template set mechanic_immune_mask = 1023393531  where entry = 91921;
+
+-- Kalanar's Mallet --
+delete from quest_template where entry = 40326;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40326,2,8,33,25,512,0,'Kalanar\'s Mallet','Long ago I traveled the forests of Ashenvale in search of a place to call home. As the druids tended to The Crescent Grove I figured such a tranquil location would make the perfect home. For centuries I tended to my garden and assisted the druids with whatever it was they needed.\n\nAs of recently a band of Furbolg had moved in, calling themselves the Groveweald. They expelled me from my home and even had the audacity to burn it to the ground. In my panic I left behind many valuable heirlooms and treasures, most of it, no doubt burnt to the ground.\n\nI ask of you to travel to the Crescent Grove, and to my burnt down home, gather from behind the house my mallet. It was given to me from my father, and was used to build my house. Collect it, for it means alot to me.','Travel to the Crescent Grove and find the burnt down home of Kalanar Brightshine, from it gather Kalanar\'s Mallet and return it to him in Astranaar.','Crescent Grove is a dangerous place, I would advise that you bring help if you are to go there.','This is it, I didn\'t expect it would still be there. You have my thanks, with this mallet I will create a new home, and find somewhere new to settle.',60472,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2450,69,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (92223, 40326);
+replace into creature_involvedrelation (id, quest) values (92223, 40326);
+
+update quest_template set type = 81 where entry = 40326;
+
+delete from item_template where entry = 60472;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60472,8281,'Kalanar\'s Mallet',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010860;
+replace into gameobject_template values
+(2010860,3,23432,'Kalanar\'s Strongbox',0,4,1,43,2010860,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010860;
+replace into gameobject_loot_template values
+(2010860,60472,-100,0,1,1,0);
