@@ -40,3 +40,6 @@ update creature_template set npc_flags = 1, faction = 29 where entry = 80918;
 replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES 
 (1000302, 5, 259, 'Stormwind Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (1000300, 5, 3606, 'Orgrimmar Guild Vault', 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set display_id1 = 18246 where entry = 93105;
+update creature_template set display_id1 = 89 where entry = 60578;
