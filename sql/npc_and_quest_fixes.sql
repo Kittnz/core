@@ -2928,3 +2928,13 @@ replace into gameobject_template values
 delete from gameobject_loot_template where entry = 2010860;
 replace into gameobject_loot_template values
 (2010860,60472,-100,0,1,1,0);
+
+update quest_template set zoneorsort = 5024 where entry in
+(40322,
+ 40323,
+ 40324,
+ 40325);
+
+update page_text set text = 'Day 59 : Well, my efforts with the Spanflux Capacitor have been almost fruitless, with only a single day of \'good weather\' I wasn\'t able to get the flying machine to take off, even after hearing it begin to start.\n\nDay 62 : Hungry, so hungry, food has practically run out, I\'m living off crumbs. This mission has been a failure, and I haven\'t heard a word from Gnomeregan in forever. Tomorrow is the day, no matter what, that I will put the last of the fuel into the flying machine and try to start it, let us hope it works!' where entry = 50522;
+replace into page_text values
+(50523,'Day 63 : Well, here we go, another bad day, with horrible snow! I\'ve been cold long enough, its time to fix this blasted flying machine, wish me luck old Fizzlepipe, wherever you are.',0);
