@@ -9,8 +9,6 @@ replace into mangos_string (entry, content_default) values
 
 ('50002', '/join world to connect with the community around you!'),
 
-('50003', 'Read more about our special features here: turtle-wow.org/features'),
+('50003', 'Keep up to date with the news and join our Discord channel: discord.turtle-wow.org');
 
-('50004', 'Keep up to date with the news and join our Discord channel: discord.turtle-wow.org');
-
-replace into autobroadcast (string_Id) values ('50000'),('50001'),('50002'),('50003'),('50004');
+replace into autobroadcast (string_Id) values ('50000'),('50001'),('50002'),('50003');
