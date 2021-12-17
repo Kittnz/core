@@ -611,6 +611,10 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->MonsterSay("Here we go! Awaken!");
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
+                {
+                    analyzer_x51->SetVisibility(VISIBILITY_ON);
+                }
                 });
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x51 = player->FindNearestCreature(60444, 30.0F))
@@ -714,6 +718,10 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 npc->MonsterSay("Hah! Go on then turn on!");
                 npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
+                {
+                    analyzer_x48->SetVisibility(VISIBILITY_ON);
+                }
                 });
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
                 if (Creature* analyzer_x48 = player->FindNearestCreature(60445, 30.0F))
