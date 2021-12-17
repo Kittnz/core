@@ -326,6 +326,25 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			return;
 		}
 	}
+	// buff/debuff system
+	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
+	{
+		if (strstr(msg.c_str(), "TW_BUFF"))
+		{
+			std::string prefix = "TW_BUFF";
+
+			if (!_player->GetSelectedCreature())
+				return;
+
+			Creature *target = _player->GetSelectedCreature();
+
+			_player->SendAddonMessage(prefix, target->GetDebuffs());
+
+			return;
+
+		}
+	}
+
 	// Shop Addon Coms
 	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
 	{

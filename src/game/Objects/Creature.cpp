@@ -3759,3 +3759,48 @@ void Creature::DespawnOrUnsummon(uint32 msTimeToDespawn /*= 0*/)
     else
         ForcedDespawn(msTimeToDespawn);
 }
+
+
+std::string Creature::GetDebuffs()
+{
+	SpellAuraHolderMap const& auraHolders = GetSpellAuraHolderMap();
+
+	std::string rd;
+
+	if (!auraHolders.empty())
+	{
+		for (SpellAuraHolderMap::const_iterator itr = auraHolders.begin(); itr != auraHolders.end(); ++itr)
+		{
+			SpellAuraHolder *holder = itr->second;
+
+			SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(holder->GetId());
+
+			SpellIconEntry const *spellIconEntry = sSpellIconStore.LookupEntry(spellInfo->SpellIconID);
+
+			//sLog.outInfo("%i) id = %u, %s ", i, spellInfo->GetIcon(spellInfo->SpellIconID),  holder->GetId(), spellInfo->SpellName[sWorld.GetDefaultDbcLocale()].c_str());
+
+			rd = rd +
+				"" + spellInfo->GetIcon(spellInfo->SpellIconID) +
+				"|" + std::to_string(holder->GetStackAmount()) +
+				"|" + std::to_string(spellInfo->Dispel) +
+				"|" + spellInfo->SpellName[sWorld.GetDefaultDbcLocale()].c_str() +
+				"|" + std::to_string(holder->GetAuraDuration()) +
+				"|" + spellInfo->ToolTip[sWorld.GetDefaultDbcLocale()].c_str() +
+				"|" + std::to_string(holder->GetId()) +
+				"#";
+
+		}
+	}
+
+	if (rd == "")
+		rd = "TW_BUFF:0";
+
+	rd.pop_back();
+
+	//sLog.outInfo("send");
+	//sLog.outInfo("%s", rd.c_str());
+	//sLog.outInfo(" ----------------------- ");
+
+	return "TW_BUFF:" + rd;
+
+}

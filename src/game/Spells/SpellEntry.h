@@ -504,7 +504,7 @@ public:
   //uint32    RankFlags;                                       // 140     not used
   //char*     Description[8];                                  // 141-148 not used
   //uint32    DescriptionFlags;                                // 149     not used
-  //char*     ToolTip[8];                                      // 150-157 not used
+    std::array<std::string, MAX_DBC_LOCALE>     ToolTip{};                                      // 150-157 not used
   //uint32    ToolTipFlags;                                    // 158     not used
     uint32    ManaCostPercentage = 0;                          // 159
     uint32    StartRecoveryCategory = 0;                       // 160
@@ -935,6 +935,7 @@ public:
     int32 GetMaxDuration() const;
     int32 CalculateDuration(WorldObject const* caster = nullptr) const;
     uint32 GetCastTime(Spell* spell = nullptr) const;
+    char* GetIcon(uint32 ID) const;
     uint32 GetCastTimeForBonus(DamageEffectType damagetype) const;
     uint16 GetAuraMaxTicks() const;
     WeaponAttackType GetWeaponAttackType() const;
