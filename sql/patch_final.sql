@@ -9,8 +9,8 @@ replace into `mangos_string` values('10057','$n claims the %s! If left unchallen
 replace into `mangos_string` values('10058','Past grudges led you to your failure, what a waste...',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 replace into `mangos_string` values('10059','The timeway been changed and we were unable to find which events shifted it, and now it will take unpredictable effect.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 replace into `mangos_string` values('10060','Great work, heroes! For these bitter few moments, lay down your weapons away from each other. And strike together at your common foe!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-replace into `mangos_string` values('10061','Lion\'s Pride Tower.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-replace into `mangos_string` values('10062','Krokvel Tower.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
-replace into `mangos_string` values('10063','Fort Wrynn.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+replace into `mangos_string` values('10061','Lion\'s Pride Tower',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+replace into `mangos_string` values('10062','Krokvel Tower',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+replace into `mangos_string` values('10063','Fort Wrynn',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 update creature_template set subname = '' where entry = 13760;
