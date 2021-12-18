@@ -43,14 +43,14 @@ replace into gameobject_template (entry, type, displayId, name, faction, flags, 
 
 update creature_template set display_id1 = 18246 where entry = 93105;
 update creature_template set display_id1 = 89 where entry = 60578;
-
 update gameobject_template set displayId = 32257 where entry = 2010859;
-
 update creature_template set npc_flags = 0, script_name = '' where entry = 16547;
 delete from broadcast_text where entry = 90000;
-
 delete from quest_template where entry in (5805, 5841, 5842, 5843, 5844, 5847);
-
 delete from item_template where entry = 50012;
 delete from quest_template where entry in (50012, 50011);
 update creature_template set npc_flags = 0, subname = '' where entry in (50028, 50027);
+delete from item_template where entry = 81200;
+update item_template set name = 'Tabard of Kul Tiras' where entry = 50087;
+update quest_template set objectives = 'Find Torta\'s Egg in Zoram Strand and return to Silas Darkmoon.' where entry = 40302;
+update creature_loot_template set chanceorquestchance = 13.3 where item = 60422;
