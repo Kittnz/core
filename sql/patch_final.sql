@@ -110,3 +110,14 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 update item_template set name = 'Glyph of Arms' where entry = 50520;
+
+-- Inactive portals:
+
+replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) values 
+(112923, 5, 23442, 'Caverns of Time Placeholder Portal I (Entrance)', 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_dungeon_portal'),
+(112924, 5, 23442, 'Caverns of Time Placeholder Portal II (Entrance)', 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_dungeon_portal');
+
+delete from gameobject where id in (112923, 112924);
+
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES (112923, 1, -8333.88, -4056.21, -207.755, 3.67723, 0, 0, 0.96435, -0.26463, 300, 300, 100, 1, 0, 0);
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES (112924, 1, -8168.86, -4165.19, -164.851, 4.19863, 0, 0, 0.863554, -0.504256, 300, 300, 100, 1, 0, 0);
