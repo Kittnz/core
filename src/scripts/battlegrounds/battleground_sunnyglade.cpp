@@ -107,6 +107,7 @@ struct SV_heraldAI : public ScriptedAI
 
 bool GossipHello_SV_herald(Player* pPlayer, Creature* pCreature)
 {
+    uint32 gossipTextId = pPlayer->GetGossipTextId(pCreature);
     if (BattleGroundMap* bgMap = dynamic_cast<BattleGroundMap*>(pCreature->GetMap()))
     {
         if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
@@ -124,7 +125,7 @@ bool GossipHello_SV_herald(Player* pPlayer, Creature* pCreature)
         }
     }
 
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(gossipTextId, pCreature->GetGUID());
     return true;
 }
 
