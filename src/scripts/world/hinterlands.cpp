@@ -573,7 +573,8 @@ struct go_corrupted_crystal : public GameObjectAI
                         if (doOnce)
                         {
                             antnormi->MonsterYell(YELL_ANTNORMI); // Enough of this! I have no time for insects like you. The master's plan is almost complete and my diversion was a success!
-                            
+                            antnormi->PlayDirectMusic(30268);
+
                             if (antnormi->HasAura(SPELL_BRONZE_AFFLICTION))
                                 antnormi->RemoveAurasDueToSpell(SPELL_BRONZE_AFFLICTION);
 
