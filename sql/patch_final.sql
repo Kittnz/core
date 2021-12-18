@@ -58,3 +58,4 @@ update creature_loot_template set chanceorquestchance = 13.3 where item = 60422;
 update quest_template set zoneorsort = -364 where entry = 40302;
 update item_template set display_id = 15908 where name = 'Grifter\'s Cover';
 update item_template set display_id = 14338 where name = 'Freebooter\'s Pantaloons';
+replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (3000519, 5, 33052, 'WorldExpansion02DoodadsULDUARUL_Ulduar_doors03.mdx', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
