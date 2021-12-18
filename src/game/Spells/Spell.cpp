@@ -6313,14 +6313,19 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
             }
             case SPELL_EFFECT_LEARN_SPELL:
             {
-                if (m_spellInfo->Id == 12775)
-                {
-                    // Schematic: Goblin Radio
+                if (m_spellInfo->Id == 12775) // Schematic: Goblin Radio
+                {                    
                     if (m_caster->IsPlayer())
                         if (Unit* target = m_targets.getUnitTarget())
                             if (target != m_caster)
                                 return SPELL_FAILED_BAD_TARGETS;
                 }
+
+                if (m_spellInfo->Id == 50029) // War Mode
+                {
+                    if (m_caster->IsPlayer())
+                        m_caster->ToPlayer()->SetPvP(true);
+                }                   
 
                 if (m_spellInfo->EffectImplicitTargetA[i] != TARGET_UNIT_CASTER_PET)
                     break;
