@@ -3013,8 +3013,7 @@ void Player::GiveXP(uint32 xp, Unit* victim)
 
     // XP to money conversion processed in Player::RewardQuest
     // if (level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
-    // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
-    if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, false)) || !HasXPGainEnabled())
+    if ((level >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled())
         return;
 
     // XP resting bonus for kill
@@ -13451,7 +13450,7 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
     uint32 XP = q_status.m_rewarded ? 0 : uint32(pQuest->XPValue(this) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_QUEST));
 
     if (GetLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
-        GiveXP(XP , nullptr);
+        GiveXP(HasChallenge(CHALLENGE_WAR_MODE) ? XP * 1.3F : XP, nullptr);
     else if (int32 money = pQuest->GetRewMoneyMaxLevelAtComplete())
         LogModifyMoney(money, "QuestMaxLevel", questEnder->GetObjectGuid(), quest_id);
 

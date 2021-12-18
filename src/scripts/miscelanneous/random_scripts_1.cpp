@@ -7208,20 +7208,14 @@ bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest con
 
 bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetLevel() == 1 && !pPlayer->HasSpell(SPELL_SLOW_AND_STEADY))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for the Slow & Steady Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    if (pPlayer->GetLevel() == 1 && !pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready for the Exhaustion Challenge.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-
     if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I'd like to buy a glyph.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I'd like to buy a glyph.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pPlayer->HasSpell(SPELL_SLOW_AND_STEADY))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Slow & Steady Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Slow & Steady Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Exhaustion Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Exhaustion Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;
@@ -7230,23 +7224,9 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
 bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->HandleEmote(EMOTE_ONESHOT_CHEER);
-        pCreature->MonsterSayToPlayer("Stay safe on your journey, friend.", pPlayer);
-        pPlayer->LearnSpell(50000, false, false);
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-        pCreature->MonsterSayToPlayer("Exhausted mind tends to optimize actions and practice makes perfect!", pPlayer);
-        pPlayer->LearnSpell(50004, false, false);
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
         pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         if (pPlayer->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
         {
@@ -7256,7 +7236,7 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
         }
     }
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
         if (pPlayer->HasChallenge(CHALLENGE_EXHAUSTION_MODE))
             pPlayer->RemoveSpell(50004, false, false);
