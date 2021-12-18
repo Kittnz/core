@@ -121,3 +121,8 @@ delete from gameobject where id in (112923, 112924);
 
 replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES (112923, 1, -8333.88, -4056.21, -207.755, 3.67723, 0, 0, 0.96435, -0.26463, 300, 300, 100, 1, 0, 0);
 replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES (112924, 1, -8168.86, -4165.19, -164.851, 4.19863, 0, 0, 0.863554, -0.504256, 300, 300, 100, 1, 0, 0);
+
+-- Adjust Stormwind Vault respawn timers:
+
+update creature_template set spawntimesecsmin = 9000, spawntimesecsmax = 9000 where map = 35;
+update creature_template set spawntimesecsmin = 604800, spawntimesecsmax = 604800 where id in (80850, 80851, 80852, 80853, 80854, 93107);
