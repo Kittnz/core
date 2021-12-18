@@ -83,6 +83,14 @@ enum BG_SV_NodeStatus
     BG_SV_NODE_STATUS_HORDE_OCCUPIED = 4
 };
 
+enum BG_SV_WorldStates
+{
+    BG_SV_SPARKS_COUNT_ALLIANCE = 2530,
+    BG_SV_SPARKS_COUNT_HORDE = 2531,
+};
+
+const uint32 BG_SV_NodeWorldStates[3] = { 2534, 2539, 2544 };
+
 enum BG_SV_NPC
 {
     NPC_HERALD = 13760,
@@ -338,7 +346,8 @@ class BattleGroundSV : public BattleGround
         uint32 GetTowerNameId(uint8 node);
         Team GetHeraldControlledTeam();
         uint32 GetTeamSparks(TeamId team) { return m_resources[team]; }
-        void AddTeamSparks(TeamId team, uint32 count) { m_resources[team] += count; }
+        void UpdateTeamSparks(TeamId team);
+        void AddTeamSparks(TeamId team, uint32 count) { m_resources[team] += count; UpdateTeamSparks(team); }
         void SetGeneralsActive(bool set) { generalsActive = set; }
         bool IsGeneralsActive() { return generalsActive; }
         bool SetupSkirmishes();
@@ -351,6 +360,8 @@ class BattleGroundSV : public BattleGround
         /* Creature spawning/despawning */
         void NodeOccupied(uint8 node, Team team);
         void NodeDeOccupied(uint8 node);
+
+        void UpdateNodeWorldState(uint8 node);
 
         uint8 m_Nodes[BG_SV_DYNAMIC_NODES_COUNT];
         uint8 m_prevNodes[BG_SV_DYNAMIC_NODES_COUNT];

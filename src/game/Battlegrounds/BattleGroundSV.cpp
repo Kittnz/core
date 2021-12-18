@@ -64,6 +64,8 @@ void BattleGroundSV::Update(uint32 diff)
                     CreateBanner(node, BG_SV_NODE_TYPE_OCCUPIED, teamIndex, true);
                     NodeOccupied(node, (teamIndex == 0) ? ALLIANCE : HORDE);
 
+                    UpdateNodeWorldState(node);
+
                     // Message to chatlog
                     if (teamIndex == 0)
                     {
@@ -310,6 +312,7 @@ void BattleGroundSV::Reset()
     {
         m_TeamScores[i] = 0;
         m_lastTick[i] = 0;
+        m_resources[i] = 0;
     }
 
     for (uint8 i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; ++i)
@@ -347,7 +350,7 @@ void BattleGroundSV::HandleKillPlayer(Player *player, Player *killer)
         player->DestroyItemCount(81390, sparkCount, true);
 
     // add sparks to killer
-    killer->AddItem(81390, sparkCount);
+    killer->AddItem(81390, sparkCount ? sparkCount : 1);
 }
 
 void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*target_obj*/)
@@ -382,6 +385,8 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
         CreateBanner(node, BG_SV_NODE_TYPE_CONTESTED, teamIndex, true);
         m_NodeTimers[node] = BG_SV_FLAG_CAPTURING_TIME;
 
+        UpdateNodeWorldState(node);
+
         if (teamIndex == 0)
             SendMessage2ToAll(LANG_BG_SV_NODE_CLAIMED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node), LANG_BG_ALLY);
         else
@@ -403,6 +408,8 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
             CreateBanner(node, BG_SV_NODE_TYPE_CONTESTED, teamIndex, true);
             m_NodeTimers[node] = BG_SV_FLAG_CAPTURING_TIME;
 
+            UpdateNodeWorldState(node);
+
             if (teamIndex == BG_TEAM_ALLIANCE)
                 SendMessage2ToAll(LANG_BG_SV_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node));
             else
@@ -419,6 +426,8 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
             CreateBanner(node, BG_SV_NODE_TYPE_OCCUPIED, teamIndex, true);
             m_NodeTimers[node] = 0;
             NodeOccupied(node, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
+
+            UpdateNodeWorldState(node);
 
             if (teamIndex == BG_TEAM_ALLIANCE)
                 SendMessage2ToAll(LANG_BG_SV_NODE_DEFENDED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node));
@@ -438,6 +447,8 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
         CreateBanner(node, BG_SV_NODE_TYPE_CONTESTED, teamIndex, true);
         m_NodeTimers[node] = BG_SV_FLAG_CAPTURING_TIME;
         NodeDeOccupied(node);
+
+        UpdateNodeWorldState(node);
 
         if (teamIndex == BG_TEAM_ALLIANCE)
             SendMessage2ToAll(LANG_BG_AB_NODE_ASSAULTED, CHAT_MSG_BG_SYSTEM_ALLIANCE, source, GetTowerNameId(node));
@@ -578,6 +589,14 @@ void BattleGroundSV::UpdatePlayerScore(Player *Source, uint32 type, uint32 value
     BattleGround::UpdatePlayerScore(Source, type, value);
 }
 
+void BattleGroundSV::UpdateTeamSparks(TeamId team)
+{
+    if (team == TEAM_ALLIANCE)
+        UpdateWorldState(BG_SV_SPARKS_COUNT_ALLIANCE, GetTeamSparks(team));
+    else
+        UpdateWorldState(BG_SV_SPARKS_COUNT_HORDE, GetTeamSparks(team));
+}
+
 WorldSafeLocsEntry const* BattleGroundSV::GetClosestGraveYard(Player* player)
 {
     uint32 baseEntry = player->GetTeam() == ALLIANCE ? SV_BASE_HUMAN : SV_BASE_ORC;
@@ -591,4 +610,26 @@ WorldSafeLocsEntry const* BattleGroundSV::GetClosestGraveYard(Player* player)
 
 void BattleGroundSV::FillInitialWorldStates(WorldPacket& data, uint32& count)
 {
+    // all node default states
+    for (uint8 node = 0; node < BG_SV_DYNAMIC_NODES_COUNT; ++node)
+        FillInitialWorldState(data, count, BG_SV_NodeWorldStates[node], m_Nodes[node] == 0);
+
+    // node occupied states
+    for (uint8 node = 0; node < BG_SV_DYNAMIC_NODES_COUNT; ++node)
+        for (uint8 i = 1; i < 5; ++i)
+            FillInitialWorldState(data, count, BG_SV_NodeWorldStates[node] + i, m_Nodes[node] == i);
+
+    // resources state
+    FillInitialWorldState(data, count, BG_SV_SPARKS_COUNT_ALLIANCE, GetTeamSparks(TEAM_ALLIANCE));
+    FillInitialWorldState(data, count, BG_SV_SPARKS_COUNT_HORDE, GetTeamSparks(TEAM_HORDE));
+}
+
+void BattleGroundSV::UpdateNodeWorldState(uint8 node)
+{
+    if (m_prevNodes[node])
+        UpdateWorldState(BG_SV_NodeWorldStates[node] + m_prevNodes[node], 0);
+    else
+        UpdateWorldState(BG_SV_NodeWorldStates[node], 0);
+
+    UpdateWorldState(BG_SV_NodeWorldStates[node] + m_Nodes[node], 1);
 }
