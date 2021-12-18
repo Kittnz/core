@@ -17,15 +17,15 @@ create table shop_items (
 
 alter table shop_categories add icon varchar(32) not null default 'default' after name;
 
-replace into shop_categories (id, name) values
-(1,  'Miscellaneous'),
-(2,  'Skins'),
-(3,  'Gameplay'),
-(4,  'Glyphs'),
-(5,  'Riding Mounts: Birds'),
-(6,  'Companions'),
-(7,  'Tabards'),
-(8,  'Illusions');
+replace into shop_categories values
+(1,  'Miscellaneous', 'default'),
+(2,  'Skins', 'ticket'),
+(3,  'Gameplay', 'toys'),
+(4,  'Glyphs', 'service'),
+(5,  'Mounts', 'mount'),
+(6,  'Companions', 'pet'),
+(7,  'Tabards', 'tabard'),
+(8,  'Illusions', 'scroll');
 
 replace into shop_items values
 -- Miscellaneous

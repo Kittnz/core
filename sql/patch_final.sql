@@ -48,3 +48,9 @@ update gameobject_template set displayId = 32257 where entry = 2010859;
 
 update creature_template set npc_flags = 0, script_name = '' where entry = 16547;
 delete from broadcast_text where entry = 90000;
+
+delete from quest_template where entry in (5805, 5841, 5842, 5843, 5844, 5847);
+
+delete from item_template where entry = 50012;
+delete from quest_template where entry in (50012, 50011);
+update creature_template set npc_flags = 0, subname = '' where entry in (50028, 50027);
