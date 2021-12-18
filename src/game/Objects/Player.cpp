@@ -3156,19 +3156,9 @@ void Player::GiveLevel(uint32 level)
         }
     }
 
-    // Quick-fix Turtle Mode & HArdcore Mode quets.
+    // Quick-fix for 'Stay awhile and listen...' (Hardcore Mode)
     if (level >= 2)
-    {
-        RemoveQuest(60118);
         RemoveQuest(80388);
-    }
-
-    // Learn Speedy Mount spell if player doesnt have it at lvl 5
-    if (level == 5 && !HasSpell(30174))
-    {        
-        ChatHandler(this).PSendSysMessage("|cff00FF00We sincerely hope you enjoy your stay on Turtle WoW! We have the best community out there and are very happy to have you join us. |cff00FF00Please accept this adorable Riding Turtle as your companion during this long and difficult journey! Safe travels!");
-        LearnSpell(30174, false);
-    }
 
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(GetRace(), GetClass(), level, &info);
@@ -22110,24 +22100,6 @@ void Player::MailCityProtectorMedallion()
             .AddItem(ToMailItem)
             .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(4968), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
     }      
-}
-
-void Player::MailRidingTurtleGift()
-{
-    if (HasItemCount(23720, 1))
-        return;
-
-    std::string subject = "Riding Turtle";
-    std::string message = "Greetings, traveler!\n\nWe sincerely hope you enjoy your stay on Turtle WoW! We have the best community out there and are very happy to have you join us.\n\nPlease accept this adorable Riding Turtle as your companion during this long and difficult journey!\n\nSafe Travels!";
-
-    {
-        Item* ToMailItem = Item::CreateItem(23720, 1, this);
-        ToMailItem->SaveToDB();
-
-        MailDraft(subject, sObjectMgr.CreateItemText(message))
-            .AddItem(ToMailItem)
-            .SendMailTo(this, MailSender(MAIL_CREATURE, uint32(51550), MAIL_STATIONERY_DEFAULT), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
-    }
 }
 
 bool Player::IsIgnoringTitles() { return m_isIgnoringTitles; }
