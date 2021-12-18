@@ -60,7 +60,7 @@ struct stormwind_vault_rat_trap : public GameObjectAI
     explicit stormwind_vault_rat_trap(GameObject* pGo) : GameObjectAI(pGo)
     {
         m_uiJustUsedTimer = 1;
-        m_uiUpdateTimer = 500;
+        m_uiUpdateTimer = 300;
     }
 
     uint32 m_uiJustUsedTimer;
@@ -75,10 +75,10 @@ struct stormwind_vault_rat_trap : public GameObjectAI
             if (!rat_event_activated)
             {
                 std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 3.0f);
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
-                Cell::VisitWorldObjects(me, searcher, 20.0f);
+                Cell::VisitWorldObjects(me, searcher, 5.0f);
 
                 for (Player* pPlayer : players)
                 {
@@ -107,7 +107,7 @@ struct stormwind_vault_rat_trap : public GameObjectAI
                         }
                         });
                 }
-                m_uiUpdateTimer = 500;
+                m_uiUpdateTimer = 300;
             }
         }
         else
