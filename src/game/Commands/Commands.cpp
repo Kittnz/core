@@ -5296,47 +5296,6 @@ bool ChatHandler::HandleGMCommand(char* args)
 
     return true;
 }
-//Enable\Disable Invisible mode
-bool ChatHandler::HandleGMVisibleCommand(char* args)
-{
-    if (!*args)
-    {
-        bool visible = GetSession()->GetPlayer()->IsGMVisible();
-        uint32 visibilityLevel = visible ? 0 : GetSession()->GetPlayer()->GetGMInvisibilityLevel();
-        PSendSysMessage(LANG_YOU_ARE, visible ? GetMangosString(LANG_VISIBLE) : GetMangosString(LANG_INVISIBLE), visibilityLevel);
-        return true;
-    }
-
-    bool value;
-    uint8 accessLevel = GetAccessLevel();
-    uint32 visibilityLevel = accessLevel + 1;
-
-    if (ExtractUInt32(&args, visibilityLevel))
-        value = (visibilityLevel == 0); // Make visible if level = 0 only
-    else if (ExtractOnOff(&args, value))
-        visibilityLevel = accessLevel;
-
-    if (visibilityLevel > accessLevel)
-    {
-        SendSysMessage(LANG_USE_BOL);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (value)
-    {
-        m_session->GetPlayer()->SetGMVisible(true);
-        m_session->SendNotification(LANG_INVISIBLE_VISIBLE);
-    }
-    else
-    {
-        m_session->GetPlayer()->SetGMInvisibilityLevel(visibilityLevel);
-        m_session->SendNotification(LANG_INVISIBLE_INVISIBLE, visibilityLevel);
-        m_session->GetPlayer()->SetGMVisible(false);
-    }
-
-    return true;
-}
 
 bool ChatHandler::HandleGMSocialsCommand(char* args)
 {
@@ -11723,51 +11682,6 @@ bool ChatHandler::HandleSaleCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleFlyCommand(char* args)
-{
-    if (!*args)
-    {
-        SendSysMessage("Syntax: .fly on / off");
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    Player* target = m_session->GetPlayer();
-    bool value;
-
-    if (!target)
-        return false;
-
-    if (!ExtractOnOff(&args, value))
-    {
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    target->CastSpell(target, 14867, true);
-
-    if (value)
-    {
-        target->SetFlying(true);
-        target->SetDisplayId(target->GetTeam() == ALLIANCE ? 6299 : 4566); // Black and Brown Owls
-        target->SetObjectScale(0.7F);
-        target->UpdateSpeed(MOVE_SWIM, false, 6.0F);
-        // Looks better if bird doesn't appear on the ground:
-        target->NearLandTo(target->GetPositionX(), target->GetPositionY(), target->GetPositionZ() + 4.0F, target->GetOrientation());
-    }
-    else
-    {
-        target->SetFlying(false);
-        target->SetObjectScale(target->GetNativeScale());
-        target->UpdateSpeed(MOVE_SWIM, false, 1.0F);
-        target->UpdateSpeed(MOVE_RUN, false, 1.0F);
-        target->UpdateSpeed(MOVE_WALK, false, 1.0F);
-        target->DeMorph();
-    }
-    return true;
-}
-
-
 bool ChatHandler::HandleSendMailsCommand(char* args)
 {
     Player* receiver;
@@ -11852,28 +11766,6 @@ bool ChatHandler::HandleReloadCustomMountEntries(char* args)
 {
     sObjectMgr.LoadCustomMountCreatureEntries();
     SendSysMessage(">> Table `custom_mount_entry_relation` reloaded.");
-    return true;
-}
-
-bool ChatHandler::HandleMorphNextCommand(char* args)
-{
-    uint16 display_id = m_session->GetPlayer()->GetDisplayId();
-    display_id++;
-    Unit* target = m_session->GetPlayer();
-
-    target->SetDisplayId(display_id);
-    PSendSysMessage("Current DisplayID: %u", m_session->GetPlayer()->GetDisplayId());
-    return true;
-}
-
-bool ChatHandler::HandleMorphBackCommand(char* args)
-{
-    uint16 display_id = m_session->GetPlayer()->GetDisplayId();
-    display_id--;
-    Unit* target = m_session->GetPlayer();
-
-    target->SetDisplayId(display_id);
-    PSendSysMessage("Current DisplayID: %u", m_session->GetPlayer()->GetDisplayId());
     return true;
 }
 

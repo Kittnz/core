@@ -286,7 +286,6 @@ class ChatHandler
         bool HandleGMCommand(char* args);
         bool HandleGMListFullCommand(char* args);
         bool HandleGMOnlineListCommand(char* args);
-        bool HandleGMVisibleCommand(char* args);
         bool HandleGMSocialsCommand(char* args);
 
         bool HandleGoCommand(char* args);
@@ -506,14 +505,11 @@ class ChatHandler
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);
-        bool HandleMorphBackCommand(char* args);
-        bool HandleMorphNextCommand(char* args);
         bool HandleModifyHairStyleCommand(char* args);
         bool HandleModifyHairColorCommand(char* args);
         bool HandleModifySkinColorCommand(char* args);
         bool HandleModifyFaceCommand(char* args);
         bool HandleModifyAccessoriesCommand(char* args);
-        bool HandleFlyCommand(char* args);
         bool HandleTransferCommand(char* args);
         bool HandleCopyCommand(char* args);
         bool HandleSendPacketCommand(char* args);

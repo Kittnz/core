@@ -164,8 +164,6 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "list",           SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleGMListFullCommand,          "", nullptr },
         { "ingame",     SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleGMOnlineListCommand,        "", nullptr },
-        { "visible",        SEC_GAMEMASTER, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
-		// TURTLE TODO: Move all options from HandleGMOptionsCommand to separate commands
         { "options",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleGMOptionsCommand,           "", nullptr },
         { "socials",        SEC_GAMEMASTER,    false, &ChatHandler::HandleGMSocialsCommand,                "", nullptr},
         { "setview",        SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetViewCommand,             "", nullptr },
@@ -636,10 +634,7 @@ ChatCommand * ChatHandler::getCommandTable()
        // {"sendmails", SEC_ADMINISTRATOR, true, &ChatHandler::HandleSendMailsCommand, "", nullptr},
         { "mailbox",         SEC_GAMEMASTER,     false,  &ChatHandler::HandleMailboxCommand,           "", nullptr },
         { "sale",           SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleSaleCommand,                "", nullptr },
-        { "morphnext",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphNextCommand,           "", nullptr },
-        { "morphback",      SEC_GAMEMASTER,     true,  &ChatHandler::HandleMorphBackCommand,           "", nullptr },
         { "mount",          SEC_GAMEMASTER,     false, &ChatHandler::HandleMountCommand,               "", nullptr },
-        { "fly",            SEC_GAMEMASTER,     false, &ChatHandler::HandleFlyCommand,                 "", nullptr },
         { "transfer",       SEC_GAMEMASTER,     false, &ChatHandler::HandleTransferCommand,                 "", nullptr },
         { "bgtest",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleBgTestCommand,                 "", nullptr },
         { "cinematic",      SEC_ADMINISTRATOR,  false, &ChatHandler::HandleTurtleCinematic,                 "", nullptr },
