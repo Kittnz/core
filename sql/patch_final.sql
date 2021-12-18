@@ -124,7 +124,12 @@ replace into gameobject (id, map, position_x, position_y, position_z, orientatio
 
 -- Adjust Stormwind Vault respawn timers:
 
-update creature_template set spawntimesecsmin = 9000, spawntimesecsmax = 9000 where map = 35;
-update creature_template set spawntimesecsmin = 604800, spawntimesecsmax = 604800 where id in (80850, 80851, 80852, 80853, 80854, 93107);
+update creature set spawntimesecsmin = 9000, spawntimesecsmax = 9000 where map = 35;
+update creature set spawntimesecsmin = 604800, spawntimesecsmax = 604800 where id in (80850, 80851, 80852, 80853, 80854, 93107);
 
 replace into npc_vendor values (80948, 81167, 0, 0, 0, 0);
+
+update quest_template set details = 'I have ventured to this rather decrepid, and lonely place to investigate the mysteries surrounding Karazhan. It has long since loomed over this land with a great power emitting from it. While the tower is impressive, it does not boast the power it once held under the rule of Medivh.\n\nMy analysis of the tower is that the growing power does not come from above, but below. There have always been tales of a crypt that stretched deep beneath Karazhan, perhaps they may be true.\n\nThe first thing I ask of you is to search for a long lost pendant, rumored to have been taken from the ruins of Karazhan some time ago. It will be needed to magically attune the key for our purposes. My suspicion is that the ogre\'s of the region have taken hold of it. An ogre magi by the name of Var\'zhog has grown to some renown as of recently, no doubt he holds the pendant.' where entry = 40311;
+
+update item_template set map_bound = 27 where entry = 81390;
+update creature_template set civilian = 0 where entry = 92130;
