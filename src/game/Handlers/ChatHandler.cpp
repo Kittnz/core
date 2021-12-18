@@ -181,7 +181,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             // Send message in universal language if crossfaction chat is enabled and player is using default faction
             // languages.
-            if ((sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) || (_player &&_player->IsDiplomat())) && (lang == LANG_COMMON || lang == LANG_ORCISH))
+            if ((sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT)) && (lang == LANG_COMMON || lang == LANG_ORCISH))
                 lang = LANG_UNIVERSAL;
             else
             {
@@ -192,13 +192,13 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     case CHAT_MSG_RAID_LEADER:
                     case CHAT_MSG_RAID_WARNING:
                         // allow two side chat at group channel if two side group allowed
-                        if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GROUP) || (_player &&_player->IsDiplomat()))
+                        if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GROUP))
                             lang = LANG_UNIVERSAL;
                         break;
                     case CHAT_MSG_GUILD:
                     case CHAT_MSG_OFFICER:
                         // allow two side chat at guild channel if two side guild allowed
-                        if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GUILD) || (_player &&_player->IsDiplomat()))
+                        if (sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_GUILD))
                             lang = LANG_UNIVERSAL;
                         break;
                 }
@@ -580,14 +580,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             ASSERT(playerPointer);
             static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
             ChannelMgr* cMgr = channelMgr(playerPointer->GetTeam());
-            if (iequals(channel, crossFactionChannel)) {
-                if (GetSecurity() == SEC_PLAYER && playerPointer->ToPlayer() && !playerPointer->ToPlayer()->IsDiplomat()) {
-                    ChatHandler(this).SendSysMessage("|cffff8040You are not a diplomat!|r");
-                    return;
-                } else {
-                    cMgr = channelMgr(ALLIANCE);
-                }
-            }
 
             if (cMgr)
             {
@@ -742,7 +734,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             if (tSecurity == SEC_PLAYER && pSecurity == SEC_PLAYER)
             {
-                if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) && !GetPlayer()->IsDiplomat() && GetPlayer()->GetTeam() != player->GetTeam())
+                if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) && GetPlayer()->GetTeam() != player->GetTeam())
                 {
                     SendWrongFactionNotice();
                     ChatHandler(this).PSendSysMessage(
@@ -765,7 +757,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
                 if (toPlayer->GetTeam() != masterPlr->GetTeam())
                 {
-                    if (!toPlayer->IsDiplomat() && !masterPlr->IsGameMaster())
+                    if (!masterPlr->IsGameMaster())
                     {
                         ChatHandler(this).PSendSysMessage(
                                 "|cffff8040The other adventurer is not interested in diplomacy at this moment.|r");

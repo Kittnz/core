@@ -41,21 +41,7 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
     recvPacket >> pass;
 
     PlayerPointer player = GetPlayerPointer();
-    static std::string crossFactionChannel = sConfig.GetStringDefault("CrossfactionChannel", "Diplomacy");
     ChannelMgr* cMgr = channelMgr(player->GetTeam());
-
-    if (iequals(channelname, crossFactionChannel))
-    {
-        if (GetSecurity() == SEC_PLAYER && player->ToPlayer() && !player->ToPlayer()->IsDiplomat())
-        {
-            ChatHandler(this).SendSysMessage("|cffff8040You are not a diplomat!|r");
-            return;
-        }
-        else
-        {
-            cMgr = channelMgr(ALLIANCE);
-        }
-    }
 
     if (cMgr)
     {
