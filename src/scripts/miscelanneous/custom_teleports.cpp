@@ -52,9 +52,18 @@ struct custom_dungeon_portal : public GameObjectAI
                                 player->GetSession()->SendNotification("Your level is too low.");
                         }
                     }    
-                    // Temporary locked portal:
-                    if (me->GetEntry() == 112920)
-                        player->GetSession()->SendNotification("This raid is currently not available.");
+                    // Temporary locked portals:  
+                    switch (me->GetEntry())
+                    {
+                    case 112920: 
+                        player->GetSession()->SendNotification("This raid is currently not available."); 
+                        break;
+                    case 112923:
+                    case 112924:
+                        player->GetSession()->SendNotification("This dungeon is currently not available.");
+                        break;
+                    }
+
                 }
             }
             m_uiUpdateTimer = 300;
