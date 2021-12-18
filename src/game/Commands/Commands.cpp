@@ -11756,6 +11756,21 @@ bool ChatHandler::HandleBalanceCommand(char* args)
     return false;
 }
 
+bool ChatHandler::HandlePlayCommand(char* args)
+{
+    int32 id = (int32)atoi(args);
+
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .play sound_id");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    m_session->GetPlayer()->PlayDirectMusic(id);
+    return true;
+}
+
 bool ChatHandler::HandleBgTestCommand(char* args)
 {
     sBattleGroundMgr.ToggleTesting();
