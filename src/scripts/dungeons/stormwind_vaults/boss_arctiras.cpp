@@ -33,7 +33,7 @@ struct boss_ArctirasAI : public GenericSpellMob
 	{
 		bCanFightInMelee = false;
 		boss_ArctirasAI::Reset();
-		constexpr uint32_t FrostballCD = 2 * IN_MILLISECONDS + 100;
+		constexpr uint32_t FrostballCD = 2 * IN_MILLISECONDS + 500;
 		// ref: https://classicdb.ch/?spell=17503
 		GenericAISpell& Frostbolt = AddSpell(SPELL_FROSTBOLT, FrostballCD, FrostballCD, GENERIC_TARGET_VICTIM);
 		Frostbolt.SpellCastFlag = CF_TRIGGERED + CF_IGNORE_LOS;
@@ -115,6 +115,24 @@ struct boss_ArctirasAI : public GenericSpellMob
 		if (GameObject* ObstructionObj = me->GetMap()->GetGameObject(ObstructionGameObjectGuid))
 		{
 			ObstructionObj->Despawn();
+		}
+	}
+
+
+	virtual void Aggro(Unit* unit) override
+	{
+		if (Player* player = unit->ToPlayer())
+		{
+			if (Group* playerGroup = player->GetGroup())
+			{
+				for (GroupReference* itr = playerGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+				{
+					if (Player* playerInGroup = itr->getSource())
+					{
+						me->MonsterWhisper("They brought me here in greed, and now they have me locked in absolute terror. This prison will be your frozen tomb.", playerInGroup, true);
+					}
+				}
+			}
 		}
 	}
 
