@@ -2408,6 +2408,7 @@ struct antnormi_cotAI : public ScriptedAI
             DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ENRAGE);
             enraged = true;
             m_creature->PMonsterYell("We have come too far to be stopped, this ends now!");
+            m_creature->PlayDirectMusic(30248);
         }
         else enrageTimer -= uiDiff;
 
@@ -2416,6 +2417,7 @@ struct antnormi_cotAI : public ScriptedAI
             enraged = true;
             DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
             m_creature->PMonsterYell("We have come too far to be stopped, this ends now!");
+            m_creature->PlayDirectMusic(30248);
         }
 
         DoMeleeAttackIfReady();
@@ -2423,11 +2425,13 @@ struct antnormi_cotAI : public ScriptedAI
 
     void JustDied(Unit*) override
     {
+        m_creature->PlayDirectMusic(30247);
         m_creature->PMonsterSay("My death changes nothing, YOU HEAR ME? NOTHING!");
     }
 
     void EnterCombat(Unit*) override
     {
+        m_creature->PlayDirectMusic(30246);
         m_creature->PMonsterYell("You again?! So the others have failed to stop the lapdogs of the Bronze, pathetic. Time to take the matter to my own hands.");
     }
 };
