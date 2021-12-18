@@ -517,6 +517,7 @@ class ChatHandler
         bool HandleQueueWsgCommand(char* args);
         bool HandleQueueAvCommand(char* args);
         bool HandleQueueArathiBasinCommand(char* args);
+        bool HandlePlayCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);
         bool HandleDebugLootTableCommand(char* args);
