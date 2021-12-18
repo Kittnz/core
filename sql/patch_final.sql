@@ -126,3 +126,5 @@ replace into gameobject (id, map, position_x, position_y, position_z, orientatio
 
 update creature_template set spawntimesecsmin = 9000, spawntimesecsmax = 9000 where map = 35;
 update creature_template set spawntimesecsmin = 604800, spawntimesecsmax = 604800 where id in (80850, 80851, 80852, 80853, 80854, 93107);
+
+replace into npc_vendor values (80948, 81167, 0, 0, 0, 0);
