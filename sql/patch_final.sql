@@ -108,3 +108,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings.\n\nI sell glyphs to those who could use them, what are you looking for?'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update item_template set name = 'Glyph of Arms' where entry = 50520;
