@@ -52,5 +52,7 @@ delete from quest_template where entry in (50012, 50011);
 update creature_template set npc_flags = 0, subname = '' where entry in (50028, 50027);
 delete from item_template where entry = 81200;
 update item_template set name = 'Tabard of Kul Tiras' where entry = 50087;
-update quest_template set objectives = 'Find Torta\'s Egg in Zoram Strand and return to Silas Darkmoon.' where entry = 40302;
+update quest_template set objectives = 'Find Torta\'s Egg in Zoram Strand.' where entry = 40302;
+update quest_template set details = 'Hello there adventurer! As you may know the Darkmoon Faire moves from Kalimdor to Eastern Kingdoms each week. In fact we are able to move through most cities without the faction barrier. With the new boat from Darkshore to Stormwind we have drastically changed our route.\n\nTo quickly be done with the explanation, this week we camped close to Zoram\'s Strand at night before reaching Darkshore, and one of those Nagas stole a very precious gift I once got in Tanaris!\n\nAh yes, it was in my days of searching for wonders and mystery that I found a curious turtle close to the shores, her name was Torta, and she could speak! Imagine, a speaking turtle, how marvelous!\n\nShe asked me to find her husband, Tooga. Apparently he got lost a lot, but he also was able to speak! Never in my life have I seen such a thing. But sadly they didn\'t wish to join the Faire, however Torta offered me one of her eggs and that\'s the precious gift I am talking about, I think it was about to hatch too.\n\nPlease, bring back my egg.' where entry = 40302;
 update creature_loot_template set chanceorquestchance = 13.3 where item = 60422;
+update quest_template set zoneorsort = -364 where entry = 40302;
