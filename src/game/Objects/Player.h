@@ -1132,7 +1132,6 @@ class Player final: public Unit
         bool IsImmortal();
         // ---
         void MailCityProtectorMedallion();
-        void MailRidingTurtleGift();
         bool IsIgnoringTitles();
         void SetIgnoringTitles(bool shouldIgnore);
         void RewardBountyHuntKill(Unit* pVictim);
