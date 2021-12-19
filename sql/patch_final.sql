@@ -104,3 +104,21 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '85', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
+ 
+ -- Pristine Gorrila Pelt --
+delete from quest_template where entry = 40329;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40329,2,33,40,35,512,0,'Pristine Gorrila Pelt','We got a contact who has been looking to buy a Pristine Gorilla Pelt for some time now. They\'re paying top dollar for one completely pristine with not a single imperfection. The Bloodsail could certainly use the coin to fund our operations.\n\nHead out into the jungles of Stranglethorn and hunt down some of the gorilla, and find me a pristine pelt. We may as well utilize the jungle while we are here afterall.','Slay Gorillas in Stranglethorn Vale and collect a Pristine Gorilla Pelt for \'Wincing\' Willy at the Bloodsail Compound.','Any luck yet? Remember, it needs to be immaculate.','<Willy would take his time inspecting the pelt for imperfections>. This might just be the one $N , nice job out there, this will certainly bring us some gold.\n\n\Here, take your cut for the good work.',60476,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,3450,87,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60479, 40329);
+replace into creature_involvedrelation (id, quest) values (60479, 40329);
+
+delete from item_template where entry = 60476;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60476,4709,'Pristine Gorrila Pelt',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'In mint condition, and completely pristine.',0);
+
+delete from creature_loot_template where item = 60476;
+replace into creature_loot_template values
+(1557,60476,-16,1,1,1,0),
+(1558,60476,-18,1,1,1,0),
+(1114,60476,-15,1,1,1,0),
+(1108,60476,-11,1,1,1,0);
