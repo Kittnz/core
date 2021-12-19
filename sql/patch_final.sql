@@ -143,7 +143,7 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 delete from gameobject_template where entry = 2010862;
 replace into gameobject_template values
-(2010862,3,24107,'Satyr Coal',0,4,1,43,2010862,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+(2010862,3,24107,'Bloodsail Supply Crate',0,4,1,43,2010862,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 delete from gameobject_loot_template where entry = 2010862;
 replace into gameobject_loot_template values
@@ -173,7 +173,7 @@ replace into creature_loot_template values
 
 -- The Bloodsail Compound V --
 delete from quest_template where entry = 40334;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40333,40334,2,33,41,30,512,0,'The Bloodsail Compound V','Nice work on checking up on things for me, there might be more work around the camp, but I\'d like you to deliver a letter up to First Mate McCoy. No doubt he\'s getting a bit anxious wondering what me and you have been up to.\n\nI have prepared a note to be taken to him down at Bloodsail Retreat, so please do so with haste. ','Bring Willy\'s Letter to First Mate McCoy at Bloodsail Retreat in Stranglethorn Vale.','Any news?','So, I take it everything is back in order huh? Well, from what I read you\'ve done a good job. You\'ve solved our supply issue, and for that you should be commended, take one of these items from the hoard, you\'ve earned it matey.',60479,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60479,1,0,850,87,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60480,1,60481,1,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40333,40334,2,33,41,30,512,0,'The Bloodsail Compound V','Nice work on checking up on things for me, there might be more work around the camp, but I\'d like you to deliver a letter up to First Mate McCoy. No doubt he\'s getting a bit anxious wondering what me and you have been up to.\n\nI have prepared a note to be taken to him down at Bloodsail Retreat, so please do so with haste.','Bring Willy\'s Letter to First Mate McCoy at Bloodsail Retreat in Stranglethorn Vale.','Any news?','So, I take it everything is back in order huh? Well, from what I read you\'ve done a good job. You\'ve solved our supply issue, and for that you should be commended, take one of these items from the hoard, you\'ve earned it matey.',60479,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60479,1,0,850,87,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60480,1,60481,1,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (8139, 40334);
 replace into creature_involvedrelation (id, quest) values (60452, 40334);
@@ -204,4 +204,23 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
+
+-- Another Day of Labor --
+delete from quest_template where entry = 40335;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40335,2,33,48,44,0,0,'Another Day of Labor','Ahoy Cap\'n! Saw ye have fun last night with the bard lassy in our vessel, fine piece ain\'t she?\n\nBy all means, I mean the boat, of course, non of my business of yer personal affairs. Speaking of which Cap\'n, have ye decided the name of the vessel yet? It\'s bad luck to have an unnamed ship at sea, so think about it!\n\nAnyway, onto more pressing matters. Admiral Garfield told me to supply our settlement with generals goods but we don\'t have the leisurely of just buying them so we\'ll just loot it.\n\nAye, loot it. The Southsea seadogs have settled on a sandbar close to that damned Giljim Isle.\n\nFortune of the waves be with ya.','Loot 10 General Good Crates from the Southsea Sandbar and return to Belgrush Daggerfist.','Hurry Cap\'n, there be much to do.','Monkeys, all of them, serve them right. Let me help you out with those!\n\nI hope you found some coins for your pockets because I\'m afraid I don\'t carry anything with me.',60482,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13267,1250,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60456, 40335);
+replace into creature_involvedrelation (id, quest) values (60456, 40335);
+
+delete from item_template where entry = 60482;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60482,7913,'General Good Crate',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010863;
+replace into gameobject_template values
+(2010863,3,24107,'General Good Crate',0,4,1,43,2010863,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010863;
+replace into gameobject_loot_template values
+(2010863,60482,-100,0,1,1,0);
 
