@@ -644,10 +644,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "sendpacket",     SEC_ADMINISTRATOR,  false,  &ChatHandler::HandleSendPacketCommand,                  "", nullptr },
         { "shop",           SEC_GAMEMASTER,     true,  nullptr,                                         "", shopCommandTable },
         { "path",           SEC_GAMEMASTER,     true,  nullptr,                                         "", pathCommandTable },
-        { "wsg",            SEC_PLAYER,         false, &ChatHandler::HandleQueueWsgCommand,                     "", nullptr},
         { "xp",             SEC_PLAYER,         false, &ChatHandler::HandleXPCommand,                     "", nullptr },
-        { "alterac",        SEC_PLAYER,         false, &ChatHandler::HandleQueueAvCommand,                      "", nullptr },
-        { "arathi",         SEC_PLAYER,         false, &ChatHandler::HandleQueueArathiBasinCommand,             "", nullptr },
         { "settime",        SEC_GAMEMASTER,     false, &ChatHandler::HandleSetTimeCommand, "", nullptr},
         { "play",           SEC_GAMEMASTER,     false, &ChatHandler::HandlePlayCommand, "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
