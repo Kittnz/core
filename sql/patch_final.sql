@@ -60,3 +60,22 @@ REPLACE INTO creature_loot_template VALUES
 (65125, 61046, 33.4, 3, 1, 1, 0),
 (65125, 61053, 50, 4, 1, 1, 0),
 (65125, 50427, 50, 4, 1, 1, 0);
+
+-- Abandoned Equipment --
+delete from quest_template where entry = 40327;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40327,2,33,42,35,512,0,'Abandoned Equipment','I got word a few weeks back that the Venture Co. had to abandon the Crystalvein Mine because of a basilisk problem. No doubt they left behind all sorts of equipment and tools that are ripe for pilfering. We pirates are usually operating on second hand equipment, and such a score we -cannot- pass up.\n\nThe Crystalvein Mine is located to the east and is just off the road near the Gurubashi Arena. Get there, and get there quick pal, before those Venture goons go and try to get back there stuff. If we act fast, they won\'t even know we went and snatched it all up!','Collect Venture Co. Equipment for Falgig Wazzlewrench at the Bloodsail Compound in Stranglethorn Vale.','Make sure you keep yours eyes open out there!','Look at all this stuff! Spanners, Flaxpipes, Togwig Gears! This will last the Bloodsail quite a while, and give me a whole bunch of opportunity to tinker! Thanks again $N, this is a haul!',60473,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3100,87,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60480, 40327);
+replace into creature_involvedrelation (id, quest) values (60480, 40327);
+
+delete from item_template where entry = 60473;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60473,7839,'Venture Co. Equipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010861;
+replace into gameobject_template values
+(2010861,3,24109,'Venture Co. Equipment',0,4,1,43,2010861,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010861;
+replace into gameobject_loot_template values
+(2010861,60473,-100,0,1,1,0);
