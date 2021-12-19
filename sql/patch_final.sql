@@ -79,3 +79,28 @@ replace into gameobject_template values
 delete from gameobject_loot_template where entry = 2010861;
 replace into gameobject_loot_template values
 (2010861,60473,-100,0,1,1,0);
+
+-- Naga Tridents --
+delete from quest_template where entry = 40328;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40328,2,33,44,38,512,0,'Naga Tridents','A few weeks back Naga began to enter the territory just south of the Bloodsail Compound. We don\'t know why they are here, or why they came but they seem quite drawn to the heights. The slithering wretches have done nothing but wander about and bother our ships as they sail about. I\'d like you to do battle with them for all of our slain kin.\n\nGather from the Naga Explorers their tridents and bring me them as proof of your deeds. 14 Should do just nicely, maybe we can use them as harpoons against the beasts.','Gather 14 Naga Trident\'s for Raga Darkeye at the Bloodsail Compound in Stranglethorn Vale.','The Naga can be a fearsome foe, battle hard, and put them down.','Ahh, excellent, the less of them swimming about, the better for all of us. You\'ve done well, here, keep one, it might serve you well.',60474,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3250,87,250,0,0,0,0,0,0,0,0,0,60475,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60481, 40328);
+replace into creature_involvedrelation (id, quest) values (60481, 40328);
+
+delete from item_template where entry = 60474;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60474,5635,'Naga Trident',12,1,2048,1,-1,-1,1,14,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60474;
+replace into creature_loot_template values
+(1907,60474,-88,1,1,1,0);
+
+replace into item_template values
+ ('60475', '2', '6', 'Bronze Naga Trident', '', '8745', '2', '0', '1', '59732', '14933', '17', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '12', '7', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '0',
+ '0', '81', '113', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '85', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
