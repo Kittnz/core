@@ -238,3 +238,22 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from creature_loot_template where item = 60483;
 replace into creature_loot_template values
 (1907,60483,-25,1,1,1,0);
+
+-- We Must Have Rum --
+delete from quest_template where entry = 40337;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40337,2,33,48,42,4096,0,'We Must Have Rum','We are running low on rum Cap\'n! I need to test something, while I can brew beer in many ways I have yet to try to make some fine heavy rum.\n\nLuckily for us, we\'re on Jaguero Island, and as you could notice there are several gorillas here, where there\'s a gorilla there\'s also bananas. With the sugar the fruit holds I might be able to brew us some rum.\n\nA bunch of them would be great.','Bring 15 bananas to \'Ale Saint\' Grida.','Can\'t wait to test it or taste it.','Aye! Now let\'s try it.\n\nThis be strong and fine rum, here ye go Cap\'n yer share.',60484,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5934,1250,87,500,0,0,0,0,0,0,0,0,0,21114,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60460, 40337);
+replace into creature_involvedrelation (id, quest) values (60460, 40337);
+
+delete from item_template where entry = 60484;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60484,6420,'Banana',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010864;
+replace into gameobject_template values
+(2010864,3,25062,'Bananas',0,4,1,43,2010864,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010864;
+replace into gameobject_loot_template values
+(2010864,60484,-100,0,1,1,0);
