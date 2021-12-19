@@ -155,3 +155,18 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60479, 40332);
 replace into creature_involvedrelation (id, quest) values (8139, 40332);
+
+-- The Bloodsail Compound IV --
+delete from quest_template where entry = 40333;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40332,40333,2,33,41,30,512,0,'The Bloodsail Compound IV','Hey I aint lookin\' for no trouble, and keep your voice down!\n\nI\'ve been supplying the Bloodsail with a potent poison for some time now, and my main guy just up and left Tanaris. I know they paid me for the last batch but I just haven\'t had an opportunity to get it, do I look like some sort of scorpid killer to you?\n\n Maybe you can help me out, and deliver it for me, I\'ll throw in some coin to you as well for the trouble. To the west of here are a bunch of Scorpid Hunters, from them gather 8 Potent Scorpid Venom and deliver them to \'Wincing\' Willy back out at the Bloodsail Compound in Stranglethorn Vale.','Gather 8 Potent Scorpid Venom and deliver them to \'Wincing\' Willy at the Bloodsail Compound in Stranglethorn Vale.','Any news?','Welcome back, this is it huh?\n\nNot bad, nice work in getting it, now you know where we get some of our poisons, so keep it hush.',60478,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2500,3250,87,250,21,-100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (8139, 40333);
+replace into creature_involvedrelation (id, quest) values (60479, 40333);
+
+delete from item_template where entry = 60478;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60478,1507,'Potent Scorpid Venom',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60478;
+replace into creature_loot_template values
+(5422,60478,-78,1,1,1,0);
