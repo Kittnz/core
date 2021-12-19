@@ -170,3 +170,38 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 delete from creature_loot_template where item = 60478;
 replace into creature_loot_template values
 (5422,60478,-78,1,1,1,0);
+
+-- The Bloodsail Compound V --
+delete from quest_template where entry = 40334;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40333,40334,2,33,41,30,512,0,'The Bloodsail Compound V','Nice work on checking up on things for me, there might be more work around the camp, but I\'d like you to deliver a letter up to First Mate McCoy. No doubt he\'s getting a bit anxious wondering what me and you have been up to.\n\nI have prepared a note to be taken to him down at Bloodsail Retreat, so please do so with haste. ','Bring Willy\'s Letter to First Mate McCoy at Bloodsail Retreat in Stranglethorn Vale.','Any news?','So, I take it everything is back in order huh? Well, from what I read you\'ve done a good job. You\'ve solved our supply issue, and for that you should be commended, take one of these items from the hoard, you\'ve earned it matey.',60479,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60479,1,0,850,87,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60480,1,60481,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (8139, 40334);
+replace into creature_involvedrelation (id, quest) values (60452, 40334);
+
+delete from item_template where entry = 60479;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60479,3901,'Willy\'s Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50524);
+
+replace into page_text values
+(50524,'Dear McCoy\n\nBeen having some troubles with supply issues, from troll attacks to not receiving deliveries. The one you sent has been plenty of help and helped get things back on track, you should receive every soon.\n\n\'Wincing\' Willy.',0);
+
+replace into item_template values
+ ('60480', '4', '2', 'Sea Brigand\'s Grips', '', '6735', '2', '0', '1', '10832', '2708', '10', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '9', '3', '6',
+ '6', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '68', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60481', '4', '3', 'Corsair\'s Leggings', '', '26039', '2', '0', '1', '25748', '6437', '7', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '7', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '201', '0', '0', '0',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
