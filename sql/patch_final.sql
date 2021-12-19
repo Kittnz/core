@@ -224,3 +224,17 @@ delete from gameobject_loot_template where entry = 2010863;
 replace into gameobject_loot_template values
 (2010863,60482,-100,0,1,1,0);
 
+-- Charming a Charmer --
+delete from quest_template where entry = 40336;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40336,2,33,48,44,0,0,'Charming a Charmer','Cap\'n, back for more songs?\n\nOr is it sugar only today.\n\n<Jeesie stares deep into your eyes>.\n\nOh what is this poor bard to do, no jewelry to match her beauty, surely the Cap\'n would love to change that, aye?\n\nI hear there\'s a group of nagas north of one of our compounds, Vil\'do says they carry elven jewelry that would best suit this gal, don\'t you think so?\n\nI will make sure to make it worth your while.','Bring a Highborne Necklace to Jeesie Silver-Tongue.','Oh Cap\'n you\'re a tease and a half, quite the charmer I may say.','<Jeesie\'s eyes sparkle at the treasure>.\n\nOh Cap\'n, it\'s beautiful, come put it on my neck, the sight will be the most treasured reward you\'d ever get!',60483,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12003,1250,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60451, 40336);
+replace into creature_involvedrelation (id, quest) values (60451, 40336);
+
+delete from item_template where entry = 60483;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60483,9857,'Highborne Necklace',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60483;
+replace into creature_loot_template values
+(1907,60483,-25,1,1,1,0);
