@@ -260,3 +260,5 @@ replace into gameobject_loot_template values
 
 REPLACE INTO gameobject VALUES
 (5001357, 180663, 1, 2826.15, 2497.69, 140.022, 4.96234, 0, 0, 0.613451, -0.789733, 300, 300, 100, 1, 0, 0);
+
+update quest_template set requiredraces = 690 where entry = 2932;
