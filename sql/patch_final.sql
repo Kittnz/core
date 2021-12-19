@@ -257,3 +257,6 @@ replace into gameobject_template values
 delete from gameobject_loot_template where entry = 2010864;
 replace into gameobject_loot_template values
 (2010864,60484,-100,0,1,1,0);
+
+REPLACE INTO gameobject VALUES
+(5001357, 180663, 1, 2826.15, 2497.69, 140.022, 4.96234, 0, 0, 0.613451, -0.789733, 300, 300, 100, 1, 0, 0);
