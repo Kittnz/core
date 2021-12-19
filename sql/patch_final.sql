@@ -129,3 +129,22 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60452, 40330);
 replace into creature_involvedrelation (id, quest) values (60479, 40330);
+
+-- The Bloodsail Compound II --
+delete from quest_template where entry = 40331;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40330,40331,2,33,40,30,512,0,'The Bloodsail Compound II','Five nights ago we were harassed by a band of trolls with blue hair, they threw all sorts of javelins at us. They made off with crates and bundles of supplies, not to mention killing a few good folk before we fought them off.\n\nThose trolls are Skullsplitter, and came from the Ziata\'jai Ruins to the north east of here head there, and recover 5 Bloodsail Supply Crates. While you\'re there, you may as well kill some as well to get some payback, we need to keep our image after all.','\'Wincing\' Willy at the Bloodsail Compound wants you to collect 5 Bloodsail Supply Crates and kill 10 Skullsplitter Warriors.','Those trolls can be some mean sons of bitches, make sure you are cautious out there.','Heh, we\'ve butted heads with the Skullsplitter a few times, they should know not to mess around now. Nice job in getting back the booty.',60477,5,0,0,0,0,0,0,667,10,0,0,0,0,0,0,0,0,0,3350,87,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60479, 40331);
+replace into creature_involvedrelation (id, quest) values (60479, 40331);
+
+delete from item_template where entry = 60477;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60477,7913,'Bloodsail Supply Crate',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'In mint condition, and completely pristine.',0);
+
+delete from gameobject_template where entry = 2010862;
+replace into gameobject_template values
+(2010862,3,24107,'Satyr Coal',0,4,1,43,2010862,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010862;
+replace into gameobject_loot_template values
+(2010862,60477,-100,0,1,1,0);
