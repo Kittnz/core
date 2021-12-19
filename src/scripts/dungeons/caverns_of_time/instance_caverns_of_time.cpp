@@ -2803,13 +2803,13 @@ struct logistical_officer : public ScriptedAI
                     {
                     case 1:
                         summon->PMonsterEmote("The Timbermaw sniffs the air.");
-                        summon->PMonsterSay("Where is this ...?");
+                        summon->PMonsterSay("Where is this...?");
                         break;
                     case 2:
                         summon->PMonsterSay("What is this? I demand to know who you are!");
                         break;
                     case 3:
-                        summon->PMonsterSay(".. freshly baked ... What? What just happened?");
+                        summon->PMonsterSay("..freshly baked... What? What just happened?");
                         break;
                     case 4:
                         summon->PMonsterEmote("The Kobold stares at George.");
@@ -2822,7 +2822,7 @@ struct logistical_officer : public ScriptedAI
                         summon->PMonsterSay("Aedelas? Where are you? What is this place?");
                         break;
                     case 6:
-                        summon->PMonsterSay("Ancestors watch over me ... where am I?");
+                        summon->PMonsterSay("Ancestors watch over me... where am I?");
                         break;
                     }
                 }
@@ -2843,7 +2843,7 @@ struct logistical_officer : public ScriptedAI
                         m_creature->PMonsterSay("My apologies, King Varian. We are protectors of the sacred timelines and are conducting a minor correction in yours. Please step into this portal.");
                         break;
                     case 3:
-                        m_creature->PMonsterSay("Hmmm ... I don't recognize this one. Assistant, I think we summoned the wrong human male.");
+                        m_creature->PMonsterSay("Hmmm... I don't recognize this one. Assistant, I think we summoned the wrong human male.");
                         break;
                     case 4:
                         m_creature->PMonsterSay("A simple Kobold. Funny, this particular Kobold is responsible for stealing a powerful lantern from Lady Sylvanas. The theft of this lantern led to many deaths and branched timelines.");
@@ -2878,7 +2878,7 @@ struct logistical_officer : public ScriptedAI
                         portal = m_creature->SummonGameObject(GOB_PORTAL_STORMWIND, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
                         break;
                     case 3:
-                        summon->PMonsterYell("OH MY GOD - IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
+                        summon->PMonsterYell("OH MY GOD — IS THAT A DRAGON?? CALL THE GUARDS! HELP!!");
                         summon->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         summon->GetMotionMaster()->MoveConfused();
                         portal = m_creature->SummonGameObject(GOB_PORTAL_STORMWIND, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
@@ -2892,11 +2892,11 @@ struct logistical_officer : public ScriptedAI
                     case 5:
                         summon->PMonsterEmote("Go'el laughs to himself.");
                         summon->HandleEmote(EMOTE_ONESHOT_LAUGH);
-                        summon->PMonsterSay("You've got a funny energy about you, Blood Elf.");
+                        summon->PMonsterSay("You've got a funny energy about you, elf.");
                         portal = m_creature->SummonGameObject(GOB_PORTAL_ORG, -8480.77f, -4221.29f, -215.03f, 0, 0, 0, 0, 0, 10000);
                         break;
                     case 6:
-                        summon->PMonsterSay("I shall go where my ancestors command, but beware Bloodelf. I sense an evil lurking in this place.");
+                        summon->PMonsterSay("I shall go where my ancestors command, but beware elf. I sense an evil lurking in this place.");
                         portal = m_creature->SummonGameObject(GOB_PORTAL_THUNDERBLUFF, -8464.56f, -4222.97f, -214.35f, 0, 0, 0, 0, 0, 10000);
                         break;
                     }
@@ -2955,7 +2955,7 @@ struct logistical_officer : public ScriptedAI
                         case 2:
                             if (!doOnce)
                             {
-                                m_creature->PMonsterSay("Kings can be ... difficult.");
+                                m_creature->PMonsterSay("Kings can be... difficult.");
                                 doOnce = true;
                                 break;
                             }
