@@ -15404,12 +15404,6 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     SetByteValue(PLAYER_BYTES_3, 2, GetActiveTitle()); // set active title on logon
 
-    if (GetGUIDLow() == 1 || GetGUIDLow() == 11549) // Torta, Pompa
-        AwardTitle(TITLE_DEVELOPER); // Developer
-
-    if (GetGUIDLow() == 121365) // Gheor
-        AwardTitle(TITLE_TURTLE_GOD); // Turtle God
-
     if (HasItemCount(21176, 1, 1)) // Scarab Lord
         AwardTitle(TITLE_SCARAB_LORD);
 
@@ -15418,7 +15412,7 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     // Award titles for current important items
     if (HasItemCount(17182, 1, 1))
-        AwardTitle(TITLE_SULFURON_CHAMPION); //Sulfuron Champion
+        AwardTitle(TITLE_SULFURON_CHAMPION); // Sulfuron Champion
         
     if (HasItemCount(19019, 1, 1))
         AwardTitle(TITLE_STORMWIELDER); // Stormwielder
