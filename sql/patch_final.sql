@@ -440,6 +440,9 @@ replace into creature_display_info_addon values(18671, 0, 0, 0, 0);
 replace into creature_display_info_addon values(18672, 0, 0, 0, 0);
 replace into creature_display_info_addon values(18673, 0, 0, 0, 0);
 replace into creature_display_info_addon values(18674, 0, 0, 0, 0);
+replace into creature_display_info_addon values(18750, 0, 0, 0, 0);
+replace into creature_display_info_addon values(18684, 0, 0, 0, 0);
+replace into creature_display_info_addon values(18688, 0, 0, 0, 0);
 
 update creature_template SET loot_id = 2442 WHERE entry = 2442;
 
@@ -633,4 +636,4 @@ replace into item_template values
  '0', '-1', '2', '0', '0', '0', '0', '0', '5', '1', '0', '0', '90', '0', '0', '0', '0', '46', '0', '0',
  '0', '0', '1', null);
  
- 
+ update creature_template set display_id1 = 12237 where entry = 49004;

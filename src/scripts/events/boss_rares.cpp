@@ -381,7 +381,7 @@ struct boss_mallon_the_moontouchedAI : public ScriptedAI
                 }
                 case EVENT_TRANSFORM:
                 {
-                    m_creature->SetDisplayId(15660);
+                    m_creature->SetDisplayId(18750);
                     break;
                 }
             }
