@@ -440,3 +440,5 @@ replace into creature_display_info_addon values(18671, 0, 0, 0, 0);
 replace into creature_display_info_addon values(18672, 0, 0, 0, 0);
 replace into creature_display_info_addon values(18673, 0, 0, 0, 0);
 replace into creature_display_info_addon values(18674, 0, 0, 0, 0);
+
+update creature_template SET loot_id = 2442 WHERE entry = 2442;
