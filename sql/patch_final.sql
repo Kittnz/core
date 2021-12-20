@@ -262,3 +262,107 @@ REPLACE INTO gameobject VALUES
 (5001357, 180663, 1, 2826.15, 2497.69, 140.022, 4.96234, 0, 0, 0.613451, -0.789733, 300, 300, 100, 1, 0, 0);
 
 update quest_template set requiredraces = 690 where entry = 2932;
+
+delete from creature_questrelation where quest = 40334;
+replace into creature_questrelation (id, quest) values (60479, 40334);
+
+update item_template set buy_price = 250000 where entry = 83090;
+REPLACE INTO npc_vendor VALUES
+(80953, 83090, 0, 0, 0, 0);
+
+replace into item_template values
+ ('60485', '15', '0', 'Sealed Diablo II Lord of Destruction Collectors Edition', 'In mint condition.', '20931', '0', '0', '1', '1000000', '250000', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60486', '2', '4', 'Fishbringer', 'Glimmers with the pure energy of the light, is it alive?', '10815', '4', '0', '1', '100000', '25000', '21', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '1', '5', '6', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '0',
+ '0', '78', '112', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '3', '3', '0', '0', '120', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60487', '4', '0', 'Cloak of the Moo Lord', 'His power can be felt upon the cloak.', '66155', '4', '0', '1', '84432', '21108', '16', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '10', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '50', '0', '10', '10',
+ '10', '10', '10', '9140', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60488', '4', '0', 'Drape of the Herd', 'Laced with milky power.', '66155', '4', '0', '1', '84432', '21108', '16', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '10', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '47', '0', '0', '0',
+ '0', '0', '0', '9140', '1', '0', '0', '-1', '0', '-1', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60489', '4', '1', 'Cap of the Cow Savant', 'Laced with the energy of the moo.', '66156', '4', '0', '1', '85948', '21487', '1', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '21', '7', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '60', '0', '0', '0',
+ '0', '0', '0', '18049', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '60', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60490', '4', '1', 'Cowskin Chapeau', 'Pure elegance with a touch of moomoo', '66156', '4', '0', '1', '86132', '21533', '1', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '18', '5', '11',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '74', '0', '0', '0',
+ '0', '0', '0', '9406', '1', '0', '0', '-1', '0', '-1', '21618', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '60', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60491', '15', '0', 'The Moo Stone', 'The images of the reign of cows can be seen within. It burns deep within your mind, the power is almost overwhelming.', '23727', '0', '0', '1', '200', '50', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+update creature_template set loot_id = 91799 where entry = 91799;
+
+replace into creature_loot_template values
+(91799,60485,100,1,1,1,0),
+(91799,60486,20,4,1,1,0),
+(91799,60487,25,4,1,1,0),
+(91799,60488,25,4,1,1,0),
+(91799,60489,25,4,1,1,0),
+(91799,60490,25,4,1,1,0),
+(91799,60491,100,2,1,1,0),
+(91799,51261,100,3,1,1,0);
+
+update page_text set text = 'A beacon that connected the creation of this order, and still keeps us together now, even after so much hardship, and trial. Despite how many times we have come close to ruin, and despite the fall of the kingdom around us we stand firm. \n\nShould the time come when darkness encroaches,', next_page = 1000248 where entry = 1000247;
+REPLACE INTO page_text VALUES
+(1000248, 'remember that the Light always shines through you, and your sacrifice will be repaid fully in the Light\'s graces.\n\nThe Light does not forsake, the Light does not forget. Let us forever keep it at our hearts.\n\nNo matter how dark the world is, the Light will always shine again.\n\n~Scribe Dafoldt', 0);
+
+update page_text set text = 'Dear McCoy/n/nBeen having some troubles with supply issues. From troll attacks to not receiving deliveries. The one you sent has been plenty of help, and got things back on track. You should receive everything soon.\n\n\'Wincing\' Willy.' where entry = 50524;
+
+update gameobject_template set displayid = 22658 where entry = 1000245;
+update creature_template set display_id1 = 18748 where entry = 49011;
+update creature_template set display_id1 = 18749 where entry = 49008;
+update creature_template set display_id1 = 18751 where entry = 60606;
+update creature_template set display_id1 = 18752 where entry = 60607;
+update creature_template set display_id1 = 18753 where entry = 91303;
+update creature_template set display_id1 = 18750 where entry = 49004;
+
