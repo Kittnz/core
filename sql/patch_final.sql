@@ -366,3 +366,37 @@ update creature_template set display_id1 = 18752 where entry = 60607;
 update creature_template set display_id1 = 18753 where entry = 91303;
 update creature_template set display_id1 = 18750 where entry = 49004;
 
+-- Citadel Wizard , display ID 18671, level 60 elite, has 7000 mana, casts fireball, faction 67, humanoid, weapon 18644
+-- Citadel Preacher, display ID 18674, level 60 elite, has 7000 mana, casts heals, faction 67, humanoid, weapon 2075
+-- Citadel Watchman, display ID 18688, level 60 elite, faction 67, humanoid, weapon 15211, weapon2 2081
+-- Duke Oswald III, display ID 18684, level 60 elite, has 3000 mana, casts hammer of justice, weapon 83262
+-- Butcher Pete, display ID 1731, level 45, faction 67, humanoid, weapon 10772
+-- Groundskeeper Samual, display ID 1748, level 45, faction 67, humanoid, no weapon
+
+REPLACE INTO creature_template VALUES
+(60615, 18671, 0, 0, 0, 'Citadel Wizard', '', 0, 60, 60, 7326, 7326, 7000, 7000, 3075, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 789, 840, 0, 272, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 7, 0, 60615, 0, 0, 0, 0, 0, 0, 0, 0, 10151, 0, 0, 0, 0, 0, 416, 548, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60616, 18674, 0, 0, 0, 'Citadel Preacher', '', 0, 60, 60, 7326, 7326, 7000, 7000, 3075, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 789, 840, 0, 272, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 7, 0, 60616, 0, 0, 0, 0, 0, 0, 0, 0, 6064, 0, 0, 0, 0, 0, 416, 548, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60617, 18688, 0, 0, 0, 'Citadel Watchman', '', 0, 60, 60, 15260, 15260, 0, 0, 2086, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60617, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60618, 18684, 0, 0, 0, 'Duke Oswald III', '', 0, 60, 60, 15260, 15260, 3000, 3000, 2086, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 469, 642, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 60617, 0, 0, 0, 0, 0, 0, 0, 0, 10308, 0, 0, 0, 0, 0, 779, 1022, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60619, 1731, 0, 0, 0, 'Butcher Pete', '', 0, 45, 45, 13302, 13302, 0, 0, 1500, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 204, 295, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 120, 230, 100, 7, 0, 60619, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 626, 822, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60619, 1748, 0, 0, 0, 'Groundskeeper Samual', '', 0, 45, 45, 13302, 13302, 0, 0, 1500, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 204, 295, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 120, 230, 100, 7, 0, 60619, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 626, 822, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20057; set @weapon_1 = 18644; set @weapon_2 = 0; set @creature = 60615;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20058; set @weapon_1 = 2075; set @weapon_2 = 0; set @creature = 60616;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20059; set @weapon_1 = 15211; set @weapon_2 = 2081; set @creature = 60617;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20060; set @weapon_1 = 83262; set @weapon_2 = 0; set @creature = 60618;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20061; set @weapon_1 = 10772; set @weapon_2 = 0; set @creature = 60619;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
