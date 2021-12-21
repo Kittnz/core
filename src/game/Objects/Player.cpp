@@ -8511,6 +8511,7 @@ void Player::SendInitWorldStates(uint32 zoneid) const
         count += 13;
     }
 
+    // marked for check!
     for (WorldStatePair const* itr = def_world_states; itr->state; ++itr)
     {
         data << uint32(itr->state);
@@ -8518,6 +8519,7 @@ void Player::SendInitWorldStates(uint32 zoneid) const
         ++count;
     }
 
+    // marked for check!
     if (ZoneScript* zoneScript = GetZoneScript())
         count += zoneScript->FillInitialWorldStates(data);
     switch (zoneid)
@@ -8525,10 +8527,13 @@ void Player::SendInitWorldStates(uint32 zoneid) const
         case 2597:                                      // AV
         case 3277:                                      // WS
         case 3358:                                      // AB
+        case 12:                                        // SV
             if (BattleGround* bg = GetBattleGround())
                 bg->FillInitialWorldStates(data, count);
             break;
     }
+
+    // TODO : duplicate worldstates from def_world_states and special BG worldstate handling. Remove it later!
 
     // Ahn'Qiraj War Effort
     if (sGameEventMgr.IsActiveEvent(EVENT_WAR_EFFORT))
