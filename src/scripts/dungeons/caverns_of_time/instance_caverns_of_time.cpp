@@ -109,6 +109,7 @@ struct instance_caverns_of_time : public ScriptedInstance
 
     void OnPlayerEnter(Player* pPlayer) override
     {
+        pPlayer->PlayDirectMusic(30274, pPlayer);
         if (!pPlayer)
             return;
     }
