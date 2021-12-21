@@ -353,13 +353,15 @@ void BattleGround::Update(uint32 diff)
         else if (GetStartDelayTime() <= m_StartDelayTimes[BG_STARTING_EVENT_SECOND] && !(m_Events & BG_STARTING_EVENT_2))
         {
             m_Events |= BG_STARTING_EVENT_2;
-            SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+            if (m_StartMessageIds[BG_STARTING_EVENT_SECOND])
+                SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_SECOND], CHAT_MSG_BG_SYSTEM_NEUTRAL);
         }
         // After 30 or 15 seconds, warning is signalled
         else if (GetStartDelayTime() <= m_StartDelayTimes[BG_STARTING_EVENT_THIRD] && !(m_Events & BG_STARTING_EVENT_3))
         {
             m_Events |= BG_STARTING_EVENT_3;
-            SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+            if (m_StartMessageIds[BG_STARTING_EVENT_THIRD])
+                SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_THIRD], CHAT_MSG_BG_SYSTEM_NEUTRAL);
         }
         // delay expired (atfer 2 or 1 minute)
         else if (GetStartDelayTime() <= 0 && !(m_Events & BG_STARTING_EVENT_4))
@@ -382,7 +384,8 @@ void BattleGround::Update(uint32 diff)
 
             ReturnPlayersToHomeGY();
 
-            SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_FOURTH], CHAT_MSG_BG_SYSTEM_NEUTRAL);
+            if (m_StartMessageIds[BG_STARTING_EVENT_FOURTH])
+                SendMessageToAll(m_StartMessageIds[BG_STARTING_EVENT_FOURTH], CHAT_MSG_BG_SYSTEM_NEUTRAL);
             SetStatus(STATUS_IN_PROGRESS);
             SetStartDelayTime(m_StartDelayTimes[BG_STARTING_EVENT_FOURTH]);
 
@@ -805,9 +808,9 @@ void BattleGround::RewardQuestComplete(Player *pPlayer)
 
 }
 
-void BattleGround::BlockMovement(Player *pPlayer)
+void BattleGround::BlockMovement(Player *pPlayer, bool apply)
 {
-    pPlayer->SetClientControl(pPlayer, 0); // movement disabled NOTE: the effect will be automatically removed by client when the player is teleported from the battleground, so no need to send with uint8(1) in RemovePlayerAtLeave()
+    pPlayer->SetClientControl(pPlayer, apply ? 0 : 1); // movement disabled NOTE: the effect will be automatically removed by client when the player is teleported from the battleground, so no need to send with uint8(1) in RemovePlayerAtLeave()
 }
 
 void BattleGround::RemovePlayerAtLeave(ObjectGuid guid, bool Transport, bool SendPacket)

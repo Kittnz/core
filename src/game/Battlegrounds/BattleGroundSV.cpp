@@ -13,10 +13,15 @@
 
 BattleGroundSV::BattleGroundSV()
 {
-    m_StartMessageIds[BG_STARTING_EVENT_FIRST] = 0;
-    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_SV_START_ONE_MINUTE;
-    m_StartMessageIds[BG_STARTING_EVENT_THIRD] = LANG_BG_SV_START_HALF_MINUTE;
+    m_StartMessageIds[BG_STARTING_EVENT_FIRST] = LANG_BG_SV_START_ONE_MINUTE;
+    m_StartMessageIds[BG_STARTING_EVENT_SECOND] = LANG_BG_SV_START_HALF_MINUTE;
+    m_StartMessageIds[BG_STARTING_EVENT_THIRD] = 0;
     m_StartMessageIds[BG_STARTING_EVENT_FOURTH] = LANG_BG_SV_HAS_BEGUN;
+
+    m_StartDelayTimes[BG_STARTING_EVENT_FIRST] = BG_START_DELAY_1M;
+    m_StartDelayTimes[BG_STARTING_EVENT_SECOND] = BG_START_DELAY_30S;
+    m_StartDelayTimes[BG_STARTING_EVENT_THIRD] = BG_START_DELAY_15S;
+    m_StartDelayTimes[BG_STARTING_EVENT_FOURTH] = BG_START_DELAY_NONE;
 
     m_BgObjects.resize(BG_SV_OBJECT_MAX);
     m_BgCreatures.resize(BG_SV_CREATURE_MAX);
@@ -136,6 +141,12 @@ void BattleGroundSV::StartingEventOpenDoors()
 {
     OpenDoorEvent(BG_EVENT_DOOR);
 
+    for (auto& itr : GetPlayers())
+    {
+        if (Player* plr = sObjectMgr.GetPlayer(itr.first))
+            BlockMovement(plr, false);
+    }
+
     // spawn neutral banners
     for (uint8 banner = BG_SV_OBJECT_BANNER_NEUTRAL, i = 0; i < BG_SV_DYNAMIC_NODES_COUNT; banner += 5, ++i)
         SpawnObject(m_BgObjects[banner], RESPAWN_IMMEDIATELY);
@@ -163,6 +174,9 @@ void BattleGroundSV::AddPlayer(Player *plr)
     //create score and add it to map, default values are set in constructor
     BattleGroundSVScore* sc = new BattleGroundSVScore;
     m_PlayerScores[plr->GetObjectGuid()] = sc;
+
+    if (GetStatus() != STATUS_IN_PROGRESS)
+        BlockMovement(plr);
 }
 
 void BattleGroundSV::RemovePlayer(Player* plr, ObjectGuid /*guid*/)
