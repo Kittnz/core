@@ -387,7 +387,7 @@ bool FlightPathMovementGenerator::Update(Player &player, uint32 const& /*diff*/)
     while (static_cast <int32>(i_currentNode) < pointId)
     {
         ++i_currentNode;
-        if ((*i_path)[i_currentNode].actionFlag & 4)
+        if (MovementInProgress() && (*i_path)[i_currentNode].actionFlag & 4)
         {
             // temporary hack 
             uint32 nextNode = i_currentNode + 4;
