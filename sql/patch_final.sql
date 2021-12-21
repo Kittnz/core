@@ -640,3 +640,15 @@ replace into item_template values
  '0', '0', '1', null);
 
  update creature_template set display_id1 = 12237 where entry = 49004;
+ 
+set @gossip_menu_id = 19000; set @magic_number = 13760;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Without Fort Wrynn at our command, we are vulnerable to enemy attacks.\n\nFind me once the fort has been secured.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 19001; set @magic_number = 13762;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I can sense the taint of the Infinite Dragonflight. Show me what you have learned.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
