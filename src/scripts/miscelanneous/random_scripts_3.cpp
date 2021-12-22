@@ -386,7 +386,7 @@ bool GossipSelect_npc_bessy(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        static const WorldLocation m_CowLevel(801, 16809.69F, 16794.09F, 65.36f, 3.70F);
+        static const WorldLocation m_CowLevel(801, 16649.712F, 16817.148F, 67.328f, 6.27F);
         pPlayer->TeleportTo(m_CowLevel);
     }
 
