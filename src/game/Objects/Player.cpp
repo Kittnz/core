@@ -8527,7 +8527,7 @@ void Player::SendInitWorldStates(uint32 zoneid) const
         case 2597:                                      // AV
         case 3277:                                      // WS
         case 3358:                                      // AB
-        case 12:                                        // SV
+        case 5023:                                      // SV
             if (BattleGround* bg = GetBattleGround())
                 bg->FillInitialWorldStates(data, count);
             break;
