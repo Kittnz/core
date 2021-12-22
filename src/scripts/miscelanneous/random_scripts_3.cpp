@@ -2314,9 +2314,39 @@ bool GossipSelect_npc_inunquaq(Player* pPlayer, Creature* pCreature, uint32 /*ui
     return true;
 }
 
+bool GOHello_go_moo_rune(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010866)
+    {
+         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Teleport me to Bessy", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+         pPlayer->SEND_GOSSIP_MENU(2010866, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_moo_rune(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010866)
+        {
+            static const WorldLocation m_bessy(0, -9128.736328F, -1050.399170F, 70.611626, 0.030956);
+            pPlayer->TeleportTo(m_bessy);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_moo_rune";
+    newscript->pGOHello = &GOHello_go_moo_rune;
+    newscript->pGOGossipSelect = &GOSelect_go_moo_rune;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_inunquaq";
