@@ -1591,7 +1591,7 @@ struct epochronos_boss_cotAI : public ScriptedAI
     {
         m_creature->PMonsterYell("We are infinite...");
 
-        if (GameObject* sandWall = m_creature->FindNearestGameObject(2010845, 75))
+        if (GameObject* sandWall = m_creature->FindNearestGameObject(2010865, 75))
             sandWall->AddObjectToRemoveList();
         if (GameObject* barrier1 = m_creature->FindNearestGameObject(180322, 75))
             barrier1->AddObjectToRemoveList();
@@ -2025,7 +2025,7 @@ struct chromie_boss_cotAI : public ScriptedAI
         if (GameObject* sandWall = m_creature->FindNearestGameObject(2002434, 50)) // remove large sand wall
             sandWall->AddObjectToRemoveList();
 
-        if (GameObject* ghostWall = m_creature->FindNearestGameObject(2010846, 50)) // remove ghost wall
+        if (GameObject* ghostWall = m_creature->FindNearestGameObject(2010866, 50)) // remove ghost wall
             ghostWall->AddObjectToRemoveList();
 
         for (int i = 0; i < timeRifts.size(); i++) // remove rifts
@@ -2408,7 +2408,7 @@ struct antnormi_cotAI : public ScriptedAI
         {
             DoCastSpellIfCan(m_creature->GetVictim(), SPELL_ENRAGE);
             enraged = true;
-            m_creature->PMonsterYell("We have come too far to be stopped, this ends now!");
+            m_creature->PMonsterYell("Let time undo you!");
             m_creature->PlayDirectMusic(30248);
         }
         else enrageTimer -= uiDiff;
@@ -2417,7 +2417,7 @@ struct antnormi_cotAI : public ScriptedAI
         {
             enraged = true;
             DoCastSpellIfCan(m_creature, SPELL_ENRAGE);
-            m_creature->PMonsterYell("We have come too far to be stopped, this ends now!");
+            m_creature->PMonsterYell("Let time undo you!");
             m_creature->PlayDirectMusic(30248);
         }
 
@@ -2433,7 +2433,7 @@ struct antnormi_cotAI : public ScriptedAI
     void EnterCombat(Unit*) override
     {
         m_creature->PlayDirectMusic(30246);
-        m_creature->PMonsterYell("You again?! So the others have failed to stop the lapdogs of the Bronze, pathetic. Time to take the matter to my own hands.");
+        m_creature->PMonsterYell("You again?! So the others have failed to stop the lapdogs of the Bronze, pathetic. Know that I am not like them, I have spent centuries in a paradox to attain this form. We are Infinite! Your journey ends here now, time will belong to US!");
     }
 };
 
