@@ -1411,3 +1411,337 @@ REPLACE INTO `creature_movement` VALUES (2562713, 12, -1896.22, 7324.88, 22.6928
 REPLACE INTO `creature_movement` VALUES (2562713, 13, -1912.54, 7361.19, 20.9275, 100, 0, 0, 0);
 REPLACE INTO `creature_movement` VALUES (2562713, 14, -1888.85, 7386.19, 18.1195, 100, 0, 0, 0);
 
+-- Butcher Pete, display ID 1731, level 45, faction 67, humanoid, weapon 10772
+-- Aerla Goldenmoon <Dockmaster>, display ID 3296, faction 80, level 55, greeting text : "We have many allies across the great sea, located far to the east within the Eastern Kingdoms. This dock leads toward the human city of Storwmind and the harbor located there. If you are looking to travel, this would be the boat to board\n\nIf it not here yet, simply wait, it shall arrive soon."
+-- NPC Dockmaster Nixx Oldfuse, rename to Nixx Oldfuse and add <Dockmaster> as subname, change level to 55, add greeting text : "We got some friends all the way across the world that are delivering us some good supplies. At the moment this port here is headed to Revantusk Village if you're looking to go all the way out to the Hinterlands."
+-- Tin'go <Dockmaster> , display ID 18721, faction 1495, level 55, greeting text : "This here boat will lead ye all the way to Sparkwater Port in Durotar, the goblins be needin' all sorts a things from us, and we're more then happy to supply them for weapons."
+-- Merk Boltratch <Zeppelin Master> , display ID 7338, faction 29, level 45, greeting text : "Me and my brother Tizak run this zeppelin route! We could certainly use some new parts to repair the thing soon, but making the trip through the Badlands has been stressful! This zeppelin here leads all the way to Orgrimmar, back to the heartland of the Horde.\n\n Careful when the zeppelin is coming in, it can be a close call!"
+-- Tizak Boltratch <Zeppelin Master>, display ID 7341 , faction 29, level 45, greeting text : "Heh, this old rustbucket doesn't steer the greatest. Damn is it hard getting it through the rough jagged landscape of the Badlands, but it's managed well enough thus far! If you're looking for an express ticket to Kargath, then there is no better route then on this old girl, the zeppelin is certainly a faithful one!\n\n Oh, and don't mind the bumpy ride, it needs some new parts, and doesn't really stop right."
+-- Razen Mudvalve <Zeppelin Master>, display ID 7182, faction 29, level 45, greeting text : "Hey there, you looking to head to the great plains of Mulgore? Well, then you're in luck, we set up a new route from Orgrimmar to Thunder Bluff, it's quite the scenic view, give it a go."
+-- Taklo Ringpipe <Zeppelin Master> , display ID 7210, faction 29, level 45 , greeting text : "Durotar is a hot, and sweltering place, that's for sure, I'm happy to be posted here in Thunder Bluff, with the nice cool breeze and the beautiful view!\n\n If you're wanting to head to Orgrimmar this zeppelin is stopping just outside of the city."
+-- Grimdar Firebrow <Mage Trainer> , display ID 10184 , faction 55, level 40, weapon 14836, greeting text : "Why, is there anything I can help you with? Unless you are seeking knowledge of the arcane, I may not be of assistance." , IS A MAGE TRAINER
+-- Tholdan Mountainheart <The Azurestone Order>, display ID 1834, faction 55, level 40, weapon 35, greeting text : "We dwarven mages are that of The Azurestone Order, long ago when the very caves of Ironforge were being mined, we came across an old, and rather magically potent stone. This stone was studied by the mages of Dalaran, and has been kept within our hands since that very day.\n\n It is with this stone that many of the first dwarven mages had gotten their footing within the realm of arcana. If you see any of our kin that are naturally gifted with magic, guide them here."
+-- Tyvadrius <Wardens of Time>, display ID 14887 , scale 1.3 , weapon 9475, greeting text : "It has been a long time since a mortal has walked these halls. As much as I have my distaste for you all, I understand that we require your aid."
+-- Grash, display ID 722, faction 59, scale 1.2, weapon 35
+-- N'ribbi, display ID 1420, faction neutral to both factions, UNATTACKABLE, level 40, greeting text : "<N'ribbi stares deep into your soul>.", ((needs to glow like a ghost or a shadow creature)) 
+-- Clampjaw, display ID 13589, level 44, scale 1.4, faction 16
+-- Bom'bay, change subname to <Witch Doctor>, change level to 40
+
+delete from creature_template where entry = 10578;
+delete from creature_template where entry = 91250;
+REPLACE INTO creature_template VALUES
+(10578, 9911, 0, 0, 0, 'Bom\'bay', 'Witch Doctor', 10578, 40, 40, 2017, 2017, 0, 0, 2325, 126, 1, 1, 1.147143, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 10578, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 10578, 0, 0, 0, 0, 524296, 0, ''),
+(91250, 7172, 0, 0, 0, 'Nixx Oldfuse', 'Dockmaster', 0, 55, 55, 3398, 3398, 0, 0, 4500, 1682, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 141, 170, 0, 248, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 91250, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60620, 1731, 0, 0, 0, 'Butcher Pete', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 67, 0, 1, 1.147143, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60620, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60621, 3296, 0, 0, 0, 'Aerla Goldenmoon', 'Dockmaster', 0, 55, 55, 3398, 3398, 0, 0, 4500, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 141, 170, 0, 248, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 60621, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60623, 18721, 0, 0, 0, 'Tin\'go', 'Dockmaster', 0, 55, 55, 3398, 3398, 0, 0, 4500, 1495, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 141, 170, 0, 248, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 60623, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60624, 7338, 0, 0, 0, 'Merk Boltratch', 'Zeppelin Master', 0, 45, 45, 2217, 2217, 0, 0, 2725, 29, 3, 1, 1.147143, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60624, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60625, 7341, 0, 0, 0, 'Tizak Boltratch', 'Zeppelin Master', 0, 45, 45, 2217, 2217, 0, 0, 2725, 29, 3, 1, 1.147143, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60625, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60626, 7182, 0, 0, 0, 'Razen Mudvalve', 'Zeppelin Master', 0, 45, 45, 2217, 2217, 0, 0, 2725, 29, 3, 1, 1.147143, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60626, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60627, 7210, 0, 0, 0, 'Taklo Ringpipe', 'Zeppelin Master', 0, 45, 45, 2217, 2217, 0, 0, 2725, 29, 3, 1, 1.147143, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60627, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60628, 10184, 0, 0, 0, 'Grimdar Firebrow', 'Mage Trainer', 0, 40, 40, 1752, 1752, 0, 0, 1890, 55, 19, 1, 1.14286, 1.15, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60629, 1834, 0, 0, 0, 'Tholdan Mountainheart', 'The Azurestone Order', 0, 40, 40, 1752, 1752, 0, 0, 1890, 55, 3, 1, 1.14286, 1.15, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60622, 14887, 0, 0, 0, 'Tyvadrius', 'Wardens of Time', 0, 55, 55, 3398, 3398, 0, 0, 4500, 35, 3, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 141, 170, 0, 248, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 60622, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60630, 722, 0, 0, 0, 'Grash', '', 0, 55, 55, 3398, 3398, 0, 0, 4500, 59, 3, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 141, 170, 0, 248, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 60630, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60631, 1420, 0, 0, 0, 'N\'ribbi', '', 0, 40, 40, 2017, 2017, 0, 0, 2325, 113, 3, 1, 1.147143, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60631, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60632, 13589, 0, 0, 0, 'Clampjaw', '', 0, 44, 44, 2117, 2117, 0, 0, 2625, 16, 0, 1, 1.147143, 1.4, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60632, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into creature_template_addon values (60631, 0, 0, 0, 0, 0, 0, 9617);
+update creature_template set npc_flags = 16388 where entry = 91413;
+
+set @equip_template = 20062; set @weapon_1 = 83279; set @weapon_2 = 0; set @creature = 49011;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20063; set @weapon_1 = 83262; set @weapon_2 = 0; set @creature = 49008;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20064; set @weapon_1 = 10772; set @weapon_2 = 0; set @creature = 60620;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20065; set @weapon_1 = 14836; set @weapon_2 = 0; set @creature = 60628;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20066; set @weapon_1 = 35; set @weapon_2 = 0; set @creature = 60629;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20067; set @weapon_1 = 9475; set @weapon_2 = 0; set @creature = 60622;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20068; set @weapon_1 = 35; set @weapon_2 = 0; set @creature = 60630;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41059; set @magic_number = 60621;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We have many allies across the great sea, located far to the east within the Eastern Kingdoms. This dock leads toward the human city of Storwmind and the harbor located there. If you are looking to travel, this would be the boat to board\n\nIf it not here yet, simply wait, it shall arrive soon.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41060; set @magic_number = 91250;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We got some friends all the way across the world that are delivering us some good supplies. At the moment this port here is headed to Revantusk Village if you\'re looking to go all the way out to the Hinterlands.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41061; set @magic_number = 60623;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'This here boat will lead ye all the way to Sparkwater Port in Durotar, the goblins be needin\' all sorts a things from us, and we\'re more then happy to supply them for weapons.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41062; set @magic_number = 60624;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Me and my brother Tizak run this zeppelin route! We could certainly use some new parts to repair the thing soon, but making the trip through the Badlands has been stressful! This zeppelin here leads all the way to Orgrimmar, back to the heartland of the Horde.\n\nCareful when the zeppelin is coming in, it can be a close call!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41063; set @magic_number = 60625;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Heh, this old rustbucket doesn\'t steer the greatest. Damn is it hard getting it through the rough jagged landscape of the Badlands, but it\'s managed well enough thus far! If you\'re looking for an express ticket to Kargath, then there is no better route then on this old girl, the zeppelin is certainly a faithful one!\n\nOh, and don\'t mind the bumpy ride, it needs some new parts, and doesn\'t really stop right.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41064; set @magic_number = 60626;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hey there, you looking to head to the great plains of Mulgore? Well, then you\'re in luck, we set up a new route from Orgrimmar to Thunder Bluff, it\'s quite the scenic view, give it a go.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41065; set @magic_number = 60627;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Durotar is a hot, and sweltering place, that\'s for sure, I\'m happy to be posted here in Thunder Bluff, with the nice cool breeze and the beautiful view!\n\nIf you\'re wanting to head to Orgrimmar this zeppelin is stopping just outside of the city.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41066; set @magic_number = 60628;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why, is there anything I can help you with? Unless you are seeking knowledge of the arcane, I may not be of assistance.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41067; set @magic_number = 60629;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We dwarven mages are that of The Azurestone Order, long ago when the very caves of Ironforge were being mined, we came across an old, and rather magically potent stone. This stone was studied by the mages of Dalaran, and has been kept within our hands since that very day.\n\nIt is with this stone that many of the first dwarven mages had gotten their footing within the realm of arcana. If you see any of our kin that are naturally gifted with magic, guide them here.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41068; set @magic_number = 60622;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It has been a long time since a mortal has walked these halls. As much as I have my distaste for you all, I understand that we require your aid.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41069; set @magic_number = 60631;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<N\'ribbi stares deep into your soul>.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41070; set @magic_number = 2010866;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Glows with power>.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into item_template values
+ ('60492', '4', '2', 'Graypaw Leggings', '', '11369', '2', '0', '1', '2952', '738', '7', '-1', '-1', '21',
+ '16', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '4', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '71', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '55', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60493', '4', '1', 'Graypaw Boots', '', '18933', '2', '0', '1', '1664', '416', '8', '-1', '-1', '21',
+ '16', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '4', '7', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '30', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+delete from creature_loot_template where entry = 91799;
+replace into creature_loot_template values
+(91799,60485,100,1,1,1,0),
+(91799,60486,25,4,1,1,0),
+(91799,60490,50,5,1,1,0),
+(91799,60489,50,5,1,1,0),
+(91799,60488,50,6,1,1,0),
+(91799,60487,50,6,1,1,0),
+(91799,60491,100,2,1,1,0),
+(91799,51261,100,3,1,1,0);
+
+update creature set spawntimesecsmin = 19200 where id = 91990;
+update creature set spawntimesecsmax = 19200 where id = 91990;
+update creature_template set loot_id = 91990 where entry = 91990;
+replace into creature_loot_template values
+(91990,60492,50,1,1,1,0),
+(91990,60493,50,1,1,1,0);
+
+replace into npc_vendor values
+(92221, 5083, 0, 0, 0, 0),
+(92221, 83406, 1, 7200, 0, 0),
+(92221, 83407, 1, 7200, 0, 0),
+(92221, 83408, 1, 7200, 0, 0),
+(92221, 83409, 1, 7200, 0, 0);
+
+REPLACE INTO npc_trainer VALUES
+(60628, 1035, 2000, 0, 0, 20),
+(60628, 1142, 100, 0, 0, 4),
+(60628, 1168, 200, 0, 0, 8),
+(60628, 1173, 100, 0, 0, 6),
+(60628, 1174, 400, 0, 0, 10),
+(60628, 1176, 1800, 0, 0, 18),
+(60628, 1191, 200, 0, 0, 8),
+(60628, 1194, 400, 0, 0, 10),
+(60628, 1196, 2000, 0, 0, 20),
+(60628, 1198, 600, 0, 0, 12),
+(60628, 1200, 2000, 0, 0, 20),
+(60628, 1210, 7000, 0, 0, 28),
+(60628, 1211, 900, 0, 0, 14),
+(60628, 1214, 8000, 0, 0, 30),
+(60628, 1225, 5000, 0, 0, 26),
+(60628, 1228, 15000, 0, 0, 40),
+(60628, 1241, 5000, 0, 0, 26),
+(60628, 1249, 100, 0, 0, 6),
+(60628, 1250, 600, 0, 0, 12),
+(60628, 1251, 3000, 0, 0, 22),
+(60628, 1266, 600, 0, 0, 12),
+(60628, 1267, 1800, 0, 0, 18),
+(60628, 1467, 900, 0, 0, 14),
+(60628, 1472, 10, 0, 0, 1),
+(60628, 1473, 900, 0, 0, 14),
+(60628, 1474, 7000, 0, 0, 28),
+(60628, 1475, 18000, 0, 0, 42),
+(60628, 1481, 2000, 0, 0, 20),
+(60628, 1811, 3000, 0, 0, 22),
+(60628, 1830, 200, 0, 0, 24),
+(60628, 2124, 1500, 0, 0, 16),
+(60628, 2125, 4000, 0, 0, 24),
+(60628, 2141, 100, 0, 0, 6),
+(60628, 2142, 900, 0, 0, 14),
+(60628, 2143, 3000, 0, 0, 22),
+(60628, 2858, 1500, 0, 0, 16),
+(60628, 3142, 1800, 0, 0, 18),
+(60628, 3553, 14000, 0, 0, 38),
+(60628, 3576, 4000, 0, 0, 24),
+(60628, 5146, 200, 0, 0, 8),
+(60628, 5147, 1500, 0, 0, 16),
+(60628, 5148, 4000, 0, 0, 24),
+(60628, 5499, 2000, 0, 0, 20),
+(60628, 5507, 100, 0, 0, 4),
+(60628, 5565, 400, 0, 0, 10),
+(60628, 5566, 2000, 0, 0, 20),
+(60628, 6121, 13000, 0, 0, 34),
+(60628, 6128, 8000, 0, 0, 30),
+(60628, 6130, 10000, 0, 0, 32),
+(60628, 6132, 15000, 0, 0, 40),
+(60628, 6142, 7000, 0, 0, 28),
+(60628, 6144, 3000, 0, 0, 22),
+(60628, 6493, 600, 0, 0, 12),
+(60628, 7323, 2000, 0, 0, 20),
+(60628, 8403, 4000, 0, 0, 24),
+(60628, 8404, 8000, 0, 0, 30),
+(60628, 8405, 13000, 0, 0, 36),
+(60628, 8409, 5000, 0, 0, 26),
+(60628, 8410, 10000, 0, 0, 32),
+(60628, 8411, 14000, 0, 0, 38),
+(60628, 8414, 8000, 0, 0, 30),
+(60628, 8415, 14000, 0, 0, 38),
+(60628, 8420, 10000, 0, 0, 32),
+(60628, 8421, 15000, 0, 0, 40),
+(60628, 8425, 10000, 0, 0, 32),
+(60628, 8426, 15000, 0, 0, 40),
+(60628, 8428, 13000, 0, 0, 36),
+(60628, 8440, 3000, 0, 0, 22),
+(60628, 8441, 8000, 0, 0, 30),
+(60628, 8442, 14000, 0, 0, 38),
+(60628, 8447, 7000, 0, 0, 28),
+(60628, 8448, 12000, 0, 0, 34),
+(60628, 8449, 15000, 0, 0, 40),
+(60628, 8452, 4000, 0, 0, 24),
+(60628, 8453, 13000, 0, 0, 36),
+(60628, 8456, 8000, 0, 0, 30),
+(60628, 8459, 8000, 0, 0, 30),
+(60628, 8460, 15000, 0, 0, 40),
+(60628, 8463, 10000, 0, 0, 32),
+(60628, 8464, 18000, 0, 0, 42),
+(60628, 8493, 12000, 0, 0, 34),
+(60628, 8496, 7000, 0, 0, 28),
+(60628, 8497, 13000, 0, 0, 36),
+(60628, 10055, 28000, 0, 0, 48),
+(60628, 10056, 40000, 0, 0, 58),
+(60628, 10141, 15000, 0, 0, 40),
+(60628, 10142, 32000, 0, 0, 50),
+(60628, 10146, 18000, 0, 0, 42),
+(60628, 10147, 35000, 0, 0, 52),
+(60628, 10152, 18000, 0, 0, 42),
+(60628, 10153, 28000, 0, 0, 48),
+(60628, 10154, 36000, 0, 0, 54),
+(60628, 10155, 42000, 0, 0, 60),
+(60628, 10158, 38000, 0, 0, 56),
+(60628, 10162, 18000, 0, 0, 42),
+(60628, 10163, 32000, 0, 0, 50),
+(60628, 10164, 40000, 0, 0, 58),
+(60628, 10171, 18000, 0, 0, 42),
+(60628, 10172, 36000, 0, 0, 54),
+(60628, 10175, 28000, 0, 0, 48),
+(60628, 10176, 42000, 0, 0, 60),
+(60628, 10178, 35000, 0, 0, 52),
+(60628, 10182, 23000, 0, 0, 44),
+(60628, 10183, 32000, 0, 0, 50),
+(60628, 10184, 38000, 0, 0, 56),
+(60628, 10188, 23000, 0, 0, 44),
+(60628, 10189, 35000, 0, 0, 52),
+(60628, 10190, 42000, 0, 0, 60),
+(60628, 10194, 23000, 0, 0, 44),
+(60628, 10195, 35000, 0, 0, 52),
+(60628, 10196, 42000, 0, 0, 60),
+(60628, 10198, 26000, 0, 0, 46),
+(60628, 10200, 36000, 0, 0, 54),
+(60628, 10203, 26000, 0, 0, 46),
+(60628, 10204, 36000, 0, 0, 54),
+(60628, 10208, 26000, 0, 0, 46),
+(60628, 10209, 35000, 0, 0, 52),
+(60628, 10210, 40000, 0, 0, 58),
+(60628, 10213, 28000, 0, 0, 48),
+(60628, 10214, 38000, 0, 0, 56),
+(60628, 10217, 28000, 0, 0, 48),
+(60628, 10218, 38000, 0, 0, 56),
+(60628, 10221, 32000, 0, 0, 50),
+(60628, 10222, 42000, 0, 0, 60),
+(60628, 10224, 32000, 0, 0, 50),
+(60628, 10226, 42000, 0, 0, 60),
+(60628, 10231, 36000, 0, 0, 54),
+(60628, 12827, 2000, 0, 0, 20),
+(60628, 12828, 15000, 0, 0, 40),
+(60628, 12829, 42000, 0, 0, 60),
+(60628, 13011, 400, 0, 0, 30),
+(60628, 13012, 650, 0, 0, 36),
+(60628, 13014, 900, 0, 0, 42),
+(60628, 13015, 14000, 0, 0, 48),
+(60628, 13016, 1800, 0, 0, 54),
+(60628, 13017, 1890, 0, 0, 60),
+(60628, 13023, 650, 0, 0, 36),
+(60628, 13024, 1150, 0, 0, 44),
+(60628, 13025, 1750, 0, 0, 52),
+(60628, 13026, 2100, 0, 0, 60),
+(60628, 13037, 1170, 0, 0, 46),
+(60628, 13038, 1750, 0, 0, 52),
+(60628, 13039, 2000, 0, 0, 58),
+(60628, 22784, 28000, 0, 0, 46),
+(60628, 22785, 40000, 0, 0, 58),
+(60628, 28403, 2000, 0, 0, 20);
+
+replace into gameobject_template values
+(2010865,2,25866,'Azurestone',0,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
+(2010866, 2, 25866, 'Moo Rune', 0, 32, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_moo_rune');
