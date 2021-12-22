@@ -119,7 +119,7 @@ bool GossipHello_SV_herald(Player* pPlayer, Creature* pCreature)
 
                     if (sparkCount)
                     {
-                        std::string text = "I'm bringing " + std::to_string(sparkCount) + " Time Sparks";
+                        std::string text = "I found " + std::to_string(sparkCount) + " Time Sparks, does this help?";
                         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, text.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
                     }
                 }

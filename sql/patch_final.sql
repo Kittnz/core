@@ -1745,3 +1745,5 @@ REPLACE INTO npc_trainer VALUES
 replace into gameobject_template values
 (2010865,2,25866,'Azurestone',0,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
 (2010866,2,25866,'Moo Rune',0,32,1.4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'go_moo_rune');
+
+update gameobject_template set name = 'Banner' where entry = 180087;
