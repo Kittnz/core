@@ -69,6 +69,8 @@ void BattleGroundSV::Update(uint32 diff)
                     CreateBanner(node, BG_SV_NODE_TYPE_OCCUPIED, teamIndex, true);
                     NodeOccupied(node, (teamIndex == 0) ? ALLIANCE : HORDE);
 
+                    RewardHonorToTeam(35, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
+
                     UpdateNodeWorldState(node);
 
                     // Message to chatlog
@@ -106,7 +108,7 @@ void BattleGroundSV::Update(uint32 diff)
             if (m_lastTick[team] > 1*MINUTE*IN_MILLISECONDS)
             {
                 m_lastTick[team] -= 1 * MINUTE * IN_MILLISECONDS;
-                m_resources[team] += BG_SV_CaptureNodesSparkTicks[nodesCount];
+                AddTeamSparks((TeamId)team, BG_SV_CaptureNodesSparkTicks[nodesCount]);
             }
         }
     }
@@ -448,8 +450,6 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
             CreateBanner(node, BG_SV_NODE_TYPE_OCCUPIED, teamIndex, true);
             m_NodeTimers[node] = 0;
             NodeOccupied(node, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
-
-            RewardHonorToTeam(35, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
 
             UpdateNodeWorldState(node);
 
