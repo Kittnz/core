@@ -144,7 +144,7 @@ void BattleGroundSV::StartingEventOpenDoors()
     for (auto& itr : GetPlayers())
     {
         if (Player* plr = sObjectMgr.GetPlayer(itr.first))
-            BlockMovement(plr, false);
+            plr->SetRooted(false);
     }
 
     // spawn neutral banners
@@ -176,7 +176,7 @@ void BattleGroundSV::AddPlayer(Player *plr)
     m_PlayerScores[plr->GetObjectGuid()] = sc;
 
     if (GetStatus() != STATUS_IN_PROGRESS)
-        BlockMovement(plr);
+        plr->SetRooted(true);
 }
 
 void BattleGroundSV::RemovePlayer(Player* plr, ObjectGuid /*guid*/)
@@ -185,6 +185,8 @@ void BattleGroundSV::RemovePlayer(Player* plr, ObjectGuid /*guid*/)
     {
         uint32 sparkCount = plr->GetItemCount(81390);
         plr->DestroyItemCount(81390, sparkCount, true, false, true);
+
+        plr->SetRooted(false);
     }
     else
     {
@@ -346,6 +348,12 @@ void BattleGroundSV::Reset()
 
 void BattleGroundSV::EndBattleGround(Team winner)
 {
+    Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
+    // rewards
+    RewardReputationToTeam(1007, 50, winner);
+    RewardHonorToTeam(198, winner);
+    RewardHonorToTeam(65, loser);
+
     BattleGround::EndBattleGround(winner);
 }
 
@@ -440,6 +448,8 @@ void BattleGroundSV::EventPlayerClickedOnFlag(Player* source, GameObject* /*targ
             CreateBanner(node, BG_SV_NODE_TYPE_OCCUPIED, teamIndex, true);
             m_NodeTimers[node] = 0;
             NodeOccupied(node, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
+
+            RewardHonorToTeam(35, (teamIndex == BG_TEAM_ALLIANCE) ? ALLIANCE : HORDE);
 
             UpdateNodeWorldState(node);
 

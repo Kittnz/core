@@ -6,9 +6,7 @@ SDCategory: BG
 EndScriptData */
 
 #include "scriptPCH.h"
-
-// For testing!
-constexpr uint8 SPARK_MAX_COUNT = 10;
+#include "World.h"
 
 enum SV_Spells
 {
@@ -112,15 +110,21 @@ bool GossipHello_SV_herald(Player* pPlayer, Creature* pCreature)
     {
         if (BattleGroundSV* bg = dynamic_cast<BattleGroundSV*>(bgMap->GetBG()))
         {
-            if (bg->GetStatus() == STATUS_IN_PROGRESS && bg->GetHeraldControlledTeam() == pPlayer->GetTeam() && !bg->IsGeneralsActive())
+            if (bg->GetStatus() == STATUS_IN_PROGRESS && !bg->IsGeneralsActive())
             {
-                uint32 sparkCount = pPlayer->GetItemCount(81390);
-
-                if (sparkCount)
+                if (bg->GetHeraldControlledTeam() == pPlayer->GetTeam())
                 {
-                    std::string text = "I'm bringing " + std::to_string(sparkCount) + " Time Sparks";
-                    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, text.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                    gossipTextId = 13762;
+                    uint32 sparkCount = pPlayer->GetItemCount(81390);
+
+                    if (sparkCount)
+                    {
+                        std::string text = "I'm bringing " + std::to_string(sparkCount) + " Time Sparks";
+                        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, text.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+                    }
                 }
+                else
+                    gossipTextId = 13760;
             }
         }
     }
@@ -146,8 +150,9 @@ bool GossipSelect_SV_herald(Player* player, Creature* creature, uint32 sender, u
 
                     // check here
                     uint32 totalSparks = bg->GetTeamSparks(TEAM_ALLIANCE) + bg->GetTeamSparks(TEAM_HORDE);
+                    uint32 maxSparks = sWorld.getConfig(CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT);
 
-                    if (totalSparks >= SPARK_MAX_COUNT)
+                    if (totalSparks >= maxSparks)
                         bg->StartFinalEvent();
 
                     // if we use npc flag gossip and created gossip with action bg start
