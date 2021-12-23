@@ -1870,8 +1870,152 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 update creature_template set display_id1 = 901 where entry = 60631;
 
+-- replace NPC Grash with level 12
+-- Duke Tavinrad, display ID 18684 (Is a custom display ID so make sure it works), level 61 elite, faction 67, weapon 1 5267, weapon2 12932
+-- Custodian A-01 - Displayid 18693 - faction 1688 - scale 2, Wielding item 83093
+-- Earthshaper Thoron - Displayid 19694 - faction 1688 - Repair service and vendor
+
 delete from creature_template where entry = 60630;
 REPLACE INTO creature_template VALUES
-(60630, 722, 0, 0, 0, 'Grash', '', 0, 12, 12, 247, 247, 0, 0, 573, 59, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 26, 30, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 60630, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(60630, 722, 0, 0, 0, 'Grash', '', 0, 12, 12, 247, 247, 0, 0, 573, 59, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 26, 30, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 60630, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60633, 18684, 0, 0, 0, 'Duke Tavinrad', '', 0, 61, 61, 50300, 50300, 0, 0, 3791, 67, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 873, 1039, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 60633, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60634, 18693, 0, 0, 0, 'Custodian A-01', '', 0, 25, 25, 712, 712, 0, 0, 1009, 1688, 3, 1, 1.14286, 2, 18, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60635, 19694, 0, 0, 0, 'Earthshaper Thoron', '', 0, 25, 25, 712, 712, 0, 0, 1009, 1688, 16390, 1, 1.14286, 2, 18, 5, 0, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
-18680
+set @equip_template = 20069; set @weapon_1 = 5267; set @weapon_2 = 12932; set @creature = 60633;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20070; set @weapon_1 = 83093; set @weapon_2 = 0; set @creature = 60634;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+update broadcast_text set male_text = 'Well, you\'ve been a much more friendly face to us, not even our own comrades in arms were willing to simply come up and talk.\n\nI thought we would be lauded as heroes, or at the least returned to with open arms, and here we are, treated as villains after surviving the expedition to the north on behalf of the crusade. It sickens me to know how many died to bring the fight to the undead just for things to have fallen apart as they have here.\n\nEither way, apologies for my rudeness, I am Captain Haroldson, of the Embertide in the Scarlet Fleet, or at the least, what is left of it, anyway, after everything that happened with that doomed expedition.'
+where entry = 60531;
+
+REPLACE INTO creature_display_info_addon VALUES
+(18680, 0, 0, 2, 0),
+(18693, 0, 0, 2, 0),
+(19694, 0, 0, 2, 0),
+(18684, 0, 0, 2, 0);
+
+-- Fix respawn timers for spawned creatures.
+update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where id in (60523, 60524);
+
+-- More Vault Items
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60500, 'Gloves of Atonement', '', 4, 1, 7, 3, 5928, 1, 60, 0, -1, -1, 49623, 12405, 10, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 30, 58, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 5, 11, 6, 8, 9315, 1, 0, 0, 0, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (60501, 'Whip of Encouragement', '', 4, 0, 1, 3, 66153, 1, 60, 1, -1, -1, 81033, 20258, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 13680, 1, 0, 1, -1, 0, -1, 13587, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, random_property, required_reputation_faction, required_reputation_rank) values (60502, 'Unstable Belt', '', 4, 2, 8, 3, 16947, 1, 60, 0, -1, -1, 64246, 16061, 6, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 35, 122, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 8671, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60503, 'Leggings of Alacrity', '', 4, 3, 5, 3, 685, 1, 60, 0, -1, -1, 156428, 39107, 7, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 90, 334, 0, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 3, 26, 7, 16, 13669, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60504, 'Dreadskin Gloves', '', 4, 2, 8, 3, 0, 1, 60, 0, -1, -1, 63953, 15988, 10, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 35, 144, 0, 0, 65, 0, 49, 0, 0, 0, 0, 5, 0, 3, 10, 7, 16, 13669, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Assigning Item Sets to Items
+update item_template set set_id = 600 where entry = 81061;
+update item_template set set_id = 600 where entry = 81062;
+update item_template set set_id = 600 where entry = 81063;
+update item_template set set_id = 600 where entry = 81064;
+update item_template set set_id = 600 where entry = 81065;
+update item_template set set_id = 600 where entry = 81066;
+
+update item_template set set_id = 601 where entry = 60287;
+update item_template set set_id = 601 where entry = 60288;
+update item_template set set_id = 601 where entry = 60289;
+update item_template set set_id = 601 where entry = 60290;
+update item_template set set_id = 601 where entry = 60291;
+update item_template set set_id = 601 where entry = 60292;
+
+update item_template set set_id = 602 where entry = 83400;
+update item_template set set_id = 602 where entry = 83401;
+update item_template set set_id = 602 where entry = 83402;
+update item_template set set_id = 602 where entry = 83403;
+update item_template set set_id = 602 where entry = 83404;
+update item_template set set_id = 602 where entry = 83405;
+
+update item_template set set_id = 603 where entry = 83410;
+update item_template set set_id = 603 where entry = 83411;
+update item_template set set_id = 603 where entry = 83412;
+update item_template set set_id = 603 where entry = 83413;
+update item_template set set_id = 603 where entry = 83414;
+update item_template set set_id = 603 where entry = 83415;
+
+update item_template set set_id = 604 where entry = 83280;
+update item_template set set_id = 604 where entry = 83281;
+update item_template set set_id = 604 where entry = 83282;
+update item_template set set_id = 604 where entry = 83283;
+update item_template set set_id = 604 where entry = 83284;
+update item_template set set_id = 604 where entry = 83285;
+
+update item_template set set_id = 605 where entry = 83286;
+update item_template set set_id = 605 where entry = 83287;
+update item_template set set_id = 605 where entry = 83288;
+update item_template set set_id = 605 where entry = 83289;
+update item_template set set_id = 605 where entry = 83290;
+update item_template set set_id = 605 where entry = 83291;
+
+update item_template set set_id = 606 where entry = 83292;
+update item_template set set_id = 606 where entry = 83293;
+update item_template set set_id = 606 where entry = 83294;
+update item_template set set_id = 606 where entry = 83295;
+update item_template set set_id = 606 where entry = 83296;
+update item_template set set_id = 606 where entry = 83297;
+
+update item_template set set_id = 607 where entry = 65000;
+update item_template set set_id = 607 where entry = 65001;
+update item_template set set_id = 607 where entry = 65002;
+update item_template set set_id = 607 where entry = 15047;
+
+-- Black Bride DROP
+delete from creature_loot_template where entry = 80850;
+replace into creature_loot_template values
+(80850, 60408, 20, 1, 1, 1, 0),
+(80850, 60409, 20, 1, 1, 1, 0),
+(80850, 60410, 20, 1, 1, 1, 0),
+(80850, 60411, 20, 1, 1, 1, 0),
+(80850, 60436, 20, 1, 1, 1, 0);
+
+-- Tham'grarr DROP
+delete from creature_loot_template where entry = 80852;
+replace into creature_loot_template values
+(80852, 60415, 16.6, 1, 1, 1, 0),
+(80852, 60416, 16.6, 1, 1, 1, 0),
+(80852, 60417, 16.6, 1, 1, 1, 0),
+(80852, 60424, 16.6, 1, 1, 1, 0),
+(80852, 60435, 16.6, 1, 1, 1, 0),
+(80852, 60502, 17, 1, 1, 1, 0);
+
+-- Aszosh Grimflame DROP
+delete from creature_loot_template where entry = 80853;
+replace into creature_loot_template values
+(80853, 60418, 16.6, 1, 1, 1, 0),
+(80853, 60419, 16.6, 1, 1, 1, 0),
+(80853, 60425, 16.6, 1, 1, 1, 0),
+(80853, 60434, 16.6, 1, 1, 1, 0),
+(80853, 60431, 16.6, 1, 1, 1, 0),
+(80853, 60504, 17, 1, 1, 1, 0);
+
+-- Damian DROP
+delete from creature_loot_template where entry = 80854;
+replace into creature_loot_template values
+(80854, 60421, 20, 1, 1, 1, 0),
+(80854, 60500, 20, 1, 1, 1, 0),
+(80854, 60423, 20, 1, 1, 1, 0),
+(80854, 60427, 20, 1, 1, 1, 0),
+(80854, 60433, 20, 1, 1, 1, 0),
+(80854, 60422, 1, 2, 1, 1, 0);
+
+-- Volkan Cruelblade DROP
+delete from creature_loot_template where entry = 80851;
+replace into creature_loot_template values
+(80851, 60412, 20, 1, 1, 1, 0),
+(80851, 60413, 20, 1, 1, 1, 0),
+(80851, 60414, 20, 1, 1, 1, 0),
+(80851, 60432, 20, 1, 1, 1, 0),
+(80851, 60503, 20, 1, 1, 1, 0);
+
+-- Arc'tiras DROP
+update creature_template set loot_id = 93107 where entry = 93107;
+replace into creature_loot_template values
+(93107, 60420, 50, 1, 1, 1, 0),
+(93107, 60429, 50, 1, 1, 1, 0),
+(93107, 60430, 33, 2, 1, 1, 0),
+(93107, 60426, 33, 2, 1, 1, 0),
+(93107, 60501, 34, 2, 1, 1, 0);
