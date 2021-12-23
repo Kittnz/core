@@ -1763,3 +1763,32 @@ update creature_template set script_name = 'npc_tholdan_mountainheart' where ent
 delete from creature_template where entry = 60347;
 replace into creature_template (entry, name, display_id1) values (60347, 'quest_40338_dummy_triger', 328);
 
+-- The Azurestone Order --
+delete from quest_template where entry = 40339;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40338,40339,2,1537,12,10,0,0,'The Azurestone Order','The Azurestone Order is as old as this city, it is on the shoulders of brave dwarves that it has managed to survive so long. A test of bravery is in order to prove that you are as strong willed as those who have come before you.\n\nTo the southeast is the Gol\'Bolar Quarry, recently infested with troggs, and led by a vile trogg named Grash who uses primitive magic to lead his minions. Travel there, and from him gather his staff.\n\nIf you manage to slay him, it will no doubt be a showing of both your bravery, and your natural prowess with the arcane gift.','Slay Grash and bring his staff to Tholdan Mountainheart in Ironforge.','Have you braved the Gol\'Bolar Quarry?','I am impressed, it seems we have another who is willing to join. Your bravery has been noted, and your excellence with magic is evident in completing this task. We dwarven mages do not shy from assisting the kingdom.\n\nAs a reward for your bravery, please, take this, as a token of joining The Azurestone Order.',60494,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,840,47,150,0,0,0,0,0,0,0,0,0,60495,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60629, 40339);
+replace into creature_involvedrelation (id, quest) values (60629, 40339);
+
+update quest_template set questflags = 512 where entry = 40339;
+update quest_template set requiredraces = 4 where entry = 40339;
+update quest_template set requiredclasses = 128 where entry = 40339;
+
+delete from item_template where entry = 60494;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60494,878,'Grash\'s Staff',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60494;
+replace into creature_loot_template values
+(60630,60494,-100,1,1,1,0);
+
+replace into item_template values
+ ('60495', '2', '10', 'Powered Iron Staff', '', '20429', '2', '0', '1', '1220', '305', '17', '128', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '2', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
+ '0', '16', '25', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
