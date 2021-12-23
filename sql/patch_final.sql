@@ -1,3 +1,14 @@
+-- Reserved.
+-- quest_template			40000-40200
+-- creature_template		60300-60500
+-- gameobject_template		2010700-2010900
+-- item_template			60000-60200
+-- gossip_menu				41000-43000
+-- creature_equip_template	20000-21000
+-- broadcast_text			30000-31000
+-- creature_ai_events		2200000-2201000
+-- creature_ai_scripts		2200000-2201000
+
 replace into mangos_string values('10051','The battle for Sunnyglade Valley begins in 1 minute.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 replace into mangos_string values('10052','The battle for Sunnyglade Valley begins in 30 seconds. Prepare yourselves!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 replace into mangos_string values('10053','Let the battle for Sunnyglade Valley begin!',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
@@ -1543,12 +1554,6 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, '<N\'ribbi
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-set @gossip_menu_id = 41070; set @magic_number = 2010866;
-replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Glows with power>.'); 
-replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
-
 replace into item_template values
  ('60492', '4', '2', 'Graypaw Leggings', '', '11369', '2', '0', '1', '2952', '738', '7', '-1', '-1', '21',
  '16', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '4', '1',
@@ -1742,10 +1747,6 @@ REPLACE INTO npc_trainer VALUES
 (60628, 22785, 40000, 0, 0, 58),
 (60628, 28403, 2000, 0, 0, 20);
 
-replace into gameobject_template values
-(2010865,2,25866,'Azurestone',0,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
-(2010866,2,25866,'Moo Rune',0,32,1.4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'go_moo_rune');
-
 update gameobject_template set name = 'Banner' where entry = 180087;
 update area_template set zone_id = 0 where entry = 5023;
 
@@ -1854,3 +1855,15 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
+
+update creature_template set rank = 1 where entry = 60619;
+
+replace into gameobject_template values
+(2010798,2,25866,'Azurestone',0,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
+(2010799,2,24515,'Moo Rune',0,32,1.4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'go_moo_rune');
+
+set @gossip_menu_id = 41070; set @magic_number = 2010799;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Glows with power>.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;

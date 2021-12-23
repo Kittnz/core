@@ -2316,10 +2316,10 @@ bool GossipSelect_npc_inunquaq(Player* pPlayer, Creature* pCreature, uint32 /*ui
 
 bool GOHello_go_moo_rune(Player* pPlayer, GameObject* pGo)
 {
-    if (pGo->GetEntry() == 2010866)
+    if (pGo->GetEntry() == 2010799)
     {
          pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Teleport me to Bessy", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-         pPlayer->SEND_GOSSIP_MENU(2010866, pGo->GetGUID());
+         pPlayer->SEND_GOSSIP_MENU(2010799, pGo->GetGUID());
     }
     return true;
 }
@@ -2328,7 +2328,7 @@ bool GOSelect_go_moo_rune(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pGo->GetEntry() == 2010866)
+        if (pGo->GetEntry() == 2010799)
         {
             static const WorldLocation m_bessy(0, -9128.736328F, -1050.399170F, 70.611626, 0.030956);
             pPlayer->TeleportTo(m_bessy);
