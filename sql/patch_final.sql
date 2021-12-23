@@ -1810,3 +1810,47 @@ replace into creature_involvedrelation (id, quest) values (80943, 40341);
 
 update quest_template set specialflags = 1 where entry = 40341;
 
+-- The Bronze Betrayal --
+delete from quest_template where entry = 40342;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40342,2,1941,60,58,0,0,'The Bronze Betrayal','Long ago I was tasked with the defence of the time ways, me and another took our oaths together. I dare not speak their name, for they are a traitor to the Bronze Dragonflight, and now consort with the Infinite. They work against everything they vowed to upkeep, and are actively destroying all of our work.\n\nThey go by the name Chronar, a twisted husk of what they once used to be. Prided by the values of our kin, and our honor, but no longer.\n\nVenture into the Black Morass, and find Chronar, bring me his vile head as proof, and I shall reward you with a gift most precious to me.','Slay Chronar, and bring his head to Tyvadrius in the Caverns of Time.','Chronar is the most foul of traitors, hunt him.','A part of my heart is put to ease, but even having his trecherous head does not repair the damage his betrayal caused me. I thank you greatly for putting this to rest, here, take this, as a token of my gratitude.',60496,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1007,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60497,1,60498,1,60499,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60622, 40342);
+replace into creature_involvedrelation (id, quest) values (60622, 40342);
+
+delete from item_template where entry = 60496;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60496,31434,'Head of Chronar',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60496;
+replace into creature_loot_template values
+(65113,60496,-100,10,1,1,0);
+
+replace into item_template values
+ ('60497', '4', '0', 'Pendant of Tyvadrius', '', '9857', '3', '0', '1', '196420', '49105', '2', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '8', '6', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '21626', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60498', '2', '6', 'Halberd of the Bronze Defender', '', '22209', '3', '0', '1', '362456', '90614', '17', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '24', '3', '8',
+ '7', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3600', '0',
+ '0', '162', '258', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '100', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60499', '4', '0', 'Ring of Tyvadrius', '', '9836', '3', '0', '1', '183224', '45806', '11', '-1', '-1', '65',
+ '60', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '18', '7', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
