@@ -190,6 +190,12 @@ void PlayerTaxi::LoadTaxiMask(const char* data)
         // load and set bits only for existing taxi nodes
         m_taximask[index] = sTaxiNodesMask[index] & uint32(atol((*iter).c_str()));
     }
+
+    // Temporary (we all know it's a lie) hack to open joined nodes for new players:
+    if (IsTaximaskNodeKnown(18) && !IsTaximaskNodeKnown(183)) SetTaximaskNode(183); // Gilijim
+    if (IsTaximaskNodeKnown(19) && !IsTaximaskNodeKnown(182)) SetTaximaskNode(182); // Lapidis
+    if (IsTaximaskNodeKnown(7)  && !IsTaximaskNodeKnown(175)) SetTaximaskNode(175); // Hawk's Vigil
+    if (IsTaximaskNodeKnown(6)  && !IsTaximaskNodeKnown(176)) SetTaximaskNode(176); // Ironforge Airfields
 }
 
 void PlayerTaxi::AppendTaximaskTo(ByteBuffer& data, bool all)
