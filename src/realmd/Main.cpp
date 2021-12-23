@@ -33,6 +33,8 @@
 #include "SystemConfig.h"
 #include "revision.h"
 #include "Util.h"
+#include "PatchLimiter.hpp"
+
 #include <openssl/opensslv.h>
 #include <openssl/crypto.h>
 
@@ -62,6 +64,8 @@ bool stopEvent = false;                                     ///< Setting it to t
 DatabaseType LoginDatabase;                                 ///< Accessor to the realm server database
 
 int32 PatchHandlerKBytesDownloadLimit = 1024 * 1024; // 1024 Mb/second
+
+uint64_t MaxDataPerSecond = 1024 * 1024 * 1024; // ^
 
 /// Print out the usage string for this program on the console.
 void usage(const char *prog)
@@ -321,9 +325,12 @@ extern int main(int argc, char **argv)
     {
         // dont move this outside the loop, the reactor will modify it
         ACE_Time_Value interval(0, 100000);
+        auto start = std::chrono::high_resolution_clock::now();
 
         if (ACE_Reactor::instance()->run_reactor_event_loop(interval) == -1)
             break;
+
+        sPatchLimiter->Update(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count());
 
         if( (++loopCounter) == numLoops )
         {
@@ -419,6 +426,7 @@ bool StartDB()
 enum class ConfigId : int32
 {
 	SpeedLimit = 1,
+    HardSpeedLimit = 2
 };
 
 void UpdateConfigVariables()
@@ -447,6 +455,13 @@ void UpdateConfigVariables()
 				}
 			}
 				break;
+
+            case ConfigId::HardSpeedLimit:
+            {
+                int32 kBytes = atoi(Value.c_str());
+                MaxDataPerSecond = (uint64_t)kBytes * 1024;
+            }break;
+
 			default:
 				sLog.outError("Unexpected Config Id %d", (int32)Id);
 				break;
