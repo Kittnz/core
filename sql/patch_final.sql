@@ -1,8 +1,8 @@
 -- Reserved.
--- quest_template			40000-40200
--- creature_template		60300-60500
--- gameobject_template		2010700-2010900
--- item_template			60000-60200
+-- quest_template			40000-41000
+-- creature_template		60300-61000
+-- gameobject_template		2010700-2011000
+-- item_template			60000-61000
 -- gossip_menu				41000-43000
 -- creature_equip_template	20000-21000
 -- broadcast_text			30000-31000
@@ -1867,3 +1867,11 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Glows with power>.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update creature_template set display_id1 = 901 where entry = 60631;
+
+delete from creature_template where entry = 60630;
+REPLACE INTO creature_template VALUES
+(60630, 722, 0, 0, 0, 'Grash', '', 0, 12, 12, 247, 247, 0, 0, 573, 59, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 26, 30, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 60630, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+18680
