@@ -2319,3 +2319,11 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+update item_template set display_id = 19044 where entry = 60504;
+update item_template set stat_value1 = 15, stat_type1 = 7, stat_value1 = 0, armor = 47, item_level = 65, required_level = 60 where entry = 60409; -- Banshee's Veil 
+update item_template set armor = 47, inventory_type = 17, name = 'Cloak of Atonement', display_id = 27325 where entry = 60500;
+update item_template set name = 'Runewarder\'s Boots' where entry = 60430;
+update creature_template set dmg_min = 252, dmg_max = 278 where entry = 93106;
+
+update creature set spawntimesecsmin = 604800, spawntimesecsmax = 604800 where guid in (2569245, 2568627, 2568817, 2568630, 2569245);

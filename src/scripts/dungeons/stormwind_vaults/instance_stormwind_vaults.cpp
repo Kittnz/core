@@ -20,11 +20,10 @@ enum object_entries
     rat_door_two = 3000276
 };
 
-const string dialog_lines[4] = { 
+const string dialog_lines[3] = { 
     "Do you hear them?! In the walls... They're always watching!",
     "What even are you?! The watchers sent you, you're going to rip us apart!",
-    "There is no leaving, not for any of us, they block our escape...",
-    "I don't want to join them, they whisper me to join them, they show me images of my body torn into pieces..."    
+    "There is no leaving, not for any of us, they block our escape..."
 };
 
 struct instance_stormwind_vault : public ScriptedInstance
@@ -42,8 +41,10 @@ struct instance_stormwind_vault : public ScriptedInstance
         switch (pCreature->GetEntry())
         {
         case maddened_guard:
-            int32 line = urand(0, 3);
-            pCreature->PMonsterSay("%s", dialog_lines[line].c_str());
+            int32 line = urand(0, 2);
+            int32 chance = urand(0, 100);
+            if (chance > 70)
+                pCreature->PMonsterSay("%s", dialog_lines[line].c_str());
             break;
         }
     }

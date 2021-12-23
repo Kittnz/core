@@ -33,7 +33,7 @@ struct boss_ArctirasAI : public GenericSpellMob
 	{
 		bCanFightInMelee = false;
 		boss_ArctirasAI::Reset();
-		constexpr uint32_t FrostballCD = 2 * IN_MILLISECONDS + 500;
+		constexpr uint32_t FrostballCD = 3 * IN_MILLISECONDS + 500;
 		// ref: https://classicdb.ch/?spell=17503
 		GenericAISpell& Frostbolt = AddSpell(SPELL_FROSTBOLT, FrostballCD, FrostballCD, GENERIC_TARGET_VICTIM);
 		Frostbolt.SpellCastFlag = CF_TRIGGERED + CF_IGNORE_LOS;
