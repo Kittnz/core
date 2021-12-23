@@ -1748,3 +1748,18 @@ replace into gameobject_template values
 
 update gameobject_template set name = 'Banner' where entry = 180087;
 update area_template set zone_id = 0 where entry = 5023;
+
+-- The Azurestone --
+delete from quest_template where entry = 40338;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40338,2,1537,12,10,0,0,'The Azurestone','Another of our kin, I take it you are coming here to seek your true purpose upon this world, or you have come to pay your tributes to this old group. The Azurestone Order is as old as Ironforge itself, and has its roots upon the building of our once mighty city.\n\nIf you wish to join our order, and learn our lessons, you will need to first listen to the tale of the Azurestone.','Speak with Tholdan Mountainheart, and listen to the tale of the Azurestone.','So, have you come to listen?','Now you understand the sheer importance of the order.',0,0,0,0,0,0,0,0,60347,1,0,0,0,0,0,0,0,0,0,100,47,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Listen to the tale of the Azurestone');
+
+replace into creature_questrelation (id, quest) values (60629, 40338);
+replace into creature_involvedrelation (id, quest) values (60629, 40338);
+
+update quest_template set requiredraces = 4 where entry = 40338;
+update quest_template set requiredclasses = 128 where entry = 40338;
+update creature_template set script_name = 'npc_tholdan_mountainheart' where entry = 60629;
+
+delete from creature_template where entry = 60347;
+replace into creature_template (entry, name, display_id1) values (60347, 'quest_40338_dummy_triger', 328);
+

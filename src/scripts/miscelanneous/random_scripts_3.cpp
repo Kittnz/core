@@ -2338,9 +2338,57 @@ bool GOSelect_go_moo_rune(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
     return false;
 }
 
+bool GossipHello_npc_tholdan_mountainheart(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40338) == QUEST_STATUS_INCOMPLETE) // The Azurestone
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I wish to hear the tale of the Azurestone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(60629, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_tholdan_mountainheart(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("Long, long ago, we first discovered the Azurestone when digging the very halls of Ironforge itself, at the beginning, it was simply seen as a beautiful blue jewel and held a natural value. Quite quickly thereafter, the power of the Azurestone was discovered by a dwarf naturally gifted with the arcana.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("Huidgrar Azurebrow was the one who studied the stone, and taught others of its power, the name 'Azurestone' came from his name, and those that studied beneath him created 'The Azurestone Order'. The Order has been pivotol in many key points in history, from the War of the Three Hammers, to when the orcs were getting close to Ironforge itself!", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSayToPlayer("When Huidgrar died from his rather long and vibrant life, the Azurestone Order fell with him, falling into obscurity with time. It is up to us, the naturally gifted of our kind to reignite this ancient group, and to show the world our prowess with fire, frost, and the arcane!", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60347))
+                player->KilledMonster(dummy_bunny, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_tholdan_mountainheart";
+    newscript->pGossipHello = &GossipHello_npc_tholdan_mountainheart;
+    newscript->pGossipSelect = &GossipSelect_npc_tholdan_mountainheart;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_moo_rune";
