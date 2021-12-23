@@ -1792,3 +1792,12 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '45', '0', '0', '0', '0', '21', '0', '0', '0',
  '0', '1', NULL);
 
+-- Corrupted Sand --
+delete from quest_template where entry = 40340;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40340,2,1941,60,58,0,0,'Corrupted Sand','The time ways have been under assault for some time now. The Infinite Dragonflight has begun to work against us in every way that they can imagine. It is from these shattered timeways that Corrupted Sand is formed.\n\nCorrupted Sand can be purified by us here in the Caverns of Time. If you so happen to get some Corrupted Sand, bring it to me, we would be very pleased to purify it.','Collect a Corrupted Sand for Dronormu in the Caverns of Time.','Keep watch when you are within the time ways, it can be a dangerous place.','This shall do nicely, a fine sample, if you get more, bring them to me, we can always use more.',50203,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1007,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80943, 40340);
+replace into creature_involvedrelation (id, quest) values (80943, 40340);
+
+update quest_template set specialflags = 1 where entry = 40340;
+
