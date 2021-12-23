@@ -1801,3 +1801,12 @@ replace into creature_involvedrelation (id, quest) values (80943, 40340);
 
 update quest_template set specialflags = 1 where entry = 40340;
 
+-- Sand in Bulk --
+delete from quest_template where entry = 40341;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40341,2,1941,60,58,0,0,'Sand in Bulk','The Purification can be a lengthy process on Corrupted Sand, it is often preferred by us to get it in large quantities. If you can retrieve 10 Corrupted Sand for me, it would make my life, and the life of my kin that much easier.\n\nThe time ways certainly are full of it, it just takes a brave soul to venture there and reclaim it for us. Perhaps you are that brave soul, and perhaps you may gather it for us.','Collect 10 Corrupted Sand for Dronormu in the Caverns of Time.','The Infinite Dragonflight has become our enemy, and it is from them you should get the Corrupted Sand.','You have done well for us, this shall make our purification easier, if you happen to find more, return to me, we are always looking for more.',50203,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1007,175,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80943, 40341);
+replace into creature_involvedrelation (id, quest) values (80943, 40341);
+
+update quest_template set specialflags = 1 where entry = 40341;
+
