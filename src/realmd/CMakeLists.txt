@@ -26,6 +26,7 @@ set (EXECUTABLE_SRCS
 	BufferedSocket.cpp
 	Main.cpp
 	PatchHandler.cpp
+        PatchLimiter.hpp
 	RealmList.cpp
 )
 

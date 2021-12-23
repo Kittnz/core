@@ -28,6 +28,7 @@
 #include "Common.h"
 #include "Timer.h"
 #include "PatchHandler.h"
+#include "PatchLimiter.hpp"
 
 #ifdef WIN32
 #include <filesystem>
@@ -37,6 +38,7 @@
 #include <ace/OS_NS_dirent.h>
 #include <ace/OS_NS_errno.h>
 #include <ace/OS_NS_unistd.h>
+
 
 #include <ace/os_include/netinet/os_tcp.h>
 
@@ -131,14 +133,23 @@ int PatchHandler::svc(void)
     {
         data.data_size = (ACE_UINT16)r;
 
+        auto size = ((size_t)r) + sizeof(data) - sizeof(data.data);
+        while (!sPatchLimiter->IsAllowed(size))
+        {
+            ACE_Time_Value SleepValue;
+            SleepValue.set_msec(100u);
+            ACE_OS::sleep(SleepValue);
+        }
+
 		ssize_t sendedBytes = peer().send((const char*)&data,
-			((size_t)r) + sizeof(data) - sizeof(data.data),
+			size,
 			flags);
 
 		if (sendedBytes == -1)
 		{
 			return -1;
 		}
+
 
 		SecondLimitBytes -= sendedBytes;
 
