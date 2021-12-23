@@ -757,12 +757,6 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
     }
 
-    // Learn Speedy Mount spell if player doesnt have it yet
-    if (pCurrChar->GetLevel() > 5 && !pCurrChar->HasSpell(30174))
-    {
-        ChatHandler(this).PSendSysMessage("|cff00FF00We sincerely hope you enjoy your stay on Turtle WoW! We have the best community out there and are very happy to have you. |cff00FF00Please accept this adorable Riding Turtle as your companion during this long and difficult journey! Safe travels!");
-        pCurrChar->LearnSpell(30174, false);
-    }
     // Hackfix for existing gnome hunters missing this racial:
     if (pCurrChar->GetRace() == RACE_GNOME && pCurrChar->GetClass() == CLASS_HUNTER)
     {
