@@ -53,7 +53,7 @@ enum Events
 };
 
 const float squareX = -9606.21484f;
-const float squareY = -2806.25635f;
+const float squareY = -2754.0f;
 const float squareZ = 7.838724f;
 const float squareDiameter = 4.191733f;
 
@@ -81,6 +81,28 @@ constexpr auto PLAYER_DEATH_4 = "It had to be done.";
 
 constexpr auto DEATH_TEXT = "You will bring your own, undoing... it has already begun...";
 
+enum SoundEntries
+{
+    SOUND_PED_TEXT_1    = 30279,
+    SOUND_PED_TEXT_2    = 30280,
+    SOUND_PED_TEXT_3    = 30281,
+    SOUND_PED_TEXT_4    = 30282,
+
+    SOUND_INTRO_TEXT_1  = 30285,
+    SOUND_INTRO_TEXT_2  = 30286,
+    SOUND_INTRO_TEXT_3  = 30291,
+    SOUND_INTRO_TEXT_4  = 30287,
+    SOUND_INTRO_TEXT_5  = 30288,
+
+    SOUND_PHASE_1       = 30278,
+    SOUND_PHASE_2       = 30277,
+    SOUND_PHASE_3       = 30276,
+    SOUND_PHASE_4       = 30283,
+    SOUND_ENRAGE        = 30290,
+
+    SOUND_PLAYER_DEATH  = 80284,
+};
+
 constexpr float sentryLocs[4][4] =
 {
     {-9613.08f, -2828.02f, 10.7f, 1.145f},
@@ -95,6 +117,19 @@ std::vector<GameObject*> portals;
 std::vector<GameObject*> devices;
 
 bool isFrostPhase;
+
+// BroadcastText system is obviously broken. Reads in sound IDs from DB as 0, so we do our own.
+void PlaySound(Unit* source, uint32 soundId, bool playToZone = false)
+{
+    if (playToZone)
+    {
+        if (Map* pZone = source->GetMap())
+            pZone->PlayDirectSoundToMap(soundId);
+    }
+    else
+        source->PlayDirectSound(soundId);
+}
+
 
 // Attempts to find nearby enemy player that is not the main target of the boss.
 Player* GetRandomNearbyEnemyPlayer(Unit* self, const float& dist, uint8 attempt = 0)
@@ -239,6 +274,8 @@ struct boss_ostariusAI : public ScriptedAI
                 me->MonsterSendTextToZone(PLAYER_DEATH_4, CHAT_MSG_MONSTER_YELL);
                 break;
             }
+
+            PlaySound(me, SOUND_PLAYER_DEATH);
         }
     }
 
@@ -295,10 +332,12 @@ struct boss_ostariusAI : public ScriptedAI
                 m_events.ScheduleEvent(EVENT_INTRO_RP_2, Seconds(2));
                 break;
             case EVENT_INTRO_RP_2:
+                PlaySound(me, SOUND_INTRO_TEXT_1, true);
                 me->MonsterSendTextToZone(INTRO_TEXT_1, CHAT_MSG_MONSTER_YELL);
                 m_events.ScheduleEvent(EVENT_INTRO_RP_3, Seconds(6));
                 break;
             case EVENT_INTRO_RP_3:
+                PlaySound(me, SOUND_INTRO_TEXT_2, true);
                 me->MonsterSendTextToZone(INTRO_TEXT_2, CHAT_MSG_MONSTER_YELL);
                 m_events.ScheduleEvent(EVENT_INTRO_RP_4, Seconds(4));
                 break;
@@ -307,12 +346,15 @@ struct boss_ostariusAI : public ScriptedAI
                 m_events.ScheduleEvent(EVENT_INTRO_RP_5, Seconds(6));
                 break;
             case EVENT_INTRO_RP_5:
+                PlaySound(me, SOUND_INTRO_TEXT_3, true);
                 me->MonsterSendTextToZone(INTRO_TEXT_3, CHAT_MSG_MONSTER_YELL);
                 m_events.ScheduleEvent(EVENT_INTRO_RP_6, Seconds(4));
                 me->SetFactionTemplateId(14); // Hostile
                 break;
             case EVENT_INTRO_RP_6:
                 me->CastSpell(me, SPELL_TARGET_CHANNEL, true);
+
+                PlaySound(me, SOUND_INTRO_TEXT_4, true);
                 me->MonsterSendTextToZone(INTRO_TEXT_4, CHAT_MSG_MONSTER_YELL);
                 m_events.ScheduleEvent(EVENT_INTRO_RP_7, Seconds(7));
                 break;
@@ -320,8 +362,10 @@ struct boss_ostariusAI : public ScriptedAI
             {
                 TogglePedestal();
                 me->InterruptNonMeleeSpells(false, SPELL_TARGET_CHANNEL);
+
+                PlaySound(me, SOUND_INTRO_TEXT_5, true);
                 me->MonsterSendTextToZone(INTRO_TEXT_5, CHAT_MSG_MONSTER_YELL);
-                m_events.ScheduleEvent(EVENT_PHASE_1_DELAY, Seconds(5));
+                m_events.ScheduleEvent(EVENT_PHASE_1_DELAY, Seconds(6));
                 break;
             }
             case EVENT_PHASE_1_DELAY:
@@ -347,6 +391,7 @@ struct boss_ostariusAI : public ScriptedAI
             me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2);
             me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
+            PlaySound(me, SOUND_PHASE_1, true);
             me->MonsterSendTextToZone(PHASE_1_TEXT, CHAT_MSG_MONSTER_YELL);
 
             // Spawn portals so sentries enter battlefield.
@@ -358,6 +403,7 @@ struct boss_ostariusAI : public ScriptedAI
         // Sentry phase (fire).
         if (me->GetHealthPercent() < 70 && !(PhaseState & STATE_PHASE_2))
         {
+            PlaySound(me, SOUND_PHASE_2, true);
             me->MonsterSendTextToZone(PHASE_2_TEXT, CHAT_MSG_MONSTER_YELL);
 
             SummonSentries();
@@ -371,6 +417,7 @@ struct boss_ostariusAI : public ScriptedAI
         {
             isFrostPhase = true;
 
+            PlaySound(me, SOUND_PHASE_3, true);
             me->MonsterSendTextToZone(PHASE_3_TEXT, CHAT_MSG_MONSTER_YELL);
 
             SpawnSupressionDevices();
@@ -382,6 +429,7 @@ struct boss_ostariusAI : public ScriptedAI
         // Manual intervention phase.
         if (me->GetHealthPercent() < 30 && !(PhaseState & STATE_PHASE_4))
         {
+            PlaySound(me, SOUND_PHASE_4, true);
             me->MonsterSendTextToZone(PHASE_4_TEXT, CHAT_MSG_MONSTER_YELL);
 
             DespawnSummons();
@@ -477,6 +525,7 @@ struct boss_ostariusAI : public ScriptedAI
         {
             me->MonsterTextEmote("Ostarius reactivates all defenses out of desperation!", nullptr, true);
             me->MonsterSendTextToZone(ENRAGE_TEXT, CHAT_MSG_MONSTER_YELL);
+            PlaySound(me, SOUND_ENRAGE, true);
 
             SummonSentries();
             SpawnPortals();
@@ -863,19 +912,23 @@ struct npc_uldum_pedestalAI : public ScriptedAI
             // "Activating Gate Keeper to greet the guests...";
                 case PEDESTAL_EVENT_INTRO_1:
                     me->MonsterSay(PED_TEXT_1);
+                    PlaySound(me, SOUND_PED_TEXT_1);
                     m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
                     break;
                 case PEDESTAL_EVENT_INTRO_2:
                     me->MonsterSay(PED_TEXT_2);
+                    PlaySound(me, SOUND_PED_TEXT_2);
                     m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
                     DoCast(nullptr, 25425, true);
                     break;
                 case PEDESTAL_EVENT_INTRO_3:
                     me->MonsterSay(PED_TEXT_3);
+                    PlaySound(me, SOUND_PED_TEXT_3);
                     m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
                     break;
                 case PEDESTAL_EVENT_INTRO_4:
                     me->MonsterSay(PED_TEXT_4);
+                    PlaySound(me, SOUND_PED_TEXT_4);
                     m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
                     break;
                 case PEDESTAL_EVENT_BOSS_SPAWN:
