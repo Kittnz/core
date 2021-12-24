@@ -607,7 +607,7 @@ void GuildBank::UnlockTab(std::string msg)
 	{
 		// money from bank
 		if (b_money < cost) {
-			_player->GetSession()->SendNotification("Your bank does not have enough money.");
+			_player->GetSession()->SendNotification("Your guild bank does not have enough money.");
 			_player->SendAddonMessage(prefix, "UnlockTab:Error:Player:NotEnoughMoney");
 			return;
 		}
@@ -835,14 +835,14 @@ void GuildBank::WithdrawMoney(std::string msg)
 
 	if (!CanAccessTab(0, ACTION_WITHDRAW_MONEY)) // min rank = 1, officer
 	{
-		_player->GetSession()->SendNotification("You dont have access to guild money yo.");
+		_player->GetSession()->SendNotification("You dont have access to guild money.");
 		_player->SendAddonMessage(prefix, "WithdrawMoney:Error:NoAccess");
 		return;
 	}
 
 	if (money > b_money)
 	{
-		_player->GetSession()->SendNotification("Not enough gold in the bank.");
+		_player->GetSession()->SendNotification("Your guild bank does not have enough money.");
 		_player->SendAddonMessage(prefix, "WithdrawMoney:Error:NotEnoug");
 		return;
 	}
