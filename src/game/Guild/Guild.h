@@ -356,6 +356,11 @@ class Guild
 
     private:
         void UpdateAccountsNumber() { m_accountsNumber = 0;}// mark for lazy calculation at request in GetAccountsNumber
+
+		// Guild Bank
+	public:
+		GuildBank* _Bank;
+		// Guild Bank end;
 };
 
 #endif

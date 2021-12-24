@@ -22,6 +22,7 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include "World.h"
+#include "GuildBank/GuildBank.h"
 
 class Guild;
 class ObjectGuid;
@@ -66,12 +67,15 @@ class GuildMgr
 
         void CreatePetition(uint32 id, Player* player, const ObjectGuid& charterGuid, std::string& name);
         void DeletePetition(Petition* petition);
+        void Update(uint32 diff);
+        void SaveGuildBanks();
         Petition* GetPetitionByCharterGuid(const ObjectGuid& charterGuid);
         Petition* GetPetitionById(uint32 id);
         Petition* GetPetitionByOwnerGuid(const ObjectGuid& ownerGuid);
 
         void LoadGuilds();
         void LoadPetitions();
+		
     private:
         void CleanUpPetitions();
         mutable std::mutex m_guildMutex;
@@ -81,6 +85,9 @@ class GuildMgr
 
         std::mutex m_petitionsMutex;
         PetitionMap m_petitionMap;
+
+		uint32 m_guildBankSaveTimer;
+
 };
 
 class Petition

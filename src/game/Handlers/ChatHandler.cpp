@@ -326,6 +326,49 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			return;
 		}
 	}
+
+
+	//guild bank
+	if (lang == LANG_ADDON && !msg.empty())
+	{
+		// no type == CHAT_MSG_GUILD on this, to protecc fraudulent messages
+		if (strstr(msg.c_str(), "TW_GUILDBANK"))
+		{
+			// HC check
+			// no Newcommers check since we dont have anyone in Newcommers to unlock the feature
+			if (_player->IsHardcore())
+			{
+				//_player->GetSession()->SendNotification("HC No Guild Bank");
+				_player->SendAddonMessage("TW_GUILDBANK", "Access:Error:HC");
+				return;
+			}
+
+			if (GetMasterPlayer()->GetGuildId())
+			{
+
+				Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId());
+				if (!guild)
+					return;
+
+				if (!guild->_Bank)
+				{
+					sLog.outInfo("cant get guild bank");
+					return;
+				}
+
+				guild->_Bank->HandleAddonMessages(msg, _player);
+
+			}
+			else
+			{
+				_player->SendAddonMessage("TW_GUILDBANK", "Player:Unguilded");
+			}
+			return;
+
+		}
+	}
+
+	
 	// buff/debuff system
 	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
 	{

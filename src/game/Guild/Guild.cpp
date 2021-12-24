@@ -165,6 +165,9 @@ bool Guild::Create(Player* leader, std::string gname)
 
     CreateDefaultGuildRanks(lSession->GetSessionDbLocaleIndex());
 
+	_Bank = new GuildBank;
+	_Bank->SetGuild(this);
+
     return AddMember(m_LeaderGuid, (uint32)GR_GUILDMASTER) == GuildAddStatus::OK;
 }
 
@@ -675,6 +678,8 @@ void Guild::DelRank()
     uint32 rank = GetLowestRank();
     CharacterDatabase.PExecute("DELETE FROM guild_rank WHERE rid>='%u' AND guildid='%u'", rank, m_Id);
 
+	_Bank->UpdateMinranks(rank);
+
     m_Ranks.pop_back();
 }
 
@@ -735,7 +740,16 @@ void Guild::Disband()
     CharacterDatabase.PExecute("DELETE FROM guild WHERE guildid = '%u'", m_Id);
     CharacterDatabase.PExecute("DELETE FROM guild_rank WHERE guildid = '%u'", m_Id);
     CharacterDatabase.PExecute("DELETE FROM guild_eventlog WHERE guildid = '%u'", m_Id);
+
+    CharacterDatabase.PExecute("DELETE FROM guild_bank WHERE guildid = '%u'", m_Id);
+    CharacterDatabase.PExecute("DELETE FROM guild_bank_log WHERE guildid = '%u'", m_Id);
+    CharacterDatabase.PExecute("DELETE FROM guild_bank_tabs WHERE guildid = '%u'", m_Id);
+    CharacterDatabase.PExecute("DELETE FROM guild_bank_money WHERE guildid = '%u'", m_Id);
     CharacterDatabase.CommitTransaction();
+
+	_Bank->DeleteFromDB();
+	delete _Bank;
+
     sGuildMgr.RemoveGuild(m_Id);
 }
 

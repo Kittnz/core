@@ -85,7 +85,7 @@ enum BankDetails
 enum BankCommLimits
 {
 	LOG_LINES_LIMIT = 50,
-	ADDON_MAX_PACKET_SIZE = 3096,
+	ADDON_MAX_PACKET_SIZE = 2096,
 };
 
 GuildBank::GuildBank()
@@ -364,6 +364,24 @@ void GuildBank::DeleteFromDB()
 	CharacterDatabase.CommitTransaction();
 }
 
+// Updates min rank in case it gets deleted
+void GuildBank::UpdateMinranks(uint32 rank)
+{
+	for (uint32 tab = 1; tab <= MAX_TABS; ++tab)
+	{
+		if (b_tabInfo[tab].minrank == rank)
+		{
+			b_tabInfo[tab].minrank -= 1;
+			b_tabs_changed = true;
+
+			SendGuildMessage("GUpdateTab:" + std::to_string(tab) + ":" + 
+				b_tabInfo[tab].name + ":" + 
+				b_tabInfo[tab].icon + ":" + 
+				std::to_string(b_tabInfo[tab].withdrawals) + ":" + 
+				std::to_string(b_tabInfo[tab].minrank));
+		}
+	}
+}
 
 /* startup */
 
@@ -732,7 +750,6 @@ void GuildBank::UpdateTab(std::string msg)
 	b_tabs_changed = true;
 }
 
-
 /* money */
 
 // Sends bank money information to the client
@@ -959,8 +976,6 @@ void GuildBank::SendTabItems(std::string msg)
 
 // Deposits a player item into the bank
 void GuildBank::DepositItem(std::string msg) {
-
-	// todo check createdby of a stack of two items created by different people
 
 	uint8 playerBag;
 	uint8 playerSlot;
@@ -1795,7 +1810,7 @@ void GuildBank::SplitItem(std::string msg)
 
 		if (sourceNewCount <= 0)
 		{
-			//move item todo
+			//move item todo maybe ?
 			_player->SendAddonMessage(prefix, "SplitItem:Error:SourceLeftCount0");
 			return;
 		}
@@ -1837,7 +1852,6 @@ void GuildBank::SplitItem(std::string msg)
 	{
 		// destination not empty
 		// try to stack if possible
-		// todo maybe tripple check itemCount ?
 
 		if (sItem->item_template == dItem->item_template)
 		{
@@ -2399,7 +2413,7 @@ void GuildBank::AppendLog(uint32 index, uint32 tab, Field *fields, uint32 state)
 // Sends a addon message to everyone in the guild
 void GuildBank::SendGuildMessage(std::string message)
 {
-	_guild->BroadcastToGuild(_player->GetSession(), prefix + " " + message, LANG_ADDON);
+	_guild->BroadcastToGuild(_player->GetSession(), prefix + "\t" + message, LANG_ADDON);
 }
 
 // Gets a new bank item guid

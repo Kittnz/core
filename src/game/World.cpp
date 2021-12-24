@@ -156,6 +156,7 @@ World::~World()
 
 void World::Shutdown()
 {
+	sGuildMgr.SaveGuildBanks();
     sWorld.KickAll();                                       // save and kick all players
     sWorld.UpdateSessions(1);                               // real players unload required UpdateSessions call
     if (m_charDbWorkerThread && m_charDbWorkerThread->joinable())
@@ -1901,6 +1902,8 @@ void World::Update(uint32 diff)
     //cleanup unused GridMap objects as well as VMaps
     if (getConfig(CONFIG_BOOL_CLEANUP_TERRAIN))
         sTerrainMgr.Update(diff);
+
+	sGuildMgr.Update(diff);
 }
 
 /// Send a packet to all players (except self if mentioned)
