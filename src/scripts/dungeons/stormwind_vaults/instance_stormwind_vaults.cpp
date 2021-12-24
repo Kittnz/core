@@ -11,7 +11,11 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
 enum mob_entries
 {
     maddened_guard = 60597,
-    hungry_rat = 93105
+    hungry_rat = 93105,
+    black_bride = 80850,
+    thamgrarr = 80852,
+    aszosh_grimflame = 80853,
+    damian = 80854
 };
 
 enum object_entries
@@ -33,6 +37,19 @@ struct instance_stormwind_vault : public ScriptedInstance
         Initialize();
     };
 
+    bool bride_killed;
+    bool thamgrarr_killed;
+    bool aszosh_killed;
+    bool damian_killed;
+
+    void Initialize() override
+    {
+        bride_killed = false;
+        thamgrarr_killed = false;
+        aszosh_killed = false;
+        damian_killed = false;
+    }
+
     void OnCreatureEnterCombat(Creature* pCreature) override
     {
         if (pCreature->IsAlive() && !pCreature->IsInCombat())
@@ -49,8 +66,27 @@ struct instance_stormwind_vault : public ScriptedInstance
         }
     }
 
-    void OnCreatureDeath(Creature* pCreature) override
+    void OnCreatureDeath(Creature* boss) override
     {
+        switch (boss->GetEntry())
+        {
+        case black_bride:
+        case thamgrarr: 
+        case aszosh_grimflame: 
+        case damian: 
+
+            if (black_bride) bride_killed = true;             
+            if (thamgrarr) thamgrarr_killed = true; 
+            if (aszosh_grimflame) aszosh_killed = true; 
+            if (damian) damian_killed = true;
+
+            if (bride_killed && thamgrarr_killed && aszosh_killed && damian_killed)
+            {
+                GameObject* vault_door = boss->FindNearestGameObject(4000509, 1500.0f);
+                vault_door->UseDoorOrButton(10800);
+                break;
+            }
+        }
     }
 };
 
