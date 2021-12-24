@@ -439,12 +439,16 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 					if (itr.second.Category != categoryID)
 						continue;
 
+					if (ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(itr.second.Item))
+					{
+						_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "="
+							+ itr.second.Description + "="
+							+ std::to_string(itr.second.Price) + "="
+							+ pProto->Description + "="
+							+ std::to_string(itr.second.Item));
+					}
 
-					_player->SendAddonMessage(prefix, "Entries:" + categoryIDString + "=" 
-						+ itr.second.Description + "=" 
-						+ std::to_string(itr.second.Price) + "=" 
-						+ itr.second.DescriptionLong + "=" 
-						+ std::to_string(itr.second.Item));
+					
 
 				}
 
