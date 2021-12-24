@@ -1859,7 +1859,7 @@ replace into item_template values
 update creature_template set rank = 1 where entry = 60619;
 
 replace into gameobject_template values
-(2010798,2,25866,'Azurestone',0,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
+(2010798,2,25866,'The Azurestone',0,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
 (2010799,2,24515,'Moo Rune',0,32,1.4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'go_moo_rune');
 
 set @gossip_menu_id = 41070; set @magic_number = 2010799;
@@ -2335,3 +2335,5 @@ replace into gameobject_template (`entry`, `type`, `displayId`, `name`, `faction
 delete from gameobject where id = 4000509;
 
 replace into  `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (4000509, 35, -63.1431, 149.797, -39.134, 6.2715, 0, 0, 0.00584376, -0.999983, 300, 300, 100, 1, 1, 533.333);
+
+update creature_template set display_id1 = 459 where entry = 60614;
