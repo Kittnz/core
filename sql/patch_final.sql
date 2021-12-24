@@ -2327,3 +2327,11 @@ update item_template set name = 'Runewarder\'s Boots' where entry = 60430;
 update creature_template set dmg_min = 252, dmg_max = 278 where entry = 93106;
 
 update creature set spawntimesecsmin = 604800, spawntimesecsmax = 604800 where guid in (2569245, 2568627, 2568817, 2568630, 2569245);
+
+update item_template set spelltrigger_1 = 1, spell_id2 = 0 where entry = 60410;
+
+replace into gameobject_template (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES (4000509, 0, 23910, 'Vault Door', 114, 54, 1, 0, 85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject where id = 4000509;
+
+replace into  `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (4000509, 35, -63.1431, 149.797, -39.134, 6.2715, 0, 0, 0.00584376, -0.999983, 300, 300, 100, 1, 1, 533.333);
