@@ -645,6 +645,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "shop",           SEC_GAMEMASTER,     true,  nullptr,                                         "", shopCommandTable },
         { "path",           SEC_GAMEMASTER,     true,  nullptr,                                         "", pathCommandTable },
         { "xp",             SEC_PLAYER,         false, &ChatHandler::HandleXPCommand,                     "", nullptr },
+        { "hcinvite",       SEC_PLAYER,         false, &ChatHandler::HandleHCInviteCommand,                     "", nullptr },
         { "settime",        SEC_GAMEMASTER,     false, &ChatHandler::HandleSetTimeCommand, "", nullptr},
         { "play",           SEC_GAMEMASTER,     false, &ChatHandler::HandlePlayCommand, "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }

@@ -174,7 +174,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAddModifier,                               //108 SPELL_AURA_ADD_PCT_MODIFIER
     &Aura::HandleNoImmediateEffect,                         //109 SPELL_AURA_ADD_TARGET_TRIGGER
     &Aura::HandleModPowerRegenPCT,                          //110 SPELL_AURA_MOD_POWER_REGEN_PERCENT
-    &Aura::HandleUnused,                                    //111 SPELL_AURA_ADD_CASTER_HIT_TRIGGER
+    &Aura::HandleNoImmediateEffect,                         //111 SPELL_AURA_ADD_CASTER_HIT_TRIGGER
     &Aura::HandleNoImmediateEffect,                         //112 SPELL_AURA_OVERRIDE_CLASS_SCRIPTS implemented in diff functions.
     &Aura::HandleNoImmediateEffect,                         //113 SPELL_AURA_MOD_RANGED_DAMAGE_TAKEN implemented in Unit::MeleeDamageBonusTaken
     &Aura::HandleNoImmediateEffect,                         //114 SPELL_AURA_MOD_RANGED_DAMAGE_TAKEN_PCT implemented in Unit::MeleeDamageBonusTaken
@@ -237,7 +237,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraModIncreaseSpeed,                      //171 SPELL_AURA_MOD_SPEED_NOT_STACK
     &Aura::HandleAuraModIncreaseMountedSpeed,               //172 SPELL_AURA_MOD_MOUNTED_SPEED_NOT_STACK
     &Aura::HandleUnused,                                    //173 SPELL_AURA_ALLOW_CHAMPION_SPELLS  only for Proclaim Champion spell
-    &Aura::HandleModSpellDamagePercentFromStat,             //174 SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT  implemented in Unit::SpellBaseDamageBonusDone (in 1.12.* only spirit)
+    &Aura::HandleModSpellDamagePercentFromStat,             //174 SPELL_AURA_MOD_SPELL_DAMAGE_OF_STAT_PERCENT  implemented in Unit::SpellBaseDamageBonusDone (in 1.12.* only spirit) SPELL_AURA_MOD_HEALING_PCT
     &Aura::HandleModSpellHealingPercentFromStat,            //175 SPELL_AURA_MOD_SPELL_HEALING_OF_STAT_PERCENT implemented in Unit::SpellBaseHealingBonusDone (in 1.12.* only spirit)
     &Aura::HandleSpiritOfRedemption,                        //176 SPELL_AURA_SPIRIT_OF_REDEMPTION   only for Spirit of Redemption spell, die at aura end
     &Aura::HandleAuraAoeCharm,                              //177 SPELL_AURA_AOE_CHARM
@@ -2478,6 +2478,17 @@ void Aura::HandleAuraModShapeshift(bool apply, bool Real)
 
         if (!(ssEntry->flags1 & SHAPESHIFT_FORM_FLAG_ALLOW_ACTIVITY))
             target->RemoveSpellsCausingAura(SPELL_AURA_WATER_WALK, GetHolder());
+
+        switch (form)
+        {
+            case FORM_CAT:
+                target->RemoveAurasDueToSpellByCancel(45709); // remove bear form berserk version if exists.
+                break;
+            case FORM_BEAR:
+            case FORM_DIREBEAR:
+                target->RemoveAurasDueToSpellByCancel(45710); // remove cat form berserk version.
+                break;
+        }
 
         if (PowerType != POWER_MANA)
         {
@@ -7011,6 +7022,16 @@ void SpellAuraHolder::HandleCastOnAuraRemoval() const
 
     switch (GetId())
     {
+        case 45568: // proclaim champion
+        {
+            if (auto caster = GetCaster())
+            {
+                if (caster->IsPlayer())
+                    caster->ToPlayer()->SetChampion(ObjectGuid{});
+            }
+            //remove proclaim guid here
+        } break;
+
         case 26180:
         {
             if (mode == AURA_REMOVE_BY_DISPEL)

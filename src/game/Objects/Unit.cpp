@@ -2123,6 +2123,10 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool che
     else
         return;                                             // ignore ranged case
 
+    // attack can be redirected to another target
+    if (Unit* magnetTarget = SelectMagnetTarget(pVictim))
+        pVictim = magnetTarget;
+
     // Nostalrius: check ligne de vision
     if (checkLoS && !HasUnitState(UNIT_STAT_ALLOW_LOS_ATTACK) && !IsWithinLOSInMap(pVictim))
         return;
