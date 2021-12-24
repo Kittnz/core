@@ -514,6 +514,7 @@ class ChatHandler
         bool HandleCopyCommand(char* args);
         bool HandleSendPacketCommand(char* args);
         bool HandleXPCommand(char* args);
+        bool HandleHCInviteCommand(char* args);
         bool HandlePlayCommand(char* args);
 
         bool HandleFastDebugCommand(char* args);

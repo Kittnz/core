@@ -2099,6 +2099,28 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
+                case 45568: // Proclaim Champion (Custom)
+                {
+                    if (!unitTarget || !m_caster->IsPlayer() || unitTarget->GetGUID() == m_caster->GetGUID())
+                        return;
+
+                    auto playerCaster = m_caster->ToPlayer();
+                    playerCaster->SetChampion(unitTarget->GetGUID());
+
+                }break;
+
+
+                case 45555: // pain spike
+                {
+                    if (!unitTarget)
+                        return;
+
+                    //cast custom pain spike healing aura with custom basepoints.
+                    int32 healAmount = damage / 5;
+                    m_caster->CastCustomSpell(unitTarget, 45556, &healAmount, nullptr, nullptr, true);
+                }break;
+
+
                 case 28598:                                 // Touch of Weakness triggered spell
                 {
                     if (!unitTarget || !m_triggeredByAuraSpell)

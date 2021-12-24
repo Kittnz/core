@@ -3180,17 +3180,16 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
     if (!victim)
         return nullptr;
 
-    SpellEntry const* pProto = spell->m_spellInfo;
-    if (!pProto) return nullptr;
-    // Example spell: Cause Insanity (Hakkar)
-    if (pProto->AttributesEx & SPELL_ATTR_EX_CANT_BE_REDIRECTED)
-        return victim;
+    SpellEntry const* pProto = nullptr;
+    if (spell)
+        pProto = spell->m_spellInfo;
+
     // Magic case
 
-    if (pProto->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO)
+    if (pProto && pProto->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO)
         return victim;
 
-    if ((pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & 0x10))
+    if (spell && pProto && (pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & 0x10))
     {
         Unit::AuraList const& magnetAuras = victim->GetAurasByType(SPELL_AURA_SPELL_MAGNET);
         for (const auto magnetAura : magnetAuras)
@@ -3206,6 +3205,30 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
                             victim->RemoveSpellAuraHolder(holder);
                         }
                     return magnet;
+                }
+            }
+        }
+    }
+    // Melee && ranged case
+    else
+    {
+        if (spell && pProto && pProto->HasAttribute(SPELL_ATTR_EX_CANT_BE_REDIRECTED))
+            return victim;
+
+        auto const& hitTriggerAuras = victim->GetAurasByType(SPELL_AURA_ADD_CASTER_HIT_TRIGGER);
+        for (auto& hitTriggerAura : hitTriggerAuras)
+        {
+            if (Unit* magnet = hitTriggerAura->GetCaster())
+            {
+                if (magnet->IsAlive() && IsValidAttackTarget(magnet))
+                {
+                    if (roll_chance_i(hitTriggerAura->GetModifier()->m_amount))
+                    {
+                        if (SpellAuraHolder* holder = hitTriggerAura->GetHolder())
+                            if (holder->DropAuraCharge())
+                                victim->RemoveSpellAuraHolder(holder);
+                        return magnet;
+                    }
                 }
             }
         }

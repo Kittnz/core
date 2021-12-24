@@ -2185,6 +2185,8 @@ class Player final: public Unit
 		// For chronoboon item
 		uint32 m_worldBuffCheckTimer;
     public:
+
+        void SetHCIniviteGuildTimer(uint32 timer) { m_hardcoreInvGuildTimer = timer; }
         void ScheduleStandStateChange(uint8 state);
         void ClearScheduledStandState() { m_newStandState = MAX_UNIT_STAND_STATE; m_standStateTimer = 0; }
         bool IsStandingUpForProc() const override;
@@ -2295,6 +2297,19 @@ public:
 
         return HasSpell(itr->second);
     };
+
+    ObjectGuid GetChampionGUID() const
+    {
+        return m_currentChampionGuid;
+    }
+
+    void SetChampion(ObjectGuid champion)
+    {
+        m_currentChampionGuid = champion;
+    }
+
+    private:
+        ObjectGuid m_currentChampionGuid;
 
 // Chat system:
 
