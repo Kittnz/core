@@ -179,6 +179,7 @@ class GuildBank
         void HandleAddonMessages(std::string msg, Player* player);
 		void SaveToDB();
 		void DeleteFromDB();
+		void UpdateMinranks(uint32 rank);
 
     private:
 		std::string prefix = "TW_GUILDBANK";

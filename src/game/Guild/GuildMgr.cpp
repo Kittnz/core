@@ -26,9 +26,11 @@
 #include "ObjectMgr.h"
 #include "Player.h"
 
+#define GUILD_BANK_SAVE_INTERVAL 2 * MINUTE * IN_MILLISECONDS
+
 GuildMgr sGuildMgr;
 
-GuildMgr::GuildMgr()
+GuildMgr::GuildMgr() : m_guildBankSaveTimer(GUILD_BANK_SAVE_INTERVAL)
 {
 }
 
@@ -52,6 +54,9 @@ void GuildMgr::AddGuild(Guild* guild)
 {
     std::lock_guard<std::mutex> guard(m_guildMutex);
     m_GuildMap[guild->GetId()] = guild;
+
+	guild->_Bank = new GuildBank;
+	guild->_Bank->SetGuild(guild);
 }
 
 void GuildMgr::RemoveGuild(uint32 guildId)
@@ -246,6 +251,29 @@ void GuildMgr::DeletePetition(Petition* petition)
 
     petition->Delete();
     delete petition;
+}
+
+void GuildMgr::Update(uint32 diff)
+{
+	if (m_guildBankSaveTimer < diff)
+		SaveGuildBanks();
+	else
+		m_guildBankSaveTimer -= diff;
+}
+
+void GuildMgr::SaveGuildBanks()
+{
+	uint32 uSaveStartTime = WorldTimer::getMSTime();
+
+	m_guildBankSaveTimer = GUILD_BANK_SAVE_INTERVAL;
+	for (const auto& itr : m_GuildMap)
+		itr.second->_Bank->SaveToDB();
+
+	uint32 uSaveDuration = WorldTimer::getMSTimeDiff(uSaveStartTime, WorldTimer::getMSTime());
+
+	//sLog.outInfo("[GuildBank] Save finished in %i minutes %i seconds (%u ms).",
+		//uSaveDuration / 60000, (uSaveDuration % 60000) / 1000, uSaveDuration);
+
 }
 
 Petition* GuildMgr::GetPetitionById(uint32 id)

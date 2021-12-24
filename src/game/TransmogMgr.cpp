@@ -91,6 +91,7 @@ void TransmogMgr::HandleAddonMessages(std::string msg)
 
 		return;
 	}
+	
 	if (strstr(msg.c_str(), "GetAvailableTransmogsItemIDs:"))
 	{
 
@@ -109,14 +110,26 @@ void TransmogMgr::HandleAddonMessages(std::string msg)
 		SendAvailableTransmogs(InventorySlotId, invType, destItemId);
 		return;
 	}
+	
 	if (strstr(msg.c_str(), "GetTransmogStatus"))
 	{
 		std::string status = "TransmogStatus:" + GetTransmogStatus();
-
 		_owner->SendAddonMessage(prefix, status);
-
 		return;
 	}
+
+	if (strstr(msg.c_str(), "GetSetsStatus:"))
+	{
+		if (STUPID_RESTRICTIONS)
+			_owner->SendAddonMessage(prefix, "SetsStatus:0");
+		else
+			_owner->SendAddonMessage(prefix, "SetsStatus:1");
+		
+		return;
+
+	}
+
+
 	if (strstr(msg.c_str(), "DoChangeGlow:")) // not used
 	{
 		std::string aText;
@@ -257,7 +270,7 @@ std::string TransmogMgr::GetTransmogStatus()
 			if (ItemPrototype const* tmogProto = ObjectMgr::GetItemPrototype(pItem->GetTransmogrification()))
 				status += std::to_string(InventorySlotId) + ":" + std::to_string(tmogProto->SourceItemId) + ",";
 			else
-				status += std::to_string(0) + ":0" + ","; // todo
+				status += std::to_string(0) + ":0" + ",";
 		}
 	}
 
@@ -331,6 +344,34 @@ std::vector<uint32> TransmogMgr::GetAvailableTransmogs(uint8 InventorySlotId, ui
 		{
 
 			if (STUPID_RESTRICTIONS) {
+				// plate = plate & mail
+				// mail = plate & mail & leather
+				// leather = mail & leather & cloth
+				// cloth = leather * cloth
+				if (proto->Class == ITEM_CLASS_ARMOR && destItemProto->Class == ITEM_CLASS_ARMOR 
+					&& proto->InventoryType == destItemProto->InventoryType)
+				{
+					if (proto->SubClass == ITEM_SUBCLASS_ARMOR_CLOTH)
+					{
+						if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_CLOTH + 1)
+							tmogs.push_back(item);
+					}
+					if (proto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER)
+					{
+						if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER - 1 || destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER + 1)
+							tmogs.push_back(item);
+					}
+					if (proto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL)
+					{
+						if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL - 1 || destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL + 1)
+							tmogs.push_back(item);
+					}
+					if (proto->SubClass == ITEM_SUBCLASS_ARMOR_PLATE)
+					{
+						if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_PLATE - 1)
+							tmogs.push_back(item);
+					}
+				}
 				if (proto->Class == destItemProto->Class)
 					if (proto->SubClass == destItemProto->SubClass)
 						if (proto->InventoryType == destItemProto->InventoryType)

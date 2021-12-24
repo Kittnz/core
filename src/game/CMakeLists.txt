@@ -201,6 +201,7 @@ set (game_SRCS
     vmap/VMapManager2.cpp
     vmap/WorldModel.cpp
     Shop/ShopMgr.cpp
+    GuildBank/GuildBank.cpp
 
     AccountMgr.h
     AuraRemovalMgr.h
@@ -392,6 +393,7 @@ set (game_SRCS
     vmap/VMapTools.h
     vmap/WorldModel.h
     Shop/ShopMgr.h
+    GuildBank/GuildBank.h
 
 )
 
