@@ -1859,7 +1859,6 @@ replace into item_template values
 update creature_template set rank = 1 where entry = 60619;
 
 replace into gameobject_template values
-(2010798,2,25866,'The Azurestone',0,32,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
 (2010799,2,24515,'Moo Rune',0,32,1.4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'go_moo_rune');
 
 set @gossip_menu_id = 41070; set @magic_number = 2010799;
@@ -2337,3 +2336,58 @@ delete from gameobject where id = 4000509;
 replace into  `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (4000509, 35, -63.1431, 149.797, -39.134, 6.2715, 0, 0, 0.00584376, -0.999983, 300, 300, 100, 1, 1, 533.333);
 
 update creature_template set display_id1 = 459 where entry = 60614;
+
+-- Arc'Tiras Items
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (60505, 'Ring of the Elder Warden', '', 4, 0, 1, 3, 26391, 1, 60, 0, -1, -1, 73211, 18302, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 49, 0, 0, 0, 0, 10, 0, 5, 11, 7, 13, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (60506, 'Vigilance', '', 2, 18, 1, 3, 32316, 1, 60, 0, -1, -1, 183245, 45811, 26, 0, 0, 0, 1, 1, 0, 72, 114, 2800, 0, 0, 75, 0, 0, 0, 65, 100, 49, 0, 0, 0, 0, 0, 0, 7, 9, 3, 5, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (40003, 'Vault\'s Defender', '', 4, 6, 6, 3, 1644, 1, 60, 0, -1, -1, 154122, 38530, 14, 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 100, 2217, 42, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 3, 6, 7, 10, 13669, 1, 0, 0, 0, 0, 0, 13674, 1, 0, 0, 0, 0, -1, 0, 0, 0);
+
+delete from creature_loot_template where entry = 93107;
+
+delete from gameobject_template where entry = 2010867;
+replace into gameobject_template values
+(2010867,3,259,'Vault Armory Equipment',0,4,1,43,2010867,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010867;
+replace into gameobject_loot_template values
+(2010867,40003,25,1,1,1,0),
+(2010867,60506,25,1,1,1,0),
+(2010867,60501,25,1,1,1,0),
+(2010867,60505,25,1,1,1,0),
+(2010867,60420,25,2,1,1,0),
+(2010867,60429,25,2,1,1,0),
+(2010867,60430,25,2,1,1,0),
+(2010867,60426,25,2,1,1,0);
+
+UPDATE creature_template set npc_flags = 1 where entry = 2547;
+
+set @gossip_menu_id = 41071; set @magic_number = 2547;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I\'ve been chosen by the Fleet Master to put you, pirates, back into shape.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41072; set @magic_number = 60496;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ahoy matey, I am very curious to see what new chapter for the Bloodsail Buccaneers you will be painting. I will be watching the Cap\'n\'s lodge for a while but when ye come here to rest or spend some alone time I will be gone.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41002; set @magic_number = 60449;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I will never care of your rank, I respect strength above else. Prove yourself to be worthy of my axe and I will die for you. Do not mistake these words for mutiny, I will respect your orders and will not question them.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update quest_template set OfferRewardText = 'You carry that crossbow well, almost as if it was suited for you. Let us begin our training, I can teach you a thing or two about the path you’re aiming to take.' where entry = 40220;
+
+update quest_template set details = 'You have learned how to tame a beast using your own skills, you must also know how to train it.\n\nBefore we move with that, I want you to know this. Some beasts do not accept the undead as their masters, either because you seem a delicious snack or since their natural mechanism advises them not to. Luckily with the aid of the Cult of Forgotten Shadow, we hunters were thought a small incantation that would soothe the mind of the beast, and it would merely alter the thought that you’d be alive.\n\nOnly use this incantation on pets that will not accept an undead master!\n\nNow, as I’ve mentioned before, on your countless adventures that are to follow, you will gain skills and you must train your pet to do so as well, I am afraid I am not able to teach you how to do that, but I know who can.\n\nTravel to the Undercity, in the War Quarter speak to Diane Willowfield, she will be the one to instruct the basics of the pet training.\n\nIt has been my utmost pleasure to teach you.' where entry = 40262;
+
+update quest_template set ObjectiveText1 = '' where entry = 40263;
+
+update creature_template set display_id1 = 18694, scale = 1 where entry = 60635;
+replace into creature_display_info_addon values(18694, 0, 0, 0, 0);
+
+delete from gameobject_template where entry = 2010798;
+replace into gameobject_template values
+(2010798,5,25866,'The Azurestone',0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
