@@ -2685,6 +2685,7 @@ public:
 		// General send addon message
 	public:
 		void SendAddonMessage(std::string prefix, std::string message);
+		void SendAddonMessage(std::string prefix, std::string message, Player* from);
 
         // For new taxi
     public:
