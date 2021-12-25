@@ -27,6 +27,7 @@
 #include "ObjectAccessor.h"
 #include "SharedDefines.h"
 #include "ObjectMgr.h"
+#include "GuildBank/GuildBank.h"
 
 class Item;
 class Petition;
