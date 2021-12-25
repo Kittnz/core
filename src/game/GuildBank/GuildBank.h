@@ -23,7 +23,8 @@
 #include "SharedDefines.h"
 #include "Platform/Define.h"
 #include "Item.h"
-#include "Database/Field.h"
+#include "Database/DatabaseEnv.h"
+#include "Util.h"
 
 class Player;
 class Guild;
