@@ -22,6 +22,8 @@
 #include "Common.h"
 #include "SharedDefines.h"
 #include "Platform/Define.h"
+#include "Item.h"
+#include "Database/Field.h"
 
 class Player;
 class Guild;
