@@ -969,19 +969,6 @@ CREATE TABLE `guild`  (
 ) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Guild System' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for guild_bank
--- ----------------------------
-DROP TABLE IF EXISTS `guild_bank`;
-CREATE TABLE `guild_bank`  (
-  `guid` int UNSIGNED NOT NULL,
-  `bag` int UNSIGNED NOT NULL DEFAULT 0,
-  `slot` tinyint UNSIGNED NOT NULL,
-  `item` int UNSIGNED NOT NULL,
-  `item_template` int UNSIGNED NOT NULL,
-  PRIMARY KEY (`item`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
 -- Table structure for guild_eventlog
 -- ----------------------------
 DROP TABLE IF EXISTS `guild_eventlog`;
