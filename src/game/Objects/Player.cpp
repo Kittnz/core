@@ -23085,3 +23085,13 @@ void Player::SendAddonMessage(std::string prefix, std::string message)
 
 	GetSession()->SendPacket(&data);
 }
+
+void Player::SendAddonMessage(std::string prefix, std::string message, Player* from)
+{
+	WorldPacket data;
+	ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD,
+		(prefix + "\t" + message).c_str(), Language(LANG_ADDON), GetChatTag(),
+		from->GetObjectGuid(), from->GetName());
+
+	GetSession()->SendPacket(&data);
+}
