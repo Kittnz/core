@@ -2406,3 +2406,4 @@ replace into `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `play
 
 update creature_template set faction = 1682 where entry = 60443;
 update gameobject set spawntimesecsmin = 30, spawntimesecsmax = 30 where id = 2010827;
+update item_template set class = 4, subclass = 0 where entry = 83239;
