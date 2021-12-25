@@ -2385,7 +2385,7 @@ update quest_template set details = 'You have learned how to tame a beast using 
 
 update quest_template set ObjectiveText1 = '' where entry = 40263;
 
-update creature_template set display_id1 = 18694, scale = 1 where entry = 60635;
+update creature_template set display_id1 = 18694, display_id2 = 0, display_id3 = 0, scale = 1 where entry = 60635;
 replace into creature_display_info_addon values(18694, 0, 0, 0, 0);
 
 delete from gameobject_template where entry = 2010798;
@@ -2393,3 +2393,9 @@ replace into gameobject_template values
 (2010798,5,25866,'The Azurestone',0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 update gameobject set spawntimesecsmin = 900, spawntimesecsmax = 900 where guid = 5001265 and id = 2004982;
+
+update creature_template set display_id1 = 18556, scale = 1 where entry = 80995;
+replace into creature_display_info_addon values(18556, 0, 0, 0, 0);
+
+update creature_template set display_id1 = 18551, scale = 1 where entry = 81034;
+replace into creature_display_info_addon values(18551, 0, 0, 0, 0);
