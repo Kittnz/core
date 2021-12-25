@@ -22,6 +22,8 @@ SET time_zone = "+00:00";
 -- Table structure for table `guild_bank`
 --
 
+-- remove old guild_bank db
+DROP TABLE IF EXISTS `guild_bank`;
 CREATE TABLE `guild_bank` (
   `guildid` int(11) UNSIGNED NOT NULL,
   `guid` int(11) NOT NULL,
