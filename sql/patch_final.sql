@@ -2391,3 +2391,5 @@ replace into creature_display_info_addon values(18694, 0, 0, 0, 0);
 delete from gameobject_template where entry = 2010798;
 replace into gameobject_template values
 (2010798,5,25866,'The Azurestone',0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+update gameobject set spawntimesecsmin = 900, spawntimesecsmax = 900 where guid = 5001265 and id = 2004982;
