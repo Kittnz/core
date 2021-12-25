@@ -314,8 +314,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			LoginDatabase.escape_string(to);
 
 			if (Player* pTargetPlayer = sObjectMgr.GetPlayer(to.c_str())) {
-				std::string playerName = _player->GetName();
-				pTargetPlayer->SendAddonMessage("TW_CHAT_MSG_WHISPER", message);
+				pTargetPlayer->SendAddonMessage("TW_CHAT_MSG_WHISPER", message, _player);
 			}
 			else
 			{
