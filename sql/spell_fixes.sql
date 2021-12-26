@@ -102,3 +102,9 @@ UPDATE spell_template SET school=1 WHERE entry=23513;
 
 -- Arcane Missiles: aggro on hit, not cast.
 UPDATE spell_template SET attributesEx3 = 131072 WHERE entry = 5143 OR entry = 5144 OR entry = 5145 OR entry = 8416 OR entry = 8417 OR entry = 10211 OR entry = 10212 OR entry = 25345;  
+
+-- Fix Wyvern Sting not being removed on taking damage.
+UPDATE `spell_template` SET `procCharges`=1 WHERE (`procFlags` & 1048576) && (`auraInterruptFlags` & 2) && (`procCharges` = 0);
+
+-- Triggered dot aura by Wyvern Sting should be a debuff.
+UPDATE `spell_template` SET `customFlags`=`customFlags` | 2 WHERE `entry` IN (24131, 24134, 24135);
