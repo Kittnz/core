@@ -1509,6 +1509,7 @@ enum ShapeshiftForm
     FORM_AMBIENT            = 0x06,
     FORM_GHOUL              = 0x07,
     FORM_DIREBEAR           = 0x08,
+    FORM_NEW_TREE           = 0x09,
     FORM_CREATUREBEAR       = 0x0E,
     FORM_CREATURECAT        = 0x0F,
     FORM_GHOSTWOLF          = 0x10,

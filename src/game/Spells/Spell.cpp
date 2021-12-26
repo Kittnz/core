@@ -5572,6 +5572,31 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         return SPELL_FAILED_TARGET_AURASTATE;
                 break;
             }
+
+            case 45563:
+            case 45564:
+            case 45565:
+            case 45566:
+            case 45567:
+            case 45569: // champion buffs
+            {
+
+                if (Player* player = ToPlayer(GetAffectiveCaster()))
+                {
+                    if (player->GetChampionGUID().IsEmpty())
+                        return SPELL_FAILED_NO_CHAMPION;
+
+                    if (Unit* target = m_targets.getUnitTarget())
+                    {
+                        if (player->GetChampionGUID() != target->GetObjectGuid())
+                        {
+                            if (Unit* champion = ObjectAccessor::GetUnit(*player, player->GetChampionGUID()))
+                                m_targets.setUnitTarget(champion); // redirect target to champion
+                        }
+                    }
+                }
+
+            }break;
         }
 
         // Loatheb Corrupted Mind spell failed
