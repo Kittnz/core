@@ -1576,10 +1576,6 @@ CreatureAI* GetAI_npc_balos_jacken(Creature *_Creature)
     return new npc_balos_jackenAI(_Creature);
 }
 
-/*######
-##
-######*/
-
 void AddSC_dustwallow_marsh()
 {
     Script *newscript;
