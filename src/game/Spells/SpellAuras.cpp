@@ -1759,6 +1759,23 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             }
             case SPELLFAMILY_SHAMAN:
                 break;
+
+            case SPELLFAMILY_PRIEST:
+            {
+                switch (GetId())
+                {
+                    case 45568: // Proclaim Champion (Custom)
+                    {
+                        auto caster = GetCaster();
+                        if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
+                            return;
+
+                        auto playerCaster = caster->ToPlayer();
+                        playerCaster->SetChampion(target->GetGUID());
+
+                    }break;
+                }
+            }break;
         }
     }
     // AT REMOVE
@@ -1977,6 +1994,17 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     target->RemoveAurasDueToSpell(29660);
                 break;
             }
+
+            case 45568: // Proclaim Champion (Custom)
+            {
+                auto caster = GetCaster();
+                if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
+                    return;
+
+                auto playerCaster = caster->ToPlayer();
+                playerCaster->SetChampion(target->GetGUID());
+
+            }break;
         }
 
         /*if (m_removeMode == AURA_REMOVE_BY_DEATH) // redundant, AM is cancelled in aura holder removal
@@ -2333,6 +2361,12 @@ std::pair<unsigned int, float> GetShapeshiftDisplayInfo(ShapeshiftForm form, Uni
     case FORM_CREATUREBEAR:
         display_id = 902;
         break;
+
+    case FORM_NEW_TREE:
+    {
+        display_id = Player::TeamForRace(target->GetRace()) == ALLIANCE ? 2451 : 864;
+    }break;
+
     case FORM_GHOSTWOLF:
         // Glyph of the Spectral Wolf
         display_id = (target->IsPlayer() && target->ToPlayer()->HasItemCount(51831, 1)) ? 3123 : 4613;
@@ -5432,6 +5466,11 @@ void Aura::HandleShapeshiftBoosts(bool apply)
         case FORM_MOONKIN:
             spellId1 = 24905;
             break;
+
+        case FORM_NEW_TREE:
+            spellId1 = 45707;
+            break;
+
         case FORM_SPIRITOFREDEMPTION:
             spellId1 = 27792;
             spellId2 = 27795;                               // must be second, this important at aura remove to prevent to early iterator invalidation.

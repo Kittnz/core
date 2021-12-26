@@ -2099,15 +2099,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
-                case 45568: // Proclaim Champion (Custom)
-                {
-                    if (!unitTarget || !m_caster->IsPlayer() || unitTarget->GetGUID() == m_caster->GetGUID())
-                        return;
-
-                    auto playerCaster = m_caster->ToPlayer();
-                    playerCaster->SetChampion(unitTarget->GetGUID());
-
-                }break;
 
 
                 case 45555: // pain spike
@@ -2163,6 +2154,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         case SPELLFAMILY_DRUID:
             switch (m_spellInfo->Id)
             {
+                case 45708: //berserk trigger
+                {
+                    auto player = m_caster->ToPlayer();
+                    if (player)
+                    {
+                        if (player->GetShapeshiftForm() == FORM_CAT)
+                            player->CastSpell(player, 45710, true);
+
+                        if (player->GetShapeshiftForm() == FORM_BEAR || player->GetShapeshiftForm() == FORM_DIREBEAR)
+                            player->CastSpell(player, 45709, true);
+                    }
+                }break;
+
                 case 5229:                                  // Enrage
                 {
                     // Reduce base armor by 27% in Bear Form and 16% in Dire Bear Form

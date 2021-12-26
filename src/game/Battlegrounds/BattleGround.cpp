@@ -641,8 +641,9 @@ void BattleGround::EndBattleGround(Team winner)
     m_EndTime = TIME_TO_AUTOREMOVE;
 
     // If PvP week is active, award experience (5% to the winner team and 2.5% to the others)
-    if (sWorld.getConfig(CONFIG_FLOAT_RATE_HONOR) > 1.0f)
-        RewardExperienceToPlayers(winner);
+    // always reward xp now.
+    //if (sWorld.getConfig(CONFIG_FLOAT_RATE_HONOR) > 1.0f)
+    RewardExperienceToPlayers(winner);
 
     for (const auto& itr : m_Players)
     {
