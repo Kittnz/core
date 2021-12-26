@@ -2591,3 +2591,7 @@ replace into `item_template` (`entry`, `class`, `subclass`, `name`, `description
  (51313, 0, 0, 'Portable Wormhole Generator: Orgrimmar', 'Technologically advanced energy-matter scrambler.', 20627, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46012, 0, -5, 0, 3600000, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '');
 
 DROP TABLE custom_mount_entry_relation;
+
+update item_template set name = 'Black Mageweave Tabard' where entry = 50091;
+update item_template set name = 'Red Mageweave Tabard' where entry = 50038;
+update item_template set name = 'Gold Mageweave Tabard' where entry = 50044;
