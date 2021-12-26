@@ -11,7 +11,9 @@ enum
 	SPELL_FROST_NOVA = 30094,
 	CREATURE_FRIGID_GUARDIAN = 60612,
 	GOBJ_OBSTRUCTION = 5001265,
+	GOBJ_OBSTRUCTION_DECOR = 5000770,
 	GOBJ_TYPE_OBSTRUCTION = 2004982,
+	GOBJ_TYPE_OBSTRUCTION_DECOR = 20002653,
 };
 
 enum class eArctirasStages : uint32_t
@@ -111,10 +113,15 @@ struct boss_ArctirasAI : public GenericSpellMob
 		me->MonsterTextEmote("You hear something shatter behind you!", nullptr, true);
 
 		ObjectGuid ObstructionGameObjectGuid(HIGHGUID_GAMEOBJECT, (uint32)GOBJ_TYPE_OBSTRUCTION, (uint32)GOBJ_OBSTRUCTION);
+		ObjectGuid ObstructionGameObjectGuid2(HIGHGUID_GAMEOBJECT, (uint32)GOBJ_TYPE_OBSTRUCTION_DECOR, (uint32)GOBJ_OBSTRUCTION_DECOR);
 
 		if (GameObject* ObstructionObj = me->GetMap()->GetGameObject(ObstructionGameObjectGuid))
 		{
 			ObstructionObj->Despawn();
+		}
+		if (GameObject* ObstructionObj2 = me->GetMap()->GetGameObject(ObstructionGameObjectGuid2))
+		{
+			ObstructionObj2->Despawn();
 		}
 	}
 

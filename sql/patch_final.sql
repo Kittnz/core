@@ -2595,3 +2595,35 @@ DROP TABLE custom_mount_entry_relation;
 update item_template set name = 'Black Mageweave Tabard' where entry = 50091;
 update item_template set name = 'Red Mageweave Tabard' where entry = 50038;
 update item_template set name = 'Gold Mageweave Tabard' where entry = 50044;
+
+replace into item_template values
+ ('83500', '0', '0', 'Plans: Untempered Runeblade', '', '1097', '3', '0', '1', '100000', '25000', '0', '-1', '-1', '65',
+ '0', '164', '300', '17039', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '47231', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+update creature_template set loot_id = 0 where entry = 93107;
+
+delete from gameobject_template where entry = 2010867;
+replace into gameobject_template values
+(2010867,3,259,'Vault Armory Equipment',0,0,1,57,2010867,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010867;
+replace into gameobject_loot_template values
+(2010867,40003,25,1,1,1,0),
+(2010867,60506,25,1,1,1,0),
+(2010867,60501,25,1,1,1,0),
+(2010867,60505,25,1,1,1,0),
+(2010867,60420,25,2,1,1,0),
+(2010867,60429,25,2,1,1,0),
+(2010867,60430,25,2,1,1,0),
+(2010867,60426,25,2,1,1,0);
+
+update item_template set bonding = 2 where entry = 65000;
+update item_template set bonding = 2 where entry = 65001;
+update item_template set bonding = 2 where entry = 65002;
+update item_template set bonding = 2 where entry = 65006;
