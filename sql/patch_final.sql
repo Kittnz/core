@@ -2556,3 +2556,31 @@ update item_template set sell_price = 0, buy_price = 0 where entry in (50000,
 80694,
 50408,
 53008);
+
+update creature_template set npc_flags = 2 where name in (
+
+'Nick Ford',
+'Andrew Bigglesell',
+'Docks Crier',
+'Josh Bauer',
+'Dock Fisher',
+'Dock Worker',
+'Cheyenne Reynolds',
+'Logger',
+'Dave "Ozy" Norton',
+'High Elf Refugee',
+'Citizen Schreimeier',
+'Citizen Fredriks',
+'Tina Murray',
+'Chelly Saintsing',
+'Officer Visser'
+
+);
+
+update item_template set display_id = 27075 where entry = 65007;
+
+set @gossip_menu_id = 45038; set @magic_number = 5390;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Everyone you meet has something that they can teach you. Is that why you have come to see me?'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
