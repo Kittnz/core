@@ -11777,13 +11777,6 @@ bool ChatHandler::HandleBgTestCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleReloadCustomMountEntries(char* args)
-{
-    sObjectMgr.LoadCustomMountCreatureEntries();
-    SendSysMessage(">> Table `custom_mount_entry_relation` reloaded.");
-    return true;
-}
-
 bool ChatHandler::HandleModifyXpCommand(char* args)
 {
     if (!*args)

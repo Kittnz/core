@@ -2221,53 +2221,26 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
         sScriptMgr.OnAuraDummy(this, apply);
 }
 
-void Aura::HandleAuraMounted(bool apply, bool Real)
+void Aura::HandleAuraMounted(bool apply, bool real)
 {
-    // only at real add/remove aura
-    if (!Real)
-        return;
-
+    if (!real) return;
     Unit *target = GetTarget();
-
-    if (!target)
-        return;
+    if (!target) return;
 
     if (apply)
     {
-        bool useCustom = false;
-        CreatureInfo const* cInfo = nullptr;
-        if (Player* pPlayer = target->ToPlayer()) {
-            const ObjectGuid& itemGuid = GetCastItemGuid();
-            if (itemGuid) {
-                uint32 itemEntry = 0;
-                if (Item* item = pPlayer->GetItemByGuid(itemGuid))
-                    itemEntry = item->GetEntry();
-                if (itemEntry > 50000) {
-                    uint32 creature_entry = sObjectMgr.GetCustomMountCreatureEntryFromItem(itemEntry);
-                    if (creature_entry) {
-                        cInfo = sCreatureStorage.LookupEntry<CreatureInfo>(creature_entry);
-                        useCustom = true;
-                    }
-                }
-            }
-        }
-
-        if (!useCustom) {
-            cInfo = ObjectMgr::GetCreatureTemplate(m_modifier.m_miscvalue);
-        }
-
-        if (!cInfo)
+        CreatureInfo const* ci = ObjectMgr::GetCreatureTemplate(m_modifier.m_miscvalue);
+        if (!ci)
         {
-            sLog.outErrorDb("AuraMounted: `creature_template`='%u' not found in database", m_modifier.m_miscvalue);
+            sLog.outErrorDb("AuraMounted: `creature_template`='%u' not found in database (only need its display_id)", m_modifier.m_miscvalue);
             return;
         }
-
-        uint32 display_id = Creature::ChooseDisplayId(cInfo);
-        CreatureDisplayInfoAddon const* minfo = sObjectMgr.GetCreatureDisplayInfoRandomGender(display_id);
+        uint32 displayId = Creature::ChooseDisplayId(ci);
+        CreatureDisplayInfoAddon const* minfo = sObjectMgr.GetCreatureDisplayInfoRandomGender(displayId);
         if (minfo)
-            display_id = minfo->display_id;
+            displayId = minfo->display_id;
 
-        target->Mount(display_id, GetId());
+        target->Mount(displayId, GetId());
     }
     else
         target->Unmount(true);

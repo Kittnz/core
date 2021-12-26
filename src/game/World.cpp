@@ -1295,9 +1295,6 @@ void World::SetInitialWorldSettings()
     ///- Loading shop tables
     sObjectMgr.LoadShop();
 
-    ///- Loading custom mounts
-    sObjectMgr.LoadCustomMountCreatureEntries();
-
     ///- Loads existing IDs in the database.
     sObjectMgr.LoadAllIdentifiers();
 

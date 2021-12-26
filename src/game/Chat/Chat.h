@@ -226,7 +226,6 @@ class ChatHandler
 		bool HandleTurtleCinematic(char *args);
         // Reload        
         bool HandleReloadShopCommand(char* args);
-        bool HandleReloadCustomMountEntries(char* args);
 
         bool HandleAccountCommand(char* args);
         bool HandleAccountCharactersCommand(char* args);
