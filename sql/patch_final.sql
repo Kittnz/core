@@ -4,7 +4,7 @@ update creature_template set display_id1 = 3007 where name = 'Bronze Bruiser';
 -- If above 125 > Expert
 -- If above 200 > Artisan
 
-replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue reqlevel) values 
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values 
 -- Artisan Leatherworker: Una
 (3007,46620,3500,165,200,0),
 (3007,46621,3500,165,200,0),
