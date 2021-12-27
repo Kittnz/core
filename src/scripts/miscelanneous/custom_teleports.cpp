@@ -39,7 +39,7 @@ struct custom_dungeon_portal : public GameObjectAI
                         { 112915, WorldLocation{269, -2002.5F, 6575.3F, -154.9F, 5.7F}, 58 },  // Black Morass (Entrance)
                         { 112916, WorldLocation{1, -8756.8F, -4191.3F, -209.4F, 5.5F},  1 },   // Black Morass (Exit)
                         { 112917, WorldLocation{35, -1.15F, 44.4F, -25.58F, 1.6F},      58 },  // Stromwind Vault (Entrance)
-                        { 112918, WorldLocation{0, -8677.6F, 637.0F, 96.9F, 5.3F},      1 },   // Stromwind Vault (Exit)      
+                        { 112918, WorldLocation{0, -8702.01F, 646.16F, 99.97F, 0.04F},  1 },   // Stromwind Vault (Exit)      
                     } };
                     for (auto const& teleport : portals_and_locations)
                     {
