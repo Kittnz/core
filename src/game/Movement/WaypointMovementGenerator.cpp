@@ -399,7 +399,7 @@ bool FlightPathMovementGenerator::Update(Player &player, uint32 const& /*diff*/)
 
             player.SaveTaxiFlightData(nextNode);
             player.PrepareTaxiFlightWithTeleport();
-            player.TeleportTo((*i_path)[nextNode].mapid, (*i_path)[nextNode].x + 1.0f, (*i_path)[nextNode].y + 1.0f, (*i_path)[nextNode].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
+            player.TeleportTo((*i_path)[i_currentNode + 4].mapid, (*i_path)[i_currentNode + 4].x + 1.0f, (*i_path)[i_currentNode + 4].y + 1.0f, (*i_path)[i_currentNode + 4].z, player.GetOrientation(), TELE_TO_FORCE_MAP_CHANGE);
             return false;
         }
         if (MovementInProgress() && (*i_path)[i_currentNode + 1].path != (*i_path)[i_currentNode].path)
