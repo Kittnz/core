@@ -287,3 +287,5 @@ replace into creature_loot_template values (92213, 83238, 16.6, 1, 1, 1, 0);
 replace into creature_loot_template values (92213, 83239, 16.6, 1, 1, 1, 0);
 replace into creature_loot_template values (92213, 83240, 16.6, 1, 1, 1, 0);
 replace into creature_loot_template values (92213, 83236, 100, 2, 1, 1, 0);
+
+update battlemaster_entry set entry = 13761 where bg_template = 5;
