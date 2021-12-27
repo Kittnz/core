@@ -278,11 +278,12 @@ replace into item_template values
 update creature_loot_template set chanceorquestchance = 0.1 where item in (83241,83242,83243,83244);
 
 delete from creature_loot_template where entry = 92213;
+delete from creature_loot_template where item = 83240;
 
-replace into creature_loot_template values (92213, 83233, 16.6, 1, 1, 1, 0, 0, 10);
-replace into creature_loot_template values (92213, 83234, 16.6, 1, 1, 1, 0, 0, 10);
-replace into creature_loot_template values (92213, 83237, 16.6, 1, 1, 1, 0, 0, 10);
-replace into creature_loot_template values (92213, 83238, 16.6, 1, 1, 1, 0, 0, 10);
-replace into creature_loot_template values (92213, 83239, 16.6, 1, 1, 1, 0, 0, 10);
-replace into creature_loot_template values (92213, 83240, 16.6, 1, 1, 1, 0, 0, 10);
-replace into creature_loot_template values (92213, 83236, 100, 2, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (92213, 83233, 16.6, 1, 1, 1, 0);
+replace into creature_loot_template values (92213, 83234, 16.6, 1, 1, 1, 0);
+replace into creature_loot_template values (92213, 83237, 16.6, 1, 1, 1, 0);
+replace into creature_loot_template values (92213, 83238, 16.6, 1, 1, 1, 0);
+replace into creature_loot_template values (92213, 83239, 16.6, 1, 1, 1, 0);
+replace into creature_loot_template values (92213, 83240, 16.6, 1, 1, 1, 0);
+replace into creature_loot_template values (92213, 83236, 100, 2, 1, 1, 0);
