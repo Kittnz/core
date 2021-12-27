@@ -333,3 +333,5 @@ replace into mangos_string values('10060','Great work, heroes! For these bitter 
 replace into mangos_string values('10061','Gladeshire Tower',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 replace into mangos_string values('10062','Gol\'Dregar Tower',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 replace into mangos_string values('10063','Fort Valiance',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+
+update mangos_string set content_default = 'The final battle is at hand, heroes. Join the fray and locate the hidden agents of the Infinite Dragonflight amongst your enemies!' where entry = 10060;
