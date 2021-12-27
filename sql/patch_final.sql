@@ -1,4 +1,4 @@
-update creature_template set display_id1 = 3007 where name = 'Bronze Bruiser';
+update creature_template set display_id1 = 15720 where name = 'Bronze Bruiser';
 
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values 
 -- Artisan Leatherworker: Una
@@ -120,104 +120,6 @@ replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reql
 (10278,47243,90,164,75,0),
 (10278,47244,90,164,120,0);
 
-replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values 
--- Shaman Trainer: Haromm
-(986,45511,3500,0,0,60), -- bloodlust rank 2 
-(986,45521,3500,0,0,60), -- Stormstrike rank 2  
-(986,45525,3500,0,0,60), -- earth shield  
-(986,45526,3500,0,0,60), -- water shield  
-(986,45529,3500,0,0,40), -- calm elements  
--- Shaman Trainer: Siln Skychaser
-(3030,45511,3500,0,0,60), -- bloodlust rank 2 
-(3030,45521,3500,0,0,60), -- Stormstrike rank 2  
-(3030,45525,3500,0,0,60), -- earth shield  
-(3030,45526,3500,0,0,60), -- water shield  
-(3030,45529,3500,0,0,40), -- calm elements  
--- Shaman Trainer: Siln Skychaser
-(3031,45511,3500,0,0,60), -- bloodlust rank 2 
-(3031,45521,3500,0,0,60), -- Stormstrike rank 2  
-(3031,45525,3500,0,0,60), -- earth shield  
-(3031,45526,3500,0,0,60), -- water shield  
-(3031,45529,3500,0,0,40), -- calm elements 
--- Shaman Trainer: Beram Skychaser
-(3032,45511,3500,0,0,60), -- bloodlust rank 2 
-(3032,45521,3500,0,0,60), -- Stormstrike rank 2  
-(3032,45525,3500,0,0,60), -- earth shield  
-(3032,45526,3500,0,0,60), -- water shield  
-(3032,45529,3500,0,0,40), -- calm elements  
--- Shaman Trainer: Kardris Dreamseeker
-(3344,45511,3500,0,0,60), -- bloodlust rank 2 
-(3344,45521,3500,0,0,60), -- Stormstrike rank 2  
-(3344,45525,3500,0,0,60), -- earth shield  
-(3344,45526,3500,0,0,60), -- water shield  
-(3344,45529,3500,0,0,40), -- calm elements   
--- Shaman Trainer: Sian'tsu
-(3403,45511,3500,0,0,60), -- bloodlust rank 2 
-(3403,45521,3500,0,0,60), -- Stormstrike rank 2  
-(3403,45525,3500,0,0,60), -- earth shield  
-(3403,45526,3500,0,0,60), -- water shield  
-(3403,45529,3500,0,0,40), -- calm elements   
--- Shaman Trainer: Sagorne Creststrider
-(13417,45511,3500,0,0,60), -- bloodlust rank 2 
-(13417,45521,3500,0,0,60), -- Stormstrike rank 2  
-(13417,45525,3500,0,0,60), -- earth shield  
-(13417,45526,3500,0,0,60), -- water shield  
-(13417,45529,3500,0,0,40), -- calm elements   
--- Priest Trainer: High Priestess Laurena
--- Priest Trainer: Miles Welsh
--- Priest Trainer: Malakai Cross
--- Priest Trainer: Father Cobb
--- Priest Trainer: Laurna Morninglight
--- Priest Trainer: Astarii Starseeker
--- Priest Trainer: Jandria
--- Priest Trainer: Lariia
--- Priest Trainer: Aelthalyste
--- Priest Trainer: Father Lankester
--- Priest Trainer: Father Lazarus
--- Priest Trainer: Theodrus Frostbeard
--- Priest Trainer: Braenna Flintcrag
--- Priest Trainer: Toldren Deepiron
--- Priest Trainer: Brother Benjamin
--- Priest Trainer: Brother Joshua
--- Priest Trainer: X'yera
--- Priest Trainer: Ur'kyo
--- Priest Trainer: Nara Meideros
--- Priest Trainer: Priestess Alathea
--- Priest Trainer: High Priest Rohan
--- Priest Trainer: High Priest Raemoran Alah'belore
-(376 ,45553,3500,0,0,60), -- improved shadow form 
-(3044,45553,3500,0,0,60), -- improved shadow form 
-(3045,45553,3500,0,0,60), -- improved shadow form 
-(3046,45553,3500,0,0,60), -- improved shadow form 
-(4090,45553,3500,0,0,60), -- improved shadow form 
-(4091,45553,3500,0,0,60), -- improved shadow form 
-(4092,45553,3500,0,0,60), -- improved shadow form 
-(4606,45553,3500,0,0,60), -- improved shadow form 
-(4607,45553,3500,0,0,60), -- improved shadow form 
-(4608,45553,3500,0,0,60), -- improved shadow form 
-(5141,45553,3500,0,0,60), -- improved shadow form 
-(5142,45553,3500,0,0,60), -- improved shadow form 
-(5143,45553,3500,0,0,60), -- improved shadow form 
-(5484,45553,3500,0,0,60), -- improved shadow form 
-(5489,45553,3500,0,0,60), -- improved shadow form 
-(6014,45553,3500,0,0,60), -- improved shadow form 
-(6018,45553,3500,0,0,60), -- improved shadow form 
-(11397,45553,3500,0,0,60), -- improved shadow form 
-(11401,45553,3500,0,0,60), -- improved shadow form 
-(11406,45553,3500,0,0,60), -- improved shadow form 
-(80243,45553,3500,0,0,60); -- improved shadow form 
--- Warrior Trainer: 
--- (3007,45599,3500,0,0,58), -- decisive strike rank 1
--- (3007,45961,3500,0,0,60), -- slam rank 5 
--- (3007,45960,3500,0,0,60), -- decisive strike rank 2
--- Hunter Trainer: 
--- (3007,45660,3500,0,0,60), -- aspect of the wolf
--- Rogue Trainer: 
--- (3007,45608,3500,0,0,24), -- detection (swirly ball)
--- (3007,45604,3500,0,0,40), -- flourish
--- Druid Trainer: 
--- (3007,45734,3500,0,0,60), --  owlkin frenzy
- 
 replace into item_template (entry, class, subclass, name, description, display_id, quality, flags, buy_count, buy_price, sell_price, inventory_type, allowable_class, allowable_race, item_level, required_level, required_skill, required_skill_rank, required_spell, required_honor_rank, required_city_rank, required_reputation_faction, required_reputation_rank, max_count, stackable, container_slots, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9, stat_value9, stat_type10, stat_value10, delay, range_mod, ammo_type, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2, dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, block, armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, spellid_4, spelltrigger_4, spellcharges_4, spellppmrate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmrate_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5, bonding, page_text, page_language, page_material, start_quest, lock_id, material, sheath, random_property, set_id, max_durability, area_bound, map_bound, duration, bag_family, disenchant_id, food_type, min_money_loot, max_money_loot, extra_flags, other_team_entry, script_name) values
 (83510, 9, 3, 'Schematic: Portable Wormhole Generator — Stormwind', '', 15274, 1, 64, 1, 1000, 250, 0, -1, -1, 24, 0, 202, 120, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47260, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
 (83511, 9, 3, 'Schematic: Portable Wormhole Generator — Orgrimmar', '', 15274, 1, 64, 1, 1000, 250, 0, -1, -1, 24, 0, 202, 120, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47261, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
@@ -340,3 +242,15 @@ replace into mount_spells (81239, 46519);
 replace into mount_spells (81240, 46520);
 
 replace into companion_spells (81258, 49515);
+
+replace into item_template values
+ ('83518', '9', '4', 'Plans: Imperial Plate Gloves', '', '811', '2', '0', '1', '12000', '3000', '0', '-1', '-1', '53',
+ '0', '164', '270', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '47239', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update quest_template set rewitemid1 = 83518, rewitemcount1 = 1 where entry = 55300;
