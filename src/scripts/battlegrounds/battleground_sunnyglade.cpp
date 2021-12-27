@@ -11,10 +11,13 @@ EndScriptData */
 enum SV_Spells
 {
     /*human leader*/
-    SPELL_HOLY_STRIKE = 17284,
-    SPELL_HAMMER_OF_JUSTICE = 24239,
     /*orc_leader*/
     SPELL_CLEAVE = 26350,
+    SPELL_WARSTOMP = 24375,
+    SPELL_REND = 18106,
+    SPELL_SUNDER_ARMOR = 24317,
+    SPELL_SLOW = 22356,
+    SPELL_KNOCK = 20686,
     /*human_footman*/
     /*human_archer*/
     SPELL_AUTOSHOT = 75,
@@ -25,15 +28,21 @@ enum SV_Spells
     /*orc_spearman*/
     /*orc_warlock*/
     /*orc_necrolyte*/
+    /**/
+    SPELL_TRANSFORM_VISUAL = 24085,
 };
 
 enum SV_Events
 {
     /*human leader*/
-    EVENT_HOLY_STRIKE,
-    EVENT_HAMMER_OF_JUSTICE,
     /*orc_leader*/
     EVENT_CLEAVE,
+    EVENT_WARSTOMP,
+    EVENT_REND,
+    EVENT_SUNDER_ARMOR,
+    EVENT_SLOW,
+    EVENT_KNOCK,
+    EVENT_TRANSFORM,
     /*human_footman*/
     /*human_archer*/
     EVENT_SHOOT,
@@ -64,8 +73,8 @@ struct SV_heraldAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
-        m_events.ScheduleEvent(EVENT_HOLY_STRIKE, Seconds(urand(8, 15)));
-        m_events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, Seconds(urand(20, 45)));
+        //m_events.ScheduleEvent(EVENT_HOLY_STRIKE, Seconds(urand(8, 15)));
+        //m_events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, Seconds(urand(20, 45)));
     }
 
     void UpdateAI(uint32 const uiDiff)  override
@@ -74,7 +83,7 @@ struct SV_heraldAI : public ScriptedAI
             return;
 
         m_events.Update(uiDiff);
-        while (auto l_EventId = m_events.ExecuteEvent())
+        /*while (auto l_EventId = m_events.ExecuteEvent())
         {
             switch (l_EventId)
             {
@@ -97,7 +106,7 @@ struct SV_heraldAI : public ScriptedAI
                 break;
             }
             }
-        }
+        }*/
 
         DoMeleeAttackIfReady();
     }
@@ -176,16 +185,22 @@ struct SV_human_leaderAI : public ScriptedAI
     }
 
     EventMap m_events;
+    bool m_blackDragon;
 
     void Reset() override
     {
         m_events.Reset();
+        m_blackDragon = false;
     }
 
     void Aggro(Unit* pWho) override
     {
-        m_events.ScheduleEvent(EVENT_HOLY_STRIKE, Seconds(urand(8, 15)));
-        m_events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, Seconds(urand(20, 45)));
+        m_events.ScheduleEvent(EVENT_CLEAVE, Seconds(10));
+        m_events.ScheduleEvent(EVENT_WARSTOMP, Seconds(15));
+        m_events.ScheduleEvent(EVENT_REND, Seconds(12));
+        m_events.ScheduleEvent(EVENT_SUNDER_ARMOR, Seconds(2));
+        m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
+        m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
     }
 
     void UpdateAI(uint32 const uiDiff)  override
@@ -193,29 +208,80 @@ struct SV_human_leaderAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
+        if (!m_blackDragon)
+        {
+            if (m_creature->GetHealthPercent() < 50.0f)
+            {
+                m_blackDragon = true;
+                DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
+                m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
+            }
+        }
+
         m_events.Update(uiDiff);
         while (auto l_EventId = m_events.ExecuteEvent())
         {
             switch (l_EventId)
             {
-                case EVENT_HOLY_STRIKE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HOLY_STRIKE) == CAST_OK)
-                        m_events.Repeat(Seconds(20));
-                    else
-                        m_events.Repeat(100);
+            case EVENT_CLEAVE:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+                    m_events.Repeat(Seconds(10));
+                else
+                    m_events.Repeat(100);
 
-                    break;
-                }
-                case EVENT_HAMMER_OF_JUSTICE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_HAMMER_OF_JUSTICE) == CAST_OK)
-                        m_events.Repeat(Seconds(30));
-                    else
-                        m_events.Repeat(100);
+                break;
+            }
+            case EVENT_WARSTOMP:
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
+                    m_events.Repeat(Seconds(15));
+                else
+                    m_events.Repeat(100);
 
-                    break;
-                }
+                break;
+            }
+            case EVENT_REND:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
+                    m_events.Repeat(Seconds(18));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_SUNDER_ARMOR:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+                    m_events.Repeat(Seconds(25));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_SLOW:
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
+                    m_events.Repeat(Seconds(20));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_KNOCK:
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
+                    m_events.Repeat(Seconds(20));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_TRANSFORM:
+            {
+                m_creature->SetDisplayId(18040);
+                break;
+            }
             }
         }
 
@@ -232,15 +298,22 @@ struct SV_orc_leaderAI : public ScriptedAI
     }
 
     EventMap m_events;
+    bool m_blackDragon;
 
     void Reset() override
     {
         m_events.Reset();
+        m_blackDragon = false;
     }
 
     void Aggro(Unit* pWho) override
     {
-        m_events.ScheduleEvent(EVENT_CLEAVE, Seconds(urand(8, 15)));
+        m_events.ScheduleEvent(EVENT_CLEAVE, Seconds(10));
+        m_events.ScheduleEvent(EVENT_WARSTOMP, Seconds(15));
+        m_events.ScheduleEvent(EVENT_REND, Seconds(12));
+        m_events.ScheduleEvent(EVENT_SUNDER_ARMOR, Seconds(2));
+        m_events.ScheduleEvent(EVENT_SLOW, Seconds(urand(20, 35)));
+        m_events.ScheduleEvent(EVENT_KNOCK, Seconds(18));
     }
 
     void UpdateAI(uint32 const uiDiff)  override
@@ -248,20 +321,80 @@ struct SV_orc_leaderAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
+        if (!m_blackDragon)
+        {
+            if (m_creature->GetHealthPercent() < 50.0f)
+            {
+                m_blackDragon = true;
+                DoCast(m_creature, SPELL_TRANSFORM_VISUAL);
+                m_events.ScheduleEvent(EVENT_TRANSFORM, 250);
+            }
+        }
+
         m_events.Update(uiDiff);
         while (auto l_EventId = m_events.ExecuteEvent())
         {
             switch (l_EventId)
             {
-                case EVENT_CLEAVE:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
-                        m_events.Repeat(Seconds(15));
-                    else
-                        m_events.Repeat(100);
+            case EVENT_CLEAVE:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+                    m_events.Repeat(Seconds(10));
+                else
+                    m_events.Repeat(100);
 
-                    break;
-                }
+                break;
+            }
+            case EVENT_WARSTOMP:
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
+                    m_events.Repeat(Seconds(15));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_REND:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
+                    m_events.Repeat(Seconds(18));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_SUNDER_ARMOR:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+                    m_events.Repeat(Seconds(25));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_SLOW:
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
+                    m_events.Repeat(Seconds(20));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_KNOCK:
+            {
+                if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
+                    m_events.Repeat(Seconds(20));
+                else
+                    m_events.Repeat(100);
+
+                break;
+            }
+            case EVENT_TRANSFORM:
+            {
+                m_creature->SetDisplayId(18750);
+                break;
+            }
             }
         }
 
@@ -360,15 +493,15 @@ struct SV_human_archerAI : public ScriptedAI
         {
             switch (l_EventId)
             {
-                case EVENT_SHOOT:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AUTOSHOT) == CAST_OK)
-                        m_events.Repeat(Seconds(2));
-                    else
-                        m_events.Repeat(100);
+            case EVENT_SHOOT:
+            {
+                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AUTOSHOT) == CAST_OK)
+                    m_events.Repeat(Seconds(2));
+                else
+                    m_events.Repeat(100);
 
-                    break;
-                }
+                break;
+            }
             }
         }
     }
@@ -403,12 +536,12 @@ struct SV_human_conjurerAI : public ScriptedAI
         {
             switch (l_EventId)
             {
-                case EVENT_SUMMON_WATER_ELEMENTAL:
-                {
-                    m_events.CancelEvent(EVENT_SUMMON_WATER_ELEMENTAL);
-                    DoCastSpellIfCan(m_creature, SPELL_SUMMON_WATER_ELEMENTAL);
-                    break;
-                }
+            case EVENT_SUMMON_WATER_ELEMENTAL:
+            {
+                m_events.CancelEvent(EVENT_SUMMON_WATER_ELEMENTAL);
+                DoCastSpellIfCan(m_creature, SPELL_SUMMON_WATER_ELEMENTAL);
+                break;
+            }
             }
         }
 
@@ -647,8 +780,8 @@ struct SV_orc_necrolyteAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
-        m_events.ScheduleEvent(EVENT_HOLY_STRIKE, Seconds(urand(8, 15)));
-        m_events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, Seconds(urand(20, 45)));
+        //m_events.ScheduleEvent(EVENT_HOLY_STRIKE, Seconds(urand(8, 15)));
+        //m_events.ScheduleEvent(EVENT_HAMMER_OF_JUSTICE, Seconds(urand(20, 45)));
     }
 
     void UpdateAI(uint32 const uiDiff)  override
