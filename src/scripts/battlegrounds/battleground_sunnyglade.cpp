@@ -392,7 +392,7 @@ struct SV_orc_leaderAI : public ScriptedAI
             }
             case EVENT_TRANSFORM:
             {
-                m_creature->SetDisplayId(18750);
+                m_creature->SetDisplayId(18040);
                 break;
             }
             }
