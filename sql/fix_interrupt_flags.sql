@@ -1,0 +1,1 @@
+REPLACE INTO `spell_mod` (`Id`, `interruptflags`) VALUES (46498, 1), (46499, 1);
