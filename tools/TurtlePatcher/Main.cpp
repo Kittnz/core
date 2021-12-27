@@ -32,7 +32,7 @@ OFFSET_STR_DISCORD_OVERLAY = 0x003FFF60,	   // Original value is some kind of CR
 #define NEW_BUILD 7000u
 #define NEW_VISUAL_BUILD "7000"
 #define NEW_VISUAL_VERSION "1.16.0"
-#define NEW_BUILD_DATE "Dec 20 2021"
+#define NEW_BUILD_DATE "Dec 27 2021"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-V.mpq"
@@ -133,9 +133,9 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_PVP_RANK_CHECK, SEEK_SET);
 	fwrite(patch_5, sizeof(patch_5), 1, hWoW);
 
-	char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
-	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
-	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
+	//char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
+	//fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
+	//fwrite(patch_6, sizeof(patch_6), 1, hWoW);
 
 	char patch_7[] = { 0xFE };
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_1, SEEK_SET);
@@ -370,7 +370,7 @@ int PatchWoWExe()
 	{
 		PatchBinary(hWoWBinary);
 		PatchNetVersion(hWoWBinary, NEW_BUILD);
-		PatchDiscordOverlayDLL(hWoWBinary);
+	 // PatchDiscordOverlayDLL(hWoWBinary);
 
 		std::string Version(NEW_VISUAL_VERSION);
 		std::string Build(NEW_VISUAL_BUILD);
