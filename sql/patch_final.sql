@@ -238,10 +238,10 @@ replace into mangos_string values('10063','Fort Valiance',NULL,NULL,NULL,NULL,NU
 
 update mangos_string set content_default = 'The final battle is at hand, heroes. Join the fray and locate the hidden agents of the Infinite Dragonflight amongst your enemies!' where entry = 10060;
 
-replace into mount_spells (81239, 46519);
-replace into mount_spells (81240, 46520);
+replace into mount_spells values (81239, 46519);
+replace into mount_spells values (81240, 46520);
 
-replace into companion_spells (81258, 49515);
+replace into companion_spells values (81258, 49515);
 
 replace into item_template values
  ('83518', '9', '4', 'Plans: Imperial Plate Gloves', '', '811', '2', '0', '1', '12000', '3000', '0', '-1', '-1', '53',
