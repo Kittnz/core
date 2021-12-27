@@ -227,3 +227,62 @@ replace into npc_vendor values
 (3413, 83511, 0, 0, 0, 0),
 -- Alliance
 (5519, 83510, 0, 0, 0, 0);
+
+update item_template set inventory_type = 16 where entry = 60500;
+
+replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (81035, 3542, 0, 0, 0, 'Jake Booker', 'Bowyer', 0, 15, 15, 273, 273, 0, 0, 20, 68, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 13, 17, 0, 68, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 21.5072, 29.5724, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 3165, 0, 0, 0, 0, 524298, 0, '');
+
+replace into npc_vendor values
+(81035, 2512, 0, 0, 0, 0),
+(81035, 2515, 0, 0, 0, 0),
+(81035, 5439, 0, 0, 0, 0),
+(81035, 11362, 0, 0, 0, 0),
+(81035, 15807, 0, 0, 0, 0);
+
+replace into item_template values
+ ('83513', '2', '10', 'Staff  of Insom\'ni', '', '20440', '2', '0', '1', '202524', '50631', '17', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '0',
+ '0', '121', '171', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10',
+ '0', '0', '0', '9358', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '85', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('83514', '4', '2', 'Hermit\'s Mantle', '', '61110', '2', '0', '1', '56824', '14206', '3', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '17', '3', '5',
+ '6', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '113', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '50', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ replace into item_template values
+ ('83515', '4', '0', 'Band of the Exile', '', '1006', '2', '0', '1', '40620', '10155', '11', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '11', '4', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+ 
+ update quest_template set  
+ rewchoiceitemid1 = 83513, rewchoiceitemcount1 = 1,
+ rewchoiceitemid2 = 83514, rewchoiceitemcount2 = 1, 
+ rewchoiceitemid3 = 83515, rewchoiceitemcount3 = 1  
+ where entry = 40214;
+
+update creature_loot_template set chanceorquestchance = 0.1 where item in (83241,83242,83243,83244);
+
+delete from creature_loot_template where entry = 92213;
+
+replace into creature_loot_template values (92213, 83233, 16.6, 1, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (92213, 83234, 16.6, 1, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (92213, 83237, 16.6, 1, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (92213, 83238, 16.6, 1, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (92213, 83239, 16.6, 1, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (92213, 83240, 16.6, 1, 1, 1, 0, 0, 10);
+replace into creature_loot_template values (92213, 83236, 100, 2, 1, 1, 0, 0, 10);
