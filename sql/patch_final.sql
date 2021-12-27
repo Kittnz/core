@@ -300,3 +300,22 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '2', '0', '0', '0', '40', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+ 
+ update creature_template set display_id1 = 18756 where entry = 91712;
+ update creature_template set display_id1 = 18755 where entry = 92180;
+ update creature_template set npc_flags = 3 where entry = 2543;
+ 
+ replace into creature_display_info_addon values(18755, 0, 0, 0, 0);
+ replace into creature_display_info_addon values(18756, 0, 0, 0, 0);
+ 
+set @gossip_menu_id = 45040; set @magic_number = 2543;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Dalaran, we are currently in the process of reconstruction, so I do apologize if our hospitality may be lacking at this moment.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 45041; set @magic_number = 92017;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hello, and welcome to Sorrowguard, I am Paladin Janathos, and I keep vigil over this place\n\nThis Stronghold was built before the first war as a means to watch the entrance westward into the Kingdom of Azeroth.\n\nIt has fallen into a state of disrepair since its fall during the first war.\n\nAfter its destruction I was sent here to attempt to reclaim it. While we have done some repairs and occupied the place, there is always more that can be done. Especially with the darkness of the swamps beside us, and the orcs lurking at Stonard.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
