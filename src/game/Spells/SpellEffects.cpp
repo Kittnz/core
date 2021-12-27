@@ -2107,7 +2107,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         return;
 
                     //cast custom pain spike healing aura with custom basepoints.
-                    int32 healAmount = damage / 5;
+                    int32 healAmount = m_damage / 5;
                     m_caster->CastCustomSpell(unitTarget, 45556, &healAmount, nullptr, nullptr, true);
                 }break;
 

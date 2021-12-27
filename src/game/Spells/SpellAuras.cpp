@@ -1642,6 +1642,18 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 switch (GetId())
                 {
+                    case 45568: // Proclaim Champion (Custom)
+                    {
+                        auto caster = GetCaster();
+                        if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
+                            return;
+
+                        auto playerCaster = caster->ToPlayer();
+                        playerCaster->SetChampion(target->GetGUID());
+
+                    }break;
+                    
+
                     case 1:
                     {
                         if (Unit* caster = GetCaster()) {
@@ -1845,6 +1857,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
         switch (GetId())
         {
+
             case 1:
                 if (Unit* caster = GetCaster()) {
                     if (Player* player = caster->ToPlayer()) {
@@ -2001,8 +2014,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
                     return;
 
+                target->RemoveAurasDueToSpell(45563);
+                target->RemoveAurasDueToSpell(45564);
+                target->RemoveAurasDueToSpell(45565);
+                target->RemoveAurasDueToSpell(45569);
                 auto playerCaster = caster->ToPlayer();
-                playerCaster->SetChampion(target->GetGUID());
+                playerCaster->SetChampion(ObjectGuid{});
 
             }break;
         }
