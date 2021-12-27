@@ -1,4 +1,4 @@
-update item_template set display_id1 = 15720 where name = 'Bronze Bruiser';
+update item_template set display_id = 15720 where name = 'Bronze Bruiser';
 
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values 
 -- Artisan Leatherworker: Una
