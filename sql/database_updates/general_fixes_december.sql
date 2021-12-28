@@ -38,4 +38,6 @@ update item_template set description = 'You can no longer disable PvP mode but e
 -- Crescent Grove spawn timers:
 update gameobject set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map = 802 and spawntimesecsmin = 300;
 -- Aggro range fixes for Stormwind Vault:
-update creature_template set detection_range = 15 where entry in (60602, 60601, 60603);
+update creature_template set detection_range = 15 where entry in (60602, 60601, 60603, 93105, 60604);
+-- Unseen Stalkers shouldn't drop plagued flesh samples.
+delete from creature_loot_template where item = 13174 and entry = 91910;
