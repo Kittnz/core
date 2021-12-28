@@ -209,8 +209,9 @@ void TransmogMgr::ApplyTransmog(std::string msg)
 uint8 TransmogMgr::ApplyTransmog(uint8 slot, uint32 sourceItemID, uint32 slotId)
 {
 	Item* destItem = _owner->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+	ItemPrototype const* destItemProto = destItem->GetProto();
 
-	if (!destItem || !destItem->GetProto())
+	if (!destItem || !destItem->GetProto() || !destItemProto)
 		return 1; // no dest item
 
 	uint32 newItemId = 0;
@@ -236,6 +237,89 @@ uint8 TransmogMgr::ApplyTransmog(uint8 slot, uint32 sourceItemID, uint32 slotId)
 		//std::vector<uint32>
 		//if (!strstr(possibleTransmogs.c_str(), std::to_string(sourceItemID).c_str()))
 			//return 5; // source not valid for destination
+
+
+		// check if source is actually allowed on dest
+		bool allowed = false;
+		if (STUPID_RESTRICTIONS) {
+			// plate = plate & mail
+			// mail = plate & mail & leather
+			// leather = mail & leather & cloth
+			// cloth = leather * cloth
+			if (srcItemProto->Class == ITEM_CLASS_ARMOR && destItemProto->Class == ITEM_CLASS_ARMOR
+				&& srcItemProto->InventoryType == destItemProto->InventoryType)
+			{
+				if (srcItemProto->SubClass == ITEM_SUBCLASS_ARMOR_CLOTH)
+					if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_CLOTH + 1)
+						allowed = true;
+				if (srcItemProto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER)
+					if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER - 1 || destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_LEATHER + 1)
+						allowed = true;
+				if (srcItemProto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL)
+					if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL - 1 || destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_MAIL + 1)
+						allowed = true;
+				if (srcItemProto->SubClass == ITEM_SUBCLASS_ARMOR_PLATE)
+					if (destItemProto->SubClass == ITEM_SUBCLASS_ARMOR_PLATE - 1)
+						allowed = true;
+			}
+			if (srcItemProto->Class == destItemProto->Class)
+				if (srcItemProto->SubClass == destItemProto->SubClass)
+					if (srcItemProto->InventoryType == destItemProto->InventoryType)
+						allowed = true;
+		}
+		else
+		{
+			if (srcItemProto->Class == ITEM_CLASS_WEAPON && destItemProto->Class == ITEM_CLASS_WEAPON) {
+
+				if (destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_FIST && srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_FIST)
+				{
+					if (destItemProto->InventoryType == INVTYPE_WEAPON || destItemProto->InventoryType == INVTYPE_WEAPONMAINHAND)
+						if (srcItemProto->InventoryType == INVTYPE_WEAPON || srcItemProto->InventoryType == INVTYPE_WEAPONMAINHAND)
+							allowed = true;
+					if (destItemProto->InventoryType == INVTYPE_WEAPONOFFHAND && srcItemProto->InventoryType == INVTYPE_WEAPONOFFHAND)
+						allowed = true;
+				}
+
+				if (destItemProto->InventoryType == INVTYPE_RANGED || destItemProto->InventoryType == INVTYPE_RANGEDRIGHT)
+					if (destItemProto->InventoryType == srcItemProto->InventoryType && destItemProto->SubClass == srcItemProto->SubClass)
+						allowed = true;
+				if (destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_DAGGER)
+					if (srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_DAGGER)
+						allowed = true;
+				if (destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
+					if (srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF)
+						allowed = true;
+				if (destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM)
+					if (srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM)
+						allowed = true;
+				if (destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_AXE || destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_MACE || destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_SWORD)
+					if (srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_AXE || srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_MACE || srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_SWORD)
+						allowed = true;
+				if (destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_AXE2 || destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_MACE2 || destItemProto->SubClass == ITEM_SUBCLASS_WEAPON_SWORD2)
+				{
+					if (srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_STAFF || srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_POLEARM)
+						allowed = true;
+					if (srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_AXE2 || srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_MACE2 || srcItemProto->SubClass == ITEM_SUBCLASS_WEAPON_SWORD2)
+						allowed = true;
+				}
+			}
+			else
+			{
+				if (destItemProto->InventoryType == INVTYPE_CHEST || destItemProto->InventoryType == INVTYPE_ROBE)
+				{
+					if (srcItemProto->InventoryType == INVTYPE_CHEST || srcItemProto->InventoryType == INVTYPE_ROBE)
+						allowed = true;
+				}
+				else
+				{
+					if (srcItemProto->InventoryType == destItemProto->InventoryType)
+						allowed = true;
+				}
+			}
+		}
+
+		if (!allowed)
+			return 5; // source not valid for destination
 
 		// create or get item replica
 		newItemId = sObjectMgr.CreateItemTransmogrifyTemplate(destItem->GetProto()->ItemId, srcItemProto->DisplayInfoID, sourceItemID);
