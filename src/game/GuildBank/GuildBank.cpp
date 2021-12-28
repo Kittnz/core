@@ -865,7 +865,10 @@ void GuildBank::WithdrawMoney(std::string msg)
 bool GuildBank::CanAccessTab(uint8 tab, uint8 action)
 {
 
-	if (action == ACTION_SPLIT_ITEM || action == ACTION_DESTROY_ITEM || action == ACTION_WITHDRAW_MONEY)
+	if (action == ACTION_WITHDRAW_MONEY)
+		return playerRankIndex <= 1;
+
+	if (action == ACTION_SPLIT_ITEM || action == ACTION_DESTROY_ITEM)
 		if (playerRankIndex >= b_tabInfo[tab].minrank)
 			return false;
 
