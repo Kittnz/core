@@ -10530,7 +10530,7 @@ void Unit::RemoveAllArenaSpellCooldown()
         if (spellEntry && spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS
             && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS)
         {
-            if (!(itr++)->first == 12312 || !(itr++)->first == 12803 || !(itr++)->first == 20230 || !(itr++)->first == 1719 || !(itr++)->first == 633 || !(itr++)->first == 2800 || !(itr++)->first == 10310 || !(itr++)->first == 20608)
+            if ((itr)->first != 12312 || (itr)->first != 12803 || (itr)->first != 20230 || (itr)->first != 1719 || (itr)->first != 633 || (itr)->first != 2800 || (itr)->first != 10310 || (itr)->first != 20608)
                 RemoveSpellCooldown((itr++)->first, true);
         }
         else
