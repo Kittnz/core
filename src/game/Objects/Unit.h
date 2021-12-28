@@ -981,7 +981,7 @@ class Unit : public WorldObject
         }
         void CooldownEvent(SpellEntry const *spellInfo, uint32 itemId = 0, Spell* spell = nullptr);
         void AddSpellAndCategoryCooldowns(SpellEntry const* spellInfo, uint32 itemId, Spell* spell = nullptr, bool infinityCooldown = false);
-        void RemoveSpellCooldown(uint32 spell_id, bool update = false);
+        void RemoveSpellCooldown(uint32 spell_id, bool update = false, SpellCooldowns::iterator* newIt = nullptr);
         void RemoveAllSpellCooldown();
         void RemoveAllArenaSpellCooldown();
         void WritePetSpellsCooldown(WorldPacket& data) const;

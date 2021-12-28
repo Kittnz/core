@@ -10490,9 +10490,12 @@ void Unit::RestoreMovement()
 }
 
 /** Spell cooldown management system. Shared by Players, Creatures, Pets, ... */
-void Unit::RemoveSpellCooldown(uint32 spell_id, bool update /* = false */)
+void Unit::RemoveSpellCooldown(uint32 spell_id, bool update /* = false */, SpellCooldowns::iterator* newIt)
 {
-    m_spellCooldowns.erase(spell_id);
+    if (newIt)
+        *newIt = m_spellCooldowns.erase(*newIt);
+    else
+        m_spellCooldowns.erase(spell_id);
 
     if (update)
         if (Player* player = GetAffectingPlayer())
@@ -10533,8 +10536,9 @@ void Unit::RemoveAllArenaSpellCooldown()
             && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS)
         {
             if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr->first) == excludedSpellIds.end())
-                RemoveSpellCooldown(itr->first, true);
-            ++itr;
+                RemoveSpellCooldown(itr->first, true, &itr);
+            else
+                ++itr;
         }
         else
             ++itr;
