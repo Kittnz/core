@@ -45,3 +45,5 @@ delete from creature_loot_template where item = 13174 and entry = 91910;
 update companion_spells set spellid = 46484 where itemid = 51433;
 -- Fix Nightmare Dreamrunner name:
 update item_template set name = 'Nightmare Dreamrunner' where entry = 50407;
+-- Make happy cloud happy again!
+update spell_template set effectmiscvalue1 = 90978 where entry = 46519;
