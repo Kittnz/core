@@ -783,8 +783,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 if (!sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT) && GetPlayer()->GetTeam() != player->GetTeam())
                 {
                     SendWrongFactionNotice();
-                    ChatHandler(this).PSendSysMessage(
-                            "|cffff8040You need to be a diplomat in order to talk with the other faction.|r");
                     return;
                 }
                 if (/*player->GetZoneId() != masterPlr->GetZoneId() && */masterPlr->GetLevel() < sWorld.getConfig(CONFIG_UINT32_WHISP_DIFF_ZONE_MIN_LEVEL))
