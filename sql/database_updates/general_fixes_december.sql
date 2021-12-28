@@ -100,3 +100,15 @@ update creature_template set loot_id = 0 where entry = 91773;
 replace into game_weather values (5024, NULL, 0, 100, 0, 0, 100, 0, 0, 100, 0, 0, 100, 0);
 -- Fixed loot tabled for Harbinger Aph’ygth:
 update creature_template set loot_id = 65114 where entry = 65114;
+-- Fix Lordaeron Remnants factions:
+update creature_template set faction = 210, type = 7 where entry = 91352;
+update creature_template set faction = 210, type = 7 where entry = 91353;
+update creature_template set faction = 210, type = 7 where entry = 91772;
+update creature_template set faction = 210, type = 7 where entry = 91975;
+update creature_template set faction = 210, type = 7 where entry = 91980;
+update creature_template set faction = 210, type = 7 where entry = 91981;
+update creature_template set faction = 210, type = 7 where entry = 91773;
+update creature_template set faction = 210, type = 7 where entry = 91976;
+update creature_template set faction = 210, type = 7 where entry = 91978;
+update creature_template set faction = 210, type = 7 where entry = 91979;
+update creature_template set faction = 210, type = 7 where entry = 91977;
