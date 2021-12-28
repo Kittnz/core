@@ -88,4 +88,11 @@ replace into playercreateinfo_item values (3, 8, 4540, 4);
 replace into playercreateinfo_item values (3, 8, 6096, 1);
 replace into playercreateinfo_item values (3, 8, 6116, 1);
 replace into playercreateinfo_item values (3, 8, 6948, 1);
-
+-- Defias loot should not drop from mobs in Tirisfal Uplands:
+update creature_template set loot_id = 0 where entry = 91352;
+update creature_template set loot_id = 0 where entry = 91353;
+update creature_template set loot_id = 0 where entry = 91772;
+update creature_template set loot_id = 0 where entry = 91975;
+update creature_template set loot_id = 0 where entry = 91980;
+update creature_template set loot_id = 0 where entry = 91981;
+update creature_template set loot_id = 0 where entry = 91773;
