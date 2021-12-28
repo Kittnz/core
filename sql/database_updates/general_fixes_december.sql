@@ -98,3 +98,5 @@ update creature_template set loot_id = 0 where entry = 91981;
 update creature_template set loot_id = 0 where entry = 91773;
 -- Hostile snowstorm weather in Icepoint Rock:
 replace into game_weather values (5024, NULL, 0, 100, 0, 0, 100, 0, 0, 100, 0, 0, 100, 0);
+-- Fixed loot tabled for Harbinger Aph’ygth:
+update creature_template set loot_id = 65114 where entry = 65114;
