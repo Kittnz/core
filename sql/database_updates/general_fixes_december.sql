@@ -21,3 +21,5 @@ update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map
 delete from quest_template where entry in (80255, 80302);
 delete from creature_questrelation where quest in (80255, 80302);
 delete from creature_involvedrelation where quest in (80255, 80302);
+-- Quest Taming the Beast IV, add quest reward:
+update quest_template set rewspell = 23356, rewspellcast = 1579 where entry = 40262;
