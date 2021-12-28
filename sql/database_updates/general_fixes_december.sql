@@ -47,3 +47,5 @@ update companion_spells set spellid = 46484 where itemid = 51433;
 update item_template set name = 'Nightmare Dreamrunner' where entry = 50407;
 -- Make happy cloud happy again!
 update spell_template set effectmiscvalue1 = 90978 where entry = 46519;
+-- Foremax Klix should have a goblin model.
+update creature_template set display_id1 = 7229 where entry = 91302;
