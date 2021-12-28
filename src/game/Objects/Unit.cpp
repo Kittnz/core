@@ -979,6 +979,14 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
 void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss)
 {
+    // Prevent killing unit twice (and giving reward from kill twice)
+    if (!pVictim->GetHealth())
+        return;
+
+    // Prevent killing Spirit of Redemption twice
+    if (pVictim->HasAura(27827))
+        return;
+
     // find player: owner of controlled `this` or `this` itself maybe
     // for loot will be sued only if pGroupTap == nullptr
     Player *pPlayerTap = GetCharmerOrOwnerPlayerOrPlayerItself();
@@ -1275,17 +1283,17 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     }
 
     // battleground things (do this at the end, so the death state flag will be properly set to handle in the bg->handlekill)
-    if (pPlayerVictim && pPlayerVictim->InBattleGround())
+    if (pPlayerTap && pPlayerTap->InBattleGround())
     {
-        if (BattleGround *bg = pPlayerVictim->GetBattleGround())
-            bg->HandleKillPlayer(pPlayerVictim, pPlayerTap);
-    }
-    else if (pCreatureVictim)
-    {
-        if (pPlayerTap)
-            if (BattleGround *bg = pPlayerTap->GetBattleGround())
+        if (BattleGround* bg = pPlayerTap->GetBattleGround())
+        {
+            if (pPlayerVictim)
+                bg->HandleKillPlayer(pPlayerVictim, pPlayerTap);
+            else if (pCreatureVictim)
                 bg->HandleKillUnit(pCreatureVictim, pPlayerTap);
+        }
     }
+
     // Nostalrius: interrupt non melee spell casted
     pVictim->InterruptSpellsCastedOnMe(false, true);
     if (pPlayerTap)
