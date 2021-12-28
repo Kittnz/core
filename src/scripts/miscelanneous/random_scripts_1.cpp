@@ -228,7 +228,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 50105: if (!male) bytes = 10; break;                                // Human: Scarlet Inquisitor
-            case 50106:            bytes = 11; break;                                // Human: Scholomance Student
+            case 50106: bytes = 11; break;                                           // Human: Scholomance Student F&M
             case 81210: if (male) bytes = 12; else bytes = 13; break;                // Human: Death Knight
             case 83091: if (male) bytes = static_cast<uint8>(irand(13, 15)); break;  // Human: Necrotic Corruption
             case 83090: if (male) bytes = 16; else bytes = static_cast<uint8>(irand(12, 14)); break;  // Human: Wizardly Attire
@@ -238,7 +238,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 50204: if (male) bytes = static_cast<uint8>(irand(9, 12)); else bytes = 9; break;  // Dwarf: Wildhammer Clan
-            case 50205: if (male) bytes = 13; else bytes = 10; break;                               // Dwarf: Dark Iron
+            case 50205: if (male) bytes = 13; else bytes = 14; break;                               // Dwarf: Dark Iron
             case 50206: if (male) bytes = static_cast<uint8>(irand(16, 17)); break;                 // Dwarf: Earthen 
             case 81229: if (male) bytes = 23; break;                                                // Dwarf: Death Knight
             }
@@ -257,9 +257,9 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             {
             case 50210: if (male) bytes = 19; else bytes = 8;  break;                                                // Troll: Forest
             case 50211: if (male) bytes = 16; break;                                                                 // Troll: Sandfury Clan 
-            case 51010: bytes = 12; break;                                                                           // Troll: Dark
+            case 51010: bytes = 12; break;                                                                           // Troll: Dark F&M
             case 51011: if (male) bytes = 13; else bytes = 7;  break;                                                // Troll: Ice
-            case 81208: if (male) bytes = 20; else bytes = 14; break;                                                // Troll: Zombie
+            case 81208: bytes = 20; break;                                                                           // Troll: Zombie F&M
             }
             break;
         case RACE_GNOME:
