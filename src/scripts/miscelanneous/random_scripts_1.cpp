@@ -227,10 +227,10 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
         case RACE_HUMAN:
             switch (item_entry)
             {
-            case 50105: if (!male) bytes = 10; break; // Human: Scarlet Inquisitor
-            case 50106:            bytes = 11; break; // Human: Scholomance Student
-            case 81210:            bytes = 12; break; // Human: Death Knight
-            case 83091: if (male) bytes = static_cast<uint8>(irand(13, 15)); else bytes = 13; break;  // Human: Necrotic Corruption
+            case 50105: if (!male) bytes = 10; break;                                // Human: Scarlet Inquisitor
+            case 50106:            bytes = 11; break;                                // Human: Scholomance Student
+            case 81210: if (male) bytes = 12; else bytes = 13; break;                // Human: Death Knight
+            case 83091: if (male) bytes = static_cast<uint8>(irand(13, 15)); break;  // Human: Necrotic Corruption
             case 83090: if (male) bytes = 16; else bytes = static_cast<uint8>(irand(12, 14)); break;  // Human: Wizardly Attire
             }
             break;
@@ -247,7 +247,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 50207: if (male) bytes = static_cast<uint8>(irand(0, 1) == 0 ? 9 : 11); else bytes = 9; break; // Orc: Blackrock Clan
-            case 50208: if (male) bytes = 10; break;                                                            // Orc: Chaos
+            case 50208: bytes = 10; break;                                                                      // Orc: Chaos F&M
             case 50209: if (male) bytes = 12; break;                                                            // Orc: Mag'Har
             case 81255: if (male)bytes = static_cast<uint8>(irand(0, 1) == 0 ? 14 : 16); break;                 // Orc: Dreadskull Clan I & II
             }
@@ -266,7 +266,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
             switch (item_entry)
             {
             case 81230: if (male) bytes = 6; else bytes = 5; break; // Gnome: Scholomanc Student
-            case 50212: if (male) bytes = 5; break;                 // Gnome: Leper
+            case 50212: if (male) bytes = 5; else bytes = 7; break; // Gnome: Leper
             }
             break;
         case RACE_HIGH_ELF:
@@ -279,7 +279,7 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
         case RACE_TAUREN:
             switch (item_entry)
             {
-            case 81228: if (male) bytes = 19; break; // Tauren: Spirit Walker
+            case 81228: if (male) bytes = 19; else bytes = 11; break; // Tauren: Spirit Walker
             }
             break;
         case RACE_NIGHTELF:
