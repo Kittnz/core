@@ -1439,7 +1439,8 @@ struct larvae_cotAI : public ScriptedAI
             return;
 
         if (Creature* harbinger = m_creature->FindNearestCreature(NPC_HARBINGER, 100.0f, true))
-            m_creature->AddThreat(harbinger->GetVictim(), 100.0f);
+            if (harbinger->GetVictim())
+                m_creature->AddThreat(harbinger->GetVictim(), 100.0f);
 
         if (spellTimer <= uiDiff)
         {
