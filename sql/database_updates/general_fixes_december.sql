@@ -67,3 +67,5 @@ replace into companion_spells values (4401, 4055);
 update creature_template set type = 7 where entry = 91715;
 -- WANTED: Hole Escapee:
 update quest_template set objectives = 'Find the prisoner Baxxil near Ratchet and return him alive or dead to Hizzle at Sparkwater Port.', details = 'To those reading this message, a local prisoner named Baxxil has recently escaped from the hole after something of a tunneling incident, and escaped off the coast.\n\nHe has been reported and sighted just west of Ratchet in the Barrens. Justice must be dealt. Bring this prisoner back dead or alive, and return to Hizzle!' where entry = 55048;
+-- Fixed Razzle's vendor list:
+update npc_vendor set incrtime = 36000 where entry = 91256;
