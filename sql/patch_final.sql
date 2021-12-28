@@ -1,5 +1,5 @@
 update item_template set display_id = 15720 where name = 'Bronze Bruiser';
-
+delete from playercreateinfo_spell where spell = 28738;
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values 
 -- Artisan Leatherworker: Una
 (3007,47200,3500,165,200,0),
@@ -254,3 +254,5 @@ replace into item_template values
  '0', '1', NULL);
  
  update quest_template set rewitemid1 = 83518, rewitemcount1 = 1 where entry = 55300;
+ 
+ UPDATE item_template SET bonding = 1 WHERE entry IN (51312, 51313);
