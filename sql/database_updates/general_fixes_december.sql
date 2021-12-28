@@ -25,3 +25,7 @@ delete from creature_involvedrelation where quest in (80255, 80302);
 update quest_template set rewspell = 23356, rewspellcast = 1579 where entry = 40262;
 -- Remove quest requirement Batskin Letter from quest A Dark Ranger's Mastery:
 update quest_template set prevquestid = 0 where entry = 40260;
+-- Removal of thise useless template is breaking trading window (cause unknown):
+-- delete from item_template where entry = 0;
+-- Temporal Bronze Disc:
+update item_template set description = 'Given to you by Chromie to close time rifts around the timeways, but where does the energy go?', bonding = 1, map_bound = 269 where entry = 80008;
