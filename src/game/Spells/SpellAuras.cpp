@@ -3997,27 +3997,24 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
 
         if (mountAura)
         {
-            uint32 itemEntry = GetCastItemGuid() && player->GetItemByGuid(GetCastItemGuid()) ?
-                               player->GetItemByGuid(GetCastItemGuid())->GetEntry() : 0;
-
-            switch (itemEntry)
+            switch (GetId())
             {
                 // PvP mounts should always have 100% speed.
-                case 18241:
-                case 18242:
-                case 18243:
-                case 18244:
-                case 18245:
-                case 18246:
-                case 18247:
-                case 18248:
+                case 22717:
+                case 22718:
+                case 22719:
+                case 22720:
+                case 22721:
+                case 22722:
+                case 22723:
+                case 22724:
                 // Winterspring Frostsaber
-                case 13086:
+                case 17229:
                 // AQ Mounts
-                case 21218:
-                case 21323:
-                case 21321:
-                case 21324:
+                case 25953:
+                case 26054:
+                case 26055:
+                case 26056:
                     m_modifier.m_amount = 100;
                     break;
                 default:
