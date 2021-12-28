@@ -60,3 +60,6 @@ replace into item_template values (50400, 15, 4, 'Barrens Zhevra', 'Zhevras are 
 update item_template set spellid_1 = 7694 where entry = 81325;
 -- Fix Tiny Shore Crab companion:
 update spell_template set effectmiscvalue1 = 81019 where entry = 46496;
+-- Fix Mechanical Squirrel companion:
+update item_template set spellid_1 = 46498 where entry = 4401;
+replace into companion_spells values (4401, 4055);
