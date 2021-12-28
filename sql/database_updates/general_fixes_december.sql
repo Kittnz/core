@@ -31,3 +31,5 @@ update quest_template set prevquestid = 0 where entry = 40260;
 update item_template set description = 'Given to you by Chromie to close time rifts around the timeways, but where does the energy go?', bonding = 1, map_bound = 269 where entry = 80008;
 -- Waters of Vision should be off-harnd frill:
 update item_template set class = 4, subclass = 0 where entry = 51861;
+-- Fix dumb Dim Torch issue:
+update spell_template set effect2 = 0 where entry = 46064;
