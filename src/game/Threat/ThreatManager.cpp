@@ -584,9 +584,8 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 
 	WorldPacket data;
 	ChatHandler::BuildChatPacket(data, inParty ? CHAT_MSG_PARTY : CHAT_MSG_RAID,
-		bigPacket.c_str(), Language(LANG_ADDON), requester->GetChatTag(),
+		("TWT \t" + bigPacket).c_str(), Language(LANG_ADDON), requester->GetChatTag(),
 		requester->GetObjectGuid(), requester->GetName());
-
 	requester->GetSession()->SendPacket(&data);
 
 }
