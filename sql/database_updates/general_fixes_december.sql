@@ -33,3 +33,5 @@ update item_template set description = 'Given to you by Chromie to close time ri
 update item_template set class = 4, subclass = 0 where entry = 51861;
 -- Fix dumb Dim Torch issue:
 update spell_template set effect2 = 0 where entry = 46064;
+-- Glyph of War additional description.
+update item_template set description = 'You can no longer disable PvP mode but experience gain from all sources is increased. Effect persists after reaching level 60.' where entry = 80060;
