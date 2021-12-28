@@ -71,3 +71,5 @@ update quest_template set objectives = 'Find the prisoner Baxxil near Ratchet an
 update npc_vendor set incrtime = 36000 where entry = 91256;
 -- Tarqsiku should be an Elemental:
 update creature_template set type = 4 where entry = 60544;
+--
+update creature_template set health_min = 700, health_max = 833 where entry = 60442;
