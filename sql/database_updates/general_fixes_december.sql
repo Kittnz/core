@@ -63,3 +63,5 @@ update spell_template set effectmiscvalue1 = 81019 where entry = 46496;
 -- Fix Mechanical Squirrel companion:
 update item_template set spellid_1 = 46498 where entry = 4401;
 replace into companion_spells values (4401, 4055);
+-- Pack Leader Sharn should be a humanoid:
+update creature_template set type = 7 where entry = 91715;
