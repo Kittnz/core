@@ -35,3 +35,5 @@ update item_template set class = 4, subclass = 0 where entry = 51861;
 update spell_template set effect2 = 0 where entry = 46064;
 -- Glyph of War additional description.
 update item_template set description = 'You can no longer disable PvP mode but experience gain from all sources is increased. Effect persists after reaching level 60.' where entry = 80060;
+-- Crescent Grove spawn timers:
+update gameobject set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map = 802 and spawntimesecsmin = 300;
