@@ -824,7 +824,7 @@ void MotionMaster::MoveDistance(Unit* pTarget, float distance)
 {
     float x, y, z;
     pTarget->GetNearPoint(m_owner, x, y, z, 0, distance, pTarget->GetAngle(m_owner));
-    
+
     if (z > (m_owner->GetPositionZ() + 10.0f))
         return;
 
