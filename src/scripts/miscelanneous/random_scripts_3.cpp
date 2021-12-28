@@ -955,7 +955,7 @@ bool GossipHello_npc_chef_jenkel(Player* pPlayer, Creature* pCreature)
     if (pCreature->IsVendor())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "Buy something?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Teach me to cook homie", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Teach me how to cook, mon!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 
     if (pPlayer->GetQuestStatus(40142) == QUEST_STATUS_INCOMPLETE)
     {
