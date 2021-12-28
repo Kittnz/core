@@ -587,6 +587,11 @@ void BattleGround::RewardExperienceToPlayers(Team winnerTeam) {
         if (!team) team = plr->GetTeam();
 
         float factor = team == winnerTeam ? 0.05f : 0.025f;
+
+        if (plr->GetLevel() > 20)
+        {
+            factor /= (plr->GetLevel() / 10);
+        }
         plr->GiveXP(static_cast<uint32>(sObjectMgr.GetXPForLevel(plr->GetLevel()) * factor), nullptr);
     }
 }
