@@ -41,3 +41,5 @@ update gameobject set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where m
 update creature_template set detection_range = 15 where entry in (60602, 60601, 60603, 93105, 60604);
 -- Unseen Stalkers shouldn't drop plagued flesh samples.
 delete from creature_loot_template where item = 13174 and entry = 91910;
+-- Fix Little Pawn companion:
+update companion_spells set spellid = 46484 where itemid = 51433;
