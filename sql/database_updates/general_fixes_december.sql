@@ -71,5 +71,10 @@ update quest_template set objectives = 'Find the prisoner Baxxil near Ratchet an
 update npc_vendor set incrtime = 36000 where entry = 91256;
 -- Tarqsiku should be an Elemental:
 update creature_template set type = 4 where entry = 60544;
---
+-- Fixed health values for Bael'modan Golems:
 update creature_template set health_min = 700, health_max = 833 where entry = 60442;
+-- Misc. Icepoint Rock fixes:
+update creature_template set display_id1 = 981 where entry = 60605;
+update creature_template set display_id1 = 18349 where entry = 60545;
+update creature_template set scale = 0.7 where entry = 70040;
+replace into creature_display_info_addon values (18349, 0, 0, 0, 0);
