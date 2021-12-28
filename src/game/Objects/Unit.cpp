@@ -10524,14 +10524,17 @@ void Unit::RemoveAllSpellCooldown()
 
 void Unit::RemoveAllArenaSpellCooldown()
 {
+    static auto excludedSpellIds = { 12312, 12803, 20230, 1719, 633, 2800, 10310, 20608 };
+
     for (auto itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end();)
     {
         auto spellEntry = sSpellMgr.GetSpellEntry(itr->first);
         if (spellEntry && spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS
             && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS)
         {
-            if ((itr)->first != 12312 || (itr)->first != 12803 || (itr)->first != 20230 || (itr)->first != 1719 || (itr)->first != 633 || (itr)->first != 2800 || (itr)->first != 10310 || (itr)->first != 20608)
-                RemoveSpellCooldown((itr++)->first, true);
+            if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr->first) == excludedSpellIds.end())
+                RemoveSpellCooldown(itr->first, true);
+            ++itr;
         }
         else
             ++itr;
