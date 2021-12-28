@@ -49,3 +49,6 @@ update item_template set name = 'Nightmare Dreamrunner' where entry = 50407;
 update spell_template set effectmiscvalue1 = 90978 where entry = 46519;
 -- Foremax Klix should have a goblin model.
 update creature_template set display_id1 = 7229 where entry = 91302;
+-- Change Custodian A-01 to a lv 60 elite with stats to back it up, same with Earthshaper Thoron.
+update creature_template set rank = 1, level_min = 60, level_max = 60, health_min = 7989, health_max = 9898, armor = 1400 where entry = 60634;
+update creature_template set rank = 1, level_min = 60, level_max = 60, health_min = 7989, health_max = 9898, armor = 1400 where entry = 60635;
