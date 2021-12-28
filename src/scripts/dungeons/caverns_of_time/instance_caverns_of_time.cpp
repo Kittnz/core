@@ -28,6 +28,7 @@ ObjectGuid GOB_SANDWALL_1;
 
 int dragonGuidCount = 0;
 bool finalDialogue = false;
+bool chromieBossSummoned = false;
 
 static const SpawnLocation rotMawSpawns[4] =
 {
@@ -68,8 +69,6 @@ struct instance_caverns_of_time : public ScriptedInstance
     Creature* deadDefender2;
     Creature* deadDefender3;
 
-    int riftsClosed;
-
     std::list<Creature*> deadDragonsList;
 
     bool doOnce = false;
@@ -83,16 +82,7 @@ struct instance_caverns_of_time : public ScriptedInstance
         bronzeDefender5 = instance->SummonCreature(50110, -1897.60f, 6646.52f, -155.83f, 0);
 
         riftsClosed = 0;
-
-        // Fix later
-        //deadDefender1 = instance->GetCreature(2563294);
-        //deadDefender2 = instance->GetCreature(2563296);
-        //deadDefender3 = instance->GetCreature(2563295);
-
-        //deadDefender1->SetHealthPercent(0.0f);
-        //deadDefender2->SetHealthPercent(0.0f);
-        //deadDefender3->SetHealthPercent(0.0f);
-
+        chromieBossSummoned = false;
     }
 
     void OnCreatureCreate(Creature* pCreature) override
@@ -1608,26 +1598,31 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
         SHADOW_AURA = 24674
     };
 
-    pPlayer->RemoveItem(80008, 1, true);
+    if (pPlayer->HasItemCount(80008, 1, true))
+        pPlayer->RemoveItem(80008, 1, true);
 
-    DoAfterTime(pCreature, 2 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
-        pCreature->GetMotionMaster()->MovePoint(0, -1597.75f, 7105.72f, 23.76f, true, 1.25f, 6.25f);
-        });
+    if (!chromieBossSummoned)
+    {
+        chromieBossSummoned = true;
 
-    DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
-        //pCreature->SetFacingTo(6.25f);
-        pCreature->PMonsterSay("By helping me close the rifts, you've ensured the success of our invasion.");
-        pCreature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-        });
+        DoAfterTime(pCreature, 2 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
+            pCreature->GetMotionMaster()->MovePoint(0, -1597.75f, 7105.72f, 23.76f, true, 1.25f, 6.25f);
+            });
 
-    DoAfterTime(pCreature, 10 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
+        DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
+            pCreature->PMonsterSay("By helping me close the rifts, you've ensured the success of our invasion.");
+            pCreature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            });
 
-        pCreature->SetVisibility(VISIBILITY_OFF);
-        pCreature->ForcedDespawn(1000);
+        DoAfterTime(pCreature, 10 * IN_MILLISECONDS, [pCreature = pCreature, pPlayer = pPlayer]() {
 
-        if (Creature* bossChromie = pCreature->SummonCreature(NPC_BOSS_CHROMIE, -1597.75f, 7105.72f, 23.76f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
-            bossChromie->AddAura(SHADOW_AURA); // shadow effect
-        });
+            pCreature->SetVisibility(VISIBILITY_OFF);
+            pCreature->ForcedDespawn(1000);
+
+            if (Creature* bossChromie = pCreature->SummonCreature(NPC_BOSS_CHROMIE, -1597.75f, 7105.72f, 23.76f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
+                bossChromie->AddAura(SHADOW_AURA); // shadow effect
+            });
+    }
 }
 
 struct shade_cotAI : public ScriptedAI
