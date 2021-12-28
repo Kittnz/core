@@ -23,3 +23,5 @@ delete from creature_questrelation where quest in (80255, 80302);
 delete from creature_involvedrelation where quest in (80255, 80302);
 -- Quest Taming the Beast IV, add quest reward:
 update quest_template set rewspell = 23356, rewspellcast = 1579 where entry = 40262;
+-- Remove quest requirement Batskin Letter from quest A Dark Ranger's Mastery:
+update quest_template set prevquestid = 0 where entry = 40260;
