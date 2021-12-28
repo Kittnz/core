@@ -43,3 +43,5 @@ update creature_template set detection_range = 15 where entry in (60602, 60601, 
 delete from creature_loot_template where item = 13174 and entry = 91910;
 -- Fix Little Pawn companion:
 update companion_spells set spellid = 46484 where itemid = 51433;
+-- Fix Nightmare Dreamrunner name:
+update item_template set name = 'Nightmare Dreamrunner' where entry = 50407;
