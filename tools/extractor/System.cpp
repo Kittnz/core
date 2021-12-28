@@ -22,6 +22,8 @@
 #include <deque>
 #include <set>
 #include <cstdlib>
+#include <unordered_set>
+#include <unordered_map>
 
 #ifdef _WIN32
 #include "direct.h"
@@ -106,6 +108,38 @@ const char* CONF_mpq_list[] =
     "patch-U.MPQ",
     "patch-V.MPQ"
 };
+
+static std::unordered_multimap<uint32, std::pair<uint32, uint32>> shangAdts =
+{
+    {0, {26, 27}},
+    {0, {26, 28}},
+    {0, {27, 51}},
+    {0, {27, 53}},
+    {0, {27, 54}},
+    {0, {28, 54}},
+    {0, {29, 54}},
+    {0, {29, 55}},
+    {0, {36, 51}},
+    {0, {37, 32}},
+    {0, {32, 59}},
+    {0, {33, 15}},
+    {0, {27, 52}},
+
+    {1, {39, 29}},
+    {1, {39, 30}},
+    {1, {40, 29}},
+    {1, {41, 29}},
+    {1, {41, 30}},
+    {1, {42, 27}},
+    {1, {43, 22}},
+    {1, {30, 35}},
+    {1, {32, 35}},
+    {1, {32, 36}},
+    {1, {34, 43}},
+    {1, {34, 28}},
+    {1, {40, 30}}
+};
+
 
 void CreateDir(const std::string& Path)
 {
@@ -289,7 +323,7 @@ uint8 liquid_flags[ADT_CELLS_PER_GRID][ADT_CELLS_PER_GRID];
 bool  liquid_show[ADT_GRID_SIZE][ADT_GRID_SIZE];
 float liquid_height[ADT_GRID_SIZE + 1][ADT_GRID_SIZE + 1];
 
-bool ConvertADT(char* filename, char* filename2, int cell_y, int cell_x)
+bool ConvertADT(char* filename, char* filename2, uint32 mapId, int cell_y, int cell_x)
 {
     ADT_file adt;
 
@@ -301,6 +335,19 @@ bool ConvertADT(char* filename, char* filename2, int cell_y, int cell_x)
     {
         printf("Can't find cells in '%s'\n", filename);
         return false;
+    }
+
+
+    bool excludeFatigue = false;
+
+    auto range = shangAdts.equal_range(mapId);
+    for (auto it = range.first; it != range.second; ++it) 
+    {
+        if (it->second.first == cell_x && it->second.second == cell_y)
+        {
+            excludeFatigue = true;
+            break;
+        }
     }
 
     memset(liquid_show, 0, sizeof(liquid_show));
@@ -561,7 +608,7 @@ bool ConvertADT(char* filename, char* filename2, int cell_y, int cell_x)
                     if (liquid->flags[y][x] != 0x0F)
                     {
                         liquid_show[cy][cx] = true;
-                        if (liquid->flags[y][x] & (1 << 7))
+                        if (liquid->flags[y][x] & (1 << 7) && !excludeFatigue)
                             liquid_flags[i][j] |= MAP_LIQUID_TYPE_DARK_WATER;
                         ++count;
                     }
@@ -874,7 +921,7 @@ void ExtractMapsFromMpq()
                     continue;
                 sprintf(mpq_filename, "World\\Maps\\%s\\%s_%u_%u.adt", map_ids[z].name, map_ids[z].name, x, y);
                 sprintf(output_filename, "%s/maps/%03u%02u%02u.map", output_path, map_ids[z].id, y, x);
-                ConvertADT(mpq_filename, output_filename, y, x);
+                ConvertADT(mpq_filename, output_filename, map_ids[z].id, y, x);
             }
             // draw progress bar
             printf("Processing........................%d%%\r", (100 * (y + 1)) / WDT_MAP_SIZE);
