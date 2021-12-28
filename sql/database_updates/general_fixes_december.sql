@@ -78,3 +78,14 @@ update creature_template set display_id1 = 981 where entry = 60605;
 update creature_template set display_id1 = 18349 where entry = 60545;
 update creature_template set scale = 0.7 where entry = 70040;
 replace into creature_display_info_addon values (18349, 0, 0, 0, 0);
+-- Fixed Dwarf Mage's starting gear:
+delete from playercreateinfo_item where race = 3 and class = 8;
+replace into playercreateinfo_item values (3, 8, 35, 1);
+replace into playercreateinfo_item values (3, 8, 55, 1);
+replace into playercreateinfo_item values (3, 8, 159, 2);
+replace into playercreateinfo_item values (3, 8, 1395, 1);
+replace into playercreateinfo_item values (3, 8, 4540, 4);
+replace into playercreateinfo_item values (3, 8, 6096, 1);
+replace into playercreateinfo_item values (3, 8, 6116, 1);
+replace into playercreateinfo_item values (3, 8, 6948, 1);
+
