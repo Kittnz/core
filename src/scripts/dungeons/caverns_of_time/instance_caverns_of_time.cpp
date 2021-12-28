@@ -1444,7 +1444,8 @@ struct larvae_cotAI : public ScriptedAI
 
         if (spellTimer <= uiDiff)
         {
-            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
+            if (m_creature->GetVictim())
+                DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
 
             spellTimer = urand(5000, 7000);
         }
