@@ -364,6 +364,9 @@ void BattleGroundSV::HandleKillPlayer(Player *player, Player *killer)
     if (GetStatus() != STATUS_IN_PROGRESS)
         return;
 
+    if (!killer || !player)
+        return;
+
     BattleGround::HandleKillPlayer(player, killer);
 
     player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SKINNABLE);
