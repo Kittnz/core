@@ -22729,3 +22729,5 @@ UPDATE `spell_template` SET `procCharges`=1 WHERE (`procFlags` & 1048576) && (`a
 
 -- Triggered dot aura by Wyvern Sting should be a debuff.
 UPDATE `spell_template` SET `customFlags`=`customFlags` | 2 WHERE `entry` IN (24131, 24134, 24135);
+
+REPLACE INTO `spell_mod` (`Id`, `interruptflags`) VALUES (46498, 1), (46499, 1);
