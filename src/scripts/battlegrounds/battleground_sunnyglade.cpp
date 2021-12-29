@@ -223,65 +223,65 @@ struct SV_human_leaderAI : public ScriptedAI
         {
             switch (l_EventId)
             {
-            case EVENT_CLEAVE:
-            {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
-                    m_events.Repeat(Seconds(10));
-                else
-                    m_events.Repeat(100);
+                case EVENT_CLEAVE:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+                        m_events.Repeat(Seconds(10));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_WARSTOMP:
-            {
-                if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
-                    m_events.Repeat(Seconds(15));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_WARSTOMP:
+                {
+                    if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
+                        m_events.Repeat(Seconds(15));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_REND:
-            {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
-                    m_events.Repeat(Seconds(18));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_REND:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
+                        m_events.Repeat(Seconds(18));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_SUNDER_ARMOR:
-            {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
-                    m_events.Repeat(Seconds(25));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_SUNDER_ARMOR:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+                        m_events.Repeat(Seconds(25));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_SLOW:
-            {
-                if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
-                    m_events.Repeat(Seconds(20));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_SLOW:
+                {
+                    if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
+                        m_events.Repeat(Seconds(20));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_KNOCK:
-            {
-                if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
-                    m_events.Repeat(Seconds(20));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_KNOCK:
+                {
+                    if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
+                        m_events.Repeat(Seconds(20));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_TRANSFORM:
-            {
-                m_creature->SetDisplayId(18040);
-                break;
-            }
+                    break;
+                }
+                case EVENT_TRANSFORM:
+                {
+                    m_creature->SetDisplayId(18750);
+                    break;
+                }
             }
         }
 
@@ -336,65 +336,65 @@ struct SV_orc_leaderAI : public ScriptedAI
         {
             switch (l_EventId)
             {
-            case EVENT_CLEAVE:
-            {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
-                    m_events.Repeat(Seconds(10));
-                else
-                    m_events.Repeat(100);
+                case EVENT_CLEAVE:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+                        m_events.Repeat(Seconds(10));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_WARSTOMP:
-            {
-                if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
-                    m_events.Repeat(Seconds(15));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_WARSTOMP:
+                {
+                    if (DoCastSpellIfCan(m_creature, SPELL_WARSTOMP) == CAST_OK)
+                        m_events.Repeat(Seconds(15));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_REND:
-            {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
-                    m_events.Repeat(Seconds(18));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_REND:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
+                        m_events.Repeat(Seconds(18));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_SUNDER_ARMOR:
-            {
-                if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
-                    m_events.Repeat(Seconds(25));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_SUNDER_ARMOR:
+                {
+                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SUNDER_ARMOR) == CAST_OK)
+                        m_events.Repeat(Seconds(25));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_SLOW:
-            {
-                if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
-                    m_events.Repeat(Seconds(20));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_SLOW:
+                {
+                    if (DoCastSpellIfCan(m_creature, SPELL_SLOW) == CAST_OK)
+                        m_events.Repeat(Seconds(20));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_KNOCK:
-            {
-                if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
-                    m_events.Repeat(Seconds(20));
-                else
-                    m_events.Repeat(100);
+                    break;
+                }
+                case EVENT_KNOCK:
+                {
+                    if (DoCastSpellIfCan(m_creature, SPELL_KNOCK) == CAST_OK)
+                        m_events.Repeat(Seconds(20));
+                    else
+                        m_events.Repeat(100);
 
-                break;
-            }
-            case EVENT_TRANSFORM:
-            {
-                m_creature->SetDisplayId(18040);
-                break;
-            }
+                    break;
+                }
+                case EVENT_TRANSFORM:
+                {
+                    m_creature->SetDisplayId(18750);
+                    break;
+                }
             }
         }
 

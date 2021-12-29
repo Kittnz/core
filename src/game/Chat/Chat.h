@@ -528,6 +528,10 @@ class ChatHandler
         bool HandleCreaturePathAddPoint(char*);
         bool HandleCreaturePathLaunch(char*);
 
+        // temp new helpers
+        bool HandleMoveLogsCommand(char*);
+        bool HandleSkirmishAddCommand(char*);
+
         Player*   GetSelectedPlayer();
         Creature* GetSelectedCreature();
         Unit*     GetSelectedUnit();
