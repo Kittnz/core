@@ -138,3 +138,5 @@ replace into conditions (condition_entry, type, value1, value2) values (80000, 1
 REPLACE INTO creature_template (entry, display_id1, name, level_min, level_max, faction) VALUES (66000, 312, 'Junior Foreman Silverhand', 25, 25, 55);
 REPLACE INTO creature_template (entry, display_id1, name, level_min, level_max, faction) VALUES (66001, 17540, 'Denalah Silverpoint', 38, 38, 371);
 REPLACE INTO creature_template (entry, display_id1, name, level_min, level_max, faction) VALUES (66002, 10034, 'Melyndella', 15, 15, 35);
+-- Update Rift Guard hp (reverse the nerf!!)
+update creature_template set health_min = 14104, health_max = 14104 where entry = 65101;
