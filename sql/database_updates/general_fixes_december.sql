@@ -161,3 +161,6 @@ replace into creature_involvedrelation values (65005, 80604);
 update creature_template set mechanic_immune_mask = 1022066674, school_immune_mask = 16 where entry = 93107;
 -- Update Zu'jin:
 update creature_template set name = 'Zul\'jin', subname = 'Amani Warlord', faction = 1494 where entry = 80867;
+-- NPC Guid 2562845, 2562891, 2562846 and 2562890 should be linked together:
+replace into creature_linking values (2562846, 2562845, 3); 
+replace into creature_linking values (2562890, 2562845, 3); 
