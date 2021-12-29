@@ -5204,7 +5204,8 @@ enum CustomGraveyardZones
     CGZ_CAVERNS_OF_TIME         = 1941,
     CGZ_LOCH_MODAN              = 38,
     CGZ_ALAH_THALAS             = 2037,
-    CGZ_DEEPRUN_TRAM            = 2257
+    CGZ_DEEPRUN_TRAM            = 2257,
+    CGZ_KARAZHAN_CRYPT          = 41
 };
 
 void Player::ScheduleRepopAtGraveyard()
@@ -5318,6 +5319,15 @@ void Player::RepopAtGraveyard()
                 if (GetAreaId() == 2040)
                 {
                     TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
+                    isCustomGraveyard = true;
+                }
+                break;
+            }
+            case CGZ_KARAZHAN_CRYPT:
+            {
+                if (GetMapId() == 800)
+                {
+                    TeleportTo(0, -11111.5F, -1832.2, 71.8F, 6.1F);
                     isCustomGraveyard = true;
                 }
                 break;
