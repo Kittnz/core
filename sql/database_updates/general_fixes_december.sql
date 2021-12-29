@@ -149,3 +149,6 @@ update creature_template set mechanic_immune_mask = 1022066674 where entry = 651
 -- Fix Banshee's Veil:
 replace into item_template values (60409, 4, 1, 'Banshee\'s Veil', '', 23747, 3, 0, 1, 17184, 4296, 16, -1, -1, 63, 58, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 14793, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 1, NULL);
 delete from item_template where entry = 80762;
+-- Fix Nightmare Dreamrunner:
+update spell_template set effectmiscvalue1 = 50098 where entry = 46450;
+
