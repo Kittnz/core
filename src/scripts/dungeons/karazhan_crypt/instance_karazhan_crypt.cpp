@@ -252,11 +252,16 @@ struct trigger_summon_alarusAI : public ScriptedAI
                 (necrotic_rune_5->GetGoState() == GO_STATE_ACTIVE) && 
                 (necrotic_rune_6->GetGoState() == GO_STATE_ACTIVE))
             {
-                Creature* alarus = me->SummonCreature(91928, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 300 * IN_MILLISECONDS);
-                me->SummonGameObject(177304, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); 
+                Creature* alarus_spawned_npc = me->FindNearestCreature(91928, 100.0f);
 
-                if (alarus)
-                    alarus->MonsterYell("It seems words alone aren't enough to deter you. Find me, and meet your untimely end!");
+                if (!alarus_spawned_npc)
+                {
+                    Creature* alarus = me->SummonCreature(91928, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetOrientation(), TEMPSUMMON_DEAD_DESPAWN, 300 * IN_MILLISECONDS);
+                    me->SummonGameObject(177304, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 3600, true);
+
+                    if (alarus)
+                        alarus->MonsterYell("It seems words alone aren't enough to deter you. Find me, and meet your untimely end!");
+                }           
             }
         }
     }
