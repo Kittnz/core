@@ -2154,7 +2154,7 @@ struct chromie_portal_cotAI : public ScriptedAI
             if (spawnTimer <= uiDiff && m_creature->FindNearestCreature(NPC_RIFT_GUARD, 50.0f, true))
             {
                 m_creature->SummonCreature(NPC_WHELP, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
-                spawnTimer = 8000;
+                spawnTimer = 15000;
             }
             else spawnTimer -= uiDiff;
         }
