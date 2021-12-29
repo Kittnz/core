@@ -164,3 +164,6 @@ update creature_template set name = 'Zul\'jin', subname = 'Amani Warlord', facti
 -- NPC Guid 2562845, 2562891, 2562846 and 2562890 should be linked together:
 replace into creature_linking values (2562846, 2562845, 3); 
 replace into creature_linking values (2562890, 2562845, 3); 
+-- Fix Black Morass spawn timers:
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map = 269 and spawntimesecsmin = 180;
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map = 269 and spawntimesecsmin = 300;
