@@ -168,5 +168,5 @@ replace into creature_linking values (2562890, 2562845, 3);
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map = 269 and spawntimesecsmin = 180;
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map = 269 and spawntimesecsmin = 300;
 -- Fixes for Arenytall Family Value:
-replace into gameobject_template values (3000520, 0, 3, 23430, 'Small Chest', 0, 4, 1, 43, 3000520, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id, patch_max) values (3000520,60167,-100,1,1,0,10);
+replace into gameobject_template values (3000520, 3, 23430, 'Areyntall Strongbox', 0, 4, 1, 43, 3000520, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id) values (3000520,60167,-100,1,1,0);
