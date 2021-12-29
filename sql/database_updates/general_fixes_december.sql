@@ -159,3 +159,5 @@ update item_template set spellid_1 = 50900 where entry = 83003;
 replace into creature_involvedrelation values (65005, 80604);
 -- Make Arc'tiras immune to frost:
 update creature_template set mechanic_immune_mask = 1022066674, school_immune_mask = 16 where entry = 93107;
+-- Update Zu'jin:
+update creature_template set name = 'Zul\'jin', subname = 'Amani Warlord', faction = 1494 where entry = 80867;
