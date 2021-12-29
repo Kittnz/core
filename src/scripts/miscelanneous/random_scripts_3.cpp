@@ -397,19 +397,12 @@ bool GossipSelect_npc_bessy(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
 bool GossipHello_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40060) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60156, 1, false))
-    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ashylah Starcaller has sent me with this missive.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
-    }
-    else // if no quest - still show a dialogue
-    {
-        if (pCreature->IsQuestGiver())
-            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-        pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
-    }
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-
+    pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
     return true;
 }
 
