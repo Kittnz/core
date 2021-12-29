@@ -10492,6 +10492,7 @@ void Unit::RestoreMovement()
 /** Spell cooldown management system. Shared by Players, Creatures, Pets, ... */
 void Unit::RemoveSpellCooldown(uint32 spell_id, bool update)
 {
+    // VERY FUCKING BAD IDEA AND BAD FUNCTION
     m_spellCooldowns.erase(spell_id);
 
     if (update)
@@ -10528,18 +10529,23 @@ void Unit::RemoveAllArenaSpellCooldown()
 {
     auto excludedSpellIds = { 12312, 12803, 20230, 1719, 633, 2800, 10310, 20608 };
 
-    for (auto const& itr : m_spellCooldowns)
+    for (auto itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end();)
     {
-        if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr.first) != excludedSpellIds.end())
-            continue;
+        if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr->first) != excludedSpellIds.end())
+            ++itr;
 
-        auto spellEntry = sSpellMgr.GetSpellEntry(itr.first);
+        auto spellEntry = sSpellMgr.GetSpellEntry(itr->first);
 
         if (spellEntry && spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS
             && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS)
         {
-            RemoveSpellCooldown(itr.first, true);
+            itr = m_spellCooldowns.erase(itr);
+
+            if (Player* player = GetAffectingPlayer())
+                player->SendClearCooldown(spellEntry->Id, this);
         }
+        else
+            ++itr;
     }
 }
 
