@@ -402,7 +402,13 @@ bool GossipHello_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature)
         pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
     }
     else // if no quest - still show a dialogue
+    {
+        if (pCreature->IsQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
         pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
+    }
+
 
     return true;
 }
