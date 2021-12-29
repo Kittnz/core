@@ -18074,7 +18074,20 @@ bool Player::ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc 
         m_taxi.AddTaxiDestination(lastNode);
     }
     else // single path
+    {
+        if (lastPath > 500 && lastPath < 1500)
+        {
+            sLog.outError("Player \"%s\" tried activate bugged taxi! sTaxiPathNodesByPath has invalid size",
+                GetName());
+            WorldPacket data(SMSG_ACTIVATETAXIREPLY, 4);
+            data << uint32(ERR_TAXIUNSPECIFIEDSERVERERROR);
+            GetSession()->SendPacket(&data);
+            m_taxi.ClearTaxiDestinations();
+            return false;
+        }
+
         m_taxi.AddTaxiDestination(lastNode);
+    }
 
     // get mount model (in case non taximaster (npc==nullptr) allow more wide lookup)
     uint32 mount_display_id = sObjectMgr.GetTaxiMountDisplayId(sourcenode, GetTeam(), npc == nullptr);
@@ -18156,6 +18169,9 @@ void Player::ContinueTaxiFlight()
     uint32 startNode = 0;
 
     TaxiPathNodeList const& nodeList = sTaxiPathNodesByPath[path];
+
+    if (nodeList.empty())
+        return;
 
     float distPrev = MAP_SIZE * MAP_SIZE;
     float distNext =
