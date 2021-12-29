@@ -278,7 +278,7 @@ bool GossipSelect_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature, u
             pPlayer->SaveInventoryAndGoldToDB();
         }
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("However King Bronzebeard has been very supportive of the Quel'dorei ascension to the Alliance.", player);
+            c->MonsterSayToPlayer("However, I have been very supportive of the Quel'dorei ascension to the Alliance.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
             });
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
