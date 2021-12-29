@@ -333,6 +333,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 		// no type == CHAT_MSG_GUILD on this, to protecc fraudulent messages
 		if (strstr(msg.c_str(), "TW_GUILDBANK"))
 		{
+			// temp disable gbank
+			return;
+
 			// HC check
 			// no Newcommers check since we dont have anyone in Newcommers to unlock the feature
 			if (_player->IsHardcore())
