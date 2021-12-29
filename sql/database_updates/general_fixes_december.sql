@@ -170,3 +170,7 @@ update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where map
 -- Fixes for Arenytall Family Value:
 replace into gameobject_template values (3000520, 3, 23430, 'Areyntall Strongbox', 0, 4, 1, 43, 3000520, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 replace into gameobject_loot_template (entry, item, chanceorquestchance, mincountorref, maxcount, condition_id) values (3000520,60167,-100,1,1,0);
+-- Hunter quests fixes:
+replace into quest_template values (80755, 2, -261, 10, 0, 10, 0, 4, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 40262, 0, 0, 0, 0, 0, 0, 'Training the Beast', 'You now have the power to tame a pet, but you must also gain the skills to train it.', 'Speak with Diane Willowfield to learn the ability to train and feed your pets.', 'Yes, I will grant you the skills you need to train and guide your pet. Not only will you be able to teach your pet new abilities, you will now be able to feed your pet, as well as revive it, should it fall in battle.$B$BNow, go.', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 420, 0, 240, 23357, 5300, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 273, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into creature_questrelation values (60488, 80755);
+replace into creature_involvedrelation values (60488, 80755);
