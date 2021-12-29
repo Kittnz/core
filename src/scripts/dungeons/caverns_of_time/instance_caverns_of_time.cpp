@@ -622,7 +622,7 @@ struct infinite_whelpAI : public ScriptedAI
                             continue;
 
                         if (playerGroup->FindNearestCreature(m_creature->GetEntry(), 50, true) && playerGroup->GetPowerPercent(POWER_MANA) >= 1)
-                            playerGroup->ModifyPower(POWER_MANA, (playerGroup->GetMaxPower(POWER_MANA) / 10) * -1);
+                            playerGroup->ModifyPower(POWER_MANA, (playerGroup->GetMaxPower(POWER_MANA) / 2.5f) * -1);
                     }
                 }
 
@@ -1294,6 +1294,7 @@ struct harbinger_boss_cotAI : public ScriptedAI
     uint32 instanityTimer;
     bool addsSpawned;
     bool burstDone;
+    bool insanityDone;
     float oldHP;
 
     enum AddEntries
@@ -1317,6 +1318,7 @@ struct harbinger_boss_cotAI : public ScriptedAI
         addsSpawned = false;
         burstDone = false;
         oldHP = 100.0f;
+        insanityDone = false;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -1334,12 +1336,12 @@ struct harbinger_boss_cotAI : public ScriptedAI
         }
         else veilTimer -= uiDiff;
 
-        if (instanityTimer <= uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CAUSE_INSANITY) == CAST_OK)
-                instanityTimer = 25000;
-        }
-        else instanityTimer -= uiDiff;
+        //if (instanityTimer <= uiDiff) // moved to health percentage (enrage like)
+        //{
+        //    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CAUSE_INSANITY) == CAST_OK)
+        //        instanityTimer = 25000;
+        //}
+        //else instanityTimer -= uiDiff;
 
         float currentHP = m_creature->GetHealthPercent();
 
@@ -1363,8 +1365,16 @@ struct harbinger_boss_cotAI : public ScriptedAI
             }
 
             m_creature->PMonsterYell("W'oq uhn'agth ez qam Sk'arr!");
-            m_creature->MonsterWhisper("Come, servants of rot. Consume!", m_creature->GetVictim(), true);
 
+            const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
+
+            for (const auto& itr : PlayerList)
+            {
+                if (Player* player = itr.getSource())
+                {
+                    m_creature->MonsterWhisper("Come, servants of rot.Consume!", player, true);
+                }
+            }
         }
 
         if (!burstDone && m_creature->GetHealthPercent() <= 35.0f)
@@ -1375,24 +1385,55 @@ struct harbinger_boss_cotAI : public ScriptedAI
             DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_BURST);
 
             m_creature->PMonsterYell("Ak'agthshi ma uhnish, ak'uq shg'cul vwahuhn! H'iwn iggksh Phquathi gag OOU KAAXTH SHUUL!");
-            m_creature->MonsterWhisper("Our numbers are endless, our power beyond reckoning! All who oppose the Destroyer will DIE A THOUSAND DEATHS!", m_creature->GetVictim(), true);
+
+            const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
+
+            for (const auto& itr : PlayerList)
+            {
+                if (Player* player = itr.getSource())
+                {
+                    m_creature->MonsterWhisper("Our numbers are endless, our power beyond reckoning! All who oppose the Destroyer will DIE A THOUSAND DEATHS!", player, true);
+                }
+            }
         }
+
+        if (!insanityDone && m_creature->GetHealthPercent() <= 10.0f)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CAUSE_INSANITY) == CAST_OK)
+                insanityDone = true;
+        }
+
         DoMeleeAttackIfReady();
     }
 
     void EnterCombat(Unit*) override
     {
         m_creature->PMonsterYell("Shuul og i agthu yrr sk'uuyat uulwi ma oou sshoq'met ez nuq far'al I zz nuq al'tha Ssaggh ni za an'zig yrr puul ywaq gul'kafh");
-        m_creature->MonsterWhisper("There is a great and terrible truth at the beginning of all things. I am its herald. Listen to my sermon, and know your infinite inconsequence.", m_creature->GetVictim(), true);
+
+        const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
+
+        for (const auto& itr : PlayerList)
+        {
+            if (Player* player = itr.getSource())
+            {
+                m_creature->MonsterWhisper("There is a great and terrible truth at the beginning of all things. I am its herald. Listen to my sermon, and know your infinite inconsequence.", player, true);
+            }
+        }
     }
 
     void JustDied(Unit*) override
     {
-
         m_creature->PMonsterSay("Hul bala miz rilakich...");
 
-        if (Player* player = m_creature->FindNearestPlayer(100))
-            m_creature->MonsterWhisper("How is this possible...", player, true);
+        const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
+
+        for (const auto& itr : PlayerList)
+        {
+            if (Player* player = itr.getSource())
+            {
+                m_creature->MonsterWhisper("How is this possible...", player, true);
+            }
+        }
 
     }
 };
@@ -1889,7 +1930,8 @@ struct chromie_boss_cotAI : public ScriptedAI
         NPC_RIFT_GUARD = 65101,
         NPC_ROTMAW = 65122,
         NPC_MOSSHEART = 65124,
-        NPC_TIME_RIFT_SMALL = 65129
+        NPC_TIME_RIFT_SMALL = 65129,
+        NPC_UNKNOWN_ENTITY = 66003
     };
 
     uint32 manaBurnTimer;
@@ -2024,8 +2066,43 @@ struct chromie_boss_cotAI : public ScriptedAI
         if (GameObject* ghostWall = m_creature->FindNearestGameObject(2010866, 50)) // remove ghost wall
             ghostWall->AddObjectToRemoveList();
 
+        for (int i = 0; i < 2; i++) // remove ghost walls
+        {
+            if (GameObject* ghostWall = m_creature->FindNearestGameObject(180322, 100))
+                ghostWall->AddObjectToRemoveList();
+        }
+
         for (int i = 0; i < timeRifts.size(); i++) // remove rifts
             timeRifts[i]->AddObjectToRemoveList();
+
+        DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
+
+            Creature* monsterSummoned = nullptr;
+
+            std::string str = "";
+
+            if (Creature* entity = m_creature->FindNearestCreature(NPC_UNKNOWN_ENTITY, 100, true))
+                entity->PMonsterEmote("rumbles nearby.");
+
+            if (monsterSummoned = m_creature->FindNearestCreature(NPC_ROTMAW, 1000, true))
+                str = "Hssss ... I ... hunger ... hssss";
+            else if (monsterSummoned = m_creature->FindNearestCreature(NPC_MOSSHEART, 1000, true))
+                str = "Mrgml ... Who dares disturb my moss slumber?";
+
+            const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
+
+            if (monsterSummoned != nullptr)
+            {
+                for (const auto& itr : PlayerList)
+                {
+                    if (Player* player = itr.getSource())
+                    {
+                        monsterSummoned->MonsterWhisper(str.c_str(), player, true);
+                    }
+                }
+            }
+
+            });
 
     }
 };

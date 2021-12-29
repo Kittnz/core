@@ -114,3 +114,17 @@ update creature_template set faction = 210, type = 7 where entry = 91979;
 update creature_template set faction = 210, type = 7 where entry = 91977;
 -- Fix Armored War Raptors spell
 UPDATE mount_spells SET spellId = 46447 WHERE itemId = 50401;
+-- Update Rift Guard HP (NERF!!)
+UPDATE creature_template SET health_min = 12104, health_max = 12104 WHERE entry = 65101;
+-- More NERFs!
+UPDATE creature_template SET `dmg_min` = dmg_min-150, `dmg_max` = dmg_max-150 WHERE entry BETWEEN 65100 AND 65107;
+-- Remove Chromie
+DELETE FROM creature WHERE guid = 2569278;
+-- Insert hidden walls
+REPLACE INTO `gameobject` VALUES (5001521, 180322, 269, -1609.51, 7101.05, 23.7942, 6.04992, 0, 0, 0.116369, -0.993206, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES (5001522, 180322, 269, -1606.15, 7115.99, 23.7218, 6.04992, 0, 0, 0.116369, -0.993206, 300, 300, 100, 1, 0, 0);
+-- Add invis trigger
+REPLACE INTO `creature_template` VALUES (66003, 262, 0, 0, 0, 'An Unknown Entity', NULL, 0, 63, 63, 9999, 9999, 0, 0, 1900, 35, 0, 1, 1.14286, 0, 20, 5, 0, 3, 1, 11, 11, 0, 290, 1, 1800, 1900, 1, 0, 0, 0, 0, 0, 0, 0, 387.6, 532.95, 100, 1, 0, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 222, 1110, '', 0, 3, 0, 0, 3, 0, 0, 0, 2147483648, 0, 32898, 0, '');
+REPLACE INTO `creature` VALUES (2569287, 66003, 0, 0, 0, 269, 0, 0, -1591.57, 7106.07, 23.7356, 3.11391, 25, 25, 0, 100, 100, 0, 0, 0);
+
+
