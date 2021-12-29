@@ -401,6 +401,9 @@ bool GossipHello_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ashylah Starcaller has sent me with this missive.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
     }
+    else // if no quest - still show a dialogue
+        pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
+
     return true;
 }
 
