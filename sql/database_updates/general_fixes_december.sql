@@ -128,4 +128,6 @@ replace into creature_template values (66003, 262, 0, 0, 0, 'An Unknown Entity',
 replace into creature values (2569287, 66003, 0, 0, 0, 269, 0, 0, -1591.57, 7106.07, 23.7356, 3.11391, 25, 25, 0, 100, 100, 0, 0, 0);
 -- Fix Simple Flour exploit:
 update item_template set sell_price = 150, buy_price = 550 where entry = 30817;
-
+-- Molkerei's damned horse:
+replace into item_template values (83520, 15, 4, 'Marshmallow', 'Molkerei\'s favorite steed.', 13108, 3, 64, 1, 100000, 0, 0, -1, -1, 40, 40, 762, 75, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46499, 0, 0, 0, 1, 330, 3000, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+replace into mount_spells values (83520, 16083);
