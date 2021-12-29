@@ -151,4 +151,7 @@ replace into item_template values (60409, 4, 1, 'Banshee\'s Veil', '', 23747, 3,
 delete from item_template where entry = 80762;
 -- Fix Nightmare Dreamrunner:
 update spell_template set effectmiscvalue1 = 50098 where entry = 46450;
-
+-- Fix Chronoboon, Refreshment Table & Soulwell:
+update item_template set spellid_1 = 50900 where entry = 83000;
+update item_template set spellid_1 = 50900 where entry = 83002;
+update item_template set spellid_1 = 50900 where entry = 83003;
