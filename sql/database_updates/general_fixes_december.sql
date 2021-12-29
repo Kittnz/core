@@ -155,3 +155,5 @@ update spell_template set effectmiscvalue1 = 50098 where entry = 46450;
 update item_template set spellid_1 = 50900 where entry = 83000;
 update item_template set spellid_1 = 50900 where entry = 83002;
 update item_template set spellid_1 = 50900 where entry = 83003;
+-- Fix A Journey into the Caverns:
+replace into creature_involvedrelation values (65005, 80604);
