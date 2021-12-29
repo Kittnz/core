@@ -157,3 +157,5 @@ update item_template set spellid_1 = 50900 where entry = 83002;
 update item_template set spellid_1 = 50900 where entry = 83003;
 -- Fix A Journey into the Caverns:
 replace into creature_involvedrelation values (65005, 80604);
+-- Make Arc'tiras immune to frost:
+update creature_template set mechanic_immune_mask = 1022066674, school_immune_mask = 16 where entry = 93107;
