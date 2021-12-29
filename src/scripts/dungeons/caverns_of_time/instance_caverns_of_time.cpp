@@ -2676,6 +2676,7 @@ bool GossipSelect_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature, uin
 
         break;
     case 2:
+        pPlayer->DestroyItemCount(80008, 1, true);
         pCreature->PMonsterEmote("Chromie breathes a sigh of relief.");
         pCreature->PMonsterSay("Thank you. You've made this so much easier.");
         ChromieBossAnim(pCreature, pPlayer);
