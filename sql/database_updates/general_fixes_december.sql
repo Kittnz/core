@@ -117,7 +117,7 @@ UPDATE mount_spells SET spellId = 46447 WHERE itemId = 50401;
 -- Update Rift Guard HP (NERF!!)
 UPDATE creature_template SET health_min = 12104, health_max = 12104 WHERE entry = 65101;
 -- More NERFs!
-UPDATE creature_template SET `dmg_min` = dmg_min-150, `dmg_max` = dmg_max-150 WHERE entry BETWEEN 65100 AND 65107;
+UPDATE creature_template SET `dmg_min` = dmg_min+150, `dmg_max` = dmg_max+150 WHERE entry BETWEEN 65100 AND 65107;
 -- Remove Chromie
 DELETE FROM creature WHERE guid = 2569278;
 -- Insert hidden walls
