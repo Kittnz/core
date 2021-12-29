@@ -112,3 +112,5 @@ update creature_template set faction = 210, type = 7 where entry = 91976;
 update creature_template set faction = 210, type = 7 where entry = 91978;
 update creature_template set faction = 210, type = 7 where entry = 91979;
 update creature_template set faction = 210, type = 7 where entry = 91977;
+-- Fix Armored War Raptors spell
+UPDATE mount_spells SET spellId = 46447 WHERE itemId = 50401;
