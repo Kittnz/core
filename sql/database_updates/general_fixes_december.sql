@@ -146,3 +146,6 @@ REPLACE INTO creature_template (entry, display_id1, name, level_min, level_max, 
 REPLACE INTO creature_template (entry, display_id1, name, level_min, level_max, faction, health_min, health_max, mana_min, mana_max, armor, npc_flags, speed_walk, speed_run, detection_range, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, unit_class, holy_res, fire_res, frost_res, shadow_res, arcane_res, movement_type, regeneration) VALUES (66002, 10034, 'Melyndella', 15, 15, 35, 328, 328, 0, 0, 20, 0, 1, 1.14286, 18, 21, 27, 0, 74, 1, 2000, 1, 0, 0, 0, 0, 0, 1, 3);
 -- Harbinger Aph’ygth should not be slowable, rootable or stunned:
 update creature_template set mechanic_immune_mask = 1022066674 where entry = 65114;
+-- Fix Banshee's Veil:
+replace into item_template values (60409, 4, 1, 'Banshee\'s Veil', '', 23747, 3, 0, 1, 17184, 4296, 16, -1, -1, 63, 58, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 7, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 14793, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 1, NULL);
+delete from item_template where entry = 80762;
