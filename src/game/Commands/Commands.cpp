@@ -11580,7 +11580,8 @@ bool ChatHandler::HandleInstancePerfInfosCommand(char* args)
         return false;
     map->PrintInfos(*this);
     uint32 playersInClient = 0, gobjsInClient = 0, unitsInClient = 0, corpsesInClient = 0;
-    for (const auto& itr : player->m_visibleGUIDs)
+    std::shared_lock<std::shared_timed_mutex> lock(player->m_visibleGUIDs_lock);
+    for (const ObjectGuid& itr : player->m_visibleGUIDs)
     {
         switch (itr.GetHigh())
         {

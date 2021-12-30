@@ -1997,11 +1997,14 @@ bool Player::SwitchInstance(uint32 newInstanceId)
     ASSERT(newmap);
     SetMap(newmap);
 
-    for (const auto& guid : m_visibleGUIDs)
     {
-        WorldPacket data(SMSG_DESTROY_OBJECT, 8);
-        data << guid;
-        GetSession()->SendPacket(&data);
+        std::shared_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+        for (const ObjectGuid& guid : m_visibleGUIDs)
+        {
+            WorldPacket data(SMSG_DESTROY_OBJECT, 8);
+            data << guid;
+            GetSession()->SendPacket(&data);
+        }
     }
 
     ASSERT(newmap->Add(this));
@@ -21637,7 +21640,8 @@ void Player::SendDestroyGroupMembers(bool includingSelf)
 {
     if (Group* group = GetGroup())
     {
-        for (const auto& itr : group->GetMemberSlots())
+        std::unique_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+        for (const Group::MemberSlot& itr : group->GetMemberSlots())
         {
             if (!includingSelf && itr.guid == GetObjectGuid())
                 continue;
@@ -21656,7 +21660,8 @@ void Player::SendDestroyGroupMembers(bool includingSelf)
 void Player::RefreshBitsForVisibleUnits(UpdateMask* mask, uint32 objectTypeMask)
 {
     UpdateData data;
-    for (const auto& guid : m_visibleGUIDs)
+    std::shared_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
+    for (const ObjectGuid& guid : m_visibleGUIDs)
     {
         if (Object* obj = GetObjectByTypeMask(guid, TypeMask(objectTypeMask)))
         {
@@ -21984,7 +21989,7 @@ bool Player::IsInVisibleList(WorldObject const* u) const
         return true;
     std::shared_lock<std::shared_timed_mutex> lock(m_visibleGUIDs_lock);
     bool atClient = m_visibleGUIDs.find(u->GetObjectGuid()) != m_visibleGUIDs.end();
-    return atClient;
+    return atClient; 
 }
 
 
