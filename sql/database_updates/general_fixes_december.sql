@@ -210,3 +210,9 @@ update creature_loot_template set chanceorquestchance = 0.5 where item = 60149;
 update quest_template set details = 'Long before I came to this place, I was quite a valuable member of the Venture Co.\n\nThat was a long time ago though, and a different me, but if anything stuck, it\'s the stupid nickname I got.\n\nWhen I was one of the engineers, I was comissioned to make a design for a mega shredder to deforest Stonetalon.\n\nTurns out, another design was better than mine, and by quite a bit. I don\'t have a problem with that, but what I got a problem with is being fired from Foreman Klix for "letting him down".\n\nHe called me a "hack", and now the nickname has stuck. Bastard\'s got what\'s coming to him. You\'ll find him out at the Windshear crag where I used to work at the old lumbermill. He\'s an old coot and I doubt he\'s moved on.\n\nBring me his ring, it\'s this oversized studded thing he wears over his middle finger.' where entry = 55042;
 -- Fixes for Adding a Little Sting:
 update quest_template set objectives = 'Collect 5 Chunk of Boar Meat and 5 Scorpid Stinger and bring them to Hargosh in Sparkwater Port.' where entry = 55004;
+-- Fix Snowball:
+delete from mount_spells where itemid = 51249;
+replace into mount_spells values (51249, 46452);
+-- Fix Armored Red Raptor:
+delete from mount_spells where itemid = 51249;
+replace into mount_spells values (51249, 46452);
