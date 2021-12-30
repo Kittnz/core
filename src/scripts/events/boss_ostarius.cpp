@@ -773,11 +773,13 @@ struct go_uldum_portalAI : public GameObjectAI
     {
         if (Summon_Timer < diff)
         {
+            float ground_z = me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT);
+
             Creature* spawn = me->SummonCreature(
                 MOB_ULDUM_CONSTRUCT,
                 me->GetPositionX(),
                 me->GetPositionY(),
-                me->GetPositionZ(),
+                ground_z,
                 me->GetOrientation(),
                 TEMPSUMMON_CORPSE_TIMED_DESPAWN,
                 5000
