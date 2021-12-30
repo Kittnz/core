@@ -192,17 +192,10 @@ UPDATE item_template SET name = '"Genuine" Dragon\'s Claw' WHERE entry = 81298;
 update item_template set range_mod = 100 where entry = 83215;
 -- Da Lord of Da Forest:
 update quest_template set objectivetext1 = 'Listen to Zul\'jin' where entry = 80801;
-
-
-
-
-
-
-
-
-
-
-
-
-
+-- Fix Turbo-Charged Flying Machine & cloud mounts:
+update spell_template set effectmiscvalue1 = 90977 where entry = 46225;
+delete from mount_spells where itemid in (81239, 81240);
+replace into mount_spells values (81239, 46519);
+replace into mount_spells values (81240, 46520);
+update spell_template set effectmiscvalue1 =  90979 where entry = 46520;
 
