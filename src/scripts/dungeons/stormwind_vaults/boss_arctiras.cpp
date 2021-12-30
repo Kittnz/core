@@ -143,6 +143,13 @@ struct boss_ArctirasAI : public GenericSpellMob
 		}
 	}
 
+
+	virtual void EnterEvadeMode() override
+	{
+		GenericSpellMob::EnterEvadeMode();
+		m_creature->GetMotionMaster()->Clear(false, false);
+	}
+
 };
 
 CreatureAI *GetAI_major_resonating_crystal(Creature *pCreature) 
