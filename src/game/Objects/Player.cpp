@@ -5207,6 +5207,7 @@ enum CustomGraveyardZones
     CGZ_DEEPRUN_TRAM            = 2257,
     CGZ_KARAZHAN_CRYPT          = 41,
     CGZ_LAPIDIS_ISLE            = 409,
+    CGZ_GILIJIM_ISLE            = 408,
 };
 
 void Player::ScheduleRepopAtGraveyard()
@@ -5336,6 +5337,12 @@ void Player::RepopAtGraveyard()
             case CGZ_LAPIDIS_ISLE:
             {
                 TeleportTo(0, -11505.1F, 3509.7F, 66.17F, 2.04F);
+                isCustomGraveyard = true;
+                break;
+            }
+            case CGZ_GILIJIM_ISLE:
+            {
+                TeleportTo(0, -13912.03F, 2350.90F, 28.57F, 5.14F);
                 isCustomGraveyard = true;
                 break;
             }
