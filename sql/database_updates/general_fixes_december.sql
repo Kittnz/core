@@ -216,3 +216,6 @@ replace into mount_spells values (51249, 46452);
 -- Fix Armored Red Raptor:
 delete from mount_spells where itemid = 50403;
 replace into mount_spells values (50403, 46502);
+-- Fix Armored White Bear:
+delete from mount_spells where itemid = 81158;
+replace into mount_spells values (81158, 46202);
