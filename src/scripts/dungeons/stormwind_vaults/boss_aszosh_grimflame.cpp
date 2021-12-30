@@ -33,7 +33,7 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI {
         _eventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellCastEvents::EventCastMindBlast), Milliseconds(400));
         _eventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellCastEvents::EventCastRisenLackey), Milliseconds(400));
 
-        me->MonsterSendTextToZone("I was amongst the first, and I will clain vengeance for Gul'dan!", CHAT_MSG_MONSTER_YELL);
+        me->MonsterSendTextToZone("I was amongst the first, and I will claim vengeance for Gul'dan!", CHAT_MSG_MONSTER_YELL);
     }
 
     void JustDied(Unit *killer) override {

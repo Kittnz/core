@@ -48,12 +48,14 @@ enum Events
     EVENT_INTRO_RP_5,
     EVENT_INTRO_RP_6,
     EVENT_INTRO_RP_7,
+    EVENT_INTRO_RP_8,
     EVENT_PHASE_1_DELAY,
     EVENT_PHASE_3_DELAY,
 };
 
+// Don't TOUCH these
 const float squareX = -9606.21484f;
-const float squareY = -2754.0f;
+const float squareY = -2806.25635f;
 const float squareZ = 7.838724f;
 const float squareDiameter = 4.191733f;
 
@@ -72,14 +74,14 @@ constexpr auto PHASE_1_TEXT = "Guardians, awaken and smite these intruders!";
 constexpr auto PHASE_2_TEXT = "Fire will burn your corruption!";
 constexpr auto PHASE_3_TEXT = "Elusive... Then face the might of the frost!";
 constexpr auto PHASE_4_TEXT = "Still you persist, servants of the old ones? Very well.";
-constexpr auto ENRAGE_TEXT = "NO! I will not fail again!";
+constexpr auto ENRAGE_TEXT  = "NO! I will not fail again!";
+constexpr auto DEATH_TEXT   = "You will bring your own, undoing... it has already begun...";
 
 constexpr auto PLAYER_DEATH_1 = "So fragile.";
 constexpr auto PLAYER_DEATH_2 = "You have failed!";
 constexpr auto PLAYER_DEATH_3 = "None shall pass!";
 constexpr auto PLAYER_DEATH_4 = "It had to be done.";
 
-constexpr auto DEATH_TEXT = "You will bring your own, undoing... it has already begun...";
 
 enum SoundEntries
 {
@@ -98,7 +100,8 @@ enum SoundEntries
     SOUND_PHASE_2       = 30277,
     SOUND_PHASE_3       = 30276,
     SOUND_PHASE_4       = 30283,
-    SOUND_ENRAGE        = 30290,
+    SOUND_ENRAGE        = 30289,
+    SOUND_DEATH         = 30290,
 
     SOUND_PLAYER_DEATH  = 80284,
 };
@@ -283,8 +286,10 @@ struct boss_ostariusAI : public ScriptedAI
     {
         DespawnSummons();
 
+        PlaySound(me, SOUND_DEATH, true);
         me->MonsterSendTextToZone(DEATH_TEXT, CHAT_MSG_MONSTER_YELL);
 
+        // Doesn't matter since boss is spawned from quest. This is just in case of server settings.
         uint32 m_respawn_delay_Timer = 7 * DAY;
         me->SetRespawnDelay(m_respawn_delay_Timer);
         me->SetRespawnTime(m_respawn_delay_Timer);
@@ -356,13 +361,15 @@ struct boss_ostariusAI : public ScriptedAI
 
                 PlaySound(me, SOUND_INTRO_TEXT_4, true);
                 me->MonsterSendTextToZone(INTRO_TEXT_4, CHAT_MSG_MONSTER_YELL);
-                m_events.ScheduleEvent(EVENT_INTRO_RP_7, Seconds(7));
+                m_events.ScheduleEvent(EVENT_INTRO_RP_7, Seconds(5));
                 break;
             case EVENT_INTRO_RP_7:
-            {
                 TogglePedestal();
                 me->InterruptNonMeleeSpells(false, SPELL_TARGET_CHANNEL);
-
+                m_events.ScheduleEvent(EVENT_INTRO_RP_8, Seconds(2));
+                break;
+            case EVENT_INTRO_RP_8:
+            {
                 PlaySound(me, SOUND_INTRO_TEXT_5, true);
                 me->MonsterSendTextToZone(INTRO_TEXT_5, CHAT_MSG_MONSTER_YELL);
                 m_events.ScheduleEvent(EVENT_PHASE_1_DELAY, Seconds(6));
@@ -543,7 +550,7 @@ struct boss_ostariusAI : public ScriptedAI
         {
             // Generates random spawn within a square on the floor.
             float spawnX = squareX + (squareDiameter * float(urand(0, 10)));
-            float spawnY = squareY + (squareDiameter * float(urand(0, 16)));
+            float spawnY = squareY + (squareDiameter * float(urand(0, 10)));
 
             GameObject* portal = me->SummonGameObject(GOB_DEFENSE_PORTAL,
                 spawnX,
@@ -579,7 +586,7 @@ struct boss_ostariusAI : public ScriptedAI
         {
             // Generates random spawn within a square on the floor.
             float spawnX = squareX + (squareDiameter * float(urand(0, 10)));
-            float spawnY = squareY + (squareDiameter * float(urand(0, 16)));
+            float spawnY = squareY + (squareDiameter * float(urand(0, 10)));
 
             GameObject* device = me->SummonGameObject(
                 GOB_DEBILITATING_DEVICE,
@@ -812,7 +819,7 @@ constexpr auto SPELL_PIERCING_COLD = 57003;
 // aka debilitating device
 struct go_uldum_suppressionAI : public GameObjectAI
 {
-    go_uldum_suppressionAI(GameObject* pGo) : GameObjectAI(pGo), m_uiCheckTimer(500), m_bActive(true) {}
+    go_uldum_suppressionAI(GameObject* pGo) : GameObjectAI(pGo), m_uiCheckTimer(500), m_bActive(true) { RestoreGo(); }
 
     uint32 m_uiCheckTimer;
     bool m_bActive;
@@ -935,7 +942,7 @@ struct npc_uldum_pedestalAI : public ScriptedAI
                     break;
                 case PEDESTAL_EVENT_BOSS_SPAWN:
                 {
-                    if (Creature* ostarius = me->SummonCreature(80935, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 10000))
+                    if (Creature* ostarius = me->SummonCreature(80935, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
                     {
                         ostarius->AI()->JustRespawned();
                         ostarius->SetInCombatWith(me->GetVictim());
