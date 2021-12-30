@@ -190,7 +190,8 @@ UPDATE item_template SET name = '"Kilrogg\'s" Eye' WHERE entry = 81299;
 UPDATE item_template SET name = '"Genuine" Dragon\'s Claw' WHERE entry = 81298;
 -- Fixed Blackflame Wand:
 update item_template set range_mod = 100 where entry = 83215;
-
+-- Da Lord of Da Forest:
+update quest_template set objectivetext1 = 'Listen to Zul\'jin' where entry = 80801;
 
 
 
