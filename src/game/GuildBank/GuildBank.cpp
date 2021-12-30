@@ -49,8 +49,6 @@
 */
 
 
-// npcs 80923, 80924
-
 enum GuildBankAction
 {
 	ACTION_WITHDRAW_ITEM             = 0,
@@ -80,6 +78,7 @@ enum BankDetails
 	MAX_TABS = 5,
 	MAX_WEEKLY_WITHDRAWALS = 5,
 	BANK_TAB_SIZE = 98,
+	DESTROY_ITEM_ALLOWED = false
 };
 
 enum BankCommLimits
@@ -123,28 +122,6 @@ void GuildBank::HandleAddonMessages(std::string msg, Player* player)
 		_player->SendAddonMessage(prefix, "ActionBlockedBySaveLock");
 		return;
 	}
-
-	// temp
-	if (strstr(msg.c_str(), "Save:"))
-		SaveToDB();
-	if (strstr(msg.c_str(), "PrintQueue:"))
-	{
-		sLog.outInfo("--- start item queue ---");
-		for (auto item : b_itemUpdateQueue)
-		{
-			if (item.state == ITEM_NEW)
-				sLog.outInfo("add %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
-			if (item.state == ITEM_CHANGED)
-				sLog.outInfo("update %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
-			if (item.state == ITEM_REMOVED)
-				sLog.outInfo("delete %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
-		}
-		sLog.outInfo("--- end item queue ---");
-	}
-	// end temp
-		
-
-	// todo check distance to npc/go for any action other than addon startup actions
 
 	if (strstr(msg.c_str(), "UnlockGuildBank:"))
 	{
@@ -191,7 +168,7 @@ void GuildBank::HandleAddonMessages(std::string msg, Player* player)
 	if (strstr(msg.c_str(), "SplitItem:"))
 		SplitItem(msg);
 
-	if (strstr(msg.c_str(), "DestroyItem:"))
+	if (strstr(msg.c_str(), "DestroyItem:") && DESTROY_ITEM_ALLOWED)
 		DestroyItem(msg);
 
 	if (strstr(msg.c_str(), "UpdateTab:"))
@@ -214,7 +191,7 @@ void GuildBank::SaveToDB()
 	}
 
 	uint32 numQuerries = 0;
-	uint32 uSaveStartTime = WorldTimer::getMSTime();
+	//uint32 uSaveStartTime = WorldTimer::getMSTime();
 	b_saveLock = true;
 
 	CharacterDatabase.BeginTransaction();
@@ -253,8 +230,6 @@ void GuildBank::SaveToDB()
 	// Save Money Log
 	if (b_moneyLog_changed)
 	{
-		uint32 q = numQuerries;
-		
 		for (uint32 i = 0; i < b_moneyLog.size(); ++i)
 			if (b_moneyLog[i].state == ITEM_NEW)
 			{
@@ -271,11 +246,9 @@ void GuildBank::SaveToDB()
 		b_moneyLog_changed = false;
 	}
 
-	// Save Log
+	// Save Item Log
 	if (b_log_changed)
 	{
-		uint32 q = numQuerries;
-
 		for (uint32 i = 1; i <= MAX_TABS; ++i)
 			for (uint32 j = 0; j < b_log[i].size(); ++j)
 				if (b_log[i][j].state == ITEM_NEW)
@@ -297,16 +270,16 @@ void GuildBank::SaveToDB()
 	// Save Items
 	if (!b_itemUpdateQueue.empty())
 	{
-		uint32 q = numQuerries;
-
 		for (auto item : b_itemUpdateQueue)
 		{
-			if (item.state == ITEM_NEW)
+			// debug stuff
+			/*if (item.state == ITEM_NEW)
 				sLog.outInfo("add %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
 			if (item.state == ITEM_CHANGED)
 				sLog.outInfo("update %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
 			if (item.state == ITEM_REMOVED)
-				sLog.outInfo("delete %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());
+				sLog.outInfo("delete %u %u/%u, %s ", item.guid, item.tab, item.slot, item.Name.c_str());*/
+			// end debug stuff
 
 			switch (item.state)
 			{
@@ -341,8 +314,7 @@ void GuildBank::SaveToDB()
 
 	CharacterDatabase.CommitTransaction();
 
-	uint32 uSaveDuration = WorldTimer::getMSTimeDiff(uSaveStartTime, WorldTimer::getMSTime());
-
+	//uint32 uSaveDuration = WorldTimer::getMSTimeDiff(uSaveStartTime, WorldTimer::getMSTime());
 	/*sLog.outInfo("Save finished for %s, in %i minutes %i seconds (%u ms), %u querries.", 
 		_guild->GetName().c_str(), 
 		uSaveDuration / 60000, 
@@ -864,12 +836,11 @@ void GuildBank::WithdrawMoney(std::string msg)
 // Checks if player can access tab based on his guild rank
 bool GuildBank::CanAccessTab(uint8 tab, uint8 action)
 {
-
 	if (action == ACTION_WITHDRAW_MONEY)
 		return playerRankIndex <= 1;
 
 	if (action == ACTION_SPLIT_ITEM || action == ACTION_DESTROY_ITEM)
-		if (playerRankIndex >= b_tabInfo[tab].minrank)
+		if (playerRankIndex > b_tabInfo[tab].minrank)
 			return false;
 
 	if (action == ACTION_WITHDRAW_ITEM || action == ACTION_DEPOSIT_ITEM)
@@ -1086,6 +1057,7 @@ void GuildBank::DepositItem(std::string msg) {
 				{
 					// can stack all
 					DepositItemInSlot(bankTab, bankSlot, pItem, count, 0, ITEM_CHANGED, true);
+					return;
 				}
 				else if (count < dItem->count && dItem->count == dItem->maxStackSize) //15 peste 20, withdraw 20-15
 				{
@@ -1454,9 +1426,6 @@ void GuildBank::WithdrawItem(uint32 bankTab, uint32 bankSlot, uint32 count, uint
 		// rightclick withdraw, let game decide dest
 
 		// create it from bItem
-		//Item* item = _player->StoreNewItem(dest, bItem->item_template, true, Item::GenerateItemRandomPropertyId(bItem->item_template));
-		
-
 		Item* item = _player->StoreNewItem(dest, bItem->item_template, true, Item::GenerateItemRandomPropertyId(bItem->item_template));
 
 		if (item)
@@ -1504,7 +1473,7 @@ void GuildBank::WithdrawItem(uint32 bankTab, uint32 bankSlot, uint32 count, uint
 		}
 		else
 		{
-			sLog.outInfo("couldnt create item");
+			//sLog.outInfo("couldnt create item");
 		}
 	}
 
@@ -1991,13 +1960,21 @@ void GuildBank::DestroyItem(std::string msg)
 	}
 
 	// destroy all
-	if (count == 0 || count == sItem->maxStackSize)
+	if (count == 0 || count == sItem->count)
 	{
 		sItem->state = ITEM_REMOVED;
 		b_itemUpdateQueue.push_back(*sItem);
 
 		// delete item from player view
-		SendGuildMessage("GDestroy:" + std::to_string(bankTab) + ":" + std::to_string(bankSlot));
+		SendGuildMessage("GDestroy:" 
+			+ std::to_string(bankTab) + ":" 
+			+ std::to_string(bankSlot) + ":"
+			+ "0" + ":"
+			+ std::to_string(sItem->item_template) + ":"
+			+ std::to_string(sItem->count)
+		);
+
+		LogAction(ACTION_DESTROY_ITEM, bankTab, sItem->item_template, sItem->count, sItem);
 	}
 	else
 	{
@@ -2013,9 +1990,9 @@ void GuildBank::DestroyItem(std::string msg)
 			std::to_string(sItem->item_template) + ":" +
 			std::to_string(sItem->count)
 		);
-	}
 
-	LogAction(ACTION_DESTROY_ITEM, bankTab, sItem->item_template, count, sItem);
+        LogAction(ACTION_DESTROY_ITEM, bankTab, sItem->item_template, count, sItem);
+	}
 
 	if (sItem->state == ITEM_REMOVED)
 		DeleteItem(sItem);
@@ -2141,16 +2118,6 @@ void GuildBank::LoadLog()
 	} while (guildBankLog->NextRow());
 
 	delete guildBankLog;
-
-	//for (uint32 i = 1; i <= 5; ++i)
-	//{
-		//sLog.outInfo("tag %u logsize %u", i, b_log[i].size());
-		/*sLog.outInfo("listing log tab %u", i);
-		for (uint32 j = 0; j < b_log[i].size(); ++j)
-		{
-			sLog.outInfo("b_log[%u][%u].id = %u ", i, j, b_log[i][j].id);
-		}*/
-	//}
 
 	b_moneyLog_changed = false;
 	b_log_changed      = false;
