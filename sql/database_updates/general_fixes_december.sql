@@ -176,3 +176,26 @@ replace into creature_questrelation values (60488, 80755);
 replace into creature_involvedrelation values (60488, 80755);
 -- Change respawn timer of Forgotten Tome object to 30 seconds:
 update gameobject set spawntimesecsmin = 30, spawntimesecsmax = 30 where id = 2010823;
+-- Raise the HP of all bosses in Crescent Grove by 2k flat:
+update creature_template set health_min = 9526+2000, health_max = 9526+2000 where entry = 92111;
+update creature_template set health_min = 13242+2000, health_max = 13242+2000 where entry = 92110;
+update creature_template set health_min = 8780+2000, health_max = 8780+2000 where entry = 92109;
+update creature_template set health_min = 9027+2000, health_max = 9027+2000 where entry = 92108;
+update creature_template set health_min = 7412+2000, health_max = 7412+2000 where entry = 92107;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
