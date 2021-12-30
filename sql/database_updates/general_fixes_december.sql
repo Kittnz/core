@@ -197,5 +197,6 @@ update spell_template set effectmiscvalue1 = 90977 where entry = 46225;
 delete from mount_spells where itemid in (81239, 81240);
 replace into mount_spells values (81239, 46519);
 replace into mount_spells values (81240, 46520);
-update spell_template set effectmiscvalue1 =  90979 where entry = 46520;
-
+update spell_template set effectmiscvalue1 = 90979 where entry = 46520;
+-- Buff Damage of Master Raxxieth by around 10%:
+update creature_template set dmg_min = , dmg_max = where entry = 92110;
