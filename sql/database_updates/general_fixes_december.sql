@@ -174,3 +174,28 @@ replace into gameobject_loot_template (entry, item, chanceorquestchance, mincoun
 replace into quest_template values (80755, 2, -261, 10, 0, 10, 0, 4, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 40262, 0, 0, 0, 0, 0, 0, 'Training the Beast', 'You now have the power to tame a pet, but you must also gain the skills to train it.', 'Speak with Diane Willowfield to learn the ability to train and feed your pets.', 'Yes, I will grant you the skills you need to train and guide your pet. Not only will you be able to teach your pet new abilities, you will now be able to feed your pet, as well as revive it, should it fall in battle.$B$BNow, go.', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 420, 0, 240, 23357, 5300, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 273, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 replace into creature_questrelation values (60488, 80755);
 replace into creature_involvedrelation values (60488, 80755);
+-- Change respawn timer of Forgotten Tome object to 30 seconds:
+update gameobject set spawntimesecsmin = 30, spawntimesecsmax = 30 where id = 2010823;
+-- Raise the HP of all bosses in Crescent Grove by 2k flat:
+update creature_template set health_min = 9526+2000, health_max = 9526+2000 where entry = 92111;
+update creature_template set health_min = 13242+2000, health_max = 13242+2000 where entry = 92110;
+update creature_template set health_min = 8780+2000, health_max = 8780+2000 where entry = 92109;
+update creature_template set health_min = 9027+2000, health_max = 9027+2000 where entry = 92108;
+update creature_template set health_min = 7412+2000, health_max = 7412+2000 where entry = 92107;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
