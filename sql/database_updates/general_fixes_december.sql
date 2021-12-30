@@ -185,10 +185,11 @@ update creature_template set health_min = 7412+2000, health_max = 7412+2000 wher
 -- Argon Halmantle wisp display ID
 UPDATE creature_template SET display_id1 = 5508 WHERE name = 'Argon Halmantle';
 -- Kilroggs eye rename
-UPDATE item_template SET name = '\"Kilrogg\'s\" Eye' WHERE entry = 81299
+UPDATE item_template SET name = '"Kilrogg\'s" Eye' WHERE entry = 81299;
 -- Dragons to Dragon's
-UPDATE item_template SET name = '\"Genuine\" Dragon\'s Claw' WHERE entry = 81298
-
+UPDATE item_template SET name = '"Genuine" Dragon\'s Claw' WHERE entry = 81298;
+-- Fixed Blackflame Wand:
+update item_template set range_mod = 100 where entry = 83215;
 
 
 
