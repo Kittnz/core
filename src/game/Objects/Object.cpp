@@ -2593,7 +2593,7 @@ void WorldObject::DestroyForNearbyPlayers()
     MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(targets, check);
     Cell::VisitWorldObjects(this, searcher, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
-    for (const Player* plr : targets)
+    for (Player* plr : targets)
     {
         if (plr == this)
             continue;
