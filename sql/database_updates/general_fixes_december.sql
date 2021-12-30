@@ -199,4 +199,8 @@ replace into mount_spells values (81239, 46519);
 replace into mount_spells values (81240, 46520);
 update spell_template set effectmiscvalue1 = 90979 where entry = 46520;
 -- Buff Damage of Master Raxxieth by around 10%:
-update creature_template set dmg_min = , dmg_max = where entry = 92110;
+update creature_template set dmg_min = 220, dmg_max = 310 where entry = 92110;
+-- Object Grain Sacks, change greeting text to : <The Grain is stored in a small sack.>:
+update gameobject_template set name = 'Grain Sack' where entry = 2010824;
+-- Boss Alarus of Karazhan Crypt needs to be buffed, make him unstunnable, and uninterruptable, increase his auto attack damage by 20%:
+update creature_template set mechanic_immune_mask = 1022066674, school_immune_mask = 48, dmg_min = 380, dmg_max = 510 where entry = 91928;
