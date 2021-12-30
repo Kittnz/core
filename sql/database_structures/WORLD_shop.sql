@@ -78,6 +78,7 @@ replace into shop_items values
 (88, 4, 51431, 'Druid: Glyph of the Frostkin', 100),
 (89, 4, 51830, 'Druid: Glyph of the Orca', 100),
 (90, 4, 51432, 'Druid: Glyph of Stars', 100),
+-- (91, 4, 50406, 'Druid: Glyph of the Stag', 100),
 -- Mounts
 (101, 5, 50071, 'Ivory Tallstrider', 100),
 (102, 5, 50072, 'Brown Tallstrider', 100), 
@@ -132,6 +133,7 @@ replace into shop_items values
 (221, 5, 13325, 'Fluorescent Mechanostrider', 120), 
 -- (222, 5, 81238, 'Turbo-Charged Flying Machine', 350), 
 (223, 5, 81239, 'Happy Whimsyshire Cloud', 200), 
+(224, 5, 81240, 'Sad Whimsyshire Cloud', 200), 
 -- Companions
 (241, 6, 13584, 'Diablo Stone', 80),
 (242, 6, 13583, 'Panda Collar', 80),
