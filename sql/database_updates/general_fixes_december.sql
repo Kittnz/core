@@ -204,3 +204,5 @@ update creature_template set dmg_min = 220, dmg_max = 310 where entry = 92110;
 update gameobject_template set name = 'Grain Sack' where entry = 2010824;
 -- Boss Alarus of Karazhan Crypt needs to be buffed, make him unstunnable, and uninterruptable, increase his auto attack damage by 20%:
 update creature_template set mechanic_immune_mask = 1022066674, school_immune_mask = 48, dmg_min = 380, dmg_max = 510 where entry = 91928;
+-- Lower drop chance of Mysterious Cow Scroll from Cow to 0.5%:
+update creature_loot_template set chanceorquestchance = 0.5 where item = 60149;
