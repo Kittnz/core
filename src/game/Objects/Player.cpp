@@ -5205,7 +5205,8 @@ enum CustomGraveyardZones
     CGZ_LOCH_MODAN              = 38,
     CGZ_ALAH_THALAS             = 2037,
     CGZ_DEEPRUN_TRAM            = 2257,
-    CGZ_KARAZHAN_CRYPT          = 41
+    CGZ_KARAZHAN_CRYPT          = 41,
+    CGZ_LAPIDIS_ISLE            = 409,
 };
 
 void Player::ScheduleRepopAtGraveyard()
@@ -5330,6 +5331,12 @@ void Player::RepopAtGraveyard()
                     TeleportTo(0, -11111.5F, -1832.2, 71.8F, 6.1F);
                     isCustomGraveyard = true;
                 }
+                break;
+            }
+            case CGZ_LAPIDIS_ISLE:
+            {
+                TeleportTo(0, -11505.1F, 3509.7F, 66.17F, 2.04F);
+                isCustomGraveyard = true;
                 break;
             }
         };
