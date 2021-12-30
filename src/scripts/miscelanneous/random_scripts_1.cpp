@@ -6376,7 +6376,7 @@ bool QuestAccept_npc_faction_leader(Player* pPlayer, Creature* pQuestGiver, Ques
     if (!pPlayer)
         return false;
 
-    if (pQuest->GetQuestId() == 40069) //A people restored
+    if (pQuest->GetQuestId() == 40069) // A People Restored
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
