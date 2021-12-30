@@ -182,7 +182,12 @@ update creature_template set health_min = 13242+2000, health_max = 13242+2000 wh
 update creature_template set health_min = 8780+2000, health_max = 8780+2000 where entry = 92109;
 update creature_template set health_min = 9027+2000, health_max = 9027+2000 where entry = 92108;
 update creature_template set health_min = 7412+2000, health_max = 7412+2000 where entry = 92107;
-
+-- Argon Halmantle wisp display ID
+UPDATE creature_template SET display_id1 = 5508 WHERE name = 'Argon Halmantle';
+-- Kilroggs eye rename
+UPDATE item_template SET name = '\"Kilrogg\'s\" Eye' WHERE entry = 81299
+-- Dragons to Dragon's
+UPDATE item_template SET name = '\"Genuine\" Dragon\'s Claw' WHERE entry = 81298
 
 
 
