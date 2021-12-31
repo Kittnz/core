@@ -230,6 +230,7 @@ UPDATE quest_template SET ObjectiveText1 = "Collect Antnormi's Head" WHERE entry
 REPLACE INTO `creature_questrelation` VALUES (65005, 80605);
 REPLACE INTO `creature_involvedrelation` VALUES (65004, 80605);
 REPLACE INTO `creature_involvedrelation` VALUES (65005, 80604);
-
+-- Update all Copper Veins to 900 seconds
+UPDATE gameobject SET spawntimesecsmin = 900, spawntimesecsmax = 900 WHERE id = 1731;
 
 
