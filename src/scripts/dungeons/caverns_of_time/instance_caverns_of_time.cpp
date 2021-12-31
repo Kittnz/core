@@ -83,6 +83,7 @@ struct instance_caverns_of_time : public ScriptedInstance
 
         riftsClosed = 0;
         chromieBossSummoned = false;
+        finalDialogue = false;
     }
 
     void OnCreatureCreate(Creature* pCreature) override
@@ -191,7 +192,7 @@ struct instance_caverns_of_time : public ScriptedInstance
             }
         }
 
-        if (!finalDialogue && riftsClosed == 5)
+        if (!finalDialogue && riftsClosed >= 5)
         {
             finalDialogue = true;
             Creature* portal = instance->SummonCreature(GOB_CHROMIE_PORTAL, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
@@ -2703,12 +2704,12 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
 
     if (cotData.m_itemTimer < now)
     {
-        cotData.m_itemTimer = now + 30;
-
         bool spawnChromie = false;
 
         if (Creature* rift = pPlayer->FindNearestCreature(91001, 10, true))
         {
+            cotData.m_itemTimer = now + 30;
+
             if (Creature* chromie = pPlayer->FindNearestCreature(91003, 50, true))
             {
                 chromie->CastSpell(chromie, SPELL_TELEPORT, false);
