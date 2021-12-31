@@ -223,3 +223,13 @@ replace into mount_spells values (81158, 46202);
 update quest_template set title = 'The Boran Family', Details = 'I come from a large family, one that once occupied the boroughs of Kul Tiras. We weren\'t exactly a rich family, but we were not poor either! I traveled out with two of my brothers when the third war started up in Lordaeron, hoping to earn some fortune and glory. I helped the navy , my brother Karl started work in Menethil Harbor, while Samual went to Southshore to assist the war effort.\n\nEver since I set said years ago, I have had no communication with them, and would like to reach out if you could deliver a letter to the both of them. They must have thought I perished after so long without a word or peep and I want to ease their minds.', Objectives = 'Deliver the letters from Arnold Boran to his two brothers.', RequestItemsText = 'Have you seen my brothers yet? It will require travelling, but I would appreciate it greatly.', OfferRewardText = 'My family has always been close knit, and I know that such a long length without hearing from me would certainly cause worry. I am simply happy to dispell such concern and let them know all is fine. Thanks again, this has meant a lot for me.' where entry = 40141;
 -- Fix Goblin barber vendor:
 update creature_template set name = 'Zeez Fluxlight' where entry = 50054;
+-- Witherbark Warleader quest drop fixed
+REPLACE INTO `creature_loot_template` VALUES (91789, 60123, -100, 0, 1, 1, 0);
+-- Update Antnormi Head quest
+UPDATE quest_template SET ObjectiveText1 = "Collect Antnormi's Head" WHERE entry = 80605;
+REPLACE INTO `creature_questrelation` VALUES (65005, 80605);
+REPLACE INTO `creature_involvedrelation` VALUES (65004, 80605);
+REPLACE INTO `creature_involvedrelation` VALUES (65005, 80604);
+
+
+
