@@ -1661,7 +1661,7 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
             pCreature->SetVisibility(VISIBILITY_OFF);
             pCreature->ForcedDespawn(1000);
 
-            if (Creature* bossChromie = pCreature->SummonCreature(NPC_BOSS_CHROMIE, -1597.75f, 7105.72f, 23.76f, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN))
+            if (Creature* bossChromie = pCreature->SummonCreature(NPC_BOSS_CHROMIE, -1597.75f, 7105.72f, 23.76f, 0, TEMPSUMMON_DEAD_DESPAWN))
                 bossChromie->AddAura(SHADOW_AURA); // shadow effect
             });
     }
