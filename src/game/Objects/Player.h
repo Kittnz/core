@@ -2680,6 +2680,7 @@ public:
         uint8 GetActiveTitle();
         void SendEarnedTitles();
         void ChangeTitle(uint8 title);
+        void UpdateAppearance();
         // Titles System End
 
 		// General send addon message

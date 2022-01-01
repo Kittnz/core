@@ -207,11 +207,15 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     case 80657: color = 7; break; // Honey Blond
     case 80658: color = 8; break; // Starry Night
     case 80659: color = 9; break; // Crab Legs
+    // Goblins
+    case 80660: color = 0; break; // Copper 
+    case 80661: color = 1; break; // Ruby
+    case 80662: color = 2; break; // Red
+    case 80663: color = 3; break; // Purple
+    case 80664: color = 4; break; // Black 
     }
-
     pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
-    pPlayer->SetDisplayId(15435); // Invisible
-    pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+    pPlayer->UpdateAppearance();
     return false;
 }
 
