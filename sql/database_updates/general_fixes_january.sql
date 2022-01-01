@@ -293,3 +293,5 @@ update item_template set spellid_1 = 26846 where entry = 81116;
 update creature_template set type_flags = 1 where entry = 1548;
 -- Bug #555
 UPDATE quest_template SET requiredraces = 0 WHERE entry IN (367, 368, 369, 492, 445, 407);
+-- Bug # 554
+UPDATE gameobject SET position_z = 150.00 WHERE guid = 5637;
