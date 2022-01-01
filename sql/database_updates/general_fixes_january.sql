@@ -295,3 +295,5 @@ update creature_template set type_flags = 1 where entry = 1548;
 UPDATE quest_template SET requiredraces = 0 WHERE entry IN (367, 368, 369, 492, 445, 407);
 -- Bug # 554
 UPDATE gameobject SET position_z = 150.00 WHERE guid = 5637;
+-- Bug # 557
+UPDATE creature SET spawntimesecsmin = 300, spawntimesecsmax = 300 WHERE id = 3810;
