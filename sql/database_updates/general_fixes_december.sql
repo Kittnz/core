@@ -236,3 +236,5 @@ UPDATE gameobject SET spawntimesecsmin = 900, spawntimesecsmax = 900 WHERE id = 
 UPDATE quest_template SET srcitemid = 60244, srcitemcount = 1 WHERE entry = 40303;
 -- Why are there so many Chromies?!
 DELETE FROM creature WHERE guid IN (2569332, 2569331, 2569333);
+-- Up the DR of SouthSea Sashes for quest
+UPDATE creature_loot_template SET ChanceOrQuestChance = -50 WHERE item = 60208;
