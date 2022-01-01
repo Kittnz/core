@@ -275,3 +275,8 @@ replace into npc_text (id, broadcasttextid0) values (2010824, 2010824);
 update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 760;
 -- 3810 Elder Ashenvale Bear has respawn timer set too fast:
 update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 3810;
+-- Transmog quests fixes:
+update quest_template set objectives = 'Complete Fashionista\'s apprentice\' request and receive one Fashion Coin as a reward.', details = 'Greetings!\n\nAren\'t you here for some Fashion Coins exchange? Well then, one will cost you some materials. Here\'s what we need at the moment...\n\nI need all the items on the list and not a single one of it less. Make sure they aren\'t damaged or chipped.' where title like '%Fashion Demands Sacrifices%';
+update item_template set description = '' where entry = 51217;
+-- Fix Wooden Planter:
+update item_template set spellid_1 = 46062 where entry = 51705;

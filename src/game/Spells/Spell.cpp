@@ -6211,7 +6211,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         return SPELL_FAILED_DONT_REPORT;
                     }
                 }
-                else if (m_spellInfo->Id == 46013) // Simple Wooden Planter
+                else if (m_spellInfo->Id == 46062) // Simple Wooden Planter 
                 {
                     if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() ||
                        (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
