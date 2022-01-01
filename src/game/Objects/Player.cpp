@@ -23121,6 +23121,13 @@ void Player::ChangeTitle(uint8 title)
     SendEarnedTitles();
 }
 
+void Player::UpdateAppearance()
+{
+    SetDisplayId(4);
+    DirectSendPublicValueUpdate(UNIT_FIELD_DISPLAYID);
+    DeMorph();
+}
+
 void Player::SendAddonMessage(std::string prefix, std::string message)
 {
 	WorldPacket data;

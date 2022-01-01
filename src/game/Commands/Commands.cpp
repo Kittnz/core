@@ -11829,9 +11829,7 @@ bool ChatHandler::HandleModifyHairStyleCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES, 2, hairstyle);
-    target->SetDisplayId(DISPLAY_ID_BOX);
-    target->DirectSendPublicValueUpdate(UNIT_FIELD_DISPLAYID);
-    target->DeMorph();
+    target->UpdateAppearance();
 
     PSendSysMessage("Character's hair style has been changed to: %u", hairstyle);
     return true;
@@ -11849,9 +11847,7 @@ bool ChatHandler::HandleModifyHairColorCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES, 3, haircolor);
-    target->SetDisplayId(DISPLAY_ID_BOX);
-    target->DirectSendPublicValueUpdate(UNIT_FIELD_DISPLAYID);
-    target->DeMorph();
+    target->UpdateAppearance();
 
     PSendSysMessage("Character's hair color has been changed to: %u", haircolor);
     return true;
@@ -11869,9 +11865,7 @@ bool ChatHandler::HandleModifySkinColorCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES, 0, skincolor);
-    target->SetDisplayId(DISPLAY_ID_BOX);
-    target->DirectSendPublicValueUpdate(UNIT_FIELD_DISPLAYID);
-    target->DeMorph();
+    target->UpdateAppearance();
 
     PSendSysMessage("Character's skin color has been changed to: %u", skincolor);
     return true;
@@ -11889,9 +11883,7 @@ bool ChatHandler::HandleModifyFaceCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES, 1, face);
-    target->SetDisplayId(DISPLAY_ID_BOX);
-    target->DirectSendPublicValueUpdate(UNIT_FIELD_DISPLAYID);
-    target->DeMorph();
+    target->UpdateAppearance();
 
     PSendSysMessage("Character's face has been changed to: %u", face);
     return true;
@@ -11909,9 +11901,7 @@ bool ChatHandler::HandleModifyAccessoriesCommand(char* args)
         target = m_session->GetPlayer();
 
     target->SetByteValue(PLAYER_BYTES_2, 0, accessories);
-    target->SetDisplayId(DISPLAY_ID_BOX);
-    target->DirectSendPublicValueUpdate(UNIT_FIELD_DISPLAYID);
-    target->DeMorph();
+    target->UpdateAppearance();
 
     PSendSysMessage("Character's facial hair / markings / hooves have been changed to: %u", accessories);
     return true;
