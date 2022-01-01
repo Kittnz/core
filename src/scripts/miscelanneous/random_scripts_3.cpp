@@ -560,11 +560,9 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
 bool GOHello_go_grain_sacks(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE)
-    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
-    }
 
+    pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
     return true;
 }
 
