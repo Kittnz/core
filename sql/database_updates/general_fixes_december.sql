@@ -224,12 +224,12 @@ update quest_template set title = 'The Boran Family', Details = 'I come from a l
 -- Fix Goblin barber vendor:
 update creature_template set name = 'Zeez Fluxlight' where entry = 50054;
 -- Witherbark Warleader quest drop fixed
-REPLACE INTO `creature_loot_template` VALUES (91789, 60123, -100, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91789, 60123, -100, 0, 1, 1, 0);
 -- Update Antnormi Head quest
 UPDATE quest_template SET ObjectiveText1 = "Collect Antnormi's Head" WHERE entry = 80605;
-REPLACE INTO `creature_questrelation` VALUES (65005, 80605);
-REPLACE INTO `creature_involvedrelation` VALUES (65004, 80605);
-REPLACE INTO `creature_involvedrelation` VALUES (65005, 80604);
+REPLACE INTO creature_questrelation VALUES (65005, 80605);
+REPLACE INTO creature_involvedrelation VALUES (65004, 80605);
+REPLACE INTO creature_involvedrelation VALUES (65005, 80604);
 -- Update all Copper Veins to 900 seconds
 UPDATE gameobject SET spawntimesecsmin = 900, spawntimesecsmax = 900 WHERE id = 1731;
 -- The Tower of Lapidis IX quest should give key 60244 at start of quest
@@ -239,11 +239,12 @@ DELETE FROM creature WHERE guid IN (2569332, 2569331, 2569333);
 -- Up the DR of SouthSea Sashes for quest
 UPDATE creature_loot_template SET ChanceOrQuestChance = -50 WHERE item = 60208;
 -- Invis trigger for quest 40295
-REPLACE INTO `gameobject_template` VALUES (2010868, 5, 381, 'Quest 40295 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_exploration_trigger');
--- Trigger locations
-REPLACE INTO `gameobject` VALUES (5001529, 2010868, 1, 2638.33, -5393.39, 83.5813, 3.61251, 0, 0, 0.972407, -0.233291, 300, 300, 100, 1, 0, 0);
-REPLACE INTO `gameobject` VALUES (5001530, 2010868, 1, 2581.45, -5327.6, 78.5973, 2.51296, 0, 0, 0.951007, 0.309169, 300, 300, 100, 1, 0, 0);
-REPLACE INTO `gameobject` VALUES (5001531, 2010868, 1, 2669.08, -5285.41, 82.2823, 0.342899, 0, 0, 0.170611, 0.985339, 300, 300, 100, 1, 0, 0);
-REPLACE INTO `gameobject` VALUES (5001532, 2010868, 1, 2692.67, -5352.07, 86.3872, 5.37416, 0, 0, 0.439025, -0.898475, 300, 300, 100, 1, 0, 0);
+REPLACE INTO gameobject_template VALUES (2010868, 5, 381, 'Quest 40295 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_exploration_trigger');
+-- Trigger locations. Don't commit guids please, there's a high chance that something will be overwritten on prod server because GMs build stuff for players!
+delete from gameobject where id = 2010868;
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (2010868, 1, 2638.33, -5393.39, 83.5813, 3.61251, 0, 0, 0.972407, -0.233291, 300, 300, 100, 1, 0, 0);
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (2010868, 1, 2581.45, -5327.6, 78.5973, 2.51296, 0, 0, 0.951007, 0.309169, 300, 300, 100, 1, 0, 0);
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (2010868, 1, 2669.08, -5285.41, 82.2823, 0.342899, 0, 0, 0.170611, 0.985339, 300, 300, 100, 1, 0, 0);
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (2010868, 1, 2692.67, -5352.07, 86.3872, 5.37416, 0, 0, 0.439025, -0.898475, 300, 300, 100, 1, 0, 0);
 
 
