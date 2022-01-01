@@ -1744,7 +1744,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 46013: // Simple Wooden Planter
+                case 46062: // Simple Wooden Planter
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
