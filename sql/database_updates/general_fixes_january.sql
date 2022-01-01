@@ -297,3 +297,5 @@ UPDATE quest_template SET requiredraces = 0 WHERE entry IN (367, 368, 369, 492, 
 UPDATE gameobject SET position_z = 150.00 WHERE guid = 5637;
 -- Bug # 557
 UPDATE creature SET spawntimesecsmin = 300, spawntimesecsmax = 300 WHERE id = 3810;
+-- Bug # 560 DR ref: https://classic.wowhead.com/item=3397/young-crocolisk-skin
+UPDATE creature_loot_template SET Chanceorquestchance = -29 WHERE item = 3397;
