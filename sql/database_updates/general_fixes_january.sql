@@ -271,3 +271,7 @@ replace into npc_vendor values (50054, 80664, 0, 0, 0, 0);
 -- Object Grain Sacks, change greeting text to : <The Grain is stored in a small sack.>:
 replace into broadcast_text (entry, male_text) values (2010824, '<The Grain is stored in a small sack.>');
 replace into npc_text (id, broadcasttextid0) values (2010824, 2010824);
+-- 760 Lost One Muckdweller has respawn timer set too fast:
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 760;
+-- 3810 Elder Ashenvale Bear has respawn timer set too fast:
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 3810;
