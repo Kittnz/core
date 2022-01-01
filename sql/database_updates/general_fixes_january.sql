@@ -263,8 +263,11 @@ replace into item_template values
 (80662, 0, 0, 'Goblin Hair Dye: Red', '', 33449, 2, 0, 1, 50000, 0, 0, -1, 256, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46029, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_hairdye'),
 (80663, 0, 0, 'Goblin Hair Dye: Purple', '', 33449, 2, 0, 1, 50000, 0, 0, -1, 256, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46029, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_hairdye'),
 (80664, 0, 0, 'Goblin Hair Dye: Black', '', 33449, 2, 0, 1, 50000, 0, 0, -1, 256, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46029, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_hairdye');
-replace into npc_vendor values (50054, 80660);
-replace into npc_vendor values (50054, 80661);
-replace into npc_vendor values (50054, 80662);
-replace into npc_vendor values (50054, 80663);
-replace into npc_vendor values (50054, 80664);
+replace into npc_vendor values (50054, 80660, 0, 0, 0, 0);
+replace into npc_vendor values (50054, 80661, 0, 0, 0, 0);
+replace into npc_vendor values (50054, 80662, 0, 0, 0, 0);
+replace into npc_vendor values (50054, 80663, 0, 0, 0, 0);
+replace into npc_vendor values (50054, 80664, 0, 0, 0, 0);
+-- Object Grain Sacks, change greeting text to : <The Grain is stored in a small sack.>:
+replace into broadcast_text (entry, male_text) values (2010824, '<The Grain is stored in a small sack.>');
+replace into npc_text (id, broadcasttextid0) values (2010824, 2010824);
