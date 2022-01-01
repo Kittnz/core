@@ -238,3 +238,12 @@ UPDATE quest_template SET srcitemid = 60244, srcitemcount = 1 WHERE entry = 4030
 DELETE FROM creature WHERE guid IN (2569332, 2569331, 2569333);
 -- Up the DR of SouthSea Sashes for quest
 UPDATE creature_loot_template SET ChanceOrQuestChance = -50 WHERE item = 60208;
+-- Invis trigger for quest 40295
+REPLACE INTO `gameobject_template` VALUES (2010868, 5, 381, 'Quest 40295 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_exploration_trigger');
+-- Trigger locations
+REPLACE INTO `gameobject` VALUES (5001529, 2010868, 1, 2638.33, -5393.39, 83.5813, 3.61251, 0, 0, 0.972407, -0.233291, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES (5001530, 2010868, 1, 2581.45, -5327.6, 78.5973, 2.51296, 0, 0, 0.951007, 0.309169, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES (5001531, 2010868, 1, 2669.08, -5285.41, 82.2823, 0.342899, 0, 0, 0.170611, 0.985339, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES (5001532, 2010868, 1, 2692.67, -5352.07, 86.3872, 5.37416, 0, 0, 0.439025, -0.898475, 300, 300, 100, 1, 0, 0);
+
+
