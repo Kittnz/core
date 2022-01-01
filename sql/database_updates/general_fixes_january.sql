@@ -280,3 +280,8 @@ update quest_template set objectives = 'Complete Fashionista\'s apprentice\' req
 update item_template set description = '' where entry = 51217;
 -- Fix Wooden Planter:
 update item_template set spellid_1 = 46062 where entry = 51705;
+-- Grammar: The Grumbling Grove:
+update quest_template set details = 'Okay, look. Any treasure hunter is gonna find some haunted treasure from time to time, see? And we can\'t go back to the boss empty-handed. I mean CAN\'T.\n\nLike "he\'ll have us shipped off to the mines" can\'t.\n\nSo here\'s what we\'re gonna do, okay? We\'re gonna try and get this thing anyway. You\'ve done good so far, kid, so you think you\'re up for a little more enforcing? There seem to be more of the first expedition\'s mechs in the little forest on the other side of the valley, and... uh... some vultures that don\'t look real natural. Clear \‘em out, and we\'ll see what\'s in there.' where entry = 80106;
+-- Fixed Alpha Agression quest drop:
+update creature set id = 60420 where id = 91355;
+delete from creature_template where entry = 91355;
