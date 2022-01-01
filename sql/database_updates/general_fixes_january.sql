@@ -301,3 +301,5 @@ UPDATE creature SET spawntimesecsmin = 300, spawntimesecsmax = 300 WHERE id = 38
 UPDATE creature_loot_template SET Chanceorquestchance = -29 WHERE item = 3397;
 -- Bug # 567 Duplicate Mailbox @ Blue Recluse
 delete from gameobject where guid = 73246;
+-- Bug # 572 Hazzuri Scav
+UPDATE creature_template SET beast_family = 0 WHERE entry = 91824;
