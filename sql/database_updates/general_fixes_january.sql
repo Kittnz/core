@@ -305,3 +305,5 @@ delete from gameobject where guid = 73246;
 UPDATE creature_template SET beast_family = 0 WHERE entry = 91824;
 -- Bug # 581 Make the Right Choice
 UPDATE quest_template SET objectives = "Bring 5 Righteous Orbs and 1 Flawless Draenethyst Sphere to Fashionista's Apprentice and recieve 3 Fashion Coins as a reward.", ObjectiveText1 = "Collect 5 Righteous Orbs", objectivetext2 = "Collect a Flawless Draenethyst Sphere", reqitemcount1 = 5 WHERE entry = 60036;
+-- Bug # 589 Res Gossip Menu fix
+update broadcast_text SET male_text = "Return me to life.", female_text = "Return me to life." WHERE entry = 2547;
