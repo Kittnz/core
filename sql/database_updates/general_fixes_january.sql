@@ -287,3 +287,5 @@ update creature set id = 60420 where id = 91355;
 delete from creature_template where entry = 91355;
 -- Spirit of Palkeote adjustments:
 update creature_template set rank = 1, health_min = 7679, health_max = 7879, dmg_min = 180, dmg_max = 230  where entry = 51598;
+-- Picnic Basket fixes:
+update item_template set spellid_1 = 26846 where entry = 81116;
