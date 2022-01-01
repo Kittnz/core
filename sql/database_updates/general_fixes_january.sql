@@ -252,3 +252,7 @@ update quest_template set details = 'Akh Z\'ador is a Riftseeker who led us to t
 replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (3000525, 5, 381, 'Invisible Reset Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 -- Fix Drape of the Herd:
 update item_template set subclass = 1 where entry = 60488;
+-- Fix Zebra (not Zhevra):
+delete from mount_spells where itemid = 50426;
+replace into mount_spells values (50426, 46446);
+update spell_template set effectmiscvalue1 = 50102 where entry = 46446;
