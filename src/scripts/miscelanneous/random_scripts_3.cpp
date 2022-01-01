@@ -1096,11 +1096,15 @@ CreatureAI* GetAI_npc_captain_ironhoof(Creature* _Creature) { return new npc_cap
 
 bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false)/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
-    }
+        if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false)/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
+        {
+            GameObject* reset_trigger_one = pGo->FindNearestGameObject(GO_RESET_TRIGGER_ONE, 3.0F);
+            if (!reset_trigger_one)
+            {
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            }
+            pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
+        }
 
     if (pPlayer->GetQuestStatus(40186) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60257, 1, false))
     {
@@ -1117,10 +1121,9 @@ bool GOSelect_go_blast_powder_keg(Player* pPlayer, GameObject* pGo, uint32 sende
     {
         if (pGo->GetEntry() == 2010834)
         {
-            //pGo->SummonGameObject(2010699, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 60, true); /*invisible trigger obj*/
+            pGo->SummonGameObject(GO_RESET_TRIGGER_ONE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60328))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
-            pGo->UseDoorOrButton(60); // 1min
         }
     }
 

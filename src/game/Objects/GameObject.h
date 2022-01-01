@@ -636,8 +636,8 @@ struct GameObjectDisplayInfoEntry;
 
 // 5 sec for bobber catch
 #define FISHING_BOBBER_READY_TIME 5
-
 #define GO_ANIMPROGRESS_DEFAULT 100                         // in 3.x 0xFF
+#define GO_RESET_TRIGGER_ONE 3000525                            // Invisible trigger for hacky scripts.
 
 class GameObject : public WorldObject
 {
