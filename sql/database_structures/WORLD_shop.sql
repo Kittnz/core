@@ -99,7 +99,7 @@ replace into shop_items values
 (127, 5, 8635, 'Ancient Nightsaber', 200), 
 (128, 5, 81232, 'Azure Frostsaber', 160),
 (129, 5, 18768, 'Armored Dawnsaber', 260),
-(130, 5, 80430, 'Armored Spectral Tiger', 2000),
+-- (130, 5, 80430, 'Armored Spectral Tiger', 2000),
 (131, 5, 12303, 'Black Zulian Panther', 200),
 (132, 5, 81231, 'Tamed Rak\'Shiri', 200),
 (141, 5, 50399, 'Ancient Quel\'dorei Steed', 200),
