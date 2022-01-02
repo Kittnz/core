@@ -505,7 +505,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			}
 			else if (_player->GetDeathState() == CORPSE || _player->GetDeathState() == DEAD)
 			{
-				_player->GetSession()->SendNotification("You cannot to queue for battlegrounds while dead.");
+				_player->GetSession()->SendNotification("You cannot queue for battlegrounds while dead.");
 				return;
 			}
             else if (_player->IsBeingTeleported())
