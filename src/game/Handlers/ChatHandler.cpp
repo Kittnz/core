@@ -492,12 +492,28 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     {
         if (strstr(msg.c_str(), "TW_BGQueue")) // prefix
         {
-            if (_player->IsInCombat() || _player->InBattleGround() || _player->IsBeingTeleported() || _player->GetDeathState() == CORPSE)
+
+			if (_player->IsInCombat())
+			{
+				_player->GetSession()->SendNotification("You cannot to queue for battlegrounds while in combat.");
+				return;
+			}
+			else if (_player->InBattleGround())
+			{
+				_player->GetSession()->SendNotification("You cannot to queue for battlegrounds while in a battleground.");
+				return;
+			}
+			else if (_player->GetDeathState() == CORPSE || _player->GetDeathState() == DEAD)
+			{
+				_player->GetSession()->SendNotification("You cannot to queue for battlegrounds while dead.");
+				return;
+			}
+            else if (_player->IsBeingTeleported())
             {
-                ChatHandler(_player).PSendSysMessage("You do not meet the conditions to queue for BGs!");
+                ChatHandler(_player).PSendSysMessage("You do not meet the conditions to queue for battlegrounds.");
                 return;
             }
-            if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac") || strstr(msg.c_str(), "Sunnyglade") || strstr(msg.c_str(), "Arena"))
+            else if (strstr(msg.c_str(), "Warsong") || strstr(msg.c_str(), "Arathi") || strstr(msg.c_str(), "Alterac") || strstr(msg.c_str(), "Sunnyglade") || strstr(msg.c_str(), "Arena"))
             {
                 _player->SetBattleGroundEntryPoint();
 
