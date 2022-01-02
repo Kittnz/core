@@ -57,7 +57,7 @@ std::string ShopMgr::BuyItem(uint32 itemID)
 {
 
 	bool found = false;
-	uint8 price = 0;
+	uint16 price = 0;
 
 	for (auto &itr : sObjectMgr.GetShopEntriesList())
 	{
