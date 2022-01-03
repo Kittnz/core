@@ -312,3 +312,5 @@ update spell_template set effectmiscvalue1 = 81102 where entry = 18363;
 -- Fix Skull of Tham:
 replace into item_template values (60417, 2, 14, 'Skull of Tham', '', 28226, 3, 0, 1, 34587, 8647, 23, -1, -1, 63, 58, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 8, 6, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9344, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 2, 6, 0, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 1, NULL);
 delete from item_template where entry = 80768;
+-- The First Settlement quest rep fix
+UPDATE quest_template SET rewrepfaction1 = 269 WHERE entry = 80289;
