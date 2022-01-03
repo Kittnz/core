@@ -332,3 +332,6 @@ update broadcast_text set male_text = 'Greetings. I\'m a mage trainer, and you\'
 update quest_template set objectives = 'Bring 5 Chunks of Boar Meat, 3 Mutton Chops and 1 Bone Chew Toy to Bristlefur in Razor Hill.' where entry = 40298;
 -- Fixed Frostname's Riding Bear name:
 update item_template set name = 'Armored Frostmane Bear' where entry = 81158;
+-- https://vanillawowdb.com/?spell=3455 Elixir of Fortitude shoult not be teached by Ainethil (should only be able to learn it from the scroll) https://vanillawowdb.com/?npc=4160 and should have a lv requirment of 35 (curently is 25):
+delete from npc_trainer where spell = 3455;
+delete from npc_trainer where spell = 3450;
