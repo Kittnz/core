@@ -29,3 +29,24 @@ replace into creature_involvedrelation (id, quest) values (5390, 40344);
 update quest_template set requiredclasses = 64 where entry = 40344;
 update quest_template set requiredraces = 32 where entry = 40344;
 
+-- The Way of Spiritwalking II --
+delete from quest_template where entry = 40345;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40344,40345,2,1638,40,40,0,0,'The Way of Spiritwalking II','The path of the spiritwalker is one of devotion to the ancestors, to keep in communication with the spirits of old. We are to respect them, and pay our tributes when we can, through this we are able to hone a power of the supernatural world.\n\nFrom the ravenous Centaur, to the vile Quilboar, even they practice elements of shamanism linking to their ancestry. It is almost entwined with Kalimdor itself, in a way.\n\nTo get you aquainted with the powers of the spirit world we will need you to gather an age-old leaf that grows in the area. Believe it or not there was a time when it was common place amongst Stonetalon and the oasis of the Barrens, but no longer.\n\nOut in the forests of Feralas grows a potent plant called Spiritleaf. It is quite rare but can be seen glittering in the air, and is needed for ones spiritual awakening.','Find and collect a Spiritleaf for Sage Palerunner in Camp Mojache.','You must be dedicated in your path if you wish to learn the ways of the spiritwalker.','A dedicated mind, it takes true perseverance to find such a rare plant, you have done well.',60507,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3350,81,350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (5390, 40345);
+replace into creature_involvedrelation (id, quest) values (5390, 40345);
+
+update quest_template set requiredclasses = 64 where entry = 40345;
+update quest_template set requiredraces = 32 where entry = 40345;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60507,24692,'Spiritleaf',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010869;
+replace into gameobject_template values
+(2010869,3,28257,'Spiritleaf',0,4,1,43,2010869,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010869;
+replace into gameobject_loot_template values
+(2010869,60507,-100,0,1,1,0);
+
