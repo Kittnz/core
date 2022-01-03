@@ -145,3 +145,15 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'To live with humility is to live with modesty, to never take more than what is neccesary, and to save everything with care for the future. Free yourself from pride, and arrogance, for they only get in the way of true progress. Do for those that cannot, and give what excess you have, to those that may be in need, be a pillar of the community, there may come dark days, when people need someone to look up to for support, let it be you, young one.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- The Way Of The Witch Doctor I --
+delete from quest_template where entry = 40349;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40349,2,1637,40,40,0,0,'The Way Of The Witch Doctor I','Ahh, yes, it would appear that you have gained much power, and word of your name has travelled to my ear. Perhaps it is time for your next step, troll, to learn the ways of our kind. We trolls have had a unique way with nature for a long time, one that these orc or tauren cannot understand.\n\nIt be the way of the witch doctor, and to learn, you must speak with one of our kind. Seek out Bom\'bay at the Sen\'jin Village, he\'ll teach you good.','Travel to Sen\'jin Village and speak with Bom\'bay.','Yes?','Ahh, you be a new one, I can feel it within your spirit mon. Let us not waste time.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,250,530,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (3403, 40349);
+replace into creature_involvedrelation (id, quest) values (10578, 40349);
+
+update creature_template set npc_flags = 3 where entry = 10578;
+
+update quest_template set requiredclasses = 64 where entry = 40349;
+update quest_template set requiredraces = 128 where entry = 40349;
