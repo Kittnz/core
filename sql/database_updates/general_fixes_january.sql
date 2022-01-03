@@ -335,3 +335,8 @@ update item_template set name = 'Armored Frostmane Bear' where entry = 81158;
 -- https://vanillawowdb.com/?spell=3455 Elixir of Fortitude shoult not be teached by Ainethil (should only be able to learn it from the scroll) https://vanillawowdb.com/?npc=4160 and should have a lv requirment of 35 (curently is 25):
 delete from npc_trainer where spell = 3455;
 delete from npc_trainer where spell = 3450;
+-- Fix fucking zebras:
+-- This is horned Ridnig Zhevra, a shop item: 
+update item_template set name = 'Riding Zhevra', required_level = 0, required_skill = 0, required_skill_rank = 0 where entry = 50400;
+-- This is Barrens Zebra, a rare drop item:
+update item_template set name = 'Barrens Zebra' where entry = 50426;
