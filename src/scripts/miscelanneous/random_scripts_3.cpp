@@ -2546,6 +2546,49 @@ bool GossipSelect_npc_nribbi(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     return true;
 }
 
+bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40353) // The Way Of The Witch Doctor V
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->AddAura(15473);
+        DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->RemoveAurasAtReset();
+            });
+
+        Creature* NPC_cheer1 = pPlayer->FindNearestCreature(60639, 40.0F);
+        Creature* NPC_cheer2 = pPlayer->FindNearestCreature(60640, 40.0F);
+        Creature* NPC_cheer3 = pPlayer->FindNearestCreature(60641, 40.0F);
+
+        if (NPC_cheer1)
+        {
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
+                npc->MonsterSayToPlayer("Ribbit!", player);
+                });
+            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
+                npc->MonsterSayToPlayer("Riiiibit", player);
+                });
+            DoAfterTime(pPlayer, 4 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer3]() {
+                npc->MonsterSayToPlayer("Riibit", player);
+                });
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
+                npc->MonsterSayToPlayer("Ribit", player);                });
+            DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
+                npc->MonsterSayToPlayer("We are saved!", player);                });
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -2554,6 +2597,7 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_nribbi";
     newscript->pGossipHello = &GossipHello_npc_nribbi;
     newscript->pGossipSelect = &GossipSelect_npc_nribbi;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_nribbi;
     newscript->RegisterSelf();
 
     newscript = new Script;

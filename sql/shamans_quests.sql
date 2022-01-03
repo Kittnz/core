@@ -214,3 +214,24 @@ replace into creature_template (entry, name, display_id1) values (60353, 'quest_
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60509,1275,'Bom\'bay\'s Serum',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The Way Of The Witch Doctor V --
+delete from quest_template where entry = 40353;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40352,40353,2,1637,40,40,0,0,'The Way Of The Witch Doctor V','The power of the witch doctor is derived from the spirits of azeroth, the loa. It is us who look after the smaller of our kind, and channel our energies into those who follow us. If you so wish to prove yourself to N\'ribbi, you must show me your courage and ability with magic.\n\nLong has it been that a massive crocolisk named Clampjaw has terrorized the toads of Dustwallow. I do not have the power to challenge him directly, but perhaps with your powers, you can.\n\nI want you to find Clampjaw in the Quagmire, and slay him for all of my kin. Do this, and I will bless you with my power young one.','Slay the mighty crocolisk Clampjaw for N\'ribbi in Dustwallow Marsh.','<N\'ribbi stares at you>.','You have done it, I am impressed. You are worthy of my power, and I bestow upon you the energies that many of your ancestors have used.\n\nMay your travels be plentiful, there is a future ahead of you shaman.',0,0,0,0,0,0,0,0,60632,1,0,0,0,0,0,0,0,0,0,3650,530,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60631, 40353);
+replace into creature_involvedrelation (id, quest) values (60631, 40353);
+
+update quest_template set requiredclasses = 64 where entry = 40353;
+update quest_template set requiredraces = 128 where entry = 40353;
+
+update quest_template set rewspellcast = 45504 where entry = 40353;
+
+REPLACE INTO creature_template VALUES
+(60639, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60640, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60641, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, '');
+
+update creature set id = 60639 where guid = 2569110;
+update creature set id = 60640 where guid = 2569099;
+update creature set id = 60641 where guid = 2569109;
