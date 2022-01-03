@@ -2387,9 +2387,51 @@ bool GossipSelect_npc_tholdan_mountainheart(Player* pPlayer, Creature* pCreature
     return true;
 }
 
+bool QuestAccept_npc_sage_palerunner(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40346) // The Way of Spiritwalking III
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 13236, false);
+
+        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("Spirits, it is I, Sage Palerunner, I call from the mortal plane to bring another into the fold. He has already braved the harsh wilds to gather the Spiritleaf required, he shows true bravery in the face of adversity.", player);
+            });
+        DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("I ask of you to allow your magic to flow through into their body, and be blessed by the Earthmother's gift. They will be the bearer of our culture, and our traditions, from now until the end of time.", player);
+            });
+        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->CastSpell(npc, 5906, false);
+            });
+        DoAfterTime(pPlayer, 26 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            {
+                npc->MonsterSayToPlayer("The ritual is complete, they will see you, to see if you are truly worthy.", player);
+                if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60348))
+                    player->KilledMonster(dummy_bunny, ObjectGuid());
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                return true;
+            }
+            });
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_sage_palerunner";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_sage_palerunner;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_tholdan_mountainheart";
