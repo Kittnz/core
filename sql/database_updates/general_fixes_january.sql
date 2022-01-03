@@ -340,3 +340,6 @@ delete from npc_trainer where spell = 3450;
 update item_template set name = 'Riding Zhevra', required_level = 0, required_skill = 0, required_skill_rank = 0 where entry = 50400;
 -- This is Barrens Zebra, a rare drop item:
 update item_template set name = 'Barrens Zebra' where entry = 50426;
+-- Spellpower coefficient on Life Tap is too low again:
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/767:
+update spell_template set effectbonuscoefficient1 = 0.80 where entry in (1454, 1455, 1456, 11687, 11688, 11689);
