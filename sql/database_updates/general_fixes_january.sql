@@ -343,3 +343,7 @@ update item_template set name = 'Barrens Zebra' where entry = 50426;
 -- Spellpower coefficient on Life Tap is too low again:
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/767:
 update spell_template set effectbonuscoefficient1 = 0.80 where entry in (1454, 1455, 1456, 11687, 11688, 11689);
+-- Killian Sanatha should be selling Fishing Rod, Shiny Baubles and Nightcrawlers besides those two recipes he already got in stock:
+replace into npc_vendor values (5748, 6256, 0, 0, 0, 0);
+replace into npc_vendor values (5748, 6529, 0, 0, 0, 0);
+replace into npc_vendor values (5748, 6530, 0, 0, 0, 0);
