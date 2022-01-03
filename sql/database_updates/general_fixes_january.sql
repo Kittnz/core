@@ -330,3 +330,5 @@ update item_template set description = '' where entry = 80455;
 update broadcast_text set male_text = 'Greetings. I\'m a mage trainer, and you\'re a mage.' where entry = 2525;
 -- Quest Red Skies of Durotar:
 update quest_template set objectives = 'Bring 5 Chunks of Boar Meat, 3 Mutton Chops and 1 Bone Chew Toy to Bristlefur in Razor Hill.' where entry = 40298;
+-- Fixed Frostname's Riding Bear name:
+update item_template set name = 'Armored Frostmane Bear' where entry = 81158;
