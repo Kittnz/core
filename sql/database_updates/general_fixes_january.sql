@@ -320,3 +320,5 @@ update item_template set sheath = 4 where entry = 60234;
 update creature_template set mechanic_immune_mask = 1022066674 where entry = 49001;
 -- Torta's Egg should be only lootable when on the quest and lower the damn drop:
 update creature_loot_template set chanceorquestchance = -20, groupid = 6 where item = 60445;
+-- Concavius should be a demon:
+update creature_template set type = 3 where entry = 92213;
