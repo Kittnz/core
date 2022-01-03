@@ -318,3 +318,5 @@ UPDATE quest_template SET rewrepfaction1 = 269 WHERE entry = 80289;
 update item_template set sheath = 4 where entry = 60234;
 -- Make Tarangos immune to stuns/slow.
 update creature_template set mechanic_immune_mask = 1022066674 where entry = 49001;
+-- Torta's Egg should be only lootable when on the quest and lower the damn drop:
+update creature_loot_template set chanceorquestchance = -20, groupid = 6 where item = 60445;
