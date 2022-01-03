@@ -316,3 +316,5 @@ delete from item_template where entry = 80768;
 UPDATE quest_template SET rewrepfaction1 = 269 WHERE entry = 80289;
 -- Item Hazzuri Primalist Defender (60234), change sheath to shield on back:
 update item_template set sheath = 4 where entry = 60234;
+-- Make Tarangos immune to stuns/slow.
+update creature_template set mechanic_immune_mask = 1022066674 where entry = 49001;
