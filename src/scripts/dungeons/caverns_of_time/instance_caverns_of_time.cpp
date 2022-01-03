@@ -110,7 +110,7 @@ struct instance_caverns_of_time : public ScriptedInstance
         if (!pPlayer)
             return;
 
-        if (pPlayer->HasItemCount(80008, 1))
+        if (!pPlayer->IsDead() && pPlayer->HasItemCount(80008, 1))
             pPlayer->DestroyItemCount(80008, 1, true);
     }
 
