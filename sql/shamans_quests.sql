@@ -157,3 +157,27 @@ update creature_template set npc_flags = 3 where entry = 10578;
 
 update quest_template set requiredclasses = 64 where entry = 40349;
 update quest_template set requiredraces = 128 where entry = 40349;
+
+-- The Way Of The Witch Doctor II --
+delete from quest_template where entry = 40350;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40349,40350,2,1637,40,40,0,0,'The Way Of The Witch Doctor II','You wish to learn da ways of the Witch Doctor huh? We troll shamans be masters of the voodoo, and perhaps you can learn my ways. First, I need you to get your hands on some Skullsplitter Mojo for me. I will be usin\' it in ma ritual to bestow power upon ye. That, and well, let\'s say I don\'t exactly like them Skullsplitters.\n\nThey can be found deep in the jungles of Stranglethorn, by ruins in the eastern parts of the region. Go there, and get me 20 of them, that should do, just nicely.','Travel to Stranglethorn Vale and bring 20 Skullsplitter Mojo to Bom\'bay.','You be gettin that mojo mon?','Such fine samples, yes... This shall do nicely!',60508,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3550,530,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (10578, 40350);
+replace into creature_involvedrelation (id, quest) values (10578, 40350);
+
+update quest_template set requiredclasses = 64 where entry = 40350;
+update quest_template set requiredraces = 128 where entry = 40350;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60508,1275,'Skullsplitter Mojo',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60508;
+replace into creature_loot_template values
+(667,60508,-75,1,1,1,0),
+(780,60508,-75,1,1,1,0),
+(696,60508,-75,1,1,1,0),
+(782,60508,-80,1,1,1,0),
+(672,60508,-100,1,1,1,0),
+(781,60508,-100,1,1,1,0),
+(783,60508,-100,1,1,1,0),
+(669,60508,-80,1,1,1,0);
