@@ -2518,9 +2518,43 @@ bool QuestAccept_npc_bombay(Player* pPlayer, Creature* pQuestGiver, Quest const*
     return false;
 }
 
+bool GossipHello_npc_nribbi(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40352) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60509, 1, false))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "N'ribbi, I have brought this serum for you as tribute.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60631, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_nribbi(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60353))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        if (pPlayer->HasItemCount(60509, 1, false))
+        {
+            pPlayer->DestroyItemCount(60509, 1, true);
+            pPlayer->SaveInventoryAndGoldToDB();
+        }
+    }
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_nribbi";
+    newscript->pGossipHello = &GossipHello_npc_nribbi;
+    newscript->pGossipSelect = &GossipSelect_npc_nribbi;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_bombay";
