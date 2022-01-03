@@ -181,3 +181,18 @@ replace into creature_loot_template values
 (781,60508,-100,1,1,1,0),
 (783,60508,-100,1,1,1,0),
 (669,60508,-80,1,1,1,0);
+
+-- The Way Of The Witch Doctor III --
+delete from quest_template where entry = 40351;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40350,40351,2,1637,40,40,0,0,'The Way Of The Witch Doctor III','With the samples you have provided I will begun to conjure a special serum, this serum will be needed for your next task. So please, give me some time to prepare it, for one mess up, be the end of ya!','Wait for Bom\'bay to finish creating the serum.','Yes Mon?','Heh, it took quite a lot of concentration, but here we are mon!',0,0,0,0,0,0,0,0,60352,1,0,0,0,0,0,0,0,0,0,350,530,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The serum has been created');
+
+replace into creature_questrelation (id, quest) values (10578, 40351);
+replace into creature_involvedrelation (id, quest) values (10578, 40351);
+
+update quest_template set requiredclasses = 64 where entry = 40351;
+update quest_template set requiredraces = 128 where entry = 40351;
+
+update creature_template set script_name = 'npc_bombay' where entry = 10578;
+
+delete from creature_template where entry = 60352;
+replace into creature_template (entry, name, display_id1) values (60352, 'quest_40351_dummy_triger', 328);
