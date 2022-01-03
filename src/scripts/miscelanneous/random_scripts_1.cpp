@@ -5466,10 +5466,10 @@ bool QuestRewarded_npc_brother_crowley(Player* pPlayer, Creature* pQuestGiver, Q
             crowley->MonsterSayToPlayer("Brigitte Abbendis is the daughter of the former High General Abbendis and utterly hates the undead, which is not a surprise when it comes to the Scarlet Crusade, I know.", player);});
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
             Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("The issue is she�d go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
+            crowley->MonsterSayToPlayer("The issue is she'd go to any length and I mean any to achieve this purpose, given what you told me and the fate of the other leaders she probably broke and went insane by now.", player); });
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
             Map* map = sMapMgr.FindMap(0);
-            crowley->MonsterSayToPlayer("Last I heard she was in Tyr�s Hand, but if there�s a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
+            crowley->MonsterSayToPlayer("Last I heard she was in Tyr's Hand, but if there's a secret training place or whatever that prisoner called it the only one to know about it would be her, an information passed down from the Ashbringer to her father and from her father to her.", player); });
         DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [player = pPlayer, crowley = pQuestGiver]() {
             Map* map = sMapMgr.FindMap(0);
             crowley->MonsterSayToPlayer("I am telling you, the Scarlet Crusade is indeed broken and we have seen better days but Abbendis will not stop at anything to take on the undead, be they Scourge or not.", player);
@@ -6226,11 +6226,11 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
                 pPlayer->SaveInventoryAndGoldToDB();
             }
             DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("I wasn�t always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quel�thalas.", player);
+                c->MonsterSayToPlayer("I wasn't always on the same page with the old orc but in truth from what I know these trolls will be an asset to the Horde and our redemption for the betrayal they faced at the borders of Quel'thalas.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Take my respond to Amani�Alor and tell them they are welcomed in our ranks with Lok�tar Ogar.", player);
+                c->MonsterSayToPlayer("Take my response to Amani'Alor and tell them they are welcomed in our ranks with Lok'tar Ogar.", player);
                 c->HandleEmote(EMOTE_ONESHOT_YES);
                 player->AddItem(83021, 1);
                 c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
@@ -6250,7 +6250,7 @@ bool GossipSelect_npc_faction_leader(Player* pPlayer, Creature* pCreature, uint3
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-                c->MonsterSayToPlayer("Da Darkspear holds no remorse to old Zul�jin�s people. We welcome them as brothers in arms and wish they will find a home under our banner.", player);
+                c->MonsterSayToPlayer("Da Darkspear holds no remorse to old Zul'jin's people. We welcome them as brothers in arms and wish they will find a home under our banner.", player);
                 c->HandleEmote(EMOTE_ONESHOT_TALK);
                 });
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
@@ -6380,7 +6380,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
-        pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn�t back down and me people and I paid da price.", pPlayer);
+        pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn't back down and me people and I paid da price.", pPlayer);
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("Dey cornered me close to dat lake and been captured by a bashful elf named Brightwing.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6390,11 +6390,11 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
             c->HandleEmote(EMOTE_ONESHOT_NO);
             });
         DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("It was den that ol� Zul�jin took a gamble with fate, with da help of me people who laid a small siege on da encampment I cut off me arm with a spear and ran into da forest.", player);
+            c->MonsterSayToPlayer("It was den that ol' Zul'jin took a gamble with fate, with da help of me people who laid a small siege on da encampment I cut off me arm with a spear and ran into da forest.", player);
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("I healed and organised me army once again, not long before da Scourge claimed Silvermoon it was time to act, but even with the Loa�s blessings we couldn�t hold against the dead and failed.", player);
+            c->MonsterSayToPlayer("I healed and organised me army once again, not long before da Scourge claimed Silvermoon it was time to act, but even with the Loa's blessings we couldn't hold against the dead and failed.", player);
             c->HandleEmote(EMOTE_ONESHOT_YES);
             });
         DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
