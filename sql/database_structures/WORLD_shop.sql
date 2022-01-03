@@ -127,7 +127,7 @@ replace into shop_items values
 (185, 5, 81154, 'Armored Black Bear', 400),
 (186, 5, 81153, 'Armored Purple Bear', 400),
 (187, 5, 81155, 'Armored Red Bear', 400),
-(188, 5, 81158, 'Armored White Bear', 400),
+(188, 5, 81158, 'Armored Frostmane Bear', 400),
 (189, 5, 81091, 'Big Blizzard Bear', 500),
 (190, 5, 81102, 'Darkmoon Dancing Bear', 300),
 (221, 5, 13325, 'Fluorescent Mechanostrider', 120), 
