@@ -328,3 +328,5 @@ update quest_template set details = 'Another of our kin, I take it you are comin
 update item_template set description = '' where entry = 80455;
 -- Fix gossip for both Marrek Stromnur and other gnome trainer:
 update broadcast_text set male_text = 'Greetings. I\'m a mage trainer, and you\'re a mage.' where entry = 2525;
+-- Quest Red Skies of Durotar:
+update quest_template set objectives = 'Bring 5 Chunks of Boar Meat, 3 Mutton Chops and 1 Bone Chew Toy to Bristlefur in Razor Hill.' where entry = 40298;
