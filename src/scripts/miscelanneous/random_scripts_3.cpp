@@ -2411,13 +2411,11 @@ bool QuestAccept_npc_sage_palerunner(Player* pPlayer, Creature* pQuestGiver, Que
             npc->CastSpell(npc, 5906, false);
             });
         DoAfterTime(pPlayer, 26 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
                 npc->MonsterSayToPlayer("The ritual is complete, they will see you, to see if you are truly worthy.", player);
                 if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60348))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 return true;
-            }
             });
     }
 
@@ -2493,9 +2491,41 @@ bool GossipSelect_npc_ancestor_of_humility(Player* pPlayer, Creature* pCreature,
     return true;
 }
 
+bool QuestAccept_npc_bombay(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40351) // The Way Of The Witch Doctor III
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 13236, false);
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_YES);
+            npc->CastSpell(npc, 5906, false);
+            npc->MonsterSayToPlayer("It be done, I have put the power of the mojo into this serum.", player);
+            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60348))
+                player->KilledMonster(dummy_bunny, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            return true;
+            });
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_bombay";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_bombay;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_ancestor_of_humility";
