@@ -196,3 +196,21 @@ update creature_template set script_name = 'npc_bombay' where entry = 10578;
 
 delete from creature_template where entry = 60352;
 replace into creature_template (entry, name, display_id1) values (60352, 'quest_40351_dummy_triger', 328);
+
+-- The Way Of The Witch Doctor IV --
+delete from quest_template where entry = 40352;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40351,40352,2,1637,40,40,0,0,'The Way Of The Witch Doctor IV','With this serum you may speak with the spirit of the toad, he is a patient, and incredibly wise one. We trolls have been hexin\' our enemies for quite some time, and it is about time for you to pay respects.\n\nN\'ribbi is the one you seek, and he can be found deep in Dustwallow Marsh, far to the north west, at the very edge of the Bluefen. Go there, and speak with him, bring this serum, and offer it to N\'ribbi as tribute.','Travel to Dustwallow Marsh and find N\'ribbi, and offer him Bom\'bay\'s Serum.','<N\'ribbi stares at you>.','So, that is why you are here, you seek my wisdom, and my knowledge as your ancestors before you have, very well.',0,0,0,0,0,0,0,0,60353,1,0,0,0,0,0,0,60509,1,0,1650,530,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak with N\'ribbi');
+
+replace into creature_questrelation (id, quest) values (10578, 40352);
+replace into creature_involvedrelation (id, quest) values (60631, 40352);
+
+update quest_template set requiredclasses = 64 where entry = 40352;
+update quest_template set requiredraces = 128 where entry = 40352;
+
+update creature_template set script_name = 'npc_nribbi' where entry = 60631;
+
+delete from creature_template where entry = 60353;
+replace into creature_template (entry, name, display_id1) values (60353, 'quest_40352_dummy_triger', 328);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60509,1275,'Bom\'bay\'s Serum',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
