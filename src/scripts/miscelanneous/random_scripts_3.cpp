@@ -2424,9 +2424,96 @@ bool QuestAccept_npc_sage_palerunner(Player* pPlayer, Creature* pQuestGiver, Que
     return false;
 }
 
+bool GossipHello_npc_ancestor_of_wisdom(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40348) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have come to learn your lesson.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60636, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_ancestor_of_wisdom(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30012, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60349))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
+bool GossipHello_npc_ancestor_of_virtue(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40348) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have come to learn your lesson.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60637, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_ancestor_of_virtue(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30013, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60350))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
+bool GossipHello_npc_ancestor_of_humility(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40348) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I have come to learn your lesson.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60638, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_ancestor_of_humility(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30014, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60351))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ancestor_of_humility";
+    newscript->pGossipHello = &GossipHello_npc_ancestor_of_humility;
+    newscript->pGossipSelect = &GossipSelect_npc_ancestor_of_humility;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_ancestor_of_virtue";
+    newscript->pGossipHello = &GossipHello_npc_ancestor_of_virtue;
+    newscript->pGossipSelect = &GossipSelect_npc_ancestor_of_virtue;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_ancestor_of_wisdom";
+    newscript->pGossipHello = &GossipHello_npc_ancestor_of_wisdom;
+    newscript->pGossipSelect = &GossipSelect_npc_ancestor_of_wisdom;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_sage_palerunner";

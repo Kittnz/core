@@ -102,3 +102,46 @@ replace into creature_involvedrelation (id, quest) values (60636, 40347);
 
 update quest_template set requiredclasses = 64 where entry = 40347;
 update quest_template set requiredraces = 32 where entry = 40347;
+
+-- The Way of Spiritwalking V --
+delete from quest_template where entry = 40348;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1,objectivetext2,objectivetext3) values (40347,40348,2,1638,40,40,512,0,'The Way of Spiritwalking V','We have been watching you for a long time, from the plains of Mulgore we gazed down upon your vigor and tenacity. You have improved much since those days long ago, and now, here you are, before me.\n\nIf you truly wish to be a Spiritwalker and learn our ways, then you must learn a lesson from the each of us. We can help guide you in the right direction, all you need to do is listen.\n\nSpeak with all three of us, and when you have heard our words, return to me.','Speak with the three Ancestors at Spirit Rise.','Have you spoken with everyone?','Do you understand the burdens of a Spiritwalker? It is to understand the lessons of the past, and to live in harmony with the spirit world. To pass this information on to those in the mortal realm, and to make sure these values never fade.\n\nYou have impressed us $N, you have done much for this world, and for the good of others and for that we are greatful.',0,0,0,0,0,0,0,0,60349,1,60350,1,60351,1,0,0,0,0,0,3850,81,450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak to the Ancestor of Wisdom','Speak to the Ancestor of Virtue','Speak to the Ancestor of Humility');
+
+replace into creature_questrelation (id, quest) values (60636, 40348);
+replace into creature_involvedrelation (id, quest) values (60636, 40348);
+
+update quest_template set requiredclasses = 64 where entry = 40348;
+update quest_template set requiredraces = 32 where entry = 40348;
+
+update quest_template set rewspellcast = 45500 where entry = 40348;
+
+update creature_template set script_name = 'npc_ancestor_of_wisdom' where entry = 60636;
+update creature_template set script_name = 'npc_ancestor_of_virtue' where entry = 60637;
+update creature_template set script_name = 'npc_ancestor_of_humility' where entry = 60638;
+
+delete from creature_template where entry = 60349;
+replace into creature_template (entry, name, display_id1) values (60349, 'quest_40348_dummy_triger', 328);
+
+delete from creature_template where entry = 60350;
+replace into creature_template (entry, name, display_id1) values (60350, 'quest_40348_dummy_triger', 328);
+
+delete from creature_template where entry = 60351;
+replace into creature_template (entry, name, display_id1) values (60351, 'quest_40348_dummy_triger', 328);
+
+set @gossip_menu_id = 41076; set @magic_number = 30012;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'To be wise is to have knowledge, to heed the advice of those who have seen, and know more than yourself. If you wish to truly advance in this world, you must reach out into areas of discomfort, and of which you have no experience. Grow, and experience new things, and seek new knowledge. In time, you will gain wisdom in many things young one.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41077; set @magic_number = 30013;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'To be virtuous is to be a just, and good person, the villages of our kind were built on the actions of the good hearted. In your travels there will be many decisions to make, and always you must look out for the good outcome of all, and not just yourself. To make a sacrifice for the good of your kin is to live with virtue, remember this always and do what is right.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41078; set @magic_number = 30014;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'To live with humility is to live with modesty, to never take more than what is neccesary, and to save everything with care for the future. Free yourself from pride, and arrogance, for they only get in the way of true progress. Do for those that cannot, and give what excess you have, to those that may be in need, be a pillar of the community, there may come dark days, when people need someone to look up to for support, let it be you, young one.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
