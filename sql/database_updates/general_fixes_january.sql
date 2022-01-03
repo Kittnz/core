@@ -347,3 +347,5 @@ update spell_template set effectbonuscoefficient1 = 0.80 where entry in (1454, 1
 replace into npc_vendor values (5748, 6256, 0, 0, 0, 0);
 replace into npc_vendor values (5748, 6529, 0, 0, 0, 0);
 replace into npc_vendor values (5748, 6530, 0, 0, 0, 0);
+-- Winterhoof Cleansing Totem:
+update item_template set allowable_race = -1 where entry = 5411;
