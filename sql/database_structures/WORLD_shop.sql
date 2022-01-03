@@ -108,7 +108,7 @@ replace into shop_items values
 (144, 5, 23193, 'Armored Black Deathcharger', 300),
 (145, 5, 81235, 'Armored Vermilion Deathcharger', 300),
 (146, 5, 50407, 'Nightmare Dreamrunner', 200),
-(147, 5, 50400, 'Barrens Zhevra', 200),
+(147, 5, 50400, 'Riding Zhevra', 200),
 (148, 5, 81234, 'Brewfest Ram', 200),
 (149, 5, 80443, 'Armored Brewfest Ram', 360),
 (150, 5, 13328, 'Ancient Black Ram', 200),
