@@ -322,3 +322,5 @@ update creature_template set mechanic_immune_mask = 1022066674 where entry = 490
 update creature_loot_template set chanceorquestchance = -20, groupid = 6 where item = 60445;
 -- Concavius should be a demon:
 update creature_template set type = 3 where entry = 92213;
+-- Quest The Azurestone:
+update quest_template set details = 'Another of our kin, I take it you are coming here to seek your true purpose upon this world, or you have come to pay your tributes to this old group. The Azurestone Order is as old as Ironforge itself, and has its roots upon the building of our mighty city.\n\nIf you wish to join our order, and learn our lessons, you will need to first listen to the tale of the Azurestone.' where entry = 40338;
