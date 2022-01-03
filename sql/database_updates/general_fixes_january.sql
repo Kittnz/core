@@ -314,3 +314,5 @@ replace into item_template values (60417, 2, 14, 'Skull of Tham', '', 28226, 3, 
 delete from item_template where entry = 80768;
 -- The First Settlement quest rep fix
 UPDATE quest_template SET rewrepfaction1 = 269 WHERE entry = 80289;
+-- Item Hazzuri Primalist Defender (60234), change sheath to shield on back:
+update item_template set sheath = 4 where entry = 60234;
