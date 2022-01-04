@@ -353,5 +353,7 @@ update item_template set allowable_race = -1 where entry = 5411;
 UPDATE creature_template SET faction = 35 WHERE entry = 8139;
 -- Buff Magister Salorn
 UPDATE creature_template SET spell_id1 = 12675 WHERE entry = 91719;
--- Typo
+-- Typo fix
 UPDATE creature_template SET NAME = "Razzari Priest" WHERE entry = 92148;
+-- Unit flags change for corpse at Naxiar npc
+UPDATE creature_template SET unit_flags = 514 WHERE entry = 60413;
