@@ -349,3 +349,5 @@ replace into npc_vendor values (5748, 6529, 0, 0, 0, 0);
 replace into npc_vendor values (5748, 6530, 0, 0, 0, 0);
 -- Winterhoof Cleansing Totem:
 update item_template set allowable_race = -1 where entry = 5411;
+-- Quest: The Bloodsail Compound III #664
+UPDATE creature_template SET faction = 35 WHERE entry = 8139;
