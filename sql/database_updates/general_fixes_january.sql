@@ -363,3 +363,5 @@ delete from gameobject where id = 141979;
 replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (141979, 70, 154.767, 288.163, -52.2262, 2.21672, 0, 0, 0.894967, 0.446132, 300, 300, 100, 1, 0, 0);
 -- Stone Guardians have the wrong respawn timer, they respawn too fast:
 update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where entry = 60402;
+-- Fix Kamio Stone.
+update item_template set spellid_1 = 46035 where entry = 70043;
