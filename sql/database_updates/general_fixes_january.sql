@@ -353,3 +353,5 @@ update item_template set allowable_race = -1 where entry = 5411;
 UPDATE creature_template SET faction = 35 WHERE entry = 8139;
 -- Buff Magister Salorn
 UPDATE creature_template SET spell_id1 = 12675 WHERE entry = 91719;
+-- Typo
+UPDATE creature_template SET NAME = "Razzari Priest" WHERE entry = 92148;
