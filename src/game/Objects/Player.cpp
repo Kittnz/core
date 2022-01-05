@@ -5197,22 +5197,6 @@ uint32 Player::DurabilityRepair(uint16 pos, bool cost, float discountMod)
     return TotalCost;
 }
 
-enum CustomGraveyardZones
-{
-    CGZ_STRANGLETHORN_VALE      = 33,
-    CGZ_STONETALON_MOUNTAINS    = 406,
-    CGZ_DUN_MOROGH              = 1,
-    CGZ_WETLANDS                = 11,
-    CGZ_BLACK_MORASS            = 2366,
-    CGZ_CAVERNS_OF_TIME         = 1941,
-    CGZ_LOCH_MODAN              = 38,
-    CGZ_ALAH_THALAS             = 2037,
-    CGZ_DEEPRUN_TRAM            = 2257,
-    CGZ_KARAZHAN_CRYPT          = 41,
-    CGZ_LAPIDIS_ISLE            = 409,
-    CGZ_GILIJIM_ISLE            = 408,
-};
-
 void Player::ScheduleRepopAtGraveyard()
 {
     if (IsInWorld() && GetSession()->IsConnected())
@@ -5254,106 +5238,18 @@ void Player::RepopAtGraveyard()
     }
     else
     {
-        // Custom graveyards
-        bool isCustomGraveyard = false;
-        switch (GetZoneId())
+        CustomGraveyardEntry const* CustomGrave = sObjectMgr.GetCustomGraveyard(GetMapId(), GetZoneId(), GetAreaId(), GetLevel());
+
+        if (CustomGrave)
         {
-            case CGZ_STRANGLETHORN_VALE:
-            {
-                if (InGurubashiArena(true)) // (inside the whole arena)
-                {
-                    if (GetTeam() == ALLIANCE)
-                        TeleportTo(0, -13209.500977f, 221.450607f, 33.236431f, 2.956571f);
-                    else
-                        TeleportTo(0, -13243.445312f, 239.786072f, 33.232769f, 5.375592f);
-
-                    isCustomGraveyard = true;
-                }
-
-                break;
-            }
-            case CGZ_BLACK_MORASS:
-            case CGZ_CAVERNS_OF_TIME:
-            {
-                TeleportTo(1, -8453.4F, -4690.7F, -202.9F, 4.9F);
-                isCustomGraveyard = true;
-                break;
-            }
-            case CGZ_DUN_MOROGH:
-            case CGZ_WETLANDS:
-            {
-                if ((GetAreaId() == 1 || GetAreaId() == 2365) && GetPositionZ() > 380)
-                {
-                    if (GetDistance2d(-4828.36f, 587.81f) < GetDistance2d(ClosestGrave->x, ClosestGrave->y)) // Only if Winter Veil Vale is nearer than the nearest graveyard
-                    {
-                        TeleportTo(0, -4828.36f, 587.81f, 428.40f, 0.76f); // Winter Veil Vale
-                        isCustomGraveyard = true;
-                    }
-                }
-
-                break;
-            }
-            case CGZ_STONETALON_MOUNTAINS:
-            {
-                if (GetAreaId() == 4011 || GetLevel() < 10) // Venture Camp
-                {
-                    TeleportTo(1, 1788.58F, 1335.74F, 144.35F, 4.0F);
-                    isCustomGraveyard = true;
-                }
-
-                if (GetAreaId() == 2041) // Amani'Alor
-                {
-                    TeleportTo(1, 2947.03F, 2557.98F, 139.30F, 2.3F);
-                    isCustomGraveyard = true;
-                }
-
-                break;
-            }
-            case CGZ_LOCH_MODAN:
-            {
-                if (GetAreaId() == 147 || GetLevel() < 10) // Farstrider's Lodge
-                {
-                    TeleportTo(0, -5653.60F, -4181.42F, 391.90F, 1.09F);
-                    isCustomGraveyard = true;
-                }
-
-                break;
-            }
-            case CGZ_ALAH_THALAS:
-            {
-                if (GetAreaId() == 2040)
-                {
-                    TeleportTo(0, 4285.19F, -2859.71F, 5.16F, 5.06F);
-                    isCustomGraveyard = true;
-                }
-                break;
-            }
-            case CGZ_KARAZHAN_CRYPT:
-            {
-                if (GetMapId() == 800)
-                {
-                    TeleportTo(0, -11111.5F, -1832.2, 71.8F, 6.1F);
-                    isCustomGraveyard = true;
-                }
-                break;
-            }
-            case CGZ_LAPIDIS_ISLE:
-            {
-                TeleportTo(0, -11505.1F, 3509.7F, 66.17F, 2.04F);
-                isCustomGraveyard = true;
-                break;
-            }
-            case CGZ_GILIJIM_ISLE:
-            {
-                TeleportTo(0, -13912.03F, 2350.90F, 28.57F, 5.14F);
-                isCustomGraveyard = true;
-                break;
-            }
-        };
+            TeleportTo(GetTeam() == TEAM_ALLIANCE ? 
+                CustomGrave->map_alliance, CustomGrave->x_alliance, CustomGrave->y_alliance, CustomGrave->z_alliance, CustomGrave->orientation_alliance :
+                CustomGrave->map_horde, CustomGrave->x_horde, CustomGrave->y_horde, CustomGrave->z_horde, CustomGrave->orientation_horde);
+        }
 
         // If no grave found, stay at the current location
         // and don't show spirit healer location
-        if (ClosestGrave && !isCustomGraveyard)
+        if (ClosestGrave && !CustomGrave)
         {
             // Release spirit from transport => Teleport alive at nearest graveyard.
             if (GetTransport())

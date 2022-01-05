@@ -375,3 +375,55 @@ update quest_template set zoneorsort = 5077 where entry = 40326;
 update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where id = 3748;
 -- Graccu & Tea stuff:
 delete from npc_vendor_template where item = 15723;
+-- Custom graveyard system:
+drop table if exists custom_graveyards;
+create table custom_graveyards (
+  `id` mediumint unsigned not null default 0 comment 'Identifier',
+  `name` varchar(64) character set utf8 collate utf8_general_ci not null default '',
+  `map_id` smallint unsigned not null default 0,
+  `zone_id` smallint unsigned not null default 0,
+  `area_id` smallint unsigned not null default 0,
+  `max_level` tinyint unsigned not null default 0,
+  `map_gy_alliance` smallint unsigned not null default 0,
+  `gy_x_alliance` float not null default 0,
+  `gy_y_alliance` float not null default 0,
+  `gy_z_alliance` float not null default 0,
+  `orientation_alliance` float not null default 0,
+  `map_gy_horde` smallint unsigned not null default 0,
+  `gy_x_horde` float not null default 0,
+  `gy_y_horde` float not null default 0,
+  `gy_z_horde` float not null default 0,
+  `orientation_horde` float not null default 0,
+  primary key (`id`) using btree
+) engine = myisam character set = utf8 collate = utf8_general_ci comment = 'Custom graveyards' row_format = fixed;
+
+replace into custom_graveyards values 
+(1,  'Gurubashi Arena'     ,  0,     33,    2177,    60,  0, -13243.44, 239.78, 33.23, 5.3,    0, -13209.50, 221.45, 33.23, 2.95),
+(2,  'Winter Veil Vale'    ,  0,     1,     1,       60,  0, -4828.36, 587.81, 428.40, 0.76,    0, -4828.36, 587.81, 428.40, 0.7),
+(3,  'Venture Camp'        ,  1,     406,   4011,    10,  1,  1788.58, 1335.74, 144.35, 4.0,    1,  1788.58, 1335.74, 144.3, 4.0),
+(4,  'Venture Camp'        ,  1,     406,   406,     10,  1,  1788.58, 1335.74, 144.35, 4.0,    1,  1788.58, 1335.74, 144.3, 4.0),
+(5,  'Amani\'Alor'         ,  1,     406,   2041,    60,  1,  2947.03, 2557.98, 139.30, 2.3,    1,  2947.03, 2557.98, 139.3, 2.3),
+(6,  'Farstrider\'s Lodge' ,  0,     38,    147,     10,  0, -5653.60, -4181.4, 391.90, 1.0,    0, -5653.60, -4181.4, 391.9, 1.0),
+(7,  'Black Morass'        ,  269,   2366,  2366,    60,  1, -8453.40, -4690.7, -202.9, 4.9,    1, -8453.4, -4690.7, -202.9, 4.9),
+(8,  'Caverns of Time'     ,  1,     1941,  1941,    60,  1, -8453.40, -4690.7, -202.9, 4.9,    1, -8453.4, -4690.7, -202.9, 4.9),
+(9,  'Alah\'Thalas'        ,  0,     2037,  2040,    60,  0,  4285.19, -2859.71, 5.16, 5.06,    0,  4285.19, -2859.7, 5.16, 5.06),
+(10,  'Karazhan Crypt'     ,   800,   41,    2563,    60,  0, -11111.5, -1832.20, 71.80, 6.1,    0, -11111.5, -1832.20, 71.8, 6.1),
+(11,  'Karazhan Crypt'     ,   800,   41,    41,      60,  0, -11111.5, -1832.20, 71.80, 6.1,    0, -11111.5, -1832.20, 71.8, 6.1),
+(12,  'Karazhan Crypt'     ,   800,   41,    10,      60,  0, -11111.5, -1832.20, 71.80, 6.1,    0, -11111.5, -1832.20, 71.8, 6.1),
+(13,  'Lapidis Isle'       ,   0,     409,   0,       60,  0, -11505.1, 3509.70, 66.1,  2.04,    0, -11111.5, -1832.20, 71.8, 6.1),
+(14,  'Gilijim Isle'       ,   0,     408,   0,       60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(15,  'Tirisfal Uplands'   ,   0,     85,    5028,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(16,  'Tirisfal Uplands'   ,   0,     85,    5029,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(17,  'Tirisfal Uplands'   ,   0,     85,    5030,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(18,  'Tirisfal Uplands'   ,   0,     85,    5031,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(19,  'Tirisfal Uplands'   ,   0,     85,    5032,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(20,  'Tirisfal Uplands'   ,   0,     85,    5033,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(21,  'Tirisfal Uplands'   ,   0,     85,    5034,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(22,  'Tirisfal Uplands'   ,   0,     85,    5035,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(23,  'Tirisfal Uplands'   ,   0,     85,    5036,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(24,  'Tirisfal Uplands'   ,   0,     85,    5037,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(25,  'Tirisfal Uplands'   ,   0,     85,    5038,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(26,  'Tirisfal Uplands'   ,   0,     85,    5039,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(27,  'Tirisfal Uplands'   ,   0,     85,    5040,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(28,  'Tirisfal Uplands'   ,   0,     85,    5041,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
+(29,  'Tirisfal Uplands'   ,   0,     85,    5042,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1);
