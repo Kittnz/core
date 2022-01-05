@@ -367,3 +367,5 @@ update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where entry =
 update item_template set spellid_1 = 46035 where entry = 70043;
 -- Childrens Week moved to monthly
 UPDATE game_event SET occurence = 40320, start_time = "2022-02-01 12:00:00" WHERE entry = 10;
+-- Venomous Jungle Serpent's do not have the correct amount of HP/damage for their level:
+UPDATE creature_template SET health_min = 3050,  health_max = 3400, dmg_min = 310, dmg_max = 420 WHERE entry = 91966;
