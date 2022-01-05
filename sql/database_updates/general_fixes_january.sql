@@ -365,3 +365,5 @@ replace into gameobject (id, map, position_x, position_y, position_z, orientatio
 update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where entry = 60402;
 -- Fix Kamio Stone.
 update item_template set spellid_1 = 46035 where entry = 70043;
+-- Childrens Week moved to monthly
+UPDATE game_event SET occurence = 40320, start_time = "2022-02-01 12:00:00" WHERE entry = 10;
