@@ -427,3 +427,8 @@ replace into custom_graveyards values
 (27,  'Tirisfal Uplands'   ,   0,     85,    5040,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
 (28,  'Tirisfal Uplands'   ,   0,     85,    5041,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
 (29,  'Tirisfal Uplands'   ,   0,     85,    5042,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1);
+
+--https://github.com/slowtorta/turtlewow-bug-tracker/issues/772
+--quest Traitor to the Bloodsail
+update quest_template set rewrepfaction2 = 21, rewrepvalue2 = 500 where entry = 9259;
+update quest_template set rewrepfaction3 = 87, rewrepvalue3 = -500 where entry = 9259;
