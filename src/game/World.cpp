@@ -1457,6 +1457,8 @@ void World::SetInitialWorldSettings()
 
     sObjectMgr.LoadQuestAreaTriggers();                     // must be after LoadQuests
 
+    sObjectMgr.LoadCustomGraveyards();                   
+
     sObjectMgr.LoadTavernAreaTriggers();
 
     sObjectMgr.LoadBattlegroundEntranceTriggers();
