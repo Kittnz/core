@@ -362,7 +362,7 @@ replace into gameobject_template values (141979, 3, 1387, 'Ancient Treasure', 0,
 delete from gameobject where id = 141979;
 replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (141979, 70, 154.767, 288.163, -52.2262, 2.21672, 0, 0, 0.894967, 0.446132, 300, 300, 100, 1, 0, 0);
 -- Stone Guardians have the wrong respawn timer, they respawn too fast:
-update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where entry = 60402;
+update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where id = 60402;
 -- Fix Kamio Stone.
 update item_template set spellid_1 = 46035 where entry = 70043;
 -- Childrens Week moved to monthly
@@ -371,3 +371,7 @@ UPDATE game_event SET occurence = 40320, start_time = "2022-02-01 12:00:00" WHER
 UPDATE creature_template SET health_min = 3050, health_max = 3400, dmg_min = 310, dmg_max = 420 WHERE entry = 91966;
 -- Quest Kalanar's Mallet needs to be labeled as Crescent Grove quest:
 update quest_template set zoneorsort = 5077 where entry = 40326;
+-- Foulweald Shamans have the wrong respawn timer, they respawn too fast:
+update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where id = 3748;
+-- Graccu & Tea stuff:
+delete from npc_vendor_template where item = 15723;
