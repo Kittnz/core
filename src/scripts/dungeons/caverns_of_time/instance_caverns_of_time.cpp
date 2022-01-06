@@ -2064,9 +2064,6 @@ struct chromie_boss_cotAI : public ScriptedAI
         if (GameObject* sandWall = m_creature->FindNearestGameObject(2002434, 50)) // remove large sand wall
             sandWall->AddObjectToRemoveList();
 
-        if (GameObject* ghostWall = m_creature->FindNearestGameObject(2010866, 50)) // remove ghost wall
-            ghostWall->AddObjectToRemoveList();
-
         for (int i = 0; i < 2; i++) // remove ghost walls
         {
             if (GameObject* ghostWall = m_creature->FindNearestGameObject(180322, 100))
