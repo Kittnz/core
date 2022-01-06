@@ -434,3 +434,5 @@ update quest_template set rewrepfaction2 = 21, rewrepvalue2 = 500 where entry = 
 update quest_template set rewrepfaction3 = 87, rewrepvalue3 = -500 where entry = 9259;
 -- Uncovering Evil fix
 update creature set spawntimesecsmin =5, spawntimesecsmax = 5 where guid = 2567562;
+-- Weapon sheath change by Kruxis
+UPDATE item_template SET sheath = 0 WHERE entry = 81357;
