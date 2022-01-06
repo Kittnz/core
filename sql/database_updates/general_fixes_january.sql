@@ -428,7 +428,6 @@ replace into custom_graveyards values
 (28,  'Tirisfal Uplands'   ,   0,     85,    5041,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
 (29,  'Tirisfal Uplands'   ,   0,     85,    5042,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37);
 
-
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/772
 -- Quest Traitor to the Bloodsail
 update quest_template set rewrepfaction2 = 21, rewrepvalue2 = 500 where entry = 9259;
@@ -437,3 +436,6 @@ update quest_template set rewrepfaction3 = 87, rewrepvalue3 = -500 where entry =
 update creature set spawntimesecsmin =5, spawntimesecsmax = 5 where guid = 2567562;
 -- Weapon sheath change by Kruxis
 UPDATE item_template SET sheath = 0 WHERE entry = 81357;
+-- Dummy quest for War Mode opt-out:
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55055,0,0,0,0,0,'War Mode Cancelled','','','','',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+update quest_template set questflags = 1024 where entry = 55055;

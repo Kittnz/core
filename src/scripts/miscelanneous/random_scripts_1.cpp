@@ -6822,7 +6822,7 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
     if (pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Exhaustion Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-    if (pPlayer->HasSpell(SPELL_WAR_MODE))
+    if (pPlayer->HasSpell(SPELL_WAR_MODE) && !pPlayer->GetQuestRewardStatus(55055))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the War Mode Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
@@ -6853,7 +6853,10 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
         if (pPlayer->HasChallenge(CHALLENGE_WAR_MODE))
+        {
+            pPlayer->CompleteQuest(55055);
             pPlayer->RemoveSpell(SPELL_WAR_MODE, false, false);
+        }
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
