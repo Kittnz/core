@@ -7,6 +7,14 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
+template <typename Functor>
+void DoAfterTime(Creature* creature, uint32 p_time, Functor&& function)
+{
+    creature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), creature->m_Events.CalculateTime(p_time));
+}
+
+void insomniDialogue(Player* pPlayer, Creature* pQuestGiver);
+
 class DemorphAfterTime : public BasicEvent
 {
 public:
@@ -1386,9 +1394,10 @@ bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     if (pPlayer->GetQuestStatus(40210) == QUEST_STATUS_INCOMPLETE)
-    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
+
+    if (pPlayer->GetQuestStatus(40214) == QUEST_STATUS_INCOMPLETE)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "We must banish this evil together.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     pPlayer->SEND_GOSSIP_MENU(60446, pCreature->GetGUID());
     return true;
@@ -1396,7 +1405,9 @@ bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    switch (uiAction)
+    {
+    case GOSSIP_ACTION_INFO_DEF + 1:
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
@@ -1417,6 +1428,12 @@ bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             });
+    }
+    case GOSSIP_ACTION_INFO_DEF + 2:
+    {
+        insomniDialogue(pPlayer, pCreature);
+    }
+
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -1487,137 +1504,146 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
     }
 
     if (pQuest->GetQuestId() == 40214) // Uncovering Evil
-    {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        insomniDialogue(pPlayer, pQuestGiver);
 
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(0, -12864.27F, 2809.63F, -6.85F, 0, 3.0F);
-            }
-            });
-        DoAfterTime(pPlayer, 39 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->MonsterSay("We must travel to the center of Kazon Island, there, I can channel the energies of both Lapidis, and Gillijim.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            });
-        DoAfterTime(pPlayer, 42 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->GetMotionMaster()->MovePoint(0, -12865.99F, 2821.96F, -0.82F, 0, 3.0F);
-            }
-            });
-        DoAfterTime(pPlayer, 47 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->MonsterSay("With the energies, and my own, I will be able to draw out the corruption that has plagued the land.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            });
-        DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F);
-            }
-            });
-        DoAfterTime(pPlayer, 61 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->GetMotionMaster()->MovePoint(0, -12865.12F, 2873.97F, 1.67F, 0, 3.0F);
-            }
-            });
-        DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F, 0.62F);
-            }
-            });
-        DoAfterTime(pPlayer, 78 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->MonsterSay("Now then - this will take much concentration to bring the entity forward into physical form, it is up to you to weaken it! When it is weak enough, I will be free to join you, until then, protect me!");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            }
-            });
-        DoAfterTime(pPlayer, 82 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->CastSpell(npc, 13236, false);
-            }
-            });
-        DoAfterTime(pPlayer, 92 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                npc->SummonCreature(60499, -12857.11F, 2914.41F, 10.39F, 3.83F, TEMPSUMMON_CORPSE_DESPAWN, 192 * IN_MILLISECONDS);
-            }
-            });
-        DoAfterTime(pPlayer, 94 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
-                {
-                    fearoth->MonsterSay("Who are you interlopers? Do you really think you can stop my plans?");
-                }
-            }
-            });
-        DoAfterTime(pPlayer, 274 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                if (Creature* fearoth = player->FindNearestCreature(60499, 40.0F))
-                {
-                    fearoth->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    fearoth->CombatStop(true);
-                    fearoth->ClearInCombat();
-                    fearoth->AddAura(642);
-                    fearoth->MonsterSay("Moah ha ha ha!");
-                }
-            }
-            });
-        DoAfterTime(pPlayer, 284 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            {
-                Creature* insomni = player->FindNearestCreature(60446, 40.0F);
-                Creature* fearoth = player->FindNearestCreature(60499, 40.0F);
-                if (fearoth && insomni)
-                {
-                    fearoth->ForcedDespawn();
-                    insomni->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    insomni->SetVisibility(VISIBILITY_ON);
-                    insomni->ForcedDespawn();
-                }
-            }
-            });
-    }
     return false;
+}
+
+void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
+{
+    pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+    DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->SetWalk(true);
+            npc->GetMotionMaster()->MovePoint(0, -12864.27F, 2809.63F, -6.85F, 0, 3.0F);
+            npc->PMonsterSay("Come, %s. It is time to banish this evil.", player->GetName());
+        }
+        });
+    DoAfterTime(pPlayer, 39 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->MonsterSay("We must travel to the center of Kazon Island, there, I can channel the energies of both Lapidis, and Gillijim.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+        }
+        });
+    DoAfterTime(pPlayer, 42 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->GetMotionMaster()->MovePoint(0, -12865.99F, 2821.96F, -0.82F, 0, 3.0F);
+        }
+        });
+    DoAfterTime(pPlayer, 47 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->MonsterSay("With the energies, and my own, I will be able to draw out the corruption that has plagued the land.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+        }
+        });
+    DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F);
+        }
+        });
+    DoAfterTime(pPlayer, 61 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->GetMotionMaster()->MovePoint(0, -12865.12F, 2873.97F, 1.67F, 0, 3.0F);
+        }
+        });
+    DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F, 0.62F);
+        }
+        });
+    DoAfterTime(pPlayer, 78 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->MonsterSay("Now then - this will take much concentration to bring the entity forward into physical form, it is up to you to weaken it! When it is weak enough, I will be free to join you, until then, protect me!");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+        }
+        });
+    DoAfterTime(pPlayer, 82 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->CastSpell(npc, 13236, false);
+            GameObject* riftSpell = npc->SummonGameObject(7000035, -12853.94f, 2915.04f, 10.81f, 0);
+        }
+        });
+
+    DoAfterTime(pPlayer, 92 * IN_MILLISECONDS, [pPlayer = pPlayer]() {
+        if (GameObject* riftSpell = pPlayer->FindNearestGameObject(7000035, 50.0f))
+            riftSpell->AddObjectToRemoveList();
+        });
+
+    DoAfterTime(pPlayer, 92 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        {
+            npc->SummonCreature(60499, -12853.94f, 2915.04f, 10.81f, 3.83F, TEMPSUMMON_CORPSE_DESPAWN);
+        }
+        });
 }
 
 struct npc_fearothAI : public ScriptedAI
 {
     npc_fearothAI(Creature* c) : ScriptedAI(c) { Reset(); }
 
-    void Reset() { }
-    void UpdateAI(const uint32 diff)
+    bool transformed;
+    bool fightBegun;
+
+    void Reset() 
     {
-        Creature* insomni = m_creature->FindNearestCreature(60446, 40.0F);
-        Creature* insomnius = m_creature->FindNearestCreature(60498, 40.0F);
-        GameObject* sum_insomnius = m_creature->FindNearestGameObject(2010699, 40.0F);
-        if (m_creature->GetHealthPercent() > 30 && m_creature->GetHealthPercent() < 40)
+        transformed = false;
+        fightBegun = false;
+    }
+
+    void UpdateAI(const uint32 diff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (!fightBegun)
         {
-            if (!sum_insomnius)
+            fightBegun = true;
+            m_creature->MonsterSay("Who are you interlopers? Do you really think you can stop my plans?");
+        }
+
+        if (!transformed && m_creature->GetHealthPercent() < 25.0f)
+        {
+            if (Creature* insomni = m_creature->FindNearestCreature(60446, 100.0F))
             {
-                m_creature->SummonGameObject(2010699, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
-                insomnius = m_creature->SummonCreature(60498, insomni->GetPositionX(), insomni->GetPositionY(), insomni->GetPositionZ(), insomni->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
-                insomni->SetVisibility(VISIBILITY_OFF);
+                Creature* insomnius = m_creature->SummonCreature(60498, insomni->GetPositionX(), insomni->GetPositionY(), insomni->GetPositionZ(), insomni->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN);
+
+                transformed = true;
+
+                insomni->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                insomni->DespawnOrUnsummon();
             }
         }
+
         DoMeleeAttackIfReady();
     }
 
-    void JustDied(Unit*) override
+    void JustDied(Unit*) 
     {
-        Creature* insomni = m_creature->FindNearestCreature(60446, 40.0F);
         Creature* insomnius = m_creature->FindNearestCreature(60498, 40.0F);
+
         if (insomnius)
         {
-            insomnius->MonsterSay("It is done! The darkness has faded, can you feel it, dissipating before your very eyes! I'll be returning to the cave, meet me there.");
+            insomnius->MonsterSay("It is done! The darkness has faded. Can you feel it dissipating before your very eyes? I'll be returning to the cave. Meet me there.");
 
-            insomni->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            insomni->SetVisibility(VISIBILITY_ON);
-            insomni->ForcedDespawn();
+            DoAfterTime(m_creature, 2 * IN_MILLISECONDS, [insomnius = insomnius]() {
+                {
+                    insomnius->CastSpell(insomnius, 26638, true);
+                    insomnius->DespawnOrUnsummon();
+                }
+                });
         }
     }
-    void EnterCombat() {}
-    void JustRespawned() { Reset(); }
+
+    void EnterEvadeMode() 
+    {
+        if (Creature* insomni = m_creature->FindNearestCreature(60446, 100.0F))
+            insomni->DespawnOrUnsummon();
+
+        if (Creature* insomnius = m_creature->FindNearestCreature(60498, 100.0F))
+            insomnius->DespawnOrUnsummon();
+
+        m_creature->DespawnOrUnsummon();
+    }
 };
 
 CreatureAI* GetAI_npc_fearoth(Creature* _Creature) { return new npc_fearothAI(_Creature); }
