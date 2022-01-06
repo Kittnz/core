@@ -2099,7 +2099,6 @@ struct chromie_boss_cotAI : public ScriptedAI
                     }
                 }
             }
-
             });
 
     }
