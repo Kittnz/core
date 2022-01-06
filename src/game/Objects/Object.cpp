@@ -2159,7 +2159,8 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
 }
 
 // Nostalrius
-GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime, bool attach)
+GameObject* WorldObject::SummonGameObject(const uint32 entry, const float x, const float y, const float z, const float ang,
+    const float rotation0, const float rotation1, const float rotation2, const float rotation3, const uint32 respawnTime, const bool attach)
 {
     if (!IsInWorld())
         return nullptr;
@@ -2170,15 +2171,19 @@ GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float 
         sLog.outErrorDb("Gameobject template %u not found in database!", entry);
         return nullptr;
     }
+
     Map *map = GetMap();
     GameObject *go = new GameObject();
+
     if (!go->Create(map->GenerateLocalLowGuid(HIGHGUID_GAMEOBJECT), entry, map, x, y, z, ang, rotation0, rotation1, rotation2, rotation3, 100, GO_STATE_READY))
     {
         delete go;
         return nullptr;
     }
+
     go->SetRespawnTime(respawnTime);
-    if (attach && (GetTypeId() == TYPEID_PLAYER || GetTypeId() == TYPEID_UNIT)) //not sure how to handle this
+
+    if (attach && (GetTypeId() == TYPEID_PLAYER || GetTypeId() == TYPEID_UNIT)) // Not sure how to handle this
         ((Unit*)this)->AddGameObject(go);
     else
         go->SetSpawnedByDefault(false);
@@ -2188,6 +2193,7 @@ GameObject* WorldObject::SummonGameObject(uint32 entry, float x, float y, float 
 
     map->Add(go);
     go->SetWorldMask(GetWorldMask());
+
     return go;
 }
 

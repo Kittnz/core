@@ -984,7 +984,7 @@ class WorldObject : public Object
         void BuildUpdateData(UpdateDataMapType &) override;
 
         Creature* SummonCreature(uint32 id, float x, float y, float z, float ang,TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN,uint32 despwtime = 25000, bool asActiveObject = false, uint32 pacifiedTimer = 0, CreatureAiSetter pFuncAiSetter = nullptr);
-        GameObject* SummonGameObject(uint32 entry, float x, float y, float z, float ang, float rotation0 = 0.0f, float rotation1 = 0.0f, float rotation2 = 0.0f, float rotation3 = 0.0f, uint32 respawnTime = 25000, bool attach = true);
+        GameObject* SummonGameObject(const uint32 entry, const float x, const float y, const float z, const float ang, const float rotation0 = 0.0f, const float rotation1 = 0.0f, const float rotation2 = 0.0f, const float rotation3 = 0.0f, const uint32 respawnTime = 25000, const bool attach = true);
 
         Creature* FindNearestCreature(uint32 entry, float range, bool alive = true, Creature const* except = nullptr) const;
         Creature* FindRandomCreature(uint32 entry, float range, bool alive = true, Creature const* except = nullptr) const;
