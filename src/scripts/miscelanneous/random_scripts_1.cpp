@@ -6822,6 +6822,9 @@ bool GossipHello_glyph_master(Player* pPlayer, Creature* pCreature)
     if (pPlayer->HasSpell(SPELL_EXHAUSTION_MODE))
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the Exhaustion Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
+    if (pPlayer->HasSpell(SPELL_WAR_MODE))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I would like to end the War Mode Challenge once and for all.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+
     pPlayer->SEND_GOSSIP_MENU(51547, pCreature->GetGUID());
     return true;
 }
@@ -6835,7 +6838,7 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     {
         if (pPlayer->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
         {
-            pPlayer->RemoveSpell(50000, false, false);
+            pPlayer->RemoveSpell(SPELL_SLOW_AND_STEADY, false, false);
             if (pPlayer->HasItemCount(50010, 1, true))
                 pPlayer->DestroyItemCount(50010, 1, true, false, true);
         }
@@ -6844,7 +6847,13 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
         if (pPlayer->HasChallenge(CHALLENGE_EXHAUSTION_MODE))
-            pPlayer->RemoveSpell(50004, false, false);
+            pPlayer->RemoveSpell(SPELL_EXHAUSTION_MODE, false, false);
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        if (pPlayer->HasChallenge(CHALLENGE_WAR_MODE))
+            pPlayer->RemoveSpell(SPELL_WAR_MODE, false, false);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
