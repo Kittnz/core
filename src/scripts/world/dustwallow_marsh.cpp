@@ -1367,14 +1367,14 @@ bool QuestAccept_npc_tabetha(Player* pPlayer, Creature* pCreature, Quest const *
  * Emberstrife
  */
 
-enum
+enum Emberstrife
 {
-    EMOTE_GENERIC_FRENZY_KILL   = 7797,
-    EMOTE_GENERIC_IS_WEAKENED   = -1531011,
+    EMOTE_GENERIC_FRENZY_KILL = 7797,
+    EMOTE_GENERIC_IS_WEAKENED = -1531011,
 
-    SPELL_FRENZY                = 8269,
-    SPELL_CLEAVE                = 19983,
-    SPELL_FLAME_BREATH          = 9573
+    SPELL_FRENZY = 8269,
+    SPELL_CLEAVE = 19983,
+    SPELL_FLAME_BREATH = 9573
 };
 
 struct npc_emberstrifeAI : ScriptedAI
@@ -1387,14 +1387,28 @@ struct npc_emberstrifeAI : ScriptedAI
     uint32 m_uiCleaveTimer;
     uint32 m_uiFrenzyTimer;
     uint32 m_uiFlameBreathTimer;
-    bool m_bWeakened;
 
     void Reset() override
     {
         m_uiCleaveTimer = urand(6000, 8000);
         m_uiFrenzyTimer = 0;
         m_uiFlameBreathTimer = urand(8000, 12000);
-        m_bWeakened = false;
+    }
+
+    void JustDied(Unit*) override
+    {
+        static constexpr auto unforgedSeal = 175321;
+        if (GameObject* pGo = m_creature->FindNearestGameObject(unforgedSeal, 50.f))
+        {
+            float fX, fY, fZ;
+            pGo->GetPosition(fX, fY, fZ);
+            pGo->Delete();
+            if (!pGo->isSpawned()) // Check again because we can.. lol it's rhyming..
+            {
+                static constexpr auto forgedSeal = 175322;
+                me->SummonGameObject(forgedSeal, fX, fY, (fZ + 1.f), 0, 0, 0, 0, 0, 120);
+            }
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -1402,12 +1416,6 @@ struct npc_emberstrifeAI : ScriptedAI
         // Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
-
-        if (!m_bWeakened && m_creature->GetHealthPercent() < 11)
-        {
-            m_bWeakened = true;
-            DoScriptText(EMOTE_GENERIC_IS_WEAKENED, m_creature);
-        }
 
         // Cleave
         if (m_uiCleaveTimer < uiDiff)
@@ -1483,33 +1491,6 @@ struct go_unforged_sealAI : GameObjectAI
 GameObjectAI* GetAI_go_unforged_seal(GameObject* pGo)
 {
     return new go_unforged_sealAI(pGo);
-}
-
-/*
- * Forged Seal of Ascension (Emberstrife support)
- */
-
-struct go_forged_sealAI : GameObjectAI
-{
-    explicit go_forged_sealAI(GameObject* pGo) : GameObjectAI(pGo)
-    {
-        m_uiDespawnTimer = 3 * MINUTE * IN_MILLISECONDS;
-    }
-
-    uint32 m_uiDespawnTimer;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        if (m_uiDespawnTimer < uiDiff)
-            me->Delete();
-        else
-            m_uiDespawnTimer -= uiDiff;
-    }
-};
-
-GameObjectAI* GetAI_go_forged_seal(GameObject* pGo)
-{
-    return new go_forged_sealAI(pGo);
 }
 
 enum
@@ -1624,11 +1605,6 @@ void AddSC_dustwallow_marsh()
     newscript = new Script;
     newscript->Name = "go_unforged_seal";
     newscript->GOGetAI = &GetAI_go_unforged_seal;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_forged_seal";
-    newscript->GOGetAI = &GetAI_go_forged_seal;
     newscript->RegisterSelf();
 
     newscript = new Script;

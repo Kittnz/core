@@ -6067,12 +6067,13 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                     // store explicit target for TARGET_UNIT_SCRIPT_NEAR_CASTER
                     else
                     {
-                        if (m_spellInfo->EffectImplicitTargetA[j] == TARGET_UNIT_SCRIPT_NEAR_CASTER ||
-                                m_spellInfo->EffectImplicitTargetB[j] == TARGET_UNIT_SCRIPT_NEAR_CASTER)
+                        if (m_spellInfo->EffectImplicitTargetA[j] == TARGET_UNIT_SCRIPT_NEAR_CASTER || m_spellInfo->EffectImplicitTargetB[j] == TARGET_UNIT_SCRIPT_NEAR_CASTER)
                         {
-                            // not sure if every TARGET_UNIT_SCRIPT_NEAR_CASTER requires the same, but this one definetely is checked wrong
-                            if (m_spellInfo->Id == 16053 && creatureScriptTarget->GetHealthPercent() < 11)
+                            /*
+                            // Broken AF
+                            if ((m_spellInfo->Id == 16053) && (creatureScriptTarget->GetHealthPercent() < 10.f))
                                 m_targets.setUnitTarget(creatureScriptTarget);
+                            */
 
                             AddUnitTarget(creatureScriptTarget, SpellEffectIndex(j));                            
                         }
