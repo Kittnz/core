@@ -412,21 +412,21 @@ replace into custom_graveyards values
 (12,  'Karazhan Crypt'     ,   800,   41,    10,      60,  0, -11111.5, -1832.20, 71.80, 6.1,    0, -11111.5, -1832.20, 71.8, 6.1),
 (13,  'Lapidis Isle'       ,   0,     409,   0,       60,  0, -11505.1, 3509.70, 66.1,  2.04,    0, -11111.5, -1832.20, 71.8, 6.1),
 (14,  'Gilijim Isle'       ,   0,     408,   0,       60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(15,  'Tirisfal Uplands'   ,   0,     85,    5028,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(16,  'Tirisfal Uplands'   ,   0,     85,    5029,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(17,  'Tirisfal Uplands'   ,   0,     85,    5030,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(18,  'Tirisfal Uplands'   ,   0,     85,    5031,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(19,  'Tirisfal Uplands'   ,   0,     85,    5032,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(20,  'Tirisfal Uplands'   ,   0,     85,    5033,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(21,  'Tirisfal Uplands'   ,   0,     85,    5034,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(22,  'Tirisfal Uplands'   ,   0,     85,    5035,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(23,  'Tirisfal Uplands'   ,   0,     85,    5036,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(24,  'Tirisfal Uplands'   ,   0,     85,    5037,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(25,  'Tirisfal Uplands'   ,   0,     85,    5038,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(26,  'Tirisfal Uplands'   ,   0,     85,    5039,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(27,  'Tirisfal Uplands'   ,   0,     85,    5040,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(28,  'Tirisfal Uplands'   ,   0,     85,    5041,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1),
-(29,  'Tirisfal Uplands'   ,   0,     85,    5042,    60,  0, -13912.03, 2350.9, 28.57, 5.14,    0, -13912.03, 2350.9, 28.57, 5.1);
+(15,  'Tirisfal Uplands'   ,   0,     85,    5028,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(16,  'Tirisfal Uplands'   ,   0,     85,    5029,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(17,  'Tirisfal Uplands'   ,   0,     85,    5030,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(18,  'Tirisfal Uplands'   ,   0,     85,    5031,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(19,  'Tirisfal Uplands'   ,   0,     85,    5032,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(20,  'Tirisfal Uplands'   ,   0,     85,    5033,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(21,  'Tirisfal Uplands'   ,   0,     85,    5034,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(22,  'Tirisfal Uplands'   ,   0,     85,    5035,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(23,  'Tirisfal Uplands'   ,   0,     85,    5036,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(24,  'Tirisfal Uplands'   ,   0,     85,    5037,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(25,  'Tirisfal Uplands'   ,   0,     85,    5038,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(26,  'Tirisfal Uplands'   ,   0,     85,    5039,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(27,  'Tirisfal Uplands'   ,   0,     85,    5040,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(28,  'Tirisfal Uplands'   ,   0,     85,    5041,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
+(29,  'Tirisfal Uplands'   ,   0,     85,    5042,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37);
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/772
 -- Quest Traitor to the Bloodsail
@@ -436,3 +436,6 @@ update quest_template set rewrepfaction3 = 87, rewrepvalue3 = -500 where entry =
 update creature set spawntimesecsmin =5, spawntimesecsmax = 5 where guid = 2567562;
 -- Weapon sheath change by Kruxis
 UPDATE item_template SET sheath = 0 WHERE entry = 81357;
+-- Dummy quest for War Mode opt-out:
+replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55055,0,0,0,0,0,'War Mode Cancelled','','','','',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+update quest_template set questflags = 1024 where entry = 55055;
