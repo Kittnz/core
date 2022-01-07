@@ -2596,6 +2596,8 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
         pQuestGiver->AddAura(15473);
+        pPlayer->LearnSpell(45504, false);
+
         DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
