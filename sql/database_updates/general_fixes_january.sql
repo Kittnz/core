@@ -576,3 +576,7 @@ update quest_template set zoneorsort = 85 where entry = 40085;
 update broadcast_text set male_text = 'I am Lord Cruk\'zogg, I lead here. We were once part of the great Gor\'dosh tribe, but now we are alone.\n\nYou will help me recreate the glory of Maul\'ogg!' where entry = 92180;
 -- NPC "Cenarion Emissary Blackhoof" noq friendly for Aliance:
 update creature_template set faction = 79 where entry = 15187;
+-- Rename inapropriate faction names:
+update faction set name1 = 'Red Dragonflight' where name1 = 'Bitch';
+update faction set name1 = 'Blue Dragonflight' where name1 = 'Fuck';
+update faction set name1 = 'Green Dragonflight' where name1 = 'Piss';
