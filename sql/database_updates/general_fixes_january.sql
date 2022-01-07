@@ -584,3 +584,5 @@ update faction set name1 = 'Green Dragonflight' where name1 = 'Piss';
 UPDATE item_template SET sheath = 3 WHERE entry = 1172;
 UPDATE item_template SET item_level = 35 WHERE entry = 60124;
 UPDATE item_template SET item_level = 15 WHERE entry = 60465;
+-- Rename the custom item "Bloodforged Helm" to something else:
+update item_template set name = 'Blood-Spattered Helm' where entry = 83216;
