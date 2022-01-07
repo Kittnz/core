@@ -445,3 +445,13 @@ UPDATE creature_template SET unit_flags = 2 WHERE entry = 91285;
 
 -- No need for this fucked script
 UPDATE `gameobject_template` SET `script_name` = "" WHERE `entry` = 175322;
+-- New NPCs Ancient Wolf Spirit & Margok Hatewind
+REPLACE INTO `gossip_menu` VALUES (65536, 100401, 0);
+REPLACE INTO `gossip_menu` VALUES (65537, 100402, 0);
+REPLACE INTO `broadcast_text` VALUES (100402, '"The spirits are always calling, one just needs to listen to hear them." ', '"The spirits are always calling, one just needs to listen to hear them." ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO `broadcast_text` VALUES (100401, '<The Ancient Wolf Spirit seems to be distracted by something else.>', '<The Ancient Wolf Spirit seems to be distracted by something else.>', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO `creature_template` VALUES (66005, 3855, 0, 0, 0, 'Margok Hatewind', NULL, 65537, 40, 40, 1857, 2120, 0, 0, 2100, 29, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 70, 84, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 82011, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `creature_template` VALUES (66004, 1236, 0, 0, 0, 'Ancient Wolf Spirit', NULL, 65536, 44, 44, 1857, 2050, 0, 0, 2050, 35, 0, 1, 1.14286, 2.4, 18, 5, 0, 0, 1, 61, 74, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO `creature_equip_template` VALUES (82011, 35, 0, 0);
+
+
