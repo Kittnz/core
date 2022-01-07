@@ -580,3 +580,7 @@ update creature_template set faction = 79 where entry = 15187;
 update faction set name1 = 'Red Dragonflight' where name1 = 'Bitch';
 update faction set name1 = 'Blue Dragonflight' where name1 = 'Fuck';
 update faction set name1 = 'Green Dragonflight' where name1 = 'Piss';
+-- Misc. item fixed from Kruxis:
+UPDATE item_template SET sheath = 3 WHERE entry = 1172;
+UPDATE item_template SET item_level = 35 WHERE entry = 60124;
+UPDATE item_template SET item_level = 15 WHERE entry = 60465;
