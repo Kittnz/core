@@ -427,9 +427,8 @@ replace into custom_graveyards values
 (27,  'Tirisfal Uplands'   ,   0,     85,    5040,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
 (28,  'Tirisfal Uplands'   ,   0,     85,    5041,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37),
 (29,  'Tirisfal Uplands'   ,   0,     85,    5042,    60,  0, 2163.39, 2811.55, 22.93, 3.37,    0, 2163.39, 2811.55, 22.93, 3.37);
-
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/772
--- Quest Traitor to the Bloodsail
+-- Quest Traitor to the Bloodsail:
 update quest_template set rewrepfaction2 = 21, rewrepvalue2 = 500 where entry = 9259;
 update quest_template set rewrepfaction3 = 87, rewrepvalue3 = -500 where entry = 9259;
 -- Uncovering Evil fix
@@ -439,10 +438,8 @@ UPDATE item_template SET sheath = 0 WHERE entry = 81357;
 -- Dummy quest for War Mode opt-out:
 replace into quest_template (prevquestid, entry, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4) values (0,55055,0,0,0,0,0,'War Mode Cancelled','','','','',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
 update quest_template set questflags = 1024 where entry = 55055;
-
 -- Grol the Exile Fix
 UPDATE creature_template SET unit_flags = 2 WHERE entry = 91285;
-
 -- No need for this fucked script
 UPDATE `gameobject_template` SET `script_name` = "" WHERE `entry` = 175322;
 -- New NPCs Ancient Wolf Spirit & Margok Hatewind
@@ -453,5 +450,129 @@ REPLACE INTO `broadcast_text` VALUES (100401, '<The Ancient Wolf Spirit seems to
 REPLACE INTO `creature_template` VALUES (66005, 3855, 0, 0, 0, 'Margok Hatewind', NULL, 65537, 40, 40, 1857, 2120, 0, 0, 2100, 29, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 70, 84, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 82011, 0, 0, 0, 0, 0, 0, '');
 REPLACE INTO `creature_template` VALUES (66004, 1236, 0, 0, 0, 'Ancient Wolf Spirit', NULL, 65536, 44, 44, 1857, 2050, 0, 0, 2050, 35, 0, 1, 1.14286, 2.4, 18, 5, 0, 0, 1, 61, 74, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 REPLACE INTO `creature_equip_template` VALUES (82011, 35, 0, 0);
-
-
+-- replace warning text for quest 40172:
+update quest_template set Objectives = 'Speak to Garfield ‘The Fox\' Sparkleblast if you wish to aid him.\n\n(This quest will align you with the Bloodsail Buccaneers  and reduce your reputation with the Steamwheedle Cartel significantly.)' where entry = 40172;
+-- For quest 40036 - [A Broken Oath] Creature 6196 - [Spitelash Myrmidon]  does not drop item 60137 - [Myrmidon Signet]:
+REPLACE INTO creature_loot_template VALUES (6196, 60137, -100, 0, 1, 1, 0);
+-- Quest needs grammar/edits Objectives:...."a stop to the Scourge's advances"... and all refrences to the Scourge should be capitalized:
+update quest_template set details = 'I hope that you have come to assist us. We are currently beset by the enemies on every side and could surely use any help that we can get. West of here is a farm where a large battle occurred recently between our troops and Humans of Lordaeron. We planned to use the dead there to boost our troops, but the Cult of the Damned appeared before us with the same idea.\n\nIf left unchecked, the Scourge will soon have a large force to attack from the west, and we cannot let that happen. If you are feeling up to it, I got a reward ready for anyone who is willing to put a stop to the Scourge advances.' where entry = 40139;
+update quest_template set objectives = 'Father Brightcopf wants me to put a stop to the Scourge\'s advances on the Corinth Farm.' where entry = 40139;
+-- Player's race capitalized from $r to $R:
+update quest_template set details = '$R, I have a task for you. A rather important one. <Nargelas shows you a well-decorated jewelry box>.\n\nIn here lays a key to respect and right to rule the Tirisfal Uplands. You see, before the scourge invaded, my wife Grelda was supposed to inherit these lands from her father. On the coronation day, the contents of this box were supposed to pass on into her possession.\n\nMany moons have passed, and yet my courtiers and I had no luck in opening the lock on this thing. But during my research, a name came up. Vathras Millson. A historian or some such, but I heard that he specializes in these kinds of things. That is why I need you to head to Steepcliff Port and find him. I heard he owns an Inn now.\n\nOh, and do be careful. The box is worth more than your life.' where entry = 40278;
+-- NPC Norga. Faction changes to Orgrimmar:
+update creature_template set faction = 29 where entry = 91720;
+-- updates loot ID for NPC "Rogue Conjurer" and deleted drop ITEM "Red Defias mask":
+update creature_template set loot_id = 91762 where entry = 91762;
+REPLACE INTO creature_loot_template VALUES
+(91762,		118,	0.0026,	 0,		 1, 1, 0),
+(91762,		414,	4.8235,	 0,		 1, 1, 0),
+(91762,		765,	0.02,	 0,		 1, 1, 0),
+(91762,		774,	0.2,	 0,		 1, 1, 0),
+(91762,		785,	0.02,	 0,		 1, 1, 0),
+(91762,		818,	0.66,	 0,		 1, 1, 0),
+(91762,		829,	-80,	 0,		 1, 1, 0),
+(91762,		856,	0.0103,  0,		 1, 1, 0),
+(91762,		858,	1.4147,  0,		 1, 2, 0),
+(91762,		955,	0.36,	 0,		 1, 1, 0),
+(91762,		1179,	2.2268,	 0,		 1, 1, 0),
+(91762,		1180,	0.34,	 0,		 1, 1, 0),
+(91762,		1181,	0.52,	 0,		 1, 1, 0),
+(91762,		1210,	0.2,	 0,		 1, 1, 0),
+(91762,		1705,	0.02,	 0,		 1, 1, 0),
+(91762,		2287,	0.02,	 0,		 1, 1, 0),
+(91762,		2406,	0.02,	 0,		 1, 1, 0),
+(91762,		2407,	0.02,	 0,		 1, 1, 0),
+(91762,		2408,	0.02,	 0,		 1, 1, 0),
+(91762,		2409,	0.02,	 0,		 1, 1, 0),
+(91762,		2447,	0.02,	 0,		 1, 1, 0),
+(91762,		2449,	0.02,	 0,		 1, 1, 0),
+(91762,		2450,	0.02,	 0,		 1, 1, 0),
+(91762,		2452,	0.02,	 0,		 1, 1, 0),
+(91762,		2453,	0.02,	 0,		 1, 1, 0),
+(91762,		2455,	0.6724,  0,		 1, 1, 0),
+(91762,		2553,	0.02,	 0,		 1, 1, 0),
+(91762,		2555,	0.02,	 0,		 1, 1, 0),
+(91762,		2589,	38.3344, 0,		 1, 3, 0),
+(91762,		2598,	0.04,	 0,		 1, 1, 0),
+(91762,		2657,	0.0103,  0,		 1, 1, 0),
+(91762,		2698,	0.18, 	 0,		 1, 1, 0),
+(91762,		2770,	0.1, 	 0,		 1, 1, 0),
+(91762,		2771,	0.04,	 0,		 1, 1, 0),
+(91762,		2775,	0.02,	 0,		 1, 1, 0),
+(91762,		2835,	0.04,	 0,		 1, 1, 0),
+(91762,		2836,	0.02,	 0,		 1, 1, 0),
+(91762,		2881,	0.02,	 0,		 1, 1, 0),
+(91762,		2971,	0.1267,  0,		 1, 1, 0),
+(91762,		2972,	0.0853,  0,		 1, 1, 0),
+(91762,		2975,	0.0853,  0,		 1, 1, 0),
+(91762,		2979,	0.0983,  0,		 1, 1, 0),
+(91762,		2996,	0.02,    0,		 1, 1, 0),
+(91762,		3013,	0.54,    0,		 1, 1, 0),
+(91762,		3207,	0.1216,  0,		 1, 1, 0),
+(91762,		3213,	0.0207,  0,		 1, 1, 0),
+(91762,		3356,	0.02, 	 0,		 1, 1, 0),
+(91762,		3609,	0.04, 	 0,		 1, 1, 0),
+(91762,		3610,	0.02, 	 0,		 1, 1, 0),
+(91762,		3643,	0.1035,  0,		 1, 1, 0),
+(91762,		4292,	0.02,	 0,		 1, 1, 0),
+(91762,		4293,	0.02,	 0,		 1, 1, 0),
+(91762,		4345,	0.02,	 0,		 1, 1, 0),
+(91762,		4346,	0.02,	 0,		 1, 1, 0),
+(91762,		4359,	0.02,	 0,		 1, 1, 0),
+(91762,		4361,	0.02,	 0,		 1, 1, 0),
+(91762,		4363,	0.02,	 0,		 1, 1, 0),
+(91762,		4364,	0.02,	 0,		 1, 1, 0),
+(91762,		4405,	0.02,	 0,		 1, 1, 0),
+(91762,		4408,	0.02,	 0,		 1, 1, 0),
+(91762,		4409,	0.02,	 0,		 1, 1, 0),
+(91762,		4537,	0.02,	 0,		 1, 1, 0),
+(91762,		4541,	0.0052,  0,		 1, 1, 0),
+(91762,		4592,	0.02,	 0,		 1, 1, 0),
+(91762,		4605,	0.02,	 0,		 1, 1, 0),
+(91762,		4677,	0.02,	 0,		 1, 1, 0),
+(91762,		4678,	0.0828,  0,		 1, 1, 0),
+(91762,		4683,	0.031,   0,		 1, 1, 0),
+(91762,		4684,	0.0336,  0,		 1, 1, 0),
+(91762,		4689,	0.0362,  0,		 1, 1, 0),
+(91762,		4690,	0.0388,  0,		 1, 1, 0),
+(91762,		5368,	0.0052,  0,		 1, 1, 0),
+(91762,		5503,	0.02,    0,		 1, 1, 0),
+(91762,		5573,	0.0103,  0,		 1, 1, 0),
+(91762,		5574,	0.0181,  0,		 1, 1, 0),
+(91762,		6271,	0.02,	 0,		 1, 1, 0),
+(91762,		6342,	0.04,	 0,		 1, 1, 0),
+(91762,		6344,	0.02,	 0,		 1, 1, 0),
+(91762,		6347,	0.02,	 0,		 1, 1, 0),
+(91762,		6348,	0.02,	 0,		 1, 1, 0),
+(91762,		6510,	0.02,	 0,		 1, 1, 0),
+(91762,		6515,	0.02,	 0,		 1, 1, 0),
+(91762,		6549,	0.16,	 0,		 1, 1, 0),
+(91762,		6555,	0.18,	 0,		 1, 1, 0),
+(91762,		6716,	0.02,	 0,		 1, 1, 0),
+(91762,		7109,	0.02,	 0,		 1, 1, 0),
+(91762,		7288,	0.02,	 0,		 1, 1, 0),
+(91762,		7351,	0.02,	 0,		 1, 1, 0),
+(91762,		9744,	0.02,	 0,		 1, 1, 0),
+(91762,		9746,	0.0284,  0,		 1, 1, 0),
+(91762,		9751,	0.02,    0,		 1, 1, 0),
+(91762,		9755,	0.0388,  0,		 1, 1, 0),
+(91762,		9759,	0.0362,  0,		 1, 1, 0),
+(91762,		9760,	0.02,    0,		 1, 1, 0),
+(91762,		9761,	0.02,    0,		 1, 1, 0),
+(91762,		9762,	0.0207,  0,		 1, 1, 0),
+(91762,		30018,	2.5,	 0, -30018, 1, 0),
+(91762,		30019,	0.5,	 0, -30019, 1, 0),
+(91762,		30020,	0.5,	 0, -30020, 1, 0),
+(91762,		30038,	0.5,	 0, -30038, 1, 0),
+(91762,		30041,	0.5,	 5, -30041, 1, 0),
+(91762,		30042,	0.5,	 7, -30042, 1, 0);
+-- Quest zone for quest "The Rogue Heights" changed to Tirisfal section:
+update quest_template set zoneorsort = 85 where entry = 40083;
+-- Quest zone for quest "Magical Interference" changed to Tirisfal section:
+update quest_template set zoneorsort = 85 where entry = 40084;
+-- Quest zone for quest "Stealing Arcane Goods" changed to Tirisfal section:
+update quest_template set zoneorsort = 85 where entry = 40085;
+-- gretings text for NPC "Lord Cruk'zogg" updated:
+update broadcast_text set male_text = 'I am Lord Cruk\'zogg, I lead here. We were once part of the great Gor\'dosh tribe, but now we are alone.\n\nYou will help me recreate the glory of Maul\'ogg!' where entry = 92180;
+-- NPC "Cenarion Emissary Blackhoof" noq friendly for Aliance:
+update creature_template set faction = 79 where entry = 15187;
