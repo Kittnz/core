@@ -2441,6 +2441,7 @@ bool QuestAccept_npc_sage_palerunner(Player* pPlayer, Creature* pQuestGiver, Que
                 if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60348))
                     player->KilledMonster(dummy_bunny, ObjectGuid());
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                npc->InterruptNonMeleeSpells(true);
                 return true;
             });
     }
