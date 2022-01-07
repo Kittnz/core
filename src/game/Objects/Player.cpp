@@ -9054,12 +9054,12 @@ bool Player::IsValidPos(uint8 bag, uint8 slot, bool explicit_pos) const
 }
 
 
-bool Player::HasItemCount(uint32 item, uint32 count, bool inBankAlso) const
+bool Player::HasItemCount(const uint32 item, const uint32 count, const bool inBankAlso) const
 {
     uint32 tempcount = 0;
-    for (int i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    for (uint32 i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_ITEM_END; ++i)
     {
-        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        Item const* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
         if (pItem && pItem->GetEntry() == item && !pItem->IsInTrade())
         {
             tempcount += pItem->GetCount();
@@ -9067,9 +9067,10 @@ bool Player::HasItemCount(uint32 item, uint32 count, bool inBankAlso) const
                 return true;
         }
     }
-    for (int i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
+
+    for (uint32 i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
     {
-        Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+        Item const* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
         if (pItem && pItem->GetEntry() == item && !pItem->IsInTrade())
         {
             tempcount += pItem->GetCount();
@@ -9077,9 +9078,10 @@ bool Player::HasItemCount(uint32 item, uint32 count, bool inBankAlso) const
                 return true;
         }
     }
-    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+
+    for (uint32 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
     {
-        if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        if (Bag const* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
             for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
             {
@@ -9096,9 +9098,9 @@ bool Player::HasItemCount(uint32 item, uint32 count, bool inBankAlso) const
 
     if (inBankAlso)
     {
-        for (int i = BANK_SLOT_ITEM_START; i < BANK_SLOT_BAG_END; ++i)
+        for (uint32 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_BAG_END; ++i)
         {
-            Item *pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
+            Item const* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i);
             if (pItem && pItem->GetEntry() == item && !pItem->IsInTrade())
             {
                 tempcount += pItem->GetCount();
@@ -9106,13 +9108,14 @@ bool Player::HasItemCount(uint32 item, uint32 count, bool inBankAlso) const
                     return true;
             }
         }
-        for (int i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+
+        for (uint32 i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
         {
-            if (Bag* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            if (Bag const* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             {
                 for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
                 {
-                    Item* pItem = GetItemByPos(i, j);
+                    Item const* pItem = GetItemByPos(i, j);
                     if (pItem && pItem->GetEntry() == item && !pItem->IsInTrade())
                     {
                         tempcount += pItem->GetCount();
@@ -10813,7 +10816,7 @@ void Player::VisualizeItem(uint8 slot, Item *pItem)
     pItem->SetState(ITEM_CHANGED, this);
 }
 
-void Player::RemoveItem(uint8 bag, uint8 slot, bool update)
+void Player::RemoveItem(const uint8 bag, const uint8 slot, const bool update)
 {
     // note: removeitem does not actually change the item
     // it only takes the item out of storage temporarily
@@ -11000,13 +11003,13 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
     }
 }
 
-void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequip_check, bool check_bank)
+void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool update, const bool unequip_check, const bool check_bank)
 {
     DEBUG_LOG("STORAGE: DestroyItemCount item = %u, count = %u", item, count);
     uint32 remcount = 0;
 
-    // in inventory
-    for (int i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
+    // In inventory
+    for (uint32 i = INVENTORY_SLOT_ITEM_START; i < INVENTORY_SLOT_ITEM_END; ++i)
     {
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
@@ -11025,8 +11028,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                 {
                     ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                     pItem->SetCount(pItem->GetCount() - count + remcount);
-                    if (IsInWorld() & update)
+
+                    if (IsInWorld() && update)
                         pItem->SendCreateUpdateToPlayer(this);
+
                     pItem->SetState(ITEM_CHANGED, this);
                     return;
                 }
@@ -11034,7 +11039,7 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
         }
     }
 
-    for (int i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
+    for (uint32 i = KEYRING_SLOT_START; i < KEYRING_SLOT_END; ++i)
     {
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
@@ -11042,7 +11047,7 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
             {
                 if (pItem->GetCount() + remcount <= count)
                 {
-                    // all keys can be unequipped
+                    // All keys can be unequipped
                     remcount += pItem->GetCount();
                     DestroyItem(INVENTORY_SLOT_BAG_0, i, update);
 
@@ -11053,8 +11058,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                 {
                     ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                     pItem->SetCount(pItem->GetCount() - count + remcount);
-                    if (IsInWorld() & update)
+
+                    if (IsInWorld() && update)
                         pItem->SendCreateUpdateToPlayer(this);
+
                     pItem->SetState(ITEM_CHANGED, this);
                     return;
                 }
@@ -11062,10 +11069,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
         }
     }
 
-    // in inventory bags
-    for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+    // In inventory bags
+    for (uint32 i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
     {
-        if (Bag *pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+        if (Bag const* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
             for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
             {
@@ -11086,8 +11093,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                         {
                             ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                             pItem->SetCount(pItem->GetCount() - count + remcount);
+
                             if (IsInWorld() && update)
                                 pItem->SendCreateUpdateToPlayer(this);
+
                             pItem->SetState(ITEM_CHANGED, this);
                             return;
                         }
@@ -11097,7 +11106,7 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
         }
     }
 
-    // in equipment and bag list
+    // In equipment and bag list
     for (int i = EQUIPMENT_SLOT_START; i < INVENTORY_SLOT_BAG_END; ++i)
     {
         if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
@@ -11119,8 +11128,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                 {
                     ItemRemovedQuestCheck(pItem->GetEntry(), count - remcount);
                     pItem->SetCount(pItem->GetCount() - count + remcount);
-                    if (IsInWorld() & update)
+
+                    if (IsInWorld() && update)
                         pItem->SendCreateUpdateToPlayer(this);
+
                     pItem->SetState(ITEM_CHANGED, this);
                     return;
                 }
@@ -11130,8 +11141,8 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
 
     if (check_bank)
     {
-        // in bank
-        for (int i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
+        // In bank
+        for (uint32 i = BANK_SLOT_ITEM_START; i < BANK_SLOT_ITEM_END; ++i)
         {
             if (Item* pItem = GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             {
@@ -11148,8 +11159,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                     else
                     {
                         pItem->SetCount(pItem->GetCount() - count + remcount);
-                        if (IsInWorld() & update)
+
+                        if (IsInWorld() && update)
                             pItem->SendCreateUpdateToPlayer(this);
+
                         pItem->SetState(ITEM_CHANGED, this);
                         return;
                     }
@@ -11157,10 +11170,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
             }
         }
 
-        // in bank bags
-        for (int i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
+        // In bank bags
+        for (uint32 i = BANK_SLOT_BAG_START; i < BANK_SLOT_BAG_END; ++i)
         {
-            if (Bag *pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            if (Bag const* pBag = (Bag*)GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             {
                 for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
                 {
@@ -11179,8 +11192,10 @@ void Player::DestroyItemCount(uint32 item, uint32 count, bool update, bool unequ
                             else
                             {
                                 pItem->SetCount(pItem->GetCount() - count + remcount);
+
                                 if (IsInWorld() && update)
                                     pItem->SendCreateUpdateToPlayer(this);
+
                                 pItem->SetState(ITEM_CHANGED, this);
                                 return;
                             }
@@ -13903,15 +13918,14 @@ void Player::GiveQuestSourceItemIfNeed(Quest const *pQuest)
     }
 }
 
-
-bool Player::TakeOrReplaceQuestStartItems(uint32 quest_id, bool msg, bool giveQuestStartItem)
+bool Player::TakeOrReplaceQuestStartItems(const uint32 quest_id, const bool msg, const bool giveQuestStartItem)
 {
     Quest const* qInfo = sObjectMgr.GetQuestTemplate(quest_id);
 
     if (!qInfo)
         return true;
 
-    uint32 srcItemID = qInfo->GetSrcItemId();
+    const uint32 srcItemID = qInfo->GetSrcItemId();
 
     if (0 == srcItemID)
         return true;
@@ -13922,7 +13936,7 @@ bool Player::TakeOrReplaceQuestStartItems(uint32 quest_id, bool msg, bool giveQu
     if (!pItem)
         return true;
 
-    uint32 count = qInfo->GetSrcItemCount();
+    const uint32 count = qInfo->GetSrcItemCount();
 
     if (giveQuestStartItem && quest_id == pItem->StartQuest)
     {
@@ -13932,7 +13946,7 @@ bool Player::TakeOrReplaceQuestStartItems(uint32 quest_id, bool msg, bool giveQu
     else
     {
         // Can't destroy items in certain cases.
-        InventoryResult res = CanUnequipItems(srcItemID, count);
+        InventoryResult const res = CanUnequipItems(srcItemID, count);
 
         if (res != EQUIP_ERR_OK)
         {
@@ -13952,11 +13966,9 @@ bool Player::TakeOrReplaceQuestStartItems(uint32 quest_id, bool msg, bool giveQu
         // Replace item, if requested
         if (giveQuestStartItem)
         {
-            if (uint32 questStartingItemID = sObjectMgr.GetQuestStartingItemID(quest_id))
+            if (const uint32 questStartingItemID = sObjectMgr.GetQuestStartingItemID(quest_id))
                 AddItem(questStartingItemID, count);
-
         }
-
     }
 
     return true;

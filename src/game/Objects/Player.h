@@ -1082,7 +1082,7 @@ class Player final: public Unit
         bool IsValidPos(uint8 bag, uint8 slot, bool explicit_pos) const;
         uint8 GetBankBagSlotCount() const { return GetByteValue(PLAYER_BYTES_2, 2); }
         void SetBankBagSlotCount(uint8 count) { SetByteValue(PLAYER_BYTES_2, 2, count); }
-        bool HasItemCount(uint32 item, uint32 count = 1, bool inBankAlso = false) const;
+        bool HasItemCount(const uint32 item, const uint32 count = 1, const bool inBankAlso = false) const;
         bool HasItemFitToSpellReqirements(SpellEntry const* spellInfo, Item const* ignoreItem = nullptr);
         bool HasItemWithIdEquipped(uint32 item, uint32 count = 1, uint8 except_slot = NULL_SLOT) const;
         InventoryResult CanStoreNewItem(uint8 bag, uint8 slot, ItemPosCountVec& dest, uint32 item, uint32 count, uint32* no_space_count = nullptr) const
@@ -1123,7 +1123,7 @@ class Player final: public Unit
         {
             return StoreItem(dest, pItem, update);
         }
-        void RemoveItem(uint8 bag, uint8 slot, bool update);
+        void RemoveItem(const uint8 bag, const uint8 slot, const bool update = true);
         void MailHardcoreModeRewards(uint32 level);
         void AnnounceHardcoreModeLevelUp(uint32 level);
         // Titles
@@ -1144,7 +1144,7 @@ class Player final: public Unit
         // in trade, auction, guild bank, mail....
         void MoveItemToInventory(ItemPosCountVec const& dest, Item* pItem, bool update, bool in_characterInventoryDB = false);
         void DestroyItem(uint8 bag, uint8 slot, bool update);
-        void DestroyItemCount(uint32 item, uint32 count, bool update, bool unequip_check = false, bool check_bank = false);
+        void DestroyItemCount(const uint32 item, const uint32 count, const bool update, const bool unequip_check = false, const bool check_bank = false);
         void DestroyItemCount(Item* item, uint32& count, bool update);
         /**
          * @brief Destroys equipped item $itemId and updates the Player
@@ -1305,7 +1305,7 @@ class Player final: public Unit
         bool SatisfyQuestExclusiveGroup(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestNextChain(Quest const* qInfo, bool msg) const;
         bool SatisfyQuestPrevChain(Quest const* qInfo, bool msg) const;
-        bool TakeOrReplaceQuestStartItems(uint32 quest_id, bool msg, bool giveQuestStartItem);
+        bool TakeOrReplaceQuestStartItems(const uint32 quest_id, const bool msg, const bool giveQuestStartItem);
         bool GetQuestRewardStatus(uint32 quest_id) const;
         const QuestStatusData* GetQuestStatusData(uint32 quest_id) const;
         QuestStatus GetQuestStatus(uint32 quest_id) const;

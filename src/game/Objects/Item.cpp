@@ -1233,6 +1233,5 @@ void Item::GetLocalizedNameWithSuffix(std::string& name, const ItemPrototype* pr
                 }
             }
         }
-            
     }
 }
