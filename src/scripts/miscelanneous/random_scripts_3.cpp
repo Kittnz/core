@@ -2472,6 +2472,22 @@ bool GossipSelect_npc_ancestor_of_wisdom(Player* pPlayer, Creature* pCreature, u
     return true;
 }
 
+bool QuestRewarded_npc_ancestor_of_wisdom(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
+{
+    enum spells
+    {
+        QUEST_WAY_OF_SPIRITWALKING_5 = 40348,
+        SPELL_SPIRITWALKING = 47262
+    };
+
+    Quest const* quest = sObjectMgr.GetQuestTemplate(QUEST_WAY_OF_SPIRITWALKING_5);
+
+    if (pQuest == quest)
+        pPlayer->LearnSpell(SPELL_SPIRITWALKING, false);
+
+    return true;
+}
+
 bool GossipHello_npc_ancestor_of_virtue(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(40348) == QUEST_STATUS_INCOMPLETE)
@@ -2647,6 +2663,7 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_ancestor_of_wisdom";
     newscript->pGossipHello = &GossipHello_npc_ancestor_of_wisdom;
     newscript->pGossipSelect = &GossipSelect_npc_ancestor_of_wisdom;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_ancestor_of_wisdom;
     newscript->RegisterSelf();
 
     newscript = new Script;
