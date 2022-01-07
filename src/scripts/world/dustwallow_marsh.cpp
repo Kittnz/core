@@ -1439,37 +1439,38 @@ struct npc_emberstrifeAI : ScriptedAI
         if (m_creature->GetHealthPercent() < 10.f && !m_bHasForged)
         {
             constexpr uint32 UNFORGED_SEAL_GO_ID{ 175321 };
-            if (GameObject* pUnforgedSeal = m_creature->FindNearestGameObject(UNFORGED_SEAL_GO_ID, 50.f))
+            if (GameObject* pUnforgedSeal = m_creature->FindNearestGameObject(UNFORGED_SEAL_GO_ID, 35.f))
             {
                 static float fX, fY, fZ;
                 pUnforgedSeal->GetPosition(fX, fY, fZ);
                 pUnforgedSeal->Delete(); // Delete unforged seal
 
                 ThreatList const& threatlist = m_creature->GetThreatManager().getThreatList();
-                for (const auto itr : threatlist)
+                for (const auto& itr : threatlist)
                 {
                     Player* pPlayer = m_creature->GetMap()->GetPlayer(itr->getUnitGuid()); // Consider all players in dragon's threatlist
-                    if (pPlayer && pPlayer->IsAlive())
+                    if (pPlayer && pPlayer->IsAlive() && !m_bHasForged)
                     {
-                        static constexpr uint32 QUEST_SEAL_OF_ASCENSION{ 4743 }; 
-                        if (m_creature->IsWithinDistInMap(pPlayer, 50.f) && // Check if player is in dragon's range
+                        static constexpr uint32 QUEST_SEAL_OF_ASCENSION{ 4743 };
+                        static constexpr uint32 UNFORGED_SEAL_ITEM_ID{ 12323 };
+                        static constexpr uint32 ORB_OF_DRACONIC_ENERGY_ITEM_ID{ 12300 };
+
+                        if (m_creature->IsWithinDistInMap(pPlayer, 35.f) && // Check if player is in dragon's range
                            (pPlayer->GetQuestStatus(QUEST_SEAL_OF_ASCENSION) == QUEST_STATUS_INCOMPLETE && // Check if players quest status is incomplete
-                            pPlayer->GetQuestStatus(QUEST_SEAL_OF_ASCENSION) != QUEST_STATUS_COMPLETE)) // Check if player's quest status isn't completed already
+                            pPlayer->GetQuestStatus(QUEST_SEAL_OF_ASCENSION) != QUEST_STATUS_COMPLETE) && // Check if player's quest status isn't completed already
+                            pPlayer->HasItemCount(UNFORGED_SEAL_ITEM_ID, true) &&
+                            pPlayer->HasItemCount(ORB_OF_DRACONIC_ENERGY_ITEM_ID, true))
                         {
-                            if (GameObject* pForgedSeal = pPlayer->SummonGameObject((UNFORGED_SEAL_GO_ID + 1.5f), fX, fY, (fZ + 1.f), 0, 0, 0, 0, 0, (3 * MINUTE * IN_MILLISECONDS)))
+                            if (GameObject* pForgedSeal = pPlayer->SummonGameObject(
+                               (UNFORGED_SEAL_GO_ID + 1), fX, fY, (fZ + 1.5f), 0, 0, 0, 0, 0, (3 * MINUTE * IN_MILLISECONDS)))
                             {
                                 m_creature->MonsterTextEmote("Emberstrife's breath sets the unforged seal on fire."); // Notify player
 
-                                // New remove obsolete quest items
-                                static constexpr uint32 UNFORGED_SEAL_ITEM_ID{ 12323 };
-                                if (pPlayer->HasItemCount(UNFORGED_SEAL_ITEM_ID, 1, true))
-                                    pPlayer->RemoveItem(UNFORGED_SEAL_ITEM_ID, 1, true);
+                                // Remove obsolete quest items
+                                pPlayer->DestroyItemCount(UNFORGED_SEAL_ITEM_ID, 1, true, false, true);
+                                pPlayer->DestroyItemCount(ORB_OF_DRACONIC_ENERGY_ITEM_ID, 1, true, false, true);
 
-                                static constexpr uint32 ORB_OF_DRACONIC_ENERGY_ITEM_ID{ 12300 };
-                                if (pPlayer->HasItemCount(ORB_OF_DRACONIC_ENERGY_ITEM_ID, 1, true))
-                                    pPlayer->RemoveItem(ORB_OF_DRACONIC_ENERGY_ITEM_ID, 1, true);
-
-                                m_bHasForged = true; // Hackfix: Prevent to generate more then one forged seal on each kill
+                                m_bHasForged = true; // Prevent to generate more then one forged seal on each kill
                             }
                         }
                     }
