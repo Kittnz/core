@@ -2651,9 +2651,37 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool GossipHello_npc_ironpatch(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40355) == QUEST_STATUS_INCOMPLETE) // Sark's Grudge
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Let me show what how in shape I am.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    pPlayer->SEND_GOSSIP_MENU(2547, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_ironpatch(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer("Arrrgh!", pPlayer);
+        pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ironpatch";
+    newscript->pGossipHello = &GossipHello_npc_ironpatch;
+    newscript->pGossipSelect = &GossipSelect_npc_ironpatch;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_nribbi";
