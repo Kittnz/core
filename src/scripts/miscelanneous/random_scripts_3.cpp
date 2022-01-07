@@ -2534,8 +2534,7 @@ bool QuestAccept_npc_bombay(Player* pPlayer, Creature* pQuestGiver, Quest const*
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 5906, false);
             npc->MonsterSayToPlayer("It be done, I have put the power of the mojo into this serum.", player);
-            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60348))
-                player->KilledMonster(dummy_bunny, ObjectGuid());
+            player->CompleteQuest(40351);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             return true;
             });
