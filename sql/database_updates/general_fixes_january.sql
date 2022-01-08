@@ -586,3 +586,5 @@ UPDATE item_template SET item_level = 35 WHERE entry = 60124;
 UPDATE item_template SET item_level = 15 WHERE entry = 60465;
 -- Rename the custom item "Bloodforged Helm" to something else:
 update item_template set name = 'Blood-Spattered Helm' where entry = 83216;
+-- Mantle of Damnation drop chance to 0.25
+DELETE FROM creature_loot_template WHERE item = 83464 AND chanceorquestchance = 12.5;
