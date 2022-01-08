@@ -588,3 +588,5 @@ UPDATE item_template SET item_level = 15 WHERE entry = 60465;
 update item_template set name = 'Blood-Spattered Helm' where entry = 83216;
 -- Mantle of Damnation drop chance to 0.25
 DELETE FROM creature_loot_template WHERE item = 83464 AND chanceorquestchance = 12.5;
+-- Quest typo:
+update quest_template set objectives = 'Speak to Garfield \'The Fox\' Sparkleblast if you wish to aid him.\n\nTHIS QUEST WILL ALIGN YOU WITH THE BLOODSAIL BUCCANEERS AND REDUCE YOUR REPUTATION WITH THE STEAMWHEEDLE CARTEL SIGNIFICANTLY.' where entry = 40172;
