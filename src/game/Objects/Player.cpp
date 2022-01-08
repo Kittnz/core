@@ -22001,7 +22001,7 @@ void Player::MailHardcoreModeRewards(uint32 level)
     subject << "Congratulations on level " << level << "!";
 
     std::ostringstream body;
-    body << "Your recent achievements on reaching level " << level << "in Turtle Mode "
+    body << "Your recent achievements on reaching level " << level << " in Turtle Mode "
         << "have not gone unnoticed. To commend you for your dedication "
         << "and enthusiasm of exploring Azeroth to its fullest, we bestow upon you this reward box filled with goodies!";
 
