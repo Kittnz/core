@@ -592,3 +592,5 @@ DELETE FROM creature_loot_template WHERE item = 83464 AND chanceorquestchance = 
 update quest_template set objectives = 'Speak to Garfield \'The Fox\' Sparkleblast if you wish to aid him.\n\nTHIS QUEST WILL ALIGN YOU WITH THE BLOODSAIL BUCCANEERS AND REDUCE YOUR REPUTATION WITH THE STEAMWHEEDLE CARTEL SIGNIFICANTLY.' where entry = 40172;
 -- Fixed Frayfeather Hippogryph mount:
 update spell_template set effectmiscvalue1 = 81005 where entry = 46451;
+-- Armored Violet Raptor mount:
+replace into mount_spells values (50402, 46501);
