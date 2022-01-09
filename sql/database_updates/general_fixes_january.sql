@@ -603,3 +603,15 @@ replace into mount_spells values (50404, 46503);
 -- Kruxis commits A Tusken Affair / Graypaw Wolf
 UPDATE quest_template SET ZoneOrSort = 1637 WHERE entry = 80300;
 UPDATE creature_template SET skinning_loot_id = 3256 WHERE entry = 91989
+-- Darlthos Jewelery Box
+UPDATE item_template SET name = "Darthlo's Jewelry Box" WHERE entry = 60189;
+-- Spelling fix Azure Scale
+UPDATE quest_template SET details = 'When Gnomeregan first sent us here, they tasked us to obtain an Azure Scale from the Blue Dragonflight. Sadly, we have not had the means to do so! We\'ve been too busy with other projects, and—well—we didn\'t want to stir the hive. Especially since we don\'t have any actual military capabilities!\n\nNow with you around, there is a possibility! The Dragonflight has gathered around Lake Mennar to the northwest. Get me an Azure Scale from the Blue Dragonflight, and make sure to bring buddies. I\'d hate to have you die on my account!' WHERE entry = 40062;
+-- The Shaow Well
+UPDATE quest_template SET details = 'We need to head down and investigate this Shadow Well, my assistant Thalo tried and he has not returned.\n\nThe air is smelly and these black slimes are overflowing, they even seem resistant to my spells.\n\nDon\'t go alone.' WHERE entry = 80291;
+-- Breaking Contracts
+UPDATE quest_template SET Details = 'In the shady, hidden corners of Azeroth there is always a deal going on, you may not see it, but its there. I got word of a deal going down on Thoradin\'s Wall that I want you to go and steal. The contract itself is that of a dear rival of mine, and if I can do anything to interrupt his business and make a profit, well I\'m just smilling ear to ear.\n\nYou can find Thoradin\'s wall between Hillsbrad and the Arathi Highlands, it is what separates the two. Supposedly some ancient wall built by Stromgarde, or something of that nature.\n\nThe ramp should be on the Hillsbrad side of the wall, near the southern end, I do know they hired some Syndicate goons to watch the ramp, but they should be no problem for you. The main muscle will be an ogre name Thoregg who guards the packages there, him you should be careful of.\n\nGet the shipment, bring it back to me, easy yeah? Oh, and no matter what, don\'t open the crate.' WHERE entry = 40223;
+-- Aerla Goldermoon
+UPDATE broadcast_text SET male_text = 'We have many allies across the great sea, located far to the east within the Eastern Kingdoms. This dock leads toward the human city of Storwmind and the harbor located there. If you are looking to travel, this would be the boat to board\n\nIf it\'s not here yet, simply wait, it shall arrive soon.' WHERE entry = 60621;
+-- Menethil Boat Text
+UPDATE broadcast_text SET male_text = 'On the northern dock, you can board a ship that will carry you to Rut\'theran Village and Darnassus.\n\nFrom the southern dock, you can find passage across the Great Sea to the human city of Stormwind in the Eastern Kingdoms.\n\nSafe journeys to you!' WHERE entry = 8106;
