@@ -600,3 +600,6 @@ UPDATE item_template SET bonding = 0, class = 15 WHERE entry = 60271;
 UPDATE item_template SET bonding = 0, class = 15 WHERE entry = 1941;
 -- Fixed Armored Obsidian War Raptor mount:
 replace into mount_spells values (50404, 46503);
+-- Kruxis commits A Tusken Affair / Graypaw Wolf
+UPDATE quest_template SET ZoneOrSort = 1637 WHERE entry = 80300;
+UPDATE creature_template SET skinning_loot_id = 3256 WHERE entry = 91989
