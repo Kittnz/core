@@ -3070,7 +3070,7 @@ void WorldObject::MonsterSendTextToZone(const char* text, const ChatMsg messageT
 
     if (const auto &players = GetMap()->GetPlayers(); !players.isEmpty())
     {
-        (*players.begin())->SendToPlayers(&worldPacket);
+        (*players.begin())->SendToPlayersInZone(&worldPacket, GetZoneId());
     }
 }
 
