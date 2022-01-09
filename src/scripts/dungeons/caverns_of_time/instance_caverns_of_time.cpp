@@ -24,11 +24,14 @@ Creature* dragonSpawn2;
 Creature* dragonSpawn3;
 
 ObjectGuid GOB_BARRIER_1;
-ObjectGuid GOB_SANDWALL_1;
+GameObject* GOB_BARRIER_2;
+GameObject* GOB_SANDWALL_1;
 
 int dragonGuidCount = 0;
 bool finalDialogue = false;
 bool chromieBossSummoned = false;
+
+std::vector<GameObject*> gobCleanuplist;
 
 static const SpawnLocation rotMawSpawns[4] =
 {
@@ -65,10 +68,6 @@ struct instance_caverns_of_time : public ScriptedInstance
     Creature* bronzeDefender4;
     Creature* bronzeDefender5;
 
-    Creature* deadDefender1;
-    Creature* deadDefender2;
-    Creature* deadDefender3;
-
     std::list<Creature*> deadDragonsList;
 
     bool doOnce = false;
@@ -80,6 +79,18 @@ struct instance_caverns_of_time : public ScriptedInstance
         bronzeDefender3 = instance->SummonCreature(50110, -1889.18f, 6640.18f, -156.75f, 0);
         bronzeDefender4 = instance->SummonCreature(50110, -1893.81f, 6643.04f, -156.24f, 0);
         bronzeDefender5 = instance->SummonCreature(50110, -1897.60f, 6646.52f, -155.83f, 0);
+
+        if (GameObject* barrier1 = instance->SummonGameObject(180322, -1609.00f, 7118.74f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
+            gobCleanuplist.push_back(barrier1);
+
+        if (GameObject* barrier2 = instance->SummonGameObject(180322, -1609.51f, 7101.04f, 23.79f, 0, 0, 0, 0, 0, -1, 0))
+            gobCleanuplist.push_back(barrier2);
+
+        if (GameObject* sandWall1 = instance->SummonGameObject(2010865, -1608.70f, 7107.35f, 23.74f, 0, 0, 0, 0, 0, -1, 0))
+            gobCleanuplist.push_back(sandWall1);
+
+        if (GameObject* sandWall2 = instance->SummonGameObject(2010865, -1607.63, 7116.59f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
+            gobCleanuplist.push_back(sandWall2);
 
         riftsClosed = 0;
         chromieBossSummoned = false;
@@ -209,7 +220,6 @@ struct instance_caverns_of_time : public ScriptedInstance
         }
     }
 };
-
 
 InstanceData* GetInstanceData_instance_caverns_of_time(Map* pMap)
 {
@@ -1637,7 +1647,10 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
     enum
     {
         NPC_BOSS_CHROMIE = 65121,
-        SHADOW_AURA = 24674
+        SHADOW_AURA = 24674,
+
+        GOB_GHOST_GATE = 180322,
+        GOB_SAND_WALL = 2010865
     };
 
     if (pPlayer->HasItemCount(80008, 1, true))
@@ -1935,6 +1948,12 @@ struct chromie_boss_cotAI : public ScriptedAI
         NPC_UNKNOWN_ENTITY = 66003
     };
 
+    enum GOBEntries
+    {
+        GOB_GHOST_GATE = 180322,
+        GOB_SAND_WALL = 2010865
+    };
+
     uint32 manaBurnTimer;
     uint32 fearTimer;
     uint32 fumbleTimer;
@@ -1959,6 +1978,15 @@ struct chromie_boss_cotAI : public ScriptedAI
     {
         if (!beginFight && timeRifts.size() == 0)
         {
+            if (GameObject* gate1 = m_creature->SummonGameObject(GOB_GHOST_GATE, -1559.58f, 7107.03f, 23.5f, 0))
+                gobCleanuplist.push_back(gate1);
+
+            if (GameObject* gate2 = m_creature->SummonGameObject(GOB_GHOST_GATE, -1557.35f, 7107.67f, 23.5f, 0))
+                gobCleanuplist.push_back(gate2);
+
+            if (GameObject* sandwall1 = m_creature->SummonGameObject(GOB_SAND_WALL, -1543.7983f, 7107.8457f, 24.7603f, 0))
+                gobCleanuplist.push_back(sandwall1);
+
             for (int i = 0; i < 8; i++)
             {
                 Creature* timeRift = m_creature->SummonCreature(NPC_TIME_RIFT_SMALL, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
@@ -1981,7 +2009,6 @@ struct chromie_boss_cotAI : public ScriptedAI
                 m_creature->RestoreFaction();
                 });
         }
-
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -2059,47 +2086,44 @@ struct chromie_boss_cotAI : public ScriptedAI
 
     void JustDied(Unit*) override
     {
+        ScriptedInstance* m_pInstance;
+        m_pInstance = (ScriptedInstance*)m_creature->GetInstanceData();
+
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
-
-        if (GameObject* sandWall = m_creature->FindNearestGameObject(2002434, 50)) // remove large sand wall
-            sandWall->AddObjectToRemoveList();
-
-        for (int i = 0; i < 2; i++) // remove ghost walls
-        {
-            if (GameObject* ghostWall = m_creature->FindNearestGameObject(180322, 100))
-                ghostWall->AddObjectToRemoveList();
-        }
 
         for (int i = 0; i < timeRifts.size(); i++) // remove rifts
             timeRifts[i]->AddObjectToRemoveList();
 
-        DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
+        for (int i = 0; i < gobCleanuplist.size(); i++) // remove walls for progression
+            gobCleanuplist[i]->AddObjectToRemoveList();
 
-            Creature* monsterSummoned = nullptr;
+        timeRifts.clear();
+        gobCleanuplist.clear();
 
-            std::string str = "";
+        Creature* monsterSummoned = nullptr;
 
-            if (Creature* entity = m_creature->FindNearestCreature(NPC_UNKNOWN_ENTITY, 100, true))
-                entity->PMonsterEmote("rumbles nearby.");
+        std::string str = "";
 
-            if (monsterSummoned = m_creature->FindNearestCreature(NPC_ROTMAW, 1000, true))
-                str = "Hssss ... I ... hunger ... hssss";
-            else if (monsterSummoned = m_creature->FindNearestCreature(NPC_MOSSHEART, 1000, true))
-                str = "Mrgml ... Who dares disturb my moss slumber?";
+        if (Creature* entity = m_pInstance->GetSingleCreatureFromStorage(NPC_UNKNOWN_ENTITY))
+            entity->PMonsterEmote("rumbles nearby.");
 
-            const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
+        if (monsterSummoned = m_pInstance->GetSingleCreatureFromStorage(NPC_ROTMAW))
+            str = "Hssss ... I ... hunger ... hssss...";
+        else if (monsterSummoned = m_pInstance->GetSingleCreatureFromStorage(NPC_ROTMAW))
+            str = "Mrgml ... Who dares disturb my mossy slumber?";
 
-            if (monsterSummoned != nullptr)
+        const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
+
+        if (monsterSummoned != nullptr)
+        {
+            for (const auto& itr : PlayerList)
             {
-                for (const auto& itr : PlayerList)
+                if (Player* player = itr.getSource())
                 {
-                    if (Player* player = itr.getSource())
-                    {
-                        monsterSummoned->MonsterWhisper(str.c_str(), player, true);
-                    }
+                    monsterSummoned->MonsterWhisper(str.c_str(), player, true);
                 }
             }
-            });
+        }
 
     }
 };
@@ -2357,14 +2381,18 @@ struct mossheart_cotAI : public ScriptedAI
             if (m_creature->GetVictim()->HasAura(SPELL_MOSS_HANDS))
             {
                 if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MOSS_FEET) == CAST_OK)
+                {
                     mossTimer = 18000;
-                m_creature->PMonsterEmote("|cffff8040Mossheart covers %s with moss!|r", nullptr, true, m_creature->GetVictim()->GetName());
+                    m_creature->PMonsterEmote("|cffff8040Mossheart covers %s with moss!|r", nullptr, true, m_creature->GetVictim()->GetName());
+                }
             }
             else
             {
                 if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MOSS_HANDS) == CAST_OK)
+                {
                     mossTimer = 18000;
-                m_creature->PMonsterEmote("|cffff8040Mossheart covers %s with moss!|r", nullptr, true, m_creature->GetVictim()->GetName());
+                    m_creature->PMonsterEmote("|cffff8040Mossheart covers %s with moss!|r", nullptr, true, m_creature->GetVictim()->GetName());
+                }
             }
         }
         else mossTimer -= uiDiff;
