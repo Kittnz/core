@@ -598,3 +598,5 @@ replace into mount_spells values (50402, 46501);
 UPDATE item_template SET spellid_1 = 10799 WHERE entry = 50402;
 UPDATE item_template SET bonding = 0, class = 15 WHERE entry = 60271;
 UPDATE item_template SET bonding = 0, class = 15 WHERE entry = 1941;
+-- Fixed Armored Obsidian War Raptor mount:
+replace into mount_spells values (50404, 46503);
