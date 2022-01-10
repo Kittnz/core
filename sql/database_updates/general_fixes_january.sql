@@ -638,6 +638,7 @@ UPDATE item_template SET display_id = 50161 WHERE entry = 65007;
 -- update item_template set item_level = 64 where entry = 81365;
 -- update item_template set item_level = 64 where entry = 81367;
 -- update item_template set required_level = 60 where entry = 81369;
+-- update item_template set spellid_1 = 48005, spelltrigger_1 = 2, spellppmRate_1 = 1, spellcooldown_1 = 300 where entry = 65013;
 -- Add Hexed Voodoo Pads 83064 to darkspear troll rep quartermaster:
 replace into npc_vendor values (80949, 83064, 0, 0, 0, 0);
 update item_template set sell_price = 50000, buy_price = 50000 where entry = 80304;
@@ -651,3 +652,4 @@ delete from creature_loot_template where item = 83472 and groupid = 2;
 update creature_template set display_id1 = 11375 where entry = 40049;
 -- Unstable Belt Of Striking cannot be disenchanted:
 update item_template set disenchant_id = 49 where entry = 60502;
+update item_template set display_id = 61090 where entry = 65007;
