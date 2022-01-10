@@ -734,10 +734,9 @@ bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetRace() == RACE_GOBLIN)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair color.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair style.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to change my hair style.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         if (pPlayer->GetGender() == GENDER_MALE)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to trim my beard.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "I'd like to trim my beard.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
     pPlayer->SEND_GOSSIP_MENU(51670, pCreature->GetGUID());
     return true;
@@ -745,29 +744,20 @@ bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_npc_barber_go(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        uint16 color = 0;
-        uint16 curr_color = pPlayer->GetByteValue(PLAYER_BYTES, 3);
-        color = (curr_color == 4) ? 0 : ++curr_color; // byte limit should match the last available option
-
-        pPlayer->SetByteValue(PLAYER_BYTES, 3, color);
-        pPlayer->SetDisplayId(15435);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2) 
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) 
     {
         uint16 style = 0;
+        uint16 limit = 0;
         uint16 curr_style = pPlayer->GetByteValue(PLAYER_BYTES, 2);
-        style = (curr_style == 14) ? 0 : ++curr_style; // byte limit should match the last available option
+        limit = pPlayer->GetGender() == GENDER_MALE ? 12 : 14;
+        style = (curr_style == limit) ? 0 : ++curr_style; // byte limit should match the last available option
 
         pPlayer->SetByteValue(PLAYER_BYTES, 2, style);
         pPlayer->SetDisplayId(15435);
         pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
     }
 
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         uint16 feature = 0;
         uint16 curr_feature = pPlayer->GetByteValue(PLAYER_BYTES_2, 0);
