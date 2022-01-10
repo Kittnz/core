@@ -655,3 +655,6 @@ update item_template set disenchant_id = 49 where entry = 60502;
 update item_template set display_id = 61090 where entry = 65007;
 -- COT Remove Creature
 DELETE FROM creature WHERE id = 66003;
+-- Poison cloud for grain:
+replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) VALUES (2000560, 5, 27484, 'Poisoned Grain Effect (Unused)', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
