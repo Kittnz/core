@@ -106,6 +106,11 @@ enum SoundEntries
     SOUND_PLAYER_DEATH  = 80284,
 };
 
+// Maximum amount of portals or debilitating devices that will open/active at the same time.
+constexpr uint8 MAX_OPEN_PORTALS = 20;
+constexpr uint8 MAX_SPAWNED_CONSTRUCTS = 50;
+constexpr uint8 MAX_ACTIVE_DEVICES = 30;
+
 constexpr float sentryLocs[4][4] =
 {
     {-9613.08f, -2828.02f, 10.7f, 1.145f},
@@ -133,8 +138,12 @@ void PlaySound(Unit* source, uint32 soundId, bool playToZone = false)
         source->PlayDirectSound(soundId);
 }
 
+Player* GetNearbyEnemyPlayer(Unit* self, const float& dist)
+{
+    return self->FindNearestHostilePlayer(dist);
+}
 
-// Attempts to find nearby enemy player that is not the main target of the boss.
+// Attempts to find randomy nearby enemy player.
 Player* GetRandomNearbyEnemyPlayer(Unit* self, const float& dist, uint8 attempt = 0)
 {
     ++attempt;
@@ -154,6 +163,16 @@ Player* GetRandomNearbyEnemyPlayer(Unit* self, const float& dist, uint8 attempt 
         return GetRandomNearbyEnemyPlayer(self, dist, attempt);
 
     return random->ToPlayer();
+}
+
+void DeletePortal(GameObject* go)
+{
+    // Find and delete self from portal vector.
+    std::vector<GameObject*>::const_iterator it = std::find(portals.begin(), portals.end(), go);
+    if (it != portals.end())
+        portals.erase(it);
+
+    go->DeleteLater();
 }
 
 struct boss_ostariusAI : public ScriptedAI
@@ -548,6 +567,10 @@ struct boss_ostariusAI : public ScriptedAI
     {
         for (uint8 i = 0; i < numOfPortalsToSpawn; ++i)
         {
+            // Hit the limit. Try again later.
+            if (portals.size() >= MAX_OPEN_PORTALS)
+                return;
+
             // Generates random spawn within a square on the floor.
             float spawnX = squareX + (squareDiameter * float(urand(0, 10)));
             float spawnY = squareY + (squareDiameter * float(urand(0, 10)));
@@ -584,6 +607,10 @@ struct boss_ostariusAI : public ScriptedAI
     {
         for (uint8 i = 0; i < numOfDevicesToSpawn; ++i)
         {
+            // Hit the limit. Try again later.
+            if (devices.size() >= MAX_ACTIVE_DEVICES)
+                return;
+
             // Generates random spawn within a square on the floor.
             float spawnX = squareX + (squareDiameter * float(urand(0, 10)));
             float spawnY = squareY + (squareDiameter * float(urand(0, 10)));
@@ -627,6 +654,13 @@ struct mob_uldum_constructAI : public ScriptedAI
     void KilledUnit(Unit* victim) override
     {
         // TODO: Add text about unit failing scan.
+    }
+
+    void JustDied(Unit* /*pKiller*/) override
+    {
+        std::vector<Unit*>::const_iterator it = std::find(constructSpawns.begin(), constructSpawns.end(), me);
+        if (it != constructSpawns.end())
+            constructSpawns.erase(it);
     }
 
     void EnterEvadeMode() override
@@ -720,7 +754,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
     {
         if (AoE_Timer < diff)
         {
-            Unit* randomTarget = GetRandomNearbyEnemyPlayer(me, 150.0f);
+            Unit* randomTarget = GetRandomNearbyEnemyPlayer(me, 200.0f);
             if (!randomTarget)
                 return;
 
@@ -752,12 +786,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
 
 bool GOOpen_go_uldum_portal(Player* pPlayer, GameObject* pGo)
 {
-    pGo->DeleteLater();
-
-    // Find and delete self from portal vector.
-    std::vector<GameObject*>::const_iterator it = std::find(portals.begin(), portals.end(), pGo);
-    if (it != portals.end())
-        portals.erase(it);
+    DeletePortal(pGo);
 
     return true;
 }
@@ -770,6 +799,7 @@ struct go_uldum_portalAI : public GameObjectAI
     }
 
     uint32 Summon_Timer;
+    uint8 PlayerSelect_Fails;
 
     void Reset()
     {
@@ -780,6 +810,10 @@ struct go_uldum_portalAI : public GameObjectAI
     {
         if (Summon_Timer < diff)
         {
+            // Hit the limit. Try again later.
+            if (constructSpawns.size() >= MAX_SPAWNED_CONSTRUCTS)
+                return;
+
             float ground_z = me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT);
 
             Creature* spawn = me->SummonCreature(
@@ -792,22 +826,28 @@ struct go_uldum_portalAI : public GameObjectAI
                 5000
             );
 
-            Player* randomPlayer = GetRandomNearbyEnemyPlayer(spawn, 150.0f);
+            Player* randomPlayer = GetNearbyEnemyPlayer(spawn, 300.0f);
             if (!randomPlayer)
             {
-                // Hopefully we don't get here, but something must be wrong... so don't FLOOD
-                // server with queries, add small delay.
-                Summon_Timer = 200;
+                // Hopefully we don't get here, but try to find a player a few more times before giving up.
+                PlayerSelect_Fails++;
+                Summon_Timer = 100;
                 spawn->DeleteLater();
+
+                // If we're repeatedly failing to find players, delete portal.
+                if (PlayerSelect_Fails >= 5)
+                    DeletePortal(me);
+
                 return;
             }
 
+            PlayerSelect_Fails = 0;
             constructSpawns.push_back(spawn);
 
             spawn->SetInCombatWith(randomPlayer);
             spawn->GetMotionMaster()->MoveChase(randomPlayer);
 
-            Summon_Timer = urand(8000, 15000);
+            Summon_Timer = urand(12000, 20000);
         }
         else
             Summon_Timer -= diff;
@@ -860,9 +900,17 @@ struct go_uldum_suppressionAI : public GameObjectAI
         if (m_uiCheckTimer <= uiDiff)
         {
             if (m_bActive)
+            {
                 ApplyAura();
+            }
             else
+            {
                 me->DeleteLater();
+
+                std::vector<GameObject*>::const_iterator it = std::find(devices.begin(), devices.end(), me);
+                if (it != devices.end())
+                    devices.erase(it);
+            }
 
             m_uiCheckTimer = 2000;
             return;
