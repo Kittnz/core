@@ -441,15 +441,15 @@ update quest_template set questflags = 1024 where entry = 55055;
 -- Grol the Exile Fix
 UPDATE creature_template SET unit_flags = 2 WHERE entry = 91285;
 -- No need for this fucked script
-UPDATE `gameobject_template` SET `script_name` = "" WHERE `entry` = 175322;
+UPDATE gameobject_template SET script_name = "" WHERE entry = 175322;
 -- New NPCs Ancient Wolf Spirit & Margok Hatewind
-REPLACE INTO `gossip_menu` VALUES (15611, 100401, 0);
-REPLACE INTO `gossip_menu` VALUES (15612, 100402, 0);
-REPLACE INTO `broadcast_text` VALUES (100402, '"The spirits are always calling, one just needs to listen to hear them." ', '"The spirits are always calling, one just needs to listen to hear them." ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
-REPLACE INTO `broadcast_text` VALUES (100401, '<The Ancient Wolf Spirit seems to be distracted by something else.>', '<The Ancient Wolf Spirit seems to be distracted by something else.>', 0, 0, 0, 0, 0, 0, 0, 0, 0);
-REPLACE INTO `creature_template` VALUES (66005, 3855, 0, 0, 0, 'Margok Hatewind', NULL, 15612, 40, 40, 1857, 2120, 0, 0, 2100, 29, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 70, 84, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 82011, 0, 0, 0, 0, 0, 0, '');
-REPLACE INTO `creature_template` VALUES (66004, 1236, 0, 0, 0, 'Ancient Wolf Spirit', NULL, 15611, 44, 44, 1857, 2050, 0, 0, 2050, 35, 0, 1, 1.14286, 2.4, 18, 5, 0, 0, 1, 61, 74, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
-REPLACE INTO `creature_equip_template` VALUES (82011, 35, 0, 0);
+REPLACE INTO gossip_menu VALUES (15611, 100401, 0);
+REPLACE INTO gossip_menu VALUES (15612, 100402, 0);
+REPLACE INTO broadcast_text VALUES (100402, '"The spirits are always calling, one just needs to listen to hear them." ', '"The spirits are always calling, one just needs to listen to hear them." ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO broadcast_text VALUES (100401, '<The Ancient Wolf Spirit seems to be distracted by something else.>', '<The Ancient Wolf Spirit seems to be distracted by something else.>', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO creature_template VALUES (66005, 3855, 0, 0, 0, 'Margok Hatewind', NULL, 15612, 40, 40, 1857, 2120, 0, 0, 2100, 29, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 70, 84, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 82011, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO creature_template VALUES (66004, 1236, 0, 0, 0, 'Ancient Wolf Spirit', NULL, 15611, 44, 44, 1857, 2050, 0, 0, 2050, 35, 0, 1, 1.14286, 2.4, 18, 5, 0, 0, 1, 61, 74, 0, 148, 1, 2000, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+REPLACE INTO creature_equip_template VALUES (82011, 35, 0, 0);
 -- replace warning text for quest 40172:
 update quest_template set Objectives = 'Speak to Garfield ‘The Fox\' Sparkleblast if you wish to aid him.\n\n(This quest will align you with the Bloodsail Buccaneers  and reduce your reputation with the Steamwheedle Cartel significantly.)' where entry = 40172;
 -- For quest 40036 - [A Broken Oath] Creature 6196 - [Spitelash Myrmidon]  does not drop item 60137 - [Myrmidon Signet]:
@@ -620,7 +620,7 @@ UPDATE broadcast_text SET male_text = 'On the northern dock, you can board a shi
 -- https://youtu.be/s_Z4G9_O7rQ?t=151
 -- https://youtu.be/wapLvjPI9mE?t=146
 -- Flag before update: interruptFlags = 9
-UPDATE `spell_template` SET `interruptFlags` = '11' WHERE `entry` = 27831; 
+UPDATE spell_template SET interruptFlags = '11' WHERE entry = 27831; 
 -- Misc. item fixes from Kruxis:
 UPDATE item_template SET inventory_type = 7 WHERE entry in (83042, 83043, 83044, 83045);
 UPDATE item_template SET displayid = 50161 WHERE entry = 65007;
@@ -640,3 +640,5 @@ UPDATE item_template SET displayid = 50161 WHERE entry = 65007;
 -- Add Hexed Voodoo Pads 83064 to darkspear troll rep quartermaster:
 replace into npc_vendor values (80949, 83064, 0, 0, 0, 0);
 update item_template set sell_price = 50000, buy_price = 50000 where entry = 80304;
+-- Viridian Hippogryph:
+replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (80467, 18298, 0, 0, 0, 'Viridian Hippogryph', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');

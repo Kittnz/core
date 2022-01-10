@@ -88,7 +88,7 @@ replace into shop_items values
 (106, 5, 81100, 'Swift Raven Lord', 500), 
 (107, 5, 81120, 'Frayfeather Hippogryph', 500),
 (108, 5, 81121, 'Cenarion Hippogryph', 500),
-(109, 5, 81242, 'Viridian Hippogryph', 300),
+-- (109, 5, 81242, 'Viridian Hippogryph', 300),
 (110, 5, 80431, 'Swift Magic Rooster', 300),
 (121, 5, 12325, 'Spotted Leopard', 200), 
 (122, 5, 12326, 'Tawny Leopard', 200),
