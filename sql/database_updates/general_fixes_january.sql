@@ -615,3 +615,13 @@ UPDATE quest_template SET Details = 'In the shady, hidden corners of Azeroth the
 UPDATE broadcast_text SET male_text = 'We have many allies across the great sea, located far to the east within the Eastern Kingdoms. This dock leads toward the human city of Storwmind and the harbor located there. If you are looking to travel, this would be the boat to board\n\nIf it\'s not here yet, simply wait, it shall arrive soon.' WHERE entry = 60621;
 -- Menethil Boat Text
 UPDATE broadcast_text SET male_text = 'On the northern dock, you can board a ship that will carry you to Rut\'theran Village and Darnassus.\n\nFrom the southern dock, you can find passage across the Great Sea to the human city of Stormwind in the Eastern Kingdoms.\n\nSafe journeys to you!' WHERE entry = 8106;
+
+
+-- Make Unrelenting Raider's (16126) Shadow Bolt Volley (27831) interruptible
+-- Proofs:
+-- https://youtu.be/s_Z4G9_O7rQ?t=151
+-- https://youtu.be/wapLvjPI9mE?t=146
+-- Flag before update: interruptFlags = 9
+
+UPDATE `spell_template` SET `interruptFlags` = '11' WHERE `entry` = 27831; 
+
