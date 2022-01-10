@@ -6124,13 +6124,13 @@ bool GossipHello_npc_faction_leader(Player* pPlayer, Creature* pCreature)
             switch (pCreature->GetEntry())
             {
             case 1748: // Stormwind
-                if (pPlayer->HasItemCount(83015, 1, false) && !pPlayer->HasItemCount(83016, 1, false))
+                if (pPlayer->HasItemCount(83015, 1, false) && !pPlayer->HasItemCount(83016, 1, false) && pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE)
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Hail, Lord Bolvar. I am delivering an important missive on behalf of the high elves.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                 if (pPlayer->HasItemCount(60155, 1, false))
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Present the Darnassian Endorsement.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
                 break;
             case 7999: // Darnassus
-                if (pPlayer->HasItemCount(83015, 1, false) && !pPlayer->HasItemCount(83018, 1, false))
+                if (pPlayer->HasItemCount(83015, 1, false) && !pPlayer->HasItemCount(83018, 1, false) && pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE)
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tyrande, the high elves have sent me with a letter for your reading.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
                 if (pPlayer->HasItemCount(60154, 1, false))
                     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Present the Sealed Writ.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);

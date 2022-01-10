@@ -93,7 +93,7 @@ bool GossipSelect_npc_royal_historian_archesonus(Player* pPlayer, Creature* pCre
 
 bool GossipHello_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature)
 {
-    if (!pPlayer->HasItemCount(83019, 1, false)) // Gnomeregan
+    if (!pPlayer->HasItemCount(83019, 1, false) && pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE) // Gnomeregan
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mekkatorque, I bring word from the high elves about important matters.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     if (pCreature->IsQuestGiver())
@@ -255,7 +255,7 @@ bool GossipHello_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83015, 1, false))
     {
-        if (!pPlayer->HasItemCount(83017, 1, false)) // Ironforge
+        if (!pPlayer->HasItemCount(83017, 1, false) && pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE) // Ironforge
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mighty Magni, the high elves have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
