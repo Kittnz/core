@@ -649,3 +649,5 @@ update gameobject_template set name = 'Arcane Artifact' where entry = 3000223;
 delete from creature_loot_template where item = 83472 and groupid = 2;
 -- Viszlow:
 update creature_template set display_id1 = 11375 where entry = 40049;
+-- Unstable Belt Of Striking cannot be disenchanted:
+update item_template set disenchant_id = 49 where entry = 60502;
