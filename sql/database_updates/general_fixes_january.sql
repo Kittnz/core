@@ -653,3 +653,5 @@ update creature_template set display_id1 = 11375 where entry = 40049;
 -- Unstable Belt Of Striking cannot be disenchanted:
 update item_template set disenchant_id = 49 where entry = 60502;
 update item_template set display_id = 61090 where entry = 65007;
+-- COT Remove Creature
+DELETE FROM creature WHERE id = 66003;
