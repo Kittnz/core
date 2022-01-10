@@ -646,3 +646,5 @@ replace into creature_template (entry, display_id1, display_id2, display_id3, di
 update gameobject_template set name = 'Arcane Artifact' where entry = 3000223;
 -- Alarus loot fix:
 delete from creature_loot_template where item = 83472 and groupid = 2;
+-- Viszlow:
+update creature_template set display_id1 = 11375 where entry = 40049;
