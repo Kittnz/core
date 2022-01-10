@@ -44,7 +44,7 @@ static const SpawnLocation rotMawSpawns[4] =
 
 struct instance_caverns_of_time : public ScriptedInstance
 {
-    instance_caverns_of_time(Map* pMap) : ScriptedInstance(pMap)
+    explicit instance_caverns_of_time(Map* pMap) : ScriptedInstance(pMap)
     {
         Initialize();
     };
@@ -231,7 +231,7 @@ InstanceData* GetInstanceData_instance_caverns_of_time(Map* pMap)
 
 struct frostbitten_bronze_soldierAI : public ScriptedAI
 {
-    frostbitten_bronze_soldierAI(Creature* c) : ScriptedAI(c)
+    explicit frostbitten_bronze_soldierAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -315,7 +315,7 @@ enum
 
 struct infinite_dragonspawnAI : public ScriptedAI
 {
-    infinite_dragonspawnAI(Creature* c) : ScriptedAI(c)
+    explicit infinite_dragonspawnAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -386,7 +386,7 @@ struct infinite_dragonspawnAI : public ScriptedAI
 
 struct infinite_riftguardAI : public ScriptedAI
 {
-    infinite_riftguardAI(Creature* c) : ScriptedAI(c)
+    explicit infinite_riftguardAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -491,7 +491,7 @@ struct infinite_riftguardAI : public ScriptedAI
 
 struct infinite_riftweaverAI : public ScriptedAI
 {
-    infinite_riftweaverAI(Creature* c) : ScriptedAI(c)
+    explicit infinite_riftweaverAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -585,7 +585,7 @@ struct infinite_riftweaverAI : public ScriptedAI
 // Whelp 
 struct infinite_whelpAI : public ScriptedAI
 {
-    infinite_whelpAI(Creature* c) : ScriptedAI(c)
+    explicit infinite_whelpAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -659,7 +659,7 @@ struct infinite_whelpAI : public ScriptedAI
 // Time-Ripper
 struct infinite_timeripperAI : public ScriptedAI
 {
-    infinite_timeripperAI(Creature* c) : ScriptedAI(c)
+    explicit infinite_timeripperAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -844,7 +844,7 @@ struct infinite_timeripperAI : public ScriptedAI
 
 struct infinite_riftlordAI : public ScriptedAI
 {
-    infinite_riftlordAI(Creature* c) : ScriptedAI(c)
+    explicit infinite_riftlordAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -925,7 +925,7 @@ struct infinite_riftlordAI : public ScriptedAI
 // Aqir-Adds
 struct aqir_addAI : public ScriptedAI
 {
-    aqir_addAI(Creature* c) : ScriptedAI(c)
+    explicit aqir_addAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -1081,7 +1081,7 @@ struct aqir_addAI : public ScriptedAI
 // swamp creatures
 struct swamp_npcs_cotAI : public ScriptedAI
 {
-    swamp_npcs_cotAI(Creature* c) : ScriptedAI(c)
+    explicit swamp_npcs_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -1089,6 +1089,7 @@ struct swamp_npcs_cotAI : public ScriptedAI
     uint32 poisonTimer;
     uint32 woundTimer;
     uint32 paralyzeTimer;
+    bool doOnce;
 
     enum NPCentries
     {
@@ -1109,6 +1110,7 @@ struct swamp_npcs_cotAI : public ScriptedAI
         poisonTimer = 21000;
         woundTimer = 10000;
         paralyzeTimer = 35000;
+        doOnce = false;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -1141,8 +1143,6 @@ struct swamp_npcs_cotAI : public ScriptedAI
         }
         case NPC_TARANTULA:
         {
-            bool doOnce = false;
-
             if (!doOnce)
             {
                 if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_PARALYZING_POISON) == CAST_OK)
@@ -1167,7 +1167,7 @@ struct swamp_npcs_cotAI : public ScriptedAI
 
 struct chronar_boss_cotAI : public ScriptedAI
 {
-    chronar_boss_cotAI(Creature* c) : ScriptedAI(c)
+    explicit chronar_boss_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -1299,7 +1299,7 @@ struct chronar_boss_cotAI : public ScriptedAI
 
 struct harbinger_boss_cotAI : public ScriptedAI
 {
-    harbinger_boss_cotAI(Creature* c) : ScriptedAI(c)
+    explicit harbinger_boss_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -1456,7 +1456,7 @@ struct harbinger_boss_cotAI : public ScriptedAI
 
 struct larvae_cotAI : public ScriptedAI
 {
-    larvae_cotAI(Creature* c) : ScriptedAI(c)
+    explicit larvae_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -1506,7 +1506,7 @@ struct larvae_cotAI : public ScriptedAI
 
 struct epochronos_boss_cotAI : public ScriptedAI
 {
-    epochronos_boss_cotAI(Creature* c) : ScriptedAI(c)
+    explicit epochronos_boss_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -1605,10 +1605,6 @@ struct epochronos_boss_cotAI : public ScriptedAI
                 summonEntry = NPC_VASHJ;
                 break;
             }
-
-            if (summonEntry > 0)
-                Creature* summon = m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 1000);
-
         }
 
         if (m_creature->FindNearestCreature(summonEntry, 100, true))
@@ -1685,7 +1681,7 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
 
 struct shade_cotAI : public ScriptedAI
 {
-    shade_cotAI(Creature* c) : ScriptedAI(c)
+    explicit shade_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -1929,7 +1925,7 @@ static const MoveLocation riftMoveLocation[8] =
 
 struct chromie_boss_cotAI : public ScriptedAI
 {
-    chromie_boss_cotAI(Creature* c) : ScriptedAI(c)
+    explicit chromie_boss_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -2089,21 +2085,18 @@ struct chromie_boss_cotAI : public ScriptedAI
 
     void JustDied(Unit*) override
     {
-        ScriptedInstance* m_pInstance;
-        m_pInstance = static_cast<instance_caverns_of_time*>(m_creature->GetInstanceData());
-
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
 
-        for (int i = 0; i < timeRifts.size(); i++) // remove rifts
+        for (auto i = 0; i < timeRifts.size(); ++i) // remove rifts
             timeRifts[i]->AddObjectToRemoveList();
 
-        for (int i = 0; i < gobCleanuplist.size(); i++) // remove walls for progression
+        for (auto i = 0; i < gobCleanuplist.size(); ++i) // remove walls for progression
             gobCleanuplist[i]->AddObjectToRemoveList();
 
         timeRifts.clear();
         gobCleanuplist.clear();
 
-        Creature* monsterSummoned = nullptr;
+        Creature* monsterSummoned{nullptr};
         std::string str = "";
 
         if (unknownEntity)
@@ -2124,7 +2117,7 @@ struct chromie_boss_cotAI : public ScriptedAI
 
         const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
 
-        if (monsterSummoned != nullptr)
+        if (monsterSummoned)
         {
             for (const auto& itr : PlayerList)
             {
@@ -2134,13 +2127,12 @@ struct chromie_boss_cotAI : public ScriptedAI
                 }
             }
         }
-        delete monsterSummoned;
     }
 };
 
 struct chromie_portal_cotAI : public ScriptedAI
 {
-    chromie_portal_cotAI(Creature* c) : ScriptedAI(c)
+    explicit chromie_portal_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -2199,7 +2191,7 @@ struct chromie_portal_cotAI : public ScriptedAI
 
 struct rotmaw_cotAI : public ScriptedAI
 {
-    rotmaw_cotAI(Creature* c) : ScriptedAI(c)
+    explicit rotmaw_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -2319,7 +2311,7 @@ struct rotmaw_cotAI : public ScriptedAI
 
 struct mossheart_cotAI : public ScriptedAI
 {
-    mossheart_cotAI(Creature* c) : ScriptedAI(c)
+    explicit mossheart_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -2451,7 +2443,7 @@ struct mossheart_cotAI : public ScriptedAI
 
 struct antnormi_cotAI : public ScriptedAI
 {
-    antnormi_cotAI(Creature* c) : ScriptedAI(c)
+    explicit antnormi_cotAI(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -2548,7 +2540,7 @@ struct antnormi_cotAI : public ScriptedAI
 
 struct injured_defender_cot : public ScriptedAI
 {
-    injured_defender_cot(Creature* c) : ScriptedAI(c)
+    explicit injured_defender_cot(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
@@ -2641,7 +2633,7 @@ struct injured_defender_cot : public ScriptedAI
 
                     m_creature->MonsterMove(-1872.45f, 6693.27f, -177.26f);
 
-                    if (Creature* portal = m_creature->FindNearestCreature(CHROMIE_PORTAL, 3))
+                    if (m_creature->FindNearestCreature(CHROMIE_PORTAL, 3))
                     {
                         m_creature->CastSpell(m_creature, SPELL_TELEPORT, true);
                     }
@@ -2665,10 +2657,7 @@ struct injured_defender_cot : public ScriptedAI
 
 bool GossipHello_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature)
 {
-    ScriptedInstance* m_pInstance;
-    m_pInstance = (ScriptedInstance*)pPlayer->GetInstanceData();
-        
-        if (riftsClosed < 3)
+    if (riftsClosed < 3)
     {
         if (!pPlayer->HasItemCount(80008, 1, true))
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Take the Temporal Bronze Disc.", GOSSIP_SENDER_MAIN, 1);
@@ -2738,8 +2727,6 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
 
     if (cotData.m_itemTimer < now)
     {
-        bool spawnChromie = false;
-
         if (Creature* rift = pPlayer->FindNearestCreature(91001, 10, true))
         {
             cotData.m_itemTimer = now + 30;
@@ -2755,7 +2742,7 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
 
             if (GameObject* riftspell = pPlayer->SummonGameObject(7000035, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0))
             {
-                DoAfterTime(rift, 5 * IN_MILLISECONDS, [rift = rift, pPlayer = pPlayer, riftSpell = riftspell, spawnChromie = spawnChromie]() {
+                DoAfterTime(rift, 5 * IN_MILLISECONDS, [rift = rift, pPlayer = pPlayer, riftSpell = riftspell, spawnChromie = false]() {
                     pPlayer->CastStop();
                     pPlayer->CastSpell(pPlayer, 22460, true);
                     pPlayer->SetRooted(false);
@@ -2777,7 +2764,7 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
 
 struct logistical_officer : public ScriptedAI
 {
-    logistical_officer(Creature* c) : ScriptedAI(c)
+    explicit logistical_officer(Creature* c) : ScriptedAI(c)
     {
         Reset();
     }
