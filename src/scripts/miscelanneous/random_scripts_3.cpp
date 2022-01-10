@@ -568,7 +568,11 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
 bool GOHello_go_grain_sacks(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    {
+        GameObject* reset_trigger_one = pGo->FindNearestGameObject(GO_RESET_TRIGGER_ONE, 3.0F);
+        if (!reset_trigger_one)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
 
     pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
     return true;
@@ -582,7 +586,9 @@ bool GOSelect_go_grain_sacks(Player* pPlayer, GameObject* pGo, uint32 sender, ui
         {
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
-            pGo->UseDoorOrButton(120); // 2min
+            pGo->SummonGameObject(GO_RESET_TRIGGER_ONE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
+            // Purple smoke effect: 
+            pGo->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
         }
     }
 
