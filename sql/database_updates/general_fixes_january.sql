@@ -624,4 +624,19 @@ UPDATE `spell_template` SET `interruptFlags` = '11' WHERE `entry` = 27831;
 -- Misc. item fixes from Kruxis:
 UPDATE item_template SET inventory_type = 7 WHERE entry in (83042, 83043, 83044, 83045);
 UPDATE item_template SET displayid = 50161 WHERE entry = 65007;
-
+-- COMMENTED OUT TILL 1.16.1 !!!
+-- Attaching new effects to items:
+-- update item_template set spellid_1 = 48008, spelltrigger_1 = 2, spellppmRate_1 = 0.85, spellcooldown_1 = 600 where entry = 65005;
+-- update item_template set spellid_1 = 48004, spelltrigger_1 = 2, spellppmRate_1 = 0.9, spellcooldown_1 = 600 where entry = 65008;
+-- update item_template set spellid_1 = 48003, spelltrigger_1 = 1 where entry = 65004;
+-- update item_template set spellid_1 = 48002, spelltrigger_1 = 0, spellcooldown_1 = 600 where entry = 65003;
+-- update item_template set spellid_1 = 48007, spelltrigger_1 = 1 where entry = 65014;
+-- update item_template set spellid_1 = 48009, spelltrigger_1 = 1 where entry = 65006;
+-- Shang Item Level Fixes:
+-- update item_template set item_level = 64 where entry = 81368;
+-- update item_template set item_level = 64 where entry = 81365;
+-- update item_template set item_level = 64 where entry = 81367;
+-- update item_template set required_level = 60 where entry = 81369;
+-- Add Hexed Voodoo Pads 83064 to darkspear troll rep quartermaster:
+replace into npc_vendor values (80949, 83064, 0, 0, 0, 0);
+update item_template set sell_price = 50000, buy_price = 50000 where entry = 80304;
