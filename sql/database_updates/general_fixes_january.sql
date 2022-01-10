@@ -602,9 +602,9 @@ UPDATE item_template SET bonding = 0, class = 15 WHERE entry = 1941;
 replace into mount_spells values (50404, 46503);
 -- Kruxis commits A Tusken Affair / Graypaw Wolf
 UPDATE quest_template SET ZoneOrSort = 1637 WHERE entry = 80300;
-UPDATE creature_template SET skinning_loot_id = 3256 WHERE entry = 91989
+UPDATE creature_template SET skinning_loot_id = 3256 WHERE entry = 91989;
 -- Darlthos Jewelery Box
-UPDATE item_template SET name = "Darthlo's Jewelry Box" WHERE entry = 60189;
+UPDATE item_template SET name = 'Darthlo\'s Jewelry Box' WHERE entry = 60189;
 -- Spelling fix Azure Scale
 UPDATE quest_template SET details = 'When Gnomeregan first sent us here, they tasked us to obtain an Azure Scale from the Blue Dragonflight. Sadly, we have not had the means to do so! We\'ve been too busy with other projects, and—well—we didn\'t want to stir the hive. Especially since we don\'t have any actual military capabilities!\n\nNow with you around, there is a possibility! The Dragonflight has gathered around Lake Mennar to the northwest. Get me an Azure Scale from the Blue Dragonflight, and make sure to bring buddies. I\'d hate to have you die on my account!' WHERE entry = 40062;
 -- The Shaow Well
@@ -623,7 +623,7 @@ UPDATE broadcast_text SET male_text = 'On the northern dock, you can board a shi
 UPDATE spell_template SET interruptFlags = '11' WHERE entry = 27831; 
 -- Misc. item fixes from Kruxis:
 UPDATE item_template SET inventory_type = 7 WHERE entry in (83042, 83043, 83044, 83045);
-UPDATE item_template SET displayid = 50161 WHERE entry = 65007;
+UPDATE item_template SET display_id = 50161 WHERE entry = 65007;
 -- COMMENTED OUT TILL 1.16.1 !!!
 -- Attaching new effects to items:
 -- update item_template set spellid_1 = 48008, spelltrigger_1 = 2, spellppmRate_1 = 0.85, spellcooldown_1 = 600 where entry = 65005;
@@ -644,3 +644,5 @@ update item_template set sell_price = 50000, buy_price = 50000 where entry = 803
 replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, subname, gossip_menu_id, level_min, level_max, health_min, health_max, mana_min, mana_max, armor, faction, npc_flags, speed_walk, speed_run, scale, detection_range, call_for_help_range, leash_range, rank, xp_multiplier, dmg_min, dmg_max, dmg_school, attack_power, dmg_multiplier, base_attack_time, ranged_attack_time, unit_class, unit_flags, dynamic_flags, beast_family, trainer_type, trainer_spell, trainer_class, trainer_race, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, type_flags, loot_id, pickpocket_loot_id, skinning_loot_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spell_id1, spell_id2, spell_id3, spell_id4, spell_list_id, pet_spell_list_id, gold_min, gold_max, ai_name, movement_type, inhabit_type, civilian, racial_leader, regeneration, equipment_id, trainer_id, vendor_id, mechanic_immune_mask, school_immune_mask, flags_extra, phase_quest_id, script_name) VALUES (80467, 18298, 0, 0, 0, 'Viridian Hippogryph', '', 0, 1, 1, 64, 64, 0, 0, 0, 35, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 -- Artifact fix:
 update gameobject_template set name = 'Arcane Artifact' where entry = 3000223;
+-- Alarus loot fix:
+delete from creature_loot_template where item = 83472 and groupid = 2;
