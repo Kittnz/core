@@ -1446,10 +1446,12 @@ bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             });
+        break;
     }
     case GOSSIP_ACTION_INFO_DEF + 2:
     {
         insomniDialogue(pPlayer, pCreature);
+        break;
     }
 
     }
@@ -1642,13 +1644,7 @@ struct npc_fearothAI : public ScriptedAI
         if (insomnius)
         {
             insomnius->MonsterSay("It is done! The darkness has faded. Can you feel it dissipating before your very eyes? I'll be returning to the cave. Meet me there.");
-
-            DoAfterTime(m_creature, 2 * IN_MILLISECONDS, [insomnius = insomnius]() {
-                {
-                    insomnius->CastSpell(insomnius, 26638, true);
-                    insomnius->DespawnOrUnsummon();
-                }
-                });
+            insomnius->DespawnOrUnsummon();
         }
     }
 
