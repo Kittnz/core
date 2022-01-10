@@ -22,6 +22,7 @@ ObjectGuid spawn3guid;
 Creature* dragonSpawn1;
 Creature* dragonSpawn2;
 Creature* dragonSpawn3;
+Creature* unknownEntity;
 
 ObjectGuid GOB_BARRIER_1;
 GameObject* GOB_BARRIER_2;
@@ -79,6 +80,8 @@ struct instance_caverns_of_time : public ScriptedInstance
         bronzeDefender3 = instance->SummonCreature(50110, -1889.18f, 6640.18f, -156.75f, 0);
         bronzeDefender4 = instance->SummonCreature(50110, -1893.81f, 6643.04f, -156.24f, 0);
         bronzeDefender5 = instance->SummonCreature(50110, -1897.60f, 6646.52f, -155.83f, 0);
+
+        unknownEntity = instance->SummonCreature(66003, -1591.57f, 7106.07f, 23.73f, 0, TEMPSUMMON_CORPSE_DESPAWN);
 
         if (GameObject* barrier1 = instance->SummonGameObject(180322, -1609.00f, 7118.74f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
             gobCleanuplist.push_back(barrier1);
@@ -2087,7 +2090,7 @@ struct chromie_boss_cotAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         ScriptedInstance* m_pInstance;
-        m_pInstance = (ScriptedInstance*)m_creature->GetInstanceData();
+        m_pInstance = static_cast<instance_caverns_of_time*>(m_creature->GetInstanceData());
 
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
 
@@ -2101,16 +2104,23 @@ struct chromie_boss_cotAI : public ScriptedAI
         gobCleanuplist.clear();
 
         Creature* monsterSummoned = nullptr;
-
         std::string str = "";
 
-        if (Creature* entity = m_pInstance->GetSingleCreatureFromStorage(NPC_UNKNOWN_ENTITY))
-            entity->PMonsterEmote("rumbles nearby.");
+        if (unknownEntity)
+        {
+            monsterSummoned = unknownEntity->FindNearestCreature(NPC_ROTMAW, 5000, true);
 
-        if (monsterSummoned = m_pInstance->GetSingleCreatureFromStorage(NPC_ROTMAW))
-            str = "Hssss ... I ... hunger ... hssss...";
-        else if (monsterSummoned = m_pInstance->GetSingleCreatureFromStorage(NPC_ROTMAW))
-            str = "Mrgml ... Who dares disturb my mossy slumber?";
+            if (monsterSummoned)
+                str = "Hssss ... I ... hunger ... hssss...";
+            else
+            {
+                monsterSummoned = unknownEntity->FindNearestCreature(NPC_MOSSHEART, 5000, true);
+                str = "Mrgml ... Who dares disturb my mossy slumber?";
+            } 
+
+            if (monsterSummoned)
+                unknownEntity->PMonsterEmote("An unknown entity emerges nearby.");
+        }
 
         const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
 
@@ -2124,7 +2134,7 @@ struct chromie_boss_cotAI : public ScriptedAI
                 }
             }
         }
-
+        delete monsterSummoned;
     }
 };
 
