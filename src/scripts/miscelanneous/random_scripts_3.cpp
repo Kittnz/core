@@ -568,7 +568,11 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
 bool GOHello_go_grain_sacks(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    {
+        GameObject* reset_trigger_one = pGo->FindNearestGameObject(GO_RESET_TRIGGER_ONE, 1.0F);
+        if (!reset_trigger_one)
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
 
     pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
     return true;
@@ -578,12 +582,11 @@ bool GOSelect_go_grain_sacks(Player* pPlayer, GameObject* pGo, uint32 sender, ui
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pGo->GetEntry() == 2010824)
-        {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            pGo->UseDoorOrButton(120); // 2min
-        }
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pGo->SummonGameObject(GO_RESET_TRIGGER_ONE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
+        // Purple smoke effect: 
+        pGo->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -1102,9 +1105,9 @@ CreatureAI* GetAI_npc_captain_ironhoof(Creature* _Creature) { return new npc_cap
 
 bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false)/* && !pGo->FindNearestGameObject(2010699, 0.5F)*/)
+    if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false))
     {
-        GameObject* reset_trigger_one = pGo->FindNearestGameObject(GO_RESET_TRIGGER_ONE, 3.0F);
+        GameObject* reset_trigger_one = pGo->FindNearestGameObject(GO_RESET_TRIGGER_ONE, 1.0F);
         if (!reset_trigger_one)
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -1117,7 +1120,6 @@ bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ignite the gunpowder.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
-
     return true;
 }
 
@@ -1125,28 +1127,22 @@ bool GOSelect_go_blast_powder_keg(Player* pPlayer, GameObject* pGo, uint32 sende
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pGo->GetEntry() == 2010834)
-        {
-            pGo->SummonGameObject(GO_RESET_TRIGGER_ONE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60328))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-        }
+        pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
+        pPlayer->SummonGameObject(GO_RESET_TRIGGER_ONE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, false);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60328))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
 
     if (action == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        if (pGo->GetEntry() == 2010834)
-        {
-            pGo->SummonGameObject(2000838, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ()+0.6f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true); /*burning effect*/
-            pPlayer->DestroyItemCount(60257, 1, true);
-            pPlayer->SaveInventoryAndGoldToDB();
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60330))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-        }
+        pGo->SummonGameObject(2000838, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 0.6f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, true); /*burning effect*/
+        pPlayer->DestroyItemCount(60257, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60330))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
-
     pPlayer->CLOSE_GOSSIP_MENU();
-    return false;
+    return true;
 }
 
 bool GOHello_go_keg_of_rum(Player* pPlayer, GameObject* pGo)
