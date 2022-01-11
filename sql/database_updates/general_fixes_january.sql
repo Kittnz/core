@@ -708,3 +708,5 @@ REPLACE INTO creature_template VALUES
 delete from item_template where entry = 60444;
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60444,1297,'Sack of Flour',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Spiced, as all good things should be.',0);
+-- Fix fake Serpentblooms:
+update gameobject set id = 13891 where id = 19535 and map = 43;
