@@ -716,3 +716,5 @@ update gameobject set position_x = 1714.48, position_y = -1285.90, position_z = 
 update quest_template set questflags = 8 where entry = 60108;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/524
 update creature_template set equipment_id = 3024 where entry = 6182;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/231
+update quest_template set offerrewardtext = '$N, your successful re-engineering of the cauldrons is a tremendous victory for us!\n\nLet all within my presence hear: for service to the Forsaken and to the Horde as a whole above and beyond what was expected - in the face of overwhelming odds and incredible danger, might I add - I give $N this, and I extend upon him our undying gratitude as a true hero of the Horde.\n\nHuzzah!' where entry = 5238;
