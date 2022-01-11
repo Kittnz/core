@@ -1,5 +1,6 @@
 #include "scriptPCH.h"
 #include "Utilities/EventProcessor.h"
+#include <algorithm>
 
 template <typename Functor>
 void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
@@ -5836,37 +5837,45 @@ bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGive
     return true;
 }
 
+static std::vector<ObjectGuid> baxxil_following;
+uint32 escortPlayerGuid;
+bool dialogueOver = false;
+
 struct npc_baxxilAI : public ScriptedAI
 {
     npc_baxxilAI(Creature* c) : ScriptedAI(c) { Reset(); }
-    bool aggro_text = false;
 
     void Reset()
     {
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
+        dialogueOver = false;
     }
     void UpdateAI(const uint32 diff)
     {
-        if (m_creature->GetHealthPercent() < 100 && !aggro_text)
-        {
-            m_creature->MonsterSay("You think I'm going to go back down there?! You're nuts!");
-            aggro_text = true;
-        }
-        if (m_creature->GetHealthPercent() < 30)
+        if (m_creature->GetHealthPercent() < 30 && !dialogueOver)
         {
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            if (!m_creature->IsInCombat() && !m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
-            {
-                m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
-                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            }
+            m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
+
+            dialogueOver = true;
         }
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+
+        if (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() == RANDOM_MOTION_TYPE /*&& baxxil_following.size() > 0*/)
+        {
+            //Player * escortPlayer = sObjectMgr.GetPlayer(baxxil_following.back());
+
+            //if (!escortPlayer)
+                m_creature->ForcedDespawn();
+        }
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
         DoMeleeAttackIfReady();
     }
     void JustRespawned() { Reset(); }
@@ -5876,25 +5885,41 @@ CreatureAI* GetAI_npc_baxxil(Creature* _Creature) { return new npc_baxxilAI(_Cre
 
 bool GossipHello_npc_baxxil(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && !dialogueOver)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You're coming back to Sparkwater to serve your sentence.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    else if (dialogueOver)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "You cant escape the long arm of the law, partner. Let's god.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
     pPlayer->SEND_GOSSIP_MENU(91297, pCreature->GetGUID());
+
     return true;
 }
-
-static std::vector<ObjectGuid> baxxil_following;
 
 bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {        
+        pCreature->MonsterSay("You think I'm going to go back down there?! You're nuts!");
+        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        pCreature->Attack(pPlayer, true);
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pPlayer->CombatStop();
         pCreature->MonsterSay("Okay, okay! Just whatever you say boss!");
-        pCreature->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
-        pCreature->UpdateSpeed(MOVE_RUN, false, pCreature->GetSpeedRate(MOVE_RUN) * 1.5);
+        pCreature->DestroyForPlayer(pPlayer);
+
+        Creature* escortNPC = pCreature->SummonCreature(91297, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 10 * MINUTE * IN_MILLISECONDS);
+        escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+        escortNPC->UpdateSpeed(MOVE_RUN, false, escortNPC->GetSpeedRate(MOVE_RUN) * 1.5);
         baxxil_following.push_back(pPlayer->GetObjectGuid());
-        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        escortNPC->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        escortNPC->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
     }
+
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -5902,7 +5927,10 @@ bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
 bool GossipHello_npc_hizzle(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(55048) == QUEST_STATUS_INCOMPLETE && (std::find(baxxil_following.begin(), baxxil_following.end(), pPlayer->GetObjectGuid()) != baxxil_following.end()))
+    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Here you are Hizzle, I got your prisoner red handed.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        baxxil_following.erase(std::remove(baxxil_following.begin(), baxxil_following.end(), pPlayer->GetObjectGuid()), baxxil_following.end());
+    }
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
