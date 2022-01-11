@@ -636,7 +636,7 @@ struct infinite_whelpAI : public ScriptedAI
                             continue;
 
                         if (playerGroup->FindNearestCreature(m_creature->GetEntry(), 50, true) && playerGroup->GetPowerPercent(POWER_MANA) >= 1)
-                            playerGroup->ModifyPower(POWER_MANA, (playerGroup->GetMaxPower(POWER_MANA) / 2.5f) * -1);
+                            playerGroup->ModifyPower(POWER_MANA, -round(playerGroup->GetMaxPower(POWER_MANA) * 0.025f));
                     }
                 }
 
