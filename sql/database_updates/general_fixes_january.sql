@@ -710,3 +710,5 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60444,1297,'Sack of Flour',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Spiced, as all good things should be.',0);
 -- Fix fake Serpentblooms:
 update gameobject set id = 13891 where id = 19535 and map = 43;
+-- GO "Tin Vein" alredy spawn outside a mountain:
+update gameobject set position_x = 1714.48, position_y = -1285.90, position_z = 161.54 where guid = 48121;
