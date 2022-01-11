@@ -689,3 +689,15 @@ UPDATE quest_template SET RewRepFaction1 = 269 WHERE entry in (80290, 80291, 802
 UPDATE quest_template SET ZoneOrSort = 331 WHERE entry = 40326;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/501
 UPDATE creature_template SET skinning_loot_id = 113 WHERE entry = 119;
+-- NPC Nina Millson can to teach cooking already:
+REPLACE INTO npc_trainer VALUES
+(91754, 2551, 100, 0, 0, 5),
+(91754, 2559, 50, 185, 10, 0),
+(91754, 2561, 100, 185, 50, 0),
+(91754, 2562, 200, 185, 75, 0),
+(91754, 2563, 150, 185, 80, 0),
+(91754, 3412, 500, 185, 50, 10),
+(91754, 6502, 100, 185, 50, 0),
+(91754, 6503, 300, 185, 125, 0),
+(91754, 21176, 4000, 185, 200, 0);
+
