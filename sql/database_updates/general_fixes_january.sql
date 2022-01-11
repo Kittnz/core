@@ -700,4 +700,9 @@ REPLACE INTO npc_trainer VALUES
 (91754, 6502, 100, 185, 50, 0),
 (91754, 6503, 300, 185, 125, 0),
 (91754, 21176, 4000, 185, 200, 0);
+-- NPC Ghoststalker level reduced for 22:
+delete from creature_template where entry = 60420;
+REPLACE INTO creature_template VALUES
+(60420, 776, 0, 0, 0, 'Ghoststalker', NULL, 0, 22, 22, 573, 573, 0, 0, 922, 38, 0, 1, 1.24, 1.5, 18, 5, 0, 0, 1, 31, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 32.8944, 45.2298, 100, 1, 0, 60420, 0, 3825, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
 
