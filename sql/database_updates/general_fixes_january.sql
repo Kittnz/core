@@ -723,3 +723,5 @@ REPLACE INTO gameobject_template VALUES
 (2010698, 2, 0, 'ivent_trigger', 0, 32, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/812
 UPDATE quest_template SET details = 'It would seem the Corinth family once held quite a few connections with both Lordaeron and the Stormwind Nobles.\n\nAll of them have died but Martin still remained, and fled to Stormwind after the war.\n\nAccording to some of these documents as part of his exile he was intending on heading to Menethil Harbor to settle there, we know this is not the case, but perhaps he had left something for us to find. Speak with the Innkeep at Menethil, ask if they had seen a Martin Corinth or Harlus Ashbuckle.' WHERE entry = 55222;
+-- Changed wrong GO Goblin Contrio Panel to truely GO Site Control Panel:
+update gameobject set id = 2010817 where guid = 4013179;
