@@ -712,3 +712,5 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 update gameobject set id = 13891 where id = 19535 and map = 43;
 -- GO "Tin Vein" alredy spawn outside a mountain:
 update gameobject set position_x = 1714.48, position_y = -1285.90, position_z = 161.54 where guid = 48121;
+-- Quest "Arugal's Folly" (60108) already is shareble:
+update quest_template set questflags = 8 where entry = 60108;
