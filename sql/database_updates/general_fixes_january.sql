@@ -718,3 +718,6 @@ update quest_template set questflags = 8 where entry = 60108;
 update creature_template set equipment_id = 3024 where entry = 6182;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/231
 update quest_template set offerrewardtext = '$N, your successful re-engineering of the cauldrons is a tremendous victory for us!\n\nLet all within my presence hear: for service to the Forsaken and to the Horde as a whole above and beyond what was expected - in the face of overwhelming odds and incredible danger, might I add - I give $N this, and I extend upon him our undying gratitude as a true hero of the Horde.\n\nHuzzah!' where entry = 5238;
+-- New go trigger for block menu of NPC Felstone (3 min)
+REPLACE INTO gameobject_template VALUES
+(2010698, 2, 0, 'ivent_trigger', 0, 32, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
