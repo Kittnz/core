@@ -570,13 +570,8 @@ bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Qu
 
 bool GOHello_go_grain_sacks(Player* pPlayer, GameObject* pGo)
 {
-    if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE)
-    {
-        GameObject* reset_trigger_one = pGo->FindNearestGameObject(GO_RESET_TRIGGER_ONE, 1.0F);
-        if (!reset_trigger_one)
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
+    if (pPlayer->GetQuestStatus(40099) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(40099)->m_creatureOrGOcount[2] != 5)
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Poison grain.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     pPlayer->SEND_GOSSIP_MENU(2010824, pGo->GetGUID());
     return true;
 }
@@ -587,9 +582,9 @@ bool GOSelect_go_grain_sacks(Player* pPlayer, GameObject* pGo, uint32 sender, ui
     {
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
-		pGo->Deactivate(15);
+		pGo->Deactivate(150);
         // Purple smoke effect: 
-		pPlayer->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, true);
+		pPlayer->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -1110,11 +1105,7 @@ bool GOHello_go_blast_powder_keg(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40174) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60373, 1, false))
     {
-        GameObject* reset_trigger_one = pGo->FindNearestGameObject(GO_RESET_TRIGGER_ONE, 1.0F);
-        if (!reset_trigger_one)
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        }
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Pour water into the keg.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         pPlayer->SEND_GOSSIP_MENU(2010834, pGo->GetGUID());
     }
 
@@ -1131,7 +1122,7 @@ bool GOSelect_go_blast_powder_keg(Player* pPlayer, GameObject* pGo, uint32 sende
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->HandleEmote(EMOTE_ONESHOT_KNEEL);
-        pPlayer->SummonGameObject(GO_RESET_TRIGGER_ONE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, false);
+        pGo->Deactivate(150);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60328))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
