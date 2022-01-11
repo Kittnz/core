@@ -5912,7 +5912,7 @@ bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
         pCreature->MonsterSay("Okay, okay! Just whatever you say boss!");
         pCreature->DestroyForPlayer(pPlayer);
 
-        Creature* escortNPC = pCreature->SummonCreature(91297, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN, 10 * MINUTE * IN_MILLISECONDS);
+        Creature* escortNPC = pCreature->SummonCreature(91297, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), 0, TEMPSUMMON_CORPSE_DESPAWN);
         escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         escortNPC->UpdateSpeed(MOVE_RUN, false, escortNPC->GetSpeedRate(MOVE_RUN) * 1.5);
         baxxil_following.push_back(pPlayer->GetObjectGuid());
