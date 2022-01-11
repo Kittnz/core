@@ -704,5 +704,7 @@ REPLACE INTO npc_trainer VALUES
 delete from creature_template where entry = 60420;
 REPLACE INTO creature_template VALUES
 (60420, 776, 0, 0, 0, 'Ghoststalker', NULL, 0, 22, 22, 573, 573, 0, 0, 922, 38, 0, 1, 1.24, 1.5, 18, 5, 0, 0, 1, 31, 38, 0, 98, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 32.8944, 45.2298, 100, 1, 0, 60420, 0, 3825, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
-
-
+-- Added quest item "Sack of Flour" for quest 40301:
+delete from item_template where entry = 60444;
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60444,1297,'Sack of Flour',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Spiced, as all good things should be.',0);
