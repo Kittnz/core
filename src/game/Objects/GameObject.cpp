@@ -88,6 +88,7 @@ GameObject::GameObject() : WorldObject(),
     m_model = nullptr;
     m_rotation = 0;
     m_playerGroupId = 0;
+	m_bTemporaryNonInteracted = false;
     m_summonTarget = ObjectGuid();
 }
 
@@ -528,6 +529,11 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                 case GAMEOBJECT_TYPE_DOOR:
                 case GAMEOBJECT_TYPE_BUTTON:
                 {
+					if (m_bTemporaryNonInteracted && (m_cooldownTime < time(nullptr)))
+					{
+						SetInteractable();
+					}
+
                     if (GetGOInfo()->GetAutoCloseTime() && (m_cooldownTime < time(nullptr)))
                         ResetDoorOrButton();
                     break;
@@ -2516,6 +2522,25 @@ SpellEntry const* GameObject::GetSpellForLock(Player const* player) const
     }
 
     return nullptr;
+}
+
+void GameObject::SetInteractable()
+{
+	m_bTemporaryNonInteracted = false;
+	RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
+	m_cooldownTime = 0;
+	SetLootState(GO_READY);
+}
+
+void GameObject::Deactivate(uint32_t timeInSec)
+{
+	uint32_t TimeToRestore = timeInSec > 0 ? timeInSec : GetGOInfo()->GetDeactivateTime();
+
+	SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
+	m_bTemporaryNonInteracted = true;
+
+	m_cooldownTime = time(nullptr) + TimeToRestore;
+	SetLootState(GO_ACTIVATED);
 }
 
 const QuaternionData GameObject::GetLocalRotation() const

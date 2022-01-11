@@ -584,9 +584,9 @@ bool GOSelect_go_grain_sacks(Player* pPlayer, GameObject* pGo, uint32 sender, ui
     {
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
-        pGo->SummonGameObject(GO_RESET_TRIGGER_ONE, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
+		pGo->Deactivate(15);
         // Purple smoke effect: 
-        pGo->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
+		pPlayer->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, true);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();

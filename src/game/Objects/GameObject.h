@@ -70,6 +70,7 @@ struct GameObjectInfo
             uint32 openTextID;                              //6 can be used to replace castBarCaption?
             uint32 closeTextID;                             //7
             uint32 losOK;                                   //8
+			uint32 deactivateTime;							//9
         } button;
         //2 GAMEOBJECT_TYPE_QUESTGIVER
         struct
@@ -547,6 +548,15 @@ struct GameObjectInfo
             default: return 0;
         }
     }
+
+	uint32 GetDeactivateTime() const
+	{
+		switch (type)
+		{
+		case GAMEOBJECT_TYPE_BUTTON: return button.deactivateTime;
+		default: return 0;
+		}
+	}
 };
 
 // GCC have alternative #pragma pack() syntax and old gcc version not support pack(pop), also any gcc version not support it at some platform
@@ -839,6 +849,10 @@ class GameObject : public WorldObject
 
         SpellEntry const* GetSpellForLock(Player const* player) const;
 
+		// Giperion Turtle: Activate/Deactivate
+		void SetInteractable();
+		void Deactivate(uint32_t timeInSec = 0);
+
     protected:
         bool        m_visible;
         uint32      m_spellId;
@@ -846,6 +860,7 @@ class GameObject : public WorldObject
         uint32      m_respawnDelayTime;                     // (secs) if 0 then current GO state no dependent from timer
         LootState   m_lootState;
         bool        m_spawnedByDefault;
+		bool		m_bTemporaryNonInteracted;
         time_t      m_cooldownTime;                         // used as internal reaction delay time store (not state change reaction).
                                                             // For traps/goober this: spell casting cooldown, for doors/buttons: reset time.
 
