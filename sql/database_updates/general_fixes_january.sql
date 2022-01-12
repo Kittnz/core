@@ -727,3 +727,5 @@ UPDATE quest_template SET details = 'It would seem the Corinth family once held 
 update gameobject set id = 2010817 where guid = 4013179;
 -- Changed quest zone for quests Bristleback Aggression and Preventive Strike to Red Cloud Mesa:
 update quest_template set zoneorsort = 220 where entry in (60150, 60115);
+
+update quest_template set zoneorsort = 5077 where entry = 40326;
