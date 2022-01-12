@@ -781,6 +781,7 @@ REPLACE INTO creature_loot_template VALUES
 (91989, 30022, 0.5, 0, -30022, 1, 0),
 (91989, 30024, 0.5, 0, -30024, 1, 0),
 (91989, 30038, 0.5, 0, -30038, 1, 0);
-
-# hp update for https://github.com/slowtorta/turtlewow-bug-tracker/issues/862
+-- hp update for https://github.com/slowtorta/turtlewow-bug-tracker/issues/862
 update creature_template set health_min = 1000, health_max = 1000 where entry = 10482;
+-- Item [Quel'dorei Cleric's Wand] have no shoot animation:
+update item_template set display_id = 28218 where entry = 80545;
