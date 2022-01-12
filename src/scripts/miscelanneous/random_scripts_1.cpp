@@ -4051,10 +4051,10 @@ bool GOHello_go_translocation_orb(Player* pPlayer, GameObject* pGo)
 }
 
 #define GAMBLING_TEXT 80602
-#define OPT1 "10 silver coins."
-#define OPT2 "1 gold coin."
-#define OPT3 "10 gold coins."
-#define OPT4 "50 gold coins."
+#define OPT1 "1 silver coin."
+#define OPT2 "10 silver coins."
+#define OPT3 "50 silver coins."
+#define OPT4 "1 gold coin."
 
 #define COIN_SOUND 1204
 
@@ -4142,16 +4142,16 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
     switch (uiAction)
     {
     case GOSSIP_ACTION_INFO_DEF + 1:
-        amount = 1000;
+        amount = 100;
         break;
     case GOSSIP_ACTION_INFO_DEF + 2:
-        amount = 10000;
+        amount = 1000;
         break;
     case GOSSIP_ACTION_INFO_DEF + 3:
-        amount = 100000;
+        amount = 5000;
         break;
     case GOSSIP_ACTION_INFO_DEF + 4:
-        amount = 500000;
+        amount = 10000;
         break;
     default:
         return true;
