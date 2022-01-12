@@ -785,3 +785,5 @@ REPLACE INTO creature_loot_template VALUES
 update creature_template set health_min = 1000, health_max = 1000 where entry = 10482;
 -- Item [Quel'dorei Cleric's Wand] have no shoot animation:
 update item_template set display_id = 28218 where entry = 80545;
+-- "Dry Hiding" gives Durotar Labor Union reputation:
+update quest_template set rewrepfaction1 = 21 where entry = 55025;
