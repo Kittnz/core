@@ -731,7 +731,7 @@ update quest_template set zoneorsort = 220 where entry in (60150, 60115);
 update quest_template set zoneorsort = 5077 where entry = 40326;
 -- Added spawn GO "Gunther's Lockbox" for quest In Gunther’s Favor:
 delete from gameobject where ID = 1000177;
-REPLACE INTO gameobject VALUES (0, 1000177, 0, -126.497, 772.794, 63.7299, 4.71796, 0, 0, 0.705134, -0.709074, 300, 300, 100, 1, 0, 0);
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (1000177, 0, -126.497, 772.794, 63.7299, 4.71796, 0, 0, 0.705134, -0.709074, 300, 300, 100, 1, 0, 0);
 -- Trash loot added for NPC Graypaw Wolf:
 REPLACE INTO creature_loot_template VALUES
 (91989, 785, 0.02, 0, 1, 1, 0),
