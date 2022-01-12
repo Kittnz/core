@@ -787,3 +787,7 @@ update creature_template set health_min = 1000, health_max = 1000 where entry = 
 update item_template set display_id = 28218 where entry = 80545;
 -- "Dry Hiding" gives Durotar Labor Union reputation:
 update quest_template set rewrepfaction1 = 21 where entry = 55025;
+-- Penus.
+UPDATE item_template SET description = 'Has a note attached to the top.' WHERE entry = 60142;
+-- Lapidis Isle Quest: Sailor's Innovation:
+update quest_template set offerrewardtext = 'Ahh, yeah this should be everything, a meal worthy for the Admiral!', reworreqmoney = 18900 where entry = 40142;
