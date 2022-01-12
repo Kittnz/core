@@ -730,4 +730,5 @@ update quest_template set zoneorsort = 220 where entry in (60150, 60115);
 -- Changed quest zone to Crescent Grove for quests Kalanar's Mallet:
 update quest_template set zoneorsort = 5077 where entry = 40326;
 -- Added spawn GO "Gunther's Lockbox" for quest In Gunther’s Favor:
-REPLACE INTO gameobject VALUES (5002789, 1000177, 0, -126.497, 772.794, 63.7299, 4.71796, 0, 0, 0.705134, -0.709074, 300, 300, 100, 1, 0, 0);
+delete from gameobject where ID = 1000177;
+REPLACE INTO gameobject VALUES (0, 1000177, 0, -126.497, 772.794, 63.7299, 4.71796, 0, 0, 0.705134, -0.709074, 300, 300, 100, 1, 0, 0);
