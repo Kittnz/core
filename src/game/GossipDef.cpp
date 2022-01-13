@@ -541,6 +541,12 @@ void PlayerMenu::SendQuestGiverQuestDetails(Quest const *pQuest, ObjectGuid npcG
 
     GetMenuSession()->SendPacket(&data);
 
+    if (GetMenuSession()->GetPlayer() && GetMenuSession()->GetPlayer()->IsHardcore())
+    {
+        if (pQuest->GetType() == QUEST_TYPE_PVP)
+            GetMenuSession()->SendNotification("This quest will flag your for PvP.");
+    }
+
     DEBUG_LOG("WORLD: Sent SMSG_QUESTGIVER_QUEST_DETAILS NPCGuid = %s, questid = %u", npcGUID.GetString().c_str(), pQuest->GetQuestId());
 }
 
