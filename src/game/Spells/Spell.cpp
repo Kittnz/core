@@ -8571,7 +8571,8 @@ public:
                             casterPlayer = owner->ToPlayer();
                     }
                     //HC checks for friendly aoe buffs to check for PvP.
-                    if (casterPlayer && unit->IsPlayer() && casterPlayer->IsHardcore())
+                    //or non-HCs for campfires.
+                    if (casterPlayer && unit->IsPlayer() && (casterPlayer->IsHardcore() || i_spell.m_spellInfo->Id == 7353 || i_spell.m_spellInfo->Id == 7358))
                     {
                         if (!casterPlayer->IsPvP() && unit->ToPlayer()->IsPvP())
                             continue;

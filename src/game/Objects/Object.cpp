@@ -5492,7 +5492,11 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
             return true;
 
         if (playerAffectingTarget->IsPvP())
+        {
+            if (playerAffectingAttacker->IsHardcore() && !playerAffectingAttacker->IsPvP()) // custom check, disable HC accidentally flagging.
+                return false;
             return true;
+        }
 
         if ((playerAffectingAttacker->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP)
             && (playerAffectingTarget->GetByteValue(UNIT_FIELD_BYTES_2, 1) & UNIT_BYTE2_FLAG_FFA_PVP))
