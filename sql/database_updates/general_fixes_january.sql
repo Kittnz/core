@@ -799,3 +799,102 @@ update item_template set spellid_1 = 26000 where entry = 51899;
 UPDATE quest_template SET Details = 'Lake Falathim was a place I spent much of my youth, it was a place of relaxation and good times. Only now it is taken over by the Saltspittle, who attacked with ferocity and no remorse. Some died during the attack, but I was lucky to escape.\n\nWhen I was about to leave I left behind an item that is most valueable to me. My Uncle who died during the Battle of Hyjal left me a book in my possession. It is one he wrote about both his technique in battle and his experiences regarding war. I\'ve found much knowledge and wisdom from that book, and I desire to know everything that he had jotted down before his passing.\n\nTravel to Lake Falathim to the south west, and find my belongings. While you are there, make sure to get revenge, and slay the Saltspittle, their fins should do fine.', RequestItemsText = 'That place is crawling with murlocs, I would advise you steel yourself for what must be done.', EndText = 'That book meant quite a lot to me, I never thought I would see it again, thank you $C.' WHERE entry = 40230;
 -- Bugfix https://github.com/slowtorta/turtlewow-bug-tracker/issues/499
 update creature_loot_template set condition_id = 2 WHERE condition_id = 4215
+
+-- Southfury guild house
+-- NPC 1: Razzik Goldbucket, goblin male, food/alcohol vendor. DisplayID 7100. Should sell food and alcohol. Will say the following lines when talked to: “Welcome to Southfury Trading Company, friend! Did ya come here for business? If you need something shipped, our first-class caravaneers got ya covered. Or are ya carryin’ a bit too much coin around and expectin’ some good-for-nothin’s to come after ya? No problem, we got some well-trained muscle to protect your pretty bottom! Or maybe you're lookin’ for some exotic wares from the South Seas? If money can buy it, we will get it for ya, promised! Southfury Trading Company - You got coin and we want it!”
+-- NPC 2: Dragga Stonehand, orc female. DisplayID 6551. Wears balcksmith/worker clothing.
+-- NPC 3: Southfury Bruiser, DisplayID 10704
+-- NPC 4: Southfury Bruiser, DisplayID 550
+REPLACE INTO creature_template VALUES
+(60636, 7100, 0, 0, 0, 'Razzik Goldbucket', '', 0, 60, 60, 3100, 3100, 0, 0, 2861, 290, 5, 1, 1.14286, 0, 20, 5, 0, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60637, 6551, 0, 0, 0, 'Dragga Stonehand', '', 0, 60, 60, 3100, 3100, 0, 0, 2861, 290, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60638, 10704, 0, 0, 0, 'Southfury Bruiser', '', 0, 60, 60, 3100, 3100, 0, 0, 2861, 290, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60639, 550, 0, 0, 0, 'Southfury Bruiser', '', 0, 60, 60, 3100, 3100, 0, 0, 2861, 290, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41073; set @magic_number = 60636;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Southfury Trading Company, friend! Did ya come here for business? If you need something shipped, our first-class caravaneers got ya covered.\n\nOr are ya carryin\' a bit too much coin around and expectin\' some good-for-nothin\'s to come after ya? No problem, we got some well-trained muscle to protect your pretty bottom! Or maybe you\'re lookin\' for some exotic wares from the South Seas? If money can buy it, we will get it for ya, promised!\n\nSouthfury Trading Company - You got coin and we want it!'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES
+(60636, 2593, 0, 0, 0, 0),
+(60636, 2594, 0, 0, 0, 0),
+(60636, 2595, 0, 0, 0, 0),
+(60636, 2596, 0, 0, 0, 0),
+(60636, 2723, 0, 0, 0, 0),
+(60636, 4600, 0, 0, 0, 0),
+(60636, 117, 0, 0, 0, 0),
+(60636, 159, 0, 0, 0, 0),
+(60636, 414, 0, 0, 0, 0),
+(60636, 422, 0, 0, 0, 0),
+(60636, 787, 0, 0, 0, 0),
+(60636, 1179, 0, 0, 0, 0),
+(60636, 1205, 0, 0, 0, 0),
+(60636, 1645, 0, 0, 0, 0),
+(60636, 1707, 0, 0, 0, 0),
+(60636, 1708, 0, 0, 0, 0),
+(60636, 2070, 0, 0, 0, 0),
+(60636, 2287, 0, 0, 0, 0),
+(60636, 3770, 0, 0, 0, 0),
+(60636, 3771, 0, 0, 0, 0),
+(60636, 3927, 0, 0, 0, 0),
+(60636, 4536, 0, 0, 0, 0),
+(60636, 4537, 0, 0, 0, 0),
+(60636, 4538, 0, 0, 0, 0),
+(60636, 4539, 0, 0, 0, 0),
+(60636, 4540, 0, 0, 0, 0),
+(60636, 4541, 0, 0, 0, 0),
+(60636, 4542, 0, 0, 0, 0),
+(60636, 4544, 0, 0, 0, 0),
+(60636, 4592, 0, 0, 0, 0),
+(60636, 4593, 0, 0, 0, 0),
+(60636, 4594, 0, 0, 0, 0),
+(60636, 4599, 0, 0, 0, 0),
+(60636, 4601, 0, 0, 0, 0),
+(60636, 4602, 0, 0, 0, 0),
+(60636, 8766, 0, 0, 0, 0),
+(60636, 8932, 0, 0, 0, 0),
+(60636, 8950, 0, 0, 0, 0),
+(60636, 8952, 0, 0, 0, 0),
+(60636, 8953, 0, 0, 0, 0),
+(60636, 8957, 0, 0, 0, 0),
+(60636, 21552, 0, 0, 0, 0);
+
+-- Hand of wrath guild house
+-- NPC 1: Sergeant Perth, forsaken female. DisplayID 3654. Will say the following lines when talked to: "The Hand of Wrath is a military unit led by Executor Rotheart. It is the iron hand of the Horde, crushing its enemies. The Hand serves the Warchief and the leaders of the races of the Horde. Founded out of the Forsaken Vanguard by the order of the Dark Lady as a way to forge brotherhood between all races of the Horde in the fires of war. Officers are straight down the tunnel if you're looking to join or have some business with us. If not then stop wasting my time."
+-- NPC 2: Goma, orc female. DisplayID 12166. General goods vendor
+REPLACE INTO creature_template VALUES
+(60640, 3654, 0, 0, 0, 'Sergeant Perth', '', 0, 60, 60, 3100, 3100, 0, 0, 2861, 290, 1, 1, 1.14286, 0, 20, 5, 0, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60641, 12166, 0, 0, 0, 'Goma', 'General Goods', 0, 60, 60, 3100, 3100, 0, 0, 2861, 290, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41074; set @magic_number = 60640;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Hand of Wrath is a military unit led by Executor Rotheart. It is the iron hand of the Horde, crushing its enemies. The Hand serves the Warchief and the leaders of the races of the Horde.\n\nFounded out of the Forsaken Vanguard by the order of the Dark Lady as a way to forge brotherhood between all races of the Horde in the fires of war. Officers are straight down the tunnel if you\'re looking to join or have some business with us. If not then stop wasting my time.'); 
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number); 
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES
+(60641, 159, 0, 0, 0, 0),
+(60641, 1205, 0, 0, 0, 0),
+(60641, 1645, 0, 0, 0, 0),
+(60641, 1708, 0, 0, 0, 0),
+(60641, 2515, 0, 0, 0, 0),
+(60641, 2519, 0, 0, 0, 0),
+(60641, 2946, 0, 0, 0, 0),
+(60641, 3030, 0, 0, 0, 0),
+(60641, 3033, 0, 0, 0, 0),
+(60641, 3107, 0, 0, 0, 0),
+(60641, 3108, 0, 0, 0, 0),
+(60641, 3131, 0, 0, 0, 0),
+(60641, 3135, 0, 0, 0, 0),
+(60641, 3137, 0, 0, 0, 0),
+(60641, 4470, 0, 0, 0, 0),
+(60641, 4471, 0, 0, 0, 0),
+(60641, 4497, 0, 0, 0, 0),
+(60641, 4498, 0, 0, 0, 0),
+(60641, 6183, 0, 0, 0, 0),
+(60641, 11284, 0, 0, 0, 0),
+(60641, 11285, 0, 0, 0, 0),
+(60641, 15326, 0, 0, 0, 0),
+(60641, 15327, 0, 0, 0, 0);
