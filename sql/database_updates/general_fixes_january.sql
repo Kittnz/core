@@ -898,3 +898,6 @@ REPLACE INTO npc_vendor VALUES
 (60641, 11285, 0, 0, 0, 0),
 (60641, 15326, 0, 0, 0, 0),
 (60641, 15327, 0, 0, 0, 0);
+-- COT UPDATE
+REPLACE INTO `broadcast_text` VALUES (91976, 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you. I cannot do that for you. ', 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you. ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO `broadcast_text` VALUES (91978, 'Please don\'t disturb me. Correcting the timeline requires an immense amount of concentration.', 'Please don\'t disturb me. Correcting the timeline requires an immense amount of concentration.', 0, 0, 0, 0, 0, 0, 0, 0, 0);
