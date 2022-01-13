@@ -901,3 +901,5 @@ REPLACE INTO npc_vendor VALUES
 -- COT UPDATE
 REPLACE INTO `broadcast_text` VALUES (91976, 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you. I cannot do that for you. ', 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you. ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
 REPLACE INTO `broadcast_text` VALUES (91978, 'Please don\'t disturb me. Correcting the timeline requires an immense amount of concentration.', 'Please don\'t disturb me. Correcting the timeline requires an immense amount of concentration.', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Second Neto has arrived
+REPLACE INTO `creature` VALUES (2569310, 65130, 0, 0, 0, 269, 0, 0, -1541.75, 7113.94, 25.1502, 6.16236, 25, 25, 0, 100, 100, 0, 0, 0);
