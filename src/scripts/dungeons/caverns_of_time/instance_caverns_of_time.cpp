@@ -206,7 +206,7 @@ struct instance_caverns_of_time : public ScriptedInstance
             }
         }
 
-        if (!finalDialogue && riftsClosed >= 1)
+        if (!finalDialogue && riftsClosed >= 5)
         {
             finalDialogue = true;
             Creature* portal = instance->SummonCreature(GOB_CHROMIE_PORTAL, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000);
@@ -2656,7 +2656,7 @@ struct injured_defender_cot : public ScriptedAI
 
 bool GossipHello_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature)
 {
-    if (riftsClosed < 0)
+    if (riftsClosed < 3)
     {
         if (!pPlayer->HasItemCount(80008, 1, true))
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Take the Temporal Bronze Disc.", GOSSIP_SENDER_MAIN, 1);
