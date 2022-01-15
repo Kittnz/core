@@ -190,8 +190,8 @@ set (game_SRCS
     PlayerBots/CombatBotBaseAI.cpp
     PlayerBots/BattleBotAI.cpp
     PlayerBots/BattleBotWaypoints.cpp
-    PlayerBots/MapBotAI.cpp
-    PlayerBots/MapBotWaypoints.cpp
+    PlayerBots/WorldBotAI.cpp
+    PlayerBots/WorldBotWaypoints.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp
     Protocol/Opcodes.cpp
@@ -382,8 +382,8 @@ set (game_SRCS
     PlayerBots/PartyBotAI.h
     PlayerBots/BattleBotAI.h
     PlayerBots/BattleBotWaypoints.h
-    PlayerBots/MapBotAI.h
-    PlayerBots/MapBotWaypoints.h
+    PlayerBots/WorldBotAI.h
+    PlayerBots/WorldBotWaypoints.h
     PlayerBots/PlayerBotAI.h
     PlayerBots/PlayerBotMgr.h
     Protocol/Opcodes.h

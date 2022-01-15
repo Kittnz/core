@@ -1,5 +1,5 @@
-#include "MapBotAI.h"
-#include "MapBotWaypoints.h"
+#include "WorldBotAI.h"
+#include "WorldBotWaypoints.h"
 #include "Player.h"
 #include "Log.h"
 #include "MotionMaster.h"
@@ -18,7 +18,7 @@
 #include <regex>
 #include <random>
 
-enum MapBotSpells
+enum WorldBotSpells
 {
     MB_SPELL_FOOD = 1131,
     MB_SPELL_DRINK = 1137,
@@ -86,13 +86,13 @@ enum MapBotSpells
 #define GO_WSG_DROPPED_SILVERWING_FLAG 179785
 #define GO_WSG_DROPPED_WARSONG_FLAG 179786
 
-std::vector<MapBotChatData> m_chatDataNotUnderstand;
-std::vector<MapBotChatData> m_chatDataGrudge;
-std::vector<MapBotChatData> m_chatDataVictim;
-std::vector<MapBotChatData> m_chatDataAttacker;
-std::vector<MapBotChatData> m_chatDataHelloRespond;
-std::vector<MapBotChatData> m_chatDataNameRespond;
-std::vector<MapBotChatData> m_chatDataAdminAbuse;
+std::vector<WorldBotChatData> m_chatDataNotUnderstand;
+std::vector<WorldBotChatData> m_chatDataGrudge;
+std::vector<WorldBotChatData> m_chatDataVictim;
+std::vector<WorldBotChatData> m_chatDataAttacker;
+std::vector<WorldBotChatData> m_chatDataHelloRespond;
+std::vector<WorldBotChatData> m_chatDataNameRespond;
+std::vector<WorldBotChatData> m_chatDataAdminAbuse;
 
 static bool IsPhysicalDamageClass(uint8 playerClass)
 {
@@ -151,10 +151,10 @@ static bool IsMeleeDamageClass(uint8 playerClass)
     return false;
 }
 
-void MapBotAI::AddPremadeGearAndSpells()
+void WorldBotAI::AddPremadeGearAndSpells()
 {
-    bool useMapBotLoader = sWorld.getConfig(CONFIG_BOOL_MAPBOT_LOADER);
-    if (!useMapBotLoader)
+    bool useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_MAPBOT_LOADER);
+    if (!useWorldBotLoader)
     {
         std::vector<uint32> vSpecs;
         for (const auto& itr : sObjectMgr.GetPlayerPremadeSpecTemplates())
@@ -185,7 +185,7 @@ void MapBotAI::AddPremadeGearAndSpells()
         }
 
         if (!vSpecs.empty())
-            sObjectMgr.ApplyPremadeSpecTemplateToPlayerMapBot(SelectRandomContainerElement(vSpecs), me);
+            sObjectMgr.ApplyPremadeSpecTemplateToPlayerWorldBot(SelectRandomContainerElement(vSpecs), me);
     }
 
     switch (me->GetClass())
@@ -204,7 +204,7 @@ void MapBotAI::AddPremadeGearAndSpells()
     }
 }
 
-uint32 MapBotAI::GetMountSpellId() const
+uint32 WorldBotAI::GetMountSpellId() const
 {
     if (me->GetLevel() >= 60)
     {
@@ -264,7 +264,7 @@ uint32 MapBotAI::GetMountSpellId() const
     return 0;
 }
 
-bool MapBotAI::UseMount()
+bool WorldBotAI::UseMount()
 {
     if (me->IsMounted())
         return false;
@@ -299,7 +299,7 @@ bool MapBotAI::UseMount()
     return false;
 }
 
-Player* MapBotAI::GetPartyLeader() const
+Player* WorldBotAI::GetPartyLeader() const
 {
     Group* pGroup = me->GetGroup();
     if (!pGroup)
@@ -312,7 +312,7 @@ Player* MapBotAI::GetPartyLeader() const
     return ObjectAccessor::FindPlayerNotInWorld(leaderGuid);
 }
 
-void MapBotAI::RunAwayFromTarget(Unit* pTarget)
+void WorldBotAI::RunAwayFromTarget(Unit* pTarget)
 {
     if (Player* pLeader = GetPartyLeader())
     {
@@ -333,7 +333,7 @@ void MapBotAI::RunAwayFromTarget(Unit* pTarget)
     me->GetMotionMaster()->MoveDistance(pTarget, 15.0f);
 }
 
-bool MapBotAI::DrinkAndEat()
+bool WorldBotAI::DrinkAndEat()
 {
     if (m_isBuffing)
         return false;
@@ -383,7 +383,7 @@ bool MapBotAI::DrinkAndEat()
     return needToEat || needToDrink;
 }
 
-float MapBotAI::GetMaxAggroDistanceForMap() const
+float WorldBotAI::GetMaxAggroDistanceForMap() const
 {
     if (!me->GetBattleGround() ||
         me->GetBattleGround()->GetTypeID() != BATTLEGROUND_AV)
@@ -392,7 +392,7 @@ float MapBotAI::GetMaxAggroDistanceForMap() const
     return 30.0f;
 }
 
-bool MapBotAI::AttackStart(Unit* pVictim)
+bool WorldBotAI::AttackStart(Unit* pVictim)
 {
     m_isBuffing = false;
 
@@ -418,7 +418,7 @@ bool MapBotAI::AttackStart(Unit* pVictim)
     return false;
 }
 
-Unit* MapBotAI::SelectAttackTarget(Unit* pExcept) const
+Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
 {
     // 1. Check units we are currently in combat with.
 
@@ -521,7 +521,7 @@ Unit* MapBotAI::SelectAttackTarget(Unit* pExcept) const
     return nullptr;
 }
 
-Unit* MapBotAI::SelectFollowTarget() const
+Unit* WorldBotAI::SelectFollowTarget() const
 {
     std::list<Player*> players;
     me->GetAlivePlayerListInRange(me, players, VISIBILITY_DISTANCE_NORMAL);
@@ -561,7 +561,7 @@ Unit* MapBotAI::SelectFollowTarget() const
     return pHealerFollowTarget;
 }
 
-void MapBotAI::DoGraveyardJump()
+void WorldBotAI::DoGraveyardJump()
 {
     if (!me->GetBattleGround() ||
         me->GetBattleGround()->GetTypeID() != BATTLEGROUND_WS)
@@ -574,7 +574,7 @@ void MapBotAI::DoGraveyardJump()
     {
         RecordedMovementPacket* point = &((*pPath)[i]);
         Player* pBot = me;
-        MapBotAI* pAI = this;
+        WorldBotAI* pAI = this;
         bool isLast = i == (*pPath).size() - 1;
         timeOffset += point->timeDiff;
         me->m_Events.AddLambdaEventAtOffset([pBot, pAI, point, isLast]
@@ -592,14 +592,14 @@ void MapBotAI::DoGraveyardJump()
     }
 }
 
-void MapBotAI::StopMoving()
+void WorldBotAI::StopMoving()
 {
     me->StopMoving();
     me->GetMotionMaster()->Clear();
     me->GetMotionMaster()->MoveIdle();
 }
 
-void MapBotAI::SendFakePacket(uint16 opcode)
+void WorldBotAI::SendFakePacket(uint16 opcode)
 {
     //printf("Bot send %s\n", LookupOpcodeName(opcode));
     switch (opcode)
@@ -621,7 +621,7 @@ void MapBotAI::SendFakePacket(uint16 opcode)
                     data << uint32(529);
                     break;
                 default:
-                    sLog.outError("MapBot: Invalid BG queue type!");
+                    sLog.outError("WorldBot: Invalid BG queue type!");
                     botEntry->requestRemoval = true;
                     return;
             }
@@ -669,9 +669,9 @@ void MapBotAI::SendFakePacket(uint16 opcode)
     CombatBotBaseAI::SendFakePacket(opcode);
 }
 
-void MapBotAI::OnPacketReceived(WorldPacket const* packet)
+void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
 {
-    //printf("MapBotAI: Bot received %s\n", LookupOpcodeName(packet->GetOpcode()));
+    //printf("WorldBotAI: Bot received %s\n", LookupOpcodeName(packet->GetOpcode()));
     ASSERT(botEntry);
 
     switch (packet->GetOpcode())
@@ -760,13 +760,13 @@ void MapBotAI::OnPacketReceived(WorldPacket const* packet)
     CombatBotBaseAI::OnPacketReceived(packet);
 }
 
-void MapBotAI::OnPlayerLogin()
+void WorldBotAI::OnPlayerLogin()
 {
     if (!m_initialized)
         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 }
 
-void MapBotAI::UpdateWaypointMovement()
+void WorldBotAI::UpdateWaypointMovement()
 {
     // We already have a path.
     if (m_currentPath)
@@ -809,21 +809,21 @@ void MapBotAI::UpdateWaypointMovement()
     StartNewPathFromAnywhere();
 }
 
-void MapBotAI::OnJustDied()
+void WorldBotAI::OnJustDied()
 {
     ClearPath();
     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
         StopMoving();
 }
 
-void MapBotAI::OnJustRevived()
+void WorldBotAI::OnJustRevived()
 {
     SummonPetIfNeeded();
     if (!me->SelectRandomUnfriendlyTarget(nullptr, 30.0f))
         DoGraveyardJump();
 }
 
-void MapBotAI::OnEnterBattleGround()
+void WorldBotAI::OnEnterBattleGround()
 {
     BattleGround* bg = me->GetBattleGround();
     if (!bg)
@@ -868,14 +868,14 @@ void MapBotAI::OnEnterBattleGround()
     }
 }
 
-void MapBotAI::OnLeaveBattleGround()
+void WorldBotAI::OnLeaveBattleGround()
 {
     ClearPath();
     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
         StopMoving();
 }
 
-bool MapBotAI::CheckForUnreachableTarget()
+bool WorldBotAI::CheckForUnreachableTarget()
 {
     if (me->GetMotionMaster()->GetCurrentMovementGeneratorType() == CHASE_MOTION_TYPE &&
        !me->GetMotionMaster()->GetCurrent()->IsReachable())
@@ -911,7 +911,7 @@ bool MapBotAI::CheckForUnreachableTarget()
     return false;
 }
 
-void MapBotAI::UpdateAI(uint32 const diff)
+void WorldBotAI::UpdateAI(uint32 const diff)
 {
     // General AI timer
     m_updateTimer.Update(diff);
@@ -1036,7 +1036,7 @@ void MapBotAI::UpdateAI(uint32 const diff)
                     ChatHandler(me).HandleGoArathiCommand("");
                     break;
                 default:
-                    sLog.outError("MapBot: Invalid BG queue type!");
+                    sLog.outError("WorldBot: Invalid BG queue type!");
                     //botEntry->requestRemoval = true;
                     m_isBattleBot = false;
                     return;
@@ -1322,7 +1322,7 @@ void MapBotAI::UpdateAI(uint32 const diff)
         UpdateInCombatAI();
 }
 
-void MapBotAI::UpdateBattleGroundAI()
+void WorldBotAI::UpdateBattleGroundAI()
 {
     BattleGround* bg = me->GetBattleGround();
     if (!bg)
@@ -1341,7 +1341,7 @@ void MapBotAI::UpdateBattleGroundAI()
     }
 }
 
-void MapBotAI::UpdateOutOfCombatAI()
+void WorldBotAI::UpdateOutOfCombatAI()
 {
     switch (me->GetClass())
     {
@@ -1375,7 +1375,7 @@ void MapBotAI::UpdateOutOfCombatAI()
     }
 }
 
-void MapBotAI::UpdateInCombatAI()
+void WorldBotAI::UpdateInCombatAI()
 {
     switch (me->GetClass())
     {
@@ -1409,7 +1409,7 @@ void MapBotAI::UpdateInCombatAI()
     }
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Paladin()
+void WorldBotAI::UpdateOutOfCombatAI_Paladin()
 {
     if (m_spells.paladin.pAura &&
         CanTryToCastSpell(me, m_spells.paladin.pAura))
@@ -1443,7 +1443,7 @@ void MapBotAI::UpdateOutOfCombatAI_Paladin()
     FindAndHealInjuredAlly();
 }
 
-void MapBotAI::UpdateInCombatAI_Paladin()
+void WorldBotAI::UpdateInCombatAI_Paladin()
 {
     if (m_spells.paladin.pDivineShield &&
        (me->GetHealthPercent() < 20.0f) &&
@@ -1576,7 +1576,7 @@ void MapBotAI::UpdateInCombatAI_Paladin()
     FindAndHealInjuredAlly(me->IsTotalImmune() ? 80.0f : 40.0f, 50.0f);
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Shaman()
+void WorldBotAI::UpdateOutOfCombatAI_Shaman()
 {
     if (m_spells.shaman.pWeaponBuff &&
         CanTryToCastSpell(me, m_spells.shaman.pWeaponBuff))
@@ -1612,7 +1612,7 @@ void MapBotAI::UpdateOutOfCombatAI_Shaman()
     }
 }
 
-void MapBotAI::UpdateInCombatAI_Shaman()
+void WorldBotAI::UpdateInCombatAI_Shaman()
 {
     if (m_spells.shaman.pGhostWolf &&
         me->GetShapeshiftForm() == FORM_GHOSTWOLF)
@@ -1712,7 +1712,7 @@ void MapBotAI::UpdateInCombatAI_Shaman()
     FindAndHealInjuredAlly(40.0f);
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Hunter()
+void WorldBotAI::UpdateOutOfCombatAI_Hunter()
 {
     if (m_spells.hunter.pAspectOfTheCheetah &&
        !me->IsMounted() &&
@@ -1744,7 +1744,7 @@ void MapBotAI::UpdateOutOfCombatAI_Hunter()
     }
 }
 
-void MapBotAI::UpdateInCombatAI_Hunter()
+void WorldBotAI::UpdateInCombatAI_Hunter()
 {
     if (Unit* pVictim = me->GetVictim())
     {
@@ -1860,7 +1860,7 @@ void MapBotAI::UpdateInCombatAI_Hunter()
     }
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Mage()
+void WorldBotAI::UpdateOutOfCombatAI_Mage()
 {
     if (m_spells.mage.pArcaneBrilliance)
     {
@@ -1897,7 +1897,7 @@ void MapBotAI::UpdateOutOfCombatAI_Mage()
         UpdateInCombatAI_Mage();
 }
 
-void MapBotAI::UpdateInCombatAI_Mage()
+void WorldBotAI::UpdateInCombatAI_Mage()
 {
     if (Unit* pVictim = me->GetVictim())
     {
@@ -2082,7 +2082,7 @@ void MapBotAI::UpdateInCombatAI_Mage()
     }
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Priest()
+void WorldBotAI::UpdateOutOfCombatAI_Priest()
 {
     BattleGround* bg = me->GetBattleGround();
     if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
@@ -2178,7 +2178,7 @@ void MapBotAI::UpdateOutOfCombatAI_Priest()
         UpdateInCombatAI_Priest();
 }
 
-void MapBotAI::UpdateInCombatAI_Priest()
+void WorldBotAI::UpdateInCombatAI_Priest()
 {
     if (m_spells.priest.pPowerWordShield &&
         CanTryToCastSpell(me, m_spells.priest.pPowerWordShield))
@@ -2335,7 +2335,7 @@ void MapBotAI::UpdateInCombatAI_Priest()
 
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Warlock()
+void WorldBotAI::UpdateOutOfCombatAI_Warlock()
 {
     BattleGround* bg = me->GetBattleGround();
     if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
@@ -2379,7 +2379,7 @@ void MapBotAI::UpdateOutOfCombatAI_Warlock()
         UpdateInCombatAI_Warlock();
 }
 
-void MapBotAI::UpdateInCombatAI_Warlock()
+void WorldBotAI::UpdateInCombatAI_Warlock()
 {
     if (Unit* pVictim = me->GetVictim())
     {
@@ -2529,7 +2529,7 @@ void MapBotAI::UpdateInCombatAI_Warlock()
     }
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Warrior()
+void WorldBotAI::UpdateOutOfCombatAI_Warrior()
 {
     if (m_spells.warrior.pBattleStance &&
         CanTryToCastSpell(me, m_spells.warrior.pBattleStance))
@@ -2562,7 +2562,7 @@ void MapBotAI::UpdateOutOfCombatAI_Warrior()
     }
 }
 
-void MapBotAI::UpdateInCombatAI_Warrior()
+void WorldBotAI::UpdateInCombatAI_Warrior()
 {
     if (Unit* pVictim = me->GetVictim())
     {
@@ -2797,7 +2797,7 @@ void MapBotAI::UpdateInCombatAI_Warrior()
     }
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Rogue()
+void WorldBotAI::UpdateOutOfCombatAI_Rogue()
 {
     if (m_spells.rogue.pMainHandPoison &&
         CanTryToCastSpell(me, m_spells.rogue.pMainHandPoison))
@@ -2826,7 +2826,7 @@ void MapBotAI::UpdateOutOfCombatAI_Rogue()
         UpdateInCombatAI_Rogue();
 }
 
-void MapBotAI::UpdateInCombatAI_Rogue()
+void WorldBotAI::UpdateInCombatAI_Rogue()
 {
     if (Unit* pVictim = me->GetVictim())
     {
@@ -3017,7 +3017,7 @@ void MapBotAI::UpdateInCombatAI_Rogue()
     }
 }
 
-void MapBotAI::UpdateOutOfCombatAI_Druid()
+void WorldBotAI::UpdateOutOfCombatAI_Druid()
 {
     BattleGround* bg = me->GetBattleGround();
     if (bg && bg->GetStatus() == STATUS_WAIT_JOIN)
@@ -3152,7 +3152,7 @@ void MapBotAI::UpdateOutOfCombatAI_Druid()
     }
 }
 
-void MapBotAI::UpdateInCombatAI_Druid()
+void WorldBotAI::UpdateInCombatAI_Druid()
 {
     if (m_spells.druid.pTravelForm &&
         me->GetShapeshiftForm() == FORM_TRAVEL)
@@ -3487,7 +3487,7 @@ void MapBotAI::UpdateInCombatAI_Druid()
     }
 }
 
-void MapBotAI::LoadBotChat()
+void WorldBotAI::LoadBotChat()
 {
     QueryResult* result = WorldDatabase.PQuery("SELECT guid, type, chat FROM mapbot_chat ORDER BY guid, type ASC;");
 
@@ -3503,39 +3503,39 @@ void MapBotAI::LoadBotChat()
 
             switch(type)
             {
-                case MapBotChatDataType::NOT_UNDERSTAND:
+                case WorldBotChatDataType::NOT_UNDERSTAND:
                 {
-                    m_chatDataNotUnderstand.push_back(MapBotChatData(guid, type, chat));
+                    m_chatDataNotUnderstand.push_back(WorldBotChatData(guid, type, chat));
                     break;
                 }
-                case MapBotChatDataType::GRUDGE:
+                case WorldBotChatDataType::GRUDGE:
                 {
-                    m_chatDataGrudge.push_back(MapBotChatData(guid, type, chat));
+                    m_chatDataGrudge.push_back(WorldBotChatData(guid, type, chat));
                     break;
                 }
-                case MapBotChatDataType::VICTIM:
+                case WorldBotChatDataType::VICTIM:
                 {
-                    m_chatDataVictim.push_back(MapBotChatData(guid, type, chat));
+                    m_chatDataVictim.push_back(WorldBotChatData(guid, type, chat));
                     break;
                 }
-                case MapBotChatDataType::ATTACKER:
+                case WorldBotChatDataType::ATTACKER:
                 {
-                    m_chatDataAttacker.push_back(MapBotChatData(guid, type, chat));
+                    m_chatDataAttacker.push_back(WorldBotChatData(guid, type, chat));
                     break;
                 }
-                case MapBotChatDataType::HELLO_RESPOND:
+                case WorldBotChatDataType::HELLO_RESPOND:
                 {
-                    m_chatDataHelloRespond.emplace_back(MapBotChatData(guid, type, chat));
+                    m_chatDataHelloRespond.emplace_back(WorldBotChatData(guid, type, chat));
                     break;
                 }
-                case MapBotChatDataType::NAME_RESPOND:
+                case WorldBotChatDataType::NAME_RESPOND:
                 {
-                    m_chatDataNameRespond.push_back(MapBotChatData(guid, type, chat));
+                    m_chatDataNameRespond.push_back(WorldBotChatData(guid, type, chat));
                     break;
                 }
-                case MapBotChatDataType::ADMIN_ABUSE:
+                case WorldBotChatDataType::ADMIN_ABUSE:
                 {
-                    m_chatDataAdminAbuse.push_back(MapBotChatData(guid, type, chat));
+                    m_chatDataAdminAbuse.push_back(WorldBotChatData(guid, type, chat));
                     break;
                 }
                 default:
@@ -3546,14 +3546,14 @@ void MapBotAI::LoadBotChat()
     }
     else
     {
-        sLog.outError("MapBot: unable to load chat.");
+        sLog.outError("WorldBot: unable to load chat.");
         return;
     }
 
     delete result;
 }
 
-void MapBotAI::BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name)
+void WorldBotAI::BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name)
 {
     if (msgtype == CHAT_MSG_CHANNEL)
     {
@@ -3561,7 +3561,7 @@ void MapBotAI::BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, Ob
         {
             if (player->GetTeam() == me->GetTeam())
             {
-                m_chatWorldRespondsQueue.push_back(MapBotChatRespondsQueue(me->GetObjectGuid(), msgtype, guid1, guid2, message, chanName, name));
+                m_chatWorldRespondsQueue.push_back(WorldBotChatRespondsQueue(me->GetObjectGuid(), msgtype, guid1, guid2, message, chanName, name));
             }
         }
     }
@@ -3571,13 +3571,13 @@ void MapBotAI::BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, Ob
         {
             if (player->GetTeam() == me->GetTeam())
             {
-                m_chatPlayerRespondsQueue.push_back(MapBotChatRespondsQueue(me->GetObjectGuid(), msgtype, guid1, guid2, message, chanName, name));
+                m_chatPlayerRespondsQueue.push_back(WorldBotChatRespondsQueue(me->GetObjectGuid(), msgtype, guid1, guid2, message, chanName, name));
             }
         }
     }
 }
 
-void MapBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
+void WorldBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
 {
     std::string respondsText;
     time_t gtime = sWorld.GetGameTime();
@@ -4041,7 +4041,7 @@ void MapBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, s
     }
 }
 
-void MapBotAI::HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
+void WorldBotAI::HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
 {
     std::string respondsText;
     time_t gtime = sWorld.GetGameTime();

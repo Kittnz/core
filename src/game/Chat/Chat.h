@@ -86,13 +86,13 @@ enum PlayerChatTag
 
 class PartyBotAI;
 class BattleBotAI;
-class MapBotAI;
+class WorldBotAI;
 
 class ChatHandler
 {
     friend class PartyBotAI;
     friend class BattleBotAI;
-    friend class MapBotAI;
+    friend class WorldBotAI;
     public:
         explicit ChatHandler(WorldSession* session);
         explicit ChatHandler(Player* player);
@@ -278,16 +278,16 @@ class ChatHandler
         bool HandleBattleBotRemoveCommand(char* args);
         bool HandleBattleBotShowPathCommand(char* args);
         bool HandleBattleBotShowAllPathsCommand(char* args);
-        bool HandleMapBotAddCommand(char* args, uint32 map, bool isBattleBot);
-        bool HandleMapBotAddAlteracCommand(char* args);
-        bool HandleMapBotAddArathiCommand(char* args);
-        bool HandleMapBotAddWarsongCommand(char* args);
-        bool HandleMapBotAddEasternKingdomsCommand(char* args);
-        bool HandleMapBotAddKalimdorCommand(char* args);
-        bool HandleMapBotRemoveCommand(char* args);
-        bool HandleMapBotShowPathCommand(char* args);
-        bool HandleMapBotShowAllPathsCommand(char* args);
-        bool HandleMapBotPathPointAddCommand(char* args);
+        bool HandleWorldBotAddCommand(char* args, uint32 map, bool isBattleBot);
+        bool HandleWorldBotAddAlteracCommand(char* args);
+        bool HandleWorldBotAddArathiCommand(char* args);
+        bool HandleWorldBotAddWarsongCommand(char* args);
+        bool HandleWorldBotAddEasternKingdomsCommand(char* args);
+        bool HandleWorldBotAddKalimdorCommand(char* args);
+        bool HandleWorldBotRemoveCommand(char* args);
+        bool HandleWorldBotShowPathCommand(char* args);
+        bool HandleWorldBotShowAllPathsCommand(char* args);
+        bool HandleWorldBotPathPointAddCommand(char* args);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);

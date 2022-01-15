@@ -1,22 +1,22 @@
-#ifndef MANGOS_MapBotAI_H
-#define MANGOS_MapBotAI_H
+#ifndef MANGOS_WorldBotAI_H
+#define MANGOS_WorldBotAI_H
 
 #include "CombatBotBaseAI.h"
-#include "MapBotWaypoints.h"
+#include "WorldBotWaypoints.h"
 #include "BattleBotAI.h"
 #include "PartyBotAI.h"
 #include "PlayerBotMgr.h"
 
-struct MapBotChatData
+struct WorldBotChatData
 {
-    MapBotChatData(uint32 guid, uint32 type, std::string chat) : m_guid(guid), m_type(type), m_chat(chat) {}
+    WorldBotChatData(uint32 guid, uint32 type, std::string chat) : m_guid(guid), m_type(type), m_chat(chat) {}
     uint32 m_type, m_guid = 0;
     std::string m_chat = "";
 };
 
-struct MapBotChatRespondsQueue
+struct WorldBotChatRespondsQueue
 {
-    MapBotChatRespondsQueue(ObjectGuid originguid, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name) : m_originguid(originguid), m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName), m_name(name) {}
+    WorldBotChatRespondsQueue(ObjectGuid originguid, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name) : m_originguid(originguid), m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName), m_name(name) {}
     ObjectGuid m_originguid;
     uint32 m_type;
     uint32 m_guid1;
@@ -26,7 +26,7 @@ struct MapBotChatRespondsQueue
     std::string m_name;
 };
 
-enum MapBotChatDataType
+enum WorldBotChatDataType
 {
     NOT_UNDERSTAND,
     GRUDGE,
@@ -37,7 +37,7 @@ enum MapBotChatDataType
     ADMIN_ABUSE
 };
 
-enum MapBotMapId
+enum WorldBotMapId
 {
     MAP_EASTERN_KINGDOMS = 0,
     MAP_KALIMDOR = 1,
@@ -46,7 +46,7 @@ enum MapBotMapId
     MAP_WS = 489,
 };
 
-enum MapBotWsgWaitSpot
+enum WorldBotWsgWaitSpot
 {
     MB_WSG_WAIT_SPOT_SPAWN,
     MB_WSG_WAIT_SPOT_LEFT,
@@ -55,11 +55,11 @@ enum MapBotWsgWaitSpot
 
 typedef std::vector<std::string> Speech;
 
-class MapBotAI : public CombatBotBaseAI
+class WorldBotAI : public CombatBotBaseAI
 {
 public:
 
-    MapBotAI(uint8 race, uint8 class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, bool isBattleBot, uint8 bgId)
+    WorldBotAI(uint8 race, uint8 class_, uint32 mapId, uint32 instanceId, float x, float y, float z, float o, bool isBattleBot, uint8 bgId)
         : CombatBotBaseAI(),  m_race(race), m_class(class_), m_mapId(mapId), m_instanceId(instanceId), m_x(x), m_y(y), m_z(z), m_o(o), m_isBattleBot(isBattleBot), m_battlegroundId(bgId)
     {
         m_updateTimer.Reset(2000);
@@ -70,7 +70,7 @@ public:
 
     bool OnSessionLoaded(PlayerBotEntry * entry, WorldSession * sess) override
     {
-        if (sPlayerBotMgr.m_useMapBotLoader)
+        if (sPlayerBotMgr.m_useWorldBotLoader)
         {
             sess->LoginPlayer(entry->playerGUID);
             return true;
@@ -141,7 +141,7 @@ public:
     bool m_wasDead = false;
     bool m_wasInBG = false;
     bool m_isBattleBot = false;
-    bool m_isMapBot = false;
+    bool m_isWorldBot = false;
 
     // Movement System
     void LoadDBWaypoints();
@@ -151,18 +151,18 @@ public:
     bool StartNewPathFromBeginning();
     void StartNewPathFromAnywhere();
     bool BGStartNewPathToObjective();
-    bool StartNewPathToPosition(Position const& position, std::vector<MapBotPath*> const& vPaths);
+    bool StartNewPathToPosition(Position const& position, std::vector<WorldBotPath*> const& vPaths);
     void ClearPath();
     void StopMoving();
     bool m_doingGraveyardJump = false;
     bool m_movingInReverse = false;
     uint32 m_currentPoint = 0;
-    MapBotPath* m_currentPath = nullptr;
+    WorldBotPath* m_currentPath = nullptr;
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
 
     // Chat System
-    std::vector<MapBotChatRespondsQueue> m_chatWorldRespondsQueue;
-    std::vector<MapBotChatRespondsQueue> m_chatPlayerRespondsQueue;
+    std::vector<WorldBotChatRespondsQueue> m_chatWorldRespondsQueue;
+    std::vector<WorldBotChatRespondsQueue> m_chatPlayerRespondsQueue;
     void LoadBotChat();
     void BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
     void HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);

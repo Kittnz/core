@@ -127,24 +127,24 @@ ChatCommand * ChatHandler::getCommandTable()
     };
     static ChatCommand mapBotPathCommandTable[] =
     {
-        { "add",          SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotPathPointAddCommand,    "", nullptr },
+        { "add",          SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotPathPointAddCommand,    "", nullptr },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
     static ChatCommand mapBotAddCommandTable[] =
     {
-        { "alterac",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddAlteracCommand, "", nullptr },
-        { "arathi",     SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddArathiCommand,  "", nullptr },
-        { "warsong",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddWarsongCommand, "", nullptr },
-        { "eastern",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddEasternKingdomsCommand, "", nullptr },
-        { "kalimdor",   SEC_ADMINISTRATOR,      false, &ChatHandler::HandleMapBotAddKalimdorCommand,  "", nullptr },
+        { "alterac",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddAlteracCommand, "", nullptr },
+        { "arathi",     SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddArathiCommand,  "", nullptr },
+        { "warsong",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddWarsongCommand, "", nullptr },
+        { "eastern",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddEasternKingdomsCommand, "", nullptr },
+        { "kalimdor",   SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddKalimdorCommand,  "", nullptr },
         { nullptr,      0,                      false, nullptr,                                        "", nullptr },
     };
     static ChatCommand mapBotCommandTable[] =
     {
         { "add",          SEC_ADMINISTRATOR,    false, nullptr,            "Add a new bot", mapBotAddCommandTable },
-        { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotRemoveCommand,       "", nullptr },
-        { "showpath",     SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotShowPathCommand,     "", nullptr },
-        { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleMapBotShowAllPathsCommand, "", nullptr },
+        { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotRemoveCommand,       "", nullptr },
+        { "showpath",     SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowPathCommand,     "", nullptr },
+        { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowAllPathsCommand, "", nullptr },
         { "path",         SEC_ADMINISTRATOR,    false, nullptr,              "Add a path", mapBotPathCommandTable },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };

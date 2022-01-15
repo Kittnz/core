@@ -1351,7 +1351,7 @@ class ObjectMgr
         void LoadPlayerPremadeTemplates();
         void ApplyPremadeGearTemplateToPlayer(uint32 entry, Player* pPlayer) const;
         void ApplyPremadeSpecTemplateToPlayer(uint32 entry, Player* pPlayer) const;
-        void ApplyPremadeSpecTemplateToPlayerMapBot(uint32 entry, Player* pPlayer) const;
+        void ApplyPremadeSpecTemplateToPlayerWorldBot(uint32 entry, Player* pPlayer) const;
         PlayerPremadeGearMap const& GetPlayerPremadeGearTemplates() const { return m_playerPremadeGearMap; }
         PlayerPremadeSpecMap const& GetPlayerPremadeSpecTemplates() const { return m_playerPremadeSpecMap; }
 

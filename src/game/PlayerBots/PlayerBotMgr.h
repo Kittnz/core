@@ -64,7 +64,7 @@ struct PlayerBotStats
     confMaxOnline(0), confMinOnline(0), confRandomBotsRefresh(0), confUpdateDiff(0) {}
 };
 
-class MapBotsCollection
+class WorldBotsCollection
 {
 public:
     uint32 guid;
@@ -116,11 +116,11 @@ class PlayerBotMgr
         PlayerBotStats& GetStats(){ return m_stats; }
         void Start() { m_enableRandomBots = true; }
 
-        void MapBotLoader();
-        void MapBotCreator();
-        void MapBotBalancer();
-        bool MapBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map);
-        bool m_useMapBotLoader = false;
+        void WorldBotLoader();
+        void WorldBotCreator();
+        void WorldBotBalancer();
+        bool WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map);
+        bool m_useWorldBotLoader = false;
 
     protected:
         // How long since last update?

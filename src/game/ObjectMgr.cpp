@@ -11282,7 +11282,7 @@ void ObjectMgr::ApplyPremadeSpecTemplateToPlayer(uint32 entry, Player* pPlayer) 
     }
 }
 
-void ObjectMgr::ApplyPremadeSpecTemplateToPlayerMapBot(uint32 entry, Player* pPlayer) const
+void ObjectMgr::ApplyPremadeSpecTemplateToPlayerWorldBot(uint32 entry, Player* pPlayer) const
 {
     auto itr = m_playerPremadeSpecMap.find(entry);
     if (itr == m_playerPremadeSpecMap.end())

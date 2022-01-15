@@ -2847,13 +2847,13 @@ OfflineChat.IP     = 0.0.0.0
 OfflineChat.Password= "p8zqkt"
 
 ###################################################################################################################
-#    Map Bots
+#    World Bots
 ###################################################################################################################
-MapBot.Enable = false
-MapBot.UseLoader = false
-MapBot.UseChat = true
-MapBot.MaxHordeBots = 100
-MapBot.MaxAllianceBots = 100
+WorldBot.Enable = false
+WorldBot.UseLoader = false
+WorldBot.UseChat = true
+WorldBot.MaxHordeBots = 100
+WorldBot.MaxAllianceBots = 100
 
 ###################################################################################################################
 #    Mail flooding mitigation

@@ -1,5 +1,5 @@
-#include "MapBotAI.h"
-#include "MapBotWaypoints.h"
+#include "WorldBotAI.h"
+#include "WorldBotWaypoints.h"
 #include "WorldPacket.h"
 #include "Player.h"
 #include "MotionMaster.h"
@@ -12,7 +12,7 @@
 #include "GridSearchers.h"
 
 std::vector<Waypoints> myWaypoints;
-MapBotPath* paths = new MapBotPath();
+WorldBotPath* paths = new WorldBotPath();
 
 enum GameObjectsAB
 {
@@ -58,7 +58,7 @@ enum AreaTriggersWS
     AT_WARSONG_FLAG    = 3647
 };
 
-void WSG_AtAllianceFlag(MapBotAI* pAI)
+void WSG_AtAllianceFlag(WorldBotAI* pAI)
 {
     if (GameObject* pFlag = pAI->me->FindNearestGameObject(GO_WS_SILVERWING_FLAG, 25.0f))
     {
@@ -106,7 +106,7 @@ void WSG_AtAllianceFlag(MapBotAI* pAI)
     pAI->MoveToNextPoint();
 }
 
-void WSG_AtHordeFlag(MapBotAI* pAI)
+void WSG_AtHordeFlag(WorldBotAI* pAI)
 {
     if (GameObject* pFlag = pAI->me->FindNearestGameObject(GO_WS_WARSONG_FLAG, 25.0f))
     {
@@ -154,7 +154,7 @@ void WSG_AtHordeFlag(MapBotAI* pAI)
     pAI->MoveToNextPoint();
 }
 
-void WSG_AtAllianceGraveyard(MapBotAI* pAI)
+void WSG_AtAllianceGraveyard(WorldBotAI* pAI)
 {
     if ((pAI->me->GetTeam() == ALLIANCE) && !pAI->me->IsMounted() && urand(0, 1))
     {
@@ -165,7 +165,7 @@ void WSG_AtAllianceGraveyard(MapBotAI* pAI)
         pAI->MoveToNextPoint();
 }
 
-void WSG_AtHordeGraveyard(MapBotAI* pAI)
+void WSG_AtHordeGraveyard(WorldBotAI* pAI)
 {
     if ((pAI->me->GetTeam() == HORDE) && !pAI->me->IsMounted() && urand(0, 1))
     {
@@ -186,7 +186,7 @@ std::vector<uint32> const vFlagsAB = { GO_AB_ALLIANCE_BANNER , GO_AB_CONTESTED_B
                                        GO_AB_STABLE_BANNER, GO_AB_BLACKSMITH_BANNER, GO_AB_FARM_BANNER, GO_AB_LUMBER_MILL_BANNER,
                                        GO_AB_GOLD_MINE_BANNER };
 
-void AtFlag(MapBotAI* pAI, std::vector<uint32> const& vFlagIds)
+void AtFlag(WorldBotAI* pAI, std::vector<uint32> const& vFlagIds)
 {
     if (Player* pFriend = pAI->me->FindNearestFriendlyPlayer(INTERACTION_DISTANCE))
     {
@@ -221,17 +221,17 @@ void AtFlag(MapBotAI* pAI, std::vector<uint32> const& vFlagIds)
     pAI->MoveToNextPoint();
 }
 
-void AB_AtFlag(MapBotAI* pAI)
+void AB_AtFlag(WorldBotAI* pAI)
 {
     AtFlag(pAI, vFlagsAB);
 }
 
-void AV_AtFlag(MapBotAI* pAI)
+void AV_AtFlag(WorldBotAI* pAI)
 {
     AtFlag(pAI, vFlagsAV);
 }
 
-void AtCaveExit(MapBotAI* pAI)
+void AtCaveExit(WorldBotAI* pAI)
 {
     pAI->me->StopMoving();
 
@@ -244,7 +244,7 @@ void AtCaveExit(MapBotAI* pAI)
     pAI->MoveToNextPoint();
 }
 
-void MoveToNextPointSpecial(MapBotAI* pAI)
+void MoveToNextPointSpecial(WorldBotAI* pAI)
 {
     if (!pAI->m_currentPath)
         return;
@@ -264,7 +264,7 @@ void MoveToNextPointSpecial(MapBotAI* pAI)
     else
         pAI->m_currentPoint++;
 
-    MapBotWaypoint& nextPoint = pAI->m_currentPath->at(pAI->m_currentPoint);
+    WorldBotWaypoint& nextPoint = pAI->m_currentPath->at(pAI->m_currentPoint);
 
     pAI->me->GetMotionMaster()->MovePoint(pAI->m_currentPoint, nextPoint.x + frand(-1, 1), nextPoint.y + frand(-1, 1), nextPoint.z, MOVE_NONE);
 }
@@ -290,7 +290,7 @@ uint32 GetRandomTaxiNode(uint32 mapid, Team team)
     return id;
 }
 
-void TaxiToOtherZone(MapBotAI* pAI)
+void TaxiToOtherZone(WorldBotAI* pAI)
 {
     pAI->me->StopMoving();
     pAI->ClearPath();
@@ -306,7 +306,7 @@ void TaxiToOtherZone(MapBotAI* pAI)
     }
 }
 
-void QueueForBG(MapBotAI* pAI)
+void QueueForBG(WorldBotAI* pAI)
 {
     // Make map bot a battle bot
     if (!pAI->m_isBattleBot)
@@ -337,7 +337,7 @@ void QueueForBG(MapBotAI* pAI)
     pAI->MoveToNextPoint();
 }
 
-void QueueForWS(MapBotAI* pAI)
+void QueueForWS(WorldBotAI* pAI)
 {
     // Make bot queue for wsg
     if (!pAI->m_isBattleBot)
@@ -356,7 +356,7 @@ void QueueForWS(MapBotAI* pAI)
     pAI->MoveToNextPoint();
 }
 
-void QueueForAB(MapBotAI* pAI)
+void QueueForAB(WorldBotAI* pAI)
 {
     // Make map bot a battle bot
     if (!pAI->m_isBattleBot)
@@ -376,7 +376,7 @@ void QueueForAB(MapBotAI* pAI)
     pAI->MoveToNextPoint();
 }
 
-void QueueForAV(MapBotAI* pAI)
+void QueueForAV(WorldBotAI* pAI)
 {
     // Make map bot a battle bot
     if (!pAI->m_isBattleBot)
@@ -396,68 +396,68 @@ void QueueForAV(MapBotAI* pAI)
     pAI->MoveToNextPoint();
 }
 
-void HoldPosition(MapBotAI* pAI)
+void HoldPosition(WorldBotAI* pAI)
 {
     pAI->me->StopMoving();
     pAI->ClearPath();
     pAI->m_allowedToMove = false;
 }
 
-void TransportTeleportToUndercityFromOrgrimmar(MapBotAI* pAI)
+void TransportTeleportToUndercityFromOrgrimmar(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(0, 2067.225f, 288.872f, 97.031f, 4.538f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToOrgrimmarFromUndercity(MapBotAI* pAI)
+void TransportTeleportToOrgrimmarFromUndercity(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(1, 1321.816f, -4651.534f, 53.858f, 0.214f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToOrgrimmarFromGromgol(MapBotAI* pAI)
+void TransportTeleportToOrgrimmarFromGromgol(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(1, 1360.486f, -4639.038f, 53.838f, 3.795f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToGromgolFromOrgrimmar(MapBotAI* pAI)
+void TransportTeleportToGromgolFromOrgrimmar(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(0, -12447.757f, 217.080f, 31.560f, 5.643f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToGromgolFromUndercity(MapBotAI* pAI)
+void TransportTeleportToGromgolFromUndercity(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(0, -12410.208f, 208.049f, 31.592f, 3.145f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToUndercityFromGromgol(MapBotAI* pAI)
+void TransportTeleportToUndercityFromGromgol(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(0, 2057.466f, 238.967f, 99.767f, 1.347f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToMenethilHarborFromTheramoreIsle(MapBotAI* pAI)
+void TransportTeleportToMenethilHarborFromTheramoreIsle(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(0, -3894.395f, -600.468f, 5.495f, 5.118f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToTheramoreIsleFromMenethilHarbor(MapBotAI* pAI)
+void TransportTeleportToTheramoreIsleFromMenethilHarbor(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(1, -4002.525f, -4727.977f, 5.009f, 0.781f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToRatchetFromBootyBay(MapBotAI* pAI)
+void TransportTeleportToRatchetFromBootyBay(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(1, -996.670f, -3828.736f, 5.583f, 1.075f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
 }
 
-void TransportTeleportToBootyBayFromRatchet(MapBotAI* pAI)
+void TransportTeleportToBootyBayFromRatchet(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(0, -14281.021f, 566.528f, 7.0141f, 4.326f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
@@ -508,16 +508,16 @@ std::vector<RecordedMovementPacket> vHordeGraveyardJumpPath_ =
     { MSG_MOVE_STOP, 327, 0, 1077.87f, 1400.27f, 323.154f, 0.0282667f },
 };
 
-std::vector<MapBotPath*> vPaths_Map_Warsong_Gulch;
-std::vector<MapBotPath*> vPaths_Map_Arathi_Basin;
-std::vector<MapBotPath*> vPaths_Map_Alterac_Valley;
-std::vector<MapBotPath*> vPaths_Map_Eastern_Kingdoms;
-std::vector<MapBotPath*> vPaths_Map_Kalimdor;
-std::vector<MapBotPath*> vPaths_NoReverseAllowed;
+std::vector<WorldBotPath*> vPaths_Map_Warsong_Gulch;
+std::vector<WorldBotPath*> vPaths_Map_Arathi_Basin;
+std::vector<WorldBotPath*> vPaths_Map_Alterac_Valley;
+std::vector<WorldBotPath*> vPaths_Map_Eastern_Kingdoms;
+std::vector<WorldBotPath*> vPaths_Map_Kalimdor;
+std::vector<WorldBotPath*> vPaths_NoReverseAllowed;
 
-void MapBotAI::LoadDBWaypoints()
+void WorldBotAI::LoadDBWaypoints()
 {
-    MapBotAI* pAI = nullptr;
+    WorldBotAI* pAI = nullptr;
     float x, y, z = 0.f;
     uint32 guid, id, area, zone, map, reverse, lastGuidPoint = 0;
     std::string func, comments = "";
@@ -560,7 +560,7 @@ void MapBotAI::LoadDBWaypoints()
     }
     else
     {
-        sLog.outError("MapBot: unable to load mapbot waypoints.");
+        sLog.outError("WorldBot: unable to load mapbot waypoints.");
         return;
     }
 
@@ -570,7 +570,7 @@ void MapBotAI::LoadDBWaypoints()
     for (auto v : myWaypoints)
     {
         uint32 guid = v.guid;
-        MapBotPath* path = new MapBotPath();
+        WorldBotPath* path = new WorldBotPath();
 
         if (guid != lastGuid)
         {
@@ -582,13 +582,13 @@ void MapBotAI::LoadDBWaypoints()
 
                 if (guid_ == guid)
                 {
-                    MapBotWaypointFunc tempFunc{};
+                    WorldBotWaypointFunc tempFunc{};
                     if (func_.empty())
                         tempFunc = nullptr;
                     else
                     {
                         if (func_ == "MoveToNextPointSpecial")
-                            tempFunc = &MoveToNextPointSpecial/*(MapBotAI * pAI = dynamic_cast<MapBotAI*>(me->AI()))*/;
+                            tempFunc = &MoveToNextPointSpecial/*(WorldBotAI * pAI = dynamic_cast<WorldBotAI*>(me->AI()))*/;
 
                         if (func_ == "WSG_AtAllianceFlag")
                             tempFunc = &WSG_AtAllianceFlag;
@@ -660,7 +660,7 @@ void MapBotAI::LoadDBWaypoints()
                             tempFunc = &TransportTeleportToBootyBayFromRatchet;
 
                     }
-                    path->push_back(MapBotWaypoint({ v_.x, v_.y, v_.z, v_.map, reverse, tempFunc }));
+                    path->push_back(WorldBotWaypoint({ v_.x, v_.y, v_.z, v_.map, reverse, tempFunc }));
                 }
             }
 
@@ -705,7 +705,7 @@ void MapBotAI::LoadDBWaypoints()
     }
 }
 
-void MapBotAI::MovementInform(uint32 movementType, uint32 data)
+void WorldBotAI::MovementInform(uint32 movementType, uint32 data)
 {
     if (movementType == POINT_MOTION_TYPE)
     { 
@@ -716,7 +716,7 @@ void MapBotAI::MovementInform(uint32 movementType, uint32 data)
     }
 }
 
-void MapBotAI::MoveToNextPoint()
+void WorldBotAI::MoveToNextPoint()
 {
     if (!m_currentPath)
         return;
@@ -749,22 +749,22 @@ void MapBotAI::MoveToNextPoint()
     else
         m_currentPoint++;
 
-    MapBotWaypoint& nextPoint = m_currentPath->at(m_currentPoint);
+    WorldBotWaypoint& nextPoint = m_currentPath->at(m_currentPoint);
 
     me->GetMotionMaster()->MovePoint(m_currentPoint, nextPoint.x + frand(-1, 1), nextPoint.y + frand(-1, 1), nextPoint.z, MOVE_PATHFINDING);
 }
 
-bool MapBotAI::StartNewPathFromBeginning()
+bool WorldBotAI::StartNewPathFromBeginning()
 {
     struct AvailablePath
     {
-        AvailablePath(MapBotPath* pPath_, bool reverse_) : pPath(pPath_), reverse(reverse_) {}
-        MapBotPath* pPath = nullptr;
+        AvailablePath(WorldBotPath* pPath_, bool reverse_) : pPath(pPath_), reverse(reverse_) {}
+        WorldBotPath* pPath = nullptr;
         bool reverse = false;
     };
     std::vector<AvailablePath> availablePaths;
 
-    std::vector<MapBotPath*> const* vPaths;
+    std::vector<WorldBotPath*> const* vPaths;
 
     switch (me->GetMapId())
     {
@@ -799,7 +799,7 @@ bool MapBotAI::StartNewPathFromBeginning()
 
     for (const auto& pPath : *vPaths)
     {
-        MapBotWaypoint* pStart = &((*pPath)[0]);
+        WorldBotWaypoint* pStart = &((*pPath)[0]);
         if (me->GetDistance(pStart->x, pStart->y, pStart->z) < INTERACTION_DISTANCE)
             availablePaths.emplace_back(AvailablePath(pPath, false));
 
@@ -807,7 +807,7 @@ bool MapBotAI::StartNewPathFromBeginning()
         if (std::find(vPaths_NoReverseAllowed.begin(), vPaths_NoReverseAllowed.end(), pPath) != vPaths_NoReverseAllowed.end())
             continue;
 
-        MapBotWaypoint* pEnd = &((*pPath)[(*pPath).size() - 1]);
+        WorldBotWaypoint* pEnd = &((*pPath)[(*pPath).size() - 1]);
         if (me->GetDistance(pEnd->x, pEnd->y, pEnd->z) < INTERACTION_DISTANCE)
             availablePaths.emplace_back(AvailablePath(pPath, true));
     }
@@ -823,13 +823,13 @@ bool MapBotAI::StartNewPathFromBeginning()
     return true;
 }
 
-void MapBotAI::StartNewPathFromAnywhere()
+void WorldBotAI::StartNewPathFromAnywhere()
 {
-    MapBotPath* pClosestPath = nullptr;
+    WorldBotPath* pClosestPath = nullptr;
     uint32 closestPoint = 0;
     float closestDistance = FLT_MAX;
 
-    std::vector<MapBotPath*> const* vPaths;
+    std::vector<WorldBotPath*> const* vPaths;
     switch (me->GetMapId())
     {
         case MAP_EASTERN_KINGDOMS:
@@ -865,7 +865,7 @@ void MapBotAI::StartNewPathFromAnywhere()
     {
         for (uint32 i = 0; i < pPath->size(); i++)
         {
-            MapBotWaypoint& waypoint = ((*pPath)[i]);
+            WorldBotWaypoint& waypoint = ((*pPath)[i]);
             float const distanceToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
             if (distanceToPoint < closestDistance)
             {
@@ -895,9 +895,9 @@ float GetDistance3D(A const& from, B const& to)
     return (dist > 0 ? dist : 0);
 }
 
-bool MapBotAI::StartNewPathToPosition(Position const& targetPosition, std::vector<MapBotPath*> const& vPaths)
+bool WorldBotAI::StartNewPathToPosition(Position const& targetPosition, std::vector<WorldBotPath*> const& vPaths)
 {
-    MapBotPath* pClosestPath = nullptr;
+    WorldBotPath* pClosestPath = nullptr;
     uint32 closestPoint = 0;
     float closestDistanceToTarget = FLT_MAX;
     bool reverse = false;
@@ -905,7 +905,7 @@ bool MapBotAI::StartNewPathToPosition(Position const& targetPosition, std::vecto
     for (const auto& pPath : vPaths)
     {
         {
-            MapBotWaypoint& lastPoint = ((*pPath)[pPath->size() - 1]);
+            WorldBotWaypoint& lastPoint = ((*pPath)[pPath->size() - 1]);
             float const distanceFromPathEndToTarget = GetDistance3D(lastPoint, targetPosition);
             if (closestDistanceToTarget > distanceFromPathEndToTarget)
             {
@@ -913,7 +913,7 @@ bool MapBotAI::StartNewPathToPosition(Position const& targetPosition, std::vecto
 
                 for (uint32 i = 0; i < pPath->size(); i++)
                 {
-                    MapBotWaypoint& waypoint = ((*pPath)[i]);
+                    WorldBotWaypoint& waypoint = ((*pPath)[i]);
                     float const distanceFromMeToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
                     if (distanceFromMeToPoint < 50.0f && closestDistanceFromMeToPoint > distanceFromMeToPoint)
                     {
@@ -931,7 +931,7 @@ bool MapBotAI::StartNewPathToPosition(Position const& targetPosition, std::vecto
             continue;
 
         {
-            MapBotWaypoint& firstPoint = ((*pPath)[0]);
+            WorldBotWaypoint& firstPoint = ((*pPath)[0]);
             float const distanceFromPathBeginToTarget = GetDistance3D(firstPoint, targetPosition);
             if (closestDistanceToTarget > distanceFromPathBeginToTarget)
             {
@@ -939,7 +939,7 @@ bool MapBotAI::StartNewPathToPosition(Position const& targetPosition, std::vecto
 
                 for (uint32 i = 0; i < pPath->size(); i++)
                 {
-                    MapBotWaypoint& waypoint = ((*pPath)[i]);
+                    WorldBotWaypoint& waypoint = ((*pPath)[i]);
                     float const distanceFromMeToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
                     if (distanceFromMeToPoint < 50.0f && closestDistanceFromMeToPoint > distanceFromMeToPoint)
                     {
@@ -1022,7 +1022,7 @@ static std::pair<uint32, uint32> AV_AllianceDefendObjectives[] =
     { BG_AV_STONEHEARTH_BUNKER, HORDE_ASSAULTED },
 };
 
-bool MapBotAI::BGStartNewPathToObjective()
+bool WorldBotAI::BGStartNewPathToObjective()
 {
     BattleGround* bg = me->GetBattleGround();
     if (!bg)
@@ -1163,7 +1163,7 @@ bool MapBotAI::BGStartNewPathToObjective()
     return false;
 }
 
-void MapBotAI::ClearPath()
+void WorldBotAI::ClearPath()
 {
     m_currentPath = nullptr;
     m_currentPoint = 0;

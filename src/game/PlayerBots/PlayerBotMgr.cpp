@@ -13,15 +13,15 @@
 #include "PartyBotAI.h"
 #include "BattleBotAI.h"
 #include "BattleBotWaypoints.h"
-#include "MapBotAI.h"
-#include "MapBotWaypoints.h"
+#include "WorldBotAI.h"
+#include "WorldBotWaypoints.h"
 #include "Language.h"
 #include "Spell.h"
 
 INSTANTIATE_SINGLETON_1(PlayerBotMgr);
-std::vector<MapBotsCollection> myBots;
-std::vector<MapBotsCollection> myHordeBots;
-std::vector<MapBotsCollection> myAllianceBots;
+std::vector<WorldBotsCollection> myBots;
+std::vector<WorldBotsCollection> myHordeBots;
+std::vector<WorldBotsCollection> myAllianceBots;
 
 PlayerBotMgr::PlayerBotMgr()
 {
@@ -148,17 +148,17 @@ void PlayerBotMgr::Load()
     bool mapBotEnabled = sWorld.getConfig(CONFIG_BOOL_MAPBOT);
     if (mapBotEnabled)
     {
-        MapBotAI* ai = nullptr;
+        WorldBotAI* ai = nullptr;
 
         // Load paths
         ai->LoadDBWaypoints();
 
         // Load db characters
-        m_useMapBotLoader = sWorld.getConfig(CONFIG_BOOL_MAPBOT_LOADER);
-        if (m_useMapBotLoader)
+        m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_MAPBOT_LOADER);
+        if (m_useWorldBotLoader)
         {
-            MapBotLoader();
-            MapBotCreator();
+            WorldBotLoader();
+            WorldBotCreator();
         }
 
         // Load chat
@@ -1715,32 +1715,32 @@ bool ChatHandler::HandleBattleBotShowAllPathsCommand(char* args)
 }
 
 
-bool ChatHandler::HandleMapBotAddAlteracCommand(char* args)
+bool ChatHandler::HandleWorldBotAddAlteracCommand(char* args)
 {
-    return HandleMapBotAddCommand(args, MAP_AV, true);
+    return HandleWorldBotAddCommand(args, MAP_AV, true);
 }
 
-bool ChatHandler::HandleMapBotAddArathiCommand(char* args)
+bool ChatHandler::HandleWorldBotAddArathiCommand(char* args)
 {
-    return HandleMapBotAddCommand(args, MAP_AB, true);
+    return HandleWorldBotAddCommand(args, MAP_AB, true);
 }
 
-bool ChatHandler::HandleMapBotAddWarsongCommand(char* args)
+bool ChatHandler::HandleWorldBotAddWarsongCommand(char* args)
 {
-    return HandleMapBotAddCommand(args, MAP_WS, true);
+    return HandleWorldBotAddCommand(args, MAP_WS, true);
 }
 
-bool ChatHandler::HandleMapBotAddEasternKingdomsCommand(char* args)
+bool ChatHandler::HandleWorldBotAddEasternKingdomsCommand(char* args)
 {
-    return HandleMapBotAddCommand(args, MAP_EASTERN_KINGDOMS, false);
+    return HandleWorldBotAddCommand(args, MAP_EASTERN_KINGDOMS, false);
 }
 
-bool ChatHandler::HandleMapBotAddKalimdorCommand(char* args)
+bool ChatHandler::HandleWorldBotAddKalimdorCommand(char* args)
 {
-    return HandleMapBotAddCommand(args, MAP_KALIMDOR, false);
+    return HandleWorldBotAddCommand(args, MAP_KALIMDOR, false);
 }
 
-bool ChatHandler::HandleMapBotAddCommand(char* args, uint32 map, bool isBattleBot)
+bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattleBot)
 {
     bool mapBotEnabled = sWorld.getConfig(CONFIG_BOOL_MAPBOT);
     if (mapBotEnabled)
@@ -1750,7 +1750,7 @@ bool ChatHandler::HandleMapBotAddCommand(char* args, uint32 map, bool isBattleBo
         return false;
     }
 
-    bool mapBotLoader = sPlayerBotMgr.m_useMapBotLoader;
+    bool mapBotLoader = sPlayerBotMgr.m_useWorldBotLoader;
     if (mapBotLoader)
     {
         SendSysMessage("Map Bots:  Adding bots is not allowed, use config to add bots from character db.");
@@ -1792,27 +1792,27 @@ bool ChatHandler::HandleMapBotAddCommand(char* args, uint32 map, bool isBattleBo
     uint8 botRace = SelectRandomRaceForClass(botClass, botTeam);
 
     // Spawn bot
-    MapBotAI* ai;
+    WorldBotAI* ai;
     switch (map)
     {
     case MAP_EASTERN_KINGDOMS:
-        ai = new MapBotAI(botRace, botClass, 0, 0, -8833.379f, 628.627f, 94.006f, 4.195f, isBattleBot, 0);
+        ai = new WorldBotAI(botRace, botClass, 0, 0, -8833.379f, 628.627f, 94.006f, 4.195f, isBattleBot, 0);
         PSendSysMessage("Added %s map bot", args);
         break;
     case MAP_KALIMDOR:
-        ai = new MapBotAI(botRace, botClass, 1, 0, 1655.873f, -4413.851f, 16.623f, 2.967f, isBattleBot, 0);
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 1655.873f, -4413.851f, 16.623f, 2.967f, isBattleBot, 0);
         PSendSysMessage("Added %s map bot", args);
         break;
     case MAP_WS:
-        ai = new MapBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_WS);
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_WS);
         PSendSysMessage("Added %s map bot and queuing for WS", args);
         break;
     case MAP_AB:
-        ai = new MapBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AB);
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AB);
         PSendSysMessage("Added %s map bot and queuing for AB", args);
         break;
     case MAP_AV:
-        ai = new MapBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AV);
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AV);
         PSendSysMessage("Added %s map bot and queuing for AV", args);
         break;
     default:
@@ -1824,7 +1824,7 @@ bool ChatHandler::HandleMapBotAddCommand(char* args, uint32 map, bool isBattleBo
     return true;
 }
 
-bool ChatHandler::HandleMapBotRemoveCommand(char* args)
+bool ChatHandler::HandleWorldBotRemoveCommand(char* args)
 {
     Player* pTarget = GetSelectedPlayer();
     if (!pTarget)
@@ -1836,7 +1836,7 @@ bool ChatHandler::HandleMapBotRemoveCommand(char* args)
 
     if (pTarget->AI())
     {
-        if (MapBotAI* pAI = dynamic_cast<MapBotAI*>(pTarget->AI()))
+        if (WorldBotAI* pAI = dynamic_cast<WorldBotAI*>(pTarget->AI()))
         {
             pAI->botEntry->requestRemoval = true;
             return true;
@@ -1848,7 +1848,7 @@ bool ChatHandler::HandleMapBotRemoveCommand(char* args)
     return false;
 }
 
-void ShowMapBotPathHelper(Map* pMap, MapBotPath* pPath, uint32 id)
+void ShowWorldBotPathHelper(Map* pMap, WorldBotPath* pPath, uint32 id)
 {
     for (const auto& point : *pPath)
     {
@@ -1864,7 +1864,7 @@ void ShowMapBotPathHelper(Map* pMap, MapBotPath* pPath, uint32 id)
     }
 }
 
-bool ChatHandler::HandleMapBotShowPathCommand(char* args)
+bool ChatHandler::HandleWorldBotShowPathCommand(char* args)
 {
     Player* pTarget = GetSelectedPlayer();
     if (!pTarget)
@@ -1876,10 +1876,10 @@ bool ChatHandler::HandleMapBotShowPathCommand(char* args)
 
     if (pTarget->AI())
     {
-        if (MapBotAI* pAI = dynamic_cast<MapBotAI*>(pTarget->AI()))
+        if (WorldBotAI* pAI = dynamic_cast<WorldBotAI*>(pTarget->AI()))
         {
             if (pAI->m_currentPath)
-                ShowMapBotPathHelper(pTarget->GetMap(), pAI->m_currentPath, 1);
+                ShowWorldBotPathHelper(pTarget->GetMap(), pAI->m_currentPath, 1);
             else
                 SendSysMessage("Target is not following a path.");
 
@@ -1892,10 +1892,10 @@ bool ChatHandler::HandleMapBotShowPathCommand(char* args)
     return false;
 }
 
-bool ChatHandler::HandleMapBotShowAllPathsCommand(char* args)
+bool ChatHandler::HandleWorldBotShowAllPathsCommand(char* args)
 {
     Player* pPlayer = m_session->GetPlayer();
-    std::vector<MapBotPath*> const* pPaths;
+    std::vector<WorldBotPath*> const* pPaths;
 
     switch (pPlayer->GetMapId())
     {
@@ -1931,14 +1931,14 @@ bool ChatHandler::HandleMapBotShowAllPathsCommand(char* args)
     uint32 id = 1;
     for (const auto& path : *pPaths)
     {
-        ShowMapBotPathHelper(pPlayer->GetMap(), path, id++);
+        ShowWorldBotPathHelper(pPlayer->GetMap(), path, id++);
     }
 
     PSendSysMessage("Showing %u paths.", id);
     return true;
 }
 
-bool ChatHandler::HandleMapBotPathPointAddCommand(char* args)
+bool ChatHandler::HandleWorldBotPathPointAddCommand(char* args)
 {
     uint32 guid, id, reverse = 0;
     char comment[100];
@@ -1959,9 +1959,9 @@ bool ChatHandler::HandleMapBotPathPointAddCommand(char* args)
     return true;
 }
 
-void PlayerBotMgr::MapBotLoader()
+void PlayerBotMgr::WorldBotLoader()
 {
-    sLog.outString("[MapBotLoader] Loading Bots from character db...");
+    sLog.outString("[WorldBotLoader] Loading Bots from character db...");
     QueryResult* result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE account > 55");
     if (!result)
     {
@@ -1990,7 +1990,7 @@ void PlayerBotMgr::MapBotLoader()
 
             if (rEntry->TeamID == 1) // horde
             {
-                MapBotsCollection bot;
+                WorldBotsCollection bot;
                 bot.guid = guid;
                 bot.account = account;
                 bot.name = name;
@@ -2006,7 +2006,7 @@ void PlayerBotMgr::MapBotLoader()
 
             if (rEntry->TeamID == 7) // alliance
             {
-                MapBotsCollection bot;
+                WorldBotsCollection bot;
                 bot.guid = guid;
                 bot.account = account;
                 bot.name = name;
@@ -2026,7 +2026,7 @@ void PlayerBotMgr::MapBotLoader()
     }
 }
 
-void PlayerBotMgr::MapBotCreator()
+void PlayerBotMgr::WorldBotCreator()
 {
     uint32 mapBotHordeCount = 0;
     uint32 mapBotAllianceCount = 0;
@@ -2039,7 +2039,7 @@ void PlayerBotMgr::MapBotCreator()
         if (mapBotHordeCount >= mapBotHordeMax)
             break;
 
-        MapBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
+        WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
         mapBotHordeCount++;
     }
 
@@ -2049,14 +2049,14 @@ void PlayerBotMgr::MapBotCreator()
         if (mapBotAllianceCount >= mapBotAllianceMax)
             break;
 
-        MapBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
+        WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
         mapBotAllianceCount++;
     }
 
-    sLog.outString("MapBotLoader:  Loaded %u horde bots and %u alliance bots", mapBotHordeCount, mapBotAllianceCount);
+    sLog.outString("WorldBotLoader:  Loaded %u horde bots and %u alliance bots", mapBotHordeCount, mapBotAllianceCount);
 }
 
-bool PlayerBotMgr::MapBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
+bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
 {
     uint32 accountId = 0;
     PlayerBotEntry* e = nullptr;
@@ -2078,7 +2078,7 @@ bool PlayerBotMgr::MapBotAdd(uint32 guid, uint32 account, uint32 race, uint32 cl
     }
     else
     {
-        MapBotAI* ai = new MapBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
+        WorldBotAI* ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
         e = new PlayerBotEntry();
         e->state = PB_STATE_LOADING;
         e->playerGUID = guid;
@@ -2099,7 +2099,7 @@ bool PlayerBotMgr::MapBotAdd(uint32 guid, uint32 account, uint32 race, uint32 cl
     return true;
 }
 
-void PlayerBotMgr::MapBotBalancer()
+void PlayerBotMgr::WorldBotBalancer()
 {
 
 }
