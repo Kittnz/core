@@ -490,6 +490,9 @@ Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
         if (!me->IsWithinDist(pTarget, aggroDistance))
             continue;
 
+        if (me->GetDistanceZ(pTarget) > 10.0f)
+            continue;
+
         if (me->IsWithinLOSInMap(pTarget))
             return pTarget;
     }
@@ -509,11 +512,14 @@ Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
                     continue;
 
                 if (Unit* pAttacker = pMember->GetAttackerForHelper())
-                    if (IsValidHostileTarget(pAttacker) &&
+                {
+                    if (pAttacker != pExcept &&
+                        IsValidHostileTarget(pAttacker) &&
                         me->IsWithinDist(pAttacker, maxAggroDistance * 2.0f) &&
-                        me->IsWithinLOSInMap(pAttacker) && 
-                        pAttacker != pExcept)
+                        me->GetDistanceZ(pAttacker) < 10.0f &&
+                        me->IsWithinLOSInMap(pAttacker))
                         return pAttacker;
+                }
             }
         }
     }
@@ -2288,7 +2294,7 @@ void WorldBotAI::UpdateInCombatAI_Priest()
         }
 
         if (m_spells.priest.pPsychicScream &&
-            pVictim->CanReachWithMeleeAutoAttack(me) &&
+            GetAttackersInRangeCount(10.0f) &&
             CanTryToCastSpell(me, m_spells.priest.pPsychicScream))
         {
             if (DoCastSpell(me, m_spells.priest.pPsychicScream) == SPELL_CAST_OK)
@@ -2304,7 +2310,7 @@ void WorldBotAI::UpdateInCombatAI_Priest()
         }
 
         if (m_spells.priest.pMindFlay &&
-           !pVictim->CanReachWithMeleeAutoAttack(me) &&
+            (!GetAttackersInRangeCount(10.0f) || me->HasAuraType(SPELL_AURA_SCHOOL_ABSORB)) &&
             CanTryToCastSpell(pVictim, m_spells.priest.pMindFlay))
         {
             if (DoCastSpell(pVictim, m_spells.priest.pMindFlay) == SPELL_CAST_OK)

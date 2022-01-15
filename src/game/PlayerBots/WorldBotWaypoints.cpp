@@ -588,7 +588,7 @@ void WorldBotAI::LoadDBWaypoints()
                     else
                     {
                         if (func_ == "MoveToNextPointSpecial")
-                            tempFunc = &MoveToNextPointSpecial/*(WorldBotAI * pAI = dynamic_cast<WorldBotAI*>(me->AI()))*/;
+                            tempFunc = &MoveToNextPointSpecial;
 
                         if (func_ == "WSG_AtAllianceFlag")
                             tempFunc = &WSG_AtAllianceFlag;
