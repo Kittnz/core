@@ -517,7 +517,6 @@ std::vector<WorldBotPath*> vPaths_NoReverseAllowed;
 
 void WorldBotAI::LoadDBWaypoints()
 {
-    WorldBotAI* pAI = nullptr;
     float x, y, z = 0.f;
     uint32 guid, id, area, zone, map, reverse, lastGuidPoint = 0;
     std::string func, comments = "";
