@@ -275,7 +275,8 @@ bool WorldBotAI::UseMount()
     if (me->GetDisplayId() != me->GetNativeDisplayId())
         return false;
 
-    if (me->GetClass() == CLASS_ROGUE)
+    // make sure rogues stealth in bg's, they don't have to be in the world
+    if (me->GetClass() == CLASS_ROGUE && me->InBattleGround())
         return false;
 
     if (BattleGround* bg = me->GetBattleGround())
