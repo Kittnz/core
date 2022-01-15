@@ -795,11 +795,10 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
         }
     }
 
-    // hack for some bug damage from summons/pets
-    // Summon Infernal
-    if (IsCreature() && GetEntry() == 89 && pVictim->IsPlayer() && pVictim->ToPlayer()->IsHardcore())
+    // Lower Infernal's and Doombuard's damage to/from HC:
+    if (IsCreature() && (GetEntry() == 89 || GetEntry() == 14385) && pVictim->IsPlayer() && pVictim->ToPlayer()->IsHardcore())
         damage /= 10;
-    else if (IsPlayer() && ToPlayer()->IsHardcore() && pVictim->IsCreature() && pVictim->GetEntry() == 89)
+    else if (IsPlayer() && ToPlayer()->IsHardcore() && pVictim->IsCreature() && (pVictim->GetEntry() == 89 || GetEntry() == 14385))
         damage *= 10;
 
     if (health <= damage)
