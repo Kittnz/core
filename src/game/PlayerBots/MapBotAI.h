@@ -166,6 +166,7 @@ public:
     void LoadBotChat();
     void BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
     void HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
+    void HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
     ShortTimeTracker m_updateChatTimer;
     //uint8 m_BotChatCount = 0;
     time_t BotLastChatTime;

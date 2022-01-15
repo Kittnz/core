@@ -517,11 +517,12 @@ std::vector<MapBotPath*> vPaths_NoReverseAllowed;
 
 void MapBotAI::LoadDBWaypoints()
 {
+    MapBotAI pAI = null;
     float x, y, z = 0.f;
     uint32 guid, id, area, zone, map, reverse, lastGuidPoint = 0;
     std::string func, comments = "";
 
-    QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, x, y, z, func, area, zone, map, reverse, comments FROM mapbot_waypoints ORDER BY guid, id ASC;");
+    QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, x, y, z, func, area, zone, map, reverse, comments, minlevel FROM mapbot_waypoints ORDER BY guid, id ASC;");
 
     if (result)
     {
@@ -587,7 +588,7 @@ void MapBotAI::LoadDBWaypoints()
                     else
                     {
                         if (func_ == "MoveToNextPointSpecial")
-                            tempFunc = &MoveToNextPointSpecial;
+                            tempFunc = &MoveToNextPointSpecial(MapBotAI *pAI = dynamic_cast<MapBotAI*>(me->AI()));
 
                         if (func_ == "WSG_AtAllianceFlag")
                             tempFunc = &WSG_AtAllianceFlag;

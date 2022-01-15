@@ -943,7 +943,7 @@ void MapBotAI::UpdateAI(uint32 const diff)
         {
             for (auto& itr : m_chatWorldRespondsQueue)
             {
-                HandleChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName, itr.m_name);
+                HandleWorldChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName, itr.m_name);
             }
             m_chatWorldRespondsQueue.clear();
         }
@@ -4034,6 +4034,40 @@ void MapBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, s
                     {
                         pMe->Whisper(c, LANG_ORCISH, pReciever);
                     }
+                }
+            }
+            BotLastChatTime = gtime;
+        }
+    }
+}
+
+void MapBotAI::HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name)
+{
+    std::string respondsText;
+    time_t gtime = sWorld.GetGameTime();
+    int32 rnd = urand(2, 4);
+    if (BotLastChatTime < (gtime - rnd))
+    {
+        // Chat Logic
+        bool found = false;
+        
+
+
+        // send responds
+        // 
+        if (found)
+        {
+            const char* c = respondsText.c_str();
+            if (chanName == "World")
+            {
+                if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
+                {
+                    std::string worldChan = "World";
+                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
+                        if (me->GetTeam() == ALLIANCE)
+                            chn->Say(me->GetObjectGuid(), c, LANG_COMMON, false);
+                        else
+                            chn->Say(me->GetObjectGuid(), c, LANG_ORCISH, false);
                 }
             }
             BotLastChatTime = gtime;
