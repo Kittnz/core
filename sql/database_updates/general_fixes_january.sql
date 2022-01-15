@@ -905,3 +905,137 @@ REPLACE INTO `broadcast_text` VALUES (91978, 'Please don\'t disturb me. Correcti
 REPLACE INTO `creature` VALUES (2569310, 65130, 0, 0, 0, 269, 0, 0, -1541.75, 7113.94, 25.1502, 6.16236, 25, 25, 0, 100, 100, 0, 0, 0);
 -- Remove Warlock's Doomguard loot:
 update creature_template set loot_id = 0 where entry = 14385;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/899
+UPDATE quest_template SET title = 'Search the Stockades', Objectives = 'Delve into the Stockades and find information about Martin Corinth.' WHERE entry = 55221;
+-- Upland Remnants balance: Gheor
+UPDATE creature_template SET health_min = 783, health_max = 879, armor = 810, attack_power = 105, ranged_attack_power = 110 WHERE entry = 91975;
+UPDATE creature_template SET armor = 640, dmg_min = 24, dmg_max = 34, attack_power = 76, ranged_dmg_min = 27, ranged_dmg_max = 39 WHERE entry in (91980, 91981);
+-- Added Blessing of the Wilds to QM of Cenarion Hold: Khazgrim/Shang
+REPLACE INTO npc_vendor (entry, item, condition_id) VALUES (15293, 83092, 5);
+-- Fucking Crescent Grove loot table shit stuff... just apply, its biting with Quest-loot
+UPDATE creature_loot_template SET groupid = 2 WHERE entry = 92100 AND item = 60446;
+UPDATE creature_loot_template SET groupid = 2 WHERE entry = 92101 AND item = 60446;
+-- NPC update for Guild House: Coun
+UPDATE creature_template SET equipment_id = 10036, level_min = 40, level_max = 40, subname = 'Southfury Trading Co' WHERE entry = 60638;
+UPDATE creature_template SET equipment_id = 2949, level_min = 40, level_max = 40, subname = 'Southfury Trading Co' WHERE entry = 60639;
+UPDATE creature_template SET level_min = 14, level_max = 14, subname = 'Southfury Trading Co' WHERE entry = 60636;
+UPDATE creature_template SET level_min = 20, level_max = 20, subname = 'Southfury Trading Co' WHERE entry = 60637;
+UPDATE creature_template SET level_min = 35, level_max = 35, subname = 'Hand of Wrath' WHERE entry = 60640;
+UPDATE creature_template SET level_min = 24, level_max = 24, subname = 'Hand of Wrath' WHERE entry = 60641;
+-- Giving better instructions on quest: Tinyfin
+UPDATE quest_template SET details = 'Listen closely, for I have no time or strength to repeat, I\'m obviously dying here… Light … Elune, give me peace of death, I beg you…\n\n<Argent Watcher Mal\'adaris gazes on you with fierce intent.>\n\nTwenty of those horrors $R, and only one … it! Destroy \'em for all the living…\n\n<Argent Watcher Mal\'adaris points you directly to the north.>\n\nCave … no, a tunnel… Don\'t go alone.\n\nMy time here is over... Please slay those beasts... and report to Lord... Maxwell Tyrosus in the Light\'s Hope... Cha...\n\n<Argent Watcher Mal\'adaris falls unconcious.>', Objectives = 'Slay 20 Crypt Horrors in the Terrorweb Tunnel' WHERE entry = 60065;
+-- Editing loot_table for Rogue Enforcer: Gheor
+REPLACE INTO item_template VALUES (91761, 4, 0, 'Black Rogue Mask', '', 32731, 1, 0, 1, 406, 81, 1, 31240, -1, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+REPLACE INTO creature_loot_template VALUES (91761, 414, 4.8324, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 765, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 774, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 785, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 818, 0.46, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 856, 0.0122, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 858, 1.3157, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 915, -80, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 954, 0.3, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 955, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 1179, 2.3078, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 1180, 0.48, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 1206, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 1210, 0.34, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 1705, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 1926, 1.15, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2287, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2450, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2452, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2453, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2455, 0.6441, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2589, 18.4474, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2592, 19.5067, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2598, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2601, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2657, 0.0153, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2772, 0.94, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2775, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2835, 0.24, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2882, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2971, 0.0397, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2972, 0.0458, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2975, 0.0366, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2979, 0.0183, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 2996, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 3012, 0.28, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 3207, 0.0305, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 3393, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 3394, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 3609, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 3643, 0.0458, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4292, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4345, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4346, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4537, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4541, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4605, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 4678, 0.0214, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 5500, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 5503, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 5573, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 5574, 0.0122, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 5578, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6344, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6375, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6390, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6549, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6555, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 6716, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 7288, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 91761, 1.9934, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 10316, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 11039, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 11081, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 30018, 2.5, 0, -30018, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 30020, 0.5, 0, -30020, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 30021, 0.5, 0, -30021, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 30037, 2.5, 0, -30037, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91761, 30038, 0.5, 0, -30038, 1, 0);
+UPDATE creature_template SET loot_id = 91761 WHERE entry in (91761, 91762, 91763);
+-- Added questitem: Shang
+replace into item_template values
+ ('40061', '4', '0', 'Rethress Tide Crest', '', '898', '2', '0', '1', '80000', '20000', '12', '-1', '-1', '60',
+ '55', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '10', '0', '0', '8747', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+ UPDATE quest_template SET RewItemId2 = 40061, RewItemCount2 = 1 WHERE entry = 40061;
+-- Giant tropical centipedes share their territories with tarantulas.
+-- Despite it's impressive length, it's a nimble navigator, and some can be highly venomous.
+-- As quick as lightning, just like the tarantula it's killing, the centipede has two curved hollow fangs which inject paralyzing venom.
+-- Even tarantulas aren't immune from an ambush.
+-- This centipede is a predator...
