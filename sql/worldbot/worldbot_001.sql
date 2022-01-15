@@ -1515,4 +1515,7 @@ INSERT INTO `worldbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `func`, `area`, `
 	(151, 8, 2060.3, 253.772, 87.76, '', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom'),
 	(151, 9, 2053.79, 262.218, 89.9978, '', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom'),
 	(151, 10, 2063.73, 271.876, 94.1076, '', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom'),
-	(151, 11, 2057.77, 240.763, 99.7675, 'TransportTeleportToGromgolFromUndercity', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom');
+	(151, 11, 2057.77, 240.763, 99.7675, 'TransportTeleportToGromgolFromUndercity', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom'),
+	(152, 0, 676, -374, 29.782, '', 0, 0, 30, 0, 'AV_Stormpike_Graveyard_to_Stormpike_Flag', ''),
+	(152, 1, 665.922, -347.777, 29.493, '', 0, 0, 30, 0, 'AV_Stormpike_Graveyard_to_Stormpike_Flag', ''),
+	(152, 2, 667.173, -295.225, 30.29, 'AV_AtFlag', 0, 0, 30, 0, 'AV_Stormpike_Graveyard_to_Stormpike_Flag', '');
