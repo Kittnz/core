@@ -145,8 +145,8 @@ void PlayerBotMgr::Load()
     }
 
     // Map Bots
-    bool mapBotEnabled = sWorld.getConfig(CONFIG_BOOL_MAPBOT);
-    if (mapBotEnabled)
+    bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
+    if (worldBotEnabled)
     {
         WorldBotAI* ai = nullptr;
 
@@ -154,7 +154,7 @@ void PlayerBotMgr::Load()
         ai->LoadDBWaypoints();
 
         // Load db characters
-        m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_MAPBOT_LOADER);
+        m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
         if (m_useWorldBotLoader)
         {
             WorldBotLoader();
@@ -1742,16 +1742,16 @@ bool ChatHandler::HandleWorldBotAddKalimdorCommand(char* args)
 
 bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattleBot)
 {
-    bool mapBotEnabled = sWorld.getConfig(CONFIG_BOOL_MAPBOT);
-    if (mapBotEnabled)
+    bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
+    if (worldBotEnabled)
     {
         SendSysMessage("Map Bots are disabled.");
         SetSentErrorMessage(true);
         return false;
     }
 
-    bool mapBotLoader = sPlayerBotMgr.m_useWorldBotLoader;
-    if (mapBotLoader)
+    bool worldBotLoader = sPlayerBotMgr.m_useWorldBotLoader;
+    if (worldBotLoader)
     {
         SendSysMessage("Map Bots:  Adding bots is not allowed, use config to add bots from character db.");
         SetSentErrorMessage(true);
@@ -1947,7 +1947,7 @@ bool ChatHandler::HandleWorldBotPathPointAddCommand(char* args)
 
     Player* me = m_session->GetPlayer();
     WorldDatabase.PExecute(
-        "INSERT INTO `mapbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `area`, `zone`, `map`, `reverse`, `comments`) VALUES "
+        "INSERT INTO `worldbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `area`, `zone`, `map`, `reverse`, `comments`) VALUES "
         "(%u, %u, %f, %f, %f, %u, %u, %u, %u, '%s')",
         guid, id, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetAreaId(), me->GetZoneId(), me->GetMapId(), reverse, comment);
 
@@ -2028,32 +2028,32 @@ void PlayerBotMgr::WorldBotLoader()
 
 void PlayerBotMgr::WorldBotCreator()
 {
-    uint32 mapBotHordeCount = 0;
-    uint32 mapBotAllianceCount = 0;
-    uint32 mapBotHordeMax = sWorld.getConfig(CONFIG_UINT32_MAPBOT_HORDE_MAX);
-    uint32 mapBotAllianceMax = sWorld.getConfig(CONFIG_UINT32_MAPBOT_ALLIANCE_MAX);
+    uint32 worldBotHordeCount = 0;
+    uint32 worldBotAllianceCount = 0;
+    uint32 worldBotHordeMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX);
+    uint32 worldBotAllianceMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX);
 
     std::random_shuffle(myHordeBots.begin(), myHordeBots.end());
     for (auto b : myHordeBots)
     {
-        if (mapBotHordeCount >= mapBotHordeMax)
+        if (worldBotHordeCount >= worldBotHordeMax)
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        mapBotHordeCount++;
+        worldBotHordeCount++;
     }
 
     std::random_shuffle(myAllianceBots.begin(), myAllianceBots.end());
     for (auto b : myAllianceBots)
     {
-        if (mapBotAllianceCount >= mapBotAllianceMax)
+        if (worldBotAllianceCount >= worldBotAllianceMax)
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        mapBotAllianceCount++;
+        worldBotAllianceCount++;
     }
 
-    sLog.outString("WorldBotLoader:  Loaded %u horde bots and %u alliance bots", mapBotHordeCount, mapBotAllianceCount);
+    sLog.outString("WorldBotLoader:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
 }
 
 bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)

@@ -8,14 +8,14 @@ IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20200829214953');
 -- Add your query below.
 
-CREATE TABLE IF NOT EXISTS `mapbot_chat` (
+CREATE TABLE IF NOT EXISTS `worldbot_chat` (
   `guid` int(11) NOT NULL,
   `type` int(11) NOT NULL DEFAULT 0,
   `chat` text NOT NULL DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-DELETE FROM `mapbot_chat`;
-INSERT INTO `mapbot_chat` (`guid`, `type`, `chat`) VALUES
+DELETE FROM `worldbot_chat`;
+INSERT INTO `worldbot_chat` (`guid`, `type`, `chat`) VALUES
 	(0, 0, 'what was that %s?'),
 	(1, 0, 'not sure I understand %s?'),
 	(2, 0, 'uh... no clue what yer talkin bout'),

@@ -125,12 +125,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleBattleBotShowAllPathsCommand, "", nullptr },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
-    static ChatCommand mapBotPathCommandTable[] =
+    static ChatCommand worldBotPathCommandTable[] =
     {
         { "add",          SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotPathPointAddCommand,    "", nullptr },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
-    static ChatCommand mapBotAddCommandTable[] =
+    static ChatCommand worldBotAddCommandTable[] =
     {
         { "alterac",    SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddAlteracCommand, "", nullptr },
         { "arathi",     SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddArathiCommand,  "", nullptr },
@@ -139,13 +139,13 @@ ChatCommand * ChatHandler::getCommandTable()
         { "kalimdor",   SEC_ADMINISTRATOR,      false, &ChatHandler::HandleWorldBotAddKalimdorCommand,  "", nullptr },
         { nullptr,      0,                      false, nullptr,                                        "", nullptr },
     };
-    static ChatCommand mapBotCommandTable[] =
+    static ChatCommand worldBotCommandTable[] =
     {
-        { "add",          SEC_ADMINISTRATOR,    false, nullptr,            "Add a new bot", mapBotAddCommandTable },
+        { "add",          SEC_ADMINISTRATOR,    false, nullptr,            "Add a new bot", worldBotAddCommandTable },
         { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotRemoveCommand,       "", nullptr },
         { "showpath",     SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowPathCommand,     "", nullptr },
         { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowAllPathsCommand, "", nullptr },
-        { "path",         SEC_ADMINISTRATOR,    false, nullptr,              "Add a path", mapBotPathCommandTable },
+        { "path",         SEC_ADMINISTRATOR,    false, nullptr,              "Add a path", worldBotPathCommandTable },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
     static ChatCommand accountSetCommandTable[] =

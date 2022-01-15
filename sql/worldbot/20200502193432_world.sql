@@ -8,7 +8,7 @@ IF v=0 THEN
 INSERT INTO `migrations` VALUES ('20200502193432');
 -- Add your query below.
 
-CREATE TABLE IF NOT EXISTS `mapbot_waypoints` (
+CREATE TABLE IF NOT EXISTS `worldbot_waypoints` (
   `guid` smallint(6) NOT NULL DEFAULT 0,
   `id` smallint(6) NOT NULL,
   `x` float NOT NULL DEFAULT 0,
@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS `mapbot_waypoints` (
   KEY `Index 2` (`guid`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-DELETE FROM `mapbot_waypoints`;
-INSERT INTO `mapbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `func`, `area`, `zone`, `map`, `reverse`, `comments`) VALUES
+DELETE FROM `worldbot_waypoints`;
+INSERT INTO `worldbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `func`, `area`, `zone`, `map`, `reverse`, `comments`) VALUES
 	(0, 0, 933.331, 1433.72, 345.536, 'WSG_AtHordeFlag', 0, 0, 489, 0, 'vPath_WSG_HordeFlagRoom_to_HordeGraveyard'),
 	(0, 1, 944.859, 1423.05, 345.437, '', 0, 0, 489, 0, 'vPath_WSG_HordeFlagRoom_to_HordeGraveyard'),
 	(0, 2, 966.691, 1422.53, 345.223, '', 0, 0, 489, 0, 'vPath_WSG_HordeFlagRoom_to_HordeGraveyard'),

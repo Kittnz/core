@@ -153,7 +153,7 @@ static bool IsMeleeDamageClass(uint8 playerClass)
 
 void WorldBotAI::AddPremadeGearAndSpells()
 {
-    bool useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_MAPBOT_LOADER);
+    bool useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
     if (!useWorldBotLoader)
     {
         std::vector<uint32> vSpecs;
@@ -3489,7 +3489,7 @@ void WorldBotAI::UpdateInCombatAI_Druid()
 
 void WorldBotAI::LoadBotChat()
 {
-    QueryResult* result = WorldDatabase.PQuery("SELECT guid, type, chat FROM mapbot_chat ORDER BY guid, type ASC;");
+    QueryResult* result = WorldDatabase.PQuery("SELECT guid, type, chat FROM worldbot_chat ORDER BY guid, type ASC;");
 
     if (result)
     {
