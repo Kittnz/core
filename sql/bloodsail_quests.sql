@@ -79,22 +79,28 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Oh boss m
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
--- NPC Fazgel Mechaflame, Health 1800, Level 47, DisplayID 8009, weapon 4379, cast 16723, text aggro line: “Hands off my haul bub!”,should be phased in when you turn in the quest.
+-- NPC Fazgel Mechaflame, Health 1800, Level 47, DisplayID 8009, weapon 4379, cast 16723, text line: “Hands off my haul bub!”,should be phased in when you turn in the quest.
 REPLACE INTO creature_template VALUES
-(60643, 8009, 0, 0, 0, 'Fazgel Mechaflame', NULL, 0, 47, 47, 1800, 1800, 0, 0, 2386, 16, 0, 1.1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500, 1500, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40357, '');
+(60643, 8009, 0, 0, 0, 'Fazgel Mechaflame', NULL, 0, 47, 47, 1800, 1800, 0, 0, 2386, 290, 3, 1.1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500, 1500, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40357, '');
 
 set @equip_template = 20071; set @weapon_1 = 4379; set @weapon_2 = 0; set @creature = 60643;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
-
-REPLACE INTO broadcast_text VALUES
-(30016, 'Hands off my haul bub!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+set @gossip_menu_id = 41080; set @magic_number = 60643;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hands off my haul bub!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 delete from creature_ai_scripts where id = 2200018;
-REPLACE INTO creature_ai_scripts VALUES
-(2200018, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30016, 0, 0, 0, 0, 0, 0, 0, 0, 'Darkmster Haza\'gi - Say on Aggro');
-
 delete from creature_ai_events where id = 2200018;
-REPLACE INTO creature_ai_events VALUES
-(2200018, 60643, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200018, 0, 0, 'Darkmster Haza\'gi - Say on Aggro');
+
+REPLACE INTO creature_template_addon VALUES (60643, 0, 0, 2, 0, 0, 0, 0);
+
+-- Mechaflame's Bargain --
+delete from quest_template where entry = 40359;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40358,40359,2,33,48,42,0,0,'Mechaflame\'s Bargain','All right bub, I don\'t know who you are but I\'ve been eyeing these statues forever! I\'m not gonna let some no good $r come in and steal MY loot, all right? But since neither of us can move them it\'s gonna be a real problem, and yea I\'m saying them, there\'s like four more around these blasted ruins.\n\nSay what bub, let\'s call a truce, you get me some parts and I will make them easier to carry, then we split them up, I get three you get two since you know I\'ll be the one that comes up with the solution here!\n\nAnyway, you gotta get me these mats and I will build some boring gnomish thing that will shrunk them to size, got it? Luckily I still got some mojo.','Gather the materials and return to Ruins of Isildien.','Got them yet?','Okay bub, stand back while I assemble this thing, yeah?',10559,1,3860,4,1529,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1250,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60643, 40359);
+replace into creature_involvedrelation (id, quest) values (60643, 40359);
