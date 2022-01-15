@@ -50,3 +50,13 @@ update creature_template set unit_flags = 33554434 where entry = 60642;
 
 delete from gameobject_template where entry = 2010870;
 replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010870, 2, 8348, 1, 'Arcanist Sovatir\'s Torn Notes', 32, '');
+
+-- Lift the Anchor! --
+delete from quest_template where entry = 40357;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40356,40357,2,33,48,42,0,0,'Lift the Anchor!','While making a note to yourself about the thought you just had you try to put one and two together and see if there\'s something useful in these notes. Lady Luck seems to be smiling to your wicked self once more.\n\nA map and drawings of statues can be somewhat seen in the journal, as far as you can tell this journey will take you to Feralas to hunt for one of the most glorious things you\'d ever see: Gold.\n\nFeralas is a long way, you decide to return to your crew.','Return to Vil\'do.','Got anythin\' boss mon?','Told ya Vil\'do’s got a nose for dis things! But look at ya figurin\' out where to go and what we be huntin\'!',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60510,1,0,1250,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation (id, quest) values (2010870, 40357);
+replace into creature_involvedrelation (id, quest) values (60459, 40357);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60510,8093,'Arcanist Sovatir\'s Torn Notes',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
