@@ -2691,9 +2691,40 @@ bool GossipSelect_npc_vildo_onetusk(Player* pPlayer, Creature* pCreature, uint32
     return true;
 }
 
+bool GossipHello_npc_fazgel_mechaflame(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40360) == QUEST_STATUS_INCOMPLETE) // Highly Unexpected Event
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Let's do it!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60643, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_fazgel_mechaflame(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSayToPlayer("Yeah, I don't think so bub!", pPlayer);
+        pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_fazgel_mechaflame";
+    newscript->pGossipHello = &GossipHello_npc_fazgel_mechaflame;
+    newscript->pGossipSelect = &GossipSelect_npc_fazgel_mechaflame;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_vildo_onetusk";
