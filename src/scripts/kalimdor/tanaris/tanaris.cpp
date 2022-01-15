@@ -17,120 +17,17 @@
 /* ScriptData
 SDName: Tanaris
 SD%Complete: 80
-SDComment: Quest support: 1560, 4005, 10277, 10279(Special flight path), 2882. Noggenfogger vendor
+SDComment: Quest support: 1560, 10277, 10279(Special flight path), 2882. Noggenfogger vendor
 SDCategory: Tanaris
 EndScriptData */
 
 /* ContentData
-mob_aquementas
 npc_marin_noggenfogger
 npc_tooga
 go_inconspicuous_landmark
 EndContentData */
 
 #include "scriptPCH.h"
-
-/*######
-## mob_aquementas
-######*/
-
-#define AGGRO_YELL_AQUE     -1000168
-
-#define SPELL_AQUA_JET      13586
-#define SPELL_FROST_SHOCK   15089
-
-struct mob_aquementasAI : public ScriptedAI
-{
-    mob_aquementasAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    uint32 SendItem_Timer;
-    uint32 SwitchFaction_Timer;
-    bool isFriendly;
-
-    uint32 FrostShock_Timer;
-    uint32 AquaJet_Timer;
-
-    void Reset() override
-    {
-        SendItem_Timer = 0;
-        SwitchFaction_Timer = 10000;
-        m_creature->SetFactionTemplateId(35);
-        isFriendly = true;
-
-        AquaJet_Timer = 5000;
-        FrostShock_Timer = 1000;
-    }
-
-    void SendItem(Unit* receiver)
-    {
-        if (((Player*)receiver)->HasItemCount(11169, 1, false) &&
-                ((Player*)receiver)->HasItemCount(11172, 11, false) &&
-                ((Player*)receiver)->HasItemCount(11173, 1, false) &&
-                !((Player*)receiver)->HasItemCount(11522, 1, true))
-        {
-            ItemPosCountVec dest;
-            uint8 msg = ((Player*)receiver)->CanStoreNewItem(NULL_BAG, NULL_SLOT, dest, 11522, 1, nullptr);
-            if (msg == EQUIP_ERR_OK)
-                ((Player*)receiver)->StoreNewItem(dest, 11522, 1, true);
-        }
-    }
-
-    void Aggro(Unit* who) override
-    {
-        DoScriptText(AGGRO_YELL_AQUE, m_creature, who);
-    }
-
-    void UpdateAI(uint32 const diff) override
-    {
-        if (isFriendly)
-        {
-            if (SwitchFaction_Timer < diff)
-            {
-                m_creature->SetFactionTemplateId(91);
-                isFriendly = false;
-            }
-            else SwitchFaction_Timer -= diff;
-        }
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        if (!isFriendly)
-        {
-            if (SendItem_Timer < diff)
-            {
-                if (m_creature->GetVictim()->GetTypeId() == TYPEID_PLAYER)
-                    SendItem(m_creature->GetVictim());
-                SendItem_Timer = 5000;
-            }
-            else SendItem_Timer -= diff;
-        }
-
-        if (FrostShock_Timer < diff)
-        {
-            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_FROST_SHOCK);
-            FrostShock_Timer = 15000;
-        }
-        else FrostShock_Timer -= diff;
-
-        if (AquaJet_Timer < diff)
-        {
-            DoCastSpellIfCan(m_creature, SPELL_AQUA_JET);
-            AquaJet_Timer = 15000;
-        }
-        else AquaJet_Timer -= diff;
-
-        DoMeleeAttackIfReady();
-    }
-};
-CreatureAI* GetAI_mob_aquementas(Creature* pCreature)
-{
-    return new mob_aquementasAI(pCreature);
-}
-
 
 #define WHISPER_CUSTODIAN_1     -1000217
 #define WHISPER_CUSTODIAN_2     -1000218
@@ -254,14 +151,15 @@ CreatureAI* GetAI_npc_custodian_of_time(Creature* pCreature)
 
 enum
 {
-    SAY_TOOG_THIRST             = -1000391,
-    SAY_TOOG_WORRIED            = -1000392,
-    SAY_TOOG_POST_1             = -1000393,
-    SAY_TORT_POST_2             = -1000394,
-    SAY_TOOG_POST_3             = -1000395,
-    SAY_TORT_POST_4             = -1000396,
-    SAY_TOOG_POST_5             = -1000397,
-    SAY_TORT_POST_6             = -1000398,
+    SAY_TOOGA_RANDOM_START      = 2221,
+    SAY_TOOGA_RANDOM_END        = 2228,
+
+    SAY_TOOG_POST_1             = 2137,
+    SAY_TORT_POST_2             = 2138,
+    SAY_TOOG_POST_3             = 2139,
+    SAY_TORT_POST_4             = 2140,
+    SAY_TOOG_POST_5             = 2141,
+    SAY_TORT_POST_6             = 2145,
 
     QUEST_TOOGA                 = 1560,
     NPC_TORTA                   = 6015,
@@ -286,7 +184,7 @@ struct npc_toogaAI : public FollowerAI
 
     void Reset() override
     {
-        m_uiCheckSpeechTimer = 2500;
+        m_uiCheckSpeechTimer = urand(30000, 60000);
         m_uiPostEventTimer = 1000;
         m_uiPhasePostEvent = 0;
 
@@ -376,17 +274,10 @@ struct npc_toogaAI : public FollowerAI
             {
                 if (m_uiCheckSpeechTimer < uiDiff)
                 {
-                    m_uiCheckSpeechTimer = 5000;
+                    m_uiCheckSpeechTimer = urand(30000, 60000);
 
-                    switch (urand(0, 50))
-                    {
-                        case 10:
-                            DoScriptText(SAY_TOOG_THIRST, m_creature);
-                            break;
-                        case 25:
-                            DoScriptText(SAY_TOOG_WORRIED, m_creature);
-                            break;
-                    }
+                    if (Player* pPlayer = GetLeaderForFollower())
+                        DoScriptText(urand(SAY_TOOGA_RANDOM_START, SAY_TOOGA_RANDOM_END), m_creature, pPlayer);
                 }
                 else
                     m_uiCheckSpeechTimer -= uiDiff;
@@ -629,11 +520,6 @@ void AddSC_tanaris()
     newscript->Name = "npc_yehkinya";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_yehkinya;
     newscript->GetAI = &GetAI_npc_yehkinya;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "mob_aquementas";
-    newscript->GetAI = &GetAI_mob_aquementas;
     newscript->RegisterSelf();
 
     newscript = new Script;

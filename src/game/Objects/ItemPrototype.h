@@ -502,6 +502,7 @@ struct ItemPrototype
     uint32 FoodType;
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
+    uint32 WrappedGift;
     uint32 ExtraFlags;                                      // see ItemExtraFlags
     uint32 OtherTeamEntry;
 
@@ -527,6 +528,8 @@ struct ItemPrototype
 
         return false;
     }
+
+    void GetAllowedEquipSlots(uint8 slots[4], uint8 classId, bool canDualWield) const;
 
     uint32 GetMaxStackSize() const { return Stackable; }
 

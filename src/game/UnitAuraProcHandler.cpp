@@ -27,6 +27,7 @@
 #include "SpellAuras.h"
 #include "SpellMgr.h"
 #include "Util.h"
+#include "World.h"
 
 pAuraProcHandler AuraProcHandler[TOTAL_AURAS] =
 {
@@ -261,7 +262,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         if (spellProto->SpellIconID == 1799)
 #endif
         {
-            return procFlag & PROC_FLAG_TAKEN_NEGATIVE_SPELL_HIT && procExtra & PROC_EX_CRITICAL_HIT;
+            return procFlag & PROC_FLAG_TAKE_HARMFUL_SPELL && procExtra & PROC_EX_CRITICAL_HIT;
         }
 #endif
         // Improved Lay on Hands
@@ -274,7 +275,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         if (spellProto->Id == 25906)
         {
             // Should be able to proc when negative magical effect lands on a target.
-            if (!isVictim && (procSpell->DmgClass == SPELL_DAMAGE_CLASS_MAGIC) && !procSpell->IsPositiveSpell() && (procExtra & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT)) && !(procSpell->IsSpellAppliesAura() && (procFlag & PROC_FLAG_ON_DO_PERIODIC)))
+            if (!isVictim && (procSpell->DmgClass == SPELL_DAMAGE_CLASS_MAGIC) && !procSpell->IsPositiveSpell() && (procExtra & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT)) && !(procSpell->IsSpellAppliesAura() && (procFlag & PROC_FLAG_DEAL_HARMFUL_PERIODIC)))
                 return roll_chance_f((float)spellProto->procChance);
         }
 #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_10_2
@@ -296,10 +297,10 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
             //   and Consecration. Only one charge will be burned per area spell cast,
             //   rather than multiple charges per target hit as was previously the case.  
 #if SUPPORTED_CLIENT_BUILD > CLIENT_BUILD_1_9_4
-            if ((procFlag & (PROC_FLAG_SUCCESSFUL_MELEE_SPELL_HIT | PROC_FLAG_SUCCESSFUL_RANGED_SPELL_HIT | PROC_FLAG_SUCCESSFUL_AOE | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
+            if ((procFlag & (PROC_FLAG_DEAL_MELEE_ABILITY | PROC_FLAG_DEAL_RANGED_ABILITY | PROC_FLAG_SUCCESSFUL_AOE | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
                 return true;
 #else
-            if ((procFlag & (PROC_FLAG_ON_DO_PERIODIC)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
+            if ((procFlag & (PROC_FLAG_DEAL_HARMFUL_PERIODIC)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
                 return true;
 #endif
         }
@@ -307,7 +308,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         // Omen of Clarity
         if (spellProto->Id == 16864)
         {
-            if (!procSpell && (procFlag & (PROC_FLAG_SUCCESSFUL_MELEE_HIT | PROC_FLAG_SUCCESSFUL_MELEE_SPELL_HIT)))
+            if (!procSpell && (procFlag & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY)))
                 return urand(0, 99) < 10;
             return false;
         }
@@ -317,7 +318,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         {
             return procSpell->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_PRAYER_OF_HEALING, CF_PRIEST_HEAL,
                 CF_PRIEST_FLASH_HEAL, CF_PRIEST_FLASH_HEAL2, CF_PRIEST_GREATER_HEAL>() &&
-                procExtra & PROC_EX_CRITICAL_HIT && procFlag & PROC_FLAG_SUCCESSFUL_POSITIVE_SPELL;
+                procExtra & PROC_EX_CRITICAL_HIT && procFlag & PROC_FLAG_DEAL_HELPFUL_SPELL;
         }
         // SPELL_AURA_ADD_TARGET_PROC
         // Chance of proc calculated after.
@@ -358,10 +359,17 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
             if (procSpell->SpellIconID == 83)
                 return true;
 
-            if (procSpell->IsDirectDamageSpell() && (procFlag & (PROC_FLAG_SUCCESSFUL_MELEE_HIT | PROC_FLAG_SUCCESSFUL_MELEE_SPELL_HIT)))
+            if (procSpell->IsDirectDamageSpell() && (procFlag & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY)))
                 return true;
         }
 #endif
+
+        // SHAMAN
+        // Elemental Mastery
+        // Do not consume aura if spell did not benefit from crit chance bonus.
+        // Can happen if aura was cast after damaging spell was already launched.
+        if (spellProto->Id == 16166 && (procExtra & PROC_EX_NORMAL_HIT))
+            return false;
     }
 
     // Get proc Event Entry
@@ -392,7 +400,7 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
         return false;
 
     // In most cases req get honor or XP from kill
-    if (EventProcFlag & PROC_FLAG_KILL && GetTypeId() == TYPEID_PLAYER)
+    if ((EventProcFlag & PROC_FLAG_KILL) && IsPlayer())
     {
         bool allow = ((Player*)this)->IsHonorOrXPTarget(pVictim);
         if (!allow)
@@ -400,11 +408,11 @@ bool Unit::IsTriggeredAtSpellProcEvent(Unit* pVictim, SpellAuraHolder* holder, S
     }
     // Aura added by spell can`t trigger from self (prevent drop charges/do triggers)
     // But except periodic triggers (can triggered from self)
-    if (procSpell && procSpell->Id == spellProto->Id && !(EventProcFlag & PROC_FLAG_ON_TAKE_PERIODIC))
+    if (procSpell && procSpell->Id == spellProto->Id && !(EventProcFlag & PROC_FLAG_TAKE_HARMFUL_PERIODIC))
         return false;
 
     // Check if current equipment allows aura to proc
-    if (!isVictim && GetTypeId() == TYPEID_PLAYER)
+    if (!isVictim && IsPlayer())
     {
         if (spellProto->EquippedItemClass == ITEM_CLASS_WEAPON)
         {
@@ -1236,15 +1244,10 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                     trigger_spell_id = 22588;
                     break;
                 }
-                // Nostalrius
-                case 28200:
+                case 28200:                                 // Talisman of Ascendance
                 {
                     if (procFlags & (PROC_FLAG_SUCCESSFUL_AOE))
-                    {
-                        if (procFlags != PROC_FLAG_SUCCESSFUL_NONE_POSITIVE_SPELL &&
-                                procFlags != PROC_FLAG_SUCCESSFUL_NONE_SPELL_HIT)
-                            return SPELL_AURA_PROC_FAILED;
-                    }
+                        return SPELL_AURA_PROC_FAILED;
                     break;
                 }
             }
@@ -1377,7 +1380,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 // Patch 1.9: Aspect of the Pack and Aspect of the Cheetah - Periodic damage will no longer trigger the Dazed effect.
                 case 5118:  // Aspect of the Cheetah
                 case 13159: // Aspect of the Pack
-                    if (procFlags & (PROC_FLAG_ON_DO_PERIODIC | PROC_FLAG_ON_TAKE_PERIODIC | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT | PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT))
+                    if (procFlags & (PROC_FLAG_DEAL_HARMFUL_PERIODIC | PROC_FLAG_TAKE_HARMFUL_PERIODIC | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT | PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT))
                         return SPELL_AURA_PROC_FAILED;
             }
 #endif
@@ -1446,7 +1449,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                         damagePoint = pVictim->SpellDamageBonusTaken(this, auraSpellInfo, triggeredByAura->GetEffIndex(), damagePoint, SPELL_DIRECT_DAMAGE);
                     }
 
-                    CastCustomSpell(pVictim, spellId, dither(damagePoint), nullptr, nullptr, true, nullptr, triggeredByAura);
+                    CastCustomSpell(pVictim, spellId, dither(damagePoint), {}, {}, true, nullptr, triggeredByAura);
                     // Seal of Righteousness can proc weapon enchants. mechanic removed in 2.1.0
                     static_cast<Player*>(this)->CastItemCombatSpell(pVictim, BASE_ATTACK);
                     return SPELL_AURA_PROC_OK;                                // no hidden cooldown
@@ -1610,18 +1613,22 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
         case 14157: // Ruthlessness
         {
             // Need add combopoint AFTER finishing move (or they get dropped in finish phase)
-            if (Spell* spell = GetCurrentSpell(CURRENT_GENERIC_SPELL))
+            if (!sWorld.getConfig(CONFIG_UINT32_SPELL_PROC_DELAY))
             {
-                spell->AddTriggeredSpell(trigger_spell_id);
-                return SPELL_AURA_PROC_OK;
+                if (Spell* spell = GetCurrentSpell(CURRENT_GENERIC_SPELL))
+                {
+                    spell->AddTriggeredSpell(trigger_spell_id);
+                    return SPELL_AURA_PROC_OK;
+                }
+                return SPELL_AURA_PROC_FAILED;
             }
-            return SPELL_AURA_PROC_FAILED;
+            break;
         }
     }
 
     // try detect target manually if not set
     if (target == nullptr)
-        target = !(procFlags & PROC_FLAG_SUCCESSFUL_POSITIVE_SPELL) && Spells::IsPositiveSpell(trigger_spell_id) ? this : pVictim;
+        target = !(procFlags & PROC_FLAG_DEAL_HELPFUL_SPELL) && Spells::IsPositiveSpell(trigger_spell_id) ? this : pVictim;
 
     return TriggerProccedSpell(target, basepoints, triggerEntry, castItem, triggeredByAura, cooldown, GetObjectGuid(), procSpell);
 }
