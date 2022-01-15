@@ -2716,9 +2716,42 @@ bool GossipSelect_npc_fazgel_mechaflame(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
+bool GossipHello_npc_sovatir(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40362) == QUEST_STATUS_INCOMPLETE)  // A Historian Finds You
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Arcanist Sovatir, how is this possible?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60644, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_sovatir(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30016, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60355))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_sovatir";
+    newscript->pGossipHello = &GossipHello_npc_sovatir;
+    newscript->pGossipSelect = &GossipSelect_npc_sovatir;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_fazgel_mechaflame";
