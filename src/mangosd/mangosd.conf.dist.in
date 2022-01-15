@@ -2822,14 +2822,14 @@ AHBot.itemcount = 50
 #                 2 (premade gear template)
 #
 ###################################################################################################################
-RandomBot.Enable = 0
+RandomBot.Enable = 1
 RandomBot.MinBots = 0
 RandomBot.MaxBots = 0
 RandomBot.Refresh = 60000
 
 PlayerBot.Debug = 0
 PlayerBot.UpdateMs = 1000
-PlayerBot.ShowInWhoList = 0
+PlayerBot.ShowInWhoList = 1
 
 PartyBot.MaxBots = 0
 PartyBot.SkipChecks = 0
@@ -2838,6 +2838,13 @@ PartyBot.RandomGearLevelDifference = 10
 
 BattleBot.AutoEquip = 1
 
+
+WorldBot.Enable = 1
+WorldBot.UseLoader = 1
+WorldBot.UseChat = 1
+WorldBot.MaxHordeBots = 20
+WorldBot.MaxAllianceBots = 20
+
 ###################################################################################################################
 #    Database-based chat
 ###################################################################################################################
@@ -2845,15 +2852,6 @@ OfflineChat.Enable = 0
 OfflineChat.Port   = 3444
 OfflineChat.IP     = 0.0.0.0
 OfflineChat.Password= "p8zqkt"
-
-###################################################################################################################
-#    World Bots
-###################################################################################################################
-WorldBot.Enable = false
-WorldBot.UseLoader = false
-WorldBot.UseChat = true
-WorldBot.MaxHordeBots = 100
-WorldBot.MaxAllianceBots = 100
 
 ###################################################################################################################
 #    Mail flooding mitigation
