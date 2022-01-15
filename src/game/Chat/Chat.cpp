@@ -141,11 +141,11 @@ ChatCommand * ChatHandler::getCommandTable()
     };
     static ChatCommand worldBotCommandTable[] =
     {
-        { "add",          SEC_ADMINISTRATOR,    false, nullptr,            "Add a new bot", worldBotAddCommandTable },
-        { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotRemoveCommand,       "", nullptr },
-        { "showpath",     SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowPathCommand,     "", nullptr },
-        { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowAllPathsCommand, "", nullptr },
-        { "path",         SEC_ADMINISTRATOR,    false, nullptr,              "Add a path", worldBotPathCommandTable },
+        { "add",          SEC_ADMINISTRATOR,    false, nullptr,                             "Add a new bot", worldBotAddCommandTable },
+        { "remove",       SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotRemoveCommand,        "", nullptr },
+        { "showpath",     SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowPathCommand,      "", nullptr },
+        { "showallpaths", SEC_ADMINISTRATOR,    false, &ChatHandler::HandleWorldBotShowAllPathsCommand,  "", nullptr },
+        { "path",         SEC_ADMINISTRATOR,    false, nullptr,                                 "Add a path", worldBotPathCommandTable },
         { nullptr,        0,                    false, nullptr,                                          "", nullptr },
     };
     static ChatCommand accountSetCommandTable[] =
@@ -1179,6 +1179,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "ahbot",          SEC_ADMINISTRATOR,  true, nullptr,                            "Manage AH bot", ahbotCommandTable    },
         { "partybot",       SEC_ADMINISTRATOR,  false, nullptr,                       "Manage party bots", partyBotCommandTable },
         { "battlebot",      SEC_ADMINISTRATOR,  false, nullptr,                      "Manage battle bots", battleBotCommandTable},
+        { "worldbot",       SEC_ADMINISTRATOR,  false, nullptr,                       "Manage world bots", worldBotCommandTable },
         { "world",          SEC_ADMINISTRATOR,  false, nullptr,                                        "", worldCommandTable    },
         { "possess",        SEC_GAMEMASTER,     false, &ChatHandler::HandlePossessCommand,             "", nullptr              },
         { "cinematic",      SEC_DEVELOPER,      false, nullptr,                                        "", cinematicCommandTable},

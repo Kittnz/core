@@ -49,7 +49,7 @@ PlayerBotMgr::~PlayerBotMgr()
 
 void PlayerBotMgr::LoadConfig()
 {
-    m_enableRandomBots = sConfig.GetBoolDefault("RandomBot.Enable", false);
+    m_enableRandomBots = sConfig.GetBoolDefault("RandomBot.Enable", true);
     m_confMinRandomBots = sConfig.GetIntDefault("RandomBot.MinBots", 3);
     m_confMaxRandomBots = sConfig.GetIntDefault("RandomBot.MaxBots", 10);
     m_confRandomBotsRefresh = sConfig.GetIntDefault("RandomBot.Refresh", 60000);
@@ -144,7 +144,7 @@ void PlayerBotMgr::Load()
         sLog.outString("[PlayerBotMgr] %u now loading", m_stats.loadingCount);
     }
 
-    // Map Bots
+    // World Bots
     bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
     if (worldBotEnabled)
     {
@@ -1743,9 +1743,9 @@ bool ChatHandler::HandleWorldBotAddKalimdorCommand(char* args)
 bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattleBot)
 {
     bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
-    if (worldBotEnabled)
+    if (!worldBotEnabled)
     {
-        SendSysMessage("Map Bots are disabled.");
+        SendSysMessage("World bots are disabled.");
         SetSentErrorMessage(true);
         return false;
     }
@@ -1753,7 +1753,7 @@ bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattle
     bool worldBotLoader = sPlayerBotMgr.m_useWorldBotLoader;
     if (worldBotLoader)
     {
-        SendSysMessage("Map Bots:  Adding bots is not allowed, use config to add bots from character db.");
+        SendSysMessage("World bots:  Adding bots is not allowed, use config to add bots from character db.");
         SetSentErrorMessage(true);
         return false;
     }
@@ -1797,29 +1797,36 @@ bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattle
     {
     case MAP_EASTERN_KINGDOMS:
         ai = new WorldBotAI(botRace, botClass, 0, 0, -8833.379f, 628.627f, 94.006f, 4.195f, isBattleBot, 0);
-        PSendSysMessage("Added %s map bot", args);
+        PSendSysMessage("Added %s world bot", args);
         break;
     case MAP_KALIMDOR:
         ai = new WorldBotAI(botRace, botClass, 1, 0, 1655.873f, -4413.851f, 16.623f, 2.967f, isBattleBot, 0);
-        PSendSysMessage("Added %s map bot", args);
+        PSendSysMessage("Added %s world bot", args);
         break;
     case MAP_WS:
         ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_WS);
-        PSendSysMessage("Added %s map bot and queuing for WS", args);
+        PSendSysMessage("Added %s world bot and queuing for WS", args);
         break;
     case MAP_AB:
         ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AB);
-        PSendSysMessage("Added %s map bot and queuing for AB", args);
+        PSendSysMessage("Added %s world bot and queuing for AB", args);
         break;
     case MAP_AV:
         ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AV);
-        PSendSysMessage("Added %s map bot and queuing for AV", args);
+        PSendSysMessage("Added %s world bot and queuing for AV", args);
         break;
     default:
         break;
     }
 
-    sPlayerBotMgr.AddBot(ai);
+    if (sPlayerBotMgr.AddBot(ai))
+        SendSysMessage("New world bot added.");
+    else
+    {
+        SendSysMessage("Error spawning bot.");
+        SetSentErrorMessage(true);
+        return false;
+    }
 
     return true;
 }
@@ -2040,6 +2047,7 @@ void PlayerBotMgr::WorldBotCreator()
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
+        sLog.outString("WorldBot:  Add horde bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
         worldBotHordeCount++;
     }
 
@@ -2050,10 +2058,11 @@ void PlayerBotMgr::WorldBotCreator()
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
+        sLog.outString("WorldBot:  Add alliance bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
         worldBotAllianceCount++;
     }
 
-    sLog.outString("WorldBotLoader:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
+    sLog.outString("WorldBot:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
 }
 
 bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
