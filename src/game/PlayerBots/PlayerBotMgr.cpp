@@ -1962,7 +1962,7 @@ bool ChatHandler::HandleWorldBotPathPointAddCommand(char* args)
 void PlayerBotMgr::WorldBotLoader()
 {
     sLog.outString("[WorldBotLoader] Loading Bots from character db...");
-    QueryResult* result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE account > 55");
+    QueryResult* result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE is_worldbot = 1");
     if (!result)
     {
         sLog.outString("Table `character` is empty.");

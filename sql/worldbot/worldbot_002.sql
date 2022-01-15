@@ -1,13 +1,3 @@
-DROP PROCEDURE IF EXISTS add_migration;
-delimiter ??
-CREATE PROCEDURE `add_migration`()
-BEGIN
-DECLARE v INT DEFAULT 1;
-SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='20200829214953');
-IF v=0 THEN
-INSERT INTO `migrations` VALUES ('20200829214953');
--- Add your query below.
-
 CREATE TABLE IF NOT EXISTS `worldbot_chat` (
   `guid` int(11) NOT NULL,
   `type` int(11) NOT NULL DEFAULT 0,
@@ -101,10 +91,3 @@ INSERT INTO `worldbot_chat` (`guid`, `type`, `chat`) VALUES
 	(87, 5, 'yes???'),
 	(88, 5, 'uh... what'),
 	(89, 5, 'you talkin to me %s?');
-
--- End of migration.
-END IF;
-END??
-delimiter ; 
-CALL add_migration();
-DROP PROCEDURE IF EXISTS add_migration;

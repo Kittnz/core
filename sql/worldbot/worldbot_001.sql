@@ -1,13 +1,3 @@
-DROP PROCEDURE IF EXISTS add_migration;
-delimiter ??
-CREATE PROCEDURE `add_migration`()
-BEGIN
-DECLARE v INT DEFAULT 1;
-SET v = (SELECT COUNT(*) FROM `migrations` WHERE `id`='20200502193432');
-IF v=0 THEN
-INSERT INTO `migrations` VALUES ('20200502193432');
--- Add your query below.
-
 CREATE TABLE IF NOT EXISTS `worldbot_waypoints` (
   `guid` smallint(6) NOT NULL DEFAULT 0,
   `id` smallint(6) NOT NULL,
@@ -1526,9 +1516,3 @@ INSERT INTO `worldbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `func`, `area`, `
 	(151, 9, 2053.79, 262.218, 89.9978, '', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom'),
 	(151, 10, 2063.73, 271.876, 94.1076, '', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom'),
 	(151, 11, 2057.77, 240.763, 99.7675, 'TransportTeleportToGromgolFromUndercity', 85, 85, 0, 0, 'undercity_out_hub_to_brill_zep_grom');
--- End of migration.
-END IF;
-END??
-delimiter ; 
-CALL add_migration();
-DROP PROCEDURE IF EXISTS add_migration;
