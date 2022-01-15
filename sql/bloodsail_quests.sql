@@ -33,3 +33,20 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I\'ve been chosen by the Fleet Master to put you, pirates, back into shape.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Elf in the Jungle --
+delete from quest_template where entry = 40356;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40356,2,33,48,42,0,0,'Elf in the Jungle','\'ello there boss mon! Time for Vil\'do to send ya out for dat booty! What, were ya just thinkin\' that ya\'d be only drinkin\' rum for da rest of ya days? No boss mon, ya must be huntin\' treasure so ya can afford da money lust and whatever else ya got. Vil\'do wouldn\'t guess and he shouldn\'t either.\n\nDa loa say Vil\'do would one day die talkin\' since he be talkin\' so much, but Vil\'do don’t listen to them and neither should ya mon.\n\nOne of da boys from da Bloodsail Compound said dey be seein\' some weirdo night elf fightin\' nagas, said somethin’ about him wavin\' his hand in da air and magic goin\' "woosh".\n\nNo idea where he be goin\' but Vil\'do sees opportunity here and Vil\'do thinks dis will lead boss mon to booty.','Find the Night Elf close to Bloodsail Compound.','The notes appear to be torn and dirty.','The language is unreadable to you and you bet it\'d be unreadable for the rest of your crewmates back at the retreat, it is by now you realize you should\'ve probably recruited a historian.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6972,1250,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60459, 40356);
+replace into gameobject_involvedrelation (id, quest) values (2010870, 40356);
+
+-- NPC Arcanist Sovatir, DisplayID: 14420, should de dead.
+REPLACE INTO creature_template VALUES
+(60642, 14420, 0, 0, 0, 'Arcanist Sovatir', NULL, 0, 48, 48, 2062, 2062, 1695, 1695, 2386, 290, 0, 1.1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set dynamic_flags = 36 where entry = 60642;
+update creature_template set unit_flags = 33554434 where entry = 60642;
+
+delete from gameobject_template where entry = 2010870;
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010870, 2, 8348, 1, 'Arcanist Sovatir\'s Torn Notes', 32, '');
