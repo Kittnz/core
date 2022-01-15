@@ -104,3 +104,19 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60643, 40359);
 replace into creature_involvedrelation (id, quest) values (60643, 40359);
+
+-- Highly Unexpected Event --
+delete from quest_template where entry = 40360;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40359,40360,2,33,48,42,0,0,'Highly Unexpected Event','It\'s done! Quite boring little thing but you know gnomes, blah, I hate gnomes. No refinement when it comes to these things, just look at this thing, the perfect way to steal stuff, and not to mention increase your own profit!\n\nThis thing was only supposed to shrink the statues, but guess what, it can now enlarge them too! Anyway let\'s be done with it yeah, no reason to wait any longer.','Kill Fazgel Mechaflame.','You stare at the statue with the engraved name once more and get ready to pull the trigger.','As you push the button the shrink ray activates! Mumbling all sorts of sounds at first you start cursing the corpse of the goblin who built this, not only was he a double-crosser but he was no engineer! Or so you\'d think, sooner than later the statue began to shrink, no weighing less, and could easily be placed in your backpack.',60511,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1250,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60643, 40360);
+replace into gameobject_involvedrelation (id, quest) values (2010871, 40360);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60511,20626,'Fazgel\'s Shrink Ray',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set script_name = 'npc_fazgel_mechaflame', loot_id = 60643 where entry = 60643;
+
+delete from creature_loot_template where item = 60511;
+replace into creature_loot_template values
+(60643,60511,-100,1,1,1,0);
