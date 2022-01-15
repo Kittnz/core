@@ -517,7 +517,7 @@ std::vector<MapBotPath*> vPaths_NoReverseAllowed;
 
 void MapBotAI::LoadDBWaypoints()
 {
-    MapBotAI pAI = null;
+    MapBotAI* pAI = nullptr;
     float x, y, z = 0.f;
     uint32 guid, id, area, zone, map, reverse, lastGuidPoint = 0;
     std::string func, comments = "";
@@ -588,7 +588,7 @@ void MapBotAI::LoadDBWaypoints()
                     else
                     {
                         if (func_ == "MoveToNextPointSpecial")
-                            tempFunc = &MoveToNextPointSpecial(MapBotAI *pAI = dynamic_cast<MapBotAI*>(me->AI()));
+                            tempFunc = &MoveToNextPointSpecial/*(MapBotAI * pAI = dynamic_cast<MapBotAI*>(me->AI()))*/;
 
                         if (func_ == "WSG_AtAllianceFlag")
                             tempFunc = &WSG_AtAllianceFlag;
