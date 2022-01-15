@@ -2659,9 +2659,47 @@ bool GossipSelect_npc_ironpatch(Player* pPlayer, Creature* pCreature, uint32 uiS
     return true;
 }
 
+bool GossipHello_npc_vildo_onetusk(Player* pPlayer, Creature* pCreature)
+{
+    if (!pPlayer->GetQuestStatus(40358) == QUEST_STATUS_NONE)  // Golden Elves of Feralas
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Let's set sail for Feralas!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60459, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_vildo_onetusk(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Go to the Feralas>.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30015, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        static const WorldLocation m_sail_to_feralas(1, -5547.61F, 1421.97F, 23.59F, 3.35);
+        pPlayer->TeleportTo(1, -5547.61F, 1421.97F, 23.59F, 3.35);
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_vildo_onetusk";
+    newscript->pGossipHello = &GossipHello_npc_vildo_onetusk;
+    newscript->pGossipSelect = &GossipSelect_npc_vildo_onetusk;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_ironpatch";
