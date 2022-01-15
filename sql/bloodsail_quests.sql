@@ -139,11 +139,35 @@ replace into gameobject_loot_template values
 (2010872,60512,-100,0,1,1,0);
 
 delete from gameobject_template where entry = 2010873;
-REPLACE INTO gameobject_template VALUES
-(2010873, 9, 8348, 'Arcanist Sovatir\'s Torn Notes', 0, 0, 1, 50525, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40361, '');
-
-REPLACE INTO page_text VALUES
-(50525, 'A reminder of the Captain\'s first booty.', 0);
+replace into gameobject_template (entry, type, displayid, size, name, flags, phase_quest_id, script_name) values (2010873, 2, 8348, 1, 'Arcanist Sovatir\'s Torn Notes', 32, 40361, '');
 
 delete from gameobject where ID = 2010873;
-replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (2010873, 0, -14593.21, -542.16, 8.44, 2.25, 0, 0, 0.705134, -0.709074, 300, 300, 100, 1, 0, 0);   
+replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (2010873, 0, -14593.21, -542.16, 8.44, 2.25, 0, 0, 0.705134, -0.709074, 300, 300, 100, 1, 0, 0);
+
+--  A Historian Finds You --
+delete from quest_template where entry = 40362;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40361,40362,2,33,48,42,0,0,' A Historian Finds You','On a cold and rainy night you decide to once more look at the notes as they remind you of your own first haul. As you reminisce about the past you also remember the wish you\'ve had to find a historian or someone knowledgeable enough to aid in the future.\n\nAs thoughts drift through your mind you reach the end of Sovatir\'s journal and you find a rune accompanied by some words that felt very natural for you to say at this exact moment. As you mumble the incantation your head feels rather dizzy as you can now depict a ghostly figure that looks like the former owner of this journal.','Speak with Arcanist Sovatir.','Am I dead?','And so you have it $N, or is it Captain $N? I guess I\'m a crewmate from now on, well, one only YOU can see.',0,0,0,0,0,0,0,0,60355,1,0,0,0,0,0,0,0,0,0,1250,87,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak with Sovatir.');
+
+replace into gameobject_questrelation (id, quest) values (2010873, 40362);
+replace into creature_involvedrelation (id, quest) values (60644, 40362);
+
+replace into creature_template (entry, name, display_id1) values (60355, 'quest_40362_dummy_triger', 328);
+
+-- NPC Arcanist Sovatir, DisplayID: 14420, level 55, Health: 2000, Mana: 1500, cast spell: 22650, faction: 119, gossip: "I bear the knowledge of the Shen'dralar, I am a Highborne of Eldre'thalas and I know a great deal about our world. Since you can aid me to gain even more knowledge I am at your service, Captain", should de ghost.
+REPLACE INTO creature_template VALUES
+(60644, 14420, 0, 0, 0, 'Arcanist Sovatir', NULL, 0, 55, 55, 2000, 2000, 1500, 1500, 2386, 119, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40361, 'npc_sovatir');
+
+REPLACE INTO creature_template_addon VALUES
+(60644, 0, 0, 0, 0, 0, 0, 9617);
+
+set @gossip_menu_id = 41081; set @magic_number = 60644;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I bear the knowledge of the Shen\'dralar, I am a Highborne of Eldre\'thalas and I know a great deal about our world. Since you can aid me to gain even more knowledge I am at your service, Captain.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41082; set @magic_number = 30016;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It seems death claimed me $r, I am Sovatir, Arcanist and Lorekeeper of Eldre\'thalas, I have placed a part of my soul and memories in that journal, when you spoke the incantation you brought it up. I should let you know that it ate at your life force however, not too much I trust.\n\nSince you\'re now the owner of the journal, you\'re also mine, my knowledge is yours as long as you keep me entertained and allow me to find even more. Do note, that nobody else can see me.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
