@@ -1044,3 +1044,6 @@ update quest_template set prevquestid = 0 where entry = 40261;
 update item_template set sell_price = 50000, buy_price = 50000 where entry = 80301;
 update item_template set name = 'Appearance: Blessing of the Wilds' where entry = 83092;
 update item_template set name = 'Appearance: Wildhammer Warpaint' where entry = 50204;
+-- Item Groveweald badge never got fixed, it drops for everyone upon a single drop, it is not intended to be like this, and should not be lootable by everyone:
+update creature_loot_template set groupid = 6 where item = 60176;
+update item_template set flags = 0 where item = 60176;
