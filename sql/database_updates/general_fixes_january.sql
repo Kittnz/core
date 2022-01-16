@@ -1040,3 +1040,7 @@ UPDATE creature_template SET display_id1 = 4394 WHERE entry = 60641;
 update gameobject set spawntimesecsmin = 60, spawntimesecsmax = 60 where id = 2010860;
 -- Fix Hunter quest chain:
 update quest_template set prevquestid = 0 where entry = 40261;
+-- Cenarion Stuff:
+update item_template set sell_price = 50000, buy_price = 50000 where entry = 80301;
+update item_template set name = 'Appearance: Blessing of the Wilds' where entry = 83092;
+update item_template set name = 'Appearance: Wildhammer Warpaint' where entry = 50204;
