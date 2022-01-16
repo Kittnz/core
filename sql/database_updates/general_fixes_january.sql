@@ -1034,8 +1034,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
  UPDATE quest_template SET RewItemId2 = 40061, RewItemCount2 = 1 WHERE entry = 40061;
--- Giant tropical centipedes share their territories with tarantulas.
--- Despite it's impressive length, it's a nimble navigator, and some can be highly venomous.
--- As quick as lightning, just like the tarantula it's killing, the centipede has two curved hollow fangs which inject paralyzing venom.
--- Even tarantulas aren't immune from an ambush.
--- This centipede is a predator...
+-- UPDATE creature_template SET display_id1 = 4394 WHERE entry = 60641;
+UPDATE creature_template SET display_id1 = 4394 WHERE entry = 60641;
+-- Object Kalanar's Strongbox , reduce respawn time to 1 minute:
+update gameobject set spawntimesecsmin = 60, spawntimesecsmax = 60 where id = 2010860;
