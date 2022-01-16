@@ -1634,9 +1634,8 @@ void Map::RemoveAllObjectsInRemoveList()
         WorldObject* obj = *i_objectsToRemove.begin();
         i_objectsToRemove.erase(i_objectsToRemove.begin());
 
-        if (obj)
-            switch (obj->GetTypeId())
-            {
+        switch (obj->GetTypeId())
+        {
             case TYPEID_CORPSE:
             {
                 Corpse* corpse = GetCorpse(obj->GetObjectGuid());
@@ -1664,7 +1663,7 @@ void Map::RemoveAllObjectsInRemoveList()
             default:
                 sLog.outError("Non-grid object (TypeId: %u) in grid object removing list, ignored.", obj->GetTypeId());
                 break;
-            }
+        }
     }
 }
 
