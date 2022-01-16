@@ -1046,4 +1046,8 @@ update item_template set name = 'Appearance: Blessing of the Wilds' where entry 
 update item_template set name = 'Appearance: Wildhammer Warpaint' where entry = 50204;
 -- Item Groveweald badge never got fixed, it drops for everyone upon a single drop, it is not intended to be like this, and should not be lootable by everyone:
 update creature_loot_template set groupid = 6 where item = 60176;
-update item_template set flags = 0 where item = 60176;
+update item_template set flags = 0 where entry = 60176;
+-- GO "Atal'ai Chest" restored in DB. Loot updated for this GO:
+REPLACE INTO gameobject_template VALUES
+(2010874, 3, 23435, 'Atal\'ai Chest', 0, 4, 1, 43, 2010874, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+update gameobject_loot_template set entry = 2010874 where item = 60344;
