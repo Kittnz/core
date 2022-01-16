@@ -1038,3 +1038,5 @@ replace into item_template values
 UPDATE creature_template SET display_id1 = 4394 WHERE entry = 60641;
 -- Object Kalanar's Strongbox , reduce respawn time to 1 minute:
 update gameobject set spawntimesecsmin = 60, spawntimesecsmax = 60 where id = 2010860;
+-- Fix Hunter quest chain:
+update quest_template set prevquestid = 0 where entry = 40261;
