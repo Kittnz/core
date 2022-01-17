@@ -115,6 +115,10 @@ struct instance_caverns_of_time : public ScriptedInstance
     void OnPlayerEnter(Player* pPlayer) override
     {
         pPlayer->PlayDirectMusic(30274, pPlayer);
+
+        if (riftsClosed > 0)
+            pPlayer->AddItem(80008, 1);
+
         if (!pPlayer)
             return;
     }
@@ -1490,9 +1494,16 @@ struct larvae_cotAI : public ScriptedAI
 
         if (spellTimer <= uiDiff)
         {
-            DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE);
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE))
+            {
+                if (Creature* harbinger = m_creature->FindNearestCreature(NPC_HARBINGER, 100.0f, true))
+                {
+                    harbinger->ModifyHealth(harbinger->GetHealth() + 100);
+                    m_creature->ModifyHealth(harbinger->GetHealth() - 100);
+                }
+                spellTimer = urand(5000, 7000);
+            }
 
-            spellTimer = urand(5000, 7000);
         }
         else spellTimer -= uiDiff;
 
@@ -1573,13 +1584,13 @@ struct epochronos_boss_cotAI : public ScriptedAI
 
         if (arcaneBlastTimer <= uiDiff)
         {
-            if (Unit* currentTarget = m_creature->SelectRandomUnfriendlyTarget(nullptr, 50.0f))
+            if (Unit* currentTarget = m_creature->SelectRandomUnfriendlyTarget(nullptr, 25.0f))
             {
                 if (currentTarget == m_creature->GetVictim())
-                    return;
+                    arcaneBlastTimer = 1000;
 
-                if (DoCastSpellIfCan(currentTarget, SPELL_ARCANE_BLAST) == CAST_OK)
-                    arcaneBlastTimer = 10000;
+                else if (DoCastSpellIfCan(currentTarget, SPELL_ARCANE_BLAST) == CAST_OK)
+                        arcaneBlastTimer = 10000;
             }
         }
         else arcaneBlastTimer -= uiDiff;
@@ -1606,6 +1617,8 @@ struct epochronos_boss_cotAI : public ScriptedAI
                 summonEntry = NPC_VASHJ;
                 break;
             }
+
+            m_creature->SummonCreature(summonEntry, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0);
         }
 
         if (m_creature->FindNearestCreature(summonEntry, 100, true))
@@ -1951,6 +1964,7 @@ struct chromie_boss_cotAI : public ScriptedAI
     enum GOBEntries
     {
         GOB_GHOST_GATE = 180322,
+        GOB_LARGE_GHOST_GATE = 2010866,
         GOB_SAND_WALL = 2010865
     };
 
@@ -1978,13 +1992,10 @@ struct chromie_boss_cotAI : public ScriptedAI
     {
         if (!beginFight && timeRifts.size() == 0)
         {
-            if (GameObject* gate1 = m_creature->SummonGameObject(GOB_GHOST_GATE, -1556.91f, 7095.96f, 23.90f, 0, 0, 0, 0, 0, 0, 0))
+            if (GameObject* gate1 = m_creature->SummonGameObject(GOB_LARGE_GHOST_GATE, -1535.68f, 7109.90f, 24.76f, 0, 0, 0, 0, 0, 0, 0))
                 gobCleanuplist.push_back(gate1);
 
-            if (GameObject* gate2 = m_creature->SummonGameObject(GOB_GHOST_GATE, -1555.989f, 7110.247f, 24.072f, 0, 0, 0, 0, 0, 0, 0))
-                gobCleanuplist.push_back(gate2);
-
-            if (GameObject* sandwall1 = m_creature->SummonGameObject(GOB_SAND_WALL, -1543.7983f, 7107.8457f, 24.7603f, 0, 0, 0, 0, 0, 0, 0))
+            if (GameObject* sandwall1 = m_creature->SummonGameObject(GOB_SAND_WALL, -1527.84f, 7111.95f, 24.05f, 0, 0, 0, 0, 0, 0, 0))
                 gobCleanuplist.push_back(sandwall1);
 
             for (int i = 0; i < 8; i++)
@@ -2680,7 +2691,6 @@ bool GossipHello_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature)
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yeah ... I lost it.", GOSSIP_SENDER_MAIN, 3);
             pPlayer->SEND_GOSSIP_MENU(91975, pCreature->GetGUID());
         }
-
     }
 
     return true;
