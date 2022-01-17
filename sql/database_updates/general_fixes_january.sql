@@ -1374,3 +1374,5 @@ REPLACE INTO npc_vendor VALUES
 
 REPLACE INTO gameobject_template VALUES
 (2010875, 5, 24805, 'Southfury Trading Company', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+-- Quest "Tower of Lapidis X" marked as Elite:
+UPDATE quest_template SET type = 1 WHERE entry = 40303;
