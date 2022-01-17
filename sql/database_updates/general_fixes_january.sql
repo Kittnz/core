@@ -1296,3 +1296,81 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Setted leash_range 50m for NPC "Naxiar":
 update creature_template set leash_range = 50 where entry = 60409;
+-- New NPCs for guilds "Golden Moon" and "Ered Ruin" added:
+REPLACE INTO creature_template VALUES
+(60645, 7016, 0, 0, 0, 'Mr. Twinkle', 'Golden Moon', 0, 20, 20, 629, 629, 0, 0, 852, 290, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 41, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60646, 7051, 0, 0, 0, 'Evatax', 'Golden Moon', 0, 18, 18, 629, 629, 0, 0, 852, 290, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 28, 41, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60647, 6882, 6588, 7330, 0, 'Artist', 'Golden Moon', 0, 10, 10, 198, 198, 0, 0, 455, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 17, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60648, 1311, 0, 0, 0, 'Olom', 'Ered Ruin', 0, 35, 35, 1279, 1279, 0, 0, 1340, 290, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 47, 60, 0, 134, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 74, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60649, 4195, 0, 0, 0, 'Rainn Farred', 'Ered Ruin', 0, 30, 30, 1179, 1179, 0, 0, 1240, 290, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 47, 60, 0, 134, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 74, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60650, 4449, 0, 0, 0, 'Pipnam', 'Olom\'s Minion', 0, 35, 35, 1279, 1279, 0, 0, 1340, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 47, 60, 0, 134, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 74, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60651, 2834, 0, 0, 0, 'Elerona', 'Rainn\'s Minion', 0, 30, 30, 1179, 1179, 0, 0, 1240, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 47, 60, 0, 134, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 74, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41084; set @magic_number = 60645;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to the Golden Moon Circus, the home of the Golden Moon Traveling Troupe.\n\nEnjoy yourselves as we entertain you through our magical acts and trickery - but be wary that we are not responsible for any burning, choking, drowning, money loss, body loss or loss of mind that might or might not happen to you.\n\nThank you for your understatement and have a pleasant day.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41085; set @magic_number = 60648;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings, $r. For I have felt the tug of your call to be summoned here.\n\nOn this plane I am known as Olom. I am a fisher between the realms. The Void. The Nether. Even the surface. You are a new face. I think. Or did you make it over here yourself?\n\nMaybe I\'m getting old, too old. This body should probably not still be alive under natural circumstances.\n\nAs a younger orc I broke free from my demonic master, so I was overjoyed to finally discover there were others out there after so many years. It gladdens my heart to know that a new age and style of warlock is growing.\n\nThe concerns of this world rarely lessen. Sadly. The reports Pipnam has been bringing me as of late hint towards more uncanny forces brewing. He spends much time scouring the lands for interesting tidbits I may learn from. Maybe your talents will prove useful to us and this world when the time comes to act in its defense?\n\nBut I digress. You should find respite at the camp therein, if you haven\'t already been acquainted with the fel-lows that meet there from time to time.\n\nWe are the Ered Ruin. The Doom Guard.\n\nWelcome to our home.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES
+(60646, 159, 0, 0, 0, 0),
+(60646, 1205, 0, 0, 0, 0),
+(60646, 1645, 0, 0, 0, 0),
+(60646, 1708, 0, 0, 0, 0),
+(60646, 2515, 0, 0, 0, 0),
+(60646, 2519, 0, 0, 0, 0),
+(60646, 2946, 0, 0, 0, 0),
+(60646, 3030, 0, 0, 0, 0),
+(60646, 3033, 0, 0, 0, 0),
+(60646, 3107, 0, 0, 0, 0),
+(60646, 3108, 0, 0, 0, 0),
+(60646, 3131, 0, 0, 0, 0),
+(60646, 3135, 0, 0, 0, 0),
+(60646, 3137, 0, 0, 0, 0),
+(60646, 4470, 0, 0, 0, 0),
+(60646, 4471, 0, 0, 0, 0),
+(60646, 4497, 0, 0, 0, 0),
+(60646, 4498, 0, 0, 0, 0),
+(60646, 6183, 0, 0, 0, 0),
+(60646, 11284, 0, 0, 0, 0),
+(60646, 11285, 0, 0, 0, 0),
+(60646, 15326, 0, 0, 0, 0),
+(60646, 15327, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES
+(60649, 2928, 0, 0, 0, 0),
+(60649, 2930, 0, 0, 0, 0),
+(60649, 3371, 0, 0, 0, 0),
+(60649, 3372, 0, 0, 0, 0),
+(60649, 3777, 0, 0, 0, 0),
+(60649, 5060, 0, 0, 0, 0),
+(60649, 5140, 0, 0, 0, 0),
+(60649, 5173, 0, 0, 0, 0),
+(60649, 5565, 0, 0, 0, 0),
+(60649, 8923, 0, 0, 0, 0),
+(60649, 8924, 0, 0, 0, 0),
+(60649, 8925, 0, 0, 0, 0),
+(60649, 16583, 0, 0, 0, 0),
+(60649, 17020, 0, 0, 0, 0),
+(60649, 17021, 0, 0, 0, 0),
+(60649, 17026, 0, 0, 0, 0),
+(60649, 17028, 0, 0, 0, 0),
+(60649, 17029, 0, 0, 0, 0),
+(60649, 17030, 0, 0, 0, 0),
+(60649, 17031, 0, 0, 0, 0),
+(60649, 17032, 0, 0, 0, 0),
+(60649, 17033, 0, 0, 0, 0),
+(60649, 17034, 0, 0, 0, 0),
+(60649, 17035, 0, 0, 0, 0),
+(60649, 17036, 0, 0, 0, 0),
+(60649, 17037, 0, 0, 0, 0),
+(60649, 17038, 0, 0, 0, 0),
+(60649, 21177, 0, 0, 0, 0);
+
+REPLACE INTO gameobject_template VALUES
+(2010875, 5, 24805, 'Southfury Trading Company', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
