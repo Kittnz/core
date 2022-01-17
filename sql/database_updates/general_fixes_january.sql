@@ -1376,3 +1376,5 @@ REPLACE INTO gameobject_template VALUES
 (2010875, 5, 24805, 'Southfury Trading Company', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 -- Quest "Tower of Lapidis X" marked as Elite:
 UPDATE quest_template SET type = 1 WHERE entry = 40303;
+-- Display ID for NPC "Goma" updated:
+UPDATE creature_template SET display_id1 = 4481 WHERE entry = 60641;
