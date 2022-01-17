@@ -1283,3 +1283,6 @@ REPLACE INTO creature_loot_template VALUES
 (91741, 30021, 1, 0, -30021, 1, 0),
 (91741, 30024, 1, 0, -30024, 1, 0),
 (91741, 30038, 1, 0, -30038, 1, 0);
+-- Item "Azure Scale" deleted from quest reward a quest "Killing the Tidelord":
+UPDATE quest_template SET RewItemId1 = 40061, RewItemCount1 = 1 WHERE entry = 40061;
+UPDATE quest_template SET RewItemId2 = 0, RewItemCount2 = 0 WHERE entry = 40061;
