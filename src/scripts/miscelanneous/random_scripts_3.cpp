@@ -2742,9 +2742,57 @@ bool GossipSelect_npc_sovatir(Player* pPlayer, Creature* pCreature, uint32 /*uiS
     return true;
 }
 
+enum BloodsailQuestItems
+{
+    ITEM_Highborne_Golden_Statue = 60510,
+    ITEM_Arcanist_Sovatirs_Torn_Notes = 60512,
+};
+
+bool QuestAcceptGO_lyvdia_dawnbird(Player* player, GameObject* pGo, const Quest* pQuest)
+{
+    if (!player)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40361) // Taking the Booty Home
+    {
+        if (!player->HasItemCount(ITEM_Highborne_Golden_Statue, 1))
+        {
+            if (player->AddItem(ITEM_Highborne_Golden_Statue))
+                first_item_added = true;
+        }
+        else
+            first_item_added = true;
+
+        if (!player->HasItemCount(ITEM_Arcanist_Sovatirs_Torn_Notes, 1))
+        {
+            if (player->AddItem(ITEM_Arcanist_Sovatirs_Torn_Notes))
+                second_item_added = true;
+        }
+        else
+            second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            player->RemoveQuest(40361);
+            player->SetQuestStatus(40361, QUEST_STATUS_NONE);
+            player->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "GO_lyvdia_dawnbird";
+    newscript->pGOQuestAccept = &QuestAcceptGO_lyvdia_dawnbird;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_sovatir";
