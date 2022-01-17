@@ -1053,3 +1053,6 @@ REPLACE INTO gameobject_template VALUES
 update gameobject_loot_template set entry = 2010874 where item = 60344;
 -- COT Oopsy
 update `creature_template` SET `npc_flags` = 1 WHERE `entry` = 65130;
+-- Neto NPC Mooove (DOING INSERT SO REPLACE DOESNT .... REPLACE)
+delete from creature where id = 65130 and map = 269;
+INSERT INTO `creature` VALUES (2569315, 65130, 0, 0, 0, 269, 0, 0, -1532.3, 7114.52, 24.4365, 0.080401, 25, 25, 0, 100, 100, 0, 0, 0);
