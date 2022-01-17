@@ -1286,3 +1286,5 @@ REPLACE INTO creature_loot_template VALUES
 -- Item "Azure Scale" deleted from quest reward a quest "Killing the Tidelord":
 UPDATE quest_template SET RewItemId1 = 40061, RewItemCount1 = 1 WHERE entry = 40061;
 UPDATE quest_template SET RewItemId2 = 0, RewItemCount2 = 0 WHERE entry = 40061;
+-- GO "Water-Weaving and Command" have respawn time 30 sec alredy:
+update gameobject set spawntimesecsmin = 30, spawntimesecsmax = 30 where id = 1000501;
