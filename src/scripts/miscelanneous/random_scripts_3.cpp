@@ -2678,14 +2678,13 @@ bool GossipSelect_npc_vildo_onetusk(Player* pPlayer, Creature* pCreature, uint32
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Go to the Feralas>.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Roll your eyes in disbelief and leave>.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
         pPlayer->SEND_GOSSIP_MENU(30015, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        static const WorldLocation m_sail_to_feralas(1, -5547.61F, 1421.97F, 23.59F, 3.35);
-        pPlayer->TeleportTo(1, -5547.61F, 1421.97F, 23.59F, 3.35);
+        pPlayer->CLOSE_GOSSIP_MENU();
     }
 
     return true;
