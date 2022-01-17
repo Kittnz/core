@@ -1057,3 +1057,5 @@ update `creature_template` SET `npc_flags` = 1 WHERE `entry` = 65130;
 delete from creature where id = 65130 and map = 269;
 INSERT INTO `creature` VALUES (2569315, 65130, 0, 0, 0, 269, 0, 0, -1532.3, 7114.52, 24.4365, 0.080401, 25, 25, 0, 100, 100, 0, 0, 0);
 REPLACE INTO `broadcast_text` VALUES (91976, 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you.', 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you. ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Quest 40261 needs to be made HUNTER only, it is allowing all classes of the race undead to have pets:
+UPDATE quest_template SET RequiredClasses = 4 WHERE entry = 40261;
