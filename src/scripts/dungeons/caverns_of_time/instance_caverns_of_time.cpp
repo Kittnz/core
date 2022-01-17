@@ -2657,17 +2657,19 @@ struct injured_defender_cot : public ScriptedAI
 
 bool GossipHello_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature)
 {
-    if (riftsClosed < 3)
+    pPlayer->CLOSE_GOSSIP_MENU();
+
+    if (!finalDialogue)
     {
         if (!pPlayer->HasItemCount(80008, 1, true))
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Take the Temporal Bronze Disc.", GOSSIP_SENDER_MAIN, 1);
+        else
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I've already got one! Somehow ... ", GOSSIP_SENDER_MAIN, 1);
 
         pPlayer->SEND_GOSSIP_MENU(91974, pCreature->GetGUID());
     }
     else
     {
-        pPlayer->CLOSE_GOSSIP_MENU();
-
         if (pPlayer->HasItemCount(80008, 1, true))
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Hand Chromie the Temporal Bronze Disc", GOSSIP_SENDER_MAIN, 2);
