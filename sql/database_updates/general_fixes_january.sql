@@ -1051,3 +1051,5 @@ update item_template set flags = 0 where entry = 60176;
 REPLACE INTO gameobject_template VALUES
 (2010874, 3, 23435, 'Atal\'ai Chest', 0, 4, 1, 43, 2010874, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 update gameobject_loot_template set entry = 2010874 where item = 60344;
+-- COT Oopsy
+update `creature_template` SET `npc_flags` = 1 WHERE `entry` = 65130;
