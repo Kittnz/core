@@ -1288,3 +1288,9 @@ UPDATE quest_template SET RewItemId1 = 40061, RewItemCount1 = 1 WHERE entry = 40
 UPDATE quest_template SET RewItemId2 = 0, RewItemCount2 = 0 WHERE entry = 40061;
 -- GO "Water-Weaving and Command" have respawn time 30 sec alredy:
 update gameobject set spawntimesecsmin = 30, spawntimesecsmax = 30 where id = 1000501;
+-- Gossip for NPC "Thurman Mullby" updated:
+set @gossip_menu_id = 41083; set @magic_number = 1285;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Best deals in Dun Agrath my friend, won\'t find any better. Now, what can I help you with?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
