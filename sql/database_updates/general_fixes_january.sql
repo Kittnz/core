@@ -1294,3 +1294,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Best deals in Dun Agrath my friend, won\'t find any better. Now, what can I help you with?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Setted leash_range 50m for NPC "Naxiar":
+update creature_template set leash_range = 50 where entry = 60409;
