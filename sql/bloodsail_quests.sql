@@ -171,3 +171,6 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It seems death claimed me $r, I am Sovatir, Arcanist and Lorekeeper of Eldre\'thalas, I have placed a part of my soul and memories in that journal, when you spoke the incantation you brought it up. I should let you know that it ate at your life force however, not too much I trust.\n\nSince you\'re now the owner of the journal, you\'re also mine, my knowledge is yours as long as you keep me entertained and allow me to find even more. Do note, that nobody else can see me.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+update gameobject_template set script_name = 'GO_lyvdia_dawnbird' where entry = 2010871;
+update quest_template set srcitemid = 0, srcitemcount = 0 where entry = 40361;
