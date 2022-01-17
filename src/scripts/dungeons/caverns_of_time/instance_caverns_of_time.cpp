@@ -92,7 +92,7 @@ struct instance_caverns_of_time : public ScriptedInstance
         if (GameObject* sandWall1 = instance->SummonGameObject(2010865, -1608.70f, 7107.35f, 23.74f, 0, 0, 0, 0, 0, -1, 0))
             gobCleanuplist.push_back(sandWall1);
 
-        if (GameObject* sandWall2 = instance->SummonGameObject(2010865, -1607.63, 7116.59f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
+        if (GameObject* sandWall2 = instance->SummonGameObject(2010865, -1607.63f, 7116.59f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
             gobCleanuplist.push_back(sandWall2);
 
         riftsClosed = 0;
@@ -353,7 +353,7 @@ struct infinite_dragonspawnAI : public ScriptedAI
     {
         uint32 randChance = urand(1, 50);
 
-        if (randChance > 50)
+        if (randChance > 25)
         {
             uint32 rand = urand(1, 2);
 
@@ -374,7 +374,7 @@ struct infinite_dragonspawnAI : public ScriptedAI
         uint32 random;
         random = urand(1, 100);
 
-        if (random > 50)
+        if (random > 25)
             m_creature->PMonsterYell("You're too late, we are infinite...");
     }
 };
@@ -414,7 +414,7 @@ struct infinite_riftguardAI : public ScriptedAI
     {
         uint32 randChance = urand(1, 50);
 
-        if (randChance > 50)
+        if (randChance > 25)
         {
             uint32 rand = urand(1, 2);
 
@@ -481,7 +481,7 @@ struct infinite_riftguardAI : public ScriptedAI
         uint32 random;
         random = urand(1, 100);
 
-        if (random > 50)
+        if (random > 25)
             m_creature->PMonsterYell("You're only delaying the inevitable... ");
     }
 };
@@ -555,7 +555,7 @@ struct infinite_riftweaverAI : public ScriptedAI
     {
         uint32 randChance = urand(1, 50);
 
-        if (randChance > 50)
+        if (randChance > 25)
         {
 
             uint32 rand = urand(1, 2);
@@ -577,7 +577,7 @@ struct infinite_riftweaverAI : public ScriptedAI
         uint32 random;
         random = urand(1, 100);
 
-        if (random > 50)
+        if (random > 25)
             m_creature->PMonsterYell("You've merely removed a grain from the hourglass... ");
     }
 };
@@ -618,6 +618,7 @@ struct infinite_whelpAI : public ScriptedAI
             DoAfterTime(m_creature, 1 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
                 m_creature->SetPowerPercent(POWER_MANA, 0);
                 stage = 0;
+                m_creature->DealDamage(m_creature, (m_creature->GetHealth() / 2), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
                 });
         }
 
@@ -635,14 +636,14 @@ struct infinite_whelpAI : public ScriptedAI
                         if (!playerGroup)
                             continue;
 
-                        if (playerGroup->FindNearestCreature(m_creature->GetEntry(), 50, true) && playerGroup->GetPowerPercent(POWER_MANA) >= 1)
-                            playerGroup->ModifyPower(POWER_MANA, -round(playerGroup->GetMaxPower(POWER_MANA) * 0.015f));
+                        if (playerGroup->FindNearestCreature(m_creature->GetEntry(), 20, true) && playerGroup->GetPowerPercent(POWER_MANA) >= 1)
+                            playerGroup->ModifyPower(POWER_MANA, (playerGroup->GetMaxPower(POWER_MANA) * 0.005f));
                     }
                 }
 
                 else
                 {
-                    player->ModifyPower(POWER_MANA, (player->GetMaxPower(POWER_MANA) / 10) * -1);
+                    player->ModifyPower(POWER_MANA, (player->GetMaxPower(POWER_MANA) * 0.05f));
                 }
             }
 
@@ -906,7 +907,7 @@ struct infinite_riftlordAI : public ScriptedAI
     {
         uint32 randChance = urand(1, 50);
 
-        if (randChance > 50)
+        if (randChance > 25)
             m_creature->PMonsterSay("The sands of time shall be scattered to the winds!");
 
         DoCastSpellIfCan(m_creature, SPELL_DEMO_SHOUT);
@@ -917,7 +918,7 @@ struct infinite_riftlordAI : public ScriptedAI
         uint32 random;
         random = urand(1, 100);
 
-        if (random > 50)
+        if (random > 25)
             m_creature->PMonsterSay("Impossible... ");
     }
 };
