@@ -1422,3 +1422,5 @@ update broadcast_text set male_text = 'Greetings.\n\nOn this plane I am known as
 update reference_loot_template set chanceorquestchance = 6.6 where entry = 30342;
 -- Disable in-builts LFG:
 delete from gossip_menu_option where option_text like '%Tell me about dun%';
+-- Wrong respawn timer, they respawn too fast:
+update creature set spawntimesecsmin =  300, spawntimesecsmax = 300 where id in (6351, 6371);
