@@ -1952,7 +1952,15 @@ void WorldObject::AddObjectToRemoveList()
     if (_deleted) // Already in the remove list
         return;
 
-    GetMap()->AddObjectToRemoveList(this);
+    Map* map = FindMap();
+
+    if (!map)
+    {
+        sLog.outError("CRASH: Object %s at attempt add to move list not have valid map (Id: %u).", GetObjectGuid().GetString().c_str(), GetMapId());
+        return;
+    }
+
+    map->AddObjectToRemoveList(this);
     _deleted = true;
 }
 
@@ -3262,6 +3270,10 @@ FactionTemplateEntry const* WorldObject::getFactionTemplateEntry() const
 // function based on function Unit::UnitReaction from 13850 client
 ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
 {
+    // possible crashfix
+    if (!target)
+        return REP_NEUTRAL;
+
     // always friendly to self
     if (this == target)
         return REP_FRIENDLY;
