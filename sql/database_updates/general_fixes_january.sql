@@ -1384,3 +1384,35 @@ UPDATE creature_template SET display_id1 = 4481 WHERE entry = 60641;
 update item_template set range_mod = 100 where entry = 60165;
 -- Satisfaction for Shak quest item doesn't drop for whole group:
 update item_template set flags = 2048 where entry = 81344;
+-- Quests Appealling to the Alliance and Appealing to the Horde must be rewritten in a way that we don't change existing leader scripts. I spent all morning trying to fix already existing quests such a What The Wind Carries. Please rewrite it in a way that receiving appeals are simple quest rewards and not results of clicking on gossip menus. It's impossible for us to make both DB scripts and core scripts to work together and now important Vanilla quests are broken:
+update creature_template set script_name = '' where entry = 1748; -- SW
+update creature_template set script_name = '' where entry = 7999; -- DN
+update creature_template set script_name = '' where entry = 4949; -- OG
+update creature_template set script_name = '' where entry = 10540; -- Trolls
+update creature_template set script_name = '' where entry = 2784; -- Magni
+delete from quest_template where entry = 80750;
+delete from quest_template where entry = 80800;
+delete from creature_questrelation where quest = 80800;
+delete from creature_questrelation where quest = 80750;
+delete from creature_involvedrelation where quest = 80800;
+delete from creature_involvedrelation where quest = 80750;
+
+update creature_template set script_name = '' where script_name = '0';
+update creature_template set script_name = '' where script_name = 'at_stormwind_gates';
+update creature_template set script_name = '' where script_name = 'birthday_dragon';
+update creature_template set script_name = '' where script_name = 'boss_turtlhu';
+update creature_template set script_name = '' where script_name = 'go_portal_to_darnassus';
+update creature_template set script_name = '' where script_name = 'go_portal_to_ironforge';
+update creature_template set script_name = '' where script_name = 'go_portal_to_stormwind';
+update creature_template set script_name = '' where script_name = 'go_stage1_trigger_cot';
+update creature_template set script_name = '' where script_name = 'item_portable_mailbox';
+update creature_template set script_name = '' where script_name = 'item_thunder_ale_drink';
+update creature_template set script_name = '' where script_name = 'npc_barber';
+update creature_template set script_name = '' where script_name = 'npc_dirge_the_bouncer';
+update creature_template set script_name = '' where script_name = 'npc_itharius';
+update creature_template set script_name = '' where script_name = 'npc_joshua_westfield';
+update creature_template set script_name = '' where script_name = 'npc_pats_firework_guy';
+update creature_template set script_name = '' where script_name = 'npc_riding_gryphon_back';
+update creature_template set script_name = '' where script_name = 'npc_surgeon';
+update creature_template set script_name = '' where script_name = 'npc_transmog';
+update creature_template set script_name = '' where script_name = 'wsg_arena';
