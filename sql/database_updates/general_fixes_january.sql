@@ -1418,3 +1418,5 @@ update creature_template set script_name = '' where script_name = 'npc_transmog'
 update creature_template set script_name = '' where script_name = 'wsg_arena';
 -- New gossip for NPC "Olom" added:
 update broadcast_text set male_text = 'Greetings.\n\nOn this plane I am known as Olom, a fisher between the realms. You are a new face... I think?\n\nAs a younger orc I broke free from my demonic master, so I was overjoyed to finally discover there were others out there after so many years who have sided against the Legion. It gladdens my heart to know that a new age and style of warlock is growing.\n\nPipnam here reports many evils brewing. So we need to be ready for the worst, as our name suggests.\n\nWe are the Ered Ruin. The Doom Guard.\n\nWelcome.' where entry = 60648;
+-- BWL loot: select * from reference_loot_template where entry = 30342;
+update reference_loot_template set chanceorquestchance = 6.6 where entry = 30342;
