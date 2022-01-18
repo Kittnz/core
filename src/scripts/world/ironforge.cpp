@@ -251,56 +251,6 @@ CreatureAI* GetAI_boss_magni_bronzebeard(Creature* pCreature)
     return new boss_magni_bronzebeardAI(pCreature);
 }
 
-bool GossipHello_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83015, 1, false))
-    {
-        if (!pPlayer->HasItemCount(83017, 1, false) && pPlayer->GetQuestStatus(80750) == QUEST_STATUS_INCOMPLETE) // Ironforge
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Mighty Magni, the high elves have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_boss_magni_bronzebeard(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
-        pCreature->MonsterSayToPlayer("The Senate will need to discuss this matter in detail.", pPlayer);
-        if (pPlayer->HasItemCount(83015, 1, false))
-        {
-            pPlayer->DestroyItemCount(83015, 1, true);
-            pPlayer->SaveInventoryAndGoldToDB();
-        }
-        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("However, I have been very supportive of the Quel'dorei ascension to the Alliance.", player);
-            c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
-            });
-        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("Especially after the refugees have done their best to help secure Loch Modan.", player);
-            c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
-            });
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("During the Second war, the majority of us dwarves were trapped in Ironforge until the Alliance liberated our lands, and the Quel'dorei were part of that very alliance.", player);
-            c->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
-            });
-        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("We would be fools to reject them after they've lost their homeland. Please deliver this reply to Alah'thalas.", player);
-            c->HandleEmote(EMOTE_ONESHOT_YES);
-            player->AddItem(83017, 1);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            });
-    }
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 void AddSC_ironforge()
 {
     Script *newscript;
