@@ -133,9 +133,6 @@ bool GossipHello_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(925) == QUEST_STATUS_INCOMPLETE)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I know this is rather silly but a young ward who is a bit shy would like your hoofprint.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    
-    if (pPlayer->GetQuestStatus(80800) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(83020, 1, false) && !pPlayer->HasItemCount(83022, 1, false))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Cairne, the Revantusk Tribe have sent me with this message.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
@@ -145,43 +142,12 @@ bool GossipHello_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-template <typename Functor>
-void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
-{
-    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
-}
-
 bool GossipSelect_npc_cairne_bloodhoof(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->CastSpell(pPlayer, 23123, true);
         pPlayer->SEND_GOSSIP_MENU(7014, pCreature->GetGUID());
-        return true;
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
-        pCreature->MonsterSayToPlayer("The Revantusk Trolls are allies I never imagined we would have after hearing the history they and the Old Horde had.", pPlayer);
-        if (pPlayer->HasItemCount(83020, 1, false))
-        {
-            pPlayer->DestroyItemCount(83020, 1, true);
-            pPlayer->SaveInventoryAndGoldToDB();
-        }
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("If they are at least half of what the Darkspear are they will not only be dependable allies but also dear friends.", player);
-            c->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("I, Cairne Bloodhoof of Thunderbluff, support the allegiance with the Revantusk Tribe, may the Earthmother guide us all.", player);
-            c->HandleEmote(EMOTE_ONESHOT_YES);
-            c->HandleEmote(EMOTE_ONESHOT_TALK);
-            player->AddItem(83022, 1);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            });
-        pPlayer->CLOSE_GOSSIP_MENU();
         return true;
     }
     return true;
