@@ -269,8 +269,6 @@ void AddSC_ironforge()
 
     newscript = new Script;
     newscript->Name = "boss_magni_bronzebeard";
-    newscript->pGossipHello = &GossipHello_boss_magni_bronzebeard;
-    newscript->pGossipSelect = &GossipSelect_boss_magni_bronzebeard;
     newscript->GetAI = &GetAI_boss_magni_bronzebeard;
     newscript->RegisterSelf();
 }
