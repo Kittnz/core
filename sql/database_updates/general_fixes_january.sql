@@ -1380,3 +1380,5 @@ UPDATE quest_template SET type = 1 WHERE entry = 40303;
 UPDATE creature_template SET display_id1 = 4481 WHERE entry = 60641;
 -- Blood Ring:
 -- replace into battleground_template (id, min_players_per_team, max_players_per_team, min_level, max_level, alliance_win_spell, alliance_lose_spell, horde_win_spell, horde_lose_spell, alliance_start_location, horde_start_location) VALUES (4, 2, 2, 0, 60, 0, 0, 0, 0, 9000, 9001);
+-- Fixed Wobblefree Fizz-rifle:
+update item_template set range_mod = 100 where entry = 60165;
