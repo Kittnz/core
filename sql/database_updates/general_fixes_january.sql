@@ -1442,7 +1442,6 @@ REPLACE INTO npc_vendor VALUES (91888, 2596, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91888, 2686, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91888, 2723, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91888, 8766, 0, 0, 0, 0);
-
 REPLACE INTO npc_vendor VALUES (91873, 117, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91873, 159, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91873, 414, 0, 0, 0, 0);
@@ -1472,7 +1471,6 @@ REPLACE INTO npc_vendor VALUES (91873, 8950, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91873, 8952, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91873, 17194, 1, 300, 0, 0);
 REPLACE INTO npc_vendor VALUES (91873, 30817, 0, 0, 0, 0);
-
 REPLACE INTO npc_vendor VALUES (91868, 159, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91868, 1205, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91868, 1645, 0, 0, 0, 0);
@@ -1496,8 +1494,6 @@ REPLACE INTO npc_vendor VALUES (91868, 11284, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91868, 11285, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91868, 15326, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91868, 15327, 0, 0, 0, 0);
-
-
 REPLACE INTO npc_vendor VALUES
 (91865, 2928, 0, 0, 0, 0),
 (91865, 2930, 0, 0, 0, 0),
@@ -1527,3 +1523,5 @@ REPLACE INTO npc_vendor VALUES
 (91865, 17037, 0, 0, 0, 0),
 (91865, 17038, 0, 0, 0, 0),
 (91865, 21177, 0, 0, 0, 0);
+-- Chest coords:
+update gameobject set position_x = 1451.4, position_y = -1480.7, position_z = 56.87 where guid = 4007551;
