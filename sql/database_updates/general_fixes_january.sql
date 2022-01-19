@@ -1534,3 +1534,5 @@ replace into creature_linking values (37568, 37523, 3);
 replace into creature_linking values (37567, 37523, 3); 
 -- Argent Dawn Commission from Argent Officer Garush can't be taken by goblins:
 update quest_template set requiredraces = 434 where entry = 5405;
+-- Wrong quest loot "Southsea Sashes" from NPC "Stormbay Warrior" deleted:
+delete from creature_loot_template where entry = 6371 and item = 60208;
