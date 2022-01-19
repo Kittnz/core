@@ -1654,3 +1654,32 @@ replace into creature_ai_events (id, creature_id, condition_id, event_type, even
 -- Striders don't flee:
 update creature_template set ai_name = 'EventAI' where entry = 2321;
 replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1007, 2321, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Foreststrider Fledgling - Flee at 15% HP');
+-- Tirisfal Uplands: everybody flee!
+set @creature_entry = 91980;
+set @comment_text = 'Remnants Farmer - Flee at 15% HP';
+update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1008, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
+set @creature_entry = 91352;
+set @comment_text = 'Remnants Footman - Flee at 15% HP';
+update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1009, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
+set @creature_entry = 91353;
+set @comment_text = 'Remnants Knight - Flee at 15% HP';
+update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1010, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
+set @creature_entry = 91981;
+set @comment_text = 'Remnants Militia - Flee at 15% HP';
+update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1011, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
+set @creature_entry = 91975;
+set @comment_text = 'Remnants Priest - Flee at 15% HP';
+update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1012, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
+set @creature_entry = 91773;
+set @comment_text = 'Remnants Scout - Flee at 15% HP';
+update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1013, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
+set @creature_entry = 91772;
+set @comment_text = 'Remnants Sentry - Flee at 15% HP';
+update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1014, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
