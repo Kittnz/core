@@ -1527,3 +1527,8 @@ REPLACE INTO npc_vendor VALUES
 update gameobject set position_x = 1451.4, position_y = -1480.7, position_z = 56.87 where guid = 4007551;
 -- Firework stuff:
 update item_template set name = 'Everlasting Firework', spellid_1 = 25465 where entry = 23714;
+-- Link Den Morther and her cubs:
+replace into creature_linking values (37566, 37523, 3); 
+replace into creature_linking values (37569, 37523, 3); 
+replace into creature_linking values (37568, 37523, 3); 
+replace into creature_linking values (37567, 37523, 3); 
