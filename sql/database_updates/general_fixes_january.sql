@@ -1532,3 +1532,5 @@ replace into creature_linking values (37566, 37523, 3);
 replace into creature_linking values (37569, 37523, 3); 
 replace into creature_linking values (37568, 37523, 3); 
 replace into creature_linking values (37567, 37523, 3); 
+-- Argent Dawn Commission from Argent Officer Garush can't be taken by goblins:
+update quest_template set requiredraces = 434 where entry = 5405;
