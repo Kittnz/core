@@ -1633,4 +1633,6 @@ delete from creature_loot_template where item = 60513;
 replace into creature_loot_template values
 (2232,60516,-40,1,1,1,0),
 (2234,60516,-10,1,1,1,0);
-
+-- Fixed Lil' Smoky companion.
+update item_template set spellid_1 = 46498 where entry = 11826;
+replace into companion_spells values (11826, 15049);
