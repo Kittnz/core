@@ -1424,3 +1424,106 @@ update reference_loot_template set chanceorquestchance = 6.6 where entry = 30342
 delete from gossip_menu_option where option_text like '%Tell me about dun%';
 -- Wrong respawn timer, they respawn too fast:
 update creature set spawntimesecsmin =  300, spawntimesecsmax = 300 where id in (6351, 6371);
+-- Added items for selling for NPCs 91888, 91873, 91865, 91868:
+UPDATE creature_template SET npc_flags = 4 WHERE entry = 91888;
+UPDATE creature_template SET npc_flags = 4 WHERE entry = 91873;
+UPDATE creature_template SET npc_flags = 6 WHERE entry = 91865;
+UPDATE creature_template SET npc_flags = 6 WHERE entry = 91868;
+
+REPLACE INTO npc_vendor VALUES (91888, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 2593, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 2594, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 2595, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 2596, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 2686, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 2723, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91888, 8766, 0, 0, 0, 0);
+
+REPLACE INTO npc_vendor VALUES (91873, 117, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 414, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 422, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 1707, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 2070, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 2287, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 2665, 1, 300, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 2678, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 2692, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 3770, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 3771, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 3927, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 4540, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 4541, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 4542, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 4544, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 4599, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 4601, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 8766, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 8932, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 8950, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 8952, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 17194, 1, 300, 0, 0);
+REPLACE INTO npc_vendor VALUES (91873, 30817, 0, 0, 0, 0);
+
+REPLACE INTO npc_vendor VALUES (91868, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 2515, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 2519, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 2946, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 3030, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 3033, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 3107, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 3108, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 3131, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 3135, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 3137, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 4470, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 4471, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 4497, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 4498, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 11284, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 11285, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 15326, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91868, 15327, 0, 0, 0, 0);
+
+
+REPLACE INTO npc_vendor VALUES
+(91865, 2928, 0, 0, 0, 0),
+(91865, 2930, 0, 0, 0, 0),
+(91865, 3371, 0, 0, 0, 0),
+(91865, 3372, 0, 0, 0, 0),
+(91865, 3777, 0, 0, 0, 0),
+(91865, 5060, 0, 0, 0, 0),
+(91865, 5140, 0, 0, 0, 0),
+(91865, 5173, 0, 0, 0, 0),
+(91865, 5565, 0, 0, 0, 0),
+(91865, 8923, 0, 0, 0, 0),
+(91865, 8924, 0, 0, 0, 0),
+(91865, 8925, 0, 0, 0, 0),
+(91865, 16583, 0, 0, 0, 0),
+(91865, 17020, 0, 0, 0, 0),
+(91865, 17021, 0, 0, 0, 0),
+(91865, 17026, 0, 0, 0, 0),
+(91865, 17028, 0, 0, 0, 0),
+(91865, 17029, 0, 0, 0, 0),
+(91865, 17030, 0, 0, 0, 0),
+(91865, 17031, 0, 0, 0, 0),
+(91865, 17032, 0, 0, 0, 0),
+(91865, 17033, 0, 0, 0, 0),
+(91865, 17034, 0, 0, 0, 0),
+(91865, 17035, 0, 0, 0, 0),
+(91865, 17036, 0, 0, 0, 0),
+(91865, 17037, 0, 0, 0, 0),
+(91865, 17038, 0, 0, 0, 0),
+(91865, 21177, 0, 0, 0, 0);
