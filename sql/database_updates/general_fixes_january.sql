@@ -1683,3 +1683,16 @@ set @creature_entry = 91772;
 set @comment_text = 'Remnants Sentry - Flee at 15% HP';
 update creature_template set ai_name = 'EventAI' where entry = @creature_entry;
 replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1014, @creature_entry, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, @comment_text);
+-- Creature (Entry: 60412 Guid: 2569312) have invalid faction (faction template id) #0:
+update creature_template set faction = 28 where entry = 60412;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/531
+-- Events list for Southsea Cannoneer
+update creature_template SET ai_name='EventAI', script_name = '' WHERE entry = 3382;
+replace into creature_ai_scripts (id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id, comments) VALUES
+(338201, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Southsea Cannoneer - Flee');
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) VALUES (338201, 3382, 0, 2, 0, 100, 0, 15, 0, 0, 0, 338201, 0, 0, 'Southsea Cannoneer - Flee at 15% HP');
+-- Events list for Southsea Privateer
+update creature_template SET ai_name='EventAI', script_name = '' WHERE entry = 3384;
+replace into creature_ai_scripts (id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id, comments) VALUES
+(338401, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Southsea Privateer - Flee');
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) VALUES (338401, 3384, 0, 2, 0, 100, 0, 15, 0, 0, 0, 338401, 0, 0, 'Southsea Privateer - Flee at 15% HP');
