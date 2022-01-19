@@ -1636,3 +1636,20 @@ replace into creature_loot_template values
 -- Fixed Lil' Smoky companion.
 update item_template set spellid_1 = 46498 where entry = 11826;
 replace into companion_spells values (11826, 15049);
+-- Missing fleein' events:
+update creature_template set ai_name = 'EventAI' where entry = 2167;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1000, 2167, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Blackwood Pathfinder - Flee at 15% HP');
+update creature_template set ai_name = 'EventAI' where entry = 2171;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1001, 2171, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Blackwood Shaman - Flee at 15% HP');
+update creature_template set ai_name = 'EventAI' where entry = 2169;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1002, 2169, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Blackwood Totemic - Flee at 15% HP');
+update creature_template set ai_name = 'EventAI' where entry = 11713;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1003, 11713, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Blackwood Tracker - Flee at 15% HP');
+update creature_template set ai_name = 'EventAI' where entry = 2170;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1004, 2170, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Blackwood Ursa - Flee at 15% HP');
+update creature_template set ai_name = 'EventAI' where entry = 2168;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1005, 2168, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Blackwood Warrior - Flee at 15% HP');
+update creature_template set ai_name = 'EventAI' where entry = 2324;
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values (1006, 2324, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Blackwood Windtalker - Flee at 15% HP');
+
+
