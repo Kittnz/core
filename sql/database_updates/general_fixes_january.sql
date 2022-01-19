@@ -1424,3 +1424,6 @@ update reference_loot_template set chanceorquestchance = 6.6 where entry = 30342
 delete from gossip_menu_option where option_text like '%Tell me about dun%';
 -- Wrong respawn timer, they respawn too fast:
 update creature set spawntimesecsmin =  300, spawntimesecsmax = 300 where id in (6351, 6371);
+-- Chest coords:
+update gameobject set position_x = 1451.4, position_y = -1480.7, position_z = 56.87 where guid = 4007551;
+
