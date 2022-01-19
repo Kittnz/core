@@ -1536,3 +1536,101 @@ replace into creature_linking values (37567, 37523, 3);
 update quest_template set requiredraces = 434 where entry = 5405;
 -- Wrong quest loot "Southsea Sashes" from NPC "Stormbay Warrior" deleted:
 delete from creature_loot_template where entry = 6371 and item = 60208;
+-- New Bonds --
+delete from quest_template where entry = 40363;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40363,2,215,10,7,0,0,'New Bonds','Hello, I am Melyndella! I come from the verdant woodlands of Moonglade. Ever since the Tauren have joined the Cenarion Circle, I have been wanting to get to know them. However, it has been terribly hard to gain their trust! Many locals have accused us Dryads of being Centaur or otherwise associated with them. The Galak clan have caused a lot of pain to this land. Please, help weaken them so I can earn the trust of the village.','Kill 12 Galak Centaurs in Mulgore.','Is it done, $r? The Tauren are such a serene people, I would really like to help them feel at one with us.','Thank you so much, $N. The village will now live more peacefully. This is a start but there is still more work to do.',0,0,0,0,0,0,0,0,2967,12,0,0,0,0,0,0,0,0,212,840,81,150,609,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (66002, 40363);
+replace into creature_involvedrelation (id, quest) values (66002, 40363);
+update quest_template set requiredraces = 690 where entry = 40363;
+
+update creature_template set npc_flags = 2 where entry = 66002;
+
+-- An Understanding of Peace --
+delete from quest_template where entry = 40364;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40363,40364,2,215,11,8,0,0,'An Understanding of Peace','Thank you for your help, $N. Now that the Centaurs pose less of a threat, there is more of an opportunity to learn about the Tauren. Perhaps you can speak to Gennia Runetotem? She is a Druid trainer in the village and has been kind to me, I believe she can help!','Speak to Gennia Runetotem.','Greetings, what can I do for you?','Ah, the young Dryad sends you on her behalf? My people are not quick to trust, especially when they see her as part of the Centaurs that nearly drove us to extinction. However, I do believe I can assist.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,212,175,81,25,609,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (66002, 40364);
+replace into creature_involvedrelation (id, quest) values (3064, 40364);
+update quest_template set requiredraces = 690 where entry = 40364;
+
+-- A Trial of Peace --
+delete from quest_template where entry = 40365;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40364,40365,2,215,11,8,0,0,'A Trial of Peace','Word of Melyndella and your deeds against the Centaurs has spread, but slaying our enemies is not enough to befriend us. She must show respect and understanding towards our traditions. Venture forth into the northern Prairie across the lake, and acquire for me eight pelts from Prairie Stalkers. Bring them to her, she will know what to do.','Collect 8 Prairie Stalker Pelt and return it to Melyndella.','Ah, hello again! Did Gennia help?','These are pelts from the prairie wolves... She didn\'t tell you what I should do with them? Hmm, these Tauren are quite enigmatic. I will try to solve this trial.',60513,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,212,840,81,150,609,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (3064, 40365);
+replace into creature_involvedrelation (id, quest) values (66002, 40365);
+update quest_template set requiredraces = 690 where entry = 40365;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60513,7740,'Prairie Stalker Pelt',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60513;
+replace into creature_loot_template values
+(2959,60513,-40,1,1,1,0);
+
+-- A Harmonious Offering --
+delete from quest_template where entry = 40366;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40365,40366,2,215,11,8,0,0,'A Harmonious Offering','I believe I have the answer, $N! I have blessed these pelts and bundled them up. Take them to the Innkeeper\'s Assistant - I have learned her name is Waya Tallgrain - and let her know they are my offering to the village.','Deliver the Blessed Prairie Pelts to Waya Tallgrain and listen to his response. Return to Melyndella with the good news.','Hello again! Have you presented my offering? What did she say?','They appreciate the gift? How lovely! I am forever grateful, $N. I want to learn more from the people of the village so I am happy to stay here for a time. I will use my talents alongside Gennia keep the lands balanced and ensure the Tauren live well. Thank you so much for all you did, I will remember you!',0,0,0,0,0,0,0,0,60356,1,0,0,0,0,0,0,60514,1,502,840,81,250,609,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Return to Melyndella with the good news');
+
+replace into creature_questrelation (id, quest) values (66002, 40366);
+replace into creature_involvedrelation (id, quest) values (66002, 40366);
+update quest_template set requiredraces = 690 where entry = 40366;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60514,7740,'Blessed Prairie Pelts',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from creature_template where entry = 60356;
+replace into creature_template (entry, name, display_id1) values (60356, 'quest_40366_dummy_triger', 328);
+
+REPLACE INTO creature_template VALUES
+(60652, 2118, 0, 0, 0, 'Waya Tallgrain', 'Innkeeper\'s Assistant', 1294, 30, 30, 1002, 1002, 0, 0, 1200, 104, 3, 1, 1.14286, 1.35, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 45.144, 62.073, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 6747, 0, 0, 0, 0, 524298, 0, 'npc_waya_tallgrain');
+
+delete from creature where id  = 60652;
+REPLACE INTO creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES
+(60652, 0, 0, 0, 1, 0, 0, -2381.26, -343.847, -8.95692, 6.14, 25, 25, 0, 100, 100, 0, 0, 0);
+
+
+-- A Pebble to Pick with Them --
+delete from quest_template where entry = 40367;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40367,2,17,20,18,0,0,'A Pebble to Pick with Them','Hail adventurer! You look like you can carry yourself in a fight. My colleagues and I ran into a bit of a pickle, you see. This is Bael Modan, a facility built by a powerful race that disappeared eons ago. According to some scholars, these Titans had a hand in the formation of our culture.\n\nWe were trying to open the door in the main chamber when a horrible screech echoed through the digsite. Dozens of statues we dug up came to life and went on a rampage. Those golems have no archaeological value when they try to kill you if you get near them. Get in there and smash them up so we can carry on our work.','Kill 16 Bael\'modan Golems in the Bael\'modan digsite.','Is it done $r? These constructs killed some of my best diggers. I want them turned to rubble!','Well done. I hope this helps put my kin to rest while ensuring the safety of the survivors. Don\'t worry, their sacrifice was not in vein. Now we can continue the excavation and learn more about the Titans and this site.',0,0,0,0,0,0,0,0,60442,16,0,0,0,0,0,0,0,0,4212,1175,47,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (66000, 40367);
+replace into creature_involvedrelation (id, quest) values (66000, 40367);
+
+update creature_template set npc_flags = 2 where entry = 66000;
+
+-- Honoring the Departed --
+delete from quest_template where entry = 40368;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40368,2,11,30,28,0,0,'Honoring the Departed','Pardon me for taking a moment of your time, wanderer, but I would ask you to help me honor someone as it is a special time of the year. Four years ago, my commanding officer and dear friend Jennalla Deemspring perished to the hand of Arthas Menethil. It is time to remember her and others like her. Please collect six sprigs of Auribloom from the village and the surrounding forest.','Collect 6 sprigs of Auribloom.','Is it done, $r? The Auribloom should not be too difficult to find.','Thank you, $r. Four years ago my commanding officer ordered me to escort a caravan of villagers out of Lordaeron. I remained with them as they settled here and built Hawk\'s Vigil. Arthas himself had returned to Lordaeron to lead the genocide of his own people.\n\nMany perished to give us a chance to escape, Jennalla among them. With the incense produced from the Auriblooms, we honor their memory.',60515,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12012,3175,269,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (66001, 40368);
+replace into creature_involvedrelation (id, quest) values (66001, 40368);
+
+update creature_template set npc_flags = 2 where entry = 66001;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60515,18953,'Sprigs of Auribloom',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010876, 3, 269, 'Auribloom', 0, 4, 0.5, 43, 2010876, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010876;
+replace into gameobject_loot_template values
+(2010876,60515,-100,0,1,1,0);
+
+-- Further Studies --
+delete from quest_template where entry = 40369;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (6343,40369,2,1657,10,10,512,0,'Further Studies','Fascinating... I wonder if such changes may cause other creatures in the food chain to be affected. I think it is a matter worth studying further! But for that I would need samples of something larger... Ah, crabs! Yes. I believe we could find something new if we study those crustaceans.','Gather 10 Crustacean Carcasses from crabs in Darkshore, then return to Nessa Shadowsong in Rut\'theran Village.','As scary as those pinchy crawlers may look, they tend to run away from you faster than you can catch a fish. Have you gathered any parts we could study further?','Ah, what a lovely haul this is! Look at these samples! Fascinating! Wait... What\'s this? Ah, it seems you have found yourself a small companion! Perhaps you should study its behaviour before you decide on your favourite seasoning.',60516,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,125,275,69,175,0,0,0,0,0,0,0,0,0,81159,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (10118, 40369);
+replace into creature_involvedrelation (id, quest) values (10118, 40369);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60516,33542,'Fine Crab Carcass',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60513;
+replace into creature_loot_template values
+(2232,60516,-40,1,1,1,0),
+(2234,60516,-10,1,1,1,0);
+
