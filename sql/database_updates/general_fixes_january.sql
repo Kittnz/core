@@ -1525,3 +1525,5 @@ REPLACE INTO npc_vendor VALUES
 (91865, 21177, 0, 0, 0, 0);
 -- Chest coords:
 update gameobject set position_x = 1451.4, position_y = -1480.7, position_z = 56.87 where guid = 4007551;
+-- Firework stuff:
+update item_template set name = 'Everlasting Firework', spellid_1 = 25465 where entry = 23714;
