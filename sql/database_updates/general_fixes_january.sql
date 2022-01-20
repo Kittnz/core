@@ -1699,3 +1699,7 @@ replace into creature_ai_events (id, creature_id, condition_id, event_type, even
 REPLACE INTO `broadcast_text` VALUES (91976, 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you.', 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you. ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
 -- COT Item change
 UPDATE item_template SET map_bound = 0 WHERE entry = 80008;
+-- Harmony in Peace and Understanding
+UPDATE `creature_template` SET script_name = "npc_kauth" where entry = 6747;
+REPLACE INTO `broadcast_text` VALUES (100500, 'Looking for a place to rest, $c?', 'Looking for a place to rest, $c?', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO `creature_template` VALUES (60370, 328, 0, 0, 0, 'quest_65003_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
