@@ -2833,6 +2833,35 @@ bool GossipSelect_npc_waya_tallgrain(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+
+
+bool GossipHello_npc_kauth(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(65003) == QUEST_STATUS_INCOMPLETE) // Harmony in Peace and Understanding
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have this offering from Melyndella for you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(100500, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_kauth(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->PMonsterSay("These pelts... The Dryad gave them to us as an offering? The quality is astounding. With pelts such as these, the newborn are sure to be protected from the cold nights and winters.");
+
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [pCreature = pCreature]() {
+            pCreature->PMonsterSay("I will let all the families know who is to thank for these pelts. If she wishes to earn our friendship with more deeds like these, we will not deny her. We understand she is not a Centaur, and if she continues to assist us in such a way, even the most stubborn Tauren will as well."); });
+
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [pPlayer = pPlayer, pCreature = pCreature]() {
+            pCreature->PMonsterSay("Return to her and thank her for the offering. Let her know that she is welcome in Bloodhoof Village. ");
+            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60370))
+                pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -3198,5 +3227,11 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "runed_thalassian_tablet";
     newscript->pGOHello = &GOHello_runed_thalassian_tablet;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_kauth";
+    newscript->pGossipHello = &GossipHello_npc_kauth;
+    newscript->pGossipSelect = &GossipSelect_npc_kauth;
     newscript->RegisterSelf();
 }
