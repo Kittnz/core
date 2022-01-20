@@ -1696,3 +1696,6 @@ update creature_template SET ai_name='EventAI', script_name = '' WHERE entry = 3
 replace into creature_ai_scripts (id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id, comments) VALUES
 (338401, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Southsea Privateer - Flee');
 replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) VALUES (338401, 3384, 0, 2, 0, 100, 0, 15, 0, 0, 0, 338401, 0, 0, 'Southsea Privateer - Flee at 15% HP');
+REPLACE INTO `broadcast_text` VALUES (91976, 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you.', 'It seems you\'ve fractured the timeline, $n. You weren\'t meant to perish here. You must correct your mistakes to align the timelines. I cannot do that for you. ', 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- COT Item change
+UPDATE item_template SET map_bound = 0 WHERE entry = 80008;
