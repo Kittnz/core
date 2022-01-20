@@ -2862,6 +2862,207 @@ bool GossipSelect_npc_kauth(Player* pPlayer, Creature* pCreature, uint32 uiSende
     return true;
 }
 
+
+
+bool GossipHello_npc_kauth(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(65003) == QUEST_STATUS_INCOMPLETE) // Harmony in Peace and Understanding
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have this offering from Melyndella for you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    pPlayer->SEND_GOSSIP_MENU(100500, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_kauth(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->PMonsterSay("These pelts... The Dryad gave them to us as an offering? The quality is astounding. With pelts such as these, the newborn are sure to be protected from the cold nights and winters.");
+
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [pCreature = pCreature]() {
+            pCreature->PMonsterSay("I will let all the families know who is to thank for these pelts. If she wishes to earn our friendship with more deeds like these, we will not deny her. We understand she is not a Centaur, and if she continues to assist us in such a way, even the most stubborn Tauren will as well."); });
+
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [pPlayer = pPlayer, pCreature = pCreature]() {
+            pCreature->PMonsterSay("Return to her and thank her for the offering. Let her know that she is welcome in Bloodhoof Village. ");
+            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60370))
+                pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+Player* escortedPlayer{ nullptr };
+std::vector<GameObject*> gobCleanuplist;
+
+struct npc_zohjikAI : public ScriptedAI
+{
+    npc_zohjikAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    int8 phase;
+
+
+    enum CreatureEntries
+    {
+        NPC_MAGISTER = 65140
+
+    };
+
+
+    void Reset() override
+    {
+        escortedPlayer = nullptr;
+        phase = 0;
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (escortedPlayer)
+        {
+            switch (phase)
+            {
+            case 0:
+            {
+                if (escortedPlayer->GetAreaId() != 279)
+                {
+                    m_creature->PMonsterSay("You be leavin'? Use da whistle by da cart and I be ready.");
+                    m_creature->DespawnOrUnsummon();
+                    return;
+                }
+
+                if (!m_creature->GetVictim())
+                    m_creature->GetMotionMaster()->MoveFollow(escortedPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+                else
+                {
+                    if (escortedPlayer->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
+                        return;
+
+                    Unit* target = m_creature->GetVictim();
+
+                    m_creature->SetInCombatWithVictim(escortedPlayer->GetVictim());
+                    m_creature->AddThreat(escortedPlayer->GetVictim(), 100.00f);
+
+                    if (target && target->IsDead())
+                    {
+                        target = nullptr;
+
+                        int8 rand = irand(1, 5);
+
+                        switch (rand)
+                        {
+                        case 1:
+                            m_creature->PMonsterSay("Another one bites da dust!");
+                            m_creature->PMonsterSay("We make a great team, $n", escortedPlayer->GetName());
+                            m_creature->PMonsterSay("For Zul’jin!");
+                            m_creature->PMonsterSay("Ya got some skills mon!");
+                            m_creature->PMonsterSay("Die ugly!");
+                        }
+                    }
+                }
+
+                if (!escortedPlayer->IsAlive())
+                    m_creature->DespawnOrUnsummon();
+
+                if (!escortedPlayer->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
+                    m_creature->DespawnOrUnsummon();
+
+                if (escortedPlayer->GetQuestStatus(65140) == QUEST_STATUS_COMPLETE) // move on
+                    phase++;
+                break;
+            }
+
+            case 1:
+            {
+                if (escortedPlayer->SummonCreature(NPC_MAGISTER, escortedPlayer->GetPositionX() + 2.0f, escortedPlayer->GetPositionY() + 2.0f, escortedPlayer->GetPositionZ(), 9, TEMPSUMMON_DEAD_DESPAWN))
+                {
+
+
+
+
+                }
+
+
+                break;
+            }
+
+            }
+        }
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+
+    void EnterEvadeMode()
+    {
+        if (escortedPlayer)
+            m_creature->GetMotionMaster()->MoveFollow(escortedPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+    }
+
+    void KilledUnit(Unit* unit)
+    {
+
+    }
+
+    /* Commented out for now until fix applied */
+
+    //void OnCombatStop() override
+    //{                                                    
+    //    if (escortedPlayer)
+    //        m_creature->GetMotionMaster()->MoveFollow(escortedPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+    //}
+
+    //void Aggro(Unit* pWho) override
+    //{
+    //    if (pWho->GetTypeId() == TYPEID_PLAYER && m_creature->GetAreaId() != 279) // Dalaran
+    //        m_creature->CombatStop();
+    //}
+};
+
+CreatureAI* GetAI_npc_zohjik(Creature* pCreature)
+{
+    return new npc_zohjikAI(pCreature);
+}
+
+bool QuestRewarded_quest_banshees_favor(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 65006) // In Da Banshee’s Favor
+    {
+        // input soon
+    }
+
+    return false;
+}
+
+bool ItemUseSpell_item_zhojik_whistle(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->FindNearestCreature(65142, 15.0f) && pPlayer->GetQuestStatus(65140) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (Creature* escortNPC = pPlayer->SummonCreature(65141, 4.35f, 182.13f, 45.52f, 0, TEMPSUMMON_MANUAL_DESPAWN))
+        {
+            escortedPlayer = pPlayer;
+
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [escortNPC = escortNPC, pPlayer = pPlayer]() {
+                escortNPC->MonsterMove(12.27f, 179.97f, 45.34f);
+                });
+
+            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [escortNPC = escortNPC, pPlayer = pPlayer]() {
+                escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+                escortNPC->MonsterSay("We be collectin' dem heads today. Lead da way.");
+                });
+
+            return true;
+        }
+    }
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
@@ -3233,5 +3434,26 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_kauth";
     newscript->pGossipHello = &GossipHello_npc_kauth;
     newscript->pGossipSelect = &GossipSelect_npc_kauth;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_kauth";
+    newscript->pGossipHello = &GossipHello_npc_kauth;
+    newscript->pGossipSelect = &GossipSelect_npc_kauth;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "quest_banshees_favor";
+    newscript->pQuestRewardedNPC = &QuestRewarded_quest_banshees_favor;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_zohjik";
+    newscript->GetAI = &GetAI_npc_zohjik;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "item_zhojik_whistle";
+    newscript->pItemUseSpell = &ItemUseSpell_item_zhojik_whistle;
     newscript->RegisterSelf();
 }
