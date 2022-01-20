@@ -1756,3 +1756,109 @@ update creature set id = 70067 where id = 13000 and guid > 190230;
 -- https://database.turtle-wow.org/?quest=708
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/932
 update quest_template set requestitemstext = 'What is it, $N?', offerrewardtext = 'Och, where\'d ye say ye found it?\n\nThe pilot of this plane has been missing for weeks, always knew but still held hope.\n\nI will hammer this into our walls along with his name. Thank ye, $N.' where entry = 708;
+
+-- Fix cloth donation quests:
+delete from creature_questrelation where quest in (7824,7835,7833,7834,7827,7831,7826,7836,7823,7821,7822,7820,7818,7817,7813,7814,7811,7809,7802,7803,7805,7804,7807,7808,7800,7799,7795,7794,7791,7793,7792,7798);
+delete from creature_involvedrelation where quest in (7824,7835,7833,7834,7827,7831,7826,7836,7823,7821,7822,7820,7818,7817,7813,7814,7811,7809,7802,7803,7805,7804,7807,7808,7800,7799,7795,7794,7791,7793,7792,7798);
+delete from creature_questrelation where quest in (80370,80371,80372,80373,80375,80376,80377,80378);
+delete from creature_involvedrelation where quest in (80370,80371,80372,80373,80375,80376,80377,80378);
+-- Stormwind
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Stormwind' WHERE `entry` = 7795;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Stormwind' WHERE `entry` = 7794;
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Stormwind' WHERE `entry` = 7791;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Stormwind' WHERE `entry` = 7793;
+replace into creature_questrelation values (14722, 7791),(14722, 7793),(14722, 7794),(14722, 7795);
+replace into creature_involvedrelation values (14722, 7791),(14722, 7793),(14722, 7794),(14722, 7795);
+-- Darnassus
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Darnassus' WHERE `entry` = 7800;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Darnassus' WHERE `entry` = 7799;
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Darnassus' WHERE `entry` = 7792;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Darnassus' WHERE `entry` = 7798;
+replace into creature_questrelation values (14725, 7800),(14725, 7799),(14725, 7792),(14725, 7798);
+replace into creature_involvedrelation values (14725, 7800),(14725, 7799),(14725, 7792),(14725, 7798);
+-- Ironforge
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Ironforge' WHERE `entry` = 7802;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Ironforge' WHERE `entry` = 7803;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Ironforge' WHERE `entry` = 7805;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Ironforge' WHERE `entry` = 7804;
+replace into creature_questrelation values (14723, 7802),(14723, 7803),(14723, 7804),(14723, 7805);
+replace into creature_involvedrelation values (14723, 7802),(14723, 7803),(14723, 7804),(14723, 7805);
+-- Gnomeregan
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Gnomeregan' WHERE `entry` = 7811;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Gnomeregan' WHERE `entry` = 7809;
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Gnomeregan' WHERE `entry` = 7807;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Gnomeregan' WHERE `entry` = 7808;
+replace into creature_questrelation values (14724, 7807),(14724, 7808),(14724, 7809),(14724, 7811);
+replace into creature_involvedrelation values (14724, 7807),(14724, 7808),(14724, 7809),(14724, 7811);
+-- Alah'thalas
+UPDATE `quest_template` SET `ZoneOrSort` = 2037, `MinLevel` = 12, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Alah\'thalas' WHERE `entry` = 80370;
+UPDATE `quest_template` SET `ZoneOrSort` = 2037, `MinLevel` = 26, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Alah\'thalas' WHERE `entry` = 80371;
+UPDATE `quest_template` SET `ZoneOrSort` = 2037, `MinLevel` = 40, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Alah\'thalas' WHERE `entry` = 80372;
+UPDATE `quest_template` SET `ZoneOrSort` = 2037, `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Alah\'thalas' WHERE `entry` = 80373;
+replace into creature_questrelation values (80459, 80370),(80459, 80371),(80459, 80372),(80459, 80373);
+replace into creature_involvedrelation values (80459, 80370),(80459, 80371),(80459, 80372),(80459, 80373);
+-- Orgrimmar
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Orgrimmar' WHERE `entry` = 7824;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Orgrimmar' WHERE `entry` = 7827;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Orgrimmar' WHERE `entry` = 7831;
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Orgrimmar' WHERE `entry` = 7826;
+replace into creature_questrelation values (14726, 7826),(14726, 7827),(14726, 7831),(14726, 7827);
+replace into creature_involvedrelation values (14726, 7826),(14726, 7827),(14726, 7831),(14726, 7827);
+-- Darkspear Tribe
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Darkspear Tribe' WHERE `entry` = 7835;
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Darkspear Tribe' WHERE `entry` = 7833;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Darkspear Tribe' WHERE `entry` = 7834;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Darkspear Tribe' WHERE `entry` = 7836;
+replace into creature_questrelation values (14727, 7833),(14727, 7834),(14727, 7835),(14727, 7836);
+replace into creature_involvedrelation values (14727, 7833),(14727, 7834),(14727, 7835),(14727, 7836);
+-- Thunder Bluff
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Thunder Bluff' WHERE `entry` = 7823;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Thunder Bluff' WHERE `entry` = 7821;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Thunder Bluff' WHERE `entry` = 7822;
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Thunder Bluff' WHERE `entry` = 7820;
+replace into creature_questrelation values (14728,7820),(14728,7821),(14728,7822),(14728,7823);
+replace into creature_involvedrelation values (14728,7820),(14728,7821),(14728,7822),(14728,7823);
+-- Undercity
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Undercity' WHERE `entry` = 7818;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Undercity' WHERE `entry` = 7817;
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Undercity' WHERE `entry` = 7813;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Undercity' WHERE `entry` = 7814;
+replace into creature_questrelation values (14729,7813),(14729,7814),(14729,7817),(14729,7818);
+replace into creature_involvedrelation values (14729,7813),(14729,7814),(14729,7817),(14729,7818);
+-- Revantusk Tribe
+UPDATE `quest_template` SET `MinLevel` = 12, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Wool: Revantusk Tribe' WHERE `entry` = 80375;
+UPDATE `quest_template` SET `MinLevel` = 26, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Silk: Revantusk Tribe' WHERE `entry` = 80376;
+UPDATE `quest_template` SET `MinLevel` = 40, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Mageweave: Revantusk Tribe' WHERE `entry` = 80377;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 0, `NextQuestId` = 0, `Title` = 'A Donation of Runecloth: Revantusk Tribe' WHERE `entry` = 80378;
+replace into creature_questrelation values (80807,80375),(80807,80376),(80807,80377),(80807,80378);
+-- Repeatables
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 7795, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Stormwind' WHERE `entry` = 7796;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 7800, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Darnassus' WHERE `entry` = 7801;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 7805, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Ironforge' WHERE `entry` = 7806;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 589, `PrevQuestId` = 7811, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Gnomeregan' WHERE `entry` = 7812;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 7818, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Undercity' WHERE `entry` = 7819;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 7823, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Thunder Bluff' WHERE `entry` = 7825;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 7836, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Darkspear Tribe' WHERE `entry` = 7837;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 7824, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Orgrimmar' WHERE `entry` = 7832;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 1613, `PrevQuestId` = 80373, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Alah\'thalas' WHERE `entry` = 80374;
+UPDATE `quest_template` SET `MinLevel` = 50, `RequiredRaces` = 434, `PrevQuestId` = 80378, `NextQuestId` = 0, `Title` = 'Additional Runecloth: Revantusk Tribe' WHERE `entry` = 80379;
+replace into creature_questrelation (`id`, `quest`) VALUES (14722, 7796);
+replace into creature_questrelation (`id`, `quest`) VALUES (14723, 7806);
+replace into creature_questrelation (`id`, `quest`) VALUES (14724, 7812);
+replace into creature_questrelation (`id`, `quest`) VALUES (14725, 7801);
+replace into creature_questrelation (`id`, `quest`) VALUES (14726, 7832);
+replace into creature_questrelation (`id`, `quest`) VALUES (14727, 7837);
+replace into creature_questrelation (`id`, `quest`) VALUES (14728, 7825);
+replace into creature_questrelation (`id`, `quest`) VALUES (14729, 7819);
+replace into creature_questrelation (`id`, `quest`) VALUES (80459, 80374);
+replace into creature_questrelation (`id`, `quest`) VALUES (80807, 80379);
+replace into creature_questrelation (`id`, `quest`) VALUES (14722, 7796);
+replace into creature_questrelation (`id`, `quest`) VALUES (14723, 7806);
+replace into creature_questrelation (`id`, `quest`) VALUES (14724, 7812);
+replace into creature_questrelation (`id`, `quest`) VALUES (14725, 7801);
+replace into creature_questrelation (`id`, `quest`) VALUES (14726, 7832);
+replace into creature_questrelation (`id`, `quest`) VALUES (14727, 7837);
+replace into creature_questrelation (`id`, `quest`) VALUES (14728, 7825);
+replace into creature_questrelation (`id`, `quest`) VALUES (14729, 7819);
+replace into creature_questrelation (`id`, `quest`) VALUES (80459, 80374);
+replace into creature_questrelation (`id`, `quest`) VALUES (80807, 80379);
