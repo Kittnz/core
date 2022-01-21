@@ -2833,37 +2833,6 @@ bool GossipSelect_npc_waya_tallgrain(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
-
-
-bool GossipHello_npc_kauth(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(65003) == QUEST_STATUS_INCOMPLETE) // Harmony in Peace and Understanding
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have this offering from Melyndella for you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    pPlayer->SEND_GOSSIP_MENU(100500, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_kauth(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->PMonsterSay("These pelts... The Dryad gave them to us as an offering? The quality is astounding. With pelts such as these, the newborn are sure to be protected from the cold nights and winters.");
-
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [pCreature = pCreature]() {
-            pCreature->PMonsterSay("I will let all the families know who is to thank for these pelts. If she wishes to earn our friendship with more deeds like these, we will not deny her. We understand she is not a Centaur, and if she continues to assist us in such a way, even the most stubborn Tauren will as well."); });
-
-        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [pPlayer = pPlayer, pCreature = pCreature]() {
-            pCreature->PMonsterSay("Return to her and thank her for the offering. Let her know that she is welcome in Bloodhoof Village. ");
-            if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60370))
-                pPlayer->KilledMonster(dummy_bunny, ObjectGuid());
-            });
-    }
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-
-
 bool GossipHello_npc_kauth(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(65003) == QUEST_STATUS_INCOMPLETE) // Harmony in Peace and Understanding
@@ -2892,7 +2861,6 @@ bool GossipSelect_npc_kauth(Player* pPlayer, Creature* pCreature, uint32 uiSende
 }
 
 Player* escortedPlayer{ nullptr };
-std::vector<GameObject*> gobCleanuplist;
 
 struct npc_zohjikAI : public ScriptedAI
 {
@@ -2902,11 +2870,21 @@ struct npc_zohjikAI : public ScriptedAI
     }
 
     int8 phase;
+    uint32 spellCastTimer;
+    bool doOnce;
 
 
-    enum CreatureEntries
+    enum Entries
     {
-        NPC_MAGISTER = 65140
+        NPC_MAGISTER = 65140,
+
+        SPELL_ICE_BLOCK = 27619,
+        SPELL_ARCANE_EXPLOSION = 25672,
+        SPELL_ARCANE_BOLT = 25055,
+        SPELL_LIGHTNING_BOLT = 26098,
+        SPELL_BALL_LIGHTNING = 28299,
+        SPELL_VOID_BOLT = 21066
+
 
     };
 
@@ -2915,13 +2893,50 @@ struct npc_zohjikAI : public ScriptedAI
     {
         escortedPlayer = nullptr;
         phase = 0;
+        spellCastTimer = 3000;
+        doOnce = false;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+        m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
         if (escortedPlayer)
         {
+            if (phase > 0 && phase < 4)
+            {
+                escortedPlayer->AddAura(SPELL_ICE_BLOCK); // entirety of this phase the player is ice blocked
+
+                if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
+                {
+                    if (spellCastTimer <= uiDiff)
+                    {
+
+                        int8 rand = irand(1, 6);
+                        uint32 spellEntry = 0;
+
+                        switch (rand)
+                        {
+                        case 1:
+                            spellEntry = SPELL_ARCANE_BOLT;
+                            break;
+                        case 2:
+                            spellEntry = SPELL_LIGHTNING_BOLT;
+                            break;
+                        case 3:
+                            spellEntry = SPELL_BALL_LIGHTNING;
+                            break;
+                        case 4:
+                            spellEntry = SPELL_ARCANE_EXPLOSION;
+                        }
+
+                        if (magister->CastSpell(m_creature, spellEntry, true))
+                            spellCastTimer = 7000;
+                    }
+                    else spellCastTimer -= uiDiff;
+                }
+            }
+
             switch (phase)
             {
             case 0:
@@ -2937,8 +2952,10 @@ struct npc_zohjikAI : public ScriptedAI
                     m_creature->GetMotionMaster()->MoveFollow(escortedPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
                 else
                 {
-                    if (escortedPlayer->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
-                        return;
+                    if (escortedPlayer->GetVictim())
+                    {
+                        if (escortedPlayer->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
+                            return;
 
                     Unit* target = m_creature->GetVictim();
 
@@ -2955,11 +2972,21 @@ struct npc_zohjikAI : public ScriptedAI
                         {
                         case 1:
                             m_creature->PMonsterSay("Another one bites da dust!");
+                            break;
+                        case 2:
                             m_creature->PMonsterSay("We make a great team, $n", escortedPlayer->GetName());
+                            break;
+                        case 3:
                             m_creature->PMonsterSay("For Zul’jin!");
+                            break;
+                        case 4:
                             m_creature->PMonsterSay("Ya got some skills mon!");
+                            break;
+                        case 5:
                             m_creature->PMonsterSay("Die ugly!");
+                            break;
                         }
+                    }
                     }
                 }
 
@@ -2969,25 +2996,121 @@ struct npc_zohjikAI : public ScriptedAI
                 if (!escortedPlayer->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
                     m_creature->DespawnOrUnsummon();
 
-                if (escortedPlayer->GetQuestStatus(65140) == QUEST_STATUS_COMPLETE) // move on
+                if (escortedPlayer->GetQuestStatus(65007) == QUEST_STATUS_COMPLETE) // move on
+                {
                     phase++;
+                    escortedPlayer->SummonCreature(NPC_MAGISTER, escortedPlayer->GetPositionX() + 4.0f, escortedPlayer->GetPositionY() + 3.0f, escortedPlayer->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
+                }
+
                 break;
             }
 
             case 1:
             {
-                if (escortedPlayer->SummonCreature(NPC_MAGISTER, escortedPlayer->GetPositionX() + 2.0f, escortedPlayer->GetPositionY() + 2.0f, escortedPlayer->GetPositionZ(), 9, TEMPSUMMON_DEAD_DESPAWN))
+                if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true)) 
                 {
+                    if (!doOnce)
+                    {
+                        doOnce = true;
+                        escortedPlayer->PlayDirectMusic(8920);
+                        magister->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        magister->CastSpell(magister, 26638, true); // teleport spell
+                        //m_creature->GetMotionMaster()->
+                        magister->PMonsterSay("Enough from you, %s. Stand still! I will take you in after I deal with this troll.", escortedPlayer->GetName());
 
+                        DoAfterTime(escortedPlayer, 5 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                            m_creature->PMonsterSay("Keep ya ugly self away from me friend, elf!");
+                            });
+                    }
 
+                    DoAfterTime(escortedPlayer, 10 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                        magister->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        m_creature->Attack(magister, true);
+                        magister->Attack(m_creature, true);
+                        });
 
-
+                    if (magister->GetHealthPercent() < 50.0f)
+                    {
+                        doOnce = false;
+                        phase++;
+                    }
                 }
-
-
                 break;
             }
+            case 2:
+            {
+                if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
+                {
+                    if (!doOnce)
+                    {
+                        doOnce = true;
 
+                        magister->PMonsterSay("Is this all you can do wretch?");
+
+                        DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                            m_creature->PMonsterSay("Seems to be enough!");
+                            });
+
+                    }
+
+                    if (magister->GetHealthPercent() < 25.0f)
+                    {
+                        doOnce = false;
+                        phase++;
+                    }
+                }
+                break;
+            }
+            case 3:
+            {
+                if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
+                {
+                    if (!doOnce)
+                    {
+                        doOnce = true;
+
+                        magister->PMonsterSay("Enough of this foolishment, I will end your life!");
+
+                        DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                            m_creature->PMonsterSay("Won’t ya just die already?");
+                            });
+
+                    }
+
+                    if (!magister->GetHealthPercent() < 5.0f)
+                    {
+                        magister->PMonsterSay("Lost to ... a forest ... frog. I'm taking ... you with me ...");
+                        magister->CastSpell(m_creature, SPELL_VOID_BOLT, true);
+                        m_creature->CombatStop();
+                        doOnce = false;
+                        phase++;
+                    }
+                }
+                break;
+            }
+            case 4:
+            {
+                if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
+                {
+                    DoAfterTime(escortedPlayer, 5 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                        magister->SetHealthPercent(0);
+                        m_creature->SetHealthPercent(1);
+                        m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
+                        });
+
+                    DoAfterTime(escortedPlayer, 10 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                        m_creature->PMonsterSay("Dat -ugh-  ugly woman got me good. %s, Gi- give Zo’hjik a moment to res-", escortedPlayer->GetName());
+                        });
+
+                    DoAfterTime(escortedPlayer, 14 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                        m_creature->SetHealthPercent(0);
+                        m_creature->PMonsterEmote("Zo’hjik closes his eyes and falls on the ground, dead.");
+                        });
+
+                    phase++;
+                }
+            }
+            break;
             }
         }
 
@@ -3042,7 +3165,7 @@ bool QuestRewarded_quest_banshees_favor(Player* pPlayer, Creature* pQuestGiver, 
 
 bool ItemUseSpell_item_zhojik_whistle(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (pPlayer->FindNearestCreature(65142, 15.0f) && pPlayer->GetQuestStatus(65140) == QUEST_STATUS_INCOMPLETE)
+    if (pPlayer->FindNearestCreature(65142, 15.0f) && pPlayer->GetQuestStatus(65007) == QUEST_STATUS_INCOMPLETE)
     {
         if (Creature* escortNPC = pPlayer->SummonCreature(65141, 4.35f, 182.13f, 45.52f, 0, TEMPSUMMON_MANUAL_DESPAWN))
         {
