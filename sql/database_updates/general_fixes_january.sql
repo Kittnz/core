@@ -1862,3 +1862,7 @@ replace into creature_questrelation (`id`, `quest`) VALUES (14728, 7825);
 replace into creature_questrelation (`id`, `quest`) VALUES (14729, 7819);
 replace into creature_questrelation (`id`, `quest`) VALUES (80459, 80374);
 replace into creature_questrelation (`id`, `quest`) VALUES (80807, 80379);
+-- Update to thing
+REPLACE INTO `creature_template` VALUES (65140, 15517, 0, 0, 0, 'High Elven Magister', NULL, 0, 60, 60, 61050, 61050, 36510, 36510, 18000, 76, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 448, 491, 0, 272, 1, 2000, 2000, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 14731, 0, 0, 0, 0, 0, 65006, '');
+REPLACE INTO `creature_equip_template` VALUES (14731, 33299, 0, 0);
+
