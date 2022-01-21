@@ -1874,3 +1874,9 @@ INSERT INTO `creature_template`
 (15726, 15788, 0, 0, 0, 'Eye Tentacle', '', 0, 60, 60, 2289, 2289, 0, 0, 4691, 16, 0, 2.4, 1.42857, 1, 20, 5, 0, 0, 1, 208, 275, 0, 272, 1, 1000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 0, 1, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 700, 4321, '', 0, 3, 0, 0, 3, 0, 0, 0, 2147488274, 0, 2129920, 0, 'mob_eye_tentacle'),
 (15728, 15790, 0, 0, 0, 'Giant Claw Tentacle', '', 0, 60, 60, 91560, 91560, 0, 0, 4691, 370, 0, 2.4, 1.42857, 5, 20, 5, 0, 1, 1, 3804, 5755, 0, 272, 1, 2500, 2000, 1, 32769, 0, 0, 0, 0, 0, 0, 255, 325, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 4626, 0, 2097152, 0, 'mob_giant_claw_tentacle'),
 (15802, 15793, 0, 0, 0, 'Flesh Tentacle', '', 0, 60, 60, 24416, 24416, 0, 0, 4691, 16, 0, 2.4, 1.42857, 0, 20, 5, 0, 0, 1, 348, 548, 0, 272, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 0, 1, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 21010, 0, 2097152, 0, 'mob_giant_flesh_tentacle');
+-- Struct Change for phasing
+ALTER TABLE `creature_template`
+	ADD COLUMN `phase_quest_action` INT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `phase_quest_id`;
+
+ALTER TABLE `gameobject_template`
+	ADD COLUMN `phase_quest_action` INT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `phase_quest_id`;
