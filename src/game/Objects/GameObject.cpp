@@ -1073,10 +1073,13 @@ bool GameObject::IsVisibleForInState(WorldObject const* pDetector, WorldObject c
     if (Player const* plDetector = pDetector->ToPlayer())
     {
         uint32 phaseQuestId = GetPhaseQuestId();
+        int statusAction = GetPhaseQuestAction(); // if 1 = visible if 0 = not-visible
+
         if (phaseQuestId)
         {
-            auto status = plDetector->GetQuestStatusData(phaseQuestId);
-            if (!status || !status->m_rewarded)
+            auto status = plDetector->GetQuestStatus(phaseQuestId);
+
+            if (status == QUEST_STATUS_COMPLETE && statusAction == 0) // hide gObject once quest is complete and phase_quest_action is 0
                 return false;
         }
     }

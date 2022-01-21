@@ -2106,10 +2106,13 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
 
     // TODO: hack for phasing creatures for player's visibility by quest status
     uint32 phaseQuestId = GetPhaseQuestId();
+    int statusAction = GetPhaseQuestAction(); // if 1 = visible if 0 = not-visible
+
     if (phaseQuestId)
     {
-        auto status = pl->GetQuestStatusData(phaseQuestId);
-        if (!status || !status->m_rewarded)
+        auto status = pl->GetQuestStatus(phaseQuestId);
+
+        if (status == QUEST_STATUS_COMPLETE && statusAction == 0) // hide NPC once quest is complete
             return false;
     }
 
