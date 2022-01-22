@@ -1877,6 +1877,12 @@ INSERT INTO `creature_template`
 -- Struct Change for phasing
 ALTER TABLE `creature_template`
 	ADD COLUMN `phase_quest_action` INT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `phase_quest_id`;
-
 ALTER TABLE `gameobject_template`
 	ADD COLUMN `phase_quest_action` INT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `phase_quest_id`;
+	
+-- Update to quest
+delete from `creature` where `id` IN (65142, 65138);
+REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (65142, 0, 0, 0, 0, 0, 0, 13.8748, 176.24, 45.3918, 0.520082, 25, 25, 0, 100, 100, 0, 0, 0);
+REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (65138, 0, 0, 0, 0, 0, 14730, -30.772, -914.034, 54.9199, 5.04637, 25, 25, 0, 100, 100, 0, 0, 0);
+
+
