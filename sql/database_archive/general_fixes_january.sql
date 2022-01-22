@@ -1867,22 +1867,10 @@ REPLACE INTO `creature_template` VALUES (65140, 15517, 0, 0, 0, 'High Elven Magi
 REPLACE INTO `creature_equip_template` VALUES (14731, 33299, 0, 0);
 
 -- fix cthun
-INSERT INTO `creature_template`
+replace into INTO `creature_template`
 (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES
 (15334, 15948, 0, 0, 0, 'Giant Eye Tentacle', '', 0, 60, 60, 36624, 36624, 0, 0, 4691, 370, 0, 1, 1, 5, 20, 5, 0, 1, 1, 1024, 1375, 0, 272, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 0, 1, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 1, 8808, '', 0, 3, 0, 0, 3, 0, 0, 0, 4626, 0, 2097152, 0, 'mob_giant_eye_tentacle'),
 (15725, 15789, 0, 0, 0, 'Claw Tentacle', '', 0, 60, 60, 1526, 1526, 0, 0, 4691, 16, 0, 2.4, 1.42857, 2, 20, 5, 0, 0, 1, 208, 275, 0, 272, 1, 1000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 0, 1, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 4626, 0, 2097152, 0, 'mob_claw_tentacle'),
 (15726, 15788, 0, 0, 0, 'Eye Tentacle', '', 0, 60, 60, 2289, 2289, 0, 0, 4691, 16, 0, 2.4, 1.42857, 1, 20, 5, 0, 0, 1, 208, 275, 0, 272, 1, 1000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 0, 1, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 700, 4321, '', 0, 3, 0, 0, 3, 0, 0, 0, 2147488274, 0, 2129920, 0, 'mob_eye_tentacle'),
 (15728, 15790, 0, 0, 0, 'Giant Claw Tentacle', '', 0, 60, 60, 91560, 91560, 0, 0, 4691, 370, 0, 2.4, 1.42857, 5, 20, 5, 0, 1, 1, 3804, 5755, 0, 272, 1, 2500, 2000, 1, 32769, 0, 0, 0, 0, 0, 0, 255, 325, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 4626, 0, 2097152, 0, 'mob_giant_claw_tentacle'),
 (15802, 15793, 0, 0, 0, 'Flesh Tentacle', '', 0, 60, 60, 24416, 24416, 0, 0, 4691, 16, 0, 2.4, 1.42857, 0, 20, 5, 0, 0, 1, 348, 548, 0, 272, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 0, 1, 0, 10, 8, 0, 0, 0, 0, 75, 75, 75, 75, 75, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 21010, 0, 2097152, 0, 'mob_giant_flesh_tentacle');
--- Struct Change for phasing
-ALTER TABLE `creature_template`
-	ADD COLUMN `phase_quest_action` INT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `phase_quest_id`;
-ALTER TABLE `gameobject_template`
-	ADD COLUMN `phase_quest_action` INT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `phase_quest_id`;
-	
--- Update to quest
-delete from `creature` where `id` IN (65142, 65138);
-REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (65142, 0, 0, 0, 0, 0, 0, 13.8748, 176.24, 45.3918, 0.520082, 25, 25, 0, 100, 100, 0, 0, 0);
-REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (65138, 0, 0, 0, 0, 0, 14730, -30.772, -914.034, 54.9199, 5.04637, 25, 25, 0, 100, 100, 0, 0, 0);
-
-
