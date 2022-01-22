@@ -14,4 +14,7 @@ update quest_template set questlevel = 44, minlevel = 40 where entry = 40078;
 -- misc.
 update creature_template set health_min = 18593, health_max = 19173 where entry = 91918;
 update creature_template set health_min = 21593, health_max = 22173 where entry = 92935;
-update creature_template set display_id1 = 4943 where entry = 60649;s
+update creature_template set display_id1 = 4943 where entry = 60649;
+-- Zo'hjik update
+REPLACE INTO `creature_template` VALUES (65138, 14773, 0, 0, 0, 'Zo’hjik', NULL, 0, 60, 60, 61050, 61050, 0, 36510, 18000, 1495, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 448, 491, 0, 272, 1, 2000, 2000, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 14730, 0, 0, 0, 0, 0, 65007, 0, '');
+
