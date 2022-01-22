@@ -32,7 +32,7 @@ struct custom_dungeon_portal : public GameObjectAI
                     }
                     array<tuple<uint32, WorldLocation, int32>, 8> portals_and_locations =
                     { {
-                        { 181580, WorldLocation{800, -11068.1F, -1806.4F, 52.7F, 1.5F}, 58 },  // Karazhan Crypt (Entrance)
+                        { 181580, WorldLocation{800, -11068.1F, -1806.4F, 52.7F, 1.5F}, 55 },  // Karazhan Crypt (Entrance)
                         { 181581, WorldLocation{0, -11068.9F, -1828.6F, 60.26F, 3.1F},  1 },   // Karazhan Crypt (Exit)
                         { 112911, WorldLocation{802, 579.13F, 90.70F, 276.11F, 3.4F},   32 },  // The Crescent Grove (Entrance)
                         { 112912, WorldLocation{1, 1722.0F, -1272.6F, 163.26F, 5.8F},   1 },   // The Crescent Grove (Exit)
