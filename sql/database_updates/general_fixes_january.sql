@@ -1740,7 +1740,7 @@ REPLACE INTO `broadcast_text` VALUES (65100, 'Ready \'mon?', 'Ready \'mon?', 0, 
 REPLACE INTO `creature_addon` VALUES (2569339, 0, 0, 0, 16, 68, 0, '');
 REPLACE INTO `creature` VALUES (2569339, 65138, 0, 0, 0, 0, 0, 14730, 9.33784, 171.236, 45.6951, 0.449417, 25, 25, 0, 100, 100, 0, 0, 0);
 
-REPLACE INTO `gossip_menu` VALUES (65536, 65100, 0);
+REPLACE INTO gossip_menu VALUES (10000, 65100, 0);
 
 -- In Da Banshee’s Favor text change and add whistle
 REPLACE INTO `quest_template` VALUES (65007, 2, 36, 55, 60, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65006, 0, 0, 0, 65020, 1, 0, 'In Da Banshee’s Favor', 'Zul\'jin be countin\' on us to kill da mages at Dalaran. I be gatherin\' information on \'em and it points to dis High Elven Magister.$B$B\nLets be makin a dent in they ranks n\' bring our findins\' to Zul\'Jin. Use dis whistle by da broken down wagon by Dalaran. I be ready.', 'Cull the Dalaran forces with Zo\'hjik.', 'Aye, it be done.', 'Da Banshee will see da might of da Amani.', '', 'Kill 10 Dalaran Magi', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65139, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3000, 4000, 1800, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
