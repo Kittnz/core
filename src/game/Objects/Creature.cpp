@@ -2112,7 +2112,7 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
     {
         auto status = pl->GetQuestStatus(phaseQuestId);
 
-        if (status == QUEST_STATUS_COMPLETE && statusAction == 0) // hide NPC once quest is complete
+        if (status == QUEST_STATUS_NONE || status == QUEST_STATUS_COMPLETE && statusAction == 0) // hide NPC once quest is complete
             return false;
     }
 
