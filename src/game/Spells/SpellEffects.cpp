@@ -1838,7 +1838,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 226: m_caster->ToPlayer()->TeleportTo(1, 1017.24F, -2225.02F, 93.09F, 5.15F);  break; // Warsong Outriders
                         case 254: m_caster->ToPlayer()->TeleportTo(1, 7.71F, -3619.13F, 27.22F, 2.5F);      break; // Southfury Trading Co
                         case 49:  m_caster->ToPlayer()->TeleportTo(0, 2743.08F, -1032.77F, 112.89F, 5.32F); break; // The Scarlet Crusade
-                        case 358: m_caster->ToPlayer()->TeleportTo(0, -10709.6F, 310.9F, 40.14F, 0.01F);    break; // The Scourge
+                        case 358: m_caster->ToPlayer()->TeleportTo(0, 2102.03F, -865.82F, 109.5F, 0.7F);    break; // The Scourge 
                         case 176: m_caster->ToPlayer()->TeleportTo(1, -10707.2F, 2483.1F, 7.9F, 3.4F);      break; // Philanthropy
                         case 215: m_caster->ToPlayer()->TeleportTo(0, -5895.49F, -3600.1F, 350.5F, 4.01F);  break; // Heirs of Quel'Thalas
                         case 346: m_caster->ToPlayer()->TeleportTo(1, 2372.3F, -2527.9F, 108.6F, 0.3F);     break; // Hand of Wrath
