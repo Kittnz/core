@@ -734,3 +734,12 @@ REPLACE INTO npc_vendor VALUES (60653, 16110, 0, 0, 0, 0);
 update quest_template set details = 'Alright, $N, here is the plan. We have established a perimeter around the Dark Iron camp, but we believe that if we move in force, then they will execute the refugees. We have been ordered to stand down.\n\nHowever, if we do not act now, the refugees will be killed. We need an outsider to sneak into their camp, kill the fire cleric, acquire the key to the cells, and free the refugees.\n\nI can think of no one more worthy of this task than you. You have proven yourself to be strong and resourceful in the short time we\'ve known each other.\n\nI believe in you, $N! Now go and save those people!' where entry = 80207;
 -- Drop chance for item "Dark Key" changed to only for quest:
 update creature_loot_template set chanceorquestchance = -100 where item = 80216;
+-- NPC "Rell" have trade menu alredy:
+update creature_template set npc_flags = 16389 where entry = 51621;
+REPLACE INTO npc_vendor VALUES (51621, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (51621, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (51621, 3466, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (51621, 3857, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (51621, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (51621, 7995, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (51621, 18567, 0, 0, 0, 0);
