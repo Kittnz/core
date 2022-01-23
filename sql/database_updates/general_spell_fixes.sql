@@ -22719,7 +22719,7 @@ update spell_template set customflags=customflags | 128 where entry in
 -- Hack school instead.
 update spell_template set school=1 where entry=23513;
 -- Arcane Missiles: aggro on hit, not cast.
-update spell_template set attributesex3 = 131072 where entry = 5143 or entry = 5144 or entry = 5145 or entry = 8416 or entry = 8417 or entry = 10211 or entry = 10212 or entry = 25345;  
+update spell_template set attributesex3 = 0 where entry in (5143,5144,5145,8416,8417,10211,10212,25345);  
 -- Fix Wyvern Sting not being removed on taking damage.
 update spell_template set proccharges=1 where (procflags & 1048576) && (aurainterruptflags & 2) && (proccharges = 0);
 -- Triggered dot aura by Wyvern Sting should be a debuff.
