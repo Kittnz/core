@@ -1,5 +1,4 @@
 -- Original values from VMaNGOS:
-
 update spell_template set customflags = 0 where entry = 1;
 update spell_template set customflags = 0 where entry = 3;
 update spell_template set customflags = 0 where entry = 4;
@@ -22620,7 +22619,7 @@ update spell_template set customflags = 0 where entry = 50009;
 update spell_template set customflags = 0 where entry = 56042;
 
 -- Remove wrongly assigned 256 bitmask first.
-UPDATE `spell_template` SET `customFlags`=`customFlags`&~256 WHERE `entry` IN
+UPDATE spell_template SET customFlags=customFlags&~256 WHERE entry IN
 (
     781,   -- Disengage (Rank 1)
     1510,  -- Volley (Rank 1)
@@ -22669,7 +22668,7 @@ UPDATE `spell_template` SET `customFlags`=`customFlags`&~256 WHERE `entry` IN
     30012  -- Chess Move (DND)
 );
 -- Add 128 to them 
-UPDATE `spell_template` SET `customFlags`=`customFlags` | 128 WHERE `entry` IN
+update spell_template set customflags=customflags | 128 where entry in
 (
     781,   -- Disengage (Rank 1)
     1510,  -- Volley (Rank 1)
@@ -22717,17 +22716,25 @@ UPDATE `spell_template` SET `customFlags`=`customFlags` | 128 WHERE `entry` IN
     29163, -- Copy of Frostbolt (Rank 1)
     30012  -- Chess Move (DND)
 );
-
 -- Hack school instead.
-UPDATE spell_template SET school=1 WHERE entry=23513;
-
+update spell_template set school=1 where entry=23513;
 -- Arcane Missiles: aggro on hit, not cast.
-UPDATE spell_template SET attributesEx3 = 131072 WHERE entry = 5143 OR entry = 5144 OR entry = 5145 OR entry = 8416 OR entry = 8417 OR entry = 10211 OR entry = 10212 OR entry = 25345;  
-
+update spell_template set attributesex3 = 131072 where entry = 5143 or entry = 5144 or entry = 5145 or entry = 8416 or entry = 8417 or entry = 10211 or entry = 10212 or entry = 25345;  
 -- Fix Wyvern Sting not being removed on taking damage.
-UPDATE `spell_template` SET `procCharges`=1 WHERE (`procFlags` & 1048576) && (`auraInterruptFlags` & 2) && (`procCharges` = 0);
-
+update spell_template set proccharges=1 where (procflags & 1048576) && (aurainterruptflags & 2) && (proccharges = 0);
 -- Triggered dot aura by Wyvern Sting should be a debuff.
-UPDATE `spell_template` SET `customFlags`=`customFlags` | 2 WHERE `entry` IN (24131, 24134, 24135);
-
-REPLACE INTO `spell_mod` (`Id`, `interruptflags`) VALUES (46498, 1), (46499, 1);
+update spell_template set customflags=customflags | 2 where entry in (24131, 24134, 24135);
+replace into spell_mod (id, interruptflags) values (46498, 1), (46499, 1);
+-- Misc. pet & mount fixes:
+update spell_template set effect2 = 0 where entry = 46064;
+update spell_template set effectmiscvalue1 = 90978 where entry = 46519;
+update spell_template set effectmiscvalue1 = 50091 where entry = 46453;
+update spell_template set effectmiscvalue1 = 81019 where entry = 46496;
+update spell_template set effectmiscvalue1 = 50098 where entry = 46450;
+update spell_template set effectmiscvalue1 = 90977 where entry = 46225;
+update spell_template set effectmiscvalue1 = 90979 where entry = 46520;
+update spell_template set effectmiscvalue1 = 50102 where entry = 46446;
+update spell_template set effectmiscvalue1 = 81102 where entry = 18363;
+update spell_template set effectbonuscoefficient1 = 0.80 where entry in (1454, 1455, 1456, 11687, 11688, 11689);
+update spell_template set effectmiscvalue1 = 81005 where entry = 46451;
+update spell_template set interruptflags = '11' where entry = 27831; 
