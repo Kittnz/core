@@ -730,4 +730,5 @@ REPLACE INTO npc_vendor VALUES (60653, 11285, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60653, 15326, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60653, 15327, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60653, 16110, 0, 0, 0, 0);
-
+-- Quest "Dark Iron Scrapping" text updated:
+update quest_template set details = 'Alright, $N, here is the plan. We have established a perimeter around the Dark Iron camp, but we believe that if we move in force, then they will execute the refugees. We have been ordered to stand down.\n\nHowever, if we do not act now, the refugees will be killed. We need an outsider to sneak into their camp, kill the fire cleric, acquire the key to the cells, and free the refugees.\n\nI can think of no one more worthy of this task than you. You have proven yourself to be strong and resourceful in the short time we\'ve known each other.\n\nI believe in you, $N! Now go and save those people!' where entry = 80207;
