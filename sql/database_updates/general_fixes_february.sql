@@ -755,11 +755,9 @@ replace into item_template values
 -- Buff resistances for Karazhan Crypt bosses:
 update creature_template set mechanic_immune_mask = 1022066674 where entry in (91929, 91920, 91917, 91916);
 -- Night elf has the wrong dialogue:
--- 
 set @gossip_menu_id = 41083; set @magic_number = 41083;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Best deals in Dun Agrath my friend, won\'t find any better. Now, what can I help you with?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 1285;
-
 replace into broadcast_text (entry, Male_Text) values (1285, '%s\'s soft voice trails away into the mists, \"Know that I love you always...\"');
