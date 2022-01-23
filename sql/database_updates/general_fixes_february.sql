@@ -743,3 +743,6 @@ REPLACE INTO npc_vendor VALUES (51621, 3857, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (51621, 5956, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (51621, 7995, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (51621, 18567, 0, 0, 0, 0);
+-- New NPC "Krilana" added to DB:
+REPLACE INTO creature_template VALUES
+(60657, 18003, 0, 0, 0, 'Krilana', NULL, 0, 7, 8, 137, 156, 0, 0, 278, 35, 0, 1, 1.14, 0, 18, 5, 0, 0, 1, 9, 13, 0, 58, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 13, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
