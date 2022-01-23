@@ -767,3 +767,7 @@ update quest_template set endtext = 'That book meant quite a lot to me, I never 
 update quest_template set objectives = 'Bring 8 Shimmerweed to Master Vornal in Sen\'jin Village.' where entry = 820;
 -- Setted leash range for NPCs "92210", "92211", "92212":
 update creature_template set leash_range = 50 where entry in (92210,92211,92212);
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/879
+delete from creature_questrelation where quest in (8565,8566,8567,8568,8569,8570);
+delete from creature_involvedrelation where quest in (8565,8566,8567,8568,8569,8570);
+delete from quest_template where entry in (8565,8566,8567,8568,8569,8570);
