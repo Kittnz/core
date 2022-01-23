@@ -20,61 +20,61 @@
 
 enum WorldBotSpells
 {
-    MB_SPELL_FOOD = 1131,
-    MB_SPELL_DRINK = 1137,
-    MB_SPELL_AUTO_SHOT = 75,
-    MB_SPELL_SHOOT_WAND = 5019,
-    MB_SPELL_TAME_BEAST = 13481,
+    WB_SPELL_FOOD = 1131,
+    WB_SPELL_DRINK = 1137,
+    WB_SPELL_AUTO_SHOT = 75,
+    WB_SPELL_SHOOT_WAND = 5019,
+    WB_SPELL_TAME_BEAST = 13481,
     
-    MB_SPELL_SUMMON_IMP = 688,
-    MB_SPELL_SUMMON_VOIDWALKER = 697,
-    MB_SPELL_SUMMON_FELHUNTER = 691,
-    MB_SPELL_SUMMON_SUCCUBUS = 712,
+    WB_SPELL_SUMMON_IMP = 688,
+    WB_SPELL_SUMMON_VOIDWALKER = 697,
+    WB_SPELL_SUMMON_FELHUNTER = 691,
+    WB_SPELL_SUMMON_SUCCUBUS = 712,
     
-    MB_SPELL_MOUNT_40_HUMAN = 470,
-    MB_SPELL_MOUNT_40_NELF = 10787,
-    MB_SPELL_MOUNT_40_DWARF = 6896,
-    MB_SPELL_MOUNT_40_GNOME = 17456,
-    MB_SPELL_MOUNT_40_TROLL = 10795,
-    MB_SPELL_MOUNT_40_ORC = 581,
-    MB_SPELL_MOUNT_40_TAUREN = 18363,
-    MB_SPELL_MOUNT_40_UNDEAD = 8980,
+    WB_SPELL_MOUNT_40_HUMAN = 470,
+    WB_SPELL_MOUNT_40_NELF = 10787,
+    WB_SPELL_MOUNT_40_DWARF = 6896,
+    WB_SPELL_MOUNT_40_GNOME = 17456,
+    WB_SPELL_MOUNT_40_TROLL = 10795,
+    WB_SPELL_MOUNT_40_ORC = 581,
+    WB_SPELL_MOUNT_40_TAUREN = 18363,
+    WB_SPELL_MOUNT_40_UNDEAD = 8980,
     
-    MB_SPELL_MOUNT_60_HUMAN = 22717,
-    MB_SPELL_MOUNT_60_NELF = 22723,
-    MB_SPELL_MOUNT_60_DWARF = 22720,
-    MB_SPELL_MOUNT_60_GNOME = 22719,
-    MB_SPELL_MOUNT_60_TROLL = 22721,
-    MB_SPELL_MOUNT_60_ORC = 22724,
-    MB_SPELL_MOUNT_60_TAUREN = 22718,
-    MB_SPELL_MOUNT_60_UNDEAD = 22722,
+    WB_SPELL_MOUNT_60_HUMAN = 22717,
+    WB_SPELL_MOUNT_60_NELF = 22723,
+    WB_SPELL_MOUNT_60_DWARF = 22720,
+    WB_SPELL_MOUNT_60_GNOME = 22719,
+    WB_SPELL_MOUNT_60_TROLL = 22721,
+    WB_SPELL_MOUNT_60_ORC = 22724,
+    WB_SPELL_MOUNT_60_TAUREN = 22718,
+    WB_SPELL_MOUNT_60_UNDEAD = 22722,
     
-    MB_SPELL_MOUNT_40_PALADIN = 13819,
-    MB_SPELL_MOUNT_60_PALADIN = 23214,
+    WB_SPELL_MOUNT_40_PALADIN = 13819,
+    WB_SPELL_MOUNT_60_PALADIN = 23214,
     
-    MB_SPELL_MOUNT_40_WARLOCK = 5784,
-    MB_SPELL_MOUNT_60_WARLOCK = 23161,
+    WB_SPELL_MOUNT_40_WARLOCK = 5784,
+    WB_SPELL_MOUNT_60_WARLOCK = 23161,
     
-    MB_PET_WOLF    = 565,
-    MB_PET_CAT     = 681,
-    MB_PET_BEAR    = 822,
-    MB_PET_CRAB    = 831,
-    MB_PET_GORILLA = 1108,
-    MB_PET_BIRD    = 1109,
-    MB_PET_BOAR    = 1190,
-    MB_PET_BAT     = 1554,
-    MB_PET_CROC    = 1693,
-    MB_PET_SPIDER  = 1781,
-    MB_PET_OWL     = 1997,
-    MB_PET_STRIDER = 2322,
-    MB_PET_SCORPID = 3127,
-    MB_PET_SERPENT = 3247,
-    MB_PET_RAPTOR  = 3254,
-    MB_PET_TURTLE  = 3461,
-    MB_PET_HYENA   = 4127,
+    WB_PET_WOLF    = 565,
+    WB_PET_CAT     = 681,
+    WB_PET_BEAR    = 822,
+    WB_PET_CRAB    = 831,
+    WB_PET_GORILLA = 1108,
+    WB_PET_BIRD    = 1109,
+    WB_PET_BOAR    = 1190,
+    WB_PET_BAT     = 1554,
+    WB_PET_CROC    = 1693,
+    WB_PET_SPIDER  = 1781,
+    WB_PET_OWL     = 1997,
+    WB_PET_STRIDER = 2322,
+    WB_PET_SCORPID = 3127,
+    WB_PET_SERPENT = 3247,
+    WB_PET_RAPTOR  = 3254,
+    WB_PET_TURTLE  = 3461,
+    WB_PET_HYENA   = 4127,
     
-    MB_ITEM_ARROW  = 2512,
-    MB_ITEM_BULLET = 2516,
+    WB_ITEM_ARROW  = 2512,
+    WB_ITEM_BULLET = 2516,
 };
 
 #define MB_UPDATE_INTERVAL 1000
@@ -195,9 +195,9 @@ void WorldBotAI::AddPremadeGearAndSpells()
             if (Item* pItem = me->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_RANGED))
             {
                 if (pItem->GetProto()->SubClass == ITEM_SUBCLASS_WEAPON_GUN)
-                    me->StoreNewItemInBestSlots(MB_ITEM_BULLET, 200);
+                    me->StoreNewItemInBestSlots(WB_ITEM_BULLET, 200);
                 else
-                    me->StoreNewItemInBestSlots(MB_ITEM_ARROW, 200);
+                    me->StoreNewItemInBestSlots(WB_ITEM_ARROW, 200);
             }
             break;
         }
@@ -209,55 +209,55 @@ uint32 WorldBotAI::GetMountSpellId() const
     if (me->GetLevel() >= 60)
     {
         if (me->GetClass() == CLASS_PALADIN)
-            return MB_SPELL_MOUNT_60_PALADIN;
+            return WB_SPELL_MOUNT_60_PALADIN;
         if (me->GetClass() == CLASS_WARLOCK)
-            return MB_SPELL_MOUNT_60_WARLOCK;
+            return WB_SPELL_MOUNT_60_WARLOCK;
 
         switch (me->GetRace())
         {
             case RACE_HUMAN:
-                return MB_SPELL_MOUNT_60_HUMAN;
+                return WB_SPELL_MOUNT_60_HUMAN;
             case RACE_NIGHTELF:
-                return MB_SPELL_MOUNT_60_NELF;
+                return WB_SPELL_MOUNT_60_NELF;
             case RACE_DWARF:
-                return MB_SPELL_MOUNT_60_DWARF;
+                return WB_SPELL_MOUNT_60_DWARF;
             case RACE_GNOME:
-                return MB_SPELL_MOUNT_60_GNOME;
+                return WB_SPELL_MOUNT_60_GNOME;
             case RACE_TROLL:
-                return MB_SPELL_MOUNT_60_TROLL;
+                return WB_SPELL_MOUNT_60_TROLL;
             case RACE_ORC:
-                return MB_SPELL_MOUNT_60_ORC;
+                return WB_SPELL_MOUNT_60_ORC;
             case RACE_TAUREN:
-                return MB_SPELL_MOUNT_60_TAUREN;
+                return WB_SPELL_MOUNT_60_TAUREN;
             case RACE_UNDEAD:
-                return MB_SPELL_MOUNT_60_UNDEAD;
+                return WB_SPELL_MOUNT_60_UNDEAD;
         }
     }
     else if (me->GetLevel() >= 40)
     {
         if (me->GetClass() == CLASS_PALADIN)
-            return MB_SPELL_MOUNT_40_PALADIN;
+            return WB_SPELL_MOUNT_40_PALADIN;
         if (me->GetClass() == CLASS_WARLOCK)
-            return MB_SPELL_MOUNT_40_WARLOCK;
+            return WB_SPELL_MOUNT_40_WARLOCK;
 
         switch (me->GetRace())
         {
             case RACE_HUMAN:
-                return MB_SPELL_MOUNT_40_HUMAN;
+                return WB_SPELL_MOUNT_40_HUMAN;
             case RACE_NIGHTELF:
-                return MB_SPELL_MOUNT_40_NELF;
+                return WB_SPELL_MOUNT_40_NELF;
             case RACE_DWARF:
-                return MB_SPELL_MOUNT_40_DWARF;
+                return WB_SPELL_MOUNT_40_DWARF;
             case RACE_GNOME:
-                return MB_SPELL_MOUNT_40_GNOME;
+                return WB_SPELL_MOUNT_40_GNOME;
             case RACE_TROLL:
-                return MB_SPELL_MOUNT_40_TROLL;
+                return WB_SPELL_MOUNT_40_TROLL;
             case RACE_ORC:
-                return MB_SPELL_MOUNT_40_ORC;
+                return WB_SPELL_MOUNT_40_ORC;
             case RACE_TAUREN:
-                return MB_SPELL_MOUNT_40_TAUREN;
+                return WB_SPELL_MOUNT_40_TAUREN;
             case RACE_UNDEAD:
-                return MB_SPELL_MOUNT_40_UNDEAD;
+                return WB_SPELL_MOUNT_40_UNDEAD;
         }
     }
 
@@ -273,6 +273,9 @@ bool WorldBotAI::UseMount()
         return false;
 
     if (me->GetDisplayId() != me->GetNativeDisplayId())
+        return false;
+
+    if (m_isDualBot)
         return false;
 
     // make sure rogues stealth in bg's, they don't have to be in the world
@@ -306,11 +309,23 @@ Player* WorldBotAI::GetPartyLeader() const
     if (!pGroup)
         return nullptr;
 
-    ObjectGuid leaderGuid = pGroup->GetLeaderGuid();
-    if (leaderGuid == me->GetObjectGuid() && !me->InBattleGround())
-        return nullptr;
+    if (Player* originalLeader = ObjectAccessor::FindPlayerNotInWorld(m_leaderGuid))
+    {
+        if (me->InBattleGround() == originalLeader->InBattleGround())
+        {
+            // In case the original spawner is not in the same group as the bots anymore.
+            if (pGroup != originalLeader->GetGroup())
+                return nullptr;
 
-    return ObjectAccessor::FindPlayerNotInWorld(leaderGuid);
+            // In case the current leader is the bot itself and it's not inside a Battleground.
+            ObjectGuid currentLeaderGuid = pGroup->GetLeaderGuid();
+            if (currentLeaderGuid == me->GetObjectGuid() && !me->InBattleGround())
+                return nullptr;
+        }
+
+        return originalLeader;
+    }
+    return nullptr;
 }
 
 void WorldBotAI::RunAwayFromTarget(Unit* pTarget)
@@ -356,8 +371,8 @@ bool WorldBotAI::DrinkAndEat()
         me->HasAura(AURA_SILVERWING_FLAG))
         return false;
 
-    bool const isEating = me->HasAura(MB_SPELL_FOOD);
-    bool const isDrinking = me->HasAura(MB_SPELL_DRINK);
+    bool const isEating = me->HasAura(WB_SPELL_FOOD);
+    bool const isDrinking = me->HasAura(WB_SPELL_DRINK);
 
     if (!isEating && needToEat)
     {
@@ -366,7 +381,7 @@ bool WorldBotAI::DrinkAndEat()
             ClearPath();
             StopMoving();
         }
-        me->CastSpell(me, MB_SPELL_FOOD, true);
+        me->CastSpell(me, WB_SPELL_FOOD, true);
         return true;
     }
 
@@ -377,7 +392,7 @@ bool WorldBotAI::DrinkAndEat()
             ClearPath();
             StopMoving();
         }
-        me->CastSpell(me, MB_SPELL_DRINK, true);
+        me->CastSpell(me, WB_SPELL_DRINK, true);
         return true;
     }
 
@@ -523,6 +538,13 @@ Unit* WorldBotAI::SelectAttackTarget(Unit* pExcept) const
                 }
             }
         }
+    }
+
+    // 4. Assist pet if its in combat.
+    if (Pet* pPet = me->GetPet())
+    {
+        if (Unit* pPetAttacker = pPet->GetAttackerForHelper())
+            return pPetAttacker;
     }
 
     return nullptr;
@@ -683,6 +705,14 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
 
     switch (packet->GetOpcode())
     {
+        case SMSG_LEARNED_SPELL:
+        case SMSG_SUPERCEDED_SPELL:
+        case SMSG_REMOVED_SPELL:
+        {
+            if (m_initialized)
+                m_resetSpellData = true;
+            return;
+        }
         case MSG_PVP_LOG_DATA:
         {
             uint8 ended = *((uint8*)(*packet).contents());
@@ -760,6 +790,23 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
                     break;
             }
 
+            break;
+        }
+        case SMSG_DUEL_REQUESTED:
+        {
+            m_isDualBot = true;
+            m_isDualBotGetReady = true;
+            m_isDualBotReady = false;
+            m_isDualBotInProgress = false;
+            uint64 dualFlagGuid = *((uint64*)(*packet).contents());
+            uint64 casterGuid = *((uint64*)(*packet).contents());
+
+            break;
+        }
+        case SMSG_DUEL_COMPLETE:
+        {
+            m_isDualBot = false;
+            UpdateWaypointMovement();
             break;
         }
     }
@@ -978,6 +1025,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         AutoAssignRole();
         PopulateSpellData();
         AddAllSpellReagents();
+        me->InitTalentForLevel();
         me->UpdateSkillsToMaxSkillsForLevel();
         me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         SummonPetIfNeeded();
@@ -985,6 +1033,8 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         me->SetPowerPercent(me->GetPowerType(), 100.0f);
         me->SetTaxiCheater(true);
         me->SetMoney(10000000); // 1000g for taxis etc
+        me->DurabilityRepairAll(false, 0);
+        //AutoEquipGear(1);
 
         // Make the bot join the world channel for chat
         ChatHandler(me).HandleChannelJoinCommand("World");
@@ -1004,6 +1054,58 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         return;
     }
 
+    // Reset bot spell data on learning new spells. 
+    if (m_resetSpellData)
+    {
+        ResetSpellData();
+        PopulateSpellData();
+        m_resetSpellData = false;
+    }
+
+    // dual bot
+    if (m_isDualBot)
+    {
+        if (m_isDualBotGetReady == true)
+        {
+            ClearPath();
+            if (!me->IsStopped())
+                me->StopMoving();
+
+            DrinkAndEat();
+
+            if (me->GetHealthPercent() > 90.0f)
+                m_isDualBotReady = true;
+        }
+
+        if (m_isDualBotReady == true && m_isDualBotInProgress == false)
+        {
+            m_isDualBotGetReady = false;
+            m_isDualBotReady = false;
+
+            me->Yell("get ready here i come!", LANG_UNIVERSAL);
+
+            // accept dual
+            WorldPacket data(CMSG_DUEL_ACCEPTED);
+            data << me->GetObjectGuid();
+            me->GetSession()->HandleDuelAcceptedOpcode(data);
+
+            // in progress
+            m_isDualBotInProgress = true;
+
+            // opponent
+            Player* plTarget = me->duel->opponent;
+
+            // move 25 feet away
+            const float distance = me->GetDistance(plTarget);
+            if (distance < 25.0f)
+                me->GetMotionMaster()->MoveDistance(plTarget, 25.0f);
+
+            // attack target
+            AttackStart(plTarget);
+        }
+    }
+
+    // party bot
     Group* pGroup = me->GetGroup();
     Player* pLeader;
     if (pGroup)
@@ -1011,6 +1113,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     else
         pLeader = nullptr;
 
+    // battle bot
     if (m_isBattleBot)
     {
         if (!me->InBattleGround())
@@ -1124,6 +1227,11 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
     }
 
+    if (me->HasUnitState(UNIT_STAT_FEIGN_DEATH) && me->HasAuraType(SPELL_AURA_FEIGN_DEATH) &&
+        !me->IsInCombat() && (!me->GetPet() || !me->GetPet()->IsInCombat()) &&
+        !me->SelectRandomUnfriendlyTarget(nullptr, 20.0f, false, true))
+        me->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
+
     if (me->HasUnitState(UNIT_STAT_CAN_NOT_REACT_OR_LOST_CONTROL))
         return;
 
@@ -1155,7 +1263,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     {
         if (m_role != ROLE_HEALER)
         {
-            if (!pVictim || pVictim->IsDead() || pVictim->HasBreakableByDamageCrowdControlAura())
+            if (!pVictim || !IsValidHostileTarget(pVictim))
             {
                 if (Unit* pVictim = SelectAttackTarget(pLeader))
                 {
@@ -1175,7 +1283,11 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     if (!me->IsInCombat())
     {
         if (DrinkAndEat())
+        {
+            if (me->IsMounted())
+                me->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
             return;
+        }
 
         if (pGroup && pLeader && !me->InBattleGround() && !me->IsTaxiFlying())
         {
@@ -1202,13 +1314,19 @@ void WorldBotAI::UpdateAI(uint32 const diff)
 
     if (!me->IsInCombat())
     {
-        if (pGroup && pLeader && !me->InBattleGround())
+        if (pGroup && pLeader && !me->InBattleGround() && !m_isDualBot)
         {
-            // Mount if leader is mounted.
+            // Mount if leader is mounted and we don't have a target.
             if (pLeader->IsMounted())
             {
                 if (!me->IsMounted())
                 {
+                    // Leave shapeshift before mounting.
+                    if (me->IsInDisallowedMountForm() &&
+                        me->GetDisplayId() != me->GetNativeDisplayId() &&
+                        me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
+                        me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
+
                     UseMount();
                 }
             }
@@ -1231,7 +1349,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         if (me->IsNonMeleeSpellCasted())
             return;
 
-        if (!pVictim || pVictim->IsDead() || pVictim->HasBreakableByDamageCrowdControlAura())
+        if (!pVictim || !IsValidHostileTarget(pVictim))
         {
             if (pVictim = SelectAttackTarget(pVictim))
             {
@@ -1414,6 +1532,10 @@ void WorldBotAI::UpdateInCombatAI()
             UpdateInCombatAI_Druid();
             break;
     }
+
+    // Make bots use their trinkets
+    if (me->GetVictim())
+        UseTrinketEffects();
 }
 
 void WorldBotAI::UpdateOutOfCombatAI_Paladin()
@@ -1761,11 +1883,34 @@ void WorldBotAI::UpdateInCombatAI_Hunter()
             me->GetMotionMaster()->MoveChase(pVictim, 25.0f);
         }
 
+        if (me->HasSpell(WB_SPELL_AUTO_SHOT) &&
+            !me->IsMoving() &&
+            (me->GetCombatDistance(pVictim) > 8.0f) &&
+            !me->IsNonMeleeSpellCasted())
+        {
+            switch (me->CastSpell(pVictim, WB_SPELL_AUTO_SHOT, false))
+            {
+            case SPELL_FAILED_NEED_AMMO:
+            case SPELL_FAILED_NO_AMMO:
+            {
+                AddHunterAmmo();
+                break;
+            }
+            }
+        }
+
         if (m_spells.hunter.pConcussiveShot &&
             pVictim->IsMoving() && (pVictim->GetVictim() == me) &&
             CanTryToCastSpell(pVictim, m_spells.hunter.pConcussiveShot))
         {
             if (DoCastSpell(pVictim, m_spells.hunter.pConcussiveShot) == SPELL_CAST_OK)
+                return;
+        }
+
+        if (m_spells.hunter.pAimedShot &&
+            CanTryToCastSpell(pVictim, m_spells.hunter.pAimedShot))
+        {
+            if (DoCastSpell(pVictim, m_spells.hunter.pAimedShot) == SPELL_CAST_OK)
                 return;
         }
 
@@ -1787,13 +1932,6 @@ void WorldBotAI::UpdateInCombatAI_Hunter()
             CanTryToCastSpell(pVictim, m_spells.hunter.pMultiShot))
         {
             if (DoCastSpell(pVictim, m_spells.hunter.pMultiShot) == SPELL_CAST_OK)
-                return;
-        }
-
-        if (m_spells.hunter.pAimedShot &&
-            CanTryToCastSpell(pVictim, m_spells.hunter.pAimedShot))
-        {
-            if (DoCastSpell(pVictim, m_spells.hunter.pAimedShot) == SPELL_CAST_OK)
                 return;
         }
 
@@ -1858,12 +1996,6 @@ void WorldBotAI::UpdateInCombatAI_Hunter()
             me->GetMotionMaster()->MoveDistance(pVictim, 25.0f);
             return;
         }
-
-        if (me->HasSpell(MB_SPELL_AUTO_SHOT) &&
-           !me->IsMoving() &&
-           (me->GetCombatDistance(pVictim) > 8.0f) &&
-           !me->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
-            me->CastSpell(pVictim, MB_SPELL_AUTO_SHOT, false);
     }
 }
 
@@ -1908,6 +2040,13 @@ void WorldBotAI::UpdateInCombatAI_Mage()
 {
     if (Unit* pVictim = me->GetVictim())
     {
+        if (m_spells.mage.pCombustion &&
+            CanTryToCastSpell(me, m_spells.mage.pCombustion))
+        {
+            if (DoCastSpell(me, m_spells.mage.pCombustion) == SPELL_CAST_OK)
+                return;
+        }
+
         if (m_spells.mage.pPyroblast &&
             m_spells.mage.pPresenceOfMind &&
             me->HasAura(m_spells.mage.pPresenceOfMind->Id) &&
@@ -2081,11 +2220,11 @@ void WorldBotAI::UpdateInCombatAI_Mage()
                 return;
         }
 
-        if (me->HasSpell(MB_SPELL_SHOOT_WAND) &&
+        if (me->HasSpell(WB_SPELL_SHOOT_WAND) &&
            !me->IsMoving() &&
            (me->GetPowerPercent(POWER_MANA) < 5.0f) &&
            !me->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
-            me->CastSpell(pVictim, MB_SPELL_SHOOT_WAND, false);
+            me->CastSpell(pVictim, WB_SPELL_SHOOT_WAND, false);
     }
 }
 
@@ -2195,7 +2334,7 @@ void WorldBotAI::UpdateInCombatAI_Priest()
     }
 
     if (m_spells.priest.pInnerFocus &&
-       (me->GetPowerPercent(POWER_MANA) < 50.0f) &&
+        (me->GetPowerPercent(POWER_MANA) < 50.0f) &&
         CanTryToCastSpell(me, m_spells.priest.pInnerFocus))
     {
         DoCastSpell(me, m_spells.priest.pInnerFocus);
@@ -2221,7 +2360,7 @@ void WorldBotAI::UpdateInCombatAI_Priest()
             }
         }
         else if (IsValidDispelTarget(me, m_spells.priest.pDispelMagic) &&
-                 CanTryToCastSpell(me, m_spells.priest.pDispelMagic))
+            CanTryToCastSpell(me, m_spells.priest.pDispelMagic))
         {
             if (DoCastSpell(me, m_spells.priest.pDispelMagic) == SPELL_CAST_OK)
                 return;
@@ -2241,7 +2380,7 @@ void WorldBotAI::UpdateInCombatAI_Priest()
             }
         }
         else if (IsValidDispelTarget(me, m_spells.priest.pAbolishDisease) &&
-                 CanTryToCastSpell(me, m_spells.priest.pAbolishDisease))
+            CanTryToCastSpell(me, m_spells.priest.pAbolishDisease))
         {
             if (DoCastSpell(me, m_spells.priest.pAbolishDisease) == SPELL_CAST_OK)
                 return;
@@ -2303,7 +2442,7 @@ void WorldBotAI::UpdateInCombatAI_Priest()
         }
 
         if (m_spells.priest.pManaBurn &&
-           (pVictim->GetPowerType() == POWER_MANA) &&
+            (pVictim->GetPowerType() == POWER_MANA) &&
             CanTryToCastSpell(pVictim, m_spells.priest.pManaBurn))
         {
             if (DoCastSpell(pVictim, m_spells.priest.pManaBurn) == SPELL_CAST_OK)
@@ -2324,20 +2463,29 @@ void WorldBotAI::UpdateInCombatAI_Priest()
             me->GetMotionMaster()->MoveChase(pVictim, 25.0f);
         }
 
-        if (m_spells.priest.pHolyNova &&
-            me->GetShapeshiftForm() == FORM_NONE &&
-            GetAttackersInRangeCount(10.0f) > 2 &&
-            CanTryToCastSpell(me, m_spells.priest.pHolyNova))
+        if (me->GetShapeshiftForm() == FORM_NONE)
         {
-            if (DoCastSpell(me, m_spells.priest.pHolyNova) == SPELL_CAST_OK)
-                return;
+            if (m_spells.priest.pHolyNova &&
+                GetAttackersInRangeCount(10.0f) > 2 &&
+                CanTryToCastSpell(me, m_spells.priest.pHolyNova))
+            {
+                if (DoCastSpell(me, m_spells.priest.pHolyNova) == SPELL_CAST_OK)
+                    return;
+            }
+
+            if (m_spells.priest.pSmite &&
+                CanTryToCastSpell(pVictim, m_spells.priest.pSmite))
+            {
+                if (DoCastSpell(pVictim, m_spells.priest.pSmite) == SPELL_CAST_OK)
+                    return;
+            }
         }
 
-        if (me->HasSpell(MB_SPELL_SHOOT_WAND) &&
-           !me->IsMoving() &&
-           (me->GetPowerPercent(POWER_MANA) < 5.0f) &&
-           !me->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
-            me->CastSpell(pVictim, MB_SPELL_SHOOT_WAND, false);
+        if (me->HasSpell(WB_SPELL_SHOOT_WAND) &&
+            !me->IsMoving() &&
+            (me->GetPowerPercent(POWER_MANA) < 5.0f) &&
+            !me->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
+            me->CastSpell(pVictim, WB_SPELL_SHOOT_WAND, false);
     }
 
 }
@@ -2380,10 +2528,21 @@ void WorldBotAI::UpdateOutOfCombatAI_Warlock()
         m_isBuffing = false;
     }
 
-    SummonPetIfNeeded();
-
     if (Unit* pVictim = me->GetVictim())
+    {
+        if (Pet* pPet = me->GetPet())
+        {
+            if (!pPet->GetVictim())
+            {
+                pPet->GetCharmInfo()->SetIsCommandAttack(true);
+                pPet->AI()->AttackStart(pVictim);
+            }
+        }
+
         UpdateInCombatAI_Warlock();
+    }
+    else
+        SummonPetIfNeeded();
 }
 
 void WorldBotAI::UpdateInCombatAI_Warlock()
@@ -2528,11 +2687,11 @@ void WorldBotAI::UpdateInCombatAI_Warlock()
                 return;
         }
 
-        if (me->HasSpell(MB_SPELL_SHOOT_WAND) &&
+        if (me->HasSpell(WB_SPELL_SHOOT_WAND) &&
            !me->IsMoving() &&
            (me->GetPowerPercent(POWER_MANA) < 5.0f) &&
            !me->GetCurrentSpell(CURRENT_AUTOREPEAT_SPELL))
-            me->CastSpell(pVictim, MB_SPELL_SHOOT_WAND, false);
+            me->CastSpell(pVictim, WB_SPELL_SHOOT_WAND, false);
     }
 }
 
@@ -2786,7 +2945,7 @@ void WorldBotAI::UpdateInCombatAI_Warrior()
         }
 
         if (m_spells.warrior.pHeroicStrike &&
-           (me->GetPower(POWER_RAGE) > 20) &&
+           (me->GetPower(POWER_RAGE) > 30) &&
             CanTryToCastSpell(pVictim, m_spells.warrior.pHeroicStrike))
         {
             if (DoCastSpell(pVictim, m_spells.warrior.pHeroicStrike) == SPELL_CAST_OK)
@@ -2802,6 +2961,51 @@ void WorldBotAI::UpdateInCombatAI_Warrior()
                 return;
         }
     }
+}
+
+bool WorldBotAI::ShouldEnterStealth() const
+{
+    if (me->IsMounted())
+        return false;
+
+    if (me->GetVictim() || me->InBattleGround() || me->IsFFAPvP())
+        return true;
+
+    if (me->GetHealthPercent() < 10.0f)
+        return true;
+
+    if (Player* pLeader = GetPartyLeader())
+    {
+        if (pLeader->IsDead() || pLeader->IsFeigningDeathSuccessfully() ||
+            pLeader->HasAuraType(SPELL_AURA_MOD_STEALTH) ||
+            pLeader->HasAuraType(SPELL_AURA_MOD_INVISIBILITY))
+            return true;
+    }
+
+    return false;
+}
+
+bool WorldBotAI::EnterStealthIfNeeded(SpellEntry const* pStealthSpell)
+{
+    if (pStealthSpell)
+    {
+        bool const shouldStealth = ShouldEnterStealth();
+
+        if (me->HasAura(pStealthSpell->Id))
+        {
+            if (!shouldStealth)
+                me->RemoveAurasDueToSpellByCancel(pStealthSpell->Id);
+        }
+        else
+        {
+            if (shouldStealth &&
+                CanTryToCastSpell(me, pStealthSpell) &&
+                DoCastSpell(me, pStealthSpell) == SPELL_CAST_OK)
+                return true;
+        }
+    }
+
+    return false;
 }
 
 void WorldBotAI::UpdateOutOfCombatAI_Rogue()
@@ -2820,8 +3024,7 @@ void WorldBotAI::UpdateOutOfCombatAI_Rogue()
             return;
     }
 
-    if (m_spells.rogue.pStealth &&
-        CanTryToCastSpell(me, m_spells.rogue.pStealth) &&
+    if (EnterStealthIfNeeded(m_spells.rogue.pStealth) &&
        !me->HasAura(AURA_WARSONG_FLAG) &&
        !me->HasAura(AURA_SILVERWING_FLAG) && !me->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_SANCTUARY))
     {
@@ -3121,8 +3324,7 @@ void WorldBotAI::UpdateOutOfCombatAI_Druid()
     }
     else if (me->GetShapeshiftForm() == FORM_CAT)
     {
-        if (m_spells.druid.pProwl &&
-            CanTryToCastSpell(me, m_spells.druid.pProwl) &&
+        if (EnterStealthIfNeeded(m_spells.druid.pProwl) &&
             !me->HasAura(AURA_WARSONG_FLAG) &&
             !me->HasAura(AURA_SILVERWING_FLAG))
         {
@@ -3250,7 +3452,7 @@ void WorldBotAI::UpdateInCombatAI_Druid()
     {
         if (me->HasUnitState(UNIT_STAT_ROOT) &&
             me->HasAuraType(SPELL_AURA_MOD_SHAPESHIFT))
-            me->RemoveAurasDueToSpellByCancel(me->GetAurasByType(SPELL_AURA_MOD_SHAPESHIFT).front()->GetId());
+            me->RemoveSpellsCausingAura(SPELL_AURA_MOD_SHAPESHIFT);
     }
 
     if (Unit* pVictim = me->GetVictim())
@@ -3589,7 +3791,7 @@ void WorldBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2,
     std::string respondsText;
     time_t gtime = sWorld.GetGameTime();
     int32 rnd = urand(2, 4);
-    if (BotLastChatTime < (gtime - rnd))
+    if (BotLastChatTime < (gtime/* - rnd*/))
     {
         // Chat Logic
         int32 verb_pos = -1;

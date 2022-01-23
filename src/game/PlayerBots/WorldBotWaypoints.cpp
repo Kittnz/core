@@ -793,7 +793,7 @@ bool WorldBotAI::StartNewPathFromBeginning()
             break;
         }
         default:
-            break;
+            return false;
     }
 
     for (const auto& pPath : *vPaths)
@@ -857,7 +857,7 @@ void WorldBotAI::StartNewPathFromAnywhere()
             break;
         }
         default:
-            break;
+            return;
     }
 
     for (const auto& pPath : *vPaths)

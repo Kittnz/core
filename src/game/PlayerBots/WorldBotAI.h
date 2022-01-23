@@ -97,6 +97,9 @@ public:
     Player* GetPartyLeader() const;
     void RunAwayFromTarget(Unit* pTarget);
 
+    bool ShouldEnterStealth() const;
+    bool EnterStealthIfNeeded(SpellEntry const* pStealthSpell);
+
     void OnJustRevived();
     void OnJustDied();
     void OnEnterBattleGround();
@@ -138,10 +141,15 @@ public:
     float m_y = 0.0f;
     float m_z = 0.0f;
     float m_o = 0.0f;
+    bool m_resetSpellData = false;
     bool m_wasDead = false;
     bool m_wasInBG = false;
     bool m_isBattleBot = false;
     bool m_isWorldBot = false;
+    bool m_isDualBot = false;
+    bool m_isDualBotReady = false;
+    bool m_isDualBotGetReady = false;
+    bool m_isDualBotInProgress = false;
 
     // Movement System
     void LoadDBWaypoints();
