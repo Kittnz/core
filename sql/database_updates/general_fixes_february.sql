@@ -675,3 +675,59 @@ UPDATE quest_template SET Title = 'An Epic Request', Details = 'Bring what I des
 UPDATE quest_template SET Title = 'Appealing to the Alliance', Details = 'Greetings, $N. I am Ranger-General Damilara Sunsorrow of the Alah\'thalas council.\n\nI\'ve heard of you and your efforts. You have my thanks. There\'s a sensitive matter to be discussed. But first, these missives must be delivered to the Alliance.\n\nAlah\'thalas is growing into a proper settlement, and we would like to formally join the Alliance. We will need the support of all the members of the Alliance to make this happen.\n\nPlease take these sealed missives to Sir Bolvar Fordragon, King Magni Bronzebeard, High Tinker Gelbin Mekkatorque, and Priestess Tyrande Whisperwind.\n\nOnce you receive their replies return to me.', Objectives = 'Take the sealed missives to all four Alliance leaders.', RequestItemsText = 'Did you get their replies?', OfferRewardText = 'It is as I feared... The night elves continue to hold their ancient grudge. Worry not, I had expected this.\n\nBut now that we have formal replies we can work on earning their trust.\n\nI hope I can count on you later. Keep helping us and I will enlist your aid when I can.' WHERE entry = 80750;
 UPDATE quest_template SET Title = 'Appealing to the Horde', Details = 'Ya\'ve been a blessing to our cause, $N, the efforts ya\'ve put in made us have a stable encampment and eased our diplomacy with da Horde.\n\nWe have one more favour to ask of ya, while Amani\'Alor grows under the Loa\'s blessings we did not join hands with da Horde yet, not officially. We be needing da support of all da Horde\'s chieftain and leaders and we will like ya to be our speaker.\n\nBring dese parchments to Warchief Thrall of Orgrimmar, High Chieftain Cairne Bloodhoof, he who stands atop Thunder Bluff; Vol\'jin of the Darkspear and Banshee Queen Sylvannas of the Forsaken.\n\nReturn to me with dey response.', Objectives = 'Deliver the letters and bring back the response to Wetnose.', RequestItemsText = 'Back already mon, with good news I hope?', OfferRewardText = 'Loa guide us, I was sure da Banshee will prove to be a thorn in our sides, no matter, we will show dat witch why da Revantusk deserves to fly the banner of da Horde.\n\nWe will call on ya when da time comes, I am sure ya won\'t fail us and hope to prove her wrong.' WHERE entry = 80800;
 UPDATE quest_template SET Title = 'Da Lord of Da Forest', Details = 'Da plans are set, $N all we need to do now is gain da Banshee\'s approval, it be no easy task but not impossible either.\n\nDa Revantusk have been patient for a long time mon, ya can\'t even start to imagine, we\'ve been without a leader, without a purpose for years but all of that ends now.\n\nTake da stairs and on da second floor of dis hut ya will finally meet our leader and da mastermind dat will aid us in convincing da Horde dat dey need us and we need dem.\n\nBe patient with our Warlord, he lived many years and went through much but no troll stands taller dan him.', Objectives = 'Speak to Zul\'jin in Amani\'Alor.', RequestItemsText = 'Da Revantusk will be da Horde\'s strongest force in time.', OfferRewardText = '<Zul\'jin\'s eye moves up and down, analyzing you from head to toe.>\n\nYa stand strong, $N, me people tell me ya\'ve greatly aided dem in settling dis establishment, ya be a person of interest and someone I personally took an interest in.' WHERE entry = 80801;
+-- diplay ID for NPC "Rainn Farred" changed:
+UPDATE creature_template SET display_id1 = 4943 WHERE entry = 60649;
+-- New NPCs "The Scourge" added:
+REPLACE INTO creature_template VALUES
+(60653, 370, 0, 0, 0, 'Skeletal Blacksmith', 'The Scourge', 0, 30, 30, 980, 980, 0, 0, 654, 290, 16388, 1, 0.857143, 0, 18, 5, 0, 0, 0.25, 64, 75, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
+(60654, 569, 570, 571, 0, 'Ghoul', 'The Scourge', 0, 30, 30, 980, 980, 0, 0, 654, 290, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0.25, 64, 75, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
+(60655, 1693, 0, 0, 0, 'Abomination', 'The Scourge', 0, 55, 55, 3398, 3398, 0, 0, 4500, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
+(60656, 10409, 0, 0, 0, 'Ordin Frostbane', 'The Scourge', 0, 35, 35, 1342, 1342, 0, 0, 1373, 290, 1, 1, 1.14286, 1.35, 18, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
+
+set @equip_template = 20072; set @weapon_1 = 54; set @weapon_2 = 0; set @creature = 60653;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20073; set @weapon_1 = 8546; set @weapon_2 = 0; set @creature = 60656;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, 0);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41086; set @magic_number = 60656;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'All that I am: anger, cruelty, vengeance, death and decay - I bestow upon those who welcome the cold embrace of undeath.\n\nGaze now upon the lands before us.\n\nThe Scarlet Crusade scurries to undo my work, while Light\'s Hope stands defiantly against us - for they are but a blemish upon the Plaguelands.\n\nThey must all be shown the price of their defiance.\n\nWhere you tread, blight will follow.\n\nGo now and claim these lands in the name of Ner\'zhul and The Lich King. ALL. MUST. DIE!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES (60653, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 2515, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 2519, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 2946, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 3030, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 3033, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 3107, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 3108, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 3131, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 3135, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 3137, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4470, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4471, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4497, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4498, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4604, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4605, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4606, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4607, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 4608, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 8766, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 8948, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 11284, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 11285, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 15326, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 15327, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60653, 16110, 0, 0, 0, 0);
+
