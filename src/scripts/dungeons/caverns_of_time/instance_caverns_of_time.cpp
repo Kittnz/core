@@ -641,7 +641,7 @@ struct infinite_whelpAI : public ScriptedAI
                             continue;
 
                         if (playerGroup->FindNearestCreature(m_creature->GetEntry(), 20, true) && playerGroup->GetPowerPercent(POWER_MANA) >= 1)
-                            playerGroup->ModifyPower(POWER_MANA, (playerGroup->GetMaxPower(POWER_MANA) * 0.005f));
+                            playerGroup->ModifyPower(POWER_MANA, -round(playerGroup->GetMaxPower(POWER_MANA) * 0.05f));
                     }
                 }
 
@@ -2764,10 +2764,11 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
                     rift->SetNativeScale(0.05f);
                     rift->ForcedDespawn(1500);
                     riftsClosed++;
+                    return true;
                     });
+
             }
         }
-        return true;
     }
 
     return false;
