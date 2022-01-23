@@ -761,3 +761,7 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Best deal
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = 1285;
 replace into broadcast_text (entry, Male_Text) values (1285, '%s\'s soft voice trails away into the mists, \"Know that I love you always...\"');
+-- Grammar fixes for quests "Saltspittle Raiders", "What Do You Rely On" and NPC "Hizzle":
+update creature_template set subname = 'Corrections Officer' where entry = 91249;
+update quest_template set endtext = 'That book meant quite a lot to me, I never thought I would see it again, thank you $N.' where entry = 40230;
+update quest_template set objectives = 'Bring 8 Shimmerweed to Master Vornal in Sen\'jin Village.' where entry = 820;
