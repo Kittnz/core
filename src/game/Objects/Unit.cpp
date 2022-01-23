@@ -5832,21 +5832,9 @@ void Unit::SetInCombatState(bool bPvP, Unit* pEnemy)
     if (!IsAlive())
         return;
 
-    if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER)
-    {
-        uint32 entry = GetEntry();
-
-        uint32 phaseQuestId = static_cast<Creature*>(this)->GetPhaseQuestId();
-        int statusAction = static_cast<Creature*>(this)->GetPhaseQuestAction(); // if 1 = visible if 0 = not-visible
-
-        if (phaseQuestId)
-        {
-            auto status = static_cast<Player*>(pEnemy)->GetQuestStatus(phaseQuestId);
-
-            if (status == QUEST_STATUS_NONE || status == QUEST_STATUS_INCOMPLETE && statusAction == 1) // do not attack player unless on quest and visible
-                return;
-        }
-    }
+    if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
+        if (!this->IsVisibleInGridForPlayer(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself()))
+            return;
 
     if (bPvP)
         m_CombatTimer = 5500;
