@@ -16,7 +16,7 @@ update creature_template set health_min = 18593, health_max = 19173 where entry 
 update creature_template set health_min = 21593, health_max = 22173 where entry = 92935;
 update creature_template set display_id1 = 4943 where entry = 60649;
 -- Zo'hjik update
-REPLACE INTO `creature_template` VALUES (65138, 14773, 0, 0, 0, 'Zo’hjik', NULL, 0, 60, 60, 61050, 61050, 0, 36510, 18000, 1495, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 448, 491, 0, 272, 1, 2000, 2000, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 14730, 0, 0, 0, 0, 0, 65007, 0, '');
+REPLACE INTO creature_template VALUES (65138, 14773, 0, 0, 0, 'Zo’hjik', NULL, 0, 60, 60, 61050, 61050, 0, 36510, 18000, 1495, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 448, 491, 0, 272, 1, 2000, 2000, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 14730, 0, 0, 0, 0, 0, 65007, 0, '');
 -- Quest "Tales of the Past" text updated:
 update quest_template set details = 'Sorrowguard Keep once held the Orcish Horde at bay for two weeks. Day after day, orcs attacked these walls and were repelled by brave defenders of the Kingdom of Azeroth. They battled from one end of the swamp all the way back to these very walls.\n\nMy mentor was one such hero who took the call and met the horde within these lands. As much of a hero he was, he gave his life so others had the chance to survive. When I was being trained, he carried a tome of great holy power from the Abbey of Northshire.\n\nI still believe the tome to be present here in the swamp, though in what condition, or where, I cannot be certain. I do know it lies west of Stonard, that should certainly narrow down the area if you wish to search in the name of the Light.' where entry = 40095;
 -- Drop chance the item Sawtooth leather raised to 40%:
@@ -748,3 +748,7 @@ REPLACE INTO creature_template VALUES
 (60657, 18003, 0, 0, 0, 'Krilana', NULL, 0, 7, 8, 137, 156, 0, 0, 278, 35, 0, 1, 1.14, 0, 18, 5, 0, 0, 1, 9, 13, 0, 58, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 13, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
 -- Grammar fix:
 update quest_template set objectives = 'Slay 10 Remnant Sentries at the Shatteridge Tower and return to Duke Nargelas.' where entry = 40097;
+-- Wedding rings:
+replace into item_template values 
+(81024, 4, 0, 'Dawnbreaker\' Wedding Ring', 'Not even death can break us apart.', 224, 1, 0, 1, 10000, 2500, 11, -1, -1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL),
+(81025, 4, 0, 'Morbide\' Wedding Ring', 'Not even death can break us apart.', 224, 1, 0, 1, 10000, 2500, 11, -1, -1, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
