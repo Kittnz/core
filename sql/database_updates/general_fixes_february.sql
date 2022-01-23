@@ -771,3 +771,5 @@ update creature_template set leash_range = 50 where entry in (92210,92211,92212)
 delete from creature_questrelation where quest in (8565,8566,8567,8568,8569,8570);
 delete from creature_involvedrelation where quest in (8565,8566,8567,8568,8569,8570);
 delete from quest_template where entry in (8565,8566,8567,8568,8569,8570);
+-- Rename damn weapon:
+update item_template set name = 'The Blackrock Slicer' where entry = 13285;
