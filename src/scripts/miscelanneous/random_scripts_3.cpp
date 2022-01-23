@@ -2883,7 +2883,10 @@ struct npc_zohjikAI : public ScriptedAI
         SPELL_ARCANE_BOLT = 25055,
         SPELL_LIGHTNING_BOLT = 26098,
         SPELL_BALL_LIGHTNING = 28299,
-        SPELL_VOID_BOLT = 21066
+        SPELL_VOID_BOLT = 21066,
+        SPELL_FINAL_BLAST = 20565,
+
+        SPELL_BERSERK = 26297
 
 
     };
@@ -2903,7 +2906,7 @@ struct npc_zohjikAI : public ScriptedAI
     {
         if (escortedPlayer)
         {
-            if (phase > 0 && phase < 4)
+            if (phase > 0 && phase < 5)
             {
                 escortedPlayer->AddAura(SPELL_ICE_BLOCK); // entirety of this phase the player is ice blocked
 
@@ -2968,6 +2971,8 @@ struct npc_zohjikAI : public ScriptedAI
 
                         int8 rand = irand(1, 5);
 
+                        m_creature->HandleEmote(11); // laugh
+
                         switch (rand)
                         {
                         case 1:
@@ -3004,7 +3009,6 @@ struct npc_zohjikAI : public ScriptedAI
 
                 break;
             }
-
             case 1:
             {
                 if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true)) 
@@ -3015,11 +3019,11 @@ struct npc_zohjikAI : public ScriptedAI
                         escortedPlayer->PlayDirectMusic(8920);
                         magister->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         magister->CastSpell(magister, 26638, true); // teleport spell
-                        //m_creature->GetMotionMaster()->
                         magister->PMonsterSay("Enough from you, %s. Stand still! I will take you in after I deal with this troll.", escortedPlayer->GetName());
 
                         DoAfterTime(escortedPlayer, 5 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->PMonsterSay("Keep ya ugly self away from me friend, elf!");
+                            m_creature->CastSpell(m_creature, SPELL_BERSERK, false);
                             });
                     }
 
@@ -3029,7 +3033,7 @@ struct npc_zohjikAI : public ScriptedAI
                         magister->Attack(m_creature, true);
                         });
 
-                    if (magister->GetHealthPercent() < 50.0f)
+                    if (magister->GetHealthPercent() < 75.0f)
                     {
                         doOnce = false;
                         phase++;
@@ -3045,15 +3049,16 @@ struct npc_zohjikAI : public ScriptedAI
                     {
                         doOnce = true;
 
-                        magister->PMonsterSay("Is this all you can do wretch?");
+                        magister->PMonsterSay("You Amani are nothing to our greater purpose!");
 
                         DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                            m_creature->PMonsterSay("Seems to be enough!");
+                            m_creature->PMonsterSay("How bout ya purpose dis spear in ya face?");
+                            m_creature->CastSpell(m_creature, SPELL_BERSERK, false);
                             });
 
                     }
 
-                    if (magister->GetHealthPercent() < 25.0f)
+                    if (magister->GetHealthPercent() < 50.0f)
                     {
                         doOnce = false;
                         phase++;
@@ -3069,19 +3074,17 @@ struct npc_zohjikAI : public ScriptedAI
                     {
                         doOnce = true;
 
-                        magister->PMonsterSay("Enough of this foolishment, I will end your life!");
+                        magister->PMonsterSay("Is this all you can do wretch?");
 
                         DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                            m_creature->PMonsterSay("Won’t ya just die already?");
+                            m_creature->PMonsterSay("Seems to be enough!");
+                            m_creature->CastSpell(m_creature, SPELL_BERSERK, false);
                             });
 
                     }
 
-                    if (!magister->GetHealthPercent() < 5.0f)
+                    if (magister->GetHealthPercent() < 25.0f)
                     {
-                        magister->PMonsterSay("Lost to ... a forest ... frog. I'm taking ... you with me ...");
-                        magister->CastSpell(m_creature, SPELL_VOID_BOLT, true);
-                        m_creature->CombatStop();
                         doOnce = false;
                         phase++;
                     }
@@ -3092,18 +3095,50 @@ struct npc_zohjikAI : public ScriptedAI
             {
                 if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
                 {
-                    DoAfterTime(escortedPlayer, 5 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
-                        magister->SetHealthPercent(0);
+                    if (!doOnce)
+                    {
+                        doOnce = true;
+
+                        magister->PMonsterSay("Enough of this foolishment, I will end your life!");
+
+                        DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                            m_creature->PMonsterSay("Won’t ya just die already?");
+                            });
+                    }
+
+                    if (magister->GetHealthPercent() < 5.0f)
+                    {
+                        magister->PMonsterSay("Lost to ... a forest ... frog. I'm taking ... you with me ...");
+                        doOnce = false;
+                        phase++;
+                    }
+                }
+                break;
+            }
+            case 5:
+            {
+                if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
+                {
+                    if (magister->GetHealthPercent() < 5.00f) // ensure he doesn't die too early.
+                        magister->SetHealthPercent(5.00f);
+
+                    DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                    magister->CastSpell(m_creature, SPELL_FINAL_BLAST, true);
+                        });
+
+                    DoAfterTime(escortedPlayer, 4 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                        m_creature->DealDamage(magister, magister->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
                         m_creature->SetHealthPercent(1);
+                        m_creature->AttackStop();
                         m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
                         });
 
-                    DoAfterTime(escortedPlayer, 10 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                    DoAfterTime(escortedPlayer, 9 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
                         m_creature->PMonsterSay("Dat -ugh-  ugly woman got me good. %s, Gi- give Zo’hjik a moment to res-", escortedPlayer->GetName());
                         });
 
-                    DoAfterTime(escortedPlayer, 14 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
-                        m_creature->SetHealthPercent(0);
+                    DoAfterTime(escortedPlayer, 16 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                        m_creature->DealDamage(m_creature, m_creature->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
                         m_creature->PMonsterEmote("Zo’hjik closes his eyes and falls on the ground, dead.");
                         });
 
@@ -3175,7 +3210,8 @@ bool ItemUseSpell_item_zhojik_whistle(Player* pPlayer, Item* pItem, const SpellC
                 escortNPC->MonsterMove(12.27f, 179.97f, 45.34f);
                 });
 
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [escortNPC = escortNPC, pPlayer = pPlayer]() {
+            DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [escortNPC = escortNPC, pPlayer = pPlayer]() {
+                escortNPC->HandleEmote(3);
                 escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
                 escortNPC->MonsterSay("We be collectin' dem heads today. Lead da way.");
                 });
@@ -3184,6 +3220,24 @@ bool ItemUseSpell_item_zhojik_whistle(Player* pPlayer, Item* pItem, const SpellC
         }
     }
     return false;
+}
+
+bool GossipHello_npc_zohjik_questComplete(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(65006) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60370))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        if (pCreature->IsQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    }
+    else if (pCreature->IsQuestGiver())
+            pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(92942, pCreature->GetGUID());
+
+    return true;
 }
 
 void AddSC_random_scripts_3()
@@ -3578,5 +3632,10 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "item_zhojik_whistle";
     newscript->pItemUseSpell = &ItemUseSpell_item_zhojik_whistle;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_zohjik_questComplete";
+    newscript->pGossipHello = &GossipHello_npc_zohjik_questComplete;
     newscript->RegisterSelf();
 }
