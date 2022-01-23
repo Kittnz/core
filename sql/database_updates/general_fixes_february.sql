@@ -21,3 +21,6 @@ REPLACE INTO `creature_template` VALUES (65138, 14773, 0, 0, 0, 'Zo’hjik', NUL
 update quest_template set details = 'Sorrowguard Keep once held the Orcish Horde at bay for two weeks. Day after day, orcs attacked these walls and were repelled by brave defenders of the Kingdom of Azeroth. They battled from one end of the swamp all the way back to these very walls.\n\nMy mentor was one such hero who took the call and met the horde within these lands. As much of a hero he was, he gave his life so others had the chance to survive. When I was being trained, he carried a tome of great holy power from the Abbey of Northshire.\n\nI still believe the tome to be present here in the swamp, though in what condition, or where, I cannot be certain. I do know it lies west of Stonard, that should certainly narrow down the area if you wish to search in the name of the Light.' where entry = 40095;
 -- Drop chance the item Sawtooth leather raised to 40%:
 update creature_loot_template set chanceorquestchance = -40 where entry = 1084;
+-- Drop chance the item "Mithril Ore" and "Solid Stone" raised to 40%:
+update creature_loot_template set chanceorquestchance = 0.02 where item = 3858;
+update creature_loot_template set chanceorquestchance = 0.02 where item = 7912;
