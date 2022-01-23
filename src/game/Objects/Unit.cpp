@@ -5832,7 +5832,7 @@ void Unit::SetInCombatState(bool bPvP, Unit* pEnemy)
     if (!IsAlive())
         return;
 
-    if (pEnemy->GetTypeId() == TYPEID_PLAYER)
+    if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER)
     {
         uint32 entry = GetEntry();
 
