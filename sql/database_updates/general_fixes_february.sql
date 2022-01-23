@@ -765,3 +765,5 @@ replace into broadcast_text (entry, Male_Text) values (1285, '%s\'s soft voice t
 update creature_template set subname = 'Corrections Officer' where entry = 91249;
 update quest_template set endtext = 'That book meant quite a lot to me, I never thought I would see it again, thank you $N.' where entry = 40230;
 update quest_template set objectives = 'Bring 8 Shimmerweed to Master Vornal in Sen\'jin Village.' where entry = 820;
+-- Setted leash range for NPCs "92210", "92211", "92212":
+update creature_template set leash_range = 50 where entry in (92210,92211,92212);
