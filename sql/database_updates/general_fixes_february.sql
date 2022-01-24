@@ -790,3 +790,5 @@ update item_template set duration = 0 where entry = 83259;
 replace into creature_loot_template values (2959, 60513, -100, 5, 1, 1, 0);
 -- Fixed Rotten Zombies spawn timers:
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91926;
+-- Temp. delete Horde quests to player's status is reset:
+delete from quest_template where entry in (80801, 65006, 65007);
