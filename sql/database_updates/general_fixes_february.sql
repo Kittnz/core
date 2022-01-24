@@ -788,3 +788,5 @@ update item_template set duration = 0 where entry = 83259;
 -- https://database.turtle-wow.org/?quest=40365 [A Trial of Peace]  can't be obtained.
 -- It probably should be obtained from https://database.turtle-wow.org/?npc=2959 [Prairie Stalker] 
 replace into creature_loot_template values (2959, 60513, -100, 5, 1, 1, 0);
+-- Fixed Rotten Zombies spawn timers:
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91926;
