@@ -784,4 +784,7 @@ REPLACE INTO creature_template VALUES (65140, 15517, 0, 0, 0, 'High Elven Magist
 REPLACE INTO creature_template VALUES (65141, 14773, 0, 0, 0, 'Zo’hjik', NULL, 65536, 60, 60, 40000, 40000, 0, 36510, 18000, 1495, 1, 1, 1.14286, 0, 20, 5, 0, 1, 1, 448, 491, 0, 272, 1, 2000, 2000, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EscortAI', 0, 3, 0, 0, 3, 14730, 0, 0, 0, 0, 0, 0, 1, 'npc_zohjik');
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/981
 update item_template set duration = 0 where entry = 83259;
-
+-- https://database.turtle-wow.org/?item=60513 [Prairie Stalker Pelt]  needed for quest 
+-- https://database.turtle-wow.org/?quest=40365 [A Trial of Peace]  can't be obtained.
+-- It probably should be obtained from https://database.turtle-wow.org/?npc=2959 [Prairie Stalker] 
+replace into creature_loot_template values (2959, 60513, -100, 5, 1, 1, 0);
