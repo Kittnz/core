@@ -792,3 +792,5 @@ replace into creature_loot_template values (2959, 60513, -100, 5, 1, 1, 0);
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91926;
 -- Temp. delete Horde quests to player's status is reset:
 delete from quest_template where entry in (80801, 65006, 65007);
+-- Make Uldum opening quests raid-flagged:
+update quest_template set questflags = 64 where entry in (40107, 40115);
