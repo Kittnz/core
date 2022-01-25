@@ -3102,7 +3102,7 @@ struct npc_zohjikAI : public ScriptedAI
                         magister->PMonsterSay("Enough of this foolishment, I will end your life!");
 
                         DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                            m_creature->PMonsterSay("Won’t ya just die already?");
+                            m_creature->PMonsterSay("Won't ya just die already?");
                             });
                     }
 
