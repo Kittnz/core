@@ -898,6 +898,7 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- GO "Auribloom" spawned:
+delete from gameobject where id = 2010876;
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
 (2010876, 0, -3847.3, -1811.18, 142.15, 0.34329, 0, 0, 0.170803, 0.985305, 300, 300, 100, 1, 0, 0),
 (2010876, 0, -3824.39, -1794.12, 144.826, 0.2233, 0, 0, 0.111418, 0.993774, 300, 300, 100, 1, 0, 0),
@@ -909,3 +910,21 @@ REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`
 (2010876, 0, -3900.72, -1975.45, 141.695, 4.39909, 0, 0, 0.808764, -0.588133, 300, 300, 100, 1, 0, 0),
 (2010876, 0, -3925.06, -1738.6, 142.163, 2.9064, 0, 0, 0.993093, 0.117327, 300, 300, 100, 1, 0, 0),
 (2010876, 0, -3958.88, -1695.77, 143.322, 2.56082, 0, 0, 0.958134, 0.286321, 300, 300, 100, 1, 0, 0);
+-- New Ostarius loot:
+delete from creature_loot_template where entry = 80935;
+replace into creature_loot_template values (80935, 83480, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (80935, 83481, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (80935, 83482, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (80935, 83483, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (80935, 83484, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (80935, 83485, 25, 2, 1, 1, 0);
+replace into creature_loot_template values (80935, 83486, 25, 2, 1, 1, 0);
+replace into creature_loot_template values (80935, 83487, 25, 2, 1, 1, 0);
+replace into creature_loot_template values (80935, 83488, 25, 2, 1, 1, 0);
+replace into creature_loot_template values (80935, 83235, 100, 3, 1, 1, 0);
+replace into creature_loot_template values (80935, 17962, 25, 4, 1, 1, 0);
+replace into creature_loot_template values (80935, 17963, 25, 4, 1, 1, 0);
+replace into creature_loot_template values (80935, 17969, 25, 4, 1, 1, 0);
+replace into creature_loot_template values (80935, 17965, 25, 4, 1, 1, 0);
+update creature_template set loot_id = 80935 where entry = 80935;
+update item_template set flags = 2048 where entry = 60103;
