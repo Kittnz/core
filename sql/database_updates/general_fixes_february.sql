@@ -928,3 +928,6 @@ replace into creature_loot_template values (80935, 17969, 25, 4, 1, 1, 0);
 replace into creature_loot_template values (80935, 17965, 25, 4, 1, 1, 0);
 update creature_template set loot_id = 80935 where entry = 80935;
 update item_template set flags = 2048 where entry = 60103;
+-- Fixed Armored Violet Raptor:
+replace into mount_spells values (50402, 46501);
+update item_template set spellid_1 = 46499 where entry = 50402;
