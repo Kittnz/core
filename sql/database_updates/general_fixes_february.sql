@@ -897,3 +897,15 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- GO "Auribloom" spawned:
+REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+(2010876, 0, -3847.3, -1811.18, 142.15, 0.34329, 0, 0, 0.170803, 0.985305, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3824.39, -1794.12, 144.826, 0.2233, 0, 0, 0.111418, 0.993774, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3817.72, -1818.3, 146.534, 4.45659, 0, 0, 0.791522, -0.611141, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3815.93, -1840.46, 144.112, 2.55411, 0, 0, 0.957167, 0.289536, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3831.36, -1889.85, 142.407, 1.90842, 0, 0, 0.815858, 0.578253, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3838.73, -1923.52, 142.477, 4.68227, 0, 0, 0.717674, -0.696379, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3878.42, -1937.1, 143.068, 4.09671, 0, 0, 0.888119, -0.459614, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3900.72, -1975.45, 141.695, 4.39909, 0, 0, 0.808764, -0.588133, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3925.06, -1738.6, 142.163, 2.9064, 0, 0, 0.993093, 0.117327, 300, 300, 100, 1, 0, 0),
+(2010876, 0, -3958.88, -1695.77, 143.322, 2.56082, 0, 0, 0.958134, 0.286321, 300, 300, 100, 1, 0, 0);
