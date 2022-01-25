@@ -931,3 +931,7 @@ update item_template set flags = 2048 where entry = 60103;
 -- Fixed Armored Violet Raptor:
 replace into mount_spells values (50402, 46501);
 update item_template set spellid_1 = 46499 where entry = 50402;
+-- Update dummy spell for sking change tokens:
+update item_template set spellid_1 = 50100 where name like '%Skin Change Token%';
+update item_template set spellid_1 = 50100 where entry = 50204;
+update item_template set spellid_1 = 50100 where entry = 83092;
