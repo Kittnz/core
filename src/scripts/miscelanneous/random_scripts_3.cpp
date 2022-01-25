@@ -2957,9 +2957,13 @@ struct npc_zohjikAI : public ScriptedAI
                 {
                     if (escortedPlayer->GetVictim())
                     {
-                        if (escortedPlayer->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
-                            return;
-
+                        if (m_creature->GetVictim())
+                            if (m_creature->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
+                            {
+                                m_creature->CombatStop();
+                                m_creature->ClearInCombat();
+                                return;
+                            }
                     Unit* target = m_creature->GetVictim();
 
                     m_creature->SetInCombatWithVictim(escortedPlayer->GetVictim());
