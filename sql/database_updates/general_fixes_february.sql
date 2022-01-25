@@ -794,3 +794,8 @@ update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id 
 delete from quest_template where entry in (80801, 65006, 65007);
 -- Make Uldum opening quests raid-flagged:
 update quest_template set questflags = 64 where entry in (40107, 40115);
+-- GO "The Dark-Rune Anvil" added:
+delete from gameobject_involvedrelation where quest = 40259;
+delete from gameobject_template where entry = 2010877;
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010877, 2, 166, 3, 'The Dark-Rune Anvil', 32, '');
+replace into gameobject_involvedrelation values (2010877,40259);
