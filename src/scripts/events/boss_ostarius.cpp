@@ -22,6 +22,7 @@ enum
     SPELL_ROOT_FOREVER = 31366,
     SPELL_TELEPORT_VISUAL = 26638,
 
+    NPC_PEDESTAL_BUNNY = 80969,
     MOB_ULDUM_CONSTRUCT = 80938,
     MOB_DEFENSE_SENTRY = 80939,
 
@@ -119,10 +120,10 @@ constexpr float sentryLocs[4][4] =
     {-9581.63f, -2728.22f, 12.5f, 4.91f},
 };
 
-std::vector<Unit*> constructSpawns;
-std::vector<Unit*> sentrySpawns;
-std::vector<GameObject*> portals;
-std::vector<GameObject*> devices;
+std::vector<ObjectGuid> constructSpawns;
+std::vector<ObjectGuid> sentrySpawns;
+std::vector<ObjectGuid> portals;
+std::vector<ObjectGuid> devices;
 
 bool isFrostPhase;
 
@@ -165,14 +166,14 @@ Player* GetRandomNearbyEnemyPlayer(Unit* self, const float& dist, uint8 attempt 
     return random->ToPlayer();
 }
 
-void DeletePortal(GameObject* go)
+void DeleteObject(WorldObject* object, std::vector<ObjectGuid> &list)
 {
-    // Find and delete self from portal vector.
-    std::vector<GameObject*>::const_iterator it = std::find(portals.begin(), portals.end(), go);
-    if (it != portals.end())
-        portals.erase(it);
+    // Find and delete self from vector.
+    std::vector<ObjectGuid>::const_iterator it = std::find(list.begin(), list.end(), object->GetObjectGuid());
+    if (it != list.end())
+        list.erase(it);
 
-    go->DeleteLater();
+    object->DeleteLater();
 }
 
 struct boss_ostariusAI : public ScriptedAI
@@ -257,21 +258,21 @@ struct boss_ostariusAI : public ScriptedAI
 
     void DespawnSummons()
     {
-        for (const auto& u : sentrySpawns)
-            if (u)
-                u->DeleteLater();
+        for (const auto& guid : sentrySpawns)
+            if (auto c = me->GetMap()->GetCreature(guid))
+                DeleteObject(c, sentrySpawns);
 
-        for (const auto& u : constructSpawns)
-            if (u)
-                u->DeleteLater();
+        for (const auto& guid : constructSpawns)
+            if (auto c = me->GetMap()->GetCreature(guid))
+                DeleteObject(c, constructSpawns);
 
-        for (const auto& g : portals)
-            if (g)
-                g->DeleteLater();
+        for (const auto& guid : portals)
+            if (auto g = me->GetMap()->GetGameObject(guid))
+                DeleteObject(g, portals);
 
-        for (const auto& d : devices)
-            if (d)
-                d->DeleteLater();
+        for (const auto& guid : devices)
+            if (auto g = me->GetMap()->GetGameObject(guid))
+                DeleteObject(g, devices);
     }
 
     void KilledUnit(Unit* victim) override
@@ -308,11 +309,9 @@ struct boss_ostariusAI : public ScriptedAI
         PlaySound(me, SOUND_DEATH, true);
         me->MonsterSendTextToZone(DEATH_TEXT, CHAT_MSG_MONSTER_YELL);
 
-        // Doesn't matter since boss is spawned from quest. This is just in case of server settings.
-        uint32 m_respawn_delay_Timer = 7 * DAY;
-        me->SetRespawnDelay(m_respawn_delay_Timer);
-        me->SetRespawnTime(m_respawn_delay_Timer);
-        me->SaveRespawnTime();
+        // Kill pedestal bunny. Acts as a respawn timer for boss (when can be summoned again).
+        if (Creature* bunny = me->FindNearestCreature(NPC_PEDESTAL_BUNNY, 300.f, true))
+            bunny->SetDeathState(JUST_DIED);
     }
 
     void MakeNormal()
@@ -474,9 +473,9 @@ struct boss_ostariusAI : public ScriptedAI
                 SpawnPortals();
 
                 // Spawn more next time.
-                numOfPortalsToSpawn += 2;
+                numOfPortalsToSpawn += 1;
 
-                SpawnPortals_Timer = 30 * IN_MILLISECONDS;
+                SpawnPortals_Timer = 40 * IN_MILLISECONDS;
             }
             else
                 SpawnPortals_Timer -= diff;
@@ -581,7 +580,7 @@ struct boss_ostariusAI : public ScriptedAI
                 squareZ,
                 0.0f
             );
-            portals.push_back(portal);
+            portals.push_back(portal->GetObjectGuid());
 
             portal->SetActiveObjectState(true);
         }
@@ -599,7 +598,7 @@ struct boss_ostariusAI : public ScriptedAI
                 sentryLocs[i][3]
             );
 
-            sentrySpawns.push_back(sentry);
+            sentrySpawns.push_back(sentry->GetObjectGuid());
         }
     }
 
@@ -622,7 +621,7 @@ struct boss_ostariusAI : public ScriptedAI
                 squareZ,
                 0.0f
             );
-            devices.push_back(device);
+            devices.push_back(device->GetObjectGuid());
         }
     }
 };
@@ -658,9 +657,7 @@ struct mob_uldum_constructAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        std::vector<Unit*>::const_iterator it = std::find(constructSpawns.begin(), constructSpawns.end(), me);
-        if (it != constructSpawns.end())
-            constructSpawns.erase(it);
+        DeleteObject(me, constructSpawns);
     }
 
     void EnterEvadeMode() override
@@ -786,7 +783,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
 
 bool GOOpen_go_uldum_portal(Player* pPlayer, GameObject* pGo)
 {
-    DeletePortal(pGo);
+    DeleteObject(pGo, portals);
 
     return true;
 }
@@ -836,18 +833,18 @@ struct go_uldum_portalAI : public GameObjectAI
 
                 // If we're repeatedly failing to find players, delete portal.
                 if (PlayerSelect_Fails >= 5)
-                    DeletePortal(me);
+                    DeleteObject(me, portals);
 
                 return;
             }
 
             PlayerSelect_Fails = 0;
-            constructSpawns.push_back(spawn);
+            constructSpawns.push_back(spawn->GetObjectGuid());
 
             spawn->SetInCombatWith(randomPlayer);
             spawn->GetMotionMaster()->MoveChase(randomPlayer);
 
-            Summon_Timer = urand(12000, 20000);
+            Summon_Timer = urand(16000, 25000);
         }
         else
             Summon_Timer -= diff;
@@ -900,17 +897,9 @@ struct go_uldum_suppressionAI : public GameObjectAI
         if (m_uiCheckTimer <= uiDiff)
         {
             if (m_bActive)
-            {
                 ApplyAura();
-            }
             else
-            {
-                me->DeleteLater();
-
-                std::vector<GameObject*>::const_iterator it = std::find(devices.begin(), devices.end(), me);
-                if (it != devices.end())
-                    devices.erase(it);
-            }
+                DeleteObject(me, devices);
 
             m_uiCheckTimer = 2000;
             return;

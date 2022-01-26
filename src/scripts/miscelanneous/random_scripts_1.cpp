@@ -6191,6 +6191,25 @@ enum UldumQuestItems
     ITEM_ULDUM_SECOND_PLATE = 60103,
 };
 
+constexpr auto PEDESTAL_BUNNY = 80969;
+
+bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
+{
+    if (!player)
+        return false;
+
+    // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
+    // way to control when the boss is eligible to be spawned again.
+    if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true))
+        player->PrepareQuestMenu(pGo->GetObjectGuid());
+    else
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
+    
+    return true;
+}
+
 bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Quest* pQuest)
 {
     if (!player)
@@ -6640,6 +6659,7 @@ void AddSC_random_scripts_1()
 
     newscript = new Script;
     newscript->Name = "GO_pedestal_of_uldum";
+    newscript->pGOGossipHello = &GossipHelloGO_pedestal_of_uldum;
     newscript->pGOQuestAccept = &QuestAcceptGO_pedestal_of_uldum;
     newscript->RegisterSelf();
 
