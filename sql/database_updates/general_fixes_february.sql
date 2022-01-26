@@ -899,7 +899,7 @@ values (@spell_list_id, @description,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- GO "Auribloom" spawned:
 delete from gameobject where id = 2010876;
-REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+REPLACE INTO gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES
 (2010876, 0, -3847.3, -1811.18, 142.15, 0.34329, 0, 0, 0.170803, 0.985305, 300, 300, 100, 1, 0, 0),
 (2010876, 0, -3824.39, -1794.12, 144.826, 0.2233, 0, 0, 0.111418, 0.993774, 300, 300, 100, 1, 0, 0),
 (2010876, 0, -3817.72, -1818.3, 146.534, 4.45659, 0, 0, 0.791522, -0.611141, 300, 300, 100, 1, 0, 0),
@@ -991,3 +991,51 @@ replace into creature_movement_template values (3436, 29, -3848.26, -1961.1, 92.
 replace into creature_movement_template values (3436, 30, -3834.72, -1967.38, 92.9835, 100, 0, 0, 0);
 replace into creature_movement_template values (3436, 31, -3815.43, -1961.57, 94.2241, 100, 0, 0, 0);
 replace into creature_movement_template values (3436, 32, -3804.81, -1954.99, 95.0912, 100, 0, 0, 0);
+-- Crocolisk loot exploit:
+update creature_template set loot_id = 1084 where entry = 1084;
+update creature_loot_template set chanceorquestchance = 60.3337 where entry = 1084 and item = 770;
+update creature_loot_template set chanceorquestchance = 0.0472 where entry = 1084 and item = 1529;
+update creature_loot_template set chanceorquestchance = 0.0787 where entry = 1084 and item = 1705;
+update creature_loot_template set chanceorquestchance = 0.0472 where entry = 1084 and item = 1725;
+update creature_loot_template set chanceorquestchance = 0.2 where entry = 1084 and item = 3357;
+update creature_loot_template set chanceorquestchance = 0.04 where entry = 1084 and item = 3358;
+update creature_loot_template set chanceorquestchance = 53.3449 where entry = 1084 and item = 3667;
+update creature_loot_template set chanceorquestchance = 0.06 where entry = 1084 and item = 3818;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3821;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3830;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3832;
+update creature_loot_template set chanceorquestchance = 0.063 where entry = 1084 and item = 3864;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3866;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3869;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3870;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3873;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 3874;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 4298;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 4350;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 4353;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 4414;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 4416;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 4417;
+update creature_loot_template set chanceorquestchance = 0.0472 where entry = 1084 and item = 4634;
+update creature_loot_template set chanceorquestchance = 0.1102 where entry = 1084 and item = 4636;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 5974;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 6045;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 7084;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 7086;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 7449;
+update creature_loot_template set chanceorquestchance = 0.0157 where entry = 1084 and item = 7909;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 7975;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 8387;
+update creature_loot_template set chanceorquestchance = 0.26 where entry = 1084 and item = 8839;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 10301;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 10604;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 11164;
+update creature_loot_template set chanceorquestchance = 0.02 where entry = 1084 and item = 11165;
+update creature_loot_template set chanceorquestchance = 41.8228 where entry = 1084 and item = 12037;
+update creature_loot_template set chanceorquestchance = 0.5 where entry = 1084 and item = 30031;
+update creature_loot_template set chanceorquestchance = 0.01 where entry = 1084 and item = 30032;
+update creature_loot_template set chanceorquestchance = 0.5 where entry = 1084 and item = 30033;
+update creature_loot_template set chanceorquestchance = 0.01 where entry = 1084 and item = 30034;
+update creature_loot_template set chanceorquestchance = 0.01 where entry = 1084 and item = 30057;
+update creature_loot_template set chanceorquestchance = 0.5 where entry = 1084 and item = 30058;
+update creature_loot_template set chanceorquestchance = 0.01 where entry = 1084 and item = 30059;
