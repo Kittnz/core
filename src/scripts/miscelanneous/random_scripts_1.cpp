@@ -457,7 +457,6 @@ bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCast
 
 bool ItemUseSpell_item_roleplay_effect(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-
     if (!pPlayer)
         return false;
 
@@ -6488,6 +6487,112 @@ bool GossipSelect_glyph_master(Player* pPlayer, Creature* pCreature, uint32 uiSe
     return true;
 }
 
+struct ZulJinMovementStages
+{
+    float x;
+    float y;
+    float z;
+    float o;
+};
+static ZulJinMovementStages const zjmovement[] =
+{
+    { 1879.89f, 220.57f, 60.10f, 3.56f }, // 0
+    { 1875.24f, 218.92f, 61.10f, 3.48f }, // 1
+    { 1300.997f, 338.57f, -60.08f, 0.00f } // 2 Sylvanas Room
+};
+
+bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 65008) // An audience with the Queen
+    {
+        pQuestGiver->PMonsterSay("I am ready for the audience.");
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
+        Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
+        GameObject* portal = pQuestGiver->SummonGameObject(4000001, zjmovement[2].x, zjmovement[2].y, zjmovement[2].z, 0);
+
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->GetMotionMaster()->MovePoint(0, zjmovement[0].x, zjmovement[0].y, zjmovement[0].z);
+            });
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->CastSpell(npc, 23017, false);
+            });
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->SummonGameObject(4000001, zjmovement[1].x, zjmovement[1].y, zjmovement[1].z, zjmovement[1].o, 0,0,0,0, 10000);
+            });
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver, guard1 = guard1, guard2 = guard2]() {
+            npc->GetMotionMaster()->MovePoint(0, zjmovement[1].x, zjmovement[1].y, zjmovement[1].z);
+            guard1->GetMotionMaster()->MovePoint(0, zjmovement[1].x, zjmovement[1].y, zjmovement[1].z);
+            guard2->GetMotionMaster()->MovePoint(0, zjmovement[1].x, zjmovement[1].y, zjmovement[1].z);
+            });
+        DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->CastSpell(npc, 26638, false);
+            });
+
+        //// TO DO
+        //// ADD Portal script to send NPCs to Sylvs room
+
+    }
+    return false;
+}
+
+//GameObjectAI* GetAI_go_zuljins_portal(GameObject* Obj) { return new go_zuljins_portal(Obj) };
+//
+//struct go_zuljins_portal : public GameObjectAI
+//{
+//    explicit go_scarlet_attack_trigger(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 1000; }
+//
+//    uint32 m_uiUpdateTimer;
+//
+//    void UpdateAI(uint32 const uiDiff) override
+//    {
+//        if (m_uiUpdateTimer < uiDiff)
+//        {
+//            std::list<Player*> players;
+//            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f, true, false);
+//            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+//            Cell::VisitWorldObjects(me, searcher, 10.0f);
+//            for (Player* pPlayer : players)
+//            {
+//                if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE &&
+//                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 0 ||
+//                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 0)
+//                {
+//                    GameObject* event_running = pPlayer->FindNearestGameObject(1000170, 30.0F);
+//                    if (!event_running)
+//                    {
+//                        pPlayer->SummonGameObject(1000170, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+//
+//                        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer]() {
+//                            Map* map = sMapMgr.FindMap(0);
+//                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+//                            player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+//                            });
+//                        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer]() {
+//                            Map* map = sMapMgr.FindMap(0);
+//                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+//                            player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+//                            });
+//                        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer]() {
+//                            Map* map = sMapMgr.FindMap(0);
+//                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+//                            Creature* vladeus_spawned = player->FindNearestCreature(50674, 30.0F);
+//                            if (!vladeus_spawned)
+//                                player->SummonCreature(50674, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS);
+//                            });
+//                    }
+//                    else return;
+//                }
+//            }
+//            m_uiUpdateTimer = 1000;
+//        }
+//        else m_uiUpdateTimer -= uiDiff;
+//    }
+//};
+
 void AddSC_random_scripts_1()
 {
     Script* newscript;
@@ -6573,6 +6678,12 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_zuljin";
     newscript->pGossipHello = &GossipHello_npc_zuljin;
     newscript->pGossipSelect = &GossipSelect_npc_zuljin;
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_zuljin;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "gob_zuljin_portal";
+    //newscript->GOGetAI = &GetAI_go_zuljin_portal;
     newscript->RegisterSelf();
 
     newscript = new Script;
