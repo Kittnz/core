@@ -935,3 +935,6 @@ update item_template set spellid_1 = 46499 where entry = 50402;
 update item_template set spellid_1 = 50100 where name like '%Skin Change Token%';
 update item_template set spellid_1 = 50100 where entry = 50204;
 update item_template set spellid_1 = 50100 where entry = 83092;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/977
+update item_template set stat_type1 = 4 where entry = 60435;
+update item_template set stat_type1 = 4 where entry = 60433;
