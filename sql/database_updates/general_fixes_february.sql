@@ -1744,3 +1744,5 @@ update item_template set inventory_type = 26 where entry = 83257;
 update npc_trainer set reqskillvalue = 200, reqlevel = 35 where spell = 12181;
 -- Wrong item "Stoley\'s Bottle" deleted from quest "Cuergo's Gold":
 update quest_template set srcitemid = 0, srcitemcount = 0 where entry = 2882;
+-- Spelling mistake fixed:
+update quest_template set details = 'This man continued to deal and swindle with me even after he brought down my crew, we spoke face to face many times. He killed Jade and took her from my life, we could have conquered the world our crew. I may not live in a palace on Tel\'abim, but I will still get the sweet justice that I have been longing for.\n\nWally Wisecrack is a goon of a human, who resides within Strahnbrad and was closely assosciated with those Syndicate fellows. Yeah the traitorous ones that sold their souls to the orcs, it seems its just in their blood, huh?\n\nFind him in Strahnbrad, kill him, and bring me his Large Looped Earring as proof.' where entry = 40226;
