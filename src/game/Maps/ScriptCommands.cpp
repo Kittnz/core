@@ -428,7 +428,7 @@ bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* so
     }
 
     if (script.summonCreature.scriptId)
-        ScriptsStart(sEventScripts, script.summonCreature.scriptId, pCreature, target);
+        ScriptsStart(sGenericScripts, script.summonCreature.scriptId, pCreature, target);
 
     return false;
 }
@@ -1240,7 +1240,7 @@ bool Map::ScriptCommand_StartScript(const ScriptInfo& script, WorldObject* sourc
     }
 
     if (chosenId)
-        ScriptsStart(sEventScripts, chosenId, source, target);
+        ScriptsStart(sGenericScripts, chosenId, source, target);
     else
         return ShouldAbortScript(script);
 
@@ -1933,7 +1933,7 @@ bool Map::ScriptCommand_StartScriptForAll(const ScriptInfo& script, WorldObject*
         }
 
         if (!script.startScriptForAll.objectEntry || (pWorldObject->GetEntry() == script.startScriptForAll.objectEntry))
-            ScriptsStart(sEventScripts, script.startScriptForAll.scriptId, pWorldObject, target);
+            ScriptsStart(sGenericScripts, script.startScriptForAll.scriptId, pWorldObject, target);
     }
     
     return false;
