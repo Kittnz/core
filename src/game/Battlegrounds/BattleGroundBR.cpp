@@ -74,7 +74,7 @@ void BattleGroundBR::AddPlayer(Player *plr)
     m_PlayerScores[plr->GetObjectGuid()] = sc;
 
     // When player is added, call this function to restore full hp/mana and reset cooldowns.
-    // plr->RemoveAllArenaSpellCooldown();
+    plr->RemoveAllArenaSpellCooldown();
 }
 
 void BattleGroundBR::RemovePlayer(Player* /*plr*/, ObjectGuid /*guid*/)
