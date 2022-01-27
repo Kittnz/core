@@ -1057,3 +1057,8 @@ update creature set movement_type = 1, wander_distance = 20 where id = 832;
 update creature set movement_type = 1, wander_distance = 20 where id = 832;
 update creature set movement_type = 1, wander_distance = 20 where id = 832;
 update creature set movement_type = 1, wander_distance = 20 where id = 832;
+-- Damage of NPC 91963 and 91964 redused, item 60340 renamed to "Saltsnap Tails", quest 40265 text updated:
+update creature_template set dmg_min = 87, dmg_max = 107 where entry = 91964;
+update creature_template set dmg_min = 89, dmg_max = 111 where entry = 91963;
+update item_template set name = 'Saltsnap Tails' where entry = 60340;
+update quest_template set details = 'If there is to be a chance for my people then I must conjure a great vision, to do as such will require materials from across the island. I ask of you to gather me the following items. 10 Basilisk Eyes from the Basilisks, 6 Crawler Pincers from the Crawlers, and 3 Deepsnap Tails from the crocolisks.\n\nOnce you have gotten these materials for me, I can begin to see what must be done.' where entry = 40265;
