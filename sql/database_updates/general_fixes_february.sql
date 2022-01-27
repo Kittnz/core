@@ -1726,7 +1726,7 @@ REPLACE INTO creature_loot_template VALUES (91848, 14047, 24.8136, 0, 1, 2, 0);
 -- Quest "The Tower of Lapidis X" started with correct quest item:
 update quest_template set srcitemid = 60302 where entry = 40303;
 -- Quest "Farseer Grimeye" text updated:
-update quest_template set details = 'The fields are clear, the peons seem happy and the productivity is already going way better than they used to.\n\nThat\'s exactly why I am sending you to another mission. You seem eager to aid and frankly the Farseer needs all the help she can get.\n\nShe\'s a cranky old orc, don\'t even for a second consider her frustration as weakness. She will task you with a harsh job but I do not doubt you will do well. Go now and give her this parchment.\n\nYou\'ll find her in the keep, north-east of here.' where entry = 70027;
+update quest_template set details = 'The fields are clear, the peons seem happy and the productivity is already going way better than they used to.\n\nThat\'s exactly why I am sending you to another mission. You seem eager to aid and frankly the Farseer needs all the help he can get.\n\nHe\'s a cranky old orc, don\'t even for a second consider her frustration as weakness. He will task you with a harsh job but I do not doubt you will do well. Go now and give him this parchment.\n\nYou\'ll find him in the keep, north-east of here.' where entry = 70027;
 -- NPC "Inkeeper Kauth" working correct alredy:
 update creature_template set script_name = '' where entry = 60652;
 -- Tirisfal worgens alredy skinnables:
