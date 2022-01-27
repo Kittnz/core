@@ -1735,3 +1735,6 @@ update creature_template set skinning_loot_id = 1924 where entry IN (91740,91760
 update quest_template set reworreqmoney = 5000 where entry = 40228;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/990
 UPDATE item_template SET sheath = 0 WHERE entry = 60131;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/264:
+update quest_template set prevquestid = 0 where entry = 60120;
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25, animprogress = 100, state = 1 where id = 1000389;
