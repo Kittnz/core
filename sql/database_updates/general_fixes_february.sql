@@ -1729,3 +1729,6 @@ update quest_template set srcitemid = 60302 where entry = 40303;
 update quest_template set details = 'The fields are clear, the peons seem happy and the productivity is already going way better than they used to.\n\nThat\'s exactly why I am sending you to another mission. You seem eager to aid and frankly the Farseer needs all the help she can get.\n\nShe\'s a cranky old orc, don\'t even for a second consider her frustration as weakness. She will task you with a harsh job but I do not doubt you will do well. Go now and give her this parchment.\n\nYou\'ll find her in the keep, north-east of here.' where entry = 70027;
 -- NPC "Inkeeper Kauth" working correct alredy:
 update creature_template set script_name = '' where entry = 60652;
+-- Tirisfal worgens alredy skinnables:
+update creature_template set skinning_loot_id = 1924 where entry IN (91740,91760,91739,91741);
+
