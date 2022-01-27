@@ -1733,3 +1733,5 @@ update creature_template set script_name = '' where entry = 60652;
 update creature_template set skinning_loot_id = 1924 where entry IN (91740,91760,91739,91741);
 -- Money reward for quest "Captain Barlgruf" added:
 update quest_template set reworreqmoney = 5000 where entry = 40228;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/990
+UPDATE item_template SET sheath = 0 WHERE entry = 60131;
