@@ -1071,6 +1071,7 @@ extern ScriptMapMap sSpellScripts;
 extern ScriptMapMap sCreatureSpellScripts;
 extern ScriptMapMap sGameObjectScripts;
 extern ScriptMapMap sEventScripts;
+extern ScriptMapMap sGenericScripts;
 extern ScriptMapMap sGossipScripts;
 extern ScriptMapMap sCreatureMovementScripts;
 extern ScriptMapMap sCreatureAIScripts;
@@ -1352,6 +1353,7 @@ class ScriptMgr
         void LoadEventScripts();
         void LoadSpellScripts();
         void LoadCreatureSpellScripts();
+        void LoadGenericScripts();
         void LoadGossipScripts();
         void LoadCreatureMovementScripts();
         void LoadCreatureEventAIScripts();
@@ -1450,6 +1452,7 @@ class ScriptMgr
         bool OnQuestAcceptByScript(Player* pPlayer, Quest const* pQuest);
         bool OnQuestRewardedByScript(Player* pPlayer, Quest const* pQuest);
         void RegisterQuestInstance(Script* pQuestScript, Player* pPlayer);
+        void CollectPossibleGenericIds(std::set<uint32>& eventIds);
         void CollectPossibleEventIds(std::set<uint32>& eventIds);
         void LoadScripts(ScriptMapMap& scripts, const char* tablename);
         void CheckScriptTexts(ScriptMapMap const& scripts);
