@@ -1731,4 +1731,5 @@ update quest_template set details = 'The fields are clear, the peons seem happy 
 update creature_template set script_name = '' where entry = 60652;
 -- Tirisfal worgens alredy skinnables:
 update creature_template set skinning_loot_id = 1924 where entry IN (91740,91760,91739,91741);
-
+-- Money reward for quest "Captain Barlgruf" added:
+update quest_template set reworreqmoney = 5000 where entry = 40228;
