@@ -1723,4 +1723,5 @@ REPLACE INTO creature_loot_template VALUES (91848, 13446, 2.74, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91848, 15732, 3.9, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91848, 8952, 4.7716, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91848, 14047, 24.8136, 0, 1, 2, 0);
--- 
+-- Quest "The Tower of Lapidis X" started with correct quest item:
+update quest_template set srcitemid = 60302 where entry = 40303;
