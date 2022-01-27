@@ -191,6 +191,7 @@ set (game_SRCS
     PlayerBots/BattleBotAI.cpp
     PlayerBots/BattleBotWaypoints.cpp
     PlayerBots/WorldBotAI.cpp
+    PlayerBots/WorldBotCombatAI.cpp
     PlayerBots/WorldBotWaypoints.cpp
     PlayerBots/PlayerBotAI.cpp
     PlayerBots/PlayerBotMgr.cpp

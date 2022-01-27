@@ -7,6 +7,66 @@
 #include "PartyBotAI.h"
 #include "PlayerBotMgr.h"
 
+enum WorldBotSpells
+{
+    WB_SPELL_FOOD = 1131,
+    WB_SPELL_DRINK = 1137,
+    WB_SPELL_AUTO_SHOT = 75,
+    WB_SPELL_SHOOT_WAND = 5019,
+    WB_SPELL_HONORLESS_TARGET = 2479,
+    WB_SPELL_TAME_BEAST = 13481,
+
+    WB_SPELL_SUMMON_IMP = 688,
+    WB_SPELL_SUMMON_VOIDWALKER = 697,
+    WB_SPELL_SUMMON_FELHUNTER = 691,
+    WB_SPELL_SUMMON_SUCCUBUS = 712,
+
+    WB_SPELL_MOUNT_40_HUMAN = 470,
+    WB_SPELL_MOUNT_40_NELF = 10787,
+    WB_SPELL_MOUNT_40_DWARF = 6896,
+    WB_SPELL_MOUNT_40_GNOME = 17456,
+    WB_SPELL_MOUNT_40_TROLL = 10795,
+    WB_SPELL_MOUNT_40_ORC = 581,
+    WB_SPELL_MOUNT_40_TAUREN = 18363,
+    WB_SPELL_MOUNT_40_UNDEAD = 8980,
+
+    WB_SPELL_MOUNT_60_HUMAN = 22717,
+    WB_SPELL_MOUNT_60_NELF = 22723,
+    WB_SPELL_MOUNT_60_DWARF = 22720,
+    WB_SPELL_MOUNT_60_GNOME = 22719,
+    WB_SPELL_MOUNT_60_TROLL = 22721,
+    WB_SPELL_MOUNT_60_ORC = 22724,
+    WB_SPELL_MOUNT_60_TAUREN = 22718,
+    WB_SPELL_MOUNT_60_UNDEAD = 22722,
+
+    WB_SPELL_MOUNT_40_PALADIN = 13819,
+    WB_SPELL_MOUNT_60_PALADIN = 23214,
+
+    WB_SPELL_MOUNT_40_WARLOCK = 5784,
+    WB_SPELL_MOUNT_60_WARLOCK = 23161,
+
+    WB_PET_WOLF = 565,
+    WB_PET_CAT = 681,
+    WB_PET_BEAR = 822,
+    WB_PET_CRAB = 831,
+    WB_PET_GORILLA = 1108,
+    WB_PET_BIRD = 1109,
+    WB_PET_BOAR = 1190,
+    WB_PET_BAT = 1554,
+    WB_PET_CROC = 1693,
+    WB_PET_SPIDER = 1781,
+    WB_PET_OWL = 1997,
+    WB_PET_STRIDER = 2322,
+    WB_PET_SCORPID = 3127,
+    WB_PET_SERPENT = 3247,
+    WB_PET_RAPTOR = 3254,
+    WB_PET_TURTLE = 3461,
+    WB_PET_HYENA = 4127,
+
+    WB_ITEM_ARROW = 2512,
+    WB_ITEM_BULLET = 2516,
+};
+
 struct WorldBotChatData
 {
     WorldBotChatData(uint32 guid, uint32 type, std::string chat) : m_guid(guid), m_type(type), m_chat(chat) {}
@@ -14,16 +74,15 @@ struct WorldBotChatData
     std::string m_chat = "";
 };
 
-struct WorldBotChatRespondsQueue
+struct BotChatRespondsQueue
 {
-    WorldBotChatRespondsQueue(ObjectGuid originguid, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name) : m_originguid(originguid), m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName), m_name(name) {}
+    BotChatRespondsQueue(ObjectGuid originguid, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName) : m_originguid(originguid), m_type(type), m_guid1(guid1), m_guid2(guid2), m_msg(msg), m_chanName(chanName) {}
     ObjectGuid m_originguid;
     uint32 m_type;
     uint32 m_guid1;
     uint32 m_guid2;
     std::string m_msg;
     std::string m_chanName;
-    std::string m_name;
 };
 
 enum WorldBotChatDataType
@@ -53,6 +112,19 @@ enum WorldBotWsgWaitSpot
     MB_WSG_WAIT_SPOT_RIGHT
 };  
 
+enum WorldBotTasks
+{
+    TASK_ROAM, // Follow waypoint path
+    TASK_EXPLORE, // Go to points of interest 
+    TASK_DUAL, // Is dualer at the gates of a big city
+    TASK_TRADE, // Looking to craft or auction house stuff
+    TASK_LFG, // Wants to do dungeons for its level
+    TASK_QUEST, // Goes questing
+    TASK_PROTECTOR, // Moves to conflicted area's or zones
+    TASK_FIRST = TASK_ROAM,
+    TASK_LAST = TASK_PROTECTOR
+};
+
 typedef std::vector<std::string> Speech;
 
 class WorldBotAI : public CombatBotBaseAI
@@ -64,6 +136,7 @@ public:
     {
         m_updateTimer.Reset(2000);
         m_updateMoveTimer.Reset(1000);
+        m_updateResurrectTimer.Reset(1000);
         m_updateChatTimer.Reset(2000);
         BotLastChatTime = sWorld.GetGameTime();
     }
@@ -131,7 +204,9 @@ public:
     uint8 m_battlegroundId = 0;
     ShortTimeTracker m_updateTimer;
     ShortTimeTracker m_updateMoveTimer;
+    ShortTimeTracker m_updateResurrectTimer;
     bool m_allowedToMove = true;
+    bool m_resurrect = false;
     ObjectGuid m_leaderGuid;
     uint8 m_race = 0;
     uint8 m_class = 0;
@@ -153,6 +228,7 @@ public:
 
     // Movement System
     void LoadDBWaypoints();
+    void UpdateMovement();
     void UpdateWaypointMovement();
     void DoGraveyardJump();
     void MoveToNextPoint();
@@ -169,16 +245,25 @@ public:
     uint8 m_waitingSpot = MB_WSG_WAIT_SPOT_SPAWN;
 
     // Chat System
-    std::vector<WorldBotChatRespondsQueue> m_chatWorldRespondsQueue;
-    std::vector<WorldBotChatRespondsQueue> m_chatPlayerRespondsQueue;
+    std::vector<BotChatRespondsQueue> m_chatGeneralRespondsQueue;
+    std::vector<BotChatRespondsQueue> m_chatTradeRespondsQueue;
+    std::vector<BotChatRespondsQueue> m_chatLFGRespondsQueue;
+    std::vector<BotChatRespondsQueue> m_chatWorldRespondsQueue;
+    std::vector<BotChatRespondsQueue> m_chatWhisperPlayerRespondsQueue;
+    std::vector<BotChatRespondsQueue> m_chatSayYellPlayerRespondsQueue;
     void LoadBotChat();
-    void BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName, std::string name);
-    void HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
-    void HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName, std::string name);
+    void BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName);
+    void HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
+    void HandleGeneralChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
+    void HandleTradeChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
+    void HandleLFGChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
+    void HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 guid2, std::string msg, std::string chanName);
     ShortTimeTracker m_updateChatTimer;
     //uint8 m_BotChatCount = 0;
     time_t BotLastChatTime;
 
+    // Task System
+    uint8 currentTaskID = 0;
 };
 
 #endif
