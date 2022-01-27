@@ -1738,3 +1738,5 @@ UPDATE item_template SET sheath = 0 WHERE entry = 60131;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/264:
 update quest_template set prevquestid = 0 where entry = 60120;
 update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25, animprogress = 100, state = 1 where id = 1000389;
+
+update item_template set inventory_type = 26 where entry = 83257;
