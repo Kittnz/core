@@ -1742,3 +1742,5 @@ update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25, animprogress
 update item_template set inventory_type = 26 where entry = 83257;
 -- Artisan Tailoring need player level 35 for learning:
 update npc_trainer set reqskillvalue = 200, reqlevel = 35 where spell = 12181;
+-- Wrong item "Stoley\'s Bottle" deleted from quest "Cuergo's Gold":
+update quest_template set srcitemid = 0, srcitemcount = 0 where entry = 2882;
