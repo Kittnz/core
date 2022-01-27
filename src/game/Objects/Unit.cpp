@@ -10532,23 +10532,23 @@ void Unit::RemoveAllArenaSpellCooldown()
 {
     auto excludedSpellIds = { 12312, 12803, 20230, 1719, 633, 2800, 10310, 20608 };
 
-    for (auto itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end();)
+    SpellCooldowns::iterator itr, next;
+    for (itr = m_spellCooldowns.begin(); itr != m_spellCooldowns.end(); itr = next)
     {
-        if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr->first) != excludedSpellIds.end())
-            ++itr;
+        next = itr;
+        ++next;
 
         auto spellEntry = sSpellMgr.GetSpellEntry(itr->first);
 
-        if (spellEntry && spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS
-            && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS)
+        if (spellEntry)
         {
-            itr = m_spellCooldowns.erase(itr);
+            bool dontRemove = false;
+            if (std::find(excludedSpellIds.begin(), excludedSpellIds.end(), itr->first) != excludedSpellIds.end())
+                dontRemove = true;
 
-            if (Player* player = GetAffectingPlayer())
-                player->SendClearCooldown(spellEntry->Id, this);
+            if (spellEntry->RecoveryTime < 10 * MINUTE * IN_MILLISECONDS && spellEntry->CategoryRecoveryTime < 10 * MINUTE * IN_MILLISECONDS && !dontRemove)
+                RemoveSpellCooldown(spellEntry->Id, true);
         }
-        else
-            ++itr;
     }
 }
 
