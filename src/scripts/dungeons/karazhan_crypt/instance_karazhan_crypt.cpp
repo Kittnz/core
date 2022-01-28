@@ -213,7 +213,7 @@ bool GOHello_necrotic_rune(Player* pPlayer, GameObject* pGo)
 
         switch (pGo->GetEntry())
         {
-        case 177302: alarus_trigger->MonsterYell("Those urns hold the remains of heroes of many good deeds, much better than you adventurer types will ever be."); break;
+        case 177302: alarus_trigger->MonsterYell("Those runes hold the remains of heroes of many good deeds, much better than you adventurer types will ever be."); break;
         case 177306: alarus_trigger->MonsterYell("Do my words fall on deaf ears? Or are you just doing this out of spite?"); break;
         case 177308: alarus_trigger->MonsterYell("Is this why you've come here, to defile sacred graves in search of precious baubles?"); break;
         }
