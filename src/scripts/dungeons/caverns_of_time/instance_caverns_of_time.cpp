@@ -2099,10 +2099,16 @@ struct chromie_boss_cotAI : public ScriptedAI
         m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
 
         for (auto i = 0; i < timeRifts.size(); ++i) // remove rifts
-            timeRifts[i]->AddObjectToRemoveList();
+        {
+            if (timeRifts[i])
+                timeRifts[i]->AddObjectToRemoveList();
+        }
 
         for (auto i = 0; i < gobCleanuplist.size(); ++i) // remove walls for progression
-            gobCleanuplist[i]->AddObjectToRemoveList();
+        {
+            if (gobCleanuplist[i])
+                gobCleanuplist[i]->AddObjectToRemoveList();
+        }
 
         timeRifts.clear();
         gobCleanuplist.clear();
