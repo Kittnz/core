@@ -1755,3 +1755,5 @@ replace into gameobject (id, map, position_x, position_y, position_z, orientatio
 replace into gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES (2010868, 1, 2672.85, -5297.93, 76.7698, 4.0829, 0, 0, 0.891273, -0.453468, 300, 300, 100, 1, 0, 0);
 -- RP: Dreadlord illusion:
 replace into item_template values (50435, 12, 0, 'Illusion: Dreadlord', 'This disguise will work until logout.', 36521, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_illusion');
+-- Changing item description: Sin'rek
+UPDATE item_template SET description = "Deep within, you sense an untameable hunger to inflict destruction." WHERE entry = 81060;
