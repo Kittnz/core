@@ -2656,6 +2656,11 @@ void AddSC_random_scripts_0()
     newscript->RegisterSelf();
 
     newscript = new Script;
+    newscript->Name = "npc_pats_firework_guy";
+    newscript->GetAI = &GetAI_npc_pats_firework_guy;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
     newscript->Name = "npc_arcanite_dragonling";
     newscript->GetAI = &GetAI_npc_arcanite_dragonling;
     newscript->RegisterSelf();
