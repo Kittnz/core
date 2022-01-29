@@ -1,0 +1,1 @@
+DELETE FROM npc_vendor WHERE entry = 15864 AND item NOT IN (21713);
