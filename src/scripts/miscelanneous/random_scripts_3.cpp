@@ -3244,9 +3244,39 @@ bool GossipHello_npc_zohjik_questComplete(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
+bool GOHello_mournful_apparition_atack(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010878)
+    {
+        if (pPlayer->GetQuestStatus(40370) == QUEST_STATUS_INCOMPLETE)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Take Tattered Necklace.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30017, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_mournful_apparition_atack(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(60517, 1);
+        pGo->SummonCreature(60658, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ()+2, pPlayer->GetOrientation()+3.14, TEMPSUMMON_CORPSE_DESPAWN);
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "mournful_apparition_atack";
+    newscript->pGOHello = &GOHello_mournful_apparition_atack;
+    newscript->pGOGossipSelect = &GOSelect_mournful_apparition_atack;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_waya_tallgrain";

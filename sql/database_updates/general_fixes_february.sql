@@ -1758,3 +1758,34 @@ replace into gameobject (id, map, position_x, position_y, position_z, orientatio
 replace into item_template values (50435, 12, 0, 'Illusion: Dreadlord', 'This disguise will work until logout.', 36521, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_illusion');
 -- Changing item description: Sin'rek
 UPDATE item_template SET description = "Deep within, you sense an untameable hunger to inflict destruction." WHERE entry = 81060;
+
+-- Krilana's magnificent Quest --
+delete from quest_template where entry = 40370;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40370,2,409,53,45,0,0,'Krilana\'s magnificent Quest','Hello! You look strong! I need the help of someone strong. I am Krilana. Mama Eliza is taking care of me because my real mom died. She told me that my mother was the only survivor that managed to get to Caelan\'s rest. In one of her stories, mama mentioned a necklace that my papa gave to my real mom but that it was lost in the wreckage.\n\nExpect for mama\'s story I have nothing to remember my parents. Could, could you please look for it? I heard that it was pretty and that it looked like the sun! I wanted to go and look for it myself, but mama won\'t let me, she says that there are ghosts there.','Search the crates in High elven wrecks by the northwestern coast of Gilijim Isle for the Tattered Necklace. Put the mournful apparition to rest.','So? Did you find anything?','You found it! Thank you, thank you, thank you! Wooooah, it really looks like a sun! You\'re my new best friend! There aren\'t any children here besides me, so I feel lonely sometimes.\n\nBut with this necklace, I can be brave like my mom and dad. They were sailors, but I want to become a Marine just like mama Eliza! <She pouts> But uncle Hardinus says that I still have a long way to go before I can enlist.',60517,1,0,0,0,0,0,0,60658,1,0,0,0,0,0,0,0,0,4840,6784,1011,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60657, 40370);
+replace into creature_involvedrelation (id, quest) values (60657, 40370);
+
+update creature_template set npc_flags = 2 where entry = 60657;
+
+REPLACE INTO creature_template VALUES
+(60658, 10381, 0, 0, 0, 'Mournful Apparition', NULL, 0, 51, 51, 2600, 2600, 0, 0, 2500, 19, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 89, 111, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 6, 0, 60658, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93, 127, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60517,31604,'Tattered Necklace',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'This silver necklace has been tattered by the elements, there are small sapphire stones adorned within and little twisted spikes resembling the rays of the sun protrude from the circular body of the necklace.',0);
+
+delete from gameobject_template where entry = 2010878;
+replace into gameobject_template (entry, type, displayid, size, name, flags, phase_quest_id, script_name) values
+(2010878, 2, 24107, 1, 'Crate in High Elven Wrecks', 32, 0, 'mournful_apparition_atack');
+
+delete from gameobject where id = 2010878;
+REPLACE INTO gameobject (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+(2010878, 0, -13562.4, 3282.9, 1.82532, 2.39112, 0, 0, 0.93042, 0.366494, 300, 300, 100, 1, 0, 0);
+
+set @gossip_menu_id = 41087; set @magic_number = 30017;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There seems to be something in this crate.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+
