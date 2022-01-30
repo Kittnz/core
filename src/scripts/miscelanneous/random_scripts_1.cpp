@@ -4833,7 +4833,10 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
             });
         }
         else
-            pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+            if (!pPlayer->FindNearestCreature(81041, 15.0F))
+            {
+                pGo->SummonCreature(81041, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+            }
         return true;
     }
     else
