@@ -1788,4 +1788,7 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There see
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+REPLACE INTO creature_template_addon VALUES
+(60658, 0, 0, 0, 0, 0, 0, 9617);
+
 
