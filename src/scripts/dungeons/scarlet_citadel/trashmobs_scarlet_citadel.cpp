@@ -66,11 +66,11 @@ struct npc_areatriggerAI : public ScriptedAI
 
     //ScriptedInstance* m_pInstance;
 
-    bool b_IsTrashSpawned = false;
+    bool b_IsTrashSpawned{ false };
 
-    uint16 ui_CheckPulse = 500;
-    uint8 ui_TrashMob = 38 + 1;
-    uint8 ui_ITR = 0;
+    uint16 ui_CheckPulse{ 500 };
+    uint8 ui_TrashMob{(38 + 1)};
+    uint8 ui_ITR{};
 
     void Reset() override
     {
@@ -82,7 +82,7 @@ struct npc_areatriggerAI : public ScriptedAI
     {
         b_IsTrashSpawned = true;
 
-        for (; ui_ITR < ui_TrashMob; ui_ITR++)
+        for ( ; ui_ITR < ui_TrashMob; ++ui_ITR)
         {
             m_creature->SummonCreature(ScarletCitadelUnit::NPC_FIRST_WING_TRASH, vf_SpawnPoint[0].m_fX, vf_SpawnPoint[0].m_fY, vf_SpawnPoint[0].m_fZ, vf_SpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
         }
@@ -96,11 +96,11 @@ struct npc_areatriggerAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(uint32 const ui_Diff) override
+    void UpdateAI(const uint32 ui_Diff) override
     {
         if (ui_CheckPulse < ui_Diff && !b_IsTrashSpawned)
         {
-            Map::PlayerList const& list = m_creature->GetMap()->GetPlayers();
+            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
             for (const auto& i : list)
             {
                 if (i.getSource()->IsInRange3d(151.724518f, 2.139748f, 18.007f, 0.0f, 7.0f))
