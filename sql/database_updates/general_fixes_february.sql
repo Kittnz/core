@@ -1790,5 +1790,9 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 REPLACE INTO creature_template_addon VALUES
 (60658, 0, 0, 0, 0, 0, 0, 9617);
-
-
+-- New gossip for NPC "Don Pompa":
+set @gossip_menu_id = 41088; set @magic_number = 30018;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The dock here? Well you could catch the ship that used to sail to that Night Elf place. What\'s it\'s name? Uhh Auberdine I think.\n\nAye. You better try Stormwind City Harbor. At least I heard people travel from Stormwind nowadays. I don\'t really know for sure, I just load and unload stuff.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = 41088 where entry = 12657;
