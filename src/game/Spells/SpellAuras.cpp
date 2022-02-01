@@ -6115,9 +6115,9 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 }
             }
 
-            // Improved Drain Mana (soul siphon now)
-            auto improvedManaDrain1 = pCaster->GetAura(45913, EFFECT_INDEX_0); // CUSTOM replaced 17864 for soul siphon
-            auto improvedManaDrain2 = pCaster->GetAura(45914, EFFECT_INDEX_0); // same for rank 2.
+            // Improved Drain Mana
+            auto improvedManaDrain1 = pCaster->GetAura(17864, EFFECT_INDEX_0);
+            auto improvedManaDrain2 = pCaster->GetAura(18393, EFFECT_INDEX_0);
 
             if (improvedManaDrain2)
                 PeriodicTick(improvedManaDrain2->GetHolder()->GetSpellProto(), SPELL_AURA_PERIODIC_DAMAGE, drain_amount * 0.3f);
