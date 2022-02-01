@@ -49,7 +49,7 @@ struct instance_caverns_of_time : public ScriptedInstance
         Initialize();
     };
 
-    enum
+    enum Misc
     {
         GOB_CHROMIE_PORTAL = 81048,
         NPC_CHROMIE = 91003,
@@ -69,7 +69,7 @@ struct instance_caverns_of_time : public ScriptedInstance
     Creature* bronzeDefender4;
     Creature* bronzeDefender5;
 
-    std::list<Creature*> deadDragonsList;
+    std::vector<Creature*> deadDragonsList;
 
     bool doOnce = false;
 
