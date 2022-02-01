@@ -2814,7 +2814,7 @@ struct logistical_officer : public ScriptedAI
         SPELL_SUBTLETY = 28398
     };
 
-    void Reset()
+    void Reset() override
     {
         m_uiUpdateTimer = 1000;
         phase = 0;
@@ -3274,7 +3274,7 @@ void AddSC_instance_caverns_of_time()
     newscript->GetAI = &GetAI_infinite_riftweaver;
     newscript->RegisterSelf();
 
-    newscript = new Script;
+    newscript = new Script; //-V773
     newscript->Name = "infinite_whelp";
     newscript->GetAI = &GetAI_infinite_whelp;
     newscript->RegisterSelf();

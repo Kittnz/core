@@ -356,7 +356,10 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
         SetAttackTimer(RANGED_ATTACK, (update_diff >= ranged_att ? 0 : ranged_att - update_diff));
 
     if (IsAlive())
+    {
         ModifyAuraState(AURA_STATE_HEALTHLESS_20_PERCENT, GetHealth() < GetMaxHealth() * 0.20f);
+        ModifyAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, GetHealth() < GetMaxHealth() * 0.35f);
+    }
 
     CheckPendingMovementChanges();
     UpdateSplineMovement(p_time);
@@ -7197,6 +7200,7 @@ void Unit::SetDeathState(DeathState s)
         // Powers are cleared on death.
         SetPower(GetPowerType(), 0);
 
+        ModifyAuraState(AURA_STATE_HEALTHLESS_35_PERCENT, false);
         ModifyAuraState(AURA_STATE_HEALTHLESS_20_PERCENT, false);
         ModifyAuraState(AURA_STATE_HEALTHLESS_15_PERCENT, false);
         ModifyAuraState(AURA_STATE_HEALTHLESS_10_PERCENT, false);
