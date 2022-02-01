@@ -535,6 +535,7 @@ enum AuraState
     AURA_STATE_HEALTHLESS_15_PERCENT        = 9,
     AURA_STATE_HEALTHLESS_10_PERCENT        = 10,
     AURA_STATE_HEALTHLESS_5_PERCENT         = 11,
+    AURA_STATE_HEALTHLESS_35_PERCENT          = 12, // custom
 };
 
 // Spell mechanics
