@@ -22358,7 +22358,7 @@ std::string Player::HardcoreResultToString(Player::HardcoreInteractionResult res
         return "Player is a Hardcore character while you are not.";
 
     case HardcoreInteractionResult::TargetNotHardcore:
-        return "You are a hardcore character while player is not.";
+        return "You are a Hardcore character while player is not.";
 
     default:
         return "";
