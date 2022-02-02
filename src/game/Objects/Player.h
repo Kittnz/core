@@ -2133,10 +2133,21 @@ class Player final: public Unit
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }
         void ResetSkippedUpdateTime() { m_skippedUpdateTime = 0; }
 
+        enum class HardcoreInteractionResult
+        {
+            Allowed = 1,
+            NotHardcore,
+            TargetNotHardcore,
+            LevelLimitExceeded
+        };
+
         void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
         bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
-        bool HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
+        HardcoreInteractionResult HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
+
+        static std::string HardcoreResultToString(HardcoreInteractionResult result);
+
         bool SetupHardcoreMode();
 
         bool HasXPGainEnabled() const { return m_xpGain; }
