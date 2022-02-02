@@ -2385,7 +2385,7 @@ bool Group::HandleHardcoreInteraction(Player * invitee)
     {
         if (Player* member = sObjectMgr.GetPlayer(itr.guid))
         {
-            if (!member->HandleHardcoreInteraction(invitee, true))
+            if (member->HandleHardcoreInteraction(invitee, true) != Player::HardcoreInteractionResult::Allowed)
                 return false;
         }
         else

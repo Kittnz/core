@@ -22320,28 +22320,49 @@ uint16 Player::GetPureMaxSkillValue(uint32 skill) const
 }
 
 // for Hardcore mode
-bool Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
+Player::HardcoreInteractionResult Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
 {
+    if (!IsHardcore() && !target->IsHardcore())
+        return HardcoreInteractionResult::Allowed;
+
     if (IsHardcore())
     {
         if (!target->IsHardcore())
-            return false;
+            return HardcoreInteractionResult::TargetNotHardcore;
 
         if (checkLevelDiff)
         {
             int32 diff = GetLevel() - target->GetLevel();
 
             if (abs(diff) > 5)
-                return false;
+                return HardcoreInteractionResult::LevelLimitExceeded;
         }
     }
     else
     {
         if (target->IsHardcore())
-            return false;
+            return HardcoreInteractionResult::NotHardcore;
     }
 
-    return true;
+    return HardcoreInteractionResult::Allowed;
+}
+
+std::string Player::HardcoreResultToString(Player::HardcoreInteractionResult result)
+{
+    switch (result)
+    {
+    case HardcoreInteractionResult::LevelLimitExceeded:
+        return "Level difference between you and player exceeds 5.";
+
+    case HardcoreInteractionResult::NotHardcore:
+        return "Player is a Hardcore character while you are not.";
+
+    case HardcoreInteractionResult::TargetNotHardcore:
+        return "You are a hardcore character while player is not.";
+
+    default:
+        return "";
+    }
 }
 
 bool Player::SetupHardcoreMode()
