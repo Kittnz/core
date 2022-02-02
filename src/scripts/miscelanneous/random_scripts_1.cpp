@@ -6195,22 +6195,50 @@ enum UldumQuestItems
     ITEM_ULDUM_SECOND_PLATE = 60103,
 };
 
+constexpr auto STONE_WATCHER_OF_NORGANNON = 7918;
 constexpr auto PEDESTAL_BUNNY = 80969;
+constexpr auto QUEST_SEEING_WHAT_HAPPENS_A = 2946;
+constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
+constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
+constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
 
 bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 {
-    if (!player)
-        return false;
+    bool showQuestMenu = false;
+    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_A))
+        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
+            showQuestMenu = true;
+
+    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_H))
+        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
+            showQuestMenu = true;
+
+    // Support vanilla quest chain for lower levels.
+    if (showQuestMenu)
+    {
+        player->PrepareQuestMenu(pGo->GetObjectGuid());
+        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
+        return true;
+    }
 
     // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
     // way to control when the boss is eligible to be spawned again.
-    if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true))
-        player->PrepareQuestMenu(pGo->GetObjectGuid());
-    else
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
+    {
+        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true))
+            player->PrepareQuestMenu(pGo->GetObjectGuid());
+        else
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
+    }
     player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
     
+    return true;
+}
+
+bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
+{
+    player->CLOSE_GOSSIP_MENU();
     return true;
 }
 
@@ -6253,6 +6281,10 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
         // Summon pedestal NPC to start encounter RP phase.
         if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
         {
+            // If vanilla quest line NPC is on-top of the pedestal, despawn him.
+            if (auto stoneWatcher = pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f, true))
+                stoneWatcher->DeleteLater();
+
             c->SetInCombatWith(player); // Used to pass along event invoker.
             pGo->UseDoorOrButton();
         }
@@ -6929,6 +6961,7 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "GO_pedestal_of_uldum";
     newscript->pGOGossipHello = &GossipHelloGO_pedestal_of_uldum;
+    newscript->pGOGossipSelect = &GossipSelectGO_pedestal_of_uldum;
     newscript->pGOQuestAccept = &QuestAcceptGO_pedestal_of_uldum;
     newscript->RegisterSelf();
 

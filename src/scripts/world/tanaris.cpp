@@ -256,9 +256,9 @@ CreatureAI* GetAI_npc_custodian_of_time(Creature* pCreature)
 #define GOSSIP_ITEM_NORGANNON_1 "What function do you serve?"
 #define GOSSIP_ITEM_NORGANNON_2 "What are the Plates of Uldum?"
 #define GOSSIP_ITEM_NORGANNON_3 "Where are the Plates of Uldum?"
-#define GOSSIP_ITEM_NORGANNON_4 "Excuse me? We've been \"reschedueled for visitations\"? What does that mean?!"
+#define GOSSIP_ITEM_NORGANNON_4 "Excuse me? We've been \"rescheduled for visitations\"? What does that mean?!"
 #define GOSSIP_ITEM_NORGANNON_5 "So, what's inside Uldum?"
-#define GOSSIP_ITEM_NORGANNON_6 "I will return when i have the Plates of Uldum."
+#define GOSSIP_ITEM_NORGANNON_6 "I will return when I have the Plates of Uldum."
 
 bool GossipHello_npc_stone_watcher_of_norgannon(Player* pPlayer, Creature* pCreature)
 {
