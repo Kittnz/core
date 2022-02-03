@@ -22350,7 +22350,7 @@ Player::HardcoreInteractionResult Player::HandleHardcoreInteraction(Player* targ
 std::string Player::HardcoreResultToString(Player::HardcoreInteractionResult result)
 {
     switch (result)
-    {
+    { // finytin
     case HardcoreInteractionResult::LevelLimitExceeded:
         return "Level difference between you and player exceeds 5.";
 
