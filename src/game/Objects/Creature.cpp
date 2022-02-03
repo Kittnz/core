@@ -2406,7 +2406,7 @@ bool Creature::IsOutOfThreatArea(Unit* pVictim) const
         const float maxThreatDistance = threatAreaDistance * 3;
         bool inThreatArea = IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance) || pVictim->IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance);
         bool isInMaxThreatRange = IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, maxThreatDistance) || pVictim->IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, maxThreatDistance);
-        if (!inThreatArea && (GetLastLeashExtensionTime() + 5 < time(nullptr) || !isInMaxThreatRange))
+        if (!inThreatArea && (GetLastLeashExtensionTime() + 7 < time(nullptr) || !isInMaxThreatRange))
             return true;
     }
 
