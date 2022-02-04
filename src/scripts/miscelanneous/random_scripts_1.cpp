@@ -6616,7 +6616,7 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
 struct go_zuljins_portal : public GameObjectAI
 {
-    explicit go_zuljins_portal(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 500; teleCount = 0;}
+    explicit go_zuljins_portal(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 1000; teleCount = 0;}
 
     uint32 m_uiUpdateTimer;
     int teleCount;
@@ -6668,14 +6668,20 @@ struct go_zuljins_portal : public GameObjectAI
             if (m_uiUpdateTimer < uiDiff)
             {
                 if (Creature* guard = me->FindNearestCreature(65144, 2, true))
+                {
                     guard->ForcedDespawn();
-
+                    teleCount++;
+                }
                 if (Creature* zulJin = me->FindNearestCreature(65143, 2, true))
                 {
                     zulJin->ForcedDespawn();
+                    teleCount++;
                 }
             }
             else m_uiUpdateTimer -= uiDiff;
+
+            if (teleCount == 3)
+                me->Despawn();
         }
     }
 };
@@ -6709,7 +6715,7 @@ struct npc_zuljinAI : public ScriptedAI
             else if (!m_creature->IsGossip())
                 m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP); 
 
-            if (m_creature->FindNearestCreature(10181, 15, true))
+            if (m_creature->FindNearestCreature(10181, 15, true) && !complete)
                 phase++;
             break;
         }
@@ -6747,7 +6753,7 @@ struct npc_zuljinAI : public ScriptedAI
                 if (playerOnQuest)
                 {
                     DoAfterTime(playerOnQuest, 10 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             varimathras->SetFacingToObject(sylvanas);
                             varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6756,7 +6762,7 @@ struct npc_zuljinAI : public ScriptedAI
                         });
 
                     DoAfterTime(playerOnQuest, 20 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = sylvanas->FindNearestCreature(2425, 15, true))
+                        if (Creature* varimathras = sylvanas->FindNearestCreature(2425, 25, true))
                         {
                             sylvanas->SetFacingToObject(varimathras);
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6765,7 +6771,7 @@ struct npc_zuljinAI : public ScriptedAI
                         });
 
                     DoAfterTime(playerOnQuest, 30 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             varimathras->SetFacingToObject(sylvanas);
                             varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6774,7 +6780,7 @@ struct npc_zuljinAI : public ScriptedAI
                         });
 
                     DoAfterTime(playerOnQuest, 40 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             sylvanas->SetFacingToObject(zuljin);
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6783,7 +6789,7 @@ struct npc_zuljinAI : public ScriptedAI
                         });
 
                     DoAfterTime(playerOnQuest, 50 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
                             zuljin->PMonsterSay("Now, now, Banshee Queen. Dis be da way to treat a guest? Especially one ya have known for such a long time.");
@@ -6791,7 +6797,7 @@ struct npc_zuljinAI : public ScriptedAI
                         });
 
                     DoAfterTime(playerOnQuest, 60 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             sylvanas->SetFacingToObject(zuljin);
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6826,12 +6832,25 @@ struct npc_zuljinAI : public ScriptedAI
                         });
 
                     DoAfterTime(playerOnQuest, 120 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
-                        sylvanas->PMonsterSay("I don’t wish to be lectured by an old disfigured frog, Zul’jin. But there’s truth in your words, past grudges will merely do more harm than good. If anything I should be the one to know of how persistent your people are. Very well, I will give you a chance, but remember this, stay out of my way. I don’t have to like you to be your ally.");
+                        zuljin->HandleEmote(EMOTE_ONESHOT_TALK);
+                        zuljin->PMonsterSay("Let go of da past Sylvannas. I be willin to. I will prove to ya and everyone else in da Horde dat we be worthy of flying da Horde's banner.");
                         });
 
-                    DoAfterTime(playerOnQuest, 130 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                    DoAfterTime(playerOnQuest, 125 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                        sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
+                        sylvanas->PMonsterSay("I don’t wish to be lectured by an old disfigured frog, Zul’jin. But there’s truth in your words, past grudges will merely do more harm than good.");
+                        });
+
+                    DoAfterTime(playerOnQuest, 135 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
+                        {
+                            sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
+                            sylvanas->PMonsterSay("If anything I should be the one to know of how persistent your people are. Very well, I will give you a chance, but remember this, stay out of my way. I don’t have to like you to be your ally.");
+                        }
+                        });
+
+                    DoAfterTime(playerOnQuest, 145 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             varimathras->SetFacingToObject(sylvanas);
                             varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6839,8 +6858,8 @@ struct npc_zuljinAI : public ScriptedAI
                         }
                         });
 
-                    DoAfterTime(playerOnQuest, 140 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                    DoAfterTime(playerOnQuest, 155 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             sylvanas->SetFacingToObject(varimathras);
                             sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6848,8 +6867,8 @@ struct npc_zuljinAI : public ScriptedAI
                         }
                         });
 
-                    DoAfterTime(playerOnQuest, 150 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 15, true))
+                    DoAfterTime(playerOnQuest, 165 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                        if (Creature* varimathras = zuljin->FindNearestCreature(2425, 25, true))
                         {
                             varimathras->SetFacingToObject(sylvanas);
                             varimathras->HandleEmote(EMOTE_ONESHOT_TALK);
@@ -6857,59 +6876,81 @@ struct npc_zuljinAI : public ScriptedAI
                         }
                         });
 
-                    DoAfterTime(playerOnQuest, 160 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                    DoAfterTime(playerOnQuest, 170 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                         sylvanas->SetFacingToObject(zuljin);
                         sylvanas->HandleEmote(EMOTE_ONESHOT_TALK);
                         sylvanas->PMonsterSay("Begone now Zul’jin, I’ve had enough of the living for today.");
                         });
 
-                    DoAfterTime(playerOnQuest, 165 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                    DoAfterTime(playerOnQuest, 175 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                         zuljin->MonsterTextEmote("Zul’jin nods and with his guards, he takes his leave.");
                         });
 
-                    DoAfterTime(playerOnQuest, 165 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        zuljin->MonsterTextEmote("Zul’jin nods and with his guards, he takes his leave.");
-                        });
-
-                    DoAfterTime(playerOnQuest, 170 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas, complete = complete]() {
+                    DoAfterTime(playerOnQuest, 180 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
                         if (playerOnQuest && playerOnQuest->FindNearestCreature(zuljin->GetEntry(), 20, true))
                         {
                             zuljin->SetFacingToObject(playerOnQuest);
-                            zuljin->PMonsterSay("Ya did gud, %s. Find me at Valorwind Lake in da Hinterlands. We got work ta do.", playerOnQuest->GetName());
+                            zuljin->PMonsterSay("Ya did gud, %s. Meet me in da Hinterlands.", playerOnQuest->GetName());
+
+                            Quest const* pQuest = sObjectMgr.GetQuestTemplate(65013);
+                            playerOnQuest->AddQuest(pQuest, zuljin);
                         }
                         });
 
-                    DoAfterTime(playerOnQuest, 180 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        zuljin->GetMotionMaster()->MovePoint(0, zjmovement[8].x, zjmovement[8].y, zjmovement[8].z);
-                        });
-
-                    DoAfterTime(playerOnQuest, 180 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        zuljin->GetMotionMaster()->MovePoint(0, zjmovement[8].x, zjmovement[8].y, zjmovement[8].z);
-                        });
-
                     DoAfterTime(playerOnQuest, 185 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
+                        zuljin->GetMotionMaster()->MovePoint(0, zjmovement[8].x, zjmovement[8].y, zjmovement[8].z);
+                        });
+
+                    DoAfterTime(playerOnQuest, 190 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature]() {
                         zuljin->CastSpell(zuljin, 23017, false);
                         });
 
-                    DoAfterTime(playerOnQuest, 188 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        GameObject* portal = zuljin->SummonGameObject(4000001, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z, zjmovement[7].o, 0, 0, 0, 0, 10000);
+                    DoAfterTime(playerOnQuest, 192 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, phase = phase]() {
+                        zuljin->SummonGameObject(4000001, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z, zjmovement[7].o, 0, 0, 0, 0, 5 * MINUTE);
+                        zuljin->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                        zuljin->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                        zuljin->GetMotionMaster()->MovePoint(0, zjmovement[8].x + 0.1f, zjmovement[8].y, zjmovement[8].z);
+                        zuljin->ForcedDespawn(60 * IN_MILLISECONDS);
+                        playerOnQuest->CompleteQuest(65008);
                         });
-
-                    DoAfterTime(playerOnQuest, 190 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = m_creature, sylvanas = sylvanas]() {
-                        zuljin->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
-                        });
-                    phase++;
                 }
             }
-            case 4:
-            {
-            }
 
+            phase++;
             break;
-}
+        }
+        case 4:
+        {
+            complete = true;
+            break;
+        }
      }
     }
 };
+
+bool QuestRewarded_npc_zul_jin(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 65008 && pPlayer->GetAreaId() == 1497) // Da Banshees Favour in Undercity
+    {
+        Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
+        Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
+
+        DoAfterTime(playerOnQuest, 10 * IN_MILLISECONDS, [playerOnQuest = playerOnQuest, zuljin = pQuestGiver, guard1 = guard1, guard2 = guard2]() {
+            zuljin->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+            guard1->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+            guard2->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+
+            });
+    }
+
+    return false;
+}
 
 CreatureAI* GetAI_npc_zulJin(Creature* _Creature) { return new npc_zuljinAI(_Creature); }
 
@@ -7001,6 +7042,7 @@ void AddSC_random_scripts_1()
     newscript->pGossipHello = &GossipHello_npc_zuljin;
     newscript->pGossipSelect = &GossipSelect_npc_zuljin;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_zuljin;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_zul_jin;
     newscript->GetAI = &GetAI_npc_zulJin;
     newscript->RegisterSelf();
 

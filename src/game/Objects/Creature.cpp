@@ -2131,6 +2131,9 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
                 case 2:
                     return false;
                     break;
+                case 3:
+                    return true;
+                    break;
                 }
             }
             }
