@@ -1862,3 +1862,6 @@ REPLACE INTO creature_loot_template VALUES (91794, 7973, 40.4453, 0, 1, 1, 0);
 update creature set spawntimesecsmin = 345600, spawntimesecsmax = 604800 where id = 91799;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/750(Kruxis):
 UPDATE quest_template SET Objectives = 'Collect 10 Raptor Eggs and bring them to Grovug Mithrilmane stationed in Dun Agarth.' WHERE entry = 55101;
+-- DisplayID and scale for NPC "Mournful Apparition"changed and addet quest drop "Tattered Necklace":
+update creature_template set display_id1 = 10771, scale = 1.35 where entry = 60658;
+REPLACE INTO creature_loot_template VALUES (60658, 60517, -100, 0, 1, 1, 0);

@@ -3378,7 +3378,7 @@ bool GOHello_mournful_apparition_atack(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == 2010878)
     {
-        if (pPlayer->GetQuestStatus(40370) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(40370) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasItemCount(60517, 1, 1))
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Take Tattered Necklace.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(30017, pGo->GetGUID());
@@ -3391,10 +3391,9 @@ bool GOSelect_mournful_apparition_atack(Player* pPlayer, GameObject* pGo, uint32
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->AddItem(60517, 1);
         if (!pPlayer->FindNearestCreature(60658, 40.0F))
         {
-            pGo->SummonCreature(60658, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 2, pPlayer->GetOrientation() + 3.14, TEMPSUMMON_CORPSE_DESPAWN);
+            pGo->SummonCreature(60658, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 2, pPlayer->GetOrientation() + 3.14, TEMPSUMMON_TIMED_DESPAWN, 2 * MINUTE * IN_MILLISECONDS);
         }
     }
     pPlayer->CLOSE_GOSSIP_MENU();
