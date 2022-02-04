@@ -3392,7 +3392,10 @@ bool GOSelect_mournful_apparition_atack(Player* pPlayer, GameObject* pGo, uint32
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pPlayer->AddItem(60517, 1);
-        pGo->SummonCreature(60658, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ()+2, pPlayer->GetOrientation()+3.14, TEMPSUMMON_CORPSE_DESPAWN);
+        if (!pPlayer->FindNearestCreature(60658, 40.0F))
+        {
+            pGo->SummonCreature(60658, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ() + 2, pPlayer->GetOrientation() + 3.14, TEMPSUMMON_CORPSE_DESPAWN);
+        }
     }
     pPlayer->CLOSE_GOSSIP_MENU();
     return false;
