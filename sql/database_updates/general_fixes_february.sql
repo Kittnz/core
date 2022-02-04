@@ -1912,3 +1912,5 @@ REPLACE INTO npc_vendor VALUES (60659, 15907, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60659, 15909, 0, 0, 0, 0);
 -- Spawn timer for GO "Large Battered Chest" fixed:
 update gameobject set spawntimesecsmin = 36000, spawntimesecsmax = 36000 where id = 75293;
+-- Quest "Lady Janira" level changed to 50:
+update quest_template set questlevel = 50 where entry = 60020;
