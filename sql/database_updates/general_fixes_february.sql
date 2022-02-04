@@ -1858,3 +1858,5 @@ REPLACE INTO creature_loot_template VALUES (91794, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91794, 13446, 2.74, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91794, 8959, 4.2672, 0, 1, 3, 0);
 REPLACE INTO creature_loot_template VALUES (91794, 7973, 40.4453, 0, 1, 1, 0);
+-- Correct resp time for NPC "The Cow King" setted:
+update creature set spawntimesecsmin = 345600, spawntimesecsmax = 604800 where id = 91799;
