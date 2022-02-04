@@ -3190,6 +3190,136 @@ CreatureAI* GetAI_npc_zohjik(Creature* pCreature)
     return new npc_zohjikAI(pCreature);
 }
 
+Player* escortedPlayerZulJin{ nullptr };
+
+struct npc_zulJin2AI : public ScriptedAI
+{
+    npc_zulJin2AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    int8 phase;
+    uint32 spellCastTimer;
+    bool doOnce;
+    uint32 areaID;
+    Unit* target{ nullptr };
+
+    void Reset() override
+    {
+
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (escortedPlayerZulJin)
+        {
+            areaID = escortedPlayerZulJin->GetAreaId();
+
+            if (areaID != 1883 && areaID != 355) // Start area and Altar of Zul
+            {
+                m_creature->PMonsterSay("We have da mission, mon. Come find me when ya be back.");
+                m_creature->DespawnOrUnsummon();
+                return;
+            }
+
+            if (!m_creature->GetVictim())
+                m_creature->GetMotionMaster()->MoveFollow(escortedPlayerZulJin, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+            else
+            {
+                if (escortedPlayerZulJin->GetVictim())
+                {
+                    if (m_creature->GetVictim())
+                        if (m_creature->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
+                        {
+                            m_creature->CombatStop();
+                            m_creature->ClearInCombat();
+                            return;
+                        }
+
+                    target = m_creature->GetVictim();
+
+                    m_creature->SetInCombatWithVictim(escortedPlayerZulJin->GetVictim());
+                    m_creature->AddThreat(escortedPlayerZulJin->GetVictim(), 100.00f);
+
+                    if (target && target->IsDead())
+                    {
+                        target = nullptr;
+
+                        int8 rand = irand(1, 5);
+
+                        m_creature->HandleEmote(11); // laugh
+
+                        switch (rand)
+                        {
+                        case 1:
+                            m_creature->PMonsterSay("For da Amani!");
+                            break;
+                        case 2:
+                            m_creature->PMonsterSay("Loa save ya twisted soul.");
+                            break;
+                        case 3:
+                            m_creature->PMonsterSay("Loa give me strength.");
+                            break;
+                        case 4:
+                            m_creature->PMonsterSay("Fools, de Blood God be tricking ya!");
+                            break;
+                        case 5:
+                            m_creature->PMonsterSay("Me patience ran out!");
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!escortedPlayerZulJin->IsAlive())
+                m_creature->DespawnOrUnsummon();
+
+            if (!escortedPlayerZulJin->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
+                m_creature->DespawnOrUnsummon();
+
+            if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+                return;
+
+            target = m_creature->GetVictim();
+
+            DoMeleeAttackIfReady();
+        }
+    }
+};
+
+
+CreatureAI* GetAI_npc_zuljin_2(Creature* pCreature)
+{
+    return new npc_zulJin2AI(pCreature);
+}
+
+
+bool QuestAccepted_npc_zulJin(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (pPlayer->GetQuestStatus(65009) == QUEST_STATUS_INCOMPLETE) // Bringing Them Home
+    {
+        if (Creature* escortNPC = pPlayer->SummonCreature(65145, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), 0, TEMPSUMMON_MANUAL_DESPAWN)) // ZulJin
+        {
+            pQuestGiver->DestroyForPlayer(pPlayer);
+
+            escortNPC->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+
+            escortedPlayerZulJin = pPlayer;
+
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [escortNPC = escortNPC, pPlayer = pPlayer]() {
+                escortNPC->HandleEmote(3);
+                escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+                escortNPC->MonsterSay("Loa give us strength. Lead da way, mon.");
+                });
+
+            return true;
+        }
+    }
+    return false;
+}
+
+
 bool QuestRewarded_quest_banshees_favor(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -3671,5 +3801,11 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_zohjik_questComplete";
     newscript->pGossipHello = &GossipHello_npc_zohjik_questComplete;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_zuljin_2";
+    newscript->pQuestAcceptNPC = &QuestAccepted_npc_zulJin;
+    newscript->GetAI = &GetAI_npc_zuljin_2;
     newscript->RegisterSelf();
 }
