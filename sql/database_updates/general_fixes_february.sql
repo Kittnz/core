@@ -1865,3 +1865,48 @@ UPDATE quest_template SET Objectives = 'Collect 10 Raptor Eggs and bring them to
 -- DisplayID and scale for NPC "Mournful Apparition"changed and addet quest drop "Tattered Necklace":
 update creature_template set display_id1 = 10771, scale = 1.35 where entry = 60658;
 REPLACE INTO creature_loot_template VALUES (60658, 60517, -100, 0, 1, 1, 0);
+-- New NPCs for guild "School of the Dragonhawk" added:
+REPLACE INTO creature_template VALUES
+(60659, 6868, 0, 0, 0, 'Cydas Moonshadow', 'School of the Dragonhawk', 0, 55, 55, 3398, 3398, 0, 0, 4500, 290, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 7804, 0, 0, 0, 0, 0, 0, 1, ''),
+(60660, 15308, 0, 0, 0, 'Vala\’shan the Ancient', 'School of the Dragonhawk', 0, 50, 50, 2990, 2990, 0, 0, 4400, 290, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 4608, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
+set @gossip_menu_id = 41089; set @magic_number = 60660;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The School was not always quel’dorei you know, its origins are far more ancient than even Ranger-Lord Dragonstrider knew of. After the War of the Ancients, many worgen still roamed the forests of Kalimdor after their unfortunate release from the Scythe of Elune. Demons and satyrs also ran rampant as well, innocents slain constantly. Brave sentinels and highborne sorcerers alike put aside their differences and created a new order of warriors to wipe out the vicious monsters that stalked the night. The “Thero’anir” or “Dragonhawks” in your tongue were infused with draconic blood to match the ferocity of their foes.\n\nSadly, only Cydas and I are all that remain of the original Thero’anir. Perhaps with Ranger-Lord Bladesong’s resurgence of the order, the School will reach its zenith again.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+REPLACE INTO npc_vendor VALUES (60659, 851, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 852, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 853, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 854, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 922, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 923, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 924, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 925, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 926, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 927, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 928, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 1196, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 1197, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 1198, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2024, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2025, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2026, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2027, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2028, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2029, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2030, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2207, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2208, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2209, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2507, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2512, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 2515, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 3026, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 5439, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 11362, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 15903, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 15904, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 15905, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 15906, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 15907, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60659, 15909, 0, 0, 0, 0);
