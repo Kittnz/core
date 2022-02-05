@@ -1856,6 +1856,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 346: m_caster->ToPlayer()->TeleportTo(1, 2372.3F, -2527.9F, 108.6F, 0.3F);     break; // Hand of Wrath
                         case 322: m_caster->ToPlayer()->TeleportTo(1, 1557.9F, -2887.1F, 183.3F, 1.9F);     break; // Ered Ruin
                         case 339: m_caster->ToPlayer()->TeleportTo(1, -727.7F, -3943.3F, 23.48F, 5.5F);     break; // Golden Moon
+                        case 363: m_caster->ToPlayer()->TeleportTo(1, 7118.21F, -3926.49F, 704.3F, 0.2F);   break; // School of the Dragonhawk
                         default: break;
                         }
                     }
