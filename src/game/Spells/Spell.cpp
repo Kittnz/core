@@ -1244,7 +1244,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             // Warriors and Druids are refunded 80% of the rage cost on dodge/parry
             // http://blue.mmo-champion.com/topic/69365-18-02-05-kalgans-response-to-warriors/
             // https://youtu.be/YzPlictRoK8?t=1m45s
-            else if ((missInfo == SPELL_MISS_PARRY || missInfo == SPELL_MISS_DODGE) && m_spellInfo->powerType == POWER_RAGE)
+            else if ((missInfo == SPELL_MISS_PARRY || missInfo == SPELL_MISS_DODGE || missInfo == SPELL_MISS_MISS) && m_spellInfo->powerType == POWER_RAGE)
             {
                 int32 regen = lroundf(m_powerCost * 0.82f);
                 pRealUnitCaster->ModifyPower(POWER_RAGE, regen);
