@@ -22,7 +22,7 @@ ObjectGuid spawn3guid;
 Creature* dragonSpawn1;
 Creature* dragonSpawn2;
 Creature* dragonSpawn3;
-Creature* unknownEntity;
+ObjectGuid unknownEntity;
 
 ObjectGuid GOB_BARRIER_1;
 GameObject* GOB_BARRIER_2;
@@ -32,7 +32,7 @@ int dragonGuidCount = 0;
 bool finalDialogue = false;
 bool chromieBossSummoned = false;
 
-std::vector<GameObject*> gobCleanuplist;
+std::vector<ObjectGuid> gobCleanuplist;
 
 static const SpawnLocation rotMawSpawns[4] =
 {
@@ -81,19 +81,22 @@ struct instance_caverns_of_time : public ScriptedInstance
         bronzeDefender4 = instance->SummonCreature(50110, -1893.81f, 6643.04f, -156.24f, 0);
         bronzeDefender5 = instance->SummonCreature(50110, -1897.60f, 6646.52f, -155.83f, 0);
 
-        unknownEntity = instance->SummonCreature(66003, -1591.57f, 7106.07f, 23.73f, 0, TEMPSUMMON_CORPSE_DESPAWN);
+        auto entityCreature = instance->SummonCreature(66003, -1591.57f, 7106.07f, 23.73f, 0, TEMPSUMMON_CORPSE_DESPAWN);
+
+        if (entityCreature)
+            unknownEntity = entityCreature->GetObjectGuid();
 
         if (GameObject* barrier1 = instance->SummonGameObject(180322, -1609.00f, 7118.74f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
-            gobCleanuplist.push_back(barrier1);
+            gobCleanuplist.push_back(barrier1->GetObjectGuid());
 
         if (GameObject* barrier2 = instance->SummonGameObject(180322, -1609.51f, 7101.04f, 23.79f, 0, 0, 0, 0, 0, -1, 0))
-            gobCleanuplist.push_back(barrier2);
+            gobCleanuplist.push_back(barrier2->GetObjectGuid());
 
         if (GameObject* sandWall1 = instance->SummonGameObject(2010865, -1608.70f, 7107.35f, 23.74f, 0, 0, 0, 0, 0, -1, 0))
-            gobCleanuplist.push_back(sandWall1);
+            gobCleanuplist.push_back(sandWall1->GetObjectGuid());
 
         if (GameObject* sandWall2 = instance->SummonGameObject(2010865, -1607.63f, 7116.59f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
-            gobCleanuplist.push_back(sandWall2);
+            gobCleanuplist.push_back(sandWall2->GetObjectGuid());
 
         riftsClosed = 0;
         chromieBossSummoned = false;
@@ -1667,7 +1670,7 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
     };
 
     if (pPlayer->HasItemCount(80008, 1, true))
-        pPlayer->RemoveItem(80008, 1, true);
+        pPlayer->DestroyItemCount(80008, 1, true);
 
     if (!chromieBossSummoned)
     {
@@ -1975,7 +1978,7 @@ struct chromie_boss_cotAI : public ScriptedAI
     uint32 phase;
     uint32 riftPhase;
     bool beginFight;
-    std::vector<Creature*> timeRifts;
+    std::vector<ObjectGuid> timeRifts;
 
     void Reset() override
     {
@@ -1993,15 +1996,15 @@ struct chromie_boss_cotAI : public ScriptedAI
         if (!beginFight && timeRifts.size() == 0)
         {
             if (GameObject* gate1 = m_creature->SummonGameObject(GOB_LARGE_GHOST_GATE, -1535.68f, 7109.90f, 24.76f, 0, 0, 0, 0, 0, 0, 0))
-                gobCleanuplist.push_back(gate1);
+                gobCleanuplist.push_back(gate1->GetObjectGuid());
 
             if (GameObject* sandwall1 = m_creature->SummonGameObject(GOB_SAND_WALL, -1527.84f, 7111.95f, 24.05f, 0, 0, 0, 0, 0, 0, 0))
-                gobCleanuplist.push_back(sandwall1);
+                gobCleanuplist.push_back(sandwall1->GetObjectGuid());
 
             for (int i = 0; i < 8; i++)
             {
                 Creature* timeRift = m_creature->SummonCreature(NPC_TIME_RIFT_SMALL, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
-                timeRifts.push_back(timeRift);
+                timeRifts.push_back(timeRift->GetObjectGuid());
                 timeRift->GetMotionMaster()->MovePoint(0, riftMoveLocation[i].m_fX, riftMoveLocation[i].m_fY, riftMoveLocation[i].m_fZ, true);
             }
 
@@ -2010,7 +2013,7 @@ struct chromie_boss_cotAI : public ScriptedAI
             m_creature->SetFactionTemporary(35);
 
             Creature* largeRift = m_creature->SummonCreature(91001, -1607.04f, 7107.48f, 26.08f, 0, TEMPSUMMON_DEAD_DESPAWN);
-            timeRifts.push_back(largeRift);
+            timeRifts.push_back(largeRift->GetObjectGuid());
 
             DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]() {
                 beginFight = true;
@@ -2062,7 +2065,7 @@ struct chromie_boss_cotAI : public ScriptedAI
             if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0))
                 m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
 
-            m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
+            m_creature->MonsterYell("We are Infinite! Our numbers are countless!");
         }
 
         if (phase == 2 && m_creature->GetHealthPercent() <= 50.0f)
@@ -2072,7 +2075,7 @@ struct chromie_boss_cotAI : public ScriptedAI
             if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0))
                 m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
 
-            m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
+            m_creature->MonsterYell("We are Infinite! Our numbers are countless!");
         }
 
         if (phase == 3 && m_creature->GetHealthPercent() <= 20.0f)
@@ -2082,7 +2085,7 @@ struct chromie_boss_cotAI : public ScriptedAI
             if (Creature* portal = m_creature->SummonCreature(NPC_TIME_RIFT, m_creature->GetPositionX() + 5, m_creature->GetPositionY() + 5, m_creature->GetPositionZ(), 0))
                 m_creature->SummonCreature(NPC_RIFT_GUARD, portal->GetPositionX(), portal->GetPositionY(), portal->GetPositionZ(), 0, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 100);
 
-            m_creature->PMonsterYell("We are Infinite! Our numbers are countless!");
+            m_creature->MonsterYell("We are Infinite! Our numbers are countless!");
         }
 
         DoMeleeAttackIfReady();
@@ -2091,23 +2094,34 @@ struct chromie_boss_cotAI : public ScriptedAI
 
     void EnterCombat(Unit*) override
     {
-        m_creature->PMonsterYell("Well well, surprised are we? I am the superior Chromie! It's a shame you came this far just to die.");
+        m_creature->MonsterYell("Well well, surprised are we? I am the superior Chromie! It's a shame you came this far just to die.");
     }
 
     void JustDied(Unit*) override
     {
-        m_creature->PMonsterYell("But I... we cannot fail! We are so close!");
+        auto map = me->GetMap();
+        m_creature->MonsterYell("But I... we cannot fail! We are so close!");
 
-        for (auto i = 0; i < timeRifts.size(); ++i) // remove rifts
+        if (map)
         {
-            if (timeRifts[i])
-                timeRifts[i]->AddObjectToRemoveList();
-        }
+            for (auto i = 0; i < timeRifts.size(); ++i) // remove rifts
+            {
+                if (timeRifts[i])
+                {
+                    if (auto rift = map->GetCreature(timeRifts[i]))
+                        rift->AddObjectToRemoveList();
+                }
+            }
 
-        for (auto i = 0; i < gobCleanuplist.size(); ++i) // remove walls for progression
-        {
-            if (gobCleanuplist[i])
-                gobCleanuplist[i]->AddObjectToRemoveList();
+            for (auto i = 0; i < gobCleanuplist.size(); ++i) // remove walls for progression
+            {
+                if (gobCleanuplist[i])
+                {
+                    if (auto gob = map->GetGameObject(gobCleanuplist[i]))
+                        gob->AddObjectToRemoveList();
+                }
+
+            }
         }
 
         timeRifts.clear();
@@ -2116,20 +2130,25 @@ struct chromie_boss_cotAI : public ScriptedAI
         Creature* monsterSummoned{nullptr};
         std::string str = "";
 
+
         if (unknownEntity)
         {
-            monsterSummoned = unknownEntity->FindNearestCreature(NPC_ROTMAW, 5000, true);
-
-            if (monsterSummoned)
-                str = "Hssss ... I ... hunger ... hssss...";
-            else
+            auto entityCreature = map->GetCreature(unknownEntity);
+            if (entityCreature)
             {
-                monsterSummoned = unknownEntity->FindNearestCreature(NPC_MOSSHEART, 5000, true);
-                str = "Mrgml ... Who dares disturb my mossy slumber?";
-            } 
+                monsterSummoned = entityCreature->FindNearestCreature(NPC_ROTMAW, 5000, true);
 
-            if (monsterSummoned)
-                unknownEntity->PMonsterEmote("An unknown entity emerges nearby.");
+                if (monsterSummoned)
+                    str = "Hssss ... I ... hunger ... hssss...";
+                else
+                {
+                    monsterSummoned = entityCreature->FindNearestCreature(NPC_MOSSHEART, 5000, true);
+                    str = "Mrgml ... Who dares disturb my mossy slumber?";
+                }
+
+                if (monsterSummoned)
+                    entityCreature->PMonsterEmote("An unknown entity emerges nearby.");
+            }
         }
 
         const Map::PlayerList& PlayerList = m_creature->GetMap()->GetPlayers();
