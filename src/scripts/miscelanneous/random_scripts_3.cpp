@@ -2367,7 +2367,7 @@ bool GOSelect_go_moo_rune(Player* pPlayer, GameObject* pGo, uint32 sender, uint3
     {
         if (pGo->GetEntry() == 2010799)
         {
-            static const WorldLocation m_bessy(0, -9128.736328F, -1050.399170F, 70.611626, 0.030956);
+            static const WorldLocation m_bessy(0, -9128.736328F, -1050.399170F, 70.611626f, 0.030956f);
             pPlayer->TeleportTo(m_bessy);
         }
     }
