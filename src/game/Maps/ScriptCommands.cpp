@@ -907,6 +907,12 @@ bool Map::ScriptCommand_AttackStart(const ScriptInfo& script, WorldObject* sourc
         return ShouldAbortScript(script);
     }
 
+    if (script.attackStart.maxRange)
+    {
+        if (pAttacker->GetDistance(pTarget) > script.attackStart.maxRange)
+            return ShouldAbortScript(script);
+    }
+
     if (pAttacker->AI())
         pAttacker->AI()->AttackStart(pTarget);
 
