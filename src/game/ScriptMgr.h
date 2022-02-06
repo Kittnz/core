@@ -686,6 +686,10 @@ struct ScriptInfo
         } run;
 
                                                             // SCRIPT_COMMAND_ATTACK_START (26)
+        struct
+        {
+            uint32 maxRange;
+        } attackStart;
 
         struct                                              // SCRIPT_COMMAND_UPDATE_ENTRY (27)
         {
