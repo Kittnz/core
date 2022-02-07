@@ -21482,6 +21482,15 @@ bool Player::ChangeQuestsForRace(uint8 oldRace, uint8 newRace)
             ++itr;
             continue; // Pas besoin de toucher a cette quete
         }
+
+        static std::unordered_set<uint32> excludedQuestIds { 8168, 8114, 8115, 8171, 8121, 8122 }; // BG related rep turn in quests for now only.
+
+        if (excludedQuestIds.find(pQuest->GetQuestId()) != excludedQuestIds.end())
+        {
+            ++itr;
+            continue;
+        }
+
         // Sinon, il faut supprimer
         uint16 log_slot = FindQuestSlot(quest_id);
         // En cours de completion, et pas deja supprimee dans la boucle precedente.
