@@ -1926,3 +1926,14 @@ REPLACE INTO creature_spells VALUES (94490, 'Eastern Plaguelands - Scarlet Cleri
 -- Item "Cheap Beer" added to NPC "Quark":
 update creature_template set npc_flags = 7 where entry = 80601;
 REPLACE INTO npc_vendor VALUES (80601, 19222, 0, 0, 0, 0);
+-- Quest reward for quests "The Profitable Activation" and "The Activation" added:
+replace into item_template values
+ ('60518', '4', '0', 'Broken Core Pendant', 'An amulet made from the Broken core of Analyzer X-51', '60863', '3', '1', '1', '50322', '12001', '2', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '16', '7', '6',
+ '5', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '1', '20959', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0',
+ '0', '1', NULL);
+update quest_template set rewitemid1 = 60518, rewitemcount1 = 1 where entry in (40132, 40133);
