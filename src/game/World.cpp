@@ -1290,7 +1290,12 @@ void World::SetInitialWorldSettings()
     }
 
     using namespace DBUpdater;
-    sAutoUpdater->ProcessUpdates();
+    if (!sAutoUpdater->ProcessUpdates())
+    {
+        sLog.outError("DB AutoUpdater FAILED, cancelling server.");
+        Log::WaitBeforeContinueIfNeed();
+        exit(1);
+    }
 
     ///- Loading shop tables
     sObjectMgr.LoadShop();

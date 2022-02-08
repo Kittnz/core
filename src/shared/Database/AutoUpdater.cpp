@@ -97,7 +97,7 @@ namespace DBUpdater
         return dbMigrations;
     }
 
-    void AutoUpdater::ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase) const
+    bool AutoUpdater::ProcessTargetUpdates(const fs::directory_entry& targetPath, DatabaseType* targetDatabase) const
     {
         auto fileMigrations = LoadFileMigrations(targetPath);
         auto dbMigrations = LoadDatabaseMigrations(targetDatabase);
@@ -139,8 +139,10 @@ namespace DBUpdater
             if (!ExecuteUpdate(update, targetDatabase))
             {
                 sLog.outError("[DB Auto-Updater] Migration %s with hash %s failed to apply.", update.Name.c_str(), update.Hash.c_str());
+                return false;
            }
         }
+        return true;
     }
 
     bool AutoUpdater::ExecuteUpdate(const FileMigration& migration, DatabaseType* targetDatabase) const
@@ -190,12 +192,12 @@ namespace DBUpdater
         return true;
     }
 
-    void AutoUpdater::ProcessUpdates()
+    bool AutoUpdater::ProcessUpdates()
     {
         if (!sConfig.GetBoolDefault("Database.AutoUpdate.Enabled", true))
         {
             sLog.outInfo("[DB Auto-Updater] Disabled.");
-            return;
+            return true;
         }
 
         auto pathString = sConfig.GetStringDefault("Database.AutoUpdate.Path", "");
@@ -209,9 +211,16 @@ namespace DBUpdater
         directory_entry charUpdatePath{ folderPath / charUpdateFolder };
         directory_entry worldUpdatePath{ folderPath / worldUpdateFolder };
 
-        ProcessTargetUpdates(logonUpdatePath, &LoginDatabase);
-        ProcessTargetUpdates(charUpdatePath, &CharacterDatabase);
-        ProcessTargetUpdates(worldUpdatePath, &WorldDatabase);
+        if (!ProcessTargetUpdates(logonUpdatePath, &LoginDatabase))
+            return false;
+
+        if (!ProcessTargetUpdates(charUpdatePath, &CharacterDatabase))
+            return false;
+
+        if (!ProcessTargetUpdates(worldUpdatePath, &WorldDatabase))
+            return false;
+
+        return true;
 
     }
 }
