@@ -371,7 +371,9 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     case 51067: displayid = 8053;  break; // Bone Serpent
     case 51205: displayid = 14368; break; // Ghost
     case 50435: displayid = 10543; break; // Dreadlord
-    case 50436: displayid = 7803; break; // Dreadlord
+    case 50436: displayid = 7803; break; // Smolderthorn Berserker
+    case 50437: displayid = 4923; break; // Naga Explorer
+    case 50438: displayid = 11263; break; // Naga Siren 
     case 53008: displayid = (18065 + urand(0, 4)); break; // Ogre
     case 50408: displayid = ((male) ? 150 : 876);  break; // Dryad
     case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
