@@ -208,6 +208,7 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     case 80657: color = 7; break; // Honey Blond
     case 80658: color = 8; break; // Starry Night
     case 80659: color = 9; break; // Crab Legs
+    case 80665: color = 10; break; // Azure Sky
     // Goblins
     case 80660: color = 0; break; // Copper 
     case 80661: color = 1; break; // Ruby

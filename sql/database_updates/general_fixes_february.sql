@@ -1943,3 +1943,5 @@ update item_template set spelltrigger_1 = 1 where entry = 83210;
 update quest_template set SpecialFlags = 1 where entry = 3483;
 -- Grammar fix for quests "The Profitable Activation" and "The Activation":
 update quest_template set objectivetext1 = 'Ask Torble Sparksprocket to turn on the Analyzer X-51 and observe what will happen.' where entry in (40132,40133);
+-- High Elf Hair Dye Light blue for hair color 10 added:
+REPLACE INTO item_template VALUES (80665, 0, 0, 'High Elf Hair Dye: Azure Sky', '', 33449, 2, 0, 1, 50000, 0, 0, -1, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46029, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_hairdye');
