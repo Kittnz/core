@@ -1946,6 +1946,6 @@ update quest_template set objectivetext1 = 'Ask Torble Sparksprocket to turn on 
 -- High Elf Hair Dye Light blue for hair color 10 added:
 REPLACE INTO item_template VALUES (80665, 0, 0, 'High Elf Hair Dye: Azure Sky', '', 33449, 2, 0, 1, 50000, 0, 0, -1, 512, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46029, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_hairdye');
 -- GM's NPC with 1000000 HP:
-replace into creature_template (entry,display_id1,level_min,level_max,health_min,health_max,armor,dmg_min,dmg_max) values (7,328,1,1,1000000,1000000,1000,1,5);
+replace into creature_template (entry,name,display_id1,level_min,level_max,health_min,health_max,armor,dmg_min,dmg_max) values (7,'',328,1,1,1000000,1000000,1000,1,5);
 -- Damage a NPC "Ruins Creeper" reduced to 102-136:
 update creature_template set dmg_min = 102, dmg_max = 136 where entry = 92203;
