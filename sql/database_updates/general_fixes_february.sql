@@ -1939,3 +1939,5 @@ replace into item_template values
 update quest_template set rewitemid1 = 60518, rewitemcount1 = 1 where entry in (40132, 40133);
 -- Item "Crescent Sigil" fixed:
 update item_template set spelltrigger_1 = 1 where entry = 83210;
+-- Quest "Signal for Pickup" fixed and is repeatble now:
+update quest_template set SpecialFlags = 1 where entry = 3483;
