@@ -1941,3 +1941,5 @@ update quest_template set rewitemid1 = 60518, rewitemcount1 = 1 where entry in (
 update item_template set spelltrigger_1 = 1 where entry = 83210;
 -- Quest "Signal for Pickup" fixed and is repeatble now:
 update quest_template set SpecialFlags = 1 where entry = 3483;
+-- Grammar fix for quests "The Profitable Activation" and "The Activation":
+update quest_template set objectivetext1 = 'Ask Torble Sparksprocket to turn on the Analyzer X-51 and observe what will happen.' where entry in (40132,40133);
