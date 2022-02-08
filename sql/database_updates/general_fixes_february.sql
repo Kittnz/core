@@ -1923,3 +1923,6 @@ REPLACE INTO creature_loot_template VALUES (2408, 3712, 30, 0, 1, 2, 0);
 -- Scarlet Clerics in Tyr's Hand fixed and can use healing spells:
 delete from creature_spells where entry = 94490;
 REPLACE INTO creature_spells VALUES (94490, 'Eastern Plaguelands - Scarlet Cleric', 15586, 100, 15, 0, 0, 0, 0, 0, 18, 21, 0, 25054, 100, 1, 0, 0, 8, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Item "Cheap Beer" added to NPC "Quark":
+update creature_template set npc_flags = 7 where entry = 80601;
+REPLACE INTO npc_vendor VALUES (80601, 19222, 0, 0, 0, 0);
