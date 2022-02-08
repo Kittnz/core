@@ -1920,3 +1920,6 @@ update creature_template set leash_range = 40 where entry IN (160105,160102,9310
 REPLACE INTO gameobject (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (2010830, 0, -13668, 3295.94, -1.34943, 4.31291, 0, 0, 0.833349, -0.552748, 300, 300, 100, 1, 0, 0);
 -- Drop chance item "Turtle Meat" lower to 30pers:
 REPLACE INTO creature_loot_template VALUES (2408, 3712, 30, 0, 1, 2, 0);
+-- Scarlet Clerics in Tyr's Hand fixed and can use healing spells:
+delete from creature_spells where entry = 94490;
+REPLACE INTO creature_spells VALUES (94490, 'Eastern Plaguelands - Scarlet Cleric', 15586, 100, 15, 0, 0, 0, 0, 0, 18, 21, 0, 25054, 100, 1, 0, 0, 8, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
