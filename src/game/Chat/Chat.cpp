@@ -214,6 +214,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "uninvite",       SEC_GAMEMASTER,     true,  &ChatHandler::HandleGuildUninviteCommand,       "", nullptr },
         { "rank",           SEC_GAMEMASTER,     true,  &ChatHandler::HandleGuildRankCommand,           "", nullptr },
         { "rename",         SEC_GAMEMASTER,    true,  &ChatHandler::HandleGuildRenameCommand,         "", nullptr },
+        { "listen",         SEC_GAMEMASTER, false, &ChatHandler::HandleGuildListenCommand, "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

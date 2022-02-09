@@ -254,6 +254,8 @@ class Guild
         void SetGINFO(std::string ginfo);
         void SetEmblem(uint32 emblemStyle, uint32 emblemColor, uint32 borderStyle, uint32 borderColor, uint32 backgroundColor);
 
+        bool AddGMListener(Player* gm);
+
         uint32 GetMemberSize() const { return members.size(); }
         uint32 GetAccountsNumber();
 
@@ -351,6 +353,8 @@ class Guild
         /** These are actually ordered lists. The first element is the oldest entry.*/
         typedef std::list<GuildEventLogEntry> GuildEventLog;
         GuildEventLog m_GuildEventLog;
+
+        std::unordered_set<ObjectGuid> m_GmListeners;
 
         uint32 m_GuildEventLogNextGuid;
 

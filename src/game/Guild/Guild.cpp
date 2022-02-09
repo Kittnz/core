@@ -599,6 +599,14 @@ void Guild::BroadcastToGuild(WorldSession *session, std::string const& msg, uint
         if (pl && pl->GetSession() && !pl->GetSocial()->HasIgnore(session->GetMasterPlayer()->GetObjectGuid()))
             pl->GetSession()->SendPacket(&data);
     }
+
+    for (const auto& gmGuid : m_GmListeners)
+    {
+        if (Player* gm = sObjectAccessor.FindPlayer(gmGuid))
+        {
+            gm->GetSession()->SendPacket(&data);
+        }
+    }
 }
 
 void Guild::BroadcastToOfficers(WorldSession *session, std::string const& msg, uint32 language)
@@ -623,6 +631,14 @@ void Guild::BroadcastToOfficers(WorldSession *session, std::string const& msg, u
         if (pl && pl->GetSession() && !pl->GetSocial()->HasIgnore(session->GetMasterPlayer()->GetObjectGuid()))
             pl->GetSession()->SendPacket(&data);
     }
+
+    for (const auto& gmGuid : m_GmListeners)
+    {
+        if (Player* gm = sObjectAccessor.FindPlayer(gmGuid))
+        {
+            gm->GetSession()->SendPacket(&data);
+        }
+    }
 }
 
 void Guild::BroadcastPacket(WorldPacket *packet)
@@ -632,6 +648,14 @@ void Guild::BroadcastPacket(WorldPacket *packet)
         Player *player = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
         if (player)
             player->GetSession()->SendPacket(packet);
+    }
+
+    for (const auto& gmGuid : m_GmListeners)
+    {
+        if (Player* gm = sObjectAccessor.FindPlayer(gmGuid))
+        {
+            gm->GetSession()->SendPacket(packet);
+        }
     }
 }
 
@@ -932,6 +956,16 @@ void Guild::SetEmblem(uint32 emblemStyle, uint32 emblemColor, uint32 borderStyle
     m_BackgroundColor = backgroundColor;
 
     CharacterDatabase.PExecute("UPDATE guild SET EmblemStyle=%u, EmblemColor=%u, BorderStyle=%u, BorderColor=%u, BackgroundColor=%u WHERE guildid = %u", m_EmblemStyle, m_EmblemColor, m_BorderStyle, m_BorderColor, m_BackgroundColor, m_Id);
+}
+
+bool Guild::AddGMListener(Player* gm)
+{
+    if (m_GmListeners.find(gm->GetObjectGuid()) == m_GmListeners.end())
+    {
+        m_GmListeners.insert(gm->GetObjectGuid());
+        return true;
+    }
+    return false;
 }
 
 /**

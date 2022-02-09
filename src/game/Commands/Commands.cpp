@@ -1846,6 +1846,28 @@ bool ChatHandler::HandleGuildRenameCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGuildListenCommand(char* args)
+{
+    if (!args || !*args)
+        return false;
+
+    char* guildName = ExtractQuotedArg(&args);
+    if (!guildName)
+        return false;
+
+    std::string nameStr = guildName;
+
+    Guild* target = sGuildMgr.GetGuildByName(guildName);
+    if (!target)
+    {
+        SendSysMessage(LANG_GUILD_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    return target->AddGMListener(GetSession()->GetPlayer());
+}
+
 
 bool ChatHandler::HandleGetDistanceCommand(char* args)
 {
