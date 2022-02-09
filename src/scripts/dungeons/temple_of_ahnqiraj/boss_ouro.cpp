@@ -290,7 +290,8 @@ struct boss_ouroAI : public Scripted_NoMovementAI
             // Sand Blast
             if (m_uiSandBlastTimer < uiDiff)
             {
-                auto target = m_creature->GetThreatManager().getHostileTarget();
+                auto target = SelectTarget(SelectTargetMethod::MaxThreat);
+                
 
                 if (target && DoCastSpellIfCan(target, SPELL_SANDBLAST) == CAST_OK)
                 {

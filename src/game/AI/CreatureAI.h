@@ -63,6 +63,85 @@ struct CreatureAISpellsEntry : CreatureSpellsEntry
     CreatureAISpellsEntry(const CreatureSpellsEntry& EntryStruct) : CreatureSpellsEntry(EntryStruct), cooldown(urand(EntryStruct.delayInitialMin, EntryStruct.delayInitialMax)) {}
 };
 
+// Selection method used by SelectTarget
+enum class SelectTargetMethod
+{
+    Random,      // just pick a random target
+    MaxThreat,   // prefer targets higher in the threat list
+    MinThreat,   // prefer targets lower in the threat list
+    MaxDistance, // prefer targets further from us
+    MinDistance  // prefer targets closer to us
+};
+
+template<class ArgumentType, class ResultType>
+struct unary_function
+{
+    typedef ArgumentType argument_type;
+    typedef ResultType result_type;
+};
+
+class ObjectDistanceOrderPred
+{
+public:
+    ObjectDistanceOrderPred(const WorldObject* pRefObj, bool ascending = true) : m_refObj(pRefObj), m_ascending(ascending) {}
+    bool operator()(const WorldObject* pLeft, const WorldObject* pRight) const
+    {
+        return m_ascending ? m_refObj->GetDistanceOrder(pLeft, pRight) : !m_refObj->GetDistanceOrder(pLeft, pRight);
+    }
+private:
+    const WorldObject* m_refObj;
+    const bool m_ascending;
+};
+
+struct DefaultTargetSelector : public unary_function<Unit*, bool>
+{
+    const Unit* me;
+    float m_dist;
+    bool m_playerOnly;
+    int32 m_aura;
+
+    // unit: the reference unit
+    // dist: if 0: ignored, if > 0: maximum distance to the reference unit, if < 0: minimum distance to the reference unit
+    // playerOnly: self explaining
+    // aura: if 0: ignored, if > 0: the target shall have the aura, if < 0, the target shall NOT have the aura
+    DefaultTargetSelector(Unit const* unit, float dist, bool playerOnly, int32 aura) : me(unit), m_dist(dist), m_playerOnly(playerOnly), m_aura(aura) {}
+
+    bool operator()(Unit const* target) const
+    {
+        if (!me)
+            return false;
+
+        if (!target)
+            return false;
+
+        if (m_playerOnly && (target->GetTypeId() != TYPEID_PLAYER))
+            return false;
+
+        if (m_dist > 0.0f && !me->IsWithinCombatDistInMap(target, m_dist))
+            return false;
+
+        if (m_dist < 0.0f && me->IsWithinCombatDistInMap(target, -m_dist))
+            return false;
+
+        if (m_aura)
+        {
+            if (m_aura > 0)
+            {
+                if (!target->HasAura(m_aura))
+                    return false;
+            }
+            else
+            {
+                if (target->HasAura(-m_aura))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+};
+
+
 class CreatureAI
 {
     public:
@@ -201,6 +280,69 @@ class CreatureAI
         bool UpdateVictim();
         bool UpdateVictimWithGaze();
         void SetGazeOn(Unit* target);
+
+
+        // Select the best target (in <targetType> order) from the threat list that fulfill the following:
+   // - Not among the first <offset> entries in <targetType> order (or SelectTargetMethod::MaxThreat order,
+   //   if <targetType> is SelectTargetMethod::Random).
+   // - Within at most <dist> yards (if dist > 0.0f)
+   // - At least -<dist> yards away (if dist < 0.0f)
+   // - Is a player (if playerOnly = true)
+   // - Not the current tank (if withTank = false)
+   // - Has aura with ID <aura> (if aura > 0)
+   // - Does not have aura with ID -<aura> (if aura < 0)
+        Unit* SelectTarget(SelectTargetMethod targetType, uint32 position = 0, float dist = 0.0f, bool playerOnly = false, int32 aura = 0);
+
+        // Select the best target (in <targetType> order) satisfying <predicate> from the threat list.
+        // If <offset> is nonzero, the first <offset> entries in <targetType> order (or SelectTargetMethod::MaxThreat
+        // order, if <targetType> is SelectTargetMethod::Random) are skipped.
+        template <class PREDICATE>
+        Unit* SelectTarget(SelectTargetMethod targetType, uint32 position, PREDICATE const& predicate)
+        {
+            auto const& threatlist = m_creature->GetThreatManager().getThreatList();
+            if (position >= threatlist.size())
+                return nullptr;
+
+            std::list<Unit*> targetList;
+            for (auto itr = threatlist.begin(); itr != threatlist.end(); ++itr)
+                if (predicate((*itr)->getTarget()))
+                    targetList.push_back((*itr)->getTarget());
+
+            if (position >= targetList.size())
+                return nullptr;
+
+            if (targetType == SelectTargetMethod::MaxDistance || targetType == SelectTargetMethod::MinDistance)
+                targetList.sort(ObjectDistanceOrderPred(m_creature));
+
+            switch (targetType)
+            {
+            case SelectTargetMethod::MaxDistance:
+            case SelectTargetMethod::MaxThreat:
+            {
+                std::list<Unit*>::iterator itr = targetList.begin();
+                std::advance(itr, position);
+                return *itr;
+            }
+            case SelectTargetMethod::MinDistance:
+            case SelectTargetMethod::MinThreat:
+            {
+                std::list<Unit*>::reverse_iterator ritr = targetList.rbegin();
+                std::advance(ritr, position);
+                return *ritr;
+            }
+            case SelectTargetMethod::Random:
+            {
+                std::list<Unit*>::iterator itr = targetList.begin();
+                std::advance(itr, urand(position, targetList.size() - 1));
+                return *itr;
+            }
+            default:
+                break;
+            }
+
+            return nullptr;
+        }
+
 
         ///== Helper functions =============================
 
