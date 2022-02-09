@@ -6839,9 +6839,9 @@ PlayerMovementPendingChange::PlayerMovementPendingChange()
 void Unit::UpdateSpeed(UnitMoveType mtype, bool forced, float ratio)
 {
     // not in combat pet have same speed as owner
-    if (IsCreature() && ((Creature*)this)->IsPet() && HasUnitState(UNIT_STAT_FOLLOW) && !IsInCombat())
+    if (IsCreature() && (((Creature*)this)->IsPet() || ToCreature()->IsCharmed()) && HasUnitState(UNIT_STAT_FOLLOW) && !IsInCombat())
     {
-        if (Unit* owner = GetOwner())
+        if (Unit* owner = GetCharmerOrOwner())
         {
             switch(mtype)
             {
