@@ -318,6 +318,12 @@ void CreatureAI::SetGazeOn(Unit *target)
     }
 }
 
+Unit* CreatureAI::SelectTarget(SelectTargetMethod targetType, uint32 position, float dist, bool playerOnly, int32 aura)
+{
+    return SelectTarget(targetType, position, DefaultTargetSelector(m_creature, dist, playerOnly, aura));
+}
+
+
 bool CreatureAI::UpdateVictimWithGaze()
 {
     if (!m_creature->IsInCombat())
