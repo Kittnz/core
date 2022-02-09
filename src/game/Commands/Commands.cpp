@@ -5336,6 +5336,48 @@ bool ChatHandler::HandleGMCommand(char* args)
     return true;
 }
 
+//Enable\Disable Invisible mode
+bool ChatHandler::HandleGMVisibleCommand(char* args)
+{
+    if (!*args)
+    {
+        bool visible = GetSession()->GetPlayer()->IsGMVisible();
+        uint32 visibilityLevel = visible ? 0 : GetSession()->GetPlayer()->GetGMInvisibilityLevel();
+        PSendSysMessage(LANG_YOU_ARE, visible ? GetMangosString(LANG_VISIBLE) : GetMangosString(LANG_INVISIBLE), visibilityLevel);
+        return true;
+    }
+
+    bool value;
+    uint8 accessLevel = GetAccessLevel();
+    uint32 visibilityLevel = accessLevel + 1;
+
+    if (ExtractUInt32(&args, visibilityLevel))
+        value = (visibilityLevel == 0); // Make visible if level = 0 only
+    else if (ExtractOnOff(&args, value))
+        visibilityLevel = accessLevel;
+
+    if (visibilityLevel > accessLevel)
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (value)
+    {
+        m_session->GetPlayer()->SetGMVisible(true);
+        m_session->SendNotification(LANG_INVISIBLE_VISIBLE);
+    }
+    else
+    {
+        m_session->GetPlayer()->SetGMInvisibilityLevel(visibilityLevel);
+        m_session->SendNotification(LANG_INVISIBLE_INVISIBLE, visibilityLevel);
+        m_session->GetPlayer()->SetGMVisible(false);
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleGMSocialsCommand(char* args)
 {
     auto player = GetSession()->GetPlayer();

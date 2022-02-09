@@ -285,6 +285,7 @@ class ChatHandler
         bool HandleGMCommand(char* args);
         bool HandleGMListFullCommand(char* args);
         bool HandleGMOnlineListCommand(char* args);
+        bool HandleGMVisibleCommand(char* args);
         bool HandleGMSocialsCommand(char* args);
 
         bool HandleGoCommand(char* args);
