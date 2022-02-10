@@ -50,3 +50,9 @@ update creature_template set fire_res = 0, nature_res = 0, frost_res = 0, shadow
 update quest_template set where entry = 40230;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1074
 update item_template set ammo_type = 2, display_id = 11247 where entry = 60338;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1058
+update item_template set spellid_1 = 46498 where entry = 11825;
+replace into companion_spells values (11825, 15048;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1058
+update item_template set spellid_1 = 46498 where entry = 15996;
+replace into companion_spells values (15996, 19772);
