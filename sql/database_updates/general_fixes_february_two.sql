@@ -70,3 +70,7 @@ update creature_ai_scripts set datalong = 15572 where command = 15 && id = 14439
 INSERT INTO gossip_menu VALUES (7058, 8321, 0);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1090
 replace into game_weather (zone, spring_rain_chance, spring_snow_chance, spring_storm_chance, summer_rain_chance, summer_snow_chance, summer_storm_chance, fall_rain_chance, fall_snow_chance, fall_storm_chance, winter_rain_chance, winter_snow_chance, winter_storm_chance) values (141, 15, 0, 0, 5, 0, 0, 15, 0, 0, 15, 0, 0);
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1063
+update item_template set spellid_1 = 52005, description = '' where entry = 61000;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/453
+update item_template set spellid_1 = 9406 where entry = 51300;

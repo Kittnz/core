@@ -1792,7 +1792,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 46200: // Teleport to Caverns of Time
+                case 52005: // Teleport to Caverns of Time
                 {
                     if (m_caster && m_caster->IsPlayer())
                         m_caster->ToPlayer()->TeleportTo(1, -8170.67F, -4758.11F, 33.33F, 4.8F);
