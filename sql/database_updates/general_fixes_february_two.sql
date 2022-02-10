@@ -15,3 +15,5 @@ REPLACE INTO creature_questrelation VALUES (14726, 7824);
 REPLACE INTO creature_involvedrelation VALUES (14726, 7824);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1082
 UPDATE quest_template SET Objectives = 'Bring 5 Chunks of Boar Meat, 3 Mutton Chops and 1 Bone Chew Toy to Bristlefur in Razor Hill.' WHERE entry = 40298;
+-- Forworn Mule:
+UPDATE creature_template SET scale = 0.8 WHERE entry = 50040.
