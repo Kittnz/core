@@ -22,3 +22,20 @@ UPDATE item_template SET inventory_type = 23 WHERE entry = 80804;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1081
 UPDATE creature_template SET spell_id1 = 13381, spell_id2 = 0, spell_id3 = 20793, spell_id4 = 0, spell_list_id = 70340 WHERE entry = 91852;
 UPDATE creature_template SET spell_id1 = 6742, spell_id2 = 9532, spell_id3 = 12550, spell_id4 = 13729, spell_list_id = 73790  WHERE entry = 91851;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1021
+replace into creature_involvedrelation (id, quest) values (80807, 80376);
+replace into creature_involvedrelation (id, quest) values (80807, 80378);
+replace into creature_involvedrelation (id, quest) values (80807, 80375);
+replace into creature_involvedrelation (id, quest) values (80807, 80377);
+replace into creature_involvedrelation (id, quest) values (80807, 80379);
+UPDATE quest_template SET Title = 'A Donation of Wool: Revantusk Tribe' WHERE entry = 80375;
+UPDATE quest_template SET Title = 'A Donation of Silk: Revantusk Tribe' WHERE entry = 80376;
+UPDATE quest_template SET Title = 'A Donation of Mageweave: Revantusk Tribe' WHERE entry = 80377;
+UPDATE quest_template SET Title = 'A Donation of Runecloth: Revantusk Tribe' WHERE entry = 80378;
+UPDATE quest_template SET Title = 'Additional Runecloth: Revantusk Tribe' WHERE entry = 80379;
+-- Silvermoon Remnants:
+UPDATE quest_template SET Title = 'A Donation of Wool: Silvermoon Remnants' WHERE entry = 80370;
+UPDATE quest_template SET Title = 'A Donation of Silk: Silvermoon Remnants' WHERE entry = 80371;
+UPDATE quest_template SET Title = 'A Donation of Mageweave: Silvermoon Remnants' WHERE entry = 80372;
+UPDATE quest_template SET Title = 'A Donation of Runecloth: Silvermoon Remnants' WHERE entry = 80373;
+UPDATE quest_template SET Title = 'Additional Runecloth: Silvermoon Remnants' WHERE entry = 80374;
