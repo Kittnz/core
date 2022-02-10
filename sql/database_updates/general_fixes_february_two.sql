@@ -66,3 +66,7 @@ update quest_template set reworreqmoney = 7000 where entry = 40072;
 update quest_template set ReqCreatureOrGOCount1 = 5, objectives = 'Kill 5 Galak Centaurs in Mulgore.' where entry = 40363;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/979
 update creature_ai_scripts set datalong = 15572 where command = 15 && id = 1443903 && datalong = 21081;
+-- Book "Soothsaying for Dummies"
+INSERT INTO gossip_menu VALUES (7058, 8321, 0);
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1090
+replace into game_weather (zone, spring_rain_chance, spring_snow_chance, spring_storm_chance, summer_rain_chance, summer_snow_chance, summer_storm_chance, fall_rain_chance, fall_snow_chance, fall_storm_chance, winter_rain_chance, winter_snow_chance, winter_storm_chance) values (141, 15, 0, 0, 5, 0, 0, 15, 0, 0, 15, 0, 0);
