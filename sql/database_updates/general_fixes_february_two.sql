@@ -39,3 +39,10 @@ UPDATE quest_template SET Title = 'A Donation of Silk: Silvermoon Remnants' WHER
 UPDATE quest_template SET Title = 'A Donation of Mageweave: Silvermoon Remnants' WHERE entry = 80372;
 UPDATE quest_template SET Title = 'A Donation of Runecloth: Silvermoon Remnants' WHERE entry = 80373;
 UPDATE quest_template SET Title = 'Additional Runecloth: Silvermoon Remnants' WHERE entry = 80374;
+-- Delete old stuff, TODO new quest chain:
+delete from creature_template where entry = 100013;
+delete from quest_template where entry = 80737;
+delete from creature_questrelation where quest = 80737;
+delete from creature_involvedrelation where quest = 80737;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1085
+update creature_template set fire_res = 0, nature_res = 0, frost_res = 0, shadow_res = 0, arcane_res = 0 where entry = 91989;
