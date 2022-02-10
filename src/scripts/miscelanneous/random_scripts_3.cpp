@@ -2872,6 +2872,7 @@ struct npc_zohjikAI : public ScriptedAI
     int8 phase;
     uint32 spellCastTimer;
     bool doOnce;
+    Player* escort{ nullptr };
 
 
     enum Entries
@@ -2894,21 +2895,26 @@ struct npc_zohjikAI : public ScriptedAI
 
     void Reset() override
     {
-        escortedPlayer = nullptr;
         phase = 0;
         spellCastTimer = 3000;
         doOnce = false;
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+
+        if (escortedPlayer)
+        {
+            escort = escortedPlayer;
+            escortedPlayer = nullptr;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (escortedPlayer)
+        if (escort)
         {
             if (phase > 0 && phase < 5)
             {
-                escortedPlayer->AddAura(SPELL_ICE_BLOCK); // entirety of this phase the player is ice blocked
+                escort->AddAura(SPELL_ICE_BLOCK); // entirety of this phase the player is ice blocked
 
                 if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
                 {
@@ -2944,7 +2950,7 @@ struct npc_zohjikAI : public ScriptedAI
             {
             case 0:
             {
-                if (escortedPlayer->GetAreaId() != 279)
+                if (escort->GetAreaId() != 279)
                 {
                     m_creature->PMonsterSay("You be leavin'? Use da whistle by da cart and I be ready.");
                     m_creature->DespawnOrUnsummon();
@@ -2952,10 +2958,10 @@ struct npc_zohjikAI : public ScriptedAI
                 }
 
                 if (!m_creature->GetVictim())
-                    m_creature->GetMotionMaster()->MoveFollow(escortedPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+                    m_creature->GetMotionMaster()->MoveFollow(escort, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
                 else
                 {
-                    if (escortedPlayer->GetVictim())
+                    if (escort->GetVictim())
                     {
                         if (m_creature->GetVictim())
                             if (m_creature->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
@@ -2966,8 +2972,8 @@ struct npc_zohjikAI : public ScriptedAI
                             }
                     Unit* target = m_creature->GetVictim();
 
-                    m_creature->SetInCombatWithVictim(escortedPlayer->GetVictim());
-                    m_creature->AddThreat(escortedPlayer->GetVictim(), 100.00f);
+                    m_creature->SetInCombatWithVictim(escort->GetVictim());
+                    m_creature->AddThreat(escort->GetVictim(), 100.00f);
 
                     if (target && target->IsDead())
                     {
@@ -2983,7 +2989,7 @@ struct npc_zohjikAI : public ScriptedAI
                             m_creature->PMonsterSay("Another one bites da dust!");
                             break;
                         case 2:
-                            m_creature->PMonsterSay("We make a great team, $n", escortedPlayer->GetName());
+                            m_creature->PMonsterSay("We make a great team, $n", escort->GetName());
                             break;
                         case 3:
                             m_creature->PMonsterSay("For Zul’jin!");
@@ -2999,16 +3005,16 @@ struct npc_zohjikAI : public ScriptedAI
                     }
                 }
 
-                if (!escortedPlayer->IsAlive())
+                if (!escort->IsAlive())
                     m_creature->DespawnOrUnsummon();
 
-                if (!escortedPlayer->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
+                if (!escort->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
                     m_creature->DespawnOrUnsummon();
 
-                if (escortedPlayer->GetQuestStatus(65007) == QUEST_STATUS_COMPLETE) // move on
+                if (escort->GetQuestStatus(65007) == QUEST_STATUS_COMPLETE) // move on
                 {
                     phase++;
-                    escortedPlayer->SummonCreature(NPC_MAGISTER, escortedPlayer->GetPositionX() + 4.0f, escortedPlayer->GetPositionY() + 3.0f, escortedPlayer->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
+                    escort->SummonCreature(NPC_MAGISTER, escort->GetPositionX() + 4.0f, escort->GetPositionY() + 3.0f, escort->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
                 }
 
                 break;
@@ -3020,18 +3026,18 @@ struct npc_zohjikAI : public ScriptedAI
                     if (!doOnce)
                     {
                         doOnce = true;
-                        escortedPlayer->PlayDirectMusic(8920);
+                        escort->PlayDirectMusic(8920);
                         magister->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         magister->CastSpell(magister, 26638, true); // teleport spell
-                        magister->PMonsterSay("Enough from you, %s. Stand still! I will take you in after I deal with this troll.", escortedPlayer->GetName());
+                        magister->PMonsterSay("Enough from you, %s. Stand still! I will take you in after I deal with this troll.", escort->GetName());
 
-                        DoAfterTime(escortedPlayer, 5 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 5 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->PMonsterSay("Keep ya ugly self away from me friend, elf!");
                             m_creature->CastSpell(m_creature, SPELL_BERSERK, false);
                             });
                     }
 
-                    DoAfterTime(escortedPlayer, 10 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                    DoAfterTime(escort, 10 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
                         magister->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         m_creature->Attack(magister, true);
                         magister->Attack(m_creature, true);
@@ -3055,7 +3061,7 @@ struct npc_zohjikAI : public ScriptedAI
 
                         magister->PMonsterSay("You Amani are nothing to our greater purpose!");
 
-                        DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->PMonsterSay("How bout ya purpose dis spear in ya face?");
                             m_creature->CastSpell(m_creature, SPELL_BERSERK, false);
                             });
@@ -3080,7 +3086,7 @@ struct npc_zohjikAI : public ScriptedAI
 
                         magister->PMonsterSay("Is this all you can do wretch?");
 
-                        DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->PMonsterSay("Seems to be enough!");
                             m_creature->CastSpell(m_creature, SPELL_BERSERK, false);
                             });
@@ -3105,7 +3111,7 @@ struct npc_zohjikAI : public ScriptedAI
 
                         magister->PMonsterSay("Enough of this foolishment, I will end your life!");
 
-                        DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->PMonsterSay("Won't ya just die already?");
                             });
                     }
@@ -3121,33 +3127,33 @@ struct npc_zohjikAI : public ScriptedAI
             }
             case 5:
             {
-                if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
-                {
-                    if (magister->GetHealthPercent() < 5.00f) // ensure he doesn't die too early.
-                        magister->SetHealthPercent(5.00f);
+                    if (Creature* magister = m_creature->FindNearestCreature(NPC_MAGISTER, 50.0f, true))
+                    {
+                        if (magister->GetHealthPercent() < 5.00f) // ensure he doesn't die too early.
+                            magister->SetHealthPercent(5.00f);
 
-                    DoAfterTime(escortedPlayer, 2 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
-                    magister->CastSpell(m_creature, SPELL_FINAL_BLAST, true);
-                        });
+                        DoAfterTime(magister, 2 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                            magister->CastSpell(m_creature, SPELL_FINAL_BLAST, true);
+                            });
 
-                    DoAfterTime(escortedPlayer, 4 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
-                        m_creature->DealDamage(magister, magister->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
-                        m_creature->SetHealthPercent(1);
-                        m_creature->AttackStop();
-                        m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
-                        });
+                        DoAfterTime(m_creature, 4 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                            m_creature->DealDamage(magister, magister->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                            m_creature->SetHealthPercent(1);
+                            m_creature->AttackStop();
+                            m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
+                            });
 
-                    DoAfterTime(escortedPlayer, 9 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
-                        m_creature->PMonsterSay("Dat -ugh-  ugly woman got me good. %s, Gi- give Zo’hjik a moment to res-", escortedPlayer->GetName());
-                        });
+                        DoAfterTime(m_creature, 9 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister, escort = escort]() {
+                            m_creature->PMonsterSay("Dat -ugh-  ugly woman got me good. %s, Gi- give Zo’hjik a moment to res-", escort->GetName());
+                            });
 
-                    DoAfterTime(escortedPlayer, 16 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
-                        m_creature->DealDamage(m_creature, m_creature->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
-                        m_creature->PMonsterEmote("Zo’hjik closes his eyes and falls on the ground, dead.");
-                        });
+                        DoAfterTime(m_creature, 16 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
+                            m_creature->DealDamage(m_creature, m_creature->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                            m_creature->PMonsterEmote("Zo’hjik closes his eyes and falls on the ground, dead.");
+                            });
 
-                    phase++;
-                }
+                        phase++;
+                    }
             }
             break;
             }
@@ -3161,8 +3167,8 @@ struct npc_zohjikAI : public ScriptedAI
 
     void EnterEvadeMode()
     {
-        if (escortedPlayer)
-            m_creature->GetMotionMaster()->MoveFollow(escortedPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+        if (escort)
+            m_creature->GetMotionMaster()->MoveFollow(escort, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
     }
 
     void KilledUnit(Unit* unit)
@@ -3174,8 +3180,8 @@ struct npc_zohjikAI : public ScriptedAI
 
     //void OnCombatStop() override
     //{                                                    
-    //    if (escortedPlayer)
-    //        m_creature->GetMotionMaster()->MoveFollow(escortedPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+    //    if (escort)
+    //        m_creature->GetMotionMaster()->MoveFollow(escort, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
     //}
 
     //void Aggro(Unit* pWho) override
@@ -3205,27 +3211,34 @@ struct npc_zulJin2AI : public ScriptedAI
     uint32 areaID;
     Unit* target{ nullptr };
     uint32 areaCheckTimer;
+    Player* escort{ nullptr };
 
     void Reset() override
     {
         areaCheckTimer = 1000;
         dolajinSummoned = false;
         phase = 0;
+
+        if (escortedPlayerZulJin)
+        {
+            escort = escortedPlayerZulJin;
+            escortedPlayerZulJin = nullptr;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (escortedPlayerZulJin)
+        if (escort != nullptr)
         {
             m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
 
             if (areaCheckTimer <= uiDiff)
             {
-                switch (phase) // shits broken
+                switch (phase) 
                 {
                 case 0:
                 {
-                    areaID = escortedPlayerZulJin->GetAreaId();
+                    areaID = escort->GetAreaId();
 
                     if (areaID != 1883 && areaID != 355) // Start area and Altar of Zul
                     {
@@ -3235,10 +3248,10 @@ struct npc_zulJin2AI : public ScriptedAI
                     }
 
                     if (!m_creature->GetVictim())
-                        m_creature->GetMotionMaster()->MoveFollow(escortedPlayerZulJin, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+                        m_creature->GetMotionMaster()->MoveFollow(escort, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
                     else
                     {
-                        if (escortedPlayerZulJin->GetVictim())
+                        if (escort->GetVictim())
                         {
                             if (m_creature->GetVictim())
                                 if (m_creature->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
@@ -3248,8 +3261,8 @@ struct npc_zulJin2AI : public ScriptedAI
                                     return;
                                 }
 
-                            m_creature->SetInCombatWithVictim(escortedPlayerZulJin->GetVictim());
-                            m_creature->AddThreat(escortedPlayerZulJin->GetVictim(), 100.00f);
+                            m_creature->SetInCombatWithVictim(escort->GetVictim());
+                            m_creature->AddThreat(escort->GetVictim(), 100.00f);
 
                             if (target && target->IsDead())
                             {
@@ -3281,10 +3294,10 @@ struct npc_zulJin2AI : public ScriptedAI
                         }
                     }
 
-                    if (!escortedPlayerZulJin->IsAlive())
+                    if (!escort->IsAlive())
                         m_creature->DespawnOrUnsummon();
 
-                    if (!escortedPlayerZulJin->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
+                    if (!escort->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
                         m_creature->DespawnOrUnsummon();
 
                     if (!dolajinSummoned && m_creature->FindNearestCreature(60372, 15, true)) // dummy trigger
@@ -3293,24 +3306,24 @@ struct npc_zulJin2AI : public ScriptedAI
                             phase++;
                             dolajinSummoned = true;
 
-                            DoAfterTime(escortedPlayerZulJin, 3 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                            DoAfterTime(escort, 3 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
                                 dolajin->MonsterYell("Fool! Ya be a fool Zul'jin, da Blood God will give us da strength to remake da whole Empire of Zul not just Zul'Aman!");
                                 });
 
-                            DoAfterTime(escortedPlayerZulJin, 8 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                            DoAfterTime(escort, 8 * IN_MILLISECONDS, [m_creature = m_creature]() {
                                 m_creature->MonsterSay("Da Blood God will eat ya and the rest of ya people! Only we can bring back the Empire of Zul, de Amani must return home.");
                                 });
 
-                            DoAfterTime(escortedPlayerZulJin, 13 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                            DoAfterTime(escort, 13 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
                                 dolajin->MonsterSay("Old crippled troll, ya can lead no one to victory. I, Dol'ajin, offer me soul to da Blood God. Master - rise from me ashes and claim da soul of dis idiot!");
                                 });
 
-                            DoAfterTime(escortedPlayerZulJin, 18 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                            DoAfterTime(escort, 18 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
                                 dolajin->SetHealthPercent(0.0f);
                                 m_creature->SummonCreature(65147, dolajin->GetPositionX(), dolajin->GetPositionY(), dolajin->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN); // hakkar
                                 });
 
-                            DoAfterTime(escortedPlayerZulJin, 20 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                            DoAfterTime(escort, 20 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
                                 m_creature->MonsterSay("Back to ya realm snake. How many times must we kill ya?");
                                 dolajin->ForcedDespawn();
 
@@ -3328,26 +3341,25 @@ struct npc_zulJin2AI : public ScriptedAI
                         m_creature->GetMotionMaster()->MovePoint(0, -269.27f, -3435.80f, 187.12f);
                         m_creature->SetOrientation(0.7926f);
 
-                        DoAfterTime(escortedPlayerZulJin, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->MonsterYell("Forest Trolls! Hear me!");
                             m_creature->HandleEmote(5);
                             });
 
-                        DoAfterTime(escortedPlayerZulJin, 7 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 7 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->MonsterYell("Da Blood God is dead and I be victorious. How many times have ya tried to bring dis mongrel back and fail miserably? Dose among ya dat wish to go back home and reclaim our lands from da elves are welcomed to join us.");
                             m_creature->HandleEmote(5);
                             });
 
-                        DoAfterTime(escortedPlayerZulJin, 12 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 12 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->MonsterYell("No more blood for da blood God! Dis ends now, together da Revantusk, da Witherbark and now da Vilebranch will bring da Amani back on dey feet.");
                             m_creature->HandleEmote(5);
                             });
 
-                        DoAfterTime(escortedPlayerZulJin, 20 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                        DoAfterTime(escort, 20 * IN_MILLISECONDS, [m_creature = m_creature]() {
                             m_creature->MonsterYell("DA WARLORD HAS SPOKEN! JOIN ME AND REMIND DA WORLD DAT DE AMANI WILL NEVER BOW DOWN TO ANYONE.");
                             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
                             m_creature->HandleEmote(5);
-                            escortedPlayerZulJin = nullptr;
                             });
 
                         phase++;
@@ -3400,10 +3412,9 @@ struct npc_zulJin_hakkarAI : public ScriptedAI
 
                 if (Creature* zulJin = m_creature->FindNearestCreature(65145, 15, true)) // zuljin
                 {
-                    if (escortedPlayerZulJin)
-                        DoAfterTime(escortedPlayerZulJin, 2 * IN_MILLISECONDS, [m_creature = m_creature, zulJin = zulJin]() {
+                    DoAfterTime(zulJin, 2 * IN_MILLISECONDS, [m_creature = m_creature, zulJin = zulJin]() {
                         zulJin->MonsterSay("Ya'll choke on ya own soon!");
-                            });
+                        });
                 }
 
                 phase++;
