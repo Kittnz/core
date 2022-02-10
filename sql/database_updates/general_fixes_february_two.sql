@@ -17,3 +17,5 @@ REPLACE INTO creature_involvedrelation VALUES (14726, 7824);
 UPDATE quest_template SET Objectives = 'Bring 5 Chunks of Boar Meat, 3 Mutton Chops and 1 Bone Chew Toy to Bristlefur in Razor Hill.' WHERE entry = 40298;
 -- Forworn Mule:
 UPDATE creature_template SET scale = 0.8 WHERE entry = 50040.
+-- arcane core needs to be an off-hand frill and not an off-hand weapon:
+UPDATE  item_template SET inventory_type = 23 WHERE entry = 80804;
