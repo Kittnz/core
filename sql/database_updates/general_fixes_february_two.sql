@@ -46,3 +46,7 @@ delete from creature_questrelation where quest = 80737;
 delete from creature_involvedrelation where quest = 80737;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1085
 update creature_template set fire_res = 0, nature_res = 0, frost_res = 0, shadow_res = 0, arcane_res = 0 where entry = 91989;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1012
+update quest_template set where entry = 40230;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1074
+update item_template set ammo_type = 2, display_id = 11247 where entry = 60338;
