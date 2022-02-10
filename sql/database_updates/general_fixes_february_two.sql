@@ -18,4 +18,7 @@ UPDATE quest_template SET Objectives = 'Bring 5 Chunks of Boar Meat, 3 Mutton Ch
 -- Forworn Mule:
 UPDATE creature_template SET scale = 0.8 WHERE entry = 50040.
 -- arcane core needs to be an off-hand frill and not an off-hand weapon:
-UPDATE  item_template SET inventory_type = 23 WHERE entry = 80804;
+UPDATE item_template SET inventory_type = 23 WHERE entry = 80804;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1081
+UPDATE creature_template SET spell_id1 = 13381, spell_id2 = 0, spell_id3 = 20793, spell_id4 = 0, spell_list_id = 70340 WHERE entry = 91852;
+UPDATE creature_template SET spell_id1 = 6742, spell_id2 = 9532, spell_id3 = 12550, spell_id4 = 13729, spell_list_id = 73790  WHERE entry = 91851;
