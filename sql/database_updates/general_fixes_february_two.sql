@@ -60,3 +60,7 @@ replace into companion_spells values (15996, 19772);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/818
 UPDATE creature_template SET dynamic_flags = 36, npc_flags = 0 WHERE entry = 91774;
 REPLACE INTO creature_template_addon (entry, bytes1) VALUES (91774, 7);
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1073
+update quest_template set reworreqmoney = 7000 where entry = 40072;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1022
+update quest_template set ReqCreatureOrGOCount1 = 5, objectives = 'Kill 5 Galak Centaurs in Mulgore.' where entry = 40363;
