@@ -64,3 +64,5 @@ REPLACE INTO creature_template_addon (entry, bytes1) VALUES (91774, 7);
 update quest_template set reworreqmoney = 7000 where entry = 40072;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1022
 update quest_template set ReqCreatureOrGOCount1 = 5, objectives = 'Kill 5 Galak Centaurs in Mulgore.' where entry = 40363;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/979
+update creature_ai_scripts set datalong = 15572 where command = 15 && id = 1443903 && datalong = 21081;
