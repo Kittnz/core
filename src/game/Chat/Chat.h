@@ -136,7 +136,7 @@ class ChatHandler
         * \param uint8 playerRank              : Used only for Defensive Channels (Value over 0 will show rank name before character name in channel)
         **/
         static void BuildChatPacket(
-            WorldPacket& data, ChatMsg msgtype, char const* message, Language language = LANG_UNIVERSAL, uint32 chatTag = CHAT_TAG_NONE,
+            WorldPacket& data, ChatMsg msgtype, const std::string& message, Language language = LANG_UNIVERSAL, uint32 chatTag = CHAT_TAG_NONE,
             ObjectGuid const& senderGuid = ObjectGuid(), char const* senderName = nullptr,
             ObjectGuid const& targetGuid = ObjectGuid(), char const* targetName = nullptr,
             char const* channelName = nullptr, uint8 playerRank = 0);
