@@ -1909,8 +1909,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                         if (spellIdOpt && m_caster->IsPlayer())
                         {
+                            uint32 count = 1;
                             m_caster->ToPlayer()->LearnSpell(spellIdOpt.value(), false);
-                            m_caster->ToPlayer()->DestroyItemCount(m_CastItem->GetEntry(), 1, true);
+                            m_caster->ToPlayer()->DestroyItemCount(m_CastItem, count, true);
                             m_caster->ToPlayer()->SaveInventoryAndGoldToDB();
                         }
                     }
