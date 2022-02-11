@@ -2337,14 +2337,27 @@ enum DressingBoxes
     FASHION_COIN = 51217
 };
 
-bool GossipHello_npc_riding_horse(Player* p_Player, Creature* p_Creature)
-{
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this horse for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    p_Player->SEND_GOSSIP_MENU(90365, p_Creature->GetGUID());
+bool GossipHello_rented_mount(Player* player, Creature* mount)
+{    
+    switch (mount->GetEntry())
+    {
+    case 51560:
+    case 51561:
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this horse for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->SEND_GOSSIP_MENU(90365, mount->GetGUID());
+        return true;
+    case 51580:
+    case 51581:
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this wolf for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->SEND_GOSSIP_MENU(90368, mount->GetGUID());
+        return true;
+    default:
+        break;
+    }
     return true;
 }
 
-bool GossipSelect_npc_riding_horse(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
+bool GossipSelect_rented_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
     uint32 spell{ 0 };
 
@@ -2354,8 +2367,10 @@ bool GossipSelect_npc_riding_horse(Player* p_Player, Creature* p_Creature, uint3
         {
             switch (p_Creature->GetEntry())
             {
-            case 51560: spell = 468; break;
-            case 51561: spell = 471; break;
+            case 51560: spell = 468;  break; // White Stallion
+            case 51561: spell = 471;  break; // Palomino
+            case 51580: spell = 6653; break; // Dire Riding Wolf
+            case 51581: spell = 580;  break; // Timber Riding Wolf
             default:
                 break;
             }
@@ -7388,9 +7403,9 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_riding_horse";
-    newscript->pGossipHello = &GossipHello_npc_riding_horse;
-    newscript->pGossipSelect = &GossipSelect_npc_riding_horse;
+    newscript->Name = "rented_mount";
+    newscript->pGossipHello = &GossipHello_rented_mount;
+    newscript->pGossipSelect = &GossipSelect_rented_mount;
     newscript->RegisterSelf();
 
     newscript = new Script;
