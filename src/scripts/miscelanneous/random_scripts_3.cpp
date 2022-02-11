@@ -1413,26 +1413,29 @@ bool GossipHello_npc_insomni(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_npc_insomni(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
+
+    auto playerGuid = pPlayer->GetObjectGuid();
     switch (uiAction)
     {
     case GOSSIP_ACTION_INFO_DEF + 1:
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+        DoAfterTime(pCreature, 1 * IN_MILLISECONDS, [npc = pCreature]() {
             npc->MonsterSay("I come from a land far away, shrouded in mystery and green mist. I am blessed by those you would not understand, and those that inhabit this mystical land. I am an outcast of my kin, and have only come here to seek new purpose. This purpose was found upon these islands.");
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
-        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+        DoAfterTime(pCreature, 21 * IN_MILLISECONDS, [npc = pCreature]() {
             npc->MonsterSay("Slowly, day by day, a darkness came, a power much like myself that dared to challenge the rule I had established. Little by little I would lose this pitiful match of displaying power to attempt to keep the locals swayed to my side.");
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
-        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+        DoAfterTime(pCreature, 41 * IN_MILLISECONDS, [ npc = pCreature]() {
             npc->MonsterSay("In the end, I could not offer the secrets of my power to those that followed me. Eventually, most of my followers and worshippers stepped aside to bask in the glory of this dark energy. Now, I am seeking revenge, I am seeking to once again reclaim my throne upon these lands, do you understand mortal?");
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
-        DoAfterTime(pPlayer, 56 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60334))
+        DoAfterTime(pCreature, 56 * IN_MILLISECONDS, [playerGuid, npc = pCreature]() {
+            auto player = sObjectAccessor.FindPlayer(playerGuid);
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60334); cInfo && player)
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             });
@@ -1458,29 +1461,36 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
     if (!pPlayer)
         return false;
 
+    auto playerGuid = pPlayer->GetObjectGuid();
+
     if (pQuest->GetQuestId() == 40171) // The Tower of Lapidis IX
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
-        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 18 * IN_MILLISECONDS, [npc = pQuestGiver]() {
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 5906, false);
             });
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            player->AddItem(60244);
-            if (player->HasItemCount(60244, 1, false))
+        DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+            auto player = sObjectAccessor.FindPlayer(playerGuid);
+            if (player)
             {
-                npc->MonsterSayToPlayer("There, it is done, the key is attuned, do with it what you must. I hope whatever purpose you are using this for, serves you well.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                return true;
+                player->AddItem(60244);
+                if (player->HasItemCount(60244, 1, false))
+                {
+                    npc->MonsterSayToPlayer("There, it is done, the key is attuned, do with it what you must. I hope whatever purpose you are using this for, serves you well.", player);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    return true;
+                }
+                else
+                    player->RemoveQuest(40171);
+                player->SetQuestStatus(40171, QUEST_STATUS_NONE);
+                player->GetSession()->SendNotification("Your bags are full!");
             }
-            else
-                player->RemoveQuest(40171);
-            player->SetQuestStatus(40171, QUEST_STATUS_NONE);
-            player->GetSession()->SendNotification("Your bags are full!");
+
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             return false;
             });
@@ -1491,23 +1501,28 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
-        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        DoAfterTime(pQuestGiver, 18 * IN_MILLISECONDS, [npc = pQuestGiver]() {
             npc->HandleEmote(EMOTE_ONESHOT_YES);
             npc->CastSpell(npc, 5906, false);
             });
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            player->AddItem(60345);
-            if (player->HasItemCount(60345, 1, false))
+        DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+            auto player = sObjectAccessor.FindPlayer(playerGuid);
+
+            if (player)
             {
-                npc->MonsterSayToPlayer("I must confess something to you mortal, for I am not one to withhold information, nor am I one to outwardly lie without purpose. I had many reasonings for the death of the Prophet Jammal'an within the depths of the Sunken Temple.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                return true;
+                player->AddItem(60345);
+                if (player->HasItemCount(60345, 1, false))
+                {
+                    npc->MonsterSayToPlayer("I must confess something to you mortal, for I am not one to withhold information, nor am I one to outwardly lie without purpose. I had many reasonings for the death of the Prophet Jammal'an within the depths of the Sunken Temple.", player);
+                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    return true;
+                }
+                else
+                    player->RemoveQuest(40271);
+                player->SetQuestStatus(40271, QUEST_STATUS_NONE);
+                player->GetSession()->SendNotification("Your bags are full!");
             }
-            else
-                player->RemoveQuest(40271);
-            player->SetQuestStatus(40271, QUEST_STATUS_NONE);
-            player->GetSession()->SendNotification("Your bags are full!");
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             return false;
             });
@@ -1523,64 +1538,64 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
 {
     pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-    DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->SetWalk(true);
             npc->GetMotionMaster()->MovePoint(0, -12864.27F, 2809.63F, -6.85F, 0, 3.0F);
             npc->PMonsterSay("Come, %s. It is time to banish this evil.", player->GetName());
         }
         });
-    DoAfterTime(pPlayer, 39 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 39 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->MonsterSay("We must travel to the center of Kazon Island, there, I can channel the energies of both Lapidis, and Gillijim.");
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
         }
         });
-    DoAfterTime(pPlayer, 42 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 42 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->GetMotionMaster()->MovePoint(0, -12865.99F, 2821.96F, -0.82F, 0, 3.0F);
         }
         });
-    DoAfterTime(pPlayer, 47 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 47 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->MonsterSay("With the energies, and my own, I will be able to draw out the corruption that has plagued the land.");
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
         }
         });
-    DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 48 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F);
         }
         });
-    DoAfterTime(pPlayer, 61 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 61 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->GetMotionMaster()->MovePoint(0, -12865.12F, 2873.97F, 1.67F, 0, 3.0F);
         }
         });
-    DoAfterTime(pPlayer, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 65 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->GetMotionMaster()->MovePoint(0, -12864.54F, 2908.59F, 10.24F, 0, 3.0F, 0.62F);
         }
         });
-    DoAfterTime(pPlayer, 78 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 78 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->MonsterSay("Now then - this will take much concentration to bring the entity forward into physical form, it is up to you to weaken it! When it is weak enough, I will be free to join you, until then, protect me!");
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
         }
         });
-    DoAfterTime(pPlayer, 82 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 82 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->CastSpell(npc, 13236, false);
             GameObject* riftSpell = npc->SummonGameObject(7000035, -12853.94f, 2915.04f, 10.81f, 0);
         }
         });
 
-    DoAfterTime(pPlayer, 92 * IN_MILLISECONDS, [pPlayer = pPlayer]() {
+    DoAfterTime(pQuestGiver, 92 * IN_MILLISECONDS, [pPlayer = pPlayer]() {
         if (GameObject* riftSpell = pPlayer->FindNearestGameObject(7000035, 50.0f))
             riftSpell->AddObjectToRemoveList();
         });
 
-    DoAfterTime(pPlayer, 92 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+    DoAfterTime(pQuestGiver, 92 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->SummonCreature(60499, -12853.94f, 2915.04f, 10.81f, 3.83F, TEMPSUMMON_CORPSE_DESPAWN);
         }
