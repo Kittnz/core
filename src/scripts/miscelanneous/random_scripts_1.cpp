@@ -2351,6 +2351,12 @@ bool GossipHello_rented_mount(Player* player, Creature* mount)
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this wolf for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         player->SEND_GOSSIP_MENU(90368, mount->GetGUID());
         return true;
+    case 51588:
+    case 51589:
+    case 51587:
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this horse for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
+        return true;
     default:
         break;
     }
@@ -2367,10 +2373,13 @@ bool GossipSelect_rented_mount(Player* p_Player, Creature* p_Creature, uint32 /*
         {
             switch (p_Creature->GetEntry())
             {
-            case 51560: spell = 468;  break; // White Stallion
-            case 51561: spell = 471;  break; // Palomino
-            case 51580: spell = 6653; break; // Dire Riding Wolf
-            case 51581: spell = 580;  break; // Timber Riding Wolf
+            case 51560: spell = 468;    break; // White Stallion
+            case 51561: spell = 471;    break; // Palomino
+            case 51580: spell = 6653;   break; // Dire Riding Wolf
+            case 51581: spell = 580;    break; // Timber Riding Wolf
+            case 51588: spell = 17462;  break; // Red Skeletal Horse
+            case 51589: spell = 17463;  break; // Blue Skeletal Horse
+            case 51587: spell = 17464;  break; // Brown Skeletal Horse
             default:
                 break;
             }
