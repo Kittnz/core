@@ -30,6 +30,34 @@ public:
     void MoveInLineOfSight(Unit *) override;
     void EnterCombat(Unit *) override;
     static int Permissible(const Creature *);
+
+
+    // Turtle WoW Start (Author: Kruxis)
+
+//=============================================================================
+// TODO: 
+// - CooldownTimer 120s (safe)
+// - Undercity Guardians needs EventAi set in DB. Work in Progress
+//=============================================================================
+
+    // Lets the Player interact with City guards which reply with emotes or text messages.
+    void ReceiveEmote(Player* pPlayer, const uint32 uiEmote) override;
+
+    // Emote Cooldown of Guards
+    bool CheckEmoteCooldown()
+    {
+        if (time(nullptr) >= m_uiTimer)
+        {
+            m_uiTimer = time(nullptr) + 120; // Cooldown time of Emote interaction
+            return true;
+        }
+        return false;
+    }
+private:
+
+    uint32 m_uiTimer;
+
+    // Turtle WoW End
 private:
     bool IsAttackingPlayerOrFriendly(const Unit *) const;
 };
