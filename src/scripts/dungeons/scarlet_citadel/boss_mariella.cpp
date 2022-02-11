@@ -13,6 +13,7 @@
     - Find a better spawn destination for felhounds (random positions preferably)
     - Add gossip menu conversation to start boss fight
     - Add more visuals
+    - Adjust difficulty (timers, spawns, etc.)
 */
 
 struct boss_mariellaAI : public ScriptedAI
@@ -172,7 +173,7 @@ struct boss_mariellaAI : public ScriptedAI
     {
         if (m_uiShadowVolley_Timer < uiDiff)
         {
-            DoCast(m_creature, MariellaSpells::SPELL_SHADOWVOLLEY); // Hits every player within range of 100 yd for 800-1000 damage (Ignores LoS)
+            DoCast(m_creature, SPELL_SHADOWVOLLEY);
 
             if (m_bEnrage)
                 m_uiShadowVolley_Timer = SHADOWVOLLEY_ENRAGE_REPEAT_TIMER;
@@ -187,8 +188,10 @@ struct boss_mariellaAI : public ScriptedAI
     {
         if (m_uiVoidBolt_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), MariellaSpells::SPELL_VOIDBOLT) == CAST_OK) // Cast only on the player with aggro, deals >= 3000 shadow damage
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_VOIDBOLT) == CAST_OK)
+            {
                 m_uiVoidBolt_Timer = VOIDBOLT_REPEAT_TIMER;
+            }
         }
         else
             m_uiVoidBolt_Timer -= uiDiff;
@@ -276,7 +279,7 @@ struct boss_mariellaAI : public ScriptedAI
     {
         if (nsFelhounds::m_uiFelhoundSpawn_Timer < uiDiff)
         {
-            if (nsFelhounds::m_vFelhounds.size() < nsFelhounds::MAX_FELHOUNDS_SPAWNED) // Set a limit in case a condition is broken and we get an overflow here ...
+            if (nsFelhounds::m_vFelhounds.size() < nsFelhounds::MAX_FELHOUNDS_SPAWNED)
             {
                 Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
                 for (const auto& itr : PlayerList)

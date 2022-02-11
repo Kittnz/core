@@ -12,81 +12,77 @@
 
 namespace nsSacrificePhase
 {
-    static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f };
+    std::vector<ObjectGuid> m_vPossibleVictim{};
+    static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Mariella regenerate on one tick
     uint8 m_uiSacrificePhase{};
     uint32 m_uiIncreaseHealth_Timer{};
     bool m_bIsSacrificePhase{};
-    std::vector<ObjectGuid> m_vPossibleVictim{};
 
-    static constexpr uint32 INCREASE_HEALTH_TIMER{ 1000 };
+    static constexpr uint32 INCREASE_HEALTH_TIMER{ 1000 };      // Interval of Boss Mariella hp re-generate
 }
 
 namespace nsVoidZone
 {
     // Void Zone
     std::vector<ObjectGuid> m_vVoidZones{};
-    static constexpr uint8 NUMBEROFSUMMONERS{ 3 };
-    static constexpr uint32 VOIDZONE_DAMAGE{ 2500 };
-    static constexpr uint32 NPC_VOIDZONE{ 2000016 };
+    static constexpr uint8 NUMBEROFSUMMONERS{ 3 };     // How many players should spawn a Void Zone on each tick
+    static constexpr uint32 VOIDZONE_DAMAGE{ 2500 };   // How much damage should void Zone do on one tick
+    static constexpr uint32 NPC_VOIDZONE{ 2000016 };   // Void Zone's entry
     static constexpr float VOIDZONE_DIAMETER{ 2.87f }; // Exact value if field `size` in creature_template = 0.1
     uint32 m_uiVoidZoneSpawn_Timer{};
     uint32 m_uiDamage_Timer{};
     bool m_bVoidZonesAlreadyAnnounced{};
 
-    static constexpr uint32 VOIDZONE_DAMAGE_REPEAT_TIMER{ 1000 };
-    static constexpr uint32 VOIDZONE_SPAWN_FIRST_TIMER{ 1000 };
-    static constexpr uint32 VOIDZONE_SPAWN_REPEAT_TIMER{ 20000 };
+    static constexpr uint32 VOIDZONE_DAMAGE_REPEAT_TIMER{ 1000 }; // Interval of Void Zones damage
+    static constexpr uint32 VOIDZONE_SPAWN_FIRST_TIMER{ 1000 };   // Void Zone's first damage tick should start after this time
+    static constexpr uint32 VOIDZONE_SPAWN_REPEAT_TIMER{ 20000 }; // Interval for a new Void Zone spawn wave
 }
 
 namespace nsFelhounds
 {
     // Felhounds
     std::vector<ObjectGuid> m_vFelhounds{};
-    static constexpr uint32 NPC_FELHOUND{ 2000017 };
-    static constexpr uint32 VISUALSPELL_DRAINMANA{ 25676 };
-    static constexpr uint32 VISUALSPELL_SUMMON_FELOUND{ 7741 };
-    static constexpr int32 VALUE_DRAINMANA{ -1250 };
-    static constexpr auto MAX_FELHOUNDS_SPAWNED{ 50 };
+    static constexpr uint32 NPC_FELHOUND{ 2000017 };            // Felhound's entry
+    static constexpr uint32 VISUALSPELL_DRAINMANA{ 25676 };     // Drain Mana visual effect (blue line)
+    static constexpr uint32 VISUALSPELL_SUMMON_FELOUND{ 7741 }; // Summon Felhound visual effect
+    static constexpr int32 VALUE_DRAINMANA{ -1250 };            // How much mana should be drained on one tick
+    static constexpr std::size_t MAX_FELHOUNDS_SPAWNED{ 50 };   // Set a limit in case a condition is broken and we get an overflow here
     uint32 m_uiFelhoundSpawn_Timer{};
     uint32 m_uiManaDrain_Timer{};
     bool m_bFelhoundsAlreadyAnnounced{};
 
-    static constexpr uint32 FELHOUND_SPAWN_FIRST_TIMER{ 1000 };
-    static constexpr uint32 FELHOUND_SPAWN_REPEAT_TIMER{ 15000 };
-    static constexpr uint32 FELHOUND_DRAIN_REPEAT_TIMER{ 1000 };
+    static constexpr uint32 FELHOUND_DRAIN_REPEAT_TIMER{ 1000 };  // Interval of Felhound's mana drain
+    static constexpr uint32 FELHOUND_SPAWN_FIRST_TIMER{ 1000 };   // Felhound's first spawn should start after this time
+    static constexpr uint32 FELHOUND_SPAWN_REPEAT_TIMER{ 15000 }; // Interval for a new Felhound spawn
 }
 
 
 // Shadow Volley
 uint32 m_uiShadowVolley_Timer{};
+static constexpr uint32 SPELL_SHADOWVOLLEY{ 21341 };              // Hits every player within range of 100 yd for 800-1000 damage (Ignores LoS)
 
-static constexpr uint32 SHADOWVOLLEY_REPEAT_TIMER{ 8000 };
-static constexpr uint32 SHADOWVOLLEY_ENRAGE_REPEAT_TIMER{ 1000 };
+static constexpr uint32 SHADOWVOLLEY_REPEAT_TIMER{ 8000 };        // Interval of how often should Shadow Volley be casted
+static constexpr uint32 SHADOWVOLLEY_ENRAGE_REPEAT_TIMER{ 1000 }; // Interval of how often should Shadow Volley be casted on enrage
 
 
 // Void Bolt
 uint32 m_uiVoidBolt_Timer{};
+static constexpr uint32 SPELL_VOIDBOLT{ 22709 };       // Cast only on the player with aggro, deals >= 3000 shadow damage
 
-static constexpr uint32 VOIDBOLT_REPEAT_TIMER{ 3000 };
+static constexpr uint32 VOIDBOLT_REPEAT_TIMER{ 3000 }; // Interval of how often should Void Bolt be casted
 
 
 // Enrage
 uint32 m_uiEnrage_Timer{};
 bool m_bEnrage{};
 
-static constexpr uint32 TIME_UNTIL_ENRAGE{ 600000 };
+static constexpr uint32 TIME_UNTIL_ENRAGE{ 600000 }; // Time until enrage
 
 
 // Misc
-static constexpr float ROOM_DIAGONAL{ 33.f };
+static constexpr float ROOM_DIAGONAL{ 33.f }; // Room size
 ScriptedInstance* m_pInstance{};
 
-
-enum MariellaSpells
-{
-    SPELL_SHADOWVOLLEY = 21341,
-    SPELL_VOIDBOLT = 22709,
-};
 
 enum class CombatNotifications
 {
