@@ -922,8 +922,8 @@ class WorldObject : public Object
         void PMonsterEmote(const char* text, Unit const* target = nullptr, bool IsBossEmote = false, ...) const;
         void PMonsterEmote(int32 text, Unit const* target = nullptr, bool IsBossEmote = false, ...) const;
 
-        void MonsterSay(const char* text, uint32 language = 0, Unit const* target = nullptr) const;
-        void MonsterYell(const char* text, uint32 language = 0, Unit const* target = nullptr) const;
+        void MonsterSay(const std::string& text, uint32 language = 0, Unit const* target = nullptr) const;
+        void MonsterYell(const std::string& text, uint32 language = 0, Unit const* target = nullptr) const;
         void MonsterTextEmote(const char* text, Unit const* target = nullptr, bool IsBossEmote = false, float rangeOverride=0.0f) const;
         void MonsterWhisper(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
         void MonsterSayToPlayer(const char* text, Unit const* target = nullptr, bool IsBossWhisper = false) const;
