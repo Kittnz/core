@@ -1716,7 +1716,7 @@ bool ChatHandler::isValidChatMessage(const char* message)
     return validSequence == validSequenceIterator;
 }
 
-void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, char const* message, Language language /*= LANG_UNIVERSAL*/, uint32 chatTag /*= CHAT_TAG_NONE*/,
+void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std::string& message, Language language /*= LANG_UNIVERSAL*/, uint32 chatTag /*= CHAT_TAG_NONE*/,
                                   ObjectGuid const& senderGuid /*= ObjectGuid()*/, char const* senderName /*= nullptr*/,
                                   ObjectGuid const& targetGuid /*= ObjectGuid()*/, char const* targetName /*= nullptr*/,
                                   char const* channelName /*= nullptr*/, uint8 playerRank /*= 0*/)
@@ -1765,13 +1765,13 @@ void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, char const
             break;
     }
 
-    MANGOS_ASSERT(message);
-    data << uint32(strlen(message) + 1);
+    if (message.empty())
+        return;
+
+    data << uint32(message.length() + 1);
     data << message;
     data << uint8(chatTag);
 }
-
-
 
 Player * ChatHandler::GetSelectedPlayer()
 {

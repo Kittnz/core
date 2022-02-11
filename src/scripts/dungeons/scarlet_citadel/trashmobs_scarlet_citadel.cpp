@@ -1,3 +1,10 @@
+/*
+ * Copyright (C) 2021-2022 Nolin (nolin.nolin.nolin.nolin@gmail.org)
+ *
+ * This is private software and may not be shared under any circumstances,
+ * absent permission of Nolin.
+ */
+
 #include "scriptPCH.h"
 #include "scarlet_citadel.h"
 
@@ -8,12 +15,12 @@ struct Location
     float m_fX, m_fY, m_fZ, m_fO;
 };
 
-static const Location vf_SpawnPoint[] =
+static const Location vfSpawnPoint[] =
 {
     { 151.75450f, -62.649109f, 18.007f, 1.59041f }
 };
 
-static const Location vf_LastWaypoint[] =
+static const Location vfLastWaypoint[] =
 {
     { 148.78366f, -18.592115f, 18.007f, 1.59041f }, // 0
     { 151.75268f, -18.500916f, 18.007f, 1.59041f }, // 1
@@ -58,47 +65,44 @@ static const Location vf_LastWaypoint[] =
 
 struct npc_areatriggerAI : public ScriptedAI
 {
-    npc_areatriggerAI(Creature* p_Creature) : ScriptedAI(p_Creature)
+    npc_areatriggerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        //m_pInstance = static_cast<ScriptedInstance*>(p_Creature->GetInstanceData());
-        Reset();
+        npc_areatriggerAI::Reset();
     }
 
-    //ScriptedInstance* m_pInstance;
+    bool m_bIsTrashSpawned{};
 
-    bool b_IsTrashSpawned{ false };
-
-    uint16 ui_CheckPulse{ 500 };
-    uint8 ui_TrashMob{(38 + 1)};
-    uint8 ui_ITR{};
+    uint16 m_uiCheckPulse{};
+    uint8 m_uiTrashMob{(38 + 1)};
+    uint8 m_uiITR{};
 
     void Reset() override
     {
-        b_IsTrashSpawned = false;
-        ui_CheckPulse = 500;
+        m_bIsTrashSpawned = false;
+        m_uiCheckPulse = 500;
     }
 
     void SummonAdds()
     {
-        b_IsTrashSpawned = true;
+        m_bIsTrashSpawned = true;
 
-        for ( ; ui_ITR < ui_TrashMob; ++ui_ITR)
+        for ( ; m_uiITR < m_uiTrashMob; ++m_uiITR)
         {
-            m_creature->SummonCreature(ScarletCitadelUnit::NPC_FIRST_WING_TRASH, vf_SpawnPoint[0].m_fX, vf_SpawnPoint[0].m_fY, vf_SpawnPoint[0].m_fZ, vf_SpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
+            m_creature->SummonCreature(ScarletCitadelUnit::NPC_FIRST_WING_TRASH, vfSpawnPoint[0].m_fX, vfSpawnPoint[0].m_fY, vfSpawnPoint[0].m_fZ, vfSpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
         }
     }
 
-    void JustSummoned(Creature* p_Summoned) override
+    void JustSummoned(Creature* pSummoned) override
     {
-        if (p_Summoned->GetEntry() == ScarletCitadelUnit::NPC_FIRST_WING_TRASH)
+        if (pSummoned->GetEntry() == ScarletCitadelUnit::NPC_FIRST_WING_TRASH)
         {
-            p_Summoned->MonsterMoveWithSpeed(vf_LastWaypoint[ui_ITR].m_fX, vf_LastWaypoint[ui_ITR].m_fY, vf_LastWaypoint[ui_ITR].m_fZ, vf_LastWaypoint[ui_ITR].m_fO, 5, uint32(MOVE_PATHFINDING | MOVE_FORCE_DESTINATION));
+            pSummoned->MonsterMoveWithSpeed(vfLastWaypoint[m_uiITR].m_fX, vfLastWaypoint[m_uiITR].m_fY, vfLastWaypoint[m_uiITR].m_fZ, vfLastWaypoint[m_uiITR].m_fO, 5, uint32(MOVE_PATHFINDING | MOVE_FORCE_DESTINATION));
         }
     }
 
-    void UpdateAI(const uint32 ui_Diff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
-        if (ui_CheckPulse < ui_Diff && !b_IsTrashSpawned)
+        if (m_uiCheckPulse < uiDiff && !m_bIsTrashSpawned)
         {
             Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
             for (const auto& i : list)
@@ -109,24 +113,24 @@ struct npc_areatriggerAI : public ScriptedAI
                 }
             }
 
-            ui_CheckPulse = 500;
+            m_uiCheckPulse = 500;
         }
         else
         {
-            ui_CheckPulse -= ui_Diff;
+            m_uiCheckPulse -= uiDiff;
         }
     }
 };
 
-CreatureAI* GetAI_npc_areatrigger(Creature* p_Creature)
+CreatureAI* GetAI_npc_areatrigger(Creature* pCreature)
 {
-    return new npc_areatriggerAI(p_Creature);
+    return new npc_areatriggerAI(pCreature);
 }
 
 // Trash OUTSIDE
 struct npc_citadel_inquisitor_AI : public ScriptedAI
 {
-    npc_citadel_inquisitor_AI(Creature* p_Creature) : ScriptedAI(p_Creature)
+    npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -136,20 +140,20 @@ struct npc_citadel_inquisitor_AI : public ScriptedAI
 
     }
 
-    void UpdateAI(uint32 const ui_Diff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         DoMeleeAttackIfReady();
     }
 };
 
-CreatureAI* GetAI_npc_citadel_inquisitor(Creature* p_Creature)
+CreatureAI* GetAI_npc_citadel_inquisitor(Creature* pCreature)
 {
-    return new npc_citadel_inquisitor_AI(p_Creature);
+    return new npc_citadel_inquisitor_AI(pCreature);
 }
 
 struct npc_citadel_valiant_AI : public ScriptedAI
 {
-    npc_citadel_valiant_AI(Creature* p_Creature) : ScriptedAI(p_Creature)
+    npc_citadel_valiant_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -159,35 +163,35 @@ struct npc_citadel_valiant_AI : public ScriptedAI
 
     }
 
-    void UpdateAI(uint32 const ui_Diff) override
+    void UpdateAI(uint32 const uiDiff) override
     {
         DoMeleeAttackIfReady();
     }
 };
 
-CreatureAI* GetAI_npc_citadel_valiant(Creature* p_Creature)
+CreatureAI* GetAI_npc_citadel_valiant(Creature* pCreature)
 {
-    return new npc_citadel_valiant_AI(p_Creature);
+    return new npc_citadel_valiant_AI(pCreature);
 }
 
 void AddSC_trash_mobs_scarlet_citadel()
 {
-    Script* p_Newscript;
+    Script* pNewscript;
 
     // Trash INSIDE
-    p_Newscript = new Script;
-    p_Newscript->Name = "npc_areatrigger";
-    p_Newscript->GetAI = &GetAI_npc_areatrigger;
-    p_Newscript->RegisterSelf();
+    pNewscript = new Script;
+    pNewscript->Name = "npc_areatrigger";
+    pNewscript->GetAI = &GetAI_npc_areatrigger;
+    pNewscript->RegisterSelf();
 
     // Trash OUTSIDE
-    p_Newscript = new Script;
-    p_Newscript->Name = "npc_citadel_inquisitor";
-    p_Newscript->GetAI = &GetAI_npc_citadel_inquisitor;
-    p_Newscript->RegisterSelf();
+    pNewscript = new Script;
+    pNewscript->Name = "npc_citadel_inquisitor";
+    pNewscript->GetAI = &GetAI_npc_citadel_inquisitor;
+    pNewscript->RegisterSelf();
 
-    p_Newscript = new Script;
-    p_Newscript->Name = "npc_citadel_valiant";
-    p_Newscript->GetAI = &GetAI_npc_citadel_valiant;
-    p_Newscript->RegisterSelf();
+    pNewscript = new Script;
+    pNewscript->Name = "npc_citadel_valiant";
+    pNewscript->GetAI = &GetAI_npc_citadel_valiant;
+    pNewscript->RegisterSelf();
 }

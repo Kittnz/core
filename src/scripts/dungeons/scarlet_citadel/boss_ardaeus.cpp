@@ -1,11 +1,18 @@
+/*
+ * Copyright (C) 2021-2022 Nolin (nolin.nolin.nolin.nolin@gmail.org)
+ *
+ * This is private software and may not be shared under any circumstances,
+ * absent permission of Nolin.
+ */
+
 #include "scriptPCH.h"
 #include "scarlet_citadel.h"
 
 struct boss_ardaeusAI : public ScriptedAI
 {
-    explicit boss_ardaeusAI(Creature* p_Creature) : ScriptedAI(p_Creature)
+    explicit boss_ardaeusAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(p_Creature->GetInstanceData());
+        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
         Reset();
     }
 
@@ -16,7 +23,7 @@ struct boss_ardaeusAI : public ScriptedAI
 
     }
 
-    void Aggro(Unit* /*p_Who*/) override
+    void Aggro(Unit* /*pWho*/) override
     {
         if (!m_pInstance)
             return;
@@ -33,7 +40,7 @@ struct boss_ardaeusAI : public ScriptedAI
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, FAIL);
     }
 
-    void JustDied(Unit* /*p_Killer*/) override
+    void JustDied(Unit* /*pKiller*/) override
     {
         if (!m_pInstance)
             return;
@@ -41,7 +48,7 @@ struct boss_ardaeusAI : public ScriptedAI
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, DONE);
     }
 
-    void UpdateAI(const uint32 ui_Diff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -50,16 +57,16 @@ struct boss_ardaeusAI : public ScriptedAI
     }
 };
 
-CreatureAI* GetAI_boss_ardaeus(Creature* p_Creature)
+CreatureAI* GetAI_boss_ardaeus(Creature* pCreature)
 {
-    return new boss_ardaeusAI(p_Creature);
+    return new boss_ardaeusAI(pCreature);
 }
 
 void AddSC_boss_ardaeus()
 {
-    Script *p_Newscript;
-    p_Newscript = new Script;
-    p_Newscript->Name = "boss_ardaeus";
-    p_Newscript->GetAI = &GetAI_boss_ardaeus;
-    p_Newscript->RegisterSelf();
+    Script *pNewscript;
+    pNewscript = new Script;
+    pNewscript->Name = "boss_ardaeus";
+    pNewscript->GetAI = &GetAI_boss_ardaeus;
+    pNewscript->RegisterSelf();
 }
