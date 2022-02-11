@@ -1846,7 +1846,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 105: m_caster->ToPlayer()->TeleportTo(0, 1574.24F, -2975.24F, 86.85F, 4.8F);   break; // Argent Vanguard
                         case 212: m_caster->ToPlayer()->TeleportTo(1, -5546.96F, -4071.97F, -58.50F, 3.2F); break; // Rats
                         case 3:   m_caster->ToPlayer()->TeleportTo(0, -1853.48F, -4091.64F, 9.81F, 4.7F);   break; // Thunder Ale Brewing Co
-                        case 168: m_caster->ToPlayer()->TeleportTo(1, 3879.91F, -5396.72F, 142.89F, 0.3F);  break; // Macrochelys
+                        case 168: m_caster->ToPlayer()->TeleportTo(1, 2934.71F, -4762.13F, 234.06F, 5.6F);  break; // Macrochelys
                         case 226: m_caster->ToPlayer()->TeleportTo(1, 1017.24F, -2225.02F, 93.09F, 5.15F);  break; // Warsong Outriders
                         case 254: m_caster->ToPlayer()->TeleportTo(1, 7.71F, -3619.13F, 27.22F, 2.5F);      break; // Southfury Trading Co
                         case 49:  m_caster->ToPlayer()->TeleportTo(0, 2743.08F, -1032.77F, 112.89F, 5.32F); break; // The Scarlet Crusade
@@ -1857,6 +1857,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 322: m_caster->ToPlayer()->TeleportTo(1, 1557.9F, -2887.1F, 183.3F, 1.9F);     break; // Ered Ruin
                         case 339: m_caster->ToPlayer()->TeleportTo(1, -727.7F, -3943.3F, 23.48F, 5.5F);     break; // Golden Moon
                         case 363: m_caster->ToPlayer()->TeleportTo(1, 7118.21F, -3926.49F, 704.3F, 0.2F);   break; // School of the Dragonhawk
+                        case 351: m_caster->ToPlayer()->TeleportTo(0, -10377.1F, -3374.04F, 21.82F, 1.8F);  break; // Blacktooth Grin
                         default: break;
                         }
                     }
