@@ -94,3 +94,5 @@ update creature_template set script_name = 'rented_mount' where script_name = 'n
 REPLACE INTO creature_template VALUES (50140, 10616, 0, 0, 0, 'Eiendor Stormcloud', 'School of the Dragonhawk', 0, 1, 1, 64, 64, 0, 0, 0, 35, 256, 1, 1.14286, 0.45, 18, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
 
 REPLACE INTO creature_template VALUES (50141, 16259, 0, 0, 0, 'Baby Turtle', NULL, 0, 1, 1, 8, 8, 0, 0, 20, 31, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 5951, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, 1, '');
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1098
+update quest_template set objectives = 'Find Shagu\'s Satchel of Mixed Herbs and return to Shagu in Bloodhoof Village.' where entry = 40002;
