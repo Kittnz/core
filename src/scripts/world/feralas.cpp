@@ -817,10 +817,8 @@ struct npc_captured_sprite_darterAI : public ScriptedAI
                         if (Creature* pKindal = m_creature->GetMap()->GetCreature(m_uiKindalGUID))
                         {
                             if (auto pKindalAI = static_cast<npc_kindal_moonweaverAI*>(pKindal->AI()))
-                            {
                                 pKindalAI->SpriteSaved();
-                                m_creature->ForcedDespawn();
-                            }                           
+                            m_creature->ForcedDespawn();
                         }
                         break;
                     }
