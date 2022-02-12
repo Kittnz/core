@@ -26,14 +26,14 @@ namespace nsVoidZone
     // Void Zone
     std::vector<ObjectGuid> m_vVoidZones{};
     static constexpr uint8 NUMBEROFSUMMONERS{ 3 };     // How many players should spawn a Void Zone on each tick
-    static constexpr uint32 VOIDZONE_DAMAGE{ 2500 };   // How much damage should void Zone do on one tick
+    static constexpr uint32 VOIDZONE_DAMAGE{ 3000 };   // How much damage should void Zone do on one tick
     static constexpr uint32 NPC_VOIDZONE{ 2000016 };   // Void Zone's entry
     static constexpr float VOIDZONE_DIAMETER{ 2.87f }; // Exact value if field `size` in creature_template = 0.1
     uint32 m_uiVoidZoneSpawn_Timer{};
     uint32 m_uiDamage_Timer{};
     bool m_bVoidZonesAlreadyAnnounced{};
 
-    static constexpr uint32 VOIDZONE_DAMAGE_REPEAT_TIMER{ 1000 }; // Interval of Void Zones damage
+    static constexpr uint32 VOIDZONE_DAMAGE_REPEAT_TIMER{ 2000 }; // Interval of Void Zones damage
     static constexpr uint32 VOIDZONE_SPAWN_FIRST_TIMER{ 1000 };   // Void Zone's first damage tick should start after this time
     static constexpr uint32 VOIDZONE_SPAWN_REPEAT_TIMER{ 20000 }; // Interval for a new Void Zone spawn wave
 }
@@ -42,7 +42,9 @@ namespace nsFelhounds
 {
     // Felhounds
     std::vector<ObjectGuid> m_vFelhounds{};
+    std::list<ObjectGuid> m_lSummoningCircles{};
     static constexpr uint32 NPC_FELHOUND{ 2000017 };            // Felhound's entry
+    static constexpr uint32 GO_SUMMONINGCIRCLE{ 181227 };       // Summoning Circle entry
     static constexpr uint32 VISUALSPELL_DRAINMANA{ 25676 };     // Drain Mana visual effect (blue line)
     static constexpr uint32 VISUALSPELL_SUMMON_FELOUND{ 7741 }; // Summon Felhound visual effect
     static constexpr int32 VALUE_DRAINMANA{ -1250 };            // How much mana should be drained on one tick
@@ -50,6 +52,19 @@ namespace nsFelhounds
     uint32 m_uiFelhoundSpawn_Timer{};
     uint32 m_uiManaDrain_Timer{};
     bool m_bFelhoundsAlreadyAnnounced{};
+
+    struct Location
+    {
+        float m_fX, m_fY, m_fZ, m_fO;
+    };
+
+    static const Location vfSpawnPoints[] =
+    {
+        { 189.632f, 18.3435f, 31.346f, 0.788997f },
+        { 189.632f, 33.1638f, 31.112f, 5.454260f },
+        { 204.404f, 33.1638f, 31.242f, 3.962000f },
+        { 204.404f, 18.3435f, 30.860f, 2.359790f }
+    };
 
     static constexpr uint32 FELHOUND_DRAIN_REPEAT_TIMER{ 1000 };  // Interval of Felhound's mana drain
     static constexpr uint32 FELHOUND_SPAWN_FIRST_TIMER{ 1000 };   // Felhound's first spawn should start after this time
@@ -65,11 +80,13 @@ static constexpr uint32 SHADOWVOLLEY_REPEAT_TIMER{ 8000 };        // Interval of
 static constexpr uint32 SHADOWVOLLEY_ENRAGE_REPEAT_TIMER{ 1000 }; // Interval of how often should Shadow Volley be casted on enrage
 
 
-// Void Bolt
-uint32 m_uiVoidBolt_Timer{};
-static constexpr uint32 SPELL_VOIDBOLT{ 22709 };       // Cast only on the player with aggro, deals >= 3000 shadow damage
+// Kill Zone
+uint32 m_uiKill_Timer{};
+std::size_t m_uiKillZoneGuid{};
+static constexpr uint32 NPC_KILLZONE{ 2000018 };           // Void Zone's entry
+static constexpr float KILLZONE_DIAMETER{ 5.74f };         // Exact value if field `size` in creature_template = 0.2
 
-static constexpr uint32 VOIDBOLT_REPEAT_TIMER{ 3000 }; // Interval of how often should Void Bolt be casted
+static constexpr uint32 KILLZONE_KILL_REPEAT_TIMER{ 500 }; // Interval of Kill Zones deadly tick
 
 
 // Enrage
@@ -80,6 +97,7 @@ static constexpr uint32 TIME_UNTIL_ENRAGE{ 600000 }; // Time until enrage
 
 
 // Misc
+bool m_bAchievementKill{};
 static constexpr float ROOM_DIAGONAL{ 33.f }; // Room size
 ScriptedInstance* m_pInstance{};
 
@@ -95,6 +113,7 @@ enum class CombatNotifications
     BOSSDIED,
     FELHOUNDS_SPAWN,
     VOIDZONES_SPAWN,
+    ACHIEVEMENT_FAILED
 };
 
 std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNotifications)
@@ -137,6 +156,10 @@ std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNo
         case CombatNotifications::VOIDZONES_SPAWN:
         {
             return (strNotification = "Only the darkness awaits the heretics.");
+        }
+        case CombatNotifications::ACHIEVEMENT_FAILED:
+        {
+            return (strNotification = "ACHIEVEMENT_FAILED"); // TODO: Find proper text
         }
     }
 }
