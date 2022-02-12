@@ -2917,7 +2917,7 @@ struct npc_zohjikAI : public ScriptedAI
 
         if (escortedPlayerGUID)
         {
-            escort = m_creature->GetMap()->GetPlayer(escortedPlayerGUID);
+            escort = sObjectAccessor.FindPlayer(escortedPlayerGUID);
             escortedPlayerGUID.Clear();
         }
     }
@@ -3231,7 +3231,7 @@ struct npc_zulJin2AI : public ScriptedAI
 
         if (escortedPlayerZulJinGUID)
         {
-            escort = m_creature->GetMap()->GetPlayer(escortedPlayerZulJinGUID);
+            escort = sObjectAccessor.FindPlayer(escortedPlayerZulJinGUID);
             escortedPlayerZulJinGUID.Clear();
         }
     }
