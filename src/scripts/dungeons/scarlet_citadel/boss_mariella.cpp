@@ -9,11 +9,9 @@
 
 /*
     TODO-List
-    - Unfuck Summoning Circle's orientation
     - Add gossip menu conversation to start boss fight
-    - Add more visuals
+    - Add more visuals and texts
     - Adjust difficulty (timers, spawns, etc.)
-    - Decide how to award an achievement kill
 */
 
 struct boss_mariellaAI : public ScriptedAI
@@ -94,7 +92,7 @@ struct boss_mariellaAI : public ScriptedAI
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
     }
 
-    void JustDied(Unit* /*pKiller*/) override
+    void JustDied(Unit* pKiller) override
     {
         if (!m_pInstance)
             return;
@@ -105,6 +103,11 @@ struct boss_mariellaAI : public ScriptedAI
         DespawnKillZone();
         DespawnSummoningCircles();
         DespawnFelhounds();
+
+        if (m_bAchievementKill)
+        {
+            SpawnAchievementReward(pKiller);
+        }
     
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, DONE);
     }
@@ -131,7 +134,6 @@ struct boss_mariellaAI : public ScriptedAI
             if ((m_creature->GetDistance3dToCenter(pPlayer) < ROOM_DIAGONAL) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
             {
                 nsSacrificePhase::m_vPossibleVictim.push_back(pPlayer->GetObjectGuid());
-                // pPlayer->SetFFAPvP(true); // Not gonna work like this.. Client related?
             }
         }
     }
@@ -141,20 +143,10 @@ struct boss_mariellaAI : public ScriptedAI
         if (nsSacrificePhase::m_vPossibleVictim.empty())
             return;
 
-/*
-        for (const auto& guid : nsSacrificePhase::m_vPossibleVictim)
-        {
-            if (Player* pPlayer{ ObjectAccessor::FindPlayer(guid) })
-            {
-                pPlayer->SetFFAPvP(false); // Make the raid members non attackable
-            }
-        }
-*/
-
         m_creature->MonsterYell(CombatNotification(CombatNotifications::SACRIFICE_ENDED), LANG_UNIVERSAL);
 
-        nsSacrificePhase::m_vPossibleVictim.clear(); // Erase list data
         SetSacrificePhaseActive(false);              // We reached the end of sacrifice phase
+        nsSacrificePhase::m_vPossibleVictim.clear(); // Erase list data
         ++nsSacrificePhase::m_uiSacrificePhase;      // Increase Sacrifice Phase counter for the next event
     }
 
@@ -307,9 +299,12 @@ struct boss_mariellaAI : public ScriptedAI
                 nsFelhounds::vfSpawnPoints[i].m_fY,
                 nsFelhounds::vfSpawnPoints[i].m_fZ,
                 nsFelhounds::vfSpawnPoints[i].m_fO,
-                TEMPSUMMON_MANUAL_DESPAWN) })
+                nsFelhounds::vfSpawnPoints[i].m_fR0,
+                nsFelhounds::vfSpawnPoints[i].m_fR1,
+                nsFelhounds::vfSpawnPoints[i].m_fR2,
+                nsFelhounds::vfSpawnPoints[i].m_fR3,
+                nsFelhounds::GO_SUMMONINGCIRCLE_DESPAWN_TIMER) })
             {
-                pSummoningCircle->SetObjectScale(0.008f);
                 nsFelhounds::m_lSummoningCircles.push_back(pSummoningCircle->GetObjectGuid());
             }
         }
@@ -455,6 +450,25 @@ struct boss_mariellaAI : public ScriptedAI
         nsSacrificePhase::m_bIsSacrificePhase = bActive;
     }
 
+    void SpawnAchievementReward(Unit* pKiller)
+    {
+        if (pKiller)
+        {
+            pKiller->SummonGameObject(GO_ACHIEVEMENT_CHEST,
+                vfAchievementChestSpawnPoint[0].m_fX,
+                vfAchievementChestSpawnPoint[0].m_fY,
+                vfAchievementChestSpawnPoint[0].m_fZ,
+                vfAchievementChestSpawnPoint[0].m_fO,
+                vfAchievementChestSpawnPoint[0].m_fR0,
+                vfAchievementChestSpawnPoint[0].m_fR1,
+                vfAchievementChestSpawnPoint[0].m_fR2,
+                vfAchievementChestSpawnPoint[0].m_fR3,
+                GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER);
+        }
+        else
+            sLog.outError("[SC] Boss Mariella: SpawnAchievementReward() called but no pKiller found!");
+    }
+
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -520,7 +534,7 @@ struct npc_voidzone : public ScriptedAI
                     m_creature->DealDamage(pPlayer, nsVoidZone::VOIDZONE_DAMAGE, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
                     m_bAchievementKill = false; // Achievement failed if a player received damage from a Void Zone
-                    m_creature->MonsterSay(CombatNotification(CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
+                    m_creature->MonsterSay(CombatNotification(CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
                 }
             }
 
