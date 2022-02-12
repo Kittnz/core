@@ -141,6 +141,7 @@ void FollowerAI::JustDied(Unit* /*pKiller*/)
             if (pPlayer->GetQuestStatus(m_pQuestForFollow->GetQuestId()) == QUEST_STATUS_INCOMPLETE)
                 pPlayer->FailQuest(m_pQuestForFollow->GetQuestId());
         }
+        OnEscortFailed(true);
     }
 }
 
@@ -263,6 +264,7 @@ void FollowerAI::UpdateAI(const uint32 uiDiff)
             {
                 sLog.outDebug("FollowerAI failed because quest failed or player/group was to far away or not found");
                 SetFollowPaused(false);
+                OnEscortFailed(false);
                 m_creature->DisappearAndDie();
                 return;
             }

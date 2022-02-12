@@ -47,6 +47,7 @@ class FollowerAI : public ScriptedAI
 
         void SetFollowPaused(bool bPaused);                 //if special event require follow mode to hold/resume during the follow
         void SetFollowComplete(bool bWithEndEvent = false);
+        virtual void OnEscortFailed(bool bDied) {};
 
         bool HasFollowState(uint32 uiFollowState) const { return m_uiFollowState & uiFollowState; }
 
