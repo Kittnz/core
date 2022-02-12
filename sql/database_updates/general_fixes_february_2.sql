@@ -65,3 +65,9 @@ REPLACE INTO npc_vendor VALUES (60663, 15327, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60663, 16110, 0, 0, 0, 0);
 -- Quest "Grand Herbal Theft" fixed objetives:
 update quest_template set objetives = 'Find Shagu\'s Satchel of Mixed Herbs and take it back to Shagu in Bloodhoof Village.' where entry = 40002;
+-- Mark in city's map for hunter trainer in Undercity:
+REPLACE INTO gossip_menu_option VALUES (2848, 6, 0, 'Hunter', 3447, 1, 1, 41092, 10500, 0, 0, 0, '', 0, 0);
+REPLACE INTO gossip_menu VALUES (41092, 200, 0);
+REPLACE INTO npc_text VALUES (200, 30019, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO broadcast_text VALUES (30019, 'In building of War Quarter on outer ring of city.', 'In building of War Quarter on outer ring of city.', 0, 0, 1, 0, 0, 0, 0, 0, 0);
+REPLACE INTO points_of_interest VALUES (10500, 1679.88, 309.89, 6, 75, 0, 'Hunter Trainer, Undercity');
