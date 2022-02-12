@@ -9,11 +9,11 @@
 
 /*
     TODO-List
-    - Rewrite sacrifice mechanic, so that the player has to do suicide instad of getting killed by others (spawn a static voidzone to instakill?)
-    - Find a better spawn destination for felhounds (random positions preferably)
+    - Unfuck Summoning Circle's orientation
     - Add gossip menu conversation to start boss fight
     - Add more visuals
     - Adjust difficulty (timers, spawns, etc.)
+    - Decide how to award an achievement kill
 */
 
 struct boss_mariellaAI : public ScriptedAI
@@ -21,7 +21,6 @@ struct boss_mariellaAI : public ScriptedAI
     explicit boss_mariellaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-        SetCombatMovement(false);
         boss_mariellaAI::Reset();
     }
 
@@ -40,12 +39,17 @@ struct boss_mariellaAI : public ScriptedAI
         // Felhounds
         nsFelhounds::m_uiFelhoundSpawn_Timer = nsFelhounds::FELHOUND_SPAWN_FIRST_TIMER;
         nsFelhounds::m_bFelhoundsAlreadyAnnounced = false;
+        nsFelhounds::m_vFelhounds.clear();
+        nsFelhounds::m_lSummoningCircles.clear();
 
         // Shadow Volley
         m_uiShadowVolley_Timer = SHADOWVOLLEY_REPEAT_TIMER;
 
-        // Void Bolt
-        m_uiVoidBolt_Timer = VOIDBOLT_REPEAT_TIMER;
+        // Kill Zone
+        m_uiKillZoneGuid = 0;
+
+        // Achievement Kill
+        m_bAchievementKill = true;
 
         // Enrage
         m_uiEnrage_Timer = TIME_UNTIL_ENRAGE;
@@ -60,6 +64,9 @@ struct boss_mariellaAI : public ScriptedAI
     {
         if (!m_pInstance)
             return;
+
+        SpawnKillZone();
+        SpawnSummoningCircles();
 
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
@@ -77,6 +84,8 @@ struct boss_mariellaAI : public ScriptedAI
             return;
         
         DespawnVoidZones();
+        DespawnKillZone();
+        DespawnSummoningCircles();
         DespawnFelhounds();
 
         m_creature->MonsterSay(CombatNotification(CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
@@ -93,6 +102,8 @@ struct boss_mariellaAI : public ScriptedAI
         m_creature->MonsterSay(CombatNotification(CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
 
         DespawnVoidZones();
+        DespawnKillZone();
+        DespawnSummoningCircles();
         DespawnFelhounds();
     
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, DONE);
@@ -184,19 +195,6 @@ struct boss_mariellaAI : public ScriptedAI
             m_uiShadowVolley_Timer -= uiDiff;
     }
 
-    void CastVoidBolt(const uint32& uiDiff)
-    {
-        if (m_uiVoidBolt_Timer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_VOIDBOLT) == CAST_OK)
-            {
-                m_uiVoidBolt_Timer = VOIDBOLT_REPEAT_TIMER;
-            }
-        }
-        else
-            m_uiVoidBolt_Timer -= uiDiff;
-    }
-
     void SpawnVoidZones(const uint32& uiDiff)
     {
         if (nsVoidZone::m_uiVoidZoneSpawn_Timer < uiDiff)
@@ -232,10 +230,8 @@ struct boss_mariellaAI : public ScriptedAI
                 Player const* pPlayer{ *summonerItr };
                 summonerItr = lPotentialSummoner.erase(summonerItr);
 
-                if (Creature const* pVoidZone{ m_creature->SummonCreature(nsVoidZone::NPC_VOIDZONE,
-                    pPlayer->GetPositionX(),
-                    pPlayer->GetPositionY(),
-                    pPlayer->GetPositionZ(), 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
+                if (Creature const* pVoidZone{ m_creature->SummonCreature(nsVoidZone::NPC_VOIDZONE, pPlayer->GetPositionX(),pPlayer->GetPositionY(),
+                    (pPlayer->GetPositionZ() + 0.25f), 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
                 {
                     if (!nsVoidZone::m_bVoidZonesAlreadyAnnounced)
                     {
@@ -275,6 +271,70 @@ struct boss_mariellaAI : public ScriptedAI
         }
     }
 
+    void SpawnKillZone()
+    {
+        if (Creature const* pKillZone{ m_creature->SummonCreature(NPC_KILLZONE, m_creature->GetPositionX(), m_creature->GetPositionY(),
+            (m_creature->GetPositionZ() + 0.25f), 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
+        {
+            m_uiKillZoneGuid = pKillZone->GetObjectGuid();
+        }
+    }
+
+    void DespawnKillZone()
+    {
+        if (!m_uiKillZoneGuid)
+            return;
+
+        if (const auto map{ m_creature->GetMap() })
+        {
+            if (Creature* pCreature{ map->GetCreature(m_uiKillZoneGuid) })
+            {
+                if (TemporarySummon* tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
+                {
+                    tmpSumm->UnSummon();
+                    m_uiKillZoneGuid = 0;
+                }
+            }
+        }
+    }
+
+    void SpawnSummoningCircles()
+    {
+        for (uint8 i{ 0 }; i < 4; ++i)
+        {
+            if (GameObject* pSummoningCircle{ m_creature->SummonGameObject(nsFelhounds::GO_SUMMONINGCIRCLE,
+                nsFelhounds::vfSpawnPoints[i].m_fX,
+                nsFelhounds::vfSpawnPoints[i].m_fY,
+                nsFelhounds::vfSpawnPoints[i].m_fZ,
+                nsFelhounds::vfSpawnPoints[i].m_fO,
+                TEMPSUMMON_MANUAL_DESPAWN) })
+            {
+                pSummoningCircle->SetObjectScale(0.008f);
+                nsFelhounds::m_lSummoningCircles.push_back(pSummoningCircle->GetObjectGuid());
+            }
+        }
+    }
+
+    void DespawnSummoningCircles()
+    {
+        if (!nsFelhounds::m_lSummoningCircles.empty())
+        {
+            if (const auto map{ m_creature->GetMap() })
+            {
+                for (const auto& guid : nsFelhounds::m_lSummoningCircles)
+                {
+                    if (GameObject* pGameObject{ map->GetGameObject(guid) })
+                    {
+                        pGameObject->Despawn();
+                        pGameObject->Delete();
+                    }
+                }
+
+                nsFelhounds::m_lSummoningCircles.clear();
+            }
+        }
+    }
+
     void SpawnFelhounds(const uint32& uiDiff)
     {
         if (nsFelhounds::m_uiFelhoundSpawn_Timer < uiDiff)
@@ -288,8 +348,13 @@ struct boss_mariellaAI : public ScriptedAI
                     {
                         if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster() && (pPlayer->GetPowerType() == POWER_MANA))
                         {
+                            const auto uiRnd{ urand(0, 3) }; // Choose a random spawn point
                             if (Creature* pFelhound{ m_creature->SummonCreature(nsFelhounds::NPC_FELHOUND,
-                                m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
+                                nsFelhounds::vfSpawnPoints[uiRnd].m_fX,
+                                nsFelhounds::vfSpawnPoints[uiRnd].m_fY,
+                                nsFelhounds::vfSpawnPoints[uiRnd].m_fZ,
+                                nsFelhounds::vfSpawnPoints[uiRnd].m_fO,
+                                TEMPSUMMON_MANUAL_DESPAWN) })
                             {
                                 pFelhound->CastSpell(pFelhound, nsFelhounds::VISUALSPELL_SUMMON_FELOUND, true);
                                 pFelhound->AI()->AttackStart(pPlayer);
@@ -406,7 +471,6 @@ struct boss_mariellaAI : public ScriptedAI
         }
         else
         {
-            CastVoidBolt(uiDiff);
             CastShadowVolley(uiDiff);
             CheckForSacraficePhase(uiDiff);
         }
@@ -454,6 +518,9 @@ struct npc_voidzone : public ScriptedAI
                 if ((m_creature->GetDistance3dToCenter(pPlayer) < nsVoidZone::VOIDZONE_DIAMETER) && pPlayer->IsAlive())
                 {
                     m_creature->DealDamage(pPlayer, nsVoidZone::VOIDZONE_DAMAGE, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+
+                    m_bAchievementKill = false; // Achievement failed if a player received damage from a Void Zone
+                    m_creature->MonsterSay(CombatNotification(CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
                 }
             }
 
@@ -472,6 +539,62 @@ struct npc_voidzone : public ScriptedAI
 CreatureAI* GetAI_npc_voidzone(Creature* pCreature)
 {
     return new npc_voidzone(pCreature);
+}
+
+struct npc_killzone : public ScriptedAI
+{
+    explicit npc_killzone(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_killzone::Reset();
+        SetCombatMovement(false);
+    }
+
+    void Reset() override
+    {
+        // Void Zone damage timer
+        m_uiKill_Timer = KILLZONE_KILL_REPEAT_TIMER;
+
+        // Void Zone shouldn't move
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
+        m_creature->SetRooted(true);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+    }
+
+    void DamageTimer(const uint32& uiDiff)
+    {
+        Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
+        if (PlayerList.isEmpty())
+            return;
+
+        if (m_uiKill_Timer < uiDiff)
+        {
+            for (const auto& itr : PlayerList)
+            {
+                Player* pPlayer{ itr.getSource() };
+                if (!pPlayer)
+                    continue;
+
+                if ((m_creature->GetDistance3dToCenter(pPlayer) < KILLZONE_DIAMETER) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
+                {
+                    m_creature->DealDamage(pPlayer, (pPlayer->GetMaxHealth() + 1), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                }
+            }
+
+            m_uiKill_Timer = KILLZONE_KILL_REPEAT_TIMER;
+        }
+        else
+            m_uiKill_Timer -= uiDiff;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        DamageTimer(uiDiff);
+    }
+};
+
+CreatureAI* GetAI_npc_killzone(Creature* pCreature)
+{
+    return new npc_killzone(pCreature);
 }
 
 struct npc_felhound : public ScriptedAI
@@ -531,6 +654,11 @@ void AddSC_boss_mariella()
     pNewscript = new Script;
     pNewscript->Name = "npc_voidzone";
     pNewscript->GetAI = &GetAI_npc_voidzone;
+    pNewscript->RegisterSelf();
+
+    pNewscript = new Script;
+    pNewscript->Name = "npc_killzone";
+    pNewscript->GetAI = &GetAI_npc_killzone;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
