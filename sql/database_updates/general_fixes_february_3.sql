@@ -1599,3 +1599,6 @@ REPLACE INTO creature_loot_template VALUES
 
 -- Reduce the aggro radius of Tomb Bats by 50%.
 update creature_template set detection_range = 15 where entry = 91921;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1008
+update item_template set spellid_1 = 9400, spellid_2 = 0, spelltrigger_1 = 0, spelltrigger_1 = 1 where entry = 80826;
