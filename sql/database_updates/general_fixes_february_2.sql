@@ -63,4 +63,5 @@ REPLACE INTO npc_vendor VALUES (60663, 11285, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60663, 15326, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60663, 15327, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60663, 16110, 0, 0, 0, 0);
-
+-- Quest "Grand Herbal Theft" fixed objetives:
+update quest_template set objetives = 'Find Shagu\'s Satchel of Mixed Herbs and take it back to Shagu in Bloodhoof Village.' where entry = 40002;
