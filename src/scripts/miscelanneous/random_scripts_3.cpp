@@ -2875,7 +2875,7 @@ bool GossipSelect_npc_kauth(Player* pPlayer, Creature* pCreature, uint32 uiSende
     return true;
 }
 
-Player* escortedPlayer{ nullptr };
+ObjectGuid escortedPlayerGUID;
 
 struct npc_zohjikAI : public ScriptedAI
 {
@@ -2888,7 +2888,6 @@ struct npc_zohjikAI : public ScriptedAI
     uint32 spellCastTimer;
     bool doOnce;
     Player* escort{ nullptr };
-
 
     enum Entries
     {
@@ -2916,10 +2915,10 @@ struct npc_zohjikAI : public ScriptedAI
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
-        if (escortedPlayer)
+        if (escortedPlayerGUID)
         {
-            escort = escortedPlayer;
-            escortedPlayer = nullptr;
+            escort = m_creature->GetMap()->GetPlayer(escortedPlayerGUID);
+            escortedPlayerGUID.Clear();
         }
     }
 
@@ -3211,7 +3210,7 @@ CreatureAI* GetAI_npc_zohjik(Creature* pCreature)
     return new npc_zohjikAI(pCreature);
 }
 
-Player* escortedPlayerZulJin{ nullptr };
+ObjectGuid escortedPlayerZulJinGUID;
 
 struct npc_zulJin2AI : public ScriptedAI
 {
@@ -3220,9 +3219,7 @@ struct npc_zulJin2AI : public ScriptedAI
         Reset();
     }
 
-    int phase;
     uint32 spellCastTimer;
-    bool dolajinSummoned;
     uint32 areaID;
     Unit* target{ nullptr };
     uint32 areaCheckTimer;
@@ -3231,157 +3228,91 @@ struct npc_zulJin2AI : public ScriptedAI
     void Reset() override
     {
         areaCheckTimer = 1000;
-        dolajinSummoned = false;
-        phase = 0;
 
-        if (escortedPlayerZulJin)
+        if (escortedPlayerZulJinGUID)
         {
-            escort = escortedPlayerZulJin;
-            escortedPlayerZulJin = nullptr;
+            escort = m_creature->GetMap()->GetPlayer(escortedPlayerZulJinGUID);
+            escortedPlayerZulJinGUID.Clear();
         }
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (escort != nullptr)
+        if (escort )
         {
             m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
 
             if (areaCheckTimer <= uiDiff)
             {
-                switch (phase) 
+                areaID = escort->GetAreaId();
+
+                if (areaID != 1883 && areaID != 355) // Start area and Altar of Zul
                 {
-                case 0:
+                    m_creature->PMonsterSay("We have da mission, mon. Come find me when ya be back.");
+                    m_creature->DespawnOrUnsummon();
+                    return;
+                }
+
+                if (!m_creature->GetVictim())
+                    m_creature->GetMotionMaster()->MoveFollow(escort, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+                else
                 {
-                    areaID = escort->GetAreaId();
-
-                    if (areaID != 1883 && areaID != 355) // Start area and Altar of Zul
+                    if (escort->GetVictim())
                     {
-                        m_creature->PMonsterSay("We have da mission, mon. Come find me when ya be back.");
-                        m_creature->DespawnOrUnsummon();
-                        return;
-                    }
-
-                    if (!m_creature->GetVictim())
-                        m_creature->GetMotionMaster()->MoveFollow(escort, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
-                    else
-                    {
-                        if (escort->GetVictim())
-                        {
-                            if (m_creature->GetVictim())
-                                if (m_creature->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
-                                {
-                                    m_creature->CombatStop();
-                                    m_creature->ClearInCombat();
-                                    return;
-                                }
-
-                            m_creature->SetInCombatWithVictim(escort->GetVictim());
-                            m_creature->AddThreat(escort->GetVictim(), 100.00f);
-
-                            if (target && target->IsDead())
+                        if (m_creature->GetVictim())
+                            if (m_creature->GetVictim()->GetTypeId() == TYPEID_PLAYER) // no attacking players
                             {
-                                target = nullptr;
+                                m_creature->CombatStop();
+                                m_creature->ClearInCombat();
+                                return;
+                            }
 
-                                int8 rand = irand(1, 5);
+                        m_creature->SetInCombatWithVictim(escort->GetVictim());
+                        m_creature->AddThreat(escort->GetVictim(), 100.00f);
 
-                                m_creature->HandleEmote(11); // laugh
+                        if (target && target->IsDead())
+                        {
+                            target = nullptr;
 
-                                switch (rand)
-                                {
-                                case 1:
-                                    m_creature->PMonsterSay("For da Amani!");
-                                    break;
-                                case 2:
-                                    m_creature->PMonsterSay("Loa save ya twisted soul.");
-                                    break;
-                                case 3:
-                                    m_creature->PMonsterSay("Loa give me strength.");
-                                    break;
-                                case 4:
-                                    m_creature->PMonsterSay("Fools, de Blood God be tricking ya!");
-                                    break;
-                                case 5:
-                                    m_creature->PMonsterSay("Me patience ran out!");
-                                    break;
-                                }
+                            int8 rand = irand(1, 5);
+
+                            m_creature->HandleEmote(11); // laugh
+
+                            switch (rand)
+                            {
+                            case 1:
+                                m_creature->PMonsterSay("For da Amani!");
+                                break;
+                            case 2:
+                                m_creature->PMonsterSay("Loa save ya twisted soul.");
+                                break;
+                            case 3:
+                                m_creature->PMonsterSay("Loa give me strength.");
+                                break;
+                            case 4:
+                                m_creature->PMonsterSay("Fools, de Blood God be tricking ya!");
+                                break;
+                            case 5:
+                                m_creature->PMonsterSay("Me patience ran out!");
+                                break;
                             }
                         }
                     }
+                }
 
-                    if (!escort->IsAlive())
-                        m_creature->DespawnOrUnsummon();
+                if (!escort->IsAlive())
+                    m_creature->DespawnOrUnsummon();
 
-                    if (!escort->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
-                        m_creature->DespawnOrUnsummon();
+                if (!escort->FindNearestCreature(m_creature->GetEntry(), 50.0f, true) && !m_creature->IsInCombat())
+                    m_creature->DespawnOrUnsummon();
 
-                    if (!dolajinSummoned && m_creature->FindNearestCreature(60372, 15, true)) // dummy trigger
-                        if (Creature* dolajin = m_creature->SummonCreature(65146, -275.06f, -3442.33f, 187.36f, 0.80f, TEMPSUMMON_MANUAL_DESPAWN))
+                if (m_creature->FindNearestCreature(60372, 15, true)) // dummy trigger
+                    if (Creature* dolajin = m_creature->SummonCreature(65146, -275.06f, -3442.33f, 187.36f, 0.80f, TEMPSUMMON_MANUAL_DESPAWN))
+                        if (Creature* zulJin = m_creature->SummonCreature(65148, -271.98f, -3438.22f, 187.16f, 3.85f, TEMPSUMMON_MANUAL_DESPAWN))
                         {
-                            phase++;
-                            dolajinSummoned = true;
-
-                            DoAfterTime(escort, 3 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
-                                dolajin->MonsterYell("Fool! Ya be a fool Zul'jin, da Blood God will give us da strength to remake da whole Empire of Zul not just Zul'Aman!");
-                                });
-
-                            DoAfterTime(escort, 8 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                                m_creature->MonsterSay("Da Blood God will eat ya and the rest of ya people! Only we can bring back the Empire of Zul, de Amani must return home.");
-                                });
-
-                            DoAfterTime(escort, 13 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
-                                dolajin->MonsterSay("Old crippled troll, ya can lead no one to victory. I, Dol'ajin, offer me soul to da Blood God. Master - rise from me ashes and claim da soul of dis idiot!");
-                                });
-
-                            DoAfterTime(escort, 18 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
-                                dolajin->SetHealthPercent(0.0f);
-                                m_creature->SummonCreature(65147, dolajin->GetPositionX(), dolajin->GetPositionY(), dolajin->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN); // hakkar
-                                });
-
-                            DoAfterTime(escort, 20 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
-                                m_creature->MonsterSay("Back to ya realm snake. How many times must we kill ya?");
-                                dolajin->ForcedDespawn();
-
-                                if (dolajin)
-                                    dolajin->DespawnOrUnsummon();
-                                });
+                            m_creature->ForcedDespawn();
+                            m_creature->DespawnOrUnsummon();
                         }
-                    break;
-                }
-                case 1:
-                {
-                    if (m_creature->FindNearestCreature(65147, 15, false))
-                    {
-                        m_creature->GetMotionMaster()->Clear();
-                        m_creature->GetMotionMaster()->MovePoint(0, -269.27f, -3435.80f, 187.12f);
-                        m_creature->SetOrientation(0.7926f);
-
-                        DoAfterTime(escort, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                            m_creature->MonsterYell("Forest Trolls! Hear me!");
-                            m_creature->HandleEmote(5);
-                            });
-
-                        DoAfterTime(escort, 7 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                            m_creature->MonsterYell("Da Blood God is dead and I be victorious. How many times have ya tried to bring dis mongrel back and fail miserably? Dose among ya dat wish to go back home and reclaim our lands from da elves are welcomed to join us.");
-                            m_creature->HandleEmote(5);
-                            });
-
-                        DoAfterTime(escort, 12 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                            m_creature->MonsterYell("No more blood for da blood God! Dis ends now, together da Revantusk, da Witherbark and now da Vilebranch will bring da Amani back on dey feet.");
-                            m_creature->HandleEmote(5);
-                            });
-
-                        DoAfterTime(escort, 20 * IN_MILLISECONDS, [m_creature = m_creature]() {
-                            m_creature->MonsterYell("DA WARLORD HAS SPOKEN! JOIN ME AND REMIND DA WORLD DAT DE AMANI WILL NEVER BOW DOWN TO ANYONE.");
-                            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-                            m_creature->HandleEmote(5);
-                            });
-
-                        phase++;
-                    }
-                    break;
-                }
-                }
             }
             else areaCheckTimer -= uiDiff;
         }
@@ -3395,10 +3326,116 @@ struct npc_zulJin2AI : public ScriptedAI
     }
 };
 
+struct npc_zulJin3AI : public ScriptedAI
+{
+    npc_zulJin3AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    int phase;
+
+    void Reset() override
+    {
+        phase = 0;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        switch (phase)
+        {
+        case 0:
+        {
+            if (Creature* dolajin = m_creature->FindNearestCreature(65146, 15, true))
+            {
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+                DoAfterTime(m_creature, 3 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                    dolajin->MonsterYell("Fool! Ya be a fool Zul'jin, da Blood God will give us da strength to remake da whole Empire of Zul not just Zul'Aman!");
+                    });
+
+                DoAfterTime(m_creature, 8 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                    m_creature->MonsterSay("Da Blood God will eat ya and the rest of ya people! Only we can bring back the Empire of Zul, de Amani must return home.");
+                    });
+
+                DoAfterTime(m_creature, 13 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                    dolajin->MonsterSay("Old crippled troll, ya can lead no one to victory. I, Dol'ajin, offer me soul to da Blood God. Master - rise from me ashes and claim da soul of dis idiot!");
+                    });
+
+                DoAfterTime(m_creature, 18 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                    dolajin->SetHealthPercent(0.0f);
+                    m_creature->SummonCreature(65147, dolajin->GetPositionX(), dolajin->GetPositionY(), dolajin->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN); // hakkar
+                    });
+
+                DoAfterTime(m_creature, 20 * IN_MILLISECONDS, [m_creature = m_creature, dolajin = dolajin]() {
+                    m_creature->MonsterSay("Back to ya realm snake. How many times must we kill ya?");
+                    dolajin->ForcedDespawn();
+
+                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+                    if (dolajin)
+                        dolajin->DespawnOrUnsummon();
+                    });
+
+                phase++;
+            }
+            break;
+        }
+        case 1:
+        {
+            if (m_creature->FindNearestCreature(65147, 15, false))
+            {
+                m_creature->GetMotionMaster()->MovePoint(0, -269.27f, -3435.80f, 187.12f);
+                m_creature->SetOrientation(0.7926f);
+
+                DoAfterTime(m_creature, 2 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                    m_creature->MonsterYell("Forest Trolls! Hear me!");
+                    m_creature->HandleEmote(5);
+                    });
+
+                DoAfterTime(m_creature, 7 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                    m_creature->MonsterYell("Da Blood God is dead and I be victorious. How many times have ya tried to bring dis mongrel back and fail miserably? Dose among ya dat wish to go back home and reclaim our lands from da elves are welcomed to join us.");
+                    m_creature->HandleEmote(5);
+                    });
+
+                DoAfterTime(m_creature, 12 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                    m_creature->MonsterYell("No more blood for da blood God! Dis ends now, together da Revantusk, da Witherbark and now da Vilebranch will bring da Amani back on dey feet.");
+                    m_creature->HandleEmote(5);
+                    });
+
+                DoAfterTime(m_creature, 20 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                    m_creature->MonsterYell("DA WARLORD HAS SPOKEN! JOIN ME AND REMIND DA WORLD DAT DE AMANI WILL NEVER BOW DOWN TO ANYONE.");
+                    m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                    m_creature->HandleEmote(5);
+                    });
+
+                DoAfterTime(m_creature, 80 * IN_MILLISECONDS, [m_creature = m_creature]() {
+                    m_creature->ForcedDespawn();
+                    m_creature->DespawnOrUnsummon();
+                    });
+
+                phase++;
+            }
+            break;
+        }
+        }
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        DoMeleeAttackIfReady();
+    }
+};
+
 
 CreatureAI* GetAI_npc_zuljin_2(Creature* pCreature)
 {
     return new npc_zulJin2AI(pCreature);
+}
+
+CreatureAI* GetAI_npc_zuljin_3(Creature* pCreature)
+{
+    return new npc_zulJin3AI(pCreature);
 }
 
 struct npc_zulJin_hakkarAI : public ScriptedAI
@@ -3473,7 +3510,7 @@ bool QuestAccepted_npc_zulJin(Player* pPlayer, Creature* pQuestGiver, Quest cons
 
             escortNPC->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
 
-            escortedPlayerZulJin = pPlayer;
+            escortedPlayerZulJinGUID = pPlayer->GetGUIDLow();
 
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [escortNPC = escortNPC, pPlayer = pPlayer]() {
                 escortNPC->HandleEmote(3);
@@ -3506,7 +3543,7 @@ bool ItemUseSpell_item_zhojik_whistle(Player* pPlayer, Item* pItem, const SpellC
     {
         if (Creature* escortNPC = pPlayer->SummonCreature(65141, 4.35f, 182.13f, 45.52f, 0, TEMPSUMMON_MANUAL_DESPAWN))
         {
-            escortedPlayer = pPlayer;
+            escortedPlayerGUID = pPlayer->GetGUIDLow();
 
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [escortNPC = escortNPC, pPlayer = pPlayer]() {
                 escortNPC->MonsterMove(12.27f, 179.97f, 45.34f);
@@ -3977,6 +4014,11 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_zuljin_2";
     newscript->pQuestAcceptNPC = &QuestAccepted_npc_zulJin;
     newscript->GetAI = &GetAI_npc_zuljin_2;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_zuljin_3";
+    newscript->GetAI = &GetAI_npc_zuljin_3;
     newscript->RegisterSelf();
 
     newscript = new Script;
