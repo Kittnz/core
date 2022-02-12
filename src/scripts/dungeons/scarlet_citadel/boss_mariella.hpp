@@ -10,6 +10,11 @@
 
 #pragma once
 
+struct Location
+{
+    float m_fX, m_fY, m_fZ, m_fO, m_fR0, m_fR1, m_fR2, m_fR3;
+};
+
 namespace nsSacrificePhase
 {
     std::vector<ObjectGuid> m_vPossibleVictim{};
@@ -25,7 +30,7 @@ namespace nsVoidZone
 {
     // Void Zone
     std::vector<ObjectGuid> m_vVoidZones{};
-    static constexpr uint8 NUMBEROFSUMMONERS{ 3 };     // How many players should spawn a Void Zone on each tick
+    static constexpr uint8 NUMBEROFSUMMONERS{ 3 };     // How many players are required to spawn a Void Zone
     static constexpr uint32 VOIDZONE_DAMAGE{ 3000 };   // How much damage should void Zone do on one tick
     static constexpr uint32 NPC_VOIDZONE{ 2000016 };   // Void Zone's entry
     static constexpr float VOIDZONE_DIAMETER{ 2.87f }; // Exact value if field `size` in creature_template = 0.1
@@ -44,7 +49,8 @@ namespace nsFelhounds
     std::vector<ObjectGuid> m_vFelhounds{};
     std::list<ObjectGuid> m_lSummoningCircles{};
     static constexpr uint32 NPC_FELHOUND{ 2000017 };            // Felhound's entry
-    static constexpr uint32 GO_SUMMONINGCIRCLE{ 181227 };       // Summoning Circle entry
+    static constexpr uint32 GO_SUMMONINGCIRCLE{ 5000012 };      // Summoning Circle entry
+    static constexpr uint32 GO_SUMMONINGCIRCLE_DESPAWN_TIMER { 1800000 };
     static constexpr uint32 VISUALSPELL_DRAINMANA{ 25676 };     // Drain Mana visual effect (blue line)
     static constexpr uint32 VISUALSPELL_SUMMON_FELOUND{ 7741 }; // Summon Felhound visual effect
     static constexpr int32 VALUE_DRAINMANA{ -1250 };            // How much mana should be drained on one tick
@@ -53,17 +59,12 @@ namespace nsFelhounds
     uint32 m_uiManaDrain_Timer{};
     bool m_bFelhoundsAlreadyAnnounced{};
 
-    struct Location
-    {
-        float m_fX, m_fY, m_fZ, m_fO;
-    };
-
     static const Location vfSpawnPoints[] =
     {
-        { 189.632f, 18.3435f, 31.346f, 0.788997f },
-        { 189.632f, 33.1638f, 31.112f, 5.454260f },
-        { 204.404f, 33.1638f, 31.242f, 3.962000f },
-        { 204.404f, 18.3435f, 30.860f, 2.359790f }
+        { 189.632f, 18.3435f, 31.346f, 0.788997f, 0.f, 0.f, 0.380631f,  0.924727f },
+        { 189.632f, 33.1638f, 31.112f, 5.454260f, 0.f, 0.f, 0.381105f, -0.924532f },
+        { 204.404f, 33.1638f, 31.242f, 3.962000f, 0.f, 0.f, 0.923975f, -0.382453f },
+        { 204.404f, 18.3435f, 30.860f, 2.359790f, 0.f, 0.f, 0.923781f,  0.382921f }
     };
 
     static constexpr uint32 FELHOUND_DRAIN_REPEAT_TIMER{ 1000 };  // Interval of Felhound's mana drain
@@ -96,8 +97,17 @@ bool m_bEnrage{};
 static constexpr uint32 TIME_UNTIL_ENRAGE{ 600000 }; // Time until enrage
 
 
-// Misc
+// Achievement
 bool m_bAchievementKill{};
+static constexpr uint32 GO_ACHIEVEMENT_CHEST{ 5000013 };              // Chest to loot the achievement reward
+static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
+static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
+{
+    { 175.895233f, 25.896152f, 31.493601f, 6.277175f, 0.f, 0.f, 0.99999f,  0.004572f }
+};
+
+
+// Misc
 static constexpr float ROOM_DIAGONAL{ 33.f }; // Room size
 ScriptedInstance* m_pInstance{};
 
