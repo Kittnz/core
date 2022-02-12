@@ -3,3 +3,5 @@ REPLACE INTO creature_spells VALUES (180019, 'The Crescent Grove: Groveweald War
 update creature_template set spell_list_id = 180019 where entry = 92100;
 -- XYZ for GO "food crate" updated:
 update gameobject set position_x = -334.396, position_y = 0.519818, position_z = 55.9874 where guid = 20881;
+-- Quest "The Completed Orb of Dar'Orahil" have truely prequest alredy:
+update quest_template set prevquestid = 4976 where entry = 4964;
