@@ -1596,3 +1596,6 @@ REPLACE INTO creature_loot_template VALUES
 (92119, 30057, 0.01, 0, -30057, 1, 0),
 (92119, 30058, 0.5, 0, -30058, 1, 0),
 (92119, 30059, 0.01, 0, -30059, 1, 0); 
+
+-- Reduce the aggro radius of Tomb Bats by 50%.
+update creature_template set detection_range = 15 where entry = 91921;
