@@ -77,3 +77,5 @@ update quest_template set reqitemid1 = 60293, reqitemcount1 = 1 where entry = 40
 -- The amount of items Alarus drops in Karazhan Crypt to 2:
 update creature_loot_template set chanceorquestchance = 25, groupid = 3 where item in (83465,83466,83467,83468);
 update creature_loot_template set chanceorquestchance = 25 where item in (83469,83470,83471,83472);
+-- GO "Mithril Deposit" fixed:
+update gameobject set position_x = -11736.4, position_y = -3169.61, position_z = -10.3473 where guid = 7208;
