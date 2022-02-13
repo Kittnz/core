@@ -74,3 +74,6 @@ REPLACE INTO points_of_interest VALUES (10500, 1679.88, 309.89, 6, 75, 0, 'Hunte
 -- Item "Untempered Runeblade" doesn't remove after finish the quest "A New Rune-Frontier" and requires for quest "The Dark-Rune Anvil":
 update quest_template set rewitemid1 = 60293, rewitemcount1 = 1, questflags = 512 where entry = 40234;
 update quest_template set reqitemid1 = 60293, reqitemcount1 = 1 where entry = 40259;
+-- The amount of items Alarus drops in Karazhan Crypt to 2:
+update creature_loot_template set chanceorquestchance = 25, groupid = 3 where item in (83465,83466,83467,83468);
+update creature_loot_template set chanceorquestchance = 25 where item in (83469,83470,83471,83472);
