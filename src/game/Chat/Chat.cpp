@@ -74,7 +74,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand accountCommandTable[] =
     {
         { "characters",     SEC_GAMEMASTER,     true,  &ChatHandler::HandleAccountCharactersCommand,   "", nullptr },
-        { "create",         SEC_CONSOLE,        true,  &ChatHandler::HandleAccountCreateCommand,       "", nullptr },
+        { "create",         SEC_TORTELLINI,        true,  &ChatHandler::HandleAccountCreateCommand,       "", nullptr },
         { "delete",         SEC_CONSOLE,        true,  &ChatHandler::HandleAccountDeleteCommand,       "", nullptr },
         { "set",            SEC_GAMEMASTER,     true,  nullptr,                                        "", accountSetCommandTable },
         { "password",       SEC_PLAYER,         true,  &ChatHandler::HandleAccountPasswordCommand,     "", nullptr },
@@ -427,12 +427,12 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "corpses",        SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleServerCorpsesCommand,     "", nullptr },
         { "exit",           SEC_CONSOLE,        true,  &ChatHandler::HandleServerExitCommand,        "", nullptr },
-        { "idlerestart",    SEC_ADMINISTRATOR,  true,  nullptr,                                      "", serverIdleRestartCommandTable },
-        { "idleshutdown",   SEC_ADMINISTRATOR,  true,  nullptr,                                      "", serverIdleShutdownCommandTable },
+        { "idlerestart",    SEC_TORTELLINI,  true,  nullptr,                                      "", serverIdleRestartCommandTable },
+        { "idleshutdown",   SEC_TORTELLINI,  true,  nullptr,                                      "", serverIdleShutdownCommandTable },
         { "info",           SEC_PLAYER,         true,  &ChatHandler::HandleServerInfoCommand,        "", nullptr },
         { "resetallraids",  SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleServerResetAllRaidCommand, "", nullptr },
-        { "restart",        SEC_ADMINISTRATOR,  true,  nullptr,                                       "", serverRestartCommandTable },
-        { "shutdown",       SEC_ADMINISTRATOR,  true,  nullptr,                                       "", serverShutdownCommandTable },
+        { "restart",        SEC_TORTELLINI,  true,  nullptr,                                       "", serverRestartCommandTable },
+        { "shutdown",       SEC_TORTELLINI,  true,  nullptr,                                       "", serverShutdownCommandTable },
         { nullptr,          0,                  false, nullptr,                                       "", nullptr }
     };
 
