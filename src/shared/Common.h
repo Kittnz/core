@@ -178,7 +178,8 @@ enum AccountTypes
     SEC_PLAYER         = 0,
     SEC_GAMEMASTER     = 1,
     SEC_ADMINISTRATOR  = 2,
-    SEC_CONSOLE        = 3                                  // must be always last in list, accounts must have less security level always also
+    SEC_TORTELLINI     = 3,
+    SEC_CONSOLE        = 4,                                  // must be always last in list, accounts must have less security level always also
 };
 
 // Used in mangosd/realmd
