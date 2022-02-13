@@ -209,6 +209,10 @@ void WorldSession::HandleMoveWorldportAckOpcode()
     //lets process all delayed operations on successful teleport
     GetPlayer()->ProcessDelayedOperations();
 
+    GetPlayer()->m_Events.AddLambdaEventAtOffset([player = GetPlayer()]() {
+        player->m_disableFallDamage = false;
+    }, 5000);
+
     // Let the client know its new position by sending a heartbeat!
     // The Windows client figures this out by itself, but the MacOS one does
     // not.
@@ -282,6 +286,10 @@ void Player::ExecuteTeleportNear()
         else
             ResummonPetTemporaryUnSummonedIfAny();
     }
+
+    m_Events.AddLambdaEventAtOffset([this]() {
+        m_disableFallDamage = false;
+    }, 5000);
 
     // lets process all delayed operations on successful teleport
     ProcessDelayedOperations();

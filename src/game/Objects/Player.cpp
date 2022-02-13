@@ -982,6 +982,9 @@ uint32 Player::EnvironmentalDamage(EnvironmentalDamageType type, uint32 damage)
     if (!IsAlive() || IsGameMaster())
         return 0;
 
+    if (m_disableFallDamage)
+        return 0;
+
     // Absorb, resist some environmental damage type
     uint32 absorb = 0;
     int32 resist = 0;
@@ -2159,6 +2162,8 @@ bool Player::TeleportTo(uint32 mapid, float x, float y, float z, float orientati
 
         sMapMgr.ScheduleFarTeleport(this, data);
     }
+
+    m_disableFallDamage = true;
     return true;
 }
 

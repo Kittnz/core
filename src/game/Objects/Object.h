@@ -896,6 +896,8 @@ class WorldObject : public Object
         bool IsSwimming() const { return m_movementInfo.HasMovementFlag(MOVEFLAG_SWIMMING); }
         bool IsMovingButNotWalking() const { return IsMoving() && !(IsWalking() || IsWalkingBackward()); }
 
+        bool m_disableFallDamage = false;
+
         MovementInfo m_movementInfo;
         Transport * m_transport;
 
