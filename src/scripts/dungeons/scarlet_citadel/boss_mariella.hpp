@@ -10,6 +10,12 @@
 
 #pragma once
 
+template <typename Functor>
+void DoAfterTime(Player* player, const uint32& uiTime, Functor&& function)
+{
+    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(uiTime));
+}
+
 struct Location
 {
     float m_fX, m_fY, m_fZ, m_fO, m_fR0, m_fR1, m_fR2, m_fR3;
@@ -33,7 +39,7 @@ namespace nsVoidZone
     static constexpr uint8 NUMBEROFSUMMONERS{ 3 };     // How many players are required to spawn a Void Zone
     static constexpr uint32 VOIDZONE_DAMAGE{ 3000 };   // How much damage should void Zone do on one tick
     static constexpr uint32 NPC_VOIDZONE{ 2000016 };   // Void Zone's entry
-    static constexpr float VOIDZONE_DIAMETER{ 2.87f }; // Exact value if field `size` in creature_template = 0.1
+    static constexpr float VOIDZONE_DIAMETER{ 2.85f }; // Exact value if field `size` in creature_template = 0.1
     uint32 m_uiVoidZoneSpawn_Timer{};
     uint32 m_uiDamage_Timer{};
     bool m_bVoidZonesAlreadyAnnounced{};
@@ -50,7 +56,7 @@ namespace nsFelhounds
     std::list<ObjectGuid> m_lSummoningCircles{};
     static constexpr uint32 NPC_FELHOUND{ 2000017 };            // Felhound's entry
     static constexpr uint32 GO_SUMMONINGCIRCLE{ 5000012 };      // Summoning Circle entry
-    static constexpr uint32 GO_SUMMONINGCIRCLE_DESPAWN_TIMER { 1800000 };
+    static constexpr uint32 GO_SUMMONINGCIRCLE_DESPAWN_TIMER{ 1800000 };
     static constexpr uint32 VISUALSPELL_DRAINMANA{ 25676 };     // Drain Mana visual effect (blue line)
     static constexpr uint32 VISUALSPELL_SUMMON_FELOUND{ 7741 }; // Summon Felhound visual effect
     static constexpr int32 VALUE_DRAINMANA{ -1250 };            // How much mana should be drained on one tick
@@ -85,7 +91,7 @@ static constexpr uint32 SHADOWVOLLEY_ENRAGE_REPEAT_TIMER{ 1000 }; // Interval of
 uint32 m_uiKill_Timer{};
 std::size_t m_uiKillZoneGuid{};
 static constexpr uint32 NPC_KILLZONE{ 2000018 };           // Void Zone's entry
-static constexpr float KILLZONE_DIAMETER{ 5.74f };         // Exact value if field `size` in creature_template = 0.2
+static constexpr float KILLZONE_DIAMETER{ 5.7f };          // Exact value if field `size` in creature_template = 0.2
 
 static constexpr uint32 KILLZONE_KILL_REPEAT_TIMER{ 500 }; // Interval of Kill Zones deadly tick
 
@@ -94,7 +100,7 @@ static constexpr uint32 KILLZONE_KILL_REPEAT_TIMER{ 500 }; // Interval of Kill Z
 uint32 m_uiEnrage_Timer{};
 bool m_bEnrage{};
 
-static constexpr uint32 TIME_UNTIL_ENRAGE{ 600000 }; // Time until enrage
+static constexpr uint32 TIME_UNTIL_ENRAGE{ 600000 };
 
 
 // Achievement
@@ -107,13 +113,22 @@ static const Location vfAchievementChestSpawnPoint[] =                // Chest s
 };
 
 
+// Gossip Menu
+static constexpr uint32 GOSSIP_TEXT_MARIELLA{ 1000000 };
+static constexpr auto GOSSIP_ANSWER{ "We will see who ends who." };
+
+
 // Misc
-static constexpr float ROOM_DIAGONAL{ 33.f }; // Room size
+static constexpr float ROOM_DIAGONAL{ (64.f / 2) }; // Room size
+static constexpr uint32 FACTION_SCARLET{ 67 };      // Scarlet Citadel Faction // TODO: Find proper ID
+static constexpr uint32 FACTION_NEUTRAL{ 189 };     // Neutral Faction
 ScriptedInstance* m_pInstance{};
 
 
 enum class CombatNotifications
 {
+    ABOUT_TO_START,
+    START,
     SACRIFICE_75_PERCENT,
     SACRIFICE_50_PERCENT,
     SACRIFICE_25_PERCENT,
@@ -131,6 +146,14 @@ std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNo
     std::string strNotification{};
     switch (combatNotifications)
     {
+        case CombatNotifications::ABOUT_TO_START:
+        {
+            return (strNotification = "I will have you confess!");
+        }
+        case CombatNotifications::START:
+        {
+            return (strNotification = "In Lady Whitemane's name!");
+        }
         case CombatNotifications::SACRIFICE_75_PERCENT:
         {
             return (strNotification = "Only through sacrifice can one achieve victory.");
@@ -169,7 +192,7 @@ std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNo
         }
         case CombatNotifications::ACHIEVEMENT_FAILED:
         {
-            return (strNotification = "ACHIEVEMENT_FAILED"); // TODO: Find proper text
+            return (strNotification = "It seems I have nothing to worry about, you will not touch my treasure.");
         }
     }
 }
