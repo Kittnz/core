@@ -65,7 +65,8 @@ namespace nsFelhounds
     uint32 m_uiManaDrain_Timer{};
     bool m_bFelhoundsAlreadyAnnounced{};
 
-    static const Location vfSpawnPoints[] =
+    static constexpr uint8 NUMBER_OF_SPAWNPOINTS{ 4 };
+    static const Location vfSpawnPoints[NUMBER_OF_SPAWNPOINTS] =
     {
         { 189.632f, 18.3435f, 31.346f, 0.788997f, 0.f, 0.f, 0.380631f,  0.924727f },
         { 189.632f, 33.1638f, 31.112f, 5.454260f, 0.f, 0.f, 0.381105f, -0.924532f },
@@ -83,7 +84,7 @@ namespace nsFelhounds
 uint32 m_uiShadowVolley_Timer{};
 static constexpr uint32 SPELL_SHADOWVOLLEY{ 21341 };              // Hits every player within range of 100 yd for 800-1000 damage (Ignores LoS)
 
-static constexpr uint32 SHADOWVOLLEY_REPEAT_TIMER{ 8000 };        // Interval of how often should Shadow Volley be casted
+static constexpr uint32 SHADOWVOLLEY_REPEAT_TIMER{ 5000 };        // Interval of how often should Shadow Volley be casted
 static constexpr uint32 SHADOWVOLLEY_ENRAGE_REPEAT_TIMER{ 1000 }; // Interval of how often should Shadow Volley be casted on enrage
 
 
@@ -197,7 +198,7 @@ std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNo
     }
 }
 
-std::string [[nodiscard]] SayOnPlayersDeath(const uint8 uiRandomNumber)
+std::string [[nodiscard]] SayOnPlayersDeath(const uint8& uiRandomNumber)
 {
     std::string strNotification{};
     switch (uiRandomNumber)

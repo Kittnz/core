@@ -133,13 +133,16 @@ struct boss_mariellaAI : public ScriptedAI
 
         for (const auto& itr : PlayerList)
         {
-            Player* pPlayer{ itr.getSource() };
-            if (!pPlayer)
-                continue;
-
-            if ((m_creature->GetDistance3dToCenter(pPlayer) < ROOM_DIAGONAL) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
+            if (Player* pPlayer{ itr.getSource() })
             {
-                nsSacrificePhase::m_vPossibleVictim.push_back(pPlayer->GetObjectGuid());
+                if ((m_creature->GetDistance3dToCenter(pPlayer) < ROOM_DIAGONAL) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
+                {
+                    nsSacrificePhase::m_vPossibleVictim.push_back(pPlayer->GetObjectGuid());
+                }
+            }
+            else
+            {
+                continue;
             }
         }
     }
@@ -157,7 +160,7 @@ struct boss_mariellaAI : public ScriptedAI
         ++nsSacrificePhase::m_uiSacrificePhase;      // Increase Sacrifice Phase counter for the next event
     }
 
-    void CheckForSacraficePhase(const uint32& uiDiff)
+    void CheckForSacraficePhase()
     {
         if (m_creature->HealthBelowPct(75) && nsSacrificePhase::m_uiSacrificePhase == 0)
         {
@@ -209,13 +212,16 @@ struct boss_mariellaAI : public ScriptedAI
             ThreatList::const_iterator itr{ tList.begin() };
             for (++itr; itr != tList.end(); ++itr)
             {
-                Player const* pPlayer{ m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()) };
-                if (!pPlayer)
-                    continue;
-
-                if (pPlayer->IsAlive() && !pPlayer->IsGameMaster() && (m_creature->GetDistance3dToCenter(pPlayer) < ROOM_DIAGONAL))
+                if (Player const* pPlayer{ m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()) })
                 {
-                    lPotentialSummoner.push_back(m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()));
+                    if (pPlayer->IsAlive() && !pPlayer->IsGameMaster() && (m_creature->GetDistance3dToCenter(pPlayer) < ROOM_DIAGONAL))
+                    {
+                        lPotentialSummoner.push_back(m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()));
+                    }
+                }
+                else
+                {
+                    continue;
                 }
             }
 
@@ -302,7 +308,7 @@ struct boss_mariellaAI : public ScriptedAI
 
     static void SpawnSummoningCircles(Creature* pCreature)
     {
-        for (uint8 i{ 0 }; i < 4; ++i)
+        for (uint8 i{ 0 }; i < nsFelhounds::NUMBER_OF_SPAWNPOINTS; ++i)
         {
             if (GameObject* pSummoningCircle{ pCreature->SummonGameObject(nsFelhounds::GO_SUMMONINGCIRCLE,
                 nsFelhounds::vfSpawnPoints[i].m_fX,
@@ -440,7 +446,7 @@ struct boss_mariellaAI : public ScriptedAI
     {
         if (nsSacrificePhase::m_uiIncreaseHealth_Timer < uiDiff)
         {
-            if (m_creature->GetHealthPercent() < 100.f) // Is this necessary?
+            if (m_creature->GetHealthPercent() < 100.f)
                 m_creature->SetHealthPercent((m_creature->GetHealthPercent() + nsSacrificePhase::REGENERATE_HEALTH_PERCENTAGE));
 
             nsSacrificePhase::m_uiIncreaseHealth_Timer = nsSacrificePhase::INCREASE_HEALTH_TIMER;
@@ -498,7 +504,7 @@ struct boss_mariellaAI : public ScriptedAI
         else
         {
             CastShadowVolley(uiDiff);
-            CheckForSacraficePhase(uiDiff);
+            CheckForSacraficePhase();
         }
     }
 };
@@ -537,17 +543,20 @@ struct npc_voidzone : public ScriptedAI
         {
             for (const auto& itr : PlayerList)
             {
-                Player* pPlayer{ itr.getSource() };
-                if (!pPlayer)
-                    continue;
-
-                if ((m_creature->GetDistance3dToCenter(pPlayer) < nsVoidZone::VOIDZONE_DIAMETER) && pPlayer->IsAlive())
+                if (Player * pPlayer{ itr.getSource() })
                 {
-                    m_creature->DealDamage(pPlayer, nsVoidZone::VOIDZONE_DAMAGE, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                    if ((m_creature->GetDistance3dToCenter(pPlayer) < nsVoidZone::VOIDZONE_DIAMETER) && pPlayer->IsAlive())
+                    {
+                        m_creature->DealDamage(pPlayer, nsVoidZone::VOIDZONE_DAMAGE, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
-                    m_bAchievementKill = false; // Achievement failed if a player received damage from a Void Zone
-                    m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-                    m_creature->MonsterSay(CombatNotification(CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
+                        m_bAchievementKill = false; // Achievement failed if a player received damage from a Void Zone
+                        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+                        m_creature->MonsterSay(CombatNotification(CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
+                    }
+                }
+                else
+                {
+                    continue;
                 }
             }
 
@@ -597,13 +606,16 @@ struct npc_killzone : public ScriptedAI
         {
             for (const auto& itr : PlayerList)
             {
-                Player* pPlayer{ itr.getSource() };
-                if (!pPlayer)
-                    continue;
-
-                if ((m_creature->GetDistance3dToCenter(pPlayer) < KILLZONE_DIAMETER) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
+                if (Player * pPlayer{ itr.getSource() })
                 {
-                    m_creature->DealDamage(pPlayer, (pPlayer->GetMaxHealth() + 1), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                    if ((m_creature->GetDistance3dToCenter(pPlayer) < KILLZONE_DIAMETER) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
+                    {
+                        m_creature->DealDamage(pPlayer, (pPlayer->GetMaxHealth() + 1), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+                    }
+                }
+                else
+                {
+                    continue;
                 }
             }
 
@@ -644,7 +656,7 @@ struct npc_felhound : public ScriptedAI
             {
                 if ((pTarget->GetPowerType() == POWER_MANA) && m_creature->IsWithinDist(pTarget, 5.f))
                 {
-                    DoCast(m_creature->GetVictim(), nsFelhounds::VISUALSPELL_DRAINMANA); // Visual only
+                    DoCast(m_creature->GetVictim(), nsFelhounds::VISUALSPELL_DRAINMANA);
                     pTarget->ModifyPower(POWER_MANA, nsFelhounds::VALUE_DRAINMANA);
                 }
             }
@@ -672,7 +684,11 @@ CreatureAI* GetAI_npc_felhound(Creature* pCreature)
 bool GossipHello_boss_mariella(Player* pPlayer, Creature* pCreature)
 {
     if (m_pInstance /*&& (m_pInstance->GetData(TYPE_ARDAEUS) == DONE) && (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
+    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ANSWER, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+    }
+    else
+        sLog.outError("[SC] Boss Mariella: Boss spawned outside of dungeon or someone tried to start encounter without killing first two bosses!");
 
     pPlayer->SEND_GOSSIP_MENU(GOSSIP_TEXT_MARIELLA, pCreature->GetObjectGuid());
 
