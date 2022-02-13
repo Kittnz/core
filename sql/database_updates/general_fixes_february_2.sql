@@ -71,3 +71,15 @@ REPLACE INTO gossip_menu VALUES (41092, 200, 0);
 REPLACE INTO npc_text VALUES (200, 30019, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 REPLACE INTO broadcast_text VALUES (30019, 'In building of War Quarter on outer ring of city.', 'In building of War Quarter on outer ring of city.', 0, 0, 1, 0, 0, 0, 0, 0, 0);
 REPLACE INTO points_of_interest VALUES (10500, 1679.88, 309.89, 6, 75, 0, 'Hunter Trainer, Undercity');
+-- Item "Untempered Runeblade" doesn't remove after finish the quest "A New Rune-Frontier" and requires for quest "The Dark-Rune Anvil":
+update quest_template set rewitemid1 = 60293, rewitemcount1 = 1, questflags = 512 where entry = 40234;
+update quest_template set reqitemid1 = 60293, reqitemcount1 = 1 where entry = 40259;
+-- The amount of items Alarus drops in Karazhan Crypt to 2:
+update creature_loot_template set chanceorquestchance = 25, groupid = 3 where item in (83465,83466,83467,83468);
+update creature_loot_template set chanceorquestchance = 25 where item in (83469,83470,83471,83472);
+-- GO "Mithril Deposit" fixed:
+update gameobject set position_x = -11736.4, position_y = -3169.61, position_z = -10.3473 where guid = 7208;
+-- Spell list of NPC "Groveweald Warrior" updated:
+delete from creature_spells where entry = 180019;
+REPLACE INTO creature_spells VALUES (180019, 'The Crescent Grove: Groveweald Warrior', 11998, 100, 1, 0, 0, 4, 4, 4, 6, 6, 0, 5271, 100, 1, 0, 0, 4, 7, 7, 21, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+

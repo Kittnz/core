@@ -2926,7 +2926,7 @@ struct npc_zohjikAI : public ScriptedAI
     {
         if (escort)
         {
-            if (phase > 0 && phase < 5)
+            if (phase > 0 && phase < 6)
             {
                 escort->AddAura(SPELL_ICE_BLOCK); // entirety of this phase the player is ice blocked
 
@@ -3028,7 +3028,7 @@ struct npc_zohjikAI : public ScriptedAI
                 if (escort->GetQuestStatus(65007) == QUEST_STATUS_COMPLETE) // move on
                 {
                     phase++;
-                    escort->SummonCreature(NPC_MAGISTER, escort->GetPositionX() + 4.0f, escort->GetPositionY() + 3.0f, escort->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
+                    escort->SummonCreature(NPC_MAGISTER, escort->GetPositionX() + 6.0f, escort->GetPositionY() + 6.0f, escort->GetPositionZ(), 0, TEMPSUMMON_DEAD_DESPAWN);
                 }
 
                 break;
@@ -3158,7 +3158,7 @@ struct npc_zohjikAI : public ScriptedAI
                             });
 
                         DoAfterTime(m_creature, 9 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister, escort = escort]() {
-                            m_creature->PMonsterSay("Dat -ugh-  ugly woman got me good. %s, Gi- give Zo’hjik a moment to res-", escort->GetName());
+                            m_creature->PMonsterSay("Dat -ugh-  ugly woman got me good. If I don be makin it - find Zul'Jin. %s, Gi- give Zo’hjik a moment to res-", escort->GetName());
                             });
 
                         DoAfterTime(m_creature, 16 * IN_MILLISECONDS, [m_creature = m_creature, magister = magister]() {
@@ -3427,6 +3427,91 @@ struct npc_zulJin3AI : public ScriptedAI
     }
 };
 
+struct npc_zulJin4AI : public ScriptedAI
+{
+    npc_zulJin4AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        Reset();
+    }
+
+    int phase;
+
+    Creature* sylvanas;
+    Creature* thrall;
+    Creature* cairne;
+    Creature* voljin;
+    Creature* anya;
+
+    uint32 m_uiUpdateTimer;
+
+    void Reset() override
+    {
+        phase = 0;
+        m_uiUpdateTimer = 500;
+
+        sylvanas = m_creature->FindNearestCreature(65151, 50, true);
+        thrall = m_creature->FindNearestCreature(4949, 50, true);
+        cairne = m_creature->FindNearestCreature(65150, 50, true);
+        voljin = m_creature->FindNearestCreature(10540, 50, true);
+        anya = m_creature->FindNearestCreature(65152, 50, true);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (sylvanas && thrall && cairne && voljin && anya)
+        {
+
+
+
+
+        switch (phase)
+        {
+        case 0: // Player approaches ZulJin to start dialogue
+        {
+            if (m_uiUpdateTimer < uiDiff)
+            {
+                std::list<Player*> players;
+                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
+                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+                Cell::VisitWorldObjects(me, searcher, 2.0f);
+                for (Player* pPlayer : players)
+                    if (pPlayer->GetQuestStatus(65010) == QUEST_STATUS_INCOMPLETE)
+                        phase++;
+            }
+            else m_uiUpdateTimer -= uiDiff;
+            break;
+        }
+
+        case 1:
+        {
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            sylvanas->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            anya->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            cairne->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            voljin->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+            m_creature->GetMotionMaster()->MovePoint(0, 1921.13f, -4148.25f, 40.41f, 1.68f);
+            sylvanas->GetMotionMaster()->MovePoint(0, 1916.84f, -4144.32f, 40.40f, 0.65f);
+            anya->GetMotionMaster()->MovePoint(0, 1915.04f, -4145.52f, 40.41f, 0.37f);
+            cairne->GetMotionMaster()->MovePoint(0, 1928.71f, -4143.90f, 40.41f, 2.71f);
+            voljin->GetMotionMaster()->MovePoint(0, 1926.78f, -4148.22f, 40.38f, 2.62f);
+
+            DoAfterTime(m_creature, 80 * IN_MILLISECONDS, [m_creature = m_creature]() {
+
+                });
+
+            phase++;
+        }
+        break;
+            }
+
+
+
+
+
+        }
+    }
+};
 
 CreatureAI* GetAI_npc_zuljin_2(Creature* pCreature)
 {
@@ -3438,6 +3523,10 @@ CreatureAI* GetAI_npc_zuljin_3(Creature* pCreature)
     return new npc_zulJin3AI(pCreature);
 }
 
+CreatureAI* GetAI_npc_zuljin_4(Creature* pCreature)
+{
+    return new npc_zulJin4AI(pCreature);
+}
 struct npc_zulJin_hakkarAI : public ScriptedAI
 {
     npc_zulJin_hakkarAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -4025,4 +4114,10 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_zulJin_hakkar";
     newscript->GetAI = &GetAI_npc_zulJin_hakkar;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_zuljin_4";
+    newscript->GetAI = &GetAI_npc_zuljin_4;
+    newscript->RegisterSelf();
+
 }
