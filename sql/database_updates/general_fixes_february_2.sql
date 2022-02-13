@@ -79,3 +79,7 @@ update creature_loot_template set chanceorquestchance = 25, groupid = 3 where it
 update creature_loot_template set chanceorquestchance = 25 where item in (83469,83470,83471,83472);
 -- GO "Mithril Deposit" fixed:
 update gameobject set position_x = -11736.4, position_y = -3169.61, position_z = -10.3473 where guid = 7208;
+-- Spell list of NPC "Groveweald Warrior" updated:
+delete from creature_spells where entry = 180019;
+REPLACE INTO creature_spells VALUES (180019, 'The Crescent Grove: Groveweald Warrior', 11998, 100, 1, 0, 0, 4, 4, 4, 6, 6, 0, 5271, 100, 1, 0, 0, 4, 7, 7, 21, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
