@@ -630,6 +630,13 @@ void CreatureEventAI::AttackStart(Unit *who)
     if (!who)
         return;
 
+    if (who && who->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
+        if (!m_creature->IsVisibleInGridForPlayer(who->GetCharmerOrOwnerPlayerOrPlayerItself()))
+        {
+            m_creature->AI()->EnterEvadeMode();
+            return;
+        }
+
     if (m_creature->Attack(who, m_bMeleeAttack))
     {
         m_creature->AddThreat(who);

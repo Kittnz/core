@@ -5826,6 +5826,13 @@ void Unit::SetInCombatWith(Unit* pEnemy)
 {
     ASSERT(pEnemy);
 
+    if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
+        if (!this->IsVisibleInGridForPlayer(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself()))
+        {
+            this->AI()->EnterEvadeMode();
+            return;
+        }
+
     SetInCombatState(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself(), pEnemy);
 }
 
@@ -5834,10 +5841,6 @@ void Unit::SetInCombatState(bool bPvP, Unit* pEnemy)
     // only alive units can be in combat
     if (!IsAlive())
         return;
-
-    if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
-        if (!this->IsVisibleInGridForPlayer(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself()))
-            return;
 
     if (bPvP)
         m_CombatTimer = 5500;

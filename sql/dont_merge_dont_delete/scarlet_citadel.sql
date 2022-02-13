@@ -50,7 +50,9 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 (5000008, 0, 444, 'SC_ARDAEUS_DOOR_ENTER', 0, 52, 1.2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ''),
 (5000009, 0, 444, 'SC_ARDAEUS_DOOR_EXIT', 0, 52, 1.2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ''),
 (5000010, 0, 444, 'SC_MARIELLA_DOOR', 0, 52, 1.18, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ''),
-(5000011, 0, 3751, 'SC_NOLIN_DOOR_LOCKED', 0, 52, 1.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '');
+(5000011, 0, 3751, 'SC_NOLIN_DOOR_LOCKED', 0, 52, 1.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ''),
+(5000012, 5, 6679, 'SC_SUMMONING_CIRCLE', 0, 52, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, ''),
+(5000013, 3, 23431, 'SC_MIRELLAS_ACHIEVEMENT_CHEST', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '');
 
 REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
 (5000000, 5000000, 44, 70.75, -0.725565, 21, 6.25026, 0, 0, 0.0164639, -0.999864, 300, 300, 100, 1, 1, 0), -- Instance Locked Whirl
@@ -68,12 +70,32 @@ REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `pos
 (5000012, 5000010, 44, 221.343, 25.8922, 31.493, 3.13509, 0, 0, 0.999995, 0.00325365, 300, 300, 100, 0, 1, 0), -- Boss Mariella's Door
 (5000013, 5000011, 44, 184.546, -107.881, 18.6774, 4.7138, 0, 0, 0.706609, -0.707604, 300, 300, 100, 1, 1, 0); -- Nolin's Locked Door
 
+-- Boss Mariella' Room GOs
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES 
+(5003799, 2008680, 44, 183.365, 25.9467, 35.2935, 0.136646, 0, 0, 0.0682697, 0.997667, 300, 300, 100, 1, 0, 0),
+(5003798, 2000208, 44, 211.521, 33.7915, 38.972, 3.14002, 0, 0, 1, 0.000785188, 300, 300, 100, 1, 0, 0),
+(5003797, 2003170, 44, 204.713, 12.2556, 33.5721, 1.50561, 0, 0, 0.683687, 0.729775, 300, 300, 100, 1, 0, 0),
+(5003796, 2003170, 44, 204.746, 39.5291, 33.572, 4.59144, 0, 0, 0.691952, -0.721943, 300, 300, 100, 1, 0, 0),
+(5003795, 2003170, 44, 189.191, 39.426, 33.772, 4.64254, 0, 0, 0.731367, -0.681985, 300, 300, 100, 1, 0, 0),
+(5003794, 2000209, 44, 211.238, 18.0338, 38.972, 3.19449, 0, 0, 0.99965, -0.026446, 300, 300, 100, 1, 0, 0),
+(5003793, 2001647, 44, 183.243, 33.8342, 35.772, 0.114943, 0, 0, 0.0574401, 0.998349, 300, 300, 100, 1, 0, 0),
+(5003792, 2003170, 44, 189.174, 12.1386, 33.372, 1.64569, 0, 0, 0.733083, 0.68014, 300, 300, 100, 1, 0, 0),
+(5003790, 2002413, 44, 219.038, 48.1073, 31.4936, 4.11037, 0, 0, 0.884959, -0.465669, 300, 300, 100, 1, 0, 0),
+(5003789, 2002414, 44, 219.371, 3.60713, 31.4936, 2.4037, 0, 0, 0.932709, 0.360631, 300, 300, 100, 1, 0, 0),
+(5003788, 2002412, 44, 174.871, 3.93426, 31.4936, 0.894172, 0, 0, 0.43234, 0.901711, 300, 300, 100, 1, 0, 0),
+(5003787, 1000264, 44, 174.938, 47.985, 31.4936, 5.62678, 0, 0, 0.322341, -0.946624, 300, 300, 100, 1, 0, 0),
+(5003783, 2001646, 44, 182.975, 18.055, 34.572, 6.16613, 0, 0, 0.0584947, -0.998288, 300, 300, 100, 1, 0, 0),
+(5003781, 2002618, 44, 202.95, 14.3245, 30.8576, 1.59083, 0, 0, 0.714152, 0.69999, 300, 300, 100, 1, 0, 0),
+(5003780, 2003531, 44, 205.428, 15.5094, 30.8391, 1.66072, 0, 0, 0.738175, 0.674609, 300, 300, 100, 1, 0, 0),
+(5003779, 2003531, 44, 207.242, 15.577, 30.8392, 5.47854, 0, 0, 0.909861, 0.414913, 300, 300, 100, 1, 0, 0);
+
+
 -- NPCs
 REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `phase_quest_action`, `script_name`) VALUES
 (2000000, 10529, 0, 0, 0, 'High Monk Daelus', 'The Scarlet Crusade', 0, 63, 63, 700000, 700000, 5000000, 5000000, 4500, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'boss_daelus'),
 (2000001, 10529, 0, 0, 0, 'Grand Magi Ardaeus', 'The Scarlet Crusade', 0, 63, 63, 500000, 500000, 5000000, 5000000, 6000, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'boss_ardaeus'),
-(2000002, 10529, 0, 0, 0, 'High Inquisitor Mariella', 'The Scarlet Crusade', 0, 63, 63, 500000, 500000, 5000000, 5000000, 4500, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'boss_mariella'),
-(2000003, 10529, 0, 0, 0, 'High General Abbendis', 'The Scarlet Crusade', 0, 63, 63, 500000, 500000, 5000000, 5000000, 4500, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'boss_abbendis'),
+(2000002, 18676, 0, 0, 0, 'High Inquisitor Mariella', 'The Scarlet Crusade', 0, 63, 63, 500000, 500000, 5000000, 5000000, 4500, 67, 0, 1.5, 1.5, 1.3, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'boss_mariella'),
+(2000003, 10431, 0, 0, 0, 'High General Abbendis', 'The Scarlet Crusade', 0, 63, 63, 500000, 500000, 5000000, 5000000, 4500, 67, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'boss_abbendis'),
 (2000004, 10529, 0, 0, 0, 'FIRST_WING_TRASH', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
 (2000005, 10529, 0, 0, 0, 'RP_ONE_PLACEHOLDER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
 (2000006, 10529, 0, 0, 0, 'RP_TWO_PLACEHOLDER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 1, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
@@ -126,3 +148,10 @@ REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `co
 (18688, 1, 1, 0, 0), -- Citadel Valiant
 (18689, 1, 1, 0, 0), -- Citadel Watchman
 (18690, 1, 1, 0, 0); -- Citadel Zealot
+
+
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`) VALUES 
+(1000000, 1000000); -- Boss Mariella
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(1000000, 'It seems Mistress Abbendis was rash when choosing the new blood, if you were to have faced me at the entrance you wouldn''t have made it this far.$B\nLook at you, monster, abomination. The way you move, the way you fight, the way you speak it''s all driven by the strings of your Dark Master. If there''s any morality left in you, pray to what you once knew as a powerful being.$B\nI have wasted breath on you, despicable creature, come and meet your end!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0); -- Boss Mariella
