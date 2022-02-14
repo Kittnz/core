@@ -13,14 +13,14 @@
 namespace nsMariella
 {
     template <typename Functor>
-    void DoAfterTime(Player* player, const uint32& uiTime, Functor&& function)
+    void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
     {
-        player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(uiTime));
+        pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(uiTime));
     }
 
     struct Location
     {
-        float m_fX, m_fY, m_fZ, m_fO, m_fR0, m_fR1, m_fR2, m_fR3;
+        float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};
     };
 
     // Void Zone
