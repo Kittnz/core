@@ -729,6 +729,9 @@ bool GossipHello_boss_mariella(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, const uint32 uiAction)
 {
+    if (!pPlayer || !pCreature)
+        return false;
+
     switch (uiAction)
     {
         case (GOSSIP_ACTION_INFO_DEF + 1):
@@ -738,23 +741,23 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
             try
             {
-                nsMariella::DoAfterTime(pPlayer, (3 * IN_MILLISECONDS), [creature = pCreature, player = pPlayer]()
+                nsMariella::DoAfterTime(pCreature, (3 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
-                        boss_mariellaAI boss_mariella{ GetClosestCreatureWithEntry(creature, NPC_MARIELLA, nsMariella::ROOM_DIAGONAL) };
-                        boss_mariella.SpawnSummoningCircles(creature);
+                        boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) };
+                        boss_mariella->SpawnSummoningCircles(creature);
                     });
 
-                nsMariella::DoAfterTime(pPlayer, (7 * IN_MILLISECONDS), [creature = pCreature, player = pPlayer]()
+                nsMariella::DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsMariella::CombatNotification(nsMariella::CombatNotifications::START), LANG_UNIVERSAL);
-                        boss_mariellaAI boss_mariella{ GetClosestCreatureWithEntry(creature, NPC_MARIELLA, nsMariella::ROOM_DIAGONAL) };
-                        boss_mariella.SpawnKillZone(creature);
+                        boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) };
+                        boss_mariella->SpawnKillZone(creature);
                     });
 
-                nsMariella::DoAfterTime(pPlayer, (10 * IN_MILLISECONDS), [creature = pCreature, player = pPlayer]()
+                nsMariella::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         creature->SetFactionTemplateId(nsMariella::FACTION_SCARLET);
