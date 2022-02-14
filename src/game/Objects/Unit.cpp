@@ -2524,6 +2524,7 @@ float Unit::RollMagicResistanceMultiplierOutcomeAgainst(float resistanceChance, 
             // NOSTALRIUS: Some DoTs follow normal resist rules. Need to find which ones, why and how.
             // We have a video proof for the following ones.
         case 20564:     // Ragnaros' Elemental Fire, proof https://www.youtube.com/watch?v=zrzTPbbEPu4&t=138s 
+        case 22442:     // Death Talon Hatcher's Growing Flames https://classic.warcraftlogs.com/reports/RA4MadH8f6YWwj9V#fight=10&type=damage-taken&source=51&ability=22442
         case 23461:     // Vaelastrasz's Flame Breath
         case 24818:     // Nightmare Dragon's Noxious Breath
         case 25812:     // Lord Kri's Toxic Volley
