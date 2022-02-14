@@ -1602,3 +1602,7 @@ update creature_template set detection_range = 15 where entry = 91921;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1008
 update item_template set spellid_1 = 9400, spellid_2 = 0, spelltrigger_1 = 0, spelltrigger_1 = 1 where entry = 80826;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/394
+
+update creature_template set level_min = 19 where entry = 2676;
