@@ -1040,6 +1040,8 @@ bool QuestComplete_npc_terenthis(Player* pPlayer, Creature* pQuestGiver, Quest c
             return true; // prevent starting db script if sentinel is already spawned
         else if (Creature* pSentinel = pQuestGiver->SummonCreature(NPC_SENTINEL_SELARIN, 6409.01f, 381.597f, 13.7997f, 1, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, 120000))
         {
+            pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]() { pQuestGiver->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER); }, 1000);
             pSentinel->SetWalk(false);
             return false; // let quest_end_script take over from here
         }
@@ -1053,7 +1055,6 @@ bool QuestComplete_npc_terenthis(Player* pPlayer, Creature* pQuestGiver, Quest c
         else
             return false;
     }
-
     return false;
 }
 
