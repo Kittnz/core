@@ -7070,6 +7070,10 @@ void Player::DuelComplete(DuelCompleteType type)
     m_duel->opponent->SetGuidValue(PLAYER_DUEL_ARBITER, ObjectGuid());
     m_duel->opponent->SetUInt32Value(PLAYER_DUEL_TEAM, 0);
 
+    // Hack to prevent duel projectiles from damaging players upon the end of a duel:
+    m_disableGeneralDamage = true;
+    m_Events.AddLambdaEventAtOffset([this]() { m_disableGeneralDamage = false; }, 2000);
+
     if (m_duel->opponent->m_duel)
         m_duel->opponent->m_duel->finished = true;;
     m_duel->finished = true;

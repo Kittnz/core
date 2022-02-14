@@ -897,6 +897,7 @@ class WorldObject : public Object
         bool IsMovingButNotWalking() const { return IsMoving() && !(IsWalking() || IsWalkingBackward()); }
 
         bool m_disableFallDamage = false;
+        bool m_disableGeneralDamage = false;
 
         MovementInfo m_movementInfo;
         Transport * m_transport;
