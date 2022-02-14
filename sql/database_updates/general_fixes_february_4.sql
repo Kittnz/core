@@ -13,3 +13,9 @@ UPDATE `spell_proc_event` SET `procEx` = `procEx` - 0x0080000 WHERE (`procEx` & 
 
 -- Make Elemental Focus proc on cast end.
 UPDATE `spell_proc_event` SET `procEx` = `procEx` | 0x0080000 WHERE `entry`=16164;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/705
+update creature_template set inhabit_type = 2 where entry = 1224;
+update creature_template set inhabit_type = 2 where entry = 2188;
+update creature set inhabit_type = 2 where id = 1224;
+update creature set inhabit_type = 2 where id = 2188;
