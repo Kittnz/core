@@ -72,7 +72,8 @@ struct instance_scarlet_citadel : public ScriptedInstance
             {
                 m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER] = pGo->GetObjectGuid();
 
-                if (m_auiEncounter[ScarletCitadelEncounter::TYPE_ARDAEUS] == DONE)
+                if ((m_auiEncounter[ScarletCitadelEncounter::TYPE_ARDAEUS] == DONE) || // Open again when Boss Ardaeus is dead
+                    (m_auiEncounter[ScarletCitadelEncounter::TYPE_ARDAEUS] == FAIL))   // Open again when raid wiped
                     pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
                 break;
