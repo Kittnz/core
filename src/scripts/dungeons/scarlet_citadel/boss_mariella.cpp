@@ -129,8 +129,6 @@ public:
         if (!m_pInstance)
             return;
 
-        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
-
         DespawnVoidZones();
         DespawnKillZone();
         DespawnSummoningCircles();
@@ -141,6 +139,8 @@ public:
             SpawnAchievementReward(pKiller);
         }
     
+        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
+
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, DONE);
     }
 
