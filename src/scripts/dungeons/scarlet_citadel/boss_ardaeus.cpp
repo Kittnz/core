@@ -30,6 +30,11 @@ public:
     void Reset() override
     {
         m_uiSunGuid = 0;
+
+        // Trigger fight on gossip
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        m_creature->SetFactionTemplateId(nsArdaeus::FACTION_NEUTRAL);
     }
 
     void Aggro(Unit* /*pWho*/) override
@@ -39,8 +44,9 @@ public:
 
         SpawnSun();
 
-        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
+
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, IN_PROGRESS);
     }
 
     void JustReachedHome() override
@@ -49,6 +55,8 @@ public:
             return;
         
         DespawnSun();
+
+        m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
 
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, FAIL);
     }
@@ -60,7 +68,15 @@ public:
     
         DespawnSun();
 
+        m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
+
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, DONE);
+    }
+
+    void KilledUnit(Unit* /*pVictim*/) override
+    {
+        m_creature->HandleEmote(EMOTE_ONESHOT_QUESTION);
+        m_creature->MonsterSay(nsArdaeus::SayOnPlayersDeath(urand(0, 3)), LANG_UNIVERSAL);
     }
 
     void SpawnSun()
@@ -102,6 +118,67 @@ public:
         DoMeleeAttackIfReady();
     }
 };
+
+bool GossipHello_boss_ardaeus(Player* pPlayer, Creature* pCreature)
+{
+    ScriptedInstance const* m_pInstance{ static_cast<ScriptedInstance*>(pCreature->GetInstanceData()) };
+
+    if (m_pInstance /*&& (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, nsArdaeus::GOSSIP_ANSWER, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+    }
+    else
+        sLog.outError("[SC] Boss Ardeus: Boss spawned outside of dungeon or someone tried to start encounter without killing the first boss!");
+
+    pPlayer->SEND_GOSSIP_MENU(nsArdaeus::GOSSIP_TEXT, pCreature->GetObjectGuid());
+
+    return true;
+}
+
+bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, const uint32 uiAction)
+{
+    if (!pPlayer || !pCreature)
+        return false;
+
+    switch (uiAction)
+    {
+        if (GOSSIP_ACTION_INFO_DEF + 1)
+        {
+            pPlayer->CLOSE_GOSSIP_MENU();
+            pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+
+            try
+            {
+                nsArdaeus::DoAfterTime(pCreature, (3 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
+                        creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
+                        creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
+                    });
+
+                nsArdaeus::DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
+                        creature->HandleEmote(EMOTE_ONESHOT_ROAR);
+                        creature->MonsterYell(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::START), LANG_UNIVERSAL);
+                    });
+
+                nsArdaeus::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
+                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        creature->SetFactionTemplateId(nsArdaeus::FACTION_SCARLET);
+                        creature->SetInCombatWithZone();
+                    });
+            }
+            catch (std::runtime_error& e)
+            {
+                sLog.outError("[SC] Boss Ardaeus: DoAfterTime() failed: %s", e.what());
+            }
+
+            break;
+        }
+    }
+
+    return true;
+}
 
 CreatureAI* GetAI_boss_ardaeus(Creature* pCreature)
 {
@@ -415,6 +492,8 @@ void AddSC_boss_ardaeus()
     pNewscript = new Script;
     pNewscript->Name = "boss_ardaeus";
     pNewscript->GetAI = &GetAI_boss_ardaeus;
+    pNewscript->pGossipHello = &GossipHello_boss_ardaeus;
+    pNewscript->pGossipSelect = &GossipSelect_boss_ardaeus;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
