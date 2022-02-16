@@ -19,6 +19,7 @@ public:
     explicit boss_mariellaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
         Reset();
     }
 
@@ -79,10 +80,6 @@ public:
         m_uiEnrage_Timer = nsMariella::TIME_UNTIL_ENRAGE;
         m_bEnrage = false;
 
-        // Boss shouldn't move
-        m_creature->AddUnitState(UNIT_STAT_ROOT);
-        m_creature->SetRooted(true);
-
         // Trigger fight on gossip
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -104,7 +101,6 @@ public:
 
     void EnterEvadeMode() override
     {
-        m_creature->SetRooted(false);
         m_creature->ClearUnitState(UNIT_STAT_ROOT);
     }
 
@@ -112,12 +108,13 @@ public:
     {
         if (!m_pInstance)
             return;
-        
+
         DespawnVoidZones();
         DespawnKillZone();
         DespawnSummoningCircles();
         DespawnFelhounds();
 
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
         m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
 
@@ -745,16 +742,20 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
-                        boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) };
-                        boss_mariella->SpawnSummoningCircles(creature);
+                        if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
+                        {
+                            boss_mariella->SpawnSummoningCircles(creature);
+                        }
                     });
 
                 nsMariella::DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsMariella::CombatNotification(nsMariella::CombatNotifications::START), LANG_UNIVERSAL);
-                        boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) };
-                        boss_mariella->SpawnKillZone(creature);
+                        if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
+                        {
+                            boss_mariella->SpawnKillZone(creature);
+                        }
                     });
 
                 nsMariella::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
@@ -764,7 +765,7 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
                         creature->SetInCombatWithZone();
                     });
             }
-            catch (std::runtime_error& e)
+            catch (const std::runtime_error& e)
             {
                 sLog.outError("[SC] Boss Mariella: DoAfterTime() failed: %s", e.what());
             }
