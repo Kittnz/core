@@ -124,6 +124,7 @@ public:
     void EnterEvadeMode() override
     {
         m_creature->ClearUnitState(UNIT_STAT_ROOT);
+        ScriptedAI::EnterEvadeMode();
     }
 
     void JustReachedHome() override
