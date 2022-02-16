@@ -19,7 +19,6 @@ public:
     explicit boss_mariellaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-        m_creature->AddUnitState(UNIT_STAT_ROOT);
         Reset();
     }
 
@@ -45,6 +44,7 @@ private:
     bool m_bFelhoundsAlreadyAnnounced{};
     bool m_bEnrage{};
     bool m_bAchievementKill{};
+    bool m_bWasAlreadyInFightOnce{};
     
     ScriptedInstance* m_pInstance{};
 
@@ -84,12 +84,32 @@ public:
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetFactionTemplateId(nsMariella::FACTION_NEUTRAL);
+
+        // Misc
+        m_bWasAlreadyInFightOnce = false;
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
+
+        // Instead of JustReachedHome()
+        if (m_pInstance && m_bWasAlreadyInFightOnce)
+        {
+            DespawnVoidZones();
+            DespawnKillZone();
+            DespawnSummoningCircles();
+            DespawnFelhounds();
+
+            m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
+
+            m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
+        }
     }
 
     void Aggro(Unit* pWho) override
     {
         if (!m_pInstance || !pWho)
             return;
+
+        m_bWasAlreadyInFightOnce = true;
 
         // Prevent to keep her in fight when nobody is in the room when the encounter starts
         if (m_creature->GetDistance3dToCenter(pWho) > (nsMariella::ROOM_DIAGONAL / 2))
@@ -106,19 +126,7 @@ public:
 
     void JustReachedHome() override
     {
-        if (!m_pInstance)
-            return;
-
-        DespawnVoidZones();
-        DespawnKillZone();
-        DespawnSummoningCircles();
-        DespawnFelhounds();
-
-        m_creature->AddUnitState(UNIT_STAT_ROOT);
-        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
-
-        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
+        // Broken AF
     }
 
     void JustDied(Unit* pKiller) override
