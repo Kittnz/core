@@ -40,10 +40,6 @@ void AggressorAI::MoveInLineOfSight(Unit *u)
     if (!m_creature->IsWithinDistInMap(u, m_creature->GetAttackDistance(u), true, false))
         return;
 
-    if (u && u->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
-        if (!m_creature->IsVisibleInGridForPlayer(u->GetCharmerOrOwnerPlayerOrPlayerItself()))
-            return;
-
     if (m_creature->CanInitiateAttack() && u->IsTargetable(true, false) && m_creature->IsHostileTo(u) &&
             m_creature->IsWithinLOSInMap(u) && u->IsInAccessablePlaceFor(m_creature))
     {

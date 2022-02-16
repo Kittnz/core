@@ -3410,10 +3410,6 @@ Creature* Creature::FindNearestFriendlyGuard(float range) const
 
 void Creature::CallNearestGuard(Unit* pEnemy) const
 {
-    if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
-        if (!this->IsVisibleInGridForPlayer(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself()))
-            return;
-
     if (Creature* pGuard = FindNearestFriendlyGuard(50.0f))
         if (pGuard->AI() && pGuard->IsValidAttackTarget(pEnemy))
             pGuard->AI()->AttackStart(pEnemy);
