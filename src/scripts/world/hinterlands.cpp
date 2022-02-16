@@ -630,10 +630,14 @@ struct go_corrupted_crystal : public GameObjectAI
                         chromie->SummonCreature(GOB_CHROMIE_PORTAL, 673.74f, -4090.49f, 100.71f, 0, TEMPSUMMON_TIMED_DESPAWN, 60000);
                         kheyna->MonsterMove(chromie->GetPositionX() + 1, chromie->GetPositionY() + 1, chromie->GetPositionZ());
 
-                        Player* pPlayer = me->GetMap()->GetPlayer(m_player);
+                        Player* pPlayer = sObjectMgr.GetPlayer(m_player);
 
                         if (pPlayer && pPlayer->GetQuestStatus(QUEST_AN_INFINITE_HUNT) == QUEST_STATUS_INCOMPLETE)
-                            pPlayer->CompleteQuest(QUEST_AN_INFINITE_HUNT);
+                        {
+                            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60373); // dummy
+                            if (cInfo != nullptr)
+                                pPlayer->KilledMonster(cInfo, ObjectGuid());
+                        }
 
                         m_uiDialogueTimer = 5000;
                         m_uiTick++;
