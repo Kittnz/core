@@ -121,9 +121,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// General greeting
 						case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 5);
 									switch (TextRandom)
@@ -147,9 +147,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Salute
 						case TEXTEMOTE_SALUTE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 5);
 									switch (TextRandom)
@@ -172,9 +172,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Bye
 						case TEXTEMOTE_BYE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 5);
 									switch (TextRandom)
@@ -190,16 +190,16 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 										case 1: case 2: case 3: case 4: case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
 									}
 								}
-								break;
 							}
+							break;
 						}
 
 						// Joke
 						case TEXTEMOTE_JOKE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 6);
 									switch (TextRandom)
@@ -225,9 +225,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						//Flex
 						case TEXTEMOTE_FLEX:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -251,9 +251,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Taunt
 						case TEXTEMOTE_TAUNT:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 3);
 									switch (TextRandom)
@@ -275,9 +275,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Tickle
 						case TEXTEMOTE_TICKLE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 3);
 									switch (TextRandom)
@@ -309,9 +309,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// General greeting
 						case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 6);
 									switch (TextRandom)
@@ -336,9 +336,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Salute
 						case TEXTEMOTE_SALUTE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -360,9 +360,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Bye
 						case TEXTEMOTE_BYE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -384,9 +384,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Joke
 						case TEXTEMOTE_JOKE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 5);
 									switch (TextRandom)
@@ -410,9 +410,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Flex
 						case TEXTEMOTE_FLEX:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -436,9 +436,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Taunt
 						case TEXTEMOTE_TAUNT:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -461,9 +461,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Tickle
 						case TEXTEMOTE_TICKLE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 3);
 									switch (TextRandom)
@@ -492,9 +492,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							// General greeting
 							case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
 							{
-								if (CheckEmoteCooldown())
+								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 								{
-									if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+									if (CheckEmoteCooldown())
 									{
 										const auto TextRandom = urand(1, 6);
 										switch (TextRandom)
@@ -518,9 +518,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							// Salute
 							case TEXTEMOTE_SALUTE:
 							{
-								if (CheckEmoteCooldown())
+								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 								{
-									if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+									if (CheckEmoteCooldown())
 									{
 										const auto TextRandom = urand(1, 4);
 										switch (TextRandom)
@@ -543,9 +543,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							// Bye
 							case TEXTEMOTE_BYE:
 							{
-								if (CheckEmoteCooldown())
+								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 								{
-									if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+									if (CheckEmoteCooldown())
 									{
 										const auto TextRandom = urand(1, 4);
 										switch (TextRandom)
@@ -567,9 +567,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							// Joke
 							case TEXTEMOTE_JOKE:
 							{
-								if (CheckEmoteCooldown())
+								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 								{
-									if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+									if (CheckEmoteCooldown())
 									{
 										const auto TextRandom = urand(1, 4);
 										switch (TextRandom)
@@ -592,9 +592,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							// Flex
 							case TEXTEMOTE_FLEX:
 							{
-								if (CheckEmoteCooldown())
+								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 								{
-									if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+									if (CheckEmoteCooldown())
 									{
 										const auto TextRandom = urand(1, 4);
 										switch (TextRandom)
@@ -618,9 +618,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							// Taunt
 							case TEXTEMOTE_TAUNT:
 							{
-								if (CheckEmoteCooldown())
+								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 								{
-									if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+									if (CheckEmoteCooldown())
 									{
 										const auto TextRandom = urand(1, 5);
 										switch (TextRandom)
@@ -645,9 +645,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							// Tickle
 							case TEXTEMOTE_TICKLE:
 							{
-								if (CheckEmoteCooldown())
+								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 								{
-									if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+									if (CheckEmoteCooldown())
 									{
 										const auto TextRandom = urand(1, 5);
 										switch (TextRandom)
@@ -674,12 +674,15 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 				// EasterEgg
 				if (m_creature->GetFactionTemplateId() == 85)
 				{
-					if (CheckEmoteCooldown())
+					if (uiEmote == TEXTEMOTE_LAUGH)
 					{
-						if (uiEmote == TEXTEMOTE_LAUGH)
+						if (m_creature->GetDistance3dToCenter(pPlayer) <= 40.f)
 						{
-							m_creature->MonsterSay("lol", Language::LANG_ORCISH); // "kek" for alliance
-							m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+							if (CheckEmoteCooldown())
+							{
+								m_creature->MonsterSay("lol", Language::LANG_ORCISH); // "kek" for alliance
+								m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+							}
 						}
 					}
 				}
@@ -697,9 +700,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// General greeting
 						case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 6);
 									switch (TextRandom)
@@ -724,9 +727,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Salute
 						case TEXTEMOTE_SALUTE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 6);
 									switch (TextRandom)
@@ -750,9 +753,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Bye
 						case TEXTEMOTE_BYE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -775,9 +778,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Joke
 						case TEXTEMOTE_JOKE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -801,9 +804,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Flex
 						case TEXTEMOTE_FLEX:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 5);
 									switch (TextRandom)
@@ -829,9 +832,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Taunt
 						case TEXTEMOTE_TAUNT:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -854,9 +857,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Tickle
 						case TEXTEMOTE_TICKLE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 3);
 									switch (TextRandom)
@@ -880,9 +883,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 					// Easteregg Poke (WC3)
 					if (uiEmote == TEXTEMOTE_POKE)
 					{
-						if (CheckEmoteCooldown())
+						if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 						{
-							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+							if (CheckEmoteCooldown())
 							{
 								m_creature->MonsterSay("Poke poke poke - is that all you do?", Language::LANG_ORCISH);
 								m_creature->HandleEmote(EMOTE_ONESHOT_ROAR);
@@ -900,9 +903,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// General greeting
 						case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 6);
 									switch (TextRandom)
@@ -926,9 +929,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Salute
 						case TEXTEMOTE_SALUTE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 5);
 									switch (TextRandom)
@@ -951,9 +954,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Bye
 						case TEXTEMOTE_BYE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 7);
 									switch (TextRandom)
@@ -978,9 +981,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Joke
 						case TEXTEMOTE_JOKE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -1003,9 +1006,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Flex
 						case TEXTEMOTE_FLEX:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
@@ -1029,9 +1032,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Taunt
 						case TEXTEMOTE_TAUNT:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 5);
 									switch (TextRandom)
@@ -1055,9 +1058,9 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 						// Tickle
 						case TEXTEMOTE_TICKLE:
 						{
-							if (CheckEmoteCooldown())
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
 									const auto TextRandom = urand(1, 4);
 									switch (TextRandom)
