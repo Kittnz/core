@@ -2005,30 +2005,30 @@ bool GossipSelect_npc_frosty(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
     return true;
 }
 
-bool GossipHello_npc_save_shark(Player* pPlayer, Creature* pCreature)
+struct npc_save_sharkAI : public ScriptedPetAI
 {
-    if (!pPlayer->GetQuestRewardStatus(80383))
+    npc_save_sharkAI(Creature* pCreature) : ScriptedPetAI(pCreature)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Shark seems friendly and you are lured to it's soft skin to touch and pet it.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        pPlayer->SEND_GOSSIP_MENU(90670, pCreature->GetGUID());
-        return true;
-    }
-    return false;
-}
-
-bool GossipSelect_npc_save_shark(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002);
-        pPlayer->KilledMonster(cInfo, ObjectGuid());
-        pCreature->MonsterTextEmote("Shark seems eager to touch and you'd swear it could send out a satisfied purring were it a cat. Shark's skin is soft to the touch and seems to be irritating it a bit. You could tell from that fast tail swing on it's way off.");
-        pCreature->GetMotionMaster()->MoveConfused();
     }
 
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
+    void ReceiveEmote(Player* pPlayer, uint32 uiEmote)
+    {
+        if (uiEmote == TEXTEMOTE_SHOO)
+        {
+            if (m_creature && m_creature->IsAlive())
+            {
+                if (pPlayer->ToPlayer()->GetQuestStatus(80383) == QUEST_STATUS_INCOMPLETE)
+                {
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002))
+                        pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                    m_creature->GetMotionMaster()->MoveConfused();
+                }
+            }
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_save_shark(Creature* pCreature) { return new npc_save_sharkAI(pCreature); }
 
 bool GossipHello_npc_vip_invite(Player* pPlayer, Creature* pCreature)
 {
@@ -7582,8 +7582,7 @@ void AddSC_random_scripts_1()
 
     newscript = new Script;
     newscript->Name = "npc_save_shark";
-    newscript->pGossipHello = &GossipHello_npc_save_shark;
-    newscript->pGossipSelect = &GossipSelect_npc_save_shark;
+    newscript->GetAI = &GetAI_npc_save_shark;
     newscript->RegisterSelf();
 
     newscript = new Script;
