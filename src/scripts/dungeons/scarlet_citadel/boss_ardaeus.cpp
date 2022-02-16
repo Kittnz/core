@@ -9,7 +9,17 @@
 
 /*
     TODO-List
-    - Everything :(
+    - Power Focus:
+    Ardaeus is channeling his magical power which summons an object similar to a sun which is moving slowly down from the roof but increases it speed from time to time.
+    The players have to do heavy damage on his "sun" to make it go back upwards. If the "sun" is touching the floor, the raid will wipe.
+
+    - Calling for help:
+    Ardaeus is calling for help which creates and echo of 11 possible creatures (statues) which have their own abilities.
+    Once the player killed an echo, the boss will become attackable until the next "Calling for help."
+    
+    - Decide achievement (don't let sun move below a certain Z axis?)
+
+    - .. and a lot more
 */
 
 class boss_ardaeusAI : public ScriptedAI
@@ -24,12 +34,16 @@ public:
 private:
     uint32 m_uiSunGuid{};
 
+    bool m_bAchievementKill{};
+
     ScriptedInstance* m_pInstance{};
 
 public:
     void Reset() override
     {
         m_uiSunGuid = 0;
+
+        m_bAchievementKill = true;
 
         // Trigger fight on gossip
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -41,8 +55,6 @@ public:
     {
         if (!m_pInstance)
             return;
-
-        SpawnSun();
 
         m_creature->SetInCombatWithZone();
 
@@ -61,12 +73,17 @@ public:
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, FAIL);
     }
 
-    void JustDied(Unit* /*pKiller*/) override
+    void JustDied(Unit* pKiller) override
     {
         if (!m_pInstance)
             return;
     
         DespawnSun();
+
+        if (m_bAchievementKill)
+        {
+            SpawnAchievementReward(pKiller);
+        }
 
         m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
 
@@ -110,6 +127,31 @@ public:
         }
     }
 
+    void SpawnAchievementReward(Unit* pKiller)
+    {
+        if (pKiller)
+        {
+            pKiller->SummonGameObject(nsArdaeus::GO_ACHIEVEMENT_CHEST,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fX,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fY,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fZ,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fO,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fR0,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fR1,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fR2,
+                nsArdaeus::vfAchievementChestSpawnPoint[0].m_fR3,
+                nsArdaeus::GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER);
+        }
+        else
+            sLog.outError("[SC] Boss Ardaeus: SpawnAchievementReward() called but no pKiller found!");
+    }
+
+    void AchievementKill(const bool& bIsAchievementKill)
+    {
+        m_bAchievementKill = bIsAchievementKill;
+    }
+
+
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -118,6 +160,122 @@ public:
         DoMeleeAttackIfReady();
     }
 };
+
+CreatureAI* GetAI_boss_ardaeus(Creature* pCreature)
+{
+    return new boss_ardaeusAI(pCreature);
+}
+
+
+class npc_sunAI : public ScriptedAI
+{
+public:
+    explicit npc_sunAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_sunAI::Reset();
+    }
+
+private:
+    uint32 m_uiDamageDone{};
+    uint32 m_uiIncreaseSpeed_Timer{};
+    uint32 m_uiAchievement_Timer{};
+
+    float m_fUpwardSpeed{}; // Do we ever want to change this value? Move to constexpr if not
+    float m_fDownwardSpeed{};
+    float m_fNewPositionZ{};
+
+public:
+    void Reset() override
+    {
+        m_uiDamageDone = 0;
+        m_uiIncreaseSpeed_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
+        m_uiAchievement_Timer = nsArdaeus::ACHIEVEMENT_CHECK_TIMER;
+
+        m_fUpwardSpeed = 0.5f;
+        m_fDownwardSpeed = 0.5f;
+        m_fNewPositionZ = 0.f;
+
+        m_creature->GetMotionMaster()->Clear();
+    }
+
+    void MoveDownwards()
+    {
+        m_creature->GetMotionMaster()->Clear();
+
+        m_creature->GetMotionMaster()->MovePoint(0,
+            nsArdaeus::vfSunMovePoints[1].m_fX,
+            nsArdaeus::vfSunMovePoints[1].m_fY,
+            nsArdaeus::vfSunMovePoints[1].m_fZ,
+            MOVE_FLY_MODE, m_fDownwardSpeed);
+    }
+
+    void MoveUpwards()
+    {
+        m_creature->GetMotionMaster()->Clear();
+
+        m_fNewPositionZ = (m_creature->GetPositionZ() + nsArdaeus::INCREASE_Z_AXIS);
+        m_creature->GetMotionMaster()->MovePoint(0,
+            nsArdaeus::vfSunMovePoints[0].m_fX,
+            nsArdaeus::vfSunMovePoints[0].m_fY,
+            m_fNewPositionZ,
+            MOVE_FLY_MODE, m_fUpwardSpeed);
+
+        m_uiDamageDone = 0;
+    }
+
+    void UpdateSpeed(const uint32& uiDiff)
+    {
+        if (m_uiIncreaseSpeed_Timer < uiDiff)
+        {
+            m_fDownwardSpeed = nsArdaeus::INCREASE_SPEED;
+            m_creature->UpdateSpeed(MOVE_RUN, m_fDownwardSpeed);
+
+            m_uiIncreaseSpeed_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
+        }
+        else
+            m_uiIncreaseSpeed_Timer -= uiDiff;
+    }
+
+    void CheckForAchievement(const uint32& uiDiff)
+    {
+        if (m_uiAchievement_Timer < uiDiff)
+        {
+            if (m_creature->GetPositionZ() < nsArdaeus::ACHIEVEMENT_FAILED_BELOW)
+            {
+                if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(me->AI()) })
+                {
+                    boss_ardaeus->AchievementKill(false);
+                }
+            }
+
+            m_uiAchievement_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
+        }
+        else
+            m_uiAchievement_Timer -= uiDiff;
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        UpdateSpeed(uiDiff);
+        CheckForAchievement(uiDiff);
+
+        if (m_uiDamageDone > nsArdaeus::DAMAGE_DONE_TO_MOVE_UPWARDS &&
+            ((m_creature->GetPositionZ() + nsArdaeus::INCREASE_Z_AXIS) < nsArdaeus::vfSunMovePoints[0].m_fZ)) // Prevent to shoot the Sun through the roof
+        {
+            MoveUpwards();
+        }
+
+        if (m_creature->GetPositionZ() > (m_fNewPositionZ - 0.05f)) // Add a small leeway as we work with float
+        {
+            MoveDownwards();
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_sunAI(Creature* pCreature)
+{
+    return new npc_sunAI(pCreature);
+}
 
 bool GossipHello_boss_ardaeus(Player* pPlayer, Creature* pCreature)
 {
@@ -142,7 +300,7 @@ bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*ui
 
     switch (uiAction)
     {
-        if (GOSSIP_ACTION_INFO_DEF + 1)
+        case (GOSSIP_ACTION_INFO_DEF + 1):
         {
             pPlayer->CLOSE_GOSSIP_MENU();
             pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -159,16 +317,23 @@ bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*ui
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::START), LANG_UNIVERSAL);
+                        if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(creature->AI()) })
+                        {
+                            boss_ardaeus->SpawnSun();
+                        }
                     });
 
                 nsArdaeus::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
-                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         creature->SetFactionTemplateId(nsArdaeus::FACTION_SCARLET);
                         creature->SetInCombatWithZone();
+                        if (npc_sunAI* npc_sun{ dynamic_cast<npc_sunAI*>(creature->AI()) })
+                        {
+                            npc_sun->MoveDownwards();
+                        }
                     });
             }
-            catch (std::runtime_error& e)
+            catch (const std::runtime_error& e)
             {
                 sLog.outError("[SC] Boss Ardaeus: DoAfterTime() failed: %s", e.what());
             }
@@ -180,53 +345,11 @@ bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*ui
     return true;
 }
 
-CreatureAI* GetAI_boss_ardaeus(Creature* pCreature)
+struct npc_invar_onearmAI : public ScriptedAI
 {
-    return new boss_ardaeusAI(pCreature);
-}
-
-
-struct npc_sun : public ScriptedAI
-{
-    explicit npc_sun(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_invar_onearmAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_sun::Reset();
-    }
-
-    float m_uiSpeed{};
-
-    void Reset() override
-    {
-        m_uiSpeed = 0.f;
-        m_creature->GetMotionMaster()->Clear();
-    }
-
-    void StartMovement()
-    {
-        m_creature->GetMotionMaster()->MovePoint(0,
-            nsArdaeus::vfSunMovePoints[1].m_fX,
-            nsArdaeus::vfSunMovePoints[1].m_fY,
-            nsArdaeus::vfSunMovePoints[1].m_fZ,
-            MOVE_FLY_MODE, m_uiSpeed);
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        StartMovement();
-    }
-};
-
-CreatureAI* GetAI_npc_sun(Creature* pCreature)
-{
-    return new npc_sun(pCreature);
-}
-
-
-struct npc_invar_onearm : public ScriptedAI
-{
-    explicit npc_invar_onearm(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        npc_invar_onearm::Reset();
+        npc_invar_onearmAI::Reset();
     }
 
     void Reset() override
@@ -236,21 +359,22 @@ struct npc_invar_onearm : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_invar_onearm(Creature* pCreature)
+CreatureAI* GetAI_npc_invar_onearmAI(Creature* pCreature)
 {
-    return new npc_invar_onearm(pCreature);
+    return new npc_invar_onearmAI(pCreature);
 }
 
 
-struct npc_arellas_fireleaf : public ScriptedAI
+struct npc_arellas_fireleafAI : public ScriptedAI
 {
-    explicit npc_arellas_fireleaf(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_arellas_fireleafAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_arellas_fireleaf::Reset();
+        npc_arellas_fireleafAI::Reset();
     }
 
     void Reset() override
@@ -260,21 +384,22 @@ struct npc_arellas_fireleaf : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_arellas_fireleaf(Creature* pCreature)
+CreatureAI* GetAI_npc_arellas_fireleafAI(Creature* pCreature)
 {
-    return new npc_arellas_fireleaf(pCreature);
+    return new npc_arellas_fireleafAI(pCreature);
 }
 
 
-struct npc_holia_sunshield : public ScriptedAI
+struct npc_holia_sunshieldAI : public ScriptedAI
 {
-    explicit npc_holia_sunshield(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_holia_sunshieldAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_holia_sunshield::Reset();
+        npc_holia_sunshieldAI::Reset();
     }
 
     void Reset() override
@@ -284,21 +409,22 @@ struct npc_holia_sunshield : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_holia_sunshield(Creature* pCreature)
+CreatureAI* GetAI_npc_holia_sunshieldAI(Creature* pCreature)
 {
-    return new npc_holia_sunshield(pCreature);
+    return new npc_holia_sunshieldAI(pCreature);
 }
 
 
-struct npc_ferren_marcus : public ScriptedAI
+struct npc_ferren_marcusAI : public ScriptedAI
 {
-    explicit npc_ferren_marcus(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_ferren_marcusAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_ferren_marcus::Reset();
+        npc_ferren_marcusAI::Reset();
     }
 
     void Reset() override
@@ -308,21 +434,22 @@ struct npc_ferren_marcus : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_ferren_marcus(Creature* pCreature)
+CreatureAI* GetAI_npc_ferren_marcusAI(Creature* pCreature)
 {
-    return new npc_ferren_marcus(pCreature);
+    return new npc_ferren_marcusAI(pCreature);
 }
 
 
-struct npc_yana_bloodspear : public ScriptedAI
+struct npc_yana_bloodspearAI : public ScriptedAI
 {
-    explicit npc_yana_bloodspear(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_yana_bloodspearAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_yana_bloodspear::Reset();
+        npc_yana_bloodspearAI::Reset();
     }
 
     void Reset() override
@@ -332,21 +459,22 @@ struct npc_yana_bloodspear : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_yana_bloodspear(Creature* pCreature)
+CreatureAI* GetAI_npc_yana_bloodspearAI(Creature* pCreature)
 {
-    return new npc_yana_bloodspear(pCreature);
+    return new npc_yana_bloodspearAI(pCreature);
 }
 
 
-struct npc_orman_stromgarde : public ScriptedAI
+struct npc_orman_stromgardeAI : public ScriptedAI
 {
-    explicit npc_orman_stromgarde(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_orman_stromgardeAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_orman_stromgarde::Reset();
+        npc_orman_stromgardeAI::Reset();
     }
 
     void Reset() override
@@ -356,21 +484,22 @@ struct npc_orman_stromgarde : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_orman_stromgarde(Creature* pCreature)
+CreatureAI* GetAI_npc_orman_stromgardeAI(Creature* pCreature)
 {
-    return new npc_orman_stromgarde(pCreature);
+    return new npc_orman_stromgardeAI(pCreature);
 }
 
 
-struct npc_fellari_swiftarrow : public ScriptedAI
+struct npc_fellari_swiftarrowAI : public ScriptedAI
 {
-    explicit npc_fellari_swiftarrow(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_fellari_swiftarrowAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_fellari_swiftarrow::Reset();
+        npc_fellari_swiftarrowAI::Reset();
     }
 
     void Reset() override
@@ -380,21 +509,22 @@ struct npc_fellari_swiftarrow : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_fellari_swiftarrow(Creature* pCreature)
+CreatureAI* GetAI_npc_fellari_swiftarrowAI(Creature* pCreature)
 {
-    return new npc_fellari_swiftarrow(pCreature);
+    return new npc_fellari_swiftarrowAI(pCreature);
 }
 
 
-struct npc_dorgar_stoenbrow : public ScriptedAI
+struct npc_dorgar_stoenbrowAI : public ScriptedAI
 {
-    explicit npc_dorgar_stoenbrow(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_dorgar_stoenbrowAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_dorgar_stoenbrow::Reset();
+        npc_dorgar_stoenbrowAI::Reset();
     }
 
     void Reset() override
@@ -404,21 +534,22 @@ struct npc_dorgar_stoenbrow : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_dorgar_stoenbrow(Creature* pCreature)
+CreatureAI* GetAI_npc_dorgar_stoenbrowAI(Creature* pCreature)
 {
-    return new npc_dorgar_stoenbrow(pCreature);
+    return new npc_dorgar_stoenbrowAI(pCreature);
 }
 
 
-struct npc_valea_twinblades : public ScriptedAI
+struct npc_valea_twinbladesAI : public ScriptedAI
 {
-    explicit npc_valea_twinblades(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_valea_twinbladesAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_valea_twinblades::Reset();
+        npc_valea_twinbladesAI::Reset();
     }
 
     void Reset() override
@@ -428,21 +559,22 @@ struct npc_valea_twinblades : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_valea_twinblades(Creature* pCreature)
+CreatureAI* GetAI_npc_valea_twinbladesAI(Creature* pCreature)
 {
-    return new npc_valea_twinblades(pCreature);
+    return new npc_valea_twinbladesAI(pCreature);
 }
 
 
-struct npc_harthal_truesight : public ScriptedAI
+struct npc_harthal_truesightAI : public ScriptedAI
 {
-    explicit npc_harthal_truesight(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_harthal_truesightAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_harthal_truesight::Reset();
+        npc_harthal_truesightAI::Reset();
     }
 
     void Reset() override
@@ -452,21 +584,22 @@ struct npc_harthal_truesight : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_harthal_truesight(Creature* pCreature)
+CreatureAI* GetAI_npc_harthal_truesightAI(Creature* pCreature)
 {
-    return new npc_harthal_truesight(pCreature);
+    return new npc_harthal_truesightAI(pCreature);
 }
 
 
-struct npc_admiral_barean_westwind : public ScriptedAI
+struct npc_admiral_barean_westwindAI : public ScriptedAI
 {
-    explicit npc_admiral_barean_westwind(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_admiral_barean_westwindAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_admiral_barean_westwind::Reset();
+        npc_admiral_barean_westwindAI::Reset();
     }
 
     void Reset() override
@@ -476,13 +609,14 @@ struct npc_admiral_barean_westwind : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
     }
 };
 
-CreatureAI* GetAI_npc_admiral_barean_westwind(Creature* pCreature)
+CreatureAI* GetAI_npc_admiral_barean_westwindAI(Creature* pCreature)
 {
-    return new npc_admiral_barean_westwind(pCreature);
+    return new npc_admiral_barean_westwindAI(pCreature);
 }
 
 
@@ -498,62 +632,62 @@ void AddSC_boss_ardaeus()
 
     pNewscript = new Script;
     pNewscript->Name = "npc_sun";
-    pNewscript->GetAI = &GetAI_npc_sun;
+    pNewscript->GetAI = &GetAI_npc_sunAI;
     pNewscript->RegisterSelf();
 
     // Adds
     pNewscript = new Script;
     pNewscript->Name = "npc_invar_onearm";
-    pNewscript->GetAI = &GetAI_npc_invar_onearm;
+    pNewscript->GetAI = &GetAI_npc_invar_onearmAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_arellas_fireleaf";
-    pNewscript->GetAI = &GetAI_npc_arellas_fireleaf;
+    pNewscript->GetAI = &GetAI_npc_arellas_fireleafAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_holia_sunshield";
-    pNewscript->GetAI = &GetAI_npc_holia_sunshield;
+    pNewscript->GetAI = &GetAI_npc_holia_sunshieldAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_ferren_marcus";
-    pNewscript->GetAI = &GetAI_npc_ferren_marcus;
+    pNewscript->GetAI = &GetAI_npc_ferren_marcusAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_yana_bloodspear";
-    pNewscript->GetAI = &GetAI_npc_yana_bloodspear;
+    pNewscript->GetAI = &GetAI_npc_yana_bloodspearAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_orman_stromgarde";
-    pNewscript->GetAI = &GetAI_npc_orman_stromgarde;
+    pNewscript->GetAI = &GetAI_npc_orman_stromgardeAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_fellari_swiftarrow";
-    pNewscript->GetAI = &GetAI_npc_fellari_swiftarrow;
+    pNewscript->GetAI = &GetAI_npc_fellari_swiftarrowAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_dorgar_stoenbrow";
-    pNewscript->GetAI = &GetAI_npc_dorgar_stoenbrow;
+    pNewscript->GetAI = &GetAI_npc_dorgar_stoenbrowAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_valea_twinblades";
-    pNewscript->GetAI = &GetAI_npc_valea_twinblades;
+    pNewscript->GetAI = &GetAI_npc_valea_twinbladesAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_harthal_truesight";
-    pNewscript->GetAI = &GetAI_npc_harthal_truesight;
+    pNewscript->GetAI = &GetAI_npc_harthal_truesightAI;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
     pNewscript->Name = "npc_admiral_barean_westwind";
-    pNewscript->GetAI = &GetAI_npc_admiral_barean_westwind;
+    pNewscript->GetAI = &GetAI_npc_admiral_barean_westwindAI;
     pNewscript->RegisterSelf();
 }
