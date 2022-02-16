@@ -1,0 +1,2 @@
+update quest_template set objectives = 'Shoo the shark in the water away from the shore, then return to Toci Flipper.' where entry = 80383;
+update creature_template set npc_flags = 0 where entry = 81006;
