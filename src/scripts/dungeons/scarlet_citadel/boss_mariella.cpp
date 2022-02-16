@@ -44,7 +44,8 @@ private:
     bool m_bFelhoundsAlreadyAnnounced{};
     bool m_bEnrage{};
     bool m_bAchievementKill{};
-    bool m_bWasAlreadyInFightOnce{};
+
+    bool m_bWasInFight{};
     
     ScriptedInstance* m_pInstance{};
 
@@ -86,11 +87,10 @@ public:
         m_creature->SetFactionTemplateId(nsMariella::FACTION_NEUTRAL);
 
         // Misc
-        m_bWasAlreadyInFightOnce = false;
         m_creature->AddUnitState(UNIT_STAT_ROOT);
 
         // Instead of JustReachedHome()
-        if (m_pInstance && m_bWasAlreadyInFightOnce)
+        if (/*m_pInstance &&*/ m_bWasInFight) // TODO: Remove comment before actual release
         {
             DespawnVoidZones();
             DespawnKillZone();
@@ -102,6 +102,8 @@ public:
 
             m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
         }
+
+        m_bWasInFight = false;
     }
 
     void Aggro(Unit* pWho) override
@@ -109,7 +111,7 @@ public:
         if (!m_pInstance || !pWho)
             return;
 
-        m_bWasAlreadyInFightOnce = true;
+        m_bWasInFight = true;
 
         // Prevent to keep her in fight when nobody is in the room when the encounter starts
         if (m_creature->GetDistance3dToCenter(pWho) > (nsMariella::ROOM_DIAGONAL / 2))
