@@ -19,3 +19,5 @@ update creature_template set inhabit_type = 2 where entry = 1224;
 update creature_template set inhabit_type = 2 where entry = 2188;
 update creature set inhabit_type = 2 where id = 1224;
 update creature set inhabit_type = 2 where id = 2188;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1115
+update gameobject set spawntimesecsmin = 180, spawntimesecsmax = 180 where id = 175928;
