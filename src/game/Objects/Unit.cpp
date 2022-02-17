@@ -5839,9 +5839,9 @@ void Unit::SetInCombatState(bool bPvP, Unit* pEnemy)
     if (!IsAlive())
         return;
 
-    if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
-        if (!this->IsVisibleInGridForPlayer(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself()))
-            return;
+    //if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
+    //    if (!this->IsVisibleInGridForPlayer(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself()))
+    //        return;
 
     if (bPvP)
         m_CombatTimer = 5500;
