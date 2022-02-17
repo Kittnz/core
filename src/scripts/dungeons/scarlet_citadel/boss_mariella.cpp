@@ -44,12 +44,29 @@ private:
     bool m_bFelhoundsAlreadyAnnounced{};
     bool m_bEnrage{};
     bool m_bAchievementKill{};
+    bool m_bWasInFight{};
     
     ScriptedInstance* m_pInstance{};
 
 public:
     void Reset() override
     {
+        // JustReachedHome() override still broken
+        if (m_pInstance && m_bWasInFight)
+        {
+            DespawnVoidZones();
+            DespawnKillZone();
+            DespawnSummoningCircles();
+            DespawnFelhounds();
+
+            m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
+
+            m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
+
+            m_bWasInFight = false;
+        }
+
         // Sacrifice
         m_uiSacrificePhase = 0;
         m_bIsSacrificePhase = false;
@@ -93,6 +110,8 @@ public:
         if (!m_pInstance || !pWho)
             return;
 
+        m_bWasInFight = true;
+
         // Prevent to keep her in fight when nobody is in the room when the encounter starts
         if (m_creature->GetDistance3dToCenter(pWho) > (nsMariella::ROOM_DIAGONAL / 2))
             EnterEvadeMode();
@@ -105,22 +124,6 @@ public:
     {
         m_creature->ClearUnitState(UNIT_STAT_ROOT);
         ScriptedAI::EnterEvadeMode();
-    }
-
-    void JustReachedHome() override
-    {
-        if (!m_pInstance)
-            return;
-
-        DespawnVoidZones();
-        DespawnKillZone();
-        DespawnSummoningCircles();
-        DespawnFelhounds();
-
-        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
-
-        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
     }
 
     void JustDied(Unit* pKiller) override
@@ -724,20 +727,28 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
             try
             {
-                nsMariella::DoAfterTime(pCreature, (3 * IN_MILLISECONDS), [creature = pCreature]()
+                nsMariella::DoAfterTime(pCreature, (1 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
+                    });
+
+                nsMariella::DoAfterTime(pCreature, (2 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
                         if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
                         {
                             boss_mariella->SpawnSummoningCircles(creature);
                         }
                     });
 
-                nsMariella::DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
+                nsMariella::DoAfterTime(pCreature, (6 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsMariella::CombatNotification(nsMariella::CombatNotifications::START), LANG_UNIVERSAL);
+                    });
+
+                nsMariella::DoAfterTime(pCreature, (8 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
                         if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
                         {
                             boss_mariella->SpawnKillZone(creature);

@@ -67,52 +67,54 @@ namespace nsArdaeus
 
     std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNotifications)
     {
-        std::string strNotification{};
         switch (combatNotifications)
         {
             case CombatNotifications::ABOUT_TO_START:
             {
-                return (strNotification = "ABOUT_TO_START");
+                return "ABOUT_TO_START";
             }
             case CombatNotifications::START:
             {
-                return (strNotification = "START");
+                return "START";
             }
             case CombatNotifications::RAIDWIPE:
             {
-                return (strNotification = "RAIDWIPE");
+                return "RAIDWIPE";
             }
             case CombatNotifications::BOSSDIED:
             {
-                return (strNotification = "BOSSDIED");
+                return "BOSSDIED";
             }
             case CombatNotifications::ACHIEVEMENT_FAILED:
             {
-                return (strNotification = "ACHIEVEMENT_FAILED");
+                return "ACHIEVEMENT_FAILED";
             }
         }
     }
 
-    std::string [[nodiscard]] SayOnPlayersDeath(const uint8& uiRandomNumber)
+    std::string [[nodiscard]] SayOnPlayersDeath(const uint8 uiRandomNumber)
     {
-        std::string strNotification{};
         switch (uiRandomNumber)
         {
             case 0:
             {
-                return (strNotification = "PLACEHOLDER0");
+                return "PLACEHOLDER0";
             }
             case 1:
             {
-                return (strNotification = "PLACEHOLDER1");
+                return "PLACEHOLDER1";
             }
             case 2:
             {
-                return (strNotification = "PLACEHOLDER2");
+                return "PLACEHOLDER2";
             }
             case 3:
             {
-                return (strNotification = "PLACEHOLDER3");
+                return "PLACEHOLDER3";
+            }
+            default:
+            {
+                break;
             }
         }
     }
