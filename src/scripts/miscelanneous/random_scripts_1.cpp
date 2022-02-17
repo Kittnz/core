@@ -2021,6 +2021,7 @@ struct npc_save_sharkAI : public ScriptedPetAI
                 {
                     if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(81002))
                         pPlayer->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                    m_creature->MonsterTextEmote("The shark looks scared to death and eager to get out of this horrific place full of people like you.");
                     m_creature->GetMotionMaster()->MoveConfused();
                 }
             }
