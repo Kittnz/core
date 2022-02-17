@@ -122,17 +122,17 @@ public:
 
     void DespawnSun()
     {
-        if (!IsSunSpawned())
-            return;
-
-        if (const auto map{ m_creature->GetMap() })
+        if (IsSunSpawned())
         {
-            if (Creature* pCreature{ map->GetCreature(m_uiSunGuid) })
+            if (const auto map{ m_creature->GetMap() })
             {
-                if (TemporarySummon* tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
+                if (Creature* pCreature{ map->GetCreature(m_uiSunGuid) })
                 {
-                    tmpSumm->UnSummon();
-                    m_uiSunGuid = 0;
+                    if (TemporarySummon* tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
+                    {
+                        tmpSumm->UnSummon();
+                        m_uiSunGuid = 0;
+                    }
                 }
             }
         }
@@ -244,7 +244,7 @@ public:
 
     bool IsSunSpawned()
     {
-        return m_uiSunGuid;
+        return (!!m_uiSunGuid);
     }
 
     void UpdateAI(const uint32 uiDiff) override
