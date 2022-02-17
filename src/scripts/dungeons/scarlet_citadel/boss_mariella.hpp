@@ -106,80 +106,82 @@ namespace nsMariella
 
     std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNotifications)
     {
-        std::string strNotification{};
         switch (combatNotifications)
         {
             case CombatNotifications::ABOUT_TO_START:
             {
-                return (strNotification = "I will have you confess!");
+                return "I will have you confess!";
             }
             case CombatNotifications::START:
             {
-                return (strNotification = "In Lady Whitemane's name!");
+                return "In Lady Whitemane's name!";
             }
             case CombatNotifications::SACRIFICE_75_PERCENT:
             {
-                return (strNotification = "Only through sacrifice can one achieve victory.");
+                return "Only through sacrifice can one achieve victory.";
             }
             case CombatNotifications::SACRIFICE_50_PERCENT:
             {
-                return (strNotification = "Die for the glory of the crusade!");
+                return "Die for the glory of the crusade!";
             }
             case CombatNotifications::SACRIFICE_25_PERCENT:
             {
-                return (strNotification = "Persistent, are we?");
+                return "Persistent, are we?";
             }
             case CombatNotifications::ENRAGE:
             {
-                return (strNotification = "That's enough! Now DIE!");
+                return "That's enough! Now DIE!";
             }
             case CombatNotifications::RAIDWIPE:
             {
-                return (strNotification = "What an utter waste of my time.");
+                return "What an utter waste of my time.";
             }
             case CombatNotifications::BOSSDIED:
             {
-                return (strNotification = "No! This is not... how it should have ended.");
+                return "No! This is not... how it should have ended.";
             }
             case CombatNotifications::SACRIFICE_ENDED:
             {
-                return (strNotification = "You worms! I will not fall to the likes of you!");
+                return "You worms! I will not fall to the likes of you!";
             }
             case CombatNotifications::FELHOUNDS_SPAWN:
             {
-                return (strNotification = "Feed my pets! Feed on the blasphemers!");
+                return "Feed my pets! Feed on the blasphemers!";
             }
             case CombatNotifications::VOIDZONES_SPAWN:
             {
-                return (strNotification = "Only the darkness awaits the heretics.");
+                return "Only the darkness awaits the heretics.";
             }
             case CombatNotifications::ACHIEVEMENT_FAILED:
             {
-                return (strNotification = "It seems I have nothing to worry about, you will not touch my treasure.");
+                return "It seems I have nothing to worry about, you will not touch my treasure.";
             }
         }
     }
 
-    std::string [[nodiscard]] SayOnPlayersDeath(const uint8& uiRandomNumber)
+    std::string [[nodiscard]] SayOnPlayersDeath(const uint8 uiRandomNumber)
     {
-        std::string strNotification{};
         switch (uiRandomNumber)
         {
             case 0:
             {
-                return (strNotification = "Unworthy.");
+                return "Unworthy.";
             }
             case 1:
             {
-                return (strNotification = "As expected.");
+                return "As expected.";
             }
             case 2:
             {
-                return (strNotification = "Pathetic.");
+                return "Pathetic.";
             }
             case 3:
             {
-                return (strNotification = "How easily you crumble.");
+                return "How easily you crumble.";
+            }
+            default:
+            {
+                break;
             }
         }
     }
