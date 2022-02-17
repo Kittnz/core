@@ -23,11 +23,11 @@ public:
     }
 
 private:
-    std::vector<ObjectGuid> m_vPossibleVictim{};
-    std::vector<ObjectGuid> m_vVoidZones{};
-    std::vector<ObjectGuid> m_vFelhounds{};
+    std::vector<ObjectGuid> m_vPossibleVictim;
+    std::vector<ObjectGuid> m_vVoidZones;
+    std::vector<ObjectGuid> m_vFelhounds;
 
-    std::list<ObjectGuid> m_lSummoningCircles{};
+    std::list<ObjectGuid> m_lSummoningCircles;
 
     uint8 m_uiSacrificePhase{};
 
@@ -44,8 +44,6 @@ private:
     bool m_bFelhoundsAlreadyAnnounced{};
     bool m_bEnrage{};
     bool m_bAchievementKill{};
-
-    bool m_bWasInFight{};
     
     ScriptedInstance* m_pInstance{};
 
@@ -88,30 +86,12 @@ public:
 
         // Misc
         m_creature->AddUnitState(UNIT_STAT_ROOT);
-
-        // Instead of JustReachedHome()
-        if (/*m_pInstance &&*/ m_bWasInFight) // TODO: Remove comment before actual release
-        {
-            DespawnVoidZones();
-            DespawnKillZone();
-            DespawnSummoningCircles();
-            DespawnFelhounds();
-
-            m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
-
-            m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
-        }
-
-        m_bWasInFight = false;
     }
 
     void Aggro(Unit* pWho) override
     {
         if (!m_pInstance || !pWho)
             return;
-
-        m_bWasInFight = true;
 
         // Prevent to keep her in fight when nobody is in the room when the encounter starts
         if (m_creature->GetDistance3dToCenter(pWho) > (nsMariella::ROOM_DIAGONAL / 2))
@@ -129,7 +109,18 @@ public:
 
     void JustReachedHome() override
     {
-        // Broken AF
+        if (!m_pInstance)
+            return;
+
+        DespawnVoidZones();
+        DespawnKillZone();
+        DespawnSummoningCircles();
+        DespawnFelhounds();
+
+        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
+
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
     }
 
     void JustDied(Unit* pKiller) override
@@ -174,10 +165,6 @@ public:
                 {
                     m_vPossibleVictim.push_back(pPlayer->GetObjectGuid());
                 }
-            }
-            else
-            {
-                continue;
             }
         }
     }
@@ -253,10 +240,6 @@ public:
                     {
                         lPotentialSummoner.push_back(m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()));
                     }
-                }
-                else
-                {
-                    continue;
                 }
             }
 
@@ -588,10 +571,6 @@ struct npc_voidzone : public ScriptedAI
                         m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
                     }
                 }
-                else
-                {
-                    continue;
-                }
             }
 
             m_uiDamage_Timer = nsMariella::VOIDZONE_DAMAGE_REPEAT_TIMER;
@@ -648,10 +627,6 @@ struct npc_killzone : public ScriptedAI
                     {
                         m_creature->DealDamage(pPlayer, (pPlayer->GetMaxHealth() + 1), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
                     }
-                }
-                else
-                {
-                    continue;
                 }
             }
 
