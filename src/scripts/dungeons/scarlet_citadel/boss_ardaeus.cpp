@@ -32,7 +32,10 @@ public:
     }
 
 private:
+    std::list<ObjectGuid>m_lSummonedCallForHelpNPCs;
+
     uint32 m_uiSunGuid{};
+    uint32 m_uiCallForHelp_Timer{};
 
     bool m_bAchievementKill{};
 
@@ -41,8 +44,14 @@ private:
 public:
     void Reset() override
     {
+        // Sun
         m_uiSunGuid = 0;
 
+        // Call for Help
+        m_uiCallForHelp_Timer = nsArdaeus::CALLFORHELP_REPEAT_TIMER;
+        m_lSummonedCallForHelpNPCs.clear();
+
+        // Achievement
         m_bAchievementKill = true;
 
         // Trigger fight on gossip
@@ -67,6 +76,7 @@ public:
             return;
         
         DespawnSun();
+        DespawnCallForHelpNPCs();
 
         m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
 
@@ -79,6 +89,7 @@ public:
             return;
     
         DespawnSun();
+        DespawnCallForHelpNPCs();
 
         if (m_bAchievementKill)
         {
@@ -111,7 +122,7 @@ public:
 
     void DespawnSun()
     {
-        if (!m_uiSunGuid)
+        if (!IsSunSpawned())
             return;
 
         if (const auto map{ m_creature->GetMap() })
@@ -123,6 +134,86 @@ public:
                     tmpSumm->UnSummon();
                     m_uiSunGuid = 0;
                 }
+            }
+        }
+    }
+
+    void CallForHelp(const uint32& uiDiff)
+    {
+        if (m_uiCallForHelp_Timer < uiDiff)
+        {
+            const auto uiRnd{ urand(0, nsArdaeus::MAX_SPAWN_POINTS) }; // Pick a random NPC
+            uint64 uiStatueNpcGUID{};
+
+            // Summon an invisible NPC in front of the random chosen statue which does a visual effect to the summoned creature
+            Creature const* pStatueNPC{ m_creature->SummonCreature(nsArdaeus::ARDAEUS_STATUE_NPC,
+                nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fX,
+                nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fX,
+                nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fZ,
+                nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fO,
+                TEMPSUMMON_MANUAL_DESPAWN) };
+
+            if (pStatueNPC)
+            {
+                uiStatueNpcGUID = pStatueNPC->GetObjectGuid(); // Store its GUID to remove it later
+            }
+
+            // Summon Ardaeus' guard
+            Creature const* pRandomNPC{ m_creature->SummonCreature(nsArdaeus::vfCallForHelpNPCs[uiRnd],
+                nsArdaeus::vfCallForHelpSpawnPoint[0].m_fX,
+                nsArdaeus::vfCallForHelpSpawnPoint[0].m_fX,
+                nsArdaeus::vfCallForHelpSpawnPoint[0].m_fZ,
+                nsArdaeus::vfCallForHelpSpawnPoint[0].m_fO,
+                TEMPSUMMON_MANUAL_DESPAWN) };
+
+            if (pRandomNPC)
+            {
+                m_lSummonedCallForHelpNPCs.push_back(pRandomNPC->GetObjectGuid()); // Store its GUID to remove it later
+            }
+
+            // TODO: Visual summoning effect
+
+            // Despawn Statue NPC
+            if (const auto map{ m_creature->GetMap() })
+            {
+                if (uiStatueNpcGUID)
+                {
+                    if (Creature* pCreature{ map->GetCreature(uiStatueNpcGUID) })
+                    {
+                        if (TemporarySummon* tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
+                        {
+                            tmpSumm->UnSummon();
+                        }
+                    }
+                }
+
+                uiStatueNpcGUID = 0;
+            }
+
+            m_uiCallForHelp_Timer = nsArdaeus::CALLFORHELP_REPEAT_TIMER;
+        }
+        else
+            m_uiCallForHelp_Timer -= uiDiff;
+    }
+
+    void DespawnCallForHelpNPCs()
+    {
+        if (!m_lSummonedCallForHelpNPCs.empty())
+        {
+            if (const auto map{ m_creature->GetMap() })
+            {
+                for (const auto& guid : m_lSummonedCallForHelpNPCs)
+                {
+                    if (Creature* pCreature{ map->GetCreature(guid) })
+                    {
+                        if (TemporarySummon* tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
+                        {
+                            tmpSumm->UnSummon();
+                        }
+                    }
+                }
+
+                m_lSummonedCallForHelpNPCs.clear();
             }
         }
     }
@@ -151,11 +242,17 @@ public:
         m_bAchievementKill = bIsAchievementKill;
     }
 
+    bool IsSunSpawned()
+    {
+        return m_uiSunGuid;
+    }
 
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        CallForHelp(uiDiff);
 
         DoMeleeAttackIfReady();
     }
@@ -183,6 +280,8 @@ private:
     float m_fUpwardSpeed{}; // Do we ever want to change this value? Move to constexpr if not
     float m_fDownwardSpeed{};
     float m_fNewPositionZ{};
+
+    boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(me->AI()) };
 
 public:
     void Reset() override
@@ -218,7 +317,7 @@ public:
             nsArdaeus::vfSunMovePoints[0].m_fX,
             nsArdaeus::vfSunMovePoints[0].m_fY,
             m_fNewPositionZ,
-            MOVE_FLY_MODE, m_fUpwardSpeed);
+            (MOVE_FLY_MODE | MOVE_FORCE_DESTINATION | MOVE_STRAIGHT_PATH), m_fUpwardSpeed);
 
         m_uiDamageDone = 0;
     }
@@ -242,7 +341,7 @@ public:
         {
             if (m_creature->GetPositionZ() < nsArdaeus::ACHIEVEMENT_FAILED_BELOW)
             {
-                if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(me->AI()) })
+                if (boss_ardaeus)
                 {
                     boss_ardaeus->AchievementKill(false);
                 }
@@ -256,6 +355,17 @@ public:
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        if (boss_ardaeus)
+        {
+            if (!boss_ardaeus->IsSunSpawned())
+                return;
+        }
+        else
+        {
+            sLog.outError("[SC] Boss Ardaeus: boss_ardaeus not found.");
+            return;
+        }
+
         UpdateSpeed(uiDiff);
         CheckForAchievement(uiDiff);
 

@@ -36,6 +36,44 @@ namespace nsArdaeus
     static constexpr float INCREASE_Z_AXIS{ 5.0f };               // Set new Z destination to move Sun upwards
     static constexpr float INCREASE_SPEED{ 5.0f };                // Set new speed
 
+    // Call for Help
+    static constexpr uint32 VISUALSPELL_SUMMON_CALLFORHELP{ 7741 }; // TODO: Replace this spell since its already used in Boss Mariella's fight
+    static constexpr uint32 CALLFORHELP_REPEAT_TIMER{ 30000 };
+    static constexpr uint32 ARDAEUS_STATUE_NPC{ 2000031 };
+    static constexpr uint8 MAX_SPAWN_POINTS{ 11 };
+    static const Location vfStatueNPCsSpawnPoints[MAX_SPAWN_POINTS] = // Statue spawn points
+    {
+        { 273.846527f,  -89.212425f, 36.449623f }, // Admiral Barean Westwind
+        { 266.307312f,  -81.047981f, 36.766712f }, // Harthal Truesight
+        { 254.888184f,  -77.541397f, 36.278404f }, // Valea Twinblades
+        { 244.001007f,  -81.246063f, 33.979237f }, // Dorgar Stoenbrow
+        { 236.904312f,  -89.258492f, 36.039940f }, // Fellari Swiftarrow
+        { 234.323257f,  -99.893288f, 36.788834f }, // Orman of Stromgarde
+        { 235.413086f, -111.568939f, 36.354855f }, // Yana Bloodspear
+        { 244.116028f, -119.026382f, 36.735710f }, // Ferren Marcus
+        { 255.226807f, -121.590538f, 35.795573f }, // Holia Sunshield
+        { 266.339966f, -119.543060f, 35.871510f }, // Arellas Fireleaf
+        { 273.310608f, -110.504791f, 36.435394f }  // Invar One-Arm
+    };
+    static const Location vfCallForHelpSpawnPoint[] =         // Call for Help NPC spawn point
+    {
+        { 255.173981f, -99.994385f, 18.679367f, 6.263751f }   // Middle of the room
+    };
+    static const uint32 vfCallForHelpNPCs[MAX_SPAWN_POINTS] = // Call for Help NPCs
+    {
+        { 2000030 }, // Admiral Barean Westwind
+        { 2000029 }, // Harthal Truesight
+        { 2000028 }, // Valea Twinblades
+        { 2000027 }, // Dorgar Stoenbrow
+        { 2000026 }, // Fellari Swiftarrow
+        { 2000025 }, // Orman of Stromgarde
+        { 2000024 }, // Yana Bloodspear
+        { 2000023 }, // Ferren Marcus
+        { 2000022 }, // Holia Sunshield
+        { 2000021 }, // Arellas Fireleaf
+        { 2000020 }  // Invar One-Arm
+    };
+
     // Gossip Menu
     static constexpr uint32 GOSSIP_TEXT{ 1000001 };
     static constexpr auto GOSSIP_ANSWER{ "Give us your worst, fanatic mage." };
@@ -47,7 +85,7 @@ namespace nsArdaeus
     static constexpr float ACHIEVEMENT_FAILED_BELOW{ 20.75f };
     static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
     {
-        { 236.068649f, -99.972031f, 23.774151f, 6.271617f, 0.f, 0.f, 0.0f,  0.0f } // TODO: Check rotation
+        { 236.068649f, -99.972031f, 23.774151f, 6.271617f, 0.f, 0.f, 0.f, 0.f } // TODO: Check rotation
     };
 
     // Misc
