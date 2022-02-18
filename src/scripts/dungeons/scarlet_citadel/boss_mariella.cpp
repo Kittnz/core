@@ -19,7 +19,7 @@ public:
     explicit boss_mariellaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-        Reset();
+        boss_mariellaAI::Reset();
     }
 
 private:

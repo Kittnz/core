@@ -28,7 +28,7 @@ public:
     explicit boss_ardaeusAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-        Reset();
+        boss_ardaeusAI::Reset();
     }
 
 private:
@@ -48,7 +48,7 @@ public:
         m_uiSunGuid = 0;
 
         // Call for Help
-        m_uiCallForHelp_Timer = nsArdaeus::CALLFORHELP_REPEAT_TIMER;
+        m_uiCallForHelp_Timer = 5000; //nsArdaeus::CALLFORHELP_REPEAT_TIMER;
         m_lSummonedCallForHelpNPCs.clear();
 
         // Achievement
@@ -146,7 +146,7 @@ public:
             uint64 uiStatueNpcGUID{};
 
             // Summon an invisible NPC in front of the random chosen statue which does a visual effect to the summoned creature
-            Creature const* pStatueNPC{ m_creature->SummonCreature(nsArdaeus::ARDAEUS_STATUE_NPC,
+            Creature* pStatueNPC{ m_creature->SummonCreature(nsArdaeus::ARDAEUS_STATUE_NPC,
                 nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fX,
                 nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fX,
                 nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fZ,
@@ -159,19 +159,18 @@ public:
             }
 
             // Summon Ardaeus' guard
-            Creature const* pRandomNPC{ m_creature->SummonCreature(nsArdaeus::vfCallForHelpNPCs[uiRnd],
+            if (Creature* pRandomNPC{ m_creature->SummonCreature(nsArdaeus::vfCallForHelpNPCs[uiRnd],
                 nsArdaeus::vfCallForHelpSpawnPoint[0].m_fX,
                 nsArdaeus::vfCallForHelpSpawnPoint[0].m_fX,
                 nsArdaeus::vfCallForHelpSpawnPoint[0].m_fZ,
                 nsArdaeus::vfCallForHelpSpawnPoint[0].m_fO,
-                TEMPSUMMON_MANUAL_DESPAWN) };
-
-            if (pRandomNPC)
+                TEMPSUMMON_MANUAL_DESPAWN) })
             {
                 m_lSummonedCallForHelpNPCs.push_back(pRandomNPC->GetObjectGuid()); // Store its GUID to remove it later
-            }
 
-            // TODO: Visual summoning effect
+                if (pStatueNPC)
+                    pRandomNPC->CastSpell(pStatueNPC, nsArdaeus::VISUALSPELL_SUMMON_CALLFORHELP, true);
+            }
 
             // Despawn Statue NPC
             if (const auto map{ m_creature->GetMap() })
@@ -269,6 +268,7 @@ class npc_sunAI : public ScriptedAI
 public:
     explicit npc_sunAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
         npc_sunAI::Reset();
     }
 
@@ -281,7 +281,7 @@ private:
     float m_fDownwardSpeed{};
     float m_fNewPositionZ{};
 
-    boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(me->AI()) };
+    ScriptedInstance* m_pInstance{};
 
 public:
     void Reset() override
@@ -341,10 +341,28 @@ public:
         {
             if (m_creature->GetPositionZ() < nsArdaeus::ACHIEVEMENT_FAILED_BELOW)
             {
-                if (boss_ardaeus)
+                if (m_pInstance->GetData(TYPE_ARDAEUS) == IN_PROGRESS)
                 {
-                    boss_ardaeus->AchievementKill(false);
+                    if (Creature* pArdaeus{ m_pInstance->GetSingleCreatureFromStorage(NPC_ARDAEUS) })
+                    {
+                        if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pArdaeus->AI()) })
+                        {
+                            boss_ardaeus->AchievementKill(false);
+                        }
+                        else
+                        {
+                            sLog.outError("[SC] Boss Ardaeus: CheckForAchievement() boss_ardaeus not found.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        sLog.outError("[SC] Boss Ardaeus: CheckForAchievement() pArdaeus not found.");
+                        return;
+                    }
                 }
+                else
+                    sLog.outError("[SC] Boss Ardaeus: CheckForAchievement() TYPE_ARDAEUS not IN_PROGRESS.");
             }
 
             m_uiAchievement_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
@@ -355,16 +373,31 @@ public:
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (boss_ardaeus)
+        if (m_pInstance->GetData(TYPE_ARDAEUS) == IN_PROGRESS)
         {
-            if (!boss_ardaeus->IsSunSpawned())
+            if (Creature* pArdaeus{ m_pInstance->GetSingleCreatureFromStorage(NPC_ARDAEUS) })
+            {
+                if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pArdaeus->AI()) })
+                {
+                    if (!boss_ardaeus->IsSunSpawned())
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    sLog.outError("[SC] Boss Ardaeus: UpdateAI() boss_ardaeus not found.");
+                    return;
+                }
+            }
+            else
+            {
+                sLog.outError("[SC] Boss Ardaeus: UpdateAI() pArdaeus not found.");
                 return;
+            }
         }
         else
-        {
-            sLog.outError("[SC] Boss Ardaeus: boss_ardaeus not found.");
-            return;
-        }
+            sLog.outError("[SC] Boss Ardaeus: UpdateAI() TYPE_ARDAEUS not IN_PROGRESS.");
 
         UpdateSpeed(uiDiff);
         CheckForAchievement(uiDiff);
