@@ -6,3 +6,5 @@ REPLACE INTO page_text VALUES (50526, 'The Tree of Lashes is covered in countles
 REPLACE INTO `creature_linking_template` (`entry`, `map`, `master_entry`, `flag`, `search_range`) VALUES (7269, 209, 7269, 3, 8);
 -- Correct pre-quest setted for quest 'The Completed Orb of Dar'Orahil':
 update quest_template set prevquestid = 4976 where entry = 4964;
+-- Phasing for NPC Vereesa removed:
+update creature_template set phase_quest_id = 0 where entry = 80877;
