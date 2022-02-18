@@ -4,3 +4,5 @@ REPLACE INTO gameobject_template VALUES (2010796, 9, 25251, 'Tree of Lashes', 0,
 REPLACE INTO page_text VALUES (50526, 'The Tree of Lashes is covered in countless wounds of varied age. Some still drip with sap, while others are faint, ghostly scars. One name is torn into the tree\'s flesh, and bleeds still: "Ariele."', 0);
 -- When pulling one scarab it pull the other one around him (8 yards):
 REPLACE INTO `creature_linking_template` (`entry`, `map`, `master_entry`, `flag`, `search_range`) VALUES (7269, 209, 7269, 3, 8);
+-- Correct pre-quest setted for quest 'The Completed Orb of Dar'Orahil':
+update quest_template set prevquestid = 4976 where entry = 4964;
