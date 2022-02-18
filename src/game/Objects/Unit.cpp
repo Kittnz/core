@@ -835,6 +835,26 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             damage -= damage / 10;
     }
 
+    //CUSTOM Vampiric Embrace
+    if (auto player = ToPlayer(); player && damageSchoolMask == SPELL_SCHOOL_MASK_SHADOW && player->HasSpell(000)) // TODO: spell id for vampiric embrace
+    {
+        const uint32 spellEffectiveness = player->HasSpell(000) ? 1 : 2;
+        auto group = player->GetGroup();
+        if (group)
+        {
+            for (auto itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+            {
+                auto member = itr->getSource();
+                if (member->GetPowerType() == POWER_MANA)
+                {
+                    member->ModifyPower(POWER_MANA, damage / 100 * spellEffectiveness);
+                }
+            }
+        }
+        else
+            player->ModifyPower(POWER_MANA, damage / 100 * spellEffectiveness);
+    }
+
     if (health <= damage)
     {
         // Can't kill gods
