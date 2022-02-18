@@ -1390,7 +1390,29 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     ((Player*)m_caster)->CastItemCombatSpell(unitTarget, BASE_ATTACK);
                 // Judgement of Command
                 else if (m_spellInfo->SpellIconID == 561)
+                {
                     ((Player*)m_caster)->CastItemCombatSpell(unitTarget, BASE_ATTACK);
+                    const auto* m_sealSpellInfo = sSpellMgr.GetSpellEntry(20424);
+                    if (auto playerCaster = m_caster->ToPlayer(); playerCaster->HasSpell(000) && m_sealSpellInfo) //TODO : add sanctified command talent spell id.
+                    {
+                        const uint32 manaEffectiveness = playerCaster->HasSpell(000) ? 10 : 20; // rank 1 or 2.
+
+                        auto group = playerCaster->GetGroup();
+                        if (group)
+                        {
+                            for (auto itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+                            {
+                                auto member = itr->getSource();
+                                if (member->GetPowerType() == POWER_MANA && playerCaster->GetDistance(member) < 15.0f)
+                                {
+                                    member->ModifyPower(POWER_MANA, m_sealSpellInfo->manaCost / 100 * manaEffectiveness);
+                                }
+                            }
+                        }
+                        else
+                            playerCaster->ModifyPower(POWER_MANA, m_sealSpellInfo->manaCost / 100 * manaEffectiveness);
+                    }
+                }
                 // Judgement of Righteousness
                 else if (m_spellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_RIGHTEOUSNESS>() && m_spellInfo->SpellIconID == 25)
                     ((Player*)m_caster)->CastItemCombatSpell(unitTarget, BASE_ATTACK);
