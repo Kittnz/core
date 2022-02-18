@@ -661,3 +661,12 @@ REPLACE INTO creature_loot_template VALUES
 (6118, 7912, 0.05, 0, 1, 1, 0),
 (11665, 7912, 26.5011, 0, 1, 1, 0);
 
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1076
+REPLACE INTO creature_involvedrelation VALUES (7918, 2954);
+
+REPLACE INTO creature_questrelation VALUES 
+(7918, 2977),
+(7918, 2967);
+
+DELETE FROM creature WHERE id = 7918;
