@@ -6266,7 +6266,6 @@ constexpr auto QUEST_SEEING_WHAT_HAPPENS_A = 2946;
 constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
 constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
 constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
-constexpr auto QUEST_THE_STONE_WATCHER = 2954;
 
 bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 {
@@ -6280,11 +6279,11 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
             showQuestMenu = true;
 
 
-    if (player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_A)->m_rewarded || player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_H)->m_rewarded && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f))
-        {
+    if (player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_A) || player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_H) && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f) && !pGo->FindNearestCreature(80970, 10.f))
+    {
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
         player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-        }
+    }
     
 
     // Support vanilla quest chain for lower levels.
@@ -6312,12 +6311,9 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 
 bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
 {
-    switch (uiAction)
-    {
-        case GOSSIP_ACTION_INFO_DEF + 2:
-            pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
-            break;
-    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+        pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
+
     player->CLOSE_GOSSIP_MENU();
     return true;
 }
