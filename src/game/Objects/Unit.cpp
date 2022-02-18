@@ -807,6 +807,34 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     else if (IsPlayer() && ToPlayer()->IsHardcore() && pVictim->IsCreature() && (pVictim->GetEntry() == 89 || GetEntry() == 14385))
         damage *= 10;
 
+    const auto* spiritLinkProto = sSpellMgr.GetSpellEntry(000);
+
+    if (HasAura(000) && spellProto != spiritLinkProto) //TODO: spellid for spirit link aura, check for proto to break infinite loop.
+    {
+        //could customize whole class to save the linked targets, rather just do a player search in the vicinity and check for aura and work from there because it doesn't happen often.
+
+        std::list<Player*> players;
+        MaNGOS::AnyPlayerInObjectRangeCheck check(this, 20.f);
+        MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
+
+        Cell::VisitWorldObjects(this, searcher, 20.f);
+
+        bool foundPlayer = false;      
+
+        for (const auto& player : players)
+        {
+            if (player->HasAura(000))
+            {
+                foundPlayer = true;
+
+                DealDamage(player, damage / 10, cleanDamage, damagetype, damageSchoolMask, spiritLinkProto, durabilityLoss, spell);
+            }
+        }
+
+        if (foundPlayer)
+            damage -= damage / 10;
+    }
+
     if (health <= damage)
     {
         // Can't kill gods
