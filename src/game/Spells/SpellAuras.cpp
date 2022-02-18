@@ -1355,6 +1355,10 @@ void Aura::TriggerSpell()
                             lRage = 100;
                         target->ModifyPower(POWER_RAGE, -lRage);
                         int32 FRTriggerBasePoints = int32(lRage * LifePerRage / 10);
+
+                        //CUSTOM 1% stamina bonus.
+                        FRTriggerBasePoints += target->GetStat(STAT_STAMINA) / 100;
+
                         target->CastCustomSpell(target, 22845, &FRTriggerBasePoints, nullptr, nullptr, true, nullptr, this);
                         return;
                     }
