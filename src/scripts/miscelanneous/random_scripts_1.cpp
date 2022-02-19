@@ -6278,20 +6278,18 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
         if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
             showQuestMenu = true;
 
-
-    if (player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_A) || player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_H) && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f) && !pGo->FindNearestCreature(80970, 10.f))
-    {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
-        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-    }
-    
-
     // Support vanilla quest chain for lower levels.
     if (showQuestMenu)
     {
         player->PrepareQuestMenu(pGo->GetObjectGuid());
         player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
         return true;
+    }
+
+    if (player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_A) || player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_H) && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f) && !pGo->FindNearestCreature(80970, 10.f))
+    {
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
+        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
     }
 
     // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
@@ -6302,7 +6300,6 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
             player->PrepareQuestMenu(pGo->GetObjectGuid());
         else
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
     }
     player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
     
@@ -6364,8 +6361,6 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
             c->SetInCombatWith(player); // Used to pass along event invoker.
             pGo->UseDoorOrButton();
         }
-
-
     }
     return false;
 }
