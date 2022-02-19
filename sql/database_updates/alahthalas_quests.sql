@@ -34,3 +34,6 @@ replace into creature_questrelation (id, quest) values (80245, 40375);
 replace into creature_involvedrelation (id, quest) values (7999, 40375);
 
 update quest_template set prevquestid = 40371 where entry = 40049;
+
+-- Do NOT reuse the entries!!!
+delete from quest_template where entry in (40049, 40050, 40058, 40059, 40060, 40069, 40070);
