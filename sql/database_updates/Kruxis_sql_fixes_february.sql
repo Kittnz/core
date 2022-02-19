@@ -664,9 +664,13 @@ REPLACE INTO creature_loot_template VALUES
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1076
 REPLACE INTO creature_involvedrelation VALUES (7918, 2954);
-
 REPLACE INTO creature_questrelation VALUES 
 (7918, 2977),
 (7918, 2967);
-
 DELETE FROM creature WHERE id = 7918;
+
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1129
+UPDATE creature_loot_template SET ChanceOrQuestChance = -28.9846 WHERE entry = 6348 AND item = 20087 AND groupid = 0;
+UPDATE creature_loot_template SET ChanceOrQuestChance = -15.18 WHERE entry = 6349 AND item = 20087 AND groupid = 0;
+UPDATE creature_loot_template SET ChanceOrQuestChance = -31.8124 WHERE entry = 6347 AND item = 20087 AND groupid = 0;
