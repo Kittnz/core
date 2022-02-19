@@ -271,6 +271,7 @@ miscelanneous/custom_exploration_triggers.cpp
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp
 world/ashenvale.cpp
+world/alahthalas.cpp
 world/azshara.cpp
 world/blasted_lands.cpp
 world/boss_omen.cpp

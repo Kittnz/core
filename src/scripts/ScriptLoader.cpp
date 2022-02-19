@@ -232,6 +232,7 @@ void AddSC_zulfarrak();                              //zulfarrak
 void AddSC_instance_zulfarrak();
 
 void AddSC_ashenvale();
+void AddSC_alahthalas();
 void AddSC_azshara();
 void AddSC_darkshore();
 void AddSC_desolace();
@@ -529,6 +530,7 @@ void AddScripts()
     AddSC_instance_zulfarrak();
 
     AddSC_ashenvale();
+    AddSC_alahthalas();
     AddSC_azshara();
     AddSC_darkshore();
     AddSC_desolace();
