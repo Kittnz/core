@@ -2,7 +2,7 @@
 UPDATE creature_template SET beast_family = 7 WHERE entry = 91824;
 
 -- Coun request
-UPDATE creature_template SET scale = 1, level = 15 WHERE entry = 50140;
+UPDATE creature_template SET scale = 1, level_min = 15, level_max = 15 WHERE entry = 50140;
 UPDATE creature_template SET display_id1 = 4999 WHERE entry = 60663;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1125
@@ -683,3 +683,6 @@ UPDATE creature_template SET faction = 35 WHERE entry = 16100;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1141
 UPDATE item_template SET item_level = 64 WHERE entry = 81368;
+
+-- Deleted Broken Spear from Crescent grove loot ~Shang
+DELETE FROM creature_loot_template WHERE entry in (92112,92113,92120) AND item = 70027;
