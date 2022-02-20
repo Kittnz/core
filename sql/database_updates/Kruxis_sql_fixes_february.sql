@@ -677,3 +677,6 @@ UPDATE creature_loot_template SET ChanceOrQuestChance = -31.8124 WHERE entry = 6
 
 -- Deleted loot_table from not existing item. (if needed i got the loot table backed up)
 DELETE FROM item_loot_template WHERE entry in (51255, 51256);
+
+-- Ysida's Trigger should not attack players.
+UPDATE creature_template SET faction = 35 WHERE entry = 16100;
