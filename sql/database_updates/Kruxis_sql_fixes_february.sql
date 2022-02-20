@@ -674,3 +674,6 @@ DELETE FROM creature WHERE id = 7918;
 UPDATE creature_loot_template SET ChanceOrQuestChance = -28.9846 WHERE entry = 6348 AND item = 20087 AND groupid = 0;
 UPDATE creature_loot_template SET ChanceOrQuestChance = -15.18 WHERE entry = 6349 AND item = 20087 AND groupid = 0;
 UPDATE creature_loot_template SET ChanceOrQuestChance = -31.8124 WHERE entry = 6347 AND item = 20087 AND groupid = 0;
+
+-- Deleted loot_table from not existing item. (if needed i got the loot table backed up)
+DELETE FROM item_loot_template WHERE entry in (51255, 51256);
