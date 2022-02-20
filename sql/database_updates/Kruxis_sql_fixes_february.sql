@@ -699,3 +699,6 @@ REPLACE INTO creature_movement VALUES
 (79875, 7, -9120.96, 394.504, 92.0548, 100, 0, 0, 0),
 (79875, 8, -9086.64, 417.472, 92.2924, 100, 0, 0, 0),
 (79875, 9, -9079.49, 425.134, 92.5005, 100, 0, 0, 0);
+
+-- Fix Mindcontrolability of unit ~Shang
+UPDATE creature_template SET mechanic_immune_mask = 2 WHERE entry = 92107;
