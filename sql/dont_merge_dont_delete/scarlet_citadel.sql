@@ -28,6 +28,11 @@
 -- 18688 Citadel Watchman
 -- 18689 Citadel Zealot
 
+-- Custom Graveyard
+REPLACE INTO `custom_graveyards` (`id`, `name`, `map_id`, `zone_id`, `area_id`, `max_level`, `map_gy_alliance`, `gy_x_alliance`, `gy_y_alliance`, `gy_z_alliance`, `orientation_alliance`, `map_gy_horde`, `gy_x_horde`, `gy_y_horde`, `gy_z_horde`, `orientation_horde`) VALUES
+(30, 'Scarlet Citadel', 44, 0, 0, 60, 0, 2603.33, -534.807, 89, 2.46552, 0, 2603.33, -534.807, 89, 2.46552);
+
+
 -- Teleport
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES
 (500, 81.1913, -0.849708, 18.6773, 6.27162, 44, 'ScarletCitadel'),
