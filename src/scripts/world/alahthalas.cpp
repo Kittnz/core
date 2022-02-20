@@ -10,7 +10,7 @@ bool GOHello_go_sacred_water(Player* pPlayer, GameObject* pGo)
 {
     if (pGo->GetEntry() == 2010815)
     {
-        if (pPlayer->GetQuestStatus(40060) == QUEST_STATUS_INCOMPLETE)
+        if (pPlayer->GetQuestStatus(40382) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F))
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Use Bowl of Sacred Water.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
             pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
@@ -25,20 +25,20 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
     {
         if (pGo->GetEntry() == 2010815)
         {
+            pGo->SummonCreature(10, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(7878, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
-                gob->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
+                gob->SummonCreature(60666, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
                 });
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
                 {
                     vestia->SetWalk(true);
                     vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
-                    vestia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 }
                 });
             DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
                 {
                     vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
                     vestia->MonsterSayToPlayer("This is it, keep me safe!", player);
@@ -51,7 +51,7 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
                 });
             DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
                 {
                     vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
                     vestia->MonsterSayToPlayer("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.", player);
@@ -61,7 +61,7 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
                 });
             DoAfterTime(pPlayer, 46 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
                 {
                     vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
                     vestia->MonsterSayToPlayer("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!", player);
@@ -75,23 +75,19 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 }
                 });
             DoAfterTime(pPlayer, 100 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
                 {
                     vestia->CastSpell(vestia, 1449, false);
                 }
                 });
             DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
+                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
                 {
                     vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
                     vestia->MonsterSayToPlayer("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.", player);
-                    vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
                         player->KilledMonster(cInfo, ObjectGuid());
                 }
-                });
-            DoAfterTime(pPlayer, 180 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
                 });
         }
     }
@@ -103,7 +99,7 @@ bool GossipHello_npc_felstone(Player* pPlayer, Creature* pCreature)
 {
     GameObject* menu_holder = pPlayer->FindNearestGameObject(2010698, 30.0F);
     GameObject* event_running = pPlayer->FindNearestGameObject(2010699, 80.0F);
-    if (pPlayer->GetQuestStatus(40050) == QUEST_STATUS_INCOMPLETE && !menu_holder && !event_running)
+    if (pPlayer->GetQuestStatus(40377) == QUEST_STATUS_INCOMPLETE && !menu_holder && !event_running)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
