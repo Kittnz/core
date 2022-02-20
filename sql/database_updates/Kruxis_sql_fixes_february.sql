@@ -680,3 +680,6 @@ DELETE FROM item_loot_template WHERE entry in (51255, 51256);
 
 -- Ysida's Trigger should not attack players.
 UPDATE creature_template SET faction = 35 WHERE entry = 16100;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1141
+UPDATE item_template SET item_level = 64 WHERE entry = 81368;
