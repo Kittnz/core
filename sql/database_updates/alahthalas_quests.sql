@@ -66,3 +66,10 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (80242, 40378);
 replace into creature_involvedrelation (id, quest) values (7999, 40378);
 
+-- Darnassian Endorsement --
+delete from quest_template where entry = 40379;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40378,40379,2,2040,60,60,0,0,'Darnassian Endorsement','Here is the endorsement you have been waiting for, take it to Highlord Bolvar Fordragon in Stormwind. I only pray to the goddess that this was not a mistake.','Present the Darnassian Endorsement to Highlord Bolvar Fordragon in Stormwind.','What brings you here?','What wonderful news! With the Darnassian Endorsement, the Alliance has agreed that the Quel\'dorei of Alah\'thalas will officially join the Alliance. Let us discuss further steps, my friend.',60155,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60155,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (7999, 40379);
+replace into creature_involvedrelation (id, quest) values (1748, 40379);
+
