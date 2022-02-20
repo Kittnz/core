@@ -87,3 +87,16 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (80242, 40381);
 replace into creature_involvedrelation (id, quest) values (7878, 40381);
 
+-- Sacred Waters of Eldre'thalas --
+delete from quest_template where entry = 40382;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40381,40382,2,2040,60,60,0,0,'Sacred Waters of Eldre\'thalas','Splendid! I will go ahead and quietly prepare everything that is required for the ritual. There is no doubt that the ogres will react aggressively to our attempt to cleanse the Moonwell.\n\nSo I will wait in the shadows until you arrive. The ritual will require my full attention, so I will need you to protect me while I do it.','Protect Vestia Moonspear while she\'s cleansing waters of corrupted Moonwell outside Dire Maul.','May Elune guide us.','An exhilarating experience. Let\'s make a deal to avoid these kinds of things from now on, okay? Jokes aside, you have my gratitude. And as promised, I will do my best to help you with your case.',0,0,0,0,0,0,0,0,60318,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The ьщщтwell has been cleaned');
+
+replace into creature_questrelation (id, quest) values (7878, 40382);
+replace into creature_involvedrelation (id, quest) values (7878, 40382);
+
+replace into creature_template (entry, name, display_id1, unit_flags, flags_extra) values (10, 'invisible_npc-controller', 328, 33554434, 128);
+
+delete from creature_template where entry in (60431,60666);
+REPLACE INTO creature_template VALUES
+(60666, 6986, 0, 0, 0, 'Vestia Moonspear', NULL, 61001, 55, 55, 2718, 2718, 2117, 2117, 2654, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 2, 33554432, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, 1, ''),
+(60431, 11561, 0, 0, 0, 'Tu\'whak', '', 0, 58, 59, 3875, 3875, 0, 0, 3462, 45, 0, 1, 1.14286, 0, 30, 30, 100, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 5241, 5241, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52410, 0, 133, 179, 'EventAI', 0, 1, 0, 0, 3, 5241, 0, 0, 0, 0, 0, 0, 1, '');
