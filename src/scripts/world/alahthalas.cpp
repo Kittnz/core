@@ -174,9 +174,63 @@ struct npc_dralox_felstarAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_dralox_felstar(Creature* _Creature) { return new npc_dralox_felstarAI(_Creature); }
 
+bool QuestRewarded_npc_bolvar(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver) return false;
+
+    if (pQuest->GetQuestId() == 40379 && !pPlayer->FindNearestCreature(60667, 30.0F))
+    {
+        pQuestGiver->SummonCreature(60667, -8443.82F, 336.08F, 122.16F, 5.40F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 50 * IN_MILLISECONDS);
+        pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]() {
+            if (Creature* anduin = pQuestGiver->FindNearestCreature(1747, 30.0F))
+            {
+                anduin->MonsterSay("Vereesa Windrunner, do your promise that from this day forward your people will join the Alliance and fight for it no matter the hardships it may bring?");
+                anduin->HandleEmote(EMOTE_ONESHOT_TALK);
+            }
+            }, 2000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]() {
+            if (Creature* vereesa = pQuestGiver->FindNearestCreature(60667, 30.0F))
+            {
+                vereesa->MonsterSay("Arrogance and isolation dommed my people once before, we thought ourselves invincible, and that was our undoing. We will not repeat the mistakes of the past. From this day, the Quel'Dorei will stand as one with the Alliance.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_KNEEL);
+            }
+            }, 15000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]() {
+            if (Creature* anduin = pQuestGiver->FindNearestCreature(1747, 30.0F))
+            {
+                anduin->MonsterSay("Well spoken. Well-spoken. Then it is my honor to officially proclaim the Quel'dorei of Alah'thalas a full-fledged member of the Grand Alliance!");
+                anduin->HandleEmote(EMOTE_ONESHOT_APPLAUD);
+            }
+            }, 30000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]() {
+            if (Creature* vereesa = pQuestGiver->FindNearestCreature(60667, 30.0F))
+            {
+                vereesa->MonsterSay("The honor is mine, and on behalf of my people I thank you all.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+            }
+            }, 45000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]() {
+            pQuestGiver->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            }, 50000);
+    }
+
+    return false;
+}
+
 void AddSC_alahthalas()
 {
-    Script *newscript;
+    Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_bolvar";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_bolvar;
+    newscript->RegisterSelf();
 	
 	newscript = new Script;
     newscript->Name = "go_sacred_water";
