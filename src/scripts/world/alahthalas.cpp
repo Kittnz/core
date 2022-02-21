@@ -180,7 +180,8 @@ bool QuestRewarded_npc_bolvar(Player* pPlayer, Creature* bolvar, Quest const* pQ
 
     if (pQuest->GetQuestId() == 40379 && !pPlayer->FindNearestCreature(60667, 30.0F))
     {
-        Creature* anduin = bolvar->FindNearestCreature(1747, 30.0F);
+        Creature* anduin = bolvar->FindNearestCreature(1747, 30.0F);        
+        if (!anduin) return false;
         Creature* vereesa = bolvar->SummonCreature(60667, -8443.82F, 336.08F, 122.16F, 5.40F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 50 * IN_MILLISECONDS);
         bolvar->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
