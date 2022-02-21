@@ -702,3 +702,6 @@ REPLACE INTO creature_movement VALUES
 
 -- Fix Mindcontrolability of unit ~Shang
 UPDATE creature_template SET mechanic_immune_mask = 2 WHERE entry = 92107;
+
+-- Shang request
+UPDATE item_template SET stat_value1 = 1 WHERE entry = 81402;
