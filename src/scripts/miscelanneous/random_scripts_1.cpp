@@ -1852,19 +1852,6 @@ GameObjectAI* GetAI_soulwell_clicks(GameObject* gameobject)
     return new soulwell_clicks(gameobject);
 }
 
-bool ItemUseSpell_item_picnic_umbrella(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    float dis{ 2.0F };
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    x += dis * cos(pPlayer->GetOrientation());
-    y += dis * sin(pPlayer->GetOrientation());
-
-    pPlayer->SummonGameObject(2004896, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
-    pPlayer->SummonGameObject(2004895, x + 0.5, y + 0.5, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
-    return false;
-}
-
 bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature)
 {
     p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What is Ardent Watch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
@@ -7647,11 +7634,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "dinka_dinker";
     newscript->pGossipHello = &GossipHello_DinkaDinker;
     newscript->pGossipSelect = &GossipSelect_DinkaDinker;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_picnic_umbrella";
-    newscript->pItemUseSpell = &ItemUseSpell_item_picnic_umbrella;
     newscript->RegisterSelf();
 
     newscript = new Script;

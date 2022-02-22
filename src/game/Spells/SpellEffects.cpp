@@ -1777,6 +1777,21 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 56067: // Picnic Basket
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        float dis{ 2.0F };
+                        float x, y, z;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+
+                        m_caster->SummonGameObject(2004896, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                        m_caster->SummonGameObject(2004895, x + 0.5, y + 0.5, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                    }
+                    return;
+                }
                 case 46012: // Portable Wormhole Generator
                 {
                     if (m_caster && m_caster->IsPlayer())
