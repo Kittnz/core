@@ -61,17 +61,17 @@ namespace nsArdaeus
     };
     static const uint32 vfCallForHelpNPCs[MAX_SPAWN_POINTS] = // Call for Help NPCs
     {
-        { 2000030 }, // Admiral Barean Westwind
-        { 2000029 }, // Harthal Truesight
-        { 2000028 }, // Valea Twinblades
-        { 2000027 }, // Dorgar Stoenbrow
-        { 2000026 }, // Fellari Swiftarrow
-        { 2000025 }, // Orman of Stromgarde
-        { 2000024 }, // Yana Bloodspear
-        { 2000023 }, // Ferren Marcus
-        { 2000022 }, // Holia Sunshield
-        { 2000021 }, // Arellas Fireleaf
-        { 2000020 }  // Invar One-Arm
+        2000030, // Admiral Barean Westwind
+        2000029, // Harthal Truesight
+        2000028, // Valea Twinblades
+        2000027, // Dorgar Stoenbrow
+        2000026, // Fellari Swiftarrow
+        2000025, // Orman of Stromgarde
+        2000024, // Yana Bloodspear
+        2000023, // Ferren Marcus
+        2000022, // Holia Sunshield
+        2000021, // Arellas Fireleaf
+        2000020  // Invar One-Arm
     };
 
     // Gossip Menu
