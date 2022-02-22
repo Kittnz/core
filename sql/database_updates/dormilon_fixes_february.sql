@@ -16,3 +16,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Lok\'tar ogar!\n\nIn this camp we do not draw blood from each other, no matter what clan you come from. Here we heal our wounds and rest.\n\nTo prepare for the next battle ahead, against the pinkskins.\n\nThru blood, fire and death!');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Leash range of NPC 'Lazsan' encreesed by 100:
+update creature_template set leash_range = 100 where entry = 60433;
