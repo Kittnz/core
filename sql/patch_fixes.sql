@@ -6,3 +6,6 @@ update item_template set spellid_1 = 56066, script_name = '', required_level = 1
 
 replace into item_template values (70080, 15, 0, 'Tonal Stone: Emerald Forest', '', 13849, 2, 0, 1, 25000, 6250, 0, -1, -1, 50, 10, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56066, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '');
 
+-- Viridian Hippogryph
+update item_template set spellid_1 = 46499 where entry = 81242;
+replace into mount_spells values (81242, 46523)
