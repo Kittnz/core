@@ -9,3 +9,7 @@ delete from item_template where entry = 50611;
 
 -- Slow & Steady glyph fix:
 update item_template set duration = 300, extra_flags = 2 where entry = 51230;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1146
+delete from creature_questrelation where quest = 3803 and id = 3516;
+delete from creature_involvedrelation where quest = 3803 and id = 3516;
