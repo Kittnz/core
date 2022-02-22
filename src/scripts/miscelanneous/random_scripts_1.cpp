@@ -327,8 +327,7 @@ bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTarget
     switch (pItem->GetEntry())
     {
     case 51021: pPlayer->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Speedy's Jukebox
-    case 10585: pPlayer->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76
-    case 70043: pPlayer->PlayDirectMusic(30218, pPlayer); break; // Tonal Stone: Kamio
+    case 10585: pPlayer->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76    
     }
     return true;
 }
