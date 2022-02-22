@@ -1792,6 +1792,24 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 56066: // Tonal Stone: Kamio
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        std::array<std::pair<uint32, uint32>, 2> items_and_sounds =
+                        { {
+                            { 70043, 30218 },
+                            { 70080, 30220 },
+                        } };
+
+                        for (auto const& data : items_and_sounds)
+                        {
+                            if (m_CastItem->GetEntry() == data.first)
+                                m_caster->PlayDirectMusic(data.second, m_caster->ToPlayer());
+                        }
+                        return;
+                    }
+                }
                 case 46012: // Portable Wormhole Generator
                 {
                     if (m_caster && m_caster->IsPlayer())
