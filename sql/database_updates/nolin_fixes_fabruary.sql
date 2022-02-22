@@ -1,3 +1,3 @@
 
--- Remove copper vein stuck in rock
-DELETE FROM `gameobject` WHERE `guid` = 5242;
+-- Remove unobtainable/obstructed ore veins
+DELETE FROM `gameobject` WHERE `guid` IN (5242, 39989);
