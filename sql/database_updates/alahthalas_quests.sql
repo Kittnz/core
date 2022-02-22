@@ -113,3 +113,5 @@ REPLACE INTO item_template VALUES (60519, 12, 0, 'Vestia\'s Missive', '', 3022, 
 REPLACE INTO creature_template VALUES (60667, 18235, 0, 0, 0, 'Speaker Vereesa Windrunner', '', 61100, 63, 63, 799500, 799500, 52400, 52400, 3402, 371, 0, 1, 1.14286, 0, 20, 5, 0, 3, 1, 1489, 1610, 0, 290, 1, 2000, 2000, 2, 33554432, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 12, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 1, 866, '', 0, 3, 0, 1, 3, 10181, 0, 0, 2764783451, 0, 2654216, 0, 1, '');
 
 update creature_template set script_name = 'npc_bolvar' where entry = 1748;
+
+update creature_template set npc_flags = 2 where entry = 7999;
