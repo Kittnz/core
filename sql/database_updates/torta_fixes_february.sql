@@ -6,3 +6,6 @@ update quest_template set objectives = 'Gather 10 Deeptide Bracelets from Deepti
 update quest_template set objectives = 'Gather a Gold Bar for Blazno Blastpipe on Gillijim\'s Isle.' where entry = 40190;
 
 delete from item_template where entry = 50611;
+
+-- Slow & Steady glyph fix:
+update item_template set duration = 300, extra_flags = 2 where entry = 51230;
