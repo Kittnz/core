@@ -5615,11 +5615,11 @@ bool ChatHandler::HandleGonameCommand(char* args)
 
     if (pTarget)
     {
-        std::string chrNameLink = playerLink(target_name);
-        Map* cMap = pTarget->GetMap();
+        const std::string chrNameLink = playerLink(target_name);
+        Map const* cMap = pTarget->GetMap();
         uint32 instanceId = 0;
         uint32 teleFlags = TELE_TO_GM_MODE;
-        InstancePlayerBind* bind = pPlayer->GetBoundInstance(pTarget->GetMapId());
+        InstancePlayerBind const* bind = pPlayer->GetBoundInstance(pTarget->GetMapId());
 
         if (bind)
         {
@@ -5665,13 +5665,13 @@ bool ChatHandler::HandleGonameCommand(char* args)
 
             // if the player or the player's group is bound to another instance
             // the player will not be bound to another one
-            InstancePlayerBind* pBind = pPlayer->GetBoundInstance(pTarget->GetMapId());
+            InstancePlayerBind const* pBind = pPlayer->GetBoundInstance(pTarget->GetMapId());
 
             if (!pBind)
             {
                 Group* group = pPlayer->GetGroup();
                 // if no bind exists, create a solo bind
-                InstanceGroupBind* gBind = group ? group->GetBoundInstance(pTarget->GetMapId()) : nullptr;
+                InstanceGroupBind const* gBind = group ? group->GetBoundInstance(pTarget->GetMapId()) : nullptr;
                 // if no bind exists, create a solo bind
                 if (!gBind)
                 {
@@ -5683,7 +5683,8 @@ bool ChatHandler::HandleGonameCommand(char* args)
                     else
                         pPlayer->BindToInstance(save, !save->CanReset());
 
-                    if (instanceId && instanceId != save->GetInstanceId()) {
+                    if (instanceId && instanceId != save->GetInstanceId())
+                    {
                         teleFlags |= TELE_TO_FORCE_MAP_CHANGE;
                     }
                 }
@@ -5708,11 +5709,11 @@ bool ChatHandler::HandleGonameCommand(char* args)
         float x, y, z;
         pTarget->GetPosition(x, y, z);
 
-        pPlayer->TeleportTo(pTarget->GetMapId(), x, y, z + 5.0f, pPlayer->GetAngle(pTarget), teleFlags);
+        pPlayer->TeleportTo(pTarget->GetMapId(), x, y, z + 2.f, pPlayer->GetAngle(pTarget), teleFlags);
     }
     else
     {
-        std::string nameLink = playerLink(target_name);
+        const std::string nameLink = playerLink(target_name);
 
         PSendSysMessage(LANG_APPEARING_AT_OFFLINE, nameLink.c_str());
 
