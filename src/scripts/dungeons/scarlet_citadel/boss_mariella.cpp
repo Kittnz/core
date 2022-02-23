@@ -503,20 +503,20 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        EnrageTimer(uiDiff);
-        SpawnVoidZones(uiDiff);
-        SpawnFelhounds(uiDiff);
-
-        if (m_bIsSacrificePhase)
+        if (!m_bIsSacrificePhase) // Phase 1
+        {
+            CastShadowVolley(uiDiff);
+            SpawnVoidZones(uiDiff);
+            SpawnFelhounds(uiDiff);
+            CheckForSacraficePhase();
+        }
+        else // Phase 2
         {
             RegenerateBossHealth(uiDiff);
             CheckIfPlayerDied();
         }
-        else
-        {
-            CastShadowVolley(uiDiff);
-            CheckForSacraficePhase();
-        }
+
+        EnrageTimer(uiDiff);
     }
 };
 
