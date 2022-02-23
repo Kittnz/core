@@ -114,4 +114,23 @@ REPLACE INTO creature_template VALUES (60667, 18235, 0, 0, 0, 'Speaker Vereesa W
 
 update creature_template set script_name = 'npc_bolvar' where entry = 1748;
 
-update creature_template set npc_flags = 2 where entry = 7999;
+update creature_template set npc_flags = 3 where entry = 7999;
+
+-- A People Restored --
+delete from quest_template where entry = 40384;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40383,40384,2,2040,60,60,0,0,'A People Restored','Again I find myself at the crossroad of helping someone who has betrayed my people. I trusted Illidan when I freed him to help us battle the Burning Legion, and he ended up saving my life, so I will do the same for Quel\'Dorei and approve this Moonwell. I only hope that this does not end up differently.','Speak to the Moon Priestess Alunasha and witness the establishment of the Moonwell in Alah\'thalas.','The preparations for the Moonwell are ready.','The Elune will soon bless these lands. Stand back and watch as her light blesses this sacred ritual.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (7999, 40384);
+replace into creature_involvedrelation (id, quest) values (60435, 40384);
+
+delete from creature_template where entry in (60435);
+REPLACE INTO creature_template VALUES (60435, 2200, 0, 0, 0, 'Moon Priestess Alunasha', '', 4691, 60, 60, 2883, 2883, 5751, 5751, 3252, 80, 2, 1, 1.14286, 0, 18, 5, 0, 1, 1, 110, 142, 0, 272, 1, 2000, 2000, 8, 4608, 0, 0, 0, 0, 5, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 40383, 1, 'npc_alunasha');
+
+REPLACE INTO creature_template VALUES
+(60669, 7274, 0, 0, 0, 'Tyrande Whisperwind', 'High Priestess of Elune', 9504, 63, 63, 533000, 533000, 52400, 52400, 3384, 124, 0, 1, 1.14286, 0, 20, 5, 0, 3, 1, 1005, 1171, 0, 290, 1, 2000, 2000, 2, 33554432, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 12, 7999, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 1, 866, 'EventAI', 0, 3, 0, 0, 3, 7999, 0, 0, 2764783451, 0, 2654218, 0, 1, '');
+
+REPLACE INTO gameobject_template VALUES (2010879, 5, 6397, 'Moonwell Water Splash', 0, 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '');
+
+REPLACE INTO gameobject_template VALUES (2010880, 5, 7417, 'Moonwell (Event)', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, '');
+
+delete from gameobject where guid = 4013822;
