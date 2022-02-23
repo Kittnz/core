@@ -24,23 +24,28 @@ namespace nsMariella
     };
 
     // Void Zone
-    static constexpr uint8 NUMBEROFSUMMONERS{ 3 };     // How many players are required to spawn a Void Zone
+    static constexpr uint8 NUMBEROFSUMMONERS{ 2 };     // How many Void Zones should be spawned on each call
     static constexpr uint32 VOIDZONE_DAMAGE{ 3000 };   // How much damage should void Zone do on one tick
     static constexpr uint32 NPC_VOIDZONE{ 2000016 };   // Void Zone's entry
     static constexpr float VOIDZONE_DIAMETER{ 2.85f }; // Exact value if field `size` in creature_template = 0.1
 
     static constexpr uint32 VOIDZONE_DAMAGE_REPEAT_TIMER{ 2000 }; // Interval of Void Zones damage
-    static constexpr uint32 VOIDZONE_SPAWN_FIRST_TIMER{ 1000 };   // Void Zone's first damage tick should start after this time
-    static constexpr uint32 VOIDZONE_SPAWN_REPEAT_TIMER{ 20000 }; // Interval for a new Void Zone spawn wave
+    static constexpr uint32 VOIDZONE_SPAWN_FIRST_TIMER{ 2500 };   // Void Zone's first damage tick should start after this time
+    static constexpr uint32 VOIDZONE_SPAWN_REPEAT_TIMER{ 10000 }; // Interval for a new Void Zone spawn wave
 
     // Felhounds
-    static constexpr uint32 NPC_FELHOUND{ 2000017 };            // Felhound's entry
-    static constexpr uint32 GO_SUMMONINGCIRCLE{ 5000012 };      // Summoning Circle entry
-    static constexpr uint32 GO_SUMMONINGCIRCLE_DESPAWN_TIMER{ 1800000 };
-    static constexpr uint32 VISUALSPELL_DRAINMANA{ 25676 };     // Drain Mana visual effect (blue line)
-    static constexpr uint32 VISUALSPELL_SUMMON_FELOUND{ 7741 }; // Summon Felhound visual effect
-    static constexpr int32 VALUE_DRAINMANA{ -1250 };            // How much mana should be drained on one tick
-    static constexpr std::size_t MAX_FELHOUNDS_SPAWNED{ 50 };   // Set a limit in case a condition is broken and we get an overflow here
+    static constexpr uint32 NPC_FELHOUND{ 2000017 };              // Felhound's entry
+    static constexpr uint32 GO_SUMMONINGCIRCLE{ 5000012 };        // Summoning Circle entry
+    static constexpr uint32 GO_SUMMONINGCIRCLE_DESPAWN_TIMER{ 1800000 }; // Need a long ass timer because we can't set it to manual despawn
+    static constexpr uint32 VISUALSPELL_DRAINMANA{ 25676 };       // Drain Mana visual effect (blue line)
+    static constexpr uint32 VISUALSPELL_SUMMON_FELOUND{ 7741 };   // Summon Felhound visual effect
+    static constexpr int32 VALUE_DRAINMANA{ -1250 };              // How much mana should be drained on one tick
+
+    static constexpr uint32 FELHOUND_DRAIN_REPEAT_TIMER{ 1500 };  // Interval of Felhound's mana drain
+    static constexpr uint32 FELHOUND_SPAWN_FIRST_TIMER{ 1000 };   // Felhound's first spawn should start after this time
+    static constexpr uint32 FELHOUND_SPAWN_REPEAT_TIMER{ 15000 }; // Interval for a new Felhound spawn
+
+    static constexpr std::size_t MAX_FELHOUNDS_SPAWNED{ 50 };     // Set a limit in case a condition is broken and we get an overflow here
 
     static constexpr uint8 NUMBER_OF_SPAWNPOINTS{ 4 };
     static const Location vfSpawnPoints[NUMBER_OF_SPAWNPOINTS] =
@@ -51,14 +56,9 @@ namespace nsMariella
         { 204.404f, 18.3435f, 30.860f, 2.359790f, 0.f, 0.f, 0.923781f,  0.382921f }
     };
 
-    static constexpr uint32 FELHOUND_DRAIN_REPEAT_TIMER{ 1000 };  // Interval of Felhound's mana drain
-    static constexpr uint32 FELHOUND_SPAWN_FIRST_TIMER{ 1000 };   // Felhound's first spawn should start after this time
-    static constexpr uint32 FELHOUND_SPAWN_REPEAT_TIMER{ 15000 }; // Interval for a new Felhound spawn
-
-
     // Shadow Volley
     static constexpr uint32 SPELL_SHADOWVOLLEY{ 21341 };              // Hits every player within range of 100 yd for 800-1000 damage (Ignores LoS)
-    static constexpr uint32 SHADOWVOLLEY_REPEAT_TIMER{ 5000 };        // Interval of how often should Shadow Volley be casted
+    static constexpr uint32 SHADOWVOLLEY_REPEAT_TIMER{ 3500 };        // Interval of how often should Shadow Volley be casted
     static constexpr uint32 SHADOWVOLLEY_ENRAGE_REPEAT_TIMER{ 1000 }; // Interval of how often should Shadow Volley be casted on enrage
 
     // Kill Zone
@@ -86,7 +86,7 @@ namespace nsMariella
     static constexpr float ROOM_DIAGONAL{ 64.0f };      // Room size
     static constexpr uint32 FACTION_SCARLET{ 67 };      // Scarlet Citadel Faction // TODO: Find proper ID
     static constexpr uint32 FACTION_NEUTRAL{ 189 };     // Neutral Faction
-    static constexpr uint32 TIME_UNTIL_ENRAGE{ 600000 };
+    static constexpr uint32 TIME_UNTIL_ENRAGE{ 480000 };// Enrage timer (8 Minutes)
 
     enum class CombatNotifications
     {
