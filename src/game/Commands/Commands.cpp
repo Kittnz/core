@@ -7456,6 +7456,7 @@ bool ChatHandler::HandleGameObjectTurnCommand(char* args)
     map->Remove(obj, false);
 
     obj->Relocate(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), o);
+    obj->SetFloatValue(GAMEOBJECT_FACING, o);
     obj->UpdateRotationFields();
 
     map->Add(obj);
@@ -7628,6 +7629,7 @@ bool ChatHandler::HandleGameObjectMoveCommand(char* args)
         obj->SetFloatValue(GAMEOBJECT_POS_X, x);
         obj->SetFloatValue(GAMEOBJECT_POS_Y, y);
         obj->SetFloatValue(GAMEOBJECT_POS_Z, z);
+        obj->SetFloatValue(GAMEOBJECT_FACING, obj->GetOrientation());
 
         map->Add(obj);
     }
