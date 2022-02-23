@@ -27,6 +27,7 @@ class boss_ardaeusAI : public ScriptedAI
 public:
     explicit boss_ardaeusAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_uiSunGuid = 0;
         m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         boss_ardaeusAI::Reset();
     }
@@ -34,7 +35,8 @@ public:
 private:
     std::list<ObjectGuid>m_lSummonedCallForHelpNPCs;
 
-    uint32 m_uiSunGuid{};
+    ObjectGuid m_uiSunGuid{};
+
     uint32 m_uiCallForHelp_Timer{};
 
     bool m_bAchievementKill{};
@@ -44,9 +46,6 @@ private:
 public:
     void Reset() override
     {
-        // Sun
-        m_uiSunGuid = 0;
-
         // Call for Help
         m_uiCallForHelp_Timer = 5000; //nsArdaeus::CALLFORHELP_REPEAT_TIMER;
         m_lSummonedCallForHelpNPCs.clear();
@@ -136,6 +135,8 @@ public:
                 }
             }
         }
+        else
+            sLog.outError("[SC] Boss Ardaeus: DespawnSun() called but no GUID assigned!");
     }
 
     void CallForHelp(const uint32& uiDiff)
@@ -243,7 +244,7 @@ public:
 
     bool IsSunSpawned()
     {
-        return (!!m_uiSunGuid);
+        return static_cast<bool>(m_uiSunGuid);
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -368,8 +369,6 @@ public:
                 }
             }
         }
-        else
-            sLog.outError("[SC] Boss Ardaeus: UpdateAI() pArdaeus not found.");
 
         UpdateSpeed(uiDiff);
         CheckForAchievement(uiDiff);
