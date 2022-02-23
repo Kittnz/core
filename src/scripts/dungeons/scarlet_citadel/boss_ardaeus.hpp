@@ -23,14 +23,13 @@ namespace nsArdaeus
         float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};
     };
 
-    static constexpr uint32 NPC_SUN{ 2000019 };
+    // Sun
     static const Location vfSunMovePoints[] =
     {
-        { 255.f, -100.f, 60.0f, 0.f, 0.f, 0.f, 0.f, 0.f }, // Spawn location
-        { 255.f, -100.f, 18.5f, 0.f, 0.f, 0.f, 0.f, 0.f }  // End location
+        { 255.183899f, -99.984581f, 55.0f, 0.f, 0.f, 0.f, 0.f, 0.f }, // Spawn location
+        { 255.183899f, -99.984581f, 18.5f, 0.f, 0.f, 0.f, 0.f, 0.f }  // End location
     };
-
-    // Sun
+    static constexpr uint32 NPC_SUN{ 2000019 };
     static constexpr uint32 DAMAGE_DONE_TO_MOVE_UPWARDS{ 25000 }; // Required damage to move Sun upwards
     static constexpr uint32 SUN_SPEED_INCREASE_TIMER{ 10000 };    // Interval for speed update
     static constexpr float INCREASE_Z_AXIS{ 5.0f };               // Set new Z destination to move Sun upwards
@@ -82,7 +81,7 @@ namespace nsArdaeus
     static constexpr uint32 ACHIEVEMENT_CHECK_TIMER{ 1000 };
     static constexpr uint32 GO_ACHIEVEMENT_CHEST{ 5000014 };              // Chest to loot the achievement reward
     static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes
-    static constexpr float ACHIEVEMENT_FAILED_BELOW{ 20.75f };
+    static constexpr float ACHIEVEMENT_FAILED_BELOW{ 20.f };
     static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
     {
         { 236.068649f, -99.972031f, 23.774151f, 6.271617f, 0.f, 0.f, 0.f, 0.f } // TODO: Check rotation
