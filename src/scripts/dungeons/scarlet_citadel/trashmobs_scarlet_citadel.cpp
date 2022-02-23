@@ -107,7 +107,7 @@ struct npc_areatriggerAI : public ScriptedAI
             Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
             for (const auto& i : list)
             {
-                if (i.getSource()->IsInRange3d(151.724518f, 2.139748f, 18.007f, 0.0f, 7.0f))
+                if (i.getSource()->IsInRange3d(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, 7.0f))
                 {
                     SummonAdds();
                 }
@@ -174,6 +174,59 @@ CreatureAI* GetAI_npc_citadel_valiant(Creature* pCreature)
     return new npc_citadel_valiant_AI(pCreature);
 }
 
+struct npc_citadel_anti_exploit_AI : public ScriptedAI
+{
+    explicit npc_citadel_anti_exploit_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_citadel_anti_exploit_AI::Reset();
+    }
+
+    uint16 m_uiCheckPulse{};
+
+    static constexpr uint32 SPELL_STUN{ 27880 };
+
+    void Reset() override
+    {
+        m_uiCheckPulse = 500;
+
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetVisibility(VISIBILITY_OFF);
+    }
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiCheckPulse < uiDiff)
+        {
+            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& player : list)
+            {
+                if (Player* pPlayer{ player.getSource() })
+                {
+                    if (!pPlayer->IsGameMaster() && pPlayer->IsInRange3d(
+                        m_creature->GetPositionX(),
+                        m_creature->GetPositionY(),
+                        m_creature->GetPositionZ(), 0.0f, 20.f))
+                    {
+                        static_cast<Unit*>(pPlayer)->NearTeleportTo(232.119843f, 25.800516f, 30.823233f, 3.145022f); // Teleport back to Mariella
+                        pPlayer->AddAura(SPELL_STUN);
+                    }
+                }
+            }
+
+            m_uiCheckPulse = 500;
+        }
+        else
+        {
+            m_uiCheckPulse -= uiDiff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_citadel_anti_exploit(Creature* pCreature)
+{
+    return new npc_citadel_anti_exploit_AI(pCreature);
+}
+
 void AddSC_trash_mobs_scarlet_citadel()
 {
     Script* pNewscript;
@@ -193,5 +246,10 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript = new Script;
     pNewscript->Name = "npc_citadel_valiant";
     pNewscript->GetAI = &GetAI_npc_citadel_valiant;
+    pNewscript->RegisterSelf();
+
+    pNewscript = new Script;
+    pNewscript->Name = "npc_citadel_anti_exploit";
+    pNewscript->GetAI = &GetAI_npc_citadel_anti_exploit;
     pNewscript->RegisterSelf();
 }
