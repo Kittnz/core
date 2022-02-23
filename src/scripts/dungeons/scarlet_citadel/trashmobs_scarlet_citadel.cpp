@@ -65,7 +65,7 @@ static const Location vfLastWaypoint[] =
 
 struct npc_areatriggerAI : public ScriptedAI
 {
-    npc_areatriggerAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_areatriggerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         npc_areatriggerAI::Reset();
     }
@@ -130,9 +130,9 @@ CreatureAI* GetAI_npc_areatrigger(Creature* pCreature)
 // Trash OUTSIDE
 struct npc_citadel_inquisitor_AI : public ScriptedAI
 {
-    npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        Reset();
+        npc_citadel_inquisitor_AI::Reset();
     }
 
     void Reset() override
@@ -153,9 +153,9 @@ CreatureAI* GetAI_npc_citadel_inquisitor(Creature* pCreature)
 
 struct npc_citadel_valiant_AI : public ScriptedAI
 {
-    npc_citadel_valiant_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_citadel_valiant_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        Reset();
+        npc_citadel_valiant_AI::Reset();
     }
 
     void Reset() override

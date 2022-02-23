@@ -59,3 +59,28 @@ enum ScarletCitadelData
 
     MAX_DATA
 };
+
+class instance_scarlet_citadel : public ScriptedInstance
+{
+public:
+    explicit instance_scarlet_citadel(Map* pMap);
+    ~instance_scarlet_citadel() override {}
+
+    void Initialize() override;
+
+    bool IsEncounterInProgress() const override;
+
+    void OnObjectCreate(GameObject* pGo) override;
+    void OnCreatureCreate(Creature* pCreature) override;
+
+    void SetData(const uint32 uiType, const uint32 uiData) override;
+    uint32 GetData(const uint32 uiType) override;
+
+    char const* Save() override { return str_InstData.c_str(); }
+    void Load(char const* chrIn) override;
+
+private:
+    uint32 m_auiEncounter[ScarletCitadelEncounter::MAX_ENCOUNTER]{};
+    uint64 m_auiData[ScarletCitadelData::MAX_DATA]{};
+    std::string str_InstData{};
+};

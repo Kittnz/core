@@ -12,11 +12,11 @@ struct boss_daelusAI : public ScriptedAI
 {
     explicit boss_daelusAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-        Reset();
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
+        boss_daelusAI::Reset();
     }
 
-    ScriptedInstance* m_pInstance;
+    instance_scarlet_citadel* m_pInstance;
 
     void Reset() override
     {

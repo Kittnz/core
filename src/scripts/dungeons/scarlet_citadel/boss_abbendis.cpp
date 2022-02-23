@@ -12,11 +12,11 @@ struct boss_abbendisAI : public ScriptedAI
 {
     explicit boss_abbendisAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
-        Reset();
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
+        boss_abbendisAI::Reset();
     }
 
-    ScriptedInstance* m_pInstance;
+    instance_scarlet_citadel* m_pInstance;
 
     void Reset() override
     {
@@ -64,7 +64,7 @@ CreatureAI* GetAI_boss_abbendis(Creature* pCreature)
 
 void AddSC_boss_abbendis()
 {
-    Script *pNewscript;
+    Script* pNewscript;
     pNewscript = new Script;
     pNewscript->Name = "boss_abbendis";
     pNewscript->GetAI = &GetAI_boss_abbendis;
