@@ -13,3 +13,6 @@ update item_template set duration = 300, extra_flags = 2 where entry = 51230;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1146
 delete from creature_questrelation where quest = 3803 and id = 3516;
 delete from creature_involvedrelation where quest = 3803 and id = 3516;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1154
+update item_template set bonding = 2 where netry = 83414;
