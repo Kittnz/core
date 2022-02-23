@@ -7,11 +7,6 @@
 
 #include "boss_mariella.hpp"
 
-/*
-    TODO-List
-    - Add more visuals
-    - Adjust difficulty (timers, spawns, etc.)
-*/
 
 class boss_mariellaAI : public ScriptedAI
 {
