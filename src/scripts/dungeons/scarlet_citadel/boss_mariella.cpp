@@ -18,7 +18,7 @@ class boss_mariellaAI : public ScriptedAI
 public:
     explicit boss_mariellaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         boss_mariellaAI::Reset();
     }
 
@@ -46,7 +46,7 @@ private:
     bool m_bAchievementKill{};
     bool m_bWasInFight{};
     
-    ScriptedInstance* m_pInstance{};
+    instance_scarlet_citadel* m_pInstance{};
 
 public:
     void Reset() override
@@ -534,11 +534,14 @@ struct npc_voidzone : public ScriptedAI
 {
     explicit npc_voidzone(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         npc_voidzone::Reset();
         SetCombatMovement(false);
     }
 
     uint32 m_uiDamage_Timer{};
+
+    instance_scarlet_citadel* m_pInstance;
 
     void Reset() override
     {
@@ -567,8 +570,13 @@ struct npc_voidzone : public ScriptedAI
                     {
                         m_creature->DealDamage(pPlayer, nsMariella::VOIDZONE_DAMAGE, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
-                        boss_mariellaAI boss_mariella{ GetClosestCreatureWithEntry(m_creature, NPC_MARIELLA, nsMariella::ROOM_DIAGONAL) };
-                        boss_mariella.AchievementKill(false); // Achievement failed if a player received damage from a Void Zone
+                        if (Creature* pCreature{ m_pInstance->GetSingleCreatureFromStorage(NPC_MARIELLA) })
+                        {
+                            if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(pCreature->AI()) })
+                            {
+                                boss_mariella->AchievementKill(false); // Achievement failed if a player received damage from a Void Zone
+                            }
+                        }
 
                         m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
                         m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
@@ -597,11 +605,14 @@ struct npc_killzone : public ScriptedAI
 {
     explicit npc_killzone(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         npc_killzone::Reset();
         SetCombatMovement(false);
     }
 
     uint32 m_uiKill_Timer{};
+
+    instance_scarlet_citadel* m_pInstance;
 
     void Reset() override
     {
@@ -624,7 +635,7 @@ struct npc_killzone : public ScriptedAI
         {
             for (const auto& itr : PlayerList)
             {
-                if (Player * pPlayer{ itr.getSource() })
+                if (Player* pPlayer{ itr.getSource() })
                 {
                     if ((m_creature->GetDistance3dToCenter(pPlayer) < nsMariella::KILLZONE_DIAMETER) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
                     {
@@ -699,7 +710,7 @@ CreatureAI* GetAI_npc_felhound(Creature* pCreature)
 
 bool GossipHello_boss_mariella(Player* pPlayer, Creature* pCreature)
 {
-    ScriptedInstance const* m_pInstance{ static_cast<ScriptedInstance*>(pCreature->GetInstanceData()) };
+    instance_scarlet_citadel const* m_pInstance{ static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData()) };
     
     if (m_pInstance /*&& (m_pInstance->GetData(TYPE_ARDAEUS) == DONE) && (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
     {
@@ -776,7 +787,7 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
 void AddSC_boss_mariella()
 {
-    Script *pNewscript;
+    Script* pNewscript;
 
     pNewscript = new Script;
     pNewscript->Name = "boss_mariella";
