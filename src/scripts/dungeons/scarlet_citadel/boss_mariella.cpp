@@ -37,7 +37,7 @@ private:
     uint32 m_uiEnrage_Timer{};
     uint32 m_uiShadowVolley_Timer{};
 
-    uint64 m_uiKillZoneGuid{};
+    ObjectGuid m_uiKillZoneGuid{};
 
     bool m_bVoidZonesAlreadyAnnounced{};
     bool m_bIsSacrificePhase{};
