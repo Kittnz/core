@@ -236,8 +236,8 @@ bool QuestRewarded_npc_alunasha(Player* pPlayer, Creature* alunasha, Quest const
 
         alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
             {
-                alunasha->SummonGameObject(2010879, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
-                alunasha->SummonGameObject(1000233, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
+                alunasha->SummonGameObject(2010879, alunasha->GetPositionX()+6.05F, alunasha->GetPositionY()-0.31F, alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
+                alunasha->SummonGameObject(1000233, alunasha->GetPositionX()+6.05F, alunasha->GetPositionY()-0.31F, alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
             }, 10000);
 
         alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
