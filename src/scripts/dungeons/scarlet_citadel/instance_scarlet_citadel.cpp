@@ -142,6 +142,9 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
             break;
         }
     }
+
+    if (pCreature->GetEntry() >= NPC_DAELUS && pCreature->GetEntry() <= ScarletCitadelUnit::NPC_ABBENDIS)
+        m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
 }
 
 void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
