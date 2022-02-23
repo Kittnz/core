@@ -212,9 +212,67 @@ bool QuestRewarded_npc_bolvar(Player* pPlayer, Creature* bolvar, Quest const* pQ
     return true;
 }
 
+bool QuestRewarded_npc_alunasha(Player* pPlayer, Creature* alunasha, Quest const* pQuest)
+{
+    if (!alunasha) return false;
+
+    if (pQuest->GetQuestId() == 40384 && !pPlayer->FindNearestCreature(10, 50.0F))
+    {
+        Creature* controller = alunasha->SummonCreature(10, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
+        Creature* vereesa = alunasha->SummonCreature(60667, 4272.49F, -2815.05F, 82.31F, 2.62F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
+        Creature* tyrande = alunasha->SummonCreature(60669, 4273.26F, -2807.21F, 82.31F, 3.48F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 44 * IN_MILLISECONDS);
+        Creature* citizen= alunasha->FindNearestCreature(60436, 50.0F);
+
+        alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
+            {
+                alunasha->MonsterYell("Mother Moon, we pray to you! Give these wayward children the blessing of your light and show them the path to your love! Let this water become the foundation for this Moonwell. Let its power bring harmony to both body and mind of those who bask in its light.");
+                alunasha->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 4000);
+
+        alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
+            {
+                alunasha->CastSpell(alunasha, 13236, false);
+            }, 5000);
+
+        alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
+            {
+                alunasha->SummonGameObject(2010879, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 4, true);
+                alunasha->SummonGameObject(1000233, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 8, true);
+            }, 10000);
+
+        alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
+            {
+                alunasha->SummonGameObject(2010880, alunasha->GetPositionX()+6.05F, alunasha->GetPositionY()-0.31F, alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 30, true);
+            }, 14000);
+
+        alunasha->m_Events.AddLambdaEventAtOffset([alunasha]()
+            {
+                alunasha->CastSpell(alunasha, 5906, false);
+            }, 18000);
+
+        alunasha->m_Events.AddLambdaEventAtOffset([alunasha, citizen]()
+            {
+                citizen->MonsterSay("I feel...Renewed? Can the goddess do this?, Finally I can focus on casting better spells., This reminds me of the Sunwell.");
+                citizen->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 25000);
+
+        alunasha->m_Events.AddLambdaEventAtOffset([alunasha, vereesa]()
+            {
+                vereesa->MonsterSay("I feel so light. My mind is free from having to focus on not losing myself. I wish to thank you for all you have done. Know that you will always be considered a close friend of Quel'Dorei, and while we may not know what awaits us, I hope that we can call on you if the need arises.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 30000);
+    }
+    return true;
+}
+
 void AddSC_alahthalas()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_alunasha";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_alunasha;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_bolvar";
