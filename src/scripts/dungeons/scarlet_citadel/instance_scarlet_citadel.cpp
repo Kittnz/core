@@ -124,11 +124,13 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
         case ScarletCitadelUnit::NPC_ARDAEUS:
         {
             m_auiData[ScarletCitadelData::DATA_ARDAEUS_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
         case ScarletCitadelUnit::NPC_MARIELLA:
         {
             m_auiData[ScarletCitadelData::DATA_MARIELLA_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
         case ScarletCitadelUnit::NPC_ABBENDIS:
@@ -141,10 +143,7 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
             m_auiData[ScarletCitadelData::DATA_FIRST_AREARIGGER_GUID] = pCreature->GetObjectGuid();
             break;
         }
-    }
-
-    if (pCreature->GetEntry() >= NPC_DAELUS && pCreature->GetEntry() <= ScarletCitadelUnit::NPC_ABBENDIS)
-        m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
+    }   
 }
 
 void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
