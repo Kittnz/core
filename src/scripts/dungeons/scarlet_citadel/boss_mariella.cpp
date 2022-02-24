@@ -54,6 +54,9 @@ public:
             DespawnSummoningCircles();
             DespawnFelhounds();
 
+            if (m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+                m_creature->RemoveAurasDueToSpell(nsMariella::SACRIFICE_VISUAL);
+
             m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
 
@@ -149,6 +152,9 @@ public:
 
     void BeginScraficePhase()
     {
+        if (!m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+            m_creature->AddAura(nsMariella::SACRIFICE_VISUAL);
+
         Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
         if (PlayerList.isEmpty())
             return;
@@ -169,6 +175,9 @@ public:
 
     void EndScraficePhase()
     {
+        if (m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+            m_creature->RemoveAurasDueToSpell(nsMariella::SACRIFICE_VISUAL);
+
         if (m_vPossibleVictim.empty())
             return;
 

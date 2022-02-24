@@ -300,6 +300,9 @@ void AddSC_boss_thamgrarr();
 void AddSC_boss_volkan_cruelblade();
 void AddSC_instance_stormwind_vaults();
 
+// Misc
+void AddSC_npc_ptr_vendor();
+
 void AddScripts()
 {
     //Nostalrius
@@ -596,4 +599,7 @@ void AddScripts()
     AddSC_boss_mariella();
     AddSC_instance_scarlet_citadel();
     AddSC_trash_mobs_scarlet_citadel();
+
+    // Misc
+    AddSC_npc_ptr_vendor();
 }

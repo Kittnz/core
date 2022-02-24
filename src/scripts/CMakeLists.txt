@@ -261,6 +261,7 @@ miscelanneous/feature_custom_spell_test.cpp
 miscelanneous/feature_gardening.cpp
 miscelanneous/feature_shop.cpp
 miscelanneous/feature_transmog.h
+miscelanneous/ptr.cpp
 miscelanneous/random_scripts_0.cpp
 miscelanneous/random_scripts_1.cpp
 miscelanneous/random_scripts_2.cpp
