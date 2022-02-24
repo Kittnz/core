@@ -18,5 +18,7 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Leash range of NPC 'Lazsan' encreesed by 100:
 update creature_template set leash_range = 100 where entry = 60433;
--- Position for GO 'Small Thorium Vein' fised:
+-- Position for GO 'Small Thorium Vein' fixed:
 update gameobject set position_x = -7261.74, position_y = -780.343, position_z = 298.363 where guid = 154;
+-- Position for GO 'Iron Deposit' fixed:
+update gameobject set position_x = -562.582, position_y = -1993.33, position_z = 79.0787 where guid = 5331;
