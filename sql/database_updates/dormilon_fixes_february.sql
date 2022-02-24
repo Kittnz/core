@@ -24,3 +24,5 @@ update gameobject set position_x = -7261.74, position_y = -780.343, position_z =
 update gameobject set position_x = -562.582, position_y = -1993.33, position_z = 79.0787 where guid = 5331;
 -- Correct npc 'Quorthon' flag setted:
 update creature_template set npc_flags = 1 where entry = 60668;
+-- Quest 'The Brokering of Peace' starting added to NPC 'Gorn One Eye':
+replace into creature_questrelation (id, quest) values (11555, 8484);
