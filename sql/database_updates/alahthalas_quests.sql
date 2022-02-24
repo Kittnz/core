@@ -114,7 +114,7 @@ REPLACE INTO creature_template VALUES (60667, 18235, 0, 0, 0, 'Speaker Vereesa W
 
 update creature_template set script_name = 'npc_bolvar' where entry = 1748;
 
-update creature_template set npc_flags = 3 where entry = 7999;
+update creature_template set npc_flags = 3, script_name = 'npc_tyrande' where entry = 7999;
 
 -- A People Restored --
 delete from quest_template where entry = 40384;
