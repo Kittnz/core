@@ -265,9 +265,128 @@ bool QuestRewarded_npc_alunasha(Player* pPlayer, Creature* alunasha, Quest const
     return true;
 }
 
+bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* pQuest)
+{
+    if (!tyrande) return false;
+
+    if (pQuest->GetQuestId() == 40383 && !pPlayer->FindNearestCreature(10, 50.0F))
+    {
+        Creature* controller = tyrande->SummonCreature(10, tyrande->GetPositionX(), tyrande->GetPositionY(), tyrande->GetPositionZ(), tyrande->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
+        Creature* vestia = tyrande->SummonCreature(60666, 9667.24F, 2527.82F, 1360.00F, 3.77F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
+        Creature* vereesa = tyrande->SummonCreature(60667, 9671.61F, 2524.67F, 1360.00F, 3.15F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vestia]()
+            {
+                vestia->MonsterSay("High Priestess, the adventurer beside me, has proven a valuable ally and has worked tirelessly in order to assist us in purifying the Moonwell of Elder'thalas. In return, he only asks that we consider building a Moonwell in Alah'Thalas. I even brought a container filled with sacred water.");
+                vestia->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 1000);
+
+        //tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+        //    {
+        //        tyrande->SummonGameObject(2010879, alunasha->GetPositionX(), alunasha->GetPositionY(), alunasha->GetPositionZ(), alunasha->GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 159, true);
+        //    }, 8000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+            {
+                tyrande->MonsterSay("I must stop you there Priestess. I thank you for your service on behalf of my people and the Goddess. But I have not forgotten what their people have done. Their reckless use of magic led not only to numerous catastrophes but almost to the destruction of the entire world. I have accepted them into the Alliance because they are not their ancestors, but that does not mean I will turn over the sacred waters of the Goddess to them.");
+                tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 15000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vestia]()
+            {
+                vestia->MonsterSay("High Priestess, please, the Quel'dorei have changed, they only seek.");
+                vestia->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 30000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+            {
+                tyrande->MonsterSay("I have made my decision, Priestess. These waters will be used to establish a new Moonwell where it is needed.");
+                tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 35000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+            {
+                vereesa->MonsterSay("Pardon me, High Priestess.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 40000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+            {
+                vereesa->MonsterSay("I come on behalf of my people. I can no longer let others do the talking for me.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_BOW);
+            }, 45000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+            {
+                tyrande->MonsterSay("There is nothing to talk about, child.");
+                tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 55000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+            {
+                vereesa->MonsterSay("Ten thousand years ago, my ancestors did unspeakable things, but now they are dead. Our kingdom has perished, along with our old ways. The mistakes they made haunt us to this day. We need a font of magic, not to use it, but to help us heal. If it helps, then the Sisterhood can manage the well.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 60000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+            {
+                tyrande->MonsterSay("You would give us authority over something in your homeland? And what prevents you from betraying us and taking the well? I sympathize with your people's loss and condition, but the Moonwell is sacred to us.");
+                tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 75000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+            {
+                vereesa->MonsterSay("High Priestess, please! We are both parts of the Alliance, but more than that, we are kin. We have been arrogant in our ways, and we have paid for it dearly. We only seek one chance, a chance to prove that we can be better.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 90000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+            {
+                vereesa->MonsterSay("My people are dying, there are so few of us left, and this curse is slowly devouring us. I need your help to secure the future for them, for, without it, we will slowly succumb to the curse and fade.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_KNEEL);
+            }, 100000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+            {
+                tyrande->MonsterSay("Rise. I... believe you Vereesa Windrunner. Your words and intentions sound sincere. A small guard of Sentinels and members of the Sisterhood will protect the well and ensure it is treated properly.");
+                tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 115000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vestia]()
+            {
+                vestia->MonsterSay("Does that mean...?");
+                vestia->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 125000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+            {
+                tyrande->MonsterSay("Yes Priestess. It means the next Moonwell is needed, in Alah'thalas. Perhaps in time, it will guide some of them back to Elune's light, but more importantly, it will give their people a second chance. <name>, you have done both of our people a great service. If Lady Vereesa Windrunner agrees, then I would like you to be present at the creation of the Moonwell. I shall send Priestess Alunasha to establish the well. She has shown sympathy to the plight of the Quel'dorei.");
+                tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 130000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, vereesa]()
+            {
+                vereesa->MonsterSay("I do not object, $N's aid has been fundamental to the survival of Alah'thalas. Thank you, High Priestess.");
+                vereesa->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 145000);
+
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+            {
+                tyrande->MonsterSay("You may go now, Lady Windrunner. We shall meet again. Great. ");
+                tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 155000);
+    }
+    return true;
+}
+
 void AddSC_alahthalas()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_tyrande";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_tyrande;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_alunasha";
