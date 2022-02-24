@@ -31,3 +31,5 @@ REPLACE INTO `creature_linking_template` (`entry`, `map`, `master_entry`, `flag`
 (8311, 109, 8311, 3, 10),
 (5226, 109, 8311, 3, 10),
 (8384, 109, 8311, 3, 10);
+-- NPC 'Groveweald Ursa' is humanoid and not skinnable alredy:
+update creature_template set type = 7, skinning_loot_id = 0 where entry = 92104;
