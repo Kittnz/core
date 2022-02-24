@@ -22,3 +22,5 @@ update creature_template set leash_range = 100 where entry = 60433;
 update gameobject set position_x = -7261.74, position_y = -780.343, position_z = 298.363 where guid = 154;
 -- Position for GO 'Iron Deposit' fixed:
 update gameobject set position_x = -562.582, position_y = -1993.33, position_z = 79.0787 where guid = 5331;
+-- Correct npc 'Quorthon' flag setted:
+update creature_template set npc_flags = 1 where entry = 60668;
