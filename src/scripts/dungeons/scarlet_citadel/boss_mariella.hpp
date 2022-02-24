@@ -80,6 +80,7 @@ namespace nsMariella
 
     // Sacrifice Phase
     static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Mariella regenerate on one tick
+    static constexpr uint32 SACRIFICE_VISUAL{ 22518 };
     static constexpr uint32 INCREASE_HEALTH_TIMER{ 1000 };      // Interval of Boss Mariella hp re-generate
 
     // Misc
