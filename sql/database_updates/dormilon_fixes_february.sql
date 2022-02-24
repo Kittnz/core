@@ -26,3 +26,8 @@ update gameobject set position_x = -562.582, position_y = -1993.33, position_z =
 update creature_template set npc_flags = 1 where entry = 60668;
 -- Quest 'The Brokering of Peace' starting added to NPC 'Gorn One Eye':
 replace into creature_questrelation (id, quest) values (11555, 8484);
+-- 'Slime maggots' it pull the other one or other elite NPC around him (10 yards):
+REPLACE INTO `creature_linking_template` (`entry`, `map`, `master_entry`, `flag`, `search_range`) VALUES
+(8311, 109, 8311, 3, 10),
+(5226, 109, 8311, 3, 10),
+(8384, 109, 8311, 3, 10);
