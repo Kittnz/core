@@ -301,7 +301,7 @@ void AddSC_boss_volkan_cruelblade();
 void AddSC_instance_stormwind_vaults();
 
 // Misc
-void AddSC_npc_ptr_vendor();
+void AddSC_npc_ptr();
 
 void AddScripts()
 {
@@ -601,5 +601,5 @@ void AddScripts()
     AddSC_trash_mobs_scarlet_citadel();
 
     // Misc
-    AddSC_npc_ptr_vendor();
+    AddSC_npc_ptr();
 }

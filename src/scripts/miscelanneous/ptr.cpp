@@ -3,18 +3,18 @@
 #include "ptr.hpp"
 #include "ItemPrototype.h"
 
-struct npc_ptr_vendorAI : public ScriptedAI
+struct ptr_npc_keklordAI : public ScriptedAI
 {
-    explicit npc_ptr_vendorAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit ptr_npc_keklordAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_ptr_vendorAI::Reset();
+        ptr_npc_keklordAI::Reset();
     }
 
     void Reset() override
     {
         if (sWorld.getConfig(CONFIG_BOOL_PTR))
         {
-            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_VENDOR);
+            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
 
         m_creature->AddUnitState(UNIT_STAT_ROOT);
@@ -22,9 +22,35 @@ struct npc_ptr_vendorAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (!sWorld.getConfig(CONFIG_BOOL_PTR) && m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_VENDOR))
+        if (!sWorld.getConfig(CONFIG_BOOL_PTR) && m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP))
         {
-            m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_VENDOR);
+            m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+        }
+    }
+};
+
+struct ptr_npc_vendorAI : public ScriptedAI
+{
+    explicit ptr_npc_vendorAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        ptr_npc_vendorAI::Reset();
+    }
+
+    void Reset() override
+    {
+        if (sWorld.getConfig(CONFIG_BOOL_PTR))
+        {
+            m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_VENDOR);
+        }
+
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!sWorld.getConfig(CONFIG_BOOL_PTR) && m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_VENDOR))
+        {
+            m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_VENDOR);
         }
     }
 };
@@ -44,9 +70,9 @@ void LearnEverythingKEKW(Player* pPlayer, ClassesAndRoles const classesAndRoles)
     if (pPlayer->GetMoney() < MONEY_AMOUNT) // Prevent overflow
         pPlayer->ModifyMoney(MONEY_AMOUNT); // 1K Gold
         
-    for (auto bags{ (pPlayer->GetItemCount(ITEM_BAG) + (pPlayer->GetClass() == CLASS_HUNTER ? 1 : 0))}; bags < 4; ++bags) // If player is a hunter -> Free up 1 slot for quivers
+    for (auto bags{ (pPlayer->GetItemCount(ITEM_BAG) + (pPlayer->GetClass() == CLASS_HUNTER ? 1 : 0))}; bags < 4; ++bags) // If player hunter -> Free up a quiver slot
     {
-        pPlayer->StoreNewItemInBestSlots(ITEM_BAG, 1); // Traveler's Backpack
+        pPlayer->StoreNewItemInBestSlots(ITEM_BAG, 1);
     }
 
     for (const auto& BisItemsAndSpells : m_vBisItemsAndSpells)
@@ -127,7 +153,7 @@ void LearnEverythingKEKW(Player* pPlayer, ClassesAndRoles const classesAndRoles)
     pPlayer->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);
 }
 
-bool GossipHello_npc_ptr_vendor(Player* pPlayer, Creature* pCreature)
+bool GossipHello_ptr_npc_keklord(Player* pPlayer, Creature* pCreature)
 {
     if (!pPlayer || !pCreature)
         return false;
@@ -154,47 +180,47 @@ bool GossipHello_npc_ptr_vendor(Player* pPlayer, Creature* pCreature)
         }
         case CLASS_PALADIN:
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Holy Paladin.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PALADIN_HOLY));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Holy Paladin.",        GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PALADIN_HOLY));
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Retribution Paladin.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PALADIN_RETRIBUTION));
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Protection Paladin.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PALADIN_PROTECTION));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Protection Paladin.",  GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PALADIN_PROTECTION));
             break;
         }
         case CLASS_PRIEST:
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Holy Priest.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PRIEST_HOLY));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Holy Priest.",   GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PRIEST_HOLY));
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Shadow Priest.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::PRIEST_SHADOW));
             break;
         }
         case CLASS_ROGUE:
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Sword Rogue.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::ROGUE_SWORD));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Sword Rogue.",  GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::ROGUE_SWORD));
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Dagger Rogue.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::ROGUE_DAGGER));
             break;
         }
         case CLASS_SHAMAN:
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Restoration Shaman.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::SHAMAN_RESTORATION));
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Elemental Shaman.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::SHAMAN_ELEMENTAL));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Elemental Shaman.",   GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::SHAMAN_ELEMENTAL));
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Enhancement Shaman.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::SHAMAN_ENCHANCEMENT));
             break;
         }
         case CLASS_DRUID:
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Restoration Druid.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::DRUID_RESTORATION));
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tank Druid.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::DRUID_TANK));
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Balance Druid.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::DRUID_BALANCE));
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Feral Druid.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::DRUID_FERAL));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tank Druid.",        GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::DRUID_TANK));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Balance Druid.",     GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::DRUID_BALANCE));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Feral Druid.",       GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::DRUID_FERAL));
             break;
         }
         case CLASS_WARRIOR:
         {
             pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Protection Warrior.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::WARRIOR_PROTECTION));
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Fury Warrior.", GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::WARRIOR_FURY));
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Fury Warrior.",       GOSSIP_SENDER_MAIN, static_cast<uint32>(ClassesAndRoles::WARRIOR_FURY));
             break;
         }
     }
 
-//    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Worldbuff me.", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+    pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Worldbuff me.", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
 
     if (Group const* pGroup{ pPlayer->GetGroup() })
     {
@@ -208,7 +234,7 @@ bool GossipHello_npc_ptr_vendor(Player* pPlayer, Creature* pCreature)
     return true;
 }
 
-bool GossipSelect_npc_ptr_vendor(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_ptr_npc_keklord(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
     if (!pPlayer || !pCreature)
         return false;
@@ -244,7 +270,7 @@ bool GossipSelect_npc_ptr_vendor(Player* pPlayer, Creature* pCreature, uint32 ui
         {
             for (const auto& buffs : m_lWorldBuffs)
             {
-                pPlayer->SendSpellGo(pPlayer, buffs);
+                pCreature->CastSpell(pPlayer, buffs, true);
             }
 
             break;
@@ -278,19 +304,29 @@ bool GossipSelect_npc_ptr_vendor(Player* pPlayer, Creature* pCreature, uint32 ui
     return true;
 }
 
-CreatureAI* GetAI_npc_ptr_vendor(Creature* pCreature)
+CreatureAI* GetAI_ptr_npc_keklord(Creature* pCreature)
 {
-    return new npc_ptr_vendorAI(pCreature);
+    return new ptr_npc_keklordAI(pCreature);
 }
 
-void AddSC_npc_ptr_vendor()
+CreatureAI* GetAI_ptr_npc_vendorAI(Creature* pCreature)
+{
+    return new ptr_npc_vendorAI(pCreature);
+}
+
+void AddSC_npc_ptr()
 {
     Script* pNewscript;
 
     pNewscript = new Script;
-    pNewscript->Name = "npc_ptr_vendor";
-    pNewscript->GetAI = &GetAI_npc_ptr_vendor;
-    pNewscript->pGossipHello = &GossipHello_npc_ptr_vendor;
-    pNewscript->pGossipSelect = &GossipSelect_npc_ptr_vendor;
+    pNewscript->Name = "ptr_npc_keklord";
+    pNewscript->GetAI = &GetAI_ptr_npc_keklord;
+    pNewscript->pGossipHello = &GossipHello_ptr_npc_keklord;
+    pNewscript->pGossipSelect = &GossipSelect_ptr_npc_keklord;
+    pNewscript->RegisterSelf();
+
+    pNewscript = new Script;
+    pNewscript->Name = "ptr_npc_vendor";
+    pNewscript->GetAI = &GetAI_ptr_npc_vendorAI;
     pNewscript->RegisterSelf();
 }
