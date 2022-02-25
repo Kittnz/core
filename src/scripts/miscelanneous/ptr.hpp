@@ -613,7 +613,11 @@ static const std::vector<std::tuple<ClassesAndRoles, std::list<std::uint32_t>, s
 
 REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `phase_quest_action`, `script_name`) VALUES
 (2000100, 10341, 0, 0, 0, 'Keklord Faelan Tordring', 'PTR NPC', 0, 60, 60, 700000, 700000, 5000000, 5000000, 4500, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'ptr_npc_keklord'),
-(2000101, 16259, 0, 0, 0, 'Turtle', 'PTR NPC', 0, 60, 60, 700000, 700000, 5000000, 5000000, 4500, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'ptr_npc_vendor');
+(2000101, 16259, 0, 0, 0, 'Turtle', 'PTR NPC', 0, 60, 60, 700000, 700000, 5000000, 5000000, 4500, 35, 4, 1.5, 1.5, 0.2, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 1, 'ptr_npc_vendor');
+
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
+(3000009, 2000100, 0, 0, 0, 451, 0, 0, 4579.22, -300.771, 270.233, 1.6003, 25, 25, 0, 100, 100, 0, 1, 200),
+(3000010, 2000101, 0, 0, 0, 451, 0, 0, 4577.31, -301.759, 270.235, 1.53745, 25, 25, 0, 100, 100, 0, 1, 200);
 
 REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`) VALUES
 (1000100, 1000100);
@@ -622,45 +626,45 @@ REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 (1000100, 'Hi, thanks for participating in Scarlet Citadel test waves.$B\nPlease feel free to take your role and get ported to the dungeon!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES
-(1000101, 13510, 0, 0, 0, 0), -- Flask of the Titans
-(1000101, 13511, 0, 0, 0, 0), -- Flask of Distilled Wisdom
-(1000101, 13512, 0, 0, 0, 0), -- Flask of Supreme Power
-(1000101, 13513, 0, 0, 0, 0), -- Flask of Chromatic Resistance
-(1000101, 20081, 0, 0, 0, 0), -- Swiftness of Zanza
-(1000101, 13452, 0, 0, 0, 0), -- Elixir of the Mongoose
-(1000101, 20007, 0, 0, 0, 0), -- Mageblood Potion
-(1000101, 3825, 0, 0, 0, 0),  -- Elixir of Fortitude
-(1000101, 13445, 0, 0, 0, 0), -- Elixir of Superior Defense
-(1000101, 20004, 0, 0, 0, 0), -- Major Troll's Blood Potion
-(1000101, 9088, 0, 0, 0, 0),  -- Gift of Arthas
-(1000101, 12451, 0, 0, 0, 0), -- Juju Power
-(1000101, 9206, 0, 0, 0, 0),  -- Elixir of Giants
-(1000101, 12460, 0, 0, 0, 0), -- Juju Might
-(1000101, 12820, 0, 0, 0, 0), -- Winterfall Firewater
-(1000101, 13454, 0, 0, 0, 0), -- Greater Arcane Elixir
-(1000101, 9264, 0, 0, 0, 0),  -- Elixir of Shadow Power
-(1000101, 21546, 0, 0, 0, 0), -- Elixir of Greater Firepower
-(1000101, 17708, 0, 0, 0, 0), -- Elixir of Frost Power
-(1000101, 13461, 0, 0, 0, 0), -- Greater Arcane Protection Potion
-(1000101, 13457, 0, 0, 0, 0), -- Greater Fire Protection Potion
-(1000101, 13456, 0, 0, 0, 0), -- Greater Frost Protection Potion
-(1000101, 13458, 0, 0, 0, 0), -- Greater Nature Protection Potion
-(1000101, 13459, 0, 0, 0, 0), -- Greater Shadow Protection Potion
-(1000101, 13928, 0, 0, 0, 0), -- Grilled Squid
-(1000101, 20452, 0, 0, 0, 0), -- Smoked Desert Dumplings
-(1000101, 13931, 0, 0, 0, 0), -- Nightfin Soup
-(1000101, 21151, 0, 0, 0, 0), -- Rumsey Rum Black Label
-(1000101, 20748, 0, 0, 0, 0), -- Brilliant Mana Oil
-(1000101, 20749, 0, 0, 0, 0), -- Brilliant Wizard Oil
-(1000101, 18262, 0, 0, 0, 0), -- Elemental Sharpening Stone
-(1000101, 13444, 0, 0, 0, 0), -- Major Mana Potion
-(1000101, 3387, 0, 0, 0, 0),  -- Limited Invulnerability Potion
-(1000101, 9030, 0, 0, 0, 0),  -- Restorative Potion
-(1000101, 5634, 0, 0, 0, 0),  -- Free Action Potion
-(1000101, 20520, 0, 0, 0, 0), -- Dark Rune
-(1000101, 5175, 0, 0, 0, 0),  -- Earth Totem
-(1000101, 5176, 0, 0, 0, 0),  -- Fire Totem
-(1000101, 5177, 0, 0, 0, 0),  -- Water Totem
-(1000101, 5178, 0, 0, 0, 0);  -- Air Totem
+(2000101, 13510, 0, 0, 0, 0), -- Flask of the Titans
+(2000101, 13511, 0, 0, 0, 0), -- Flask of Distilled Wisdom
+(2000101, 13512, 0, 0, 0, 0), -- Flask of Supreme Power
+(2000101, 13513, 0, 0, 0, 0), -- Flask of Chromatic Resistance
+(2000101, 20081, 0, 0, 0, 0), -- Swiftness of Zanza
+(2000101, 13452, 0, 0, 0, 0), -- Elixir of the Mongoose
+(2000101, 20007, 0, 0, 0, 0), -- Mageblood Potion
+(2000101, 3825, 0, 0, 0, 0),  -- Elixir of Fortitude
+(2000101, 13445, 0, 0, 0, 0), -- Elixir of Superior Defense
+(2000101, 20004, 0, 0, 0, 0), -- Major Troll's Blood Potion
+(2000101, 9088, 0, 0, 0, 0),  -- Gift of Arthas
+(2000101, 12451, 0, 0, 0, 0), -- Juju Power
+(2000101, 9206, 0, 0, 0, 0),  -- Elixir of Giants
+(2000101, 12460, 0, 0, 0, 0), -- Juju Might
+(2000101, 12820, 0, 0, 0, 0), -- Winterfall Firewater
+(2000101, 13454, 0, 0, 0, 0), -- Greater Arcane Elixir
+(2000101, 9264, 0, 0, 0, 0),  -- Elixir of Shadow Power
+(2000101, 21546, 0, 0, 0, 0), -- Elixir of Greater Firepower
+(2000101, 17708, 0, 0, 0, 0), -- Elixir of Frost Power
+(2000101, 13461, 0, 0, 0, 0), -- Greater Arcane Protection Potion
+(2000101, 13457, 0, 0, 0, 0), -- Greater Fire Protection Potion
+(2000101, 13456, 0, 0, 0, 0), -- Greater Frost Protection Potion
+(2000101, 13458, 0, 0, 0, 0), -- Greater Nature Protection Potion
+(2000101, 13459, 0, 0, 0, 0), -- Greater Shadow Protection Potion
+(2000101, 13928, 0, 0, 0, 0), -- Grilled Squid
+(2000101, 20452, 0, 0, 0, 0), -- Smoked Desert Dumplings
+(2000101, 13931, 0, 0, 0, 0), -- Nightfin Soup
+(2000101, 21151, 0, 0, 0, 0), -- Rumsey Rum Black Label
+(2000101, 20748, 0, 0, 0, 0), -- Brilliant Mana Oil
+(2000101, 20749, 0, 0, 0, 0), -- Brilliant Wizard Oil
+(2000101, 18262, 0, 0, 0, 0), -- Elemental Sharpening Stone
+(2000101, 13444, 0, 0, 0, 0), -- Major Mana Potion
+(2000101, 3387, 0, 0, 0, 0),  -- Limited Invulnerability Potion
+(2000101, 9030, 0, 0, 0, 0),  -- Restorative Potion
+(2000101, 5634, 0, 0, 0, 0),  -- Free Action Potion
+(2000101, 20520, 0, 0, 0, 0), -- Dark Rune
+(2000101, 5175, 0, 0, 0, 0),  -- Earth Totem
+(2000101, 5176, 0, 0, 0, 0),  -- Fire Totem
+(2000101, 5177, 0, 0, 0, 0),  -- Water Totem
+(2000101, 5178, 0, 0, 0, 0);  -- Air Totem
 
 */
