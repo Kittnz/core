@@ -2117,8 +2117,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     return;
 
                 int32 dmg = m_casterUnit->CalculateSpellDamage(m_casterUnit, m_spellInfo, eff_idx, &m_currentBasePoints[EFFECT_INDEX_0]);
+                int32 oldDamage = dmg;
                 if (Player* modOwner = m_casterUnit->GetSpellModOwner())
                     modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_COST, dmg, this);
+
+                int32 spellModDmg = dmg;
 
                 dmg = m_casterUnit->SpellDamageBonusDone(m_casterUnit, m_spellInfo, eff_idx, uint32(dmg > 0 ? dmg : 0), SPELL_DIRECT_DAMAGE);
                 dmg = m_casterUnit->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, eff_idx, dmg, SPELL_DIRECT_DAMAGE);
@@ -2129,6 +2132,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     m_casterUnit->ModifyHealth(-dmg);
 
                     int32 mana = dmg;
+
+                    if (oldDamage > spellModDmg) // set bonus shouldnt decrease mana when decreasing cost.
+                        mana += oldDamage - spellModDmg;
 
                     Unit::AuraList const& auraDummy = m_casterUnit->GetAurasByType(SPELL_AURA_DUMMY);
                     for (const auto itr : auraDummy)
