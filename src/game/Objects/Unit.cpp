@@ -985,7 +985,10 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss)
 {
     // Prevent killing unit twice (and giving reward from kill twice)
-    if (!pVictim->GetHealth())
+	// Twin emps (entries: 15275, 15276) exception
+	// - one twin has to die from script cause they share pool
+	//   and the script was stopping in this gethealth check, cause his hp was 0 and not dead
+    if (!pVictim->GetHealth() && (pVictim->GetEntry() != 15275 && pVictim->GetEntry() != 15276))
         return;
 
     // Prevent killing Spirit of Redemption twice
