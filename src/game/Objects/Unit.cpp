@@ -5257,6 +5257,9 @@ bool Unit::IsSpellCrit(Unit const* pVictim, SpellEntry const* spellProto, SpellS
     if (IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_ALWAYS_CRIT))
         return true;
 
+    if (IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_ALWAYS_SPELL_CRIT))
+        return true;
+
     // not critting spell
     if ((spellProto->AttributesEx2 & SPELL_ATTR_EX2_CANT_CRIT))
         return false;
@@ -6419,7 +6422,7 @@ bool Unit::CanDetectStealthOf(Unit const* target, float distance, bool *alert) c
             return true;
 
 
-    if (distance > IsPlayer() ? MaxPlayerDetectRange : MaxCreatureDetectRange)
+    if (distance > (IsPlayer() ? MaxPlayerDetectRange : MaxCreatureDetectRange))
         return false;
     
 
