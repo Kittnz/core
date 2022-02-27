@@ -708,3 +708,60 @@ UPDATE item_template SET stat_value1 = 1 WHERE entry = 81402;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1149
 UPDATE quest_template SET details = 'So listen here mate, ye see these foul sea tailed imps? These Blackwater Pirates are naught but a joke, hiding in their port. They even have their weapons laying around in crates, truly a disgrace to all pirates around.\n\n<Garfield spits on the ground.>\n\nSo that\'s exactly why ye are going to collect them and bring them to a special someone in the city. What, ye thought these sea tailed imps wouldn\'t have a rat? Outrageous, but hilarious, innit? Narkk be the name.' WHERE entry = 40173;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1162
+REPLACE INTO creature_loot_template VALUES 
+(91715, 785, 0.02, 0, 1, 1, 0),
+(91715, 818, 0.16, 0, 1, 1, 0),
+(91715, 1206, 0.12, 0, 1, 1, 0),
+(91715, 1210, 0.34, 0, 1, 1, 0),
+(91715, 2406, 0.02, 0, 1, 1, 0),
+(91715, 2408, 0.02, 0, 1, 1, 0),
+(91715, 2409, 0.02, 0, 1, 1, 0),
+(91715, 2447, 0.08, 0, 1, 1, 0),
+(91715, 2449, 0.02, 0, 1, 1, 0),
+(91715, 2450, 0.16, 0, 1, 1, 0),
+(91715, 2452, 0.04, 0, 1, 1, 0),
+(91715, 2555, 0.02, 0, 1, 1, 0),
+(91715, 2657, 0.04, 0, 1, 1, 0),
+(91715, 2672, 81.6873, 0, 1, 2, 0),
+(91715, 2770, 0.12, 0, 1, 1, 0),
+(91715, 2835, 0.02, 0, 1, 1, 0),
+(91715, 2881, 0.02, 0, 1, 1, 0),
+(91715, 3164, 46.3814, 0, 1, 1, 0),
+(91715, 3299, 3.2387, 0, 1, 1, 0),
+(91715, 3301, 24.99, 0, 1, 1, 0),
+(91715, 3394, 0.02, 0, 1, 1, 0),
+(91715, 4292, 0.06, 0, 1, 1, 0),
+(91715, 4293, 0.02, 0, 1, 1, 0),
+(91715, 4345, 0.06, 0, 1, 1, 0),
+(91715, 4346, 0.02, 0, 1, 1, 0),
+(91715, 4408, 0.02, 0, 1, 1, 0),
+(91715, 4409, 0.02, 0, 1, 1, 0),
+(91715, 5573, 0.02, 0, 1, 1, 0),
+(91715, 5574, 0.02, 0, 1, 1, 0),
+(91715, 5635, 2.1591, 0, 1, 1, 0),
+(91715, 5972, 0.02, 0, 1, 1, 0),
+(91715, 6342, 0.02, 0, 1, 1, 0),
+(91715, 6344, 0.02, 0, 1, 1, 0),
+(91715, 6347, 0.02, 0, 1, 1, 0),
+(91715, 6348, 0.04, 0, 1, 1, 0),
+(91715, 6375, 0.02, 0, 1, 1, 0),
+(91715, 6390, 0.02, 0, 1, 1, 0),
+(91715, 6391, 0.02, 0, 1, 1, 0),
+(91715, 6716, 0.02, 0, 1, 1, 0),
+(91715, 7288, 0.02, 0, 1, 1, 0),
+(91715, 10316, 0.02, 0, 1, 1, 0),
+(91715, 11038, 0.02, 0, 1, 1, 0),
+(91715, 11039, 0.02, 0, 1, 1, 0),
+(91715, 30020, 0.5, 0, -30020, 1, 0),
+(91715, 30021, 0.5, 0, -30021, 1, 0),
+(91715, 30022, 0.5, 0, -30022, 1, 0),
+(91715, 30024, 0.5, 0, -30024, 1, 0),
+(91715, 30038, 0.5, 0, -30038, 1, 0),
+(91715, 60172, -100, 0, 1, 1, 0);
+DELETE FROM creature_loot_template WHERE entry = 1923 AND item = 60172;
+UPDATE creature_template SET loot_id = 91715 WHERE entry = 91715;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1160
+UPDATE item_template SET subclass = 1 WHERE entry = 80833;
