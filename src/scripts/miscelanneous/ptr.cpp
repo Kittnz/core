@@ -281,7 +281,7 @@ bool GossipSelect_ptr_npc_keklord(Player* pPlayer, Creature* pCreature, uint32 u
             {
                 if (pGroup->isRaidGroup())
                 {
-                    const auto currentGroupSize{ pGroup->GetMembersCount() };
+                    const uint8 currentGroupSize{ static_cast<uint8>(pGroup->GetMembersCount())};
                     if (currentGroupSize == PLAYERS_REQUIRED && pPlayer->IsAlive())
                     {
                         pPlayer->TeleportTo(MAP,
@@ -292,7 +292,7 @@ bool GossipSelect_ptr_npc_keklord(Player* pPlayer, Creature* pCreature, uint32 u
                     }
                     else
                     {
-                        ChatHandler(pPlayer).PSendSysMessage("Your raidgroup needs %u more member.", currentGroupSize);
+                        ChatHandler(pPlayer).PSendSysMessage("Your raidgroup needs %u more player(s).", (PLAYERS_REQUIRED - currentGroupSize));
                     }
                 }
             }
