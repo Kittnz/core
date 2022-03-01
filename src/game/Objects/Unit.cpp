@@ -5492,7 +5492,7 @@ bool Unit::IsImmuneToSpell(SpellEntry const *spellInfo, bool /*castOnSelf*/) con
         SpellImmuneList const& schoolList = m_spellImmune[IMMUNITY_SCHOOL];
         for (const auto& itr : schoolList)
             if (!(Spells::IsPositiveSpell(itr.spellId) && spellInfo->IsPositiveSpell()) &&
-                    (itr.type & spellInfo->GetSpellSchoolMask()))
+                    (itr.type & spellInfo->GetSpellSchoolMask()) && !spellInfo->HasEffect(SPELL_EFFECT_ATTACK_ME)) // Except for taunt
                 return true;
     }
 
