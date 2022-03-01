@@ -2290,3 +2290,27 @@ bool Map::ScriptCommand_QuestCredit(ScriptInfo const& script, WorldObject* sourc
 
     return false;
 }
+
+
+bool Map::ScriptCommand_DespawnCreatureNear(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    Creature* creature = ToCreature(source);
+
+    if (!creature)
+    {
+        sLog.outError("SCRIPT_COMMAND_DESPAWN_CREATURE_NEAR(script id %u) call for a nullptr or non-creature source (TypeId: %u), skipping.", script.id, source ? source->GetTypeId() : 0);
+        return ShouldAbortScript(script);
+    }
+
+    MaNGOS::AnyCreatureEntryInObjectRangeCheck u_check(creature, script.despawnCreatureNear.searchRange, script.despawnCreatureNear.creatureEntry);
+
+    Creature* despawner = nullptr;
+    MaNGOS::CreatureLastSearcher<MaNGOS::AnyCreatureEntryInObjectRangeCheck> searcher(despawner, u_check);
+
+    Cell::VisitAllObjects(creature, searcher, script.despawnCreatureNear.searchRange);
+
+    if (despawner)
+        despawner->DespawnOrUnsummon();
+
+    return false;
+}
