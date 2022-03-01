@@ -1221,6 +1221,30 @@ namespace MaNGOS
             NearestCreatureEntryFitConditionInObjectRangeCheck(NearestCreatureEntryFitConditionInObjectRangeCheck const&);
     };
 
+
+    class AnyCreatureEntryInObjectRangeCheck
+    {
+    public:
+        AnyCreatureEntryInObjectRangeCheck(WorldObject const* obj, float range, uint32 entry, bool distance_3d = true, bool check_alive = true) : i_entry(entry), i_obj(obj), i_range(range), b_3dDist(distance_3d), b_checkAlive(check_alive) {}
+        WorldObject const& GetFocusObject() const { return *i_obj; }
+        bool operator()(Creature* u)
+        {
+            if (!u->IsAlive() && b_checkAlive)
+                return false;
+
+            if (u->GetEntry() != i_entry)
+                return false;
+            return i_obj->IsWithinDistInMap(u, i_range, b_3dDist);
+
+        }
+    private:
+        WorldObject const* i_obj;
+        float i_range;
+        uint32 i_entry;
+        bool b_3dDist;
+        bool b_checkAlive;
+    };
+
     // Player checks and do
 
     class AnyPlayerInObjectRangeCheck
