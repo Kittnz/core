@@ -1319,6 +1319,18 @@ void Player::Update(uint32 update_diff, uint32 p_time)
     if (now > m_Last_tick)
         UpdateItemDuration(uint32(now - m_Last_tick));
 
+    if ((GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
+    {
+        if (GetSession()->m_muteTime <= update_diff)
+        {
+            GetSession()->m_muteTime = 0;
+            GetSession()->SetAccountFlags(GetSession()->GetAccountFlags() & ~ACCOUNT_FLAG_MUTED_PAUSING);
+            LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_PAUSING, GetSession()->GetAccountId());
+        }
+        else
+            GetSession()->m_muteTime -= update_diff;
+    }
+
     if (!m_timedquests.empty())
     {
         QuestSet::iterator iter = m_timedquests.begin();
@@ -16634,6 +16646,11 @@ void Player::SaveToDB(bool online, bool force)
 
     CharacterDatabase.CommitTransaction();
 
+    if ((GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
+    {
+        LoginDatabase.PExecute("UPDATE account SET `mutetime` = '%u' WHERE `id` = '%u'", GetSession()->m_muteTime, GetSession()->GetAccountId());
+    }
+
     // check if stats should only be saved on logout
     // save stats can be out of transaction
     if (m_session->isLogingOut() || !sWorld.getConfig(CONFIG_BOOL_STATS_SAVE_ONLY_ON_LOGOUT))
@@ -17103,7 +17120,7 @@ void Player::outDebugStatsValues() const
 
 bool Player::CanSpeak() const
 {
-    return  GetSession()->m_muteTime <= time(nullptr);
+    return  (GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING ? GetSession()->m_muteTime == 0 : GetSession()->m_muteTime <= time(nullptr);
 }
 
 /*********************************************************/

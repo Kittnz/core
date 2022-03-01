@@ -34,6 +34,8 @@
 #include "GossipDef.h"
 #include "MapNodes/AbstractPlayer.h"
 
+#include <optional>
+
 struct ItemPrototype;
 struct AuctionEntry;
 struct AuctionHouseEntry;
@@ -202,6 +204,7 @@ enum PacketDumpType
 enum AccountFlags
 {
     ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS     = 0x1,
+    ACCOUNT_FLAG_MUTED_PAUSING                  = 0x2
 };
 
 //class to deal with packet processing

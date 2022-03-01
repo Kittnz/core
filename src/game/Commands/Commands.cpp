@@ -6798,7 +6798,21 @@ bool ChatHandler::HandleMuteCommand(char* args)
     if (char* givenReasonC = ExtractQuotedOrLiteralArg(&args))
         givenReason = givenReasonC;
 
+
+    std::string pausingStr;
+    if (char* pausingStrC = ExtractQuotedOrLiteralArg(&args))
+        pausingStr = pausingStrC;
+
+
+
+    bool pausing = false;
+    if (pausingStr == "pausing")
+        pausing = true;
+
+
+
     uint32 account_id = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
+
 
     // find only player from same account if any
     if (!target)
@@ -6813,10 +6827,21 @@ bool ChatHandler::HandleMuteCommand(char* args)
 
     time_t mutetime = time(nullptr) + notspeaktime * 60;
 
+    if (pausing) // pausing uses world ms diff so multiply by 1000 for ms instead of s and use ms left instead of current time in future.
+        mutetime = notspeaktime * 60 * 1000;
+
     if (target)
         target->GetSession()->m_muteTime = mutetime;
 
     LoginDatabase.PExecute("UPDATE account SET mutetime = " UI64FMTD " WHERE id = '%u'", uint64(mutetime), account_id);
+
+    if (pausing)
+    {
+        LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_PAUSING, target->GetSession()->GetAccountId());
+        if (target)
+            target->GetSession()->SetAccountFlags(target->GetSession()->GetAccountFlags() | ACCOUNT_FLAG_MUTED_PAUSING);
+    }
+
 
     if (target)
         ChatHandler(target).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notspeaktime);
@@ -6868,6 +6893,29 @@ bool ChatHandler::HandleUnmuteCommand(char* args)
         }
 
         target->GetSession()->m_muteTime = 0;
+    }
+
+    uint32 accountFlags = 0;
+
+    if (target)
+        accountFlags = target->GetSession()->GetAccountFlags();
+    else
+    {
+        auto result = LoginDatabase.PQuery("SELECT `flags` FROM `account` WHERE `id` = '%u'", account_id);
+
+        if (result)
+        {
+            accountFlags = result->Fetch()[0].GetUInt32();
+            delete result;
+        }
+
+    }
+
+    if (accountFlags & ACCOUNT_FLAG_MUTED_PAUSING)
+    {
+        LoginDatabase.PExecute("UPDATE account SET flags = flags & ~0x%x WHERE id = '%u'", ACCOUNT_FLAG_MUTED_PAUSING, target->GetSession()->GetAccountId());
+        if (target)
+            target->GetSession()->SetAccountFlags(target->GetSession()->GetAccountFlags() & ~ACCOUNT_FLAG_MUTED_PAUSING);
     }
 
     LoginDatabase.PExecute("UPDATE account SET mutetime = '0' WHERE id = '%u'", account_id);
@@ -11256,6 +11304,9 @@ bool ChatHandler::HandleGMOptionsCommand(char* args)
         flags |= PLAYER_CHEAT_ALWAYS_PROC;
     if (sArgs.find("video") != std::string::npos || sArgs.find("VIDEO") != std::string::npos)
         flags |= PLAYER_VIDEO_MODE;
+
+    if (sArgs.find("spellcr") != std::string::npos || sArgs.find("SPELLCR") != std::string::npos)
+        flags |= PLAYER_CHEAT_ALWAYS_SPELL_CRIT;
 
     Player* pTarget = GetSelectedPlayer();
     if (!pTarget)
