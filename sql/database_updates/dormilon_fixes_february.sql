@@ -39,3 +39,5 @@ update creature_template set flags_extra = 524296 where entry in (60664,60665);
 update quest_template set objectives = 'Speak to Garfield \'The Fox\' Sparkleblast if you wish to aid him.\n\n(This will make the Bloodsail Buccaneers not see you as an enemy anymore.)' where entry = 40172;
 -- Quest 'In Service of the Light' deleted:
 delete * from quest_template where entry = 50300;
+-- Respawn time fixed:
+update creature set spawntimesecsmin = 600, spawntimesecsmax = 600 where id = 6147;
