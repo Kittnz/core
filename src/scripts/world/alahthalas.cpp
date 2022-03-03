@@ -379,9 +379,42 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
     return true;
 }
 
+bool GOHello_go_ship_to_shalandis(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010881)
+    {
+        if (pPlayer->GetQuestRewardStatus(40385) && !pPlayer->GetQuestRewardStatus(40386))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Board this ship and head to Shalandis Isle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_ship_to_shalandis(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010881)
+        {
+            static const WorldLocation m_shalandis(42, 7705.45F, -5668.93F, 3.6f, 4.6f);
+            pPlayer->TeleportTo(m_shalandis);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_alahthalas()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_ship_to_shalandis";
+    newscript->pGOHello = &GOHello_go_ship_to_shalandis;
+    newscript->pGOGossipSelect = &GOSelect_go_ship_to_shalandis;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_tyrande";
