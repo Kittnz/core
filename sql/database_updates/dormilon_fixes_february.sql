@@ -37,3 +37,5 @@ update creature_template set type = 7, skinning_loot_id = 0 where entry = 92104;
 update creature_template set flags_extra = 524296 where entry in (60664,60665);
 -- Grammar fix for quest 'Red flag over the sea':
 update quest_template set objectives = 'Speak to Garfield \'The Fox\' Sparkleblast if you wish to aid him.\n\n(This will make the Bloodsail Buccaneers not see you as an enemy anymore.)' where entry = 40172;
+-- Quest 'In Service of the Light' deleted:
+delete * from quest_template where entry = 50300;
