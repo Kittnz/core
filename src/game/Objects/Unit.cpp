@@ -855,6 +855,12 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             player->ModifyPower(POWER_MANA, damage / 100 * spellEffectiveness);
     }
 
+    if (HasSpell(000u)) // Passive : AVOIDANCE for Pets.
+    {
+        if (spellProto && (spellProto->IsAreaOfEffectSpell() || spellProto->HasAreaAuraEffect()))
+            damage *= 0.5f;
+    }
+
     if (health <= damage)
     {
         // Can't kill gods
