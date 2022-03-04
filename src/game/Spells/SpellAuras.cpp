@@ -1776,6 +1776,19 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             case SPELLFAMILY_SHAMAN:
                 break;
 
+            case SPELLFAMILY_WARRIOR:
+            {
+                switch (GetId())
+                {
+                    case 20230: // retaliation for die by the sword
+                    {
+                        auto caster = GetCaster();
+                        if (caster)
+                            caster->CastSpell(caster, 000u, true); // TODO : correct spell id
+                    }break;
+                }
+            }break;
+
             case SPELLFAMILY_PRIEST:
             {
                 switch (GetId())
