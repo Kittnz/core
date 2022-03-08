@@ -10,3 +10,8 @@ update creature_tem
 replace into broadcast_text values (9656, '', 'There are costs with war, $c... ones that are often overlooked.\n\nThose costs are the orphans—children who have lost their parents to the far-too-numerous conflicts that rage across Azeroth.\n\nThose children have no one else to turn to come here often to live until they are old enough to fend for themselves.\n\nOne week out of the month, the Horde takes time to give something back to these innocents. This time is called Children\'s Week.', 0, 0, 0, 1, 1, 0, 0, 0, 0);
 replace into broadcast_text values (9659, '', 'There are costs with war, $c... ones that are often overlooked.\n\nThose costs are the orphans—children who have lost their parents to the far-too-numerous conflicts that rage across Azeroth.\n\nThose children have no one else to turn to come here often to live until they are old enough to fend for themselves.\n\nOne week out of the month, the Alliance takes time to give something back to these innocents. This time is called Children\'s Week.', 0, 0, 0, 1, 1, 0, 0, 0, 0);
 
+-- Boat to Auberdine deprecated sign:
+delete from gameobject where guid = 13779;
+
+-- Prepare instanced map for `Scourge!` quest:
+update map_template set map_type = 1, player_limit = 1 where entry = 42;
