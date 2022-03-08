@@ -33,3 +33,8 @@ update creature_template SET dmg_min = 241, dmg_max = 324 where name = 'Anvilrag
 update creature_template SET dmg_min = 273, dmg_max = 361 where name = 'Anvilrage Officer';
 update creature_template SET dmg_min = 293, dmg_max = 397 where name = 'Anvilrage Marshal';
 update creature_template SET dmg_min = 279, dmg_max = 370 where name = 'Anvilrage Soldier';
+
+-- Adjusted base mana stats for level 1 druids.
+
+update player_levelstats set inte = 17 where class = 11 and race = 6 and level = 1;
+update player_levelstats set inte = 22 where class = 11 and race = 4 and level = 1;  
