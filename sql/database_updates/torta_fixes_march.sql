@@ -15,3 +15,6 @@ delete from gameobject where guid = 13779;
 
 -- Prepare instanced map for `Scourge!` quest:
 update map_template set map_type = 1, player_limit = 1 where entry = 42;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1186
+update quest_template set objectivetext1 = 'Bring Righteous Orb and Flawless Draenethyst Sphere to Fashionista\'s Apprentice and recieve 3 Fashion Coins as a reward.' where entry = 60036;
