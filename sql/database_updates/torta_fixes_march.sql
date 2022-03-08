@@ -38,3 +38,8 @@ update creature_template SET dmg_min = 279, dmg_max = 370 where name = 'Anvilrag
 
 update player_levelstats set inte = 17 where class = 11 and race = 6 and level = 1;
 update player_levelstats set inte = 22 where class = 11 and race = 4 and level = 1;  
+
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/240"
+
+update item_template set flags = 2048 where entry = 12562;
