@@ -823,8 +823,8 @@ struct go_uldum_portalAI : public GameObjectAI
                 me->GetPositionY(),
                 ground_z,
                 me->GetOrientation(),
-                TEMPSUMMON_CORPSE_TIMED_DESPAWN,
-                5000
+                TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, // despawns after a specified time (out of combat) OR when the creature dies
+                300
             );
 
             Player* randomPlayer = GetNearbyEnemyPlayer(spawn, 300.0f);

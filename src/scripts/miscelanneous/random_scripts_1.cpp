@@ -373,7 +373,6 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     case 50436: displayid = 7803; break; // Smolderthorn Berserker
     case 50437: displayid = 4923; break; // Naga Explorer
     case 50438: displayid = 11263; break; // Naga Siren 
-    case 53008: displayid = (18065 + urand(0, 4)); break; // Ogre
     case 50408: displayid = ((male) ? 150 : 876);  break; // Dryad
     case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
     case 80694: // Scourge
@@ -402,6 +401,13 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     {
         int models[4] = { 487, 383, 384, 491 };
         int modelid = rand() % 4;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    case 53008: // Two-headed Ogre
+    {
+        int models[7] = { 18065, 18066, 18067, 18068, 18069, 18070, 18182 };
+        int modelid = rand() % 7;
         displayid = static_cast<uint32>(models[modelid]);
         break;
     }

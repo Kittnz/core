@@ -578,13 +578,22 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                 //any return here in case battleground traps
             }
 
-            if (GetOwnerGuid())
+            if (GetSpellId() || GetOwnerGuid())
             {
                 if (Unit* owner = GetOwner())
                     owner->RemoveGameObject(this, false);
 
-                SetRespawnTime(0);
-                Delete();
+                // don't delete spell spawned chests, which are not consumed on loot:
+                if (m_respawnTime > 0 && GetGoType() == GAMEOBJECT_TYPE_CHEST && !GetGOInfo()->IsDespawnAtAction())
+                {
+                    UpdateObjectVisibility();
+                    SetLootState(GO_READY);
+                }
+                else
+                {
+                    SetRespawnTime(0);
+                    Delete();
+                }
                 return;
             }
 

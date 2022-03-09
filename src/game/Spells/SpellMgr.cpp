@@ -2305,6 +2305,12 @@ SpellCastResult SpellMgr::GetSpellAllowedInLocationError(SpellEntry const *spell
 
     uint32 mapId = caster ? caster->GetMapId() : (player ? player->GetMapId() : 0);
 
+	if (spellInfo->Id == 22563 && player && player->InBattleGround() && player->GetTeamId() != TEAM_HORDE)
+		return SPELL_FAILED_SPELL_UNAVAILABLE;
+
+	if (spellInfo->Id == 22564 && player && player->InBattleGround() && player->GetTeamId() != TEAM_ALLIANCE)
+		return SPELL_FAILED_SPELL_UNAVAILABLE;
+
     switch (spellInfo->Id)
     {
         // Alterac Valley
