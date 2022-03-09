@@ -8792,6 +8792,21 @@ bool ChatHandler::HandleModifyMorphCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGetSkillValueCommand(char* args)
+{
+    if (!*args) return false;
+
+    uint32 skill_id = (uint32)atoi(args);
+    uint32 skill_value = 0;
+
+    Player* target = GetSelectedPlayer();
+    if (!target) target = m_session->GetPlayer();
+
+    skill_value = target->GetSkillValue(skill_id);
+    PSendSysMessage("Skill %u Value %u", skill_id, skill_value);
+    return true;
+}
+
 //Edit Player money
 bool ChatHandler::HandleModifyMoneyCommand(char* args)
 {

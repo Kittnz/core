@@ -202,7 +202,7 @@ void HonorMaintenancer::SetCityRanks()
 
     for (uint8 i = 1; i < MAX_RACES; ++i)
     {
-        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorLastWeekHK` FROM characters WHERE `honorLastWeekHK` > 0 and race = '%u' ORDER BY `honorLastWeekHK` ASC LIMIT 1", i);
+        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorLastWeekHK` FROM characters WHERE `honorLastWeekHK` > 0 and race = '%u' ORDER BY `honorLastWeekHK` DESC LIMIT 1", i);
 
         if (result)
         {
