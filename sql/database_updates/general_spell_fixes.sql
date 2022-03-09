@@ -48264,3 +48264,6 @@ update `spell_template` set `effectBonusCoefficient1` = 0.8 where `entry` = 1168
 update `spell_template` set `effectBonusCoefficient1` = 0.8 where `entry` = 11688; -- rank5
 update `spell_template` set `effectBonusCoefficient1` = 0.8 where `entry` = 11689; -- rank6
 
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1119
+-- Blademaster's Blindfold helm isn't adding +5 polearms on character skill window:
+replace into spell_template values (46041, 0, 38, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 101, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 6, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1527, 0, 0, 'Increased Polearms +5', 16712190, '', 16712190, 'Increased Polearm +5.', 16712190, '', 16712190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
