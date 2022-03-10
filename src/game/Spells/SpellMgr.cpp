@@ -376,7 +376,7 @@ void SpellMgr::OverrideProcEvents()
         if (ruleset == procEventModifiers.end())
             continue;
 
-        if (auto func = std::get_if<FuncType>(&itr->second))
+        if (auto func = std::get_if<FuncType>(&ruleset->second))
             (*func)(entry);
     }
 }
