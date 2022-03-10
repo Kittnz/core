@@ -1783,8 +1783,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     case 20230: // retaliation for die by the sword
                     {
                         auto caster = GetCaster();
-                        if (caster)
-                            caster->CastSpell(caster, 000u, true); // TODO : correct spell id
+                        if (caster && caster->HasSpell(45584))
+                            caster->CastSpell(caster, 45589u, true);
                     }break;
                 }
             }break;

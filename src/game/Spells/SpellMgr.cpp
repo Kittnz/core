@@ -30,6 +30,9 @@
 #include "MapManager.h"
 #include "Unit.h"
 
+#include <optional>
+#include <variant>
+
 using namespace Spells;
 
 SpellMgr::SpellMgr()
@@ -333,6 +336,49 @@ void SpellMgr::LoadSpellProcEvents()
     } while (result->NextRow());
 
     rankHelper.FillHigherRanks();
+
+    OverrideProcEvents();
+}
+
+
+
+
+void SpellMgr::OverrideProcEvents()
+{
+    using FuncType = std::function<void(SpellProcEventEntry*)>;
+
+    static std::unordered_map<uint32, std::variant<uint32, FuncType>> procEventModifiers =
+    {
+        {15268, [this](SpellProcEventEntry* entry) { // blackout rank 1
+
+            entry->procEx = PROC_EX_NORMAL_HIT; // dont proc on heal.
+        }},
+        {15323, 15268}, // blackout rank 2
+        {15324, 15268}, // blackout rank 3
+        {15325, 15268}, // blackout rank 4
+        {15326, 15268}  // blackout rank 5
+    };
+
+    for (auto itr = procEventModifiers.begin(); itr != procEventModifiers.end(); ++itr)
+    {
+        auto procEventItr = mSpellProcEventMap.find(itr->first);
+
+        if (procEventItr == mSpellProcEventMap.end())
+            continue;
+
+        SpellProcEventEntry* entry = &procEventItr->second;
+
+        decltype(itr) ruleset = itr;
+
+        while (auto linkedId = std::get_if<uint32>(&itr->second))
+            ruleset = procEventModifiers.find(*linkedId);
+
+        if (ruleset == procEventModifiers.end())
+            continue;
+
+        if (auto func = std::get_if<FuncType>(&itr->second))
+            (*func)(entry);
+    }
 }
 
 struct DoSpellProcItemEnchant

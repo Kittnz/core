@@ -776,6 +776,7 @@ class SpellMgr
         void LoadSpellAffects();
         void LoadSpellElixirs();
         void LoadSpellProcEvents();
+        void OverrideProcEvents();
         void LoadSpellProcItemEnchant();
         void LoadSpellTargetPositions();
         void LoadSpellThreats();
