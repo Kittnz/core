@@ -836,9 +836,9 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     }
 
     //CUSTOM Vampiric Embrace
-    if (auto player = ToPlayer(); player && damageSchoolMask == SPELL_SCHOOL_MASK_SHADOW && player->HasSpell(000)) // TODO: spell id for vampiric embrace
+    if (auto player = ToPlayer(); player && damageSchoolMask == SPELL_SCHOOL_MASK_SHADOW && (player->HasSpell(45557) || player->HasSpell(45558)))
     {
-        const uint32 spellEffectiveness = player->HasSpell(000) ? 1 : 2;
+        const uint32 spellEffectiveness = player->HasSpell(45557) ? 1 : 2;
         auto group = player->GetGroup();
         if (group)
         {
@@ -855,7 +855,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             player->ModifyPower(POWER_MANA, damage / 100 * spellEffectiveness);
     }
 
-    if (HasSpell(000u)) // Passive : AVOIDANCE for Pets.
+    if (HasSpell(46023) || HasSpell(46024)) // Passive : AVOIDANCE for Pets.
     {
         if (spellProto && (spellProto->IsAreaOfEffectSpell() || spellProto->HasAreaAuraEffect()))
             damage *= 0.5f;
