@@ -370,7 +370,7 @@ void SpellMgr::OverrideProcEvents()
 
         decltype(itr) ruleset = itr;
 
-        while (auto linkedId = std::get_if<uint32>(&itr->second))
+        while (auto linkedId = std::get_if<uint32>(&ruleset->second))
             ruleset = procEventModifiers.find(*linkedId);
 
         if (ruleset == procEventModifiers.end())
