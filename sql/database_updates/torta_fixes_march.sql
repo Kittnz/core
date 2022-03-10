@@ -13,7 +13,7 @@ replace into broadcast_text values (9659, '', 'There are costs with war, $c... o
 -- Boat to Auberdine deprecated sign:
 delete from gameobject where guid = 13779;
 
--- Prepare instanced map for `Scourge!` quest:
+-- Prepare instanced map for Scourge! quest:
 update map_template set map_type = 1, player_limit = 1 where entry = 42;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1186
@@ -43,3 +43,11 @@ update player_levelstats set inte = 22 where class = 11 and race = 4 and level =
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/240"
 
 update item_template set flags = 2048 where entry = 12562;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1161
+update gameobject_loot_template set entry = 1736 where entry = 1732 and item = 2798;
+delete from gameobject_loot_template where item = 2798 and entry not in (1735, 1736);
+update gameobject set id = 2054 where guid in (72064, 72065, 72066, 72082, 72083, 72085, 72086, 72087, 72123, 72124, 72125, 72126, 72127);
+update gameobject set id = 2055 where guid in (72000, 72001, 72002, 72009, 72010, 72011, 72012, 72051, 72052, 72053, 72062);
+replace into gameobject_loot_template values (1735, 2798, 40, 0, 1, 1, 0);
+replace into gameobject_loot_template values (1736, 2798, 2, 0, 1, 1, 0);
