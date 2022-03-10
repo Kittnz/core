@@ -51,3 +51,6 @@ update gameobject set id = 2054 where guid in (72064, 72065, 72066, 72082, 72083
 update gameobject set id = 2055 where guid in (72000, 72001, 72002, 72009, 72010, 72011, 72012, 72051, 72052, 72053, 72062);
 replace into gameobject_loot_template values (1735, 2798, 40, 0, 1, 1, 0);
 replace into gameobject_loot_template values (1736, 2798, 2, 0, 1, 1, 0);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1185
+update item_template set class = 13, subclass = 0, bag_family = 9 where entry = 11078;
