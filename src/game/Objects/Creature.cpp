@@ -3131,7 +3131,7 @@ void Creature::OnLeaveCombat()
         m_zoneScript->OnCreatureEvade(this);
 }
 
-void Creature::OnEnterCombat(Unit* pWho, bool notInCombat)
+void Creature::OnEnterCombat(Unit* pWho, const bool notInCombat)
 {
     if (!pWho)
         return;
@@ -3162,17 +3162,29 @@ void Creature::OnEnterCombat(Unit* pWho, bool notInCombat)
         // Mark as At War with faction in client so player can attack back.
         if (GetReputationId() >= 0)
         {
-            if (Player* pPlayer = pWho->ToPlayer())
+            if (Player* pPlayer{ pWho->ToPlayer() })
+            {
                 if (pPlayer->GetReputationMgr().SetAtWar(GetReputationId(), true))
+                {
                     pPlayer->SendFactionAtWar(GetReputationId(), true);
+
+                    // std::cout << "Set player " << pPlayer->GetGUID() << "at war with faction " << GetReputationId() << std::endl;
+                }
+            }
         }
 
         if (pWho->IsPlayer() && CanSummonGuards())
+        {
             sGuardMgr.SummonGuard(this, static_cast<Player*>(pWho));
+        }
 
         if (IsPet())
-            if (Creature* pOwner = GetOwnerCreature())
+        {
+            if (Creature const* pOwner{ GetOwnerCreature() })
+            {
                 SetLastLeashExtensionTimePtr(pOwner->GetLastLeashExtensionTimePtr());
+            }
+        }
     }
 }
 

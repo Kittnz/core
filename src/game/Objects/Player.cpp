@@ -17194,11 +17194,11 @@ void Player::SendExplorationExperience(uint32 Area, uint32 Experience) const
     GetSession()->SendPacket(&data);
 }
 
-void Player::SendFactionAtWar(uint32 reputationId, bool apply) const
+void Player::SendFactionAtWar(const uint32 reputationId, const bool apply) const
 {
-    WorldPacket data(SMSG_SET_FACTION_ATWAR, 4 + 1);
-    data << uint32(reputationId);
-    data << uint8(apply ? FACTION_FLAG_AT_WAR : 0);
+    WorldPacket data(SMSG_SET_FACTION_ATWAR, (4 + 1));
+    data << static_cast<uint32>(reputationId);
+    data << static_cast<uint8>(apply ? FACTION_FLAG_AT_WAR : 0);
     GetSession()->SendPacket(&data);
 }
 
