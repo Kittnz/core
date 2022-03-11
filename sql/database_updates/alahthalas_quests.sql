@@ -142,21 +142,64 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (80877, 40385);
 replace into creature_involvedrelation (id, quest) values (60670, 40385);
 
+delete from creature_template where entry in (60670,60671,60672,60677);
 REPLACE INTO creature_template VALUES
-(60670, 4839, 0, 0, 0, 'Captain Breanna Darrowmont', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 150, 2, 1, 1.14286, 1, 18, 5, 40, 1, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
-(60671, 4979, 1858, 4677, 4671, 'Theramore Marine', '', 0, 60, 60, 5000, 5000, 0, 0, 3252, 150, 0, 1, 1.14286, 0, 18, 5, 40, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
-(60672, 18220, 18221, 18222, 18223, 'Alah\'thalas Ranger', '', 0, 60, 60, 5000, 5000, 0, 0, 3252, 371, 0, 1, 1.14286, 0, 18, 5, 40, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
+(60670, 4839, 0, 0, 0, 'Captain Breanna Darrowmont', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 150, 3, 1, 1.14286, 1, 8, 5, 40, 1, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 3385, 0, 0, 0, 0, 0, 0, 1, 'npc_breanna_darrowmont'),
+(60671, 4679, 1858, 0, 0, 'Theramore Marine', '', 0, 60, 60, 3800, 3800, 0, 0, 3252, 150, 0, 1, 1.14286, 0, 8, 5, 40, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 3385, 0, 0, 0, 0, 0, 0, 1, ''),
+(60672, 18220, 18221, 18222, 18223, 'Alah\'thalas Ranger', '', 0, 60, 60, 3500, 3500, 0, 0, 3252, 231, 0, 1, 1.14286, 0, 8, 5, 40, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 80216, 0, 0, 0, 0, 0, 0, 1, ''),
+(60677, 18214, 0, 0, 0, 'Ranger-Captain Nasuna Dawnbringer', NULL, 0, 60, 60, 9146, 9146, 0, 0, 4391, 231, 2, 1, 1.14286, 0, 20, 5, 40, 1, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 10824, 0, 0, 0, 0, 0, 0, 0, 0, 15547, 12057, 11978, 0, 108240, 0, 139, 187, 'EventAI', 0, 3, 0, 0, 3, 10824, 0, 0, 0, 0, 0, 0, 1, 'npc_nasuna');
 
-delete from gameobject_template where entry = 2010881;
-replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010881, 2, 7552, 1, 'The ship to Shalandis Isle.', 32, 'go_ship_to_shalandis');
+set @gossip_menu_id = 41094; set @magic_number = 60670;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greatings');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 -- Scourge! --
 delete from quest_template where entry = 40386;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40385,40386,2,2040,60,60,0,0,'Scourge!','This is a disaster! No matter how many we slay, they keep coming! Our Rangers will secure the ship and provide ranged support, but we need your help before they overrun us!','Defend Shalandis Isle.','Welcome back, $N. I hope that you bring good news.','With the beach secured and our fortifications up, we have finally made a first step in reclaiming these lands. But we need to be careful. Their commander mentioned someone named Lord Dar\'Khan.\n\nCould he be their leader? And why does that name feel so familiar? Anyways, we won\'t get much from overthinking. Let us wait for the rest of the reinforcements before continuing our campaign in Quel\'thalas.',0,0,0,0,0,0,0,0,60673,1,60674,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40385,40386,2,2040,60,60,0,0,'Scourge!','This is a disaster! No matter how many we slay, they keep coming! Our Rangers will secure the ship and provide ranged support, but we need your help before they overrun us!','Defend Shalandis Isle.','Yes?','With the beach secured and our fortifications up, we have finally made a first step in reclaiming these lands. But we need to be careful. Their commander mentioned someone named Lord Dar\'Khan.\n\nCould he be their leader? And why does that name feel so familiar? Anyways, we won\'t get much from overthinking. Let us wait for the rest of the reinforcements before continuing our campaign in Quel\'thalas.',0,0,0,0,0,0,0,0,60673,1,60674,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
-replace into creature_questrelation (id, quest) values (80232, 40386);
-replace into creature_involvedrelation (id, quest) values (80245, 40386);
+delete from creature_questrelation where quest = 40386;
+delete from creature_involvedrelation where quest = 40386;
+replace into creature_questrelation (id, quest) values (60677, 40386);
+replace into creature_involvedrelation (id, quest) values (60677, 40386);
 
 REPLACE INTO creature_template VALUES
-(60673, 18498, 0, 0, 0, 'Lady Ripper', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 21, 0, 1, 1.14286, 1.5, 18, 5, 40, 0, 1, 86, 94, 0, 106, 1, 480, 480, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 6, 0, 60673, 0, 0, 50, 0, 0, 0, 50, 25, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
-(60674, 7919, 0, 0, 0, 'Dre\'gheor Frostshiv', '', 0, 60, 60, 19300, 19300, 0, 0, 3791, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 390, 450, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 6, 0, 60674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
+(60673, 18498, 0, 0, 0, 'Lady Ripper', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 21, 0, 1, 1.14286, 1.5, 20, 5, 40, 0, 1, 86, 94, 0, 106, 1, 480, 480, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 6, 0, 60673, 0, 0, 50, 0, 0, 0, 50, 25, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 'npc_lady_ripper'),
+(60674, 7919, 0, 0, 0, 'Dre\'gheor Frostshiv', '', 0, 60, 60, 19300, 19300, 0, 0, 3791, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 390, 450, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 6, 0, 60674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, 'npc_frostshiv'),
+(60675, 7847, 9786, 5432, 828, 'Scourge Soldier', NULL, 0, 58, 59, 3500, 3600, 0, 0, 3640, 21, 0, 1.14286, 1.14286, 0, 20, 5, 0, 0, 1, 114, 138, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 6, 0, 60675, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 180, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, ''),
+(60676, 370, 0, 0, 0, 'Scourge Commander', NULL, 0, 60, 60, 4000, 4000, 0, 0, 3640, 21, 0, 1.24286, 1.24286, 0, 20, 5, 0, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 6, 0, 60675, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 180, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 1, '');
+
+delete from creature where id in (60670,60671,60672,60677,60673,60674,60675);
+REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
+(60670, 0, 0, 0, 42, 0, 0, 7698.92, -5575.48, 19.66580, 3.83057, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7659.88, -5610.37, 13.31150, 5.20327, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7651.02, -5612.52, 13.53940, 4.50731, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7650.90, -5610.02, 13.44700, 2.66425, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7653.02, -5606.07, 13.33960, 2.53466, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7676.72, -5634.24, 0.349135, 5.07594, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7682.33, -5629.10, 0.595067, 5.40155, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7665.27, -5611.79, 13.18080, 5.25249, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7669.57, -5609.06, 12.85840, 5.27169, 300, 300, 0, 100, 100, 0, 0, 0),
+(60677, 0, 0, 0, 42, 0, 0, 7696.65, -5651.08, 3.559440, 5.25798, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7692.89, -5655.35, 3.933480, 5.45477, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7701.59, -5648.35, 3.671490, 5.05307, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7697.72, -5657.15, 3.790160, 5.37274, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7701.75, -5654.08, 3.667410, 5.28634, 300, 300, 0, 100, 100, 0, 0, 0);
+
+REPLACE INTO `creature_linking_template` (`entry`, `map`, `master_entry`, `flag`, `search_range`) VALUES
+(60675, 42, 60676, 512, 30);
+
+-- Returning to Alah'thalas --
+delete from quest_template where entry = 40387;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40386,40387,2,2040,60,60,0,0,'Returning to Alah\'thalas','It is done... With the initial attack repelled, we can properly set up the defenses. With the Rangers, the Magisters, the Druids, and Moon Priestesses, we\'re more than capable of holding this isle until the fleet arrives.\n\nOnce the Rangers and Magisters have disembarked, we will return to Alah\'thalas. I take it you can send word to Speaker Windrunner?','Speak to Vereesa Windrunner in Alah\'thalas','Welcome back, $N. I hope that you bring good news.','With the beach secured and our fortifications up, we have finally made a first step in reclaiming these lands. But we need to be careful. Their commander mentioned someone named Lord Dar\'Khan.\n\nCould he be their leader? And why does that name feel so familiar? Anyways, we won\'t get much from overthinking. Let us wait for the rest of the reinforcements before continuing our campaign in Quel\'thalas.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60677, 40387);
+replace into creature_involvedrelation (id, quest) values (80877, 40387);
+
+REPLACE INTO creature_template_addon VALUES
+(60672, 0, 0, 1, 0, 0, 0, 0),
+(60677, 0, 0, 2, 0, 0, 0, 0);
+
+delete from gameobject_template where entry = 2010881;
+delete from gameobject where id = 2010881;
