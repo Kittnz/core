@@ -379,41 +379,188 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
     return true;
 }
 
-bool GOHello_go_ship_to_shalandis(Player* pPlayer, GameObject* pGo)
+bool GossipHello_npc_breanna_darrowmont(Player* pPlayer, Creature* pCreature)
 {
-    if (pGo->GetEntry() == 2010881)
+    if (pPlayer->GetQuestRewardStatus(40385) && !pPlayer->GetQuestRewardStatus(40386))
     {
-        if (pPlayer->GetQuestRewardStatus(40385) && !pPlayer->GetQuestRewardStatus(40386))
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Board this ship and head to Shalandis Isle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
-        }
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Head to Shalandis Isle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
+
+    if (pPlayer->GetQuestStatus(40387) == QUEST_STATUS_COMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Head to Theramore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(60670, pCreature->GetGUID());
+
     return true;
 }
 
-bool GOSelect_go_ship_to_shalandis(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+bool GossipSelect_npc_breanna_darrowmont(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pGo->GetEntry() == 2010881)
-        {
-            static const WorldLocation m_shalandis(42, 7705.45F, -5668.93F, 3.6f, 4.6f);
-            pPlayer->TeleportTo(m_shalandis);
-        }
+        static const WorldLocation m_shalandis(42, 7705.45F, -5668.93F, 3.6f, 4.6f);
+        pPlayer->TeleportTo(m_shalandis);
     }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        static const WorldLocation m_theramore(1, -3854.16F, -4566.08F, 8.11f, 3.95f);
+            pPlayer->TeleportTo(m_theramore);
+    }
+
     pPlayer->CLOSE_GOSSIP_MENU();
     return false;
 }
+
+bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40386 && !pPlayer->FindNearestCreature(10, 50.0F)) // Scourge!
+    {
+        Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 600 * IN_MILLISECONDS);
+        
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7707.94F, -5675.16F, 3.65F, 1.82F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                Creature* commander = pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                commander->SetWalk(true);
+                commander->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+            }, 1000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7707.94F, -5675.16F, 3.65F, 1.82F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+
+            }, 90000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                Creature* lady_ripper = pQuestGiver->SummonCreature(60673, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                lady_ripper->SetWalk(true);
+                lady_ripper->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+            }, 180000);
+
+    }
+
+    return false;
+}
+
+struct npc_lady_ripperAI : public ScriptedAI
+{
+    npc_lady_ripperAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    bool transformed;
+    bool fightBegun;
+
+    void Reset()
+    {
+        transformed = false;
+        fightBegun = false;
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (!fightBegun)
+        {
+            fightBegun = true;
+        }
+
+        DoMeleeAttackIfReady();
+    }
+    void JustDied(Unit*) override
+    {
+        Creature* frostshiv = m_creature->SummonCreature(60674, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+        frostshiv->SetWalk(true);
+        frostshiv->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+    }
+    void EnterCombat() {}
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_lady_ripper(Creature* _Creature) { return new npc_lady_ripperAI(_Creature); }
+
+struct npc_frostshivAI : public ScriptedAI
+{
+    npc_frostshivAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    bool transformed;
+    bool fightBegun;
+
+    void Reset()
+    {
+        transformed = false;
+        fightBegun = false;
+    }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (!fightBegun)
+        {
+            fightBegun = true;
+            m_creature->MonsterSay("Surrender to the might of the Scourge, Lord Dar'khan will see to your death!");
+        }
+
+        DoMeleeAttackIfReady();
+    }
+    void JustDied(Unit*) override
+    {
+        Creature* nasuna = m_creature->FindNearestCreature(60677, 50.0F);
+        nasuna->MonsterSay("Victory is ours! The enemy's attack is slowing down. Set up the defenses and take position! The next time they come, we will be ready!");
+    }
+    void EnterCombat() {}
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_frostshiv(Creature* _Creature) { return new npc_frostshivAI(_Creature); }
 
 void AddSC_alahthalas()
 {
     Script* newscript;
 
     newscript = new Script;
-    newscript->Name = "go_ship_to_shalandis";
-    newscript->pGOHello = &GOHello_go_ship_to_shalandis;
-    newscript->pGOGossipSelect = &GOSelect_go_ship_to_shalandis;
+    newscript->Name = "npc_frostshiv";
+    newscript->GetAI = &GetAI_npc_frostshiv;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_lady_ripper";
+    newscript->GetAI = &GetAI_npc_lady_ripper;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_nasuna";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_nasuna;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_breanna_darrowmont";
+    newscript->pGossipHello = &GossipHello_npc_breanna_darrowmont;
+    newscript->pGossipSelect = &GossipSelect_npc_breanna_darrowmont;
     newscript->RegisterSelf();
 
     newscript = new Script;
