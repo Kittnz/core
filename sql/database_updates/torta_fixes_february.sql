@@ -20,3 +20,12 @@ update item_template set bonding = 2 where entry = 83414;
 -- Fix Tranquil Mechanical Yeti:
 update item_template set spellid_1 = 46498 where entry = 21277;
 replace into companion_spells values (21277, 26010); 
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1196
+-- You should not be able to interact with Franclorn Forgewright alive:
+update creature_template set type_flags = 2, npc_flags = 3 where entry = 8888;
+update creature_template_addon set auras = "10848 9617 9036" where entry = 8888;
+
+-- Revert non-functional phasing field:
+ALTER TABLE creature_template DROP IF EXISTS phase_quest_action;
+ALTER TABLE gameobject_template DROP IF EXISTS phase_quest_action;
