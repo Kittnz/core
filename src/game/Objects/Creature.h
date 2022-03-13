@@ -166,7 +166,6 @@ struct CreatureInfo
     uint32  school_immune_mask;
     uint32  flags_extra;
     uint32  phase_quest_id;
-    uint32  phase_quest_action;
     uint32  script_id;
 
     // helpers
@@ -991,8 +990,6 @@ class Creature : public Unit
         uint32 GetOriginalEntry() const { return m_originalEntry; }
 
         uint32 GetPhaseQuestId() const { return GetCreatureInfo()->phase_quest_id; }
-        uint32 GetPhaseQuestAction() const { return GetCreatureInfo()->phase_quest_action; }
-
 		std::string GetDebuffs();
 
     protected:
