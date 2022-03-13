@@ -352,7 +352,6 @@ struct GameObjectInfo
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
     uint32 PhaseQuestId;
-    uint32 PhaseQuestAction;
     uint32 ScriptId;
 
     // helpers
