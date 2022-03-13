@@ -7544,11 +7544,8 @@ bool Unit::IsVisibleForInState(WorldObject const* pDetector, WorldObject const* 
 /// returns true if creature can't be seen by alive units
 bool Unit::IsInvisibleForAlive() const
 {
-    // Ghost
-    if (HasAura(9036))
+    if (IsGhost()) 
         return true;
-
-    // TODO: maybe spiritservices also have just an aura
     return IsSpiritService();
 }
 
