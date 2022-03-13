@@ -151,7 +151,7 @@ REPLACE INTO creature_template VALUES
 
 set @gossip_menu_id = 41094; set @magic_number = 60670;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greatings');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Glad you are with us! There is no telling what awaits us on Shalandis, but we cannot let our new allies down.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
