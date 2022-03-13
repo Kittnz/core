@@ -2104,46 +2104,16 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
     if (HasExtraFlag(CREATURE_FLAG_EXTRA_INVISIBLE))
         return false;
 
-    //// TODO: hack for phasing creatures for player's visibility by quest status
-    //uint32 phaseQuestId = GetPhaseQuestId();
-    //int statusAction = GetPhaseQuestAction();
+    // Visilibity based on the quest status:
+    uint32 phaseQuestId = GetPhaseQuestId();
+    if (phaseQuestId)
+    {
+        auto status = pl->GetQuestStatusData(phaseQuestId);
+        if (!status || !status->m_rewarded)
+            return false;
+    }
 
-    //if (phaseQuestId && statusAction)
-    //{
-    //    auto status = pl->GetQuestStatus(phaseQuestId);
-    //    // Phasing //
-    //    if (status) // if 1 = visible // 0 = not-visible // 2 = visible to all (even without quest) until quest completed then is invisible
-    //    {
-    //        switch (status)
-    //        {
-    //        case QUEST_STATUS_INCOMPLETE:
-    //        {
-    //            if (statusAction == 1)
-    //                return true;
-    //            break;
-    //        }
-    //        case QUEST_STATUS_COMPLETE:
-    //        {
-    //            switch (statusAction)
-    //            {
-    //            case 0:
-    //            case 1:
-    //            case 2:
-    //                return false;
-    //                break;
-    //            case 3:
-    //                return true;
-    //                break;
-    //            }
-    //        }
-    //        }
-    //    }
-    //    else if (statusAction == 2)
-    //        return true;
-    //    else return false;
-    //}
-
-    // Live player (or with not release body see live creatures or death creatures with corpse disappearing time > 0
+    // If players is alive or haven't released spirit yet
     if (pl->IsAlive() || pl->GetDeathTimer() > 0)
         return (IsAlive() || m_corpseDecayTimer > 0 || (IsDeadByDefault() && m_deathState == CORPSE));
 
@@ -2159,7 +2129,7 @@ bool Creature::IsVisibleInGridForPlayer(Player const* pl) const
         }
     }
 
-    // Dead player can see ghosts
+    // Dead player can see ghosts:
     if (GetCreatureInfo()->type_flags & CREATURE_TYPEFLAGS_GHOST_VISIBLE)
         return true;
 
