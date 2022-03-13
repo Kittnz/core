@@ -16,3 +16,7 @@ delete from creature_involvedrelation where quest = 3803 and id = 3516;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1154
 update item_template set bonding = 2 where entry = 83414;
+
+-- Fix Tranquil Mechanical Yeti:
+update item_template set spellid_1 = 46498 where entry = 21277;
+replace into companion_spells values (21277, 26010); 
