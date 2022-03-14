@@ -28,9 +28,9 @@ EndContentData */
 #include "scriptPCH.h"
 
 template <typename Functor>
-void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+void DoAfterTime(Creature* pCreature, const uint32 p_time, Functor&& function)
 {
-    player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
+    pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(p_time));
 }
 
 /*######
@@ -109,20 +109,27 @@ bool GossipSelect_npc_tinker_mekkatorque(Player* pPlayer, Creature* pCreature, u
     {
         pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("As someone who has lost their home, I can deeply empathize with the elves.", pPlayer);
+
         if (pPlayer->HasItemCount(83015, 1, false))
         {
             pPlayer->DestroyItemCount(83015, 1, true);
             pPlayer->SaveInventoryAndGoldToDB();
         }
+
         pCreature->HandleEmote(EMOTE_ONESHOT_TALK_NOSHEATHE);
-        DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
-            c->MonsterSayToPlayer("You can count on the gnomes to support the high elven ascension into the Alliance!", player);
-            c->HandleEmote(EMOTE_ONESHOT_YES);
-            player->AddItem(83019, 1);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+        DoAfterTime(pCreature, 3 * IN_MILLISECONDS, [player = pPlayer, creature = pCreature]()
+            {
+                creature->MonsterSayToPlayer("You can count on the gnomes to support the high elven ascension into the Alliance!", player);
+                creature->HandleEmote(EMOTE_ONESHOT_YES);
+
+                player->AddItem(83019, 1);
+
+                creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             });
     }
+
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }

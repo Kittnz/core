@@ -2,13 +2,13 @@
 #include "Utilities/EventProcessor.h"
 
 template <typename Functor>
-void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
 {
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
 template <typename Functor>
-void DoAfterTime(Creature* creature, uint32 p_time, Functor&& function)
+void DoAfterTime(Creature* creature, const uint32 p_time, Functor&& function)
 {
     creature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), creature->m_Events.CalculateTime(p_time));
 }
