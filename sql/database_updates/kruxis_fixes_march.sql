@@ -27,4 +27,4 @@ UPDATE creature SET spawntimesecsmin = 300, spawntimesecsmax = 300 WHERE id IN (
 UPDATE quest_template SET RewItemId1 = 60270, RewItemCount1 = 1, RewChoiceItemId1 = 0, RewChoiceItemCount1 = 0 WHERE entry = 40196;
 
 -- Fixed quest for Dragunovi
-UPDATE quest_template SET Title = 'Krilana\'s Magnificent Quest', Objectives = 'Search the crates in High Elven Wrecks by the northwestern coast of Gilijim Isle for the Tattered Necklace. Put the mournful apparition to rest.' WHERE entry = 40370;
+UPDATE quest_template SET Title = 'Krilana\'s Magnificent Quest', Objectives = 'Search the crates in high elven wrecks by the northwestern coast of Gilijim Isle for the Tattered Necklace. Put the mournful apparition to rest.' WHERE entry = 40370;
