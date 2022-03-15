@@ -27,7 +27,10 @@ UPDATE creature SET spawntimesecsmin = 300, spawntimesecsmax = 300 WHERE id IN (
 UPDATE quest_template SET RewItemId1 = 60270, RewItemCount1 = 1, RewChoiceItemId1 = 0, RewChoiceItemCount1 = 0 WHERE entry = 40196;
 
 -- Fixed quest for Dragunovi
-UPDATE quest_template SET Title = 'Krilana\'s Magnificent Quest', Objectives = 'Search the crates in high elven wrecks by the northwestern coast of Gilijim Isle for the Tattered Necklace. Put the mournful apparition to rest.' WHERE entry = 40370;
+UPDATE quest_template SET Title = 'Krilana\'s Magnificent Quest', Details = 'Hello! You look strong! I need the help of someone strong. I am Krilana. Mama Eliza is taking care of me because my real mom died. She told me that my mother was the only survivor that managed to get to Caelan\'s Rest. In one of her stories, mama mentioned a necklace that my papa gave to my real mom but that it was lost in the wreckage.\n\nExpect for mama\'s story I have nothing to remember my parents. Could, could you please look for it? I heard that it was pretty and that it looked like the sun! I wanted to go and look for it myself, but mama won\'t let me, she says that there are ghosts there.', Objectives = 'Search the crates in high elven wrecks by the northwestern coast of Gilijim Isle for the Tattered Necklace. Put the mournful apparition to rest.' WHERE entry = 40370;
 
 -- Dragunovi — 14.03.2022 at 11:00 pm: delete https://database.turtle-wow.org/?item=80764 as its a defunct version to avoid confusion
 DELETE FROM item_template WHERE entry = 80764;
+
+-- Item fix Dragunovi
+UPDATE item_template SET name = 'Azshara Keeper\'s Staff', required_level = 0 WHERE entry = 60333;
