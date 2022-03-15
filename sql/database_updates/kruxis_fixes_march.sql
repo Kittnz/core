@@ -22,3 +22,6 @@ UPDATE creature_template SET mechanic_immune_mask = 16401 WHERE entry = 8907;
 -- Fix NPCS for Coun
 UPDATE creature_template SET ai_name = "" WHERE entry IN (60664, 60665);
 UPDATE creature SET spawntimesecsmin = 300, spawntimesecsmax = 300 WHERE id IN (60664, 60665); -- Not spawned on prod yet
+
+-- fixed quest for Dragunovi
+UPDATE quest_template SET RewItemId1 = 60270, RewItemCount1 = 1, RewChoiceItemId1 = 0, RewChoiceItemCount1 = 0 WHERE entry = 40196;
