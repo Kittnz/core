@@ -220,4 +220,16 @@ delete from gameobject where id = 2010882;
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
 (2010882, 1, -3947.74, -4626.38, 5.22041, 0.747484, 0, 0, 0.365102, 0.930968, 300, 300, 100, 1, 0, 0);
 
-
+-- Reputation:
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40371;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40376;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40377;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40378;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40379;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40380;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40381;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40382;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40383;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40384;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40385;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40386;
