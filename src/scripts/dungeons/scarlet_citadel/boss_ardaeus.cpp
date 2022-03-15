@@ -421,13 +421,13 @@ bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*ui
 
             try
             {
-                nsArdaeus::DoAfterTime(pCreature, (3 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (3 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
                     });
 
-                nsArdaeus::DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::START), LANG_UNIVERSAL);
@@ -437,7 +437,7 @@ bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*ui
                         }
                     });
 
-                nsArdaeus::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->SetFactionTemplateId(nsArdaeus::FACTION_SCARLET);
                         creature->SetInCombatWithZone();

@@ -12,12 +12,6 @@
 
 namespace nsArdaeus
 {
-    template <typename Functor>
-    void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
-    {
-        pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(uiTime));
-    }
-
     struct Location
     {
         float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};

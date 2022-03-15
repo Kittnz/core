@@ -60,6 +60,18 @@ enum ScarletCitadelData
     MAX_DATA
 };
 
+template <typename Functor>
+void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
+{
+    pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(uiTime));
+}
+
+template <typename Functor>
+void DoAfterTime(Player* pPlayer, const uint32& uiTime, Functor&& function)
+{
+    pPlayer->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pPlayer->m_Events.CalculateTime(uiTime));
+}
+
 class instance_scarlet_citadel : public ScriptedInstance
 {
 public:

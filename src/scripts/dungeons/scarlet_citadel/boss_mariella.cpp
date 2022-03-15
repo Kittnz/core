@@ -742,13 +742,13 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
             try
             {
-                nsMariella::DoAfterTime(pCreature, (1 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (1 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
                     });
 
-                nsMariella::DoAfterTime(pCreature, (2 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (2 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
                         {
@@ -756,13 +756,13 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
                         }
                     });
 
-                nsMariella::DoAfterTime(pCreature, (6 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (6 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsMariella::CombatNotification(nsMariella::CombatNotifications::START), LANG_UNIVERSAL);
                     });
 
-                nsMariella::DoAfterTime(pCreature, (8 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (8 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
                         {
@@ -770,7 +770,7 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
                         }
                     });
 
-                nsMariella::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         creature->SetFactionTemplateId(nsMariella::FACTION_SCARLET);

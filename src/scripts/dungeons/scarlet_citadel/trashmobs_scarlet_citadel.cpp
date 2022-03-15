@@ -174,6 +174,12 @@ CreatureAI* GetAI_npc_citadel_valiant(Creature* pCreature)
     return new npc_citadel_valiant_AI(pCreature);
 }
 
+
+static const float vfTeleportDestinations[][4] =
+{
+    { 232.119843f, 25.800516f, 30.823233f, 3.145022f } // Boss Mariella
+};
+
 struct npc_citadel_anti_exploit_AI : public ScriptedAI
 {
     explicit npc_citadel_anti_exploit_AI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -183,11 +189,14 @@ struct npc_citadel_anti_exploit_AI : public ScriptedAI
 
     uint16 m_uiCheckPulse{};
 
+    static constexpr uint32 PULSE_TIMER{ 500 };
     static constexpr uint32 SPELL_STUN{ 27880 };
+    static constexpr float PERMITTED_AREA{ 20.f };
+    static constexpr auto WARNING_MESSAGE{ "You are not allowed to leave this area." };
 
     void Reset() override
     {
-        m_uiCheckPulse = 500;
+        m_uiCheckPulse = PULSE_TIMER;
 
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetVisibility(VISIBILITY_OFF);
@@ -205,15 +214,36 @@ struct npc_citadel_anti_exploit_AI : public ScriptedAI
                     if (!pPlayer->IsGameMaster() && pPlayer->IsInRange3d(
                         m_creature->GetPositionX(),
                         m_creature->GetPositionY(),
-                        m_creature->GetPositionZ(), 0.0f, 20.f))
+                        m_creature->GetPositionZ(),
+                        0.0f, PERMITTED_AREA))
                     {
-                        static_cast<Unit*>(pPlayer)->NearTeleportTo(232.119843f, 25.800516f, 30.823233f, 3.145022f); // Teleport back to Mariella
                         pPlayer->AddAura(SPELL_STUN);
+
+                        DoAfterTime(pPlayer, (3 * IN_MILLISECONDS), [player = pPlayer]()
+                            {
+                                if (player)
+                                {
+                                    static_cast<Unit*>(player)->NearTeleportTo(
+                                        vfTeleportDestinations[0][0],
+                                        vfTeleportDestinations[0][1],
+                                        vfTeleportDestinations[0][2],
+                                        vfTeleportDestinations[0][3]
+                                    );
+                                }
+                            });
+
+                        DoAfterTime(pPlayer, (5 * IN_MILLISECONDS), [player = pPlayer]()
+                            {
+                                if (player)
+                                {
+                                    ChatHandler(player).SendSysMessage(WARNING_MESSAGE);
+                                }
+                            });
                     }
                 }
             }
 
-            m_uiCheckPulse = 500;
+            m_uiCheckPulse = PULSE_TIMER;
         }
         else
         {
