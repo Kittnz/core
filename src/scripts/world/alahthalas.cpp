@@ -547,9 +547,67 @@ struct npc_frostshivAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_frostshiv(Creature* _Creature) { return new npc_frostshivAI(_Creature); }
 
+
+struct npc_distance_trigger_AI : public ScriptedAI
+{
+    explicit npc_distance_trigger_AI(Creature* pCreature) : ScriptedAI(pCreature) { npc_distance_trigger_AI::Reset(); }
+
+    uint16 m_uiCheckPulse{};
+
+    static constexpr uint32 PULSE_TIMER{ 500 };
+    static constexpr uint32 SPELL_STUN{ 27880 };
+    static constexpr float PERMITTED_AREA{ 100.F };
+
+    void Reset() override
+    {
+        m_uiCheckPulse = PULSE_TIMER;
+
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetVisibility(VISIBILITY_OFF);
+    }
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiCheckPulse < uiDiff)
+        {
+            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& player : list)
+            {
+                if (Player * pPlayer{ player.getSource() })
+                {
+                    if (!pPlayer->IsGameMaster() && !pPlayer->IsInRange3d(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, PERMITTED_AREA))
+                    {
+                        pPlayer->AddAura(SPELL_STUN);
+
+                        DoAfterTime(pPlayer, (3 * IN_MILLISECONDS), [player = pPlayer]()
+                            {
+                                if (player)
+                                    static_cast<Unit*>(player)->NearTeleportTo(7705.45F, -5668.93F, 3.6f, 4.6f);
+                            });
+
+                    }
+                }
+            }
+
+            m_uiCheckPulse = PULSE_TIMER;
+        }
+        else
+        {
+            m_uiCheckPulse -= uiDiff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_distance_trigger(Creature* pCreature) { return new npc_distance_trigger_AI(pCreature); }
+
 void AddSC_alahthalas()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_distance_trigger";
+    newscript->GetAI = &GetAI_npc_distance_trigger;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_frostshiv";
