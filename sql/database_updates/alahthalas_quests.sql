@@ -232,7 +232,8 @@ update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry =
 update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40383;
 update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40384;
 update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40385;
-update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40386;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40386;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40387;
 
 -- Dummy:
 replace into creature_template values (81264, 6908, 0, 0, 0, 'Shalandis Isle: Distance Trigger', '', 0, 1, 1, 1, 1, 0, 0, 0, 35, 0, 0.91, 1.14286, 0.2, 20, 5, 0, 0, 0, 7, 7, 0, 290, 1, 2000, 2200, 1, 33554432, 0, 7, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 5242886, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 'NullAI', 0, 4, 0, 0, 3, 0, 0, 0, 2147483648, 0, 0, 0, 'npc_distance_trigger');
