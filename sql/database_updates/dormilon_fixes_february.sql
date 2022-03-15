@@ -51,8 +51,8 @@ delete from creature where id = 60428;
 delete from creature_template where entry = 60428;
 REPLACE INTO gameobject_template VALUES
 (2010883, 2, 236, 'Corrupted Felstone', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_felstone');
-delete from gameobject where id = 2010883 and position_x = 3536.35;
-delete from gameobject where id = 181174 and position_x = 3536.35;
+delete from gameobject where id = 2010883 and position_x between 3536.3 and 3536.4;
+delete from gameobject where id = 181174 and position_x between 3536.3 and 3536.4;
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
 (2010883, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0),
 (181174, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0);
