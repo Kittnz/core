@@ -95,41 +95,49 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
     return false;
 }
 
-bool GossipHello_npc_felstone(Player* pPlayer, Creature* pCreature)
+bool GOHello_go_felstone(Player* pPlayer, GameObject* pGo)
 {
     GameObject* menu_holder = pPlayer->FindNearestGameObject(2010698, 30.0F);
     GameObject* event_running = pPlayer->FindNearestGameObject(2010699, 80.0F);
-    if (pPlayer->GetQuestStatus(40377) == QUEST_STATUS_INCOMPLETE && !menu_holder && !event_running)
+    if (pGo->GetEntry() == 2010883)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        if (pPlayer->GetQuestStatus(40377) == QUEST_STATUS_INCOMPLETE && !menu_holder && !event_running)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
+        }
     }
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
     return true;
 }
 
-bool GossipSelect_npc_felstone(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+bool GOSelect_go_felstone(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
 {
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-        pPlayer->SummonGameObject(2010698, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->SummonCreature(60426, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            npc->SummonCreature(60427, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            });
+        if (pGo->GetEntry() == 2010883)
+        {
+            pPlayer->SummonGameObject(2010698, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+            {
+                DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                    gob->SummonCreature(60426, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                    gob->SummonCreature(60427, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                    });
 
-        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->SummonCreature(60426, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            npc->SummonCreature(60427, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            });
+                DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                    gob->SummonCreature(60426, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                    gob->SummonCreature(60427, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                    });
 
-        DoAfterTime(pPlayer, 81 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->SummonCreature(60425, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            if (Creature* dralox_felstar = player->FindNearestCreature(60425, 30.0F))
-                dralox_felstar->MonsterSayToPlayer("Get away from that Felstone! It is crucial to my plans!", player);
-            });
+                DoAfterTime(pPlayer, 81 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                    gob->SummonCreature(60425, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+                    if (Creature* dralox_felstar = player->FindNearestCreature(60425, 30.0F))
+                        dralox_felstar->MonsterSayToPlayer("Get away from that Felstone! It is crucial to my plans!", player);
+                    });
+            }
+        }
     }
     pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
+    return false;
 }
 
 struct npc_dralox_felstarAI : public ScriptedAI
@@ -152,6 +160,7 @@ struct npc_dralox_felstarAI : public ScriptedAI
                 mob_one->MonsterSay("You do not stand alone friend! Let's take this creature down!");
             }
         }
+        DoMeleeAttackIfReady();
     }
     void JustDied(Unit*) override
     {
@@ -590,9 +599,9 @@ void AddSC_alahthalas()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "npc_felstone";
-    newscript->pGossipHello = &GossipHello_npc_felstone;
-    newscript->pGossipSelect = &GossipSelect_npc_felstone;
+    newscript->Name = "go_felstone";
+    newscript->pGOHello = &GOHello_go_felstone;
+    newscript->pGOGossipSelect = &GOSelect_go_felstone;
     newscript->RegisterSelf();
 
 }

@@ -46,3 +46,13 @@ update quest_template set details = 'Looks like you indeed require my services. 
 update quest_template set details = 'As if I had nothing better to do… Oh, you again? Well then, this time my services will cost you much more than just some lousy malachite. Fashion, as you know, demands sacrifices and dedication.\n\nI will not be waiting long for your delivery. You come too late – demands shall be greater.\n\nMake sure that goods you bring will be of perfect condition. No less.', objectives = 'Bring 10 Wool Cloth, 5 Medium Leather, 5 Shadowgems and 5 Small Furry Paw to Fashionista Apprentice.', offerrewardtext = 'Finally, something of value. Feel free to knock yourself out. Yes, have a nice day.', requestitemstext = 'Those materials better be in perfect condition. Well? Do you have it?', reqitemcount1 = 10, rewxp = 375 where entry = 60031;
 -- Quest 'Food for Baby' text fixed:
 update quest_template set details = 'Sprite darters are omnivores--that means they eat both meat and vegetation. If your egg here\'s gonna hatch, we best be prepared. Some good eats for these little guys are flanks of meat, raw and juicy, believe it or not. I was never able to find out why, but it has somethin\' to do with Elune\'s plan for the elves... maybe they were to be protectors or somethin\'. I don\'t know.\n\nI\'ll take care of the egg for now. Why don\'t you get me some good Silvermane Stalker flanks for it to eat when it hatches.' where entry = 4297;
+-- NPC 'Corrupted Felstone' changed to GO:
+delete from creature where id = 60428;
+delete from creature_template where entry = 60428;
+REPLACE INTO gameobject_template VALUES
+(2010883, 2, 236, 'Corrupted Felstone', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_felstone');
+delete from gameobject where id = 2010883 and position_x = 3536.35;
+delete from gameobject where id = 181174 and position_x = 3536.35;
+REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+(2010883, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0),
+(181174, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0);
