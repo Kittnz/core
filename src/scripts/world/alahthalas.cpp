@@ -440,30 +440,30 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
         
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7707.94F, -5675.16F, 3.65F, 1.82F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                Creature* commander = pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7707.94F, -5675.16F, 3.65F, 1.82F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_CORPSE_DESPAWN);
+                Creature* commander = pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
                 commander->SetWalk(true);
                 commander->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
             }, 1000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7707.94F, -5675.16F, 3.65F, 1.82F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-                pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7707.94F, -5675.16F, 3.65F, 1.82F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
 
             }, 90000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                Creature* lady_ripper = pQuestGiver->SummonCreature(60673, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                Creature* lady_ripper = pQuestGiver->SummonCreature(60673, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
                 lady_ripper->SetWalk(true);
                 lady_ripper->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
             }, 180000);
