@@ -278,6 +278,8 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
 {
     if (!tyrande) return false;
 
+    std::string playerName = pPlayer->GetName();
+
     if (pQuest->GetQuestId() == 40383 && !pPlayer->FindNearestCreature(10, 50.0F))
     {
         Creature* controller = tyrande->SummonCreature(10, tyrande->GetPositionX(), tyrande->GetPositionY(), tyrande->GetPositionZ(), tyrande->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
@@ -367,9 +369,9 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 vestia->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 125000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, playerName]()
             {
-                tyrande->MonsterSay("It means the next Moonwell is needed, in Alah'thalas. Perhaps in time, it will guide some of them back to Elune's light, but more importantly, it will give their people a second chance. If Lady Vereesa Windrunner agrees, then I would like you to be present at the creation of the Moonwell. I shall send Priestess Alunasha to establish the well. She has shown sympathy to the plight of the Quel'dorei.");
+                tyrande->PMonsterSay("Yes Priestess. It means the next Moonwell is needed, in Alah'thalas. Perhaps in time, it will guide some of them back to Elune's light, but more importantly, it will give their people a second chance. %s, you have done both of our people a great service. If Lady Vereesa Windrunner agrees, then I would like you to be present at the creation of the Moonwell. I shall send Priestess Alunasha to establish the well. She has shown sympathy to the plight of the Quel'dorei.", playerName.c_str()); 
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 130000);
 
