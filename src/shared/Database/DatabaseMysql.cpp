@@ -293,11 +293,26 @@ bool MySQLConnection::ExecuteMultiline(const char* sql)
     {
         uint32 lErrno = mysql_errno(mMysql);
 
+        const char* error = mysql_error(mMysql);
         sLog.outErrorDb("SQL: %s", sql);
-        sLog.outErrorDb("[%u] %s", lErrno, mysql_error(mMysql));
+        sLog.outErrorDb("[%u] %s", lErrno, error);
 
-        if (HandleMySQLError(lErrno)) // If error is handled, just try again
-            return Execute(sql);
+        switch (lErrno)
+        {
+            case CR_SERVER_GONE_ERROR:
+            case CR_SERVER_LOST:
+    #if !(MARIADB_VERSION_ID >= 100200)
+            case CR_INVALID_CONN_HANDLE:
+    #endif
+            case CR_SERVER_LOST_EXTENDED:
+            {
+                mysql_close(mMysql);
+                Reconnect();
+                return Execute(sql);
+            }
+            default:
+                sLog.out(LOG_AUTOUPDATER, "[FAIL] MySQL Error %u, message: %s.\nSQL: %s", lErrno, error, sql);
+        }
         return false;
     }
     else

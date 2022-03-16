@@ -29,3 +29,5 @@ update creature_template_addon set auras = "10848 9617 9036" where entry = 8888;
 -- Revert non-functional phasing field:
 ALTER TABLE creature_template DROP IF EXISTS phase_quest_action;
 ALTER TABLE gameobject_template DROP IF EXISTS phase_quest_action;
+
+update quest_template set objectives = 'Gather 2 Automaton Legs, 2 Automaton arms, and an Automaton Head from the Bael Modan Digsite.' where entry = 40130;

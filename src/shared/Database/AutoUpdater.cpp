@@ -11,6 +11,7 @@
 #include <iterator>
 #include <istream>
 #include <locale>
+#include <iostream>
 
 using namespace std::filesystem;
 
@@ -139,6 +140,8 @@ namespace DBUpdater
             if (!ExecuteUpdate(update, targetDatabase))
             {
                 sLog.outError("[DB Auto-Updater] Migration %s with hash %s failed to apply.", update.Name.c_str(), update.Hash.c_str());
+                std::string line;
+                std::getline(std::cin, line);
                 return false;
            }
         }
@@ -148,6 +151,7 @@ namespace DBUpdater
     bool AutoUpdater::ExecuteUpdate(const FileMigration& migration, DatabaseType* targetDatabase) const
     {
         sLog.outInfo("[DB Auto-Updater] Attempting to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
+        sLog.out(LOG_AUTOUPDATER, "[INFO] Attempting to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
         std::string sqlString{ migration.FileData.begin(), migration.FileData.end() };
 
         if (!targetDatabase->BeginTransaction())
@@ -155,9 +159,15 @@ namespace DBUpdater
 
         targetDatabase->Execute(sqlString.c_str(), true);
 
-        targetDatabase->DirectPExecute("INSERT INTO `%s` (`Name`, `Hash`, `AppliedAt`) VALUES (\'%s\', \'%s\', NOW());", MigrationTable, migration.Name.c_str(), migration.Hash.c_str());
+        targetDatabase->PExecute("INSERT INTO `%s` (`Name`, `Hash`, `AppliedAt`) VALUES (\'%s\', \'%s\', NOW());", MigrationTable, migration.Name.c_str(), migration.Hash.c_str());
 
-        return targetDatabase->CommitTransactionDirect();
+        bool res = targetDatabase->CommitTransactionDirect();
+
+        if (res)
+            sLog.out(LOG_AUTOUPDATER, "[SUCCESS] Executed update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
+        else
+            sLog.out(LOG_AUTOUPDATER, "[FAIL] Failed to execute update %s, hash %s.", migration.Name.c_str(), migration.Hash.c_str());
+        return res;
     }
 
     bool AutoUpdater::CalculateFileHash(const std::string& fileName, std::string& hexResult, std::optional<std::reference_wrapper<std::vector<uint8>>> fileData) const

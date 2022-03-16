@@ -2082,7 +2082,7 @@ class Player final: public Unit
         void SendAutoRepeatCancel() const;
         void SendFeignDeathResisted() const;
         void SendExplorationExperience(uint32 Area, uint32 Experience) const;
-        void SendFactionAtWar(const uint32 reputationId, const bool apply) const;
+        void SendFactionAtWar(uint32 reputationId, bool apply) const;
         AutoAttackCheckResult CanAutoAttackTarget(Unit const*) const override;
 
         // Cannot be detected by creature (Should be tested in AI::MoveInLineOfSight)

@@ -47,7 +47,7 @@ replace into creature_involvedrelation (id, quest) values (80877, 40376);
 
 -- Breaking the Felstar --
 delete from quest_template where entry = 40377;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40376,40377,2,2040,60,60,0,0,'Breaking the Felstar','With the pleasantries out of the way, it is time I let you in on our next move. I knew from the start that gaining the support of the Kaldorei would be hard, given our shared history. But we must show them that we are not the enemy.\n\nThat is why I have sent a detachment of my best rangers to assist them, and they were successful in uncovering that a powerful Satyr is plotting to invade Ashenvale from Felwood. We cannot allow that to happen, which is why I have arranged for you to meet my rangers near the border of Felwood, north of Raynewood\'s Retreat.\n\nHelp them stop this attack and make sure to take proof of your victory to the Ashylah Starcaller in Darnassus. She is an ally to our cause.','Rendezvous with Rangers and defeat the Satyr threat to Ashenvale. Take the Satyr horns to Ashylah Starcaller in Darnassus.','What can I do for you?','Dra\'lox Felstar is dead? It appears that my decision to give Quel\'Dorei a chance proved fruitful. Now it is my turn to return the favor.',60148,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40376,40377,2,2040,60,60,0,0,'Breaking the Felstar','With the pleasantries out of the way, it is time I let you in on our next move. I knew from the start that gaining the support of the Kaldorei would be hard, given our shared history. But we must show them that we are not the enemy.\n\nThat is why I have sent a detachment of my best rangers to assist them, and they were successful in uncovering that a powerful Satyr is plotting to invade Ashenvale from Felwood. We cannot allow that to happen, which is why I have arranged for you to meet my rangers near the border of Felwood, north of Raynewood\'s Retreat.\n\nHelp them stop this attack and make sure to take proof of your victory to the Ashylah Starcaller in Darnassus. She is an ally to our cause.','Defeat the Satyr threat to Ashenvale. Take the Satyr horns to Ashylah Starcaller in Darnassus.','What can I do for you?','Dra\'lox Felstar is dead? It appears that my decision to give Quel\'Dorei a chance proved fruitful. Now it is my turn to return the favor.',60148,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (80877, 40377);
 replace into creature_involvedrelation (id, quest) values (80242, 40377);
@@ -94,7 +94,7 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation (id, quest) values (7878, 40382);
 replace into creature_involvedrelation (id, quest) values (7878, 40382);
 
-replace into creature_template (entry, name, display_id1, unit_flags, flags_extra) values (10, 'invisible_npc-controller', 328, 33554434, 128);
+delete from creature_template where entry = 10;
 
 delete from creature_template where entry in (60431,60666);
 REPLACE INTO creature_template VALUES
@@ -137,14 +137,14 @@ delete from gameobject where guid = 4013822;
 
 -- Shalandis Isle --
 delete from quest_template where entry = 40385;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40384,40385,2,2040,60,60,0,0,'Shalandis Isle','The time has come. The Kaldorei fleet has arrived and is making its final preparations, and the Theramore fleet should also be ready. Find a Theramore officer and board the ship as its vanguard.\n\nThere is no doubt that the Scourge will attack as soon as they see us, and having you onboard will undoubtedly improve our chances. Go and do what you must for the Alliance!','Speak to the Theramore Officer and board the transport ship to Shalandis Isle.','How may I help?','We have been waiting for you. We are ready to depart, on your word, but make sure you bring all the necessary equipment. There is no telling what awaits us there.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40384,40385,2,2040,60,60,0,0,'Shalandis Isle','The time has come. The Kaldorei fleet has arrived and is making its final preparations, and the Theramore fleet should also be ready. Find a Theramore officer and board the ship as its vanguard.\n\nThere is no doubt that the Scourge will attack as soon as they see us, and having you onboard will undoubtedly improve our chances. Go and do what you must for the Alliance!','Speak to the Captain Darrowmont and board the transport ship to Shalandis Isle.','How may I help?','We have been waiting for you. We are ready to depart, on your word, but make sure you bring all the necessary equipment. There is no telling what awaits us there.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (80877, 40385);
 replace into creature_involvedrelation (id, quest) values (60670, 40385);
 
 delete from creature_template where entry in (60670,60671,60672,60677);
 REPLACE INTO creature_template VALUES
-(60670, 4837, 0, 0, 0, 'Captain Breanna Darrowmont', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 150, 3, 1, 1.14286, 1, 8, 5, 40, 1, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 3385, 0, 0, 0, 0, 0, 0, 'npc_breanna_darrowmont'),
+(60670, 4837, 0, 0, 0, 'Captain Darrowmont', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 150, 3, 1, 1.14286, 1, 8, 5, 40, 1, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 3385, 0, 0, 0, 0, 0, 0, 'npc_breanna_darrowmont'),
 (60671, 4679, 1858, 0, 0, 'Theramore Marine', '', 0, 60, 60, 3800, 3800, 0, 0, 3252, 150, 0, 1, 1.14286, 0, 8, 5, 40, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 3385, 0, 0, 0, 0, 0, 0, ''),
 (60672, 18220, 18221, 18222, 18223, 'Alah\'thalas Ranger', '', 0, 60, 60, 3500, 3500, 0, 0, 3252, 231, 0, 1, 1.14286, 0, 8, 5, 40, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 80216, 0, 0, 0, 0, 0, 0, ''),
 (60677, 18214, 0, 0, 0, 'Ranger-Captain Nasuna Dawnbringer', NULL, 0, 60, 60, 1000000, 1000000, 0, 0, 4391, 231, 2, 1, 1.14286, 0, 20, 5, 40, 1, 1, 1, 2, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 10824, 0, 0, 0, 0, 0, 0, 0, 0, 15547, 12057, 11978, 0, 108240, 0, 139, 187, 'EventAI', 0, 3, 0, 0, 3, 10824, 0, 0, 0, 0, 0, 0, 'npc_nasuna');
@@ -157,7 +157,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 -- Scourge! --
 delete from quest_template where entry = 40386;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40385,40386,2,2040,60,60,0,0,'Scourge!','This is a disaster! No matter how many we slay, they keep coming! Our Rangers will secure the ship and provide ranged support, but we need your help before they overrun us!','Defend Shalandis Isle.','Yes?','With the beach secured and our fortifications up, we have finally made a first step in reclaiming these lands. But we need to be careful. Their commander mentioned someone named Lord Dar\'Khan.\n\nCould he be their leader? And why does that name feel so familiar? Anyways, we won\'t get much from overthinking. Let us wait for the rest of the reinforcements before continuing our campaign in Quel\'thalas.',0,0,0,0,0,0,0,0,60673,1,60674,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40385,40386,2,2040,60,60,0,0,'Scourge!','This is a disaster! No matter how many we slay, they keep coming!\n\nOur Rangers will secure the ship and provide ranged support, but we need your help before they overrun us!','Defend Shalandis Isle.','Yes?','With the beach secured and our fortifications up, we have finally made a first step in reclaiming these lands. But we need to be careful. Their commander mentioned someone named Lord Dar\'Khan.\n\nCould he be their leader? And why does that name feel so familiar? Anyways, we won\'t get much from overthinking. Let us wait for the rest of the reinforcements before continuing our campaign in Quel\'thalas.',0,0,0,0,0,0,0,0,60673,1,60674,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 delete from creature_questrelation where quest = 40386;
 delete from creature_involvedrelation where quest = 40386;
@@ -171,7 +171,7 @@ REPLACE INTO creature_template VALUES
 (60676, 370, 0, 0, 0, 'Scourge Commander', NULL, 0, 60, 60, 4000, 4000, 0, 0, 3640, 21, 0, 1.24286, 1.24286, 0, 20, 5, 0, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 6, 0, 60675, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 180, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 delete from creature where id in (60670,60671,60672,60677,60673,60674,60675);
-REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
+REPLACE INTO creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES
 -- (60670, 0, 0, 0, 1, 0, 3385, -3921.28, -4601.84, 18.1754, 3.88645, 25, 25, 0, 100, 100, 0, 0, 0),
 (60671, 0, 0, 0, 1, 0, 3385, -3936.04, -4608.02, 15.9268, 3.92441, 25, 25, 0, 100, 100, 0, 0, 0),
 (60671, 0, 0, 0, 1, 0, 3385, -3957.12, -4635.27, 11.7756, 0.770602, 25, 25, 0, 100, 100, 0, 0, 0),
@@ -196,7 +196,7 @@ REPLACE INTO `creature` (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipm
 (60672, 0, 0, 0, 42, 0, 0, 7697.72, -5657.15, 3.790160, 5.37274, 300, 300, 0, 100, 100, 0, 0, 0),
 (60672, 0, 0, 0, 42, 0, 0, 7701.75, -5654.08, 3.667410, 5.28634, 300, 300, 0, 100, 100, 0, 0, 0);
 
-REPLACE INTO `creature_linking_template` (`entry`, `map`, `master_entry`, `flag`, `search_range`) VALUES
+REPLACE INTO creature_linking_template (entry, map, master_entry, flag, search_range) VALUES
 (60675, 42, 60676, 512, 30);
 
 -- Returning to Alah'thalas --
@@ -217,7 +217,41 @@ REPLACE INTO gameobject_template VALUES
 
 delete from gameobject where id = 2010881;
 delete from gameobject where id = 2010882;
-REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+REPLACE INTO gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES
 (2010882, 1, -3947.74, -4626.38, 5.22041, 0.747484, 0, 0, 0.365102, 0.930968, 300, 300, 100, 1, 0, 0);
 
+-- Reputation:
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40371;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40376;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40377;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40378;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40379;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40380;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40381;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40382;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40383;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40384;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40385;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40386;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40387;
 
+-- Dummy:
+replace into creature_template values (81264, 6908, 0, 0, 0, 'Shalandis Isle: Distance Trigger', '', 0, 1, 1, 1, 1, 0, 0, 0, 35, 0, 0.91, 1.14286, 0.2, 20, 5, 0, 0, 0, 7, 7, 0, 290, 1, 2000, 2200, 1, 33554432, 0, 7, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 5242886, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 'NullAI', 0, 4, 0, 0, 3, 0, 0, 0, 2147483648, 0, 0, 0, 'npc_distance_trigger');
+delete from creature where id = 81264;
+replace into creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) values (81264, 0, 0, 0, 42, 0, 0, 7699.79, -5652.43, 3.63838, 4.85535, 25, 25, 0, 100, 100, 0, 0, 0);
+
+-- Spawn Captain:
+delete from creature where id = 60670;
+replace into creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES (60670, 0, 0, 0, 1, 0, 3385, -3929.98, -4638.62, 9.39826, 5.46738, 25, 25, 0, 100, 100, 0, 0, 0);
+replace into creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES (60670, 0, 0, 0, 42, 0, 3385, 7659.05, -5606, 13.3265, 0.603108, 25, 25, 0, 100, 100, 0, 0, 0);
+
+-- NPC 'Corrupted Felstone' changed to GO:
+delete from creature where id = 60428;
+delete from creature_template where entry = 60428;
+REPLACE INTO gameobject_template VALUES
+(2010883, 2, 26308, 'Corrupted Felstone', 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_felstone');
+delete from gameobject where id = 2010883 and position_x between 3536.3 and 3536.4;
+delete from gameobject where id = 181174 and position_x between 3536.3 and 3536.4;
+REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+(2010883, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0),
+(181174, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0);
