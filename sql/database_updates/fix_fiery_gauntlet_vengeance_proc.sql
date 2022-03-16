@@ -1,0 +1,1 @@
+UPDATE `spell_mod` SET `AttributesEx3` = -1 WHERE `Id` = 7714 OR `Id` = 7712;

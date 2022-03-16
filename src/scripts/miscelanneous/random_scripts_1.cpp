@@ -327,8 +327,7 @@ bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTarget
     switch (pItem->GetEntry())
     {
     case 51021: pPlayer->SummonGameObject(1000055, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Speedy's Jukebox
-    case 10585: pPlayer->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76
-    case 70043: pPlayer->PlayDirectMusic(30218, pPlayer); break; // Tonal Stone: Kamio
+    case 10585: pPlayer->SummonGameObject(1000077, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 600, true); break; // Goblin Radio KABOOM-Box X23B76    
     }
     return true;
 }
@@ -374,7 +373,6 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     case 50436: displayid = 7803; break; // Smolderthorn Berserker
     case 50437: displayid = 4923; break; // Naga Explorer
     case 50438: displayid = 11263; break; // Naga Siren 
-    case 53008: displayid = (18065 + urand(0, 4)); break; // Ogre
     case 50408: displayid = ((male) ? 150 : 876);  break; // Dryad
     case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
     case 80694: // Scourge
@@ -403,6 +401,13 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     {
         int models[4] = { 487, 383, 384, 491 };
         int modelid = rand() % 4;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    case 53008: // Two-headed Ogre
+    {
+        int models[7] = { 18065, 18066, 18067, 18068, 18069, 18070, 18182 };
+        int modelid = rand() % 7;
         displayid = static_cast<uint32>(models[modelid]);
         break;
     }
@@ -636,7 +641,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         race = RACE_GNOME;
         break;
     case 50605: // Dwarf
-        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_MAGE || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_SHAMAN)
+        if (pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_WARLOCK || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
@@ -681,7 +686,7 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
         race = RACE_TAUREN;
         break;
     case 50610: // Undead
-        if (pPlayer->GetClass() == CLASS_PALADIN || pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_SHAMAN || pPlayer->GetClass() == CLASS_HUNTER)
+        if (pPlayer->GetClass() == CLASS_PALADIN || pPlayer->GetClass() == CLASS_DRUID || pPlayer->GetClass() == CLASS_SHAMAN)
         {
             pPlayer->GetSession()->SendNotification("This race does not support your class.");
             return false;
@@ -1850,19 +1855,6 @@ struct soulwell_clicks : public GameObjectAI
 GameObjectAI* GetAI_soulwell_clicks(GameObject* gameobject)
 {
     return new soulwell_clicks(gameobject);
-}
-
-bool ItemUseSpell_item_picnic_umbrella(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    float dis{ 2.0F };
-    float x, y, z;
-    pPlayer->GetSafePosition(x, y, z);
-    x += dis * cos(pPlayer->GetOrientation());
-    y += dis * sin(pPlayer->GetOrientation());
-
-    pPlayer->SummonGameObject(2004896, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
-    pPlayer->SummonGameObject(2004895, x + 0.5, y + 0.5, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
-    return false;
 }
 
 bool GossipHello_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creature)
@@ -6266,7 +6258,6 @@ constexpr auto QUEST_SEEING_WHAT_HAPPENS_A = 2946;
 constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
 constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
 constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
-constexpr auto QUEST_THE_STONE_WATCHER = 2954;
 
 bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 {
@@ -6279,20 +6270,18 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
         if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
             showQuestMenu = true;
 
-
-    if (player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_A)->m_rewarded || player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_H)->m_rewarded && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f))
-        {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
-        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-        }
-    
-
     // Support vanilla quest chain for lower levels.
     if (showQuestMenu)
     {
         player->PrepareQuestMenu(pGo->GetObjectGuid());
         player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
         return true;
+    }
+
+    if (player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_A) || player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_H) && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f) && !pGo->FindNearestCreature(80970, 10.f))
+    {
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
+        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
     }
 
     // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
@@ -6303,7 +6292,6 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
             player->PrepareQuestMenu(pGo->GetObjectGuid());
         else
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
     }
     player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
     
@@ -6312,12 +6300,9 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 
 bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
 {
-    switch (uiAction)
-    {
-        case GOSSIP_ACTION_INFO_DEF + 2:
-            pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
-            break;
-    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+        pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
+
     player->CLOSE_GOSSIP_MENU();
     return true;
 }
@@ -6368,8 +6353,6 @@ bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Ques
             c->SetInCombatWith(player); // Used to pass along event invoker.
             pGo->UseDoorOrButton();
         }
-
-
     }
     return false;
 }
@@ -7656,11 +7639,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "dinka_dinker";
     newscript->pGossipHello = &GossipHello_DinkaDinker;
     newscript->pGossipSelect = &GossipSelect_DinkaDinker;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_picnic_umbrella";
-    newscript->pItemUseSpell = &ItemUseSpell_item_picnic_umbrella;
     newscript->RegisterSelf();
 
     newscript = new Script;

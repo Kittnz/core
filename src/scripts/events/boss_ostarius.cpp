@@ -675,6 +675,10 @@ struct mob_uldum_constructAI : public ScriptedAI
         {
             if (channelCheck_Timer <= diff)
             {
+                // Due to vanilla debuff limits, players can exploit this phase by getting full stacks 
+                // of scans and never be affected by conflag. This ensures that we make room for it.
+                me->GetVictim()->RemoveAurasDueToSpell(SPELL_MORTALITY_SCAN);
+
                 DoCast(me->GetVictim(), SPELL_CONFLAG, true);
                 channelCheck_Timer = 11 * IN_MILLISECONDS;
                 channelStarted = false;
@@ -819,8 +823,8 @@ struct go_uldum_portalAI : public GameObjectAI
                 me->GetPositionY(),
                 ground_z,
                 me->GetOrientation(),
-                TEMPSUMMON_CORPSE_TIMED_DESPAWN,
-                5000
+                TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, // despawns after a specified time (out of combat) OR when the creature dies
+                300
             );
 
             Player* randomPlayer = GetNearbyEnemyPlayer(spawn, 300.0f);
@@ -928,10 +932,12 @@ struct npc_uldum_pedestalAI : public ScriptedAI
 
     uint32 InitialDelay_Timer;
     EventMap m_events;
+    uint8 failedSearches;
 
     void SetDefaults()
     {
         m_events.Reset();
+        failedSearches = 0;
     }
 
     void Reset()
@@ -941,12 +947,34 @@ struct npc_uldum_pedestalAI : public ScriptedAI
         m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_1, Seconds(2));
     }
 
+    void TogglePedestal()
+    {
+        auto ped = me->FindNearestGameObject(GOB_PEDESTAL, 100.0f);
+        if (ped)
+        {
+            if (ped->getLootState() == GO_READY || ped->getLootState() == GO_JUST_DEACTIVATED)
+                ped->UseDoorOrButton();
+            else
+                ped->ResetDoorOrButton();
+        }
+    }
+
     void UpdateAI(const uint32 diff) override
     {
         m_events.Update(diff);
 
         if (!me->GetVictim())
+        {
+            failedSearches++;
+
+            if (failedSearches >= 20)
+            {
+                TogglePedestal();
+                me->DeleteLater();
+            }
+
             return;
+        }
 
         while (uint32 eventId = m_events.ExecuteEvent())
         {

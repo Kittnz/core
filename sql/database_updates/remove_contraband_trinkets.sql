@@ -1,0 +1,1 @@
+UPDATE `item_template` SET required_level = 55 WHERE entry IN (13209, 19812);

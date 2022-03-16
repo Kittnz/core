@@ -65,7 +65,7 @@ static const Location vfLastWaypoint[] =
 
 struct npc_areatriggerAI : public ScriptedAI
 {
-    npc_areatriggerAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_areatriggerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         npc_areatriggerAI::Reset();
     }
@@ -107,7 +107,7 @@ struct npc_areatriggerAI : public ScriptedAI
             Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
             for (const auto& i : list)
             {
-                if (i.getSource()->IsInRange3d(151.724518f, 2.139748f, 18.007f, 0.0f, 7.0f))
+                if (i.getSource()->IsInRange3d(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, 7.0f))
                 {
                     SummonAdds();
                 }
@@ -130,9 +130,9 @@ CreatureAI* GetAI_npc_areatrigger(Creature* pCreature)
 // Trash OUTSIDE
 struct npc_citadel_inquisitor_AI : public ScriptedAI
 {
-    npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        Reset();
+        npc_citadel_inquisitor_AI::Reset();
     }
 
     void Reset() override
@@ -153,9 +153,9 @@ CreatureAI* GetAI_npc_citadel_inquisitor(Creature* pCreature)
 
 struct npc_citadel_valiant_AI : public ScriptedAI
 {
-    npc_citadel_valiant_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_citadel_valiant_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        Reset();
+        npc_citadel_valiant_AI::Reset();
     }
 
     void Reset() override
@@ -172,6 +172,89 @@ struct npc_citadel_valiant_AI : public ScriptedAI
 CreatureAI* GetAI_npc_citadel_valiant(Creature* pCreature)
 {
     return new npc_citadel_valiant_AI(pCreature);
+}
+
+
+static const float vfTeleportDestinations[][4] =
+{
+    { 232.119843f, 25.800516f, 30.823233f, 3.145022f } // Boss Mariella
+};
+
+struct npc_citadel_anti_exploit_AI : public ScriptedAI
+{
+    explicit npc_citadel_anti_exploit_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_citadel_anti_exploit_AI::Reset();
+    }
+
+    uint16 m_uiCheckPulse{};
+
+    static constexpr uint32 PULSE_TIMER{ 500 };
+    static constexpr uint32 SPELL_STUN{ 27880 };
+    static constexpr float PERMITTED_AREA{ 20.f };
+    static constexpr auto WARNING_MESSAGE{ "You are not allowed to leave this area." };
+
+    void Reset() override
+    {
+        m_uiCheckPulse = PULSE_TIMER;
+
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetVisibility(VISIBILITY_OFF);
+    }
+
+    void UpdateAI(uint32 const uiDiff) override
+    {
+        if (m_uiCheckPulse < uiDiff)
+        {
+            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& player : list)
+            {
+                if (Player* pPlayer{ player.getSource() })
+                {
+                    if (!pPlayer->IsGameMaster() && pPlayer->IsInRange3d(
+                        m_creature->GetPositionX(),
+                        m_creature->GetPositionY(),
+                        m_creature->GetPositionZ(),
+                        0.0f, PERMITTED_AREA))
+                    {
+                        pPlayer->AddAura(SPELL_STUN);
+
+                        DoAfterTime(pPlayer, (3 * IN_MILLISECONDS), [player = pPlayer]()
+                            {
+                                if (player)
+                                {
+                                    static_cast<Unit*>(player)->NearTeleportTo(
+                                        vfTeleportDestinations[0][0],
+                                        vfTeleportDestinations[0][1],
+                                        vfTeleportDestinations[0][2],
+                                        vfTeleportDestinations[0][3]
+                                    );
+                                }
+                            });
+
+                        DoAfterTime(pPlayer, (5 * IN_MILLISECONDS), [player = pPlayer]()
+                            {
+                                if (player)
+                                {
+                                    ChatHandler(player).SendSysMessage(WARNING_MESSAGE);
+                                }
+                            });
+                    }
+                }
+            }
+
+            m_uiCheckPulse = PULSE_TIMER;
+        }
+        else
+        {
+            m_uiCheckPulse -= uiDiff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_citadel_anti_exploit(Creature* pCreature)
+{
+    return new npc_citadel_anti_exploit_AI(pCreature);
 }
 
 void AddSC_trash_mobs_scarlet_citadel()
@@ -193,5 +276,10 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript = new Script;
     pNewscript->Name = "npc_citadel_valiant";
     pNewscript->GetAI = &GetAI_npc_citadel_valiant;
+    pNewscript->RegisterSelf();
+
+    pNewscript = new Script;
+    pNewscript->Name = "npc_citadel_anti_exploit";
+    pNewscript->GetAI = &GetAI_npc_citadel_anti_exploit;
     pNewscript->RegisterSelf();
 }

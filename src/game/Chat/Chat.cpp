@@ -649,6 +649,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hcinvite",       SEC_PLAYER,         false, &ChatHandler::HandleHCInviteCommand,                     "", nullptr },
         { "settime",        SEC_GAMEMASTER,     false, &ChatHandler::HandleSetTimeCommand, "", nullptr},
         { "play",           SEC_GAMEMASTER,     false, &ChatHandler::HandlePlayCommand, "", nullptr},
+        { "getskillvalue",  SEC_GAMEMASTER,     false, &ChatHandler::HandleGetSkillValueCommand, "", nullptr},
+
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

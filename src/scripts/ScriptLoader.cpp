@@ -232,6 +232,7 @@ void AddSC_zulfarrak();                              //zulfarrak
 void AddSC_instance_zulfarrak();
 
 void AddSC_ashenvale();
+void AddSC_alahthalas();
 void AddSC_azshara();
 void AddSC_darkshore();
 void AddSC_desolace();
@@ -298,6 +299,9 @@ void AddSC_boss_major_resonating_crystalAI();
 void AddSC_boss_thamgrarr();
 void AddSC_boss_volkan_cruelblade();
 void AddSC_instance_stormwind_vaults();
+
+// Misc
+void AddSC_npc_ptr();
 
 void AddScripts()
 {
@@ -529,6 +533,7 @@ void AddScripts()
     AddSC_instance_zulfarrak();
 
     AddSC_ashenvale();
+    AddSC_alahthalas();
     AddSC_azshara();
     AddSC_darkshore();
     AddSC_desolace();
@@ -594,4 +599,7 @@ void AddScripts()
     AddSC_boss_mariella();
     AddSC_instance_scarlet_citadel();
     AddSC_trash_mobs_scarlet_citadel();
+
+    // Misc
+    AddSC_npc_ptr();
 }

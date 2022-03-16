@@ -27,26 +27,25 @@ class boss_ardaeusAI : public ScriptedAI
 public:
     explicit boss_ardaeusAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
+        m_uiSunGuid = 0;
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         boss_ardaeusAI::Reset();
     }
 
 private:
     std::list<ObjectGuid>m_lSummonedCallForHelpNPCs;
 
-    uint32 m_uiSunGuid{};
+    ObjectGuid m_uiSunGuid{};
+
     uint32 m_uiCallForHelp_Timer{};
 
     bool m_bAchievementKill{};
 
-    ScriptedInstance* m_pInstance{};
+    instance_scarlet_citadel* m_pInstance{};
 
 public:
     void Reset() override
     {
-        // Sun
-        m_uiSunGuid = 0;
-
         // Call for Help
         m_uiCallForHelp_Timer = 5000; //nsArdaeus::CALLFORHELP_REPEAT_TIMER;
         m_lSummonedCallForHelpNPCs.clear();
@@ -136,6 +135,8 @@ public:
                 }
             }
         }
+        else
+            sLog.outError("[SC] Boss Ardaeus: DespawnSun() called but no GUID assigned!");
     }
 
     void CallForHelp(const uint32& uiDiff)
@@ -243,7 +244,7 @@ public:
 
     bool IsSunSpawned()
     {
-        return (!!m_uiSunGuid);
+        return static_cast<bool>(m_uiSunGuid);
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -268,7 +269,7 @@ class npc_sunAI : public ScriptedAI
 public:
     explicit npc_sunAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         npc_sunAI::Reset();
     }
 
@@ -281,7 +282,7 @@ private:
     float m_fDownwardSpeed{};
     float m_fNewPositionZ{};
 
-    ScriptedInstance* m_pInstance{};
+    instance_scarlet_citadel* m_pInstance{};
 
 public:
     void Reset() override
@@ -341,28 +342,13 @@ public:
         {
             if (m_creature->GetPositionZ() < nsArdaeus::ACHIEVEMENT_FAILED_BELOW)
             {
-                if (m_pInstance->GetData(TYPE_ARDAEUS) == IN_PROGRESS)
+                if (Creature* pCreature{ m_pInstance->GetSingleCreatureFromStorage(NPC_ARDAEUS) })
                 {
-                    if (Creature* pArdaeus{ m_pInstance->GetSingleCreatureFromStorage(NPC_ARDAEUS) })
+                    if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pCreature->AI()) })
                     {
-                        if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pArdaeus->AI()) })
-                        {
-                            boss_ardaeus->AchievementKill(false);
-                        }
-                        else
-                        {
-                            sLog.outError("[SC] Boss Ardaeus: CheckForAchievement() boss_ardaeus not found.");
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        sLog.outError("[SC] Boss Ardaeus: CheckForAchievement() pArdaeus not found.");
-                        return;
+                        boss_ardaeus->AchievementKill(false);
                     }
                 }
-                else
-                    sLog.outError("[SC] Boss Ardaeus: CheckForAchievement() TYPE_ARDAEUS not IN_PROGRESS.");
             }
 
             m_uiAchievement_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
@@ -373,31 +359,16 @@ public:
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (m_pInstance->GetData(TYPE_ARDAEUS) == IN_PROGRESS)
+        if (Creature* pCreature{ m_pInstance->GetSingleCreatureFromStorage(NPC_ARDAEUS) })
         {
-            if (Creature* pArdaeus{ m_pInstance->GetSingleCreatureFromStorage(NPC_ARDAEUS) })
+            if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pCreature->AI()) })
             {
-                if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pArdaeus->AI()) })
+                if (!boss_ardaeus->IsSunSpawned())
                 {
-                    if (!boss_ardaeus->IsSunSpawned())
-                    {
-                        return;
-                    }
-                }
-                else
-                {
-                    sLog.outError("[SC] Boss Ardaeus: UpdateAI() boss_ardaeus not found.");
                     return;
                 }
             }
-            else
-            {
-                sLog.outError("[SC] Boss Ardaeus: UpdateAI() pArdaeus not found.");
-                return;
-            }
         }
-        else
-            sLog.outError("[SC] Boss Ardaeus: UpdateAI() TYPE_ARDAEUS not IN_PROGRESS.");
 
         UpdateSpeed(uiDiff);
         CheckForAchievement(uiDiff);
@@ -422,7 +393,7 @@ CreatureAI* GetAI_npc_sunAI(Creature* pCreature)
 
 bool GossipHello_boss_ardaeus(Player* pPlayer, Creature* pCreature)
 {
-    ScriptedInstance const* m_pInstance{ static_cast<ScriptedInstance*>(pCreature->GetInstanceData()) };
+    instance_scarlet_citadel const* m_pInstance{ static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData()) };
 
     if (m_pInstance /*&& (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
     {
@@ -450,13 +421,13 @@ bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*ui
 
             try
             {
-                nsArdaeus::DoAfterTime(pCreature, (3 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (3 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
                     });
 
-                nsArdaeus::DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::START), LANG_UNIVERSAL);
@@ -466,7 +437,7 @@ bool GossipSelect_boss_ardaeus(Player* pPlayer, Creature* pCreature, uint32 /*ui
                         }
                     });
 
-                nsArdaeus::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->SetFactionTemplateId(nsArdaeus::FACTION_SCARLET);
                         creature->SetInCombatWithZone();
@@ -765,7 +736,8 @@ CreatureAI* GetAI_npc_admiral_barean_westwindAI(Creature* pCreature)
 
 void AddSC_boss_ardaeus()
 {
-    Script *pNewscript;
+    Script* pNewscript;
+
     pNewscript = new Script;
     pNewscript->Name = "boss_ardaeus";
     pNewscript->GetAI = &GetAI_boss_ardaeus;

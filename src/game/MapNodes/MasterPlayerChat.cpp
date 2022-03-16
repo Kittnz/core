@@ -14,6 +14,8 @@ void MasterPlayer::UpdateSpeakTime()
         return;
 
     time_t current = time(nullptr);
+
+
     if (m_speakTime > current)
     {
         uint32 max_count = sWorld.getConfig(CONFIG_UINT32_CHATFLOOD_MESSAGE_COUNT);
@@ -25,7 +27,7 @@ void MasterPlayer::UpdateSpeakTime()
         {
             // prevent overwrite mute time, if message send just before mutes set, for example.
             time_t new_mute = current + sWorld.getConfig(CONFIG_UINT32_CHATFLOOD_MUTE_TIME);
-            if (GetSession()->m_muteTime < new_mute)
+            if (GetSession()->m_muteTime < new_mute && !((GetSession()->GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING))
                 GetSession()->m_muteTime = new_mute;
 
             m_speakCount = 0;

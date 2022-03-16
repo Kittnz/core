@@ -7,18 +7,13 @@
 
 #include "boss_mariella.hpp"
 
-/*
-    TODO-List
-    - Add more visuals
-    - Adjust difficulty (timers, spawns, etc.)
-*/
 
 class boss_mariellaAI : public ScriptedAI
 {
 public:
     explicit boss_mariellaAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        m_pInstance = static_cast<ScriptedInstance*>(pCreature->GetInstanceData());
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         boss_mariellaAI::Reset();
     }
 
@@ -37,7 +32,7 @@ private:
     uint32 m_uiEnrage_Timer{};
     uint32 m_uiShadowVolley_Timer{};
 
-    uint64 m_uiKillZoneGuid{};
+    ObjectGuid m_uiKillZoneGuid{};
 
     bool m_bVoidZonesAlreadyAnnounced{};
     bool m_bIsSacrificePhase{};
@@ -46,7 +41,7 @@ private:
     bool m_bAchievementKill{};
     bool m_bWasInFight{};
     
-    ScriptedInstance* m_pInstance{};
+    instance_scarlet_citadel* m_pInstance{};
 
 public:
     void Reset() override
@@ -58,6 +53,9 @@ public:
             DespawnKillZone();
             DespawnSummoningCircles();
             DespawnFelhounds();
+
+            if (m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+                m_creature->RemoveAurasDueToSpell(nsMariella::SACRIFICE_VISUAL);
 
             m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
@@ -97,7 +95,7 @@ public:
         m_bEnrage = false;
 
         // Trigger fight on gossip
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetFactionTemplateId(nsMariella::FACTION_NEUTRAL);
 
@@ -154,6 +152,9 @@ public:
 
     void BeginScraficePhase()
     {
+        if (!m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+            m_creature->AddAura(nsMariella::SACRIFICE_VISUAL);
+
         Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
         if (PlayerList.isEmpty())
             return;
@@ -174,6 +175,9 @@ public:
 
     void EndScraficePhase()
     {
+        if (m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+            m_creature->RemoveAurasDueToSpell(nsMariella::SACRIFICE_VISUAL);
+
         if (m_vPossibleVictim.empty())
             return;
 
@@ -508,20 +512,20 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        EnrageTimer(uiDiff);
-        SpawnVoidZones(uiDiff);
-        SpawnFelhounds(uiDiff);
-
-        if (m_bIsSacrificePhase)
+        if (!m_bIsSacrificePhase) // Phase 1
+        {
+            CastShadowVolley(uiDiff);
+            SpawnVoidZones(uiDiff);
+            SpawnFelhounds(uiDiff);
+            CheckForSacraficePhase();
+        }
+        else // Phase 2
         {
             RegenerateBossHealth(uiDiff);
             CheckIfPlayerDied();
         }
-        else
-        {
-            CastShadowVolley(uiDiff);
-            CheckForSacraficePhase();
-        }
+
+        EnrageTimer(uiDiff);
     }
 };
 
@@ -534,11 +538,14 @@ struct npc_voidzone : public ScriptedAI
 {
     explicit npc_voidzone(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         npc_voidzone::Reset();
         SetCombatMovement(false);
     }
 
     uint32 m_uiDamage_Timer{};
+
+    instance_scarlet_citadel* m_pInstance;
 
     void Reset() override
     {
@@ -567,8 +574,13 @@ struct npc_voidzone : public ScriptedAI
                     {
                         m_creature->DealDamage(pPlayer, nsMariella::VOIDZONE_DAMAGE, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
-                        boss_mariellaAI boss_mariella{ GetClosestCreatureWithEntry(m_creature, NPC_MARIELLA, nsMariella::ROOM_DIAGONAL) };
-                        boss_mariella.AchievementKill(false); // Achievement failed if a player received damage from a Void Zone
+                        if (Creature* pCreature{ m_pInstance->GetSingleCreatureFromStorage(NPC_MARIELLA) })
+                        {
+                            if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(pCreature->AI()) })
+                            {
+                                boss_mariella->AchievementKill(false); // Achievement failed if a player received damage from a Void Zone
+                            }
+                        }
 
                         m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
                         m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
@@ -597,11 +609,14 @@ struct npc_killzone : public ScriptedAI
 {
     explicit npc_killzone(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         npc_killzone::Reset();
         SetCombatMovement(false);
     }
 
     uint32 m_uiKill_Timer{};
+
+    instance_scarlet_citadel* m_pInstance;
 
     void Reset() override
     {
@@ -624,7 +639,7 @@ struct npc_killzone : public ScriptedAI
         {
             for (const auto& itr : PlayerList)
             {
-                if (Player * pPlayer{ itr.getSource() })
+                if (Player* pPlayer{ itr.getSource() })
                 {
                     if ((m_creature->GetDistance3dToCenter(pPlayer) < nsMariella::KILLZONE_DIAMETER) && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
                     {
@@ -699,7 +714,7 @@ CreatureAI* GetAI_npc_felhound(Creature* pCreature)
 
 bool GossipHello_boss_mariella(Player* pPlayer, Creature* pCreature)
 {
-    ScriptedInstance const* m_pInstance{ static_cast<ScriptedInstance*>(pCreature->GetInstanceData()) };
+    instance_scarlet_citadel const* m_pInstance{ static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData()) };
     
     if (m_pInstance /*&& (m_pInstance->GetData(TYPE_ARDAEUS) == DONE) && (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
     {
@@ -727,13 +742,13 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
             try
             {
-                nsMariella::DoAfterTime(pCreature, (1 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (1 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
                         creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
                     });
 
-                nsMariella::DoAfterTime(pCreature, (2 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (2 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
                         {
@@ -741,13 +756,13 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
                         }
                     });
 
-                nsMariella::DoAfterTime(pCreature, (6 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (6 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->HandleEmote(EMOTE_ONESHOT_ROAR);
                         creature->MonsterYell(nsMariella::CombatNotification(nsMariella::CombatNotifications::START), LANG_UNIVERSAL);
                     });
 
-                nsMariella::DoAfterTime(pCreature, (8 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (8 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(creature->AI()) })
                         {
@@ -755,7 +770,7 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
                         }
                     });
 
-                nsMariella::DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         creature->SetFactionTemplateId(nsMariella::FACTION_SCARLET);
@@ -776,7 +791,7 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
 void AddSC_boss_mariella()
 {
-    Script *pNewscript;
+    Script* pNewscript;
 
     pNewscript = new Script;
     pNewscript->Name = "boss_mariella";

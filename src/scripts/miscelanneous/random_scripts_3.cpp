@@ -2,13 +2,13 @@
 #include "Utilities/EventProcessor.h"
 
 template <typename Functor>
-void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
+void DoAfterTime(Player* player, const uint32 p_time, Functor&& function)
 {
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
 template <typename Functor>
-void DoAfterTime(Creature* creature, uint32 p_time, Functor&& function)
+void DoAfterTime(Creature* creature, const uint32 p_time, Functor&& function)
 {
     creature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), creature->m_Events.CalculateTime(p_time));
 }
@@ -220,166 +220,6 @@ private:
 
 CreatureAI* GetAI_the_cow_king(Creature* pCreature) { return new the_cow_kingAI(pCreature); }
 
-bool GossipHello_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(40049) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Windrunner? That is a famous name. I'd like to learn more about you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
-    if (pPlayer->GetQuestStatus(40069) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Are you happy with this?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    }
-
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    pPlayer->SEND_GOSSIP_MENU(80877, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_vereesa_windrunner(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            npc->MonsterSayToPlayer("Ah my family name. I always lived in the shadows of my sisters. Alleria sacrificed herself to stop the Orcish Horde, Sylvanas she... Became the Ranger-General of Silvermoon. I have always been proud of my sisters but I never managed to reach their level, I guess I was lacking the conviction they had, but that has changed. Seeing what happened to my people.\t", player);
-            });
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            npc->MonsterSayToPlayer("How broken they are, how much they suffer and struggle. I couldn't idle in Dalaran anymore, I reached out to the surviving Elven lodges and acquired the support from several Elven citizen and magi of Dalaran. I searched the Dalarani records and found records pertaining to this ancient outpost.\t", player);
-            });
-
-        if (pPlayer->GetRace() == RACE_HIGH_ELF)
-        {
-            DoAfterTime(pPlayer, 17 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild our people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
-                });
-            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. As you know, we are still so few. I am truly glad that you managed to survive, you are an inspiration to us all.", player);
-
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60314))
-                    player->KilledMonster(cInfo, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-        }
-        else
-        {
-            DoAfterTime(pPlayer, 17 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Thus I led an expedition to reclaim the outpost and restore it. It isn't much yet, but I hope it will serve as the foundation to rebuild my people's future. I only wish Prince Kael'thas had seen these records. Perhaps if he knew of this place his fate would be different.\t", player);
-                });
-            DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                npc->MonsterSayToPlayer("Still, now is not the time to mourn. It is the time to forge ahead and rebuild what we can. There's so few left of us that every life we save is a miracle. Thus your assistance here is very welcome and I salute you.", player);
-
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60314))
-                    player->KilledMonster(cInfo, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                });
-        }
-        pPlayer->CLOSE_GOSSIP_MENU();
-    }
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "What happens now?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        pPlayer->SEND_GOSSIP_MENU(60301, pCreature->GetGUID());
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        pPlayer->SEND_GOSSIP_MENU(60312, pCreature->GetGUID());
-    }
-    return true;
-}
-
-bool GossipHello_npc_felstone(Player* pPlayer, Creature* pCreature)
-{
-    GameObject* menu_holder = pPlayer->FindNearestGameObject(2010698, 30.0F);
-    GameObject* event_running = pPlayer->FindNearestGameObject(2010699, 80.0F);
-    if (pPlayer->GetQuestStatus(40050) == QUEST_STATUS_INCOMPLETE && !menu_holder && !event_running)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Inspect Felstone", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_felstone(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-        pPlayer->SummonGameObject(2010698, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
-    {
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->SummonCreature(60426, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            npc->SummonCreature(60427, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            });
-
-        DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->SummonCreature(60426, 3558.34F, -1567.86F, 172.00F, 3.37F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            npc->SummonCreature(60427, 3549.72F, -1560.13F, 169.80F, 3.85F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            });
-
-        DoAfterTime(pPlayer, 81 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->SummonCreature(60425, 3553.80F, -1561.09F, 170.19F, 4.09F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-            if (Creature* dralox_felstar = player->FindNearestCreature(60425, 30.0F))
-                dralox_felstar->MonsterSayToPlayer("Get away from that Felstone! It is crucial to my plans!", player);
-            });
-    }
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-struct npc_dralox_felstarAI : public ScriptedAI
-{
-    npc_dralox_felstarAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset() { }
-    void UpdateAI(const uint32 diff)
-    {
-        GameObject* event_running = m_creature->FindNearestGameObject(2010699, 30.0F);
-        if (m_creature->GetHealthPercent() > 70 && m_creature->GetHealthPercent() < 75)
-        {
-            if (!event_running)
-            {
-                m_creature->SummonGameObject(2010699, m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
-                Creature* mob_one = m_creature->SummonCreature(60429, 3515.17F, -1600.66F, 169.37F, 2.76F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-                Creature* mob_two = m_creature->SummonCreature(60429, 3533.07F, -1603.13F, 172.10F, 1.40F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-                Creature* mob_three = m_creature->SummonCreature(60429, 3526.66F, -1601.96F, 170.83F, 1.73F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-
-                mob_one->MonsterSay("You do not stand alone friend! Let's take this creature down!");
-            }
-        }
-    }
-    void JustDied(Unit*) override
-    {
-        m_creature->MonsterSay("NO! Thousands of years of planning!");
-        Creature* mob_one = m_creature->FindNearestCreature(60429, 20.0F);
-        Creature* mob_two = m_creature->FindNearestCreature(60429, 20.0F);
-        Creature* mob_three = m_creature->FindNearestCreature(60429, 20.0F);
-
-        if (mob_one && mob_two && mob_three)
-        {
-            mob_one->MonsterSay("We will warn the Sentinels about the Felstone, go now!");
-            mob_one->ForcedDespawn();
-            mob_two->ForcedDespawn();
-            mob_three->ForcedDespawn();
-        }
-    }
-    void EnterCombat() {}
-    void JustRespawned() { Reset(); }
-};
-
-CreatureAI* GetAI_npc_dralox_felstar(Creature* _Creature) { return new npc_dralox_felstarAI(_Creature); }
-
 bool GossipHello_npc_bessy(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestRewardStatus(40056))
@@ -403,138 +243,6 @@ bool GossipSelect_npc_bessy(Player* pPlayer, Creature* pCreature, uint32 /*uiSen
 
     pPlayer->CLOSE_GOSSIP_MENU();
     return true;
-}
-
-bool GossipHello_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(40060) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60156, 1, false))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Ashylah Starcaller has sent me with this missive.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    pPlayer->SEND_GOSSIP_MENU(7878, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_vestia_moonspear(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "That's terrible! What can I do to help?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->SEND_GOSSIP_MENU(60313, pCreature->GetGUID());
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I see, It appears that I have no choice. I will help.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        pPlayer->SEND_GOSSIP_MENU(60314, pCreature->GetGUID());
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        pPlayer->SEND_GOSSIP_MENU(60315, pCreature->GetGUID());
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60317))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-
-        if (pPlayer->HasItemCount(60156, 1, false))
-        {
-            pPlayer->DestroyItemCount(60156, 1, true);
-            pPlayer->SaveInventoryAndGoldToDB();
-        }
-    }
-    return true;
-}
-
-bool GOHello_go_sacred_water(Player* pPlayer, GameObject* pGo)
-{
-    if (pGo->GetEntry() == 2010815)
-    {
-        if (pPlayer->GetQuestStatus(40060) == QUEST_STATUS_INCOMPLETE)
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Use Bowl of Sacred Water.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(100304, pGo->GetGUID());
-        }
-    }
-    return true;
-}
-
-bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        if (pGo->GetEntry() == 2010815)
-        {
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(7878, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
-                gob->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
-                });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
-                {
-                    vestia->SetWalk(true);
-                    vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
-                    vestia->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                }
-                });
-            DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
-                {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("This is it, keep me safe!", player);
-                }
-                });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-                });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-                });
-            DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
-                {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.", player);
-                }
-                });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-                });
-            DoAfterTime(pPlayer, 46 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
-                {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!", player);
-                }
-                });
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-                if (Creature* tuwhak = player->FindNearestCreature(60431, 30.0F))
-                {
-                    tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
-                }
-                });
-            DoAfterTime(pPlayer, 100 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
-                {
-                    vestia->CastSpell(vestia, 1449, false);
-                }
-                });
-            DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(7878, 30.0F))
-                {
-                    vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
-                    vestia->MonsterSayToPlayer("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.", player);
-                    vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
-                        player->KilledMonster(cInfo, ObjectGuid());
-                }
-                });
-            DoAfterTime(pPlayer, 180 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NO_INTERACT);
-                });
-        }
-    }
-    pPlayer->CLOSE_GOSSIP_MENU();
-    return false;
 }
 
 bool QuestAccept_npc_wendo_wobblefizz(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -4005,38 +3713,9 @@ void AddSC_random_scripts_3()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_sacred_water";
-    newscript->pGOHello = &GOHello_go_sacred_water;
-    newscript->pGOGossipSelect = &GOSelect_go_sacred_water;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_vestia_moonspear";
-    newscript->pGossipHello = &GossipHello_npc_vestia_moonspear;
-    newscript->pGossipSelect = &GossipSelect_npc_vestia_moonspear;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_bessy";
     newscript->pGossipHello = &GossipHello_npc_bessy;
     newscript->pGossipSelect = &GossipSelect_npc_bessy;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_dralox_felstar";
-    newscript->GetAI = &GetAI_npc_dralox_felstar;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_felstone";
-    newscript->pGossipHello = &GossipHello_npc_felstone;
-    newscript->pGossipSelect = &GossipSelect_npc_felstone;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_vereesa_windrunner";
-    newscript->pGossipHello = &GossipHello_npc_vereesa_windrunner;
-    newscript->pGossipSelect = &GossipSelect_npc_vereesa_windrunner;
     newscript->RegisterSelf();
 
     newscript = new Script;

@@ -578,13 +578,22 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                 //any return here in case battleground traps
             }
 
-            if (GetOwnerGuid())
+            if (GetSpellId() || GetOwnerGuid())
             {
                 if (Unit* owner = GetOwner())
                     owner->RemoveGameObject(this, false);
 
-                SetRespawnTime(0);
-                Delete();
+                // don't delete spell spawned chests, which are not consumed on loot:
+                if (m_respawnTime > 0 && GetGoType() == GAMEOBJECT_TYPE_CHEST && !GetGOInfo()->IsDespawnAtAction())
+                {
+                    UpdateObjectVisibility();
+                    SetLootState(GO_READY);
+                }
+                else
+                {
+                    SetRespawnTime(0);
+                    Delete();
+                }
                 return;
             }
 
@@ -1067,22 +1076,19 @@ bool GameObject::IsVisibleForInState(WorldObject const* pDetector, WorldObject c
 
     // Transport always visible at this step implementation
     if (IsTransport() && IsInMap(pDetector))
-        return true;
+        return true;  
 
-    //// TODO: hack for phasing gameobjects for player's visibility by quest status
-    //if (Player const* plDetector = pDetector->ToPlayer())
-    //{
-    //    uint32 phaseQuestId = GetPhaseQuestId();
-    //    int statusAction = GetPhaseQuestAction(); // if 1 = visible if 0 = not-visible
-
-    //    if (phaseQuestId)
-    //    {
-    //        auto status = plDetector->GetQuestStatus(phaseQuestId);
-
-    //        if (status == QUEST_STATUS_NONE || status == QUEST_STATUS_COMPLETE && statusAction == 0) // hide gObject once quest is complete and phase_quest_action is 0
-    //            return false;
-    //    }
-    //}
+    // Visibility based on the quest status:
+    if (Player const* plDetector = pDetector->ToPlayer())
+    {
+        uint32 phaseQuestId = GetPhaseQuestId();
+        if (phaseQuestId)
+        {
+            auto status = plDetector->GetQuestStatusData(phaseQuestId);
+            if (!status || !status->m_rewarded)
+                return false;
+        }
+    }
 
 	// Check for exclusive visibility settings
 	if (!ExclusiveVisibleGuid.IsEmpty())

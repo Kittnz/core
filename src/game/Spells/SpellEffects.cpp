@@ -1777,6 +1777,39 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 56067: // Picnic Basket
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        float dis{ 2.0F };
+                        float x, y, z;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+
+                        m_caster->SummonGameObject(2004896, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                        m_caster->SummonGameObject(2004895, x + 0.5, y + 0.5, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 300, true);
+                    }
+                    return;
+                }
+                case 56066: // Tonal Stone: Kamio
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        std::array<std::pair<uint32, uint32>, 2> items_and_sounds =
+                        { {
+                            { 70043, 30218 },
+                            { 70080, 30220 },
+                        } };
+
+                        for (auto const& data : items_and_sounds)
+                        {
+                            if (m_CastItem->GetEntry() == data.first)
+                                m_caster->PlayDirectMusic(data.second, m_caster->ToPlayer());
+                        }
+                        return;
+                    }
+                }
                 case 46012: // Portable Wormhole Generator
                 {
                     if (m_caster && m_caster->IsPlayer())
@@ -1858,6 +1891,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 339: m_caster->ToPlayer()->TeleportTo(1, -727.7F, -3943.3F, 23.48F, 5.5F);     break; // Golden Moon
                         case 363: m_caster->ToPlayer()->TeleportTo(1, 7118.21F, -3926.49F, 704.3F, 0.2F);   break; // School of the Dragonhawk
                         case 351: m_caster->ToPlayer()->TeleportTo(0, -10377.1F, -3374.04F, 21.82F, 1.8F);  break; // Blacktooth Grin
+                        case 295: m_caster->ToPlayer()->TeleportTo(0, 843.65F, -5069.647F, 8.589F, 0.53F);  break; // Nephilim
                         default: break;
                         }
                     }
@@ -2083,8 +2117,11 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     return;
 
                 int32 dmg = m_casterUnit->CalculateSpellDamage(m_casterUnit, m_spellInfo, eff_idx, &m_currentBasePoints[EFFECT_INDEX_0]);
+                int32 oldDamage = dmg;
                 if (Player* modOwner = m_casterUnit->GetSpellModOwner())
                     modOwner->ApplySpellMod(m_spellInfo->Id, SPELLMOD_COST, dmg, this);
+
+                int32 spellModDmg = dmg;
 
                 dmg = m_casterUnit->SpellDamageBonusDone(m_casterUnit, m_spellInfo, eff_idx, uint32(dmg > 0 ? dmg : 0), SPELL_DIRECT_DAMAGE);
                 dmg = m_casterUnit->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, eff_idx, dmg, SPELL_DIRECT_DAMAGE);
@@ -2095,6 +2132,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     m_casterUnit->ModifyHealth(-dmg);
 
                     int32 mana = dmg;
+
+                    if (oldDamage > spellModDmg) // set bonus shouldnt decrease mana when decreasing cost.
+                        mana += oldDamage - spellModDmg;
 
                     Unit::AuraList const& auraDummy = m_casterUnit->GetAurasByType(SPELL_AURA_DUMMY);
                     for (const auto itr : auraDummy)

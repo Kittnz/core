@@ -4666,7 +4666,7 @@ void Aura::HandleAuraModStat(bool apply, bool /*Real*/)
     // Improved Scorpid Sting
     if (GetSpellProto()->IsFitToFamilyMask<CF_HUNTER_SCORPID_STING>() && (m_modifier.m_miscvalue == STAT_STRENGTH))
     {
-        if (apply)
+        if (apply && GetCaster())
         {
             int32 staminaToRemove = 0;
             Unit::AuraList const& auraClassScripts = GetCaster()->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
@@ -4684,7 +4684,7 @@ void Aura::HandleAuraModStat(bool apply, bool /*Real*/)
                     break;
             }
 
-            if (staminaToRemove)
+            if (staminaToRemove && GetCaster())
                 GetCaster()->CastCustomSpell(target, 19486, &staminaToRemove, nullptr, nullptr, true);
         }
         else
