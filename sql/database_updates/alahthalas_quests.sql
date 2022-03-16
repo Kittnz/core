@@ -249,7 +249,7 @@ replace into creature (id, id2, id3, id4, map, display_id, equipment_id, positio
 delete from creature where id = 60428;
 delete from creature_template where entry = 60428;
 REPLACE INTO gameobject_template VALUES
-(2010883, 2, 26308, 'Corrupted Felstone', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_felstone');
+(2010883, 2, 26308, 'Corrupted Felstone', 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_felstone');
 delete from gameobject where id = 2010883 and position_x between 3536.3 and 3536.4;
 delete from gameobject where id = 181174 and position_x between 3536.3 and 3536.4;
 REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
