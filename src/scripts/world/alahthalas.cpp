@@ -27,68 +27,89 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
         {
             pGo->SummonCreature(10, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
 
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60666, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
-                });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+            Creature* vestia = pGo->SummonCreature(60666, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
+            vestia = pPlayer->FindNearestCreature(60666, 30.0F);
+
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    vestia->SetWalk(true);
-                    vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
-                }
-                });
-            DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        vestia->SetWalk(true);
+                        vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
+                    }
+                }, 5000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("This is it, keep me safe!", player);
-                }
-                });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                });
-            DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                        vestia->MonsterSay("This is it, keep me safe!");
+                    }
+                }, 13000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
                 {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.", player);
-                }
-                });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                });
-            DoAfterTime(pPlayer, 46 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        //vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        Creature* ogre_1 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                        //ogre_1->AI()->AttackStart(vestia);
+                    }
+                }, 15000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
                 {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!", player);
-                }
-                });
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                if (Creature* tuwhak = player->FindNearestCreature(60431, 30.0F))
+                    if (vestia)
+                    {
+                        Creature* ogre_2 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                    }
+                }, 30000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
-                }
-                });
-            DoAfterTime(pPlayer, 100 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                        vestia->MonsterSay("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.");
+                    }
+                }, 31000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
                 {
-                    vestia->CastSpell(vestia, 1449, false);
-                }
-                });
-            DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        Creature* ogre_3 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                    }
+                }, 45000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
-                    vestia->MonsterSayToPlayer("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.", player);
-                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
-                        player->KilledMonster(cInfo, ObjectGuid());
-                }
-                });
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                        vestia->MonsterSay("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!");
+                    }
+                }, 46000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
+                {
+                    if (vestia)
+                    {
+                        Creature* tuwhak = pGo->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                        tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
+                    }
+                }, 60000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+                {
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 1449, false);
+                    }
+                }, 100000);
+            pGo->m_Events.AddLambdaEventAtOffset([pPlayer, vestia]()
+                {
+                    if (vestia)
+                    {
+                        vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
+                        vestia->MonsterSay("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.");
+                        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
+                            pPlayer->KilledMonster(cInfo, ObjectGuid());
+                    }
+                }, 103000);
         }
     }
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -278,8 +299,6 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
 {
     if (!tyrande) return false;
 
-    std::string playerName = pPlayer->GetName();
-
     if (pQuest->GetQuestId() == 40383 && !pPlayer->FindNearestCreature(10, 50.0F))
     {
         Creature* controller = tyrande->SummonCreature(10, tyrande->GetPositionX(), tyrande->GetPositionY(), tyrande->GetPositionZ(), tyrande->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 160 * IN_MILLISECONDS);
@@ -369,9 +388,9 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
                 vestia->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 125000);
 
-        tyrande->m_Events.AddLambdaEventAtOffset([tyrande, playerName]()
+        tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
             {
-                tyrande->PMonsterSay("Yes Priestess. It means the next Moonwell is needed, in Alah'thalas. Perhaps in time, it will guide some of them back to Elune's light, but more importantly, it will give their people a second chance. %s, you have done both of our people a great service. If Lady Vereesa Windrunner agrees, then I would like you to be present at the creation of the Moonwell. I shall send Priestess Alunasha to establish the well. She has shown sympathy to the plight of the Quel'dorei.", playerName.c_str()); 
+                tyrande->MonsterSay("Yes Priestess. It means the next Moonwell is needed, in Alah'thalas. Perhaps in time, it will guide some of them back to Elune's light, but more importantly, it will give their people a second chance. <name>, you have done both of our people a great service. If Lady Vereesa Windrunner agrees, then I would like you to be present at the creation of the Moonwell. I shall send Priestess Alunasha to establish the well. She has shown sympathy to the plight of the Quel'dorei.");
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 130000);
 
