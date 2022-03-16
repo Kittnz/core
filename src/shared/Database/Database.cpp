@@ -526,10 +526,10 @@ bool Database::CommitTransactionDirect()
 
     //directly execute SqlTransaction
     SqlTransaction * pTrans = m_TransStorage->detach();
-    pTrans->Execute(m_pAsyncConn);
+    bool res = pTrans->Execute(m_pAsyncConn);
     delete pTrans;
 
-    return true;
+    return res;
 }
 
 bool Database::RollbackTransaction()
