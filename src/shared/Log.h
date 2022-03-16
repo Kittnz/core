@@ -105,6 +105,7 @@ enum LogFile
     LOG_EXPLOITS,
     LOG_HARDCORE_MODE,
     LOG_MAIL_AH,
+    LOG_AUTOUPDATER,
     LOG_MAX_FILES
 };
 
