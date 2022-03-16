@@ -29,7 +29,7 @@ EndContentData */
 #include "scriptPCH.h"
 
 template <typename Functor>
-void DoAfterTime(Creature* creature, uint32 p_time, Functor&& function)
+void DoAfterTime(Creature* creature, const uint32 p_time, Functor&& function)
 {
     creature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), creature->m_Events.CalculateTime(p_time));
 }

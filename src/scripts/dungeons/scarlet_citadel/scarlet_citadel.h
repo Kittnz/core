@@ -59,3 +59,40 @@ enum ScarletCitadelData
 
     MAX_DATA
 };
+
+template <typename Functor>
+void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
+{
+    pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(uiTime));
+}
+
+template <typename Functor>
+void DoAfterTime(Player* pPlayer, const uint32& uiTime, Functor&& function)
+{
+    pPlayer->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pPlayer->m_Events.CalculateTime(uiTime));
+}
+
+class instance_scarlet_citadel : public ScriptedInstance
+{
+public:
+    explicit instance_scarlet_citadel(Map* pMap);
+    ~instance_scarlet_citadel() override {}
+
+    void Initialize() override;
+
+    bool IsEncounterInProgress() const override;
+
+    void OnObjectCreate(GameObject* pGo) override;
+    void OnCreatureCreate(Creature* pCreature) override;
+
+    void SetData(const uint32 uiType, const uint32 uiData) override;
+    uint32 GetData(const uint32 uiType) override;
+
+    char const* Save() override { return str_InstData.c_str(); }
+    void Load(char const* chrIn) override;
+
+private:
+    uint32 m_auiEncounter[ScarletCitadelEncounter::MAX_ENCOUNTER]{};
+    uint64 m_auiData[ScarletCitadelData::MAX_DATA]{};
+    std::string str_InstData{};
+};

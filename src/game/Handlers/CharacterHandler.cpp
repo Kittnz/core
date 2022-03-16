@@ -635,15 +635,18 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     GetMasterPlayer()->SendInitialActionButtons();
 
     // Show only player accounts cinematic at first log on
-    AccountMgr AccountMgr;
-    if (AccountMgr.IsPlayerAccount(GetSecurity()))
+    if (!sWorld.getConfig(CONFIG_BOOL_PTR))
     {
-        if (!pCurrChar->GetCinematic())
+        AccountMgr AccountMgr;
+        if (AccountMgr.IsPlayerAccount(GetSecurity()))
         {
-            pCurrChar->SetCinematic(1);
+            if (!pCurrChar->GetCinematic())
+            {
+                pCurrChar->SetCinematic(1);
 
-            if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->GetRace()))
-                pCurrChar->SendCinematicStart(rEntry->CinematicSequence);
+                if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->GetRace()))
+                    pCurrChar->SendCinematicStart(rEntry->CinematicSequence);
+            }
         }
     }
 
@@ -751,8 +754,11 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
     {
-        if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD))
+        AccountMgr accountMgr;
+        if (sWorld.getConfig(CONFIG_BOOL_BEGINNERS_GUILD) && accountMgr.IsPlayerAccount(GetSecurity()))
+        {
             pCurrChar->JoinBeginnersGuild();
+        }
 
         pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
     }

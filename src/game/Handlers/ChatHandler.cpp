@@ -217,9 +217,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             auto currTime = time(nullptr);
 
-            if (m_muteTime > currTime) // Muted
+            if (GetPlayer() && !GetPlayer()->CanSpeak()) // Muted
             {
-                std::string timeStr = secsToTimeString(m_muteTime - currTime);
+                std::string timeStr = "";
+
+                if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
+                    timeStr = secsToTimeString(m_muteTime / 1000);
+                else
+                    timeStr = secsToTimeString(m_muteTime - currTime);
+
                 SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
                 return;
             }
@@ -1014,7 +1020,14 @@ void WorldSession::HandleEmoteOpcode(WorldPacket & recv_data)
 
     if (!GetPlayer()->CanSpeak())
     {
-        std::string timeStr = secsToTimeString(m_muteTime - time(nullptr));
+
+
+        std::string timeStr = "";
+
+        if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
+            timeStr = secsToTimeString(m_muteTime / 1000);
+        else
+            timeStr = secsToTimeString(m_muteTime - time(nullptr));
         SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
         return;
     }
@@ -1068,7 +1081,13 @@ void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
 
     if (!GetPlayer()->CanSpeak())
     {
-        std::string timeStr = secsToTimeString(m_muteTime - time(nullptr));
+        std::string timeStr = "";
+
+        if ((GetAccountFlags() & ACCOUNT_FLAG_MUTED_PAUSING) == ACCOUNT_FLAG_MUTED_PAUSING)
+            timeStr = secsToTimeString(m_muteTime / 1000);
+        else
+            timeStr = secsToTimeString(m_muteTime - time(nullptr));
+
         SendNotification(GetMangosString(LANG_WAIT_BEFORE_SPEAKING), timeStr.c_str());
         return;
     }

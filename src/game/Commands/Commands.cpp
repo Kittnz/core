@@ -5615,11 +5615,11 @@ bool ChatHandler::HandleGonameCommand(char* args)
 
     if (pTarget)
     {
-        std::string chrNameLink = playerLink(target_name);
-        Map* cMap = pTarget->GetMap();
+        const std::string chrNameLink = playerLink(target_name);
+        Map const* cMap = pTarget->GetMap();
         uint32 instanceId = 0;
         uint32 teleFlags = TELE_TO_GM_MODE;
-        InstancePlayerBind* bind = pPlayer->GetBoundInstance(pTarget->GetMapId());
+        InstancePlayerBind const* bind = pPlayer->GetBoundInstance(pTarget->GetMapId());
 
         if (bind)
         {
@@ -5665,13 +5665,13 @@ bool ChatHandler::HandleGonameCommand(char* args)
 
             // if the player or the player's group is bound to another instance
             // the player will not be bound to another one
-            InstancePlayerBind* pBind = pPlayer->GetBoundInstance(pTarget->GetMapId());
+            InstancePlayerBind const* pBind = pPlayer->GetBoundInstance(pTarget->GetMapId());
 
             if (!pBind)
             {
                 Group* group = pPlayer->GetGroup();
                 // if no bind exists, create a solo bind
-                InstanceGroupBind* gBind = group ? group->GetBoundInstance(pTarget->GetMapId()) : nullptr;
+                InstanceGroupBind const* gBind = group ? group->GetBoundInstance(pTarget->GetMapId()) : nullptr;
                 // if no bind exists, create a solo bind
                 if (!gBind)
                 {
@@ -5683,7 +5683,8 @@ bool ChatHandler::HandleGonameCommand(char* args)
                     else
                         pPlayer->BindToInstance(save, !save->CanReset());
 
-                    if (instanceId && instanceId != save->GetInstanceId()) {
+                    if (instanceId && instanceId != save->GetInstanceId())
+                    {
                         teleFlags |= TELE_TO_FORCE_MAP_CHANGE;
                     }
                 }
@@ -5708,11 +5709,11 @@ bool ChatHandler::HandleGonameCommand(char* args)
         float x, y, z;
         pTarget->GetPosition(x, y, z);
 
-        pPlayer->TeleportTo(pTarget->GetMapId(), x, y, z + 5.0f, pPlayer->GetAngle(pTarget), teleFlags);
+        pPlayer->TeleportTo(pTarget->GetMapId(), x, y, z + 2.f, pPlayer->GetAngle(pTarget), teleFlags);
     }
     else
     {
-        std::string nameLink = playerLink(target_name);
+        const std::string nameLink = playerLink(target_name);
 
         PSendSysMessage(LANG_APPEARING_AT_OFFLINE, nameLink.c_str());
 
@@ -6797,7 +6798,21 @@ bool ChatHandler::HandleMuteCommand(char* args)
     if (char* givenReasonC = ExtractQuotedOrLiteralArg(&args))
         givenReason = givenReasonC;
 
+
+    std::string pausingStr;
+    if (char* pausingStrC = ExtractQuotedOrLiteralArg(&args))
+        pausingStr = pausingStrC;
+
+
+
+    bool pausing = false;
+    if (pausingStr == "pausing")
+        pausing = true;
+
+
+
     uint32 account_id = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
+
 
     // find only player from same account if any
     if (!target)
@@ -6812,10 +6827,21 @@ bool ChatHandler::HandleMuteCommand(char* args)
 
     time_t mutetime = time(nullptr) + notspeaktime * 60;
 
+    if (pausing) // pausing uses world ms diff so multiply by 1000 for ms instead of s and use ms left instead of current time in future.
+        mutetime = notspeaktime * 60 * 1000;
+
     if (target)
         target->GetSession()->m_muteTime = mutetime;
 
     LoginDatabase.PExecute("UPDATE account SET mutetime = " UI64FMTD " WHERE id = '%u'", uint64(mutetime), account_id);
+
+    if (pausing)
+    {
+        LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_PAUSING, target->GetSession()->GetAccountId());
+        if (target)
+            target->GetSession()->SetAccountFlags(target->GetSession()->GetAccountFlags() | ACCOUNT_FLAG_MUTED_PAUSING);
+    }
+
 
     if (target)
         ChatHandler(target).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notspeaktime);
@@ -6867,6 +6893,29 @@ bool ChatHandler::HandleUnmuteCommand(char* args)
         }
 
         target->GetSession()->m_muteTime = 0;
+    }
+
+    uint32 accountFlags = 0;
+
+    if (target)
+        accountFlags = target->GetSession()->GetAccountFlags();
+    else
+    {
+        auto result = LoginDatabase.PQuery("SELECT `flags` FROM `account` WHERE `id` = '%u'", account_id);
+
+        if (result)
+        {
+            accountFlags = result->Fetch()[0].GetUInt32();
+            delete result;
+        }
+
+    }
+
+    if (accountFlags & ACCOUNT_FLAG_MUTED_PAUSING)
+    {
+        LoginDatabase.PExecute("UPDATE account SET flags = flags & ~0x%x WHERE id = '%u'", ACCOUNT_FLAG_MUTED_PAUSING, target->GetSession()->GetAccountId());
+        if (target)
+            target->GetSession()->SetAccountFlags(target->GetSession()->GetAccountFlags() & ~ACCOUNT_FLAG_MUTED_PAUSING);
     }
 
     LoginDatabase.PExecute("UPDATE account SET mutetime = '0' WHERE id = '%u'", account_id);
@@ -7455,6 +7504,7 @@ bool ChatHandler::HandleGameObjectTurnCommand(char* args)
     map->Remove(obj, false);
 
     obj->Relocate(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), o);
+    obj->SetFloatValue(GAMEOBJECT_FACING, o);
     obj->UpdateRotationFields();
 
     map->Add(obj);
@@ -7627,6 +7677,7 @@ bool ChatHandler::HandleGameObjectMoveCommand(char* args)
         obj->SetFloatValue(GAMEOBJECT_POS_X, x);
         obj->SetFloatValue(GAMEOBJECT_POS_Y, y);
         obj->SetFloatValue(GAMEOBJECT_POS_Z, z);
+        obj->SetFloatValue(GAMEOBJECT_FACING, obj->GetOrientation());
 
         map->Add(obj);
     }
@@ -8738,6 +8789,21 @@ bool ChatHandler::HandleModifyMorphCommand(char* args)
         target->SetDisplayId(display_id);
     }
 
+    return true;
+}
+
+bool ChatHandler::HandleGetSkillValueCommand(char* args)
+{
+    if (!*args) return false;
+
+    uint32 skill_id = (uint32)atoi(args);
+    uint32 skill_value = 0;
+
+    Player* target = GetSelectedPlayer();
+    if (!target) target = m_session->GetPlayer();
+
+    skill_value = target->GetSkillValue(skill_id);
+    PSendSysMessage("Skill %u Value %u", skill_id, skill_value);
     return true;
 }
 
@@ -11253,6 +11319,9 @@ bool ChatHandler::HandleGMOptionsCommand(char* args)
         flags |= PLAYER_CHEAT_ALWAYS_PROC;
     if (sArgs.find("video") != std::string::npos || sArgs.find("VIDEO") != std::string::npos)
         flags |= PLAYER_VIDEO_MODE;
+
+    if (sArgs.find("spellcr") != std::string::npos || sArgs.find("SPELLCR") != std::string::npos)
+        flags |= PLAYER_CHEAT_ALWAYS_SPELL_CRIT;
 
     Player* pTarget = GetSelectedPlayer();
     if (!pTarget)

@@ -1039,7 +1039,10 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss)
 {
     // Prevent killing unit twice (and giving reward from kill twice)
-    if (!pVictim->GetHealth())
+	// Twin emps (entries: 15275, 15276) exception
+	// - one twin has to die from script cause they share pool
+	//   and the script was stopping in this gethealth check, cause his hp was 0 and not dead
+    if (!pVictim->GetHealth() && (pVictim->GetEntry() != 15275 && pVictim->GetEntry() != 15276))
         return;
 
     // Prevent killing Spirit of Redemption twice
@@ -5311,6 +5314,9 @@ bool Unit::IsSpellCrit(Unit const* pVictim, SpellEntry const* spellProto, SpellS
     if (IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_ALWAYS_CRIT))
         return true;
 
+    if (IsPlayer() && ToPlayer()->HasOption(PLAYER_CHEAT_ALWAYS_SPELL_CRIT))
+        return true;
+
     // not critting spell
     if ((spellProto->AttributesEx2 & SPELL_ATTR_EX2_CANT_CRIT))
         return false;
@@ -5540,7 +5546,7 @@ bool Unit::IsImmuneToSpell(SpellEntry const *spellInfo, bool /*castOnSelf*/) con
         SpellImmuneList const& schoolList = m_spellImmune[IMMUNITY_SCHOOL];
         for (const auto& itr : schoolList)
             if (!(Spells::IsPositiveSpell(itr.spellId) && spellInfo->IsPositiveSpell()) &&
-                    (itr.type & spellInfo->GetSpellSchoolMask()))
+                    (itr.type & spellInfo->GetSpellSchoolMask()) && !spellInfo->HasEffect(SPELL_EFFECT_ATTACK_ME)) // Except for taunt
                 return true;
     }
 
@@ -5892,10 +5898,6 @@ void Unit::SetInCombatState(bool bPvP, Unit* pEnemy)
     // only alive units can be in combat
     if (!IsAlive())
         return;
-
-    //if (pEnemy && pEnemy->GetTypeId() == TYPEID_PLAYER) // check for phasing conditions
-    //    if (!this->IsVisibleInGridForPlayer(pEnemy->GetCharmerOrOwnerPlayerOrPlayerItself()))
-    //        return;
 
     if (bPvP)
         m_CombatTimer = 5500;
@@ -6460,8 +6462,11 @@ bool Unit::CanDetectStealthOf(Unit const* target, float distance, bool *alert) c
 {
     if (HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED))
         return false;
-    if (distance < 0.388f) //collision
+    if (distance < 1.5f) //collision
         return true;
+
+    const float MaxPlayerDetectRange = sWorld.getConfig(CONFIG_FLOAT_MAX_PLAYERS_STEALTH_DETECT_RANGE);
+    constexpr float MaxCreatureDetectRange = 30.f;
 
     // Hunter mark functionality
     AuraList const& auras = target->GetAurasByType(SPELL_AURA_MOD_STALKED);
@@ -6469,47 +6474,37 @@ bool Unit::CanDetectStealthOf(Unit const* target, float distance, bool *alert) c
         if (iter->GetCasterGuid() == GetObjectGuid())
             return true;
 
-    // set max distance
-    float MaxStealthDetectRange = sWorld.getConfig(CONFIG_FLOAT_MAX_PLAYERS_STEALTH_DETECT_RANGE);
-    float visibleDistance = IsPlayer() ? MaxStealthDetectRange : ((Creature*)this)->GetAttackDistance(target);
 
-    //Always invisible from back (when stealth detection is on), also filter max distance cases
-    bool isInFront = distance < visibleDistance && HasInArc(target);
-    if (!isInFront)
+    if (distance > (IsPlayer() ? MaxPlayerDetectRange : MaxCreatureDetectRange))
         return false;
+    
 
-    visibleDistance = 10.5f - target->GetTotalAuraModifier(SPELL_AURA_MOD_STEALTH) / 100.0f;
+    float visibleDistance = IsPlayer() ? ((target->IsPlayer()) ? 9.0f : 21.f) : (5.0f / 6.0f);
+    float yardsPerLevel = IsPlayer() ? 1.5f : 5.0f / 6.0f;
+    int32 stealthSkill = target->IsPlayer() ? target->GetTotalAuraModifier(SPELL_AURA_MOD_STEALTH) : target->GetLevelForTarget(this) * 5;
+    stealthSkill += target->GetTotalAuraModifier(SPELL_AURA_MOD_STEALTH_LEVEL);
+    int32 detectSkill = GetLevelForTarget(target) * 5 + int32(GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_STEALTH_DETECT, 0));
+    int32 const levelDiff = int32(GetLevelForTarget(target)) - int32(target->GetLevelForTarget(this));
+    if (levelDiff > 3)
+        yardsPerLevel *= 2;
 
-    //Visible distance is modified by
-    //-Level Diff (every level diff = 1.0f in visible distance)
-    int32 level_diff = int32(GetLevelForTarget(target)) - int32(target->GetLevelForTarget(this));
-    if (abs(level_diff) > 3)
-        visibleDistance += level_diff;
-    else
-        visibleDistance += 0.5f * level_diff;
+    visibleDistance += (detectSkill - stealthSkill) * yardsPerLevel / 5.0f;
 
-    //This allows to check talent tree and will add addition stealth dependent on used points)
-    int32 stealthMod = target->GetTotalAuraModifier(SPELL_AURA_MOD_STEALTH_LEVEL);
-    if (stealthMod < 0)
-        stealthMod = 0;
+    if (visibleDistance > 30.0f)
+        visibleDistance = 30.0f;
+    else if (visibleDistance < 0.0f)
+        visibleDistance = 0.0f;
 
-    //-Stealth Mod(positive like Master of Deception) and Stealth Detection(negative like paranoia)
-    //based on wowwiki every 5 mod we have 1 more level diff in calculation
-    visibleDistance += (int32(GetTotalAuraModifierByMiscValue(SPELL_AURA_MOD_STEALTH_DETECT, 0)) - stealthMod) / 5.0f;
-    visibleDistance = visibleDistance > MaxStealthDetectRange ? MaxStealthDetectRange : visibleDistance;
+    if (!HasInArc(target))
+        visibleDistance -= 9.0f;
+
+    float alertRange = visibleDistance + 5.0f;
 
     // recheck new distance
-    if (visibleDistance <= 0 || distance > visibleDistance)
-    {
-        if (alert && distance < 15.0f /*TODO: add MAX ALERT DISTANCE config*/)
-        {
-            visibleDistance = visibleDistance * 1.08f + 1.5f;
-            *alert = distance < visibleDistance;
-        }
-        return false;
-    }
+    if (alert)
+        *alert = distance <= alertRange && distance > visibleDistance;
 
-    return true;
+    return distance <= visibleDistance;
 }
 
 void Unit::CheckPendingMovementChanges()
@@ -7603,11 +7598,8 @@ bool Unit::IsVisibleForInState(WorldObject const* pDetector, WorldObject const* 
 /// returns true if creature can't be seen by alive units
 bool Unit::IsInvisibleForAlive() const
 {
-    // Ghost
-    if (HasAura(9036))
+    if (IsGhost()) 
         return true;
-
-    // TODO: maybe spiritservices also have just an aura
     return IsSpiritService();
 }
 

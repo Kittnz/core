@@ -34,3 +34,224 @@ replace into creature_questrelation (id, quest) values (80245, 40375);
 replace into creature_involvedrelation (id, quest) values (7999, 40375);
 
 update quest_template set prevquestid = 40371 where entry = 40049;
+
+-- Do NOT reuse the entries!!!
+delete from quest_template where entry in (40049, 40050, 40058, 40059, 40060, 40069, 40070);
+
+-- The Kaldorei Problem --
+delete from quest_template where entry = 40376;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40371,40376,2,2040,60,60,0,0,'The Kaldorei Problem','You have done well. I think it is high time for you to meet our leader. She awaits your arrival atop the Citadel.','Ascend the summit of the Citadel of the Sun and speak to the leader of the Silvermoon Remnant.','So you are the one that everyone has been talking about. It\'s a pleasure to meet you $N. My name is Vereesa Windrunerr, and I wanted to personally thank you for your efforts in bringing our people closer to the Alliance. Although it is unfortunate that Kaldorei still doubt our intentions.','You see, when the Scourge ravaged our lands, we were left beaten and broken. So I gathered those I could find and set out to reclaim this outpost. It was not an easy task, but now we have a place to call home.\n\nI only wish Prince Kael\'thas could have seen all of this. But, now is not the time to mourn. We have to hold our heads high and look forward.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80245, 40376);
+replace into creature_involvedrelation (id, quest) values (80877, 40376);
+
+-- Breaking the Felstar --
+delete from quest_template where entry = 40377;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40376,40377,2,2040,60,60,0,0,'Breaking the Felstar','With the pleasantries out of the way, it is time I let you in on our next move. I knew from the start that gaining the support of the Kaldorei would be hard, given our shared history. But we must show them that we are not the enemy.\n\nThat is why I have sent a detachment of my best rangers to assist them, and they were successful in uncovering that a powerful Satyr is plotting to invade Ashenvale from Felwood. We cannot allow that to happen, which is why I have arranged for you to meet my rangers near the border of Felwood, north of Raynewood\'s Retreat.\n\nHelp them stop this attack and make sure to take proof of your victory to the Ashylah Starcaller in Darnassus. She is an ally to our cause.','Defeat the Satyr threat to Ashenvale. Take the Satyr horns to Ashylah Starcaller in Darnassus.','What can I do for you?','Dra\'lox Felstar is dead? It appears that my decision to give Quel\'Dorei a chance proved fruitful. Now it is my turn to return the favor.',60148,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80877, 40377);
+replace into creature_involvedrelation (id, quest) values (80242, 40377);
+
+delete from creature_template where entry in (60425,60426,60427,60429);
+REPLACE INTO creature_template VALUES
+(60425, 12334, 0, 0, 0, 'Dra\'lox Felstar', '', 0, 60, 60, 8900, 8900, 0, 0, 3489, 90, 0, 1, 1.14286, 0, 30, 30, 150, 1, 1, 354, 456, 0, 268, 1, 1200, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 3, 0, 60425, 0, 0, 0, 0, 0, 0, 0, 0, 7164, 8258, 15572, 0, 0, 0, 474, 624, 'EventAI', 0, 1, 0, 0, 3, 4623, 0, 0, 0, 0, 0, 0, 'npc_dralox_felstar'),
+(60426, 2011, 0, 0, 0, 'Felstone Guardian', '', 0, 58, 59, 3875, 3875, 0, 0, 3462, 90, 0, 1, 1.14286, 0, 30, 30, 150, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 3, 0, 6073, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 4, 0, 0, ''),
+(60427, 1185, 0, 0, 0, 'Felstone Guardian', '', 0, 58, 59, 3875, 3875, 0, 0, 3462, 90, 0, 1, 1.14286, 0, 30, 30, 150, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 3, 0, 6073, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 4, 0, 0, ''),
+(60429, 18220, 18221, 18222, 18223, 'High Elf Ranger', '', 0, 60, 60, 3875, 3875, 0, 0, 3462, 231, 0, 1, 1.14286, 0, 50, 30, 0, 0, 1, 101, 126, 0, 268, 2, 2000, 2000, 1, 4096, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 80216, 0, 0, 0, 0, 525312, 0, '');
+
+-- Thalassian Ascension --
+delete from quest_template where entry = 40378;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40377,40378,2,2040,60,60,0,0,'Thalassian Ascension','There it is done. I have prepared a writ for the High Priestess, explaining how instrumental you and the Quel\'Dorei were in slaying our ancient enemy Dra\'lox Felster. His deeds were unforgivable, which is why your actions may prove just enough to sway the High Priestess.','Present the Sealed Writ to Tyrande Whisperwind in Darnassus.','What news do you bring?','A message from the Ashylah? So you and your allies managed to slay Felstar. I must say, I\'m impressed. But one good action is not enough to rectify centuries of betrayal and wickedness.\n\n<She lets out a long sigh>.\n\nYet I cannot deny that your actions and that of your allies saved countless lives, and for that, I am grateful. I\'m willing to withdraw my opposition to the ascension of the Quel\'Dorei in the Alliance but know that we will be watching their every move.',60154,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60154,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80242, 40378);
+replace into creature_involvedrelation (id, quest) values (7999, 40378);
+
+-- Darnassian Endorsement --
+delete from quest_template where entry = 40379;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40378,40379,2,2040,60,60,0,0,'Darnassian Endorsement','Here is the endorsement you have been waiting for, take it to Highlord Bolvar Fordragon in Stormwind. I only pray to the goddess that this was not a mistake.','Present the Darnassian Endorsement to Highlord Bolvar Fordragon in Stormwind.','What brings you here?','What wonderful news! With the Darnassian Endorsement, the Alliance has agreed that the Quel\'dorei of Alah\'thalas will officially join the Alliance. Let us discuss further steps, my friend.',60155,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60155,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (7999, 40379);
+replace into creature_involvedrelation (id, quest) values (1748, 40379);
+
+-- The Magical Ailment --
+delete from quest_template where entry = 40380;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40379,40380,2,2040,60,60,0,0,'The Magical Ailment','With Quel\'Dorei ascension in the Alliance, I do not doubt that it is only a matter of time before we rise to our former glory. But as my people celebrate, I must keep track of the problems that remain.\n\nFor years my people relied on the magic of the great fount called Sunwell. Its destruction made us realize how dependent we became on its magic. Without it, we were vulnerable to succumbing to magic addiction. Miraculously the rangers who were hunting Dra\'lox with you stumbled upon a mystical pool of water whose effects mimic Sunwell, if only a little.\n\nIf this is true, this could be our salvation. I need you to travel to Dranassus and ask Ashylah Starcaller if those waters can be procured for the Quel\'Dorei.','Travel to Darnassus and speak to Ashylah Starcaller.','I take it the Quel\'dorei sent you. What can I do for you?','Have they lost their minds?! A Moonwell is the sacred fount of Elune. It is not something we can just entrust to anyone.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80877, 40380);
+replace into creature_involvedrelation (id, quest) values (80242, 40380);
+
+-- A Quest for the Moonwell --
+delete from quest_template where entry = 40381;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40380,40381,2,2040,60,60,0,0,'A Quest for the Moonwell','A Moonwell is something we sentinels protect with our lives. I sympathize with the Quel\'dorei\'s plight, but I would never betray my people by turning over the sacred waters to them. But, perhaps there is another way.\n\nIf the Quel\'Dorei are truly willing to repent for their past deeds and are able to prove it, then there might be a chance to plead for a small well to be built in Alah\'talas. After all, they agreed once before to do the same for the Stormwind. Travel to the Feathermoon Stronghold in Feralas and look for Vestia Moonspear.\n\nShe alone may be the only priestess sympathetic enough to your cause to listen to you. Give her this missive and pay close attention to what she has to say.','Travel to Feralas and deliver the missive to Vestia Moonspear.','What brings you here?','What you ask is difficult, but not impossible. As you probably know by now, the waters of Moonwells are sacred to us. It contains the pure power of our Goddess Elune but also a fragment of the original Well of Eternity.\n\nHaving such well corrupted is considered a great offense to Elune. Unfortunately, even with our constant watch, this can happen.\n\nA twin set of Moonwells exist outside Elder\'thalas, known to many as Dire Maul. While one well remains pure, the other was defiled by Ogres. Help us cleanse the Moonwell and bring those responsible to justice, and I will present your case to the High Priestess herself.',60156,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60156,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80242, 40381);
+replace into creature_involvedrelation (id, quest) values (7878, 40381);
+
+-- Sacred Waters of Eldre'thalas --
+delete from quest_template where entry = 40382;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40381,40382,2,2040,60,60,0,0,'Sacred Waters of Eldre\'thalas','Splendid! I will go ahead and quietly prepare everything that is required for the ritual. There is no doubt that the ogres will react aggressively to our attempt to cleanse the Moonwell.\n\nSo I will wait in the shadows until you arrive. The ritual will require my full attention, so I will need you to protect me while I do it.','Protect Vestia Moonspear while she\'s cleansing waters of corrupted Moonwell outside Dire Maul.','May Elune guide us.','An exhilarating experience. Let\'s make a deal to avoid these kinds of things from now on, okay? Jokes aside, you have my gratitude. And as promised, I will do my best to help you with your case.',0,0,0,0,0,0,0,0,60318,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'The well has been cleaned');
+
+replace into creature_questrelation (id, quest) values (7878, 40382);
+replace into creature_involvedrelation (id, quest) values (7878, 40382);
+
+delete from creature_template where entry = 10;
+
+delete from creature_template where entry in (60431,60666);
+REPLACE INTO creature_template VALUES
+(60666, 6986, 0, 0, 0, 'Vestia Moonspear', NULL, 61001, 55, 55, 2718, 2718, 2117, 2117, 2654, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 2, 33554432, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 0, ''),
+(60431, 11561, 0, 0, 0, 'Tu\'whak', '', 0, 58, 59, 3875, 3875, 0, 0, 3462, 45, 0, 1, 1.14286, 0, 30, 30, 100, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 5241, 5241, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52410, 0, 133, 179, 'EventAI', 0, 1, 0, 0, 3, 5241, 0, 0, 0, 0, 0, 0, '');
+
+-- Vestia's Missive --
+delete from quest_template where entry = 40383;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40382,40383,2,2040,60,60,0,0,'Vestia\'s Missive','Take this. I have convinced a few of my fellow priestesses to vouch for you and your Quel\'Dorei friends, but know that creating a new Moonwell and immediately giving it up won\'t be easy, even with our assurances. Let\'s hope that the High Priestess sees this request as a chance to mend old wounds.','Deliver Vestia\'s Missive to Tyrande Whisperwind in Darnassus.','Yes?','See how quickly they grasp at the chance to return to their old ways? Was having them accepted in the Alliance not enough?\n\n<Tyrande opens up and reads the missive>.\n\nMy reaction may have been brash, but you must understand it is not easy to forget wrongdoings done to us throughout the centuries. Yet your actions prove that there is a possibility of us working together with Quel\'Dorei.\n\nI need time to think this over.',60519,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60519,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (7878, 40383);
+replace into creature_involvedrelation (id, quest) values (7999, 40383);
+
+REPLACE INTO item_template VALUES (60519, 12, 0, 'Vestia\'s Missive', '', 3022, 1, 2048, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+REPLACE INTO creature_template VALUES (60667, 18235, 0, 0, 0, 'Speaker Vereesa Windrunner', '', 61100, 63, 63, 799500, 799500, 52400, 52400, 3402, 371, 0, 1, 1.14286, 0, 20, 5, 0, 3, 1, 1489, 1610, 0, 290, 1, 2000, 2000, 2, 33554432, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 12, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 1, 866, '', 0, 3, 0, 1, 3, 10181, 0, 0, 2764783451, 0, 2654216, 0, '');
+
+update creature_template set script_name = 'npc_bolvar' where entry = 1748;
+
+update creature_template set npc_flags = 3, script_name = 'npc_tyrande' where entry = 7999;
+
+-- A People Restored --
+delete from quest_template where entry = 40384;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40383,40384,2,2040,60,60,0,0,'A People Restored','Again I find myself at the crossroad of helping someone who has betrayed my people. I trusted Illidan when I freed him to help us battle the Burning Legion, and he ended up saving my life, so I will do the same for Quel\'Dorei and approve this Moonwell. I only hope that this does not end up differently.','Speak to the Moon Priestess Alunasha and witness the establishment of the Moonwell in Alah\'thalas.','The preparations for the Moonwell are ready.','The Elune will soon bless these lands. Stand back and watch as her light blesses this sacred ritual.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (7999, 40384);
+replace into creature_involvedrelation (id, quest) values (60435, 40384);
+
+delete from creature_template where entry in (60435);
+REPLACE INTO creature_template VALUES (60435, 2200, 0, 0, 0, 'Moon Priestess Alunasha', '', 4691, 60, 60, 2883, 2883, 5751, 5751, 3252, 80, 2, 1, 1.14286, 0, 18, 5, 0, 1, 1, 110, 142, 0, 272, 1, 2000, 2000, 8, 4608, 0, 0, 0, 0, 5, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524298, 40383, 'npc_alunasha');
+
+REPLACE INTO creature_template VALUES
+(60669, 7274, 0, 0, 0, 'Tyrande Whisperwind', 'High Priestess of Elune', 9504, 63, 63, 533000, 533000, 52400, 52400, 3384, 124, 0, 1, 1.14286, 0, 20, 5, 0, 3, 1, 1005, 1171, 0, 290, 1, 2000, 2000, 2, 33554432, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 12, 7999, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 1, 866, 'EventAI', 0, 3, 0, 0, 3, 7999, 0, 0, 2764783451, 0, 2654218, 0, '');
+
+REPLACE INTO gameobject_template VALUES (2010879, 5, 6397, 'Moonwell Water Splash', 0, 0, 3, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO gameobject_template VALUES (2010880, 5, 7417, 'Moonwell (Event)', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject where guid = 4013822;
+
+-- Shalandis Isle --
+delete from quest_template where entry = 40385;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40384,40385,2,2040,60,60,0,0,'Shalandis Isle','The time has come. The Kaldorei fleet has arrived and is making its final preparations, and the Theramore fleet should also be ready. Find a Theramore officer and board the ship as its vanguard.\n\nThere is no doubt that the Scourge will attack as soon as they see us, and having you onboard will undoubtedly improve our chances. Go and do what you must for the Alliance!','Speak to the Captain Darrowmont and board the transport ship to Shalandis Isle.','How may I help?','We have been waiting for you. We are ready to depart, on your word, but make sure you bring all the necessary equipment. There is no telling what awaits us there.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80877, 40385);
+replace into creature_involvedrelation (id, quest) values (60670, 40385);
+
+delete from creature_template where entry in (60670,60671,60672,60677);
+REPLACE INTO creature_template VALUES
+(60670, 4837, 0, 0, 0, 'Captain Darrowmont', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 150, 3, 1, 1.14286, 1, 8, 5, 40, 1, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 1, 0, 0, 3, 3385, 0, 0, 0, 0, 0, 0, 'npc_breanna_darrowmont'),
+(60671, 4679, 1858, 0, 0, 'Theramore Marine', '', 0, 60, 60, 3800, 3800, 0, 0, 3252, 150, 0, 1, 1.14286, 0, 8, 5, 40, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 3385, 0, 0, 0, 0, 0, 0, ''),
+(60672, 18220, 18221, 18222, 18223, 'Alah\'thalas Ranger', '', 0, 60, 60, 3500, 3500, 0, 0, 3252, 231, 0, 1, 1.14286, 0, 8, 5, 40, 0, 1, 104, 130, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 111, 150, 'EventAI', 0, 3, 0, 0, 3, 80216, 0, 0, 0, 0, 0, 0, ''),
+(60677, 18214, 0, 0, 0, 'Ranger-Captain Nasuna Dawnbringer', NULL, 0, 60, 60, 1000000, 1000000, 0, 0, 4391, 231, 2, 1, 1.14286, 0, 20, 5, 40, 1, 1, 1, 2, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 7, 0, 10824, 0, 0, 0, 0, 0, 0, 0, 0, 15547, 12057, 11978, 0, 108240, 0, 139, 187, 'EventAI', 0, 3, 0, 0, 3, 10824, 0, 0, 0, 0, 0, 0, 'npc_nasuna');
+
+set @gossip_menu_id = 41094; set @magic_number = 60670;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Glad you are with us! There is no telling what awaits us on Shalandis, but we cannot let our new allies down.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Scourge! --
+delete from quest_template where entry = 40386;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40385,40386,2,2040,60,60,0,0,'Scourge!','This is a disaster! No matter how many we slay, they keep coming!\n\nOur Rangers will secure the ship and provide ranged support, but we need your help before they overrun us!','Defend Shalandis Isle.','Yes?','With the beach secured and our fortifications up, we have finally made a first step in reclaiming these lands. But we need to be careful. Their commander mentioned someone named Lord Dar\'Khan.\n\nCould he be their leader? And why does that name feel so familiar? Anyways, we won\'t get much from overthinking. Let us wait for the rest of the reinforcements before continuing our campaign in Quel\'thalas.',0,0,0,0,0,0,0,0,60673,1,60674,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40386;
+delete from creature_involvedrelation where quest = 40386;
+replace into creature_questrelation (id, quest) values (60677, 40386);
+replace into creature_involvedrelation (id, quest) values (60677, 40386);
+
+REPLACE INTO creature_template VALUES
+(60673, 18498, 0, 0, 0, 'Lady Ripper', '', 0, 60, 60, 9898, 9898, 0, 0, 1400, 21, 0, 1, 1.14286, 1.5, 20, 5, 40, 0, 1, 86, 94, 0, 106, 1, 480, 480, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 6, 0, 60673, 0, 0, 50, 0, 0, 0, 50, 25, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_lady_ripper'),
+(60674, 7919, 0, 0, 0, 'Dre\'gheor Frostshiv', '', 0, 60, 60, 19300, 19300, 0, 0, 3791, 21, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 390, 450, 0, 278, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 6, 0, 60674, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 503, 2517, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_frostshiv'),
+(60675, 7847, 9786, 5432, 828, 'Scourge Soldier', NULL, 0, 58, 59, 3500, 3600, 0, 0, 3640, 21, 0, 1.14286, 1.14286, 0, 20, 5, 0, 0, 1, 114, 138, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 6, 0, 60675, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 180, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60676, 370, 0, 0, 0, 'Scourge Commander', NULL, 0, 60, 60, 4000, 4000, 0, 0, 3640, 21, 0, 1.24286, 1.24286, 0, 20, 5, 0, 0, 1, 161, 207, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 6, 0, 60675, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 134, 180, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from creature where id in (60670,60671,60672,60677,60673,60674,60675);
+REPLACE INTO creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES
+-- (60670, 0, 0, 0, 1, 0, 3385, -3921.28, -4601.84, 18.1754, 3.88645, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3936.04, -4608.02, 15.9268, 3.92441, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3957.12, -4635.27, 11.7756, 0.770602, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3926.71, -4601.37, 11.0385, 3.80006, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3956.27, -4621.84, 5.98615, 5.23411, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3923.44, -4608.49, 5.98474, 2.30781, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3916.78, -4602.37, 5.98326, 3.08099, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3945.09, -4615.48, 5.98621, 0.0135718, 25, 25, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 1, 0, 3385, -3955.47, -4631.21, 5.98526, 0.767116, 25, 25, 0, 100, 100, 0, 0, 0),
+(60670, 0, 0, 0, 42, 0, 0, 7698.92, -5575.48, 19.66580, 3.83057, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7659.88, -5610.37, 13.31150, 5.20327, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7651.02, -5612.52, 13.53940, 4.50731, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7650.90, -5610.02, 13.44700, 2.66425, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7653.02, -5606.07, 13.33960, 2.53466, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7676.72, -5634.24, 0.349135, 5.07594, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7682.33, -5629.10, 0.595067, 5.40155, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7665.27, -5611.79, 13.18080, 5.25249, 300, 300, 0, 100, 100, 0, 0, 0),
+(60671, 0, 0, 0, 42, 0, 0, 7669.57, -5609.06, 12.85840, 5.27169, 300, 300, 0, 100, 100, 0, 0, 0),
+(60677, 0, 0, 0, 42, 0, 0, 7696.65, -5651.08, 3.559440, 5.25798, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7692.89, -5655.35, 3.933480, 5.45477, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7701.59, -5648.35, 3.671490, 5.05307, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7697.72, -5657.15, 3.790160, 5.37274, 300, 300, 0, 100, 100, 0, 0, 0),
+(60672, 0, 0, 0, 42, 0, 0, 7701.75, -5654.08, 3.667410, 5.28634, 300, 300, 0, 100, 100, 0, 0, 0);
+
+REPLACE INTO creature_linking_template (entry, map, master_entry, flag, search_range) VALUES
+(60675, 42, 60676, 512, 30);
+
+-- Returning to Alah'thalas --
+delete from quest_template where entry = 40387;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40386,40387,2,2040,60,60,0,0,'Returning to Alah\'thalas','It is done... With the initial attack repelled, we can properly set up the defenses. With the Rangers, the Magisters, the Druids, and Moon Priestesses, we\'re more than capable of holding this isle until the fleet arrives.\n\nOnce the Rangers and Magisters have disembarked, we will return to Alah\'thalas. I take it you can send word to Speaker Windrunner?','Speak to Vereesa Windrunner in Alah\'thalas','Welcome back, $N. I hope that you bring good news.','With the beach secured and our fortifications up, we have finally made a first step in reclaiming these lands. But we need to be careful. Their commander mentioned someone named Lord Dar\'Khan.\n\nCould he be their leader? And why does that name feel so familiar? Anyways, we won\'t get much from overthinking. Let us wait for the rest of the reinforcements before continuing our campaign in Quel\'thalas.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60677, 40387);
+replace into creature_involvedrelation (id, quest) values (80877, 40387);
+
+REPLACE INTO creature_template_addon VALUES
+(60672, 0, 0, 1, 0, 0, 0, 0),
+(60677, 0, 0, 2, 0, 0, 0, 0);
+
+delete from gameobject_template where entry = 2010881;
+delete from gameobject_template where entry = 2010882;
+REPLACE INTO gameobject_template VALUES
+(2010882, 14, 28718, 'Shalandis Ship', 0, 0, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject where id = 2010881;
+delete from gameobject where id = 2010882;
+REPLACE INTO gameobject (id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) VALUES
+(2010882, 1, -3947.74, -4626.38, 5.22041, 0.747484, 0, 0, 0.365102, 0.930968, 300, 300, 100, 1, 0, 0);
+
+-- Reputation:
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40371;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40376;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40377;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40378;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40379;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40380;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40381;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40382;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40383;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40384;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40385;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 200 where entry = 40386;
+update quest_template set rewrepfaction1 = 269, rewrepvalue1 = 1000 where entry = 40387;
+
+-- Dummy:
+replace into creature_template values (81264, 6908, 0, 0, 0, 'Shalandis Isle: Distance Trigger', '', 0, 1, 1, 1, 1, 0, 0, 0, 35, 0, 0.91, 1.14286, 0.2, 20, 5, 0, 0, 0, 7, 7, 0, 290, 1, 2000, 2200, 1, 33554432, 0, 7, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 5242886, 0, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 'NullAI', 0, 4, 0, 0, 3, 0, 0, 0, 2147483648, 0, 0, 0, 'npc_distance_trigger');
+delete from creature where id = 81264;
+replace into creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) values (81264, 0, 0, 0, 42, 0, 0, 7699.79, -5652.43, 3.63838, 4.85535, 25, 25, 0, 100, 100, 0, 0, 0);
+
+-- Spawn Captain:
+delete from creature where id = 60670;
+replace into creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES (60670, 0, 0, 0, 1, 0, 3385, -3929.98, -4638.62, 9.39826, 5.46738, 25, 25, 0, 100, 100, 0, 0, 0);
+replace into creature (id, id2, id3, id4, map, display_id, equipment_id, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES (60670, 0, 0, 0, 42, 0, 3385, 7659.05, -5606, 13.3265, 0.603108, 25, 25, 0, 100, 100, 0, 0, 0);
+
+-- NPC 'Corrupted Felstone' changed to GO:
+delete from creature where id = 60428;
+delete from creature_template where entry = 60428;
+REPLACE INTO gameobject_template VALUES
+(2010883, 2, 26308, 'Corrupted Felstone', 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_felstone');
+delete from gameobject where id = 2010883 and position_x between 3536.3 and 3536.4;
+delete from gameobject where id = 181174 and position_x between 3536.3 and 3536.4;
+REPLACE INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+(2010883, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0),
+(181174, 1, 3536.35, -1570.49, 170.42, 1.24, 0, 0, 0.59716, -0.802122, 25, 25, 100, 1, 0, 0);

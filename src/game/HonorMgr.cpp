@@ -202,7 +202,7 @@ void HonorMaintenancer::SetCityRanks()
 
     for (uint8 i = 1; i < MAX_RACES; ++i)
     {
-        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorStanding` FROM characters WHERE `honorStanding` > 0 and race = '%u' ORDER BY `honorStanding` ASC LIMIT 1", i);
+        QueryResult *result = CharacterDatabase.PQuery("SELECT `guid`, `honorLastWeekHK` FROM characters WHERE `honorLastWeekHK` > 0 and race = '%u' ORDER BY `honorLastWeekHK` DESC LIMIT 1", i);
 
         if (result)
         {
@@ -210,9 +210,9 @@ void HonorMaintenancer::SetCityRanks()
             {
                 Field *fields = result->Fetch();
                 uint32 guid = fields[0].GetUInt32();
-                uint32 honorStanding = fields[1].GetUInt32();
+                uint32 kills = fields[1].GetUInt32();
 
-                highestStandingInRace[i] = std::make_pair(guid, honorStanding);
+                highestStandingInRace[i] = std::make_pair(guid, kills);
 
             } while (result->NextRow());
         }

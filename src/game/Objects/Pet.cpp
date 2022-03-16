@@ -787,12 +787,21 @@ void Pet::RegenerateFocus()
 
 void Pet::LooseHappiness()
 {
-    uint32 curValue = GetPower(POWER_HAPPINESS);
+    const uint32 curValue = GetPower(POWER_HAPPINESS);
     if (curValue <= 0)
         return;
-    int32 addvalue = (140 >> GetLoyaltyLevel()) * 125;      //value is 70/35/17/8/4 (per min) * 1000 / 8 (timer 7.5 secs)
-    if (IsInCombat())                                       //we know in combat happiness fades faster, multiplier guess
+
+    if (Unit const* owner{ GetOwner() })
+    {
+        if (((Player*)owner)->IsTaxiFlying())
+            return;
+    }
+
+    int32 addvalue = (140 >> GetLoyaltyLevel()) * 125; // Value is 70/35/17/8/4 (per min) * 1000 / 8 (timer 7.5 secs)
+
+    if (IsInCombat()) // We know in combat happiness fades faster, multiplier guess
         addvalue = int32(addvalue * 1.5);
+
     ModifyPower(POWER_HAPPINESS, -addvalue);
 }
 

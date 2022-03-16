@@ -261,6 +261,7 @@ miscelanneous/feature_custom_spell_test.cpp
 miscelanneous/feature_gardening.cpp
 miscelanneous/feature_shop.cpp
 miscelanneous/feature_transmog.h
+miscelanneous/ptr.cpp
 miscelanneous/random_scripts_0.cpp
 miscelanneous/random_scripts_1.cpp
 miscelanneous/random_scripts_2.cpp
@@ -271,6 +272,7 @@ miscelanneous/custom_exploration_triggers.cpp
 world/alterac_mountains.cpp
 world/arathi_highlands.cpp
 world/ashenvale.cpp
+world/alahthalas.cpp
 world/azshara.cpp
 world/blasted_lands.cpp
 world/boss_omen.cpp

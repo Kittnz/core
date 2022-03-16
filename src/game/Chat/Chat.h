@@ -224,6 +224,7 @@ class ChatHandler
         bool HandleUnitStatCommand(char *args);
 		bool HandleBgTestCommand(char *args);
 		bool HandleTurtleCinematic(char *args);
+		bool HandleGetSkillValueCommand(char *args);
         // Reload        
         bool HandleReloadShopCommand(char* args);
 

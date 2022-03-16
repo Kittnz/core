@@ -352,7 +352,6 @@ struct GameObjectInfo
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
     uint32 PhaseQuestId;
-    uint32 PhaseQuestAction;
     uint32 ScriptId;
 
     // helpers
@@ -844,7 +843,6 @@ class GameObject : public WorldObject
         uint32 GetLevel() const final;
 
         uint32 GetPhaseQuestId() const { return GetGOInfo()->PhaseQuestId; }
-        uint32 GetPhaseQuestAction() const { return GetGOInfo()->PhaseQuestAction; }
 
         bool IsAtInteractDistance(Position const& pos, float radius) const;
         bool IsAtInteractDistance(Player const* player, uint32 maxRange = 0) const;
