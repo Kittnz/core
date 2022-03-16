@@ -369,7 +369,7 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
 
         tyrande->m_Events.AddLambdaEventAtOffset([tyrande]()
             {
-                tyrande->MonsterSay("Yes Priestess. It means the next Moonwell is needed, in Alah'thalas. Perhaps in time, it will guide some of them back to Elune's light, but more importantly, it will give their people a second chance. <name>, you have done both of our people a great service. If Lady Vereesa Windrunner agrees, then I would like you to be present at the creation of the Moonwell. I shall send Priestess Alunasha to establish the well. She has shown sympathy to the plight of the Quel'dorei.");
+                tyrande->MonsterSay("It means the next Moonwell is needed, in Alah'thalas. Perhaps in time, it will guide some of them back to Elune's light, but more importantly, it will give their people a second chance. If Lady Vereesa Windrunner agrees, then I would like you to be present at the creation of the Moonwell. I shall send Priestess Alunasha to establish the well. She has shown sympathy to the plight of the Quel'dorei.");
                 tyrande->HandleEmote(EMOTE_ONESHOT_TALK);
             }, 130000);
 
