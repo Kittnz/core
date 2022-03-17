@@ -115,6 +115,6 @@ replace into quest_end_scripts (id, delay, command, datalong, datalong2, datalon
 (4144, 19, 1, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Bloodpetal Sprouts: Muigin - Emote OneShotLaugh'),
 (4144, 19, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4969, 0, 0, 0, 0, 0, 0, 0, 0, 'Bloodpetal Sprouts: Muigin - Say Text'),
 (4144, 22, 3, 0, 986, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, -6204.39, -1055.46, -197.712, 0, 0, 'Bloodpetal Sprouts: Muigin - Move'),
-(4144, 23, 35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4.86947, 0, 'Bloodpetal Sprouts: Muigin - Set Orientation'),
+(4144, 23, 35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4.86947, 0, 'Bloodpetal Sprouts: Muigin - Set Orientation');
 -- (4144, 25, 4, 147, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Bloodpetal Sprouts: Muigin - Add Npc Flags'),
 -- (4144, 25, 4, 46, 256, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Bloodpetal Sprouts: Muigin - Remove Unit Flags');

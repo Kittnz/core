@@ -1,0 +1,1 @@
+delete from item_template where entry = 69005;
