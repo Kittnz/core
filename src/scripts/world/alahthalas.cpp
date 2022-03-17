@@ -408,21 +408,20 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
 
 bool GossipHello_npc_breanna_darrowmont(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestRewardStatus(40385) && !pPlayer->GetQuestRewardStatus(40386) && !pCreature->GetMapId() == 42)
+    if (pPlayer->GetQuestRewardStatus(40385) && !pPlayer->GetQuestRewardStatus(40386) && pPlayer->GetMapId() != 42)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Head to Shalandis Isle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready to head to the Shalandis Isle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
-    if (pPlayer->GetQuestStatus(40387) == QUEST_STATUS_COMPLETE && pCreature->GetMapId() == 42)
+    if (pPlayer->GetQuestRewardStatus(40386) &&  pPlayer->GetQuestStatus(40387) == QUEST_STATUS_COMPLETE && pPlayer->GetMapId() == 42)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Head to Theramore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready to return to Theramore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     pPlayer->SEND_GOSSIP_MENU(60670, pCreature->GetGUID());
-
     return true;
 }
 
