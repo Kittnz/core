@@ -65,13 +65,6 @@ void instance_dire_maul::OnPlayerEnter(Player* pPlayer)
     if (!pPlayer)
         return;
 
-    // prevent instance reset exploit
-    if (pPlayer->HasItemCount(ITEM_GORDOK_INNER_DOOR_KEY, 1))
-    {
-        if (GetData(TYPE_MOLDAR) != DONE)
-            pPlayer->DestroyItemCount(ITEM_GORDOK_INNER_DOOR_KEY, 1, true);
-    }
-
     // set the trap again if server went down
     if (GetData(TYPE_BROKEN_TRAP) == DONE)
     {
