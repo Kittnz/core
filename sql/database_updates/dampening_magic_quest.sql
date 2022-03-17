@@ -1,0 +1,2 @@
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1206
+update quest_template set rewspell = 0, objectives = 'Slay 3 Draconic Magelords and kill Lieutenant Azsalus. Return to Magus Bromley in Aszhara.' where entry = 40127;
