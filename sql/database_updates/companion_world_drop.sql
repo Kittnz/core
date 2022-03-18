@@ -44,3 +44,6 @@ replace into npc_vendor (entry, item) values (91402, 50078); -- Jinz'ah <Voodoo 
 replace into npc_vendor (entry, item) values (91402, 50078); -- Jinz'ah <Voodoo Hexxer>
 replace into npc_vendor (entry, item) values (91865, 50078); -- Primalist Bin'doga <Reagents>
 replace into npc_vendor (entry, item) values (3490,  50078);  -- Hula'mahi <Reagents and Herbs>
+-- Tirisfal Bat:
+update creature_template set display_id1 = 4732 name = 'Tirisfal Batling' where entry = 51585;
+replace into creature_loot_template values (1554, 51858, 1, 6, 1, 1, 0); -- Vampiric Duskbat
