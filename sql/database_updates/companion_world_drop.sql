@@ -35,3 +35,12 @@ replace into npc_vendor (entry, item) values (80961, 50068); -- Vanessa Clang <D
 replace into creature_loot_template values (3807, 50069, 2, 6, 1, 1, 0); -- Forsaken Assassin
 replace into creature_loot_template values (2246, 50069, 2, 6, 1, 1, 0); -- Syndicate Assassin
 replace into creature_loot_template values (5623, 50069, 2, 6, 1, 1, 0); -- Wastewander Assassin
+-- Gilnean Raven
+update creature_template set display_id1 = 18746 where entry = 89000;
+replace into creature_display_info_addon values (18746,0,0,0,0);
+-- Dart Frog
+update item_template set buy_price = 36000, sell_price = 5500, name = 'Dart Frog', description = 'Toads and frogs are fast friends of trolls, perfect for poisons.' where entry = 50078;
+replace into npc_vendor (entry, item) values (91402, 50078); -- Jinz'ah <Voodoo Hexxer>
+replace into npc_vendor (entry, item) values (91402, 50078); -- Jinz'ah <Voodoo Hexxer>
+replace into npc_vendor (entry, item) values (91865, 50078); -- Primalist Bin'doga <Reagents>
+replace into npc_vendor (entry, item) values (3490,  50078);  -- Hula'mahi <Reagents and Herbs>
