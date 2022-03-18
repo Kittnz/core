@@ -45,5 +45,12 @@ replace into npc_vendor (entry, item) values (91402, 50078); -- Jinz'ah <Voodoo 
 replace into npc_vendor (entry, item) values (91865, 50078); -- Primalist Bin'doga <Reagents>
 replace into npc_vendor (entry, item) values (3490,  50078);  -- Hula'mahi <Reagents and Herbs>
 -- Tirisfal Bat:
-update creature_template set display_id1 = 4732 name = 'Tirisfal Batling' where entry = 51585;
+update creature_template set display_id1 = 4732, name = 'Tirisfal Batling' where entry = 51585;
 replace into creature_loot_template values (1554, 51858, 1, 6, 1, 1, 0); -- Vampiric Duskbat
+-- Darters:
+update item_template set name = 'Brightwing', description = 'Hello, friend! Brightwing likes it when you visit!' where entry = 50077;
+update item_template set name = 'Spectral Faeling' where entry = 81151;
+update creature_template set scale = 0.7 where entry = 9662;
+-- 
+update item_template set name = 'Dalaran Cloud Familiar', description = 'A mage from Dalaran always seem so serious, until their messages are delivered by these emotive familiars.' where entry = 81207;
+update creature_template set name = 'Dalaran Cloud Familiar' where entry = 81031;
