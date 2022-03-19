@@ -338,6 +338,9 @@ bool AuthSocket::_HandleLogonChallenge()
     pkt << (uint8) CMD_AUTH_LOGON_CHALLENGE;
     pkt << (uint8) 0x00;
 
+    // Whether to continue handling the logon after prechecks or not
+    bool handle_logon{ true };
+
     ///- Verify that this IP is not in the ip_banned table
     // No SQL injection possible (paste the IP address as passed by the socket)
     std::string address = get_remote_address();
@@ -350,8 +353,33 @@ bool AuthSocket::_HandleLogonChallenge()
         pkt << (uint8)WOW_FAIL_DB_BUSY;
         BASIC_LOG("[AuthChallenge] Banned ip '%s' tries to login with account '%s'!", get_remote_address().c_str(), _login.c_str());
         delete result;
+
+        handle_logon = false;
     }
-    else
+
+    // Throttle the number of successful connections to different accounts from a single IP within a certain timeframe
+    const auto throttleCount{ 15 };
+    const auto throttleDuration{ 300 };
+    if (handle_logon && throttleCount > 0)
+    {
+        result = LoginDatabase.PQuery("SELECT COUNT(id) FROM account WHERE last_ip = '%s' AND last_login > NOW() - '%d'", address.c_str(), throttleDuration);
+        if (result)
+        {
+            const auto connections{ result->Fetch()[0].GetInt32() + 1 }; // Include this connection in the throttle?
+
+            if (connections >= throttleCount)
+            {
+                pkt << (uint8)WOW_FAIL_DB_BUSY;
+                BASIC_LOG("[AuthChallenge] Too many successful login attempts from '%s' (%d) within last %d seconds (limit %d)", address.c_str(), connections, throttleDuration, throttleCount);
+
+                handle_logon = false;
+            }
+
+            delete result;
+        }
+    }
+
+    if (handle_logon)
     {
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
@@ -374,7 +402,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
             if (requireVerification && !verified)
             {
-                BASIC_LOG("[AuthChallenge] Account '%s' using IP '%s 'email address requires email verification - rejecting login", _login.c_str(), get_remote_address().c_str());
+                BASIC_LOG("[AuthChallenge] Account '%s' ('%s) and local IP %u 'email address requires email verification - rejecting login", _login.c_str(), get_remote_address().c_str(), ch->ip);
                 pkt << (uint8)WOW_FAIL_UNKNOWN_ACCOUNT;
                 send((char const*)pkt.contents(), pkt.size());
                 return true;
