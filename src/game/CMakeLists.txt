@@ -81,6 +81,7 @@ set (game_SRCS
     Chat/ChannelMgr.cpp
     Chat/Chat.cpp
     Chat/AsyncCommandHandlers.cpp
+    Chat/WhisperTargetLimits.cpp
     Commands/Commands.cpp
     Database/CharacterDatabaseCache.cpp
     Database/CharacterDatabaseCleaner.cpp
@@ -274,6 +275,7 @@ set (game_SRCS
     Chat/ChannelMgr.h
     Chat/Chat.h
     Chat/AsyncCommandHandlers.h
+    Chat/WhisperTargetLimits.h
     Commands/Nostalrius.h
     Database/CharacterDatabaseCache.h
     Database/CharacterDatabaseCleaner.h

@@ -23,8 +23,7 @@
 /// @{
 /// \file
 
-#ifndef __WORLDSESSION_H
-#define __WORLDSESSION_H
+#pragma once
 
 #include "Common.h"
 #include "SharedDefines.h"
@@ -33,6 +32,7 @@
 #include "Item.h"
 #include "GossipDef.h"
 #include "MapNodes/AbstractPlayer.h"
+#include "WhisperTargetLimits.h"
 
 #include <optional>
 
@@ -459,6 +459,8 @@ class WorldSession
         uint32 getDialogStatus(Player *pPlayer, Object* questgiver, uint32 defstatus);
         uint32 GetAccountMaxLevel() const { return _characterMaxLevel; }
         void SetAccountMaxLevel(uint32 l) { _characterMaxLevel = l; }
+
+        WhisperTargetLimits& GetWhisperTargets() { return _whisper_targets; }
 
         // Public chat cooldown restriction functionality
         // Intentionally session-based to avoid login/logout hijinks
@@ -895,6 +897,8 @@ class WorldSession
         AccountTypes _security;
         uint32 _accountId;
 
+        WhisperTargetLimits _whisper_targets;
+
         time_t _logoutTime;
         bool m_inQueue;                                     // session wait in auth.queue
         bool m_playerLoading;                               // code processed in LoginPlayer
@@ -948,5 +952,4 @@ class WorldSession
         MasterPlayer*   m_masterPlayer;
         /// End of clustering system
 };
-#endif
 /// @}

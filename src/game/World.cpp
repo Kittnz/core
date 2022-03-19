@@ -958,6 +958,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_YELLRANGE_LINEARSCALE_MAXLEVEL, "YellRange.LinearScale.MaxLevel", 0);
     setConfig(CONFIG_UINT32_YELLRANGE_QUADRATICSCALE_MAXLEVEL, "YellRange.QuadraticScale.MaxLevel", 0);
     setConfig(CONFIG_UINT32_YELLRANGE_MIN, "YellRange.Min", 0);
+    setConfig(CONFIG_UINT32_WHISPER_TARGETS_MAX, "WhisperTargets.MaxTargets", 0);
+    setConfig(CONFIG_UINT32_WHISPER_TARGETS_DECAY, "WhisperTargets.DecayTime", 0);
+    setConfig(CONFIG_UINT32_WHISPER_TARGETS_BYPASS_LEVEL, "WhisperTargets.BypassLevel", 0);
 
     setConfig(CONFIG_UINT32_ITEM_INSTANTSAVE_QUALITY, "Item.InstantSaveQuality", ITEM_QUALITY_ARTIFACT);
     setConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING, "Item.PreventDataMining", true);
