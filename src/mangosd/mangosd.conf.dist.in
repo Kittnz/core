@@ -1968,3 +1968,19 @@ Spells.CCDelay = 200
 Hardcore.Disable.Duel = 0
 
 PTR = 0
+
+#
+#    WhisperTargets.MaxTargets
+#    WhisperTargets.DecayTime
+#        Sets how many different players can be whispered in a specific time window. (WhisperTargets.DecayTime)
+#        Hyjal Default: 15 (Player), 1800 (30 Minutes)
+
+WhisperTargets.MaxTargets = 15
+WhisperTargets.DecayTime = 1800
+
+#
+#    WhisperTargets.BypassLevel
+#        Checking for the highest toon on the players account if there is a toon which is on level (WhisperTargets.BypassLevel), skip this mechanic.
+#        Hyjal Default: 40 (Level)
+
+WhisperTargets.BypassLevel = 40

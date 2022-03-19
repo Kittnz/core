@@ -810,9 +810,21 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     SendWrongFactionNotice();
                     return;
                 }
+
                 if (/*player->GetZoneId() != masterPlr->GetZoneId() && */masterPlr->GetLevel() < sWorld.getConfig(CONFIG_UINT32_WHISP_DIFF_ZONE_MIN_LEVEL))
                 {
                     ChatHandler(this).SendSysMessage("You cannot whisper yet.");
+                    return;
+                }
+
+                const auto maxLevel{ masterPlr->GetSession()->GetAccountMaxLevel() };
+                auto& whisper_targets{ masterPlr->GetSession()->GetWhisperTargets() };
+                Player* toPlayer{ player->GetSession()->GetPlayer() };
+
+                if (toPlayer && !whisper_targets.can_whisper(toPlayer->GetObjectGuid(), maxLevel))
+                {
+                    ChatHandler(this).PSendSysMessage("You have whispered too many different players too quickly.");
+                    ChatHandler(this).PSendSysMessage("Please wait a while before whispering any additional players.");
                     return;
                 }
             }
