@@ -804,6 +804,12 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
     if (spellId_1 == spellId_2)
         return false;
 
+    // Moonkin Aura and Power of the Guardian (Atiesh):
+    if (spellInfo_1->Id == 24907 && spellInfo_2->Id == 28142) return false;
+    if (spellInfo_1->Id == 24907 && spellInfo_2->Id == 28143) return false;
+    if (spellInfo_1->Id == 24907 && spellInfo_2->Id == 28144) return false;
+    if (spellInfo_1->Id == 24907 && spellInfo_2->Id == 28145) return false;
+
     // Resurrection sickness
     if ((spellInfo_1->Id == SPELL_ID_PASSIVE_RESURRECTION_SICKNESS) != (spellInfo_2->Id == SPELL_ID_PASSIVE_RESURRECTION_SICKNESS))
         return false;
