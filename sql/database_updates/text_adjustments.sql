@@ -1,0 +1,1 @@
+update quest_template set objectives = 'Travel to Greenpaw Village and slay 3 Foulweald Shamans.' where entry = 55032;
