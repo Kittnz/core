@@ -122,6 +122,12 @@ void WorldSession::HandleGMTicketCreateOpcode(WorldPacket& recvData)
             return;
         }
 
+        ChatHandler(this).SendSysMessage("NOTE: Game Masters DO NOT handle bug reports!");
+        ChatHandler(this).SendSysMessage("Please use our bugtracker and provide sources if possible:");
+        ChatHandler(this).SendSysMessage("https://github.com/slowtorta/turtlewow-bug-tracker/issues");
+        ChatHandler(this).SendSysMessage("For casual support, visit our discord:");
+        ChatHandler(this).SendSysMessage("https://discord.com/invite/mBGxmHy");
+
         if (ticketType >= GMTICKET_MAX)
             return;
 
