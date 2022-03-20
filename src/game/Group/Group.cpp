@@ -37,6 +37,7 @@
 #include "LootMgr.h"
 #include "LFGMgr.h"
 #include "LFGHandler.h"
+#include "Chat.h"
 
 #include <array>
 
@@ -80,7 +81,7 @@ void Roll::targetObjectBuildLink()
 
 Group::Group() : m_Id(0), m_leaderLastOnline(0), m_groupType(GROUPTYPE_NORMAL), 
                  m_bgGroup(nullptr), m_lootMethod(FREE_FOR_ALL), m_lootThreshold(ITEM_QUALITY_UNCOMMON),
-                 m_subGroupsCounts(nullptr), m_groupTeam(TEAM_NONE), m_LFGAreaId(0)
+                 m_subGroupsCounts(nullptr), m_groupTeam(TEAM_NONE), m_LFGAreaId(0), m_isCrossfaction(false)
 {
 }
 
@@ -312,12 +313,61 @@ Player* Group::GetInvited(std::string const& name) const
     return nullptr;
 }
 
+bool Group::IsCrossfaction() const
+{
+    if (!isBGGroup())
+        return false;
+
+    return m_isCrossfaction;
+}
+
+bool Group::UpdateCrossfaction()
+{
+    const auto hordeCount = std::count_if(m_memberSlots.begin(), m_memberSlots.end(), [this](auto member) {
+        Player* player = sObjectMgr.GetPlayer(member.guid);
+        if (!player || !player->GetSession() || player->GetGroup() != this)
+            return false;
+
+        return player->GetTeamId() == TEAM_HORDE;
+    });
+
+    m_isCrossfaction = hordeCount != 0 || hordeCount != GetMembersCount();
+
+    return m_isCrossfaction;
+}
+
 bool Group::AddMember(ObjectGuid guid, const char* name, uint8 joinMethod)
 {
     if (!_addMember(guid, name))
         return false;
 
     SendUpdate();
+
+    constexpr const char* message = "This party has members from both factions. Engaging in PvP or attacking PvP enabled NPCs in the open world will result in getting removed from the party.";
+    if (!isBGGroup())
+    {
+        bool wasCrossfaction = IsCrossfaction();
+        bool isCrossfaction = UpdateCrossfaction();
+
+        if (!wasCrossfaction && isCrossfaction) // do full group notify
+        {
+            for (member_citerator citr = m_memberSlots.begin(); citr != m_memberSlots.end(); ++citr)
+            {
+                Player* player = sObjectMgr.GetPlayer(citr->guid);
+                if (!player || !player->GetSession() || player->GetGroup() != this)
+                    continue;
+
+                ChatHandler(player).SendSysMessage(message);
+            }
+        }
+        else if (wasCrossfaction)
+        {
+            //already was xfac, just send notification to joining member.
+            if (Player* player = sObjectMgr.GetPlayer(guid))
+                ChatHandler(player).SendSysMessage(message);
+        }
+
+    }
 
     if (Player *player = sObjectMgr.GetPlayer(guid))
     {
@@ -373,6 +423,8 @@ uint32 Group::RemoveMember(ObjectGuid guid, uint8 removeMethod)
     if (GetMembersCount() > GetMembersMinCount())
     {
         bool leaderChanged = _removeMember(guid);
+
+        bool isCrossfaction = IsCrossfaction();
 
         if (Player *player = sObjectMgr.GetPlayer(guid))
         {
