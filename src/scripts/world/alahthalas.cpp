@@ -465,6 +465,7 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 Creature* commander = pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
                 commander->SetWalk(true);
                 commander->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                pQuestGiver->MonsterSay("Here they come, hold your ground!");
             }, 1000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -475,11 +476,13 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_CORPSE_DESPAWN);
                 pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_CORPSE_DESPAWN);
                 pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->MonsterSay("Do not falter, for Quel'Thalas for the Alliance!");
 
             }, 60000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
+                pQuestGiver->MonsterSay("Endirina-dor Highborne!");
                 Creature* lady_ripper = pQuestGiver->SummonCreature(60673, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
                 lady_ripper->SetWalk(true);
                 lady_ripper->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
@@ -498,6 +501,7 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
+                pQuestGiver->MonsterSay("Begone, spawn of darkness!");
                 Creature* frostshiv = pQuestGiver->SummonCreature(60674, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
                 frostshiv->SetWalk(true);
                 frostshiv->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
