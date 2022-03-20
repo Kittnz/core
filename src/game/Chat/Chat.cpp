@@ -380,9 +380,9 @@ ChatCommand * ChatHandler::getCommandTable()
         { "level",          SEC_ADMINISTRATOR,     true,  &ChatHandler::HandleResetLevelCommand,          "", nullptr },
         { "spells",         SEC_ADMINISTRATOR,     true,  &ChatHandler::HandleResetSpellsCommand,         "", nullptr },
         { "stats",          SEC_ADMINISTRATOR,     true,  &ChatHandler::HandleResetStatsCommand,          "", nullptr },
-        { "talents",        SEC_GAMEMASTER,     true,  &ChatHandler::HandleResetTalentsCommand,        "", nullptr },
-        { "all",            SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleResetAllCommand,            "", nullptr },
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "talents",        SEC_GAMEMASTER,        true,  &ChatHandler::HandleResetTalentsCommand,        "", nullptr },
+        { "all",            SEC_CONSOLE,           true,  &ChatHandler::HandleResetAllCommand,            "", nullptr },
+        { nullptr,          0,                     false, nullptr,                                        "", nullptr }
     };
 
     static ChatCommand sendCommandTable[] =
