@@ -315,7 +315,7 @@ Player* Group::GetInvited(std::string const& name) const
 
 bool Group::IsCrossfaction() const
 {
-    if (!isBGGroup())
+    if (isBGGroup())
         return false;
 
     return m_isCrossfaction;
