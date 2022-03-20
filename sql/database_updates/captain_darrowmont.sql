@@ -1,1 +1,1 @@
-update creature_template set display_id1 = 18666, name = 'Captain James Darrowmont' where entry = 60670;
+update creature_template set display_id1 = 4835, name = 'Captain James Darrowmont' where entry = 60670;
