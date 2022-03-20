@@ -5,3 +5,5 @@ delete from item_template where entry = 83010;
 delete from item_template where name like '%Dressing Box%';
 -- Rename Steel Plate Helm:
 update item_template set name = 'Steel Helm' where entry = 7922;
+-- Farmer's Guidebook: Surviving on the Land!
+update item_template set sell_price = 0, buy_price = 0 where entry = 51709;
