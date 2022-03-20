@@ -331,7 +331,7 @@ bool Group::UpdateCrossfaction()
         return player->GetTeamId() == TEAM_HORDE;
     });
 
-    m_isCrossfaction = hordeCount != 0 || hordeCount != GetMembersCount();
+    m_isCrossfaction = hordeCount != 0 && hordeCount != GetMembersCount();
 
     return m_isCrossfaction;
 }
@@ -344,7 +344,7 @@ bool Group::AddMember(ObjectGuid guid, const char* name, uint8 joinMethod)
     SendUpdate();
 
     constexpr const char* message = "This party has members from both factions. Engaging in PvP or attacking PvP enabled NPCs in the open world will result in getting removed from the party.";
-    if (!isBGGroup())
+    if (!isBGGroup() && GetMembersCount() != 1) // dont check xfac groups and send message for leader-only groups.
     {
         bool wasCrossfaction = IsCrossfaction();
         bool isCrossfaction = UpdateCrossfaction();
@@ -424,7 +424,7 @@ uint32 Group::RemoveMember(ObjectGuid guid, uint8 removeMethod)
     {
         bool leaderChanged = _removeMember(guid);
 
-        bool isCrossfaction = IsCrossfaction();
+        UpdateCrossfaction();
 
         if (Player *player = sObjectMgr.GetPlayer(guid))
         {
