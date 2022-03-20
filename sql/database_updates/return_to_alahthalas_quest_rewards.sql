@@ -1,5 +1,5 @@
 replace into item_template values
- ('81500', '4', '0', 'Pendant of the Sunwell', 'A single droplet of the Sunwell rests within the crystal.', '60863', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
+ ('81500', '4', '0', 'Pendant of the Sunwell', 'These necklaces are highly sought after since the destruction of the elven homeland.', '60863', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '10', '7', '8',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -9,7 +9,7 @@ replace into item_template values
  '0', '1', NULL);
  
  replace into item_template values
- ('81501', '4', '0', 'Amulet of Thas\'alah', 'A leaf from the Mother Tree is engraved in the pendant, it remains healthy even now.', '60857', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
+ ('81501', '4', '0', 'Amulet of Thas\'alah', 'A leaf from the Mother Tree is encased in the pendant, remaining healthy even now.', '60857', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '14', '7', '8',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -19,7 +19,7 @@ replace into item_template values
  '0', '1', NULL);
  
  replace into item_template values
- ('81502', '4', '0', 'Sunblessed Shard of Renewal', 'A shard of pure light with incredible healing capabilities.', '6539', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
+ ('81502', '4', '0', 'Sun-Blessed Shard of Renewal', 'A shard of pure light with incredible healing capabilities.', '6539', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '8', '6', '8',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -29,7 +29,7 @@ replace into item_template values
  '0', '1', NULL);
  
  replace into item_template values
- ('81503', '4', '0', 'Choker of the Phoenix', 'A sturdy choker in the shape of a Phoenix. The elven metal is enchanted to provide protection to its wearer.', '9658', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
+ ('81503', '4', '0', 'Thalassian Defender\'s Gorget', 'Enchanted armor that was once given to protect the Children of the Sun against invaders.', '9658', '3', '0', '1', '62252', '15563', '2', '-1', '-1', '68',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '7', '14',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '6', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0',
