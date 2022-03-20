@@ -2100,17 +2100,22 @@ void RacePlayer::GoRaceMode()
 	}
 }
 
-void RacePlayer::LeaveRaceMode()
+void RacePlayer::LeaveRaceMode(bool left)
 {
 	if (map == nullptr) return;
 
 	if (bIsRaceMode)
 	{
 		Player* pl = map->GetPlayer(guid);
+
+        if (!pl)
+            pl = sObjectAccessor.FindPlayerNotInWorld(guid);
 		if (pl != nullptr)
 		{
 			pl->SetFly(false);
-			pl->TeleportTo(savedPlPos);
+            if (!left)
+                pl->TeleportTo(savedPlPos); // dont tp if left by going off track.
+
 			pl->SetDisplayId(pl->GetNativeDisplayId());
 			pl->SetRooted(false);
 			pl->Unmount();
@@ -2156,7 +2161,7 @@ void RacePlayer::Update(uint32 deltaTime)
 	if (Player* pl = map->GetPlayer(guid))
 	{
 		constexpr float AllowedDist = 24.0f * 24.0f;
-		constexpr float OutOfRaceDist = 250.0f * 250.0f;
+		constexpr float OutOfRaceDist = 100.0f * 100.0f;
 
 		float DistToCheckpoint = pl->GetDistanceSqr(nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z);
 		if (DistToCheckpoint < AllowedDist)
@@ -2168,7 +2173,7 @@ void RacePlayer::Update(uint32 deltaTime)
 		if (DistToCheckpoint > OutOfRaceDist)
 		{
 			pl->SendRaidWarning("You leave the race!");
-			LeaveRaceMode();
+			LeaveRaceMode(true);
 		}
 	}
 	else
