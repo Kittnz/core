@@ -450,6 +450,11 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
 
 bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+	if (!pPlayer)
+		return false;
+	if (pPlayer->InBattleGround())
+		return false;
+
     GameObject* other_tree = pPlayer->FindNearestGameObject(1000070, 15.0F);
 
     if (other_tree)
