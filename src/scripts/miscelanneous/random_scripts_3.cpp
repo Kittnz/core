@@ -1246,6 +1246,8 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
 {
     pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
+    auto pGuid = pPlayer->GetObjectGuid();
+
     DoAfterTime(pQuestGiver, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
         {
             npc->SetWalk(true);
@@ -1298,8 +1300,16 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
         }
         });
 
-    DoAfterTime(pQuestGiver, 92 * IN_MILLISECONDS, [pPlayer = pPlayer]() {
-        if (GameObject* riftSpell = pPlayer->FindNearestGameObject(7000035, 50.0f))
+    DoAfterTime(pQuestGiver, 92 * IN_MILLISECONDS, [pGuid, npc = pQuestGiver]() {
+       
+        WorldObject* obj = nullptr;
+        Player* pPlayer = ObjectAccessor::FindPlayer(pGuid);
+        if (!pPlayer)
+            obj = npc;
+        else
+            obj = pPlayer;
+
+        if (GameObject* riftSpell = obj->FindNearestGameObject(7000035, 50.0f))
             riftSpell->AddObjectToRemoveList();
         });
 
