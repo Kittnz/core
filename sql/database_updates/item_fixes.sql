@@ -9,3 +9,5 @@ update item_template set name = 'Steel Helm' where entry = 7922;
 update item_template set sell_price = 0, buy_price = 0 where entry = 51709;
 -- Cryptwatcher's Call can't be repaired:
 update item_template set item_level = 65, required_level = 60 where entry = 83467;
+-- Nitghtscape Cloak is not disechantable:
+update item_template set disenchant_id = 8 where entry = 8195;
