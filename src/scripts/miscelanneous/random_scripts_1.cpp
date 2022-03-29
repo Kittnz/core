@@ -388,6 +388,13 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
         displayid = static_cast<uint32>(models[modelid]);
         break;
     }
+    case 50439: // Harpy
+    {
+        int models[3] = { 3022, 10872, 1352 };
+        int modelid = rand() % 3;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
     case 51200: // Goblin
     {
         int m_male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };

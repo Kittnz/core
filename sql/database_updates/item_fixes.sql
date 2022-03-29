@@ -76,3 +76,5 @@ replace into item_template values
 -- Attaching spells to items
 update item_template set spellid_1 = 18092, spelltrigger_1 = 2, spellppmRate_1 = 1.2, spellcooldown_1 = 360 where entry = 65013;
 update item_template set spellid_1 = 5597, spelltrigger_1 = 2, spellppmRate_1 = 0.9, spellcooldown_1 = 540 where entry = 65005;
+
+replace into item_template values (50439, 12, 0, 'Illusion: Harpy', 'This disguise will work until logout.', 36521, 1, 0, 1, 0, 0, 0, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1300, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 31726, 0, 0, 0, 10, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'item_illusion');
