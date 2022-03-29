@@ -75,7 +75,7 @@ bool GOHello_skeleton_thalo(Player* pPlayer, GameObject* pGo)
     if (pPlayer->GetQuestStatus(80291) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(70891, 20.0F)) // The Shadow Well
     {
         pGo->SummonCreature(70891, pPlayer->GetPositionX() + 2.0F, pPlayer->GetPositionY() + 2.0F, pPlayer->GetPositionZ() + 1.0F, 0.0F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
-        ChatHandler(pPlayer).SendSysMessage("|cffF58CBABlack Blood of N'zoth whispers: N'zoth sees you, the black water shall herald an age of reckoning for this world.|r");
+        ChatHandler(pPlayer).SendSysMessage("|cffF58CBAWhisper: He sees all. Indulge yourself in his voice, for there is no point in defying the inevitable. The day of reckoning is approaching...|r");
     }
     return true;
 }
