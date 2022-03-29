@@ -10,7 +10,7 @@ update quest_template set
 
 details = 'With all that has been going around here, I could use help from an adventurer like you.\n\nYou see, our people used magic to shape the land and create buildings like this, but this one appears to have been only partially complete and abandoned.\n\nI tried venturing inside myself but was immediately filled with dread and horror. It felt like it was consuming me, so I fled outside. But you, on the other hand, seem like someone who is not easily frightened.\n\nBefore I... left. I noticed a Stone Tablet etched into the cliff. Perhaps it can provide some clue as to what might\'ve happened here.\n\nCould you be so kind as to retrieve it for me?',
 objectives = 'Obtain the tablet within the unfinished building.',
-offerrewardtext = 'So it was haunted, after all? It\'s a shame we could not talk to the spirit, but I guess it\'s for the best.\n\nAnyways, let\'s see that tablet. Ah, it\'s written in Thalassian, that makes things a bit easier. It details the establishment of Ishnu\'danil as the new home of the Highborne and Alah\'aran. But look at this part.\n\nIt\'s a verse about a well, to be precise, a well of power. And what is this? Look here at the bottom.\n\nThere\'s a message inscribed here, but this does not match the writing style from before. It states: <Avoid the Shalla\'aran. Avoid the Ishnu\'danil. There is only darkness here.>\n\nIshnu\'danil translates to Fortune\'s Peak, but Shall\'aran means the Shadow Well.\n\nIf something that powerful lies somewhere around here, we must investigate further.',
+offerrewardtext = 'So it was haunted, after all? It\'s a shame we could not talk to the spirit, but I guess it\'s for the best.\n\nAnyways, let\'s see that tablet. Ah, it\'s written in Thalassian, that makes things a bit easier. It details the establishment of Ishnu\'danil as the new home of the Highborne and Alah\'aran. But look at this part.\n\nIt\'s a verse about a well, to be precise, a well of power. And what is this? Look here at the bottom.\n\nThere\'s a message inscribed here, but this does not match the writing style from before. It states: <Avoid the Shalla\'aran. Avoid the Ishnu\'danil. There is only darkness here.>\n\nIshnu\'danil translates to Fortune\'s Peak, but Shalla\'aran means the Shadow Well.\n\nIf something that powerful lies somewhere around here, we must investigate further.',
 requestitemstext = 'Did you get it?'	 
 
 where entry = 80290;
@@ -31,5 +31,5 @@ requestitemstext = 'Took you long enough, $N. You\'re alone.\n\nWhere is Scryer 
 
 where entry = 80292;
 
-update creature_template set name = 'Dark Ooze' where entry = 70891;
+update creature_template set name = 'Blood of Shalla\'Aran' where entry = 70891;
 delete from creature_template where entry = 50056;
