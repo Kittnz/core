@@ -42,3 +42,9 @@ REPLACE INTO npc_vendor VALUES
 REPLACE INTO gossip_menu VALUES (60702, 60702, 0);
 REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (60702, 60702);
 REPLACE INTO broadcast_text (entry, male_text) VALUES (60702, 'Everyone wants to know the secret to my brew, but it’s something I can\'t teach.\n\nI learned from an eccentric man riding a turtle a few years back.');
+
+-- Vean'za
+REPLACE INTO creature_template (entry, name, display_id1, equipment_id, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, npc_flags, dmg_min, dmg_max, dmg_multiplier, civilian, unit_flags, armor, scale, detection_range, call_for_help_range, regeneration, gossip_menu_id, flags_extra) VALUES (60703, 'Vean\'za', 4089, 4506, 15, 15, 500, 550, 126, 1, 1.14286, 1, 50, 78, 1, 1, 4096, 40, 1, 18, 5, 3, 60703, 2);
+REPLACE INTO gossip_menu VALUES (60703, 60703, 0);
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (60703, 60703);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (60703, 'It\'s really inconvenient to come here to eat every day, but I just can\'t get enough of Sarn\'s brew.\n\nHave you seen Nantai work? I could watch that all day.');
