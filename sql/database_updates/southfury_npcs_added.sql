@@ -1,0 +1,2 @@
+-- Added creatures ang gossip and shit for Southfury thingy. idk i hate gossip and shit.
+REPLACE INTO creature_template (entry, name, subname, display_id1, display_id2, display_id3,  equipment_id, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run) VALUES (60678, 'Southfury Peon', 'Southfury Trading Company', 10038, 550, 7201, 14901, 4, 4, 69, 69, 35, 1, 1.14286);
