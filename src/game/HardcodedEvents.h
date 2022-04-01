@@ -371,7 +371,7 @@ struct RacePlayer
 	bool bIsRaceMode = false;
 
 	void GoRaceMode();
-	void LeaveRaceMode(bool left = false);
+	void LeaveRaceMode();
 	void Update(uint32 deltaTime);
 private:
 	void IncrementCheckpoint(Player* pl);
