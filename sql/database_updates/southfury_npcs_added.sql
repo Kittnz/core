@@ -14,3 +14,6 @@ REPLACE INTO npc_vendor VALUES
 REPLACE INTO gossip_menu VALUES (60700, 60700, 0);
 REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (60700, 60700);
 REPLACE INTO broadcast_text (entry, male_text) VALUES (60700, 'I\'ve found my calling after the injuries of the last war in preparing the finest meals I can provide. \n\nCome and have your fill before heading back to work!');
+
+-- Rat
+REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, scale, detection_range, call_for_help_range, regeneration) VALUES (60701, 'Gress', 'Rats', 1141, 25, 25, 1000, 1023, 35, 1, 1.14286, 2, 18, 5, 3);
