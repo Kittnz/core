@@ -48,3 +48,6 @@ REPLACE INTO creature_template (entry, name, display_id1, equipment_id, level_mi
 REPLACE INTO gossip_menu VALUES (60703, 60703, 0);
 REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (60703, 60703);
 REPLACE INTO broadcast_text (entry, male_text) VALUES (60703, 'It\'s really inconvenient to come here to eat every day, but I just can\'t get enough of Sarn\'s brew.\n\nHave you seen Nantai work? I could watch that all day.');
+
+
+UPDATE creature_template SET npc_flags = 16388 WHERE entry = 81023;
