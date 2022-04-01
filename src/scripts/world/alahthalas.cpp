@@ -572,7 +572,8 @@ struct npc_frostshivAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         Creature* nasuna = m_creature->FindNearestCreature(60677, 50.0F);
-        nasuna->MonsterSay("Victory is ours! The enemy's attack is slowing down. Set up the defenses and take position! The next time they come, we will be ready!");
+        if (nasuna)
+            nasuna->MonsterSay("Victory is ours! The enemy's attack is slowing down. Set up the defenses and take position! The next time they come, we will be ready!");
     }
     void EnterCombat() {}
     void JustRespawned() { Reset(); }
