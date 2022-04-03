@@ -1,9 +1,3 @@
--- Tamamo server-todo
-UPDATE quest_template SET MinLevel = 14 WHERE entry = 40371;
-UPDATE item_template SET required_level = 14 WHERE entry = 65018;
-UPDATE quest_template SET MinLevel = 24 WHERE entry in (40376, 40377, 40378, 40379);
-UPDATE quest_template SET MinLevel = 44 WHERE entry in (40380, 40381, 40382, 40383, 40384);
-
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1250
 REPLACE into creature_loot_template VALUES
 (91718, 118, 0.0103, 0, 1, 1, 0),
