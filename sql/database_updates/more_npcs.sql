@@ -3,3 +3,6 @@ REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, le
 REPLACE INTO gossip_menu VALUES (60704, 60704, 0);
 REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (60704, 60704);
 REPLACE INTO broadcast_text (entry, male_text) VALUES (60704, '<She claps excitedly in your face before giggling wildly.>\n\nStep carefully around this estate! Lots of questionable types around, even the flowers are scared!\n\nCan you hear them?!');
+
+-- Coun
+REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, equipment_id, npc_flags) VALUES (60705, 'Zibs Smallcoil', 'The Lions Pride Legion', 7093, 28, 28, 860, 930, 35, 1, 1.14286, 3491, 4);
