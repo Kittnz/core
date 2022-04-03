@@ -324,10 +324,27 @@ bool Group::IsCrossfaction() const
 bool Group::UpdateCrossfaction()
 {
     const auto hordeCount = std::count_if(m_memberSlots.begin(), m_memberSlots.end(), [this](auto member) {
-        Player* player = sObjectMgr.GetPlayer(member.guid);
-        if (!player || !player->GetSession() || player->GetGroup() != this)
-            return false;
+        Player* player = sObjectAccessor.FindPlayerNotInWorld(member.guid);
+        auto playerCacheData = sObjectMgr.GetPlayerDataByGUID(member.guid.GetCounter());
 
+        if (!player)
+        {
+            if (playerCacheData)
+            {
+                switch (playerCacheData->uiRace)
+                {
+                    case RACE_DWARF:
+                    case RACE_GNOME:
+                    case RACE_HIGH_ELF:
+                    case RACE_HUMAN:
+                    case RACE_NIGHTELF:
+                        return false;
+                    default:
+                        return true;
+                }
+            }
+            return false;
+        }
         return player->GetTeamId() == TEAM_HORDE;
     });
 
