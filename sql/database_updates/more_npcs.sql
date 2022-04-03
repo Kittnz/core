@@ -6,3 +6,6 @@ REPLACE INTO broadcast_text (entry, male_text) VALUES (60704, '<She claps excite
 
 -- Coun
 REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, equipment_id, npc_flags) VALUES (60705, 'Zibs Smallcoil', 'The Lions Pride Legion', 7093, 28, 28, 860, 930, 35, 1, 1.14286, 3491, 4);
+
+-- Coun
+REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, equipment_id) VALUES (60706, 'Taranarion', 'The Lions Pride Legion', 3436, 32, 32, 949, 1286, 35, 1, 1.14286, 51601);
