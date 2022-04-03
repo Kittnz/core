@@ -9,3 +9,6 @@ REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, le
 
 -- Coun
 REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, equipment_id) VALUES (60706, 'Taranarion', 'The Lions Pride Legion', 3436, 32, 32, 949, 1286, 35, 1, 1.14286, 51601);
+
+-- Coun
+REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, equipment_id) VALUES (60706, 'Darren Jones', 'The Lions Pride Legion', 1299, 32, 32, 949, 1286, 35, 1, 1.14286, 914);
