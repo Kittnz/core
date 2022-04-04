@@ -103,7 +103,7 @@ REPLACE into creature_loot_template VALUES
 (91718, 30024, 0.5, 0, -30024, 1, 0),
 (91718, 30037, 2.5, 0, -30037, 1, 0),
 (91718, 30038, 0.5, 0, -30038, 1, 0),
-(91718, 60197, -100, 0, 1, 1, 0);
+(91718, 60197, -100, 3, 1, 1, 0);
 DELETE from creature_loot_template WHERE entry = 122 AND item = 60197;
 UPDATE creature_template SET loot_id = 91718 WHERE entry = 91718;
 
