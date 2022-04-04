@@ -1,0 +1,1 @@
+update creature_template set loot_id = 11881 where entry = 49006;
