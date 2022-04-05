@@ -848,6 +848,20 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     pVictim->CastCustomSpell(pVictim, 15290, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
                     return SPELL_AURA_PROC_OK;                                // no hidden cooldown
                 }
+
+                //CUSTOM reflective shields
+                case 45560:
+                {
+                    if (pVictim && pVictim->GetAura(SPELL_AURA_SCHOOL_ABSORB, SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD))
+                    {
+                        basepoints[0] = 0.15f * damage;
+                        //cast custom damage spell without threat.
+                        pVictim->CastCustomSpell(this, 45561, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura, false);
+                        return SPELL_AURA_PROC_OK;
+                    }
+                    return SPELL_AURA_PROC_CANT_TRIGGER;
+                }
+
                 // Oracle Healing Bonus ("Garments of the Oracle" set)
                 case 26169:
                 {

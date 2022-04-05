@@ -5263,7 +5263,7 @@ SpellCastResult WorldObject::CastSpell(GameObject* pTarget, SpellEntry const* sp
     return spell->prepare(std::move(targets), triggeredByAura);
 }
 
-void WorldObject::CastCustomSpell(Unit* pTarget, uint32 spellId, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
+void WorldObject::CastCustomSpell(Unit* pTarget, uint32 spellId, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem, Aura* triggeredByAura, bool addThreat, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
 {
     SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellId);
 
@@ -5276,10 +5276,10 @@ void WorldObject::CastCustomSpell(Unit* pTarget, uint32 spellId, int32 const* bp
         return;
     }
 
-    CastCustomSpell(pTarget, spellInfo, bp0, bp1, bp2, triggered, castItem, triggeredByAura, originalCaster, triggeredBy);
+    CastCustomSpell(pTarget, spellInfo, bp0, bp1, bp2, triggered, castItem, triggeredByAura, addThreat, originalCaster, triggeredBy);
 }
 
-void WorldObject::CastCustomSpell(Unit* pTarget, SpellEntry const *spellInfo, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem, Aura* triggeredByAura, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
+void WorldObject::CastCustomSpell(Unit* pTarget, SpellEntry const *spellInfo, int32 const* bp0, int32 const* bp1, int32 const* bp2, bool triggered, Item *castItem, Aura* triggeredByAura, bool addThreat, ObjectGuid originalCaster, SpellEntry const* triggeredBy)
 {
     if (!spellInfo)
     {
@@ -5322,6 +5322,7 @@ void WorldObject::CastCustomSpell(Unit* pTarget, SpellEntry const *spellInfo, in
     SpellCastTargets targets;
     targets.setUnitTarget(pTarget);
     spell->SetCastItem(castItem);
+    spell->m_addThreat = addThreat;
     spell->prepare(std::move(targets), triggeredByAura);
 }
 

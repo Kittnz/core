@@ -410,6 +410,8 @@ class Spell
         SpellEntry const* m_spellInfo;
         bool m_isCustomSpell = false;
 
+        bool m_addThreat = true;
+
         SpellEntry const* m_originalSpellInfo = nullptr; // For auto down-ranking aura case, we send this in cast result packet
         SpellEntry const* m_triggeredBySpellInfo;
         SpellEntry const* m_triggeredByParentSpellInfo; // Spell that triggered the spell that triggered this
