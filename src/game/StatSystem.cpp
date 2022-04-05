@@ -161,6 +161,32 @@ void Player::UpdateArmor()
         }
     }
 
+    //CUSTOM spirit armor
+    if (GetClass() == CLASS_SHAMAN)
+    {
+        auto auraList = GetAurasByType(SPELL_AURA_DUMMY);
+
+        static std::unordered_map<uint32, uint32> armorLookup =
+        {
+            {0000, 10},
+            {0000, 20},
+            {0000, 30}
+        };
+
+        for (const auto& aura : auraList)
+        {
+            if (auto findItr = armorLookup.find(aura->GetId()); findItr != armorLookup.end())
+            {
+                auto shield = GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND);
+                if (shield && shield->GetProto()->Class == ITEM_CLASS_ARMOR &&
+                    (shield->GetProto()->SubClass == ITEM_SUBCLASS_ARMOR_SHIELD || shield->GetProto()->SubClass == ITEM_SUBCLASS_ARMOR_BUCKLER))
+                {
+                    dynamic += shield->GetProto()->Armor / 100 * findItr->second;
+                }
+            }
+        }
+    }
+
     m_auraModifiersGroup[UNIT_MOD_ARMOR][TOTAL_VALUE] += dynamic;
     int32 value = GetTotalResistanceValue(SPELL_SCHOOL_NORMAL);
 
