@@ -2117,6 +2117,54 @@ bool ChatHandler::HandleReviveCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAnonymousWhispers(char* args)
+{
+    Player* player = GetSession()->GetPlayer();
+    bool value = player->HasOption(PLAYER_RANDOMIZE_WHISPER_NAMES);
+    char* nameStr = ExtractQuotedOrLiteralArg(&args);
+    std::string newName = nameStr;
+    if (value)
+    {
+        player->RemoveOption(PLAYER_RANDOMIZE_WHISPER_NAMES);
+        sObjectMgr.RemoveFakeName(player);
+    }
+    else
+    {
+        
+        if (!nameStr)
+        {
+            //TODO generate name here.
+            return false;
+        }
+        player->EnableOption(PLAYER_RANDOMIZE_WHISPER_NAMES);
+        sObjectMgr.AddFakeName(player, newName);
+    }
+
+    value = !value;
+
+    PSendSysMessage("Anonymous whispers are now %s", value ? "ON" : "OFF");
+
+
+    return true;
+}
+
+bool ChatHandler::HandleAnonymousMail(char* args)
+{
+    Player* player = GetSession()->GetPlayer();
+    bool value = player->HasOption(PLAYER_ANON_MAIL);
+
+    if (value)
+        player->RemoveOption(PLAYER_ANON_MAIL);
+    else
+        player->EnableOption(PLAYER_ANON_MAIL);
+
+    value = !value;
+
+    PSendSysMessage("Anonymous mails are now %s", value ? "ON" : "OFF");
+
+    return true;
+}
+
 bool ChatHandler::HandleAuraCommand(char* args)
 {
     Unit *target = GetSelectedUnit();

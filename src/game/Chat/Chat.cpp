@@ -532,6 +532,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,             0,                     false, nullptr,                                       "", nullptr }
     };
 
+    static ChatCommand anonymousCommandTable[] =
+    {
+        { "whispers",          SEC_GAMEMASTER,       false, &ChatHandler::HandleAnonymousWhispers,         "", nullptr},
+        { "mail",              SEC_GAMEMASTER,       false, &ChatHandler::HandleAnonymousMail,         "", nullptr}
+    };
+
     static ChatCommand commandTable[] =
     {
         { "account",        SEC_PLAYER,         true, nullptr,                                         "", accountCommandTable  },
@@ -650,6 +656,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "settime",        SEC_GAMEMASTER,     false, &ChatHandler::HandleSetTimeCommand, "", nullptr},
         { "play",           SEC_GAMEMASTER,     false, &ChatHandler::HandlePlayCommand, "", nullptr},
         { "getskillvalue",  SEC_GAMEMASTER,     false, &ChatHandler::HandleGetSkillValueCommand, "", nullptr},
+        { "anonymous",      SEC_GAMEMASTER,     false, nullptr,                                       "", anonymousCommandTable},
 
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
