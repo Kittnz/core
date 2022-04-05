@@ -939,9 +939,40 @@ bool AreaTrigger_at_irontree_wood(Player* pPlayer, AreaTriggerEntry const* pAt)
     return false;
 }
 
+// Vartrus the Ancient
+
+bool GossipHello_npc_vartrus_the_ancient(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestRewardStatus(7636) && !pPlayer->HasItemCount(18713, 1) && !pPlayer->HasItemCount(18707, 1))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greetings, ancient one. I have done all that has been asked of me. I now ask that you grant me Rhok'delar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (pPlayer->GetQuestRewardStatus(7636) && !pPlayer->HasItemCount(18715, 1) && !pPlayer->HasItemCount(18707, 1))
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Greetings, ancient one. I have done all that has been asked of me. I now ask that you grant me Lok'delar.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
+    pPlayer->SEND_GOSSIP_MENU(7800, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_vartrus_the_ancient(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1) pPlayer->AddItem(18713);
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2) pPlayer->AddItem(18715);
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_felwood()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_vartrus_the_ancient";
+    newscript->pGossipHello = &GossipHello_npc_vartrus_the_ancient;
+    newscript->pGossipSelect = &GossipSelect_npc_vartrus_the_ancient;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_kitten";
