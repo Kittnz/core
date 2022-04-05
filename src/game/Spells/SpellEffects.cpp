@@ -1892,6 +1892,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 363: m_caster->ToPlayer()->TeleportTo(1, 7118.21F, -3926.49F, 704.3F, 0.2F);   break; // School of the Dragonhawk
                         case 351: m_caster->ToPlayer()->TeleportTo(0, -10377.1F, -3374.04F, 21.82F, 1.8F);  break; // Blacktooth Grin
                         case 295: m_caster->ToPlayer()->TeleportTo(0, 843.65F, -5069.647F, 8.589F, 0.53F);  break; // Nephilim
+                        case 376: m_caster->ToPlayer()->TeleportTo(0, -10598.617F, -40.95F, 35.9F, 5.89F);  break; // The Lions Pride Legion
                         default: break;
                         }
                     }
