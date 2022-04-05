@@ -535,7 +535,8 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand anonymousCommandTable[] =
     {
         { "whispers",          SEC_GAMEMASTER,       false, &ChatHandler::HandleAnonymousWhispers,         "", nullptr},
-        { "mail",              SEC_GAMEMASTER,       false, &ChatHandler::HandleAnonymousMail,         "", nullptr}
+        { "mail",              SEC_GAMEMASTER,       false, &ChatHandler::HandleAnonymousMail,         "", nullptr},
+        { nullptr,             0,                     false, nullptr,                                       "", nullptr }
     };
 
     static ChatCommand commandTable[] =
