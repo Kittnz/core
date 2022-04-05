@@ -413,6 +413,8 @@ enum PlayerCheatOptions
     PLAYER_VIDEO_MODE              = 0x100,
     PLAYER_CHEAT_UNRANDOMIZE       = 0x200,
     PLAYER_CHEAT_ALWAYS_SPELL_CRIT = 0x400,
+    PLAYER_RANDOMIZE_WHISPER_NAMES = 0x800,
+    PLAYER_ANON_MAIL               = 0x1000
 };
 
 typedef std::map<uint32, QuestStatusData> QuestStatusMap;

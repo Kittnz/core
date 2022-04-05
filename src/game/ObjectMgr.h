@@ -713,6 +713,15 @@ class ObjectMgr
             return m_TaxiPathTransitions.equal_range(entry);
         }
 
+        void RemoveFakeName(Player* player)
+        {
+            m_fakeNames.erase(player->GetGUIDLow());
+        }
+        void AddFakeName(Player* player, const std::string& name)
+        {
+            m_fakeNames[player->GetGUIDLow()] = name;
+        }
+
         void LoadTaxiNodes();
         TaxiNodesEntry const* GetTaxiNodeEntry(uint32 id) const { return id < GetMaxTaxiNodeId() ? m_TaxiNodes[id].get() : nullptr; }
         uint32 GetMaxTaxiNodeId() const { return m_TaxiNodes.size(); }
@@ -1494,6 +1503,8 @@ class ObjectMgr
         ObjectGuidGenerator<HIGHGUID_CORPSE>     m_CorpseGuids;
 
         QuestMap            m_QuestTemplatesMap;
+
+        std::unordered_map<uint32, std::string> m_fakeNames;
 
         typedef std::unordered_map<uint32, uint32> QuestAreaTriggerMap;
         typedef std::unordered_map<uint32, std::string> ItemTextMap;
