@@ -1,0 +1,3 @@
+REPLACE INTO `gossip_menu_option` VALUES (50000,0,0,'Greetings, ancient one. I have done all that has been asked of me. I now ask that you grant me Rhok\'delar.',10784,1,1,-1,0,5000000,0,0,NULL,0,18717),(50000,1,0,'Greetings, ancient one. I have done all that has been asked of me. I now ask that you grant me Lok\'delar.',10785,1,1,-1,0,5000001,0,0,NULL,0,18718);
+UPDATE `creature_template` SET script_name = '' WHERE `entry` = 14524;
+UPDATE `broadcast_text` SET male_text = 'Greetings, $n.' WHERE `entry` = 10783;
