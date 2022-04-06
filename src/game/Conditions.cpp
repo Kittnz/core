@@ -326,6 +326,20 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
 
             return false;
         }
+        case CONDITION_WOW_PATCH:
+        {
+            // Always assume Turtle WoW is on patch 1.12 (10) for condition checks.
+            switch (m_value2)
+            {
+                case 0:
+                    return 10 == m_value1;
+                case 1:
+                    return 10 >= m_value1;
+                case 2:
+                    return 10 <= m_value1;
+            }
+            return false;
+        }
         case CONDITION_ACTIVE_HOLIDAY:
         {
             return sGameEventMgr.IsActiveHoliday(HolidayIds(m_value1));
@@ -1005,10 +1019,6 @@ bool ConditionEntry::IsValid()
             }
             break;
         }
-        case CONDITION_ESCORT:
-        {
-            break;
-        }
         case CONDITION_SOURCE_ENTRY:
         {
             if (!sObjectMgr.GetCreatureTemplate(m_value1) && !sObjectMgr.GetGameObjectInfo(m_value1))
@@ -1176,6 +1186,8 @@ bool ConditionEntry::IsValid()
         case CONDITION_CANT_PATH_TO_VICTIM:
         case CONDITION_IS_PLAYER:
         case CONDITION_OBJECT_IS_SPAWNED:
+        case CONDITION_ESCORT:
+        case CONDITION_WOW_PATCH:
             break;
         default:
             sLog.outErrorDb("Condition entry %u has bad type of %d, skipped ", m_entry, m_condition);
