@@ -1,3 +1,0 @@
-delete from gossip_menu_option where menu_id = 50000;
-update creature_template set script_name = 'npc_vartrus_the_ancient' where entry = 14524;
-update broadcast_text set male_text = 'We are Ancients: protectors of this once great forest.\n\nOur physical forms were destroyed ten thousands years ago when Archimonde and the Burning Legion marched upon Hyjal.\n\nOur spirits, however, remain intact.' where entry = 10783;
