@@ -116,3 +116,6 @@ UPDATE quest_template SET details = 'It seems as though there is only one thing 
 
 -- Flag creature 60705 as repair NPC. Already is a vendor.
 update creature_template set npc_flags = 16388 where entry = 60705;
+
+-- Creatures 60700, 60702 and 60703 need to be flagged PvP and Civilians.
+update creature_template set unit_flags = 4608, civilian = 1, flags_extra = 524298 where entry in (60700, 60702, 60703);
