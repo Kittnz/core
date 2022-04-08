@@ -113,3 +113,6 @@ REPLACE INTO gameobject_template (entry, type, displayId, name, size, data0, dat
 
 -- Dragunovovitsch
 UPDATE quest_template SET details = 'It seems as though there is only one thing left. I cannot believe the Blue Dragonflight would be responsible for such a thing. If their enemy is magic, then that means their enemy is Dalaran. We cannot allow their plans to succeed. We must deal with them now with due haste in our actions.\n\nJust south of here is Lake Mennar where the Blue Dragonflight has gathered. The cause of which was unknown until now. Head there, slay their Magelords, and kill the leader, Lieutenant Azsalus. Report back to me once you were able to shatter them. \n\nOne more thing... The Blue Dragonflight is not a foe to be underestimated. I would advise you to find a band of mercenaries or like-minded heroes. You will need them to battle with the dragonkin, or at least to stand a chance.' WHERE entry = 40127;
+
+-- Flag creature 60705 as repair NPC. Already is a vendor.
+update creature_template set npc_flags = 16388 where entry = 60705;
