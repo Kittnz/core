@@ -970,6 +970,7 @@ struct npc_uldum_pedestalAI : public ScriptedAI
             if (failedSearches >= 20)
             {
                 TogglePedestal();
+                Reset();
                 me->DeleteLater();
             }
 
