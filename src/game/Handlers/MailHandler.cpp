@@ -467,6 +467,15 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
     // mails which only contain a text message will arrive instantly
     uint32 deliver_delay = (req->itemGuid) ? sWorld.getConfig(CONFIG_UINT32_MAIL_DELIVERY_DELAY) : 0;
 
+
+    MailSender sender(loadedPlayer);
+
+    if (loadedPlayer->HasOption(PLAYER_ANON_MAIL))
+    {
+        deliver_delay = 0;
+        sender = MailSender(MAIL_NORMAL, 0u, MAIL_STATIONERY_GM);
+    }
+
     if (!item && req->COD)
     {
         req->COD = 0;
@@ -476,7 +485,7 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
     draft
     .SetMoney(req->money)
     .SetCOD(req->COD)
-    .SendMailTo(MailReceiver(req->receiverPtr, req->receiver), loadedPlayer, req->body.empty() ? MAIL_CHECK_MASK_COPIED : MAIL_CHECK_MASK_HAS_BODY, deliver_delay);
+    .SendMailTo(MailReceiver(req->receiverPtr, req->receiver), sender, req->body.empty() ? MAIL_CHECK_MASK_COPIED : MAIL_CHECK_MASK_HAS_BODY, deliver_delay);
 
     CharacterDatabase.BeginTransaction(loadedPlayer->GetGUIDLow());
     loadedPlayer->SaveInventoryAndGoldToDB();

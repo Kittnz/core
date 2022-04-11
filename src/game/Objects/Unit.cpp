@@ -6041,6 +6041,12 @@ void Unit::TogglePlayerPvPFlagOnAttackVictim(Unit const* pVictim, bool touchOnly
                 if (pVictimPlayer)
                     pThisPlayer->UpdatePvPContested(true);
 
+                if (auto group = pThisPlayer->GetGroup(); group && group->IsCrossfaction() && !pVictim->GetMap()->IsDungeon())
+                {
+                    group->RemoveMember(pThisPlayer->GetObjectGuid(), GROUP_KICK);
+                    ChatHandler(pThisPlayer).SendSysMessage("You have been removed from the cross-faction party for engaging in PvP or attacking PvP enabled NPCs in the open world.");
+                }
+
                 pThisPlayer->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ENTER_PVP_COMBAT);
             }
         }

@@ -27,67 +27,85 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
         {
             pGo->SummonCreature(10, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
 
-            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60666, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
-                });
-            DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+            Creature* vestia = pGo->SummonCreature(60666, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_TIMED_DESPAWN, 180 * IN_MILLISECONDS);
+            vestia = pPlayer->FindNearestCreature(60666, 30.0F);
+
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    vestia->SetWalk(true);
-                    vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
-                }
-                });
-            DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        vestia->SetWalk(true);
+                        vestia->GetMotionMaster()->MovePoint(0, -4505.66F, 1265.37F, 127.57F);
+                    }
+                }, 5000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("This is it, keep me safe!", player);
-                }
-                });
-            DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                });
-            DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                        vestia->MonsterSay("This is it, keep me safe!");
+                    }
+                }, 13000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
                 {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.", player);
-                }
-                });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                });
-            DoAfterTime(pPlayer, 46 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        //vestia->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        Creature* ogre_1 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                        //ogre_1->AI()->AttackStart(vestia);
+                    }
+                }, 15000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
                 {
-                    vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
-                    vestia->MonsterSayToPlayer("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!", player);
-                }
-                });
-            DoAfterTime(pPlayer, 60 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                gob->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
-                if (Creature* tuwhak = player->FindNearestCreature(60431, 30.0F))
+                    if (vestia)
+                    {
+                        Creature* ogre_2 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                    }
+                }, 30000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
                 {
-                    tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
-                }
-                });
-            DoAfterTime(pPlayer, 100 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                        vestia->MonsterSay("Mother moon, I call upon you to restore this sacred water, our negligence caused this defilement to happen and we humbly beg your giveness.");
+                    }
+                }, 31000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
                 {
-                    vestia->CastSpell(vestia, 1449, false);
-                }
-                });
+                    if (vestia)
+                    {
+                        Creature* ogre_3 = pGo->SummonCreature(60430, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                    }
+                }, 45000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+                {
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 23017, false); // Arcane Channeling
+                        vestia->MonsterSay("Bless us with the light of the moon and restore these waters to their former glory so that your love can be shared even to our wayward kin!");
+                    }
+                }, 46000);
+            pGo->m_Events.AddLambdaEventAtOffset([pGo, vestia]()
+                {
+                    if (vestia)
+                    {
+                        Creature* tuwhak = pGo->SummonCreature(60431, -4496.34F, 1281.63F, 127.91F, 4.25F, TEMPSUMMON_CORPSE_DESPAWN);
+                        tuwhak->MonsterYell("Tu'whak smack tiny people! Leave Tu'whak toilet alone!");
+                    }
+                }, 60000);
+            pGo->m_Events.AddLambdaEventAtOffset([vestia]()
+                {
+                    if (vestia)
+                    {
+                        vestia->CastSpell(vestia, 1449, false);
+                    }
+                }, 100000);
             DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
-                if (Creature* vestia = player->FindNearestCreature(60666, 30.0F))
-                {
-                    vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
-                    vestia->MonsterSayToPlayer("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.", player);
-                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
-                        player->KilledMonster(cInfo, ObjectGuid());
-                }
+                Creature* vestia = player->FindNearestCreature(60666, 30.0F);
+                vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
+                vestia->MonsterSay("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.");
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
+                    player->KilledMonster(cInfo, ObjectGuid());
                 });
         }
     }
@@ -390,21 +408,20 @@ bool QuestRewarded_npc_tyrande(Player* pPlayer, Creature* tyrande, Quest const* 
 
 bool GossipHello_npc_breanna_darrowmont(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestRewardStatus(40385) && !pPlayer->GetQuestRewardStatus(40386) && !pCreature->GetMapId() == 42)
+    if (pPlayer->GetQuestRewardStatus(40385) && !pPlayer->GetQuestRewardStatus(40386) && pPlayer->GetMapId() != 42)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Head to Shalandis Isle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready to head to the Shalandis Isle.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
-    if (pPlayer->GetQuestStatus(40387) == QUEST_STATUS_COMPLETE && pCreature->GetMapId() == 42)
+    if (pPlayer->GetQuestRewardStatus(40386) &&  pPlayer->GetQuestStatus(40387) == QUEST_STATUS_COMPLETE && pPlayer->GetMapId() == 42)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Head to Theramore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I'm ready to return to Theramore.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     }
 
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
     pPlayer->SEND_GOSSIP_MENU(60670, pCreature->GetGUID());
-
     return true;
 }
 
@@ -412,7 +429,7 @@ bool GossipSelect_npc_breanna_darrowmont(Player* pPlayer, Creature* pCreature, u
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        static const WorldLocation m_shalandis(42, 7705.45F, -5668.93F, 3.6f, 4.6f);
+        static const WorldLocation m_shalandis(42, 7679.61F, -5631.98, 0.4F, 5.3F);
         pPlayer->TeleportTo(m_shalandis);
     }
 
@@ -448,6 +465,7 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 Creature* commander = pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
                 commander->SetWalk(true);
                 commander->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+                pQuestGiver->MonsterSay("Here they come, hold your ground!");
             }, 1000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -458,15 +476,36 @@ bool QuestAccept_npc_nasuna(Player* pPlayer, Creature* pQuestGiver, Quest const*
                 pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_CORPSE_DESPAWN);
                 pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_CORPSE_DESPAWN);
                 pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->MonsterSay("Do not falter, for Quel'Thalas for the Alliance!");
 
-            }, 90000);
+            }, 60000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
+                pQuestGiver->MonsterSay("Endirina-dor Highborne!");
                 Creature* lady_ripper = pQuestGiver->SummonCreature(60673, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
                 lady_ripper->SetWalk(true);
                 lady_ripper->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+            }, 140000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->SummonCreature(60675, 7705.61F, -5679.09F, 3.26F, 1.83F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7707.94F, -5675.16F, 3.65F, 1.82F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7701.89F, -5677.43F, 3.16F, 1.91F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7700.34F, -5680.39F, 2.65F, 1.81F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60675, 7710.91F, -5677.55F, 3.78F, 1.88F, TEMPSUMMON_CORPSE_DESPAWN);
+                pQuestGiver->SummonCreature(60676, 7704.40F, -5673.89F, 3.62F, 1.89F, TEMPSUMMON_CORPSE_DESPAWN);
+
             }, 180000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Begone, spawn of darkness!");
+                Creature* frostshiv = pQuestGiver->SummonCreature(60674, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
+                frostshiv->SetWalk(true);
+                frostshiv->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
+            }, 200000);
 
     }
 
@@ -497,12 +536,6 @@ struct npc_lady_ripperAI : public ScriptedAI
         }
 
         DoMeleeAttackIfReady();
-    }
-    void JustDied(Unit*) override
-    {
-        Creature* frostshiv = m_creature->SummonCreature(60674, 7704.91F, -5676.25F, 3.51F, 1.89F, TEMPSUMMON_TIMED_DESPAWN, 3 * MINUTE * IN_MILLISECONDS);
-        frostshiv->SetWalk(true);
-        frostshiv->GetMotionMaster()->MovePoint(0, 7696.65F, -5651.08F, 3.559440F);
     }
     void EnterCombat() {}
     void JustRespawned() { Reset(); }
@@ -539,7 +572,8 @@ struct npc_frostshivAI : public ScriptedAI
     void JustDied(Unit*) override
     {
         Creature* nasuna = m_creature->FindNearestCreature(60677, 50.0F);
-        nasuna->MonsterSay("Victory is ours! The enemy's attack is slowing down. Set up the defenses and take position! The next time they come, we will be ready!");
+        if (nasuna)
+            nasuna->MonsterSay("Victory is ours! The enemy's attack is slowing down. Set up the defenses and take position! The next time they come, we will be ready!");
     }
     void EnterCombat() {}
     void JustRespawned() { Reset(); }

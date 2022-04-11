@@ -308,6 +308,10 @@ class Group
                 SendUpdate();
         }
 
+
+        bool IsCrossfaction() const;
+        bool UpdateCrossfaction();
+
         void SetTargetIcon(uint8 id, ObjectGuid targetGuid);
         void ClearTargetIcon(ObjectGuid targetGuid);
         uint16 InInstance();
@@ -451,5 +455,6 @@ class Group
         uint8*              m_subGroupsCounts;
         Team                m_groupTeam; // ALLIANCE / HORDE / TEAM_NONE / TEAM_CROSSFACTION
         uint32              m_LFGAreaId;
+        bool                m_isCrossfaction;
 };
 #endif
