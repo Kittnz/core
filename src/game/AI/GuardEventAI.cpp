@@ -106,7 +106,7 @@ void GuardEventAI::EnterCombat(Unit *pWho)
 //=============================================================================
 void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 {
-	if (m_creature->IsAlive() && !m_creature->IsInCombat() && m_creature->IsWithinLOSInMap(pPlayer))
+	if (m_creature->IsAlive() && !m_creature->IsInCombat() && m_creature->IsWithinLOSInMap(pPlayer) && !pPlayer->HasStealthAura())
 	{
 		switch (pPlayer->GetTeam())
 		{

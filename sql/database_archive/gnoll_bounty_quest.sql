@@ -1,0 +1,1 @@
+update quest_template set objectives = 'Kill 10 Riverpaw Runts and 10 Riverpaw Outrunners and return to Supervisor Raelen in Eastvale Logging Camp.' where entry = 60042;	

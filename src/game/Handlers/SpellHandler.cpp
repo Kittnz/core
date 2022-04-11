@@ -44,6 +44,12 @@ void WorldSession::HandleUseItemOpcode(WorldPacket& recvPacket)
     // TODO: add targets.read() check
     Player* pUser = _player;
 
+    if (!pUser->IsAlive())
+    {
+        pUser->SendEquipError(EQUIP_ERR_YOU_ARE_DEAD, nullptr, nullptr);
+        return;
+    }
+
     // ignore for remote control state
     if (!pUser->IsSelfMover())
     {
@@ -263,7 +269,18 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket& recvPacket)
         stmt.PExecute(pItem->GetGUIDLow());
     }
     else
+    {
+        // Opening item should properly interrupt looting
+        if (_player->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_LOOTING))
+        {
+            if (ObjectGuid lootGuid{ GetPlayer()->GetLootGuid() })
+            {
+                DoLootRelease(lootGuid);
+            }
+        }
+
         pUser->SendLoot(pItem->GetObjectGuid(), LOOT_CORPSE);
+    }
 }
 
 void WorldSession::HandleGameObjectUseOpcode(WorldPacket & recv_data)

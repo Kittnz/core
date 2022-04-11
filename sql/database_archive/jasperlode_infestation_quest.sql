@@ -1,0 +1,1 @@
+update quest_template set objectives = 'Go to the Jasperlode Mine northeast of Goldshire and clear out the spider infestation. Return to Marshal Dughan in Goldshire.' where entry = 60154;	

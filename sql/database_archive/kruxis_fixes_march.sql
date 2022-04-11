@@ -34,3 +34,6 @@ DELETE FROM item_template WHERE entry = 80764;
 
 -- Item fix Dragunovi
 UPDATE item_template SET name = 'Azshara Keeper\'s Staff', required_level = 0 WHERE entry = 60333;
+
+-- Fix Dragunovi
+UPDATE item_template SET name = "Crate of Ley-Shards" WHERE entry = 60114;

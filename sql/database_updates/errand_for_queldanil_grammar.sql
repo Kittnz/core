@@ -1,0 +1,2 @@
+-- Errand for Quel'Danil
+update quest_template set offerrewardtext = 'You have my deepest gratitude, $C, and of course I\'ll make sure to thank Loania, too. You must be curious why a human is among us. If you are interested, then I shall tell you...' where entry = 80393;

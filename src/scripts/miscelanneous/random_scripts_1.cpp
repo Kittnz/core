@@ -363,7 +363,6 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     case 51247: displayid = 10008; break; // Chromie
     case 51055: displayid = 18356;  break; // Tree Form
     case 51065: displayid = 4629;  break; // Shadow
-    case 51253: displayid = 6746;  break; // Furbolg
     case 51209: displayid = 2176;  break; // Rat
     case 81145: displayid = 18251; break; // Pandaren
     case 51066: displayid = 12030; break; // Flamewaker
@@ -378,6 +377,20 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
     case 80694: // Scourge
     {
         int models[3] = { 158, 612, 733 };
+        int modelid = rand() % 3;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    case 51253: // Furbolg
+    {
+        int models[3] = { 6746, 5773, 11363 };
+        int modelid = rand() % 3;
+        displayid = static_cast<uint32>(models[modelid]);
+        break;
+    }
+    case 50439: // Harpy
+    {
+        int models[3] = { 3022, 10872, 1352 };
         int modelid = rand() % 3;
         displayid = static_cast<uint32>(models[modelid]);
         break;
@@ -450,6 +463,11 @@ bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTar
 
 bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
+	if (!pPlayer)
+		return false;
+	if (pPlayer->InBattleGround())
+		return false;
+
     GameObject* other_tree = pPlayer->FindNearestGameObject(1000070, 15.0F);
 
     if (other_tree)

@@ -463,6 +463,8 @@ class ChatHandler
         bool HandleReplenishCommand(char* args);
         bool HandleModifyMorphCommand(char* args);
         bool HandleAuraCommand(char* args);
+        bool HandleAnonymousWhispers(char* args);
+        bool HandleAnonymousMail(char* args);
         bool HandleUnAuraCommand(char* args);
         bool HandleLinkGraveCommand(char* args);
         bool HandleNearGraveCommand(char* args);
