@@ -371,6 +371,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "mangos_string",                SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadMangosStringCommand,            "", nullptr },
         { "bgplayers",                    SEC_ADMINISTRATOR, true, &ChatHandler::HandleReloadBgAmounts,                      "", nullptr},
         { "gmlevels",                     SEC_ADMINISTRATOR, true, &ChatHandler::HandleReloadGmLevelsCommand,                   "", nullptr},
+        { "leasharea",                    SEC_ADMINISTRATOR, true, &ChatHandler::HandleReloadLeashAreasCommand,                 "", nullptr},
         { nullptr,                       0,                 false, nullptr,                                                  "", nullptr }
     };
 
