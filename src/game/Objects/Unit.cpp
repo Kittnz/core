@@ -836,7 +836,8 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     }
 
     //CUSTOM Vampiric Embrace
-    if (auto player = ToPlayer(); player && damageSchoolMask == SPELL_SCHOOL_MASK_SHADOW && (player->HasSpell(45557) || player->HasSpell(45558)))
+    if (auto player = ToPlayer(); player && damageSchoolMask == SPELL_SCHOOL_MASK_SHADOW && (player->HasSpell(45557) || player->HasSpell(45558))
+        && pVictim->HasAura(15286) /*vampiric embrace*/)
     {
         const uint32 spellEffectiveness = player->HasSpell(45557) ? 1 : 2;
         auto group = player->GetGroup();
