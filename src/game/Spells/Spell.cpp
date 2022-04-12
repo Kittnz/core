@@ -2076,6 +2076,18 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
     // custom radius cases
     switch (m_spellInfo->SpellFamilyName)
     {
+        //CUSTOM Thunderhead
+        case SPELLFAMILY_SHAMAN:
+        {
+            if (m_spellInfo->SpellIconID == 19 && m_casterUnit && m_casterUnit->HasAura(45508)) // lightning shields
+            {
+                targetMode = TARGET_UNIT_FRIEND;
+                auto playerTarget = ObjectAccessor::GetUnit(*m_casterUnit, m_casterUnit->GetTargetGuid());
+                if (playerTarget && playerTarget->IsPlayer())
+                    m_targets.setUnitTarget(playerTarget);
+            }
+        }break;
+
         case SPELLFAMILY_GENERIC:
         {
             switch (m_spellInfo->Id)

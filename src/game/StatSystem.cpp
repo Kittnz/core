@@ -168,9 +168,9 @@ void Player::UpdateArmor()
 
         static std::unordered_map<uint32, uint32> armorLookup =
         {
-            {0000, 10},
+            {45951, 10},
             {0000, 20},
-            {0000, 30}
+            {45953, 30}
         };
 
         for (const auto& aura : auraList)
