@@ -3364,9 +3364,62 @@ bool GOSelect_mournful_apparition_atack(Player* pPlayer, GameObject* pGo, uint32
     return false;
 }
 
+bool QuestRewarded_npc_captain_grayson(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40396 && !pQuestGiver->FindNearestCreature(60709, 30.0F)) // Captain Grayson's Revenge
+    {
+        Creature* npc_cookie = pQuestGiver->SummonCreature(60709, -11410.70F, 1966.56F, 10.60F, 6.12F, TEMPSUMMON_TIMED_DESPAWN, 0.125 * MINUTE * IN_MILLISECONDS);
+
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            Creature* npc_cookie = npc->FindNearestCreature(60709, 30.0F);
+            npc_cookie->PMonsterEmote("Cookie looks at Grayson with sadness in his eyes and waves him off.");
+            npc_cookie->MonsterSay("Mrrgl?");
+            });
+        DoAfterTime(pPlayer, 9 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            Creature* npc_captain_grayson = npc->FindNearestCreature(392, 30.0F);
+            npc_captain_grayson->MonsterSay("Cookie, I am sorry! I swear I will make it right. Farewell, my friend.");
+            });
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_captain_grayson(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestRewardStatus(40396))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "What was Cookie to you, Grayson?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(392, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_captain_grayson(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30019, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_captain_grayson";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_captain_grayson;
+    newscript->pGossipHello = &GossipHello_npc_captain_grayson;
+    newscript->pGossipSelect = &GossipSelect_npc_captain_grayson;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "mournful_apparition_atack";
