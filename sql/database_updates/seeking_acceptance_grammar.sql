@@ -1,0 +1,2 @@
+-- Seeking Acceptance
+update quest_template set title = 'Seeking Acceptance', details = 'As the immediate threat of the Galak has been addressed, perhaps you can seek out a member of the nearby village and speak on my behalf.', requestitemstext = 'I see that you have something on your mind. Speak freely.', offerrewardtext = 'I have never heard such a strange tale and I struggle to believe it to be true. We have never known the centaur to be anything but beasts seeking our extinction. If she is yet true to her word, perhaps I can assist.' where entry = 40364;
