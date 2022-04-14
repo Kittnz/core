@@ -506,6 +506,7 @@ class ChatHandler
         bool HandleSaleCommand(char* args);
         bool HandleReloadBgAmounts(char* args);
         bool HandleReloadGmLevelsCommand(char* args);
+        bool HandleReloadLeashAreasCommand(char* args);
         bool HandleMountCommand(char* args);
         bool HandleModifyTitleCommand(char* args);
         bool HandleModifyXpCommand(char* args);
