@@ -1,0 +1,2 @@
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1303
+update creature_template set spell_list_id = 94510, unit_class = 8, equipment_id = 3047, spell_id1 = 0, spell_id2 = 0, spell_id3 = 0  where entry = 60467;
