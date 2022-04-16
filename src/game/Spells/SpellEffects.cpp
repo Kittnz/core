@@ -1810,6 +1810,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         return;
                     }
                 }
+                case 45407: // Refreshment Ritual
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        float dis{ 2.0F };
+                        float x, y, z;
+                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->ToPlayer()->GetOrientation());
+                        y += dis * sin(m_caster->ToPlayer()->GetOrientation());
+                        m_caster->ToPlayer()->PMonsterEmote("%s begins to conjure a refreshment table.", nullptr, false, m_caster->ToPlayer()->GetName());
+                        m_caster->ToPlayer()->SummonGameObject(1000083, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
+                    }
+                }
                 case 46012: // Portable Wormhole Generator
                 {
                     if (m_caster && m_caster->IsPlayer())
