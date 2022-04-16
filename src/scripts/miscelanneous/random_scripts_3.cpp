@@ -59,13 +59,31 @@ bool GOHello_runed_thalassian_tablet(Player* pPlayer, GameObject* pGo)
 struct highborne_wraithAI : public ScriptedAI
 {
     highborne_wraithAI(Creature* c) : ScriptedAI(c) { Reset(); }
-    void Reset() {}
-    void UpdateAI(const uint32 diff) {}
-    void JustRespawned() { Reset(); }
-    void Aggro(Unit* who)
+
+    bool transformed;
+    bool fightBegun;
+
+    void Reset()
     {
-        m_creature->MonsterYell("Leave this place! Leave! It took us, it will take you!");
+        transformed = false;
+        fightBegun = false;
     }
+
+    void UpdateAI(const uint32 diff)
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        if (!fightBegun)
+        {
+            fightBegun = true;
+            m_creature->MonsterYell("Leave this place! Leave! It took us, it will take you!");
+        }
+
+        DoMeleeAttackIfReady();
+    }
+    void EnterCombat() {}
+    void JustRespawned() { Reset(); }
 };
 
 CreatureAI* GetAI_highborne_wraith(Creature* _Creature) { return new highborne_wraithAI(_Creature); }
