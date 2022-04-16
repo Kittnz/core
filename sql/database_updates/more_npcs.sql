@@ -14,4 +14,4 @@ REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, le
 REPLACE INTO creature_template (entry, name, subname, display_id1, level_min, level_max, health_min, health_max, faction, speed_walk, speed_run, equipment_id) VALUES (60707, 'Darren Jones', 'The Lions Pride Legion', 1299, 32, 32, 949, 1286, 35, 1, 1.14286, 914);
 
 -- Coun
-REPLACE INTO gameobject_template (entry, type, displayId, name, size, data0, data1) VALUES (2004014, 5, 25251, 'The Illspring Estate', 1, 1, 1);
+REPLACE INTO gameobject_template (entry, type, displayId, name, size, data0, data1) VALUES (6000001, 5, 25251, 'The Illspring Estate', 1, 1, 1);
