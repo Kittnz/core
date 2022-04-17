@@ -1,0 +1,9 @@
+delete from quest_template where entry = 50010;
+delete from quest_template where entry = 50302;
+delete from quest_template where entry = 50301;
+delete from quest_template where entry = 50303;
+delete from quest_template where entry = 50300;
+delete from quest_template where entry = 50212;
+delete from quest_template where entry = 50210;
+delete from quest_template where entry = 50213;
+delete from quest_template where entry = 50211;
