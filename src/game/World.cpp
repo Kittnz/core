@@ -1598,6 +1598,8 @@ void World::SetInitialWorldSettings()
     sCompanionMgr->LoadFromDB();
     sMountMgr->LoadFromDB();
 
+    Creature::LoadMaxLeashAreaMultiplier();
+
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);
     m_startTime = m_gameTime;

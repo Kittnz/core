@@ -671,6 +671,9 @@ class Creature : public Unit
         static float _GetDamageMod(int32 rank); ///< Get custom factor to scale damage (default 1, CONFIG_FLOAT_RATE_*_DAMAGE)
         static float _GetSpellDamageMod(int32 rank); ///< Get custom factor to scale spell damage (default 1, CONFIG_FLOAT_RATE_*_SPELLDAMAGE)
 
+        static float GetMaxLeashAreaMultiplier(uint32 entry);
+        static void LoadMaxLeashAreaMultiplier();
+
         VendorItemData const* GetVendorItems() const;
         VendorItemData const* GetVendorTemplateItems() const;
         uint32 GetVendorItemCurrentCount(VendorItem const* vItem);

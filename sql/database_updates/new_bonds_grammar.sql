@@ -1,0 +1,6 @@
+-- New Bonds
+update quest_template set details = 'Do not be alarmed, I am an exile of the Galak that seeks refuge and mean you no harm. I accompanied my brethren here with the intent to raid, but upon seeing the tauren and their peaceful life free from the pains of our clan life - I began to yearn for their freedom.\n\nIf we weaken the Galak\'s attack on the tauren, perhaps I can earn their trust.', requestitemstext = 'Is it done, $c? As an exile, this is my only chance to find acceptance in amongst others.', offerrewardtext = 'Your kindness surprises me, $c. With the Galak\'s raid crippled, the tauren will be free to continue their peaceful lives.\n\nThere is still yet work to do if I am to earn their favor.' where entry = 40363;
+update creature_template set level_min = 10, level_max = 10, display_id1 = 4871, name = 'Kherra' where entry = 66002;
+delete from creature where id = 66002;
+REPLACE INTO creature (`id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
+(66002, 0, 0, 0, 1, 0, 0, -2287.83, -950.54, -5.63405, 2.11425, 300, 300, 0, 100, 100, 0, 0, 0);
