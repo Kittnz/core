@@ -6096,8 +6096,9 @@ bool ChatHandler::HandleModifyManaCommand(char* args)
     if (chr->GetTypeId() == TYPEID_PLAYER && needReportToTarget(chr->ToPlayer()))
         ChatHandler(chr->ToPlayer()).PSendSysMessage(LANG_YOURS_MANA_CHANGED, GetNameLink().c_str(), mana, manam);
 
-    chr->SetMaxPower(POWER_MANA, manam);
-    chr->SetPower(POWER_MANA, mana);
+    auto powerType = chr->GetPowerType();
+    chr->SetMaxPower(powerType, manam);
+    chr->SetPower(powerType, mana);
 
     return true;
 }
