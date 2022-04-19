@@ -18,7 +18,7 @@ update item_template set description = 'The best way to give away your position!
 update item_template set description = 'This little friend snuck into your boot to join you on your travels.' where entry = 50079;
 update item_template set container_slots = 8, name = 'Adventurer\'s Belt Pouch', description = 'An adventurer’s best friend — can’t pick this pocket!' where entry = 4981;
 update item_template set container_slots = 14, name = 'Adventurer\'s Satchel', description = 'Bigger pockets for bigger adventures!' where entry = 3762;
-update item_template set container_slots = 14, name = 'Adventurer\'s Knapsack', description = 'With this on your back, you\'re basically a turtle.' where entry = 10683;
+update item_template set container_slots = 16, name = 'Adventurer\'s Knapsack', description = 'With this on your back, you\'re basically a turtle.' where entry = 10683;
 
 delete from quest_template where entry = 60003;
 
