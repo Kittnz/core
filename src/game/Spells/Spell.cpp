@@ -5572,6 +5572,16 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 return SPELL_FAILED_MOVING;
         }
 
+        //CUSTOM Aspect of the wolf can not use ranged attacks.
+        if (m_caster->ToPlayer()->HasAura(45650))
+        {
+            if (m_spellInfo->IsAutoRepeatRangedSpell() || (m_spellInfo->Attributes & SPELL_ATTR_RANGED))
+            {
+                m_caster->ToPlayer()->GetSession()->SendNotification("Can\'t use that in this Aspect.");
+                return SPELL_FAILED_DONT_REPORT;
+            }
+        }
+
         if (!m_IsTriggeredSpell && m_spellInfo->NeedsComboPoints() && Spells::IsExplicitlySelectedUnitTarget(m_spellInfo->EffectImplicitTargetA[0]) &&
            (!m_targets.getUnitTarget() || m_targets.getUnitTarget()->GetObjectGuid() != ((Player*)m_caster)->GetComboTargetGuid()))
             // warrior not have real combo-points at client side but use this way for mark allow Overpower use
