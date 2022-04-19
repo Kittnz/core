@@ -1,0 +1,2 @@
+-- change the following npcs to faction 76 and give them the subname <Kirin Tor>.
+update creature_template set subname = 'Kirin Tor', faction = 76 where entry in (3546,5385,5393,5508,5996,5997,5998,5999,6000,6001,6002,6003,7851);
