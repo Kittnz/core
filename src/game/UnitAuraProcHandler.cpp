@@ -1598,6 +1598,8 @@ SpellAuraProcResult Unit::HandleOverrideClassScriptAuraProc(Unit *pVictim, uint3
             triggered_spell_id = 24406;
             break;
         }
+
+
         case 3656: // Corrupted Healing
         {
             // only proc on direct healing
