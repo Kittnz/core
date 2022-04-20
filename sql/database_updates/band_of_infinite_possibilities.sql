@@ -1,0 +1,1 @@
+update item_template set armor = 0 where entry = 61032;
