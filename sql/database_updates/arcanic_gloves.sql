@@ -1,0 +1,1 @@
+update item_template set stat_value2 = 6, stat_type2 = 6 where entry = 61057;
