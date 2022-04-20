@@ -102,8 +102,11 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 }, 100000);
             DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
                 Creature* vestia = player->FindNearestCreature(60666, 30.0F);
-                vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
-                vestia->MonsterSay("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.");
+                if (vestia)
+                {
+                    vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
+                    vestia->MonsterSay("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.");
+                }
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
                     player->KilledMonster(cInfo, ObjectGuid());
                 });
