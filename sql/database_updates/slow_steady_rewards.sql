@@ -46,6 +46,7 @@ insert into item_loot_template values (50053, 50079, 100, 3, 1, 1, 0); -- Island
 insert into item_loot_template values (50054, 51217, 100, 1, 5, 5, 0); -- Fashion Coin x5
 insert into item_loot_template values (50054, 19054, 100, 2, 1, 1, 0); -- Red Dragon Pet
 insert into item_loot_template values (50054, 10683, 100, 3, 1, 1, 0); -- 16-slot bag
+insert into item_loot_template values (50054, 51836, 100, 4, 1, 1, 0); -- Murloc Illusion
 
 -- Level 60
 insert into item_loot_template values (50055, 51217, 100, 1, 5, 5, 0); -- Fashion Coin x5
