@@ -222,7 +222,7 @@ bool QuestRewarded_npc_bolvar(Player* pPlayer, Creature* bolvar, Quest const* pQ
             }, 2000);
         bolvar->m_Events.AddLambdaEventAtOffset([bolvar, vereesa]() 
             {
-            vereesa->MonsterSay("Arrogance and isolation dommed my people once before, we thought ourselves invincible, and that was our undoing. We will not repeat the mistakes of the past. From this day, the Quel'Dorei will stand as one with the Alliance.");
+            vereesa->MonsterSay("Arrogance and isolation doomed my people once before, we thought ourselves invincible, and that was our undoing. We will not repeat the mistakes of the past. From this day, the Quel'Dorei will stand as one with the Alliance.");
             vereesa->HandleEmote(EMOTE_ONESHOT_KNEEL);
             }, 15000);
         bolvar->m_Events.AddLambdaEventAtOffset([bolvar, anduin]() 
