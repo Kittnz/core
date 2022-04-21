@@ -44,6 +44,8 @@
 #include "Config/Config.h"
 #include "Shop/ShopMgr.h"
 
+#include "rapidjson/document.h"
+#include "rapidjson/rapidjson.h"
 #include <regex>
 
 bool WorldSession::ProcessChatMessageAfterSecurityCheck(std::string& msg, uint32 lang, uint32 msgType)
@@ -287,9 +289,33 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
     }
 
+    const std::string debuffPrefix = "TW_Debuff";
+
 	// ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD
 	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
 	{
+        if (msg.find(debuffPrefix) != std::string::npos)
+        {
+            auto payload = msg.substr(debuffPrefix.length() + 1); // skip tab too of prefix, so + 1.
+            rapidjson::Document d;
+            d.Parse(payload.c_str());
+
+            if (d.HasParseError())
+                return;
+
+            if (!d.HasMember("opcode"))
+                return;
+
+            std::string opcode = d["opcode"].GetString();
+
+
+            if (opcode == "target")
+            {
+
+            }
+
+        }
+
 		if (strstr(msg.c_str(), "TW_CHAT_MSG_WHISPER"))
 		{
 			// syntax: SendAddonMessage("TW_CHAT_MSG_WHISPER<ToName>", "message", "GUILD")
