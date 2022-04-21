@@ -1,0 +1,1 @@
+UPDATE `broadcast_text` SET `male_text` = 'I have fought in many wars, and have slain many foes. All the way from Draenor, to this outpost here, and I will lead it with great honor.\n\nI am entrusted by the greatest minds in Orgrimmar to lead the Horde\'s efforts, and I shall...\n\nHave you come to lend a hand, to make a name for yourself?' WHERE `entry` = 92024;
