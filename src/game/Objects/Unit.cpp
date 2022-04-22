@@ -9935,15 +9935,23 @@ float Unit::GetLeewayBonusRangeForTargets(Unit const* aggressor, Unit const* tar
     const auto aggressorPlayer = aggressor->ToPlayer();
     const auto targetPlayer = target->ToPlayer();
 
+    const bool moving = aggressor->IsMovingButNotWalking() && target->IsMovingButNotWalking();
+
 
     if (!aggressorPlayer && !targetPlayer)
+    {
+        if ((aggressor->IsPet() && aggressor->GetOwner() && aggressor->GetOwner()->IsPlayer()) ||
+            target->IsPet() && target->GetOwner() && target->GetOwner()->IsPlayer())
+        {
+            if (moving)
+                return LEEWAY_BONUS_RANGE;
+        }
         return 0.0f;
+    }
 
     if (ability)
         return (aggressor->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED && target->GetXZFlagBasedSpeed() > LEEWAY_MIN_MOVE_SPEED) ? LEEWAY_BONUS_RANGE : 0.0f;
 
-
-    const bool moving = aggressor->IsMovingButNotWalking() && target->IsMovingButNotWalking();
 
 
     if (aggressorPlayer && targetPlayer) // PvP, full effect.
