@@ -1337,3 +1337,11 @@ CREATE TABLE `worldstates`  (
 ) ENGINE = MyISAM CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+CREATE TABLE `whisper_targets` (
+  `account` int(10) unsigned NOT NULL,
+  `target_guid` int(10) unsigned NOT NULL,
+  `time` int(10) unsigned NOT NULL,
+  UNIQUE KEY `account_target` (`account`,`target_guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
