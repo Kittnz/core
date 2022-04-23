@@ -1,0 +1,1 @@
+update quest_template set questflags = 8 where entry in (40191,40176,40196);

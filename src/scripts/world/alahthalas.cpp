@@ -102,8 +102,11 @@ bool GOSelect_go_sacred_water(Player* pPlayer, GameObject* pGo, uint32 sender, u
                 }, 100000);
             DoAfterTime(pPlayer, 103 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
                 Creature* vestia = player->FindNearestCreature(60666, 30.0F);
-                vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
-                vestia->MonsterSay("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.");
+                if (vestia)
+                {
+                    vestia->HandleEmote(EMOTE_ONESHOT_KNEEL);
+                    vestia->MonsterSay("It is done. Please travel to Darnassus and speak to the High Priestess. I have something I must finish here, then I will catch up to you.");
+                }
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60318))
                     player->KilledMonster(cInfo, ObjectGuid());
                 });
@@ -219,7 +222,7 @@ bool QuestRewarded_npc_bolvar(Player* pPlayer, Creature* bolvar, Quest const* pQ
             }, 2000);
         bolvar->m_Events.AddLambdaEventAtOffset([bolvar, vereesa]() 
             {
-            vereesa->MonsterSay("Arrogance and isolation dommed my people once before, we thought ourselves invincible, and that was our undoing. We will not repeat the mistakes of the past. From this day, the Quel'Dorei will stand as one with the Alliance.");
+            vereesa->MonsterSay("Arrogance and isolation doomed my people once before, we thought ourselves invincible, and that was our undoing. We will not repeat the mistakes of the past. From this day, the Quel'Dorei will stand as one with the Alliance.");
             vereesa->HandleEmote(EMOTE_ONESHOT_KNEEL);
             }, 15000);
         bolvar->m_Events.AddLambdaEventAtOffset([bolvar, anduin]() 
