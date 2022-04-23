@@ -1,0 +1,2 @@
+-- Out For Delivery
+update quest_template set details = 'I\'m not going anywhere near that tauren!\n\nI\'m unemployed, remember? You want to see the deliver through, you take it to Kaia yourself.', requestitemstext = '<She pauses in the middle of packing orders to look at you hopefully. Your empty hands cause a scowl>.', offerrewardtext = 'Praise the ancestors, you\'ve got my ammo! I have many orders to fill in the next two hours. You say Rezlak fought harpies for these supplies? Guess it\'s money well-spent.' where entry = 60122;

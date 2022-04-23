@@ -14,39 +14,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-/* ScriptData
-SDName: Instance_Shadowfang_Keep
-SD%Complete: 100
-SDComment:
-SDCategory: Shadowfang Keep
-EndScriptData */
+ /* ScriptData
+ SDName: Instance_Shadowfang_Keep
+ SD%Complete: 100
+ SDComment:
+ SDCategory: Shadowfang Keep
+ EndScriptData */
 
 #include "scriptPCH.h"
 
 enum
 {
-    TYPE_FREE_NPC           = 1,
-    TYPE_RETHILGORE         = 2,
-    TYPE_FENRUS             = 3,
-    TYPE_NANDOS             = 4,
-    TYPE_INTRO              = 5,
-    TYPE_VOIDWALKER         = 6,
-    MAX_ENCOUNTER           = 6,
+    TYPE_FREE_NPC = 1,
+    TYPE_RETHILGORE = 2,
+    TYPE_FENRUS = 3,
+    TYPE_NANDOS = 4,
+    TYPE_INTRO = 5,
+    TYPE_VOIDWALKER = 6,
+    MAX_ENCOUNTER = 6,
 
-    NPC_BARON_SILVERLAINE   = 3887,
-    NPC_CMD_SPRINGVALE      = 4278,
-    NPC_ASH                 = 3850,
-    NPC_ADA                 = 3849,
-    NPC_ARUGAL              = 10000,                        //"Arugal" says intro text
-    NPC_ARCHMAGE_ARUGAL     = 4275,                         //"Archmage Arugal" does Fenrus event
-    NPC_FENRUS              = 4274,                         //used to summon Arugal in Fenrus event
-    NPC_VINCENT             = 4444,                         //Vincent should be "dead" is Arugal is done the intro already
-    NPC_NANDOS              = 3927,
+    NPC_VOIDWALKER = 4627,
+    NPC_BARON_SILVERLAINE = 3887,
+    NPC_CMD_SPRINGVALE = 4278,
+    NPC_ASH = 3850,
+    NPC_ADA = 3849,
+    NPC_ARUGAL = 10000,                        //"Arugal" says intro text
+    NPC_ARCHMAGE_ARUGAL = 4275,                         //"Archmage Arugal" does Fenrus event
+    NPC_FENRUS = 4274,                         //used to summon Arugal in Fenrus event
+    NPC_VINCENT = 4444,                         //Vincent should be "dead" is Arugal is done the intro already
+    NPC_NANDOS = 3927,
 
-    GO_COURTYARD_DOOR       = 18895,                        //door to open when talking to NPC's
-    GO_SORCERER_DOOR        = 18972,                        //door to open when Fenrus the Devourer dies
-    GO_ARUGAL_DOOR          = 18971,                        //door to open when Wolf Master Nandos dies
-    GO_ARUGAL_FOCUS         = 18973,                        //this generates the lightning visual in the Fenrus event
+    GO_COURTYARD_DOOR = 18895,                        //door to open when talking to NPC's
+    GO_SORCERER_DOOR = 18972,                        //door to open when Fenrus the Devourer dies
+    GO_ARUGAL_DOOR = 18971,                        //door to open when Wolf Master Nandos dies
+    GO_ARUGAL_FOCUS = 18973,                        //this generates the lightning visual in the Fenrus event
 };
 
 struct instance_shadowfang_keep : public ScriptedInstance
@@ -72,7 +73,7 @@ struct instance_shadowfang_keep : public ScriptedInstance
     uint64 m_uiVincentGUID;
     uint64 m_uiNandosGUID;
 
-    uint32 m_uiVoidWalkerCount;
+    uint32 m_uiVoidWalkerKillCount;
 
     uint32 m_uiSpawnPatrolOnBaronDeath;
     uint32 m_uiSpawnPatrolOnCmdDeath;
@@ -88,21 +89,20 @@ struct instance_shadowfang_keep : public ScriptedInstance
         m_uiAdaGUID = 0;
 
         m_uiDoorCourtyardGUID = 0;
-        m_uiDoorSorcererGUID  = 0;
-        m_uiDoorArugalGUID    = 0;
+        m_uiDoorSorcererGUID = 0;
+        m_uiDoorArugalGUID = 0;
 
-        m_uiFenrusGUID        = 0;
-        m_uiVincentGUID       = 0;
+        m_uiFenrusGUID = 0;
+        m_uiVincentGUID = 0;
         m_uiCmdSpringvaleGUID = 0;
 
         isBaronDead = false;
-        isCmdDead   = false;
+        isCmdDead = false;
         m_uiSpawnPatrolOnBaronDeath = 6000;
-        m_uiSpawnPatrolOnCmdDeath   = 6000;
+        m_uiSpawnPatrolOnCmdDeath = 6000;
 
         m_uiBaronSilverlaineGUID = 0;
-        //Nostalrius
-        m_uiVoidWalkerCount   = 0;
+        m_uiVoidWalkerKillCount = 0;
     }
 
     void OnCreatureCreate(Creature* pCreature) override
@@ -164,6 +164,15 @@ struct instance_shadowfang_keep : public ScriptedInstance
             case NPC_CMD_SPRINGVALE:
                 isCmdDead = true;
                 break;
+            case NPC_VOIDWALKER:
+            {
+                m_uiVoidWalkerKillCount++;
+                if (m_uiVoidWalkerKillCount == 4)
+                {
+                    DoUseDoorOrButton(m_uiDoorSorcererGUID);
+                    m_uiVoidWalkerKillCount = 0;
+                }
+            }
         }
     }
 
@@ -177,8 +186,8 @@ struct instance_shadowfang_keep : public ScriptedInstance
                 if (m_auiEncounter[0] == DONE)
                     pGo->SetGoState(GO_STATE_ACTIVE);
                 break;
-            //for this we ignore voidwalkers, because if the server restarts
-            //they won't be there, but Fenrus is dead so the door can't be opened!
+                //for this we ignore voidwalkers, because if the server restarts
+                //they won't be there, but Fenrus is dead so the door can't be opened!
             case GO_SORCERER_DOOR:
                 m_uiDoorSorcererGUID = pGo->GetGUID();
                 if (m_auiEncounter[2] == DONE)
@@ -238,7 +247,6 @@ struct instance_shadowfang_keep : public ScriptedInstance
                     m_uiSpawnPatrolOnCmdDeath -= uiDiff;
             }
         }
-
     }
 
     void SetData(uint32 uiType, uint32 uiData) override
@@ -264,14 +272,6 @@ struct instance_shadowfang_keep : public ScriptedInstance
             case TYPE_INTRO:
                 m_auiEncounter[4] = uiData;
                 break;
-            case TYPE_VOIDWALKER:
-                if (uiData == DONE)
-                {
-                    m_auiEncounter[5]++;
-                    if (m_auiEncounter[5] > 3)
-                        DoUseDoorOrButton(m_uiDoorSorcererGUID);
-                }
-                break;
         }
 
         if (uiData == DONE)
@@ -280,7 +280,7 @@ struct instance_shadowfang_keep : public ScriptedInstance
 
             std::ostringstream saveStream;
             saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " " << m_auiEncounter[3]
-                       << " " << m_auiEncounter[4] << " " << m_auiEncounter[5];
+                << " " << m_auiEncounter[4] << " " << m_auiEncounter[5];
 
             strInstData = saveStream.str();
 
@@ -326,9 +326,9 @@ struct instance_shadowfang_keep : public ScriptedInstance
 
         std::istringstream loadStream(chrIn);
         loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3]
-                   >> m_auiEncounter[4] >> m_auiEncounter[5];
+            >> m_auiEncounter[4] >> m_auiEncounter[5];
 
-        for (uint32 & i : m_auiEncounter)
+        for (uint32& i : m_auiEncounter)
         {
             if (i == IN_PROGRESS)
                 i = NOT_STARTED;
@@ -345,7 +345,7 @@ InstanceData* GetInstanceData_instance_shadowfang_keep(Map* pMap)
 
 void AddSC_instance_shadowfang_keep()
 {
-    Script *newscript;
+    Script* newscript;
     newscript = new Script;
     newscript->Name = "instance_shadowfang_keep";
     newscript->GetInstanceData = &GetInstanceData_instance_shadowfang_keep;

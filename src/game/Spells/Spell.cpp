@@ -4255,7 +4255,7 @@ void Spell::update(uint32 difftime)
                 if (m_caster->IsPlayer() || m_caster->IsPet())
                 {
                     // check for incapacitating player states
-                    if (m_casterUnit->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
+                    if (m_casterUnit->HasUnitState(UNIT_STAT_CAN_NOT_REACT) && (m_spellInfo->Id != 24322) && (m_spellInfo->Id != 24323))
                         cancel();
 
                     // check if player has turned if flag is set

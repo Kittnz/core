@@ -6962,7 +6962,7 @@ bool ChatHandler::HandleUnmuteCommand(char* args)
 
     if (accountFlags & ACCOUNT_FLAG_MUTED_PAUSING)
     {
-        LoginDatabase.PExecute("UPDATE account SET flags = flags & ~0x%x WHERE id = '%u'", ACCOUNT_FLAG_MUTED_PAUSING, target->GetSession()->GetAccountId());
+        LoginDatabase.PExecute("UPDATE account SET flags = flags & ~0x%x WHERE id = '%u'", ACCOUNT_FLAG_MUTED_PAUSING, account_id);
         if (target)
             target->GetSession()->SetAccountFlags(target->GetSession()->GetAccountFlags() & ~ACCOUNT_FLAG_MUTED_PAUSING);
     }

@@ -1325,7 +1325,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         {
             GetSession()->m_muteTime = 0;
             GetSession()->SetAccountFlags(GetSession()->GetAccountFlags() & ~ACCOUNT_FLAG_MUTED_PAUSING);
-            LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_PAUSING, GetSession()->GetAccountId());
+            LoginDatabase.PExecute("UPDATE account SET flags = flags & ~0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_PAUSING, GetSession()->GetAccountId());
         }
         else
             GetSession()->m_muteTime -= update_diff;
