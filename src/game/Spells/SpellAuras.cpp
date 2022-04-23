@@ -5152,6 +5152,26 @@ void Aura::HandleRangedAmmoHaste(bool apply, bool /*Real*/)
 /***        ATTACK POWER      ***/
 /********************************/
 
+void CheckRangedOverrides(Unit* target, Aura* aura, bool apply, int32 amount)
+{
+    if (!target || !aura)
+        return;
+
+    constexpr uint32 spellIds[] =
+    {
+        22888 // Rallying Cry of the Dragonslayer
+    };
+
+    for (auto itr = std::begin(spellIds); itr != std::end(spellIds); ++itr)
+    {
+        if (aura->GetSpellProto()->Id == *itr)
+        {
+            target->HandleStatModifier(UNIT_MOD_ATTACK_POWER_RANGED, TOTAL_VALUE, amount, apply);
+            break;
+        }
+    }
+}
+
 void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
 {
     if (apply)
@@ -5162,6 +5182,8 @@ void Aura::HandleAuraModAttackPower(bool apply, bool /*Real*/)
     }
 
     GetTarget()->HandleStatModifier(UNIT_MOD_ATTACK_POWER, TOTAL_VALUE, m_modifier.m_amount, apply);
+
+    CheckRangedOverrides(GetTarget(), this, apply, m_modifier.m_amount);
 }
 
 void Aura::HandleAuraModRangedAttackPower(bool apply, bool /*Real*/)
