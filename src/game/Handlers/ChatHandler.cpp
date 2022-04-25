@@ -303,7 +303,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             if (d.HasParseError())
                 return;
 
-            if (!d.HasMember("opcode"))
+            if (!d.IsObject() || !d.HasMember("opcode"))
                 return;
 
             std::string opcode = d["opcode"].GetString();

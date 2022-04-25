@@ -62,6 +62,7 @@
 #include "Anticheat.h"
 #include "CreatureLinkingMgr.h"
 #include "MovementPacketSender.h"
+#include "TWDebuff/TWDebuff.hpp"
 
 #include "Autoscaling/AutoScaler.hpp"
 
@@ -3451,16 +3452,47 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
     //DEBUG_LOG("AddSpellAuraHolder: Adding spell %d, debuff limit affected: %d", holder->GetId(), holder->IsAffectedByDebuffLimit());
     if (holder->IsAffectedByDebuffLimit())
     {
-        uint32 negativeAuras = GetNegativeAurasCount();
+        constexpr uint32 MaxClientDebuffs = 16;
+        uint32 negativeAuras = 0;
+
+        for (const auto& i : m_spellAuraHolders)
+        {
+            if (!i.second || !i.second->IsAffectedByDebuffLimit())
+                continue;
+
+            ++negativeAuras;
+            if (negativeAuras > MaxClientDebuffs)
+            {
+
+            }
+        }
+
         if (negativeAuras > sWorld.getConfig(CONFIG_UINT32_DEBUFF_LIMIT))
         {
             // We may have removed the aura we just applied ...
             if (RemoveAuraDueToDebuffLimit(holder))
                 return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
         }
+
+       
+        if (negativeAuras > MaxClientDebuffs) // client debuff limit, activate addon-view.
+        {
+            sTWDebuff->AddDebuff(this, holder);
+        }
+
+        /*uint32 negativeAuras = GetNegativeAurasCount();
+        if (negativeAuras > sWorld.getConfig(CONFIG_UINT32_DEBUFF_LIMIT))
+        {
+            // We may have removed the aura we just applied ...
+            if (RemoveAuraDueToDebuffLimit(holder))
+                return false; // The holder has been deleted with 'RemoveSpellAuraHolder'
+        }
+        */
+        
     }
     // When we call _AddSpellAuraHolder, we must have a free aura slot
     holder->_AddSpellAuraHolder();
+
     return true;
 }
 

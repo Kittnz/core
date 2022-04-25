@@ -5,6 +5,7 @@
 #include "SpellAuras.h"
 #include "Player.h"
 
+#include <unordered_map>
 #include <string>
 
 class TWDebuff
@@ -20,7 +21,13 @@ public:
 		return &instance;
 	}
 
-	void SendNewDebuff(Player* player, Aura* aura);
+	void SendNewDebuff(Player* player, SpellAuraHolder* aura);
+	void AddDebuff(Unit* target, SpellAuraHolder* debuff);
+	void RegisterTarget(Player* player, ObjectGuid targetGuid);
 
-	void RegisterTarget(Player* player, Unit* target);
+private:
+	std::unordered_multimap<ObjectGuid, ObjectGuid> m_targetHolder; // Key = target, value = multiple seers who have targeted target
+	std::unordered_map<ObjectGuid, ObjectGuid> m_unitTargets; // Key = seer, value = what target
 };
+
+#define sTWDebuff TWDebuff::Instance()

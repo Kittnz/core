@@ -525,6 +525,7 @@ public:
     uint32 MinTargetLevel = 0;                                 // 162
     uint32 Custom = 0;                                         // 176
     uint32 Internal = 0;                                       // Assigned by the core.
+    std::string ParsedTooltip;
 protected:
     bool _isBinary = false;
     bool _isDispel = false;

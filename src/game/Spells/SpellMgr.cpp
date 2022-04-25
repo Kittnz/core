@@ -3114,6 +3114,64 @@ void SpellMgr::AssignInternalSpellFlags()
     }
 }
 
+void ParseTooltip(SpellEntry* entry)
+{
+    auto tooltip = entry->ToolTip[0];
+
+    std::string parsedTooltip = "";
+
+    for (auto i = 0; i < tooltip.length(); ++i)
+    {
+        char ch = tooltip[i];
+        if (ch != '$')
+        {
+            parsedTooltip += ch;
+            continue;
+        }
+
+        ++i;
+        char expression = tooltip[i];
+        ++i;
+        int index = tooltip[i] - '0' - 1;
+
+        switch (expression)
+        {
+            case 't':
+            {
+                //periodic.
+                parsedTooltip += std::to_string(entry->EffectAmplitude[index] / 1000);
+            }break;
+
+            case 's':
+            {
+                //basepoints
+
+                auto dieSides = entry->EffectDieSides[index];
+                auto val = 0;
+                auto val2 = 0;
+                bool range = false;
+                if (dieSides == 0 || dieSides == 1)
+                    val = entry->EffectBasePoints[index] + dieSides;
+                else
+                {
+                    val = entry->EffectBasePoints[index] + 1;
+                    val2 = entry->EffectBasePoints[index] + dieSides;
+                    range = true;
+                }
+
+                if (val < 0)
+                    val *= -1;
+
+                if (range)
+                    parsedTooltip += std::to_string(val) + std::string{ " to " } + std::to_string(val2);
+                else
+                    parsedTooltip += std::to_string(val);
+            }break;
+        }
+    }
+    entry->ParsedTooltip = parsedTooltip;
+}
+
 void SpellMgr::LoadSpells()
 {
     uint32 oldMSTime = WorldTimer::getMSTime();
@@ -3269,6 +3327,7 @@ void SpellMgr::LoadSpells()
         spell->spellPriority = fields[122].GetUInt32();
         spell->SpellName[0] = fields[123].GetCppString();
         spell->Rank[0] = fields[125].GetCppString();
+        spell->ToolTip[0] = fields[129].GetCppString();
         spell->ManaCostPercentage = fields[131].GetUInt32();
         spell->StartRecoveryCategory = fields[132].GetUInt32();
         spell->StartRecoveryTime = fields[133].GetUInt32();
@@ -3283,6 +3342,8 @@ void SpellMgr::LoadSpells()
         spell->DmgMultiplier[1] = fields[143].GetFloat();
         spell->DmgMultiplier[2] = fields[144].GetFloat();
         spell->Custom = fields[148].GetUInt32();
+        ParseTooltip(spell.get());
+
      
         spell->InitCachedValues();
         mSpellEntryMap[spellId] = std::move(spell);

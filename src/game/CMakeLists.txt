@@ -181,7 +181,7 @@ set (game_SRCS
     Protocol/Opcodes.cpp
     Protocol/WorldSocket.cpp
     Protocol/WorldSocketMgr.cpp
-	Protocol/Opcodes_1_12_1.h
+    Protocol/Opcodes_1_12_1.h
     Spells/Spell.cpp
     Spells/SpellAuras.cpp
     Spells/SpellEffects.cpp
@@ -192,6 +192,7 @@ set (game_SRCS
     Threat/ThreatManager.cpp
     Transports/Transport.cpp
     Transports/TransportMgr.cpp
+    TWDebuff/TWDebuff.cpp
     vmap/BIH.cpp
     vmap/DynamicTree.cpp
     vmap/GameObjectModel.cpp
