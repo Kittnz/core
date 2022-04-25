@@ -46,11 +46,6 @@ void TWDebuff::SendNewDebuff(Player* player, SpellAuraHolder* aura)
 	d.Accept(writer);
 
 	player->SendAddonMessage("TW_Debuff", buffer.GetString());
-	
-
-	/*//sLog.outInfo("%i) id = %u, %s ", i, spellInfo->GetIcon(spellInfo->SpellIconID),  holder->GetId(), spellInfo->SpellName[sWorld.GetDefaultDbcLocale()].c_str());
-	rapidjson::objec
-	d.AddMember("stackCount", aura->GetStackAmount(), d.GetAllocator());*/
 
 }
 
