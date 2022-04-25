@@ -15,3 +15,7 @@ set @reqskillvalue = 300; -- not needed for class spells
 set @player_level = 0; 
 
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+replace into creature_loot_template values (1045, 83537, 5, 6, 1, 1, 0);
+replace into creature_loot_template values (1046, 83537, 5, 6, 1, 1, 0);
+replace into creature_loot_template values (1047, 83537, 5, 6, 1, 1, 0);
