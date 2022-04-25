@@ -49,6 +49,7 @@
 #include "MasterPlayer.h"
 #include "GossipDef.h"
 #include "GameEventMgr.h"
+#include "TWDebuff/TWDebuff.hpp"
 
 #ifdef WIN32
 #include "..\zlib\zlib.h"
@@ -484,6 +485,8 @@ void WorldSession::HandleSetSelectionOpcode(WorldPacket & recv_data)
     if (unit)
         if (FactionTemplateEntry const* factionTemplateEntry = sObjectMgr.GetFactionTemplateEntry(unit->GetFactionTemplateId()))
             _player->GetReputationMgr().SetVisible(factionTemplateEntry);
+
+    sTWDebuff->RegisterTarget(_player, guid);
 
     // Drop combo points only for rogues and druids
     // Warriors use combo points internally, do no reset for everyone
