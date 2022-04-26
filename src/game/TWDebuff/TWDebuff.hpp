@@ -7,6 +7,7 @@
 #include "Objects/Object.h"
 #include "SpellEntry.h"
 #include "SpellAuras.h"
+#include "World.h"
 #include "Player.h"
 
 #include <unordered_map>
