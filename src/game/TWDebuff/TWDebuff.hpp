@@ -2,6 +2,9 @@
 
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"
+#include "Objects/Unit.h"
+#include "Objects/Item.h"
+#include "Objects/Object.h"
 #include "SpellAuras.h"
 #include "Player.h"
 
