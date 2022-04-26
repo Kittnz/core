@@ -45,3 +45,7 @@ update item_template set item_level = 40 where entry = 80785;
 update item_template set item_level = 41 where entry = 80806;
 update item_template set item_level = 35 where entry = 83064;
 update item_template set item_level = 40 where entry = 80797;
+
+update item_template set spellid_2 = 18384 where entry = 61048;
+update item_template set bonding = 1 where entry = 61033;
+update item_template set bonding = 0 where entry = 15730;
