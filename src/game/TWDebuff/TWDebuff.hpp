@@ -5,6 +5,7 @@
 #include "Objects/Unit.h"
 #include "Objects/Item.h"
 #include "Objects/Object.h"
+#include "SpellEntry.h"
 #include "SpellAuras.h"
 #include "Player.h"
 
