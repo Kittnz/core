@@ -1,1 +1,1 @@
-update creature_template set scrip_name = '' where entry = 65115;
+update creature_template set script_name = '' where entry = 65115;
