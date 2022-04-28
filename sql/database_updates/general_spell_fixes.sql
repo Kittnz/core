@@ -48281,3 +48281,6 @@ replace into spell_mod (id, castingtimeindex, interruptflags) values (46010, 6, 
 -- Chillwind Chimera (Winterspring) Lighting Breath should be interruptable:
 update spell_template set interruptflags = 11 where entry = 15797; -- Goes to DBC.
 replace into spell_mod (id, interruptflags, comment) values (15797, 11, 'Lighting Breath - Interrupt flags.'); -- Temp. server-side.
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1347
+-- Bomb should not ignore LOS:
+replace into spell_mod (id, attributesex2, comment) values (8858, 0, 'Bomb - Remove No LoS flag (Dark Iron Demolitionist)'); 
