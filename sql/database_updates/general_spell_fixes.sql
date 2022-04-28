@@ -48273,3 +48273,7 @@ replace into spell_template values (46041, 0, 38, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0
 update spell_template set spelliconid = 1779 where entry = 25702;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/233
 update spell_template set spelliconid = 1779 where entry = 25700;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1339
+-- Guild teleport spell should be interruptable:
+update spell_template set interruptflags = 31 where entry = 46010; -- Goes to DBC.
+replace into spell_mod (id, castingtimeindex, interruptflags) values (46010, 6, 31); -- Temp. server-side.
