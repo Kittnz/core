@@ -1,0 +1,1 @@
+update creature_loot_template set chanceorquestchance = -25, groupid = 6 where item = 5959;
