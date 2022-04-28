@@ -48277,3 +48277,7 @@ update spell_template set spelliconid = 1779 where entry = 25700;
 -- Guild teleport spell should be interruptable:
 update spell_template set interruptflags = 31 where entry = 46010; -- Goes to DBC.
 replace into spell_mod (id, castingtimeindex, interruptflags) values (46010, 6, 31); -- Temp. server-side.
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/338
+-- Chillwind Chimera (Winterspring) Lighting Breath should be interruptable:
+update spell_template set interruptflags = 11 where entry = 15797; -- Goes to DBC.
+replace into spell_mod (id, interruptflags, comment) values (15797, 11, 'Lighting Breath - Interrupt flags.'); -- Temp. server-side.
