@@ -9,6 +9,7 @@ update spell_template set effectmiscvalue1 = 90979 where entry = 46520;
 update spell_template set effectmiscvalue1 = 50102 where entry = 46446;
 update spell_template set effectmiscvalue1 = 81102 where entry = 18363;
 update spell_template set effectmiscvalue1 = 80314 where entry = 46516;
+update spell_template set effectmiscvalue1 = 80319 where entry = 46513; 
 update spell_template set effectbonuscoefficient1 = 0.80 where entry in (1454, 1455, 1456, 11687, 11688, 11689);
 update spell_template set effectmiscvalue1 = 81005 where entry = 46451;
 update spell_template set interruptflags = '11' where entry = 27831; 
