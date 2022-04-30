@@ -6339,7 +6339,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
             }
             case SPELL_EFFECT_LEARN_SPELL:
             {
-                if (m_spellInfo->Id == 12775) // Schematic: Goblin Radio
+                if (m_spellInfo->Id == 12775 || m_spellInfo->Id == 46231) // Schematic: Goblin Radio, Sun's Serenity
                 {                    
                     if (m_caster->IsPlayer())
                         if (Unit* target = m_targets.getUnitTarget())
