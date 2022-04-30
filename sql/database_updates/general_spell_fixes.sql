@@ -48285,3 +48285,6 @@ replace into spell_mod (id, interruptflags, comment) values (15797, 11, 'Lightin
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1347
 -- Bomb should not ignore LOS:
 replace into spell_mod (id, attributesex2, comment) values (8858, 0, 'Bomb - Remove No LoS flag (Dark Iron Demolitionist)'); 
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/256
+UPDATE `skill_line_ability` SET `superseded_by_spell` = 0 WHERE `id` = 9395;
