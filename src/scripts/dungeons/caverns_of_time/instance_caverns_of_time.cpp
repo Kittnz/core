@@ -86,11 +86,11 @@ struct instance_caverns_of_time : public ScriptedInstance
         if (entityCreature)
             unknownEntity = entityCreature->GetObjectGuid();
 
-        if (GameObject* barrier1 = instance->SummonGameObject(180322, -1609.00f, 7118.74f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
-            gobCleanuplist.push_back(barrier1->GetObjectGuid());
+        //if (GameObject* barrier1 = instance->SummonGameObject(180322, -1609.00f, 7118.74f, 23.72f, 0, 0, 0, 0, 0, -1, 0))
+        //    gobCleanuplist.push_back(barrier1->GetObjectGuid());
 
-        if (GameObject* barrier2 = instance->SummonGameObject(180322, -1609.51f, 7101.04f, 23.79f, 0, 0, 0, 0, 0, -1, 0))
-            gobCleanuplist.push_back(barrier2->GetObjectGuid());
+        //if (GameObject* barrier2 = instance->SummonGameObject(180322, -1609.51f, 7101.04f, 23.79f, 0, 0, 0, 0, 0, -1, 0))
+        //    gobCleanuplist.push_back(barrier2->GetObjectGuid());
 
         if (GameObject* sandWall1 = instance->SummonGameObject(2010865, -1608.70f, 7107.35f, 23.74f, 0, 0, 0, 0, 0, -1, 0))
             gobCleanuplist.push_back(sandWall1->GetObjectGuid());
