@@ -449,6 +449,7 @@ class ChatHandler
         bool HandleDeMorphCommand(char* args);
         bool HandleGroupInfoCommand(char* args);
         bool HandlePInfoCommand(char* args);
+        bool HandlePausingMuteCommand(char* args);
         bool HandleMuteCommand(char* args);
         bool HandleUnmuteCommand(char* args);
         bool HandleMovegensCommand(char* args);

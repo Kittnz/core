@@ -6827,6 +6827,73 @@ static uint32 ReputationRankStrIndex[MAX_REPUTATION_RANK] =
     LANG_REP_FRIENDLY, LANG_REP_HONORED, LANG_REP_REVERED,    LANG_REP_EXALTED
 };
 
+bool ChatHandler::HandlePausingMuteCommand(char* args)
+{
+    char* nameStr = ExtractOptNotLastArg(&args);
+
+    Player* target;
+    ObjectGuid target_guid;
+    std::string target_name;
+    if (!ExtractPlayerTarget(&nameStr, &target, &target_guid, &target_name))
+        return false;
+
+    uint32 notspeaktime;
+    if (!ExtractUInt32(&args, notspeaktime))
+        return false;
+
+    std::string givenReason;
+    if (char* givenReasonC = ExtractQuotedOrLiteralArg(&args))
+        givenReason = givenReasonC;
+
+
+
+    uint32 account_id = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
+
+
+    // find only player from same account if any
+    if (!target)
+    {
+        if (WorldSession* session = sWorld.FindSession(account_id))
+            target = session->GetPlayer();
+    }
+
+    // must have strong lesser security level
+    if (HasLowerSecurity(target, target_guid, true))
+        return false;
+
+    time_t mutetime = time(nullptr) + notspeaktime * 60;
+
+    // pausing uses world ms diff so multiply by 1000 for ms instead of s and use ms left instead of current time in future.
+    mutetime = notspeaktime * 60 * 1000;
+
+    if (target)
+        target->GetSession()->m_muteTime = mutetime;
+
+    LoginDatabase.PExecute("UPDATE account SET mutetime = " UI64FMTD " WHERE id = '%u'", uint64(mutetime), account_id);
+
+    LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_PAUSING, account_id);
+    if (target)
+        target->GetSession()->SetAccountFlags(target->GetSession()->GetAccountFlags() | ACCOUNT_FLAG_MUTED_PAUSING);
+
+
+    if (target)
+        ChatHandler(target).PSendSysMessage(LANG_YOUR_CHAT_DISABLED, notspeaktime);
+
+    std::string nameLink = playerLink(target_name);
+
+    PSendSysMessage(LANG_YOU_DISABLE_CHAT, nameLink.c_str(), notspeaktime);
+
+    // Add warning to the account
+    std::string authorName = m_session ? m_session->GetPlayerName() : "Console";
+    PlayerCacheData const* playerData = sObjectMgr.GetPlayerDataByGUID(target_guid);
+    ASSERT(playerData);
+    std::stringstream reason;
+    reason << playerData->sName << " muted " << notspeaktime << " minutes (sticky)";
+    if (!givenReason.empty())
+        reason << " for \"" << givenReason << "\"";
+    return true;
+}
+
 //mute player for some times
 bool ChatHandler::HandleMuteCommand(char* args)
 {
@@ -6847,16 +6914,6 @@ bool ChatHandler::HandleMuteCommand(char* args)
         givenReason = givenReasonC;
 
 
-    std::string pausingStr;
-    if (char* pausingStrC = ExtractQuotedOrLiteralArg(&args))
-        pausingStr = pausingStrC;
-
-
-
-    bool pausing = false;
-    if (pausingStr == "pausing")
-        pausing = true;
-
 
 
     uint32 account_id = target ? target->GetSession()->GetAccountId() : sObjectMgr.GetPlayerAccountIdByGUID(target_guid);
@@ -6875,20 +6932,10 @@ bool ChatHandler::HandleMuteCommand(char* args)
 
     time_t mutetime = time(nullptr) + notspeaktime * 60;
 
-    if (pausing) // pausing uses world ms diff so multiply by 1000 for ms instead of s and use ms left instead of current time in future.
-        mutetime = notspeaktime * 60 * 1000;
-
     if (target)
         target->GetSession()->m_muteTime = mutetime;
 
     LoginDatabase.PExecute("UPDATE account SET mutetime = " UI64FMTD " WHERE id = '%u'", uint64(mutetime), account_id);
-
-    if (pausing)
-    {
-        LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_PAUSING, account_id);
-        if (target)
-            target->GetSession()->SetAccountFlags(target->GetSession()->GetAccountFlags() | ACCOUNT_FLAG_MUTED_PAUSING);
-    }
 
 
     if (target)
