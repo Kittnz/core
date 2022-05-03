@@ -625,6 +625,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "respawn",        SEC_GAMEMASTER,    false, &ChatHandler::HandleRespawnCommand,             "", nullptr },
         { "send",           SEC_GAMEMASTER,      true, nullptr,                                         "", sendCommandTable     },
         { "mute",           SEC_GAMEMASTER,      true,  &ChatHandler::HandleMuteCommand,                "", nullptr },
+        { "pausingmute",           SEC_GAMEMASTER,      true,& ChatHandler::HandlePausingMuteCommand,                "", nullptr },
         { "unmute",         SEC_GAMEMASTER, true,  &ChatHandler::HandleUnmuteCommand,              "", nullptr },
         { "movegens",       SEC_GAMEMASTER, false, &ChatHandler::HandleMovegensCommand,            "", nullptr },
         { "cometome",       SEC_GAMEMASTER,     false, &ChatHandler::HandleComeToMeCommand,            "", nullptr },
