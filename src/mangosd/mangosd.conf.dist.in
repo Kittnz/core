@@ -492,6 +492,7 @@ ClientIdsLogFile = "client.log"
 # Log file for loot.
 
 LootsLogFile = "loot.log"
+RareLootsLogFile = "rareloot.log"
 
 # Log file for level ups.
 
