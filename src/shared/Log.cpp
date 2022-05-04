@@ -303,6 +303,7 @@ void Log::Initialize()
     logFiles[LOG_DBERRFIX] = openLogFile("DBErrorFixFile", nullptr, "w+");
     logFiles[LOG_CLIENT_IDS] = openLogFile("ClientIdsLogFile", nullptr, "a");
     logFiles[LOG_LOOTS] = openLogFile("LootsLogFile", nullptr, "a");
+    logFiles[LOG_RARELOOTS] = openLogFile("RareLootsLogFile", nullptr, "a");
     logFiles[LOG_LEVELUP] = openLogFile("LevelupLogFile", nullptr, "a");
     logFiles[LOG_PERFORMANCE] = openLogFile("PerformanceLog.File", nullptr, "a");
     logFiles[LOG_MONEY_TRADES] = openLogFile("LogMoneyTrades", nullptr, "a");
