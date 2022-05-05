@@ -108,7 +108,6 @@ class SpellAuraHolder
         bool ModStackAmount(int32 num); // return true if last charge dropped
 
         Aura* GetAuraByEffectIndex(SpellEffectIndex index) const { return m_auras[index]; }
-        uint32 GetAuraPeriodicTickTimer(SpellEffectIndex index) const;
 
         uint32 GetId() const { return m_spellProto->Id; }
         SpellEntry const* GetSpellProto() const { return m_spellProto; }
@@ -171,11 +170,9 @@ class SpellAuraHolder
         void UpdateHolder(uint32 diff) { SetInUse(true); Update(diff); SetInUse(false); }
         void Update(uint32 diff);
         void RefreshHolder();
-        void RefreshAuraPeriodicTimers(int32 duration = 0);
 
         bool IsSingleTarget() const { return m_isSingleTarget; }
         void SetIsSingleTarget(bool val) { m_isSingleTarget = val; }
-        bool IsChanneled() { return m_isChanneled; }
         void UnregisterSingleCastHolder();
 
         int32 GetAuraMaxDuration() const { return m_maxDuration; }
@@ -265,7 +262,6 @@ class SpellAuraHolder
         bool m_isRemovedOnShapeLost:1;
         bool m_isSingleTarget:1;                            // true if it's a single target spell and registered at caster - can change at spell steal for example
         bool m_deleted:1;
-        bool m_isChanneled:1;
         bool m_makesTargetSecondaryFocus;
         bool m_spellTriggered;                              // applied by a triggered spell (used in debuff priority computation)
 
@@ -475,7 +471,6 @@ class Aura
         bool IsAreaAura() const { return m_isAreaAura; }
         bool IsPeriodic() const { return m_isPeriodic; }
         bool IsInUse() const { return m_in_use; }
-        bool IsChanneled() const { return GetHolder()->IsChanneled(); }
         // NOSTALRIUS
         void SetPositive(bool pos) { m_positive = pos; }
         void SetPersistent(bool on) { m_isPersistent = on; }
@@ -507,10 +502,7 @@ class Aura
         // NOSTALRIUS: Ajout de 'skipCheckExclusive'
         void ApplyModifier(bool apply, bool Real = false, bool skipCheckExclusive = false);
 
-        void UpdatePeriodicTimer(int32 duration);
         void UpdateAura(uint32 diff) { SetInUse(true); Update(diff); SetInUse(false); }
-        // Called only in Aura::Update, for area aura owners to update affected targets
-        virtual void UpdateForAffected(uint32 diff);
         void Refresh(Unit* caster, Unit* target, SpellAuraHolder* pRefreshWithHolder);
 
         void SetRemoveMode(AuraRemoveMode mode) { m_removeMode = mode; }
@@ -576,7 +568,6 @@ class AreaAura : public Aura
         ~AreaAura() override;
     protected:
         void Update(uint32 diff) override;
-        void UpdateForAffected(uint32 diff) override;
     private:
         float m_radius;
         AreaAuraType m_areaAuraType;

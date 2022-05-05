@@ -493,31 +493,6 @@ void Aura::SetModifier(AuraType t, int32 a, uint32 pt, int32 miscValue)
     m_modifier.periodictime = pt;
 }
 
-void Aura::UpdatePeriodicTimer(int32 duration)
-{
-    if (m_isPeriodic)
-    {
-        // If duration gets changed, also change the periodic timer so that we
-        // aren't losing out on ticks. Required for channeled spells that utilize
-        // dynamic objects - don't want periodic timer initialized to the full
-        // tick timer on entry into the aura
-        // Avoid using modulo if we don't need to (slight perf increase)
-        int32 newtick = (duration > m_modifier.periodictime) ? (duration % m_modifier.periodictime) : duration;
-        // can be a divisible amount, in which case set it to the full period
-        if (!newtick)
-            newtick = m_modifier.periodictime;
-
-        m_periodicTimer = newtick;
-    }
-}
-
-void Aura::UpdateForAffected(uint32 diff)
-{
-    SetInUse(true);
-    Aura::Update(diff);
-    SetInUse(false);
-}
-
 void Aura::Update(uint32 diff)
 {
     if (m_isPeriodic)
@@ -541,15 +516,9 @@ void Aura::Update(uint32 diff)
         {
             Player* pTargetPlayer = pTarget->GetCharmerOrOwnerPlayerOrPlayerItself();
             if (!pTargetPlayer || !pTargetPlayer->GetGroup() || !pTargetPlayer->GetGroup()->IsMember(casterGuid))
-                pTarget->RemoveAurasByCasterSpell(GetId(), casterGuid, AURA_REMOVE_BY_GROUP);
+                pTarget->RemoveAurasByCasterSpell(GetId(), casterGuid);
         }
     }
-}
-
-// Called by caster of this area aura to tick auras for affected targets
-void AreaAura::UpdateForAffected(uint32 diff)
-{
-    Aura::UpdateForAffected(diff);
 }
 
 void AreaAura::Update(uint32 diff)
@@ -689,22 +658,12 @@ void AreaAura::Update(uint32 diff)
 
                     Aura *aur = i->second->GetAuraByEffectIndex(m_effIndex);
 
-                    if (aur)
-                    {
-                        // If this unit is the caster, update the tick. Units won't tick their
-                        // own area auras. Make sure we don't double tick if this unit is the caster
-                        // though
-                        if (i->second->GetCasterGuid() == GetCasterGuid() && i->second->GetTarget()->GetObjectGuid() != GetCasterGuid())
-                        {
-                            aur->UpdateForAffected(diff);
-                        }
-
-                        // in generic case not allow stacking area auras
-                        apply = false;
-                        break;
-                    }
-                    else
+                    if (!aur)
                         continue;
+
+                    // in generic case not allow stacking area auras
+                    apply = false;
+                    break;
                 }
 
                 if (!apply)
@@ -728,18 +687,10 @@ void AreaAura::Update(uint32 diff)
                     addedToExisting = false;
                 }
 
+                holder->SetAuraDuration(GetAuraDuration());
+
                 AreaAura* aur = new AreaAura(actualSpellInfo, m_effIndex, &actualBasePoints, holder, target, caster, nullptr, GetSpellProto()->Id);
                 holder->AddAura(aur, m_effIndex);
-
-                if (!holder->IsPassive() && !holder->IsPermanent())
-                {
-                    // Aura duration has already been decremented in caster holder update, so re-add
-                    // for the target's holder or it will be one diff in the future
-                    holder->SetAuraDuration(GetAuraDuration() + diff);
-                }
-
-                // Caster's aura will tick at the end of this method, so subtract now to remain synced
-                holder->RefreshAuraPeriodicTimers(m_periodicTimer - diff);
 
                 if (addedToExisting)
                 {
@@ -752,15 +703,6 @@ void AreaAura::Update(uint32 diff)
                     holder = nullptr;
 
                 DETAIL_LOG("Added aura %u to holder for spell %u on %s", m_effIndex, GetId(), target->GetName());
-
-                // Add holder to spell if it's channeled so the updates are synced
-                if (holder && IsChanneled() && !addedToExisting)
-                {
-                    if (Spell* spell = caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
-                    {
-                        spell->AddChanneledAuraHolder(holder);
-                    }
-                }
             }
         }
         Aura::Update(diff);
@@ -771,9 +713,8 @@ void AreaAura::Update(uint32 diff)
         Unit* target = GetTarget();
         uint32 originalRankSpellId = m_originalRankSpellId ? m_originalRankSpellId : GetId(); // caster may have different spell id if target has lower level
         // Aura updates in caster update, see above
-        //Aura::Update(diff);
+        Aura::Update(diff);
 
-        // only do range/removal check, tick is done on caster update to remain in sync
         // remove aura if out-of-range from caster (after teleport for example)
         // or caster is isolated or caster no longer has the aura
         // or caster is (no longer) friendly
@@ -785,7 +726,7 @@ void AreaAura::Update(uint32 diff)
             caster->IsFriendlyTo(target) != needFriendly
             )
         {
-            target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid(), AURA_REMOVE_BY_RANGE);
+            target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid());
         }
         else if (m_areaAuraType == AREA_AURA_PARTY)         // check if in same sub group
         {
@@ -799,16 +740,16 @@ void AreaAura::Update(uint32 diff)
                 {
                     Player* checkTarget = target->GetCharmerOrOwnerPlayerOrPlayerItself();
                     if (!checkTarget || !pGroup->SameSubGroup(check, checkTarget))
-                        target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid(), AURA_REMOVE_BY_GROUP);
+                        target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid());
                 }
                 else
-                    target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid(), AURA_REMOVE_BY_GROUP);
+                    target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid());
             }
         }
         else if (m_areaAuraType == AREA_AURA_PET)
         {
             if (target->GetObjectGuid() != caster->GetCharmerOrOwnerGuid())
-                target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid(), AURA_REMOVE_BY_GROUP);
+                target->RemoveSingleAuraFromSpellAuraHolder(GetId(), GetEffIndex(), GetCasterGuid());
         }
     }
 }
@@ -843,7 +784,7 @@ void PersistentAreaAura::Update(uint32 diff)
     // update (since the caster updates area auras). We shouldn't be ticking it
     // when the target is out of range anyway.
     if (remove)
-        GetTarget()->RemoveSingleAuraFromSpellAuraHolder(GetHolder(), m_effIndex, AURA_REMOVE_BY_RANGE);
+        GetTarget()->RemoveAura(GetId(), GetEffIndex());
     else
         Aura::Update(diff);
 }
@@ -1576,7 +1517,7 @@ void Aura::TriggerSpell()
 
     // for channeled spell cast applied from aura owner to channel target (persistent aura affects already applied to true target)
     // some periodic casts applied to targets, so need select proper caster (ex. 15790)
-    if (IsChanneled() && GetSpellProto()->Effect[GetEffIndex()] != SPELL_EFFECT_PERSISTENT_AREA_AURA)
+    if (GetSpellProto()->IsChanneledSpell() && GetSpellProto()->Effect[GetEffIndex()] != SPELL_EFFECT_PERSISTENT_AREA_AURA)
     {
         // interesting 2 cases: periodic aura at caster of channeled spell
         if (target->GetObjectGuid() == casterGUID)
@@ -1795,9 +1736,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
     {
         if (IsQuestTameSpell(GetId()) && target->IsAlive())
         {
-            if (m_removeMode != AURA_REMOVE_BY_CHANNEL)
-                return;
-
             Unit* caster = GetCaster();
             if (!caster || !caster->IsAlive())
                 return;
@@ -2024,7 +1962,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             }break;
         }
 
-        /*if (m_removeMode == AURA_REMOVE_BY_DEATH) // redundant, AM is cancelled in aura holder removal
+        if (m_removeMode == AURA_REMOVE_BY_DEATH) // redundant, AM is cancelled in aura holder removal
         {
             // Stop caster Arcane Missle chanelling on death
             if (GetSpellProto()->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_ARCANE_MISSILES_CHANNEL>())
@@ -2034,7 +1972,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
                 return;
             }
-        }*/
+        }
     }
 
     // AT APPLY & REMOVE
@@ -3099,6 +3037,7 @@ void Unit::ModPossess(Unit* pTarget, bool apply, AuraRemoveMode m_removeMode)
     {
         // Clear threat generated when MC ends.
         pTarget->RemoveAttackersThreat(pCaster);
+        pCaster->InterruptSpell(CURRENT_CHANNELED_SPELL);  // the spell is not automatically canceled when interrupted, do it now
 
         pCaster->SetMover(nullptr);
         pCaster->SetCharm(nullptr);
@@ -6533,7 +6472,6 @@ SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Uni
     m_isDeathPersist = spellproto->IsDeathPersistentSpell();
     m_isSingleTarget = spellproto->HasSingleTargetAura();
     m_procCharges = spellproto->procCharges;
-    m_isChanneled = spellproto->IsChanneledSpell();
 
     m_isRemovedOnShapeLost = m_casterGuid == m_target->GetObjectGuid() && m_spellProto->IsRemovedOnShapeLostSpell();
 
@@ -7193,7 +7131,7 @@ void SpellAuraHolder::Update(uint32 diff)
                     {
                         if (target)
                             target->RemoveAurasDueToSpell(m_spellProto->Id, this);
-                        if (m_isChanneled)
+                        if (m_spellProto->IsChanneledSpell())
                             caster->InterruptSpell(CURRENT_CHANNELED_SPELL);
                         if (Player* plCaster = caster->ToPlayer())
                             Spell::SendCastResult(plCaster, m_spellProto, SPELL_FAILED_FIZZLE);
@@ -7208,7 +7146,7 @@ void SpellAuraHolder::Update(uint32 diff)
             aura->UpdateAura(diff);
 
     // Channeled aura required check distance from caster
-    if (m_isChanneled && GetCasterGuid() != m_target->GetObjectGuid())
+    if (m_spellProto->IsChanneledSpell() && GetCasterGuid() != m_target->GetObjectGuid())
     {
         Unit* caster = GetCaster();
         if (!caster)
@@ -7254,28 +7192,6 @@ void SpellAuraHolder::RefreshHolder()
     UpdateAuraDuration();
 }
 
-/**
- * Updates periodic timers based on the current duration. Used for channeled spells
- * which are applied using dynamic objects, when we want the tick to be based on
- * the current spell timer rather than a fresh holder.
- * @param duration Custom duration to base tick on (typically in the case of passive auras)
- *
- */
-void SpellAuraHolder::RefreshAuraPeriodicTimers(int32 duration)
-
-{
-    for (int i = 0 ; i < MAX_EFFECT_INDEX; ++i)
-    {
-        if (Aura* pAura = GetAuraByEffectIndex(SpellEffectIndex(i)))
-        {
-            // If the aura is periodic, update the periodic timer to correspond with the new
-            // aura timer
-            if (pAura->IsPeriodic())
-                pAura->UpdatePeriodicTimer(duration > 0 ? duration : m_duration);
-        }
-    }
-}
-
 void SpellAuraHolder::SetAuraMaxDuration(int32 duration)
 {
     m_maxDuration = duration;
@@ -7286,15 +7202,6 @@ void SpellAuraHolder::SetAuraMaxDuration(int32 duration)
         if (!(IsPassive() && GetSpellProto()->DurationIndex == 0))
             SetPermanent(false);
     }
-}
-
-uint32 SpellAuraHolder::GetAuraPeriodicTickTimer(SpellEffectIndex index) const
-{
-    Aura* aura = m_auras[index];
-    if (!aura)
-        return -1;
-
-    return aura->GetAuraPeriodicTimer();
 }
 
 bool SpellAuraHolder::HasMechanic(uint32 mechanic) const
@@ -7901,7 +7808,7 @@ void SpellAuraHolder::CalculateForDebuffLimit()
         else
             m_debuffLimitScore = 0;
     }
-    else if (m_isChanneled && m_debuffLimitScore < 1)
+    else if (m_spellProto->IsChanneledSpell() && m_debuffLimitScore < 1)
         m_debuffLimitScore = 1;
 }
 

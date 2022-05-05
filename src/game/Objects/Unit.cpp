@@ -210,8 +210,6 @@ Unit::Unit()
 
     m_doExtraAttacks = false;
 
-    m_spellUpdateTimeBuffer = 0;
-
     m_isCreatureLinkingTrigger = false;
     m_isSpawningLinked = false;
 }
@@ -265,24 +263,13 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
         ++it;
     }
 
-    // Buffer spell system update time to save on performance when players are updated twice per
-    // world update. We do not need to update spells when the interval is only a few ms (~10ms)
-    m_spellUpdateTimeBuffer += update_diff;
-    if (m_spellUpdateTimeBuffer >= UNIT_SPELL_UPDATE_TIME_BUFFER)
-    {
-        // WARNING! Order of execution here is important, do not change.
-        // Spells must be processed with event system BEFORE they go to _UpdateSpells.
-        // Or else we may have some SPELL_STATE_FINISHED spells stalled in pointers, that is bad.
-        m_Events.Update(m_spellUpdateTimeBuffer);
-        _UpdateSpells(m_spellUpdateTimeBuffer);
+    // WARNING! Order of execution here is important, do not change.
+    // Spells must be processed with event system BEFORE they go to _UpdateSpells.
+    // Or else we may have some SPELL_STATE_FINISHED spells stalled in pointers, that is bad.
+    m_Events.Update(update_diff);
+    _UpdateSpells(update_diff);
 
-        CleanupDeletedAuras();
-
-        // update abilities available only for fraction of time
-        UpdateReactives(m_spellUpdateTimeBuffer);
-
-        m_spellUpdateTimeBuffer = 0;
-    }
+    CleanupDeletedAuras();
 
     if (m_lastManaUseTimer)
     {
@@ -354,6 +341,9 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
 
     if (uint32 ranged_att = GetAttackTimer(RANGED_ATTACK))
         SetAttackTimer(RANGED_ATTACK, (update_diff >= ranged_att ? 0 : ranged_att - update_diff));
+
+    // update abilities available only for fraction of time
+    UpdateReactives(update_diff);
 
     if (IsAlive())
     {
@@ -2809,11 +2799,6 @@ void Unit::_UpdateSpells(uint32 time)
         SpellAuraHolder* i_holder = m_spellAuraHoldersUpdateIterator->second;
         ++m_spellAuraHoldersUpdateIterator;                            // need shift to next for allow update if need into aura update
 
-        // If channeled spell, do not update. The spell caster will update the holder on spell
-        // update to prevent loss of periodic ticks due to out of sync updates
-        if (i_holder->IsChanneled())
-            continue;
-
         i_holder->UpdateHolder(time);
     }
 
@@ -3923,8 +3908,8 @@ void Unit::RemoveSpellAuraHolder(SpellAuraHolder *holder, AuraRemoveMode mode)
     // Statue unsummoned at holder remove
     Totem* statue = nullptr;
     WorldObject* caster = holder->GetRealCaster();
-    bool isChanneled = holder->IsChanneled(); // cache for after the holder is deleted
-    if (isChanneled && caster)
+    SpellEntry const* AurSpellInfo = holder->GetSpellProto();
+    if (AurSpellInfo->IsChanneledSpell() && caster)
         if (caster->IsCreature() && ((Creature*)caster)->IsTotem() && ((Totem*)caster)->GetTotemType() == TOTEM_STATUE)
             statue = ((Totem*)caster);
 
@@ -3968,19 +3953,9 @@ void Unit::RemoveSpellAuraHolder(SpellAuraHolder *holder, AuraRemoveMode mode)
     // store it in holder list with delayed deletion
     DeleteAuraHolder(holder);
 
-    if (isChanneled && caster)
-    {
-        Spell *channeled = caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL);
-        if (channeled && channeled->m_spellInfo->Id == auraSpellId)
-        {
-            // If single target, interrupt cast. If not, notify the spell caster so we
-            // can stop processing this holder
-            if (!channeled->m_spellInfo->IsAreaOfEffectSpell() && mode != AURA_REMOVE_BY_CHANNEL && (mode != AURA_REMOVE_BY_EXPIRE || caster->IsControlledByPlayer()))
-                caster->InterruptSpell(CURRENT_CHANNELED_SPELL);
-            else
-                channeled->RemoveChanneledAuraHolder(holder, mode);
-        }
-    }
+    if (mode != AURA_REMOVE_BY_EXPIRE && AurSpellInfo->IsChanneledSpell() && !AurSpellInfo->IsAreaOfEffectSpell() && caster)
+        if (caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL) && caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL)->m_spellInfo->Id == auraSpellId)
+            caster->InterruptSpell(CURRENT_CHANNELED_SPELL);
 }
 
 void Unit::RemoveSingleAuraFromSpellAuraHolder(SpellAuraHolder *holder, SpellEffectIndex index, AuraRemoveMode mode)
@@ -4128,7 +4103,7 @@ void Unit::DelaySpellAuraHolder(uint32 spellId, int32 delaytime, ObjectGuid cast
             holder->SetAuraDuration(holder->GetAuraDuration() - delaytime);
 
         // push down the tick timer with the delay, otherwise we can still get max ticks even with pushback
-        holder->RefreshAuraPeriodicTimers();
+        //holder->RefreshAuraPeriodicTimers();
         holder->UpdateAuraDuration();
 
         DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "Spell %u partially interrupted on %s, new duration: %u ms", spellId, GetObjectGuid().GetString().c_str(), holder->GetAuraDuration());
