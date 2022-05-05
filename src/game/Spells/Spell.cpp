@@ -4891,7 +4891,7 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
         // Reset of channel values has to be done after a few delay.
         // Else, we have some visual bugs (arcane projectile, last tick)
         ChannelResetEvent* event = new ChannelResetEvent(m_casterUnit);
-        m_casterUnit->m_Events.AddEvent(event, m_casterUnit->m_Events.CalculateTime(0));
+        m_casterUnit->m_Events.AddEventAtOffset(event, 1000);
 	// Sources show that prior to Patch 1.9.0, AM could not trigger Clearcasting. After 1.9.0, it could.
 	// In Patch 3.0.8, this was changed to one chance per cast, meaning it was one chance per pulse between Patch 1.9.0 and Patch 3.0.8.
     }
