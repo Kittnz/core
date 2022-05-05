@@ -925,7 +925,7 @@ void Spell::AddUnitTarget(Unit* pTarget, SpellEffectIndex effIndex)
     if (m_spellInfo->speed > 0.0f && affectiveObject && pTarget != affectiveObject)
     {
         // calculate spell incoming interval
-        float dist = affectiveObject->GetDistance(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
+        float dist = affectiveObject->GetDistance3dToCenter(pTarget);
         if (dist < 5.0f)
             dist = 5.0f;
 
@@ -1024,7 +1024,7 @@ void Spell::AddGOTarget(GameObject* pTarget, SpellEffectIndex effIndex)
     if (m_spellInfo->speed > 0.0f && affectiveObject && pTarget != affectiveObject)
     {
         // calculate spell incoming interval
-        float dist = affectiveObject->GetDistance(pTarget->GetPositionX(), pTarget->GetPositionY(), pTarget->GetPositionZ());
+        float dist = affectiveObject->GetDistance3dToCenter(pTarget);
         if (dist < 5.0f)
             dist = 5.0f;
 
@@ -1187,7 +1187,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             {
                 if (!m_spellInfo->IsPositiveSpell() && (m_caster->IsVisibleForOrDetect(unit, unit, false) || m_spellInfo->HasAttribute(SPELL_ATTR_EX_IS_PICKPOCKET)))
                 {
-                    bool combat = (m_spellInfo->Id != 3600) && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO);
+                    bool combat = !IsTriggeredByAura() && !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT) && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO);
 
                     // Pickpocket can cause back attack if failed
                     if (m_spellInfo->HasAttribute(SPELL_ATTR_EX_IS_PICKPOCKET))
@@ -1583,7 +1583,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                     (m_spellInfo->Id == 6358 || // Exception to fix succubus seduction.
                      m_caster->IsVisibleForOrDetect(unit, unit, false)))
             {
-                if (!m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO) && !IsTriggeredByAura())
+                if (!IsTriggeredByAura() && !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT) && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO))
                 {
                     // use speedup check to avoid re-remove after above lines
                     if (m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_BREAK_STEALTH)
