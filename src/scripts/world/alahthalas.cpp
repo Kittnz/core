@@ -177,8 +177,8 @@ struct npc_dralox_felstarAI : public ScriptedAI
                 Creature* mob_one = m_creature->SummonCreature(60429, 3515.17F, -1600.66F, 169.37F, 2.76F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
                 Creature* mob_two = m_creature->SummonCreature(60429, 3533.07F, -1603.13F, 172.10F, 1.40F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
                 Creature* mob_three = m_creature->SummonCreature(60429, 3526.66F, -1601.96F, 170.83F, 1.73F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 120 * IN_MILLISECONDS);
-
-                mob_one->MonsterSay("You do not stand alone friend! Let's take this creature down!");
+                if (mob_one)
+                    mob_one->MonsterSay("You do not stand alone friend! Let's take this creature down!");
             }
         }
         DoMeleeAttackIfReady();

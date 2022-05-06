@@ -488,9 +488,6 @@ class Spell
         }
         void RemoveStealthAuras();
 
-        void AddChanneledAuraHolder(SpellAuraHolder *holder);
-        void RemoveChanneledAuraHolder(SpellAuraHolder *holder, AuraRemoveMode mode);
-
         void Delete() const;
 
         bool HasModifierApplied(SpellModifier* mod);
@@ -534,7 +531,6 @@ class Spell
         bool m_autoRepeat = false;
         bool m_delayed = false;
         bool m_successCast = false;
-        bool m_channeled = false;
         bool m_isChannelingVisual = false;                  // For summoning ritual helpers visual spell
                                                             // no effect handled, only channel start/update is sent
 
@@ -549,9 +545,6 @@ class Spell
         bool m_immediateHandled = false;                    // were immediate actions handled? (used by delayed spells only)
 
         // Channeled spells system
-        typedef std::list<SpellAuraHolder *> SpellAuraHolderList;
-        SpellAuraHolderList m_channeledHolders;             // aura holders of spell on targets for channeled spells. process in sync with spell
-        SpellAuraHolderList::iterator m_channeledUpdateIterator; // maintain an iterator to the current update element so we can handle removal of multiple auras
 
         // These vars are used in both delayed spell system and modified immediate spell system
         bool m_referencedFromCurrentSpell = false;          // mark as references to prevent deleted and access by dead pointers

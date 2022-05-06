@@ -5035,10 +5035,10 @@ void WorldObject::FinishSpell(CurrentSpellTypes spellType, bool ok /*= true*/)
     if (!spell)
         return;
 
+    spell->finish(ok);
+
     if (spellType == CURRENT_CHANNELED_SPELL)
         spell->SendChannelUpdate(0);
-
-    spell->finish(ok);
 }
 
 void WorldObject::GetDynObjects(uint32 spellId, SpellEffectIndex effectIndex, std::vector<DynamicObject*>& dynObjsOut)

@@ -9,6 +9,7 @@ update spell_template set effectmiscvalue1 = 90979 where entry = 46520;
 update spell_template set effectmiscvalue1 = 50102 where entry = 46446;
 update spell_template set effectmiscvalue1 = 81102 where entry = 18363;
 update spell_template set effectmiscvalue1 = 80314 where entry = 46516;
+update spell_template set effectmiscvalue1 = 80319 where entry = 46513; 
 update spell_template set effectbonuscoefficient1 = 0.80 where entry in (1454, 1455, 1456, 11687, 11688, 11689);
 update spell_template set effectmiscvalue1 = 81005 where entry = 46451;
 update spell_template set interruptflags = '11' where entry = 27831; 
@@ -48273,3 +48274,17 @@ replace into spell_template values (46041, 0, 38, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0
 update spell_template set spelliconid = 1779 where entry = 25702;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/233
 update spell_template set spelliconid = 1779 where entry = 25700;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1339
+-- Guild teleport spell should be interruptable:
+update spell_template set interruptflags = 31 where entry = 46010; -- Goes to DBC.
+replace into spell_mod (id, castingtimeindex, interruptflags) values (46010, 6, 31); -- Temp. server-side.
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/338
+-- Chillwind Chimera (Winterspring) Lighting Breath should be interruptable:
+update spell_template set interruptflags = 11 where entry = 15797; -- Goes to DBC.
+replace into spell_mod (id, interruptflags, comment) values (15797, 11, 'Lighting Breath - Interrupt flags.'); -- Temp. server-side.
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1347
+-- Bomb should not ignore LOS:
+replace into spell_mod (id, attributesex2, comment) values (8858, 0, 'Bomb - Remove No LoS flag (Dark Iron Demolitionist)'); 
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/256
+UPDATE `skill_line_ability` SET `superseded_by_spell` = 0 WHERE `id` = 9395;
