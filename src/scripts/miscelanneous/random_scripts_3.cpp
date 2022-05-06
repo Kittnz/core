@@ -3428,9 +3428,59 @@ bool GossipSelect_npc_captain_grayson(Player* pPlayer, Creature* pCreature, uint
     return true;
 }
 
+bool QuestRewarded_npc_niremius(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40399) // By Any Means Necessary III
+    {
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("I must apologize for lying to you, and using you for power, you must understand, it was all for the greater good of the region.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+    }
+
+    return false;
+}
+
+bool QuestAccept_npc_niremius(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40401) // By Any Means Necessary V
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 17447, false);
+
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("You have given me items of great power, and I will use them to defend this forest until my last breath. Deception can come from all forms, even friends, be wary within the future, and take this as a lesson.", player);
+            });
+
+        DoAfterTime(pPlayer, 25 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_BOW);
+            npc->MonsterSayToPlayer("Carry my Glaive with conviction, and good luck.", player);
+            player->CompleteQuest(40401);
+            });
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            }, 26000);
+        return true;
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_niremius";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_niremius;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_niremius;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_captain_grayson";

@@ -201,9 +201,6 @@ enum AuraRemoveMode
     AURA_REMOVE_BY_DELETE,                                  // use for speedup and prevent unexpected effects at player logout/pet unsummon (must be used _only_ after save), delete.
     AURA_REMOVE_BY_SHIELD_BREAK,                            // when absorb shield is removed by damage
     AURA_REMOVE_BY_EXPIRE,                                  // at duration end
-    AURA_REMOVE_BY_CHANNEL,                                 // when removing an aura due to channel finish or cancel
-    AURA_REMOVE_BY_RANGE,                                   // when removing an area aura due to being out of range
-    AURA_REMOVE_BY_GROUP                                    // when removing an aura due to not being in the same group (includes pet ownership)
 };
 
 enum UnitMods

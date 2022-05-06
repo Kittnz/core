@@ -30,7 +30,7 @@
 #include "GridNotifiersImpl.h"
 #include "SpellMgr.h"
 
-DynamicObject::DynamicObject() : WorldObject(), m_spellId(0), m_effIndex(EFFECT_INDEX_0), m_aliveDuration(0), m_radius(0), m_positive(false), m_channeled(false)
+DynamicObject::DynamicObject() : WorldObject(), m_spellId(0), m_effIndex(EFFECT_INDEX_0), m_aliveDuration(0), m_radius(0), m_positive(false)
 {
     m_objectType |= TYPEMASK_DYNAMICOBJECT;
     m_objectTypeId = TYPEID_DYNAMICOBJECT;
@@ -118,7 +118,6 @@ bool DynamicObject::Create(uint32 guidlow, WorldObject* caster, uint32 spellId, 
     m_effIndex = effIndex;
     m_spellId = spellId;
     m_positive = spellProto->IsPositiveEffect(m_effIndex);
-    m_channeled = spellProto->IsChanneledSpell();
 
     return true;
 }
@@ -178,19 +177,11 @@ void DynamicObject::Update(uint32 update_diff, uint32 p_time)
         return;
     }
 
-    if (_deleted)
-        return;
-
-    // If this object is from the current channeled spell, do not delete it. Otherwise
-    // we can lose the last tick of the effect due to differeng updates. The spell
-    // itself will call for the object to be removed at the end of the cast
     bool deleteThis = false;
 
-    m_aliveDuration -= p_time;
-    if (m_aliveDuration <= 0)
-        m_aliveDuration = 0;
-
-    if (m_aliveDuration == 0 && (!m_channeled || (caster->IsUnit() && static_cast<Unit*>(caster)->GetChannelObjectGuid() != GetObjectGuid())))
+    if (m_aliveDuration > int32(p_time))
+        m_aliveDuration -= p_time;
+    else
         deleteThis = true;
 
     for (auto& iter : m_affected)
