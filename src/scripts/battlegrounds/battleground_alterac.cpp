@@ -5604,7 +5604,8 @@ struct AV_mineNpcAI : public ScriptedAI
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        DoMeleeAttackIfReady();
+        if (m_creature->IsAlive())
+            DoMeleeAttackIfReady();
     }
 };
 
