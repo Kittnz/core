@@ -442,12 +442,12 @@ void WorldBotAI::UpdateInCombatAI_Hunter()
         {
             switch (me->CastSpell(pVictim, WB_SPELL_AUTO_SHOT, false))
             {
-            case SPELL_FAILED_NEED_AMMO:
-            case SPELL_FAILED_NO_AMMO:
-            {
-                AddHunterAmmo();
-                break;
-            }
+                case SPELL_FAILED_NEED_AMMO:
+                case SPELL_FAILED_NO_AMMO:
+                {
+                    AddHunterAmmo();
+                    break;
+                }
             }
         }
 
@@ -540,13 +540,13 @@ void WorldBotAI::UpdateInCombatAI_Hunter()
 
         if (!me->HasUnitState(UNIT_STAT_ROOT) &&
             (me->GetCombatDistance(pVictim) < 8.0f) &&
-            me->GetMotionMaster()->GetCurrentMovementGeneratorType() != DISTANCING_MOTION_TYPE)
+             me->GetMotionMaster()->GetCurrentMovementGeneratorType() != DISTANCING_MOTION_TYPE)
         {
             if (!me->IsStopped())
                 me->StopMoving();
             me->GetMotionMaster()->Clear();
             me->GetMotionMaster()->MoveDistance(pVictim, 25.0f);
-            return;
+                return;
         }
     }
 }

@@ -118,8 +118,9 @@ enum WorldBotTasks
     TASK_EXPLORE, // Go to points of interest 
     TASK_DUAL, // Is dualer at the gates of a big city
     TASK_TRADE, // Looking to craft or auction house stuff
-    TASK_LFG, // Wants to do dungeons for its level
+    TASK_LFG, // Wants to do dungeons for its level range
     TASK_QUEST, // Goes questing
+    TASK_GRIND, // Goes grinding
     TASK_PROTECTOR, // Moves to conflicted area's or zones
     TASK_FIRST = TASK_ROAM,
     TASK_LAST = TASK_PROTECTOR
@@ -228,13 +229,13 @@ public:
 
     // Movement System
     void LoadDBWaypoints();
-    void UpdateMovement();
     void UpdateWaypointMovement();
     void DoGraveyardJump();
     void MoveToNextPoint();
     bool StartNewPathFromBeginning();
     void StartNewPathFromAnywhere();
     bool BGStartNewPathToObjective();
+    bool StartNewPathToObjectiveForTask(uint8 currentTaskID);
     bool StartNewPathToPosition(Position const& position, std::vector<WorldBotPath*> const& vPaths);
     void ClearPath();
     void StopMoving();
@@ -264,6 +265,15 @@ public:
 
     // Task System
     uint8 currentTaskID = 0;
+    std::string DestName = "";
+    float DestCoordinatesX = 0.0f;
+    float DestCoordinatesY = 0.0f;
+    float DestCoordinatesZ = 0.0f;
+    int8 DestMap = 0;
+    bool hasPoiDestination = false;
+    bool TaskDestination();
+    void SetExploreDestination();
+
 };
 
 #endif

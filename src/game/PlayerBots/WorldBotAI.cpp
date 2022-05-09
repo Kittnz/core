@@ -15,6 +15,7 @@
 #include "Channel.h"
 #include "ChannelMgr.h"
 #include "MasterPlayer.h"
+#include "Object.h"
 #include <regex>
 #include <random>
 
@@ -34,6 +35,7 @@ std::vector<WorldBotChatData> m_chatDataAttacker;
 std::vector<WorldBotChatData> m_chatDataHelloRespond;
 std::vector<WorldBotChatData> m_chatDataNameRespond;
 std::vector<WorldBotChatData> m_chatDataAdminAbuse;
+extern std::vector<WorldBotsAreaPOI> myAreaPOI;
 
 static bool IsPhysicalDamageClass(uint8 playerClass)
 {
@@ -322,7 +324,11 @@ bool WorldBotAI::DrinkAndEat()
             ClearPath();
             StopMoving();
         }
-        me->CastSpell(me, WB_SPELL_FOOD, true);
+        if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(WB_SPELL_FOOD))
+        {
+            me->CastSpell(me, pSpellEntry, true);
+            me->RemoveSpellCooldown(*pSpellEntry);
+        }
         return true;
     }
 
@@ -333,7 +339,11 @@ bool WorldBotAI::DrinkAndEat()
             ClearPath();
             StopMoving();
         }
-        me->CastSpell(me, WB_SPELL_DRINK, true);
+        if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(WB_SPELL_DRINK))
+        {
+            me->CastSpell(me, pSpellEntry, true);
+            me->RemoveSpellCooldown(*pSpellEntry);
+        }
         return true;
     }
 
@@ -691,7 +701,7 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
                     me->GetMotionMaster()->MoveIdle();
 
                 }
-                UpdateMovement();
+                UpdateWaypointMovement();
             }
             break;
         }
@@ -737,15 +747,14 @@ void WorldBotAI::OnPacketReceived(WorldPacket const* packet)
             m_isDualBotGetReady = true;
             m_isDualBotReady = false;
             m_isDualBotInProgress = false;
-            uint64 dualFlagGuid = *((uint64*)(*packet).contents());
-            uint64 casterGuid = *((uint64*)(*packet).contents());
-
+            /*uint64 dualFlagGuid = *((uint64*)(*packet).contents());
+            uint64 casterGuid = *((uint64*)(*packet).contents());*/
             break;
         }
         case SMSG_DUEL_COMPLETE:
         {
             m_isDualBot = false;
-            UpdateMovement();
+            UpdateWaypointMovement();
             break;
         }
     }
@@ -757,16 +766,6 @@ void WorldBotAI::OnPlayerLogin()
 {
     if (!m_initialized)
         me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-}
-
-void WorldBotAI::UpdateMovement()
-{
-    // check if player is on roaming task
-    if (currentTaskID == TASK_ROAM)
-        UpdateWaypointMovement();
-
-    if (currentTaskID == TASK_EXPLORE)
-        UpdateWaypointMovement();
 }
 
 void WorldBotAI::UpdateWaypointMovement()
@@ -787,25 +786,33 @@ void WorldBotAI::UpdateWaypointMovement()
     if (me->HasUnitState(UNIT_STAT_CAN_NOT_MOVE))
         return;
 
+    if (hasPoiDestination)
+        return;
+
     switch (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
     {
-        case IDLE_MOTION_TYPE:
-        case CHASE_MOTION_TYPE:
-        case POINT_MOTION_TYPE:
-            break;
-        default:
-            return;
+    case IDLE_MOTION_TYPE:
+    case CHASE_MOTION_TYPE:
+    case POINT_MOTION_TYPE:
+        break;
+    default:
+        return;
     }
 
+    // in battlebot mode
     if (m_isBattleBot)
         if (BattleGround* bg = me->GetBattleGround())
             if (bg->GetStatus() == STATUS_WAIT_JOIN)
                 return;
-    
+
     if (m_isBattleBot)
         if (BGStartNewPathToObjective())
-            return; 
+            return;
 
+    // Handle task destination
+    TaskDestination();
+
+    // normal pathing
     if (StartNewPathFromBeginning())
         return;
 
@@ -955,14 +962,14 @@ void WorldBotAI::UpdateAI(uint32 const diff)
     if (m_updateChatTimer.Passed())
     {
         // say / yell chat
-        if (!m_chatSayYellPlayerRespondsQueue.empty())
+        /*if (!m_chatSayYellPlayerRespondsQueue.empty())
         {
             for (auto& itr : m_chatSayYellPlayerRespondsQueue)
             {
                 HandleChat(me, itr.m_type, itr.m_guid1, itr.m_guid2, itr.m_msg, itr.m_chanName);
             }
             m_chatSayYellPlayerRespondsQueue.clear();
-        }
+        }*/
 
         // whisper chat
         if (!m_chatWhisperPlayerRespondsQueue.empty())
@@ -1052,7 +1059,20 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
 
         // Choose a TASK todo
-        currentTaskID = TASK_EXPLORE;//urand(TASK_FIRST, TASK_LAST);
+        int32 rtask = urand(0, 1);
+        switch (rtask)
+        {
+            case 0:
+            {
+                currentTaskID = TASK_ROAM;
+            }
+            case 1:
+            {
+                currentTaskID = TASK_EXPLORE;
+            }
+            default:
+                currentTaskID = TASK_ROAM;
+        }
 
         uint32 newzone, newarea;
         me->GetZoneAndAreaId(newzone, newarea);
@@ -1199,9 +1219,9 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         {
             if (me->GetDeathState() == CORPSE)
             {
-                me->BuildPlayerRepop();
                 if (m_resurrect)
                 {
+                    me->BuildPlayerRepop();
                     if (Corpse* corpse = me->GetCorpse())
                     {
                         me->TeleportPositionRelocation(corpse->GetPosition());
@@ -1424,7 +1444,9 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                 }
             }
             else
-                UpdateMovement();
+            {
+                UpdateWaypointMovement();
+            }
         }
         return;
     }
@@ -1552,7 +1574,7 @@ void WorldBotAI::LoadBotChat()
 
 void WorldBotAI::BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, ObjectGuid guid2, std::string message, std::string chanName)
 {
-    if (msgtype == CHAT_MSG_SAY || msgtype == CHAT_MSG_YELL)
+    /*if (msgtype == CHAT_MSG_SAY || msgtype == CHAT_MSG_YELL)
     {
         if (MasterPlayer* player = ObjectAccessor::FindMasterPlayer(guid1))
         {
@@ -1561,7 +1583,7 @@ void WorldBotAI::BotChatAddToQueue(Player* me, uint8 msgtype, ObjectGuid guid1, 
                 m_chatSayYellPlayerRespondsQueue.push_back(BotChatRespondsQueue(me->GetObjectGuid(), msgtype, guid1, guid2, message, chanName));
             }
         }
-    }
+    }*/
     if (msgtype == CHAT_MSG_WHISPER)
     {
         if (MasterPlayer* player = ObjectAccessor::FindMasterPlayer(guid1))
@@ -2041,30 +2063,15 @@ void WorldBotAI::HandleChat(Player* me, uint32 type, uint32 guid1, uint32 guid2,
         if (found)
         {
             const char* c = respondsText.c_str();
-            if (chanName == "World")
+            if (type == CHAT_MSG_WHISPER)
             {
-                if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
+                if (me->GetTeam() == ALLIANCE)
                 {
-                    std::string worldChan = "World";
-                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
-                        if (me->GetTeam() == ALLIANCE)
-                            chn->Say(me->GetObjectGuid(), c, LANG_COMMON, false);
-                        else
-                            chn->Say(me->GetObjectGuid(), c, LANG_ORCISH, false);
+                    pMe->Whisper(c, LANG_COMMON, pReciever);
                 }
-            }
-            else
-            {
-                if (type == CHAT_MSG_WHISPER)
+                else
                 {
-                    if (me->GetTeam() == ALLIANCE)
-                    {
-                        pMe->Whisper(c, LANG_COMMON, pReciever);
-                    }
-                    else
-                    {
-                        pMe->Whisper(c, LANG_ORCISH, pReciever);
-                    }
+                    pMe->Whisper(c, LANG_ORCISH, pReciever);
                 }
             }
             BotLastChatTime = gtime;
@@ -2093,12 +2100,11 @@ void WorldBotAI::HandleGeneralChat(Player* me, uint32 type, uint32 guid1, uint32
         if (found)
         {
             const char* c = respondsText.c_str();
-            if (chanName == "World")
+            if (chanName.find("General"))
             {
                 if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
                 {
-                    std::string worldChan = "World";
-                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
+                    if (Channel* chn = cMgr->GetJoinChannel(chanName.c_str()))
                         if (me->GetTeam() == ALLIANCE)
                             chn->Say(me->GetObjectGuid(), c, LANG_COMMON, false);
                         else
@@ -2131,12 +2137,11 @@ void WorldBotAI::HandleTradeChat(Player* me, uint32 type, uint32 guid1, uint32 g
         if (found)
         {
             const char* c = respondsText.c_str();
-            if (chanName == "World")
+            if (chanName.find("Trade"))
             {
                 if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
                 {
-                    std::string worldChan = "World";
-                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
+                    if (Channel* chn = cMgr->GetJoinChannel(chanName.c_str()))
                         if (me->GetTeam() == ALLIANCE)
                             chn->Say(me->GetObjectGuid(), c, LANG_COMMON, false);
                         else
@@ -2169,12 +2174,11 @@ void WorldBotAI::HandleLFGChat(Player* me, uint32 type, uint32 guid1, uint32 gui
         if (found)
         {
             const char* c = respondsText.c_str();
-            if (chanName == "World")
+            if (chanName.find("Lfg"))
             {
                 if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
                 {
-                    std::string worldChan = "World";
-                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
+                    if (Channel* chn = cMgr->GetJoinChannel(chanName.c_str()))
                         if (me->GetTeam() == ALLIANCE)
                             chn->Say(me->GetObjectGuid(), c, LANG_COMMON, false);
                         else
@@ -2207,12 +2211,11 @@ void WorldBotAI::HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 g
         if (found)
         {
             const char* c = respondsText.c_str();
-            if (chanName == "World")
+            if (chanName.find("World"))
             {
                 if (ChannelMgr* cMgr = channelMgr(me->GetTeam()))
                 {
-                    std::string worldChan = "World";
-                    if (Channel* chn = cMgr->GetJoinChannel(worldChan.c_str()))
+                    if (Channel* chn = cMgr->GetJoinChannel(chanName.c_str()))
                         if (me->GetTeam() == ALLIANCE)
                             chn->Say(me->GetObjectGuid(), c, LANG_COMMON, false);
                         else
@@ -2221,5 +2224,53 @@ void WorldBotAI::HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 g
             }
             BotLastChatTime = gtime;
         }
+    }
+}
+
+bool WorldBotAI::TaskDestination()
+{
+    if (currentTaskID == TASK_EXPLORE)
+    {
+        if (hasPoiDestination)
+            return false;
+        else
+            SetExploreDestination();
+
+        // create position
+        Position const dest_loc = { DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ, 0.0f };
+
+        // move to position
+        if (DestMap == 0)
+            StartNewPathToPosition(dest_loc, vPaths_Map_Eastern_Kingdoms);
+        else if (DestMap == 1)
+            StartNewPathToPosition(dest_loc, vPaths_Map_Kalimdor);
+
+        hasPoiDestination = true;
+            
+        // debug
+        sLog.outString("WorldBot: %s moving to poi: %s xyz: %f %f %f", me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+
+        return true;
+    }
+
+    return true;
+}
+
+void WorldBotAI::SetExploreDestination()
+{
+    // get random poi
+    std::random_shuffle(myAreaPOI.begin(), myAreaPOI.end());
+    for (auto& poi : myAreaPOI)
+    {
+        if (poi.map == 0 || poi.map == 1)
+            continue;
+
+        DestName = poi.name;
+        DestCoordinatesX = poi.pos_x;
+        DestCoordinatesY = poi.pos_y;
+        DestCoordinatesZ = poi.pos_z;
+        DestMap = poi.map;
+        hasPoiDestination = true;
+        break;
     }
 }

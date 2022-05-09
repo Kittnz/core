@@ -308,7 +308,7 @@ void TaxiToOtherZone(WorldBotAI* pAI)
 
 void QueueForBG(WorldBotAI* pAI)
 {
-    // Make map bot a battle bot
+    // Make world bot a battle bot
     if (!pAI->m_isBattleBot)
     {
         std::vector<uint8> bgIds;
@@ -358,7 +358,7 @@ void QueueForWS(WorldBotAI* pAI)
 
 void QueueForAB(WorldBotAI* pAI)
 {
-    // Make map bot a battle bot
+    // Make world bot a battle bot
     if (!pAI->m_isBattleBot)
     {
         uint8 bgId = 0;
@@ -378,7 +378,7 @@ void QueueForAB(WorldBotAI* pAI)
 
 void QueueForAV(WorldBotAI* pAI)
 {
-    // Make map bot a battle bot
+    // Make world bot a battle bot
     if (!pAI->m_isBattleBot)
     {
         uint8 bgId = 0;
@@ -461,6 +461,56 @@ void TransportTeleportToBootyBayFromRatchet(WorldBotAI* pAI)
 {
     pAI->me->TeleportTo(0, -14281.021f, 566.528f, 7.0141f, 4.326f, TELE_TO_FORCE_MAP_CHANGE);
     pAI->MoveToNextPoint();
+}
+
+void AddToTransport(WorldBotAI* pAI)
+{
+    GameObject* p_GameObject = nullptr;
+
+    /*
+    https://github.com/vmangos/core/commit/1b3e1b594056274c18e827dc7b4c1706f1e846ba#diff-38c0f8987d9ce268af8c9b65e9d6ecc9e6a6f87736ab434b2fec92eed2ce35d6
+    
+    MaNGOS::NearestGameObjectEntryInObjectRangeCheck go_check(*pAI->me, uiEntry, fMaxSearchRange);
+    MaNGOS::GameObjectLastSearcher<MaNGOS::NearestGameObjectEntryInObjectRangeCheck> searcher(p_GameObject, go_check);
+
+    Cell::VisitGridObjects(pSource, searcher, fMaxSearchRange);
+
+    if (p_GameObject)
+    {
+        bool sendHeartbeat = false;
+
+        if (GenericTransport* pMyTransport = me->GetTransport())
+        {
+            sendHeartbeat = true;
+            pMyTransport->RemovePassenger(me);
+            me->Relocate(pLeader->GetPositionX(), pLeader->GetPositionY(), pLeader->GetPositionZ());
+        }
+
+        if (GenericTransport* pHisTransport = pLeader->GetTransport())
+        {
+            sendHeartbeat = true;
+            me->Relocate(pLeader->GetPositionX(), pLeader->GetPositionY(), pLeader->GetPositionZ());
+            pHisTransport->AddPassenger(me);
+        }
+
+        if (sendHeartbeat)
+            me->SendHeartBeat(false);
+
+
+    }*/
+}
+
+void DualPoint(WorldBotAI* pAI)
+{
+    if (urand(0, 1))
+    {
+
+    }
+}
+
+void PopWorldBuff(WorldBotAI * pAI)
+{
+
 }
 
 std::vector<RecordedMovementPacket> vAllianceGraveyardJumpPath_ =
@@ -750,7 +800,7 @@ void WorldBotAI::MoveToNextPoint()
 
     WorldBotWaypoint& nextPoint = m_currentPath->at(m_currentPoint);
 
-    me->GetMotionMaster()->MovePoint(m_currentPoint, nextPoint.x + frand(-1, 1), nextPoint.y + frand(-1, 1), nextPoint.z, MOVE_PATHFINDING);
+    me->GetMotionMaster()->MovePoint(m_currentPoint, nextPoint.x + frand(-2, 2), nextPoint.y + frand(-2, 2), nextPoint.z, MOVE_PATHFINDING);
 }
 
 bool WorldBotAI::StartNewPathFromBeginning()
@@ -824,6 +874,9 @@ bool WorldBotAI::StartNewPathFromBeginning()
 
 void WorldBotAI::StartNewPathFromAnywhere()
 {
+    if (currentTaskID != TASK_ROAM)
+        return;
+
     WorldBotPath* pClosestPath = nullptr;
     uint32 closestPoint = 0;
     float closestDistance = FLT_MAX;
@@ -903,25 +956,23 @@ bool WorldBotAI::StartNewPathToPosition(Position const& targetPosition, std::vec
 
     for (const auto& pPath : vPaths)
     {
+        WorldBotWaypoint& lastPoint = ((*pPath)[pPath->size() - 1]);
+        float const distanceFromPathEndToTarget = GetDistance3D(lastPoint, targetPosition);
+        if (closestDistanceToTarget > distanceFromPathEndToTarget)
         {
-            WorldBotWaypoint& lastPoint = ((*pPath)[pPath->size() - 1]);
-            float const distanceFromPathEndToTarget = GetDistance3D(lastPoint, targetPosition);
-            if (closestDistanceToTarget > distanceFromPathEndToTarget)
-            {
-                float closestDistanceFromMeToPoint = FLT_MAX;
+            float closestDistanceFromMeToPoint = FLT_MAX;
 
-                for (uint32 i = 0; i < pPath->size(); i++)
+            for (uint32 i = 0; i < pPath->size(); i++)
+            {
+                WorldBotWaypoint& waypoint = ((*pPath)[i]);
+                float const distanceFromMeToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
+                if (distanceFromMeToPoint < 50.0f && closestDistanceFromMeToPoint > distanceFromMeToPoint)
                 {
-                    WorldBotWaypoint& waypoint = ((*pPath)[i]);
-                    float const distanceFromMeToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
-                    if (distanceFromMeToPoint < 50.0f && closestDistanceFromMeToPoint > distanceFromMeToPoint)
-                    {
-                        reverse = false;
-                        pClosestPath = pPath;
-                        closestPoint = i;
-                        closestDistanceToTarget = distanceFromPathEndToTarget;
-                        closestDistanceFromMeToPoint = distanceFromMeToPoint;
-                    }
+                    reverse = false;
+                    pClosestPath = pPath;
+                    closestPoint = i;
+                    closestDistanceToTarget = distanceFromPathEndToTarget;
+                    closestDistanceFromMeToPoint = distanceFromMeToPoint;
                 }
             }
         }
@@ -929,25 +980,23 @@ bool WorldBotAI::StartNewPathToPosition(Position const& targetPosition, std::vec
         if (std::find(vPaths_NoReverseAllowed.begin(), vPaths_NoReverseAllowed.end(), pPath) != vPaths_NoReverseAllowed.end())
             continue;
 
+        WorldBotWaypoint& firstPoint = ((*pPath)[0]);
+        float const distanceFromPathBeginToTarget = GetDistance3D(firstPoint, targetPosition);
+        if (closestDistanceToTarget > distanceFromPathBeginToTarget)
         {
-            WorldBotWaypoint& firstPoint = ((*pPath)[0]);
-            float const distanceFromPathBeginToTarget = GetDistance3D(firstPoint, targetPosition);
-            if (closestDistanceToTarget > distanceFromPathBeginToTarget)
-            {
-                float closestDistanceFromMeToPoint = FLT_MAX;
+            float closestDistanceFromMeToPoint = FLT_MAX;
 
-                for (uint32 i = 0; i < pPath->size(); i++)
+            for (uint32 i = 0; i < pPath->size(); i++)
+            {
+                WorldBotWaypoint& waypoint = ((*pPath)[i]);
+                float const distanceFromMeToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
+                if (distanceFromMeToPoint < 50.0f && closestDistanceFromMeToPoint > distanceFromMeToPoint)
                 {
-                    WorldBotWaypoint& waypoint = ((*pPath)[i]);
-                    float const distanceFromMeToPoint = me->GetDistance(waypoint.x, waypoint.y, waypoint.z);
-                    if (distanceFromMeToPoint < 50.0f && closestDistanceFromMeToPoint > distanceFromMeToPoint)
-                    {
-                        reverse = true;
-                        pClosestPath = pPath;
-                        closestPoint = i;
-                        closestDistanceToTarget = distanceFromPathBeginToTarget;
-                        closestDistanceFromMeToPoint = distanceFromMeToPoint;
-                    }
+                    reverse = true;
+                    pClosestPath = pPath;
+                    closestPoint = i;
+                    closestDistanceToTarget = distanceFromPathBeginToTarget;
+                    closestDistanceFromMeToPoint = distanceFromMeToPoint;
                 }
             }
         }
@@ -962,7 +1011,6 @@ bool WorldBotAI::StartNewPathToPosition(Position const& targetPosition, std::vec
     {
         if (closestPoint == 0)
             return false;
-            
     }
     else
     {
@@ -1159,6 +1207,12 @@ bool WorldBotAI::BGStartNewPathToObjective()
         }
     }
 
+    return false;
+}
+
+bool WorldBotAI::StartNewPathToObjectiveForTask(uint8 currentTaskID)
+{
+   
     return false;
 }
 

@@ -22,6 +22,7 @@ INSTANTIATE_SINGLETON_1(PlayerBotMgr);
 std::vector<WorldBotsCollection> myBots;
 std::vector<WorldBotsCollection> myHordeBots;
 std::vector<WorldBotsCollection> myAllianceBots;
+std::vector<WorldBotsAreaPOI> myAreaPOI;
 
 PlayerBotMgr::PlayerBotMgr()
 {
@@ -160,6 +161,9 @@ void PlayerBotMgr::Load()
             WorldBotLoader();
             WorldBotCreator();
         }
+
+        // Load Area POI's
+        WorldBotLoadAreaPOI();
 
         // Load chat
         ai->LoadBotChat();
@@ -2111,4 +2115,45 @@ bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 
 void PlayerBotMgr::WorldBotBalancer()
 {
 
+}
+
+void PlayerBotMgr::WorldBotLoadAreaPOI()
+{
+    sLog.outString("[WorldBot POI] Loading poi's from db...");
+    QueryResult* result = WorldDatabase.PQuery("SELECT ID, Importance, X, Y, Z, ContinentID, Flags, AreaID, Name_enUS FROM `worldbot_areapoi`");
+    if (!result)
+    {
+        sLog.outString("Table `worldbot_areapoi` is empty.");
+    }
+    else
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            uint32 importance = fields[1].GetUInt32();
+            float pos_x = fields[2].GetFloat();
+            float pos_y = fields[3].GetFloat();
+            float pos_z = fields[4].GetFloat();
+            uint32 map = fields[5].GetUInt32();
+            uint32 flags = fields[6].GetUInt32();
+            uint32 areaid = fields[7].GetUInt32();
+            std::string name = fields[8].GetString();
+
+            WorldBotsAreaPOI poi;
+            poi.id = id;
+            poi.importance = importance;
+            poi.pos_x = pos_x;
+            poi.pos_y = pos_y;
+            poi.pos_z = pos_z;
+            poi.map = map;
+            poi.flags = flags;
+            poi.areaid = areaid;
+            poi.name = name;
+            myAreaPOI.push_back(poi);
+
+        } while (result->NextRow());
+
+        delete result;
+    }
 }

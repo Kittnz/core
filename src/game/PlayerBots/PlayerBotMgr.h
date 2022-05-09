@@ -79,6 +79,20 @@ public:
     float orientation;
 };
 
+class WorldBotsAreaPOI
+{
+public:
+    uint32 id;
+    uint32 importance;
+    float pos_x;
+    float pos_y;
+    float pos_z;
+    uint32 map;
+    uint32 flags;
+    uint32 areaid;
+    std::string name;
+};
+
 class PlayerBotMgr
 {
     public:
@@ -121,6 +135,7 @@ class PlayerBotMgr
         void WorldBotBalancer();
         bool WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map);
         bool m_useWorldBotLoader = false;
+        void WorldBotLoadAreaPOI();
 
     protected:
         // How long since last update?
