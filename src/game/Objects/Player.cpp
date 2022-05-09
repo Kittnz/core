@@ -1133,7 +1133,7 @@ void Player::HandleDrowning(uint32 time_diff)
         {
             m_MirrorTimer[BREATH_TIMER] -= time_diff;
             // Timer limit - need deal damage
-            if (m_MirrorTimer[BREATH_TIMER] < 0)
+            if (m_MirrorTimer[BREATH_TIMER] < 0 && !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
             {
                 m_MirrorTimer[BREATH_TIMER] += 1 * IN_MILLISECONDS;
                 // Calculate and deal damage
