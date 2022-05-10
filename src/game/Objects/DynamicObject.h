@@ -55,7 +55,6 @@ class DynamicObject : public WorldObject
         float GetRadius() const { return m_radius; }
         DynamicObjectType GetType() const { return (DynamicObjectType)GetByteValue(DYNAMICOBJECT_BYTES,0); }
         bool NeedsRefresh(Unit *unit) const;
-        bool IsChanneled() const { return m_channeled; }
         void AddAffected(Unit* unit);
         void RemoveAffected(Unit* unit);
         void Delay(int32 delaytime);
@@ -80,7 +79,6 @@ class DynamicObject : public WorldObject
         int32 m_aliveDuration;
         float m_radius;                                     // radius apply persistent effect, 0 = no persistent effect
         bool m_positive;
-        bool m_channeled;
         AffectedMap m_affected;
     private:
         GridReference<DynamicObject> m_gridRef;

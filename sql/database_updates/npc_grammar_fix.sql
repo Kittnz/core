@@ -1,0 +1,1 @@
+update creature_template set subname = 'The Crusade' where entry in (50101,50560);

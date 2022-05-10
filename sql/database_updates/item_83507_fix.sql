@@ -1,0 +1,1 @@
+update item_template set class = 9, subclass = 4, spellcharges_1 = -1 where entry = 83507;

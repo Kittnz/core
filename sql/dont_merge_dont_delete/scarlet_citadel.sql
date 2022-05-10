@@ -35,14 +35,14 @@ REPLACE INTO `custom_graveyards` (`id`, `name`, `map_id`, `zone_id`, `area_id`, 
 
 -- Teleport
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES
-(500, 81.1913, -0.849708, 18.6773, 6.27162, 44, 'ScarletCitadel'),
-(809, 232.119843, 25.800516, 30.823233, 3.145022, 44,'BossMariella'),
-(810, 228.214, -100.218, 18.007, 0.008913, 44, 'BossArdaeus');
+(500, 81.1913, -0.849708, 18.6773, 6.27162, 45, 'ScarletCitadel'),
+(809, 232.119843, 25.800516, 30.823233, 3.145022, 45,'BossMariella'),
+(810, 228.214, -100.218, 18.007, 0.008913, 45, 'BossArdaeus');
 
 
 -- Dungeon is a 10 man raid with 7 day reset timer
 REPLACE INTO `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `player_limit`, `reset_delay`, `ghost_entrance_map`, `ghost_entrance_x`, `ghost_entrance_y`, `map_name`, `script_name`) VALUES
-(44, 0, 2, 0, 10, 7, -1, 0, 0, 'Scarlet Citadel', 'instance_scarlet_citadel');
+(45, 0, 2, 0, 10, 7, -1, 0, 0, 'Scarlet Citadel', 'instance_scarlet_citadel');
 
 -- Doors
 REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `phase_quest_action`, `script_name`) VALUES

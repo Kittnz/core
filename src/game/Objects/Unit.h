@@ -179,8 +179,6 @@ enum SpellAuraProcResult
 typedef SpellAuraProcResult(Unit::*pAuraProcHandler)(Unit* pVictim, uint32 damage, Aura* triggeredByAura, SpellEntry const *procSpell, uint32 procFlag, uint32 procEx, uint32 cooldown);
 extern pAuraProcHandler AuraProcHandler[TOTAL_AURAS];
 
-#define UNIT_SPELL_UPDATE_TIME_BUFFER 60
-
 struct GlobalCooldown
 {
     explicit GlobalCooldown(uint32 dur = 0, uint32 time = 0) : duration(dur), cast_time(time) {}
@@ -723,7 +721,6 @@ class Unit : public WorldObject
         AuraList m_modAuras[TOTAL_AURAS];
         uint32 m_lastManaUseSpellId;
         uint32 m_lastManaUseTimer;
-        uint32 m_spellUpdateTimeBuffer;
         SpellCooldowns m_spellCooldowns;
         GlobalCooldownMgr m_GlobalCooldownMgr;
 

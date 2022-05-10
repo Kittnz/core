@@ -6155,6 +6155,7 @@ bool GossipSelect_npc_harlus(Player* pPlayer, Creature* pCreature, uint32 uiSend
             c->MonsterSayToPlayer("I shall destroy you and all others who try to stop me!", player);
             c->SetFactionTemporary(14, TEMPFACTION_RESTORE_RESPAWN);
             c->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+            c->ClearCastingTarget();
             });
     }
     pPlayer->CLOSE_GOSSIP_MENU();
