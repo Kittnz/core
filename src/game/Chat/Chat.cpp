@@ -356,6 +356,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "list",           SEC_GAMEMASTER,     true,  &ChatHandler::HandlePetListCommand,              "", nullptr },
         { "rename",         SEC_GAMEMASTER,     true,  &ChatHandler::HandlePetRenameCommand,            "", nullptr },
         { "delete",         SEC_GAMEMASTER,     true,  &ChatHandler::HandlePetDeleteCommand,            "", nullptr },
+        { "loyalty",        SEC_GAMEMASTER,     true,  &ChatHandler::HandlePetLoyaltyCommand,            "", nullptr },
         { nullptr,          0,                  false, nullptr,                                         "", nullptr }
     };
 
@@ -625,6 +626,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "respawn",        SEC_GAMEMASTER,    false, &ChatHandler::HandleRespawnCommand,             "", nullptr },
         { "send",           SEC_GAMEMASTER,      true, nullptr,                                         "", sendCommandTable     },
         { "mute",           SEC_GAMEMASTER,      true,  &ChatHandler::HandleMuteCommand,                "", nullptr },
+        { "pausingmute",           SEC_GAMEMASTER,      true,& ChatHandler::HandlePausingMuteCommand,                "", nullptr },
         { "unmute",         SEC_GAMEMASTER, true,  &ChatHandler::HandleUnmuteCommand,              "", nullptr },
         { "movegens",       SEC_GAMEMASTER, false, &ChatHandler::HandleMovegensCommand,            "", nullptr },
         { "cometome",       SEC_GAMEMASTER,     false, &ChatHandler::HandleComeToMeCommand,            "", nullptr },
@@ -1817,6 +1819,14 @@ Creature* ChatHandler::GetSelectedCreature()
         return nullptr;
 
     return m_session->GetPlayer()->GetMap()->GetAnyTypeCreature(m_session->GetPlayer()->GetSelectionGuid());
+}
+
+Pet* ChatHandler::GetSelectedPet()
+{
+    if (!m_session)
+        return nullptr;
+
+    return m_session->GetPlayer()->GetMap()->GetPet(m_session->GetPlayer()->GetSelectionGuid());
 }
 
 /**

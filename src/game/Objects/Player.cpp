@@ -1133,7 +1133,7 @@ void Player::HandleDrowning(uint32 time_diff)
         {
             m_MirrorTimer[BREATH_TIMER] -= time_diff;
             // Timer limit - need deal damage
-            if (m_MirrorTimer[BREATH_TIMER] < 0)
+            if (m_MirrorTimer[BREATH_TIMER] < 0 && !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
             {
                 m_MirrorTimer[BREATH_TIMER] += 1 * IN_MILLISECONDS;
                 // Calculate and deal damage
@@ -21856,8 +21856,15 @@ void Player::RewardHonorOnDeath()
 
 void Player::OnReceivedItem(Item* item)
 {
-    if (item->GetProto()->Quality >= sWorld.getConfig(CONFIG_UINT32_ITEM_INSTANTSAVE_QUALITY))
+    // Get quality of the item
+    uint32 quality = item->GetProto()->Quality;
+
+    if (quality >= sWorld.getConfig(CONFIG_UINT32_ITEM_INSTANTSAVE_QUALITY))
         SetSaveTimer(1);
+
+    // Write to the extra loot log readable by GMs if quality is high (Config setting)
+    if (quality >= sWorld.getConfig(CONFIG_UINT32_ITEM_RARELOOT_QUALITY))
+        sLog.out(LOG_RARELOOTS, "%s loots %ux%u with quality %u", GetShortDescription().c_str(), item->GetCount(),  item->GetEntry(), quality);
 }
 
 
