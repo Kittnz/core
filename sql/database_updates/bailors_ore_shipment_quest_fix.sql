@@ -1,0 +1,1 @@
+update quest_template set prevquestid = 1653 where entry = 1655;
