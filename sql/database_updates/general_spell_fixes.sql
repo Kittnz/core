@@ -48288,3 +48288,6 @@ replace into spell_mod (id, attributesex2, comment) values (8858, 0, 'Bomb - Rem
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/256
 UPDATE `skill_line_ability` SET `superseded_by_spell` = 0 WHERE `id` = 9395;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/972
+update spell_template set effectimplicittargeta1= 1 where entry in (19184,19387,19388,19389,19390);
