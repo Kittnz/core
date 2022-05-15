@@ -225,3 +225,41 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '5', '0', '0', '0', '40', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
+
+-- Engineer Biggles
+
+-- The Creator's Goggles - 60540 (Group 1, 25%)
+-- Wrench of Creation - 60544 (Group 1, 25%)
+-- Figgle's Coveralls - 60542 (Group 1, 25%)
+-- Electroconductive Mitts - 60541 (Group 1, 25%)
+-- Techrifle X-TREME 5200 - 60545 (Group 1, 25%)
+-- Decoy Dragonling Remote - 60539 (Group 2 , 15%)
+
+replace into creature_loot_template values (60736, 60540, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60736, 60543, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60736, 60542, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60736, 60541, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60736, 60545, 20, 1, 1, 1, 0);
+
+replace into creature_loot_template values (60736, 60539, 0.5, 2, 1, 1, 0);
+
+update creature_template set loot_id = 60736 where entry = 60736;
+
+-- Har'gesh Doomcaller 
+
+-- Doomcaller Staff -  (Group 1, 25%)
+-- Shawl of End Times - 60549 (Group 1, 25%)
+-- Band of Calamity - 60547 (Group 1, 25%)
+-- Cuffs of Dawnfall - 60548 (Group 1, 25%)
+-- Shadowruned Girdle - 60550 (Group 1, 25%)
+-- Pendant of the Faceless -  (Group 2, 0.0025%)
+
+replace into creature_loot_template values (60737, 60546, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60737, 60549, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60737, 60547, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60737, 60548, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60737, 60550, 20, 1, 1, 1, 0);
+
+replace into creature_loot_template values (60737, 60551, 0.5, 1, 1, 1, 0);
+
+update creature_template set loot_id = 60737 where entry = 60737;
