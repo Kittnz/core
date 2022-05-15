@@ -260,6 +260,67 @@ replace into creature_loot_template values (60737, 60547, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60737, 60548, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60737, 60550, 20, 1, 1, 1, 0);
 
-replace into creature_loot_template values (60737, 60551, 0.5, 1, 1, 1, 0);
+replace into creature_loot_template values (60737, 60551, 0.5, 2, 1, 1, 0);
 
 update creature_template set loot_id = 60737 where entry = 60737;
+
+-- Hatereaver Annihilator
+
+-- Group 1
+-- Hatereaver Cog - 60559 (25%)
+-- Blackstone Stompers - 60563 (25%)
+-- Flameforged Lugnut - 60561 (25%)
+-- Ragereaver's Helm - 60562 (25%)
+-- Empowered Power Core - 60564 (25%)
+
+-- Group 2
+-- Steamrigged Servohammer - 60560 (10%)
+
+replace into creature_loot_template values (60734, 60559, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60734, 60563, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60734, 60561, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60734, 60562, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60734, 60564, 20, 1, 1, 1, 0);
+
+replace into creature_loot_template values (60734, 60560, 10, 2, 1, 1, 0);
+
+update creature_template set loot_id = 60734 where entry = 60734;
+
+-- High Foreman Bargul Blackhammer
+
+-- Group 1
+-- Hateforged Cleaver - 60565 (25%)
+-- Visor of Command - 60566 (25%)
+-- Blackhammer Pauldrons - 60567 (25%)
+-- Taskmaster's Tag - 60569 (25%)
+-- Incendosaur Skin Boots - 60568 (25%)
+
+-- Group 2
+-- Dark Iron Hooked Net - 60570 (5%)
+
+replace into creature_loot_template values (60735, 60565, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60735, 60566, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60735, 60567, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60735, 60569, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60735, 60568, 20, 1, 1, 1, 0);
+
+replace into creature_loot_template values (60735, 60570, 10, 2, 1, 1, 0);
+
+update creature_template set loot_id = 60735 where entry = 60735;
+
+-- Ambassador Gessendar
+
+-- Group 1
+-- Scepter of the Molten Flame - 60571 (%35)
+-- Incendosaur Skin Pauldrons - 60572 (%35)
+-- Shifting Gloves - <Broken ID, Fix> (%35)
+
+-- FILL THIS ONE ONCE THE AMBASSADOR NPC IS ADDED!
+
+/*
+replace into creature_loot_template values (60735, 60565, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60735, 60566, 20, 1, 1, 1, 0);
+replace into creature_loot_template values (60735, 60567, 20, 1, 1, 1, 0);
+
+update creature_template set loot_id = 60735 where entry = 60735;
+*/
