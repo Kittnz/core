@@ -1,0 +1,1 @@
+update quest_template set rewmoneymaxlevel = 3960 where entry in (40397, 40398, 40399, 40400, 40401);
