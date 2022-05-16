@@ -13,6 +13,8 @@ replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote
 replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570717, 0, 0, 0, 0, 0, 0, 0);
 replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570594, 0, 0, 0, 0, 0, 0, 0);
 replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570595, 0, 0, 0, 0, 0, 0, 0);
+replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570692, 0, 0, 0, 0, 0, 0, 0);
+replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570681, 0, 0, 0, 0, 0, 0, 0);
 -- GUIDS FOR WORK/CRAFT EMOTE
 replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570460, 0, 0, 0, 0, 69, 0, 0);
 replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570452, 0, 0, 0, 0, 69, 0, 0);
