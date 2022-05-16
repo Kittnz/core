@@ -2,8 +2,11 @@
 -- Muckshell Makrura, display ID 2599, level 37-39, scale 1.0, faction 16, can swim, humanoid
 -- Mol'gol , display ID 10704, scale 1.5, faction 232, level 40, humanoid
 -- NPC Soothound, make NON elite, adjust HP and stats accordingly
+-- Ambassador Gessendar, display ID 12030, level 52 elite , scale 1.5 , faction 54, humanoid, weapon1 : 11838 (18912 HP, 3140 ARMOR)
+
 delete from creature_template where entry in (60697,60714);
 REPLACE INTO creature_template VALUES
+(60698, 12030, 0, 0, 0, 'Ambassador Gessendar', NULL, 0, 52, 52, 18912, 18912, 0, 0, 3140, 54, 0, 1, 1.14286, 1.5, 20, 5, 40, 1, 1, 301, 334, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60698, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60697, 8050, 0, 0, 0, 'Soothound', NULL, 0, 51, 52, 3076, 3076, 0, 0, 2432, 18, 0, 1, 1.14286, 0, 18, 5, 40, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 1, 0, 60697, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 1024, 0, ''),
 (60712, 4465, 0, 0, 0, 'Decoy Dragonling', '', 0, 48, 48, 2577, 2577, 0, 0, 680, 54, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 87, 112, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 9, 0, 60712, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60713, 397, 0, 0, 0, 'Peculiar Broodling', NULL, 0, 50, 51, 2600, 2600, 800, 800, 2500, 54, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 90, 120, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 9, 0, 60713, 0, 0, 0, 0, 0, 0, 0, 0, 13375, 0, 0, 0, 0, 0, 93, 127, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 2113536, 0, 0, 0, ''),
@@ -11,6 +14,10 @@ REPLACE INTO creature_template VALUES
 (60715, 4465, 0, 0, 0, '\'Broody\'', 'Engineer Figgle\'s Minion', 0, 52, 52, 15000, 15000, 900, 900, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 259, 334, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 9, 0, 60715, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60757, 2599, 0, 0, 0, 'Muckshell Makrura', NULL, 0, 37, 39, 1536, 1604, 0, 0, 1664, 16, 0, 1, 1.14286, 1, 18, 5, 40, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60757, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60758, 10704, 0, 0, 0, 'Mol\'gol', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1964, 232, 0, 1, 1.14286, 1.5, 18, 5, 40, 0, 1, 57, 70, 0, 156, 1, 1600, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60758, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 93, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20099; set @weapon_1 = 11838; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60698;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 20098; set @weapon_1 = 60124; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60714;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
