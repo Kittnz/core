@@ -241,7 +241,7 @@ replace into creature_loot_template values (60736, 60542, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60736, 60541, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60736, 60545, 20, 1, 1, 1, 0);
 
-replace into creature_loot_template values (60736, 60539, 0.5, 2, 1, 1, 0);
+replace into creature_loot_template values (60736, 60539, 15, 2, 1, 1, 0);
 
 update creature_template set loot_id = 60736 where entry = 60736;
 
@@ -260,7 +260,7 @@ replace into creature_loot_template values (60737, 60547, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60737, 60548, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60737, 60550, 20, 1, 1, 1, 0);
 
-replace into creature_loot_template values (60737, 60551, 0.5, 2, 1, 1, 0);
+replace into creature_loot_template values (60737, 60551, 0.0025, 2, 1, 1, 0);
 
 update creature_template set loot_id = 60737 where entry = 60737;
 
@@ -282,7 +282,7 @@ replace into creature_loot_template values (60734, 60561, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60734, 60562, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60734, 60564, 20, 1, 1, 1, 0);
 
-replace into creature_loot_template values (60734, 60560, 10, 2, 1, 1, 0);
+replace into creature_loot_template values (60734, 60560, 15, 2, 1, 1, 0);
 
 update creature_template set loot_id = 60734 where entry = 60734;
 
@@ -304,7 +304,7 @@ replace into creature_loot_template values (60735, 60567, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60735, 60569, 20, 1, 1, 1, 0);
 replace into creature_loot_template values (60735, 60568, 20, 1, 1, 1, 0);
 
-replace into creature_loot_template values (60735, 60570, 10, 2, 1, 1, 0);
+replace into creature_loot_template values (60735, 60570, 15, 2, 1, 1, 0);
 
 update creature_template set loot_id = 60735 where entry = 60735;
 
