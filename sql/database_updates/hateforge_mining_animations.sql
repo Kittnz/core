@@ -22,4 +22,4 @@ replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote
 replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570646, 0, 0, 0, 0, 69, 0, 0);
 -- GUIDS FOR MINE EMOTE
 replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570597, 0, 0, 0, 0, 233, 0, 0);
-replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570645, 0, 0, 0, 0, 233, 0, 0);
+replace into creature_addon (guid, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (2570645, 0, 0, 0, 0, 69, 0, 0);
