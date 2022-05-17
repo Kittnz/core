@@ -48291,3 +48291,4 @@ UPDATE `skill_line_ability` SET `superseded_by_spell` = 0 WHERE `id` = 9395;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/972
 update spell_template set effectimplicittargeta1= 1 where entry in (19184,19387,19388,19389,19390);
+update spell_template set effectitemtype1 = 46600 where entry  = 46600;
