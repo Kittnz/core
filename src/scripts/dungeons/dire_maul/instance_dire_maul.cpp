@@ -417,7 +417,7 @@ void instance_dire_maul::SetData(uint32 uiType, uint32 uiData)
                 if (!m_lFelvineShardGUIDs.empty())
                 {
                     for (const auto& guid : m_lFelvineShardGUIDs)
-                        DoRespawnGameObject(guid);
+                        DoRespawnGameObject(guid, 600);
                 }
             }
             m_auiEncounter[uiType] = uiData;
