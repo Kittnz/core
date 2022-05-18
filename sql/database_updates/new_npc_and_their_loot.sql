@@ -1,3 +1,73 @@
+-- Adjutant Scheer <Kirin Tor> , Faction 76, display ID 18797, level 52, Quest/Greeting flags, weapon 1: 16894 , greeting text : "Welcome, I hope you can find some rest within this hellish place.\n\n This is Nethergarde Keep, established once the Dark Portal opened and the First War had begun years ago. We have been assigned to watch over it, and report magical irregularities should they arise.\n\n If you see anything unusual, let us know."
+-- Sergeant Burnside <Kirin Tor> , Faction 76, display ID 18799, level 54 elite, quest/greeting flags, weapon 1: 80817, greeting text : "We've seen all manner of foe out there, from ogre, to orc, to demon. It is only a matter of time before they grow bold enough to strike at us.\n\n We will be more then prepared for when they make such an action."
+-- Captain Baelos <Kirin Tor>, Faction 76, Display ID 18798, level 56 elite, quest/greeting flags, weapon1: 7945, greeting text : "Make sure you don't cause any trouble here, we have more then enough problems with all of the fel-warped beasts lurking in the wasteland. \n\n Or maybe you've come to this frontier in order to offer assistance."
+-- Engineer Wigglestip <Head Analyst> , Faction 76, display ID 18800, level 48, quest/greeting flags, no weapon, greeting text : "So many magical fluctuations, so much warping of genetics, it almost makes a gnomes head spin with the possibilities of it all!\n\n There's research to be done $R , Research to be done! \n\n Oh, right. I'm Wigglestip, Lead Analyst at Nethergarde, a pleasure to make your acquaintance."
+-- Harguf <Kirin Tor> , Faction 76, display ID 18801, level 54 elite, weapon : 18481, quest/greeting flags, greeting text : "I'm growing restless behind these blasted stone walls, I've crushed too many demon skulls to be wasting away here.\n\n Names Harguf, I've been here quite a long time, what can I do for you?"
+-- 'Sugarcoat' X00 Prototype, display ID 3886, scale 0.6, faction 35, mechanical
+-- 'Nugget' D01 Battle Chicken, display ID 7920, scale 1.5, faction 35, mechanical
+-- 'Buttercup' X01 Prototype , display ID 3886, scale 0.6, faction 35
+REPLACE INTO creature_template VALUES
+(60791, 18797, 0, 0, 0, 'Adjutant Scheer', 'Kirin Tor', 0, 52, 52, 3082, 3082, 0, 0, 2669, 76, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60792, 18799, 0, 0, 0, 'Sergeant Burnside', 'Kirin Tor', 0, 54, 54, 8190, 8190, 0, 0, 3400, 76, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 354, 454, 0, 244, 1, 1300, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60793, 18798, 0, 0, 0, 'Captain Baelos', 'Kirin Tor', 0, 56, 56, 8397, 8397, 0, 0, 3271, 76, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60794, 18800, 0, 0, 0, 'Engineer Wigglestip', 'Head Analyst', 0, 48, 48, 2398, 2398, 0, 0, 2753, 76, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 74, 96, 0, 208, 1, 1000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.744, 86.273, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60795, 18801, 0, 0, 0, 'Harguf', 'Kirin Tor', 0, 54, 54, 8190, 8190, 0, 0, 3400, 76, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 354, 454, 0, 244, 1, 1300, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60796, 3886, 0, 0, 0, '\'Sugarcoat\' X00 Prototype', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 2, 1, 1.14286, 0.6, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60797, 7920, 0, 0, 0, '\'Nugget\' D01 Battle Chicken', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 2, 1, 1.14286, 1.5, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60798, 3886, 0, 0, 0, '\'Buttercup\' X01 Prototype', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 2, 1, 1.14286, 0.6, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20115; set @weapon_1 = 18481; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60795;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20114; set @weapon_1 = 7945; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60793;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20113; set @weapon_1 = 80817; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60792;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20112; set @weapon_1 = 16894; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60791;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41137; set @magic_number = 60795;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I\'m growing restless behind these blasted stone walls, I\'ve crushed too many demon skulls to be wasting away here.\n\nNames Harguf, I\'ve been here quite a long time, what can I do for you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41136; set @magic_number = 60794;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'So many magical fluctuations, so much warping of genetics, it almost makes a gnomes head spin with the possibilities of it all!\n\nThere\'s research to be done $R, Research to be done!\n\nOh, right. I\'m Wigglestip, Lead Analyst at Nethergarde, a pleasure to make your acquaintance.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41135; set @magic_number = 60793;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Make sure you don\'t cause any trouble here, we have more then enough problems with all of the fel-warped beasts lurking in the wasteland.\n\nOr maybe you\'ve come to this frontier in order to offer assistance.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41134; set @magic_number = 60792;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We\'ve seen all manner of foe out there, from ogre, to orc, to demon. It is only a matter of time before they grow bold enough to strike at us.\n\nWe will be more then prepared for when they make such an action.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41133; set @magic_number = 60791;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome, I hope you can find some rest within this hellish place.\n\nThis is Nethergarde Keep, established once the Dark Portal opened and the First War had begun years ago. We have been assigned to watch over it, and report magical irregularities should they arise.\n\nIf you see anything unusual, let us know.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO creature_display_info_addon VALUES
+(18797, 0, 0, 0, 0),
+(18799, 0, 0, 0, 0),
+(18798, 0, 0, 0, 0),
+(18800, 0, 0, 0, 0),
+(18801, 0, 0, 0, 0);
 -- 'Chaser' display ID 514, scale 0.7, faction 12, quest flags, mechanical
 -- Annabelle Livingstone, display ID 18857 , scale 1, faction 12, quest flags/gossip, humanoid, greeting text : "Why hello there, and welcome to Livingstone Croft, make yourself at home, the only thing I ask is that you wipe your feet off outside before you come in!"
 -- Oswald Livingstone, display ID 18862 , scale 1, faction 12, quest flags/gossip, humanoid, weapon : 1485, greeting text : "So many damned critters around here, keep disturbing the crops and making our lives even more difficult then it needs to be...\n\n Ahh , sorry about that, what can I do for you?"
