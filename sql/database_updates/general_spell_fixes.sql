@@ -48292,3 +48292,10 @@ UPDATE `skill_line_ability` SET `superseded_by_spell` = 0 WHERE `id` = 9395;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/972
 update spell_template set effectimplicittargeta1= 1 where entry in (19184,19387,19388,19389,19390);
 update spell_template set effectitemtype1 = 46600 where entry  = 46600;
+
+-- Fixes Well Fed buff for some seasonal food like Winter Veil cookies
+UPDATE `spell_template` SET `Effect2`=6, `EffectDieSides2`=1, `EffectBaseDice2`=1, `EffectImplicitTargetA2`=1, `EffectApplyAuraName2`=23, `EffectAmplitude2`=10000, `EffectTriggerSpell2`=24870 WHERE `entry`=24869;
+UPDATE `spell_template` SET `EffectRealPointsPerLevel1`=0.25, `EffectRealPointsPerLevel2`=0.25, `EffectBaseDice1`=0, `EffectBaseDice2`=0, `EffectBasePoints2`=0 WHERE `entry`=24870;
+
+-- Fixed radius of Consumption spell for Void Zone in Four Horsemen (use same value than TBC DBCs)
+UPDATE spell_template SET EffectRadiusIndex1=7 WHERE entry=28865;
