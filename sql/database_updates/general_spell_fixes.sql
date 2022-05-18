@@ -48296,3 +48296,6 @@ update spell_template set effectitemtype1 = 46600 where entry  = 46600;
 -- Fixes Well Fed buff for some seasonal food like Winter Veil cookies
 UPDATE `spell_template` SET `Effect2`=6, `EffectDieSides2`=1, `EffectBaseDice2`=1, `EffectImplicitTargetA2`=1, `EffectApplyAuraName2`=23, `EffectAmplitude2`=10000, `EffectTriggerSpell2`=24870 WHERE `entry`=24869;
 UPDATE `spell_template` SET `EffectRealPointsPerLevel1`=0.25, `EffectRealPointsPerLevel2`=0.25, `EffectBaseDice1`=0, `EffectBaseDice2`=0, `EffectBasePoints2`=0 WHERE `entry`=24870;
+
+-- Fixed radius of Consumption spell for Void Zone in Four Horsemen (use same value than TBC DBCs)
+UPDATE spell_template SET EffectRadiusIndex1=7 WHERE entry=28865;
