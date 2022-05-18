@@ -1,3 +1,163 @@
+-- 'Chaser' display ID 514, scale 0.7, faction 12, quest flags, mechanical
+-- Annabelle Livingstone, display ID 18857 , scale 1, faction 12, quest flags/gossip, humanoid, greeting text : "Why hello there, and welcome to Livingstone Croft, make yourself at home, the only thing I ask is that you wipe your feet off outside before you come in!"
+-- Oswald Livingstone, display ID 18862 , scale 1, faction 12, quest flags/gossip, humanoid, weapon : 1485, greeting text : "So many damned critters around here, keep disturbing the crops and making our lives even more difficult then it needs to be...\n\n Ahh , sorry about that, what can I do for you?"
+-- Brian Livingstone, display ID 251, scale 1, faction 12, quest/gossip flags, humanoid,  greeting text : "All of this work being done, its exciting, I can't wait to see the whole city finished!"
+-- Marjorie Natheldon , display ID 18860 , scale 1, faction 12, quest/gossip flags, humanoid
+-- Bart Natheldon, display ID 18858 , scale 1, faction 12, quest/gossip flags, humanoid
+-- Eperius , display ID 2404 , scale 1, faction 12, beast 
+-- Tarral Holk <Horse Master> , display ID 18866 , scale 1, selling, quest, and gossip flags, humanoid, weapon1 12801, gossip text : "I look after a lot of the horses for the Stromgarde Cavalrymen, no doubt you've seen them around, they often keep the main road between here and Refuge Pointe secured, as much as they can, anyway."
+-- Peter Yarrel, display ID 18864 , scale 1, quest/gossip flags, humanoid, no weapon, gossip text : "It is only a matter of time until things get much better."
+-- Sergeant Karster, display ID 18865 , scale 1, quest/gossip flags, humanoid, weapon1 15212, gossip text : "Welcome to Gallant Square, our section of the city. Don't let your guard down, for as much progress as we are making it can all be destroyed within a matter of minutes.\n\n The Ogres and Syndicate still lurk within other parts of the city, and cause us much nuisance, so keep your wits about you on the way in and out.\n\n So, what can I do for you?"
+-- Hazel Luppel <Alchemy Supplies>, displayID 18859 , scale 1, vendor, quest, and gossip flags, humanoid, gossip text: "Don't be scared, come come! I sell all sorts of magical supplies and stuff, perhaps you're looking for what I'm selling!"
+-- Mathilda Beckett <General Goods>, display ID 18861 , scale 1, vendor, quest, and gossip flags, humanoid, gossip text: "No need to be shy, look around, and buy what you need."
+REPLACE INTO creature_template VALUES
+(60779, 514, 0, 0, 0, '\'Chaser\'', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 2, 1, 1.14286, 0.7, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60780, 18857, 0, 0, 0, 'Annabelle Livingstone', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60781, 18862, 0, 0, 0, 'Oswald Livingstone', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60782, 251, 0, 0, 0, 'Brian Livingstone', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60783, 18860, 0, 0, 0, 'Marjorie Natheldon', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60784, 18858, 0, 0, 0, 'Bart Natheldon', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60785, 2404, 0, 0, 0, 'Eperius', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60786, 18866, 0, 0, 0, 'Tarral Holk', 'Horse Master', 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 7, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60787, 18864, 0, 0, 0, 'Peter Yarrel', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60788, 18865, 0, 0, 0, 'Sergeant Karster', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60789, 18859, 0, 0, 0, 'Hazel Luppel', 'Alchemy Supplies', 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 7, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60790, 18861, 0, 0, 0, 'Mathilda Beckett', 'General Goods', 0, 50, 50, 2990, 2990, 0, 0, 2958, 12, 7, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20111; set @weapon_1 = 15212; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60788;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20110; set @weapon_1 = 12801; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60786;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20109; set @weapon_1 = 1485; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60781;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41132; set @magic_number = 60790;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'No need to be shy, look around, and buy what you need.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41131; set @magic_number = 60789;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Don\'t be scared, come come! I sell all sorts of magical supplies and stuff, perhaps you\'re looking for what I\'m selling!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41130; set @magic_number = 60788;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Gallant Square, our section of the city. Don\'t let your guard down, for as much progress as we are making it can all be destroyed within a matter of minutes.\n\nThe Ogres and Syndicate still lurk within other parts of the city, and cause us much nuisance, so keep your wits about you on the way in and out.\n\nSo, what can I do for you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41129; set @magic_number = 60787;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It is only a matter of time until things get much better.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41128; set @magic_number = 60786;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I look after a lot of the horses for the Stromgarde Cavalrymen, no doubt you\'ve seen them around, they often keep the main road between here and Refuge Pointe secured, as much as they can, anyway.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41127; set @magic_number = 60782;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'All of this work being done, its exciting, I can\'t wait to see the whole city finished!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41126; set @magic_number = 60781;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'So many damned critters around here, keep disturbing the crops and making our lives even more difficult then it needs to be...\n\nAhh, sorry about that, what can I do for you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41125; set @magic_number = 60780;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why hello there, and welcome to Livingstone Croft, make yourself at home, the only thing I ask is that you wipe your feet off outside before you come in!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES
+(60789, 858, 3, 7200, 0, 0),
+(60789, 1710, 3, 7200, 0, 0),
+(60789, 3371, 0, 0, 0, 0),
+(60789, 3372, 0, 0, 0, 0),
+(60789, 3385, 3, 7200, 0, 0),
+(60789, 3827, 3, 7200, 0, 0),
+(60789, 8925, 0, 0, 0, 0),
+(60789, 14634, 1, 7200, 3, 0),
+(60789, 18256, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES
+(60790, 159, 0, 0, 0, 0),
+(60790, 1179, 0, 0, 0, 0),
+(60790, 1205, 0, 0, 0, 0),
+(60790, 1645, 0, 0, 0, 0),
+(60790, 1708, 0, 0, 0, 0),
+(60790, 2515, 0, 0, 0, 0),
+(60790, 2519, 0, 0, 0, 0),
+(60790, 2946, 0, 0, 0, 0),
+(60790, 3030, 0, 0, 0, 0),
+(60790, 3033, 0, 0, 0, 0),
+(60790, 3107, 0, 0, 0, 0),
+(60790, 3108, 0, 0, 0, 0),
+(60790, 3131, 0, 0, 0, 0),
+(60790, 3135, 0, 0, 0, 0),
+(60790, 3137, 0, 0, 0, 0),
+(60790, 4470, 0, 0, 0, 0),
+(60790, 4471, 0, 0, 0, 0),
+(60790, 4497, 0, 0, 0, 0),
+(60790, 4498, 0, 0, 0, 0),
+(60790, 4604, 0, 0, 0, 0),
+(60790, 4605, 0, 0, 0, 0),
+(60790, 4606, 0, 0, 0, 0),
+(60790, 4607, 0, 0, 0, 0),
+(60790, 4608, 0, 0, 0, 0),
+(60790, 6183, 0, 0, 0, 0),
+(60790, 8766, 0, 0, 0, 0),
+(60790, 8948, 0, 0, 0, 0),
+(60790, 11284, 0, 0, 0, 0),
+(60790, 11285, 0, 0, 0, 0),
+(60790, 15326, 0, 0, 0, 0),
+(60790, 15327, 0, 0, 0, 0),
+(60790, 16110, 0, 0, 0, 0);
+
+REPLACE INTO creature_display_info_addon VALUES
+(18871, 0, 0, 0, 0),
+(18869, 0, 0, 0, 0),
+(18870, 0, 0, 0, 0),
+(18872, 0, 0, 0, 0),
+(18873, 0, 0, 0, 0),
+(18874, 0, 0, 0, 0),
+(18875, 0, 0, 0, 0),
+(18876, 0, 0, 0, 0),
+(18879, 0, 0, 0, 0),
+(18877, 0, 0, 0, 0),
+(18882, 0, 0, 0, 0),
+(18878, 0, 0, 0, 0),
+(18883, 0, 0, 0, 0),
+(18884, 0, 0, 0, 0),
+(18885, 0, 0, 0, 0),
+(18886, 0, 0, 0, 0),
+(18887, 0, 0, 0, 0),
+(18868, 0, 0, 0, 0);
+
+REPLACE INTO creature_display_info_addon VALUES
+(18857, 0, 0, 0, 0),
+(18862, 0, 0, 0, 0),
+(18860, 0, 0, 0, 0),
+(18858, 0, 0, 0, 0),
+(18866, 0, 0, 0, 0),
+(18864, 0, 0, 0, 0),
+(18865, 0, 0, 0, 0),
+(18859, 0, 0, 0, 0),
+(18861, 0, 0, 0, 0);
 -- Sorlugg, display ID 18871 , level 58 , faction 29, weapon 15424, quest/gossip flags, greeting text : "Our mission here is of an utmost importance. The Dark Portal radiates with fel energy, who knows if it is even still active."
 -- Bagaroh, display ID 18869, level 54, faction 29, weapon 80814 , quest/gossip flags, greeting text : "I hate ogres."
 -- Jaiymu, display ID 18870, level 54, faction 29, weapon 20647, quest/gossip flags, greeting text : "I am Jaiymu, son of Taiymu. What do you need friend?"
