@@ -87,8 +87,21 @@ class AccountMgr
         uint32 GetId(std::string username);
 
         void Load();
-        AccountTypes GetSecurity(uint32 acc_id);
-        void SetSecurity(uint32 accId, AccountTypes sec);
+
+        // DEPRECATED: !!!
+        //AccountTypes GetSecurity(uint32 acc_id);
+        //void SetSecurity(uint32 accId, AccountTypes sec);
+
+        // Giperion Turtle - ranks security system
+        uint32 GetSecurityRanks(uint32 AccountId) const;
+        void AddRanksToAccount(uint32 AccountId, const std::string& Ranks);
+        void RemoveRanksFromAccount(uint32 AccountId, const std::string& Ranks);
+        void SetRanksToAccount(uint32 Account, uint32 RankValue);
+        void QueryAccountRanks(uint32 AccountId, std::string& OutRanks) const;
+
+        void ParseSecurityRanks(uint32 RankValue, std::string& OutRanks) const;
+
+        uint32 GetRankValue(const std::string& RankName) const;
 
         bool GetName(uint32 acc_id, std::string &name);
         uint32 GetCharactersCount(uint32 acc_id);
@@ -109,15 +122,18 @@ class AccountMgr
         bool CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 maxCount);
         void AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_t enterTime);
 
-        // TW - Nolin
         bool IsPlayerAccount(uint32 gmlevel);
-        bool IsGMAccount(uint32 gmlevel);
-        bool IsAdminAccount(uint32 gmlevel);
-        bool IsConsoleAccount(uint32 gmlevel);
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
     protected:
-        std::map<uint32, AccountTypes> m_accountSecurity;
+
+        // Giperion Turtle - Ranks system
+        using RankMap = std::map<uint32, uint32>; // key - accountId, value - rank value
+        RankMap m_accountSecurity;
+
+        using RankValueMap = std::map< std::string, uint32 >; // key - rank mask value, value - name
+        RankValueMap m_Ranks;
+
         uint32 m_banlistUpdateTimer;
         std::map<std::string, uint32> m_ipBanned;
         std::map<uint32, uint32> m_accountBanned;
