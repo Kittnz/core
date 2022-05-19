@@ -255,3 +255,11 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60730, 40418);
 replace into creature_involvedrelation (id, quest) values (60730, 40418);
+
+-- A Blasted Land
+delete from quest_template where entry = 40419;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40419,2,17,47,45,0,0,'A Blasted Land','Soldier, we need you.\n\nA Few weeks ago I sent a small expeditionary force south, to Blasted Lands. I haven\'t gotten a word from them since. Go there, and see what happened. I ordered them to set up a camp in proximity to the Dark Portal, if it helps.','Find the missing expedition in Blasted Lands.','Ruag sent you? I didn\'t expect him to hire a search party that soon.','We have our hands full of work. I wasn\'t able to spare any of my men to send the report back to Stonard.\n\nBut since you are here now, you might be able to help us with the matters at hand.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1200,29,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (7623, 40419);
+replace into creature_involvedrelation (id, quest) values (60759, 40419);
+
