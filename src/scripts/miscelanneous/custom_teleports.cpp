@@ -30,7 +30,7 @@ struct custom_dungeon_portal : public GameObjectAI
                         player->ResurrectPlayer(0.5f);
                         player->SpawnCorpseBones();
                     }
-                    array<tuple<uint32, WorldLocation, int32>, 8> portals_and_locations =
+                    array<tuple<uint32, WorldLocation, int32>, 10> portals_and_locations =
                     { {
                         { 181580, WorldLocation{800, -11068.1F, -1806.4F, 52.7F, 1.5F}, 55 },  // Karazhan Crypt (Entrance)
                         { 181581, WorldLocation{0, -11068.9F, -1828.6F, 60.26F, 3.1F},  1 },   // Karazhan Crypt (Exit)
@@ -40,6 +40,8 @@ struct custom_dungeon_portal : public GameObjectAI
                         { 112916, WorldLocation{1, -8756.8F, -4191.3F, -209.4F, 5.5F},  1 },   // Black Morass (Exit)
                         { 112917, WorldLocation{35, -1.15F, 44.4F, -25.58F, 1.6F},      58 },  // Stromwind Vault (Entrance)
                         { 112918, WorldLocation{0, -8702.01F, 646.16F, 99.97F, 0.04F},  1 },   // Stromwind Vault (Exit)      
+                        { 112940, WorldLocation{808, -8173.9F, -3120.6F, 199.8F, 4.7F}, 58 },  // Hateforge Quarry (Entrance)
+                        { 112941, WorldLocation{0, -8169.2F, -3106.71F, 200.4F, 1.1F},  1 },   // Hateforge Quarry (Exit)   
                     } };
                     for (auto const& teleport : portals_and_locations)
                     {
