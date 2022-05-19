@@ -81,12 +81,6 @@ bool ChatHandler::HandleAccountDeleteCommand(char* args)
     if (!account_id)
         return false;
 
-    /// Commands not recommended call from chat, but support anyway
-    /// can delete only for account with less security
-    /// This is also reject self apply in fact
-    if (HasLowerSecurityAccount (nullptr, account_id, true))
-        return false;
-
     AccountOpResult result = sAccountMgr.DeleteAccount(account_id);
     switch(result)
     {
@@ -580,7 +574,7 @@ void CliRunnable::operator()()
                 continue;
             }
 
-            sWorld.QueueCliCommand(new CliCommandHolder(0, SEC_CONSOLE, nullptr, command.c_str(), &utf8print, &commandFinished));
+            sWorld.QueueCliCommand(new CliCommandHolder(0, RANK_CONSOLE, nullptr, command.c_str(), &utf8print, &commandFinished));
         }
         else if (feof(stdin))
         {

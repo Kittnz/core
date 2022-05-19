@@ -124,7 +124,7 @@ void PInfoHandler::HandleDelayedMoneyQuery(QueryResult*, SqlQueryHolder *holder,
     // and print the result once it completes. We also read guild info
     // so this cannot be done in an async task
     LoginDatabase.AsyncPQueryUnsafe(&PInfoHandler::HandleAccountInfoResult, data,
-        "SELECT username,last_ip,last_login,locale,locked FROM account WHERE id = '%u'",
+        "SELECT username,last_ip,last_login,locale,locked, rank FROM account WHERE id = '%u'",
         data->accId);
 }
 
@@ -144,14 +144,13 @@ void PInfoHandler::HandleAccountInfoResult(QueryResult *result, PInfoData *data)
     {
         Field* fields = result->Fetch();
         data->username = fields[0].GetCppString();
-        data->security = sAccountMgr.GetSecurity(data->accId);
+        data->security = sAccountMgr.GetSecurityRanks(data->accId);
         data->loc = LocaleConstant(fields[3].GetUInt8());
         data->security_flag = fields[4].GetUInt8();
+        data->ranks = fields[5].GetUInt32();
 
         bool showIp = true;
-        if (session->GetSecurity() < data->security)
-            showIp = false;
-        else if (session->GetSecurity() < SEC_ADMINISTRATOR && data->security > SEC_PLAYER) // Only admins can see GM IPs
+        if (data->ranks >= RANK_STAFF) // We can show players ip, but staff ip is always hidden
             showIp = false;
         if (showIp)
         {
@@ -191,7 +190,7 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
     {
         data->username = cHandler.GetMangosString(LANG_ERROR);
         data->last_ip = cHandler.GetMangosString(LANG_ERROR);
-        data->security = SEC_PLAYER;
+        data->security = RANK_PLAYER;
     }
 
     std::string nameLink = cHandler.playerLink(data->target_name);
@@ -259,7 +258,7 @@ void PlayerAccountSearchDisplayTask::operator ()()
     }
 
     uint32 count = 0;
-    AccountTypes sessionAccess = session->GetSecurity();
+    //uint32 sessionAccess = session->GetSecurity();
     for (uint32 i = 0; i < holder->GetSize(); ++i)
     {
         QueryResult *query = holder->GetResult(i);
@@ -272,12 +271,12 @@ void PlayerAccountSearchDisplayTask::operator ()()
             uint32& acc_id = accountInfo.first;
             std::string &acc_name = accountInfo.second;
 
-            AccountTypes security = sAccountMgr.GetSecurity(acc_id);
-
-            // Cannot lookup accounts above the caller's security, nor can GMs below
-            // administrator lookup other non-player accounts
-            if (sessionAccess < security || (sessionAccess < SEC_ADMINISTRATOR && security > SEC_PLAYER))
-                continue;
+//             AccountTypes security = sAccountMgr.GetSecurity(acc_id);
+// 
+//             // Cannot lookup accounts above the caller's security, nor can GMs below
+//             // administrator lookup other non-player accounts
+//             if (sessionAccess < security || (sessionAccess < SEC_ADMINISTRATOR && security > SEC_PLAYER))
+//                 continue;
 
             bool banned = sAccountMgr.IsAccountBanned(acc_id);
             if (banned)
@@ -437,7 +436,6 @@ void AccountSearchHandler::ShowAccountListHelper(QueryResult* result, ChatHandle
     }
 
     ///- Circle through accounts
-    AccountTypes sessionAccess = chatHandler.GetSession() ? chatHandler.GetSession()->GetSecurity() : SEC_CONSOLE;
     do
     {
         // check limit
@@ -454,10 +452,8 @@ void AccountSearchHandler::ShowAccountListHelper(QueryResult* result, ChatHandle
         std::string lastIp = chatHandler.GetMangosString(LANG_ERROR);
         bool showIp = true;
 
-        AccountTypes security = sAccountMgr.GetSecurity(account);
-        if (sessionAccess < security)
-            showIp = false;
-        else if (sessionAccess < SEC_ADMINISTRATOR && security > SEC_PLAYER) // Only admins can see GM IPs
+        uint32 security = sAccountMgr.GetSecurityRanks(account);
+        if (security >= RANK_STAFF) // Only admins can see GM IPs
             showIp = false;
 
         if (showIp)

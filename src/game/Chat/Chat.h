@@ -57,7 +57,7 @@ class ChatCommand
 {
 public:
         const char *       Name;
-        uint8              SecurityLevel;                   // function pointer required correct align (use uint32)
+        uint32              RequiredRank;                   // function pointer required correct align (use uint32)
         bool               AllowConsole;
         bool (ChatHandler::*Handler)(char* args);
         std::string        Help;
@@ -148,19 +148,20 @@ class ChatHandler
 
         // function with different implementation for chat/console
         virtual uint32 GetAccountId() const;
-        virtual AccountTypes GetAccessLevel() const;
+        virtual uint32 GetAccessLevel() const;
         virtual bool isAvailable(ChatCommand const& cmd) const;
         virtual std::string GetNameLink() const;
         virtual bool needReportToTarget(Player* chr) const;
         virtual LocaleConstant GetSessionDbcLocale() const;
         virtual int GetSessionDbLocaleIndex() const;
 
-        bool HasLowerSecurity(Player* target, ObjectGuid guid = ObjectGuid(), bool strong = false);
-        bool HasLowerSecurityAccount(WorldSession* target, uint32 account, bool strong = false);
-
         void SendGlobalSysMessage(const char *str);
 
-        bool SetDataForCommandInTable(ChatCommand *table, const char* text, uint8 security, std::string const& help, uint8 flags);
+        bool IsAdmin(Player* player) const;
+        bool IsAdmin(ObjectGuid ObjPlayer) const;
+        bool IsAdmin(uint32 AccountId) const;
+
+        bool SetDataForCommandInTable(ChatCommand *table, const char* text, uint32 security);
         void ExecuteCommand(const char* text);
         bool ShowHelpForCommand(ChatCommand *table, const char* cmd);
         bool ShowHelpForSubCommands(ChatCommand *table, char const* cmd);
@@ -234,8 +235,11 @@ class ChatHandler
         bool HandleAccountCreateCommand(char* args);
         bool HandleAccountDeleteCommand(char* args);
         bool HandleAccountPasswordCommand(char* args);
-        bool HandleAccountSetGmLevelCommand(char* args);
         bool HandleAccountSetPasswordCommand(char* args);
+
+        bool HandleAccountRankAddCommand(char* args);
+        bool HandleAccountRankDeleteCommand(char* args);
+        bool HandleAccountRankQueryCommand(char* args);
 
         bool HandleBanAccountCommand(char* args);
         bool HandleBanCharacterCommand(char* args);
@@ -638,13 +642,13 @@ class CliHandler : public ChatHandler
 {
     public:
         typedef void Print(void*, char const*);
-        explicit CliHandler(uint32 accountId, AccountTypes accessLevel, void* callbackArg, Print* zprint)
+        explicit CliHandler(uint32 accountId, uint32 accessLevel, void* callbackArg, Print* zprint)
             : m_accountId(accountId), m_loginAccessLevel(accessLevel), m_callbackArg(callbackArg), m_print(zprint) {}
 
         // overwrite functions
         const char *GetMangosString(int32 entry) const override;
         uint32 GetAccountId() const override;
-        AccountTypes GetAccessLevel() const override;
+        uint32 GetAccessLevel() const override;
         bool isAvailable(ChatCommand const& cmd) const override;
         void SendSysMessage(const char *str) override;
         std::string GetNameLink() const override;
@@ -654,7 +658,7 @@ class CliHandler : public ChatHandler
 
     private:
         uint32 m_accountId;
-        AccountTypes m_loginAccessLevel;
+        uint32 m_loginAccessLevel;
         void* m_callbackArg;
         Print* m_print;
 };
@@ -667,7 +671,7 @@ class NullChatHandler : public ChatHandler
         // overwrite functions
         const char *GetMangosString(int32 entry) const override;
         uint32 GetAccountId() const override { return 0; }
-        AccountTypes GetAccessLevel() const override { return SEC_PLAYER; }
+        uint32 GetAccessLevel() const override { return RANK_PLAYER; }
         bool isAvailable(ChatCommand const& cmd) const override { return false; }
         void SendSysMessage(const char *str) override {}
         std::string GetNameLink() const override { return ""; }
