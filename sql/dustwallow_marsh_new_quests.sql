@@ -223,3 +223,18 @@ REPLACE INTO page_text VALUES
 
 update creature_template set script_name = 'npc_captain_wallace_cross' where entry = 60729;
 update creature_template set script_name = 'npc_captain_harker' where entry = 60730;
+
+-- Delivery to Cross
+delete from quest_template where entry = 40416;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40416,2,15,37,32,0,0,'Delivery to Cross','I once came from the city of Stormwind, and travelled to Kul Tiras, that was before the fleet ventured here, to Theramore. Ever since me and my brother have been seperated and while I have heard good things about him, and his business I haven\'t had any opportunity to deliver a letter, especially being stuck here at my post.\n\nIf you ever find yourself in Stormwind, would you mind stopping by The Silver Shield in the Old Town of Stormwind? My brother Bryan is the one that runs the place, and it would mean the world to me if you could run him this letter.','Deliver Wallace\'s Letter to Bryan Cross in Stormwind City.','Yes?',' Well, I must say, this is the last thing I had expected to come into my shop, I haven\'t heard from Wallace in some time, not seeing family certainly makes you miss old times.',60604,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60604,1,0,700,108,75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60729, 40416);
+replace into creature_involvedrelation (id, quest) values (1319, 40416);
+
+update creature_template set npc_flags = 16391 where entry = 1319;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60604,5646,'Wallace\'s Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50536);
+
+REPLACE INTO page_text VALUES
+(50536, 'Dear brother, it has been a long time since we have met, I have been meaning to send a letter, but have not had a reliable means.\n\nIf this letter does reach you, do know that I have been well, defending Theramore has been extremely rewarding, and this place is now my true home. The people in which I serve with are some of the best I have ever met, so do not fear, for I am truly in great hands.\n\nHearing about the success of your business has brought me great joy. I look forward to the day that we can meet again, and celebrate like old times.\n\n Wallace Cross.', 0);
