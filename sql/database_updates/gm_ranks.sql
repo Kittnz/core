@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS `command`;
 
 CREATE TABLE IF NOT EXISTS `command` (
   `name` VARCHAR(50) NOT NULL,
-  `rank` VARCHAR(20) NOT NULL,
+  `rank` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`name`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC));   
 
