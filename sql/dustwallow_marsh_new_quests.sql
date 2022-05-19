@@ -82,3 +82,30 @@ REPLACE INTO creature_loot_template VALUES
 (4361, 60594, -90, 0, 1, 1, 0),
 (4362, 60594, -90, 0, 1, 1, 0),
 (4363, 60594, -90, 0, 1, 1, 0);
+
+-- Stolen Oil
+delete from quest_template where entry = 40410;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40410,2,15,38,33,0,0,'Stolen Oil','It was about a week ago now when the damned Mirefin raided my Lighthouse and got off with all manner of supply I had been building up. A few weeks of food rations and some tools, but most importantly oil for the Lighthouse!\n\nThe Lighthouse in Theramore runs from oil collected in other parts of the world, and of which we only get a shipment in at the start of every month, without it, the Lighthouse will die out. I do not need to tell you how vital this Lighthouse is especially for a port city like Theramore.\n\nI ask of you to gather it back from the Mirefin Murlocs, no doubt they have it stashed among their hovels up to the north west, make sure to check the isles there, they practically infest them.','Gather the Lighthouse Oil Barrel for Old Bryan at the Theramore Lighthouse.','Every minute that burns away is a minute less that we have.','Ah, this is it, and it\'s still sealed, I would have expected those dumb creatures to pry it open, or use the oil to make a big fire or something, it seems they couldn\'t figure it out, or hadn\'t gotten around to it yet.\n\nThanks again for the help, you may have saved my hide here!',60595,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2650,108,250,0,0,0,0,0,0,0,0,0,60596,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60728, 40410);
+replace into creature_involvedrelation (id, quest) values (60728, 40410);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60595,8381,'Lighthouse Oil Barrel',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010888, 3, 23078, 'Oil Barrel', 0, 4, 1.5, 43, 2010888, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+delete from gameobject_loot_template where entry = 2010888;
+replace into gameobject_loot_template values
+(2010888,60595,-100,0,1,1,0);
+
+replace into item_template values
+ ('60596', '4', '2', 'Lighthouse Keeper Boots', '', '11373', '2', '0', '1', '18432', '4608', '8', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '7', '6', '4',
+ '4', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '77', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '45', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
