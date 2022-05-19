@@ -141,3 +141,67 @@ replace into creature_involvedrelation (id, quest) values (60728, 40413);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60599,8928,'Bryan\'s Food Delivery',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Marglum Blood-eye
+delete from quest_template where entry = 40414;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40414,2,15,40,35,0,0,'Marglum Blood-eye','The local murlocs are becoming more, and more of a threat as time continues, they are no longer confined to just the depths or the shore, and are often seen traveling inland, or harassing locals.\n\nThey are led by a large, foul beast named Marglum Blood-eye, a hulking abomination of a murloc that patrols the coastline to the northern-western shoreline.\n\nFind him, and bring his head to me, and I will make sure you are rewarded.','Find Marglum Blood-eye along coast north west of Theramore and bring his head to Sergeant Terresa on Theramore Isle.','Have you slain the foul monster?','This may not be the end of the murloc threat, but this will no doubt slow them down. Thanks again, as promised.',60600,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1500,2650,108,150,0,0,0,0,0,0,0,0,0,60601,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60732, 40414);
+replace into creature_involvedrelation (id, quest) values (60732, 40414);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60600,9585,'Head of Marglum Blood-eye',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into item_template values
+ ('60601', '2', '4', 'The Murloc Clubber', '', '8287', '2', '0', '1', '73052', '18263', '13', '-1', '-1', '45',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '7', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '0',
+ '0', '47', '94', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '75', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+REPLACE INTO creature_loot_template VALUES
+(60714, 60600, -100, 0, 1, 1, 0),
+(60714, 1477, 0.272, 0, 1, 1, 0),
+(60714, 1529, 0.016, 0, 1, 1, 0),
+(60714, 1708, 2.591, 0, 1, 1, 0),
+(60714, 1710, 1.393, 0, 1, 1, 0),
+(60714, 1725, 0.039, 0, 1, 1, 0),
+(60714, 2289, 0.218, 0, 1, 1, 0),
+(60714, 3827, 0.801, 0, 1, 1, 0),
+(60714, 3831, 0.008, 0, 1, 1, 0),
+(60714, 3832, 0.008, 0, 1, 1, 0),
+(60714, 3864, 0.093, 0, 1, 1, 0),
+(60714, 3869, 0.008, 0, 1, 1, 0),
+(60714, 3873, 0.008, 0, 1, 1, 0),
+(60714, 3874, 0.008, 0, 1, 1, 0),
+(60714, 4414, 0.008, 0, 1, 1, 0),
+(60714, 4416, 0.008, 0, 1, 1, 0),
+(60714, 4421, 0.156, 0, 1, 1, 0),
+(60714, 4424, 0.148, 0, 1, 1, 0),
+(60714, 4614, 0.054, 0, 1, 1, 0),
+(60714, 4636, 0.039, 0, 1, 1, 0),
+(60714, 5785, 12.286, 0, 1, 1, 0),
+(60714, 5847, -33, 0, 1, 1, 0),
+(60714, 6045, 0.008, 0, 1, 1, 0),
+(60714, 6362, 4.583, 0, 1, 3, 0),
+(60714, 7084, 0.008, 0, 1, 1, 0),
+(60714, 7450, 0.008, 0, 1, 1, 0),
+(60714, 7453, 0.023, 0, 1, 1, 0),
+(60714, 7909, 0.016, 0, 1, 1, 0),
+(60714, 7992, 0.016, 0, 1, 1, 0),
+(60714, 8029, 0.31, 0, 1, 1, 4),
+(60714, 10301, 0.008, 0, 1, 1, 0),
+(60714, 11167, 0.008, 0, 1, 1, 0),
+(60714, 17057, 28.929, 0, 1, 1, 0),
+(60714, 17058, 29.567, 0, 1, 1, 0),
+(60714, 30025, 0.5, 0, -30025, 1, 0),
+(60714, 30026, 0.01, 0, -30026, 1, 0),
+(60714, 30031, 0.5, 0, -30031, 1, 0),
+(60714, 30032, 0.01, 0, -30032, 1, 0),
+(60714, 30033, 0.5, 0, -30033, 1, 0),
+(60714, 30034, 0.01, 0, -30034, 1, 0),
+(60714, 30039, 2.5, 0, -30039, 1, 0),
+(60714, 30040, 2.5, 0, -30040, 1, 0);
