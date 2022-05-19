@@ -205,3 +205,21 @@ REPLACE INTO creature_loot_template VALUES
 (60714, 30034, 0.01, 0, -30034, 1, 0),
 (60714, 30039, 2.5, 0, -30039, 1, 0),
 (60714, 30040, 2.5, 0, -30040, 1, 0);
+
+-- Reports of Dustwallow
+delete from quest_template where entry = 40415;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40415,2,15,37,32,0,0,'Reports of Dustwallow','Hey there, you look tough enough to handle yourself, and Theramore is in need of some assistance. My last runner was ambushed on the roadway, and suffered a rather grevious wound. If we want to keep our defence of the roadway through Dustwallow then we need to remain steadfast.\n\nAs such, I haven\'t received the weekly reports from both Sentry Point, and North Point.\n\nI want you to report to Captain Wallace Cross at Sentry Point Tower, and Captain Harker at North Point Tower, and bring their reports back to me.','Collect the Sentry Point Report, and the North Point Report for Colonel Breen at Theramore Isle in Dustwallow Marsh.','Have you gotten those reports yet?','Well, thanks for gathering these reports, its good to hear news from the frontier, even if some of it is bad, take this coin as thanks for the work.',60602,1,60603,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,850,108,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60727, 40415);
+replace into creature_involvedrelation (id, quest) values (60727, 40415);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60602,3048,'Sentry Point Report',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50534),
+(60603,5646,'North Point Report',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50535);
+
+REPLACE INTO page_text VALUES
+(50534, 'Situation report for Sentry Point Tower\n\nLocal wildlife has been a nuisance, but we are managing fine, the Mirefin along the coast may soon cause trouble for Theramore given the movements we have been seeing.\n\nMorale is high, supplies are high.\n\nCaptain Wallace Cross.', 0),
+(50535, 'Situation report for North Point Tower\n\nWe have lost one man, and had three more get wounded by the local Bloodfen Raptor\'s that have been stalking the northern wilds.\n\nWe have recently scouted Horde patrols and have deployed forward sentries and pickets further down the road to warn us ahead of time.\n\nMorale is manageable, supplies are dwindling, we request food.\n\nCaptain Harker.', 0);
+
+update creature_template set script_name = 'npc_captain_wallace_cross' where entry = 60729;
+update creature_template set script_name = 'npc_captain_harker' where entry = 60730;
