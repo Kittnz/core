@@ -131,3 +131,13 @@ replace into creature_involvedrelation (id, quest) values (4792, 40412);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60598,7926,'Jarl\'s Package',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'"Smells awfully foul."',0);
+
+-- Old Bryan's Food Delivery
+delete from quest_template where entry = 40413;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40413,2,15,35,30,0,0,'Old Bryan\'s Food Delivery','Hey there, I\'m in need of assistance if you don\'t mind giving some. I have a delivery I need run to the Theramore Lighthouse to Old Bryan that resides there. His food delivery has run a little late and I need it to get to him as soon as possible.\n\nYou can find the Theramore Lighthouse just off the coast to the north east, the bright shining light should be enough to guide you.','Bring Bryan\'s Food Delivery to Old Bryan at the Theramore Lighthouse in Dustwallow Marsh.','Yes?','Ahh, about time, I hate having to ferry to Theramore for a meal!',60599,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60599,1,0,450,108,75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60733, 40413);
+replace into creature_involvedrelation (id, quest) values (60728, 40413);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60599,8928,'Bryan\'s Food Delivery',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
