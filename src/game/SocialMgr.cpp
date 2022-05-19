@@ -206,17 +206,16 @@ void SocialMgr::GetFriendInfo(MasterPlayer* player, uint32 friend_lowguid, Frien
     MasterPlayer *pFriend = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, friend_lowguid));
 
     Team team = player->GetTeam();
-    AccountTypes security = player->GetSession()->GetSecurity();
+    uint32 security = player->GetSession()->GetSecurity();
     bool allowTwoSideWhoList = sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_WHO_LIST);
-    AccountTypes gmLevelInWhoList = AccountTypes(sWorld.getConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST));
 
     PlayerSocialMap::const_iterator itr = player->GetSocial()->m_playerSocialMap.find(friend_lowguid);
     if (itr != player->GetSocial()->m_playerSocialMap.end())
     {
         // PLAYER see his team only and PLAYER can't see MODERATOR, GAME MASTER, ADMINISTRATOR characters
         // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
-        if (pFriend && pFriend->GetName() && (security > SEC_PLAYER ||
-            ((pFriend->GetTeam() == team || allowTwoSideWhoList) && (pFriend->GetSession()->GetSecurity() <= gmLevelInWhoList))) && pFriend->IsVisibleGloballyFor(player)
+        if (pFriend && pFriend->GetName() && (security >= RANK_STAFF ||
+            ((pFriend->GetTeam() == team || allowTwoSideWhoList) && (pFriend->GetSession()->GetSecurity() == RANK_PLAYER))) && pFriend->IsVisibleGloballyFor(player)
             && (pFriend->m_ExtraFlags & PLAYER_EXTRA_GM_DISABLE_SOCIAL) == 0)
         {
             friendInfo.Status = FRIEND_STATUS_ONLINE;
@@ -283,9 +282,8 @@ void SocialMgr::BroadcastToFriendListers(MasterPlayer *player, WorldPacket *pack
         return;
 
     Team team = player->GetTeam();
-    AccountTypes security = player->GetSession()->GetSecurity();
+    uint32 security = player->GetSession()->GetSecurity();
     uint32 guid     = player->GetGUIDLow();
-    AccountTypes gmLevelInWhoList = AccountTypes(sWorld.getConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST));
     bool allowTwoSideWhoList = sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_WHO_LIST);
 
     std::unique_lock<std::mutex> guard(_socialMapLock);
@@ -299,8 +297,8 @@ void SocialMgr::BroadcastToFriendListers(MasterPlayer *player, WorldPacket *pack
             // PLAYER see his team only and PLAYER can't see MODERATOR, GAME MASTER, ADMINISTRATOR characters
             // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
             if (pFriend &&
-                    (pFriend->GetSession()->GetSecurity() > SEC_PLAYER ||
-                     ((pFriend->GetTeam() == team || allowTwoSideWhoList) && security <= gmLevelInWhoList)) &&
+                    (pFriend->GetSession()->GetSecurity() >= RANK_STAFF ||
+                     ((pFriend->GetTeam() == team || allowTwoSideWhoList) && security == RANK_PLAYER)) &&
                     player->IsVisibleGloballyFor(pFriend))
                 pFriend->GetSession()->SendPacket(packet);
         }

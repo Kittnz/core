@@ -1,3 +1,91 @@
+-- name = 'Hertha', subname = 'Schmetterlingsbrigade', level = 15, display_id1 = 2959 Has the following gossip: You are surely wondering what we are doing here…\n\nUnderstand me correctly, we do not like the war.\n\nWe do not go into battle for pride or honor. We don\'t care about the squabble between the Alliance and the Horde.\n\nEach side has its children and each child should be able to grow up happily.\n\nThe brigade wants to preserve this world and protect their children.\n\nSo, now it\'s up to you to decide. If you join us, take this butterfly. It will sit on your heart and on your tabard. Then you will begin to understand.
+-- name = 'Jurag', subname = 'Schmetterlingsbrigade', level = 35, display_id1 = 10704, scale = 2.0 Copy vendor menu from https://database.turtle-wow.org/?npc=8934. Please also add Blank Parchment (https://database.turtle-wow.org/?item=10648)  to the vendor menu. Also mark as repair NPC.
+-- name = 'Nelly', subname = 'Schmetterlingsbrigade', level = 20, display_id1 = 4085 Copy vendor menu from https://database.turtle-wow.org/?npc=60705. 
+-- name = 'Mushu', subname = 'The Blackwing Guard', level = 5, display_id = 956 Has the following gossip: Greetings, soldier. Have you come to fend off the nefarious black dragonflight? There’s tension in the air... I can feel it. The closer we get to taking down the new leaders of the flight, the closer we get to feeling safe again.
+-- name = 'Tyrion Bouden', subname = 'The Blackwing Guard', level = 50, display_id1 = 1299, equipment_id = 54 Make repair vendor and copy vendor ID from https://database.turtle-wow.org/?npc=1294
+-- name = 'Dragonsworn Lookout', subname = 'The Blackwing Guard', level = 50, display_id1 = 1710, equipment_id = 7315 If possible, make her stealthed.
+-- name = 'Blackwing Guard', subname = 'The Blackwing Guard', display_id1 = 14885, level = 55, equipment_id = 12461
+REPLACE INTO creature_template VALUES
+(60799, 2959, 0, 0, 0, 'Hertha', 'Schmetterlingsbrigade', 0, 15, 15, 328, 328, 0, 0, 660, 290, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60800, 10704, 0, 0, 0, 'Jurag', 'Schmetterlingsbrigade', 0, 35, 35, 1342, 1342, 0, 0, 1373, 290, 16388, 1, 1.14286, 2, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60801, 4085, 0, 0, 0, 'Nelly', 'Schmetterlingsbrigade', 0, 20, 20, 629, 629, 0, 0, 852, 290, 4, 1, 1.14286, 0, 20, 5, 40, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60802, 956, 0, 0, 0, 'Mushu', 'The Blackwing Guard', 0, 5, 5, 102, 102, 0, 0, 145, 290, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60803, 1299, 0, 0, 0, 'Tyrion Bouden', 'The Blackwing Guard', 0, 50, 50, 2990, 2990, 0, 0, 2958, 290, 16388, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 54, 0, 0, 0, 0, 0, 0, ''),
+(60804, 1710, 0, 0, 0, 'Dragonsworn Lookout', 'The Blackwing Guard', 0, 50, 50, 2990, 2990, 0, 0, 2958, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 7315, 0, 0, 0, 0, 0, 0, ''),
+(60805, 14885, 0, 0, 0, 'Blackwing Guard', 'The Blackwing Guard', 0, 55, 55, 3643, 3643, 0, 0, 3272, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 12461, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO creature_template_addon VALUES (60804, 0, 0, 0, 0, 0, 0, '16380');
+
+set @gossip_menu_id = 41139; set @magic_number = 60802;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings, soldier. Have you come to fend off the nefarious black dragonflight? There’s tension in the air... I can feel it. The closer we get to taking down the new leaders of the flight, the closer we get to feeling safe again.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41138; set @magic_number = 60799;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You are surely wondering what we are doing here.\n\nUnderstand me correctly, we do not like the war.\n\nWe do not go into battle for pride or honor. We don\'t care about the squabble between the Alliance and the Horde.\n\nEach side has its children and each child should be able to grow up happily.\n\nThe brigade wants to preserve this world and protect their children.\n\nSo, now it\'s up to you to decide. If you join us, take this butterfly. It will sit on your heart and on your tabard. Then you will begin to understand.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor VALUES
+(60803, 285, 0, 0, 0, 0),
+(60803, 286, 0, 0, 0, 0),
+(60803, 287, 0, 0, 0, 0),
+(60803, 718, 0, 0, 0, 0),
+(60803, 847, 0, 0, 0, 0),
+(60803, 848, 0, 0, 0, 0),
+(60803, 849, 0, 0, 0, 0),
+(60803, 850, 0, 0, 0, 0),
+(60803, 1845, 0, 0, 0, 0),
+(60803, 1846, 0, 0, 0, 0),
+(60803, 1852, 0, 0, 0, 0),
+(60803, 1853, 0, 0, 0, 0),
+(60803, 2392, 0, 0, 0, 0),
+(60803, 2393, 0, 0, 0, 0),
+(60803, 2394, 0, 0, 0, 0),
+(60803, 2395, 0, 0, 0, 0),
+(60803, 2396, 0, 0, 0, 0),
+(60803, 2397, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES
+(60800, 10648, 0, 0, 0, 0),
+(60800, 2320, 0, 0, 0, 0),
+(60800, 2321, 0, 0, 0, 0),
+(60800, 2324, 0, 0, 0, 0),
+(60800, 2325, 0, 0, 0, 0),
+(60800, 2604, 0, 0, 0, 0),
+(60800, 2605, 0, 0, 0, 0),
+(60800, 2678, 0, 0, 0, 0),
+(60800, 2692, 0, 0, 0, 0),
+(60800, 2880, 0, 0, 0, 0),
+(60800, 2901, 0, 0, 0, 0),
+(60800, 2928, 0, 0, 0, 0),
+(60800, 3371, 0, 0, 0, 0),
+(60800, 3372, 0, 0, 0, 0),
+(60800, 3466, 0, 0, 0, 0),
+(60800, 3713, 0, 0, 0, 0),
+(60800, 3777, 0, 0, 0, 0),
+(60800, 3857, 0, 0, 0, 0),
+(60800, 4289, 0, 0, 0, 0),
+(60800, 4291, 0, 0, 0, 0),
+(60800, 4340, 0, 0, 0, 0),
+(60800, 4341, 0, 0, 0, 0),
+(60800, 4342, 0, 0, 0, 0),
+(60800, 4399, 0, 0, 0, 0),
+(60800, 4400, 0, 0, 0, 0),
+(60800, 5956, 0, 0, 0, 0),
+(60800, 6183, 0, 0, 0, 0),
+(60800, 6217, 0, 0, 0, 0),
+(60800, 6256, 0, 0, 0, 0),
+(60800, 6260, 0, 0, 0, 0),
+(60800, 6529, 0, 0, 0, 0),
+(60800, 6530, 0, 0, 0, 0),
+(60800, 6532, 0, 0, 0, 0),
+(60800, 7005, 0, 0, 0, 0),
+(60800, 8343, 0, 0, 0, 0),
+(60800, 8925, 0, 0, 0, 0),
+(60800, 14341, 0, 0, 0, 0),
+(60800, 18256, 5, 43200, 0, 0);
 -- Adjutant Scheer <Kirin Tor> , Faction 76, display ID 18797, level 52, Quest/Greeting flags, weapon 1: 16894 , greeting text : "Welcome, I hope you can find some rest within this hellish place.\n\n This is Nethergarde Keep, established once the Dark Portal opened and the First War had begun years ago. We have been assigned to watch over it, and report magical irregularities should they arise.\n\n If you see anything unusual, let us know."
 -- Sergeant Burnside <Kirin Tor> , Faction 76, display ID 18799, level 54 elite, quest/greeting flags, weapon 1: 80817, greeting text : "We've seen all manner of foe out there, from ogre, to orc, to demon. It is only a matter of time before they grow bold enough to strike at us.\n\n We will be more then prepared for when they make such an action."
 -- Captain Baelos <Kirin Tor>, Faction 76, Display ID 18798, level 56 elite, quest/greeting flags, weapon1: 7945, greeting text : "Make sure you don't cause any trouble here, we have more then enough problems with all of the fel-warped beasts lurking in the wasteland. \n\n Or maybe you've come to this frontier in order to offer assistance."
@@ -258,7 +346,7 @@ REPLACE INTO creature_template VALUES
 (60764, 18874, 0, 0, 0, 'Dagesh the Evoker', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 29, 3, 1, 1.14286, 1, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60765, 18875, 0, 0, 0, 'Raider Fargosh', NULL, 0, 53, 53, 8100, 8100, 0, 0, 3400, 29, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 344, 444, 0, 244, 1, 1300, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60766, 18876, 0, 0, 0, 'Golsh', 'General Goods', 0, 50, 50, 2990, 2990, 0, 0, 2958, 29, 5, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60767, 18879, 18880, 18881, 0, 'Karfang Grunt', NULL, 4342, 55, 55, 7842, 7842, 0, 0, 4500, 29, 11, 1, 1.14286, 0, 20, 5, 40, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60767, 18879, 18880, 18881, 0, 'Karfang Grunt', NULL, 4342, 55, 55, 7842, 7842, 0, 0, 4500, 29, 0, 1, 1.14286, 0, 20, 5, 40, 1, 1, 310, 400, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60768, 18877, 0, 0, 0, 'Herekk', 'Stable Master', 0, 48, 48, 2398, 2398, 0, 0, 2753, 29, 8192, 1, 1.14286, 0, 20, 5, 40, 0, 1, 74, 96, 0, 208, 1, 1000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.744, 86.273, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60769, 18882, 0, 0, 0, 'Molk', 'Strategist', 0, 54, 54, 3292, 3292, 0, 0, 3216, 29, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 106, 136, 0, 244, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 153, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60770, 18878, 0, 0, 0, 'Karfang', 'Warleader', 0, 57, 57, 7842, 7842, 0, 0, 4822, 29, 3, 1.2, 1.14286, 0, 20, 5, 40, 1, 1, 344, 444, 0, 248, 1, 2500, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.3, 81.57, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 425, 559, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -327,7 +415,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 set @gossip_menu_id = 41121; set @magic_number = 60773;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We have ale if you need it, or food if you need that, so , what will it be?');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We have ale if you need it, or food if you need that, what will it be?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -339,7 +427,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 set @gossip_menu_id = 41119; set @magic_number = 60770;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'My name is Karfang, I am leader here, my people should cause you no harm, lest you insult or bother them to much. There is many things to discuss, and many things to do for us to secure our place in the world.\n\nThe Blackrock find themselves now within the mountain, manipulated by greater forces, I would not have my people follow that same madness that drives the Old Horde now.');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '"My name is Karfang, I am leader here.\n\nMy people should cause you no harm, lest you insult, or bother them too much. There are many things to discuss, and many things to do for us to secure our place in this world.\n\nThe Blackrock Clan find themselves manipulated by greater forces. The Old Horde is a shell of what it once was, and I will not allow my people to follow them into madness.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
