@@ -6824,10 +6824,6 @@ bool ChatHandler::HandlePausingMuteCommand(char* args)
             target = session->GetPlayer();
     }
 
-    // must have strong lesser security level
-    if (HasLowerSecurity(target, target_guid, true))
-        return false;
-
     time_t mutetime = time(nullptr) + notspeaktime * 60;
 
     // pausing uses world ms diff so multiply by 1000 for ms instead of s and use ms left instead of current time in future.
