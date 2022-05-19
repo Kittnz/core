@@ -403,10 +403,9 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
         details << req->body << "\n";
         if (req->COD)
             details << "COD: " << req->COD << " coppers\n";
-        uint32 logId = sWorld.InsertLog(details.str(), SEC_GAMEMASTER);
 
         std::stringstream oss;
-        oss << "Mail limit reached (\"" << req->body.substr(0, 30) << "...\") [log #" << logId << "]";
+        oss << "Mail limit reached (\"" << req->body.substr(0, 30) << "...\");";
         ProcessAnticheatAction("ChatSpam", oss.str().c_str(), CHEAT_ACTION_LOG);
         SendMailResult(0, MAIL_SEND, MAIL_OK);
         return;

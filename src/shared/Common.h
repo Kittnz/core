@@ -177,9 +177,17 @@ enum AccountTypes
 {
     SEC_PLAYER         = 0,
     SEC_GAMEMASTER     = 1,
-    SEC_ADMINISTRATOR  = 2,
-    SEC_TORTELLINI     = 3,
-    SEC_CONSOLE        = 4,                                  // must be always last in list, accounts must have less security level always also
+};
+
+// Giperion Turtle specific - Gamemaster ranks (priviliges)
+enum AccountRanks
+{
+    RANK_PLAYER = 0,
+    RANK_STAFF = 1, // it's not a real rank. We using it like "if you have any ranks at all"
+    RANK_CUSTOM_END = 1 << 29,
+
+    RANK_ADMIN = 1 << 30, // special rank, that bypass all checks from custom ranks
+    RANK_CONSOLE = 1 << 31, // not only bypass all other checks, but allow special commands that available only from console
 };
 
 // Used in mangosd/realmd

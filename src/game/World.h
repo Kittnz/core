@@ -684,13 +684,13 @@ struct CliCommandHolder
     typedef void CommandFinished(void*, bool success);
 
     uint32 m_cliAccountId;                                  // 0 for console and real account id for RA/soap
-    AccountTypes m_cliAccessLevel;
+    uint32 m_cliAccessLevel;
     void* m_callbackArg;
     char *m_command;
     Print* m_print;
     CommandFinished* m_commandFinished;
 
-    CliCommandHolder(uint32 accountId, AccountTypes cliAccessLevel, void* callbackArg, const char *command, Print* zprint, CommandFinished* commandFinished)
+    CliCommandHolder(uint32 accountId, uint32 cliAccessLevel, void* callbackArg, const char *command, Print* zprint, CommandFinished* commandFinished)
         : m_cliAccountId(accountId), m_cliAccessLevel(cliAccessLevel), m_callbackArg(callbackArg), m_print(zprint), m_commandFinished(commandFinished)
     {
         size_t len = strlen(command)+1;
@@ -732,7 +732,9 @@ class World
 
         /// Get the active session server limit (or security level limitations)
         uint32 GetPlayerAmountLimit() const { return m_playerLimit >= 0 ? m_playerLimit : 0; }
-        AccountTypes GetPlayerSecurityLimit() const { return m_playerLimit <= 0 ? AccountTypes(-m_playerLimit) : SEC_PLAYER; }
+		uint32 GetPlayerSecurityLimit() const {
+            return m_securityPlayerLimit;
+		}
 
         /// Set the active session server limit (or security level limitation)
         void SetPlayerLimit(int32 limit, bool needUpdate = false);
@@ -835,7 +837,6 @@ class World
         bool IsFFAPvPRealm() { return getConfig(CONFIG_UINT32_GAME_TYPE) == REALM_TYPE_FFA_PVP; }
 
         void KickAll();
-        void KickAllLess(AccountTypes sec);
         void BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author);
         BanReturn BanAccount(BanMode mode, std::string nameOrIP, uint32 duration_secs, std::string reason, std::string author);
         bool RemoveBanAccount(BanMode mode, std::string const& source, std::string const& message, std::string nameOrIP);
@@ -892,10 +893,10 @@ class World
         struct ArchivedLogMessage
         {
             std::string msg;
-            AccountTypes sec;
+            uint32 sec;
         };
-        uint32 InsertLog(std::string const& message, AccountTypes sec);
-        ArchivedLogMessage* GetLog(uint32 logId, AccountTypes my_sec);
+        uint32 InsertLog(std::string const& message, uint32 sec);
+        ArchivedLogMessage* GetLog(uint32 logId, uint32 my_sec);
 
         // Invalidate player name, player guild info/roster and refresh some UI elements
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
@@ -972,7 +973,8 @@ class World
         float m_configFloatValues[CONFIG_FLOAT_VALUE_COUNT];
         bool m_configBoolValues[CONFIG_BOOL_VALUE_COUNT];
 
-        int32 m_playerLimit;
+        uint32 m_playerLimit;
+        uint32 m_securityPlayerLimit = 0;
 
         LocaleConstant m_defaultDbcLocale;                     // from config for one from loaded DBC locales
         uint32 m_availableDbcLocaleMask = 0;                   // by loaded DBC
@@ -1008,9 +1010,6 @@ class World
         //used versions
         uint32 m_anticrashRearmTimer = 0;
         std::unique_ptr<std::thread> m_charDbWorkerThread;
-
-        typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
-        LogMessagesMap m_logMessages;
 
         // Packet broadcaster
         std::unique_ptr<MovementBroadcaster> m_broadcaster;
