@@ -1297,7 +1297,7 @@ void AuthSocket::InitPatch()
 
 void AuthSocket::LoadAccountSecurityLevels(uint32 accountId)
 {
-    QueryResult* result = LoginDatabase.PQuery("SELECT gmlevel, RealmID FROM account_access WHERE id = %u", accountId);
+    QueryResult* result = LoginDatabase.PQuery("SELECT rank FROM account WHERE id = %u", accountId);
     if (!result)
         return;
 
@@ -1305,11 +1305,7 @@ void AuthSocket::LoadAccountSecurityLevels(uint32 accountId)
     {
         Field *fields = result->Fetch();
         AccountTypes security = AccountTypes(fields[0].GetUInt32());
-        int realmId = fields[1].GetInt32();
-        if (realmId < 0)
-            _accountDefaultSecurityLevel = security;
-        else
-            _accountSecurityOnRealm[realmId] = security;
+        _accountDefaultSecurityLevel = security;
     } while (result->NextRow());
 
     delete result;
