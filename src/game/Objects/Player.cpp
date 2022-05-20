@@ -782,7 +782,7 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     SetUInt32Value(PLAYER_GUILD_TIMESTAMP, 0);
 
     // set starting level
-    if (GetSession()->GetSecurity() >= SEC_GAMEMASTER)
+    if (GetSession()->GetSecurity() >= SEC_OBSERVER)
         SetUInt32Value(UNIT_FIELD_LEVEL, sWorld.getConfig(CONFIG_UINT32_START_GM_LEVEL));
     else
         SetUInt32Value(UNIT_FIELD_LEVEL, sWorld.getConfig(CONFIG_UINT32_START_PLAYER_LEVEL));

@@ -176,10 +176,11 @@ enum TimeConstants
 enum AccountTypes
 {
     SEC_PLAYER         = 0,
-    SEC_GAMEMASTER     = 1,
-    SEC_ADMINISTRATOR  = 2,
-    SEC_TORTELLINI     = 3,
-    SEC_CONSOLE        = 4,                                  // must be always last in list, accounts must have less security level always also
+    SEC_OBSERVER       = 1,
+    SEC_MODERATOR      = 2,
+    SEC_DEVELOPER      = 3,
+    SEC_ADMINISTRATOR  = 4,
+    SEC_CONSOLE        = 5,                               
 };
 
 // Used in mangosd/realmd
