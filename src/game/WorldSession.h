@@ -277,7 +277,7 @@ class WorldSession
 {
     friend class CharacterHandler;
     public:
-        WorldSession(uint32 id, WorldSocket *sock, uint32 ranks, time_t mute_time, LocaleConstant locale, const std::string& remote_ip);
+        WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip);
         ~WorldSession();
 
         bool PlayerLoading() const { return m_playerLoading; }
@@ -296,13 +296,13 @@ class WorldSession
         void SendAreaTriggerMessage(const char* Text, ...) ATTR_PRINTF(2,3);
         void SendQueryTimeResponse();
 
-        uint32 GetSecurity() const { return _security; }
+        AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
         std::string GetUsername() const { return m_username; }
         void SetUsername(std::string const& s) { m_username = s; }
         Player* GetPlayer() const { return _player; }
         char const* GetPlayerName() const;
-        void SetSecurity(uint32 security) { _security = security; }
+        void SetSecurity(AccountTypes security) { _security = security; }
         std::string const& GetRemoteAddress() const { return m_Address; }
         std::string const& GetClientHash() const { return _clientHash; }
         void SetPlayer(Player *plr) { _player = plr; }
@@ -894,7 +894,7 @@ class WorldSession
         WorldSocket *m_Socket;
         std::string m_Address;
 
-        uint32 _security;
+        AccountTypes _security;
         uint32 _accountId;
 
         WhisperTargetLimits _whisper_targets;

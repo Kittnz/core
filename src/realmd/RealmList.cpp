@@ -74,7 +74,7 @@ void RealmList::Initialize(uint32 updateInterval)
     UpdateRealms(true);
 }
 
-void RealmList::UpdateRealm( uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, RealmFlags realmflags, uint8 timezone, uint32 allowedSecurityLevel, float popu)
+void RealmList::UpdateRealm( uint32 ID, const std::string& name, const std::string& address, uint32 port, uint8 icon, RealmFlags realmflags, uint8 timezone, AccountTypes allowedSecurityLevel, float popu)
 {
     ///- Create new if not exist or update existed
     Realm& realm = m_realms[name];
@@ -135,7 +135,7 @@ void RealmList::UpdateRealms(bool init)
         do
         {
             Field *fields = result->Fetch();
-            uint32 allowedSecurityLevel = fields[7].GetUInt32();
+            uint8 allowedSecurityLevel = fields[7].GetUInt8();
             uint8 realmflags = fields[5].GetUInt8();
             std::string realmAddress = overrideAddr ? overrideAddrStr : fields[2].GetCppString();
 
@@ -148,7 +148,7 @@ void RealmList::UpdateRealms(bool init)
             UpdateRealm(
                 fields[0].GetUInt32(), fields[1].GetCppString(), realmAddress, fields[3].GetUInt32(),
                 fields[4].GetUInt8(), RealmFlags(realmflags), fields[6].GetUInt8(),
-                allowedSecurityLevel,
+                (allowedSecurityLevel <= SEC_ADMINISTRATOR ? AccountTypes(allowedSecurityLevel) : SEC_ADMINISTRATOR),
                 fields[8].GetFloat());
 
             if(init)

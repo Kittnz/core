@@ -57,11 +57,9 @@ MovementAnticheat* AnticheatManager::CreateAnticheatFor(Player* player)
 
 Warden* AnticheatManager::CreateWardenFor(WorldSession* client, BigNumber* K)
 {
-    if ((client->GetSecurity() >= RANK_STAFF) &&
+    if ((client->GetSecurity() != SEC_PLAYER) &&
         sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_PLAYERS_ONLY))
-    {
         return nullptr;
-    }
 
     Warden* warden;
     ClientOSType os = client->GetOS();
