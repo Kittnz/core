@@ -1904,7 +1904,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         {                        
                         case 189: m_caster->ToPlayer()->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);     break; // Rush'n Attack                     
                         case 172: m_caster->ToPlayer()->TeleportTo(1, -3134.49F, 2415.03F, 253.12F, 5.5F);  break; // Traveler
-                        case 415: m_caster->ToPlayer()->TeleportTo(0, 1574.24F, -2975.24F, 86.85F, 4.8F);   break; // The Crusade
+                        case 415: m_caster->ToPlayer()->TeleportTo(0, 1568.51F, -3062.9F, 78.08F, 1.97F);   break; // The Crusade
                         case 212: m_caster->ToPlayer()->TeleportTo(1, -5546.96F, -4071.97F, -58.50F, 3.2F); break; // Rats
                         case 3:   m_caster->ToPlayer()->TeleportTo(0, -1853.48F, -4091.64F, 9.81F, 4.7F);   break; // Thunder Ale Brewing Co
                         case 168: m_caster->ToPlayer()->TeleportTo(1, 2934.71F, -4762.13F, 234.06F, 5.6F);  break; // Macrochelys
@@ -1921,6 +1921,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 351: m_caster->ToPlayer()->TeleportTo(0, -10377.1F, -3374.04F, 21.82F, 1.8F);  break; // Blacktooth Grin
                         case 295: m_caster->ToPlayer()->TeleportTo(0, 843.65F, -5069.647F, 8.589F, 0.53F);  break; // Nephilim
                         case 376: m_caster->ToPlayer()->TeleportTo(0, -10598.617F, -40.95F, 35.9F, 5.89F);  break; // The Lions Pride Legion
+                        case 76:  m_caster->ToPlayer()->TeleportTo(1, -11523.83F, -4660.29F, 3.005F, 2.2F);  break; // Schmetterlingsbrigade
                         default: break;
                         }
                     }
