@@ -111,16 +111,16 @@ void ChannelMgr::LeftChannel(std::string const& name)
 
 void ChannelMgr::CreateDefaultChannels()
 {
-    GetJoinChannel("Warden")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("Anticrash")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("Antiflood")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("ItemsCheck")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("GoldDupe")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("SAC")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("MailsAC")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("BotsDetector")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("ChatSpam")->SetSecurityLevel(SEC_GAMEMASTER);
-    GetJoinChannel("LowLevelBots")->SetSecurityLevel(SEC_GAMEMASTER);
+    GetJoinChannel("Warden")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("Anticrash")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("Antiflood")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("ItemsCheck")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("GoldDupe")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("SAC")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("MailsAC")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("BotsDetector")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("ChatSpam")->SetSecurityLevel(SEC_DEVELOPER);
+    GetJoinChannel("LowLevelBots")->SetSecurityLevel(SEC_DEVELOPER);
 
     for (const auto& channel : channels)
         channel.second->SetAnnounce(false);

@@ -190,7 +190,9 @@ void AccountMgr::Load()
         {
         case SEC_PLAYER:
             break;
-        case SEC_GAMEMASTER:
+        case SEC_OBSERVER:
+        case SEC_MODERATOR:
+        case SEC_DEVELOPER:
         case SEC_ADMINISTRATOR:
             if (m_accountSecurity.find(accountId) == m_accountSecurity.end() ||
                 m_accountSecurity[accountId] < secu)
@@ -415,7 +417,7 @@ bool AccountMgr::IsPlayerAccount(uint32 gmlevel)
 
 bool AccountMgr::IsGMAccount(uint32 gmlevel)
 {
-    return gmlevel >= SEC_GAMEMASTER && gmlevel <= SEC_CONSOLE;
+    return gmlevel >= SEC_OBSERVER && gmlevel <= SEC_CONSOLE;
 }
 
 bool AccountMgr::IsAdminAccount(uint32 gmlevel)

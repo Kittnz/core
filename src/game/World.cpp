@@ -726,7 +726,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_OUTDOORPVP_SI_ENABLE, "OutdoorPvP.SI.Enable", true);
 
     setConfig(CONFIG_BOOL_PLAYER_COMMANDS, "PlayerCommands", true);
-    setConfig(CONFIG_UINT32_INSTANT_LOGOUT, "InstantLogout", SEC_GAMEMASTER);
+    setConfig(CONFIG_UINT32_INSTANT_LOGOUT, "InstantLogout", SEC_OBSERVER);
     setConfigMin(CONFIG_UINT32_GROUP_OFFLINE_LEADER_DELAY, "Group.OfflineLeaderDelay", 300, 0);
     setConfigMin(CONFIG_UINT32_GUILD_EVENT_LOG_COUNT, "Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS, GUILD_EVENTLOG_MAX_RECORDS);
 

@@ -4329,7 +4329,7 @@ bool ChatHandler::HandleGMOnlineListCommand(char* args)
     bool empty = true;
     for (const auto& [accId, session] : sWorld.GetAllSessions())
     {
-        if (!session || !session->GetPlayer() || session->GetSecurity() < SEC_GAMEMASTER)
+        if (!session || !session->GetPlayer() || session->GetSecurity() < SEC_OBSERVER)
             continue;
 
         if (empty)
