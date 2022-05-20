@@ -17,11 +17,13 @@ struct Location
 
 static const Location vfSpawnPoint[] =
 {
-    { 151.75450f, -62.649109f, 18.007f, 1.59041f }
+    { 128.852097f, -73.639236f, (15.988636f + 0.1f), 1.583155f }
 };
 
 static const Location vfLastWaypoint[] =
 {
+    {} // TODO: Fix coords after dungeon scaling
+    /*
     { 148.78366f, -18.592115f, 18.007f, 1.59041f }, // 0
     { 151.75268f, -18.500916f, 18.007f, 1.59041f }, // 1
     { 154.81858f, -18.524998f, 18.007f, 1.59041f }, // 2
@@ -61,6 +63,7 @@ static const Location vfLastWaypoint[] =
     { 148.76803f, -53.945572f, 18.007f, 1.59041f }, // 36
     { 151.82702f, -53.945675f, 18.007f, 1.59041f }, // 37
     { 154.78801f, -53.945774f, 18.007f, 1.59041f }  // 38
+    */
 };
 
 struct npc_areatriggerAI : public ScriptedAI
@@ -177,7 +180,7 @@ CreatureAI* GetAI_npc_citadel_valiant(Creature* pCreature)
 
 static const float vfTeleportDestinations[][4] =
 {
-    { 232.119843f, 25.800516f, 30.823233f, 3.145022f } // Boss Mariella
+    { 231.569946f, 48.830078f, (32.822887f + 0.1f), 3.130378f } // Boss Mariella
 };
 
 struct npc_citadel_anti_exploit_AI : public ScriptedAI

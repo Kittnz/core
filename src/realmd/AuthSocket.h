@@ -128,10 +128,13 @@ class AuthSocket: public BufferedSocket
         std::string _localizationName;
         uint16 _build;
 
-        uint32 GetSecurityLevel() const;
+        AccountTypes GetSecurityOn(uint32 realmId) const;
+        void LoadAccountSecurityLevels(uint32 accountId);
         bool GeographicalLockCheck();
 
-        uint32 _securityLevel;
+        AccountTypes _accountDefaultSecurityLevel;
+        typedef std::map<uint32, AccountTypes> AccountSecurityMap;
+        AccountSecurityMap _accountSecurityOnRealm;
 
         ACE_HANDLE patch_;
 
