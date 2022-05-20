@@ -147,7 +147,7 @@ AuthSocket::AuthSocket() : promptPin(false), gridSeed(0), _geoUnlockPIN(0), _acc
     g.SetDword(7);
     _status = STATUS_CHALLENGE;
 
-    _securityLevel = RANK_PLAYER;
+    _accountDefaultSecurityLevel = SEC_PLAYER;
 
     _build = 0;
     patch_ = ACE_INVALID_HANDLE;
@@ -160,9 +160,13 @@ AuthSocket::~AuthSocket()
         ACE_OS::close(patch_);
 }
 
-uint32 AuthSocket::GetSecurityLevel() const
+AccountTypes AuthSocket::GetSecurityOn(uint32 realmId) const
 {
-    return _securityLevel;
+    AccountSecurityMap::const_iterator it = _accountSecurityOnRealm.find(realmId);
+    if (it == _accountSecurityOnRealm.end())
+        return _accountDefaultSecurityLevel;
+
+    return it->second;
 }
 
 /// Accept the connection and set the s random value for SRP6
@@ -379,19 +383,7 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
-        // 0 - sha_pass_hash
-        // 1 - id
-        // 2 - locked
-        // 3 - last_ip
-        // 4 - v
-        // 5 - s
-        // 6 - security
-        // 7 - email_verif
-        // 8 - geolock_pin
-        // 9 - email
-        // 10 - joindate
-        // 11 - rank
-        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate), rank FROM account WHERE username = '%s'",_safelogin.c_str ());
+        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate) FROM account WHERE username = '%s'",_safelogin.c_str ());
         if (result)
         {
             Field* fields = result->Fetch();
@@ -537,7 +529,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     for(int i = 0; i < 4; ++i)
                         _localizationName[i] = ch->country[4-i-1];
 
-                    _securityLevel = fields[11].GetUInt32();
+                    LoadAccountSecurityLevels(account_id);
                     BASIC_LOG("[AuthChallenge] Account '%s' using IP '%s' is using '%c%c%c%c' locale (%u)", _login.c_str (), get_remote_address().c_str(), ch->country[3], ch->country[2], ch->country[1], ch->country[0], GetLocaleByName(_localizationName));
 
                     _accountId = account_id;
@@ -1110,7 +1102,7 @@ void AuthSocket::LoadRealmlist(ByteBuffer& pkt)
         }
 
         // Show offline state for unsupported client builds and locked realms (1.x clients not support locked state show)
-        if (!ok_build || (i.second.allowedSecurityLevel & GetSecurityLevel()))
+        if (!ok_build || (i.second.allowedSecurityLevel > GetSecurityOn(i.second.m_ID)))
             realmflags = RealmFlags(realmflags | REALM_FLAG_OFFLINE);
 
         pkt << uint32(i.second.icon); // realm type
@@ -1301,6 +1293,22 @@ void AuthSocket::InitPatch()
         handler->close();
         close_connection();
     }
+}
+
+void AuthSocket::LoadAccountSecurityLevels(uint32 accountId)
+{
+    QueryResult* result = LoginDatabase.PQuery("SELECT rank FROM account WHERE id = %u", accountId);
+    if (!result)
+        return;
+
+    do
+    {
+        Field *fields = result->Fetch();
+        AccountTypes security = AccountTypes(fields[0].GetUInt32());
+        _accountDefaultSecurityLevel = security;
+    } while (result->NextRow());
+
+    delete result;
 }
 
 bool AuthSocket::GeographicalLockCheck()

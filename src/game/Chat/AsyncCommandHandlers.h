@@ -49,7 +49,6 @@ struct PInfoData
     uint32 level = 0;
     uint32 latency = 0;
     uint32 security_flag = 0;
-    uint32 ranks = 0;
     LocaleConstant loc = LOCALE_enUS;
     ObjectGuid target_guid;
     uint32 m_accountId;
@@ -60,7 +59,7 @@ struct PInfoData
     std::string two_factor_enabled;
     std::string username;
     std::string last_ip;
-    uint32 security = RANK_PLAYER;
+    AccountTypes security = SEC_PLAYER;
     std::string last_login;
     std::string target_name;
 };

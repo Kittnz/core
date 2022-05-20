@@ -44,10 +44,10 @@ namespace nsMariella
     static constexpr uint8 NUMBER_OF_SPAWNPOINTS{ 4 };
     static const Location vfSpawnPoints[NUMBER_OF_SPAWNPOINTS] =
     {
-        { 189.632f, 18.3435f, 31.346f, 0.788997f, 0.f, 0.f, 0.380631f,  0.924727f },
-        { 189.632f, 33.1638f, 31.112f, 5.454260f, 0.f, 0.f, 0.381105f, -0.924532f },
-        { 204.404f, 33.1638f, 31.242f, 3.962000f, 0.f, 0.f, 0.923975f, -0.382453f },
-        { 204.404f, 18.3435f, 30.860f, 2.359790f, 0.f, 0.f, 0.923781f,  0.382921f }
+        { 178.621826f, 57.703217f, 33.25f, 5.535669f, 0.f, 0.f, 0.380631f,  0.924727f },
+        { 178.621826f, 38.533649f, 33.55f, 0.755342f, 0.f, 0.f, 0.381105f, -0.924532f },
+        { 197.665680f, 38.533649f, 32.88f, 2.328107f, 0.f, 0.f, 0.923975f, -0.382453f },
+        { 197.665680f, 57.703217f, 33.45f, 2.359790f, 0.f, 0.f, 0.923781f,  0.382921f }
     };
 
     // Shadow Volley
@@ -65,7 +65,7 @@ namespace nsMariella
     static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
     static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
     {
-        { 175.895233f, 25.896152f, 31.493601f, 6.277175f, 0.f, 0.f, 0.99999f,  0.004572f }
+        { 160.547501f, 48.432278f, 33.703342f, 6.268054f, 0.f, 0.f, 0.99999f,  0.004572f }
     };
 
     // Gossip Menu

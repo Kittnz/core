@@ -1,0 +1,1 @@
+update creature set spawntimesecsmin = 7200, spawntimesecsmax = 7200 where map = 808;
