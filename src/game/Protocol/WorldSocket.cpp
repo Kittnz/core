@@ -165,9 +165,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-    QueryResult *result = LoginDatabase.PQuery("SELECT a.id, aa.gmLevel, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.flags, "
-        "ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a LEFT JOIN account_access aa ON a.id = aa.id AND aa.RealmID IN (-1, %u) "
-        "LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' ORDER BY aa.RealmID DESC LIMIT 1", realmID, safe_account.c_str());
+	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.flags, "
+		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
+		"LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' DESC LIMIT 1", safe_account.c_str());
 
     // Stop if the account is not found
     if (!result)
