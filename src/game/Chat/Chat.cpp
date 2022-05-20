@@ -60,8 +60,6 @@
 // |color|Htaxinode:id|h[name]|h|r
 // |color|Htele:id|h[name]|h|r
 
-bool ChatHandler::load_command_table = true;
-
 ChatCommand * ChatHandler::getCommandTable()
 {
     static ChatCommand accountSetCommandTable[] =
@@ -664,31 +662,6 @@ ChatCommand * ChatHandler::getCommandTable()
 
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
-
-    if (load_command_table)
-    {
-        load_command_table = false;
-
-        // check hardcoded part integrity
-        //CheckIntegrity(commandTable, nullptr);
-        FillFullCommandsName(commandTable, "");
-
-        QueryResult *result = WorldDatabase.Query("SELECT `name`, `security`, `help`, `flags` FROM `command`");
-        if (result)
-        {
-            do
-            {
-                Field *fields = result->Fetch();
-                std::string name = fields[0].GetCppString();
-
-                SetDataForCommandInTable(commandTable, name.c_str(), fields[1].GetUInt8(), fields[2].GetCppString(), fields[3].GetUInt8());
-
-            }
-            while (result->NextRow());
-
-            delete result;
-        }
-    }
 
     return commandTable;
 }
