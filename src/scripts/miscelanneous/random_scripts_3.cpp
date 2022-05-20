@@ -3472,9 +3472,144 @@ bool QuestAccept_npc_niremius(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool GossipHello_npc_jabbey(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pPlayer->GetQuestStatus(40411) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 8139 && !pPlayer->HasItemCount(60597, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am here to pick up a package for 'Groy'.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(8139, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_jabbey(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        pPlayer->GetSession()->SendListInventory(pCreature->GetGUID());
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->AddItem(60597);
+        if (pPlayer->HasItemCount(60597, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Hey now, hush, I don't need everyone knowing my business. Here it is, if you ever need more, you know where to find me bub!", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
+bool GossipHello_npc_captain_wallace_cross(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40415) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 60729 && !pPlayer->HasItemCount(60602, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "'I have been sent by Colonel Breen to collect your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60729, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_captain_wallace_cross(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(60602);
+        if (pPlayer->HasItemCount(60602, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Make sure that the Colonel gets it.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
+bool GossipHello_npc_captain_harker(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40415) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 60730 && !pPlayer->HasItemCount(60603, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "'I have been sent by Colonel Breen to collect your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60730, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_captain_harker(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(60603);
+        if (pPlayer->HasItemCount(60603, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("The last one didn't make it back to Theramore, be quick.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_captain_harker";
+    newscript->pGossipHello = &GossipHello_npc_captain_harker;
+    newscript->pGossipSelect = &GossipSelect_npc_captain_harker;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_captain_wallace_cross";
+    newscript->pGossipHello = &GossipHello_npc_captain_wallace_cross;
+    newscript->pGossipSelect = &GossipSelect_npc_captain_wallace_cross;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_jabbey";
+    newscript->pGossipHello = &GossipHello_npc_jabbey;
+    newscript->pGossipSelect = &GossipSelect_npc_jabbey;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_niremius";
