@@ -165,9 +165,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-    QueryResult *result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.flags, "
-        "ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
-        "LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' LIMIT 1", safe_account.c_str());
+    QueryResult *result = LoginDatabase.PQuery("SELECT a.id, aa.gmLevel, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.flags, "
+        "ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a LEFT JOIN account_access aa ON a.id = aa.id AND aa.RealmID IN (-1, %u) "
+        "LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' ORDER BY aa.RealmID DESC LIMIT 1", realmID, safe_account.c_str());
 
     // Stop if the account is not found
     if (!result)
@@ -217,7 +217,9 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     id = fields[0].GetUInt32();
-    security = fields[1].GetUInt32();
+    security = sAccountMgr.GetSecurity(id); //fields[1].GetUInt16 ();
+    if (security > SEC_ADMINISTRATOR)                       // prevent invalid security settings in DB
+        security = SEC_ADMINISTRATOR;
 
     K.SetHexStr(fields[2].GetString());
 
@@ -249,20 +251,17 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // Check locked state for server
-    uint32 allowedAccountType = sWorld.GetPlayerSecurityLimit();
+    AccountTypes allowedAccountType = sWorld.GetPlayerSecurityLimit();
 
-    if (allowedAccountType > 0)
+    if (allowedAccountType > SEC_PLAYER && AccountTypes(security) < allowedAccountType)
     {
-        if ((security & allowedAccountType) == 0)
-        {
-            WorldPacket Packet(SMSG_AUTH_RESPONSE, 1);
-            Packet << uint8(AUTH_UNAVAILABLE);
+        WorldPacket Packet(SMSG_AUTH_RESPONSE, 1);
+        Packet << uint8(AUTH_UNAVAILABLE);
 
-            SendPacket(packet);
+        SendPacket(packet);
 
-            BASIC_LOG("WorldSocket::HandleAuthSession: User tries to login but his security level is not matched rank filter");
-            return -1;
-        }
+        BASIC_LOG("WorldSocket::HandleAuthSession: User tries to login but his security level is not enough");
+        return -1;
     }
 
     // Check that Key and account name are the same on client and server
@@ -307,7 +306,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     }
 
     // NOTE ATM the socket is single-threaded, have this in mind ...
-    ACE_NEW_RETURN(m_Session, WorldSession(id, this, security, mutetime, locale, remote_ip), -1);
+    ACE_NEW_RETURN(m_Session, WorldSession(id, this, AccountTypes(security), mutetime, locale, remote_ip), -1);
 
     m_Crypt.SetKey(K.AsByteArray());
     m_Crypt.Init();

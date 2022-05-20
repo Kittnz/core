@@ -100,9 +100,9 @@ public:
             return;
         uint32 clientcount = 0;
         Team team = sess->GetPlayer()->GetTeam();
-        uint32 security = sess->GetSecurity();
+        AccountTypes security = sess->GetSecurity();
         bool allowTwoSideWhoList = sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_WHO_LIST);
-        uint32 gmLevelInWhoList = sWorld.getConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST);
+        AccountTypes gmLevelInWhoList = (AccountTypes)sWorld.getConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST);
 
         const uint32 zone = sess->GetPlayer()->GetCachedZoneId();
         const bool notInBattleground = !((zone == 2597) || (zone == 3277) || (zone == 3358));
@@ -117,7 +117,7 @@ public:
         {
             Player* pPlayer = itr.second;
 
-            if (security == RANK_PLAYER)
+            if (security == SEC_PLAYER)
             {
                 // player can see member of other team only if CONFIG_BOOL_ALLOW_TWO_SIDE_WHO_LIST
                 if (pPlayer->GetTeam() != team && !allowTwoSideWhoList)
@@ -355,7 +355,7 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
 
     //instant logout in taverns/cities or on taxi or for admins, gm's, mod's if its enabled in mangosd.conf
     if (GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING) || GetPlayer()->IsTaxiFlying() ||
-            GetSecurity() >= RANK_STAFF)
+            GetSecurity() >= (AccountTypes)sWorld.getConfig(CONFIG_UINT32_INSTANT_LOGOUT))
     {
         WorldPacket data(SMSG_LOGOUT_RESPONSE, 1 + 4);
         data << uint32(0);
@@ -563,7 +563,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
     {
         if (friendGuid == GetMasterPlayer()->GetObjectGuid())
             friendResult = FRIEND_SELF;
-        else if (GetMasterPlayer()->GetTeam() != team && !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_ADD_FRIEND) && GetSecurity() == RANK_PLAYER)
+        else if (GetMasterPlayer()->GetTeam() != team && !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_ADD_FRIEND) && GetSecurity() < SEC_GAMEMASTER)
             friendResult = FRIEND_ENEMY;
         else if (GetMasterPlayer()->GetSocial()->HasFriend(friendGuid))
             friendResult = FRIEND_ALREADY;
@@ -1101,7 +1101,7 @@ void WorldSession::HandleWorldTeleportOpcode(WorldPacket& recv_data)
 
     DEBUG_LOG("Time %u sec, map=%u, x=%f, y=%f, z=%f, orient=%f", time / 1000, mapId, positionX, positionY, positionZ, orientation);
 
-    if (GetSecurity() & RANK_ADMIN)
+    if (GetSecurity() >= SEC_ADMINISTRATOR)
         GetPlayer()->TeleportTo(mapId, positionX, positionY, positionZ, orientation);
     else
         SendNotification(LANG_YOU_NOT_HAVE_PERMISSION);
@@ -1123,7 +1123,7 @@ void WorldSession::HandleMoveSetRawPosition(WorldPacket& recv_data)
         return;
     }
 
-    if (GetSecurity() & RANK_ADMIN)
+    if (GetSecurity() >= SEC_ADMINISTRATOR)
         GetPlayer()->NearTeleportTo(PosX, PosY, PosZ, PosO);
     else
         SendNotification(LANG_YOU_NOT_HAVE_PERMISSION);
@@ -1135,7 +1135,7 @@ void WorldSession::HandleWhoisOpcode(WorldPacket& recv_data)
     std::string charname;
     recv_data >> charname;
 
-    if (GetSecurity() & RANK_ADMIN)
+    if (GetSecurity() < SEC_ADMINISTRATOR)
     {
         SendNotification(LANG_YOU_NOT_HAVE_PERMISSION);
         return;

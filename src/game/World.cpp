@@ -597,8 +597,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_GM_ACCEPT_TICKETS,    "GM.AcceptTickets", 2);
     setConfig(CONFIG_UINT32_GM_CHAT,              "GM.Chat",          2);
     setConfig(CONFIG_UINT32_GM_WISPERING_TO,      "GM.WhisperingTo",  2);
-    setConfig(CONFIG_UINT32_GM_LEVEL_IN_GM_LIST,  "GM.InGMList.Level",  RANK_ADMIN);
-    setConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST, "GM.InWhoList.Level", RANK_ADMIN);
+    setConfig(CONFIG_UINT32_GM_LEVEL_IN_GM_LIST,  "GM.InGMList.Level",  SEC_ADMINISTRATOR);
+    setConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST, "GM.InWhoList.Level", SEC_ADMINISTRATOR);
     setConfig(CONFIG_BOOL_GM_LOG_TRADE,           "GM.LogTrade", false);
     setConfigMinMax(CONFIG_UINT32_START_GM_LEVEL, "GM.StartLevel", 1, getConfig(CONFIG_UINT32_START_PLAYER_LEVEL), MAX_LEVEL);
     setConfig(CONFIG_BOOL_DIE_COMMAND_CREDIT,     "GM.CreditOnDie", true);
@@ -610,7 +610,7 @@ void World::LoadConfigSettings(bool reload)
         setConfig(CONFIG_BOOL_GM_JOIN_OPPOSITE_FACTION_CHANNELS, false);
     setConfig(CONFIG_BOOL_GMTICKETS_ENABLE,           "GMTickets.Enable", true);
     setConfig(CONFIG_UINT32_GMTICKETS_MINLEVEL,       "GMTickets.MinLevel", 0);
-    setConfig(CONFIG_UINT32_GMTICKETS_ADMIN_SECURITY, "GMTickets.Admin.Security", RANK_CONSOLE);
+    setConfig(CONFIG_UINT32_GMTICKETS_ADMIN_SECURITY, "GMTickets.Admin.Security", SEC_CONSOLE);
 
     setConfig(CONFIG_UINT32_GROUP_VISIBILITY, "Visibility.GroupMode", 0);
 
@@ -730,11 +730,11 @@ void World::LoadConfigSettings(bool reload)
     setConfigMin(CONFIG_UINT32_GROUP_OFFLINE_LEADER_DELAY, "Group.OfflineLeaderDelay", 300, 0);
     setConfigMin(CONFIG_UINT32_GUILD_EVENT_LOG_COUNT, "Guild.EventLogRecordsCount", GUILD_EVENTLOG_MAX_RECORDS, GUILD_EVENTLOG_MAX_RECORDS);
 
-    setConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL, "TimerBar.Fatigue.GMLevel", RANK_CONSOLE);
+    setConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_GMLEVEL, "TimerBar.Fatigue.GMLevel", SEC_CONSOLE);
     setConfig(CONFIG_UINT32_TIMERBAR_FATIGUE_MAX,     "TimerBar.Fatigue.Max", 60);
-    setConfig(CONFIG_UINT32_TIMERBAR_BREATH_GMLEVEL,  "TimerBar.Breath.GMLevel", RANK_CONSOLE);
+    setConfig(CONFIG_UINT32_TIMERBAR_BREATH_GMLEVEL,  "TimerBar.Breath.GMLevel", SEC_CONSOLE);
     setConfig(CONFIG_UINT32_TIMERBAR_BREATH_MAX,      "TimerBar.Breath.Max", 60);
-    setConfig(CONFIG_UINT32_TIMERBAR_FIRE_GMLEVEL,    "TimerBar.Fire.GMLevel", RANK_CONSOLE);
+    setConfig(CONFIG_UINT32_TIMERBAR_FIRE_GMLEVEL,    "TimerBar.Fire.GMLevel", SEC_CONSOLE);
     setConfig(CONFIG_UINT32_TIMERBAR_FIRE_MAX,        "TimerBar.Fire.Max", 1);
 
     setConfig(CONFIG_BOOL_PET_UNSUMMON_AT_MOUNT,      "PetUnsummonAtMount", false);
@@ -2128,6 +2128,16 @@ void World::KickAll()
         (*itr).KickPlayer();
 }
 
+/// Kick (and save) all players with security level less `sec`
+void World::KickAllLess(AccountTypes sec)
+{
+    // session not removed at kick and will removed in next update tick
+    for (const auto& itr : m_sessions)
+        if (WorldSession* session = itr.second)
+            if (session->GetSecurity() < sec)
+                session->KickPlayer();
+}
+
 void World::BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author)
 {
     LoginDatabase.escape_string(reason);
@@ -2437,7 +2447,7 @@ void World::SendServerMessage(ServerMessageType type, const char *text, Player* 
 void World::UpdateSessions(uint32 diff)
 {
     ///- Update player limit if needed
-    uint32 hardPlayerLimit = getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT);
+    int32 hardPlayerLimit = getConfig(CONFIG_UINT32_PLAYER_HARD_LIMIT);
     if (hardPlayerLimit)
         m_playerLimit = std::min(hardPlayerLimit, m_playerLimit);
     uint32 loggedInSessions = uint32(m_sessions.size() - m_QueuedSessions.size());
@@ -2561,10 +2571,14 @@ void World::_UpdateRealmCharCount(QueryResult *resultCharCount, uint32 accountId
 
 void World::SetPlayerLimit(int32 limit, bool needUpdate)
 {
+    if (limit < -SEC_ADMINISTRATOR)
+        limit = -SEC_ADMINISTRATOR;
+
     // lock update need
     bool db_update_need = needUpdate || (limit < 0) != (m_playerLimit < 0) || (limit < 0 && m_playerLimit < 0 && limit != m_playerLimit);
 
     m_playerLimit = limit;
+
     if (db_update_need)
         LoginDatabase.PExecute("UPDATE realmlist SET allowedSecurityLevel = '%u' WHERE id = '%u'",
                                uint32(GetPlayerSecurityLimit()), realmID);
@@ -3420,6 +3434,23 @@ bool World::CanSkipQueue(WorldSession const* sess)
         return false;
     time_t now = time(nullptr);
     return (now - prev_logout->second) < grace_period;
+}
+
+uint32 World::InsertLog(std::string const& message, AccountTypes sec)
+{
+    uint32 key = m_logMessages.size();
+    ArchivedLogMessage& s = m_logMessages[key];
+    s.msg = message;
+    s.sec = sec;
+    return key;
+}
+
+World::ArchivedLogMessage* World::GetLog(uint32 logId, AccountTypes my_sec)
+{
+    LogMessagesMap::iterator it = m_logMessages.find(logId);
+    if (it == m_logMessages.end() || it->second.sec > my_sec)
+        return nullptr;
+    return &(it->second);
 }
 
 void World::SetWorldUpdateTimer(WorldTimers timer, uint32 current)

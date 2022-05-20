@@ -190,7 +190,7 @@ void Channel::Leave(ObjectGuid guid, bool send)
 
 void Channel::KickOrBan(ObjectGuid guid, const char *targetName, bool ban)
 {
-    uint32 sec = RANK_PLAYER;
+    AccountTypes sec = SEC_PLAYER;
     PlayerPointer gplr = GetPlayer(guid);
     if (gplr)
         sec = gplr->GetSession()->GetSecurity();
@@ -203,7 +203,7 @@ void Channel::KickOrBan(ObjectGuid guid, const char *targetName, bool ban)
         return;
     }
 
-    if (!m_players[guid].IsModerator() && sec < RANK_STAFF)
+    if (!m_players[guid].IsModerator() && sec < SEC_GAMEMASTER)
     {
         WorldPacket data;
         MakeNotModerator(&data);
@@ -231,7 +231,7 @@ void Channel::KickOrBan(ObjectGuid guid, const char *targetName, bool ban)
     
     bool changeowner = (m_ownerGuid == targetGuid);
 
-    if (sec < RANK_STAFF && changeowner && guid != m_ownerGuid)
+    if (sec < SEC_GAMEMASTER && changeowner && guid != m_ownerGuid)
     {
         WorldPacket data;
         MakeNotOwner(&data);
@@ -513,7 +513,7 @@ void Channel::List(PlayerPointer player)
     size_t pos = data.wpos();
     data << int32(0);                                   // size of list, placeholder
 
-    uint32 gmLevelInWhoList = sWorld.getConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST);
+    AccountTypes gmLevelInWhoList = (AccountTypes)sWorld.getConfig(CONFIG_UINT32_GM_LEVEL_IN_WHO_LIST);
 
     uint32 count = 0;
     for (const auto& itr : m_players)
@@ -523,7 +523,7 @@ void Channel::List(PlayerPointer player)
             MasterPlayer* pPlayer = sObjectAccessor.FindMasterPlayer(itr.first);
             // PLAYER can't see MODERATOR, GAME MASTER, ADMINISTRATOR characters
             // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
-            if (pPlayer && (masterPlayer->GetSession()->GetSecurity() > RANK_PLAYER || pPlayer->GetSession()->GetSecurity() <= gmLevelInWhoList) &&
+            if (pPlayer && (masterPlayer->GetSession()->GetSecurity() > SEC_PLAYER || pPlayer->GetSession()->GetSecurity() <= gmLevelInWhoList) &&
                 pPlayer->IsVisibleGloballyFor(masterPlayer))
             {
                 data << ObjectGuid(itr.first);
@@ -537,7 +537,7 @@ void Channel::List(PlayerPointer player)
 
             // PLAYER can't see MODERATOR, GAME MASTER, ADMINISTRATOR characters
             // MODERATOR, GAME MASTER, ADMINISTRATOR can see all
-            if (pPlayer && (asPlayer->GetSession()->GetSecurity() > RANK_PLAYER || pPlayer->GetSession()->GetSecurity() <= gmLevelInWhoList) &&
+            if (pPlayer && (asPlayer->GetSession()->GetSecurity() > SEC_PLAYER || pPlayer->GetSession()->GetSecurity() <= gmLevelInWhoList) &&
                 pPlayer->IsVisibleGloballyFor(asPlayer))
             {
                 data << ObjectGuid(itr.first);
