@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS `command`;
+DROP TABLE IF EXISTS `staff_ranks`;
+
+/*
 CREATE TABLE IF NOT EXISTS `staff_ranks` (
   `bit_index` INT UNSIGNED NOT NULL,
   `name` VARCHAR(20) NOT NULL,
@@ -362,3 +366,4 @@ replace into command values
 ('anonymous', 'Support'), 
 ('anonymous whispers', 'Support'),      
 ('anonymous mail', 'Support');
+*/
