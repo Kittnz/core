@@ -114,7 +114,7 @@ INSERT INTO `taxi_nodes` VALUES (400, 1, 0, 0, 0, 'Boat: Sparkwater to Revantusk
 INSERT INTO `taxi_nodes` VALUES (401, 0, 0, 0, 0, 'Boat: Revanstusk to Sparkwater', 0, 0);
 INSERT INTO `taxi_nodes` VALUES (502, 0, -6657.53, -2219.37, 275.68, 'Zeppelin: Kargath to Orgrimmar', 0, 0);
 INSERT INTO `taxi_nodes` VALUES (503, 1, 1168.83, -4190, 50.34, 'Zeppelin: Orgrimmar to Kargath', 0, 0);
-
+/*
 -- ----------------------------
 -- Table structure for taxi_path_transitions
 -- ----------------------------
@@ -505,3 +505,4 @@ INSERT INTO `taxi_path_transitions` VALUES (272, 93, 11, 1, 'Southshore, Hillsbr
 INSERT INTO `taxi_path_transitions` VALUES (402, 95, 13, 14, 'Thorium Point, Searing Gorge -> Ironforge, Dun Morogh -> Ironforge Airfields, Dun Morogh');
 
 SET FOREIGN_KEY_CHECKS = 1;
+*/
