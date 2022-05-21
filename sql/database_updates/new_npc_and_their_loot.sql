@@ -14,7 +14,7 @@ REPLACE INTO creature_template VALUES
 (60804, 1710, 0, 0, 0, 'Dragonsworn Lookout', 'The Blackwing Guard', 0, 50, 50, 2990, 2990, 0, 0, 2958, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 7315, 0, 0, 0, 0, 0, 0, ''),
 (60805, 14885, 0, 0, 0, 'Blackwing Guard', 'The Blackwing Guard', 0, 55, 55, 3643, 3643, 0, 0, 3272, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 12461, 0, 0, 0, 0, 0, 0, '');
 
-REPLACE INTO creature_template_addon VALUES (60804, 0, 0, 0, 0, 0, 0, '16380');
+REPLACE INTO creature_template_addon VALUES (60804, 0, 0, 0, 0, 0, 0, '0');
 
 set @gossip_menu_id = 41139; set @magic_number = 60802;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
