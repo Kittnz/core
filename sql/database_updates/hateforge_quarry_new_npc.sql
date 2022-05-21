@@ -590,3 +590,5 @@ REPLACE INTO creature_display_info_addon VALUES
 (18854, 0, 0, 0, 0),
 (18855, 0, 0, 0, 0),
 (18856, 0, 0, 0, 0);
+
+update creature set spawntimesecsmin = 7200, spawntimesecsmax = 7200 where map = 808;
