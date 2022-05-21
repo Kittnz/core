@@ -29,6 +29,19 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 REPLACE INTO npc_vendor VALUES
+(60801, 1708, 0, 0, 0, 0),
+(60801, 2723, 0, 0, 0, 0),
+(60801, 4600, 0, 0, 0, 0),
+(60801, 2594, 0, 0, 0, 0),
+(60801, 2593, 0, 0, 0, 0),
+(60801, 1179, 0, 0, 0, 0),
+(60801, 2595, 0, 0, 0, 0),
+(60801, 1205, 0, 0, 0, 0),
+(60801, 1645, 0, 0, 0, 0),
+(60801, 8766, 0, 0, 0, 0),
+(60801, 159, 0, 0, 0, 0),
+(60801, 2596, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES
 (60803, 285, 0, 0, 0, 0),
 (60803, 286, 0, 0, 0, 0),
 (60803, 287, 0, 0, 0, 0),
