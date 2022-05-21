@@ -290,6 +290,8 @@ void AddSC_boss_mariella();
 void AddSC_instance_scarlet_citadel();
 void AddSC_trash_mobs_scarlet_citadel();
 
+void AddSC_boss_hargesh_doomcaller();
+
 // Stormwind Vaults
 void AddSC_boss_aszosh_grimflame();
 void AddSC_boss_black_bride();
