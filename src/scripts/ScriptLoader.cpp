@@ -291,6 +291,7 @@ void AddSC_instance_scarlet_citadel();
 void AddSC_trash_mobs_scarlet_citadel();
 
 void AddSC_boss_hargesh_doomcaller();
+void AddSC_trash_mobs_hateforge_quarry();
 
 // Stormwind Vaults
 void AddSC_boss_aszosh_grimflame();
@@ -601,6 +602,9 @@ void AddScripts()
     AddSC_boss_mariella();
     AddSC_instance_scarlet_citadel();
     AddSC_trash_mobs_scarlet_citadel();
+
+    AddSC_boss_hargesh_doomcaller();
+    AddSC_trash_mobs_hateforge_quarry();
 
     // Misc
     AddSC_npc_ptr();

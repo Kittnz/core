@@ -73,6 +73,8 @@ dungeons/gnomeregan/gnomeregan.cpp
 dungeons/gnomeregan/gnomeregan.h
 dungeons/gnomeregan/instance_gnomeregan.cpp
 dungeons/hateforge_quarry/boss_hargesh_doomcaller.cpp
+dungeons/hateforge_quarry/hateforge_quarry.h
+dungeons/hateforge_quarry/hateforge_quarry_trash.cpp
 dungeons/karazhan_crypt/instance_karazhan_crypt.cpp
 dungeons/crescent_grove/instance_crescent_grove.cpp
 dungeons/maraudon/boss_celebras_the_cursed.cpp
