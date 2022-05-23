@@ -326,7 +326,53 @@ REPLACE INTO creature_display_info_addon VALUES
 (18236, 0, 0, 0, 0),
 (18850, 0, 0, 0, 0);
 
-UPDATE `creature_template` SET `script_name` = 'boss_hargesh_doomcaller' WHERE `entry` = 60737; -- Assign C++ Script
+
+-- Nolin Beginn
 UPDATE `creature_template` SET `unit_class` = '4' WHERE `entry` = 60737; -- Hargesh should have mana since he is casting shadow spells
 
+UPDATE `creature_template` SET `script_name` = 'boss_hargesh_doomcaller' WHERE `entry` = 60737; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_bargul_blackhammer' WHERE `entry` = 60735; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_engineer_figgles' WHERE `entry` = 60736; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_hatereaver_annhilator' WHERE `entry` = 60734; -- Assign C++ Script
+
 UPDATE `creature_template` SET `script_name` = 'mob_hateforge_cleric' WHERE `entry` = 60718; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'mob_hateforge_taskmaster' WHERE `entry` = 60723; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'mob_twilight_fireblade' WHERE `entry` = 60725; -- Assign C++ Script
+
+UPDATE `creature_template` SET `spell_id1` = 0, `spell_id2` = 0, `spell_id3` = 0, `spell_id4` = 0, `spell_list_id` = 0 WHERE `entry` IN -- Remove spells and spell list (Replaced by C++ Scripts)
+(
+	60737,
+	60735,
+	60736,
+	60734,
+	60718,
+	60723,
+	60725
+);
+
+UPDATE `creature_template` SET `ai_name` = "" WHERE `entry` IN -- Remove Event AI (Replaced by C++ Scripts)
+(
+	60737,
+	60735,
+	60736,
+	60734,
+	60718,
+	60723,
+	60725
+);
+
+REPLACE INTO `script_texts` (`entry`, `content_default`, `sound`, `type`, `comment`) VALUES
+-- Boss Bargul Blackhammer
+('-1999950', "We must maintain our production! WORK HARDER!", '60349', '6', "BARGUL_BLACKHAMMER_OOC_0"),
+('-1999951', "Shadowforge shall reward us all for our work here in the Quarry!", '60350', '6', "BARGUL_BLACKHAMMER_OOC_1"),
+('-1999952', "I don't see enough of you busy out there, We don't have all month!", '60351', '6', "BARGUL_BLACKHAMMER_OOC_2"),
+('-1999953', "You think you contend with the High Foreman? Feel the fury of the Dark Iron!", '60348', '0', "BARGUL_BLACKHAMMER_AGGRO"),
+('-1999954', "Curse you.. Damn you... The work, must go on.", '60352', '0', "BARGUL_BLACKHAMMER_DEAD"),
+-- Boss Engineer Figgles
+('-1999955', "You foolish outsiders! You're not supposed to be here interrupting my great work. Broody, get them, destroy them!", '60353', '0', "Engineer_Figgles_AGGRO"),
+('-1999956', "I.. Was going to build an army... I would've never been stopped!", '60354', '0', "Engineer_Figgles_DEAD"),
+-- Boss Hatereaver Annihilator
+('-1999957', "Unidentified intruders, defensive measures, engaged.", '60355', '0', "Hatereaver_Annihilator_AGGRO"),
+('-1999958', "Activate emergency power... Emergency power activation failed... Commence... Shut... Do..wn...", '60356', '0', "Hatereaver_Annihilator_DEAD");
+-- Nolin End
+

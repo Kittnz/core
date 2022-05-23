@@ -5,8 +5,10 @@
 -- name = 'Tyrion Bouden', subname = 'The Blackwing Guard', level = 50, display_id1 = 1299, equipment_id = 54 Make repair vendor and copy vendor ID from https://database.turtle-wow.org/?npc=1294
 -- name = 'Dragonsworn Lookout', subname = 'The Blackwing Guard', level = 50, display_id1 = 1710, equipment_id = 7315 If possible, make her stealthed.
 -- name = 'Blackwing Guard', subname = 'The Blackwing Guard', display_id1 = 14885, level = 55, equipment_id = 12461
--- Master Genko, display ID 4328, faction 35, level 50, greeting/quest flags , greeting text : "Until you rid your heart of anger, your growth will remain forever stunted." 
-
+-- Master Genko, display ID 4328, faction 35, level 50, greeting/quest flags , greeting text : "Until you rid your heart of anger, your growth will remain forever stunted."
+-- name = 'Hard Knocks Bruiser', subname = 'Hard Knocks Society', level = 50, display_id1 = 11375, equipment_id = 9460
+-- name = 'Razza Sparkfizzle', subname = 'Hard Knocks Society', level = 40, display_id1 = 9791, equpment_id = 5411 - Repair NPC & Vendor. Copy vendor menu from https://database.turtle-wow.org/?npc=3367
+-- name = 'Vault Baron', subname = 'Hard Knocks Society', level = 35, display_id1 = 9561, equpment_id = 8661
 REPLACE INTO creature_template VALUES
 (60799, 2959, 0, 0, 0, 'Hertha', 'Schmetterlingsbrigade', 0, 15, 15, 328, 328, 0, 0, 660, 290, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60800, 10704, 0, 0, 0, 'Jurag', 'Schmetterlingsbrigade', 0, 35, 35, 1342, 1342, 0, 0, 1373, 290, 16388, 1, 1.14286, 1.3, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -15,7 +17,10 @@ REPLACE INTO creature_template VALUES
 (60803, 1299, 0, 0, 0, 'Tyrion Bouden', 'The Blackwing Guard', 0, 50, 50, 2990, 2990, 0, 0, 2958, 290, 16388, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 54, 0, 0, 0, 0, 0, 0, ''),
 (60804, 1710, 0, 0, 0, 'Dragonsworn Lookout', 'The Blackwing Guard', 0, 50, 50, 2990, 2990, 0, 0, 2958, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 7315, 0, 0, 0, 0, 0, 0, ''),
 (60805, 14885, 0, 0, 0, 'Blackwing Guard', 'The Blackwing Guard', 0, 55, 55, 3643, 3643, 0, 0, 3272, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 12461, 0, 0, 0, 0, 0, 0, ''),
-(60806, 4328, 0, 0, 0, 'Master Genko', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(60806, 4328, 0, 0, 0, 'Master Genko', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60807, 11375, 0, 0, 0, 'Hard Knocks Bruiser', 'Hard Knocks Society', 0, 50, 50, 2990, 2990, 0, 0, 2958, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 9460, 0, 0, 0, 0, 0, 0, ''),
+(60808, 9791, 0, 0, 0, 'Razza Sparkfizzle', 'Hard Knocks Society', 0, 40, 40, 2628, 2628, 0, 0, 1964, 290, 16388, 1, 1.14286, 0, 20, 5, 40, 0, 1, 57, 70, 0, 156, 1, 1600, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 93, 'EventAI', 0, 3, 0, 0, 3, 5411, 0, 0, 0, 0, 0, 0, ''),
+(60809, 9561, 0, 0, 0, 'Vault Baron', 'Hard Knocks Society', 0, 35, 35, 1342, 1342, 0, 0, 1373, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 8661, 0, 0, 0, 0, 0, 0, '');
 
 REPLACE INTO creature_template_addon VALUES (60804, 0, 0, 0, 0, 0, 0, '0');
 
@@ -37,6 +42,40 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You are s
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+REPLACE INTO npc_vendor VALUES
+(60808, 2320, 0, 0, 0, 0),
+(60808, 2321, 0, 0, 0, 0),
+(60808, 2325, 0, 0, 0, 0),
+(60808, 2604, 0, 0, 0, 0),
+(60808, 2678, 0, 0, 0, 0),
+(60808, 2692, 0, 0, 0, 0),
+(60808, 2880, 0, 0, 0, 0),
+(60808, 2901, 0, 0, 0, 0),
+(60808, 2928, 0, 0, 0, 0),
+(60808, 3371, 0, 0, 0, 0),
+(60808, 3372, 0, 0, 0, 0),
+(60808, 3466, 0, 0, 0, 0),
+(60808, 3713, 0, 0, 0, 0),
+(60808, 3777, 0, 0, 0, 0),
+(60808, 3857, 0, 0, 0, 0),
+(60808, 4289, 0, 0, 0, 0),
+(60808, 4291, 0, 0, 0, 0),
+(60808, 4340, 0, 0, 0, 0),
+(60808, 4341, 0, 0, 0, 0),
+(60808, 4342, 0, 0, 0, 0),
+(60808, 4399, 0, 0, 0, 0),
+(60808, 4400, 0, 0, 0, 0),
+(60808, 5956, 0, 0, 0, 0),
+(60808, 6183, 0, 0, 0, 0),
+(60808, 6217, 0, 0, 0, 0),
+(60808, 6256, 0, 0, 0, 0),
+(60808, 6530, 0, 0, 0, 0),
+(60808, 6532, 0, 0, 0, 0),
+(60808, 7005, 0, 0, 0, 0),
+(60808, 8343, 0, 0, 0, 0),
+(60808, 8925, 0, 0, 0, 0),
+(60808, 14341, 0, 0, 0, 0),
+(60808, 18256, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES
 (60801, 1708, 0, 0, 0, 0),
 (60801, 2723, 0, 0, 0, 0),
