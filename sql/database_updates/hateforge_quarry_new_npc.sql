@@ -13,8 +13,8 @@ REPLACE INTO creature_template VALUES
 (60716, 18834, 18835, 0, 0, 'Hateforge Watcher', NULL, 0, 48, 49, 4179, 4179, 0, 0, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 273, 338, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60716, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60717, 18836, 18837, 0, 0, 'Hateforge Chemist', NULL, 0, 52, 53, 6876, 6876, 0, 0, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 451, 501, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60717, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60718, 18838, 18839, 0, 0, 'Hateforge Cleric', NULL, 0, 51, 52, 5151, 5151, 2100, 2100, 2232, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 290, 301, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60718, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60719, 18840, 18841, 0, 0,'Hateforge Craftsman', NULL, 0, 50, 52, 5000, 5151, 0, 0, 2232, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 350, 376, 0, 226, 1, 1670, 1670, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60719, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60720, 18842, 0, 0, 0, 'Hateforge Engineer', NULL, 0, 51, 52, 3800, 3800, 0, 0, 2840, 54, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 130, 160, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 60720, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60719, 18840, 18841, 0, 0,'Hateforge Craftsman', NULL, 0, 50, 52, 5000, 5151, 0, 0, 2232, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 350, 376, 0, 226, 1, 1670, 1670, 1, 64, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60719, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60720, 18842, 0, 0, 0, 'Hateforge Engineer', NULL, 0, 51, 52, 3800, 3800, 0, 0, 2840, 54, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 130, 160, 0, 230, 1, 2000, 2000, 1, 64, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 60720, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60721, 18843, 18844, 0, 0, 'Hateforge Miner', NULL, 0, 49, 50, 4179, 4400, 0, 0, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 364, 392, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60721, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60722, 18845, 18846, 0, 0, 'Hateforge Overseer', NULL, 0, 53, 53, 8100, 8100, 0, 0, 3400, 54, 0, 1.1, 1.14286, 0, 20, 5, 0, 1, 1, 412, 532, 0, 244, 1, 1300, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60722, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60723, 18847, 18848, 0, 0, 'Hateforge Taskmaster', NULL, 0, 52, 53, 7043, 7043, 0, 0, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 325, 350, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60723, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -372,21 +372,21 @@ set @spell_list_id = 180025;
  
 set @spellid_1 = 56523; -- ???
 set @probability_1 = 100; 
-set @casttarget_1 = 1; 
-set @castflags_1 = 4;
-set @delayinitialmin_1 = 5; 
-set @delayinitialmax_1 = 5; 
+set @casttarget_1 = 0;
+set @castflags_1 = 0;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 1; 
 set @delayrepeatmin_1 = 10; 
 set @delayrepeatmax_1 = 10;
 
 set @spellid_2 = 6660; -- Shoot
 set @probability_2 = 100;
 set @casttarget_2 = 1; 
-set @castflags_2 = 4;
-set @delayinitialmin_2 = 1; 
-set @delayinitialmax_2 = 1; 
-set @delayrepeatmin_2 = 14; 
-set @delayrepeatmax_2 = 16;
+set @castflags_2 = 8;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0.25; 
+set @delayrepeatmax_2 = 0.25;
 
 set @spellid_3 = 0;
 set @probability_3 = 0; 
@@ -443,7 +443,7 @@ set @delayrepeatmin_8 = 0;
 set @delayrepeatmax_8 = 0;
 
 -- Do not touch this part:
-update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 56523, spell_id2 = 6660, spell_id3 = 0 
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
 where entry = @creature_entry;
 replace into creature_spells (entry, name, 
 spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
@@ -481,11 +481,11 @@ set @delayrepeatmax_1 = 16;
 set @spellid_2 = 6660; -- Shoot
 set @probability_2 = 100;
 set @casttarget_2 = 1; 
-set @castflags_2 = 4;
-set @delayinitialmin_2 = 1; 
-set @delayinitialmax_2 = 1; 
-set @delayrepeatmin_2 = 14; 
-set @delayrepeatmax_2 = 16;
+set @castflags_2 = 8;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0.25; 
+set @delayrepeatmax_2 = 0.25;
 
 set @spellid_3 = 0;
 set @probability_3 = 0; 
@@ -542,7 +542,7 @@ set @delayrepeatmin_8 = 0;
 set @delayrepeatmax_8 = 0;
 
 -- Do not touch this part:
-update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 6016, spell_id2 = 6660, spell_id3 = 0 
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
 where entry = @creature_entry;
 replace into creature_spells (entry, name, 
 spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
