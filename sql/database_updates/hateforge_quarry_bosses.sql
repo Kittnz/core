@@ -326,6 +326,7 @@ REPLACE INTO creature_display_info_addon VALUES
 (18236, 0, 0, 0, 0),
 (18850, 0, 0, 0, 0);
 
+
 -- Nolin Beginn
 UPDATE `creature_template` SET `unit_class` = '4' WHERE `entry` = 60737; -- Hargesh should have mana since he is casting shadow spells
 
@@ -360,5 +361,18 @@ UPDATE `creature_template` SET `ai_name` = "" WHERE `entry` IN -- Remove Event A
 	60725
 );
 
-
+REPLACE INTO `script_texts` (`entry`, `content_default`, `sound`, `type`, `comment`) VALUES
+-- Boss Bargul Blackhammer
+('-1999950', "We must maintain our production! WORK HARDER!", '60349', '6', "BARGUL_BLACKHAMMER_OOC_0"),
+('-1999951', "Shadowforge shall reward us all for our work here in the Quarry!", '60350', '6', "BARGUL_BLACKHAMMER_OOC_1"),
+('-1999952', "I don't see enough of you busy out there, We don't have all month!", '60351', '6', "BARGUL_BLACKHAMMER_OOC_2"),
+('-1999953', "You think you contend with the High Foreman? Feel the fury of the Dark Iron!", '60348', '0', "BARGUL_BLACKHAMMER_AGGRO"),
+('-1999954', "Curse you.. Damn you... The work, must go on.", '60352', '0', "BARGUL_BLACKHAMMER_DEAD"),
+-- Boss Engineer Figgles
+('-1999955', "You foolish outsiders! You're not supposed to be here interrupting my great work. Broody, get them, destroy them!", '60353', '0', "Engineer_Figgles_AGGRO"),
+('-1999956', "I.. Was going to build an army... I would've never been stopped!", '60354', '0', "Engineer_Figgles_DEAD"),
+-- Boss Hatereaver Annihilator
+('-1999957', "Unidentified intruders, defensive measures, engaged.", '60355', '0', "Hatereaver_Annihilator_AGGRO"),
+('-1999958', "Activate emergency power... Emergency power activation failed... Commence... Shut... Do..wn...", '60356', '0', "Hatereaver_Annihilator_DEAD");
 -- Nolin End
+

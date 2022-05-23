@@ -2,13 +2,16 @@
 #include "scriptPCH.h"
 
 
-class boss_hatereaver_annhilatorAI : public ScriptedAI // TODO: Implement VOice Scripts
+class boss_hatereaver_annhilatorAI : public ScriptedAI
 {
 public:
     explicit boss_hatereaver_annhilatorAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         boss_hatereaver_annhilatorAI::Reset();
     }
+
+    static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999957 };
+    static constexpr int32 VOICE_SCRIPT_DEAD{ -1999958 };
 
     static constexpr uint32 SPELL_KNOCKBACK{ 28438 };
     static constexpr uint32 SPELL_CLEAVE{ 19983 };
@@ -23,6 +26,16 @@ public:
         m_uiKnockback_Timer = 30000;
         m_uiCleave_Timer = 40000;
         m_uiWarStomp = 45000;
+    }
+
+    void Aggro(Unit* /*pWho*/) override
+    {
+        DoScriptText(VOICE_SCRIPT_AGGRO, m_creature);
+    }
+
+    void JustDied(Unit* /*pKiller*/) override
+    {
+        DoScriptText(VOICE_SCRIPT_DEAD, m_creature);
     }
 
     void CastKnockback(const uint32& uiDiff)
