@@ -65,7 +65,7 @@ CreatureAI* GetAI_mob_hateforge_clericAI(Creature* pCreature)
 }
 
 
-class mob_hateforge_taskmasterAI : public ScriptedAI // TODO: Implement Voice Scripts
+class mob_hateforge_taskmasterAI : public ScriptedAI
 {
 public:
     explicit mob_hateforge_taskmasterAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -115,7 +115,7 @@ CreatureAI* GetAI_mob_hateforge_taskmasterAI(Creature* pCreature)
 }
 
 
-class mob_twilight_firebladeAI : public ScriptedAI // TODO: Implement Voice Scripts
+class mob_twilight_firebladeAI : public ScriptedAI
 {
 public:
     explicit mob_twilight_firebladeAI(Creature* pCreature) : ScriptedAI(pCreature)

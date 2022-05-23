@@ -2,13 +2,16 @@
 #include "scriptPCH.h"
 
 
-class boss_engineer_figglesAI : public ScriptedAI // TODO: Implement Voice Scripts
+class boss_engineer_figglesAI : public ScriptedAI
 {
 public:
     explicit boss_engineer_figglesAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         boss_engineer_figglesAI::Reset();
     }
+
+    static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999955 };
+    static constexpr int32 VOICE_SCRIPT_DEAD{ -1999956 };
 
     static constexpr uint32 SPELL_CORROSIVE_POISON{ 24111 };
 
@@ -17,6 +20,16 @@ public:
     void Reset() override
     {
         m_uiCorrosivePoison_Timer = 10000;
+    }
+
+    void Aggro(Unit* /*pWho*/) override
+    {
+        DoScriptText(VOICE_SCRIPT_AGGRO, m_creature);
+    }
+
+    void JustDied(Unit* /*pKiller*/) override
+    {
+        DoScriptText(VOICE_SCRIPT_DEAD, m_creature);
     }
 
     void CastCorrosivePoison(const uint32& uiDiff)
