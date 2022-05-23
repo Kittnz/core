@@ -20,7 +20,7 @@ REPLACE INTO creature_template VALUES
 (60723, 18847, 18848, 0, 0, 'Hateforge Taskmaster', NULL, 0, 52, 53, 7043, 7043, 0, 0, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 325, 350, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60723, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60724, 18849, 0, 0, 0, 'Hateforge Warden', NULL, 0, 53, 53, 7043, 7124, 0, 0, 4000, 54, 0, 1.1, 1.14286, 0, 20, 5, 0, 1, 1, 325, 350, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60724, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60725, 18851, 18852, 18853, 0, 'Twilight Fireblade', NULL, 0, 54, 54, 6273, 6273, 0, 0, 4000, 54, 0, 1.1, 1.14286, 0, 20, 5, 0, 1, 1, 286, 308, 2, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60725, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60726, 18854, 18855, 18856, 0, 'Twilight Shadowcaller', NULL, 0, 54, 54, 6273, 6273, 0, 0, 2500, 54, 0, 1.1, 1.14286, 0, 20, 5, 0, 1, 1, 338, 364, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60726, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(60726, 18854, 18855, 18856, 0, 'Twilight Shadowcaller', NULL, 0, 54, 54, 6273, 6273, 1500, 1500, 2500, 54, 0, 1.1, 1.14286, 0, 20, 5, 0, 1, 1, 338, 364, 0, 226, 1, 2000, 2000, 2, 32768, 0, 0, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 60726, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 157, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 20085; set @weapon_1 = 12250; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60726;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -167,17 +167,17 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
--- Hateforge Shadowcaller
+-- Twilight Shadowcaller
 set @creature_entry = 60726;
-set @description = 'HATEFORGE QUARRY: Hateforge Shadowcaller';
+set @description = 'HATEFORGE QUARRY: Twilight Shadowcaller';
 set @spell_list_id = 180030;
  
-set @spellid_1 = 56519; -- ???
+set @spellid_1 = 56519; -- Twilight Shadow
 set @probability_1 = 100; 
 set @casttarget_1 = 1; 
-set @castflags_1 = 4;
-set @delayinitialmin_1 = 1; 
-set @delayinitialmax_1 = 1; 
+set @castflags_1 = 0;
+set @delayinitialmin_1 = 5; 
+set @delayinitialmax_1 = 9; 
 set @delayrepeatmin_1 = 20; 
 set @delayrepeatmax_1 = 20;
 
