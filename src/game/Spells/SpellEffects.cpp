@@ -1924,7 +1924,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 76:  m_caster->ToPlayer()->TeleportTo(1, -11523.83F, -4660.29F, 3.005F, 2.2F); break; // Schmetterlingsbrigade
                         case 466: m_caster->ToPlayer()->TeleportTo(1, -6904.55F, -4238.45F, 11.81F, 0.6F);  break; // Hard Knocks Society
                         case 444: m_caster->ToPlayer()->TeleportTo(0, -8809.33F, 1093.16F, 95.53F, 3.4F);   break; // Thalassian Alliance
-
+                        case 436: m_caster->ToPlayer()->TeleportTo(0, -8341.12F, -836.33F, 225.91F, 0.8F);  break; // The Blackwing Guard
                         default: break;
                         }
                     }
