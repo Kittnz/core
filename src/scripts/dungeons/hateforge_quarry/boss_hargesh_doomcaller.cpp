@@ -28,7 +28,7 @@ public:
         m_uiDeadCounter = 0;
 
         m_uiImmolate_Timer = 30000;
-        m_uiShadowBoltVolley_Timer = 90000;
+        m_uiShadowBoltVolley_Timer = 60000;
         m_uiShadowBolt_Timer = 10000;
         m_uiCheckIfAddsAreDead_Timer = 500;
 
@@ -81,6 +81,13 @@ public:
     void PhaseTwo()
     {
         m_creature->CastSpell(m_creature, SPELL_IMMUNE_ALL, true);
+
+        m_creature->ClearTarget();
+        m_creature->StopMoving();
+        m_creature->AddUnitState(UNIT_STAT_ROOT);
+        m_creature->SetRooted(true);
+
+        m_creature->CastSpell(m_creature, SPELL_SHADOW_CHANNELING, true);
 
         Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
         for (const auto& itr : PlayerList)
@@ -137,7 +144,12 @@ public:
 
                             if (m_uiDeadCounter == 2) // Both adds are dead
                             {
+                                m_creature->RemoveAurasDueToSpell(SPELL_SHADOW_CHANNELING);
                                 m_creature->RemoveAurasDueToSpell(SPELL_IMMUNE_ALL);
+                                m_creature->SetRooted(false);
+                                m_creature->ClearUnitState(UNIT_STAT_ROOT);
+                                m_creature->AddThreat(m_creature->GetVictim(), 10.f);
+
                                 m_bAddsAreDead = true;
                             }
                         }
@@ -182,9 +194,12 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        CastImmolate(uiDiff);
-        CastShadowBoltVolley(uiDiff);
-        CastShadowBolt(uiDiff);
+        if (!m_bPhaseTwo || m_bAddsAreDead)
+        {
+            CastImmolate(uiDiff);
+            CastShadowBoltVolley(uiDiff);
+            CastShadowBolt(uiDiff);
+        }
 
         if (m_creature->HealthBelowPct(60) && !m_bPhaseTwo) // Boss' health is below 60% and phase two didn't start yet
         {
@@ -192,7 +207,9 @@ public:
         }
 
         if (!m_bAddsAreDead)
+        {
             CheckIfAddsAreDead(uiDiff);
+        }
 
         DoMeleeAttackIfReady();
     }
