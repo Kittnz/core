@@ -283,6 +283,7 @@ void AddSC_random_scripts_3();
 void AddSC_custom_teleports();
 void AddSC_custom_exploration_triggers();
 
+// Scarlet Citadel
 void AddSC_boss_abbendis();
 void AddSC_boss_ardaeus();
 void AddSC_boss_daelus();
@@ -290,7 +291,11 @@ void AddSC_boss_mariella();
 void AddSC_instance_scarlet_citadel();
 void AddSC_trash_mobs_scarlet_citadel();
 
+// Hateforge Quarry
+void AddSC_boss_bargul_blackhammer();
+void AddSC_boss_engineer_figgles();
 void AddSC_boss_hargesh_doomcaller();
+void AddSC_boss_hatereaver_annhilator();
 void AddSC_trash_mobs_hateforge_quarry();
 
 // Stormwind Vaults
@@ -596,6 +601,7 @@ void AddScripts()
     AddSC_custom_teleports();
     AddSC_custom_exploration_triggers();
 
+    // Scarlet Citadel
     AddSC_boss_abbendis();
     AddSC_boss_ardaeus();
     AddSC_boss_daelus();
@@ -603,7 +609,11 @@ void AddScripts()
     AddSC_instance_scarlet_citadel();
     AddSC_trash_mobs_scarlet_citadel();
 
+    // Hateforge Quarry
+    AddSC_boss_bargul_blackhammer();
+    AddSC_boss_engineer_figgles();
     AddSC_boss_hargesh_doomcaller();
+    AddSC_boss_hatereaver_annhilator();
     AddSC_trash_mobs_hateforge_quarry();
 
     // Misc

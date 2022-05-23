@@ -326,7 +326,39 @@ REPLACE INTO creature_display_info_addon VALUES
 (18236, 0, 0, 0, 0),
 (18850, 0, 0, 0, 0);
 
-UPDATE `creature_template` SET `script_name` = 'boss_hargesh_doomcaller' WHERE `entry` = 60737; -- Assign C++ Script
+-- Nolin Beginn
 UPDATE `creature_template` SET `unit_class` = '4' WHERE `entry` = 60737; -- Hargesh should have mana since he is casting shadow spells
 
+UPDATE `creature_template` SET `script_name` = 'boss_hargesh_doomcaller' WHERE `entry` = 60737; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_bargul_blackhammer' WHERE `entry` = 60735; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_engineer_figgles' WHERE `entry` = 60736; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_hatereaver_annhilator' WHERE `entry` = 60734; -- Assign C++ Script
+
 UPDATE `creature_template` SET `script_name` = 'mob_hateforge_cleric' WHERE `entry` = 60718; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'mob_hateforge_taskmaster' WHERE `entry` = 60723; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'mob_twilight_fireblade' WHERE `entry` = 60725; -- Assign C++ Script
+
+UPDATE `creature_template` SET `spell_id1` = 0, `spell_id2` = 0, `spell_id3` = 0, `spell_id4` = 0, `spell_list_id` = 0 WHERE `entry` IN -- Remove spells and spell list (Replaced by C++ Scripts)
+(
+	60737,
+	60735,
+	60736,
+	60734,
+	60718,
+	60723,
+	60725
+);
+
+UPDATE `creature_template` SET `ai_name` = "" WHERE `entry` IN -- Remove Event AI (Replaced by C++ Scripts)
+(
+	60737,
+	60735,
+	60736,
+	60734,
+	60718,
+	60723,
+	60725
+);
+
+
+-- Nolin End
