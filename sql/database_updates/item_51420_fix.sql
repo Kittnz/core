@@ -1,0 +1,1 @@
+update item_template set description = '', allowable_class = 0 where entry = 51420;
