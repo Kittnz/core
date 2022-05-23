@@ -16,7 +16,7 @@ struct mob_hateforge_clericAI : public ScriptedAI
 
     void Reset() override
     {
-        m_uiHealNearbyAllies_Timer = 2000;
+        m_uiHealNearbyAllies_Timer = 4000;
 
         m_bShadowWordPainAlreadyCastedOnce = false;
     }
@@ -29,7 +29,7 @@ struct mob_hateforge_clericAI : public ScriptedAI
             {
                 if (DoCastSpellIfCan(pTarget, SPELL_GREATER_HEAL) == CanCastResult::CAST_OK)
                 {
-                    m_uiHealNearbyAllies_Timer = urand(4000, 6000);
+                    m_uiHealNearbyAllies_Timer = urand(8000, 10000);
                 }
             }
         }
