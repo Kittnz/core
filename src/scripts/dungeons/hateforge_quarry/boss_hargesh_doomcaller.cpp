@@ -1,5 +1,16 @@
 
-#include "hateforge_quarry.h"
+#include "scriptPCH.h"
+
+struct Location
+{
+    float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};
+};
+
+static const Location vfSpawnPoint[] =
+{
+    { -8300.825195f, -3735.292725f, 138.12f, 6.020778f },
+    { -8283.150391f, -3740.716309f, 137.77f, 2.820284f }
+};
 
 class boss_hargesh_doomcallerAI : public ScriptedAI
 {
@@ -10,6 +21,15 @@ public:
     }
 
 private:
+    static constexpr uint32 NPC_FACELESS_TERROR{ 60738 };
+
+    static constexpr uint32 SPELL_IMMOLATE{ 11668 };
+    static constexpr uint32 SPELL_SHADOW_BOLT_VOLLEY{ 27646 };
+    static constexpr uint32 SPELL_SHADOW_BOLT{ 12739 };
+    static constexpr uint32 SPELL_IMMUNE_ALL{ 29230 };
+    static constexpr uint32 SPELL_SHADOW_CHANNELING{ 12380 };
+
+
     uint8 m_uiDeadCounter{};
 
     uint32 m_uiImmolate_Timer{};
