@@ -172,194 +172,52 @@ uint32 AccountMgr::GetId(std::string username)
 void AccountMgr::Load()
 {
     m_accountSecurity.clear();
-    m_Ranks.clear();
 
-    // Load custom ranks
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `rank` FROM `account`"));
+
+    if (!result)
     {
-	    std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `bit_index`, `name` FROM `staff_ranks`"));
-
-		if (!result)
-		{
-			return;
-		}
-
-		Field* fields = nullptr;
-		do
-		{
-			fields = result->Fetch();
-			uint32 BitIndex = fields[0].GetUInt32();
-			std::string RankName = fields[1].GetCppString();
-            strToLower(RankName);
-            
-            RankValueMap::iterator ExistedRankIter = std::find_if(m_Ranks.begin(), m_Ranks.end(), [&RankName](std::pair< std::string, uint32 > const& RankPair)
-                {
-                    return RankPair.first == RankName;
-                });
-
-            if (ExistedRankIter != m_Ranks.end())
-            {
-                sLog.outError("Duplicate rank name: %s, server will not work properly, abort!", ExistedRankIter->first.c_str());
-				Log::WaitBeforeContinueIfNeed();
-				exit(1);
-            }
-
-            if (BitIndex > RANK_CUSTOM_END)
-            {
-				sLog.outError("Bit index '%u' can't be more then '%u'. Stucked at this rank: '%s'", BitIndex, uint32(RANK_CUSTOM_END), RankName.c_str());
-				Log::WaitBeforeContinueIfNeed();
-				exit(1);
-            }
-
-            uint32 RankMaskValue = 1 << BitIndex;
-
-            m_Ranks[RankName] = RankMaskValue;
-		} while (result->NextRow());
-
-        // insert hardcoded ranks
-        m_Ranks["player"] = 0;
-        m_Ranks["staff"] = 1;
-        m_Ranks["admin"] = RANK_ADMIN;
-        m_Ranks["console"] = RANK_CONSOLE;
+        return;
     }
 
-
-    // Load security for players
+    Field *fields = nullptr;
+    do
     {
-        std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `rank` FROM `account`"));
-
-        if (!result)
+        fields = result->Fetch();
+        uint32 accountId = fields[0].GetUInt32();
+        AccountTypes secu = AccountTypes(fields[1].GetUInt32());
+        switch (secu)
         {
-            return;
+        case SEC_PLAYER:
+            break;
+        case SEC_OBSERVER:
+        case SEC_MODERATOR:
+        case SEC_DEVELOPER:
+        case SEC_ADMINISTRATOR:
+            if (m_accountSecurity.find(accountId) == m_accountSecurity.end() ||
+                m_accountSecurity[accountId] < secu)
+                m_accountSecurity[accountId] = secu;
+            break;
         }
-
-        Field* fields = nullptr;
-        do
-        {
-            fields = result->Fetch();
-            uint32 accountId = fields[0].GetUInt32();
-            uint32 rank = fields[1].GetUInt32();
-
-            m_accountSecurity[accountId] = rank;
-        } while (result->NextRow());
-    }
+    } while (result->NextRow());
 
     LoadAccountBanList();
     LoadIPBanList();
 }
 
-uint32 AccountMgr::GetSecurityRanks(uint32 AccountId) const
+AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
 {
-    RankMap::const_iterator iter = m_accountSecurity.find(AccountId);
-    if (iter == m_accountSecurity.end())
-    {
-        return RANK_PLAYER;
-    }
-    return iter->second;
+    std::map<uint32, AccountTypes>::const_iterator it = m_accountSecurity.find(acc_id);
+    if (it == m_accountSecurity.end())
+        return SEC_PLAYER;
+    return it->second;
 }
 
-void AccountMgr::AddRanksToAccount(uint32 AccountId, const std::string& Ranks)
+void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
 {
-    Tokenizer AllRanks(Ranks, '|');
-
-    uint32 RankValue = GetSecurityRanks(AccountId);
-    for (const std::string& Rank : AllRanks)
-    {
-        std::string LowercaseRank = Rank;
-        strToLower(LowercaseRank);
-
-        RankValueMap::const_iterator RankWithValueIter = m_Ranks.find(LowercaseRank);
-        if (RankWithValueIter == m_Ranks.cend())
-        {
-            continue;
-        }
-
-        RankValue |= RankWithValueIter->second;
-    }
-
-    SetRanksToAccount(AccountId, RankValue);
+    m_accountSecurity[accId] = sec;
+    LoginDatabase.PExecute("UPDATE `account` SET `rank` = '%u' WHERE (`id` = '%u')", sec, accId);
 }
-
-void AccountMgr::RemoveRanksFromAccount(uint32 AccountId, const std::string& Ranks)
-{
-    Tokenizer AllRanks(Ranks, '|');
-
-	uint32 RankValue = GetSecurityRanks(AccountId);
-	for (const std::string& Rank : AllRanks)
-	{
-		std::string LowercaseRank = Rank;
-		strToLower(LowercaseRank);
-
-		RankValueMap::const_iterator RankWithValueIter = m_Ranks.find(LowercaseRank);
-		if (RankWithValueIter == m_Ranks.cend())
-		{
-			continue;
-		}
-
-		RankValue &= ~(RankWithValueIter->second);
-	}
-
-	SetRanksToAccount(AccountId, RankValue);
-}
-
-void AccountMgr::SetRanksToAccount(uint32 Account, uint32 RankValue)
-{
-    RankMap::iterator RankValueIter = m_accountSecurity.find(Account);
-    if (RankValueIter != m_accountSecurity.end())
-    {
-        RankValueIter->second = RankValue;
-
-		LoginDatabase.PExecute("UPDATE `account` SET `rank` = '%u' WHERE (`id` = '%u')", RankValue, Account);
-    }
-}
-
-void AccountMgr::QueryAccountRanks(uint32 AccountId, std::string& OutRanks) const
-{
-    uint32 RankValue = GetSecurityRanks(AccountId);
-
-    ParseSecurityRanks(RankValue, OutRanks);
-}
-
-void AccountMgr::ParseSecurityRanks(uint32 RankValue, std::string& OutRanks) const
-{
-	for (const RankValueMap::value_type& RankPair : m_Ranks)
-	{
-		if (RankValue & RankPair.second)
-		{
-			OutRanks.append(RankPair.first);
-			OutRanks.append("|");
-		}
-	}
-
-	if (OutRanks.size() > 0)
-	{
-		OutRanks.erase(OutRanks.begin() + (OutRanks.size() - 1));
-	}
-}
-
-uint32 AccountMgr::GetRankValue(const std::string& RankName) const
-{
-    RankValueMap::const_iterator RankIter = m_Ranks.find(RankName);
-    if (RankIter != m_Ranks.cend())
-    {
-        return RankIter->second;
-    }
-
-    return 0;
-}
-
-// AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
-// {
-//     std::map<uint32, AccountTypes>::const_iterator it = m_accountSecurity.find(acc_id);
-//     if (it == m_accountSecurity.end())
-//         return SEC_PLAYER;
-//     return it->second;
-// }
-
-// void AccountMgr::SetSecurity(uint32 accId, AccountTypes sec)
-// {
-//     m_accountSecurity[accId] = sec;
-//     LoginDatabase.PExecute("UPDATE account SET gmlevel = '%u' WHERE (id = '%u')", sec, accId);
-// }
 
 bool AccountMgr::GetName(uint32 acc_id, std::string &name)
 {
@@ -554,7 +412,22 @@ void AccountMgr::AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_
 
 bool AccountMgr::IsPlayerAccount(uint32 gmlevel)
 {
-    return gmlevel == RANK_PLAYER;
+    return gmlevel == SEC_PLAYER;
+}
+
+bool AccountMgr::IsGMAccount(uint32 gmlevel)
+{
+    return gmlevel >= SEC_OBSERVER && gmlevel <= SEC_CONSOLE;
+}
+
+bool AccountMgr::IsAdminAccount(uint32 gmlevel)
+{
+    return gmlevel == SEC_ADMINISTRATOR || gmlevel == SEC_CONSOLE;
+}
+
+bool AccountMgr::IsConsoleAccount(uint32 gmlevel)
+{
+    return gmlevel == SEC_CONSOLE;
 }
 
 // Anticheat

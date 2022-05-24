@@ -57,7 +57,7 @@ bool WorldSession::ProcessChatMessageAfterSecurityCheck(std::string& msg, uint32
         if (sWorld.getConfig(CONFIG_BOOL_CHAT_FAKE_MESSAGE_PREVENTING))
             stripLineInvisibleChars(msg);
 
-        if (sWorld.getConfig(CONFIG_UINT32_CHAT_STRICT_LINK_CHECKING_SEVERITY) && GetSecurity() < SEC_GAMEMASTER
+        if (sWorld.getConfig(CONFIG_UINT32_CHAT_STRICT_LINK_CHECKING_SEVERITY) && GetSecurity() < SEC_OBSERVER
                 && !ChatHandler(this).isValidChatMessage(msg.c_str()))
         {
             sLog.outError("Player %s (GUID: %u) sent a chatmessage with an invalid link: %s", GetPlayer()->GetName(),
@@ -134,6 +134,19 @@ uint32_t WorldSession::ChatCooldown()
 
     return 0;
 }
+
+void replaceAll(std::string& str, const std::string& from, const std::string& to) 
+{
+    if (from.empty())
+        return;
+
+    size_t start_pos = 0;
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length();
+    }
+}
+
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
@@ -285,6 +298,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
             if (a->isMuted(GetAccountId(), true, type))
                 return;
+
+        replaceAll(msg, "\n", "");
+        replaceAll(msg, "\r", "");
     }
 
 	// ghetto CHAT_MSG_WHISPER via CHAT_MSG_GUILD

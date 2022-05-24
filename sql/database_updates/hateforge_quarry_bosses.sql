@@ -3,14 +3,13 @@
 -- (Humanoid) High Foreman Bargul Blackhammer, display ID 18850, level 54 elite, faction 54, casts 5703 every 25 seconds , cast 27580 every 35 seconds, casts 27579 every minute (21412 HP, 3194 ARMOR, 25 Shadow Resistance, 25 Fire Reistance, damage should be 25% higher then regular), weapon1:7945, weapon2: 7941
 -- (Humanoid) Engineer Figgles <The Creator>, display ID 18832, level 54 elite, faction 54, casts 24111 one time 10 seconds after start of fight (18442 HP, 2980 ARMOR, 50 Fire resistance, 50 Nature Resistance, 10% higher damage) , weapon 1911
 -- (Humanoid) Har'gesh Doomcaller <Twilight's Hammer>, display ID 18833, level 57 elite, faction 54, at the start of fight, goes immune, summons 2 monsters called 'Faceless Terror' , once the Faceless Terror are killed, Har'gesh becomes fightable again, and can cast the following spells : 11668 every 30 seconds, casts 27646 every 90 seconds, casts 17393 every 20 seconds (21412 HP, 1950 ARMOR, 10000 MANA, 100 Shadow Resistance , 5% more damage then normal) 
--- (NO SPECIES TAG)Faceless Terror, display ID 18236, level 53 elite, faction 54, has 30% more hp and damage then regular, immune to shadow damage 
-
+-- (NO SPECIES TAG)Faceless Terror, display ID 18236, level 53 elite, faction 54, has 30% more hp and damage then regular, immune to shadow damage.
 REPLACE INTO creature_template VALUES
-(60734, 8049, 0, 0, 0, 'Hatereaver Anhilator', NULL, 0, 55, 55, 25301, 25301, 0, 0, 4796, 54, 0, 1, 1.14286, 1.6, 20, 5, 0, 1, 1, 444, 571, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 9, 0, 60734, 0, 0, 0, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60735, 18850, 0, 0, 0, 'High Foreman Bargul Blackhammer', NULL, 0, 54, 54, 21412, 21412, 0, 0, 3194, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 394, 510, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60735, 0, 0, 0, 25, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60736, 18832, 0, 0, 0, 'Engineer Figgles', 'The Creator', 0, 54, 54, 18442, 18442, 0, 0, 2980, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 377, 488, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60736, 0, 0, 0, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60737, 18833, 0, 0, 0, 'Har\'gesh Doomcaller', 'Twilight\'s Hammer', 0, 57, 57, 21412, 21412, 10000, 10000, 1950, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 343, 444, 0, 238, 6.5, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 45.6, 62.7, 100, 7, 0, 60737, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60738, 18236, 0, 0, 0, 'Faceless Terror', NULL, 0, 53, 53, 8840, 8840, 0, 0, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 394, 510, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 32, 0, 0, '');
+(60734, 8049, 0, 0, 0, 'Hatereaver Annihilator', NULL, 0, 55, 55, 25301, 25301, 0, 0, 4796, 54, 0, 1, 1.14286, 1.6, 20, 5, 0, 1, 1, 666, 856, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 9, 0, 60734, 0, 0, 0, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 2798337887, 0, 0, 0, ''),
+(60735, 18850, 0, 0, 0, 'High Foreman Bargul Blackhammer', NULL, 0, 54, 54, 21412, 21412, 0, 0, 3194, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 512, 663, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60735, 0, 0, 0, 25, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 2798337887, 0, 0, 0, ''),
+(60736, 18832, 0, 0, 0, 'Engineer Figgles', 'The Creator', 0, 54, 54, 18442, 18442, 0, 0, 2980, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 509, 659, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 60736, 0, 0, 0, 50, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 2798337887, 0, 0, 0, ''),
+(60737, 18833, 0, 0, 0, 'Har\'gesh Doomcaller', 'Twilight\'s Hammer', 0, 57, 57, 21412, 21412, 10000, 10000, 1950, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 171, 222, 0, 238, 6.5, 2000, 2000, 4, 0, 0, 0, 0, 0, 0, 0, 45.6, 62.7, 100, 7, 0, 60737, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 1029, 1349, '', 0, 3, 0, 0, 3, 0, 0, 0, 2798337887, 0, 0, 0, 'boss_hargesh_doomcaller'),
+(60738, 18236, 0, 0, 0, 'Faceless Terror', NULL, 0, 53, 53, 8840, 8840, 0, 0, 2432, 54, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 591, 765, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 32, 0, 0, '');
 
 set @equip_template = 20093; set @weapon_1 = 1911; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60736;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -20,7 +19,7 @@ set @equip_template = 20092; set @weapon_1 = 7945; set @weapon_2 = 7941; set @we
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
-set @equip_template = 20091; set @weapon_1 = 14837; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60734;
+set @equip_template = 20091; set @weapon_1 = 0; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60734;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
@@ -33,10 +32,10 @@ set @spellid_1 = 24111; -- Corrosive Poison
 set @probability_1 = 100; 
 set @casttarget_1 = 1; 
 set @castflags_1 = 4;
-set @delayinitialmin_1 = 10; 
+set @delayinitialmin_1 = 0; 
 set @delayinitialmax_1 = 10; 
-set @delayrepeatmin_1 = 1200; 
-set @delayrepeatmax_1 = 1200;
+set @delayrepeatmin_1 = 45; 
+set @delayrepeatmax_1 = 45;
 
 set @spellid_2 = 0;
 set @probability_2 = 0;
@@ -134,8 +133,8 @@ set @casttarget_1 = 1;
 set @castflags_1 = 4;
 set @delayinitialmin_1 = 6; 
 set @delayinitialmax_1 = 6; 
-set @delayrepeatmin_1 = 25; 
-set @delayrepeatmax_1 = 25;
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 20;
 
 set @spellid_2 = 27580; -- Mortal Strike
 set @probability_2 = 100;
@@ -143,8 +142,8 @@ set @casttarget_2 = 1;
 set @castflags_2 = 4;
 set @delayinitialmin_2 = 3; 
 set @delayinitialmax_2 = 3; 
-set @delayrepeatmin_2 = 35; 
-set @delayrepeatmax_2 = 35;
+set @delayrepeatmin_2 = 30; 
+set @delayrepeatmax_2 = 30;
 
 set @spellid_3 = 27579; -- Demoralizing Shout
 set @probability_3 = 100; 
@@ -152,17 +151,17 @@ set @casttarget_3 = 1;
 set @castflags_3 = 4;
 set @delayinitialmin_3 = 1; 
 set @delayinitialmax_3 = 1; 
-set @delayrepeatmin_3 = 60; 
-set @delayrepeatmax_3 = 60;
+set @delayrepeatmin_3 = 55; 
+set @delayrepeatmax_3 = 55;
 
-set @spellid_4 = 0;
-set @probability_4 = 0; 
+set @spellid_4 = 12686; -- Enrage
+set @probability_4 = 100; 
 set @casttarget_4 = 0; 
-set @castflags_4 = 0;
+set @castflags_4 = 4;
 set @delayinitialmin_4 = 0; 
 set @delayinitialmax_4 = 0; 
-set @delayrepeatmin_4 = 0; 
-set @delayrepeatmax_4 = 0;
+set @delayrepeatmin_4 = 1200; 
+set @delayrepeatmax_4 = 1200;
 
 set @spellid_5 = 0; 
 set @probability_5 = 0; 
@@ -201,7 +200,7 @@ set @delayrepeatmin_8 = 0;
 set @delayrepeatmax_8 = 0;
 
 -- Do not touch this part:
-update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 5703, spell_id2 = 27580, spell_id3 = 27579 
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 5703, spell_id2 = 27580, spell_id3 = 27579, spell_id4 = 12686
 where entry = @creature_entry;
 replace into creature_spells (entry, name, 
 spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
@@ -233,8 +232,8 @@ set @casttarget_1 = 1;
 set @castflags_1 = 4;
 set @delayinitialmin_1 = 6; 
 set @delayinitialmax_1 = 6; 
-set @delayrepeatmin_1 = 30; 
-set @delayrepeatmax_1 = 30;
+set @delayrepeatmin_1 = 25; 
+set @delayrepeatmax_1 = 25;
 
 set @spellid_2 = 19983; -- Cleave
 set @probability_2 = 100;
@@ -242,8 +241,8 @@ set @casttarget_2 = 1;
 set @castflags_2 = 4;
 set @delayinitialmin_2 = 3; 
 set @delayinitialmax_2 = 3; 
-set @delayrepeatmin_2 = 40; 
-set @delayrepeatmax_2 = 40;
+set @delayrepeatmin_2 = 35; 
+set @delayrepeatmax_2 = 35;
 
 set @spellid_3 = 11876; -- War Stomp
 set @probability_3 = 100; 
@@ -251,8 +250,8 @@ set @casttarget_3 = 1;
 set @castflags_3 = 4;
 set @delayinitialmin_3 = 1; 
 set @delayinitialmax_3 = 1; 
-set @delayrepeatmin_3 = 45; 
-set @delayrepeatmax_3 = 45;
+set @delayrepeatmin_3 = 40; 
+set @delayrepeatmax_3 = 40;
 
 set @spellid_4 = 0;
 set @probability_4 = 0; 
@@ -326,3 +325,54 @@ REPLACE INTO creature_display_info_addon VALUES
 (18833, 0, 0, 0, 0),
 (18236, 0, 0, 0, 0),
 (18850, 0, 0, 0, 0);
+
+
+-- Nolin Beginn
+UPDATE `creature_template` SET `unit_class` = '4' WHERE `entry` = 60737; -- Hargesh should have mana since he is casting shadow spells
+
+UPDATE `creature_template` SET `script_name` = 'boss_hargesh_doomcaller' WHERE `entry` = 60737; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_bargul_blackhammer' WHERE `entry` = 60735; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_engineer_figgles' WHERE `entry` = 60736; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'boss_hatereaver_annhilator' WHERE `entry` = 60734; -- Assign C++ Script
+
+UPDATE `creature_template` SET `script_name` = 'mob_hateforge_cleric' WHERE `entry` = 60718; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'mob_hateforge_taskmaster' WHERE `entry` = 60723; -- Assign C++ Script
+UPDATE `creature_template` SET `script_name` = 'mob_twilight_fireblade' WHERE `entry` = 60725; -- Assign C++ Script
+
+UPDATE `creature_template` SET `spell_id1` = 0, `spell_id2` = 0, `spell_id3` = 0, `spell_id4` = 0, `spell_list_id` = 0 WHERE `entry` IN -- Remove spells and spell list (Replaced by C++ Scripts)
+(
+	60737,
+	60735,
+	60736,
+	60734,
+	60718,
+	60723,
+	60725
+);
+
+UPDATE `creature_template` SET `ai_name` = "" WHERE `entry` IN -- Remove Event AI (Replaced by C++ Scripts)
+(
+	60737,
+	60735,
+	60736,
+	60734,
+	60718,
+	60723,
+	60725
+);
+
+REPLACE INTO `script_texts` (`entry`, `content_default`, `sound`, `type`, `comment`) VALUES
+-- Boss Bargul Blackhammer
+('-1999950', "We must maintain our production! WORK HARDER!", '60349', '6', "BARGUL_BLACKHAMMER_OOC_0"),
+('-1999951', "Shadowforge shall reward us all for our work here in the Quarry!", '60350', '6', "BARGUL_BLACKHAMMER_OOC_1"),
+('-1999952', "I don't see enough of you busy out there, We don't have all month!", '60351', '6', "BARGUL_BLACKHAMMER_OOC_2"),
+('-1999953', "You think you contend with the High Foreman? Feel the fury of the Dark Iron!", '60348', '0', "BARGUL_BLACKHAMMER_AGGRO"),
+('-1999954', "Curse you.. Damn you... The work, must go on.", '60352', '0', "BARGUL_BLACKHAMMER_DEAD"),
+-- Boss Engineer Figgles
+('-1999955', "You foolish outsiders! You're not supposed to be here interrupting my great work. Broody, get them, destroy them!", '60353', '0', "Engineer_Figgles_AGGRO"),
+('-1999956', "I.. Was going to build an army... I would've never been stopped!", '60354', '0', "Engineer_Figgles_DEAD"),
+-- Boss Hatereaver Annihilator
+('-1999957', "Unidentified intruders, defensive measures, engaged.", '60355', '0', "Hatereaver_Annihilator_AGGRO"),
+('-1999958', "Activate emergency power... Emergency power activation failed... Commence... Shut... Do..wn...", '60356', '0', "Hatereaver_Annihilator_DEAD");
+-- Nolin End
+
