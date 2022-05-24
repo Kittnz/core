@@ -126,7 +126,7 @@ public:
 
     void JustDied(Unit* pKiller) override
     {
-        if (!m_pInstance)
+        if (!m_pInstance || !pKiller)
             return;
 
         DespawnVoidZones();

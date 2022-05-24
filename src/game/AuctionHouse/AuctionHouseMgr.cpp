@@ -156,7 +156,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
         else
         {
             bidder_accId = sObjectMgr.GetPlayerAccountIdByGUID(bidder_guid);
-            bidder_security = sAccountMgr.GetSecurityRanks(bidder_accId);
+            bidder_security = sAccountMgr.GetSecurity(bidder_accId);
 
             if (bidder_security > SEC_PLAYER)               // not do redundant DB requests
             {
@@ -165,7 +165,7 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
             }
         }
 
-        if (bidder_security >= RANK_STAFF)
+        if (bidder_security > SEC_PLAYER)
         {
             ObjectGuid owner_guid = ObjectGuid(HIGHGUID_PLAYER, auction->owner);
             std::string owner_name;

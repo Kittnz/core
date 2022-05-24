@@ -105,6 +105,57 @@ bool ChatHandler::HandleReloadQuestTemplateCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleAccountSetGmLevelCommand(char* args)
+{
+    char* accountStr = ExtractOptNotLastArg(&args);
+
+    std::string targetAccountName;
+    Player* targetPlayer = nullptr;
+    uint32 targetAccountId = ExtractAccountId(&accountStr, &targetAccountName, &targetPlayer);
+    if (!targetAccountId)
+        return false;
+
+    /// only target player different from self allowed
+    if (GetAccountId() == targetAccountId)
+        return false;
+
+    int32 gm;
+    if (!ExtractInt32(&args, gm))
+        return false;
+
+    if (gm < SEC_PLAYER || gm > SEC_ADMINISTRATOR)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    /// can set security level only for target with less security and to less security that we have
+    /// This is also reject self apply in fact
+    if (HasLowerSecurityAccount(nullptr, targetAccountId, true))
+        return false;
+
+    /// account can't set security to greater level, need more power GM or console
+    AccountTypes plSecurity = GetAccessLevel();
+    if (AccountTypes(gm) > plSecurity)
+    {
+        SendSysMessage(LANG_YOURS_SECURITY_IS_LOW);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (targetPlayer)
+    {
+        ChatHandler(targetPlayer).PSendSysMessage(LANG_YOURS_SECURITY_CHANGED, GetNameLink().c_str(), gm);
+        targetPlayer->GetSession()->SetSecurity(AccountTypes(gm));
+    }
+
+    PSendSysMessage(LANG_YOU_CHANGE_SECURITY, targetAccountName.c_str(), gm);
+    sAccountMgr.SetSecurity(targetAccountId, AccountTypes(gm));
+
+    return true;
+}
+
 /// Set password for account
 bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
 {
@@ -120,6 +171,10 @@ bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
     if (!szPassword1 || !szPassword2)
         return false;
 
+    /// can set password only for target with less security
+    /// This is also reject self apply in fact
+    if (HasLowerSecurityAccount(nullptr, targetAccountId, true))
+        return false;
 
     if (strcmp(szPassword1, szPassword2))
     {
@@ -150,77 +205,6 @@ bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
     }
 
     return true;
-}
-
-bool ChatHandler::HandleAccountRankAddCommand(char* args)
-{
-	std::string AccountName;
-	uint32 targetAccountId = ExtractAccountId(&args, &AccountName);
-	if (!targetAccountId)
-		return false;
-
-    char* Ranks = ExtractQuotedOrLiteralArg(&args);
-    if (Ranks == nullptr)
-    {
-        return false;
-    }
-
-    std::string RankStr(Ranks);
-    sAccountMgr.AddRanksToAccount(targetAccountId, RankStr);
-
-    return true;
-}
-
-bool ChatHandler::HandleAccountRankDeleteCommand(char* args)
-{
-	std::string AccountName;
-	uint32 targetAccountId = ExtractAccountId(&args, &AccountName);
-	if (!targetAccountId)
-		return false;
-
-	char* Ranks = ExtractQuotedOrLiteralArg(&args);
-	if (Ranks == nullptr)
-	{
-		return false;
-	}
-
-	std::string RankStr(Ranks);
-	sAccountMgr.RemoveRanksFromAccount(targetAccountId, RankStr);
-	return true;
-}
-
-bool ChatHandler::HandleAccountRankQueryCommand(char* args)
-{
-	std::string AccountName;
-	uint32 targetAccountId = ExtractAccountId(&args, &AccountName);
-	if (!targetAccountId)
-		return false;
-
-    std::string Ranks;
-    sAccountMgr.QueryAccountRanks(targetAccountId, Ranks);
-
-	Tokenizer RankTokens(Ranks, '|');
-    if (RankTokens.size() == 0)
-    {
-        PSendSysMessage("Player with account name \"%s\" doesn't have any ranks", AccountName.c_str());
-        return true;
-    }
-
-    std::stringstream ss;
-    ss << "Player with account name \"";
-    ss << AccountName;
-    ss << "\" has ranks: ";
-
-    for (const char* Rank : RankTokens)
-    {
-        ss << Rank;
-        ss << " ";
-    }
-
-    std::string Message = ss.str();
-    PSendSysMessage("%s", Message.c_str());
-
-	return true;
 }
 
 bool ChatHandler::HandleMaxSkillCommand(char* /*args*/)
@@ -1938,7 +1922,7 @@ bool ChatHandler::HandleDieCommand(char* /*args*/)
 
     if (target->GetTypeId() == TYPEID_PLAYER)
     {
-        if (IsAdmin((Player*)target))
+        if (HasLowerSecurity((Player*)target, ObjectGuid(), false))
             return false;
     }
 
@@ -2192,7 +2176,7 @@ bool ChatHandler::HandleAuraCommand(char* args)
     }
 
     // Only allow admins to use auras in other players
-    if (GetSession()->GetSecurity() & RANK_ADMIN)
+    if (GetSession()->GetSecurity() < SEC_ADMINISTRATOR)
         target = GetSession()->GetPlayer();
 
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
@@ -3359,7 +3343,7 @@ bool ChatHandler::HandleBanAllIPCommand(char* args)
         reason = "<no reason given>";
 
     uint32 maxLevel = 10;
-    uint32 minId = 0; // Don't show GM accounts
+    uint32 minId = GetAccessLevel() < SEC_ADMINISTRATOR ? 100 : 0; // Don't show GM accounts
 
     std::string ip = ipStr;
     LoginDatabase.escape_string(ip);
@@ -4001,7 +3985,7 @@ bool ChatHandler::HandleCastCommand(char* args)
     }
 
     // Only allow admins to cast spells in other players
-    if (GetSession()->GetSecurity() & RANK_ADMIN)
+    if (GetSession()->GetSecurity() < SEC_ADMINISTRATOR)
         target = GetSession()->GetPlayer();
 
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
@@ -4229,7 +4213,7 @@ bool ChatHandler::HandleInstanceUnbindCommand(char* args)
         return false;
 
     Player* player = GetSelectedPlayer();
-    if (!player || GetAccessLevel() < RANK_ADMIN) // no one able to reset someone else instances, unless admin
+    if (!player || GetAccessLevel() < SEC_ADMINISTRATOR)
         player = m_session->GetPlayer();
 
     uint32 mapid = 0;
@@ -4313,8 +4297,8 @@ bool ChatHandler::HandleInstanceStatsCommand(char* /*args*/)
 bool ChatHandler::HandleGMListFullCommand(char* /*args*/)
 {
     ///- Get the accounts with GM Level >0
-    QueryResult *result = LoginDatabase.PQuery("SELECT username, gmlevel FROM account "
-                                                "WHERE gmlevel > 0");
+    QueryResult *result = LoginDatabase.PQuery("SELECT username, rank FROM account"
+                          "WHERE rank > 0");
     if (result)
     {
         SendSysMessage(LANG_GMLIST);
@@ -4345,7 +4329,7 @@ bool ChatHandler::HandleGMOnlineListCommand(char* args)
     bool empty = true;
     for (const auto& [accId, session] : sWorld.GetAllSessions())
     {
-        if (!session || !session->GetPlayer() || session->GetSecurity() < SEC_GAMEMASTER)
+        if (!session || !session->GetPlayer() || session->GetSecurity() < SEC_OBSERVER)
             continue;
 
         if (empty)
@@ -5096,9 +5080,8 @@ bool ChatHandler::HandleAccountCommand(char* args)
     if (*args)
         return false;
 
-    std::string Ranks;
-    sAccountMgr.ParseSecurityRanks(GetAccessLevel(), Ranks);
-    PSendSysMessage(LANG_ACCOUNT_LEVEL, Ranks.c_str());
+    AccountTypes gmlevel = GetAccessLevel();
+    PSendSysMessage(LANG_ACCOUNT_LEVEL, uint32(gmlevel));
     return true;
 }
 
@@ -5600,6 +5583,9 @@ bool ChatHandler::HandleSummonCommand(char* args)
     if (pTarget)
     {
         std::string nameLink = playerLink(target_name);
+        // check online security
+        if (HasLowerSecurity(pTarget))
+            return false;
 
         if (pTarget->IsBeingTeleported())
         {
@@ -5638,6 +5624,10 @@ bool ChatHandler::HandleSummonCommand(char* args)
     }
     else
     {
+        // check offline security
+        if (HasLowerSecurity(nullptr, target_guid))
+            return false;
+
         std::string nameLink = playerLink(target_name);
 
         PSendSysMessage(LANG_SUMMONING, nameLink.c_str(), GetMangosString(LANG_OFFLINE));
@@ -5795,6 +5785,10 @@ bool ChatHandler::HandleRecallCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target))
         return false;
 
+    // check online security
+    if (HasLowerSecurity(target))
+        return false;
+
     if (target->IsBeingTeleported())
     {
         PSendSysMessage(LANG_IS_TELEPORTED, GetNameLink(target).c_str());
@@ -5904,6 +5898,9 @@ bool ChatHandler::HandleTaxiCheatCommand(char* args)
     Player* chr = GetSelectedPlayer();
     if (!chr)
         chr = m_session->GetPlayer();
+    // check online security
+    else if (HasLowerSecurity(chr))
+        return false;
 
     if (value)
     {
@@ -6001,6 +5998,10 @@ bool ChatHandler::HandleModifyScaleCommand(char* args)
 
     if (target->GetTypeId() == TYPEID_PLAYER)
     {
+        // check online security
+        if (HasLowerSecurity((Player*)target))
+            return false;
+
         PSendSysMessage(LANG_YOU_CHANGE_SIZE, Scale, GetNameLink((Player*)target).c_str());
         if (needReportToTarget((Player*)target))
             ChatHandler((Player*)target).PSendSysMessage(LANG_YOURS_SIZE_CHANGED, GetNameLink().c_str(), Scale);
@@ -6045,6 +6046,10 @@ bool ChatHandler::HandleModifyHPCommand(char* args)
         return false;
     }
 
+    // check online security
+    if (chr->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity(chr->ToPlayer()))
+        return false;
+
     PSendSysMessage(LANG_YOU_CHANGE_HP, chr->ToPlayer() ? GetNameLink(chr->ToPlayer()).c_str() : "<creature>", hp, hpm);
     if (chr->GetTypeId() == TYPEID_PLAYER && needReportToTarget(chr->ToPlayer()))
         ChatHandler(chr->ToPlayer()).PSendSysMessage(LANG_YOURS_HP_CHANGED, GetNameLink().c_str(), hp, hpm);
@@ -6082,6 +6087,10 @@ bool ChatHandler::HandleModifyManaCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+    // check online security
+    if (chr->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity(chr->ToPlayer()))
+        return false;
 
     PSendSysMessage(LANG_YOU_CHANGE_MANA, chr->ToPlayer() ? GetNameLink(chr->ToPlayer()).c_str() : "<creature>", mana, manam);
     if (chr->GetTypeId() == TYPEID_PLAYER && needReportToTarget(chr->ToPlayer()))
@@ -6338,6 +6347,10 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
 
     if (target)
     {
+        // check online security
+        if (HasLowerSecurity(target))
+            return false;
+
         std::string chrNameLink = playerLink(target_name);
 
         if (target->IsBeingTeleported())
@@ -6355,6 +6368,10 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
     }
     else
     {
+        // check offline security
+        if (HasLowerSecurity(nullptr, target_guid))
+            return false;
+
         std::string nameLink = playerLink(target_name);
 
         PSendSysMessage(LANG_TELEPORTING_TO, nameLink.c_str(), GetMangosString(LANG_OFFLINE), tele->name.c_str());
@@ -6377,6 +6394,10 @@ bool ChatHandler::HandleTeleGroupCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+    // check online security
+    if (HasLowerSecurity(player))
+        return false;
 
     // id, or string, or [name] Shift-click form |color|Htele:id|h[name]|h|r
     GameTele const* tele = ExtractGameTeleFromLink(&args);
@@ -6403,6 +6424,10 @@ bool ChatHandler::HandleTeleGroupCommand(char* args)
 
         if (!pl || !pl->GetSession())
             continue;
+
+        // check online security
+        if (HasLowerSecurity(pl))
+            return false;
 
         std::string plNameLink = GetNameLink(pl);
 
@@ -6439,6 +6464,10 @@ bool ChatHandler::HandleGroupgoCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target))
         return false;
 
+    // check online security
+    if (HasLowerSecurity(target))
+        return false;
+
     Group* grp = target->GetGroup();
 
     std::string nameLink = GetNameLink(target);
@@ -6471,6 +6500,10 @@ bool ChatHandler::HandleGroupgoCommand(char* args)
 
         if (!pl || pl == pPlayer || !pl->GetSession())
             continue;
+
+        // check online security
+        if (HasLowerSecurity(pl))
+            return false;
 
         std::string plNameLink = GetNameLink(pl);
 
@@ -6889,6 +6922,10 @@ bool ChatHandler::HandleMuteCommand(char* args)
             target = session->GetPlayer();
     }
 
+    // must have strong lesser security level
+    if (HasLowerSecurity(target, target_guid, true))
+        return false;
+
     time_t mutetime = time(nullptr) + notspeaktime * 60;
 
     if (target)
@@ -6932,6 +6969,10 @@ bool ChatHandler::HandleUnmuteCommand(char* args)
         if (WorldSession* session = sWorld.FindSession(account_id))
             target = session->GetPlayer();
     }
+
+    // must have strong lesser security level
+    if (HasLowerSecurity(target, target_guid, true))
+        return false;
 
     if (target)
     {
@@ -8173,6 +8214,10 @@ bool ChatHandler::HandleModifyRepCommand(char* args)
         return false;
     }
 
+    // check online security
+    if (HasLowerSecurity(target))
+        return false;
+
     uint32 factionId;
     if (!ExtractUint32KeyFromLink(&args, "Hfaction", factionId))
         return false;
@@ -8793,6 +8838,11 @@ bool ChatHandler::HandleDeMorphCommand(char* /*args*/)
     if (!target)
         target = m_session->GetPlayer();
 
+
+    // check online security
+    else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*)target))
+        return false;
+
     target->DeMorph();
 
     return true;
@@ -8812,6 +8862,10 @@ bool ChatHandler::HandleModifyMorphCommand(char* args)
     Unit* target = GetSelectedUnit();
     if (!target)
         target = m_session->GetPlayer();
+
+    // check online security
+    else if (target->GetTypeId() == TYPEID_PLAYER && HasLowerSecurity((Player*)target))
+        return false;
 
     // Different actions for specific display_ids
     switch (display_id)
@@ -8857,6 +8911,10 @@ bool ChatHandler::HandleModifyMoneyCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+    // check online security
+    if (HasLowerSecurity(chr))
+        return false;
 
     int32 addmoney = atoi(args);
 
@@ -8982,6 +9040,10 @@ bool ChatHandler::HandleKickPlayerCommand(char* args)
         return false;
     }
 
+    // check online security
+    if (HasLowerSecurity(target))
+        return false;
+
     bool force = extraArgs.find("force") != std::string::npos;
 
     // [Hardcore] Prevent death caused by getting disconnected while in-fight
@@ -9061,6 +9123,9 @@ bool ChatHandler::HandlePInfoCommand(char* args)
     ObjectGuid target_guid;
     std::string target_name;
     if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name, true))
+        return false;
+
+    if (HasLowerSecurity(target, target ? ObjectGuid() : target_guid))
         return false;
 
     PInfoHandler::HandlePInfoCommand(m_session, target, target_guid, target_name);
@@ -9902,12 +9967,20 @@ bool ChatHandler::HandleCharacterRenameCommand(char* args)
     {
         if (target)
         {
+            // check online security
+            if (HasLowerSecurity(target))
+                return false;
+
             PSendSysMessage(LANG_RENAME_PLAYER, GetNameLink(target).c_str());
             target->SetAtLoginFlag(AT_LOGIN_RENAME);
             CharacterDatabase.PExecute("UPDATE characters SET at_login = at_login | '1' WHERE guid = '%u'", target->GetGUIDLow());
         }
         else
         {
+            // check offline security
+            if (HasLowerSecurity(nullptr, target_guid))
+                return false;
+
             std::string oldNameLink = playerLink(target_name);
 
             PSendSysMessage(LANG_RENAME_PLAYER_GUID, oldNameLink.c_str(), target_guid.GetCounter());
@@ -10352,6 +10425,10 @@ bool ChatHandler::HandleCombatStopCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target))
         return false;
 
+    // check online security
+    if (HasLowerSecurity(target))
+        return false;
+
     target->CombatStop();
     target->GetHostileRefManager().deleteReferences();
     return true;
@@ -10513,6 +10590,10 @@ bool ChatHandler::HandleLookupPlayerCharacterCommand(char* args)
                 std::string ip = fields[1].GetCppString();
                 delete result;
 
+                AccountTypes security = sAccountMgr.GetSecurity(id);
+                if (GetAccessLevel() < security || (GetAccessLevel() < SEC_ADMINISTRATOR && security > SEC_PLAYER))
+                    return LookupPlayerSearchCommand(nullptr, &limit);
+
                 LoginDatabase.escape_string(ip);
                 result = LoginDatabase.PQuery("SELECT id, username FROM account WHERE last_ip = '%s'", ip.c_str());
             }
@@ -10586,6 +10667,10 @@ bool ChatHandler::HandleRepairitemsCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target))
         return false;
 
+    // check online security
+    if (HasLowerSecurity(target))
+        return false;
+
     // Repair items
     target->DurabilityRepairAll(false, 0);
 
@@ -10613,6 +10698,10 @@ bool ChatHandler::HandleWaterwalkCommand(char* args)
         SetSentErrorMessage(true);
         return false;
     }
+
+    // check online security
+    if (HasLowerSecurity(player))
+        return false;
 
     if (value)
         player->SetWaterWalking(true);
@@ -10805,7 +10894,7 @@ bool ChatHandler::HandleCleanCharactersToDeleteCommand(char* args)
 bool ChatHandler::HandleCleanCharactersItemsCommand(char* args)
 {
     bool Real = false;
-    if (m_session->GetSecurity() == RANK_CONSOLE)
+    if (m_session->GetSecurity() == SEC_CONSOLE)
         Real = true;
 
     QueryResult* listDeleteItems = CharacterDatabase.Query("SELECT entry FROM characters_item_delete;");

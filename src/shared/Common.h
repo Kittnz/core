@@ -176,18 +176,11 @@ enum TimeConstants
 enum AccountTypes
 {
     SEC_PLAYER         = 0,
-    SEC_GAMEMASTER     = 1,
-};
-
-// Giperion Turtle specific - Gamemaster ranks (priviliges)
-enum AccountRanks
-{
-    RANK_PLAYER = 0,
-    RANK_STAFF = 1, // it's not a real rank. We using it like "if you have any ranks at all"
-    RANK_CUSTOM_END = 1 << 29,
-
-    RANK_ADMIN = 1 << 30, // special rank, that bypass all checks from custom ranks
-    RANK_CONSOLE = 1 << 31, // not only bypass all other checks, but allow special commands that available only from console
+    SEC_OBSERVER       = 1,
+    SEC_MODERATOR      = 2,
+    SEC_DEVELOPER      = 3,
+    SEC_ADMINISTRATOR  = 4,
+    SEC_CONSOLE        = 5,                               
 };
 
 // Used in mangosd/realmd

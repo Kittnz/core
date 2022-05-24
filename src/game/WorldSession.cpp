@@ -73,10 +73,10 @@ bool MapSessionFilter::Process(WorldPacket * packet)
 }
 
 /// WorldSession constructor
-WorldSession::WorldSession(uint32 id, WorldSocket *sock, uint32 ranks, time_t mute_time, LocaleConstant locale, const std::string& remote_ip) :
+WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_t mute_time, LocaleConstant locale, const std::string& remote_ip) :
     m_muteTime(mute_time), m_connected(true), m_disconnectTimer(0), m_who_recvd(false),
     m_ah_list_recvd(false), _scheduleBanLevel(0),
-    _accountFlags(0), m_idleTime(WorldTimer::getMSTime()), _player(nullptr), m_Socket(sock), _security(ranks), _accountId(id), _logoutTime(0), m_inQueue(false),
+    _accountFlags(0), m_idleTime(WorldTimer::getMSTime()), _player(nullptr), m_Socket(sock), _security(sec), _accountId(id), _logoutTime(0), m_inQueue(false),
     m_playerLoading(false), m_playerLogout(false), m_playerRecentlyLogout(false), m_playerSave(false), m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
     m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_warden(nullptr), m_cheatData(nullptr),
     m_bot(nullptr), m_lastReceivedPacketTime(0), _clientOS(CLIENT_OS_UNKNOWN), _gameBuild(0),
@@ -884,7 +884,7 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
     if (cheatAction & CHEAT_ACTION_MUTE_PUB_CHANS)
     {
         action = "Muted from public channels.";
-        if (GetSecurity() == RANK_PLAYER)
+        if (GetSecurity() == SEC_PLAYER)
         {
             LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS, GetAccountId());
             SetAccountFlags(GetAccountFlags() | ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS);
@@ -893,7 +893,7 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
     if (cheatAction & CHEAT_ACTION_BAN_IP_ACCOUNT)
     {
         action = "Account+IP banned.";
-        if (GetSecurity() == RANK_PLAYER)
+        if (GetSecurity() == SEC_PLAYER)
         {
             std::string _reason = std::string("CHEAT") + ": " + reason;
             sWorld.BanAccount(BAN_ACCOUNT, GetUsername(), banSeconds, _reason, detector);
@@ -906,13 +906,13 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
     {
         action = "Banned.";
         std::string _reason = std::string("CHEAT") + ": " + reason;
-        if (GetSecurity() == RANK_PLAYER)
+        if (GetSecurity() == SEC_PLAYER)
             sWorld.BanAccount(BAN_ACCOUNT, GetUsername(), banSeconds, _reason, detector);
     }
     else if (cheatAction & CHEAT_ACTION_KICK)
     {
         action = "Kicked.";
-        if (GetSecurity() == RANK_PLAYER)
+        if (GetSecurity() == SEC_PLAYER)
             KickPlayer();
     }
     else if (cheatAction & CHEAT_ACTION_REPORT_GMS)

@@ -1,0 +1,1 @@
+update creature_template set name = 'Hatereaver Annihilator' where entry = 60734;
