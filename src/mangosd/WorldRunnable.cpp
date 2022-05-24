@@ -59,6 +59,7 @@ void WorldRunnable::operator()()
         realCurrTime = WorldTimer::getMSTime();
 
         uint32 diff = WorldTimer::tick();
+        sWorld.SetLastDiff(diff);
         if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE) && diff > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE))
             sLog.out(LOG_PERFORMANCE, "Slow world update: %ums", diff);
 
