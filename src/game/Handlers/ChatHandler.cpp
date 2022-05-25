@@ -137,6 +137,19 @@ uint32_t WorldSession::ChatCooldown()
     return 0;
 }
 
+void replaceAll(std::string& str, const std::string& from, const std::string& to) 
+{
+    if (from.empty())
+        return;
+
+    size_t start_pos = 0;
+    while ((start_pos = str.find(from, start_pos)) != std::string::npos) {
+        str.replace(start_pos, from.length(), to);
+        start_pos += to.length();
+    }
+}
+
+
 void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 {
     uint32 type;
@@ -287,6 +300,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
             if (a->isMuted(GetAccountId(), true, type))
                 return;
+
+        replaceAll(msg, "\n", "");
+        replaceAll(msg, "\r", "");
     }
 
     const std::string debuffPrefix = "TW_Debuff";
