@@ -93,16 +93,18 @@ public:
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        PlayVoiceScriptsOOC(uiDiff);
+        if (m_creature->SelectHostileTarget() && m_creature->GetVictim())
+        {
+            CastStunningStrike(uiDiff);
+            CastMortalStrike(uiDiff);
+            CastDemoralizingShout(uiDiff);
 
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        CastStunningStrike(uiDiff);
-        CastMortalStrike(uiDiff);
-        CastDemoralizingShout(uiDiff);
-
-        DoMeleeAttackIfReady();
+            DoMeleeAttackIfReady();
+        }
+        else
+        {
+            PlayVoiceScriptsOOC(uiDiff); // Shouldn't do if infight
+        }
     }
 };
 
