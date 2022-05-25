@@ -1,7 +1,7 @@
 
 -- Custom Graveyard
 REPLACE INTO `custom_graveyards` (`id`, `name`, `map_id`, `zone_id`, `area_id`, `max_level`, `map_gy_alliance`, `gy_x_alliance`, `gy_y_alliance`, `gy_z_alliance`, `orientation_alliance`, `map_gy_horde`, `gy_x_horde`, `gy_y_horde`, `gy_z_horde`, `orientation_horde`) VALUES
-(30, 'Scarlet Citadel', 44, 0, 0, 60, 0, 2603.33, -534.807, 89, 2.46552, 0, 2603.33, -534.807, 89, 2.46552);
+(30, 'Scarlet Citadel', 45, 0, 0, 60, 0, 2603.33, -534.807, 89, 2.46552, 0, 2603.33, -534.807, 89, 2.46552);
 
 -- Teleport
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES
@@ -32,7 +32,7 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 (5000014, 3, 23431, 'SC_ARDAEUS_ACHIEVEMENT_CHEST', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 -- Reserved Range 650000-650100
-DELETE FROM `gameobject` WHERE `guid` BETWEEN 5000000 AND 5000013; -- Erase deprecated GOs
+-- DELETE FROM `gameobject` WHERE `guid` BETWEEN 5000000 AND 5000013; -- Erase deprecated GOs
 
 REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
 -- Daelus' Room
@@ -44,14 +44,14 @@ REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `pos
 -- Nolin's Room
 (650005, 5000005, 45, 171.915, -126.624, 16.869, 1.56309, 0, 0, 0.704379, 0.709825, 300, 300, 100, 1, 1, 533.333),
 -- Ardaeus' Room
-(650006, 5000006, 45, 250.217, -116.853, 16.8702, 0.0105844, 0, 0, 0.00529215, 0.999986, 0, 0, 100, 1, 1, 533.333),
+(650006, 5000006, 45, 250.217, -116.853, 16.8702, 0.0105844, 0, 0, 0.00529215, 0.999986, 0, 0, 100, 0, 1, 533.333),
 (650007, 5000007, 45, 306.483, -116.88, 33.705, 3.12978, 0, 0, 0.999983, 0.00590698, 0, 0, 100, 1, 1, 533.333),
 -- Mariella's Room
-(650008, 5000008, 45, 220.03, 48.4829, 33.7034, 3.14467, 0, 0, 0.999999, -0.0015388, 0, 0, 100, 1, 1, 533.333),
+(650008, 5000008, 45, 220.03, 48.4829, 33.7034, 3.14467, 0, 0, 0.999999, -0.0015388, 0, 0, 100, 0, 1, 533.333),
 -- Right Wing's Door
 (650009, 5000009, 45, 332.627, -55.8007, 33.7003, 3.13626, 0, 0, 0.999996, 0.00266476, 0, 0, 100, 1, 1, 533.333),
 -- Abbendis' Room
-(650010, 5000010, 45, 421.206, -8.97886, 37.7045, 4.70785, 0, 0, 0.70871, -0.7055, 0, 0, 100, 1, 1, 533.333),
+(650010, 5000010, 45, 421.206, -8.97886, 37.7045, 4.70785, 0, 0, 0.70871, -0.7055, 0, 0, 100, 0, 1, 533.333),
 (650011, 5000011, 45, 421.228, -144.38, 35.0195, 4.69175, 0, 0, 0.714365, -0.699774, 0, 0, 100, 1, 1, 533.333);
 
 
@@ -115,6 +115,11 @@ REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `displa
 
 
 -- Reserved Range 1300000-1300100
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
+(1300000, 2000000, 0, 0, 0, 45, 0, 0, 67.3897, 13.3098, 16.8691, 6.2806, 25, 25, 0, 100, 100, 0, 1, 200),  -- Boss High Monk Daelus
+(1300001, 2000001, 0, 0, 0, 45, 0, 0, 283.91, -116.886, 16.8717, 3.14647, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss Grand Magi Ardaeus
+(1300002, 2000002, 0, 0, 0, 45, 0, 0, 188.304, 48.5719, 32.8437, 6.28209, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss High Inquisitor Mariella
+(1300003, 2000003, 0, 0, 0, 45, 0, 0, 420.76, -120.074, 35.7493, 1.55949, 25, 25, 0, 100, 100, 0, 1, 200); -- Boss High General Abbendis
 
 
 
