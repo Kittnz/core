@@ -60,6 +60,11 @@ enum ScarletCitadelData
     MAX_DATA
 };
 
+struct LocationXYZO
+{
+    float m_fX{}, m_fY{}, m_fZ{}, m_fO{};
+};
+
 template <typename Functor>
 void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
 {
