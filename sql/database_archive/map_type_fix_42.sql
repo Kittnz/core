@@ -1,0 +1,1 @@
+update map_template set map_type = 0 where entry = 42;
