@@ -1,0 +1,1 @@
+update creature_template set script_name = 'npc_blacksmithing_specialisations', gossip_menu_id = 0 where entry in (11145, 11176);
