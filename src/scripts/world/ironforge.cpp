@@ -258,9 +258,74 @@ CreatureAI* GetAI_boss_magni_bronzebeard(Creature* pCreature)
     return new boss_magni_bronzebeardAI(pCreature);
 }
 
+// https://database.turtle-wow.org/?npc=11145 Myolor Sunderfury 
+// https://database.turtle-wow.org/?npc=11176 Krathok Moltenfist 
+
+enum BMSpecs
+{
+    SPELL_ARMORSMITH        = 9788,
+    SPELL_WEAPONSMITH       = 9787,
+
+    NPC_MYOLOR_SUNDERFURY = 11145,
+    NPC_KRATHOK_MOLENFIST = 11176,
+
+    GOSSIP_MYOLOR_SUNDERFURY = 3937,
+    GOSSIP_KRATHOK_MOLENFIST = 3953,
+
+    QUEST_ARMORSMITH_ALLIANCE  = 5283,
+    QUEST_ARMORSMITH_HORDE     = 5301,
+    QUEST_WEAPONSMITH_ALLIANCE = 5284,
+    QUEST_WEAPONSMITH_HORDE    = 5302
+};
+
+bool GossipHello_npc_blacksmithing_specialisations(Player* pPlayer, Creature* pCreature)
+{
+    if ((pPlayer->GetQuestRewardStatus(QUEST_WEAPONSMITH_ALLIANCE) || pPlayer->GetQuestRewardStatus(QUEST_WEAPONSMITH_HORDE)) && 
+         pPlayer->GetSkillValue(SKILL_BLACKSMITHING) >= 225 && pPlayer->HasSpell(SPELL_WEAPONSMITH))
+
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I wish to become an armorsmith.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if ((pPlayer->GetQuestRewardStatus(QUEST_ARMORSMITH_ALLIANCE) || pPlayer->GetQuestRewardStatus(QUEST_ARMORSMITH_HORDE)) && 
+        pPlayer->GetSkillValue(SKILL_BLACKSMITHING) >= 225 && pPlayer->HasSpell(SPELL_ARMORSMITH))
+
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I wish to become an weaponsmith.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(pCreature->GetEntry() == NPC_MYOLOR_SUNDERFURY ? GOSSIP_MYOLOR_SUNDERFURY : GOSSIP_KRATHOK_MOLENFIST, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->RemoveSpell(SPELL_WEAPONSMITH, false, false);
+        pPlayer->RemoveQuest(QUEST_WEAPONSMITH_ALLIANCE);
+        pPlayer->RemoveQuest(QUEST_WEAPONSMITH_HORDE);
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->RemoveSpell(SPELL_ARMORSMITH, false, false);
+        pPlayer->RemoveQuest(QUEST_ARMORSMITH_ALLIANCE);
+        pPlayer->RemoveQuest(QUEST_ARMORSMITH_HORDE);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_ironforge()
 {
     Script *newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_blacksmithing_specialisations";
+    newscript->pGossipHello = &GossipHello_npc_blacksmithing_specialisations;
+    newscript->pGossipSelect = &GossipSelect_npc_blacksmithing_specialisations;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_royal_historian_archesonus";
