@@ -1,0 +1,2 @@
+-- Removed Spell: Bone Armor from CG Warriors
+UPDATE creature_spells SET spellid_3 = 0, probability_3 = 0, castTarget_3 = 0, castFlags_3 = 0, delayInitialMin_3 = 0, delayInitialMax_3 = 0, delayRepeatMin_3 = 0, delayRepeatMax_3 = 0 WHERE entry = 180019;

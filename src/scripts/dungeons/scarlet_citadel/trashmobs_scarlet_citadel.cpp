@@ -9,7 +9,6 @@
 #include "scarlet_citadel.h"
 
 
-// Trash INSIDE
 struct Location
 {
     float m_fX, m_fY, m_fZ, m_fO;
@@ -20,50 +19,27 @@ static const Location vfSpawnPoint[] =
     { 128.852097f, -73.639236f, (15.988636f + 0.1f), 1.583155f }
 };
 
-static const Location vfLastWaypoint[] =
+static constexpr uint8 TOTAL_WAYPOINTS{ 18 };
+static const Location vfLastWaypoint[TOTAL_WAYPOINTS] =
 {
-    {} // TODO: Fix coords after dungeon scaling
-    /*
-    { 148.78366f, -18.592115f, 18.007f, 1.59041f }, // 0
-    { 151.75268f, -18.500916f, 18.007f, 1.59041f }, // 1
-    { 154.81858f, -18.524998f, 18.007f, 1.59041f }, // 2
-    { 154.67590f, -21.368568f, 18.007f, 1.59041f }, // 3
-    { 151.72247f, -21.426525f, 18.007f, 1.59041f }, // 4
-    { 148.88095f, -21.477419f, 18.007f, 1.59041f }, // 5
-    { 148.83274f, -24.543039f, 18.007f, 1.59041f }, // 6
-    { 151.78595f, -24.474773f, 18.007f, 1.59041f }, // 7
-    { 154.73963f, -24.433607f, 18.007f, 1.59041f }, // 8
-    { 154.69479f, -27.267065f, 18.007f, 1.59041f }, // 9
-    { 151.73402f, -27.244328f, 18.007f, 1.59041f }, // 10
-    { 148.78012f, -27.267494f, 18.007f, 1.59041f }, // 11
-    { 148.85170f, -30.331608f, 18.007f, 1.59041f }, // 12
-    { 151.79849f, -30.296930f, 18.007f, 1.59041f }, // 13
-    { 154.75230f, -30.262171f, 18.007f, 1.59041f }, // 14
-    { 154.73669f, -33.214294f, 18.007f, 1.59041f }, // 15
-    { 151.79025f, -33.271278f, 18.007f, 1.59041f }, // 16
-    { 148.95544f, -33.304626f, 18.007f, 1.59041f }, // 17
-    { 148.87420f, -36.257507f, 18.007f, 1.59041f }, // 18
-    { 151.82739f, -36.187962f, 18.007f, 1.59041f }, // 19
-    { 154.66903f, -36.142517f, 18.007f, 1.59041f }, // 20
-    { 154.70416f, -39.089146f, 18.007f, 1.59041f }, // 21
-    { 151.85516f, -39.089092f, 18.007f, 1.59041f }, // 22
-    { 148.78916f, -39.089035f, 18.007f, 1.59041f }, // 23
-    { 148.80809f, -42.136555f, 18.007f, 1.59041f }, // 24
-    { 151.86688f, -42.100590f, 18.007f, 1.59041f }, // 25
-    { 154.82078f, -42.077461f, 18.007f, 1.59041f }, // 26
-    { 154.77267f, -45.024055f, 18.007f, 1.59041f }, // 27
-    { 151.72085f, -44.997993f, 18.007f, 1.59041f }, // 28
-    { 148.88606f, -44.964539f, 18.007f, 1.59041f }, // 29
-    { 148.89892f, -47.924526f, 18.007f, 1.59041f }, // 30
-    { 151.74072f, -47.891113f, 18.007f, 1.59041f }, // 31
-    { 154.70851f, -47.859352f, 18.007f, 1.59041f }, // 32
-    { 154.68435f, -50.925259f, 18.007f, 1.59041f }, // 33
-    { 151.73756f, -50.959892f, 18.007f, 1.59041f }, // 34
-    { 148.89576f, -50.993290f, 18.007f, 1.59041f }, // 35
-    { 148.76803f, -53.945572f, 18.007f, 1.59041f }, // 36
-    { 151.82702f, -53.945675f, 18.007f, 1.59041f }, // 37
-    { 154.78801f, -53.945774f, 18.007f, 1.59041f }  // 38
-    */
+    { 128.883f, -48.6615f, 15.99f, 1.55f },
+    { 132.825f, -48.7298f, 15.99f, 1.55f },
+    { 125.016f, -48.6871f, 15.99f, 1.55f },
+    { 125.081f, -36.9308f, 15.99f, 1.55f },
+    { 128.847f, -36.9513f, 15.99f, 1.55f },
+    { 132.736f, -36.8489f, 15.99f, 1.55f },
+    { 132.777f, -25.3095f, 15.99f, 1.55f },
+    { 128.892f, -25.3187f, 15.99f, 1.55f },
+    { 125.063f, -25.3278f, 15.99f, 1.55f },
+    { 125.035f, -13.6799f, 15.99f, 1.55f },
+    { 128.917f, -13.6573f, 15.99f, 1.55f },
+    { 132.745f, -13.7459f, 15.99f, 1.55f },
+    { 132.766f, -2.05773f, 15.99f, 1.55f },
+    { 128.937f, -2.03679f, 15.99f, 1.55f },
+    { 125.003f, -2.01526f, 15.99f, 1.55f },
+    { 125.066f,  9.52406f, 15.99f, 1.55f },
+    { 128.944f,  9.48699f, 15.99f, 1.55f },
+    { 132.826f,  9.47718f, 15.99f, 1.55f }
 };
 
 struct npc_areatriggerAI : public ScriptedAI
@@ -73,11 +49,10 @@ struct npc_areatriggerAI : public ScriptedAI
         npc_areatriggerAI::Reset();
     }
 
-    bool m_bIsTrashSpawned{};
-
-    uint16 m_uiCheckPulse{};
-    uint8 m_uiTrashMob{(38 + 1)};
     uint8 m_uiITR{};
+    uint16 m_uiCheckPulse{};
+
+    bool m_bIsTrashSpawned{};
 
     void Reset() override
     {
@@ -89,7 +64,7 @@ struct npc_areatriggerAI : public ScriptedAI
     {
         m_bIsTrashSpawned = true;
 
-        for ( ; m_uiITR < m_uiTrashMob; ++m_uiITR)
+        for ( ; m_uiITR < TOTAL_WAYPOINTS; ++m_uiITR)
         {
             m_creature->SummonCreature(ScarletCitadelUnit::NPC_FIRST_WING_TRASH, vfSpawnPoint[0].m_fX, vfSpawnPoint[0].m_fY, vfSpawnPoint[0].m_fZ, vfSpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
         }
@@ -130,7 +105,7 @@ CreatureAI* GetAI_npc_areatrigger(Creature* pCreature)
     return new npc_areatriggerAI(pCreature);
 }
 
-// Trash OUTSIDE
+
 struct npc_citadel_inquisitor_AI : public ScriptedAI
 {
     explicit npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -153,6 +128,7 @@ CreatureAI* GetAI_npc_citadel_inquisitor(Creature* pCreature)
 {
     return new npc_citadel_inquisitor_AI(pCreature);
 }
+
 
 struct npc_citadel_valiant_AI : public ScriptedAI
 {
