@@ -2252,9 +2252,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     {
                         if (player->GetShapeshiftForm() == FORM_CAT)
                             player->CastSpell(player, 45710, true);
-
+   
                         if (player->GetShapeshiftForm() == FORM_BEAR || player->GetShapeshiftForm() == FORM_DIREBEAR)
-                            player->CastSpell(player, 45709, true);
+                        {
+                            int32 healthModSpellBasePoints0 = int32(m_casterUnit->GetMaxHealth() * 0.2);
+                            m_casterUnit->CastCustomSpell(m_casterUnit, 45709, &healthModSpellBasePoints0, nullptr, nullptr, true, nullptr);
+                        }
                     }
                 }break;
 
@@ -2351,6 +2354,9 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     if (!unitTarget)
                         return;
 
+                    if (m_spellInfo->Id == 45954 || m_spellInfo->Id == 45953) // dont trigger on custom Sanctified Command
+                        return;
+
                     uint32 spell_id = m_currentBasePoints[eff_idx];
                     SpellEntry const* spell_proto = sSpellMgr.GetSpellEntry(spell_id);
                     if (!spell_proto)
@@ -2359,6 +2365,15 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     m_caster->CastSpell(unitTarget, spell_proto, true, nullptr);
                     return;
                 }
+            }
+
+            switch (m_spellInfo->Id)
+            {
+            case 45954:
+            case 45953:
+            {
+
+            }break;
             }
             break;
         }
@@ -5684,6 +5699,7 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     // must be calculated base at raw base points in spell proto, GetModifier()->m_value for S.Righteousness modified by SPELLMOD_DAMAGE
                     spellId2 = aura->GetSpellProto()->CalculateSimpleValue(EFFECT_INDEX_2);
 
+                    //if (spellInfo->Id == sanctified command)
                     if (spellId2 <= 1)
                         continue;
 
