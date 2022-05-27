@@ -1,0 +1,1 @@
+update map_template set ghost_entrance_map = 1, ghost_entrance_x = 1722.0, ghost_entrance_y = -1272.6 where entry = 802;
