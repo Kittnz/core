@@ -5157,6 +5157,11 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
     PSendSysMessage("Players online: %i (%i queued). Max online: %i (%i queued).", activeClientsNum, queuedClientsNum, maxActiveClientsNum, maxQueuedClientsNum);
     PSendSysMessage(LANG_UPTIME, str.c_str());
 
+    if (GetSession() && GetSession()->GetSecurity() >= SEC_MODERATOR)
+    {
+        PSendSysMessage("Server diff: %u ms", sWorld.GetLastDiff());
+    }
+
     return true;
 }
 
