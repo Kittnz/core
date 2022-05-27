@@ -58,7 +58,7 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
             m_auiData[ScarletCitadelData::DATA_DOOR_DAELUS] = pGo->GetObjectGuid();
 
             if (m_auiEncounter[ScarletCitadelEncounter::TYPE_DAELUS] == DONE)
-                pGo->DeleteLater(); // Remove it (Looks better)
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }
@@ -77,7 +77,7 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
             m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_EXIT] = pGo->GetObjectGuid();
 
             if (m_auiEncounter[ScarletCitadelEncounter::TYPE_ARDAEUS] == DONE)
-                pGo->DeleteLater(); // Remove it (Looks better)
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }
@@ -86,7 +86,7 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
             m_auiData[ScarletCitadelData::DATA_DOOR_RIGHT_WING] = pGo->GetObjectGuid();
 
             if (m_auiEncounter[ScarletCitadelEncounter::TYPE_MARIELLA] == DONE)
-                pGo->DeleteLater(); // Remove it
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }
@@ -104,8 +104,9 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
         {
             m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS] = pGo->GetObjectGuid();
 
-            if (m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] == DONE)
-                pGo->DeleteLater(); // Remove it
+            if ((m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] == DONE) || // Open again when Boss Abbendis is dead
+                (m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] == FAIL))   // Open again when raid wiped
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }

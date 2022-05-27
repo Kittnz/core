@@ -1,0 +1,1 @@
+update item_template set name = 'Steel Plate Barbute' where entry = 83415;

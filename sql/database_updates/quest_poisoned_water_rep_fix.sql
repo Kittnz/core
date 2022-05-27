@@ -1,0 +1,1 @@
+update quest_template set rewrepfaction1 = 749 where entry = 6804;

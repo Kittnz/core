@@ -1,1 +1,0 @@
-update item_template set display_id = 31644, description = '' where entry = 51025;

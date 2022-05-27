@@ -1,1 +1,0 @@
-update creature_template set script_name = 'generic_spell_ai' where entry = 750;
