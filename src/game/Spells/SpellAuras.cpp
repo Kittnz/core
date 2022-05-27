@@ -5429,6 +5429,7 @@ void Aura::HandleShapeshiftBoosts(bool apply)
 
         case FORM_NEW_TREE:
             spellId1 = 45707;
+            spellId2 = 45706;
             break;
 
         case FORM_SPIRITOFREDEMPTION:
