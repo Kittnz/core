@@ -332,6 +332,8 @@ struct npc_citadel_footman_AI : public ScriptedAI
             {
                 DoCast(m_creature->GetVictim(), SPELL_HAMSTRING);
 
+                m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
+
                 m_uiDisarm_Timer = 7000;
             }
         }
@@ -425,13 +427,26 @@ struct npc_eric_dark_AI : public ScriptedAI
 
     std::vector<ObjectGuid> m_vSpawnedAdds;
 
+    uint32 m_uiLightningCloud_Timer{};
+    uint32 m_uiLightningWave_Timer{};
+    uint32 m_uiDrainMana_Timer{};
+    uint32 m_uiEnergize_Timer{};
+
     // Areatrigger
     uint16 m_uiCheckPulse{};
     bool m_bIsTrashAllowedToSpawn{};
 
     void Reset() override
     {
+        m_uiLightningCloud_Timer = 5000;
+        m_uiLightningWave_Timer = 1000;
+        m_uiDrainMana_Timer = 5000;
+        m_uiEnergize_Timer = 300000; // 5 Minutes
+
         DespawnAdds();
+
+        if (m_creature->HasAura(SPELL_ENERGIZE))
+            m_creature->RemoveAurasDueToSpell(SPELL_ENERGIZE);
 
         // Areatrigger
         m_uiCheckPulse = 1000;
@@ -448,19 +463,19 @@ struct npc_eric_dark_AI : public ScriptedAI
     {
         DespawnAdds();
 
-        m_creature->SetRespawnDelay(7200); // Respawn after 2 hours, if Boss Grand Magi Ardaeus has not been defeted in this time
+        m_creature->SetRespawnDelay(7200); // Respawn Eric Dark once again after 2 hours if Boss Araeus isn't dead yet (partly handled in boss_ardaeus.cpp)
     }
 
     void AreaTrigger(const uint32& uiDiff)
     {
         if (m_uiCheckPulse < uiDiff)
         {
-            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
-            for (const auto& i : list)
+            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& itr : PlayerList)
             {
-                if (!i.getSource()->IsGameMaster())
+                if (!itr.getSource()->IsGameMaster() && !itr.getSource()->HasAuraType(SPELL_AURA_FEIGN_DEATH) && itr.getSource()->IsAlive())
                 {
-                    if (i.getSource()->IsInRange3d(128.86f, -9.69f, 15.98f, 0.f, 12.f)) // Middle of the Wing
+                    if (itr.getSource()->IsInRange3d(128.86f, -9.69f, 15.98f, 0.f, 12.f)) // Middle of the Wing
                     {
                         SummonAdds();
                     }
@@ -485,12 +500,16 @@ struct npc_eric_dark_AI : public ScriptedAI
                 pSummoned->MonsterMoveWithSpeed(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO, 5, MOVE_PATHFINDING);
                 pSummoned->SetHomePosition(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO);
 
+                if (!pSummoned->IsInCombat())
+                    pSummoned->HandleEmote(EMOTE_STATE_READY2H);
+
                 m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
             }
         }
         
         m_creature->SetFactionTemplateId(FACTION_HOSTILE);
-        m_creature->MonsterYell("INTRUDERS!");
+        m_creature->MonsterYell("Kill the intruders!");
+        m_creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
 
         m_bIsTrashAllowedToSpawn = false;
     }
@@ -517,13 +536,120 @@ struct npc_eric_dark_AI : public ScriptedAI
         }
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+    void CastLightningCloud(const uint32& uiDiff)
+    {
+        if (m_uiLightningCloud_Timer < uiDiff)
+        {
+            if (Unit* pRandomTarget{ m_creature->FindNearestHostilePlayer(15.f) })
+            {
+                if (DoCastSpellIfCan(pRandomTarget, SPELL_LIGHTNING_CLOUD) == CanCastResult::CAST_OK)
+                {
+                    m_uiLightningCloud_Timer = 15000;
+                }
+            }
+        }
+        else
+        {
+            m_uiLightningCloud_Timer -= uiDiff;
+        }
+    }
+
+    void CastLightningWave(const uint32& uiDiff)
+    {
+        if (m_uiLightningWave_Timer < uiDiff)
+        {
+            if (Unit* pRandomTarget{ m_creature->FindLowestHpHostileUnit(50.f) })
+            {
+                if (m_creature->IsWithinLOSInMap(pRandomTarget))
+                {
+                    if (DoCastSpellIfCan(pRandomTarget, SPELL_LIGHTNING_WAVE) == CanCastResult::CAST_OK)
+                    {
+                        m_uiLightningWave_Timer = urand(4000, 5000);
+                    }
+                }
+            }
+        }
+        else
+        {
+            m_uiLightningWave_Timer -= uiDiff;
+        }
+    }
+
+    void DrainMana(const uint32& uiDiff)
+    {
+        if (m_uiDrainMana_Timer < uiDiff)
+        {
+            if (Unit* pTarget{ m_creature->GetHostileCasterInRange(0, 50.f) })
+            {
+                if (m_creature->IsWithinLOSInMap(pTarget))
+                {
+                    if (DoCastSpellIfCan(pTarget, SPELL_DRAINMANA) == CanCastResult::CAST_OK)
+                    {
+                        m_uiDrainMana_Timer = 3000;
+                    }
+                }
+            }
+        }
+        else
+        {
+            m_uiDrainMana_Timer -= uiDiff;
+        }
+    }
+
+    void ChannelEnergize(const uint32& uiDiff)
+    {
+        if (m_uiEnergize_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_ENERGIZE) == CanCastResult::CAST_OK)
+            {
+                m_creature->AttackStop();
+            }
+        }
+        else
+        {
+            m_uiEnergize_Timer -= uiDiff;
+        }
+    }
+
+    void DoExplosion()
+    {
+        Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
+        if (PlayerList.isEmpty())
+            return;
+
+        for (const auto& itr : PlayerList)
+        {
+            if (Player* pPlayer{ itr.getSource() })
+            {
+                if (pPlayer->IsAlive() && !pPlayer->IsGameMaster())
+                {
+                    m_creature->DoKillUnit(pPlayer);
+                }
+            }
+        }
+
+        npc_eric_dark_AI::EnterEvadeMode();
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_bIsTrashAllowedToSpawn)
             AreaTrigger(uiDiff);
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (!m_creature->HasAura(SPELL_ENERGIZE))
+        {
+            CastLightningCloud(uiDiff);
+            CastLightningWave(uiDiff);
+            DrainMana(uiDiff);
+
+            ChannelEnergize(uiDiff);
+        }
+
+        if (m_creature->GetPower(POWER_MANA) >= m_creature->GetMaxPower(POWER_MANA))
+            DoExplosion();
 
         DoMeleeAttackIfReady();
     }

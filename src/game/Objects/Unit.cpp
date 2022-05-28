@@ -9091,25 +9091,27 @@ Unit* Unit::SelectRandomFriendlyTarget(Unit* except /*= nullptr*/, float radius 
 }
 
 // Returns friendly unit with the most amount of hp missing from max hp
-Unit* Unit::FindLowestHpFriendlyUnit(float fRange, uint32 uiMinHPDiff, bool bPercent, Unit* except) const
+Unit* Unit::FindLowestHpFriendlyUnit(const float fRange, const uint32 uiMinHPDiff, const bool bPercent, Unit* except) const
 {
     std::list<Unit*> targets;
 
-    if (Unit* pVictim = GetVictim())
+    if (Unit* pVictim{ GetVictim() })
     {
-        HostileReference* pReference = pVictim->GetHostileRefManager().getFirst();
-
-        while (pReference)
+        if (HostileReference* pReference{ pVictim->GetHostileRefManager().getFirst() })
         {
-            if (Unit* pTarget = pReference->getSourceUnit())
+            while (pReference)
             {
-                if (pTarget->IsAlive() && IsFriendlyTo(pTarget) && IsWithinDistInMap(pTarget, fRange) &&
-                    ((bPercent && (100 - pTarget->GetHealthPercent() > uiMinHPDiff)) || (!bPercent && (pTarget->GetMaxHealth() - pTarget->GetHealth() > uiMinHPDiff))))
+                if (Unit* pTarget{ pReference->getSourceUnit() })
                 {
-                    targets.push_back(pTarget);
+                    if (pTarget->IsAlive() && IsFriendlyTo(pTarget) && IsWithinDistInMap(pTarget, fRange) &&
+                        ((bPercent && (100 - pTarget->GetHealthPercent() > uiMinHPDiff)) || (!bPercent && (pTarget->GetMaxHealth() - pTarget->GetHealth() > uiMinHPDiff))))
+                    {
+                        targets.push_back(pTarget);
+                    }
                 }
+
+                pReference = pReference->next();
             }
-            pReference = pReference->next();
         }
     }
     else
@@ -9120,13 +9122,50 @@ Unit* Unit::FindLowestHpFriendlyUnit(float fRange, uint32 uiMinHPDiff, bool bPer
         Cell::VisitAllObjects(this, searcher, fRange);
     }
 
-    // remove current target
+    // Remove current target
     if (except)
+    {
         targets.remove(except);
+    }
 
-    // no appropriate targets
+    // No appropriate targets
     if (targets.empty())
+    {
         return nullptr;
+    }
+
+    return *targets.begin();
+}
+
+// Returns hostile unit with the most amount of hp missing from max hp
+Unit* Unit::FindLowestHpHostileUnit(const float fRange, const uint32 uiMinHPDiff, const bool bPercent, Unit* except) const
+{
+    std::list<Unit*> targets;
+
+    const ThreatList threatList{ GetThreatManager().getThreatList() };
+    for (const auto itr : threatList)
+    {
+        if (Unit* pTarget{ GetMap()->GetUnit(itr->getUnitGuid()) })
+        {
+            if (pTarget->IsAlive() && IsHostileTo(pTarget) && IsWithinDistInMap(pTarget, fRange) &&
+                ((bPercent && (100 - pTarget->GetHealthPercent() > uiMinHPDiff)) || (!bPercent && (pTarget->GetMaxHealth() - pTarget->GetHealth() > uiMinHPDiff))))
+            {
+                targets.push_back(pTarget);
+            }
+        }
+    }
+
+    // Remove current target
+    if (except)
+    {
+        targets.remove(except);
+    }
+
+    // No appropriate targets
+    if (targets.empty())
+    {
+        return nullptr;
+    }
 
     return *targets.begin();
 }
