@@ -7,7 +7,7 @@
 
 #pragma once
 
-enum ScarletCitadelUnit
+enum ScarletCitadelUnit : uint32
 {
     // Gameobjects
     GO_DOOR_VENDOR_LEFT   = 5000001,
@@ -25,12 +25,14 @@ enum ScarletCitadelUnit
     NPC_MARIELLA = 2000002,
     NPC_ABBENDIS = 2000003,
 
-    // Trash
-    NPC_FIRST_WING_TRASH_TRIGGER = 2000013,
-    NPC_FIRST_WING_TRASH         = 2000004
+    // Caster's Nightmare Trash (First Wing)
+    NPC_ERIC_DARK = 2000004,
+    NPC_CITADEL_INQUISITOR = 2000033,
+    NPC_CITADEL_VALIANT = 2000034,
+    NPC_CITADEL_FOOTMAN = 2000035
 };
 
-enum ScarletCitadelEncounter
+enum ScarletCitadelEncounter : uint32
 {
     TYPE_DAELUS,
     TYPE_ARDAEUS,
@@ -40,7 +42,7 @@ enum ScarletCitadelEncounter
     MAX_ENCOUNTER
 };
 
-enum ScarletCitadelData
+enum ScarletCitadelData : uint32
 {
     DATA_DOOR_VENDOR_LEFT,
     DATA_DOOR_VENDOR_RIGHT,
@@ -55,7 +57,7 @@ enum ScarletCitadelData
     DATA_ARDAEUS_GUID,
     DATA_MARIELLA_GUID,
     DATA_ABBENDIS_GUID,
-    DATA_FIRST_AREARIGGER_GUID,
+    DATA_ERIC_DARK_GUID,
 
     MAX_DATA
 };

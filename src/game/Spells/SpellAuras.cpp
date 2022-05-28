@@ -2761,7 +2761,7 @@ void Aura::HandleForceReaction(bool apply, bool Real)
         player->StopAttackFaction(faction_id);
 
     // sorry, need to hack ashbringer to make you friendly with scarlet crusade too
-    if (m_spellAuraHolder && m_spellAuraHolder->GetSpellProto() && m_spellAuraHolder->GetId() == 28282)
+    if (m_spellAuraHolder && m_spellAuraHolder->GetSpellProto() && m_spellAuraHolder->GetId() == 28282 && player->GetMapId() != 45)
     {
         uint32 scarlet_crusade_faction_id = 56;
         ReputationRank scarlet_crusade_rank = ReputationRank(7);
