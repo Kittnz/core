@@ -470,12 +470,12 @@ struct npc_eric_dark_AI : public ScriptedAI
     {
         if (m_uiCheckPulse < uiDiff)
         {
-            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
-            for (const auto& i : list)
+            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& itr : PlayerList)
             {
-                if (!i.getSource()->IsGameMaster())
+                if (!itr.getSource()->IsGameMaster() && !itr.getSource()->HasAuraType(SPELL_AURA_FEIGN_DEATH) && itr.getSource()->IsAlive())
                 {
-                    if (i.getSource()->IsInRange3d(128.86f, -9.69f, 15.98f, 0.f, 12.f)) // Middle of the Wing
+                    if (itr.getSource()->IsInRange3d(128.86f, -9.69f, 15.98f, 0.f, 12.f)) // Middle of the Wing
                     {
                         SummonAdds();
                     }
@@ -500,12 +500,16 @@ struct npc_eric_dark_AI : public ScriptedAI
                 pSummoned->MonsterMoveWithSpeed(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO, 5, MOVE_PATHFINDING);
                 pSummoned->SetHomePosition(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO);
 
+                if (!pSummoned->IsInCombat())
+                    pSummoned->HandleEmote(EMOTE_STATE_READY2H);
+
                 m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
             }
         }
         
         m_creature->SetFactionTemplateId(FACTION_HOSTILE);
-        m_creature->MonsterYell("INTRUDERS!");
+        m_creature->MonsterYell("Kill the intruders!");
+        m_creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
 
         m_bIsTrashAllowedToSpawn = false;
     }
@@ -581,7 +585,7 @@ struct npc_eric_dark_AI : public ScriptedAI
                 {
                     if (DoCastSpellIfCan(pTarget, SPELL_DRAINMANA) == CanCastResult::CAST_OK)
                     {
-                        m_uiDrainMana_Timer = 5000;
+                        m_uiDrainMana_Timer = 3000;
                     }
                 }
             }
