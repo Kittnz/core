@@ -35,14 +35,14 @@ struct npc_citadel_anti_exploit_AI : public ScriptedAI
         m_creature->SetVisibility(VISIBILITY_OFF);
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (m_uiCheckPulse < uiDiff)
         {
             Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
             for (const auto& player : list)
             {
-                if (Player * pPlayer{ player.getSource() })
+                if (Player* pPlayer{ player.getSource() })
                 {
                     if (!pPlayer->IsGameMaster() && pPlayer->IsInRange3d(
                         m_creature->GetPositionX(),
@@ -94,102 +94,6 @@ CreatureAI* GetAI_npc_citadel_anti_exploit(Creature* pCreature)
 // FIRST WING (Caster's Nightmare)
 //////////////////////////////////////////
 
-static const LocationXYZO vfSpawnPoint[] =
-{
-    { 128.852097f, -73.639236f, (15.988636f + 0.1f), 1.583155f }
-};
-
-static constexpr uint8 TOTAL_WAYPOINTS{ 18 };
-static const LocationXYZO vfLastWaypoint[TOTAL_WAYPOINTS] =
-{
-    { 128.883f, -48.6615f, 15.99f, 1.55f },
-    { 132.825f, -48.7298f, 15.99f, 1.55f },
-    { 125.016f, -48.6871f, 15.99f, 1.55f },
-    { 125.081f, -36.9308f, 15.99f, 1.55f },
-    { 128.847f, -36.9513f, 15.99f, 1.55f },
-    { 132.736f, -36.8489f, 15.99f, 1.55f },
-    { 132.777f, -25.3095f, 15.99f, 1.55f },
-    { 128.892f, -25.3187f, 15.99f, 1.55f },
-    { 125.063f, -25.3278f, 15.99f, 1.55f },
-    { 125.035f, -13.6799f, 15.99f, 1.55f },
-    { 128.917f, -13.6573f, 15.99f, 1.55f },
-    { 132.745f, -13.7459f, 15.99f, 1.55f },
-    { 132.766f, -2.05773f, 15.99f, 1.55f },
-    { 128.937f, -2.03679f, 15.99f, 1.55f },
-    { 125.003f, -2.01526f, 15.99f, 1.55f },
-    { 125.066f,  9.52406f, 15.99f, 1.55f },
-    { 128.944f,  9.48699f, 15.99f, 1.55f },
-    { 132.826f,  9.47718f, 15.99f, 1.55f }
-};
-
-struct npc_areatriggerAI : public ScriptedAI
-{
-    explicit npc_areatriggerAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        npc_areatriggerAI::Reset();
-    }
-
-    uint8 m_uiITR{};
-    uint16 m_uiCheckPulse{};
-
-    bool m_bIsTrashSpawned{};
-
-    void Reset() override
-    {
-        m_bIsTrashSpawned = false;
-        m_uiCheckPulse = 500;
-    }
-
-    void SummonAdds()
-    {
-        m_bIsTrashSpawned = true;
-
-        for ( ; m_uiITR < TOTAL_WAYPOINTS; ++m_uiITR)
-        {
-            m_creature->SummonCreature(ScarletCitadelUnit::NPC_FIRST_WING_TRASH, vfSpawnPoint[0].m_fX, vfSpawnPoint[0].m_fY, vfSpawnPoint[0].m_fZ, vfSpawnPoint[0].m_fO, TEMPSUMMON_DEAD_DESPAWN, 30000);
-        }
-    }
-
-    void JustSummoned(Creature* pSummoned) override
-    {
-        if (pSummoned->GetEntry() == ScarletCitadelUnit::NPC_FIRST_WING_TRASH)
-        {
-            pSummoned->MonsterMoveWithSpeed(vfLastWaypoint[m_uiITR].m_fX, vfLastWaypoint[m_uiITR].m_fY, vfLastWaypoint[m_uiITR].m_fZ, vfLastWaypoint[m_uiITR].m_fO, 5, uint32(MOVE_PATHFINDING | MOVE_FORCE_DESTINATION));
-            pSummoned->SetHomePosition(vfLastWaypoint[m_uiITR].m_fX, vfLastWaypoint[m_uiITR].m_fY, vfLastWaypoint[m_uiITR].m_fZ, vfLastWaypoint[m_uiITR].m_fO);
-        }
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (m_uiCheckPulse < uiDiff && !m_bIsTrashSpawned)
-        {
-            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
-            for (const auto& i : list)
-            {
-                if (!i.getSource()->IsGameMaster())
-                {
-                    if (i.getSource()->IsInRange3d(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), 0.f, 12.f))
-                    {
-                        SummonAdds();
-                    }
-                }
-            }
-
-            m_uiCheckPulse = 500;
-        }
-        else
-        {
-            m_uiCheckPulse -= uiDiff;
-        }
-    }
-};
-
-CreatureAI* GetAI_npc_areatrigger(Creature* pCreature)
-{
-    return new npc_areatriggerAI(pCreature);
-}
-
-
 struct npc_citadel_inquisitor_AI : public ScriptedAI
 {
     explicit npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -215,6 +119,8 @@ struct npc_citadel_inquisitor_AI : public ScriptedAI
         m_uiGreaterHeal_Timer = 5000;
 
         m_bCastedDivineShieldOnce = false;
+
+        m_creature->SetNoCallAssistance(true); // Link groups manually
     }
 
     void CastCounterSpell(const uint32& uiDiff)
@@ -278,9 +184,12 @@ struct npc_citadel_inquisitor_AI : public ScriptedAI
             {
                 if (m_creature->IsWithinLOSInMap(pFriendlyTarget))
                 {
-                    if (DoCastSpellIfCan(pFriendlyTarget, SPELL_GREATER_HEAL) == CanCastResult::CAST_OK)
+                    if (pFriendlyTarget->GetHealthPercent() < 40.f)
                     {
-                        m_uiGreaterHeal_Timer = 5000;
+                        if (DoCastSpellIfCan(pFriendlyTarget, SPELL_GREATER_HEAL) == CanCastResult::CAST_OK)
+                        {
+                            m_uiGreaterHeal_Timer = 5000;
+                        }
                     }
                 }
             }
@@ -327,6 +236,8 @@ struct npc_citadel_valiant_AI : public ScriptedAI
     {
         m_uiCharge_Timer = 10000;
         m_uiCleave_Timer = 5000;
+
+        m_creature->SetNoCallAssistance(true); // Link groups manually
     }
 
     void DoCharge(const uint32& uiDiff)
@@ -409,6 +320,8 @@ struct npc_citadel_footman_AI : public ScriptedAI
     {
         m_uiDisarm_Timer = 1000;
         m_uiFrenzy_Timer = 15000;
+
+        m_creature->SetNoCallAssistance(true); // Link groups manually
     }
 
     void DoDisarm(const uint32& uiDiff)
@@ -443,7 +356,7 @@ struct npc_citadel_footman_AI : public ScriptedAI
         }
     }
 
-    void UpdateAI(uint32 const uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -460,6 +373,30 @@ CreatureAI* GetAI_npc_citadel_footman(Creature* pCreature)
     return new npc_citadel_footman_AI(pCreature);
 }
 
+namespace nsERIC_DARK
+{
+    static const LocationXYZO vfMoveTo[] =
+    {
+        { 128.883f, -48.6615f, 15.99f, 1.55f },
+        { 132.825f, -48.7298f, 15.99f, 1.55f },
+        { 125.016f, -48.6871f, 15.99f, 1.55f },
+        { 125.081f, -36.9308f, 15.99f, 1.55f },
+        { 128.847f, -36.9513f, 15.99f, 1.55f },
+        { 132.736f, -36.8489f, 15.99f, 1.55f },
+        { 132.777f, -25.3095f, 15.99f, 1.55f },
+        { 128.892f, -25.3187f, 15.99f, 1.55f },
+        { 125.063f, -25.3278f, 15.99f, 1.55f },
+        { 125.035f, -13.6799f, 15.99f, 1.55f },
+        { 128.917f, -13.6573f, 15.99f, 1.55f },
+        { 132.745f, -13.7459f, 15.99f, 1.55f },
+        { 132.766f, -2.05773f, 15.99f, 1.55f },
+        { 128.937f, -2.03679f, 15.99f, 1.55f },
+        { 125.003f, -2.01526f, 15.99f, 1.55f },
+        { 125.066f,  9.52406f, 15.99f, 1.55f },
+        { 128.944f,  9.48699f, 15.99f, 1.55f },
+        { 132.826f,  9.47718f, 15.99f, 1.55f }
+    };
+}
 
 struct npc_eric_dark_AI : public ScriptedAI
 {
@@ -473,9 +410,32 @@ struct npc_eric_dark_AI : public ScriptedAI
     static constexpr uint32 SPELL_ENERGIZE{ 25685 };
     static constexpr uint32 SPELL_DRAINMANA{ 25676 };
 
+    static constexpr uint32 FACTION_HOSTILE{ 67 };
+
+    const std::vector<uint32> vTrashEntryList{ NPC_CITADEL_INQUISITOR, NPC_CITADEL_VALIANT, NPC_CITADEL_FOOTMAN };
+    const std::vector<std::pair<LocationXYZO, uint32>>pairlol
+    {
+        std::make_pair(nsERIC_DARK::vfMoveTo[0], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[1], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[2], vTrashEntryList[2]),
+        std::make_pair(nsERIC_DARK::vfMoveTo[3], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[4], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[5], vTrashEntryList[2]),
+        std::make_pair(nsERIC_DARK::vfMoveTo[6], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[7], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[8], vTrashEntryList[2]),
+        std::make_pair(nsERIC_DARK::vfMoveTo[9], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[10], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[11], vTrashEntryList[2]),
+        std::make_pair(nsERIC_DARK::vfMoveTo[12], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[13], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[14], vTrashEntryList[2]),
+        std::make_pair(nsERIC_DARK::vfMoveTo[15], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[16], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[17], vTrashEntryList[2])
+    };
+
+    std::vector<ObjectGuid> m_vSpawnedAdds;
+
+    // Areatrigger
+    uint16 m_uiCheckPulse{};
+    bool m_bIsTrashAllowedToSpawn{};
+
     void Reset() override
     {
+        DespawnAdds();
 
+        // Areatrigger
+        m_uiCheckPulse = 500;
+        m_bIsTrashAllowedToSpawn = true;
     }
 
     void Aggro(Unit* /*pWho*/) override
@@ -484,8 +444,82 @@ struct npc_eric_dark_AI : public ScriptedAI
         m_creature->SetPower(POWER_MANA, 0);
     }
 
+    void JustDied(Unit* /*pKiller*/) override
+    {
+        DespawnAdds();
+    }
+
+    void AreaTrigger(const uint32& uiDiff)
+    {
+        if (m_uiCheckPulse < uiDiff)
+        {
+            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& i : list)
+            {
+                if (!i.getSource()->IsGameMaster())
+                {
+                    if (i.getSource()->IsInRange3d(128.86f, -9.69f, 15.98f, 0.f, 12.f)) // Middle of the Wing
+                    {
+                        SummonAdds();
+                    }
+                }
+            }
+
+            m_uiCheckPulse = 500;
+        }
+        else
+        {
+            m_uiCheckPulse -= uiDiff;
+        }
+    }
+
+    void SummonAdds()
+    {
+        for (const auto& itr : pairlol)
+        {
+            if (Creature* pSummoned{ m_creature->SummonCreature(itr.second, m_creature->GetPositionX(), (m_creature->GetPositionY() + 5.f), m_creature->GetPositionZ(),
+                m_creature->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN) })
+            {
+                pSummoned->MonsterMoveWithSpeed(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO, 5, static_cast<uint32>(MOVE_PATHFINDING));
+                pSummoned->SetHomePosition(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO);
+
+                m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
+            }
+        }
+        
+        m_creature->MonsterYell("INTRUDERS!");
+        m_creature->SetFactionTemplateId(FACTION_HOSTILE);
+
+        m_bIsTrashAllowedToSpawn = false;
+    }
+
+    void DespawnAdds()
+    {
+        if (!m_vSpawnedAdds.empty())
+        {
+            if (const auto map{ m_creature->GetMap() })
+            {
+                for (const auto& guid : m_vSpawnedAdds)
+                {
+                    if (Creature* pCreature{ map->GetCreature(guid) })
+                    {
+                        if (TemporarySummon* tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
+                        {
+                            tmpSumm->UnSummon();
+                        }
+                    }
+                }
+
+                m_vSpawnedAdds.clear();
+            }
+        }
+    }
+
     void UpdateAI(uint32 const uiDiff) override
     {
+        if (m_bIsTrashAllowedToSpawn)
+            AreaTrigger(uiDiff);
+
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -509,12 +543,6 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript->RegisterSelf();
 
     // FIRST WING (Caster's Nightmare)
-
-    pNewscript = new Script;
-    pNewscript->Name = "npc_areatrigger";
-    pNewscript->GetAI = &GetAI_npc_areatrigger;
-    pNewscript->RegisterSelf();
-
     pNewscript = new Script;
     pNewscript->Name = "npc_citadel_inquisitor";
     pNewscript->GetAI = &GetAI_npc_citadel_inquisitor;
