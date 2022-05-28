@@ -536,7 +536,7 @@ struct npc_eric_dark_AI : public ScriptedAI
     {
         if (m_uiLightningCloud_Timer < uiDiff)
         {
-            if (Unit* pRandomTarget{ m_creature->SelectRandomUnfriendlyTarget(nullptr, 15.f) })
+            if (Unit* pRandomTarget{ m_creature->FindNearestHostilePlayer(15.f) })
             {
                 if (DoCastSpellIfCan(pRandomTarget, SPELL_LIGHTNING_CLOUD) == CanCastResult::CAST_OK)
                 {
