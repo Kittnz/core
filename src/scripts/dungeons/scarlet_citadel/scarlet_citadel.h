@@ -7,7 +7,7 @@
 
 #pragma once
 
-enum ScarletCitadelUnit
+enum ScarletCitadelUnit : uint32
 {
     // Gameobjects
     GO_DOOR_VENDOR_LEFT   = 5000001,
@@ -32,7 +32,7 @@ enum ScarletCitadelUnit
     NPC_CITADEL_FOOTMAN = 2000035
 };
 
-enum ScarletCitadelEncounter
+enum ScarletCitadelEncounter : uint32
 {
     TYPE_DAELUS,
     TYPE_ARDAEUS,
@@ -42,7 +42,7 @@ enum ScarletCitadelEncounter
     MAX_ENCOUNTER
 };
 
-enum ScarletCitadelData
+enum ScarletCitadelData : uint32
 {
     DATA_DOOR_VENDOR_LEFT,
     DATA_DOOR_VENDOR_RIGHT,
