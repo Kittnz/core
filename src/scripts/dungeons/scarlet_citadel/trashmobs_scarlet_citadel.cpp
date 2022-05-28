@@ -448,7 +448,7 @@ struct npc_eric_dark_AI : public ScriptedAI
     {
         DespawnAdds();
 
-        m_creature->SetRespawnDelay(7200); // Respawn after 2 hours, if Boss Grand Magi Ardaeus has not been defeted in this time
+        m_creature->SetRespawnDelay(7200); // Respawn Eric Dark once again after 2 hours if Boss Araeus isn't dead yet (partly handled in boss_ardaeus.cpp)
     }
 
     void AreaTrigger(const uint32& uiDiff)
