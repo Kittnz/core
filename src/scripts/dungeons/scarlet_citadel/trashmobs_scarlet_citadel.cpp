@@ -434,7 +434,7 @@ struct npc_eric_dark_AI : public ScriptedAI
         DespawnAdds();
 
         // Areatrigger
-        m_uiCheckPulse = 500;
+        m_uiCheckPulse = 1000;
         m_bIsTrashAllowedToSpawn = true;
     }
 
@@ -447,6 +447,8 @@ struct npc_eric_dark_AI : public ScriptedAI
     void JustDied(Unit* /*pKiller*/) override
     {
         DespawnAdds();
+
+        m_creature->SetRespawnDelay(7200); // Respawn after 2 hours, if Boss Grand Magi Ardaeus has not been defeted in this time
     }
 
     void AreaTrigger(const uint32& uiDiff)
@@ -480,15 +482,15 @@ struct npc_eric_dark_AI : public ScriptedAI
             if (Creature* pSummoned{ m_creature->SummonCreature(itr.second, m_creature->GetPositionX(), (m_creature->GetPositionY() + 5.f), m_creature->GetPositionZ(),
                 m_creature->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN) })
             {
-                pSummoned->MonsterMoveWithSpeed(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO, 5, static_cast<uint32>(MOVE_PATHFINDING));
+                pSummoned->MonsterMoveWithSpeed(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO, 5, MOVE_PATHFINDING);
                 pSummoned->SetHomePosition(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO);
 
                 m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
             }
         }
         
-        m_creature->MonsterYell("INTRUDERS!");
         m_creature->SetFactionTemplateId(FACTION_HOSTILE);
+        m_creature->MonsterYell("INTRUDERS!");
 
         m_bIsTrashAllowedToSpawn = false;
     }
