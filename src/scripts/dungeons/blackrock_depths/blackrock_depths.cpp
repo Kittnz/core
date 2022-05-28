@@ -184,6 +184,7 @@ struct npc_grimstoneAI : public npc_escortAI
         homeZ = -54.132176f;
         homeO = 0;
 
+
         // T0.5 Challenge has been put down, summon Theldren and his random adds
         if (m_pInstance->GetData(DATA_THELDREN) == IN_PROGRESS)
         {
@@ -201,20 +202,11 @@ struct npc_grimstoneAI : public npc_escortAI
             // The last three are DPS. Can both be ranged, both melee or one from each.
             // https://web.archive.org/web/20060523124717/http://wow.allakhazam.com:80/db/quest.html?wquest=9015&mid=114423967727961
 
-            uint32 HealerEntries[2];
-            uint32 DPSEntries[6];
+            const std::vector<uint32> HealerEntries = { 16053, 16055 };
+            std::vector<uint32> DPSEntries { 16049, 16050, 16051, 16052, 16054, 16058 };
 
-            HealerEntries[0] = 16053;
-            HealerEntries[1] = 16055;
-
-            DPSEntries[0] = 16058;
-            DPSEntries[1] = 16051;
-            DPSEntries[2] = 16052;
-            DPSEntries[3] = 16049;
-            DPSEntries[4] = 16050;
-            DPSEntries[5] = 16054;
             // Offset spawns slightly so the NPCs aren't stacked
-            if (Creature *healer = m_creature->SummonCreature(HealerEntries[rand() % 2], spawnX+3, spawnY-1, spawnZ-1, spawnO, TEMPSUMMON_DEAD_DESPAWN, 0))
+            if (Creature *healer = m_creature->SummonCreature(HealerEntries[urand(0,1)], spawnX + 3, spawnY - 1, spawnZ - 1, spawnO, TEMPSUMMON_DEAD_DESPAWN, 0))
             {
                 healer->GetMotionMaster()->MovePoint(1, spawnX, spawnY, spawnZ);
                 healer->SetHomePosition(homeX, homeY, homeZ, homeO);
@@ -226,18 +218,17 @@ struct npc_grimstoneAI : public npc_escortAI
             // Spawn 3 more random DPS!
             for (uint8 i = 0; i < 3; ++i)
             {
-                float x, y, z;
-                x = spawnX + 1.5f;
-                y = spawnY - 3 + 3 * i;
-                z = spawnZ;
+                const float x{ spawnX + 1.5f }, y{ spawnY - 3 + 3 * i }, z{ spawnZ };
 
-                if (Creature *dps = m_creature->SummonCreature(DPSEntries[rand() % 6], x, y, z, spawnO, TEMPSUMMON_DEAD_DESPAWN, 0))
+                const uint32 SummonedDPSEntry = urand(0, (DPSEntries.size() - 1));
+                if (Creature *dps = m_creature->SummonCreature(DPSEntries[SummonedDPSEntry], x, y, z, spawnO, TEMPSUMMON_DEAD_DESPAWN, 0))
                 {
                     dps->GetMotionMaster()->MovePoint(1, spawnX, spawnY, spawnZ);
                     dps->SetHomePosition(homeX, homeY, homeZ, homeO);
                     dps->SetInCombatWithZone();
                     ChallengeMobGUID[i + 1] = dps->GetGUID();
                     ++MobCount;
+                    DPSEntries.erase(DPSEntries.begin() + SummonedDPSEntry) ;
                 }
             }
 

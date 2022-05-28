@@ -2369,14 +2369,20 @@ bool GossipHello_rented_mount(Player* player, Creature* mount)
         player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
         return true;
     case 4779:
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this ram for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
+        return true;
     case 4710:
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this ram for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
+        player->SEND_GOSSIP_MENU(90381, mount->GetGUID());
         return true;
     case 12354:
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this kodo for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
+        return true;
     case 12355:
         player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Hire this kodo for 50 copper.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-        player->SEND_GOSSIP_MENU(90369, mount->GetGUID());
+        player->SEND_GOSSIP_MENU(90382, mount->GetGUID());
         return true;
     default:
         break;
