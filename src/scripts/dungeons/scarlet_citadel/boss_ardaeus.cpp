@@ -97,6 +97,8 @@ public:
 
         m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
 
+        m_creature->SetRespawnDelay(604800);
+
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, DONE);
 
 
