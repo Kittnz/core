@@ -513,7 +513,27 @@ bool AuthSocket::_HandleLogonChallenge()
                     //force 2FA for staff accounts.
                     if (securityRank >= SEC_MODERATOR && lockFlags == FIXED_PIN)
                     {
-                        promptPin = true;
+                        std::string address = get_remote_address();
+                        LoginDatabase.escape_string(address);
+
+
+                        auto result = LoginDatabase.PQuery("SELECT expires_at FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+
+                        if (result)
+                        {
+                            auto fields = result->Fetch();
+                            uint64 expiresAt = fields[0].GetUInt64();
+                            if (expiresAt < time(nullptr)) // expired.
+                            {
+                                LoginDatabase.DirectPExecute("DELETE FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+                                promptPin = true;
+                            }
+                            else
+                                promptPin = false;
+                            delete result;
+                        }
+                        else
+                            promptPin = true;
                     }
 
 
@@ -743,6 +763,13 @@ bool AuthSocket::_HandleLogonProof()
         if ((lockFlags & FIXED_PIN) == FIXED_PIN)
         {
             pinResult = ValidateToken(securityInfo, pinData);
+            if (pinResult)
+            {
+                //add IP to exception table for 30 days.
+                std::string address = get_remote_address();
+                LoginDatabase.escape_string(address);
+                LoginDatabase.DirectPExecute("INSERT INTO `account_twofactor_allowed`(`ip_address`, `account_id`, `expires_at`) VALUES ('%s', '%u', '%llu')", address.c_str(), _accountId, time(nullptr) + (60 * 60 * 24 * 30)); // 30 days
+            }
             BASIC_LOG("[AuthChallenge] Account '%s' using IP '%s' PIN result: %u", _login.c_str(), get_remote_address().c_str(), pinResult);
         }
         else if ((lockFlags & TOTP) == TOTP)
