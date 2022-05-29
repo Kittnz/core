@@ -13,13 +13,15 @@ static const float vfTeleportDestinations[][4] =
     { 231.569946f, 48.830078f, (32.822887f + 0.1f), 3.130378f } // Boss Mariella
 };
 
-struct npc_citadel_anti_exploit_AI : public ScriptedAI
+class npc_citadel_anti_exploit_AI : public ScriptedAI
 {
+public:
     explicit npc_citadel_anti_exploit_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         npc_citadel_anti_exploit_AI::Reset();
     }
 
+private:
     uint16 m_uiCheckPulse{};
 
     static constexpr uint32 PULSE_TIMER{ 500 };
@@ -27,6 +29,7 @@ struct npc_citadel_anti_exploit_AI : public ScriptedAI
     static constexpr float PERMITTED_AREA{ 20.f };
     static constexpr auto WARNING_MESSAGE{ "You are not allowed to leave this area." };
 
+public:
     void Reset() override
     {
         m_uiCheckPulse = PULSE_TIMER;
@@ -94,13 +97,15 @@ CreatureAI* GetAI_npc_citadel_anti_exploit(Creature* pCreature)
 // FIRST WING (Caster's Nightmare)
 //////////////////////////////////////////
 
-struct npc_citadel_inquisitor_AI : public ScriptedAI
+class npc_citadel_inquisitor_AI : public ScriptedAI
 {
+public:
     explicit npc_citadel_inquisitor_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         npc_citadel_inquisitor_AI::Reset();
     }
 
+private:
     static constexpr uint32 SPELL_HOLY_NOVA{ 23858 };
     static constexpr uint32 SPELL_COUNTERSPELL{ 20537 };
     static constexpr uint32 SPELL_DIVINE_SHIELD{ 1020 };
@@ -112,6 +117,7 @@ struct npc_citadel_inquisitor_AI : public ScriptedAI
 
     bool m_bCastedDivineShieldOnce{};
 
+public:
     void Reset() override
     {
         m_uiCounterSpell_Timer = 2000;
@@ -218,13 +224,15 @@ CreatureAI* GetAI_npc_citadel_inquisitor(Creature* pCreature)
 }
 
 
-struct npc_citadel_valiant_AI : public ScriptedAI
+class npc_citadel_valiant_AI : public ScriptedAI
 {
+public:
     explicit npc_citadel_valiant_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         npc_citadel_valiant_AI::Reset();
     }
 
+private:
     static constexpr uint32 SPELL_CHARGE{ 26561 };
     static constexpr uint32 SPELL_CLEAVE{ 26350 };
     static constexpr uint32 SPELL_SONICBURST{ 23918 };
@@ -232,6 +240,7 @@ struct npc_citadel_valiant_AI : public ScriptedAI
     uint32 m_uiCharge_Timer{};
     uint32 m_uiCleave_Timer{};
 
+public:
     void Reset() override
     {
         m_uiCharge_Timer = 10000;
@@ -302,13 +311,15 @@ CreatureAI* GetAI_npc_citadel_valiant(Creature* pCreature)
 }
 
 
-struct npc_citadel_footman_AI : public ScriptedAI
+class npc_citadel_footman_AI : public ScriptedAI
 {
+public:
     explicit npc_citadel_footman_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         npc_citadel_footman_AI::Reset();
     }
 
+private:
     static constexpr uint32 SPELL_DISARM{ 6713 };
     static constexpr uint32 SPELL_FRENZY{ 8269 };
     static constexpr uint32 SPELL_HAMSTRING{ 26141 };
@@ -316,6 +327,7 @@ struct npc_citadel_footman_AI : public ScriptedAI
     uint32 m_uiDisarm_Timer{};
     uint32 m_uiFrenzy_Timer{};
 
+public:
     void Reset() override
     {
         m_uiDisarm_Timer = 1000;
@@ -400,13 +412,15 @@ namespace nsERIC_DARK
     };
 }
 
-struct npc_eric_dark_AI : public ScriptedAI
+class npc_eric_dark_AI : public ScriptedAI
 {
+public:
     explicit npc_eric_dark_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         npc_eric_dark_AI::Reset();
     }
 
+private:
     static constexpr uint32 SPELL_LIGHTNING_CLOUD{ 25033 };
     static constexpr uint32 SPELL_LIGHTNING_WAVE{ 24819 };
     static constexpr uint32 SPELL_ENERGIZE{ 25685 };
@@ -436,6 +450,7 @@ struct npc_eric_dark_AI : public ScriptedAI
     uint16 m_uiCheckPulse{};
     bool m_bIsTrashAllowedToSpawn{};
 
+public:
     void Reset() override
     {
         m_uiLightningCloud_Timer = 5000;
@@ -661,6 +676,169 @@ CreatureAI* GetAI_npc_eric_dark(Creature* pCreature)
 }
 
 
+class npc_citadel_interrogator_AI : public ScriptedAI
+{
+public:
+    explicit npc_citadel_interrogator_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_citadel_interrogator_AI::Reset();
+    }
+
+private:
+    static constexpr uint32 SPELL_STEALTH{ 1787 };
+    static constexpr uint32 SPELL_FRENZY{ 8269 };
+    static constexpr uint32 SPELL_BLIND{ 2094 };
+    static constexpr uint32 SPELL_EVASION{ 5277 };
+    static constexpr uint32 SPELL_EVISCERATE{ 11300 };
+    static constexpr uint32 SPELL_GOUGE{ 11286 };
+    static constexpr uint32 SPELL_SINISTER_STRIKE{ 11294 };
+
+    uint32 m_uiBlind_Timer{};
+    uint32 m_uiGouge_Timer{};
+    uint32 m_uiSinisterStrike_Timer{};
+
+    uint8 m_uiSinisterStrikeHits{};
+
+    bool m_bAlreadyUsedFrenzy{};
+    bool m_bAlreadyUsedEvasion{};
+
+public:
+    void Reset() override
+    {
+        m_uiSinisterStrike_Timer = urand(2000, 3000);
+        m_uiGouge_Timer = 8000;
+        m_uiBlind_Timer = 12000;
+
+        m_uiSinisterStrikeHits = 0;
+
+        m_bAlreadyUsedFrenzy = false;
+        m_bAlreadyUsedEvasion = false;
+
+        if (!m_creature->HasAura(SPELL_STEALTH))
+        {
+            m_creature->CastSpell(m_creature, SPELL_STEALTH, true);
+        }
+    }
+
+    void EnterEvadeMode() override
+    {
+        m_creature->CastSpell(m_creature, SPELL_STEALTH, true);
+
+        ScriptedAI::EnterEvadeMode();
+    }
+
+    void Aggro(Unit* /*pWho*/) override
+    {
+        if (m_creature->HasAura(SPELL_STEALTH))
+        {
+            m_creature->RemoveAurasDueToSpell(SPELL_STEALTH);
+        }
+    }
+
+    void GoFrenzy()
+    {
+        if (m_creature->HealthBelowPct(25) && !m_bAlreadyUsedFrenzy)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_FRENZY) == CanCastResult::CAST_OK)
+            {
+                m_bAlreadyUsedFrenzy = true;
+            }
+        }
+    }
+
+    void DoEvasion()
+    {
+        if (m_creature->HealthBelowPct(50) && !m_bAlreadyUsedEvasion)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_EVASION) == CanCastResult::CAST_OK)
+            {
+                m_bAlreadyUsedEvasion = true;
+            }
+        }
+    }
+
+    void DoEviscerate()
+    {
+        DoCastSpellIfCan(m_creature->GetVictim(), SPELL_EVISCERATE);
+    }
+
+    void DoBlind(const uint32& uiDiff)
+    {
+        if (m_uiBlind_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BLIND) == CanCastResult::CAST_OK)
+            {
+                m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
+
+                m_uiBlind_Timer = urand(12000, 15000);
+            }
+        }
+        else
+        {
+            m_uiBlind_Timer -= uiDiff;
+        }
+    }
+
+    void DoGauge(const uint32& uiDiff)
+    {
+        if (m_uiGouge_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_GOUGE) == CanCastResult::CAST_OK)
+            {
+                m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
+
+                m_uiGouge_Timer = urand(8000, 10000);
+            }
+        }
+        else
+        {
+            m_uiGouge_Timer -= uiDiff;
+        }
+    }
+
+    void DoSinisterStrike(const uint32& uiDiff)
+    {
+        if (m_uiSinisterStrike_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SINISTER_STRIKE) == CanCastResult::CAST_OK)
+            {
+                m_uiSinisterStrike_Timer = urand(2000, 3000);
+                ++m_uiSinisterStrikeHits;
+
+                if (m_uiSinisterStrikeHits >= 5)
+                {
+                    DoEviscerate();
+                    m_uiSinisterStrikeHits = 0;
+                }
+            }
+        }
+        else
+        {
+            m_uiSinisterStrike_Timer -= uiDiff;
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        GoFrenzy();
+        DoEvasion();
+        DoSinisterStrike(uiDiff);
+        DoGauge(uiDiff);
+        DoBlind(uiDiff);
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
+{
+    return new npc_citadel_interrogator_AI(pCreature);
+}
+
+
 void AddSC_trash_mobs_scarlet_citadel()
 {
     Script* pNewscript;
@@ -691,5 +869,9 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript->GetAI = &GetAI_npc_eric_dark;
     pNewscript->RegisterSelf();
 
-    // SECOND WING
+    // Ambush Park
+    pNewscript = new Script;
+    pNewscript->Name = "npc_citadel_interrogator";
+    pNewscript->GetAI = &GetAI_npc_citadel_interrogator;
+    pNewscript->RegisterSelf();
 }
