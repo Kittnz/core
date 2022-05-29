@@ -120,6 +120,7 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
         case ScarletCitadelUnit::NPC_DAELUS:
         {
             m_auiData[ScarletCitadelData::DATA_DAELUS_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
         case ScarletCitadelUnit::NPC_ARDAEUS:
@@ -137,11 +138,13 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
         case ScarletCitadelUnit::NPC_ABBENDIS:
         {
             m_auiData[ScarletCitadelData::DATA_ABBENDIS_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
         case ScarletCitadelUnit::NPC_ERIC_DARK:
         {
             m_auiData[ScarletCitadelData::DATA_ERIC_DARK_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
     }   
@@ -204,11 +207,6 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]); // Open it
                     }
-                }
-
-                if (Creature* p_Creature{ instance->GetCreature(m_auiData[ScarletCitadelData::DATA_ERIC_DARK_GUID]) })
-                {
-                    p_Creature->ForcedDespawn(); // Despawn first wing trash arearigger to prevent respawn of trash after killing 2nd boss
                 }
             }
             else if (uiData == FAIL)
@@ -319,7 +317,11 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
         OUT_SAVE_INST_DATA;
 
         std::ostringstream saveStream;
-        saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " " << m_auiEncounter[3];
+        saveStream
+            << m_auiEncounter[0] << " " // TYPE_DAELUS
+            << m_auiEncounter[1] << " " // TYPE_ARDAEUS
+            << m_auiEncounter[2] << " " // TYPE_MARIELLA
+            << m_auiEncounter[3];       // TYPE_ABBENDIS
 
         str_InstData = saveStream.str();
 
@@ -348,7 +350,11 @@ void instance_scarlet_citadel::Load(char const* chrIn)
 
     std::istringstream loadStream(chrIn);
 
-    loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3];
+    loadStream >>
+        m_auiEncounter[0] >> // TYPE_DAELUS
+        m_auiEncounter[1] >> // TYPE_ARDAEUS
+        m_auiEncounter[2] >> // TYPE_MARIELLA
+        m_auiEncounter[3];   // TYPE_ABBENDIS
 
     for (uint8 i{ 0 }; i < MAX_ENCOUNTER; ++i)
     {
