@@ -97,7 +97,15 @@ public:
 
         m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
 
+        m_creature->SetRespawnDelay(604800);
+
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, DONE);
+
+
+        if (Creature* pEricDark{ m_pInstance->GetSingleCreatureFromStorage(NPC_ERIC_DARK) })
+        {
+            pEricDark->SetRespawnDelay(604800); // If Boss Ardaeus is dead, set Eric Dark's respawntimer to 7 days
+        }
     }
 
     void KilledUnit(Unit* /*pVictim*/) override
