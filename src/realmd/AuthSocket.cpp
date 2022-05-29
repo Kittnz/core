@@ -511,7 +511,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     }
 
                     //force 2FA for staff accounts.
-                    if (securityRank >= SEC_MODERATOR)
+                    if (securityRank >= SEC_MODERATOR && lockFlags == FIXED_PIN)
                     {
                         promptPin = true;
                     }
