@@ -133,11 +133,11 @@ public:
     {
         if (m_uiCounterSpell_Timer < uiDiff)
         {
-            if (Unit* pTarget{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA) })
+            if (Unit* pRandomTarget{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA) })
             {
-                if (pTarget->IsNonMeleeSpellCasted(true))
+                if (pRandomTarget->IsNonMeleeSpellCasted(true))
                 {
-                    if (DoCastSpellIfCan(pTarget, SPELL_COUNTERSPELL) == CAST_OK)
+                    if (DoCastSpellIfCan(pRandomTarget, SPELL_COUNTERSPELL) == CAST_OK)
                     {
                         m_uiCounterSpell_Timer = urand(5000, 8000);
                     }
@@ -555,9 +555,9 @@ public:
     {
         if (m_uiLightningCloud_Timer < uiDiff)
         {
-            if (Unit* pRandomTarget{ m_creature->FindNearestHostilePlayer(15.f) })
+            if (Unit* pClosestTarget{ m_creature->FindNearestHostilePlayer(15.f) })
             {
-                if (DoCastSpellIfCan(pRandomTarget, SPELL_LIGHTNING_CLOUD) == CanCastResult::CAST_OK)
+                if (DoCastSpellIfCan(pClosestTarget, SPELL_LIGHTNING_CLOUD) == CanCastResult::CAST_OK)
                 {
                     m_uiLightningCloud_Timer = 15000;
                 }
@@ -573,11 +573,11 @@ public:
     {
         if (m_uiLightningWave_Timer < uiDiff)
         {
-            if (Unit* pRandomTarget{ m_creature->FindLowestHpHostileUnit(50.f) })
+            if (Unit* pTargetLowestHP{ m_creature->FindLowestHpHostileUnit(50.f) })
             {
-                if (m_creature->IsWithinLOSInMap(pRandomTarget))
+                if (m_creature->IsWithinLOSInMap(pTargetLowestHP))
                 {
-                    if (DoCastSpellIfCan(pRandomTarget, SPELL_LIGHTNING_WAVE) == CanCastResult::CAST_OK)
+                    if (DoCastSpellIfCan(pTargetLowestHP, SPELL_LIGHTNING_WAVE) == CanCastResult::CAST_OK)
                     {
                         m_uiLightningWave_Timer = urand(4000, 5000);
                     }
@@ -839,6 +839,155 @@ CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
 }
 
 
+class npc_citadel_illusionist_AI : public ScriptedAI
+{
+public:
+    explicit npc_citadel_illusionist_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_citadel_illusionist_AI::Reset();
+    }
+
+private:
+    static constexpr uint32 SPELL_SHADOWFORM{ 15473 };
+
+    static constexpr uint32 SPELL_MIND_CONTROL{ 785 };
+    static constexpr uint32 SPELL_SHADOW_VOLLEY{ 21341 };
+    static constexpr uint32 SPELL_MIND_FLAY{ 26143 };
+    static constexpr uint32 SPELL_IMPENDING_DOOM{ 19702 };
+
+    uint32 m_uiMindControl_Timer{};
+    uint32 m_uiShadowVolley_Timer{};
+    uint32 m_uiMindFlay_Timer{};
+    uint32 m_uiImpendingDoom_Timer{};
+
+    uint32 m_uiShadowformCheck_Timer{};
+
+public:
+    void Reset() override
+    {
+        m_uiMindControl_Timer = 15000;
+        m_uiShadowVolley_Timer = 5000;
+        m_uiMindFlay_Timer = 8000;
+        m_uiImpendingDoom_Timer = 6000;
+
+        m_uiShadowformCheck_Timer = 500;
+    }
+
+    void JustDied(Unit* /*pKiller*/) override
+    {
+        m_creature->SetRespawnDelay(604800); // Once dead, set respawntimer to 7 days
+    }
+
+    void CheckForShadowform(const uint32& uiDiff)
+    {
+        if (m_uiShadowformCheck_Timer < uiDiff)
+        {
+            if (!m_creature->HasAura(SPELL_SHADOWFORM))
+            {
+                m_creature->AddAura(SPELL_SHADOWFORM);
+            }
+
+            m_uiShadowformCheck_Timer = 500;
+        }
+        else
+        {
+            m_uiShadowformCheck_Timer -= uiDiff;
+        }
+    }
+
+    void DoMindControl(const uint32& uiDiff)
+    {
+        if (m_uiMindControl_Timer < uiDiff)
+        {
+            if (m_creature->GetThreatManager().getThreatList().size() > 1)
+            {
+                if (Unit* pRandomTarget{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER) })
+                {
+                    if (m_creature->IsWithinLOSInMap(pRandomTarget))
+                    {
+                        if (DoCastSpellIfCan(pRandomTarget, SPELL_MIND_CONTROL) == CanCastResult::CAST_OK)
+                        {
+                            m_uiMindControl_Timer = urand(15000, 25000);
+                        }
+                    }
+                }
+            }
+        }
+        else
+        {
+            m_uiMindControl_Timer -= uiDiff;
+        }
+    }
+
+    void CastShadowVolley(const uint32& uiDiff)
+    {
+        if (m_uiShadowVolley_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_SHADOW_VOLLEY) == CanCastResult::CAST_OK)
+            {
+                m_uiShadowVolley_Timer = urand(6000, 8000);
+            }
+        }
+        else
+        {
+            m_uiShadowVolley_Timer -= uiDiff;
+        }
+    }
+
+    void ChannelMindFlay(const uint32& uiDiff)
+    {
+        if (m_uiMindFlay_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_FLAY) == CanCastResult::CAST_OK)
+            {
+                m_uiMindFlay_Timer = urand(18000, 22000);
+            }
+        }
+        else
+        {
+            m_uiMindFlay_Timer -= uiDiff;
+        }
+    }
+
+    void CastImpendingDoom(const uint32& uiDiff)
+    {
+        if (m_uiImpendingDoom_Timer < uiDiff)
+        {
+            if (Unit* pRandomManaTarget{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA) })
+            {
+                if (DoCastSpellIfCan(pRandomManaTarget, SPELL_IMPENDING_DOOM) == CanCastResult::CAST_OK)
+                {
+                    m_uiImpendingDoom_Timer = 5500;
+                }
+            }
+        }
+        else
+        {
+            m_uiImpendingDoom_Timer -= uiDiff;
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        CheckForShadowform(uiDiff);
+
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+            return;
+
+        DoMindControl(uiDiff);
+        CastShadowVolley(uiDiff);
+        ChannelMindFlay(uiDiff);
+        CastImpendingDoom(uiDiff);
+
+        DoMeleeAttackIfReady();
+    }
+};
+
+CreatureAI* GetAI_npc_citadel_illusionist(Creature* pCreature)
+{
+    return new npc_citadel_illusionist_AI(pCreature);
+}
+
 void AddSC_trash_mobs_scarlet_citadel()
 {
     Script* pNewscript;
@@ -874,4 +1023,12 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript->Name = "npc_citadel_interrogator";
     pNewscript->GetAI = &GetAI_npc_citadel_interrogator;
     pNewscript->RegisterSelf();
+
+    // Shadow Wing
+    pNewscript = new Script;
+    pNewscript->Name = "npc_citadel_illusionist";
+    pNewscript->GetAI = &GetAI_npc_citadel_illusionist;
+    pNewscript->RegisterSelf();
+
+    
 }
