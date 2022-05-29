@@ -304,12 +304,28 @@ SpellModifier::SpellModifier(SpellModOp _op, SpellModType _type, int32 _value, A
     mask = sSpellMgr.GetSpellAffectMask(aura->GetId(), aura->GetEffIndex());
 }
 
+bool HasOverrideAttributes(SpellEntry const* triggerSpell, SpellEntry const* modSpell, SpellModifier mod)
+{
+    if (mod.op == SPELLMOD_DURATION)
+    {
+        if (triggerSpell->SpellFamilyName == SPELLFAMILY_DRUID && triggerSpell->SpellIconID == 1181) // tiger's fury 
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool SpellModifier::isAffectedOnSpell(SpellEntry const *spell) const
 {
     SpellEntry const *affect_spell = sSpellMgr.GetSpellEntry(spellId);
     // False if affect_spell == nullptr or spellFamily not equal
     if (!affect_spell || affect_spell->SpellFamilyName != spell->SpellFamilyName)
         return false;
+
+    if (HasOverrideAttributes(spell, affect_spell, *this))
+        return true;
+
     return spell->IsFitToFamilyMask(mask);
 }
 
