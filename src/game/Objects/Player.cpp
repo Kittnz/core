@@ -6519,6 +6519,19 @@ void Player::CheckAreaExploreAndOutdoor()
     {
         SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset, (uint32)(currFields | val));
 
+        bool eligible_for_title = true;
+        for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
+        {
+            bool explored_chunk = (GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) == 0xFFFFFFFF);
+            if (!explored_chunk)
+            {
+                eligible_for_title = false;
+                break;
+            }
+        }
+        if (eligible_for_title)
+            AwardTitle(TITLE_CARTOGRAPHER);
+
         const auto *p = AreaEntry::GetByAreaFlagAndMap(areaFlag, GetMapId());
         if (!p)
             sLog.outError("PLAYER: Player %u discovered unknown area (x: %f y: %f map: %u", GetGUIDLow(), GetPositionX(), GetPositionY(), GetMapId());
