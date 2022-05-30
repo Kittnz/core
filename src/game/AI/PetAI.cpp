@@ -693,6 +693,13 @@ bool PetAI::CanAttack(Unit* target)
     if (!m_creature->IsValidAttackTarget(target, false))
         return false;
 
+    constexpr uint32 infernoId = 89, doomguardId = 11859;
+
+    if ((m_creature->GetEntry() == infernoId || m_creature->GetEntry() == doomguardId)
+        && target->IsPlayer() && target->ToPlayer()->IsHardcore())
+        return false;
+
+
     if (!target->IsAlive())
     {
         // Clear target to prevent getting stuck on dead targets
