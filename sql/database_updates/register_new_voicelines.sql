@@ -1,0 +1,24 @@
+-- alter table `sound_entries` alter column `id` int(50);
+
+replace into sound_entries values (60348, 'Hateforge Quarry - BARGUL BLACKHAMMER');
+replace into sound_entries values (60349, 'Hateforge Quarry - BARGUL BLACKHAMMER');
+replace into sound_entries values (60350, 'Hateforge Quarry - BARGUL BLACKHAMMER');
+replace into sound_entries values (60351, 'Hateforge Quarry - BARGUL BLACKHAMMER');
+replace into sound_entries values (60352, 'Hateforge Quarry - BARGUL BLACKHAMMER');
+replace into sound_entries values (60353, 'Hateforge Quarry - ENGINEER FIGGLES');
+replace into sound_entries values (60354, 'Hateforge Quarry - ENGINEER FIGGLES');
+replace into sound_entries values (60355, 'Hateforge Quarry - HATEREAVER');
+replace into sound_entries values (60356, 'Hateforge Quarry - HATEREAVER');
+replace into sound_entries values (60360, 'Hateforge Quarry - HARGESH DOOMCALLER');
+replace into sound_entries values (60361, 'Hateforge Quarry - HARGESH DOOMCALLER');
+replace into sound_entries values (30268, 'Scescent Grove - GROVETENDER ENGRYSS');
+replace into sound_entries values (30269, 'Scescent Grove - GROVETENDER ENGRYSS');
+replace into sound_entries values (30270, 'Scescent Grove - GROVETENDER ENGRYSS');
+replace into sound_entries values (30271, 'Scescent Grove - MASTER RAXXIETH');
+replace into sound_entries values (30272, 'Scescent Grove - MASTER RAXXIETH');
+replace into sound_entries values (30273, 'Scescent Grove - MASTER RAXXIETH');
+replace into sound_entries values (30252, 'Scescent Grove - FENEKTIS THE DECEIVER');
+replace into sound_entries values (30253, 'Scescent Grove - FENEKTIS THE DECEIVER');
+replace into sound_entries values (30256, 'Scescent Grove - KEEPER RANATHOS');
+replace into sound_entries values (30257, 'Scescent Grove - KEEPER RANATHOS');
+replace into sound_entries values (30258, 'Scescent Grove - KEEPER RANATHOS');
