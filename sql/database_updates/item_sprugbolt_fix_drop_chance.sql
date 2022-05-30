@@ -1,1 +1,0 @@
-update creature_loot_template set chanceorquestchance = -35 where item in (60159,60325);

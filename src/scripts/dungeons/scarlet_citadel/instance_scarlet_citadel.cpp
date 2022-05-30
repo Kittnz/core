@@ -58,7 +58,7 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
             m_auiData[ScarletCitadelData::DATA_DOOR_DAELUS] = pGo->GetObjectGuid();
 
             if (m_auiEncounter[ScarletCitadelEncounter::TYPE_DAELUS] == DONE)
-                pGo->DeleteLater(); // Remove it (Looks better)
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }
@@ -77,7 +77,7 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
             m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_EXIT] = pGo->GetObjectGuid();
 
             if (m_auiEncounter[ScarletCitadelEncounter::TYPE_ARDAEUS] == DONE)
-                pGo->DeleteLater(); // Remove it (Looks better)
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }
@@ -86,7 +86,7 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
             m_auiData[ScarletCitadelData::DATA_DOOR_RIGHT_WING] = pGo->GetObjectGuid();
 
             if (m_auiEncounter[ScarletCitadelEncounter::TYPE_MARIELLA] == DONE)
-                pGo->DeleteLater(); // Remove it
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }
@@ -104,8 +104,9 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
         {
             m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS] = pGo->GetObjectGuid();
 
-            if (m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] == DONE)
-                pGo->DeleteLater(); // Remove it
+            if ((m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] == DONE) || // Open again when Boss Abbendis is dead
+                (m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] == FAIL))   // Open again when raid wiped
+                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
 
             break;
         }
@@ -119,6 +120,7 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
         case ScarletCitadelUnit::NPC_DAELUS:
         {
             m_auiData[ScarletCitadelData::DATA_DAELUS_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
         case ScarletCitadelUnit::NPC_ARDAEUS:
@@ -136,11 +138,13 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
         case ScarletCitadelUnit::NPC_ABBENDIS:
         {
             m_auiData[ScarletCitadelData::DATA_ABBENDIS_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
-        case ScarletCitadelUnit::NPC_FIRST_WING_TRASH_TRIGGER:
+        case ScarletCitadelUnit::NPC_ERIC_DARK:
         {
-            m_auiData[ScarletCitadelData::DATA_FIRST_AREARIGGER_GUID] = pCreature->GetObjectGuid();
+            m_auiData[ScarletCitadelData::DATA_ERIC_DARK_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
     }   
@@ -155,16 +159,20 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             m_auiEncounter[ScarletCitadelEncounter::TYPE_DAELUS] = uiData;
             if (uiData == DONE)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_RIGHT]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_RIGHT]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_RIGHT]); // Open it
+                    }
                 }
 
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_DAELUS]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_DAELUS]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         p_Go->DeleteLater(); // Remove it (Looks better)
+                    }
                 }
             }
 
@@ -175,37 +183,40 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             m_auiEncounter[ScarletCitadelEncounter::TYPE_ARDAEUS] = uiData;
             if (uiData == IN_PROGRESS)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
                 {
                     if (p_Go->GetGoState() == GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]); // Close it
+                    }
                 }
             }
             else if (uiData == DONE)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_EXIT]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_EXIT]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         p_Go->DeleteLater(); // Remove it (Looks better)
+                    }
                 }
 
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]); // Open it
-                }
-
-                if (Creature * p_Creature{ instance->GetCreature(m_auiData[ScarletCitadelData::DATA_FIRST_AREARIGGER_GUID]) })
-                {
-                    p_Creature->ForcedDespawn(); // Despawn first wing trash arearigger to prevent respawn of trash after killing 2nd boss
+                    }
                 }
             }
             else if (uiData == FAIL)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]); // Open it
+                    }
                 }
             }
 
@@ -216,31 +227,40 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             m_auiEncounter[ScarletCitadelEncounter::TYPE_MARIELLA] = uiData;
             if (uiData == IN_PROGRESS)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
                 {
                     if (p_Go->GetGoState() == GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]); // Close it
+                    }
                 }
             }
             else if (uiData == DONE)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]); // Open it
+                    }
                 }
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_RIGHT_WING]) })
+
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_RIGHT_WING]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         p_Go->DeleteLater(); // Remove it
+                    }
                 }
             }
             else if (uiData == FAIL)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]); // Open it
+                    }
                 }
             }
 
@@ -251,32 +271,40 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] = uiData;
             if (uiData == IN_PROGRESS)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
                 {
                     if (p_Go->GetGoState() == GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]); // Close it
+                    }
                 }
             }
             else if (uiData == DONE)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         p_Go->DeleteLater(); // Remove it
+                    }
                 }
 
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]) }) // Open second vendor door after killing last boss
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]) }) // Open second vendor door after killing last boss
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]); // Open it
+                    }
                 }
             }
             else if (uiData == FAIL)
             {
-                if (GameObject * p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
+                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
                 {
                     if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]); // Open it
+                    }
                 }
             }
 
@@ -289,7 +317,11 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
         OUT_SAVE_INST_DATA;
 
         std::ostringstream saveStream;
-        saveStream << m_auiEncounter[0] << " " << m_auiEncounter[1] << " " << m_auiEncounter[2] << " " << m_auiEncounter[3];
+        saveStream
+            << m_auiEncounter[0] << " " // TYPE_DAELUS
+            << m_auiEncounter[1] << " " // TYPE_ARDAEUS
+            << m_auiEncounter[2] << " " // TYPE_MARIELLA
+            << m_auiEncounter[3];       // TYPE_ABBENDIS
 
         str_InstData = saveStream.str();
 
@@ -318,7 +350,11 @@ void instance_scarlet_citadel::Load(char const* chrIn)
 
     std::istringstream loadStream(chrIn);
 
-    loadStream >> m_auiEncounter[0] >> m_auiEncounter[1] >> m_auiEncounter[2] >> m_auiEncounter[3];
+    loadStream >>
+        m_auiEncounter[0] >> // TYPE_DAELUS
+        m_auiEncounter[1] >> // TYPE_ARDAEUS
+        m_auiEncounter[2] >> // TYPE_MARIELLA
+        m_auiEncounter[3];   // TYPE_ABBENDIS
 
     for (uint8 i{ 0 }; i < MAX_ENCOUNTER; ++i)
     {

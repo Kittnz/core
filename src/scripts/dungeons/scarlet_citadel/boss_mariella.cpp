@@ -141,6 +141,8 @@ public:
     
         m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
 
+        m_creature->SetRespawnDelay(604800);
+
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, DONE);
     }
 

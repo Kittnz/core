@@ -1224,7 +1224,8 @@ class Unit : public WorldObject
         Unit* SelectRandomFriendlyTarget(Unit* except = nullptr, float radius = ATTACK_DISTANCE, bool inCombat = false) const;
         Player* FindNearestHostilePlayer(float range) const;
         Player* FindNearestFriendlyPlayer(float range) const;
-        Unit* FindLowestHpFriendlyUnit(float fRange, uint32 uiMinHPDiff = 1, bool bPercent = false, Unit* except = nullptr) const;
+        Unit* FindLowestHpFriendlyUnit(const float fRange, const uint32 uiMinHPDiff = 1, const bool bPercent = false, Unit* except = nullptr) const;
+        Unit* FindLowestHpHostileUnit(const float fRange, const uint32 uiMinHPDiff = 1, const bool bPercent = false, Unit* except = nullptr) const;
         Unit* FindFriendlyUnitMissingBuff(float range, uint32 spellid, Unit* except = nullptr) const;
         Unit* FindFriendlyUnitCC(float range) const;
         Unit* SummonCreatureAndAttack(uint32 creatureEntry, Unit* pVictim = nullptr);

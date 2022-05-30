@@ -1,0 +1,1 @@
+update creature_template set rank = 1, dmg_min = 290, dmg_max = 301, health_min = 5151, health_max = 5151 where entry = 60720;
