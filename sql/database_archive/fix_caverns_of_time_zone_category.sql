@@ -1,0 +1,1 @@
+update quest_template set zoneorsort = 1941 where zoneorsort = 2300;

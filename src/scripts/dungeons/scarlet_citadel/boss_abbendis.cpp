@@ -45,6 +45,8 @@ struct boss_abbendisAI : public ScriptedAI
         if (!m_pInstance)
             return;
     
+        m_creature->SetRespawnDelay(604800);
+
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ABBENDIS, DONE);
     }
 

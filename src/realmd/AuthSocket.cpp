@@ -383,7 +383,7 @@ bool AuthSocket::_HandleLogonChallenge()
     {
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
-        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate) FROM account WHERE username = '%s'",_safelogin.c_str ());
+        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif,geolock_pin,email,UNIX_TIMESTAMP(joindate),rank FROM account WHERE username = '%s'",_safelogin.c_str ());
         if (result)
         {
             Field* fields = result->Fetch();
@@ -415,6 +415,8 @@ bool AuthSocket::_HandleLogonChallenge()
             _lastIP = fields[3].GetString();
             _geoUnlockPIN = fields[8].GetUInt32();
             _email = fields[9].GetCppString();
+
+            uint8 securityRank = fields[11].GetUInt8();
 
             if (lockFlags & IP_LOCK)
             {
@@ -507,6 +509,33 @@ bool AuthSocket::_HandleLogonChallenge()
                     {
                         promptPin = true; // prompt if the lock hasn't been triggered but ALWAYS_ENFORCE is set
                     }
+
+                    //force 2FA for staff accounts.
+                    if (securityRank >= SEC_MODERATOR && lockFlags == FIXED_PIN)
+                    {
+                        std::string address = get_remote_address();
+                        LoginDatabase.escape_string(address);
+
+
+                        auto result = LoginDatabase.PQuery("SELECT expires_at FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+
+                        if (result)
+                        {
+                            auto fields = result->Fetch();
+                            uint64 expiresAt = fields[0].GetUInt64();
+                            if (expiresAt < time(nullptr)) // expired.
+                            {
+                                LoginDatabase.DirectPExecute("DELETE FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
+                                promptPin = true;
+                            }
+                            else
+                                promptPin = false;
+                            delete result;
+                        }
+                        else
+                            promptPin = true;
+                    }
+
 
                     if (promptPin)
                     {
@@ -733,14 +762,21 @@ bool AuthSocket::_HandleLogonProof()
     {
         if ((lockFlags & FIXED_PIN) == FIXED_PIN)
         {
-            pinResult = VerifyPinData(std::stoi(securityInfo), pinData);
+            pinResult = ValidateToken(securityInfo, pinData);
+            if (pinResult)
+            {
+                //add IP to exception table for 30 days.
+                std::string address = get_remote_address();
+                LoginDatabase.escape_string(address);
+                LoginDatabase.DirectPExecute("INSERT INTO `account_twofactor_allowed`(`ip_address`, `account_id`, `expires_at`) VALUES ('%s', '%u', '%llu')", address.c_str(), _accountId, time(nullptr) + (60 * 60 * 24 * 30)); // 30 days
+            }
             BASIC_LOG("[AuthChallenge] Account '%s' using IP '%s' PIN result: %u", _login.c_str(), get_remote_address().c_str(), pinResult);
         }
         else if ((lockFlags & TOTP) == TOTP)
         {
             for (int i = -2; i != 2; ++i)
             {
-                auto pin = GenerateTotpPin(securityInfo, i);
+                auto pin = 0;
 
                 if (pin == uint32(-1))
                     break;
@@ -1249,37 +1285,40 @@ bool AuthSocket::VerifyPinData(uint32 pin, const PINData& clientData)
     return !memcmp(hash.AsDecStr(), clientHash.AsDecStr(), 20);
 }
 
-uint32 AuthSocket::GenerateTotpPin(const std::string& secret, int interval)
+uint32 GenerateToken(const std::string& b32key, time_t timeOffset)
 {
-    std::vector<uint8> decoded_key((secret.size() + 7) / 8 * 5);
-    int key_size = base32_decode((const uint8_t*)secret.data(), decoded_key.data(), decoded_key.size());
+    size_t keySize = b32key.length();
+    int bufsize = (keySize + 7) / 8 * 5;
+    std::vector<uint8_t> encoded;
+    encoded.resize(bufsize);
+    uint32 hmacResSize = 20;
+    uint8 hmacRes[20];
+    uint64 timestamp = timeOffset / 30;
+    uint8 challenge[8];
 
-    if (key_size == -1)
-    {
-        DEBUG_LOG("Unable to base32 decode TOTP key for user %s", _safelogin.c_str());
-        return -1;
-    }
+    for (int i = 8; i--; timestamp >>= 8)
+        challenge[i] = timestamp;
 
-    // not guaranteed by the standard to be the UNIX epoch but it is on all supported platforms
-    auto time = std::time(nullptr);
-    uint64 now = static_cast<uint64>(time);
-    uint64 step = static_cast<uint64>((floor(now / 30))) + interval;
-    EndianConvertReverse(step);
+    base32_decode((const uint8_t*)b32key.data(),(uint8_t*)encoded.data(), bufsize);
+    HMAC(EVP_sha1(), encoded.data(), bufsize, challenge, 8, hmacRes, &hmacResSize);
 
-    HmacHash hmac(decoded_key.data(), key_size);
-    hmac.UpdateData((uint8*)&step, sizeof(step));
-    hmac.Finalize();
+    uint32 offset = hmacRes[19] & 0xF;
+    uint32 truncHash = (hmacRes[offset] << 24) | (hmacRes[offset + 1] << 16) | (hmacRes[offset + 2] << 8) | (hmacRes[offset + 3]);
+    truncHash &= 0x7FFFFFFF;
 
-    auto hmac_result = hmac.GetDigest();
+    return truncHash % 1000000;
+}
 
-    unsigned int offset = hmac_result[19] & 0xF;
-    std::uint32_t pin = (hmac_result[offset] & 0x7f) << 24 | (hmac_result[offset + 1] & 0xff) << 16
-        | (hmac_result[offset + 2] & 0xff) << 8 | (hmac_result[offset + 3] & 0xff);
-    EndianConvert(pin);
+bool AuthSocket::ValidateToken(std::string const& secretString, PINData& data)
+{
+    time_t now = time(nullptr);
+    uint32 pin1 = GenerateToken(secretString, now - 30), pin2 = GenerateToken(secretString, now), pin3 = GenerateToken(secretString, now + 30);
 
-    pin &= 0x7FFFFFFF;
-    pin %= 1000000;
-    return pin;
+    return (
+        (VerifyPinData(pin1, data)) ||
+        (VerifyPinData(pin2, data)) ||
+        (VerifyPinData(pin3, data))
+        );
 }
 
 void AuthSocket::InitPatch()
