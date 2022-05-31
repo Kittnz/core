@@ -6706,16 +6706,14 @@ void ObjectMgr::LoadSoundEntries()
     std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT * FROM `sound_entries`"));
 
     if (!result)
-    {
         return;
-    }
 
     do
     {
-        Field* fields = result->Fetch();
+        Field const* fields = result->Fetch();
 
         SoundEntriesEntry sound;
-        uint32 soundId = fields[0].GetUInt32();
+        const uint32 soundId = fields[0].GetUInt32();
 
         sound.Id = soundId;
         sound.Name = fields[1].GetCppString();
