@@ -269,6 +269,8 @@ int main(int argc, char** argv)
          quick = false;
     char* offMeshInputPath = nullptr;
 
+    std::cin.get();
+
     bool validParam = handleArgs(argc, argv, mapnum,
                                  tileX, tileY, maxAngle,
                                  skipLiquid, skipContinents, skipJunkMaps, skipBattlegrounds,
@@ -303,6 +305,12 @@ int main(int argc, char** argv)
         builder.buildAllMaps();
         builder.buildTransports();
     }
+
+    while (builder.IsBusy())
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    }
+
 
     return silent ? 1 : finish("Movemap build is complete!", 1);
 }
