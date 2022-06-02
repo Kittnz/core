@@ -19265,7 +19265,7 @@ void Player::LearnDefaultSpells()
             LearnSpell(spell, true);
     }
 
-    if (GetSession()->GetSecurity() > SEC_PLAYER)
+    if (GetSession()->GetSecurity() >= SEC_DEVELOPER)
     {
         LearnGameMasterSpells(); // Add some GM-Spells to new created toons
     }
