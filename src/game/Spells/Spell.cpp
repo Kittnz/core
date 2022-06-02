@@ -1383,9 +1383,9 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 {
                     ((Player*)m_caster)->CastItemCombatSpell(unitTarget, BASE_ATTACK);
                     const auto* m_sealSpellInfo = sSpellMgr.GetSpellEntry(20424);
-                    if (auto playerCaster = m_caster->ToPlayer(); playerCaster->HasSpell(000) && m_sealSpellInfo) //TODO : add sanctified command talent spell id.
+                    if (auto playerCaster = m_caster->ToPlayer(); (playerCaster->HasSpell(45954) || playerCaster->HasSpell(45955)) && m_sealSpellInfo) //sanctified command.
                     {
-                        const uint32 manaEffectiveness = playerCaster->HasSpell(000) ? 10 : 20; // rank 1 or 2.
+                        const uint32 manaEffectiveness = playerCaster->HasSpell(45954) ? 10 : 20; // rank 1 or 2.
 
                         auto group = playerCaster->GetGroup();
                         if (group)
@@ -8801,13 +8801,11 @@ void Spell::RemoveStealthAuras()
                 && m_spellInfo->SpellIconID == 249  // Assommer
            )
         {
-            // Gestion de assommer ameliore
+            // Improved sap
             if (m_casterUnit->HasAura(14076))  // Rang 1
-                doUnaura = (urand(0, 99) > 30);
+                doUnaura = (urand(0, 99) > 50);
             else if (m_casterUnit->HasAura(14094))  // Rang 2
-                doUnaura = (urand(0, 99) > 60);
-            else if (m_casterUnit->HasAura(14095))  // Rang 3
-                doUnaura = (urand(0, 99) > 90);
+                doUnaura = false;
         }
         if (doUnaura)
             m_casterUnit->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
