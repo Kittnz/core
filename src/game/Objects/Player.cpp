@@ -313,6 +313,14 @@ bool HasOverrideAttributes(SpellEntry const* triggerSpell, SpellEntry const* mod
             return true;
         }
     }
+
+    if (mod.op == SPELLMOD_CRIT_DAMAGE_BONUS)
+    {
+        if (triggerSpell->SpellFamilyName == SPELLFAMILY_MAGE && modSpell->SpellIconID == 1708 && triggerSpell->School == SPELL_SCHOOL_ARCANE) // Arcane potency mage
+        {
+            return true;
+        }
+    }
     return false;
 }
 
