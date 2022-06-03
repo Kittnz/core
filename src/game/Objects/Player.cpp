@@ -321,6 +321,15 @@ bool HasOverrideAttributes(SpellEntry const* triggerSpell, SpellEntry const* mod
             return true;
         }
     }
+
+    if (mod.op == SPELLMOD_COOLDOWN)
+    {
+        if (triggerSpell->SpellFamilyName == SPELLFAMILY_WARRIOR && triggerSpell->Id == 20230 &&
+            (modSpell->Id == 45576 || modSpell->Id == 45577 || modSpell->Id == 45578)) // custom retaliation case for CD reduction custom improved disciplines
+        {
+            return true;
+        }
+    }
     return false;
 }
 
