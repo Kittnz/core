@@ -126,7 +126,7 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraModPacifyAndSilence,                   // 60 SPELL_AURA_MOD_PACIFY_SILENCE
     &Aura::HandleAuraModScale,                              // 61 SPELL_AURA_MOD_SCALE
     &Aura::HandlePeriodicHealthFunnel,                      // 62 SPELL_AURA_PERIODIC_HEALTH_FUNNEL
-    &Aura::HandleUnused,                                    // 63 SPELL_AURA_PERIODIC_MANA_FUNNEL obsolete?
+    &Aura::HandlePeriodicManaFunnel,                        // 63 SPELL_AURA_PERIODIC_MANA_FUNNEL NEW CUSTOM 
     &Aura::HandlePeriodicManaLeech,                         // 64 SPELL_AURA_PERIODIC_MANA_LEECH
     &Aura::HandleModCastingSpeed,                           // 65 SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK
     &Aura::HandleFeignDeath,                                // 66 SPELL_AURA_FEIGN_DEATH
@@ -2133,6 +2133,15 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
                     return;
                 }
+
+                //Spirit armor CUSTOM, recalc armor values on remove or apply
+                case 45951:
+                case 45952:
+                case 45953:
+                {
+                    GetTarget()->UpdateArmor();
+                    return;
+                }break;
             }
             break;
         }
@@ -4437,6 +4446,27 @@ void Aura::HandlePeriodicHealthFunnel(bool apply, bool /*Real*/)
     }
 }
 
+void Aura::HandlePeriodicManaFunnel(bool apply, bool/**/)
+{
+    m_isPeriodic = apply;
+
+    // For prevent double apply bonuses
+    bool loading = (GetTarget()->GetTypeId() == TYPEID_PLAYER && ((Player*)GetTarget())->GetSession()->PlayerLoading());
+
+    // Custom damage calculation after
+    if (apply)
+    {
+        if (loading)
+            return;
+
+        Unit* caster = GetCaster();
+        if (!caster)
+            return;
+
+        m_modifier.m_amount = caster->SpellDamageBonusDone(GetTarget(), GetSpellProto(), GetEffIndex(), m_modifier.m_amount, DOT, GetStackAmount());
+    }
+}
+
 /*********************************************************/
 /***                  MODIFY STATS                     ***/
 /*********************************************************/
@@ -6011,6 +6041,47 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             }
             break;
         }
+
+        case SPELL_AURA_PERIODIC_MANA_FUNNEL:
+        {
+            if (!target->IsAlive())
+                return;
+
+            // only do simple pet cases for now, CUSTOM anyway
+
+            //just only accept mana..
+
+            auto caster = GetCaster();
+
+            if (!caster)
+                return;
+
+            if (target->GetPowerType() != POWER_MANA || caster->GetPowerType() != POWER_MANA)
+                return;
+
+            uint32 mana = std::max(m_modifier.m_amount, 0);
+
+            uint32 amount = target->GetPower(POWER_MANA) >= mana ? mana : target->GetPower(POWER_MANA);
+
+            float gain_multiplier = 0;
+
+            if (caster->GetMaxPower(POWER_MANA) > 0)
+            {
+                gain_multiplier = spellProto->EffectMultipleValue[GetEffIndex()];
+
+                if (Player* modOwner = caster->GetSpellModOwner())
+                    modOwner->ApplySpellMod(GetId(), SPELLMOD_MULTIPLE_VALUE, gain_multiplier);
+            }
+
+            SpellPeriodicAuraLogInfo pInfo(this, amount, 0, 0, gain_multiplier);
+            target->SendPeriodicAuraLog(&pInfo);
+
+            int32 gain_amount = int32(amount * gain_multiplier);
+
+            caster->ModifyPower(POWER_MANA, -target->ModifyPower(POWER_MANA, gain_amount));
+
+        }break;
+
         case SPELL_AURA_PERIODIC_MANA_LEECH:
         {
             // don't damage target if not alive, possible death persistent effects

@@ -1382,7 +1382,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 else if (m_spellInfo->SpellIconID == 561)
                 {
                     ((Player*)m_caster)->CastItemCombatSpell(unitTarget, BASE_ATTACK);
-                    const auto* m_sealSpellInfo = sSpellMgr.GetSpellEntry(20424);
+                    const auto* m_sealSpellInfo = sSpellMgr.GetSpellEntry(20375);
                     if (auto playerCaster = m_caster->ToPlayer(); (playerCaster->HasSpell(45954) || playerCaster->HasSpell(45955)) && m_sealSpellInfo) //sanctified command.
                     {
                         const uint32 manaEffectiveness = playerCaster->HasSpell(45954) ? 10 : 20; // rank 1 or 2.
