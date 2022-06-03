@@ -139,10 +139,10 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand gmCommandTable[] =
     {
         { "list",           SEC_DEVELOPER,  true,  &ChatHandler::HandleGMListFullCommand,          "", nullptr },
-        { "ingame",         SEC_DEVELOPER,  true,  &ChatHandler::HandleGMOnlineListCommand,        "", nullptr },
+        { "ingame",         SEC_MODERATOR,  true,  &ChatHandler::HandleGMOnlineListCommand,        "", nullptr },
         { "visible",        SEC_OBSERVER, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
         { "options",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleGMOptionsCommand,           "", nullptr },
-        { "socials",        SEC_DEVELOPER,    false, &ChatHandler::HandleGMSocialsCommand,                "", nullptr},
+        { "socials",        SEC_MODERATOR,    false, &ChatHandler::HandleGMSocialsCommand,                "", nullptr},
         { "setview",        SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetViewCommand,             "", nullptr },
         { "chat",           SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetGMChatCommand,          "", nullptr},
         { "",               SEC_OBSERVER, false, &ChatHandler::HandleGMCommand,                  "", nullptr },
