@@ -4261,6 +4261,10 @@ bool Player::ResetTalents(bool no_cost)
         m_resetTalentsTime = time(nullptr);
     }
 
+    // Warlock: remove Touch of Shadow aura:
+    if (GetClass() == CLASS_WARLOCK && HasAura(18791))
+        RemoveAurasDueToSpell(18791);
+
     //FIXME: remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
     RemovePet(PET_SAVE_REAGENTS);
     return true;
