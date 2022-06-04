@@ -699,7 +699,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         GetMasterPlayer()->areaId = pCurrChar->GetCachedAreaId();
         GetMasterPlayer()->zoneId = pCurrChar->GetCachedZoneId();
         if (!pCurrChar->HasGMDisabledSocials())
-            sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
+            sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
     }
 
     if (!alreadyOnline)

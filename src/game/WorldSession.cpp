@@ -630,8 +630,8 @@ void WorldSession::LogoutPlayer(bool Save)
         if (m_masterPlayer->GetSocial())
         {
             if(!disabledSocials)
-                sSocialMgr.SendFriendStatus(m_masterPlayer, FRIEND_OFFLINE, m_masterPlayer->GetObjectGuid(), true);
-            sSocialMgr.RemovePlayerSocial(m_masterPlayer->GetGUIDLow());
+                sSocialMgr->SendFriendStatus(m_masterPlayer, FRIEND_OFFLINE, m_masterPlayer->GetObjectGuid(), true);
+            sSocialMgr->RemovePlayerSocial(m_masterPlayer->GetObjectGuid());
             m_masterPlayer->SetSocial(nullptr);
         }
 
