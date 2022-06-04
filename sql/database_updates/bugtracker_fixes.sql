@@ -7,5 +7,3 @@ DELETE FROM `spell_proc_event` WHERE `entry` = '19389';
 DELETE FROM `spell_proc_event` WHERE `entry` = '19390';
 
 UPDATE `spell_template` SET `procFlags` = '2097152' WHERE `entry` = '19390';
-
-DELETE FROM `character_social` WHERE `friend` NOT IN (SELECT `guid` FROM `characters`);
