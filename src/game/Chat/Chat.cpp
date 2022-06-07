@@ -140,12 +140,12 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "list",           SEC_DEVELOPER,  true,  &ChatHandler::HandleGMListFullCommand,          "", nullptr },
         { "ingame",         SEC_MODERATOR,  true,  &ChatHandler::HandleGMOnlineListCommand,        "", nullptr },
-        { "visible",        SEC_OBSERVER, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
+        { "visible",        SEC_DEVELOPER, false, &ChatHandler::HandleGMVisibleCommand,           "", nullptr },
         { "options",        SEC_ADMINISTRATOR,     false, &ChatHandler::HandleGMOptionsCommand,           "", nullptr },
         { "socials",        SEC_MODERATOR,    false, &ChatHandler::HandleGMSocialsCommand,                "", nullptr},
         { "setview",        SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetViewCommand,             "", nullptr },
         { "chat",           SEC_ADMINISTRATOR, false, &ChatHandler::HandleSetGMChatCommand,          "", nullptr},
-        { "",               SEC_OBSERVER, false, &ChatHandler::HandleGMCommand,                  "", nullptr },
+        { "",               SEC_DEVELOPER, false, &ChatHandler::HandleGMCommand,                  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -186,8 +186,8 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "create",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildCreateCommand,         "", nullptr },
         { "delete",         SEC_DEVELOPER,    true,  &ChatHandler::HandleGuildDeleteCommand,         "", nullptr },
-        { "invite",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildInviteCommand,         "", nullptr },
-        { "uninvite",       SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildUninviteCommand,       "", nullptr },
+        { "invite",         SEC_MODERATOR,     true,  &ChatHandler::HandleGuildInviteCommand,         "", nullptr },
+        { "uninvite",       SEC_MODERATOR,     true,  &ChatHandler::HandleGuildUninviteCommand,       "", nullptr },
         { "rank",           SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildRankCommand,           "", nullptr },
         { "rename",         SEC_DEVELOPER,    true,  &ChatHandler::HandleGuildRenameCommand,         "", nullptr },
         { "listen",         SEC_DEVELOPER, false, &ChatHandler::HandleGuildListenCommand, "", nullptr},
@@ -259,7 +259,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hp",             SEC_DEVELOPER,     false, &ChatHandler::HandleModifyHPCommand,            "", nullptr },
         { "mana",           SEC_DEVELOPER,     false, &ChatHandler::HandleModifyManaCommand,          "", nullptr },
         { "money",          SEC_DEVELOPER,     false, &ChatHandler::HandleModifyMoneyCommand,         "", nullptr },
-        { "speed",          SEC_OBSERVER, false, &ChatHandler::HandleModifyASpeedCommand,         "", nullptr },
+        { "speed",          SEC_DEVELOPER, false, &ChatHandler::HandleModifyASpeedCommand,         "", nullptr },
         { "scale",          SEC_DEVELOPER,     false, &ChatHandler::HandleModifyScaleCommand,         "", nullptr },
         { "faction",        SEC_DEVELOPER,     false, &ChatHandler::HandleModifyFactionCommand,       "", nullptr },
         { "rep",            SEC_DEVELOPER,     false, &ChatHandler::HandleModifyRepCommand,           "", nullptr },
@@ -543,7 +543,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "worldstate",     SEC_ADMINISTRATOR,   false, nullptr,                                        "", worldStateCommandTable},
         { "bg",             SEC_ADMINISTRATOR,   false, nullptr,                                        "", bgCommandTable},
         { "variable",       SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleVariableCommand,            "", nullptr},
-        { "god",            SEC_OBSERVER,        false, &ChatHandler::HandleGodCommand,                 "", nullptr },
+        { "god",            SEC_DEVELOPER,       false, &ChatHandler::HandleGodCommand,                 "", nullptr },
         { "aura",           SEC_DEVELOPER,       false, &ChatHandler::HandleAuraCommand,                "", nullptr },
         { "unaura",         SEC_DEVELOPER,       false, &ChatHandler::HandleUnAuraCommand,              "", nullptr },
         { "announce",       SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleAnnounceCommand,            "", nullptr },
@@ -566,7 +566,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "cooldown",       SEC_DEVELOPER,       false, &ChatHandler::HandleCooldownCommand,            "", nullptr },
         { "unlearn",        SEC_DEVELOPER,       false, &ChatHandler::HandleUnLearnCommand,             "", nullptr },
         { "distance",       SEC_DEVELOPER,       false, &ChatHandler::HandleGetDistanceCommand,         "", nullptr },
-        { "recall",         SEC_OBSERVER,        false, &ChatHandler::HandleRecallCommand,              "", nullptr },
+        { "recall",         SEC_DEVELOPER,        false, &ChatHandler::HandleRecallCommand,              "", nullptr },
         { "save",           SEC_DEVELOPER,       false, &ChatHandler::HandleSaveCommand,                "", nullptr },
         { "wareffortget",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleGetWarEffortResource,       "", nullptr },
         { "wareffortset",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleSetWarEffortResource,       "", nullptr },
