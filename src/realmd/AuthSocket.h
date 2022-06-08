@@ -64,7 +64,7 @@ class AuthSocket: public BufferedSocket
         void SendProof(Sha1Hash sha);
         void LoadRealmlist(ByteBuffer &pkt);
         bool VerifyPinData(uint32 pin, const PINData& clientData);
-        uint32 GenerateTotpPin(const std::string& secret, int interval);
+        bool ValidateToken(std::string const& secretString, PINData& data);
 
         bool _HandleLogonChallenge();
         bool _HandleLogonProof();

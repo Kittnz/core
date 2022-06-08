@@ -1,0 +1,1 @@
+update quest_template set rewxp = 256 where entry = 70052;

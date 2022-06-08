@@ -850,6 +850,10 @@ void Spell::prepareDataForTriggerSystem()
         }
     }
 
+    // Hunter trap spells - Entrapment
+    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_HUNTER && m_spellInfo->SpellFamilyFlags & 0x4) // Explosive and Immolation Trap
+        m_procAttacker |= PROC_FLAG_ON_TRAP_ACTIVATION;
+
     // some negative spells have positive effects to another or same targets
     // avoid triggering negative hit for only positive targets
     m_negativeEffectMask = 0x0;
@@ -4227,8 +4231,9 @@ void Spell::update(uint32 difftime)
                 RemoveStealthAuras();
                 cast();
             }
+
+            break;
         }
-        break;
         case SPELL_STATE_CASTING:
         {
             if (m_timer > 0)
@@ -4331,11 +4336,11 @@ void Spell::update(uint32 difftime)
 
                 finish();
             }
+
+            break;
         }
-        break;
         default:
-        {
-        } break;
+            break;
     }
 }
 
