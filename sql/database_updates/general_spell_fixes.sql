@@ -48299,3 +48299,11 @@ UPDATE `spell_template` SET `EffectRealPointsPerLevel1`=0.25, `EffectRealPointsP
 
 -- Fixed radius of Consumption spell for Void Zone in Four Horsemen (use same value than TBC DBCs)
 UPDATE spell_template SET EffectRadiusIndex1=7 WHERE entry=28865;
+
+-- Steel Plate * recipes casttimer index:
+replace into spell_mod (id, castingtimeindex) values (47206, 0); 
+replace into spell_mod (id, castingtimeindex) values (47207, 0); 
+replace into spell_mod (id, castingtimeindex) values (47208, 0); 
+replace into spell_mod (id, castingtimeindex) values (47209, 0); 
+replace into spell_mod (id, castingtimeindex) values (47210, 0); 
+replace into spell_mod (id, castingtimeindex) values (47211, 0); 

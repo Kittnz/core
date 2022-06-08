@@ -73,6 +73,7 @@ namespace MMAP
 
             // builds list of maps, then builds all of mmap tiles (based on the skip settings)
             void buildAllMaps();
+            bool IsBusy();
 
             void buildGameObject(std::string modelName, uint32 displayId);
             void buildTransports();

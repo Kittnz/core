@@ -699,7 +699,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         GetMasterPlayer()->areaId = pCurrChar->GetCachedAreaId();
         GetMasterPlayer()->zoneId = pCurrChar->GetCachedZoneId();
         if (!pCurrChar->HasGMDisabledSocials())
-            sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
+            sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_ONLINE, GetMasterPlayer()->GetObjectGuid(), true);
     }
 
     if (!alreadyOnline)
@@ -770,6 +770,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (!pCurrChar->HasSpell(7340))  pCurrChar->LearnSpell(7340, false);  // Language: Gnomish
         if  (pCurrChar->HasSpell(672))   pCurrChar->RemoveSpell(672, false);  // Langue: Dwarven (cleanup in DB later).
     }
+
+    if ((pCurrChar->GetUInt32Value(PLAYER_EXPLORED_ZONES_1) == 0xFFFFFFFF) && !pCurrChar->HasTitle(TITLE_CARTOGRAPHER))
+        pCurrChar->AwardTitle(TITLE_CARTOGRAPHER);
 
     // show time before shutdown if shutdown planned.
     if (sWorld.IsShutdowning())

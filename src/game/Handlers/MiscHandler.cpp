@@ -578,7 +578,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
             else
                 friendResult = FRIEND_ADDED_OFFLINE;
 
-            if (!GetMasterPlayer()->GetSocial()->AddToSocialList(friendGuid, false))
+            if (!GetMasterPlayer()->GetSocial()->AddToSocialList(friendGuid, SOCIAL_FLAG_FRIEND))
             {
                 friendResult = FRIEND_LIST_FULL;
                 DEBUG_LOG("WORLD: %s's friend list is full.", GetMasterPlayer()->GetName());
@@ -586,7 +586,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
         }
     }
 
-    sSocialMgr.SendFriendStatus(GetMasterPlayer(), friendResult, friendGuid, false);
+    sSocialMgr->SendFriendStatus(GetMasterPlayer(), friendResult, friendGuid, false);
 
     DEBUG_LOG("WORLD: Sent (SMSG_FRIEND_STATUS)");
 }
@@ -601,9 +601,9 @@ void WorldSession::HandleDelFriendOpcode(WorldPacket & recv_data)
 
     recv_data >> friendGuid;
 
-    GetMasterPlayer()->GetSocial()->RemoveFromSocialList(friendGuid, false);
+    GetMasterPlayer()->GetSocial()->RemoveFromSocialList(friendGuid, SOCIAL_FLAG_FRIEND);
 
-    sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_REMOVED, friendGuid, false);
+    sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_REMOVED, friendGuid, false);
 
     DEBUG_LOG("WORLD: Sent motd (SMSG_FRIEND_STATUS)");
 }
@@ -643,12 +643,12 @@ void WorldSession::HandleAddIgnoreOpcode(WorldPacket & recv_data)
             ignoreResult = FRIEND_IGNORE_ADDED;
 
             // ignore list full
-            if (!GetMasterPlayer()->GetSocial()->AddToSocialList(ignoreGuid, true))
+            if (!GetMasterPlayer()->GetSocial()->AddToSocialList(ignoreGuid, SOCIAL_FLAG_IGNORED))
                 ignoreResult = FRIEND_IGNORE_FULL;
         }
     }
 
-    sSocialMgr.SendFriendStatus(GetMasterPlayer(), ignoreResult, ignoreGuid, false);
+    sSocialMgr->SendFriendStatus(GetMasterPlayer(), ignoreResult, ignoreGuid, false);
 
     DEBUG_LOG("WORLD: Sent (SMSG_FRIEND_STATUS)");
 }
@@ -663,9 +663,9 @@ void WorldSession::HandleDelIgnoreOpcode(WorldPacket & recv_data)
 
     recv_data >> ignoreGuid;
 
-    GetMasterPlayer()->GetSocial()->RemoveFromSocialList(ignoreGuid, true);
+    GetMasterPlayer()->GetSocial()->RemoveFromSocialList(ignoreGuid, SOCIAL_FLAG_IGNORED);
 
-    sSocialMgr.SendFriendStatus(GetMasterPlayer(), FRIEND_IGNORE_REMOVED, ignoreGuid, false);
+    sSocialMgr->SendFriendStatus(GetMasterPlayer(), FRIEND_IGNORE_REMOVED, ignoreGuid, false);
 
     DEBUG_LOG("WORLD: Sent motd (SMSG_FRIEND_STATUS)");
 }
