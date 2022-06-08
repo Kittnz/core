@@ -169,7 +169,7 @@ void Player::UpdateArmor()
         static std::unordered_map<uint32, uint32> armorLookup =
         {
             {45951, 10},
-            {0000, 20},
+            {45952, 20},
             {45953, 30}
         };
 
