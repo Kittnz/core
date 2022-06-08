@@ -3231,7 +3231,7 @@ void Map::CrashUnload()
 
             if (player->GetSocial())
             {
-                sSocialMgr.RemovePlayerSocial(player->GetGUIDLow());
+                sSocialMgr->RemovePlayerSocial(player->GetObjectGuid());
                 session->GetMasterPlayer()->SetSocial(nullptr);
             }
 
