@@ -46,6 +46,8 @@ enum SocialFlag
     SOCIAL_FLAG_FRIEND      = 0x01,
     SOCIAL_FLAG_IGNORED     = 0x02,
     SOCIAL_FLAG_MUTED       = 0x04,                         // guessed
+
+    SOCIAL_FLAG_ALL = SOCIAL_FLAG_FRIEND | SOCIAL_FLAG_IGNORED | SOCIAL_FLAG_MUTED
 };
 
 struct FriendInfo
@@ -56,27 +58,12 @@ struct FriendInfo
     uint32 Level;
     uint32 Class;
 
-    FriendInfo()
-    {
-        Status = FRIEND_STATUS_OFFLINE;
-        Flags = 0;
-        Area = 0;
-        Level = 0;
-        Class = 0;
-    }
+    FriendInfo() : Status(FRIEND_STATUS_OFFLINE), Flags(0), Area(0), Level(0), Class(0)
+    { }
 
-    explicit FriendInfo(uint32 flags)
-    {
-        Status = FRIEND_STATUS_OFFLINE;
-        Flags = flags;
-        Area = 0;
-        Level = 0;
-        Class = 0;
-    }
+    FriendInfo(uint8 flags) : Status(FRIEND_STATUS_OFFLINE), Flags(flags), Area(0), Level(0), Class(0)
+    { }
 };
-
-typedef std::map<uint32, FriendInfo> PlayerSocialMap;
-typedef std::map<uint32, PlayerSocial> SocialMap;
 
 /// Results of friend related commands
 enum FriendsResult
@@ -118,23 +105,26 @@ class PlayerSocial
     friend class SocialMgr;
     public:
         PlayerSocial();
-        ~PlayerSocial();
         // adding/removing
-        bool AddToSocialList(ObjectGuid friend_guid, bool ignore);
-        void RemoveFromSocialList(ObjectGuid friend_guid, bool ignore);
-        void SetFriendNote(ObjectGuid friend_guid, std::string note);
+        bool AddToSocialList(ObjectGuid const& guid, SocialFlag flag);
+        void RemoveFromSocialList(ObjectGuid const& guid, SocialFlag flag);
         // Packet send's
         void SendFriendList();
         void SendIgnoreList();
         // Misc
         bool HasFriend(ObjectGuid friend_guid) const;
         bool HasIgnore(ObjectGuid ignore_guid) const;
-        void SetPlayerGuid(ObjectGuid guid) { m_playerLowGuid = guid.GetCounter(); }
+
+        ObjectGuid const& GetPlayerGUID() const { return m_playerGUID; }
+        void SetPlayerGUID(ObjectGuid const& guid) { m_playerGUID = guid; }
+
         uint32 GetNumberOfSocialsWithFlag(SocialFlag flag);
+
         void SetMasterPlayer(MasterPlayer* m) { m_masterPlayer = m; }
         MasterPlayer* GetMasterPlayer() const { return m_masterPlayer; }
     private:
-        uint32 m_playerLowGuid;
+        ObjectGuid m_playerGUID;
+        typedef std::map<ObjectGuid, FriendInfo> PlayerSocialMap;
         PlayerSocialMap m_playerSocialMap;
         MasterPlayer* m_masterPlayer;
 };
@@ -142,23 +132,26 @@ class PlayerSocial
 class SocialMgr
 {
     public:
-        SocialMgr();
-        ~SocialMgr();
-        // Misc
-        void RemovePlayerSocial(uint32 guid);
+        static SocialMgr* instance();
 
-        void GetFriendInfo(MasterPlayer *player, uint32 friendGUID, FriendInfo &friendInfo);
+        // Misc
+        void RemovePlayerSocial(ObjectGuid const& guid);
+
+        static void GetFriendInfo(MasterPlayer* player, ObjectGuid const& friendGUID, FriendInfo& friendInfo);
+
         // Packet management
-        void MakeFriendStatusPacket(FriendsResult result, uint32 friend_guid, WorldPacket *data);
-        void SendFriendStatus(MasterPlayer *player, FriendsResult result, ObjectGuid friend_guid, bool broadcast);
+        void SendFriendStatus(MasterPlayer *player, FriendsResult result, ObjectGuid const& friendGuid, bool broadcast);
         void BroadcastToFriendListers(MasterPlayer *player, WorldPacket *packet);
+
         // Loading
-        PlayerSocial *LoadFromDB(QueryResult *result, ObjectGuid guid);
+        PlayerSocial *LoadFromDB(QueryResult *result, ObjectGuid const& guid);
+
     private:
+        typedef std::map<ObjectGuid, PlayerSocial> SocialMap;
         SocialMap m_socialMap;
 
         std::mutex _socialMapLock;
 };
 
-#define sSocialMgr MaNGOS::Singleton<SocialMgr>::Instance()
+#define sSocialMgr SocialMgr::instance()
 #endif

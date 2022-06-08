@@ -452,7 +452,7 @@ void MasterPlayer::SaveActions()
 
 void MasterPlayer::LoadSocial(QueryResult* result)
 {
-    m_social = sSocialMgr.LoadFromDB(result, GetObjectGuid());
+    m_social = sSocialMgr->LoadFromDB(result, GetObjectGuid());
     m_social->SetMasterPlayer(this);
 }
 

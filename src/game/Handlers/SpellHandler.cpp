@@ -402,13 +402,10 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket& recvPacket)
     // it remains until cast finish
     _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ON_CAST_SPELL, 4079);
 
-    if (_player->GetRace() == RACE_TAUREN)
+    if (_player->GetRace() == RACE_TAUREN && _player->HasAura(PLAINSRUNNING_SPELL) && !spellInfo->HasAttribute(SPELL_ATTR_CASTABLE_WHILE_MOUNTED))
     {
-        if (_player->HasAura(PLAINSRUNNING_SPELL))
-        {
-            _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_0);
-            _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_1);
-        }
+        _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_0);
+        _player->RemoveAura(PLAINSRUNNING_SPELL, EFFECT_INDEX_1);
     }
 
     _player->m_castingSpell = spellId;

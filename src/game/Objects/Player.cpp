@@ -2956,7 +2956,7 @@ void Player::SetGMSocials(bool on, bool init)
 
     // only friend status requires immediate update, rest can wait, and only if not logging in.
     if (!init)
-        sSocialMgr.SendFriendStatus(GetSession()->GetMasterPlayer(), status, GetObjectGuid(), true);
+        sSocialMgr->SendFriendStatus(GetSession()->GetMasterPlayer(), status, GetObjectGuid(), true);
 
 }
 
@@ -4261,6 +4261,10 @@ bool Player::ResetTalents(bool no_cost)
         m_resetTalentsTime = time(nullptr);
     }
 
+    // Warlock: remove Touch of Shadow aura:
+    if (GetClass() == CLASS_WARLOCK && HasAura(18791))
+        RemoveAurasDueToSpell(18791);
+
     //FIXME: remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
     RemovePet(PET_SAVE_REAGENTS);
     return true;
@@ -4705,6 +4709,22 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
                 delete resultPets;
             }
 
+            // Delete char from social list of online chars
+            QueryResult* resultFriends = CharacterDatabase.PQuery("SELECT guid FROM character_social WHERE friend = '%u'", lowguid);
+
+            if (resultFriends)
+            {
+                do
+                {
+                    if (MasterPlayer* playerFriend = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, (*resultFriends)[0].GetUInt32())))
+                    {
+                        playerFriend->GetSocial()->RemoveFromSocialList(playerguid, SOCIAL_FLAG_ALL);
+                        sSocialMgr->SendFriendStatus(playerFriend, FRIEND_REMOVED, playerguid, false);
+                    }
+                } while (resultFriends->NextRow());
+                delete resultFriends;
+            }
+
             CharacterDatabase.PExecute("DELETE FROM characters WHERE guid = '%u'", lowguid);
             CharacterDatabase.PExecute("DELETE FROM character_action WHERE guid = '%u'", lowguid);
             CharacterDatabase.PExecute("DELETE FROM character_aura WHERE guid = '%u'", lowguid);
@@ -4723,7 +4743,8 @@ void Player::DeleteFromDB(ObjectGuid playerguid, uint32 accountId, bool updateRe
             CharacterDatabase.PExecute("DELETE FROM character_spell_cooldown WHERE guid = '%u'", lowguid);
             CharacterDatabase.PExecute("DELETE FROM character_ticket WHERE guid = '%u'", lowguid);
             CharacterDatabase.PExecute("DELETE FROM item_instance WHERE owner_guid = '%u'", lowguid);
-            CharacterDatabase.PExecute("DELETE FROM character_social WHERE guid = '%u' OR friend='%u'", lowguid, lowguid);
+            CharacterDatabase.PExecute("DELETE FROM character_social WHERE guid = '%u'", lowguid);
+            CharacterDatabase.PExecute("DELETE FROM character_social WHERE friend = '%u'", lowguid);
             CharacterDatabase.PExecute("DELETE FROM mail WHERE receiver = '%u'", lowguid);
             CharacterDatabase.PExecute("DELETE FROM mail_items WHERE receiver = '%u'", lowguid);
             CharacterDatabase.PExecute("DELETE FROM character_pet WHERE owner = '%u'", lowguid);
@@ -19265,7 +19286,7 @@ void Player::LearnDefaultSpells()
             LearnSpell(spell, true);
     }
 
-    if (GetSession()->GetSecurity() > SEC_PLAYER)
+    if (GetSession()->GetSecurity() >= SEC_DEVELOPER)
     {
         LearnGameMasterSpells(); // Add some GM-Spells to new created toons
     }

@@ -1,0 +1,1 @@
+DELETE FROM `character_social` WHERE `friend` NOT IN (SELECT `guid` FROM `characters`);
