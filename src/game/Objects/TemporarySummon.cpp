@@ -27,14 +27,15 @@ TemporarySummon::TemporarySummon(ObjectGuid summoner) : Creature(CREATURE_SUBTYP
 {
 }
 
-void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
+void TemporarySummon::Update(uint32 update_diff, uint32 diff)
 {
-    switch (m_type)
+    // Don't despawn charmed mob until charm expires. Fixes Warlock's Infernal.
+    if (GetCharmerGuid().IsEmpty() || !HasAuraType(SPELL_AURA_MOD_CHARM))
     {
-        case TEMPSUMMON_MANUAL_DESPAWN:
+        switch (m_type)
         {
+        case TEMPSUMMON_MANUAL_DESPAWN:
             break;
-        }
         case TEMPSUMMON_TIMED_DESPAWN:
         {
             if (m_timer <= update_diff)
@@ -75,7 +76,6 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
 
                 m_timer -= update_diff;
             }
-
             break;
         }
         case TEMPSUMMON_CORPSE_DESPAWN:
@@ -96,7 +96,6 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
                 UnSummon();
                 return;
             }
-
             break;
         }
         case TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN:
@@ -120,7 +119,6 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else if (m_timer != m_lifetime)
                 m_timer = m_lifetime;
-
             break;
         }
         case TEMPSUMMON_TIMED_OR_DEAD_DESPAWN:
@@ -144,7 +142,6 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else if (m_timer != m_lifetime)
                 m_timer = m_lifetime;
-
             break;
         }
         case TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN:
@@ -154,7 +151,6 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
                 UnSummon();
                 return;
             }
-
             if (m_timer <= update_diff)
             {
                 if (!IsInCombat())
@@ -167,7 +163,6 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else
                 m_timer -= update_diff;
-
             break;
         }
         case TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN:
@@ -198,11 +193,9 @@ void TemporarySummon::Update(uint32 update_diff,  uint32 diff)
             }
             else
                 m_timer -= update_diff;
-
             break;
         }
         default:
-        {
             UnSummon();
             sLog.outError("Temporary summoned creature (entry: %u) have unknown type %u of ", GetEntry(), m_type);
             break;
