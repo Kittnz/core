@@ -51,22 +51,28 @@ void MemberSlot::UpdateLogoutTime()
     LogoutTime = time(nullptr);
 }
 
-void MemberSlot::SetPNOTE(std::string pnote)
+void MemberSlot::SetPublicNote(std::string const& publicNote)
 {
-    Pnote = pnote;
+    if (PublicNote == publicNote)
+        return;
+
+    PublicNote = publicNote;
 
     // pnote now can be used for encoding to DB
-    CharacterDatabase.escape_string(pnote);
-    CharacterDatabase.PExecute("UPDATE guild_member SET pnote = '%s' WHERE guid = '%u'", pnote.c_str(), guid.GetCounter());
+    CharacterDatabase.escape_string(PublicNote);
+    CharacterDatabase.PExecute("UPDATE guild_member SET pnote = '%s' WHERE guid = '%u'", PublicNote.c_str(), guid.GetCounter());
 }
 
-void MemberSlot::SetOFFNOTE(std::string offnote)
+void MemberSlot::SetOfficerNote(std::string const& officerNote)
 {
-    OFFnote = offnote;
+    if (OfficerNote == officerNote)
+        return;
+
+    OfficerNote = officerNote;
 
     // offnote now can be used for encoding to DB
-    CharacterDatabase.escape_string(offnote);
-    CharacterDatabase.PExecute("UPDATE guild_member SET offnote = '%s' WHERE guid = '%u'", offnote.c_str(), guid.GetCounter());
+    CharacterDatabase.escape_string(OfficerNote);
+    CharacterDatabase.PExecute("UPDATE guild_member SET offnote = '%s' WHERE guid = '%u'", OfficerNote.c_str(), guid.GetCounter());
 }
 
 void MemberSlot::ChangeRank(uint32 newRank)
@@ -244,14 +250,14 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
     }
 
     newmember.RankId  = plRank;
-    newmember.OFFnote = (std::string)"";
-    newmember.Pnote   = (std::string)"";
+    newmember.OfficerNote = (std::string)"";
+    newmember.PublicNote   = (std::string)"";
     newmember.LogoutTime = time(nullptr);
     members[lowguid] = newmember;
     sGuildMgr.GuildMemberAdded(GetId(), lowguid);
 
-    std::string dbPnote   = newmember.Pnote;
-    std::string dbOFFnote = newmember.OFFnote;
+    std::string dbPnote   = newmember.PublicNote;
+    std::string dbOFFnote = newmember.OfficerNote;
     CharacterDatabase.escape_string(dbPnote);
     CharacterDatabase.escape_string(dbOFFnote);
 
@@ -450,8 +456,8 @@ bool Guild::LoadMembersFromDB(QueryResult *guildMembersResult)
         if (newmember.RankId >= m_Ranks.size())
             newmember.RankId = GetLowestRank();
 
-        newmember.Pnote                 = fields[3].GetCppString();
-        newmember.OFFnote               = fields[4].GetCppString();
+        newmember.PublicNote                 = fields[3].GetCppString();
+        newmember.OfficerNote                = fields[4].GetCppString();
 
         newmember.Name                  = fields[5].GetCppString();
         newmember.Level                 = fields[6].GetUInt8();
@@ -815,7 +821,7 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
 
 
         totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
-        totalSize += info.Slot->Pnote.length() + 1 + info.Slot->OFFnote.length() + 1;
+        totalSize += info.Slot->PublicNote.length() + 1 + info.Slot->OfficerNote.length() + 1;
     }
 
     size_t count = onlineMembers + offlineMembers;
@@ -864,8 +870,8 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
             data << uint32(member.Slot->ZoneId);
             data << float(float(time(nullptr) - member.Slot->LogoutTime) / DAY);
         }
-        data << member.Slot->Pnote;
-        data << member.Slot->OFFnote;
+        data << member.Slot->PublicNote;
+        data << member.Slot->OfficerNote;
     };
     // we can only guess size
     WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));

@@ -64,6 +64,9 @@ bool normalizePlayerName(std::string& name, size_t max_len)
     if (name.empty())
         return false;
 
+    if (name[0] == -61 && name[1] == -97)
+        return false;
+
     std::wstring wstr_buf;
     if (!Utf8toWStr(name, wstr_buf))
         return false;
