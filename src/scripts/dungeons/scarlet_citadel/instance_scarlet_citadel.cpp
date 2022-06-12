@@ -157,21 +157,22 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
         case ScarletCitadelEncounter::TYPE_DAELUS:
         {
             m_auiEncounter[ScarletCitadelEncounter::TYPE_DAELUS] = uiData;
+
             if (uiData == DONE)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_RIGHT]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
-                        DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_RIGHT]); // Open it
+                        DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]); // Open it
                     }
                 }
 
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_DAELUS]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_DAELUS]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
-                        p_Go->DeleteLater(); // Remove it (Looks better)
+                        pGo->SetGoState(GO_STATE_ACTIVE); // Open it
                     }
                 }
             }
@@ -183,9 +184,9 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             m_auiEncounter[ScarletCitadelEncounter::TYPE_ARDAEUS] = uiData;
             if (uiData == IN_PROGRESS)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
                 {
-                    if (p_Go->GetGoState() == GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() == GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]); // Close it
                     }
@@ -193,17 +194,17 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             }
             else if (uiData == DONE)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_EXIT]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_EXIT]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
-                        p_Go->DeleteLater(); // Remove it (Looks better)
+                        pGo->SetGoState(GO_STATE_ACTIVE); // Open it
                     }
                 }
 
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]); // Open it
                     }
@@ -211,9 +212,9 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             }
             else if (uiData == FAIL)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ARDAEUS_ENTER]); // Open it
                     }
@@ -227,9 +228,9 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             m_auiEncounter[ScarletCitadelEncounter::TYPE_MARIELLA] = uiData;
             if (uiData == IN_PROGRESS)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
                 {
-                    if (p_Go->GetGoState() == GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() == GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]); // Close it
                     }
@@ -237,27 +238,27 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             }
             else if (uiData == DONE)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]); // Open it
                     }
                 }
 
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_RIGHT_WING]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_RIGHT_WING]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
-                        p_Go->DeleteLater(); // Remove it
+                        pGo->SetGoState(GO_STATE_ACTIVE); // Open it
                     }
                 }
             }
             else if (uiData == FAIL)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_MARIELLA]); // Open it
                     }
@@ -271,9 +272,9 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             m_auiEncounter[ScarletCitadelEncounter::TYPE_ABBENDIS] = uiData;
             if (uiData == IN_PROGRESS)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
                 {
-                    if (p_Go->GetGoState() == GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() == GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]); // Close it
                     }
@@ -281,17 +282,17 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             }
             else if (uiData == DONE)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
-                        p_Go->DeleteLater(); // Remove it
+                        pGo->DeleteLater(); // Remove it
                     }
                 }
 
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]) }) // Open second vendor door after killing last boss
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]) }) // Open second vendor door after killing last boss
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_VENDOR_LEFT]); // Open it
                     }
@@ -299,9 +300,9 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
             }
             else if (uiData == FAIL)
             {
-                if (GameObject* p_Go{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
+                if (GameObject* pGo{ instance->GetGameObject(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]) })
                 {
-                    if (p_Go->GetGoState() != GO_STATE_ACTIVE)
+                    if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
                         DoUseDoorOrButton(m_auiData[ScarletCitadelData::DATA_DOOR_ABBENDIS]); // Open it
                     }
@@ -326,6 +327,7 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
         str_InstData = saveStream.str();
 
         SaveToDB();
+
         OUT_SAVE_INST_DATA_COMPLETE;
     }
 }
@@ -374,7 +376,8 @@ InstanceData* GetInstanceData_instance_scarlet_citadel(Map* pMap)
 
 void AddSC_instance_scarlet_citadel()
 {
-    Script *pNewscript;
+    Script* pNewscript;
+
     pNewscript = new Script;
     pNewscript->Name = "instance_scarlet_citadel";
     pNewscript->GetInstanceData = &GetInstanceData_instance_scarlet_citadel;
