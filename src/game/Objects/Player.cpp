@@ -19279,11 +19279,16 @@ void Player::LearnDefaultSpells()
 
     for (const auto spell : info->spell)
     {
-        DEBUG_LOG("PLAYER (Class: %u Race: %u): Adding initial spell, id = %u", uint32(GetClass()), uint32(GetRace()), spell);
-        if (!IsInWorld())                                   // will send in INITIAL_SPELLS in list anyway at map add
+        DEBUG_LOG("PLAYER (Class: %u Race: %u): Adding initial spell, id = %u", static_cast<uint32>(GetClass()), static_cast<uint32>(GetRace()), spell);
+
+        if (!IsInWorld()) // will send in INITIAL_SPELLS in list anyway at map add
+        {
             AddSpell(spell, true, true, true, false);
-        else                                                // but send in normal spell in game learn case
+        }
+        else // but send in normal spell in game learn case
+        {
             LearnSpell(spell, true);
+        }
     }
 
     if (GetSession()->GetSecurity() >= SEC_DEVELOPER)
@@ -19382,7 +19387,7 @@ void Player::LearnQuestRewardedSpells()
 
 void Player::LearnGameMasterSpells()
 {
-    const std::size_t aGameMasterSpellList[] =
+    const std::list<std::uint32_t> aGameMasterSpellList =
     {
         56043, // Debug: Next DisplayID
         56044, // Debug: Previous DisplayID
@@ -19397,7 +19402,7 @@ void Player::LearnGameMasterSpells()
         5,     // Death Touch
         11,    // Swiftness
         265,   // Area Death
-        7,     // Suicide
+        7      // Suicide
     };
 
     try
