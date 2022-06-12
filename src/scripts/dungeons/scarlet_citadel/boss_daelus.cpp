@@ -5,8 +5,8 @@
  * absent permission of Nolin.
  */
 
-#include "scriptPCH.h"
-#include "scarlet_citadel.h"
+#include "boss_daelus.hpp"
+
 
 struct boss_daelusAI : public ScriptedAI
 {
@@ -28,8 +28,9 @@ struct boss_daelusAI : public ScriptedAI
         if (!m_pInstance)
             return;
 
-        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
+
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, IN_PROGRESS);
     }
 
     void JustReachedHome() override
@@ -42,10 +43,10 @@ struct boss_daelusAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/) override
     {
+        m_creature->SetRespawnDelay(604800);
+
         if (!m_pInstance)
             return;
-    
-        m_creature->SetRespawnDelay(604800);
 
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, DONE);
     }
@@ -66,7 +67,8 @@ CreatureAI* GetAI_boss_daelus(Creature* pCreature)
 
 void AddSC_boss_daelus()
 {
-    Script *pNewscript;
+    Script* pNewscript;
+
     pNewscript = new Script;
     pNewscript->Name = "boss_daelus";
     pNewscript->GetAI = &GetAI_boss_daelus;

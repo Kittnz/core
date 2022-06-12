@@ -29,8 +29,6 @@
 #include "World.h"
 #include "Util.h"
 
-INSTANTIATE_SINGLETON_1(SocialMgr);
-
 PlayerSocial::PlayerSocial(): m_playerGUID(), m_masterPlayer(nullptr)
 {
 }
