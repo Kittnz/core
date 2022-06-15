@@ -288,7 +288,7 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
 
         while (m_extraAttacks)
         {
-            AttackerStateUpdate(victim, BASE_ATTACK, true, true);
+            AttackerStateUpdate(victim, BASE_ATTACK, true);
             if (m_extraAttacks > 0)
                 --m_extraAttacks;
         }
@@ -343,7 +343,11 @@ AutoAttackCheckResult Unit::CanAutoAttackTarget(Unit const* pVictim) const
     if (!pVictim->IsAlive() || !IsAlive())
         return ATTACK_RESULT_DEAD;
 
-    if (!CanReachWithMeleeAutoAttack(pVictim) || (!IsWithinLOSInMap(pVictim) && !HasUnitState(UNIT_STAT_ALLOW_LOS_ATTACK)))
+    if (!CanReachWithMeleeAutoAttack(pVictim))
+        return ATTACK_RESULT_NOT_IN_RANGE;
+
+    // Creature attacks should probably ignore LoS too, but it might open up exploits.
+    if (!(IsPlayer() && pVictim->IsPlayer()) && !HasUnitState(UNIT_STAT_ALLOW_LOS_ATTACK) && !IsWithinLOSInMap(pVictim))
         return ATTACK_RESULT_NOT_IN_RANGE;
 
     if (GetDistance2dToCenter(pVictim) > NO_FACING_CHECKS_DISTANCE)
@@ -388,7 +392,7 @@ bool Unit::UpdateMeleeAttackingState()
                     if (GetAttackTimer(OFF_ATTACK) < ATTACK_DISPLAY_DELAY)
                         SetAttackTimer(OFF_ATTACK, ATTACK_DISPLAY_DELAY);
                 }
-                AttackerStateUpdate(pVictim, BASE_ATTACK, false);
+                AttackerStateUpdate(pVictim, BASE_ATTACK);
                 ResetAttackTimer(BASE_ATTACK);
             }
             if (HaveOffhandWeapon() && IsAttackReady(OFF_ATTACK))
@@ -398,7 +402,7 @@ bool Unit::UpdateMeleeAttackingState()
                 if (base_att < ATTACK_DISPLAY_DELAY)
                     SetAttackTimer(BASE_ATTACK, ATTACK_DISPLAY_DELAY);
                 // do attack
-                AttackerStateUpdate(pVictim, OFF_ATTACK, false);
+                AttackerStateUpdate(pVictim, OFF_ATTACK);
                 ResetAttackTimer(OFF_ATTACK);
             }
             break;
@@ -623,7 +627,9 @@ void Unit::RemoveFearEffectsByDamageTaken(uint32 damage, uint32 exceptSpellId, D
         {
             case MECHANIC_FEAR:
             case MECHANIC_TURN: // [Turn Undead] #2878
-                canRemoveAura = true;
+                // only fears with proc flags mention that damage may interrupt the effect on tooltip
+                // example: Flash Bomb does not break on damage
+                canRemoveAura = (*iter)->GetSpellProto()->procFlags;
                 break;
         }
         if (!canRemoveAura)
@@ -2022,7 +2028,7 @@ void Unit::CalculateAbsorbResistBlock(SpellCaster* pCaster, SpellNonMeleeDamage*
     damageInfo->damage = (damageInfo->damage <= malus ? 0 : (damageInfo->damage - malus));
 }
 
-void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool checkLoS, bool extra)
+void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool extra)
 {
     if (!pVictim->IsAlive())
         return;
@@ -2037,10 +2043,6 @@ void Unit::AttackerStateUpdate(Unit* pVictim, WeaponAttackType attType, bool che
         hitInfo = HITINFO_LEFTSWING + HITINFO_AFFECTS_VICTIM;
     else
         return;                                             // ignore ranged case
-
-    // Nostalrius: check ligne de vision
-    if (checkLoS && !HasUnitState(UNIT_STAT_ALLOW_LOS_ATTACK) && !IsWithinLOSInMap(pVictim))
-        return;
 
     if (GetExtraAttacks() && !extra)
         AddExtraAttackOnUpdate();
@@ -4404,38 +4406,6 @@ void Unit::SendAttackStateUpdate(uint32 HitInfo, Unit* target, SpellSchoolMask d
     SendAttackStateUpdate(&dmgInfo);
 }
 
-void Unit::SetInitCreaturePowerType()
-{
-    if (IsPlayer())
-        return;
-
-    Creature* pCreature = static_cast<Creature*>(this);
-    Pet* pPet = pCreature->ToPet();
-
-    if (pPet && pPet->getPetType() == HUNTER_PET)
-        return;
-
-    // a bit wrong, but have to follow the dirty database values
-    if (pCreature->GetCreatureInfo()->mana_min > 0)
-        SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_POWER_TYPE, POWER_MANA);
-    else
-    {
-        switch (GetClass())
-        {
-        case CLASS_ROGUE:
-            SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_POWER_TYPE, POWER_ENERGY);
-            SetMaxPower(POWER_ENERGY, GetCreatePowers(POWER_ENERGY));
-            SetPower(POWER_ENERGY, 0);
-            break;
-        default:
-            SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_POWER_TYPE, POWER_RAGE);
-            SetMaxPower(POWER_RAGE, GetCreatePowers(POWER_RAGE));
-            SetPower(POWER_RAGE, 0);
-            break;
-        }
-    }
-}
-
 void Unit::SetPowerType(Powers new_powertype)
 {
     SetByteValue(UNIT_FIELD_BYTES_0, UNIT_BYTES_0_OFFSET_POWER_TYPE, new_powertype);
@@ -5588,6 +5558,13 @@ UnitMountResult Unit::Mount(uint32 mount, uint32 spellId)
     InterruptSpellsWithChannelFlags(AURA_INTERRUPT_MOUNT_CANCELS);
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_MOUNT_CANCELS);
     SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mount);
+
+    if (IsCreature())
+    {
+        UpdateSpeed(MOVE_WALK, false);
+        UpdateSpeed(MOVE_RUN, false);
+    }
+
     return MOUNTRESULT_OK;
 }
 
@@ -5599,6 +5576,13 @@ UnitDismountResult Unit::Unmount(bool from_aura)
     InterruptSpellsWithChannelFlags(AURA_INTERRUPT_DISMOUNT_CANCELS);
     RemoveAurasWithInterruptFlags(AURA_INTERRUPT_DISMOUNT_CANCELS);
     SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 0);
+
+    if (IsCreature())
+    {
+        UpdateSpeed(MOVE_WALK, false);
+        UpdateSpeed(MOVE_RUN, false);
+    }
+
     return DISMOUNTRESULT_OK;
 }
 
@@ -5768,7 +5752,7 @@ void Unit::SetInCombatWithAssisted(Unit* pAssisted)
         }
     }
 
-    SetInCombatState(pAssisted->GetCombatTimer() > 0 ? UNIT_PVP_COMBAT_TIMER : 0);
+    SetInCombatState((pAssisted->GetCombatTimer() > 0 || pAssisted->HasAuraType(SPELL_AURA_INTERRUPT_REGEN)) ? UNIT_PVP_COMBAT_TIMER : 0);
 }
 
 void Unit::TogglePlayerPvPFlagOnAttackVictim(Unit const* pVictim, bool touchOnly/* = false*/)
@@ -6646,7 +6630,10 @@ bool Unit::IsMovedByPlayer() const
         if (pPossessor->GetCharmGuid() == GetObjectGuid())
             return true;
 
-    return IsPlayer() && !static_cast<Player const*>(this)->IsBot();
+    return IsPlayer() &&
+           movespline->Finalized() &&
+           static_cast<Player const*>(this)->IsControlledByOwnClient() &&
+           !static_cast<Player const*>(this)->IsBot();
 }
 
 PlayerMovementPendingChange::PlayerMovementPendingChange()
@@ -6758,17 +6745,17 @@ void Unit::UpdateSpeed(UnitMoveType mtype, bool forced, float ratio)
             switch (mtype)
             {
                 case MOVE_RUN:
-                    speed *= ((Creature*)this)->GetCreatureInfo()->speed_run;
+                    speed *= ((Creature*)this)->GetBaseRunSpeedRate();
                     break;
                 case MOVE_WALK:
-                    speed *= ((Creature*)this)->GetCreatureInfo()->speed_walk;
+                    speed *= ((Creature*)this)->GetBaseWalkSpeedRate();
                     break;
                 default:
                     break;
             }
         }
         else
-            speed *= 1.14286f;  // normalized player pet runspeed
+            speed *= DEFAULT_NPC_RUN_SPEED_RATE;  // normalized player pet runspeed
 
         // Speed reduction at low health percentages
         if (!pCreature->IsPet() && !pCreature->IsWorldBoss())
@@ -7403,8 +7390,6 @@ bool Unit::HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, f
         return false;
     }
 
-    float val = 1.0f;
-
     switch (modifierType)
     {
         case BASE_VALUE:
@@ -7413,11 +7398,7 @@ bool Unit::HandleStatModifier(UnitMods unitMod, UnitModifierType modifierType, f
             break;
         case BASE_PCT:
         case TOTAL_PCT:
-            if (amount <= -100.0f)                          //small hack-fix for -100% modifiers
-                amount = -200.0f;
-
-            val = (100.0f + amount) / 100.0f;
-            m_auraModifiersGroup[unitMod][modifierType] *= apply ? val : (1.0f / val);
+            ApplyPercentModFloatVar(m_auraModifiersGroup[unitMod][modifierType], amount, apply);
             break;
 
         default:

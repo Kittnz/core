@@ -336,6 +336,7 @@ class WorldSession
         void ProcessAnticheatAction(char const* detector, char const* reason, uint32 action, uint32 banTime = 0 /* Perm ban */);
         uint32 GetFingerprint() const { return 0; } // TODO
         void CleanupFingerprintHistory() {} // TODO
+        bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
         
         void SetReceivedWhoRequest(bool v) { m_who_recvd = v; }
         bool ReceivedWhoRequest() const { return m_who_recvd; }
@@ -428,7 +429,6 @@ class WorldSession
         AuctionHouseEntry const* GetCheckedAuctionHouseForAuctioneer(ObjectGuid guid);
 
         // Item Enchantment
-        void SendEnchantmentLog(ObjectGuid targetGuid, ObjectGuid casterGuid, uint32 itemId, uint32 spellId);
         void SendItemEnchantTimeUpdate(ObjectGuid playerGuid, ObjectGuid itemGuid, uint32 slot, uint32 duration);
 
         // Taxi
