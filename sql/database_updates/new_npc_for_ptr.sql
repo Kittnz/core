@@ -10,7 +10,8 @@
 -- Bristleback Rockshaper, display ID 6077, scale 1.1, level 10-11 humanoid, weapon 1839, (has 292 mana, casts 8044 every 15 seconds)
 -- Bristleback Boar, display ID 3027, scale 1, level 9-10, beast, no weapon, (cast 7371 when aggroed only (If able))
 -- Bristleback Trapper, display ID 1274, scale 1, level 11-12, humanoid, weapon 15396, (casts 12024 every 20 seconds)
--- Kas'tal, display ID 628, level 54,  scale 1.3, faction 35, humanoid, weapon : 5306, has 3201 mana, greeting/quest flags, greeting text : "There are many things to learn, and much wisdom to be passed down.\n\n We exiles have a lot to teach the other races of this world." 
+-- Kas'tal, display ID 628, level 54,  scale 1.3, faction 35, humanoid, weapon : 5306, has 3201 mana, greeting/quest flags, greeting text : "There are many things to learn, and much wisdom to be passed down.\n\n We exiles have a lot to teach the other races of this world."
+-- name = 'Ley-Technician Vorthal', subname = 'Thalassian Alliance', level = 45, display_id1 = 17279, equipment_id = 5884. Faction 269 and PvP-flagged. Has the following gossip: "Your curious face tells me you want to know who we are or what we do...\n\n<Ley-Technician Vorthalsighs exasperatedly.>\n\nWe are the Thalassian Alliance, an organization with the noble goal of helping refugees, my people, the High Elves, and of course, supporting our new Alliance allies in whatever they do. Now, if you will excuse me, I need to fix this blasted orb, so, unless you happen to be an expert in ley lines or mana currents, go entertain yourself elsewhere and stop wasting my time."
 REPLACE INTO creature_template VALUES
 (60838, 1193, 0, 0, 0, 'Boulderclaw Tunneler', '', 0, 47, 48, 2577, 2577, 0, 0, 680, 90, 0, 1, 1.14286, 1.1, 20, 5, 0, 0, 1, 87, 112, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 60838, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60839, 1193, 0, 0, 0, 'Boulderclaw Geomancer', '', 0, 49, 50, 2768, 2768, 0, 0, 2999, 90, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67, 92, 100, 7, 0, 60839, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -24,7 +25,8 @@ REPLACE INTO creature_template VALUES
 (60847, 6077, 0, 0, 0, 'Bristleback Rockshaper', '', 0, 10, 11, 198, 212, 292, 292, 455, 16, 0, 1, 1.14286, 1.1, 20, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 7, 0, 60847, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60848, 3027, 0, 0, 0, 'Bristleback Boar', '', 0, 9, 10, 176, 189, 0, 0, 406, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 11, 15, 0, 60, 1, 1900, 2090, 1, 0, 0, 0, 0, 0, 0, 0, 15.2064, 20.9088, 100, 1, 0, 60848, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60849, 1274, 0, 0, 0, 'Bristleback Trapper', '', 0, 11, 12, 212, 247, 0, 0, 573, 16, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 26, 30, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 60849, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60850, 628, 0, 0, 0, 'Kas\'tal', '', 0, 54, 54, 3292, 3292, 3201, 3201, 3216, 35, 3, 1, 1.14286, 1.3, 20, 5, 40, 0, 1, 106, 136, 0, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 153, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(60850, 628, 0, 0, 0, 'Kas\'tal', '', 0, 54, 54, 3292, 3292, 3201, 3201, 3216, 35, 3, 1, 1.14286, 1.3, 20, 5, 40, 0, 1, 106, 136, 0, 244, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 153, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60851, 17279, 0, 0, 0, 'Ley-Technician Vorthal', 'Thalassian Alliance', 0, 45, 45, 2217, 2217, 0, 0, 2725, 269, 3, 1, 1.14714, 0, 20, 5, 40, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 5884, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 20139; set @weapon_1 = 5306; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60850;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -65,6 +67,12 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20130; set @weapon_1 = 2259; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60838;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41156; set @magic_number = 60851;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Your curious face tells me you want to know who we are or what we do...\n\n<Ley-Technician Vorthalsighs exasperatedly.>\n\nWe are the Thalassian Alliance, an organization with the noble goal of helping refugees, my people, the High Elves, and of course, supporting our new Alliance allies in whatever they do.\n\nNow, if you will excuse me, I need to fix this blasted orb, so, unless you happen to be an expert in ley lines or mana currents, go entertain yourself elsewhere and stop wasting my time.!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41155; set @magic_number = 60846;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
