@@ -186,8 +186,8 @@ struct MemberSlot
 {
     void SetMemberStats(Player* player);
     void UpdateLogoutTime();
-    void SetPNOTE(std::string pnote);
-    void SetOFFNOTE(std::string offnote);
+    void SetPublicNote(std::string const& publicNote);
+    void SetOfficerNote(std::string const& officerNote);
     void ChangeRank(uint32 newRank);
 
     ObjectGuid guid;
@@ -198,8 +198,8 @@ struct MemberSlot
     uint8 Class;
     uint32 ZoneId;
     uint64 LogoutTime;
-    std::string Pnote;
-    std::string OFFnote;
+    std::string PublicNote;
+    std::string OfficerNote;
 };
 
 struct RankInfo

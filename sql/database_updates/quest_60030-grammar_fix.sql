@@ -1,1 +1,0 @@
-update quest_template set objectives = 'Bring 5 Linen Cloth, 5 Light Leather, 5 Malachite and 5 Small Leather Collar to the fashionista\'s apprentice and receive one Fashion Coin as a reward.' where entry = 60030;

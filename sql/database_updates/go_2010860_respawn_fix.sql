@@ -1,1 +1,0 @@
-update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 5 where id = 2010860;
