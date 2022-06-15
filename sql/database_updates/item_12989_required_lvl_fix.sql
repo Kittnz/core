@@ -1,1 +1,0 @@
-update item_template set required_level = 18 where entry = 12989;

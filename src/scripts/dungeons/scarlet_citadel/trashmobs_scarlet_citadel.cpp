@@ -509,14 +509,15 @@ public:
     {
         for (const auto& itr : pairlol)
         {
-            if (Creature* pSummoned{ m_creature->SummonCreature(itr.second, m_creature->GetPositionX(), (m_creature->GetPositionY() + 5.f), m_creature->GetPositionZ(),
-                m_creature->GetOrientation(), TEMPSUMMON_MANUAL_DESPAWN) })
+            if (Creature* pSummoned{ m_creature->SummonCreature(itr.second, 147.f, -60.f, 17.f, 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
             {
                 pSummoned->MonsterMoveWithSpeed(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO, 5, MOVE_PATHFINDING);
                 pSummoned->SetHomePosition(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO);
 
                 if (!pSummoned->IsInCombat())
+                {
                     pSummoned->HandleEmote(EMOTE_STATE_READY2H);
+                }
 
                 m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
             }

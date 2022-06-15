@@ -1,0 +1,15 @@
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565187;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565183;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565184;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565182;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565151;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565157;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565159;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565160;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565161;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565163;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565164;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565186;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565185;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565153;
+UPDATE creature SET wander_distance = 30 WHERE guid = 2565162;

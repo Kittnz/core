@@ -516,11 +516,13 @@ void WorldSession::HandleGuildSetPublicNoteOpcode(WorldPacket& recvPacket)
 {
     DEBUG_LOG("WORLD: Received CMSG_GUILD_SET_PUBLIC_NOTE");
 
-    std::string name, PNOTE;
+    std::string name, note;
     recvPacket >> name;
+    recvPacket >> note;
 
-    if (!normalizePlayerName(name))
+    if (!normalizePlayerName(name) || !normalizePlayerName(note))
         return;
+
     Guild* guild = sGuildMgr.GetGuildById(GetPlayer()->GetGuildId());
 
     if (!guild)
@@ -542,11 +544,10 @@ void WorldSession::HandleGuildSetPublicNoteOpcode(WorldPacket& recvPacket)
         return;
     }
 
-    recvPacket >> PNOTE;
-    if (PNOTE.size() > GUILD_NOTE_MAX_LENGTH)
+    if (note.size() > GUILD_NOTE_MAX_LENGTH)
         return;
 
-    slot->SetPNOTE(PNOTE);
+    slot->SetPublicNote(note);
 
     guild->Roster(this);
 }
@@ -555,10 +556,11 @@ void WorldSession::HandleGuildSetOfficerNoteOpcode(WorldPacket& recvPacket)
 {
     DEBUG_LOG("WORLD: Received CMSG_GUILD_SET_OFFICER_NOTE");
 
-    std::string plName, OFFNOTE;
-    recvPacket >> plName;
+    std::string name, note;
+    recvPacket >> name;
+    recvPacket >> note;
 
-    if (!normalizePlayerName(plName))
+    if (!normalizePlayerName(name) || !normalizePlayerName(note))
         return;
 
     Guild* guild = sGuildMgr.GetGuildById(GetPlayer()->GetGuildId());
@@ -568,24 +570,24 @@ void WorldSession::HandleGuildSetOfficerNoteOpcode(WorldPacket& recvPacket)
         SendGuildCommandResult(GUILD_CREATE_S, "", ERR_GUILD_PLAYER_NOT_IN_GUILD);
         return;
     }
+
     if (!guild->HasRankRight(GetPlayer()->GetRank(), GR_RIGHT_EOFFNOTE))
     {
         SendGuildCommandResult(GUILD_INVITE_S, "", ERR_GUILD_PERMISSIONS);
         return;
     }
 
-    MemberSlot* slot = guild->GetMemberSlot(plName);
+    MemberSlot* slot = guild->GetMemberSlot(name);
     if (!slot)
     {
-        SendGuildCommandResult(GUILD_INVITE_S, plName, ERR_GUILD_PLAYER_NOT_IN_GUILD_S);
+        SendGuildCommandResult(GUILD_INVITE_S, name, ERR_GUILD_PLAYER_NOT_IN_GUILD_S);
         return;
     }
 
-    recvPacket >> OFFNOTE;
-    if (OFFNOTE.size() > GUILD_NOTE_MAX_LENGTH)
+    if (note.size() > GUILD_NOTE_MAX_LENGTH)
         return;
 
-    slot->SetOFFNOTE(OFFNOTE);
+    slot->SetOfficerNote(note);
 
     guild->Roster(this);
 }
@@ -618,6 +620,9 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     recvPacket >> rankname;
     DEBUG_LOG("WORLD: Changed RankName to %s , Rights to 0x%.4X", rankname.c_str(), rights);
 
+    if (!normalizePlayerName(rankname))
+        return;
+
     guild->SetRankName(rankId, rankname);
 
     if (rankId == GR_GUILDMASTER)                           // prevent loss leader rights
@@ -635,6 +640,9 @@ void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
 
     std::string rankname;
     recvPacket >> rankname;
+
+    if (!normalizePlayerName(rankname))
+        return;
 
     Guild* guild = sGuildMgr.GetGuildById(GetPlayer()->GetGuildId());
     if (!guild)
@@ -698,6 +706,10 @@ void WorldSession::HandleGuildChangeInfoTextOpcode(WorldPacket& recvPacket)
 
     std::string GINFO;
     recvPacket >> GINFO;
+
+    if (!normalizePlayerName(GINFO))
+        return;
+
     if (GINFO.size() > GUILD_INFO_MAX_LENGTH)
         return;
 
