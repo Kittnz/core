@@ -1219,9 +1219,14 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         {
             if (me->GetDeathState() == CORPSE)
             {
+                me->BuildPlayerRepop();
+                me->RepopAtGraveyard();
+
+                if (me->GetMotionMaster()->GetCurrentMovementGeneratorType())
+                    me->GetMotionMaster()->MoveIdle();
+
                 if (m_resurrect)
                 {
-                    me->BuildPlayerRepop();
                     if (Corpse* corpse = me->GetCorpse())
                     {
                         me->TeleportPositionRelocation(corpse->GetPosition());
@@ -1318,7 +1323,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
         }
     }
 
-    if (!me->IsInCombat() && me->GetLevel() != 1)
+    if (!me->IsInCombat() && me->GetLevel() <= 5)
     {
         if (DrinkAndEat())
         {
@@ -2259,10 +2264,15 @@ bool WorldBotAI::TaskDestination()
 void WorldBotAI::SetExploreDestination()
 {
     // get random poi
+    int mapId = me->GetMapId();
+
     std::random_shuffle(myAreaPOI.begin(), myAreaPOI.end());
     for (auto& poi : myAreaPOI)
     {
         if (poi.map == 0 || poi.map == 1)
+            continue;
+
+        if (poi.map == mapId)
             continue;
 
         DestName = poi.name;
