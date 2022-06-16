@@ -106,7 +106,8 @@ const char* CONF_mpq_list[] =
     "patch-2.MPQ",
     "patch-T.MPQ",
     "patch-U.MPQ",
-    "patch-V.MPQ"
+    "patch-V.MPQ",
+    "patch-W.MPQ"
 };
 
 static std::unordered_multimap<uint32, std::pair<uint32, uint32>> shangAdts =
