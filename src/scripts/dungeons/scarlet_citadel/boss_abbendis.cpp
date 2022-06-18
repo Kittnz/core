@@ -16,7 +16,7 @@ struct boss_abbendisAI : public ScriptedAI
         boss_abbendisAI::Reset();
     }
 
-    instance_scarlet_citadel* m_pInstance;
+    instance_scarlet_citadel* m_pInstance{};
 
     void Reset() override
     {
