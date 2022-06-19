@@ -8,6 +8,7 @@
 #include "scriptPCH.h"
 #include "scarlet_citadel.h"
 
+
 struct boss_abbendisAI : public ScriptedAI
 {
     explicit boss_abbendisAI(Creature* pCreature) : ScriptedAI(pCreature)

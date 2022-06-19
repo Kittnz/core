@@ -7,6 +7,7 @@
 
 #pragma once
 
+
 enum ScarletCitadelUnit : uint32
 {
     // Gameobjects

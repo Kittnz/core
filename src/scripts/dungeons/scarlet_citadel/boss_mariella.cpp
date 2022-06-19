@@ -5,6 +5,8 @@
  * absent permission of Nolin.
  */
 
+#include "scriptPCH.h"
+#include "scarlet_citadel.h"
 #include "boss_mariella.hpp"
 
 
@@ -39,7 +41,7 @@ private:
     bool m_bFelhoundsAlreadyAnnounced{};
     bool m_bEnrage{};
     bool m_bAchievementKill{};
-    bool m_bWasInFight{};
+    bool m_bWasInFight{ false };
     
     instance_scarlet_citadel* m_pInstance{};
 
