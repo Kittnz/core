@@ -70,6 +70,8 @@ public:
     {
         if (Creature* pDaelus{ m_pInstance->GetSingleCreatureFromStorage(NPC_DAELUS) })
         {
+            const std::uint32_t uiChosenOne{ urand(0, (nsDaelus::NUMBER_OF_ADDS - 1)) };
+
             for (std::uint8_t i{ 0 }; i < nsDaelus::NUMBER_OF_ADDS; ++i )
             {
                 if (Creature* pSummoned{ m_creature->SummonCreature(nsDaelus::NPC_CITADEL_MONK,
@@ -78,9 +80,13 @@ public:
                     nsDaelus::vfSpawnPoints[i].m_fZ,
                     nsDaelus::vfSpawnPoints[i].m_fO,TEMPSUMMON_MANUAL_DESPAWN) })
                 {
-                    pSummoned->GetMotionMaster()->Clear();
                     pSummoned->GetMotionMaster()->MoveFollow(pDaelus, ATTACK_DISTANCE, 0.f);
                     pSummoned->SetTargetGuid(0);
+
+                    if (i == uiChosenOne)
+                    {
+                        pSummoned->AddAura(22579); // TODO: Find aura
+                    }
 
                     m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
                 }
