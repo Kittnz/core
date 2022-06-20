@@ -1,0 +1,1 @@
+update item_template set required_reputation_rank = 5 where entry = 83064;
