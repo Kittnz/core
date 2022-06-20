@@ -26,4 +26,6 @@ namespace nsDaelus
     };
 
     static constexpr std::uint32_t NPC_CITADEL_MONK{ 2000013 };
+
+    static constexpr std::uint32_t SPELL_VULNERABLE{ 26235 }; // Adds the red color. Does not actually makes him vulnerable.
 }
