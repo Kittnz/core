@@ -5,9 +5,6 @@
  * absent permission of Nolin.
  */
 
-#include "scriptPCH.h"
-#include "scarlet_citadel.h"
-
 #pragma once
 
 namespace nsDaelus
@@ -17,13 +14,18 @@ namespace nsDaelus
         float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};
     };
 
-    static const Location vfSpawnPoints[] =
+    static constexpr std::uint8_t NUMBER_OF_ADDS{ 6 };
+    static const Location vfSpawnPoints[NUMBER_OF_ADDS] =
     {
         { 36.207348f, -17.218674f, 16.87f, 1.570526f }, // R1
         { 36.207348f,  43.897984f, 16.87f, 4.696410f }, // L1
         { 67.414421f, -17.218674f, 16.87f, 1.570526f }, // R2
         { 67.414421f,  43.897984f, 16.87f, 4.696410f }, // L2
-        { 98.575172f - 17.218674f, 16.87f, 1.570526f }, // R3
+        { 98.575172f, -17.218674f, 16.87f, 1.570526f }, // R3
         { 98.575172f,  43.897984f, 16.87f, 4.696410f }, // L3
     };
+
+    static constexpr std::uint32_t NPC_CITADEL_MONK{ 2000013 };
+
+    static constexpr std::uint32_t SPELL_VULNERABLE{ 26235 }; // Adds the red color. Does not actually makes him vulnerable.
 }
