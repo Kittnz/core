@@ -191,6 +191,7 @@ public:
         if (!m_creature->HasAura(nsDaelus::SPELL_VULNERABLE))
         {
             m_creature->AddAura(nsDaelus::SPELL_VULNERABLE);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
         }
     }
 
