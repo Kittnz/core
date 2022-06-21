@@ -638,6 +638,14 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static bool loaded = false;
+
+    if (!loaded)
+    {
+        loaded = true;
+        FillFullCommandsName(commandTable, "");
+    }
+
     return commandTable;
 }
 
