@@ -899,7 +899,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         {
                             if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
                             {
-                                ChatHandler(this).SendSysMessage("Public guild chats are English speaking only.");
+                                ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
                                 return;
                             }
                         }
