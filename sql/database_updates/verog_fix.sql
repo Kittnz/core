@@ -1,0 +1,1 @@
+update creature_ai_events set event_chance = 2 where id in (327402, 327504, 339703);
