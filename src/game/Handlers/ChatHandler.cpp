@@ -890,7 +890,22 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         {
             if (GetMasterPlayer()->GetGuildId())
                 if (Guild* guild = sGuildMgr.GetGuildById(GetMasterPlayer()->GetGuildId()))
+                {
+                    if (guild->GetId() == GUILD_NEWCOMERS || guild->GetId() == GUILD_HARDCORE)
+                    {
+                        // Still Alive & Newcomers channels should be strictly English-speaking:
+                        std::wstring w_normMsg;
+                        if (Utf8toWStr(msg, w_normMsg))
+                        {
+                            if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+                            {
+                                ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
+                                return;
+                            }
+                        }
+                    }
                     guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
+                }
 
             if (lang != LANG_ADDON)
                 sWorld.LogChat(this, "Guild", msg, nullptr, GetMasterPlayer()->GetGuildId());
