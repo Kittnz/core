@@ -823,6 +823,7 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
     offlineMembers = std::min(offlineMembers, size_t(GUILD_MAX_MEMBERS) - onlineMembers);
 
     const bool inPacketCap = totalSize < MAX_UNCOMPRESSED_PACKET_SIZE;
+    auto sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
 
     if (!inPacketCap)
     {
@@ -832,7 +833,7 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
         // this if block is intentionally left empty.
     }
 
-    auto writeMemberData = [inPacketCap](WorldPacket& data, TempMemberInfo const& member) -> bool
+    auto writeMemberData = [inPacketCap, sendOfficerNote](WorldPacket& data, TempMemberInfo const& member) -> bool
     {
         if (!inPacketCap)
         {
@@ -863,9 +864,10 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
             data << float(float(time(nullptr) - member.Slot->LogoutTime) / DAY);
         }
         data << member.Slot->PublicNote;
-        data << member.Slot->OfficerNote;
+        data << (sendOfficerNote ? member.Slot->OfficerNote : "");
         return true;
     };
+
     // we can only guess size
     WorldPacket data(SMSG_GUILD_ROSTER, (4 + m_motd.length() + 1 + m_info.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
 
