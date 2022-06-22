@@ -1380,7 +1380,7 @@ bool ChatHandler::HandleLookupGuildCommand(char* args)
                     guild->GetCreatedDay());
     PSendSysMessage("- Members: %u (%u accounts)", guild->GetMemberSize(), guild->GetAccountsNumber());
     PSendSysMessage("- MOTD: %s", guild->GetMOTD().c_str());
-    PSendSysMessage("- INFO: %s", guild->GetGINFO().c_str());
+    PSendSysMessage("- INFO: %s", guild->GetInfo().c_str());
 
     return true;
 }
