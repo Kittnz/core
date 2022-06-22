@@ -900,7 +900,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     std::wstring w_normMsg;
                     if (!Utf8toWStr(msg, w_normMsg))
                     {
-                        if (!isBasicLatinString(w_normMsg, true))
+                        if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
                         {
                             ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
                             return;
