@@ -324,7 +324,15 @@ class Guild
             return nullptr;
         }
 
+        void SendRoster(WorldSession* session = nullptr)
+        {
+            if (m_Id == GUILD_NEWCOMERS || m_Id == GUILD_HARDCORE)
+                TempRosterOnline(session);
+            else
+                Roster(session);
+        }
         void Roster(WorldSession *session = nullptr);          // nullptr = broadcast
+        void TempRosterOnline(WorldSession* session = nullptr);          // nullptr = broadcast
         void Query(WorldSession *session);
 
         // Guild EventLog
