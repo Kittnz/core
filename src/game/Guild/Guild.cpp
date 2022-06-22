@@ -771,6 +771,110 @@ void Guild::Disband()
     sGuildMgr.RemoveGuild(m_Id);
 }
 
+void Guild::TempRosterOnline(WorldSession* session /*= nullptr*/)
+{
+    struct TempMemberInfo
+    {
+        ObjectGuid Guid;
+        Player* Member = nullptr;
+        MemberSlot* Slot = nullptr;
+    };
+
+    size_t onlineMembers = 0;
+    std::vector<TempMemberInfo> onlineMemberCache;
+
+    uint32 totalSize = 0;
+    totalSize += sizeof(uint32); // count
+    totalSize += m_motd.length() + 1 + m_info.length() + 1;
+    totalSize += sizeof(uint32); // m_ranks.size()
+    totalSize += sizeof(uint32) * m_Ranks.size(); // all ranks
+
+    for (auto itr = members.begin(); itr != members.end(); ++itr)
+    {
+        TempMemberInfo info;
+        info.Guid = ObjectGuid(HIGHGUID_PLAYER, itr->first);
+        info.Member = ObjectAccessor::FindPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+        info.Slot = &itr->second;
+
+        if (info.Member && !info.Member->HasGMDisabledSocials())
+        {
+            onlineMemberCache.emplace_back(info);
+            ++onlineMembers;
+        }
+
+        totalSize += GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE;
+        totalSize += info.Slot->PublicNote.length() + 1 + info.Slot->OfficerNote.length() + 1;
+    }
+
+    const bool inPacketCap = totalSize < MAX_UNCOMPRESSED_PACKET_SIZE;
+    auto sendOfficerNote = session && session->GetPlayer() ? HasRankRight(session->GetPlayer()->GetRank(), GR_RIGHT_VIEWOFFNOTE) : false;
+
+    auto writeMemberData = [inPacketCap, sendOfficerNote](WorldPacket& data, TempMemberInfo const& member) -> bool
+    {
+        if (!inPacketCap)
+        {
+            // if the packet is expected to be bigger than cap we filter otherwise we might send too much.
+            if (data.size() + GUILD_MEMBER_BLOCK_SIZE >= MAX_UNCOMPRESSED_PACKET_SIZE)
+                return false;
+        }
+
+        data << member.Guid;
+        data << uint8(1); // only online
+        data << member.Member->GetName();
+        data << uint32(member.Slot->RankId);
+        data << uint8(member.Member->GetLevel());
+        data << uint8(member.Member->GetClass());
+        data << uint32(member.Member->GetCachedZoneId());
+        data << member.Slot->PublicNote;
+        data << (sendOfficerNote ? member.Slot->OfficerNote : "");
+        return true;
+    };
+
+    // we can only guess size
+    WorldPacket data(SMSG_GUILD_ROSTER, (4 + m_motd.length() + 1 + m_info.length() + 1 + 4 + m_Ranks.size() * 4 + onlineMembers * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
+
+    uint32 countPos = data.wpos();
+
+    data << uint32(onlineMembers);
+    data << m_motd;
+    data << m_info;
+
+    data << uint32(m_Ranks.size());
+    for (RankList::const_iterator ritr = m_Ranks.begin(); ritr != m_Ranks.end(); ++ritr)
+        data << uint32(ritr->Rights);
+
+
+    //sort the members from highest to lowest rank if over limit.
+    if (!inPacketCap)
+    {
+        std::sort(onlineMemberCache.begin(), onlineMemberCache.end(), [](const TempMemberInfo& a, const TempMemberInfo& b)
+            {
+                return a.Slot->RankId < b.Slot->RankId; // lowest ranks first, lowest rank ids -> highest actual rank
+            });
+    }
+
+    uint32 finalCount = 0;
+
+    for (const auto& member : onlineMemberCache)
+    {
+        if (!member.Member)
+            continue;
+
+        if (writeMemberData(data, member))
+            ++finalCount;
+        else
+            break;
+    }
+
+    data.put<uint32>(countPos, finalCount);
+
+    if (session)
+        session->SendPacket(&data);
+    else
+        BroadcastPacket(&data);
+    DEBUG_LOG("WORLD: Sent (SMSG_GUILD_ROSTER) (ONLY FOR ONLINE)");
+}
+
 void Guild::Roster(WorldSession *session /*= nullptr*/)
 {
     struct TempMemberInfo
