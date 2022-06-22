@@ -89,21 +89,9 @@ void MemberSlot::ChangeRank(uint32 newRank)
 
 //// Guild /////////////////////////////////////////////////
 
-Guild::Guild() : m_Name(), MOTD(), GINFO()
+Guild::Guild() : m_Id(0), m_EmblemStyle(0), m_EmblemColor(0), m_BorderStyle(0), m_BorderColor(0), m_BackgroundColor(0), m_accountsNumber(0),
+    m_CreatedYear(0), m_CreatedMonth(0), m_CreatedDay(0), m_GuildEventLogNextGuid(0), _Bank(nullptr)
 {
-    m_Id = 0;
-    m_EmblemStyle = 0;
-    m_EmblemColor = 0;
-    m_BorderStyle = 0;
-    m_BorderColor = 0;
-    m_BackgroundColor = 0;
-    m_accountsNumber = 0;
-
-    m_CreatedYear = 0;
-    m_CreatedMonth = 0;
-    m_CreatedDay = 0;
-
-    m_GuildEventLogNextGuid = 0;
 }
 
 Guild::~Guild()
@@ -140,8 +128,8 @@ bool Guild::Create(Player* leader, std::string gname)
 
     m_LeaderGuid = leader->GetObjectGuid();
     m_Name = gname;
-    GINFO.clear();
-    MOTD = "No message set.";
+    m_info.clear();
+    m_motd = "No message set.";
     m_Id = sObjectMgr.GenerateGuildId();
 
     // creating data
@@ -156,8 +144,8 @@ bool Guild::Create(Player* leader, std::string gname)
     // gname already assigned to Guild::name, use it to encode string for DB
     CharacterDatabase.escape_string(gname);
 
-    std::string dbGINFO = GINFO;
-    std::string dbMOTD = MOTD;
+    std::string dbGINFO = m_info;
+    std::string dbMOTD = m_motd;
     CharacterDatabase.escape_string(dbGINFO);
     CharacterDatabase.escape_string(dbMOTD);
 
@@ -279,7 +267,7 @@ GuildAddStatus Guild::AddMember(ObjectGuid plGuid, uint32 plRank)
 
 void Guild::SetMOTD(std::string motd)
 {
-    MOTD = motd;
+    m_motd = motd;
 
     // motd now can be used for encoding to DB
     CharacterDatabase.escape_string(motd);
@@ -288,7 +276,7 @@ void Guild::SetMOTD(std::string motd)
 
 void Guild::SetGINFO(std::string ginfo)
 {
-    GINFO = ginfo;
+    m_info = ginfo;
 
     // ginfo now can be used for encoding to DB
     CharacterDatabase.escape_string(ginfo);
@@ -310,8 +298,8 @@ bool Guild::LoadGuildFromDB(QueryResult *guildDataResult)
     m_BorderStyle     = fields[5].GetUInt32();
     m_BorderColor     = fields[6].GetUInt32();
     m_BackgroundColor = fields[7].GetUInt32();
-    GINFO             = fields[8].GetCppString();
-    MOTD              = fields[9].GetCppString();
+    m_info            = fields[8].GetCppString();
+    m_motd            = fields[9].GetCppString();
     time_t time       = fields[10].GetUInt64();
 
     if (time > 0)
@@ -801,7 +789,7 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
 
     uint32 totalSize = 0;
     totalSize += sizeof(uint32); // count
-    totalSize += MOTD.length() + 1 + GINFO.length() + 1;
+    totalSize += m_motd.length() + 1 + m_info.length() + 1;
     totalSize += sizeof(uint32); // m_ranks.size()
     totalSize += sizeof(uint32) * m_Ranks.size(); // all ranks
 
@@ -879,13 +867,13 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
         return true;
     };
     // we can only guess size
-    WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
+    WorldPacket data(SMSG_GUILD_ROSTER, (4 + m_motd.length() + 1 + m_info.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
 
     uint32 countPos = data.wpos();
 
     data << uint32(count);
-    data << MOTD;
-    data << GINFO;
+    data << m_motd;
+    data << m_info;
 
     data << uint32(m_Ranks.size());
     for (RankList::const_iterator ritr = m_Ranks.begin(); ritr != m_Ranks.end(); ++ritr)
