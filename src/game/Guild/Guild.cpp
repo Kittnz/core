@@ -800,6 +800,10 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
     offlineMemberCache.reserve(members.size() / 2);
 
     uint32 totalSize = 0;
+    totalSize += sizeof(uint32); // count
+    totalSize += MOTD.length() + 1 + GINFO.length() + 1;
+    totalSize += sizeof(uint32); // m_ranks.size()
+    totalSize += sizeof(uint32) * m_Ranks.size(); // all ranks
 
     for (auto itr = members.begin(); itr != members.end(); ++itr)
     {
@@ -840,13 +844,13 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
         // this if block is intentionally left empty.
     }
 
-    auto writeMemberData = [inPacketCap](WorldPacket& data, TempMemberInfo const& member) -> void
+    auto writeMemberData = [inPacketCap](WorldPacket& data, TempMemberInfo const& member) -> bool
     {
         if (!inPacketCap)
         {
             // if the packet is expected to be bigger than cap we filter otherwise we might send too much.
             if (data.size() + GUILD_MEMBER_BLOCK_SIZE >= MAX_UNCOMPRESSED_PACKET_SIZE)
-                return;
+                return false;
         }
 
         bool online = member.Member != nullptr && !member.Member->HasGMDisabledSocials();
@@ -872,9 +876,13 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
         }
         data << member.Slot->PublicNote;
         data << member.Slot->OfficerNote;
+        return true;
     };
     // we can only guess size
     WorldPacket data(SMSG_GUILD_ROSTER, (4 + MOTD.length() + 1 + GINFO.length() + 1 + 4 + m_Ranks.size() * 4 + count * GUILD_MEMBER_BLOCK_SIZE_WITHOUT_NOTE));
+
+    uint32 countPos = data.wpos();
+
     data << uint32(count);
     data << MOTD;
     data << GINFO;
@@ -905,12 +913,17 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
     if (offlineMembers < offlineMemberCache.size())
         offlineMemberCache.resize(offlineMemberCache.size() - (offlineMemberCache.size() - offlineMembers));
 
+    uint32 finalCount = 0;
+
     for (const auto& member : onlineMemberCache)
     {
         if (!member.Member)
             continue;
 
-        writeMemberData(data, member);
+        if (writeMemberData(data, member))
+            ++finalCount;
+        else
+            break;
     }
 
     for (const auto& member : offlineMemberCache)
@@ -918,8 +931,13 @@ void Guild::Roster(WorldSession *session /*= nullptr*/)
         if (member.Member && !member.Member->HasGMDisabledSocials())
             continue;
 
-        writeMemberData(data, member);
+        if (writeMemberData(data, member))
+            ++finalCount;
+        else
+            break;
     }
+
+    data.put<uint32>(countPos, finalCount);
 
     if (session)
         session->SendPacket(&data);
