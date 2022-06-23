@@ -27,6 +27,7 @@ private:
 
     std::uint32_t m_uiCallMonks_Timer{};
     std::uint32_t m_uiCheckAndConsumeMonks_Timer{};
+    std::uint32_t m_uiVulnerability_Timer{};
 
     std::vector<ObjectGuid> m_vSpawnedAdds;
 
@@ -54,7 +55,7 @@ public:
         m_creature->SetFactionTemplateId(189);
 
         // Misc
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->AddUnitState(UNIT_STAT_ROOT);
     }
@@ -145,7 +146,7 @@ public:
         {
             SummonAdds();
 
-            m_uiCallMonks_Timer = 15000;
+            m_uiCallMonks_Timer = 30000;
         }
         else
         {
@@ -163,7 +164,7 @@ public:
                 {
                     if (Creature* pMonk{ map->GetCreature(monk) })
                     {
-                        if (pMonk->GetDistance2d(m_creature) < 7.f)
+                        if (pMonk->GetDistance2d(m_creature) < 5.f)
                         {
                             if (pMonk->HasAura(nsDaelus::SPELL_VULNERABLE) && m_uiPhase == 1)
                             {
@@ -191,9 +192,28 @@ public:
     {
         m_creature->AddAura(nsDaelus::SPELL_VULNERABLE);
         m_creature->RemoveAurasDueToSpell(26156);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
         m_creature->MonsterSay("PHASE_2");
 
+        m_uiVulnerability_Timer = 30000;
         m_uiPhase = 2;
+    }
+
+    void CheckVulnerability(const uint32& uiDiff)
+    {
+        if (m_uiVulnerability_Timer < uiDiff)
+        {
+            m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_VULNERABLE);
+            m_creature->CastSpell(m_creature, 26156, true);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
+            m_creature->MonsterSay("PHASE_1");
+
+            m_uiPhase = 1;
+        }
+        else
+        {
+            m_uiVulnerability_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -208,7 +228,7 @@ public:
         }
         else if (m_uiPhase == 2) // Vulnerable
         {
-            // ?
+            CheckVulnerability(uiDiff);
         }
         else if (m_uiPhase == 3) // Soft enrage?
         {
