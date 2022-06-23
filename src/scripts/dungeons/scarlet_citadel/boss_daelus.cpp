@@ -22,6 +22,7 @@ public:
     }
 
 private:
+    std::uint32_t m_uiPhase{};
     std::uint32_t m_uiFivePercent{};
 
     std::uint32_t m_uiCallMonks_Timer{};
@@ -36,6 +37,8 @@ private:
 public:
     void Reset() override
     {
+        m_uiPhase = 1;
+
         m_uiCallMonks_Timer = 5000;
         m_uiCheckAndConsumeMonks_Timer = m_uiCallMonks_Timer;
 
@@ -48,8 +51,11 @@ public:
             m_bWasInFight = false;
         }
 
+        m_creature->SetFactionTemplateId(189);
+
         // Misc
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
+        m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->AddUnitState(UNIT_STAT_ROOT);
     }
 
@@ -59,6 +65,8 @@ public:
             return;
 
         m_bWasInFight = true;
+
+        m_creature->CastSpell(m_creature, 26156, true);
 
         m_creature->SetInCombatWithZone();
 
@@ -83,26 +91,27 @@ public:
 
             for (std::uint8_t i{ 0 }; i < nsDaelus::NUMBER_OF_ADDS; ++i )
             {
-                if (Creature* pSummoned{ m_creature->SummonCreature(nsDaelus::NPC_CITADEL_MONK,
+                if (Creature* pMonk{ m_creature->SummonCreature(nsDaelus::NPC_CITADEL_MONK,
                     nsDaelus::vfSpawnPoints[i].m_fX,
                     nsDaelus::vfSpawnPoints[i].m_fY,
                     nsDaelus::vfSpawnPoints[i].m_fZ,
                     nsDaelus::vfSpawnPoints[i].m_fO,TEMPSUMMON_MANUAL_DESPAWN) })
                 {
                     // Don't react to face-aggro, neither to damage
-                    pSummoned->AI()->SetMeleeAttack(false);
-                    pSummoned->AI()->SetCombatMovement(false);
-                    pSummoned->SetTargetGuid(0);
+                    pMonk->AI()->SetMeleeAttack(false);
+                    pMonk->AI()->SetCombatMovement(false);
+                    //pSummoned->SetTargetGuid(0);
                     
                     // Now move to the boss
-                    pSummoned->MonsterMoveWithSpeed(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), 1.f, MOVE_PATHFINDING);
+                    pMonk->MonsterMoveWithSpeed(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), 1.f, MOVE_PATHFINDING);
 
                     if (i == uiChosenOne)
                     {
-                        pSummoned->AddAura(nsDaelus::SPELL_VULNERABLE); // TODO: Find aura
+                        pMonk->AddAura(nsDaelus::SPELL_VULNERABLE);
+                        pMonk->SetHealth(5);
                     }
 
-                    m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
+                    m_vSpawnedAdds.push_back(pMonk->GetObjectGuid());
                 }
             }
         }
@@ -134,7 +143,7 @@ public:
     {
         if (m_uiCallMonks_Timer < uiDiff)
         {
-            boss_daelusAI::SummonAdds();
+            SummonAdds();
 
             m_uiCallMonks_Timer = 15000;
         }
@@ -144,7 +153,7 @@ public:
         }
     }
 
-    bool CheckAndConsumeMonks(const uint32& uiDiff)
+    void CheckConsumedMonks(const uint32& uiDiff)
     {
         if (m_uiCheckAndConsumeMonks_Timer < uiDiff)
         {
@@ -154,23 +163,17 @@ public:
                 {
                     if (Creature* pMonk{ map->GetCreature(monk) })
                     {
-                        if (!pMonk->IsAlive())
+                        if (pMonk->GetDistance2d(m_creature) < 7.f)
                         {
-                            continue;
-                        }
+                            if (pMonk->HasAura(nsDaelus::SPELL_VULNERABLE) && m_uiPhase == 1)
+                            {
+                                MakeBossVulnerable();
+                            }
 
-                        if (pMonk->GetDistance2d(m_creature) < 10.f)
-                        {
-                            m_creature->SetFacingToObject(m_creature);
                             pMonk->DealDamage(pMonk, pMonk->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
                             // SetHealth truncates to maxhealth internally
                             m_creature->SetHealth(m_creature->GetHealth() + m_uiFivePercent);
-
-                            if (pMonk->HasAura(nsDaelus::SPELL_VULNERABLE))
-                            {
-                                return true;
-                            }
                         }
                     }
                 }
@@ -182,17 +185,15 @@ public:
         {
             m_uiCheckAndConsumeMonks_Timer -= uiDiff;
         }
-
-        return false;
     }
 
     void MakeBossVulnerable()
     {
-        if (!m_creature->HasAura(nsDaelus::SPELL_VULNERABLE))
-        {
-            m_creature->AddAura(nsDaelus::SPELL_VULNERABLE);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
-        }
+        m_creature->AddAura(nsDaelus::SPELL_VULNERABLE);
+        m_creature->RemoveAurasDueToSpell(26156);
+        m_creature->MonsterSay("PHASE_2");
+
+        m_uiPhase = 2;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -200,13 +201,21 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        CallMonks(uiDiff);
-        if (CheckAndConsumeMonks(uiDiff))
+        if (m_uiPhase == 1) // Unvulnerable
         {
-            MakeBossVulnerable();
+            CallMonks(uiDiff);
+            DoMeleeAttackIfReady();
+        }
+        else if (m_uiPhase == 2) // Vulnerable
+        {
+            // ?
+        }
+        else if (m_uiPhase == 3) // Soft enrage?
+        {
+            DoMeleeAttackIfReady();
         }
 
-        DoMeleeAttackIfReady();
+        CheckConsumedMonks(uiDiff);
     }
 };
 
@@ -215,12 +224,54 @@ CreatureAI* GetAI_boss_daelus(Creature* pCreature)
     return new boss_daelusAI(pCreature);
 }
 
+bool GossipHello_boss_daelus(Player* pPlayer, Creature* pCreature)
+{
+    instance_scarlet_citadel const* m_pInstance{ static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData()) };
+
+    if (m_pInstance)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "START_FIGHT", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+    }
+    else
+    {
+        sLog.outError("[SC] Boss Daelus: Boss spawned outside of dungeon.");
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(0001, pCreature->GetObjectGuid());
+
+    return true;
+}
+
+bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, const uint32 uiAction)
+{
+    if (!pPlayer || !pCreature)
+        return false;
+
+    switch (uiAction)
+    {
+        case (GOSSIP_ACTION_INFO_DEF + 1):
+        {
+            pPlayer->CLOSE_GOSSIP_MENU();
+            pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            pCreature->SetFactionTemplateId(67);
+            pCreature->SetInCombatWithZone();
+
+            break;
+        }
+    }
+
+    return true;
+}
+
 void AddSC_boss_daelus()
 {
     Script* pNewscript;
 
     pNewscript = new Script;
     pNewscript->Name = "boss_daelus";
+    pNewscript->pGossipHello = &GossipHello_boss_daelus;
+    pNewscript->pGossipSelect = &GossipSelect_boss_daelus;
     pNewscript->GetAI = &GetAI_boss_daelus;
     pNewscript->RegisterSelf();
 }
