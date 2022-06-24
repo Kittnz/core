@@ -5052,6 +5052,12 @@ void Spell::TakePower()
     // health as power used
     if (m_spellInfo->powerType == POWER_HEALTH)
     {
+        if (m_casterUnit->GetHealth() <= m_powerCost) // SAFEGUARD: some NPCs skip health-using spell checks for sufficient HP, causing 0 HP on creatures who aren't dead, bad.
+        {
+            m_casterUnit->SetHealth(1);
+            return;
+        }
+
         m_casterUnit->ModifyHealth(-(int32)m_powerCost);
         return;
     }
