@@ -236,6 +236,7 @@ class ChatHandler
         bool HandleAccountPasswordCommand(char* args);
         bool HandleAccountSetGmLevelCommand(char* args);
         bool HandleAccountSetPasswordCommand(char* args);
+        bool HandleAccountFaCommand(char* args);
 
         bool HandleBanAccountCommand(char* args);
         bool HandleBanCharacterCommand(char* args);

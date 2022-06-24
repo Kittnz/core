@@ -71,6 +71,7 @@
 #include "WorldSession.h"
 #include "GuidObjectScaling.h"
 #include "revision.h"
+#include "Auth/base32.h"
 #include <cctype>
 #include <fstream>
 #include <iostream>
@@ -204,6 +205,37 @@ bool ChatHandler::HandleAccountSetPasswordCommand(char* args)
             return false;
     }
 
+    return true;
+}
+
+bool ChatHandler::HandleAccountFaCommand(char* args)
+{
+    const std::string possibleChars = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+    std::string account_name;
+    uint32 targetAccountId = ExtractAccountId(&args, &account_name);
+    if (!targetAccountId)
+        return false;
+
+    auto res = std::unique_ptr<QueryResult>(LoginDatabase.PQuery("SELECT `security` FROM `account` WHERE `id` = '%u' AND `locked` = 2", targetAccountId));
+
+    if (res)
+    {
+        PSendSysMessage("Account %s already has 2FA enabled. Token: %s.", account_name.c_str(), res->Fetch()[0].GetCppString().c_str());
+        return false;
+    }
+
+    std::string randTokBuff;
+    for (uint32 i = 0; i < 8; ++i)
+    {
+        randTokBuff += possibleChars[urand(0, possibleChars.length() - 1)];
+    }
+
+    std::string output;
+    output.resize(16);
+
+    base32_encode((const uint8_t*)randTokBuff.data(), 8, (uint8_t*)output.data(), 16);
+    PSendSysMessage("Token: %s", output.c_str());
+    LoginDatabase.PExecute("UPDATE `account` SET `security` = '%s', `locked` = 2 WHERE id = '%u'", output.c_str(), targetAccountId);
     return true;
 }
 
