@@ -235,8 +235,8 @@ class Guild
         uint32 GetId(){ return m_Id; }
         ObjectGuid GetLeaderGuid() const { return m_LeaderGuid; }
         std::string const& GetName() const { return m_Name; }
-        std::string const& GetMOTD() const { return MOTD; }
-        std::string const& GetGINFO() const { return GINFO; }
+        std::string const& GetMOTD() const { return m_motd; }
+        std::string const& GetInfo() const { return m_info; }
 
         void Rename(std::string& newName);
 
@@ -324,7 +324,15 @@ class Guild
             return nullptr;
         }
 
+        void SendRoster(WorldSession* session = nullptr)
+        {
+            if (m_Id == GUILD_NEWCOMERS || m_Id == GUILD_HARDCORE)
+                TempRosterOnline(session);
+            else
+                Roster(session);
+        }
         void Roster(WorldSession *session = nullptr);          // nullptr = broadcast
+        void TempRosterOnline(WorldSession* session = nullptr);          // nullptr = broadcast
         void Query(WorldSession *session);
 
         // Guild EventLog
@@ -339,8 +347,8 @@ class Guild
         uint32 m_Id;
         std::string m_Name;
         ObjectGuid m_LeaderGuid;
-        std::string MOTD;
-        std::string GINFO;
+        std::string m_motd;
+        std::string m_info;
         uint32 m_CreatedYear;
         uint32 m_CreatedMonth;
         uint32 m_CreatedDay;

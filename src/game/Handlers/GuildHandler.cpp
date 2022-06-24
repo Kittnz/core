@@ -256,7 +256,7 @@ void WorldSession::HandleGuildRosterOpcode(WorldPacket& /*recvPacket*/)
     DEBUG_LOG("WORLD: Received CMSG_GUILD_ROSTER");
 
     if (Guild* guild = sGuildMgr.GetGuildById(_player->GetGuildId()))
-        guild->Roster(this);
+        guild->SendRoster(this);
 }
 
 void WorldSession::HandleGuildPromoteOpcode(WorldPacket& recvPacket)
@@ -549,7 +549,7 @@ void WorldSession::HandleGuildSetPublicNoteOpcode(WorldPacket& recvPacket)
 
     slot->SetPublicNote(note);
 
-    guild->Roster(this);
+    guild->SendRoster(this);
 }
 
 void WorldSession::HandleGuildSetOfficerNoteOpcode(WorldPacket& recvPacket)
@@ -589,7 +589,7 @@ void WorldSession::HandleGuildSetOfficerNoteOpcode(WorldPacket& recvPacket)
 
     slot->SetOfficerNote(note);
 
-    guild->Roster(this);
+    guild->SendRoster(this);
 }
 
 void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
@@ -631,7 +631,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     guild->SetRankRights(rankId, rights);
 
     guild->Query(this);
-    guild->Roster();                                        // broadcast for tab rights update
+    guild->SendRoster();                                        // broadcast for tab rights update
 }
 
 void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
@@ -663,7 +663,7 @@ void WorldSession::HandleGuildAddRankOpcode(WorldPacket& recvPacket)
     guild->CreateRank(rankname, GR_RIGHT_GCHATLISTEN | GR_RIGHT_GCHATSPEAK);
 
     guild->Query(this);
-    guild->Roster();                                        // broadcast for tab rights update
+    guild->SendRoster();                                        // broadcast for tab rights update
 }
 
 void WorldSession::HandleGuildDelRankOpcode(WorldPacket& /*recvPacket*/)
@@ -686,7 +686,7 @@ void WorldSession::HandleGuildDelRankOpcode(WorldPacket& /*recvPacket*/)
     guild->DelRank();
 
     guild->Query(this);
-    guild->Roster();                                        // broadcast for tab rights update
+    guild->SendRoster();                                        // broadcast for tab rights update
 }
 
 void WorldSession::SendGuildCommandResult(uint32 typecmd, std::string const& str, uint32 cmdresult)
