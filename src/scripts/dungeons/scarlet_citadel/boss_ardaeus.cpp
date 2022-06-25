@@ -306,7 +306,13 @@ public:
         m_fDownwardSpeed = 0.5f;
         m_fNewPositionZ = 0.f;
 
+        SetCombatMovement(false);
+
         m_creature->GetMotionMaster()->Clear();
+        m_creature->SetSpeedRate(MOVE_RUN, .1f);
+        m_creature->CastSpell(m_creature, 17131, true);
+        m_creature->SetFly(true);
+        m_creature->SetLevitate(true);
     }
 
     void MoveDownwards()
@@ -317,7 +323,7 @@ public:
             nsArdaeus::vfSunMovePoints[1].m_fX,
             nsArdaeus::vfSunMovePoints[1].m_fY,
             nsArdaeus::vfSunMovePoints[1].m_fZ,
-            MOVE_FLY_MODE, m_fDownwardSpeed);
+            (MOVE_FLY_MODE), m_fDownwardSpeed);
     }
 
     void MoveUpwards()
@@ -329,7 +335,7 @@ public:
             nsArdaeus::vfSunMovePoints[0].m_fX,
             nsArdaeus::vfSunMovePoints[0].m_fY,
             m_fNewPositionZ,
-            (MOVE_FLY_MODE | MOVE_FORCE_DESTINATION | MOVE_STRAIGHT_PATH), m_fUpwardSpeed);
+            (MOVE_FLY_MODE), m_fUpwardSpeed);
 
         m_uiDamageDone = 0;
     }
