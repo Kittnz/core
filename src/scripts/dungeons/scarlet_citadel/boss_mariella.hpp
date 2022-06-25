@@ -148,6 +148,9 @@ namespace nsMariella
             {
                 return "It seems I have nothing to worry about, you will not touch my treasure.";
             }
+
+            default:
+                return "<>";
         }
     }
 
@@ -173,7 +176,7 @@ namespace nsMariella
             }
             default:
             {
-                break;
+                return "<>";
             }
         }
     }
