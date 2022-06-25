@@ -898,7 +898,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 {
                     // Still Alive & Newcomers channels should be strictly English-speaking:
                     std::wstring w_normMsg;
-                    if (Utf8toWStr(msg, w_normMsg))
+                    if (!Utf8toWStr(msg, w_normMsg))
                     {
                         ChatHandler(this).SendSysMessage("Don't use invalid characters in public guild chats!");
                         return;
