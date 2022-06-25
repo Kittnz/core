@@ -27,5 +27,75 @@ namespace nsDaelus
 
     static constexpr std::uint32_t NPC_CITADEL_MONK{ 2000013 };
 
-    static constexpr std::uint32_t SPELL_VULNERABLE{ 26235 }; // Adds the red color. Does not actually makes him vulnerable.
+    static constexpr std::uint32_t SPELL_RED_COLOR{ 26235 };
+    static constexpr std::uint32_t SPELL_VULNERABILITY{ 26156 };
+
+    static constexpr std::uint32_t CALL_MONKS_FIRST_TIMER{ 5000 };
+    static constexpr std::uint32_t CALL_MONKS_REPEAT_TIMER{ 30000 };
+    static constexpr std::uint32_t CHECK_MONKS_REPEAT_TIMER{ 500 };
+
+    static constexpr std::uint32_t FACTION_SCARLET{ 67 };  // Scarlet Citadel Faction
+    static constexpr std::uint32_t FACTION_NEUTRAL{ 189 }; // Neutral Faction
+
+    static constexpr auto START_BUTTON{ "START_BUTTON" };
+
+    enum class CombatNotifications
+    {
+        ABOUT_TO_START,
+        START,
+        PHASE_ONE,
+        PHASE_TWO,
+        PHASE_THREE,
+        ENRAGE,
+        RAIDWIPE,
+        BOSSDIED,
+        ACHIEVEMENT_FAILED
+    };
+
+    const std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNotifications)
+    {
+        switch (combatNotifications)
+        {
+            case CombatNotifications::ABOUT_TO_START:
+            {
+                return "ABOUT_TO_START";
+            }
+            case CombatNotifications::START:
+            {
+                return "START";
+            }
+            case CombatNotifications::PHASE_ONE:
+            {
+                return "PHASE_ONE";
+            }
+            case CombatNotifications::PHASE_TWO:
+            {
+                return "PHASE_TWO";
+            }
+            case CombatNotifications::PHASE_THREE:
+            {
+                return "PHASE_THREE";
+            }
+            case CombatNotifications::ENRAGE:
+            {
+                return "ENRAGE";
+            }
+            case CombatNotifications::RAIDWIPE:
+            {
+                return "RAIDWIPE";
+            }
+            case CombatNotifications::BOSSDIED:
+            {
+                return "BOSSDIED";
+            }
+            case CombatNotifications::ACHIEVEMENT_FAILED:
+            {
+                return "ACHIEVEMENT_FAILED";
+            }
+            default:
+            {
+                return "";
+            }
+        }
+    }
 }
