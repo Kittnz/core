@@ -86,7 +86,7 @@ void instance_scarlet_citadel::OnObjectCreate(GameObject* pGo)
             m_auiData[ScarletCitadelData::DATA_DOOR_RIGHT_WING] = pGo->GetObjectGuid();
 
             if (m_auiEncounter[ScarletCitadelEncounter::TYPE_MARIELLA] == DONE)
-                pGo->SetGoState(GO_STATE_ACTIVE); // Open it
+                pGo->DeleteLater(); // Remove it (Looks better)
 
             break;
         }
@@ -250,7 +250,7 @@ void instance_scarlet_citadel::SetData(const uint32 uiType, const uint32 uiData)
                 {
                     if (pGo->GetGoState() != GO_STATE_ACTIVE)
                     {
-                        pGo->SetGoState(GO_STATE_ACTIVE); // Open it
+                        pGo->DeleteLater(); // Remove it (Looks better)
                     }
                 }
             }

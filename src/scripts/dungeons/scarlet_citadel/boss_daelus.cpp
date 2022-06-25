@@ -22,7 +22,7 @@ public:
     }
 
 private:
-    std::uint32_t m_uiPhase{};
+    std::uint8_t m_uiPhase{};
     std::uint32_t m_uiFivePercent{};
 
     std::uint32_t m_uiCallMonks_Timer{};
@@ -40,22 +40,26 @@ public:
     {
         m_uiPhase = 1;
 
-        m_uiCallMonks_Timer = 5000;
+        m_uiCallMonks_Timer = nsDaelus::CALL_MONKS_FIRST_TIMER;
         m_uiCheckAndConsumeMonks_Timer = m_uiCallMonks_Timer;
 
         if (m_pInstance && m_bWasInFight)
         {
             DespawnAdds();
 
+            m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
+
             m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, FAIL);
 
             m_bWasInFight = false;
         }
 
-        m_creature->SetFactionTemplateId(189);
+        m_creature->HandleEmoteCommand(EMOTE_STATE_KNEEL); // This fucking BS is such broken
+
+        m_creature->SetFactionTemplateId(nsDaelus::FACTION_NEUTRAL);
 
         // Misc
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->AddUnitState(UNIT_STAT_ROOT);
     }
@@ -67,7 +71,7 @@ public:
 
         m_bWasInFight = true;
 
-        m_creature->CastSpell(m_creature, 26156, true);
+        m_creature->CastSpell(m_creature, nsDaelus::SPELL_VULNERABILITY, true);
 
         m_creature->SetInCombatWithZone();
 
@@ -76,10 +80,12 @@ public:
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        m_creature->SetRespawnDelay(604800);
-
         if (!m_pInstance)
             return;
+
+        m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
+
+        m_creature->SetRespawnDelay(604800);
 
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, DONE);
     }
@@ -101,14 +107,13 @@ public:
                     // Don't react to face-aggro, neither to damage
                     pMonk->AI()->SetMeleeAttack(false);
                     pMonk->AI()->SetCombatMovement(false);
-                    //pSummoned->SetTargetGuid(0);
                     
                     // Now move to the boss
                     pMonk->MonsterMoveWithSpeed(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), 1.f, MOVE_PATHFINDING);
 
                     if (i == uiChosenOne)
                     {
-                        pMonk->AddAura(nsDaelus::SPELL_VULNERABLE);
+                        pMonk->AddAura(nsDaelus::SPELL_RED_COLOR);
                         pMonk->SetHealth(5);
                     }
 
@@ -146,7 +151,7 @@ public:
         {
             SummonAdds();
 
-            m_uiCallMonks_Timer = 30000;
+            m_uiCallMonks_Timer = nsDaelus::CALL_MONKS_REPEAT_TIMER;
         }
         else
         {
@@ -166,7 +171,7 @@ public:
                     {
                         if (pMonk->GetDistance2d(m_creature) < 5.f)
                         {
-                            if (pMonk->HasAura(nsDaelus::SPELL_VULNERABLE) && m_uiPhase == 1)
+                            if (pMonk->HasAura(nsDaelus::SPELL_RED_COLOR) && m_uiPhase == 1)
                             {
                                 MakeBossVulnerable();
                             }
@@ -180,7 +185,7 @@ public:
                 }
             }
 
-            m_uiCheckAndConsumeMonks_Timer = 500;
+            m_uiCheckAndConsumeMonks_Timer = nsDaelus::CHECK_MONKS_REPEAT_TIMER;
         }
         else
         {
@@ -190,10 +195,10 @@ public:
 
     void MakeBossVulnerable()
     {
-        m_creature->AddAura(nsDaelus::SPELL_VULNERABLE);
-        m_creature->RemoveAurasDueToSpell(26156);
+        m_creature->AddAura(nsDaelus::SPELL_RED_COLOR);
+        m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_VULNERABILITY);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
-        m_creature->MonsterSay("PHASE_2");
+        m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::PHASE_TWO), LANG_UNIVERSAL);
 
         m_uiVulnerability_Timer = 30000;
         m_uiPhase = 2;
@@ -203,10 +208,10 @@ public:
     {
         if (m_uiVulnerability_Timer < uiDiff)
         {
-            m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_VULNERABLE);
-            m_creature->CastSpell(m_creature, 26156, true);
+            m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_RED_COLOR);
+            m_creature->CastSpell(m_creature, nsDaelus::SPELL_VULNERABILITY, true);
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
-            m_creature->MonsterSay("PHASE_1");
+            m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::PHASE_ONE), LANG_UNIVERSAL);
 
             m_uiPhase = 1;
         }
@@ -250,11 +255,7 @@ bool GossipHello_boss_daelus(Player* pPlayer, Creature* pCreature)
 
     if (m_pInstance)
     {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "START_FIGHT", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
-    }
-    else
-    {
-        sLog.outError("[SC] Boss Daelus: Boss spawned outside of dungeon.");
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, nsDaelus::START_BUTTON, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
     }
 
     pPlayer->SEND_GOSSIP_MENU(0001, pCreature->GetObjectGuid());
@@ -273,9 +274,32 @@ bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiS
         {
             pPlayer->CLOSE_GOSSIP_MENU();
             pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-            pCreature->SetFactionTemplateId(67);
-            pCreature->SetInCombatWithZone();
+
+            try
+            {
+                DoAfterTime(pCreature, (2 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
+                        creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
+                    });
+
+                DoAfterTime(pCreature, (4 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
+                        creature->HandleEmoteCommand(EMOTE_STATE_STAND);
+                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
+                        creature->MonsterYell(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::START), LANG_UNIVERSAL);
+                    });
+
+                DoAfterTime(pCreature, (6 * IN_MILLISECONDS), [creature = pCreature]()
+                    {
+                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        creature->SetFactionTemplateId(nsDaelus::FACTION_SCARLET);
+                        creature->SetInCombatWithZone();
+                    });
+            }
+            catch (const std::runtime_error& e)
+            {
+                sLog.outError("[SC] Boss Daelus: DoAfterTime() failed: %s", e.what());
+            }
 
             break;
         }
