@@ -54,7 +54,7 @@ public:
             m_bWasInFight = false;
         }
 
-        m_creature->HandleEmoteCommand(EMOTE_STATE_KNEEL); // This fucking BS is such broken
+        m_creature->SetStandState(EMOTE_STATE_KNEEL); // This fucking BS is such broken
 
         m_creature->SetFactionTemplateId(nsDaelus::FACTION_NEUTRAL);
 
@@ -284,7 +284,7 @@ bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiS
 
                 DoAfterTime(pCreature, (4 * IN_MILLISECONDS), [creature = pCreature]()
                     {
-                        creature->HandleEmoteCommand(EMOTE_STATE_STAND);
+                        creature->SetStandState(EMOTE_STATE_STAND);
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
                         creature->MonsterYell(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::START), LANG_UNIVERSAL);
                     });
