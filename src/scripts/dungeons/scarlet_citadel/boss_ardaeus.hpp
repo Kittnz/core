@@ -5,9 +5,6 @@
  * absent permission of Nolin.
  */
 
-#include "scriptPCH.h"
-#include "scarlet_citadel.h"
-
 #pragma once
 
 namespace nsArdaeus

@@ -5,6 +5,8 @@
  * absent permission of Nolin.
  */
 
+#include "scriptPCH.h"
+#include "scarlet_citadel.h"
 #include "boss_mariella.hpp"
 
 
@@ -15,6 +17,7 @@ public:
     {
         m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         boss_mariellaAI::Reset();
+        m_bWasInFight = false;
     }
 
 private:

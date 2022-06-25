@@ -1,3 +1,122 @@
+-- NPC Mazen Mac'Nadir (Entry 338), give greeting line : "Welcome to the Academy of Arcane Arts and Sciences, what can I do for you here today?"
+-- Add NPC Roost Hatchling , display ID 2298, faction 35, scale 0.3, level 1, beast
+-- Add NPC Tasag, display ID 18900, faction 91, scale 1.2, level 49 elite, humanoid, on pull voice : "I am infused with the power of the tiger, I will win, no matter how many new scars I gain along the way!" , casts 15618 every 20 seconds, casts 8379 every 30 seconds
+REPLACE INTO creature_template VALUES
+(60852, 2298, 0, 0, 0, 'Roost Hatchling', NULL, 0, 1, 1, 42, 42, 0, 0, 16, 35, 0, 1, 1.14286, 0.3, 12, 5, 0, 0, 1, 1, 2, 0, 46, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 3.5024, 4.8158, 100, 1, 0, 60852, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60853, 18900, 0, 0, 0, 'Tasag', NULL, 0, 49, 49, 4179, 4179, 0, 0, 2432, 91, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 273, 338, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 60853, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41157; set @magic_number = 338;  -- OLD gossip 9004
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to the Academy of Arcane Arts and Sciences, what can I do for you here today?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Tasag aggro line
+REPLACE INTO broadcast_text VALUES
+(30020, 'I am infused with the power of the tiger, I will win, no matter how many new scars I gain along the way!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO creature_ai_scripts VALUES
+(2200018, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30020, 0, 0, 0, 0, 0, 0, 0, 0, 'Tasag - Say on Aggro');
+REPLACE INTO creature_ai_events VALUES
+(2200018, 60853, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200018, 0, 0, 'Tasag - Say on Aggro');
+
+-- Tasag
+set @creature_entry = 60853;
+set @description = ': Tasag';
+set @spell_list_id = 180043;
+
+set @spellid_1 = 15618; -- Snap Kick
+set @probability_1 = 100; 
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 20;
+
+set @spellid_2 = 8379; -- Disarm
+set @probability_2 = 100;
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 5; 
+set @delayinitialmax_2 = 5; 
+set @delayrepeatmin_2 = 30; 
+set @delayrepeatmax_2 = 30;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 15618, spell_id2 = 8379, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- Boulderclaw Tunneler, display ID 1193, scale 1.1, level 47-48, faction 90, humanoid, weapon 2259
 -- Boulderclaw Geomancer, display ID 1193, scale 0.8, level 49-50, faction 90, humanoid, weapon 15397
 -- Boulderclaw Ambusher, display ID 726, scale 1.0, level 47-48, faction 90, humanoid, weapon : 10617
@@ -14,7 +133,7 @@
 -- name = 'Ley-Technician Vorthal', subname = 'Thalassian Alliance', level = 45, display_id1 = 17279, equipment_id = 5884. Faction 269 and PvP-flagged. Has the following gossip: "Your curious face tells me you want to know who we are or what we do...\n\n<Ley-Technician Vorthalsighs exasperatedly.>\n\nWe are the Thalassian Alliance, an organization with the noble goal of helping refugees, my people, the High Elves, and of course, supporting our new Alliance allies in whatever they do. Now, if you will excuse me, I need to fix this blasted orb, so, unless you happen to be an expert in ley lines or mana currents, go entertain yourself elsewhere and stop wasting my time."
 REPLACE INTO creature_template VALUES
 (60838, 1193, 0, 0, 0, 'Boulderclaw Tunneler', '', 0, 47, 48, 2577, 2577, 0, 0, 680, 90, 0, 1, 1.14286, 1.1, 20, 5, 0, 0, 1, 87, 112, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 60838, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60839, 1193, 0, 0, 0, 'Boulderclaw Geomancer', '', 0, 49, 50, 2768, 2768, 0, 0, 2999, 90, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67, 92, 100, 7, 0, 60839, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60839, 1193, 0, 0, 0, 'Boulderclaw Geomancer', '', 0, 49, 50, 2768, 2768, 2100, 2100, 2999, 90, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 85, 109, 0, 226, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 67, 92, 100, 7, 0, 60839, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60840, 726, 0, 0, 0, 'Boulderclaw Ambusher', '', 0, 47, 48, 2577, 2577, 0, 0, 680, 90, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 87, 112, 0, 216, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 64.68, 88.935, 100, 7, 0, 60840, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 124, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60841, 1108, 0, 0, 0, 'Enraged Cave Rumbler', '', 0, 50, 51, 2979, 2979, 0, 0, 3052, 90, 0, 1, 1.14286, 1.2, 20, 5, 0, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 4, 0, 60841, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60842, 1193, 0, 0, 0, 'Boulderclaw Basher', '', 0, 48, 50, 2672, 2672, 0, 0, 2944, 90, 3, 1, 1.14286, 1.3, 20, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 60842, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 98, 133, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -964,6 +1083,7 @@ REPLACE INTO creature_loot_template VALUES
 (60828, 60554, 33, 0, 1, 1, 0);
 
 REPLACE INTO creature_display_info_addon VALUES
+(18900, 0, 0, 0, 0),
 (18901, 0, 0, 0, 0),
 (18902, 0, 0, 0, 0),
 (18903, 0, 0, 0, 0),
@@ -996,9 +1116,9 @@ REPLACE INTO creature_template VALUES
 (60816, 18892, 0, 0, 0, 'Kolgo Highmane', 'Roost Master', 0, 40, 40, 2628, 2628, 0, 0, 1964, 104, 3, 1, 1.14286, 1.35, 20, 5, 40, 0, 1, 57, 70, 0, 156, 1, 1600, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 93, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60817, 18893, 0, 0, 0, 'Trainer Sinopa', '', 0, 25, 25, 712, 712, 0, 0, 1009, 104, 3, 1, 1.14286, 1.25, 18, 5, 40, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60818, 18894, 0, 0, 0, 'Trainer Tokala', '', 0, 25, 25, 712, 712, 0, 0, 1009, 104, 3, 1, 1.14286, 1.35, 18, 5, 40, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60819, 2298, 0, 0, 0, 'Skyrider', '', 0, 25, 25, 712, 712, 0, 0, 1009, 104, 0, 1, 1.14286, 0.6, 18, 5, 40, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60820, 2298, 0, 0, 0, 'Bluffclaw', '', 0, 25, 25, 712, 712, 0, 0, 1009, 104, 0, 1, 1.14286, 1.1, 18, 5, 40, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60821, 2298, 0, 0, 0, 'Sunchaser', '', 0, 25, 25, 712, 712, 0, 0, 1009, 104, 0, 1, 1.14286, 1.3, 18, 5, 40, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60819, 2298, 0, 0, 0, 'Skyrider', '', 0, 5, 5, 102, 102, 0, 0, 147, 290, 0, 1, 1.14286, 0.6, 18, 5, 40, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60820, 2298, 0, 0, 0, 'Bluffclaw', '', 0, 14, 14, 328, 328, 0, 0, 528, 104, 0, 1, 1.14286, 1.1, 18, 5, 40, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60821, 2298, 0, 0, 0, 'Sunchaser', '', 0, 8, 8, 166, 166, 0, 0, 312, 104, 0, 1, 1.14286, 1.3, 18, 5, 40, 0, 1, 11, 14, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 13.4464, 18.4888, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60822, 18895, 0, 0, 0, 'Brave Proudspear', '', 0, 50, 50, 2990, 2990, 0, 0, 2958, 104, 3, 1, 1.14286, 1.35, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 54, 0, 0, 0, 0, 0, 0, ''),
 (60823, 18896, 0, 0, 0, 'Elder Pyrestrider', 'Spirit Walker', 0, 40, 40, 2628, 2628, 0, 0, 1964, 104, 3, 1, 1.14286, 1.35, 20, 5, 40, 0, 1, 57, 70, 0, 156, 1, 1600, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 93, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60824, 18897, 0, 0, 0, 'Kiona Stonefeather', 'Spirit Walker', 0, 35, 35, 1403, 1403, 0, 0, 1427, 104, 3, 1, 1.14286, 1.25, 18, 5, 0, 0, 1, 50, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),

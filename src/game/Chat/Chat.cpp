@@ -55,6 +55,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "delete",         SEC_CONSOLE,        true,  &ChatHandler::HandleAccountDeleteCommand,       "", nullptr },
         { "set",            SEC_DEVELOPER,      true,  nullptr,                                        "", accountSetCommandTable },
         { "password",       SEC_PLAYER,         true,  &ChatHandler::HandleAccountPasswordCommand,     "", nullptr },
+        { "twofa",          SEC_ADMINISTRATOR,      true,  &ChatHandler::HandleAccountFaCommand,           "", nullptr },
         { "",               SEC_PLAYER,         true,  &ChatHandler::HandleAccountCommand,             "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
@@ -637,6 +638,14 @@ ChatCommand * ChatHandler::getCommandTable()
 
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
+
+    static bool loaded = false;
+
+    if (!loaded)
+    {
+        loaded = true;
+        FillFullCommandsName(commandTable, "");
+    }
 
     return commandTable;
 }
@@ -1682,6 +1691,14 @@ void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std:
                                   ObjectGuid const& targetGuid /*= ObjectGuid()*/, char const* targetName /*= nullptr*/,
                                   char const* channelName /*= nullptr*/, uint8 playerRank /*= 0*/)
 {
+    std::string messageFinal;
+    if (chatTag == CHAT_TAG_GM)
+    {
+        messageFinal = std::string("|c1049e6ff") + message + "|r";
+    }
+    else
+        messageFinal = message;
+
     data.Initialize(SMSG_MESSAGECHAT);
     data << uint8(msgtype);
     data << uint32(language);
@@ -1726,11 +1743,11 @@ void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std:
             break;
     }
 
-    if (message.empty())
+    if (messageFinal.empty())
         return;
 
-    data << uint32(message.length() + 1);
-    data << message;
+    data << uint32(messageFinal.length() + 1);
+    data << messageFinal;
     data << uint8(chatTag);
 }
 
