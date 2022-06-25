@@ -1,0 +1,15 @@
+-- Recovering Vault Shackles
+delete from quest_template where entry = 40426;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40426,2,5087,63,55,0,0,'Recovering Vault Shackles','Back when the Vault first was opened, it was used to house the most dangerous prisoners, to contain magical entities and the insane alike, we used Runic Constructs to patrol the hallways!\n\nThese Runic Constructs have fallen corrupt from the intense magic within the Vault, and need to be destroyed, their powerful bracers are what keep them intact, and they need to be recovered! I have plans to test what exactly went wrong with these bracers.\n\nYou can find them within the Stormwind Vault, slay them, and bring me a pair of Shackles, I will make sure you are rewarded for the task.','Within the Stormwind Vault, slay Runic Constructs for 2 Runic Shackles, return them to Koli Steamheart.','Be careful, the Runic Constructs are quite powerful, an overchage of magical energy gone rampant!','Ahh, here we are! This is them, thanks again, this means a lot, here, just as I promised.',60623,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,50000,6500,72,350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (80451, 40426);
+replace into creature_involvedrelation (id, quest) values (80451, 40426);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60623,12456,'Runic Shackle',12,1,2048,1,-1,-1,1,2,-1,-1,-1,-1,4,'',0);
+
+delete from creature_loot_template where item = 60013;
+replace into creature_loot_template values
+(60596,60623,-100,1,1,1,0);
+
+update creature_template set script_name = 'npc_koli_steamheart' where entry = 80451;

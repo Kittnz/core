@@ -3589,9 +3589,27 @@ bool GossipSelect_npc_captain_harker(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+bool QuestRewarded_npc_koli_steamheart(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40426) // Recovering Vault Shackles
+    {
+        pQuestGiver->MonsterSayToPlayer("Thanks again for the help! I will make sure to study these so the same thing cannot happen again!", pPlayer);
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_koli_steamheart";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_koli_steamheart;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_captain_harker";

@@ -8,6 +8,7 @@
 #include "scriptPCH.h"
 #include "scarlet_citadel.h"
 
+
 static const float vfTeleportDestinations[][4] =
 {
     { 231.569946f, 48.830078f, (32.822887f + 0.1f), 3.130378f } // Boss Mariella

@@ -1,0 +1,1 @@
+update creature set spawntimesecsmin = 432000, spawntimesecsmin = 432000 where id in (60715,60734,60735,60736,60737);

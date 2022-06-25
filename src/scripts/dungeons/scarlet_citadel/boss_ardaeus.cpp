@@ -5,7 +5,10 @@
  * absent permission of Nolin.
  */
 
+#include "scriptPCH.h"
+#include "scarlet_citadel.h"
 #include "boss_ardaeus.hpp"
+
 
 /*
     TODO-List
