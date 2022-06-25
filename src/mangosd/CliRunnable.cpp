@@ -46,7 +46,7 @@ void utf8print(void* /*arg*/, const char* str)
     std::wstring wtemp_buf;
     std::string temp_buf(str);
 
-    if (!Utf8toWStr(temp_buf, wtemp_buf, 6000))
+    if (!Utf8toWStr(temp_buf, wtemp_buf))
         return;
 
     // Guarantee nullptr termination
