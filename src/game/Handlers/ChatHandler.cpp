@@ -900,11 +900,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     std::wstring w_normMsg;
                     if (Utf8toWStr(msg, w_normMsg))
                     {
-                        if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
-                        {
-                            ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
-                            return;
-                        }
+                        ChatHandler(this).SendSysMessage("Don't use invalid characters in public guild chats!");
+                        return;
+                    }
+
+                    if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
+                    {
+                        ChatHandler(this).SendSysMessage("Please use English in public guild chats.");
+                        return;
                     }
                 }
 
