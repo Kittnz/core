@@ -898,7 +898,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 {
                     // Still Alive & Newcomers channels should be strictly English-speaking:
                     std::wstring w_normMsg;
-                    if (!Utf8toWStr(msg, w_normMsg))
+                    if (Utf8toWStr(msg, w_normMsg))
                     {
                         if (isCyrillicString(w_normMsg, true) || isEastAsianString(w_normMsg, true))
                         {
