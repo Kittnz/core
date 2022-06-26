@@ -121,7 +121,7 @@ public:
     {
         if (Creature const* pSun{ m_creature->SummonCreature(nsArdaeus::NPC_SUN,
             nsArdaeus::vfSunMovePoints[0].m_fX,
-            nsArdaeus::vfSunMovePoints[0].m_fX,
+            nsArdaeus::vfSunMovePoints[0].m_fY,
             nsArdaeus::vfSunMovePoints[0].m_fZ,
             nsArdaeus::vfSunMovePoints[0].m_fO,
             TEMPSUMMON_MANUAL_DESPAWN) })
@@ -160,7 +160,7 @@ public:
             // Summon an invisible NPC in front of the random chosen statue which does a visual effect to the summoned creature
             Creature* pStatueNPC{ m_creature->SummonCreature(nsArdaeus::ARDAEUS_STATUE_NPC,
                 nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fX,
-                nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fX,
+                nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fY,
                 nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fZ,
                 nsArdaeus::vfStatueNPCsSpawnPoints[uiRnd].m_fO,
                 TEMPSUMMON_MANUAL_DESPAWN) };
@@ -173,7 +173,7 @@ public:
             // Summon Ardaeus' guard
             if (Creature* pRandomNPC{ m_creature->SummonCreature(nsArdaeus::vfCallForHelpNPCs[uiRnd],
                 nsArdaeus::vfCallForHelpSpawnPoint[0].m_fX,
-                nsArdaeus::vfCallForHelpSpawnPoint[0].m_fX,
+                nsArdaeus::vfCallForHelpSpawnPoint[0].m_fY,
                 nsArdaeus::vfCallForHelpSpawnPoint[0].m_fZ,
                 nsArdaeus::vfCallForHelpSpawnPoint[0].m_fO,
                 TEMPSUMMON_MANUAL_DESPAWN) })

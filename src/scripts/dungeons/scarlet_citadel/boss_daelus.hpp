@@ -32,7 +32,9 @@ namespace nsDaelus
 
     static constexpr std::uint32_t CALL_MONKS_FIRST_TIMER{ 5000 };
     static constexpr std::uint32_t CALL_MONKS_REPEAT_TIMER{ 30000 };
+    static constexpr std::uint32_t SPAWN_CHOSEN_ONE_TIMER{ 30000 };
     static constexpr std::uint32_t CHECK_MONKS_REPEAT_TIMER{ 500 };
+    static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Daelus regenerate on each consume
 
     static constexpr std::uint32_t FACTION_SCARLET{ 67 };  // Scarlet Citadel Faction
     static constexpr std::uint32_t FACTION_NEUTRAL{ 189 }; // Neutral Faction
