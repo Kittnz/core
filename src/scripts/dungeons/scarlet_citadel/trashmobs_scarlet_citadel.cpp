@@ -716,25 +716,7 @@ public:
         m_bAlreadyUsedFrenzy = false;
         m_bAlreadyUsedEvasion = false;
 
-        if (!m_creature->HasAura(SPELL_STEALTH))
-        {
-            m_creature->CastSpell(m_creature, SPELL_STEALTH, true);
-        }
-    }
-
-    void EnterEvadeMode() override
-    {
-        m_creature->CastSpell(m_creature, SPELL_STEALTH, true);
-
-        ScriptedAI::EnterEvadeMode();
-    }
-
-    void Aggro(Unit* /*pWho*/) override
-    {
-        if (m_creature->HasAura(SPELL_STEALTH))
-        {
-            m_creature->RemoveAurasDueToSpell(SPELL_STEALTH);
-        }
+        m_creature->AddAura(SPELL_STEALTH);
     }
 
     void GoFrenzy()

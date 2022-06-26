@@ -17,15 +17,15 @@ public:
     {
         m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         boss_daelusAI::Reset();
-        m_uiFivePercent = static_cast<std::uint32_t>(m_creature->GetMaxHealth() * .05f);
         m_bWasInFight = false;
     }
 
 private:
     std::uint8_t m_uiPhase{};
-    std::uint32_t m_uiFivePercent{};
+    std::uint8_t m_uiChosenOne{};
 
     std::uint32_t m_uiCallMonks_Timer{};
+    std::uint32_t m_uiSpawnChosenOne_Timer{};
     std::uint32_t m_uiCheckAndConsumeMonks_Timer{};
     std::uint32_t m_uiVulnerability_Timer{};
 
@@ -39,9 +39,11 @@ public:
     void Reset() override
     {
         m_uiPhase = 1;
+        m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS;
 
         m_uiCallMonks_Timer = nsDaelus::CALL_MONKS_FIRST_TIMER;
-        m_uiCheckAndConsumeMonks_Timer = m_uiCallMonks_Timer;
+        m_uiSpawnChosenOne_Timer = nsDaelus::SPAWN_CHOSEN_ONE_TIMER;
+        m_uiCheckAndConsumeMonks_Timer = m_uiCallMonks_Timer; // A delayed timer could be added, but is it rly worth the effort?
 
         if (m_pInstance && m_bWasInFight)
         {
@@ -54,9 +56,11 @@ public:
             m_bWasInFight = false;
         }
 
-        m_creature->SetStandState(EMOTE_STATE_KNEEL); // This fucking BS is such broken
+        m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
 
         m_creature->SetFactionTemplateId(nsDaelus::FACTION_NEUTRAL);
+
+        m_creature->SetHealthPercent(75.0f);
 
         // Misc
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
@@ -90,12 +94,24 @@ public:
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, DONE);
     }
 
+    void CheckChosenOneTiming(const uint32& uiDiff)
+    {
+        if (m_uiSpawnChosenOne_Timer < uiDiff)
+        {
+            m_uiChosenOne = urand(0, (nsDaelus::NUMBER_OF_ADDS - 1));
+
+            m_uiSpawnChosenOne_Timer = nsDaelus::SPAWN_CHOSEN_ONE_TIMER;
+        }
+        else
+        {
+            m_uiSpawnChosenOne_Timer -= uiDiff;
+        }
+    }
+
     void SummonAdds()
     {
         if (Creature* pDaelus{ m_pInstance->GetSingleCreatureFromStorage(NPC_DAELUS) })
         {
-            const std::uint32_t uiChosenOne{ urand(0, (nsDaelus::NUMBER_OF_ADDS - 1)) };
-
             for (std::uint8_t i{ 0 }; i < nsDaelus::NUMBER_OF_ADDS; ++i )
             {
                 if (Creature* pMonk{ m_creature->SummonCreature(nsDaelus::NPC_CITADEL_MONK,
@@ -111,10 +127,12 @@ public:
                     // Now move to the boss
                     pMonk->MonsterMoveWithSpeed(m_creature->GetPositionX(), m_creature->GetPositionY(), m_creature->GetPositionZ(), m_creature->GetOrientation(), 1.f, MOVE_PATHFINDING);
 
-                    if (i == uiChosenOne)
+                    if (i == m_uiChosenOne)
                     {
                         pMonk->AddAura(nsDaelus::SPELL_RED_COLOR);
-                        pMonk->SetHealth(5);
+                        pMonk->SetHealthPercent(1.f);
+                        pMonk->SetObjectScale(1.2f);
+                        pMonk->UpdateModelData();
                     }
 
                     m_vSpawnedAdds.push_back(pMonk->GetObjectGuid());
@@ -178,8 +196,10 @@ public:
 
                             pMonk->DealDamage(pMonk, pMonk->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
-                            // SetHealth truncates to maxhealth internally
-                            m_creature->SetHealth(m_creature->GetHealth() + m_uiFivePercent);
+                            if (m_creature->GetHealthPercent() < 100.f)
+                            {
+                                m_creature->SetHealthPercent((m_creature->GetHealthPercent() + nsDaelus::REGENERATE_HEALTH_PERCENTAGE));
+                            }
                         }
                     }
                 }
@@ -229,6 +249,8 @@ public:
         if (m_uiPhase == 1) // Unvulnerable
         {
             CallMonks(uiDiff);
+            CheckChosenOneTiming(uiDiff);
+
             DoMeleeAttackIfReady();
         }
         else if (m_uiPhase == 2) // Vulnerable
@@ -284,12 +306,12 @@ bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiS
 
                 DoAfterTime(pCreature, (4 * IN_MILLISECONDS), [creature = pCreature]()
                     {
-                        creature->SetStandState(EMOTE_STATE_STAND);
+                        creature->SetStandState(UNIT_STAND_STATE_STAND);
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
                         creature->MonsterYell(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::START), LANG_UNIVERSAL);
                     });
 
-                DoAfterTime(pCreature, (6 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (8 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         creature->SetFactionTemplateId(nsDaelus::FACTION_SCARLET);
