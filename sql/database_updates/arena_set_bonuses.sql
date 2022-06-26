@@ -34,3 +34,5 @@ update item_template set set_id = 611 where entry = 60362;
 update item_template set set_id = 611 where entry = 60363;
 update item_template set set_id = 611 where entry = 60364;
 update item_template set set_id = 611 where entry = 60365;
+
+update item_template set stat_type2 = 5, stat_value1 = 8, stat_value2 = 8, stat_value3 = 0, spellid_1 = 9346, spellid_2 = 18384, spelltrigger_2 = 1 where entry = 18403;
