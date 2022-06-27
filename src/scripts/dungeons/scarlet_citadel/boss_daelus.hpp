@@ -25,17 +25,31 @@ namespace nsDaelus
         { 98.575172f,  43.897984f, 16.87f, 4.696410f }, // L3
     };
 
-    static constexpr std::uint32_t NPC_CITADEL_MONK{ 2000013 };
+    // Phase 1
+    static constexpr std::uint32_t NPC_FALLEN_SPIRIT{ 2000013 };
 
     static constexpr std::uint32_t SPELL_RED_COLOR{ 26235 };
     static constexpr std::uint32_t SPELL_VULNERABILITY{ 26156 };
+    static constexpr std::uint32_t SPELL_SONICBURST{ 23918 };
+    static constexpr std::uint32_t SPELL_GREEN_CHANNELING{ 13540 };
 
     static constexpr std::uint32_t CALL_MONKS_FIRST_TIMER{ 5000 };
     static constexpr std::uint32_t CALL_MONKS_REPEAT_TIMER{ 30000 };
-    static constexpr std::uint32_t SPAWN_CHOSEN_ONE_TIMER{ 30000 };
+    static constexpr std::uint32_t SPAWN_CHOSEN_ONE_TIMER{ 90000 };
     static constexpr std::uint32_t CHECK_MONKS_REPEAT_TIMER{ 500 };
+    static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
+
     static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Daelus regenerate on each consume
 
+    // Phase 2
+
+
+
+    // Phase 3
+
+
+
+    // Misc
     static constexpr std::uint32_t FACTION_SCARLET{ 67 };  // Scarlet Citadel Faction
     static constexpr std::uint32_t FACTION_NEUTRAL{ 189 }; // Neutral Faction
 
