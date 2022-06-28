@@ -1934,16 +1934,12 @@ void World::SendGlobalMessage(WorldPacket *packet, WorldSession *self, uint32 te
             }
         }
     }
-}
+} 
 
 namespace MaNGOS
 {
-class WorldWorldTextBuilder
-{
-public:
-    typedef std::vector<WorldPacket*> WorldPacketList;
-    explicit WorldWorldTextBuilder(int32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) {}
-    void operator()(WorldPacketList& data_list, int32 loc_idx)
+
+    void MaNGOS::WorldWorldTextBuilder::operator()(WorldPacketList& data_list, int32 loc_idx)
     {
         char const* text = sObjectMgr.GetMangosString(i_textId, loc_idx);
 
@@ -1953,7 +1949,7 @@ public:
             va_list ap;
             va_copy(ap, *i_args);
 
-            char str [2048];
+            char str[2048];
             vsnprintf(str, 2048, text, ap);
             va_end(ap);
 
@@ -1962,14 +1958,8 @@ public:
         else
             do_helper(data_list, (char*)text);
     }
-private:
-    char* lineFromMessage(char*& pos)
-    {
-        char* start = strtok(pos, "\n");
-        pos = nullptr;
-        return start;
-    }
-    void do_helper(WorldPacketList& data_list, char* text)
+
+    void MaNGOS::WorldWorldTextBuilder::do_helper(WorldPacketList& data_list, char* text)
     {
         char* pos = text;
 
@@ -1980,11 +1970,7 @@ private:
             data_list.push_back(data);
         }
     }
-
-    int32 i_textId;
-    va_list* i_args;
-};
-}                                                           // namespace MaNGOS
+}
 
 /// Send a System Message to all players (except self if mentioned)
 void World::SendWorldText(int32 string_id, ...)
