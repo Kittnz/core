@@ -621,6 +621,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADMAILEDITEMS,
     PLAYER_LOGIN_QUERY_BATTLEGROUND_DATA,
     PLAYER_LOGIN_QUERY_FORGOTTEN_SKILLS,
+    PLAYER_LOGIN_QUERY_LOADVARIABLES,
 
     MAX_PLAYER_LOGIN_QUERY
 };
@@ -944,6 +945,12 @@ struct ScheduledTeleportData
 	std::function<void()> OnTeleportFinished = std::function<void()>();
 };
 
+enum class PlayerVariables : uint32
+{
+    HardcoreMessagesEnabled = 1,
+    HardcoreMessageLevel
+};
+
 class Player final: public Unit
 {
     friend class WorldSession;
@@ -1014,10 +1021,24 @@ class Player final: public Unit
         uint32 GetGMTicketCounter() const { return m_currentTicketCounter; }
         void SetGMTicketCounter(uint32 counter) { m_currentTicketCounter = counter; }
 
+        std::optional<std::string> GetPlayerVariable(PlayerVariables variable)
+        {
+            if (m_variables.find(variable) != m_variables.end())
+                return m_variables[variable];
+            return {};
+        }
+
+        void SetPlayerVariable(PlayerVariables variable, std::string value)
+        {
+            m_variables[variable] = value;
+        }
+
         /*********************************************************/
         /***                    STORAGE SYSTEM                 ***/
         /*********************************************************/
     private:
+        std::unordered_map<PlayerVariables, std::string> m_variables;
+
         ObjectGuid m_lootGuid;
         Item* m_items[PLAYER_SLOTS_COUNT];
         uint32 m_currentBuybackSlot;
@@ -1386,6 +1407,7 @@ class Player final: public Unit
         void _LoadForgottenSkills(QueryResult* result);
         void LoadSkillsFromFields();
         void _LoadSpells(QueryResult* result);
+        void _LoadPlayerVariables(QueryResult* result);
         bool _LoadHomeBind(QueryResult* result);
         void _LoadBGData(QueryResult* result);
         void _LoadIntoDataField(const char* data, uint32 startOffset, uint32 count);

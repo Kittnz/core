@@ -635,6 +635,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "play",           SEC_DEVELOPER,       false, &ChatHandler::HandlePlayCommand,                "", nullptr},
         { "getskillvalue",  SEC_DEVELOPER,       false, &ChatHandler::HandleGetSkillValueCommand,       "", nullptr},
         { "anonymous",      SEC_DEVELOPER,       false, nullptr,                                        "", anonymousCommandTable},
+        { "hcmessages",     SEC_PLAYER,          false, &ChatHandler::HandleHCMessagesCommand,          "", nullptr },
 
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
