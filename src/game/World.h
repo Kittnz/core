@@ -703,6 +703,28 @@ struct CliCommandHolder
 
 class ThreadPool;
 
+namespace MaNGOS
+{
+    class WorldWorldTextBuilder
+    {
+    public:
+        typedef std::vector<WorldPacket*> WorldPacketList;
+        explicit WorldWorldTextBuilder(int32 textId, va_list* args = nullptr) : i_textId(textId), i_args(args) {}
+        void operator()(WorldPacketList& data_list, int32 loc_idx);
+    private:
+        char* lineFromMessage(char*& pos)
+        {
+            char* start = strtok(pos, "\n");
+            pos = nullptr;
+            return start;
+        }
+        void do_helper(WorldPacketList& data_list, char* text);
+
+        int32 i_textId;
+        va_list* i_args;
+    };
+}
+
 /// The World
 class World
 {
@@ -790,6 +812,27 @@ class World
         void LoadConfigSettings(bool reload = false);
 
         void SendWorldText(int32 string_id, ...);
+        
+        template <typename F>
+        void SendWorldTextChecked(int32 string_id, F checker, ...)
+        {
+            va_list ap;
+            va_start(ap, checker);
+
+            MaNGOS::WorldWorldTextBuilder wt_builder(string_id, &ap);
+            MaNGOS::LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
+            for (const auto& itr : m_sessions)
+            {
+                if (WorldSession* session = itr.second)
+                {
+                    Player* player = session->GetPlayer();
+                    if (player && player->IsInWorld() && checker(player))
+                        wt_do(player);
+                }
+            }
+
+            va_end(ap);
+        }
          // Only for GMs with ticket notification ON
         void SendGMTicketText(int32 string_id, ...);
         void SendGMTicketText(const char* text);
