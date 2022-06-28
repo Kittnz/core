@@ -1006,3 +1006,13 @@ replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VA
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45556, 15473, 15473, 3, 0);
 
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45553, 15473, 15473, 2, 0);
+
+-- Apply Shang's Hateforge Armor set
+update item_template set set_id = 615 where entry = 60573;
+update item_template set set_id = 615 where entry = 60574;
+update item_template set set_id = 615 where entry = 60575;
+update item_template set set_id = 615 where entry = 60576;
+update item_template set set_id = 615 where entry = 60577;
+update item_template set set_id = 615 where entry = 60578;
+
+update item_template set spellid_3 = 56525, spellcooldown_3 = 600000, spelltrigger_3 = 0, spellid_1 = 7597 where entry = 60577;
