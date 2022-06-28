@@ -8951,7 +8951,7 @@ bool ChatHandler::HandleHCMessagesCommand(char* args)
         return false;
     }
 
-    minLevel = std::floorf(float(minLevel) / 10.f) * 10;
+    minLevel = floor(float(minLevel) / 10.f) * 10;
 
     if (minLevel == 0)
         minLevel = 1;
