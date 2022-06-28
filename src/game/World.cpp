@@ -1979,7 +1979,7 @@ void World::SendWorldText(int32 string_id, ...)
     va_start(ap, string_id);
 
     MaNGOS::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    MaNGOS::LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
+    LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
     for (const auto& itr : m_sessions)
     {
         if (WorldSession* session = itr.second)
@@ -2015,7 +2015,7 @@ void World::SendGMTicketText(int32 string_id, ...)
     va_start(ap, string_id);
 
     MaNGOS::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    MaNGOS::LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
+    LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
     for (const auto& itr : m_sessions)
     {
         if (WorldSession* session = itr.second)
@@ -2038,7 +2038,7 @@ void World::SendGMText(int32 string_id, ...)
     va_start(ap, string_id);
 
     MaNGOS::WorldWorldTextBuilder wt_builder(string_id, &ap);
-    MaNGOS::LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
+    LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
     for (const auto& itr : m_sessions)
     {
         if (WorldSession* session = itr.second)
