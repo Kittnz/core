@@ -811,6 +811,48 @@ class World
         void SetInitialWorldSettings();
         void LoadConfigSettings(bool reload = false);
 
+        template<class Builder>
+        class LocalizedPacketListDo
+        {
+        public:
+            typedef std::vector<WorldPacket*> WorldPacketList;
+            explicit LocalizedPacketListDo(Builder& builder) : i_builder(builder) {}
+
+            ~LocalizedPacketListDo()
+            {
+                for (size_t i = 0; i < i_data_cache.size(); ++i)
+                    for (size_t j = 0; j < i_data_cache[i].size(); ++j)
+                        delete i_data_cache[i][j];
+            }
+            void operator()(Player* p)
+            {
+                int32 loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
+                uint32 cache_idx = loc_idx + 1;
+                WorldPacketList* data_list;
+
+                // create if not cached yet
+                if (i_data_cache.size() < cache_idx + 1 || i_data_cache[cache_idx].empty())
+                {
+                    if (i_data_cache.size() < cache_idx + 1)
+                        i_data_cache.resize(cache_idx + 1);
+
+                    data_list = &i_data_cache[cache_idx];
+
+                    i_builder(*data_list, loc_idx);
+                }
+                else
+                    data_list = &i_data_cache[cache_idx];
+
+                for (auto& i : *data_list)
+                    p->SendDirectMessage(i);
+            }
+
+        private:
+            Builder& i_builder;
+            std::vector<WorldPacketList> i_data_cache;
+            // 0 = default, i => i-1 locale index
+        };
+
         void SendWorldText(int32 string_id, ...);
         
         template <typename F>
@@ -820,7 +862,7 @@ class World
             va_start(ap, checker);
 
             MaNGOS::WorldWorldTextBuilder wt_builder(string_id, &ap);
-            MaNGOS::LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
+            LocalizedPacketListDo<MaNGOS::WorldWorldTextBuilder> wt_do(wt_builder);
             for (const auto& itr : m_sessions)
             {
                 if (WorldSession* session = itr.second)
