@@ -358,68 +358,126 @@ size_t utf8length(std::string& utf8str)
 {
     try
     {
-        return utf8::distance(utf8str.c_str(),utf8str.c_str()+utf8str.size());
+        return utf8::distance(utf8str.c_str(), utf8str.c_str() + utf8str.size());
     }
-    catch(std::exception)
+    catch (std::exception const&)
     {
-        utf8str = "";
+        utf8str.clear();
         return 0;
     }
 }
 
-bool Utf8toWStr(const std::string& utf8str, std::wstring& wstr, size_t max_len)
+void utf8truncate(std::string& utf8str, size_t len)
 {
-    if (utf8str.empty())
-    {
-        wstr = std::wstring();
-        return true;
-    }
-
     try
     {
-        // A UTF8 string can have a maximum of 4 octets per character
-        // A 4 octet char can take up to two UTF16 characters (4*8 = 32 / 16 = 2)
-        // The UTF8 string may also actually be ASCII, in which case no truncation
-        // takes place! The final string length is therefore unknown. Reserve
-        // as long as the OG string, and back-insert
-        wstr.resize(utf8str.size());
+        size_t wlen = utf8::distance(utf8str.c_str(), utf8str.c_str() + utf8str.size());
+        if (wlen <= len)
+            return;
 
-        auto end = utf8::utf8to16(utf8str.cbegin(), utf8str.cend(), wstr.begin());
-
-        if (end != wstr.end())
-            wstr.erase(end, wstr.end());
-
-        // truncate to max len
-        if (!!max_len && wstr.size() > max_len)
-        {
-            wstr.resize(max_len);
-        }
+        std::wstring wstr;
+        wstr.resize(wlen);
+        utf8::utf8to16(utf8str.c_str(), utf8str.c_str() + utf8str.size(), &wstr[0]);
+        wstr.resize(len);
+        char* oend = utf8::utf16to8(wstr.c_str(), wstr.c_str() + wstr.size(), &utf8str[0]);
+        utf8str.resize(oend - (&utf8str[0]));                 // remove unused tail
     }
-    catch (std::exception)
+    catch (std::exception const&)
     {
-        wstr = L"";
+        utf8str.clear();
+    }
+}
+
+bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize)
+{
+    try
+    {
+        CheckedBufferOutputIterator<wchar_t> out(wstr, wsize);
+        out = utf8::utf8to16(utf8str, utf8str + csize, out);
+        wsize -= out.remaining(); // remaining unused space
+        wstr[wsize] = L'\0';
+    }
+    catch (std::exception const&)
+    {
+        // Replace the converted string with an error message if there is enough space
+        // Otherwise just return an empty string
+        wchar_t const* errorMessage = L"An error occurred converting string from UTF-8 to WStr";
+        size_t errorMessageLength = wcslen(errorMessage);
+        if (wsize >= errorMessageLength)
+        {
+            wcscpy(wstr, errorMessage);
+            wsize = wcslen(wstr);
+        }
+        else if (wsize > 0)
+        {
+            wstr[0] = L'\0';
+            wsize = 0;
+        }
+        else
+            wsize = 0;
+
         return false;
     }
 
     return true;
 }
 
-bool WStrToUtf8(std::wstring& wstr, std::string& utf8str)
+bool Utf8toWStr(std::string_view utf8str, std::wstring& wstr)
+{
+    wstr.clear();
+    try
+    {
+        utf8::utf8to16(utf8str.begin(), utf8str.end(), std::back_inserter(wstr));
+    }
+    catch (std::exception const&)
+    {
+        wstr.clear();
+        return false;
+    }
+
+    return true;
+}
+
+bool WStrToUtf8(wchar_t const* wstr, size_t size, std::string& utf8str)
+{
+    try
+    {
+        std::string utf8str2;
+        utf8str2.resize(size * 4);                            // allocate for most long case
+
+        if (size)
+        {
+            char* oend = utf8::utf16to8(wstr, wstr + size, &utf8str2[0]);
+            utf8str2.resize(oend - (&utf8str2[0]));               // remove unused tail
+        }
+        utf8str = utf8str2;
+    }
+    catch (std::exception const&)
+    {
+        utf8str.clear();
+        return false;
+    }
+
+    return true;
+}
+
+bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str)
 {
     try
     {
         std::string utf8str2;
         utf8str2.resize(wstr.size() * 4);                     // allocate for most long case
 
-        auto end = utf8::utf16to8(wstr.cbegin(), wstr.cend(), utf8str2.begin());
-        if (end != utf8str2.end())
-            utf8str2.erase(end, utf8str2.end());
-
+        if (!wstr.empty())
+        {
+            char* oend = utf8::utf16to8(wstr.begin(), wstr.end(), &utf8str2[0]);
+            utf8str2.resize(oend - (&utf8str2[0]));                // remove unused tail
+        }
         utf8str = utf8str2;
     }
-    catch (std::exception)
+    catch (std::exception const&)
     {
-        utf8str = "";
+        utf8str.clear();
         return false;
     }
 
@@ -484,21 +542,19 @@ void utf8printf(FILE* out, const char *str, ...)
 void vutf8printf(FILE *out, const char *str, va_list* ap)
 {
 #if PLATFORM == PLATFORM_WINDOWS
-    std::string temp_buf;
-    temp_buf.resize(32 * 1024);
-    std::wstring wtemp_buf;
+    char temp_buf[32 * 1024];
+    wchar_t wtemp_buf[32 * 1024];
 
-    vsnprintf(&temp_buf[0], 32 * 1024, str, *ap);
-    temp_buf.resize(strlen(temp_buf.c_str())); // Resize to match the formatted string
+    size_t temp_len = vsnprintf(temp_buf, 32 * 1024, str, *ap);
+    //vsnprintf returns -1 if the buffer is too small
+    if (temp_len == size_t(-1))
+        temp_len = 32 * 1024 - 1;
 
-    if (!temp_buf.empty())
-    {
-        Utf8toWStr(temp_buf, wtemp_buf, 32 * 1024);
-        wtemp_buf.push_back('\0');
+    size_t wtemp_len = 32 * 1024 - 1;
+    Utf8toWStr(temp_buf, temp_len, wtemp_buf, wtemp_len);
 
-        CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], wtemp_buf.size());
-    }
-    fprintf(out, "%s", temp_buf.c_str());
+    CharToOemBuffW(&wtemp_buf[0], &temp_buf[0], uint32(wtemp_len + 1));
+    fprintf(out, "%s", temp_buf);
 #else
     vfprintf(out, str, *ap);
 #endif
