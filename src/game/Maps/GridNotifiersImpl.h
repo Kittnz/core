@@ -581,28 +581,4 @@ void MaNGOS::LocalizedPacketDo<Builder>::operator()( Player* p )
     p->SendDirectMessage(i_data_cache[cache_idx].get());
 }
 
-template<class Builder>
-void MaNGOS::LocalizedPacketListDo<Builder>::operator()( Player* p )
-{
-    int32 loc_idx = p->GetSession()->GetSessionDbLocaleIndex();
-    uint32 cache_idx = loc_idx+1;
-    WorldPacketList* data_list;
-
-    // create if not cached yet
-    if (i_data_cache.size() < cache_idx+1 || i_data_cache[cache_idx].empty())
-    {
-        if (i_data_cache.size() < cache_idx+1)
-            i_data_cache.resize(cache_idx+1);
-
-        data_list = &i_data_cache[cache_idx];
-
-        i_builder(*data_list, loc_idx);
-    }
-    else
-        data_list = &i_data_cache[cache_idx];
-
-    for(auto & i : *data_list)
-        p->SendDirectMessage(i);
-}
-
 #endif                                                      // MANGOS_GRIDNOTIFIERSIMPL_H
