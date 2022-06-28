@@ -8943,9 +8943,12 @@ bool ChatHandler::HandleHCMessagesCommand(char* args)
         return false;
     }
 
-    int32 minLevel = atoi(args);
+    
+    int32 minLevel = -1;
 
-    if (!minLevel || minLevel > 100 || minLevel < 0)
+    ExtractInt32(&args, minLevel);
+
+    if (minLevel > 100 || minLevel <= 0)
     {
         SendSysMessage("Enter a valid level.");
         return false;
