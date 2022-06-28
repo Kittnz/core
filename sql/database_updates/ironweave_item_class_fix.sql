@@ -137,3 +137,29 @@ update item_template set stat_type3 = 3 where entry = 21624; -- Gauntlets of Kal
 update item_template set spellid_1 = 9346 where entry = 21704; -- Boots of the Redeemed Prophecy
 update item_template set spellid_1 = 14799 where entry = 21889; -- Gloves of the Redeemed Prophecy
 update item_template set spellid_1 = 14047 where entry = 21890; -- Gloves of the Fallen Prophet (Adding to AQ40 Trash loottables soon!)
+
+update item_template set spellid_1 = 18677, spellid_2 = 9342, spellid_3 = 21361, spelltrigger_3 = 1, spelltrigger_2 = 1, shadow_res = 0, frost_res = 0, fire_res = 0, arcane_res = 0, nature_res = 0 where entry = 17110; -- Seal of the Archmagus
+update item_template set stat_type2 = 3, spellid_1 = 9416, fire_res = 7 where entry = 16860; -- Lawbringer Gauntlets
+update item_template set stat_type2 = 3, spellid_2 = 9344 where entry = 16854; -- Lawbringer Helm
+update item_template set stat_type2 = 3, spellid_2 = 9344 where entry = 16855; -- Lawbringer Legplates
+update item_template set stat_type2 = 3, spellid_1 = 9416 where entry = 16856; -- Lawbringer Spaulders
+update item_template set stat_type2 = 3, spellid_1 = 9344, spellid_2 = 0 where entry = 16853; -- Lawbringer Chestguard
+update item_template set stat_type2 = 7, stat_value2 = 13, stat_value3 = 0, spellid_1 = 9417, spelltrigger_1 = 1 where entry = 19138; -- Band of Sulfuras
+update item_template set stat_type4 = 7, stat_value4 = 25, stat_value5 = 0, stat_value1 = 17, stat_value2 = 23, stat_value3 = 24, stat_type2 = 4, stat_type3 = 5, spellid_1 = 9346 where entry = 21389; -- Avenger's Breastplate
+update item_template set stat_type2 = 3 where entry = 16952; -- Judgement Belt
+update item_template set spellid_1 = 9343, spellid_2 = 18382, spellid_3 = 23727 where entry = 19401; -- Primalist\'s Linked Legguards
+update item_template set stat_type3 = 3 where entry = 19357; -- Herald of Woe
+update item_template set spellid_2 = 23729, spellid_1 = 9416 where entry = 19388; -- Angelista's Grasp
+update item_template set stat_type4 = 3 where entry = 21684; -- Mantle of the Desert's Fury
+update item_template set spellid_1 = 13669, spellid_2 = 0 where entry = 21675; -- Thick Qirajihide Belt
+update item_template set dmg_min1 = 109, dmg_max1 = 184, delay = 3100 where entry = 21272; -- Blessed Qiraji Musket
+update item_template set armor = 100, spellid_1 = 13384, spellid_2 = 18676, stat_value1 = 16, stat_type1 = 7, spelltrigger_2 = 1, shadow_res = 0, frost_res = 0, fire_res = 0, arcane_res = 0, nature_res = 0 where entry = 18813; -- Ring of Binding
+update item_template set spellid_1 = 9396 where entry = 19827; -- Zandalar Freethinker's Armguards
+update item_template set spellid_1 = 9417 where entry = 19826; -- Zandalar Freethinker's Belt
+update item_template set dmg_min1 = 61, dmg_max1 = 135, delay = 1900, spellid_1 = 9416 where entry = 21395; -- Blade of Eternal Justice
+update item_template set spellid_1 = 9343 where entry = 21397; -- Cape of Eternal Justice
+update item_template set nature_res = 10, fire_res = 0 where entry = 16958; -- Judgement Breastplate
+
+update item_template set spellid_1 = 23727 where entry = 83443;
+update item_template set range_mod = 100 where entry = 60624;
+
