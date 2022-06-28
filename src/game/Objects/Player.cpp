@@ -16703,7 +16703,7 @@ void Player::SaveToDB(bool online, bool force)
 
     for (const auto& pair : m_variables)
     {
-        CharacterDatabase.PExecute("REPLACE INTO `character_variables` VALUES('%u', '%u', '%s')", GetGUIDLow(), (uint32)pair.first, pair.second);
+        CharacterDatabase.PExecute("REPLACE INTO `character_variables` VALUES('%u', '%u', '%s')", GetGUIDLow(), (uint32)pair.first, pair.second.c_str());
     }
 
     // Systeme de phasing
