@@ -57,6 +57,34 @@ private:
     StorageType m_storage;
 };
 
+template <class T>
+class CheckedBufferOutputIterator
+{
+public:
+    using iterator_category = std::output_iterator_tag;
+    using value_type = void;
+    using pointer = T*;
+    using reference = T&;
+    using difference_type = std::ptrdiff_t;
+
+    CheckedBufferOutputIterator(T* buf, size_t n) : _buf(buf), _end(buf + n) {}
+
+    T& operator*() const { check(); return *_buf; }
+    CheckedBufferOutputIterator& operator++() { check(); ++_buf; return *this; }
+    CheckedBufferOutputIterator operator++(int) { CheckedBufferOutputIterator v = *this; operator++(); return v; }
+
+    size_t remaining() const { return (_end - _buf); }
+
+private:
+    T* _buf;
+    T* _end;
+    void check() const
+    {
+        if (!(_buf < _end))
+            throw std::out_of_range("index");
+    }
+};
+
 typedef std::vector<std::string> Tokens;
 
 Tokens StrSplit(std::string const& src, std::string const& sep);
@@ -170,49 +198,60 @@ inline void ApplyPercentModFloatVar(float& var, float val, bool apply)
     var *= (apply?(100.0f+val)/100.0f : 100.0f / (100.0f+val));
 }
 
-bool Utf8toWStr(std::string const& utf8str, std::wstring& wstr, size_t max_len = 0);
+// UTF8 handling
+bool Utf8toWStr(std::string_view utf8str, std::wstring& wstr);
+
 // in wsize==max size of buffer, out wsize==real string size
+bool Utf8toWStr(char const* utf8str, size_t csize, wchar_t* wstr, size_t& wsize);
 
-bool WStrToUtf8(std::wstring& wstr, std::string& utf8str);
+inline bool Utf8toWStr(std::string_view utf8str, wchar_t* wstr, size_t& wsize)
+{
+    return Utf8toWStr(utf8str.data(), utf8str.size(), wstr, wsize);
+}
 
-size_t utf8length(std::string& utf8str);                    // set string to "" if invalid utf8 sequence
-void utf8truncate(std::string& utf8str,size_t len);
+bool WStrToUtf8(std::wstring_view wstr, std::string& utf8str);
+// size==real string size
+bool WStrToUtf8(wchar_t const* wstr, size_t size, std::string& utf8str);
+
+// set string to "" if invalid utf8 sequence
+size_t utf8length(std::string& utf8str);
+void utf8truncate(std::string& utf8str, size_t len);
 
 inline bool isBasicLatinCharacter(wchar_t wchar)
 {
-    if(wchar >= L'a' && wchar <= L'z')                      // LATIN SMALL LETTER A - LATIN SMALL LETTER Z
+    if (wchar >= L'a' && wchar <= L'z')                      // LATIN SMALL LETTER A - LATIN SMALL LETTER Z
         return true;
-    if(wchar >= L'A' && wchar <= L'Z')                      // LATIN CAPITAL LETTER A - LATIN CAPITAL LETTER Z
+    if (wchar >= L'A' && wchar <= L'Z')                      // LATIN CAPITAL LETTER A - LATIN CAPITAL LETTER Z
         return true;
     return false;
 }
 
 inline bool isExtendedLatinCharacter(wchar_t wchar)
 {
-    if(isBasicLatinCharacter(wchar))
+    if (isBasicLatinCharacter(wchar))
         return true;
-    if(wchar >= 0x00C0 && wchar <= 0x00D6)                  // LATIN CAPITAL LETTER A WITH GRAVE - LATIN CAPITAL LETTER O WITH DIAERESIS
+    if (wchar >= 0x00C0 && wchar <= 0x00D6)                  // LATIN CAPITAL LETTER A WITH GRAVE - LATIN CAPITAL LETTER O WITH DIAERESIS
         return true;
-    if(wchar >= 0x00D8 && wchar <= 0x00DF)                  // LATIN CAPITAL LETTER O WITH STROKE - LATIN CAPITAL LETTER THORN
+    if (wchar >= 0x00D8 && wchar <= 0x00DE)                  // LATIN CAPITAL LETTER O WITH STROKE - LATIN CAPITAL LETTER THORN
         return true;
-    if(wchar == 0x00DF)                                     // LATIN SMALL LETTER SHARP S
+    if (wchar == 0x00DF)                                     // LATIN SMALL LETTER SHARP S
         return true;
-    if(wchar >= 0x00E0 && wchar <= 0x00F6)                  // LATIN SMALL LETTER A WITH GRAVE - LATIN SMALL LETTER O WITH DIAERESIS
+    if (wchar >= 0x00E0 && wchar <= 0x00F6)                  // LATIN SMALL LETTER A WITH GRAVE - LATIN SMALL LETTER O WITH DIAERESIS
         return true;
-    if(wchar >= 0x00F8 && wchar <= 0x00FE)                  // LATIN SMALL LETTER O WITH STROKE - LATIN SMALL LETTER THORN
+    if (wchar >= 0x00F8 && wchar <= 0x00FE)                  // LATIN SMALL LETTER O WITH STROKE - LATIN SMALL LETTER THORN
         return true;
-    if(wchar >= 0x0100 && wchar <= 0x012F)                  // LATIN CAPITAL LETTER A WITH MACRON - LATIN SMALL LETTER I WITH OGONEK
+    if (wchar >= 0x0100 && wchar <= 0x012F)                  // LATIN CAPITAL LETTER A WITH MACRON - LATIN SMALL LETTER I WITH OGONEK
         return true;
-    if(wchar == 0x1E9E)                                     // LATIN CAPITAL LETTER SHARP S
+    if (wchar == 0x1E9E)                                     // LATIN CAPITAL LETTER SHARP S
         return true;
     return false;
 }
 
 inline bool isCyrillicCharacter(wchar_t wchar)
 {
-    if(wchar >= 0x0410 && wchar <= 0x044F)                  // CYRILLIC CAPITAL LETTER A - CYRILLIC SMALL LETTER YA
+    if (wchar >= 0x0410 && wchar <= 0x044F)                  // CYRILLIC CAPITAL LETTER A - CYRILLIC SMALL LETTER YA
         return true;
-    if(wchar == 0x0401 || wchar == 0x0451)                  // CYRILLIC CAPITAL LETTER IO, CYRILLIC SMALL LETTER IO
+    if (wchar == 0x0401 || wchar == 0x0451)                  // CYRILLIC CAPITAL LETTER IO, CYRILLIC SMALL LETTER IO
         return true;
     return false;
 }

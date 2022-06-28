@@ -17,8 +17,8 @@ namespace nsArdaeus
     // Sun
     static const Location vfSunMovePoints[] =
     {
-        { 255.183899f, -99.984581f, 55.0f, 0.f, 0.f, 0.f, 0.f, 0.f }, // Spawn location
-        { 255.183899f, -99.984581f, 18.5f, 0.f, 0.f, 0.f, 0.f, 0.f }  // End location
+        { 264.5f, -117.f, 40.0f, 0.f, 0.f, 0.f, 0.f, 0.f }, // Spawn location
+        { 264.5f, -117.f, 18.5f, 0.f, 0.f, 0.f, 0.f, 0.f }  // End location
     };
     static constexpr uint32 NPC_SUN{ 2000019 };
     static constexpr uint32 DAMAGE_DONE_TO_MOVE_UPWARDS{ 25000 }; // Required damage to move Sun upwards

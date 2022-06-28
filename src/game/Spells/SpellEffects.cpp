@@ -1963,6 +1963,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 466: m_caster->ToPlayer()->TeleportTo(1, -6904.55F, -4238.45F, 11.81F, 0.6F);  break; // Hard Knocks Society
                         case 444: m_caster->ToPlayer()->TeleportTo(0, -8809.33F, 1093.16F, 95.53F, 3.4F);   break; // Thalassian Alliance
                         case 436: m_caster->ToPlayer()->TeleportTo(0, -8341.12F, -836.33F, 225.91F, 0.8F);  break; // The Blackwing Guard
+                        case 428: m_caster->ToPlayer()->TeleportTo(1, -9669.25F, -1967.92F, 0.51F, 0.3F);   break; // Conquistadores
                         default: break;
                         }
                     }
