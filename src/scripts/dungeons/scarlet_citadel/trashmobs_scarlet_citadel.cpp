@@ -677,7 +677,7 @@ CreatureAI* GetAI_npc_eric_dark(Creature* pCreature)
     return new npc_eric_dark_AI(pCreature);
 }
 
-
+// TODO: Behave like a toxic player too! ;)
 class npc_citadel_interrogator_AI : public ScriptedAI
 {
 public:
@@ -823,12 +823,12 @@ CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
 }
 
 
-class npc_citadel_illusionist_AI : public ScriptedAI
+class npc_darkcaller_rayn_AI : public ScriptedAI
 {
 public:
-    explicit npc_citadel_illusionist_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_darkcaller_rayn_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_citadel_illusionist_AI::Reset();
+        npc_darkcaller_rayn_AI::Reset();
     }
 
 private:
@@ -967,9 +967,9 @@ public:
     }
 };
 
-CreatureAI* GetAI_npc_citadel_illusionist(Creature* pCreature)
+CreatureAI* GetAI_npc_darkcaller_rayn(Creature* pCreature)
 {
-    return new npc_citadel_illusionist_AI(pCreature);
+    return new npc_darkcaller_rayn_AI(pCreature);
 }
 
 void AddSC_trash_mobs_scarlet_citadel()
@@ -1010,8 +1010,8 @@ void AddSC_trash_mobs_scarlet_citadel()
 
     // Shadow Wing
     pNewscript = new Script;
-    pNewscript->Name = "npc_citadel_illusionist";
-    pNewscript->GetAI = &GetAI_npc_citadel_illusionist;
+    pNewscript->Name = "npc_darkcaller_rayn";
+    pNewscript->GetAI = &GetAI_npc_darkcaller_rayn;
     pNewscript->RegisterSelf();
 
     
