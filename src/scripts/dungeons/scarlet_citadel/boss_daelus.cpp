@@ -21,31 +21,38 @@ public:
     }
 
 private:
-    std::uint8_t m_uiPhase{};
+    // Phase 1
     std::uint8_t m_uiChosenOne{};
 
-    std::uint32_t m_uiCallMonks_Timer{};
+    std::uint32_t m_uiCallSpirits_Timer{};
     std::uint32_t m_uiSpawnChosenOne_Timer{};
-    std::uint32_t m_uiCheckAndConsumeMonks_Timer{};
-    std::uint32_t m_uiVulnerability_Timer{};
+    std::uint32_t m_uiCheckAndConsumeSpirits{};
     std::uint32_t m_uiCheckForTank_Timer{};
+    std::uint32_t m_uiArcaneExplosion_Timer{};
 
     std::vector<ObjectGuid> m_vSpawnedAdds;
 
-    instance_scarlet_citadel* m_pInstance{};
+    // Phase 2
+    std::uint32_t m_uiVulnerability_Timer{};
 
+    // Misc
     bool m_bWasInFight{};
+
+    std::uint8_t m_uiPhase{};
+
+    instance_scarlet_citadel* m_pInstance{};
 
 public:
     void Reset() override
     {
         m_uiPhase = 1;
-        m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS;
+        m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS; // Set m_uiChosenOne out of range until CheckChosenOneTiming() assigns a value within range (0-5)
 
-        m_uiCallMonks_Timer = nsDaelus::CALL_MONKS_FIRST_TIMER;
-        m_uiSpawnChosenOne_Timer = nsDaelus::SPAWN_CHOSEN_ONE_TIMER;
-        m_uiCheckAndConsumeMonks_Timer = m_uiCallMonks_Timer; // A delayed timer could be added, but is it rly worth the effort?
+        m_uiCallSpirits_Timer = nsDaelus::CALL_SPIRITS_FIRST_TIMER;
+        m_uiSpawnChosenOne_Timer = nsDaelus::INITIAL_SPAWN_CHOSEN_ONE_TIMER;
+        m_uiCheckAndConsumeSpirits = m_uiCallSpirits_Timer; // A delayed timer could be added, but is it rly worth the effort?
         m_uiCheckForTank_Timer = nsDaelus::CHECK_FOR_TANK_TIMER;
+        m_uiArcaneExplosion_Timer = nsDaelus::ARCANE_EXPLOSION_TIMER;
 
         if (m_pInstance && m_bWasInFight)
         {
@@ -102,7 +109,7 @@ public:
         {
             m_uiChosenOne = urand(0, (nsDaelus::NUMBER_OF_ADDS - 1));
 
-            m_uiSpawnChosenOne_Timer = nsDaelus::SPAWN_CHOSEN_ONE_TIMER;
+            m_uiSpawnChosenOne_Timer = urand(120000, 180000); // Betwwen 2-3 minutes
         }
         else
         {
@@ -112,23 +119,22 @@ public:
 
     void SummonAdds()
     {
-        if (Creature* pDaelus{ m_pInstance->GetSingleCreatureFromStorage(NPC_DAELUS) })
+        for (std::uint8_t i{ 0 }; i < nsDaelus::NUMBER_OF_ADDS; ++i)
         {
-            for (std::uint8_t i{ 0 }; i < nsDaelus::NUMBER_OF_ADDS; ++i )
+            if (Creature* pMonk{ m_creature->SummonCreature(nsDaelus::NPC_FALLEN_SPIRIT,
+                nsDaelus::vfSpawnPoints[i].m_fX,
+                nsDaelus::vfSpawnPoints[i].m_fY,
+                nsDaelus::vfSpawnPoints[i].m_fZ,
+                nsDaelus::vfSpawnPoints[i].m_fO,TEMPSUMMON_MANUAL_DESPAWN) })
             {
-                if (Creature* pMonk{ m_creature->SummonCreature(nsDaelus::NPC_FALLEN_SPIRIT,
-                    nsDaelus::vfSpawnPoints[i].m_fX,
-                    nsDaelus::vfSpawnPoints[i].m_fY,
-                    nsDaelus::vfSpawnPoints[i].m_fZ,
-                    nsDaelus::vfSpawnPoints[i].m_fO,TEMPSUMMON_MANUAL_DESPAWN) })
+                if (i == m_uiChosenOne)
                 {
-                    if (i == m_uiChosenOne)
-                    {
-                        pMonk->AddAura(nsDaelus::SPELL_RED_COLOR);
-                    }
+                    pMonk->AddAura(nsDaelus::SPELL_RED_COLOR);
 
-                    m_vSpawnedAdds.push_back(pMonk->GetObjectGuid());
+                    m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS; // Set m_uiChosenOne out of range until CheckChosenOneTiming() assigns a value within range (0-5)
                 }
+
+                m_vSpawnedAdds.push_back(pMonk->GetObjectGuid());
             }
         }
     }
@@ -155,23 +161,23 @@ public:
         }
     }
 
-    void CallMonks(const uint32& uiDiff)
+    void CallSpirits(const uint32& uiDiff)
     {
-        if (m_uiCallMonks_Timer < uiDiff)
+        if (m_uiCallSpirits_Timer < uiDiff)
         {
             SummonAdds();
 
-            m_uiCallMonks_Timer = nsDaelus::CALL_MONKS_REPEAT_TIMER;
+            m_uiCallSpirits_Timer = nsDaelus::CALL_SPIRITS_REPEAT_TIMER;
         }
         else
         {
-            m_uiCallMonks_Timer -= uiDiff;
+            m_uiCallSpirits_Timer -= uiDiff;
         }
     }
 
-    void CheckConsumedMonks(const uint32& uiDiff)
+    void CheckConsumedSpirits(const uint32& uiDiff)
     {
-        if (m_uiCheckAndConsumeMonks_Timer < uiDiff)
+        if (m_uiCheckAndConsumeSpirits < uiDiff)
         {
             for (const auto& monk : m_vSpawnedAdds)
             {
@@ -197,16 +203,21 @@ public:
                 }
             }
 
-            m_uiCheckAndConsumeMonks_Timer = nsDaelus::CHECK_MONKS_REPEAT_TIMER;
+            m_uiCheckAndConsumeSpirits = nsDaelus::CHECK_SPIRITS_REPEAT_TIMER;
         }
         else
         {
-            m_uiCheckAndConsumeMonks_Timer -= uiDiff;
+            m_uiCheckAndConsumeSpirits -= uiDiff;
         }
     }
 
     void MakeBossVulnerable()
     {
+        if (m_creature->IsNonMeleeSpellCasted()) // Check if Daeulus is still channeling his casting animation...
+        {
+            m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_LIFE_DRAIN_VISIAL); // ... if this is the case, STOP IT
+        }
+
         m_creature->AddAura(nsDaelus::SPELL_RED_COLOR);
         m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_VULNERABILITY);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
@@ -243,7 +254,7 @@ public:
                 if (PlayerList.isEmpty())
                     return;
 
-                m_creature->CastSpell(m_creature, nsDaelus::SPELL_GREEN_CHANNELING, true); // Start casting animation
+                m_creature->CastSpell(m_creature, nsDaelus::SPELL_LIFE_DRAIN_VISIAL, true); // Start casting animation
 
                 std::uint32_t uiHealthPoints{}; // Create variable for life drain which contains 10% hp of all players
 
@@ -255,7 +266,7 @@ public:
                         {
                             const std::uint32_t uiTenPercentLife{ static_cast<std::uint32_t>(pPlayer->GetMaxHealth() / 0.1f) }; // Get int value of 10% HP of player's maxlife
                             uiHealthPoints += uiTenPercentLife; // Now add player's 10% hp to the life drain variable
-                            std::cout << uiTenPercentLife << std::endl;
+                            std::cout << "uiTenPercentLife: " << uiTenPercentLife << std::endl;
 
                             const std::int32_t iNewHealthPoints{ static_cast<std::int32_t>(pPlayer->GetHealth() - uiTenPercentLife) }; // Calculate player's new HP after life drain
                             if (iNewHealthPoints <= 1) // If player's life pool is 1 HP or less (Yes, 1HP could also be dead in some cases)...
@@ -265,7 +276,7 @@ public:
                             else
                             {
                                 pPlayer->SetHealth(static_cast<std::uint32_t>(iNewHealthPoints)); // Assign player's new HPs
-                                std::cout << iNewHealthPoints << std::endl;
+                                std::cout << "iNewHealthPoints: " << iNewHealthPoints << std::endl;
                             }
                         }
                     }
@@ -278,7 +289,7 @@ public:
             {
                 if (m_creature->IsNonMeleeSpellCasted()) // Check if Daeulus is still channeling his casting animation...
                 {
-                    m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_GREEN_CHANNELING); // ... if this is the case, STOP IT
+                    m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_LIFE_DRAIN_VISIAL); // ... if this is the case, STOP IT
                 }
 
                 DoMeleeAttackIfReady(); // Do melee hits
@@ -292,6 +303,60 @@ public:
         }
     }
 
+    Player* SelectRandomPlayerExceptTank()
+    {
+        ThreatList const& tList{ m_creature->GetThreatManager().getThreatList() };
+        if (tList.empty())
+            return nullptr;
+
+        std::list<Player*> candidates;
+        ThreatList::const_iterator i{ tList.begin() };
+
+        if (tList.size() > 1)
+        {
+            ++i; // Skipping top-aggro if there is more then 1 player in list
+        }
+
+        for (; i != tList.end(); ++i)
+        {
+            if (Player* pPlayer{ m_creature->GetMap()->GetPlayer((*i)->getUnitGuid()) })
+            {
+                if (m_creature->IsInRange(pPlayer, 0.f, 40.f)) // Last value of parameter to prevent player standing on the edge of the room to avoid too much dmg to raid
+                {
+                    candidates.push_back(pPlayer);
+                }
+            }
+            else
+            {
+                continue;
+            }
+        }
+
+        if (candidates.empty())
+            return nullptr;
+
+        auto candIt{ candidates.begin() };
+        std::advance(candIt, urand(0, candidates.size() - 1));
+        return *candIt;
+    }
+
+    void ForcePlayerToCastArcaneExplosion(const uint32& uiDiff)
+    {
+        if (m_uiArcaneExplosion_Timer < uiDiff)
+        {
+            if (Player* pPlayer{ SelectRandomPlayerExceptTank() })
+            {
+                pPlayer->CastCustomSpell(pPlayer, nsDaelus::SPELL_ARCANE_EXPLOSION, &nsDaelus::ARCANE_EXPLOSION_DMG, nullptr, nullptr, true, nullptr, nullptr, m_creature->GetObjectGuid());
+            }
+
+            m_uiArcaneExplosion_Timer = nsDaelus::ARCANE_EXPLOSION_TIMER;
+        }
+        else
+        {
+            m_uiArcaneExplosion_Timer -= uiDiff;
+        }
+    }
+
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
@@ -299,9 +364,10 @@ public:
 
         if (m_uiPhase == 1) // Unvulnerable
         {
-            CallMonks(uiDiff);
-            CheckChosenOneTiming(uiDiff);
             LookingForTank(uiDiff);
+            ForcePlayerToCastArcaneExplosion(uiDiff);
+            CallSpirits(uiDiff);
+            CheckChosenOneTiming(uiDiff);
         }
         else if (m_uiPhase == 2) // Vulnerable
         {
@@ -312,7 +378,7 @@ public:
             // LookingForTank(uiDiff);
         }
 
-        CheckConsumedMonks(uiDiff);
+        CheckConsumedSpirits(uiDiff);
     }
 };
 
@@ -417,10 +483,7 @@ public:
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        if (!IsChosenOne()) // Chosen one should do sonicburst on death
-        {
-            m_creature->CastSpell(m_creature, nsDaelus::SPELL_SONICBURST, true);
-        }
+        m_creature->CastSpell(m_creature, nsDaelus::SPELL_SONICBURST, true);
 
         m_creature->DeleteLater(); // Keep the floor clean!
     }
