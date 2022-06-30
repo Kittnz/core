@@ -78,7 +78,7 @@ void PlayerBotMgr::Load()
     // 4- LoadFromDB
     result = CharacterDatabase.PQuery("SELECT char_guid, chance, ai FROM playerbot");
     if (!result)
-        sLog.outString("DB playerbot vide.");
+        sLog.outString("Loading playerbots...");
     else
     {
         do
