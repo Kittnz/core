@@ -32,6 +32,7 @@ namespace nsDaelus
     static constexpr std::uint32_t SPELL_VULNERABILITY{ 26156 };
     static constexpr std::uint32_t SPELL_SONICBURST{ 23918 };
     static constexpr std::uint32_t SPELL_LIFE_DRAIN_VISUAL{ 21157 };
+    static constexpr std::uint32_t SPELL_SUNDER_ARMOR{ 25051 };
 
     static constexpr std::uint32_t CALL_SPIRITS_FIRST_TIMER{ 5000 };
     static constexpr std::uint32_t CALL_SPIRITS_REPEAT_TIMER{ 30000 };
@@ -40,6 +41,7 @@ namespace nsDaelus
     static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
     static constexpr std::uint32_t CHOSEN_ONE_MIN_TIMER{ 120000 };
     static constexpr std::uint32_t CHOSEN_ONE_MAX_TIMER{ 180000 };
+    static constexpr std::uint32_t SUNDER_ARMOR_TIMER{ 10000 };
 
     static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Daelus regenerate on each consume
 
