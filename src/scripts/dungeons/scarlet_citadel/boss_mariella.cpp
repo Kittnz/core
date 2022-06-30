@@ -41,7 +41,7 @@ private:
     bool m_bIsSacrificePhase{};
     bool m_bFelhoundsAlreadyAnnounced{};
     bool m_bEnrage{};
-    bool m_bAchievementKill{};
+    bool m_bAchievementKillFailed{};
     bool m_bWasInFight{};
     
     instance_scarlet_citadel* m_pInstance{};
@@ -91,7 +91,7 @@ public:
         m_uiKillZoneGuid = 0;
 
         // Achievement Kill
-        m_bAchievementKill = true;
+        m_bAchievementKillFailed = false;
 
         // Enrage
         m_uiEnrage_Timer = nsMariella::TIME_UNTIL_ENRAGE;
@@ -137,7 +137,7 @@ public:
         DespawnSummoningCircles();
         DespawnFelhounds();
 
-        if (m_bAchievementKill)
+        if (!IsAchievementKillFailed())
         {
             SpawnAchievementReward(pKiller);
         }
@@ -507,9 +507,17 @@ public:
             sLog.outError("[SC] Boss Mariella: SpawnAchievementReward() called but no pKiller found!");
     }
 
-    void AchievementKill(const bool& bIsAchievementKill)
+    void AchievementKillFailed()
     {
-        m_bAchievementKill = bIsAchievementKill;
+        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
+
+        m_bAchievementKillFailed = true;
+    }
+
+    bool IsAchievementKillFailed()
+    {
+        return m_bAchievementKillFailed;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -583,12 +591,12 @@ struct npc_voidzone : public ScriptedAI
                         {
                             if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(pCreature->AI()) })
                             {
-                                boss_mariella->AchievementKill(false); // Achievement failed if a player received damage from a Void Zone
+                                if (!boss_mariella->IsAchievementKillFailed())
+                                {
+                                    boss_mariella->AchievementKillFailed(); // Achievement failed if a player received damage from a Void Zone
+                                }
                             }
                         }
-
-                        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-                        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
                     }
                 }
             }
