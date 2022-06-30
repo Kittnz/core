@@ -6,6 +6,7 @@
 -- Soja , display ID 18916, level 44, faction 83, weapon1 :12943, humanoid, quest/greeting flags, greeting text : "Make yourself welcome here, there be a lot to do!"
 -- Maltimor Gartside, display ID 18917, faction 11, weapon1 : 9513, humanoid, quest/greeting flags, greeting text : "Westfall. Once, land of prosperity. Now, nothing more than a wasteland."
 -- Gazzirik, display ID 7182, faction 35, weapon1 : 3198, humanoid, quest/greeting flags, greeting text : "I'm busy, pal."
+-- Private Holson, display ID 18918, level 49, faction 35, humanoid, no weapon, quest/greeting flags, greeting text : " <The body lays unmoving.> (NPC must be in a dead pose)
 REPLACE INTO creature_template VALUES
 (60854, 18913, 0, 0, 0, 'Farad Wrightsow', '', 0, 25, 25, 712, 712, 0, 0, 1009, 11, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60855, 18914, 0, 0, 0, 'Foreman Tanoth', 'Kirin Tor', 0, 50, 50, 2990, 2990, 0, 0, 2958, 76, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -14,7 +15,8 @@ REPLACE INTO creature_template VALUES
 (60858, 18917, 0, 0, 0, 'Maltimor Gartside', '', 0, 25, 25, 712, 712, 0, 0, 1009, 11, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 31, 40, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 38.72, 53.24, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60859, 7182, 0, 0, 0, 'Gazzirik', '', 0, 42, 42, 1981, 1981, 0, 0, 2246, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60860, 4657, 0, 0, 0, 'Xoro III', 'Conquistadores', 0, 50, 50, 2990, 2990, 0, 0, 2958, 290, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 2546, 0, 0, 0, 0, 0, 0, ''),
-(60861, 6944, 796, 6946, 6948, 'Recluta', 'Conquistadores', 0, 40, 40, 2628, 2628, 0, 0, 1964, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 57, 70, 0, 156, 1, 1600, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 1563, 0, 0, 0, 0, 0, 0, '');
+(60861, 6944, 796, 6946, 6948, 'Recluta', 'Conquistadores', 0, 40, 40, 2628, 2628, 0, 0, 1964, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 57, 70, 0, 156, 1, 1600, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 1563, 0, 0, 0, 0, 0, 0, ''),
+(60862, 18918, 0, 0, 0, 'Private Holson', '', 0, 49, 49, 2672, 2672, 0, 0, 2944, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, 0, '');
 
 set @equip_template = 20145; set @weapon_1 = 3198; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60859;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -39,6 +41,12 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20140; set @weapon_1 = 3902; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60854;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41167; set @magic_number = 60862;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<The body lays unmoving.>');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41166; set @magic_number = 60860;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -84,4 +92,13 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 REPLACE INTO creature_template_addon VALUES
 (60856, 0, 0, 0, 0, 0, 0, 9617),
-(60860, 0, 0, 0, 0, 0, 0, 9617);
+(60860, 0, 0, 0, 0, 0, 0, 9617),
+(60862, 0, 7, 0, 0, 0, 0, NULL);
+
+REPLACE INTO creature_display_info_addon VALUES
+(18913, 0, 0, 0, 0),
+(18914, 0, 0, 0, 0),
+(18915, 0, 0, 0, 0),
+(18916, 0, 0, 0, 0),
+(18917, 0, 0, 0, 0),
+(18918, 0, 0, 0, 0);

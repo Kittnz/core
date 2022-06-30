@@ -8936,6 +8936,40 @@ bool ChatHandler::HandleGetSkillValueCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleHCMessagesCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .hcmessages <minlevel>");
+        return false;
+    }
+
+    
+    int32 minLevel = -1;
+
+    ExtractInt32(&args, minLevel);
+
+    if (minLevel > 100 || minLevel <= 0)
+    {
+        SendSysMessage("Enter a valid level.");
+        return false;
+    }
+
+    minLevel = floor(float(minLevel) / 10.f) * 10;
+
+    if (minLevel == 0)
+        minLevel = 1;
+
+    Player* player = GetSession()->GetPlayer();
+
+    if (player)
+    {
+        PSendSysMessage("Minimum level for Hardcore messages is now: %d", minLevel);
+        player->SetPlayerVariable(PlayerVariables::HardcoreMessageLevel, std::to_string(minLevel));
+    }
+    return true;
+}
+
 //Edit Player money
 bool ChatHandler::HandleModifyMoneyCommand(char* args)
 {

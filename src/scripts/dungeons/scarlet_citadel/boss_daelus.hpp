@@ -31,13 +31,17 @@ namespace nsDaelus
     static constexpr std::uint32_t SPELL_RED_COLOR{ 26235 };
     static constexpr std::uint32_t SPELL_VULNERABILITY{ 26156 };
     static constexpr std::uint32_t SPELL_SONICBURST{ 23918 };
-    static constexpr std::uint32_t SPELL_GREEN_CHANNELING{ 13540 };
+    static constexpr std::uint32_t SPELL_LIFE_DRAIN_VISIAL{ 21157 };
+    static constexpr std::uint32_t SPELL_ARCANE_EXPLOSION{ 19712 };
 
-    static constexpr std::uint32_t CALL_MONKS_FIRST_TIMER{ 5000 };
-    static constexpr std::uint32_t CALL_MONKS_REPEAT_TIMER{ 30000 };
-    static constexpr std::uint32_t SPAWN_CHOSEN_ONE_TIMER{ 90000 };
-    static constexpr std::uint32_t CHECK_MONKS_REPEAT_TIMER{ 500 };
+    static constexpr std::int32_t ARCANE_EXPLOSION_DMG{ 1337 };
+
+    static constexpr std::uint32_t CALL_SPIRITS_FIRST_TIMER{ 5000 };
+    static constexpr std::uint32_t CALL_SPIRITS_REPEAT_TIMER{ 30000 };
+    static constexpr std::uint32_t INITIAL_SPAWN_CHOSEN_ONE_TIMER{ 90000 };
+    static constexpr std::uint32_t CHECK_SPIRITS_REPEAT_TIMER{ 500 };
     static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
+    static constexpr std::uint32_t ARCANE_EXPLOSION_TIMER{ 10000 };
 
     static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Daelus regenerate on each consume
 

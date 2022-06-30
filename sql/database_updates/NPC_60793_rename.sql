@@ -1,0 +1,1 @@
+update creature_template set name = 'Commander Baelos' where entry = 60793;
