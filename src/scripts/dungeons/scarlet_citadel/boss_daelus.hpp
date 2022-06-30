@@ -38,6 +38,8 @@ namespace nsDaelus
     static constexpr std::uint32_t INITIAL_SPAWN_CHOSEN_ONE_TIMER{ 90000 };
     static constexpr std::uint32_t CHECK_SPIRITS_REPEAT_TIMER{ 500 };
     static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
+    static constexpr std::uint32_t CHOSEN_ONE_MIN_TIMER{ 120000 };
+    static constexpr std::uint32_t CHOSEN_ONE_MAX_TIMER{ 180000 };
 
     static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Daelus regenerate on each consume
 

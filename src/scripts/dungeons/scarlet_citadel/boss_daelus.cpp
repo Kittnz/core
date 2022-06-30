@@ -46,15 +46,6 @@ private:
 public:
     void Reset() override
     {
-        m_uiPhase = 1;
-        m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS; // Set m_uiChosenOne out of range until CheckChosenOneTiming() assigns a value within range (0-5)
-
-        m_uiCallSpirits_Timer = nsDaelus::CALL_SPIRITS_FIRST_TIMER;
-        m_uiSpawnChosenOne_Timer = nsDaelus::INITIAL_SPAWN_CHOSEN_ONE_TIMER;
-        m_uiCheckAndConsumeSpirits = m_uiCallSpirits_Timer; // A delayed timer could be added, but is it rly worth the effort?
-        m_uiCheckForTank_Timer = nsDaelus::CHECK_FOR_TANK_TIMER;
-        m_uiPoisonCloud_Timer = nsDaelus::INITIAL_POISON_CLOUD_TIMER;
-
         if (m_pInstance && m_bWasInFight)
         {
             DespawnAdds();
@@ -62,15 +53,16 @@ public:
             m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
 
             m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, FAIL);
-
-            m_bWasInFight = false;
         }
 
-        m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
+        // Phase 1
+        m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS; // Set m_uiChosenOne out of range until CheckChosenOneTiming() assigns a value within range (0-5)
+        m_uiCheckForTank_Timer = nsDaelus::CHECK_FOR_TANK_TIMER;
+        m_uiCallSpirits_Timer = nsDaelus::CALL_SPIRITS_FIRST_TIMER;
+        m_uiSpawnChosenOne_Timer = nsDaelus::INITIAL_SPAWN_CHOSEN_ONE_TIMER;
 
-        m_creature->SetFactionTemplateId(nsDaelus::FACTION_NEUTRAL);
-
-        m_creature->SetHealthPercent(75.0f);
+        m_uiCheckAndConsumeSpirits = m_uiCallSpirits_Timer; // A delayed timer could be added, but is it rly worth the effort?
+        m_uiPoisonCloud_Timer = nsDaelus::INITIAL_POISON_CLOUD_TIMER;
 
         // Achievement Kill
         m_bAchievementKillFailed = false;
@@ -79,27 +71,27 @@ public:
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->AddUnitState(UNIT_STAT_ROOT);
+        m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
+        m_creature->SetFactionTemplateId(nsDaelus::FACTION_NEUTRAL);
+        m_creature->SetHealthPercent(75.0f);
+
+        m_uiPhase = 1;
+
+        m_bWasInFight = false;
     }
 
     void Aggro(Unit* /*pWho*/) override
     {
-        if (!m_pInstance)
-            return;
-
-        m_bWasInFight = true;
-
+        m_creature->SetInCombatWithZone();
         m_creature->CastSpell(m_creature, nsDaelus::SPELL_VULNERABILITY, true);
 
-        m_creature->SetInCombatWithZone();
-
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, IN_PROGRESS);
+
+        m_bWasInFight = true;
     }
 
     void JustDied(Unit* pKiller) override
     {
-        if (!m_pInstance)
-            return;
-
         DespawnAdds();
 
         if (!IsAchievementKillFailed())
@@ -108,7 +100,6 @@ public:
         }
 
         m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
-
         m_creature->SetRespawnDelay(604800);
 
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_DAELUS, DONE);
@@ -120,7 +111,7 @@ public:
         {
             m_uiChosenOne = urand(0, (nsDaelus::NUMBER_OF_ADDS - 1));
 
-            m_uiSpawnChosenOne_Timer = urand(120000, 180000); // Betwwen 2-3 minutes
+            m_uiSpawnChosenOne_Timer = urand(nsDaelus::CHOSEN_ONE_MIN_TIMER, nsDaelus::CHOSEN_ONE_MAX_TIMER);
         }
         else
         {
@@ -271,7 +262,7 @@ public:
     {
         if (m_uiCheckForTank_Timer < uiDiff)
         {
-            if (m_creature->GetDistance2d(m_creature->GetVictim()) > 1.5f) // If Daelus' current target isn't close to him
+            if (m_creature->GetDistance2d(m_creature->GetVictim()) > 4.5f) // If Daelus' current target isn't close to him
             {
                 Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() }; // Get all players in dungeon
                 if (PlayerList.isEmpty())
@@ -288,7 +279,6 @@ public:
                         if (pPlayer->IsAlive() && !pPlayer->IsGameMaster()) // Skip dead players and GMs
                         {
                             const float uiTenPercentLife{ (pPlayer->GetMaxHealth() * 0.1f) }; // Get int value of 10% HP of player's maxlife
-                            std::cout << "uiTenPercentLife: " << uiTenPercentLife << std::endl;
 
                             m_creature->DealDamage(pPlayer, uint32(uiTenPercentLife), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NONE, nullptr, true);
 
@@ -298,7 +288,6 @@ public:
                 }
 
                 m_creature->SetHealth(m_creature->GetHealth() + uint32(uiHealthPoints)); // After iteration of all player's are done, add all drained HPs to Daelus
-                std::cout << "uiHealthPoints: " << uiHealthPoints << std::endl;
             }
             else
             {
@@ -459,9 +448,14 @@ bool GossipHello_boss_daelus(Player* pPlayer, Creature* pCreature)
     if (m_pInstance)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, nsDaelus::START_BUTTON, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+        pPlayer->SEND_GOSSIP_MENU(0001, pCreature->GetObjectGuid());
+    }
+    else
+    {
+        sLog.outError("[SC] Boss Daelus: Boss spawned outside of dungeon!");
+        pPlayer->CLOSE_GOSSIP_MENU();
     }
 
-    pPlayer->SEND_GOSSIP_MENU(0001, pCreature->GetObjectGuid());
 
     return true;
 }

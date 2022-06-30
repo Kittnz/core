@@ -147,7 +147,9 @@ public:
             }
         }
         else
+        {
             sLog.outError("[SC] Boss Ardaeus: DespawnSun() called but no GUID assigned!");
+        }
     }
 
     void CallForHelp(const uint32& uiDiff)
@@ -181,7 +183,9 @@ public:
                 m_lSummonedCallForHelpNPCs.push_back(pRandomNPC->GetObjectGuid()); // Store its GUID to remove it later
 
                 if (pStatueNPC)
+                {
                     pRandomNPC->CastSpell(pStatueNPC, nsArdaeus::VISUALSPELL_SUMMON_CALLFORHELP, true);
+                }
             }
 
             // Despawn Statue NPC
@@ -204,7 +208,9 @@ public:
             m_uiCallForHelp_Timer = nsArdaeus::CALLFORHELP_REPEAT_TIMER;
         }
         else
+        {
             m_uiCallForHelp_Timer -= uiDiff;
+        }
     }
 
     void DespawnCallForHelpNPCs()
@@ -245,7 +251,9 @@ public:
                 nsArdaeus::GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER);
         }
         else
+        {
             sLog.outError("[SC] Boss Ardaeus: SpawnAchievementReward() called but no pKiller found!");
+        }
     }
 
     void AchievementKillFailed()
@@ -358,7 +366,9 @@ public:
             m_uiIncreaseSpeed_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
         }
         else
+        {
             m_uiIncreaseSpeed_Timer -= uiDiff;
+        }
     }
 
     void CheckForAchievement(const uint32& uiDiff)
@@ -382,7 +392,9 @@ public:
             m_uiAchievement_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
         }
         else
+        {
             m_uiAchievement_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -426,11 +438,13 @@ bool GossipHello_boss_ardaeus(Player* pPlayer, Creature* pCreature)
     if (m_pInstance /*&& (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, nsArdaeus::GOSSIP_ANSWER, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+        pPlayer->SEND_GOSSIP_MENU(nsArdaeus::GOSSIP_TEXT, pCreature->GetObjectGuid());
     }
     else
+    {
         sLog.outError("[SC] Boss Ardeus: Boss spawned outside of dungeon or someone tried to start encounter without killing the first boss!");
-
-    pPlayer->SEND_GOSSIP_MENU(nsArdaeus::GOSSIP_TEXT, pCreature->GetObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
 
     return true;
 }
