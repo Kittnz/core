@@ -29,6 +29,7 @@ private:
     std::uint32_t m_uiCheckAndConsumeSpirits{};
     std::uint32_t m_uiCheckForTank_Timer{};
     std::uint32_t m_uiPoisonCloud_Timer{};
+    std::uint32_t m_uiSunderArmor_Timer{};
 
     std::vector<ObjectGuid> m_vSpawnedAdds;
 
@@ -60,6 +61,7 @@ public:
         m_uiCheckForTank_Timer = nsDaelus::CHECK_FOR_TANK_TIMER;
         m_uiCallSpirits_Timer = nsDaelus::CALL_SPIRITS_FIRST_TIMER;
         m_uiSpawnChosenOne_Timer = nsDaelus::INITIAL_SPAWN_CHOSEN_ONE_TIMER;
+        m_uiSunderArmor_Timer = nsDaelus::SUNDER_ARMOR_TIMER;
 
         m_uiCheckAndConsumeSpirits = m_uiCallSpirits_Timer; // A delayed timer could be added, but is it rly worth the effort?
         m_uiPoisonCloud_Timer = nsDaelus::INITIAL_POISON_CLOUD_TIMER;
@@ -268,7 +270,7 @@ public:
     {
         if (m_uiCheckForTank_Timer < uiDiff)
         {
-            if (m_creature->GetDistance2d(m_creature->GetVictim()) > 4.5f) // If Daelus' current target isn't close to him
+            if (m_creature->GetDistance2d(m_creature->GetVictim()) > 3.f) // If Daelus' current target isn't close to him
             {
                 Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() }; // Get all players in dungeon
                 if (PlayerList.isEmpty())
@@ -320,16 +322,16 @@ public:
             return nullptr;
 
         std::list<Player*> candidates;
-        ThreatList::const_iterator i{ tList.begin() };
+        ThreatList::const_iterator itr{ tList.begin() };
 
         if (tList.size() > 1)
         {
-            ++i; // Skipping top-aggro if there is more then 1 player in list
+            ++itr; // Skipping top-aggro if there is more then 1 player in list
         }
 
-        for (; i != tList.end(); ++i)
+        for (; itr != tList.end(); ++itr)
         {
-            if (Player* pPlayer{ m_creature->GetMap()->GetPlayer((*i)->getUnitGuid()) })
+            if (Player* pPlayer{ m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()) })
             {
                 if (m_creature->IsInRange(pPlayer, 0.f, 40.f)) // Last value of parameter to prevent player standing on the edge of the room to avoid too much dmg to raid
                 {
@@ -385,6 +387,23 @@ public:
         }
     }
 
+    void DoSunderArmor(const uint32& uiDiff) // TODO: Replace with a proper spell which keep tanks busy
+    {
+        if (m_uiSunderArmor_Timer < uiDiff)
+        {
+            if (m_creature->GetDistance2d(m_creature->GetVictim()) < 3.f)
+            {
+                m_creature->CastSpell(m_creature->GetVictim(), nsDaelus::SPELL_SUNDER_ARMOR, true);
+            }
+
+            m_uiSunderArmor_Timer = nsDaelus::SUNDER_ARMOR_TIMER;
+        }
+        else
+        {
+            m_uiSunderArmor_Timer -= uiDiff;
+        }
+    }
+
     void SpawnAchievementReward(Unit* pKiller)
     {
         if (pKiller)
@@ -424,6 +443,7 @@ public:
 
         if (m_uiPhase == 1) // Unvulnerable
         {
+            DoSunderArmor(uiDiff);
             LookingForTank(uiDiff);
             CallSpirits(uiDiff);
             CheckChosenOneTiming(uiDiff);
