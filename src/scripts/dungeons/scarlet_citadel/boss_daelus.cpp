@@ -82,6 +82,9 @@ public:
 
     void Aggro(Unit* /*pWho*/) override
     {
+        if (!m_pInstance)
+            return;
+
         m_creature->SetInCombatWithZone();
         m_creature->CastSpell(m_creature, nsDaelus::SPELL_VULNERABILITY, true);
 
@@ -92,6 +95,9 @@ public:
 
     void JustDied(Unit* pKiller) override
     {
+        if (!m_pInstance)
+            return;
+
         DespawnAdds();
 
         if (!IsAchievementKillFailed())
