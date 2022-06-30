@@ -42,7 +42,7 @@ private:
 
     uint32 m_uiCallForHelp_Timer{};
 
-    bool m_bAchievementKill{};
+    bool m_bAchievementKillFailed{};
 
     instance_scarlet_citadel* m_pInstance{};
 
@@ -54,7 +54,7 @@ public:
         m_lSummonedCallForHelpNPCs.clear();
 
         // Achievement
-        m_bAchievementKill = true;
+        m_bAchievementKillFailed = false;
 
         // Trigger fight on gossip
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -93,7 +93,7 @@ public:
         DespawnSun();
         DespawnCallForHelpNPCs();
 
-        if (m_bAchievementKill)
+        if (!IsAchievementKillFailed())
         {
             SpawnAchievementReward(pKiller);
         }
@@ -248,9 +248,17 @@ public:
             sLog.outError("[SC] Boss Ardaeus: SpawnAchievementReward() called but no pKiller found!");
     }
 
-    void AchievementKill(const bool& bIsAchievementKill)
+    void AchievementKillFailed()
     {
-        m_bAchievementKill = bIsAchievementKill;
+        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+        m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
+
+        m_bAchievementKillFailed = true;
+    }
+
+    bool IsAchievementKillFailed()
+    {
+        return m_bAchievementKillFailed;
     }
 
     bool IsSunSpawned()
@@ -363,7 +371,10 @@ public:
                 {
                     if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pCreature->AI()) })
                     {
-                        boss_ardaeus->AchievementKill(false);
+                        if (!boss_ardaeus->IsAchievementKillFailed())
+                        {
+                            boss_ardaeus->AchievementKillFailed();
+                        }
                     }
                 }
             }

@@ -31,17 +31,13 @@ namespace nsDaelus
     static constexpr std::uint32_t SPELL_RED_COLOR{ 26235 };
     static constexpr std::uint32_t SPELL_VULNERABILITY{ 26156 };
     static constexpr std::uint32_t SPELL_SONICBURST{ 23918 };
-    static constexpr std::uint32_t SPELL_LIFE_DRAIN_VISIAL{ 21157 };
-    static constexpr std::uint32_t SPELL_ARCANE_EXPLOSION{ 19712 };
-
-    static constexpr std::int32_t ARCANE_EXPLOSION_DMG{ 1337 };
+    static constexpr std::uint32_t SPELL_LIFE_DRAIN_VISUAL{ 21157 };
 
     static constexpr std::uint32_t CALL_SPIRITS_FIRST_TIMER{ 5000 };
     static constexpr std::uint32_t CALL_SPIRITS_REPEAT_TIMER{ 30000 };
     static constexpr std::uint32_t INITIAL_SPAWN_CHOSEN_ONE_TIMER{ 90000 };
     static constexpr std::uint32_t CHECK_SPIRITS_REPEAT_TIMER{ 500 };
     static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
-    static constexpr std::uint32_t ARCANE_EXPLOSION_TIMER{ 10000 };
 
     static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Daelus regenerate on each consume
 
@@ -52,6 +48,21 @@ namespace nsDaelus
     // Phase 3
 
 
+
+    // Poison Cloud
+    static constexpr std::uint32_t NPC_POISON_CLOUD{ 16363 };
+    static constexpr std::uint32_t SPELL_POISON_CLOUD{ 28240 }; // 60 Second duration of ticking 1100-1300 damage / sec
+    static constexpr std::uint32_t SPELL_GREEN_GLOW_VISUAL{ 22577 };
+    static constexpr std::uint32_t INITIAL_POISON_CLOUD_TIMER{ 10000 };
+    static constexpr std::uint32_t POISON_CLOUD_TIMER{ 60000 };
+
+    // Achievement
+    static constexpr uint32 GO_ACHIEVEMENT_CHEST{ 0000 };                 // Chest to loot the achievement reward
+    static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
+    static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
+    {
+        { 0.f } // TODO: Check rotation
+    };
 
     // Misc
     static constexpr std::uint32_t FACTION_SCARLET{ 67 };  // Scarlet Citadel Faction
@@ -69,7 +80,8 @@ namespace nsDaelus
         ENRAGE,
         RAIDWIPE,
         BOSSDIED,
-        ACHIEVEMENT_FAILED
+        ACHIEVEMENT_FAILED,
+        POISONCLOUD
     };
 
     const std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNotifications)
@@ -111,6 +123,10 @@ namespace nsDaelus
             case CombatNotifications::ACHIEVEMENT_FAILED:
             {
                 return "ACHIEVEMENT_FAILED";
+            }
+            case CombatNotifications::POISONCLOUD:
+            {
+                return "POISONCLOUD";
             }
             default:
             {
