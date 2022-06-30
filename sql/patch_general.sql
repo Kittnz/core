@@ -999,9 +999,9 @@ replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VA
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10332, 5569, 679, 7, 0); -- Holy Strike Rank 7
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10333, 10332, 679, 8, 0); -- Holy Strike Rank 8
 
-update item_template set spellid_2 = 56525, spellcooldown_2 = 600000, spellid_1 = 13679, spellcooldown = -1 where entry = 60577;
+update item_template set spellid_2 = 56525, spellcooldown_2 = 600000, spellid_1 = 13679, spellcooldown_1 = -1 where entry = 60577;
 
-replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45555, 0, 0, 0 0);
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45555, 0, 0, 0, 0);
 
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45556, 15473, 15473, 3, 0);
 

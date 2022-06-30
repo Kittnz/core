@@ -5032,7 +5032,18 @@ void Player::KillPlayer()
     {
         SetHardcoreStatus(HARDCORE_MODE_STATUS_DEAD);
         if (GetLevel() >= 10)
-            sWorld.SendWorldText(50300, GetName(), GetLevel());
+        {
+            sWorld.SendWorldTextChecked(50300, [level = GetLevel()](Player* player) -> bool
+            {
+                auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
+                if (!levelCheck.has_value())
+                    return true;
+
+                if (std::atoi(levelCheck.value().c_str()) <= level)
+                    return true;
+                return false;
+            }, GetName(), GetLevel());
+        }
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 120 seconds.");
         ChatHandler(this).SendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 120 seconds.");
@@ -15289,6 +15300,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     _LoadSpells(holder->GetResult(PLAYER_LOGIN_QUERY_LOADSPELLS));
 
+    _LoadPlayerVariables(holder->GetResult(PLAYER_LOGIN_QUERY_LOADVARIABLES));
+
     // after spell load
     InitTalentForLevel();
 
@@ -16162,6 +16175,20 @@ void Player::_LoadSpells(QueryResult *result)
     }
 }
 
+void Player::_LoadPlayerVariables(QueryResult* result)
+{
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 variableType = fields[0].GetUInt32();
+            std::string value = fields[1].GetCppString();
+
+        } while (result->NextRow());
+    }
+}
+
 void Player::_LoadGroup(QueryResult *result)
 {
     //QueryResult *result = CharacterDatabase.PQuery("SELECT groupId FROM group_member WHERE memberGuid='%u'", GetGUIDLow());
@@ -16706,6 +16733,11 @@ void Player::SaveToDB(bool online, bool force)
     m_reputationMgr.SaveToDB();
     m_honorMgr.Save();
     // _collectionMgr->SaveToDB();
+
+    for (const auto& pair : m_variables)
+    {
+        CharacterDatabase.PExecute("REPLACE INTO `character_variables` VALUES('%u', '%u', '%s')", GetGUIDLow(), (uint32)pair.first, pair.second.c_str());
+    }
 
     // Systeme de phasing
     sObjectMgr.SetPlayerWorldMask(GetGUIDLow(), GetWorldMask());
@@ -22206,7 +22238,16 @@ void Player::AnnounceHardcoreModeLevelUp(uint32 level)
         case 30:
         case 40:
         case 50:
-            sWorld.SendWorldText(50301, GetName(), level);
+            sWorld.SendWorldTextChecked(50301, [level](Player* player) -> bool
+            {
+                auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
+                if (!levelCheck.has_value())
+                    return true;
+
+                if (std::atoi(levelCheck.value().c_str()) <= level)
+                    return true;
+                return false;
+            },GetName(), level);
             break;
         case 60:
             sWorld.SendWorldText(50302, GetName(), GetName());
