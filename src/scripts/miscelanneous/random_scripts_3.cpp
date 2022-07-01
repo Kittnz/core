@@ -3602,9 +3602,52 @@ bool QuestRewarded_npc_koli_steamheart(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool GossipHello_npc_sergeant_burnside(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40433) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 60792 && !pPlayer->HasItemCount(60635, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Commander Baelos is looking for your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(91950, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_sergeant_burnside(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(60635);
+        if (pPlayer->HasItemCount(60635, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Oh, here it is, I haven't had the time to deliver it yet, thanks.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_sergeant_burnside";
+    newscript->pGossipHello = &GossipHello_npc_sergeant_burnside;
+    newscript->pGossipSelect = &GossipSelect_npc_sergeant_burnside;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_koli_steamheart";
