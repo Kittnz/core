@@ -70,5 +70,4 @@ void AddSC_CUSTOM_SPELL()
     newscript->Name = "boss_custom_spell";
     newscript->GetAI = &Get_AIboss_custom_spell_test_AI;
     newscript->RegisterSelf();
-
 }
