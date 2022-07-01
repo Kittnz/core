@@ -1383,7 +1383,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadPageTexts();
     sLog.outString("Loading gameobject info...");
     sObjectMgr.LoadGameobjectInfo();
-    sLog.outString("Loadingtransport templates...");
+    sLog.outString("Loading transport templates...");
     sTransportMgr->LoadTransportTemplates();
     sLog.outString("Loading spell chains...");
     sSpellMgr.LoadSpellChains();

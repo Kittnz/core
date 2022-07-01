@@ -1460,8 +1460,6 @@ struct harbinger_boss_cotAI : public ScriptedAI
     }
 };
 
-
-
 struct larvae_cotAI : public ScriptedAI
 {
     explicit larvae_cotAI(Creature* c) : ScriptedAI(c)
