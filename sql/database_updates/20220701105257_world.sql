@@ -1,0 +1,1 @@
+update quest_template set objectives = 'Report to Watch Paladin Janathos at Sorrowguard Keep in Swamp of Sorrows.' where entry = 40255;
