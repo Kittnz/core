@@ -439,38 +439,6 @@ struct npc_car_controller : public ScriptedAI
 
 };
 
-
-struct npc_race_car : public ScriptedAI 
-{
-	npc_race_car(Creature* InCreature) : ScriptedAI(InCreature) {}
-
-	void UpdateAI(const uint32 delta) override
-	{
-		if (Unit* pawn = me->GetMap()->GetUnit(PlayerControllerGuid))
-		{
-			WorldLocation currentPosition;
-			me->GetPosition(currentPosition);
-			float x, y, z;
-
-			me->GetNearPoint(me, x, y, z, 0.0f, 3.0f, pawn->GetOrientation());
-
-			me->StopMoving(true);
-			me->MonsterMove(x, y, z);
-		}
-	}
-
-	void Reset() override
-	{
-	}
-
-	ObjectGuid PlayerControllerGuid;
-
-	void InformGuid(const ObjectGuid guid, uint32 = 0) override
-	{
-		PlayerControllerGuid = guid;
-	}
-};
-
 struct npc_landing_siteAI : public ScriptedAI
 {
     npc_landing_siteAI(Creature *c) : ScriptedAI(c)
@@ -507,11 +475,6 @@ CreatureAI* GetAI_npc_landing_site(Creature* pCreature)
 GameObjectAI* GetAI_go_speed_up(GameObject* gameobject)
 {
     return new go_speed_up(gameobject);
-}
-
-CreatureAI* GetAI_npc_race_car(Creature* creature)
-{
-	return new npc_race_car(creature);
 }
 
 CreatureAI* GetAI_npc_race_sheep(Creature* creature)
@@ -577,11 +540,6 @@ void AddSC_mirage_raceway()
     newscript->Name = "go_speed_up";
     newscript->GOGetAI = &GetAI_go_speed_up;
     newscript->RegisterSelf();
-
-	newscript = new Script;
-	newscript->Name = "npc_race_car";
-	newscript->GetAI = GetAI_npc_race_car;
-	newscript->RegisterSelf();
 
 	newscript = new Script;
 	newscript->Name = "npc_race_sheep";

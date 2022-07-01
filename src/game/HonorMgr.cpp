@@ -638,8 +638,6 @@ void HonorMaintenancer::SetMaintenanceDays(uint32 last, uint32 next)
 
 void HonorMaintenancer::Initialize()
 {
-    sLog.outString("Initialize Honor Maintenance system...");
-
     QueryResult* result = CharacterDatabase.Query("SELECT `lastHonorMaintenanceDay`, `nextHonorMaintenanceDay`, `honorMaintenanceMarker` FROM `saved_variables`");
     if (result)
     {
