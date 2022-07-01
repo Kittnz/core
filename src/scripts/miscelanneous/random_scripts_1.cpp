@@ -747,17 +747,6 @@ bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-bool ItemUseSpell_shop_changegender(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) return false;
-
-    uint8 player_gender = (pPlayer->GetGender() == GENDER_MALE) ? 1 : 0;
-    pPlayer->SetByteValue(UNIT_FIELD_BYTES_0, 2, player_gender);
-    pPlayer->InitPlayerDisplayIds();
-    pPlayer->SaveToDB();
-    return true;
-}
-
 bool GossipHello_npc_barber_go(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetRace() == RACE_GOBLIN)
@@ -7754,11 +7743,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_surgeon_go";
     newscript->pGossipHello = &GossipHello_npc_surgeon_go;
     newscript->pGossipSelect = &GossipSelect_npc_surgeon_go;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "shop_changegender";
-    newscript->pItemUseSpell = &ItemUseSpell_shop_changegender;
     newscript->RegisterSelf();
 
     newscript = new Script;

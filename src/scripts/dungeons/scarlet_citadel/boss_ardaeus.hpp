@@ -75,7 +75,7 @@ namespace nsArdaeus
     static constexpr float ACHIEVEMENT_FAILED_BELOW{ 20.f };
     static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
     {
-        { 236.068649f, -99.972031f, 23.774151f, 6.271617f, 0.f, 0.f, 0.f, 0.f } // TODO: Check rotation
+        { 0.f } // TODO: Check rotation
     };
 
     // Misc
