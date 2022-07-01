@@ -256,7 +256,6 @@ void AddSC_winterspring();
 void AddSC_war_effort();
 
 // Turtle WoW
-void AddSC_shop();
 void AddSC_arena_tournament();
 void AddSC_boss_rares();
 void AddSC_boss_avatar_of_pompa();
@@ -573,7 +572,6 @@ void AddScripts()
     AddSC_boss_volkan_cruelblade();
     AddSC_instance_stormwind_vaults();
 
-    AddSC_shop();
     AddSC_arena_tournament();
     AddSC_boss_rares();
     AddSC_boss_avatar_of_pompa();
