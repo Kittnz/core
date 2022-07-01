@@ -39,11 +39,9 @@ AnticheatManager* GetAnticheatLib()
 
 void AnticheatManager::LoadAnticheatData()
 {
-    sLog.outString();
     sLog.outString("Loading warden checks...");
     sWardenMgr->LoadWardenChecks();
-    
-    sLog.outString();
+
     sLog.outString("Loading warden modules...");
     sWardenMgr->LoadWardenModules();
 }

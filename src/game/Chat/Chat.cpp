@@ -1693,7 +1693,7 @@ void ChatHandler::BuildChatPacket(WorldPacket& data, ChatMsg msgtype, const std:
                                   char const* channelName /*= nullptr*/, uint8 playerRank /*= 0*/)
 {
     std::string messageFinal;
-    if (chatTag == CHAT_TAG_GM)
+    if (chatTag == CHAT_TAG_GM && language != LANG_ADDON)
     {
         messageFinal = std::string("|c1049e6ff") + message + "|r";
     }

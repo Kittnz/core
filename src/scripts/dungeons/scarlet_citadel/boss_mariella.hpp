@@ -62,7 +62,7 @@ namespace nsMariella
     static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
     static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
     {
-        { 160.547501f, 48.432278f, 33.703342f, 6.268054f, 0.f, 0.f, 0.99999f,  0.004572f }
+        { 0.f } // TODO: Check rotation
     };
 
     // Gossip Menu

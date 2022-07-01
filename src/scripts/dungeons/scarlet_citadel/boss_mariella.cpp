@@ -41,7 +41,7 @@ private:
     bool m_bIsSacrificePhase{};
     bool m_bFelhoundsAlreadyAnnounced{};
     bool m_bEnrage{};
-    bool m_bAchievementKill{};
+    bool m_bAchievementKillFailed{};
     bool m_bWasInFight{};
     
     instance_scarlet_citadel* m_pInstance{};
@@ -49,7 +49,6 @@ private:
 public:
     void Reset() override
     {
-        // JustReachedHome() override still broken
         if (m_pInstance && m_bWasInFight)
         {
             DespawnVoidZones();
@@ -58,14 +57,14 @@ public:
             DespawnFelhounds();
 
             if (m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+            {
                 m_creature->RemoveAurasDueToSpell(nsMariella::SACRIFICE_VISUAL);
+            }
 
             m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::RAIDWIPE), LANG_UNIVERSAL);
 
             m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, FAIL);
-
-            m_bWasInFight = false;
         }
 
         // Sacrifice
@@ -91,7 +90,7 @@ public:
         m_uiKillZoneGuid = 0;
 
         // Achievement Kill
-        m_bAchievementKill = true;
+        m_bAchievementKillFailed = false;
 
         // Enrage
         m_uiEnrage_Timer = nsMariella::TIME_UNTIL_ENRAGE;
@@ -104,6 +103,8 @@ public:
 
         // Misc
         m_creature->AddUnitState(UNIT_STAT_ROOT);
+
+        m_bWasInFight = false;
     }
 
     void Aggro(Unit* pWho) override
@@ -111,14 +112,16 @@ public:
         if (!m_pInstance || !pWho)
             return;
 
-        m_bWasInFight = true;
-
         // Prevent to keep her in fight when nobody is in the room when the encounter starts
         if (m_creature->GetDistance3dToCenter(pWho) > (nsMariella::ROOM_DIAGONAL / 2))
+        {
             EnterEvadeMode();
+        }
 
-        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_MARIELLA, IN_PROGRESS);
+
+        m_bWasInFight = true;
     }
 
     void EnterEvadeMode() override
@@ -137,7 +140,7 @@ public:
         DespawnSummoningCircles();
         DespawnFelhounds();
 
-        if (m_bAchievementKill)
+        if (!IsAchievementKillFailed())
         {
             SpawnAchievementReward(pKiller);
         }
@@ -158,7 +161,9 @@ public:
     void BeginScraficePhase()
     {
         if (!m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+        {
             m_creature->AddAura(nsMariella::SACRIFICE_VISUAL);
+        }
 
         Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
         if (PlayerList.isEmpty())
@@ -181,7 +186,9 @@ public:
     void EndScraficePhase()
     {
         if (m_creature->HasAura(nsMariella::SACRIFICE_VISUAL))
+        {
             m_creature->RemoveAurasDueToSpell(nsMariella::SACRIFICE_VISUAL);
+        }
 
         if (m_vPossibleVictim.empty())
             return;
@@ -226,12 +233,18 @@ public:
             DoCast(m_creature, nsMariella::SPELL_SHADOWVOLLEY);
 
             if (m_bEnrage)
+            {
                 m_uiShadowVolley_Timer = nsMariella::SHADOWVOLLEY_ENRAGE_REPEAT_TIMER;
+            }
             else
+            {
                 m_uiShadowVolley_Timer = nsMariella::SHADOWVOLLEY_REPEAT_TIMER;
+            }
         }
         else
+        {
             m_uiShadowVolley_Timer -= uiDiff;
+        }
     }
 
     void SpawnVoidZones(const uint32& uiDiff)
@@ -263,7 +276,9 @@ public:
                 auto summonerItr{ lPotentialSummoner.begin() };
 
                 if (lPotentialSummoner.size() >= nsMariella::NUMBEROFSUMMONERS)
+                {
                     std::advance(summonerItr, urand(0, (lPotentialSummoner.size() - 1)));
+                }
 
                 Player const* pPlayer{ *summonerItr };
                 summonerItr = lPotentialSummoner.erase(summonerItr);
@@ -284,7 +299,9 @@ public:
             m_uiVoidZoneSpawn_Timer = nsMariella::VOIDZONE_SPAWN_REPEAT_TIMER;
         }
         else
+        {
             m_uiVoidZoneSpawn_Timer -= uiDiff;
+        }
     }
 
     void DespawnVoidZones()
@@ -418,7 +435,9 @@ public:
             m_uiFelhoundSpawn_Timer = nsMariella::FELHOUND_SPAWN_REPEAT_TIMER;
         }
         else
+        {
             m_uiFelhoundSpawn_Timer -= uiDiff;
+        }
     }
 
     void DespawnFelhounds()
@@ -452,7 +471,9 @@ public:
             m_bEnrage = true;
         }
         else
+        {
             m_uiEnrage_Timer -= uiDiff;
+        }
     }
 
     void CheckIfPlayerDied()
@@ -477,14 +498,15 @@ public:
         if (m_uiIncreaseHealth_Timer < uiDiff)
         {
             if (m_creature->GetHealthPercent() < 100.f)
+            {
                 m_creature->SetHealthPercent((m_creature->GetHealthPercent() + nsMariella::REGENERATE_HEALTH_PERCENTAGE));
+            }
 
             m_uiIncreaseHealth_Timer = nsMariella::INCREASE_HEALTH_TIMER;
         }
         else
         {
             m_uiIncreaseHealth_Timer -= uiDiff;
-            return;
         }
     }
 
@@ -504,12 +526,22 @@ public:
                 nsMariella::GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER);
         }
         else
+        {
             sLog.outError("[SC] Boss Mariella: SpawnAchievementReward() called but no pKiller found!");
+        }
     }
 
-    void AchievementKill(const bool& bIsAchievementKill)
+    void AchievementKillFailed()
     {
-        m_bAchievementKill = bIsAchievementKill;
+        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
+
+        m_bAchievementKillFailed = true;
+    }
+
+    bool IsAchievementKillFailed()
+    {
+        return m_bAchievementKillFailed;
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -583,12 +615,12 @@ struct npc_voidzone : public ScriptedAI
                         {
                             if (boss_mariellaAI* boss_mariella{ dynamic_cast<boss_mariellaAI*>(pCreature->AI()) })
                             {
-                                boss_mariella->AchievementKill(false); // Achievement failed if a player received damage from a Void Zone
+                                if (!boss_mariella->IsAchievementKillFailed())
+                                {
+                                    boss_mariella->AchievementKillFailed(); // Achievement failed if a player received damage from a Void Zone
+                                }
                             }
                         }
-
-                        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-                        m_creature->MonsterSay(nsMariella::CombatNotification(nsMariella::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
                     }
                 }
             }
@@ -596,7 +628,9 @@ struct npc_voidzone : public ScriptedAI
             m_uiDamage_Timer = nsMariella::VOIDZONE_DAMAGE_REPEAT_TIMER;
         }
         else
+        {
             m_uiDamage_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -656,7 +690,9 @@ struct npc_killzone : public ScriptedAI
             m_uiKill_Timer = nsMariella::KILLZONE_KILL_REPEAT_TIMER;
         }
         else
+        {
             m_uiKill_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -700,7 +736,9 @@ struct npc_felhound : public ScriptedAI
             m_uiManaDrain_Timer = nsMariella::FELHOUND_DRAIN_REPEAT_TIMER;
         }
         else
+        {
             m_uiManaDrain_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -724,11 +762,13 @@ bool GossipHello_boss_mariella(Player* pPlayer, Creature* pCreature)
     if (m_pInstance /*&& (m_pInstance->GetData(TYPE_ARDAEUS) == DONE) && (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, nsMariella::GOSSIP_ANSWER, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+        pPlayer->SEND_GOSSIP_MENU(nsMariella::GOSSIP_TEXT, pCreature->GetObjectGuid());
     }
     else
+    {
         sLog.outError("[SC] Boss Mariella: Boss spawned outside of dungeon or someone tried to start encounter without killing first two bosses!");
-
-    pPlayer->SEND_GOSSIP_MENU(nsMariella::GOSSIP_TEXT, pCreature->GetObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
 
     return true;
 }

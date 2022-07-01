@@ -42,7 +42,7 @@ private:
 
     uint32 m_uiCallForHelp_Timer{};
 
-    bool m_bAchievementKill{};
+    bool m_bAchievementKillFailed{};
 
     instance_scarlet_citadel* m_pInstance{};
 
@@ -54,7 +54,7 @@ public:
         m_lSummonedCallForHelpNPCs.clear();
 
         // Achievement
-        m_bAchievementKill = true;
+        m_bAchievementKillFailed = false;
 
         // Trigger fight on gossip
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
@@ -93,7 +93,7 @@ public:
         DespawnSun();
         DespawnCallForHelpNPCs();
 
-        if (m_bAchievementKill)
+        if (!IsAchievementKillFailed())
         {
             SpawnAchievementReward(pKiller);
         }
@@ -147,7 +147,9 @@ public:
             }
         }
         else
+        {
             sLog.outError("[SC] Boss Ardaeus: DespawnSun() called but no GUID assigned!");
+        }
     }
 
     void CallForHelp(const uint32& uiDiff)
@@ -181,7 +183,9 @@ public:
                 m_lSummonedCallForHelpNPCs.push_back(pRandomNPC->GetObjectGuid()); // Store its GUID to remove it later
 
                 if (pStatueNPC)
+                {
                     pRandomNPC->CastSpell(pStatueNPC, nsArdaeus::VISUALSPELL_SUMMON_CALLFORHELP, true);
+                }
             }
 
             // Despawn Statue NPC
@@ -204,7 +208,9 @@ public:
             m_uiCallForHelp_Timer = nsArdaeus::CALLFORHELP_REPEAT_TIMER;
         }
         else
+        {
             m_uiCallForHelp_Timer -= uiDiff;
+        }
     }
 
     void DespawnCallForHelpNPCs()
@@ -245,12 +251,22 @@ public:
                 nsArdaeus::GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER);
         }
         else
+        {
             sLog.outError("[SC] Boss Ardaeus: SpawnAchievementReward() called but no pKiller found!");
+        }
     }
 
-    void AchievementKill(const bool& bIsAchievementKill)
+    void AchievementKillFailed()
     {
-        m_bAchievementKill = bIsAchievementKill;
+        m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+        m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::ACHIEVEMENT_FAILED), LANG_UNIVERSAL);
+
+        m_bAchievementKillFailed = true;
+    }
+
+    bool IsAchievementKillFailed()
+    {
+        return m_bAchievementKillFailed;
     }
 
     bool IsSunSpawned()
@@ -350,7 +366,9 @@ public:
             m_uiIncreaseSpeed_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
         }
         else
+        {
             m_uiIncreaseSpeed_Timer -= uiDiff;
+        }
     }
 
     void CheckForAchievement(const uint32& uiDiff)
@@ -363,7 +381,10 @@ public:
                 {
                     if (boss_ardaeusAI* boss_ardaeus{ dynamic_cast<boss_ardaeusAI*>(pCreature->AI()) })
                     {
-                        boss_ardaeus->AchievementKill(false);
+                        if (!boss_ardaeus->IsAchievementKillFailed())
+                        {
+                            boss_ardaeus->AchievementKillFailed();
+                        }
                     }
                 }
             }
@@ -371,7 +392,9 @@ public:
             m_uiAchievement_Timer = nsArdaeus::SUN_SPEED_INCREASE_TIMER;
         }
         else
+        {
             m_uiAchievement_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -415,11 +438,13 @@ bool GossipHello_boss_ardaeus(Player* pPlayer, Creature* pCreature)
     if (m_pInstance /*&& (m_pInstance->GetData(TYPE_DAELUS) == DONE)*/) // TODO: Remove comment after testing
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, nsArdaeus::GOSSIP_ANSWER, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
+        pPlayer->SEND_GOSSIP_MENU(nsArdaeus::GOSSIP_TEXT, pCreature->GetObjectGuid());
     }
     else
+    {
         sLog.outError("[SC] Boss Ardeus: Boss spawned outside of dungeon or someone tried to start encounter without killing the first boss!");
-
-    pPlayer->SEND_GOSSIP_MENU(nsArdaeus::GOSSIP_TEXT, pCreature->GetObjectGuid());
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
 
     return true;
 }
