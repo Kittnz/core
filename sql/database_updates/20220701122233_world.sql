@@ -118,3 +118,15 @@ update creature_template set loot_id = 60844 where entry = 60844;
 replace into creature_loot_template values
 (60844,60633,-100,1,1,1,0),
 (60843,60634,-100,1,1,1,0);
+
+-- Report from Burnside
+delete from quest_template where entry = 40433;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40433,2,4,45,45,0,0,'Report from Burnside','Nethergarde is an isolated, and rather desolate place. We rely on a large garrison to help stem the tide of a potential demonic invasion, should such an occasion ever occur.\n\nThe soldiers under my command have homes and families, and morale here is paramount. I rely on my sergeants to give me a situation report on the status of those beneath me.\n\nAs of current the only one I am waiting from is from Sergeant Burnside, would you do me a favor, and collect it from him? You can find him somewhere outside the gate, he is probably with his troops.','Find Sergeant Burnside and collect his report, deliver the Report from Burnside to Commander Baelos at Nethergarde Keep.','Have you found Sergeant Burnside yet?','<The Commander would take some time to look over the situation report.>\n\nI see, well thanks again for your work, I don\'t have all day to look for everyone, take some silver for the trouble.',60635,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,850,61,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60793, 40433);
+replace into creature_involvedrelation (id, quest) values (60793, 40433);
+
+update creature_template set script_name = 'npc_sergeant_burnside' where entry = 60792;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60635,3020,'Report from Burnside',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
