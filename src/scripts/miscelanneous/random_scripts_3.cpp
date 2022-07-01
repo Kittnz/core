@@ -2795,7 +2795,7 @@ bool GossipHello_npc_sergeant_burnside(Player* pPlayer, Creature* pCreature)
         }
     }
 
-    pPlayer->SEND_GOSSIP_MENU(91950, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(60792, pCreature->GetGUID());
     return true;
 }
 
@@ -2819,9 +2819,89 @@ bool GossipSelect_npc_sergeant_burnside(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
+bool GossipHello_npc_engineer_wigglestip(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40438) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 60794 && !pPlayer->HasItemCount(60640, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Adjutant Scheer sent me to get your report.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60794, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_engineer_wigglestip(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(60640);
+        if (pPlayer->HasItemCount(60640, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Oh, well here it is! My experiments have been running late all day, take this to him.", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_watcher_mahar_ba(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40440) // Fel Energy Irregularities III
+    {
+        pQuestGiver->MonsterSayToPlayer("It is time to pray that the worst has not come.", pPlayer);
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    if (pQuest->GetQuestId() == 40441) // Fel Energy Irregularities IV
+    {
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSayToPlayer("So, it is as we suspected, but I need to be sure, and completely sure before we take action.", player);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+
+        Creature* NPC_riftwatcher_say = pQuestGiver->FindNearestCreature(6002, 40.0F);
+
+        if (NPC_riftwatcher_say)
+        {
+            DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_riftwatcher_say]() {
+                npc->MonsterSayToPlayer("It would appear that these items are potent with fel energy, they cannot have been lingering for very long.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_watcher_mahar_ba";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_watcher_mahar_ba;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_engineer_wigglestip";
+    newscript->pGossipHello = &GossipHello_npc_engineer_wigglestip;
+    newscript->pGossipSelect = &GossipSelect_npc_engineer_wigglestip;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_sergeant_burnside";
