@@ -586,3 +586,82 @@ update quest_template set nextquestinchain = 80710 where entry = 80709;
 update creature_template set script_name = "larvae_cot" where entry = 65115;
 
 update creature_template set script_name = '' where script_name = 'npc_zohjik_questComplete';
+
+update creature_template set movement_type = 0 where entry in (92210, 92211, 92212, 1698);
+update creature set movement_type = 0 where id in (92210, 92211, 92212, 1698);
+
+delete from npc_trainer where entry = 3689;
+
+delete from creature_loot_template where entry in (50682, 50683, 60843, 60844);
+
+delete from npc_gossip where npc_guid in (69680, 79730, 79732);
+
+delete from gossip_menu where entry in (10000, 15612, 15611, 56010);
+
+delete from quest_template where entry = 60002;
+
+update quest_template set ReqCreatureOrGOCount1 = 0 where entry = 40366;
+update quest_template set ReqCreatureOrGOCount3 = 0 where entry = 40366;
+update quest_template set ReqCreatureOrGOCount4 = 0 where entry = 40366;
+
+update quest_template set ReqItemCount1 = 1 where entry = 40424;
+
+delete from quest_template where entry = 1156;
+
+update creature_template set faction = 35 where entry = 50665;
+update creature_template set faction = 35 where entry = 50666;
+update creature_template set faction = 35 where entry = 50667;
+update creature_template set faction = 35 where entry = 50668;
+update creature_template set faction = 35 where entry = 50669;
+update creature_template set faction = 35 where entry = 50670;
+update creature_template set faction = 35 where entry = 50671;
+update creature_template set faction = 35 where entry = 50675;
+update creature_template set faction = 35, display_id1 = 4626 where entry = 70030;
+
+update creature_template set equipment_id = 0 where entry = 80851;
+
+delete from creature_involvedrelation where quest = 60002;
+
+delete from areatrigger_involvedrelation where id = 80204;
+
+update item_template set script_name = '' where script_name = 'item_zhojik_whistle';
+
+delete from gossip_menu_option where menu_id = 15611;
+
+delete from quest_template where entry = 60000;
+delete from quest_template where entry = 60001;
+delete from quest_template where entry = 60002;
+
+delete from creature_involvedrelation where quest = 60000;
+delete from creature_involvedrelation where quest = 60001;
+delete from creature_questrelation where quest = 60001;
+delete from creature_questrelation where quest = 60000;
+
+update quest_template set ReqCreatureOrGOCount3 = 0 where entry = 80703;
+update quest_template set ReqCreatureOrGOCount4 = 0 where entry = 80703;
+
+delete from generic_scripts where id in (10003, 60401);
+
+delete from gossip_scripts where id = 15611;
+delete from gossip_menu_option where menu_id = 50450 and condition_id = 24470;
+
+update creature_template set gossip_menu_id= 0 where entry = 9076;
+update creature_template set gossip_menu_id= 0 where entry = 15611;
+update creature_template set gossip_menu_id= 0 where entry = 51536;
+update creature_template set gossip_menu_id= 0 where entry = 66004;
+update creature_template set gossip_menu_id= 0 where entry = 66005;
+update creature_template set gossip_menu_id= 0 where entry = 91003;
+
+delete from creature_linking where guid = 190228 and master_guid = 190242;
+
+update spell_proc_event set procflags = 0 where entry = 6346;
+
+delete from quest_start_scripts where id = 60000;
+
+replace into creature_movement_scripts values (14, 0, 26, 0, 0, 0, 0, 2276, 10, 8, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Event Assassin Southshore Attack magistrate');
+
+delete from creature_movement where id = 1246441;
+delete from creature_movement where id = 1246442;
+delete from creature_movement where id = 1246438;
+delete from creature_movement where id = 1246440;
+delete from creature_movement where id = 1246439;

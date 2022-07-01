@@ -5660,9 +5660,7 @@ GameObjectUseRequirement const* ObjectMgr::GetGameObjectUseRequirement(ObjectGui
 void ObjectMgr::LoadGameObjectDisplayInfoAddon()
 {
     sGameObjectDisplayInfoAddonStorage.Load();
-    sLog.outString();
     sLog.outString(">> Loaded %u GameObject display based info", sGameObjectDisplayInfoAddonStorage.GetRecordCount());
-    sLog.outString();
 }
 
 void ObjectMgr::LoadExplorationBaseXP()
