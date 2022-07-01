@@ -92,3 +92,122 @@ replace into creature_display_info_addon values (18603, 0, 0, 0, 0);
 replace into creature_display_info_addon values (18624, 0, 0, 0, 0);
 
 delete from npc_trainer where spell in ( 24978, 24978, 24978, 24978, 24978, 24978, 24978, 24978, 24978, 24978, 24978, 24978, 24978,  24978, 46620, 46621, 46622, 46623, 46624, 46625, 47015, 47016, 47017, 47018, 47019, 47020, 46620, 46621, 46622, 46623, 46624, 46625, 47015, 47016, 47017, 47018, 47019, 47020, 46633, 46634, 46635, 46636, 46637, 46638, 46639, 46640, 46641, 46642, 46643, 46644, 46645, 46646, 46647, 46648, 46649, 46650, 46633, 46634, 46635, 46636, 46637, 46638, 46639, 46640, 46641, 46642, 46643, 46644, 46645, 46646, 46647, 46648, 46649, 46650, 46626, 46627, 46628, 46629, 46630, 46631, 46626, 46627, 46628, 46629, 46630, 46631, 46663, 46664, 46665, 46663, 46664, 46665,  46663,  46664,  46665,  46663,  46664,  46665,  46663,  46664,  46665,  46663,  46664,  46665,  46663,  46664,  46665, 46663, 46664, 46665, 46663, 46664, 46665, 46663, 46664, 46665, 45511, 45521, 45525, 45526, 45529,  45511,  45521,  45525,  45526,  45529,  45511,  45521,  45525,  45526,  45529,  45511,  45521,  45525,  45526,  45529,  45511,  45521,  45525,  45526,  45529,  45511,  45521,  45525,  45526,  45529,  45511,  45521,  45525,  45526,  45529, 45553,  45553,  45553,  45553,  45553	,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553,  45553);
+
+update item_template set stackable = 200 where entry = 50203;
+update item_template set bag_family = 0 where entry in (60522, 60523, 60524);
+
+delete from creature_display_info_addon where display_id = 19694;
+
+delete from creature_equip_template where entry in (14731, 20036, 20049, 20051, 20072, 20073, 20137);
+
+update creature_spells set probability_2 = 100 where entry = 201078;
+update creature_spells set probability_1 = 100 where entry = 180021;
+
+update creature_template set display_id1 = 4626 where entry in (15, 91295, 91295);
+
+update creature_template set display_id1 = 341 where entry = 60558;
+update creature_template set display_id1 = 16218 where entry = 60530;
+
+update creature_template set vendor_id = 0 where entry in (6739, 60747, 60748);
+update creature_template set equipment_id = 0 where entry in (60432, 60663, 93000, 93005);
+
+update creature_template_addon set auras = '' where auras = '0';
+
+update creature set health_percent = 100 where id = 60408;
+
+delete from pool_gameobject where guid in (39989, 5242, 45093);
+
+update quest_template set rewrepfaction1 = 893 where rewrepfaction1 = 1494;
+update quest_template set rewrepfaction1 = 909 where rewrepfaction1 = 1555;
+
+delete from creature_loot_template where item = 83100;
+
+update creature_loot_template set mincountorref = 1 where item = 4278;
+
+update creature_loot_template set chanceorquestchance = 33.3 where entry = 2447 and groupid = 6;
+update creature_loot_template set chanceorquestchance = 16.6 where entry = 60525 and groupid = 1;
+
+update item_loot_template set chanceorquestchance = 20 where entry =  83236 and groupid = 1;
+update item_loot_template set chanceorquestchance = 20 where entry =  83236 and groupid = 3;
+update item_loot_template set chanceorquestchance = 33.3 where entry = 83270 and groupid = 1;
+
+update creature set movement_type = 2 where guid = 32347;
+delete from creature_movement_template where entry = 3888;
+insert into creature_movement_template (entry, point, position_x, position_y, position_z, orientation, waittime, wander_distance, script_id) values
+(3888, 1, 2768.44, -411.098, 111.463, 1.62316, 480000, 0, 388803),
+(3888, 2, 2768.44, -411.098, 111.463, 100, 2000, 0, 388801),
+(3888, 3, 2766.91, -407.248, 111.471, 100, 6000, 0, 388802),
+(3888, 4, 2763.06, -402.483, 111.482, 100, 0, 0, 0),
+(3888, 5, 2763.35, -399.281, 111.479, 100, 0, 0, 0),
+(3888, 6, 2762.86, -396.496, 111.235, 100, 10000, 0, 0),
+(3888, 7, 2756.46, -418.976, 111.475, 100, 0, 0, 0),
+(3888, 8, 2754.08, -425.621, 111.475, 100, 0, 0, 0),
+(3888, 9, 2748.49, -435.343, 111.474, 100, 0, 0, 0),
+(3888, 10, 2736.83, -432.064, 111.874, 100, 189000, 0, 388803),
+(3888, 11, 2736.83, -432.064, 111.874, 100, 2000, 0, 388801),
+(3888, 12, 2743.72, -433.638, 111.458, 100, 0, 0, 0),
+(3888, 13, 2751.9, -428.987, 111.474, 100, 0, 0, 0),
+(3888, 14, 2759.19, -415.571, 111.48, 100, 0, 0, 0),
+(3888, 15, 2768.07, -415.291, 111.459, 100, 0, 0, 0);
+delete from creature_movement_scripts where id in (388801, 388802, 388803);
+insert into creature_movement_scripts (id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id, comments) values (388801, 0, 28, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Korra - Set Stand State');
+insert into creature_movement_scripts (id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id, comments) values (388802, 2, 0, 2, 0, 0, 0, 0, 0, 0, 4, 1296, 0, 0, 0, 0, 0, 0, 0, 0, 'Korra - Talk');
+insert into creature_movement_scripts (id, delay, command, datalong, datalong2, datalong3, datalong4, target_param1, target_param2, target_type, data_flags, dataint, dataint2, dataint3, dataint4, x, y, z, o, condition_id, comments) values (388803, 2, 28, 3, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Korra - Set Stand State');
+
+update creature set movement_type = 2 where guid in (17040, 21660, 21661, 27974, 2562709, 2562710, 2562711, 2562712, 2562713, 2567587, 2569242);
+
+update gameobject_template set data3 = 1 where entry in (2010817, 2010835, 2010837, 2010838, 2010839, 2010840, 2010843, 2010844);
+
+delete from npc_text where id = 90000;
+
+update item_template set disenchant_id = 0 where entry = 2540;
+update item_template set disenchant_id = 0 where entry = 2541;
+
+update item_template set extra_flags = 1 where entry = 9311;
+update item_template set extra_flags = 1 where entry = 18154;
+update item_template set extra_flags = 1 where entry = 21140;
+update item_template set extra_flags = 1 where entry = 22058;
+
+delete from item_template where entry = 22233;
+
+update creature_template set equipment_id = 0 where entry in (60520, 60587, 60653, 60656, 60847);
+update creature set equipment_id = 0 where id in (60520, 60587, 60653, 60656, 60847, 80851);
+
+delete from battleground_events where map in (25, 37);
+
+replace into conditions (condition_entry, type, value1, value2, value3, value4, flags) values (1422, 20, 1421, 80, 0, 0, 0);
+
+update creature_template set script_name = 'boss_magni_bronzebeard' where entry = 2784;
+
+update creature_template set name = '[Test] Custom spell cast', subname = '', script_name = 'boss_custom_spell' where entry = 80865;
+
+replace into creature_template (entry, display_id1, display_id2, display_id3, display_id4, name, level_min, level_max, health_min, health_max, armor, faction, speed_walk, detection_range, xp_multiplier, dmg_min, dmg_max, attack_power, dmg_multiplier, ranged_attack_time, unit_class, unit_flags, ranged_dmg_min, ranged_dmg_max, ranged_attack_power, type, ai_name, inhabit_type, regeneration, flags_extra) values (5738, 4116, 4117, 4118, 4119, 'Caged Dwarf Male', 5, 5, 102, 102, 20, 68, 1, 18, 1, 6, 8, 52, 1, 2000, 1, 768, 8.624, 11.858, 100, 7, 'EventAI', 3, 3, 2);
+
+replace into creature (guid, id, id2, id3, id4, map, position_x, position_y, position_z, orientation, spawntimesecsmin, spawntimesecsmax, wander_distance, health_percent, mana_percent, movement_type, spawn_flags, visibility_mod) VALUES (31875, 5738, 0, 0, 0, 0, 1403.85, 376.678, -84.868, 5.79449, 300, 300, 0, 100, 0, 0, 0, 0);
+
+update creature_loot_template set maxcount = 1 where entry = 2574 and item = 4278;
+
+delete from gameobject_loot_template where entry = 3000512;
+
+update creature_template set skinning_loot_id = 0 where skinning_loot_id = 100001;
+
+delete from creature_involvedrelation where id = 50677 and quest = 80729;
+
+update creature_template set npc_flags = 4 where entry = 15;
+
+update creature_template set npc_flags = 7 where entry = 92202;
+
+delete from npc_vendor where item = 83422; 
+
+delete from creature_template where entry = 81021;
+
+update creature_template set npc_flags = 4 where entry = 1650;
+update creature_template set npc_flags = 135 where entry = 6739;
+
+delete from npc_vendor where entry = 81021;
+
+update creature_template set npc_flags = 19 where entry = 5885;
+update creature_template set npc_flags = 6 where entry = 3689;
+
+delete from quest_end_scripts where id = 50530;
+

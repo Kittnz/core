@@ -264,7 +264,6 @@ miscelanneous/areatrigger_scripts.cpp
 miscelanneous/gameobject_scripts.cpp
 miscelanneous/feature_custom_spell_test.cpp
 miscelanneous/feature_gardening.cpp
-miscelanneous/feature_shop.cpp
 miscelanneous/feature_transmog.h
 miscelanneous/ptr.cpp
 miscelanneous/random_scripts_0.cpp
