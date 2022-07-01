@@ -6729,107 +6729,6 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
     return false;
 }
 
-struct go_zuljins_portal : public GameObjectAI
-{
-    explicit go_zuljins_portal(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 500; teleCount = 0;}
-
-    uint32 m_uiUpdateTimer;
-    int teleCount;
-
-    void UpdateAI(uint32 const uiDiff) override
-    {
-        switch (me->GetAreaId())
-        {
-        case 153: // Ruins of Lordaeron
-        {
-            if (m_uiUpdateTimer < uiDiff)
-            {
-                if (Creature* guard = me->FindNearestCreature(65144, 2, true))
-                {
-                    guard->CastSpell(guard, 26638, false);
-                    guard->DestroyForNearbyPlayers();
-                    guard->DespawnOrUnsummon();
-
-                    teleCount++;
-
-                    if (teleCount == 1)
-                        me->SummonCreature(65144, zjmovement[4].x, zjmovement[4].y, zjmovement[4].z, zjmovement[4].o);
-                    else
-                        me->SummonCreature(65144, zjmovement[5].x, zjmovement[5].y, zjmovement[5].z, zjmovement[5].o);
-                }
-
-                if (Creature* zulJin = me->FindNearestCreature(65143, 2, true))
-                {
-                    zulJin->CastSpell(zulJin, 26638, false);
-                    zulJin->DestroyForNearbyPlayers();
-                    zulJin->DespawnOrUnsummon();
-
-                    me->SummonCreature(65143, zjmovement[3].x, zjmovement[3].y, zjmovement[3].z, zjmovement[3].o);
-                }
-
-                std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
-                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-                Cell::VisitWorldObjects(me, searcher, 2.0f);
-                for (Player* pPlayer : players)
-                {
-                    if (pPlayer->GetQuestStatus(65008) == QUEST_STATUS_INCOMPLETE)
-                    {
-                        pPlayer->CastSpell(pPlayer, 26638, false);
-                        pPlayer->TeleportTo(0, zjmovement[2].x, zjmovement[2].y, zjmovement[2].z, zjmovement[2].o);
-                    }
-                }
-            }
-            else m_uiUpdateTimer -= uiDiff;
-            break;
-        }
-        case 1497: // Sylvanas Chamber
-        {
-            if (m_uiUpdateTimer < uiDiff)
-            {
-                if (Creature* guard = me->FindNearestCreature(65144, 2, true))
-                {
-                    guard->ForcedDespawn();
-                    teleCount++;
-                }
-                if (Creature* zulJin = me->FindNearestCreature(65143, 2, true))
-                {
-                    zulJin->ForcedDespawn();
-                    teleCount++;
-                }
-            }
-            else m_uiUpdateTimer -= uiDiff;
-
-            if (teleCount == 3)
-                me->Despawn();
-            break;
-        }
-        case 414: // Amani Alor
-        {
-            if (m_uiUpdateTimer < uiDiff)
-            {
-                std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
-                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-                Cell::VisitWorldObjects(me, searcher, 2.0f);
-                for (Player* pPlayer : players)
-                {
-                    if (pPlayer->GetQuestStatus(65010) == QUEST_STATUS_INCOMPLETE)
-                        pPlayer->CastSpell(pPlayer, 26638, false);
-                    pPlayer->TeleportTo(1, 1923.46f, -4173.63f, 40.90f, 1.67f);
-                }
-            }
-            else m_uiUpdateTimer -= uiDiff;
-            break;
-        }
-
-
-        }
-    }
-};
-
-GameObjectAI* GetAI_go_zuljin_portal(GameObject* Obj) { return new go_zuljins_portal(Obj); }
-
 struct npc_zuljinAI : public ScriptedAI
 {
     npc_zuljinAI(Creature* c) : ScriptedAI(c) { Reset(); }
@@ -7231,11 +7130,6 @@ void AddSC_random_scripts_1()
     newscript->pQuestAcceptNPC = &QuestAccept_npc_zuljin;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_zul_jin;
     newscript->GetAI = &GetAI_npc_zulJin;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "gob_zuljin_portal";
-    newscript->GOGetAI = &GetAI_go_zuljin_portal;
     newscript->RegisterSelf();
 
     newscript = new Script;
