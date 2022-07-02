@@ -388,7 +388,7 @@ CreatureAI* GetAI_npc_citadel_footman(Creature* pCreature)
     return new npc_citadel_footman_AI(pCreature);
 }
 
-namespace nsERIC_DARK
+namespace nsERIC_VESPER
 {
     static const LocationXYZO vfMoveTo[] =
     {
@@ -411,17 +411,14 @@ namespace nsERIC_DARK
         { 128.944f,  9.48699f, 15.99f, 1.55f },
         { 132.826f,  9.47718f, 15.99f, 1.55f }
     };
-}
 
-class npc_eric_dark_AI : public ScriptedAI
-{
-public:
-    explicit npc_eric_dark_AI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        npc_eric_dark_AI::Reset();
-    }
+    static constexpr auto TEXT_DIED{ "If only I- I could <cough> .. glance upon an evening’s star <cough> one last time." };
+    static constexpr auto TEXT_SUMMON_ADDS{ "The enemy has gone past the Sacred Fist, avenge our fallen brother!" };
+    static constexpr auto TEXT_RANDOM0{ "All your efforts are in vain." };
+    static constexpr auto TEXT_RANDOM1{ "It’s too late to turn back now!" };
+    static constexpr auto TEXT_RANDOM2{ "Vile Scourge." };
+    static constexpr auto TEXT_RANDOM3{ "Even the afterlife abandons mongrels like you!" };
 
-private:
     static constexpr uint32 SPELL_LIGHTNING_CLOUD{ 25033 };
     static constexpr uint32 SPELL_LIGHTNING_WAVE{ 24819 };
     static constexpr uint32 SPELL_ENERGIZE{ 25685 };
@@ -429,27 +426,38 @@ private:
 
     static constexpr uint32 FACTION_HOSTILE{ 67 };
 
-    const std::vector<uint32> vTrashEntryList{ NPC_CITADEL_INQUISITOR, NPC_CITADEL_VALIANT, NPC_CITADEL_FOOTMAN };
-    const std::vector<std::pair<LocationXYZO, uint32>>pairlol
+    static const std::vector<uint32> vTrashEntryList{ NPC_CITADEL_INQUISITOR, NPC_CITADEL_VALIANT, NPC_CITADEL_FOOTMAN };
+    static const std::vector<std::pair<LocationXYZO, uint32>>pairlol
     {
-        std::make_pair(nsERIC_DARK::vfMoveTo[0], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[1], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[2], vTrashEntryList[2]),
-        std::make_pair(nsERIC_DARK::vfMoveTo[3], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[4], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[5], vTrashEntryList[2]),
-        std::make_pair(nsERIC_DARK::vfMoveTo[6], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[7], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[8], vTrashEntryList[2]),
-        std::make_pair(nsERIC_DARK::vfMoveTo[9], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[10], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[11], vTrashEntryList[2]),
-        std::make_pair(nsERIC_DARK::vfMoveTo[12], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[13], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[14], vTrashEntryList[2]),
-        std::make_pair(nsERIC_DARK::vfMoveTo[15], vTrashEntryList[0]), std::make_pair(nsERIC_DARK::vfMoveTo[16], vTrashEntryList[1]), std::make_pair(nsERIC_DARK::vfMoveTo[17], vTrashEntryList[2])
+        std::make_pair(nsERIC_VESPER::vfMoveTo[0], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[1], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[2], vTrashEntryList[2]),
+        std::make_pair(nsERIC_VESPER::vfMoveTo[3], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[4], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[5], vTrashEntryList[2]),
+        std::make_pair(nsERIC_VESPER::vfMoveTo[6], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[7], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[8], vTrashEntryList[2]),
+        std::make_pair(nsERIC_VESPER::vfMoveTo[9], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[10], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[11], vTrashEntryList[2]),
+        std::make_pair(nsERIC_VESPER::vfMoveTo[12], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[13], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[14], vTrashEntryList[2]),
+        std::make_pair(nsERIC_VESPER::vfMoveTo[15], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[16], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[17], vTrashEntryList[2])
     };
+}
 
-    std::vector<ObjectGuid> m_vSpawnedAdds;
+class npc_eric_vesper_AI : public ScriptedAI
+{
+public:
+    explicit npc_eric_vesper_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_eric_vesper_AI::Reset();
+    }
 
+private:
     uint32 m_uiLightningCloud_Timer{};
     uint32 m_uiLightningWave_Timer{};
     uint32 m_uiDrainMana_Timer{};
     uint32 m_uiEnergize_Timer{};
+    uint32 m_uiRandomFightText_Timer{};
 
     // Areatrigger
-    uint16 m_uiCheckPulse{};
     bool m_bIsTrashAllowedToSpawn{};
+    uint16 m_uiCheckPulse{};
+
+    std::vector<ObjectGuid> m_vSpawnedAdds;
 
 public:
     void Reset() override
@@ -458,11 +466,12 @@ public:
         m_uiLightningWave_Timer = 1000;
         m_uiDrainMana_Timer = 5000;
         m_uiEnergize_Timer = 300000; // 5 Minutes
+        m_uiRandomFightText_Timer = 30000;
 
         DespawnAdds();
 
-        if (m_creature->HasAura(SPELL_ENERGIZE))
-            m_creature->RemoveAurasDueToSpell(SPELL_ENERGIZE);
+        if (m_creature->HasAura(nsERIC_VESPER::SPELL_ENERGIZE))
+            m_creature->RemoveAurasDueToSpell(nsERIC_VESPER::SPELL_ENERGIZE);
 
         // Areatrigger
         m_uiCheckPulse = 1000;
@@ -480,6 +489,8 @@ public:
         DespawnAdds();
 
         m_creature->SetRespawnDelay(7200); // Respawn Eric Dark once again after 2 hours if Boss Araeus isn't dead yet (partly handled in boss_ardaeus.cpp)
+
+        m_creature->MonsterSay(nsERIC_VESPER::TEXT_DIED);
     }
 
     void AreaTrigger(const uint32& uiDiff)
@@ -508,7 +519,7 @@ public:
 
     void SummonAdds()
     {
-        for (const auto& itr : pairlol)
+        for (const auto& itr : nsERIC_VESPER::pairlol)
         {
             if (Creature* pSummoned{ m_creature->SummonCreature(itr.second, 147.f, -60.f, 17.f, 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
             {
@@ -524,8 +535,8 @@ public:
             }
         }
         
-        m_creature->SetFactionTemplateId(FACTION_HOSTILE);
-        m_creature->MonsterYell("Kill the intruders!");
+        m_creature->SetFactionTemplateId(nsERIC_VESPER::FACTION_HOSTILE);
+        m_creature->MonsterYell(nsERIC_VESPER::TEXT_SUMMON_ADDS);
         m_creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
 
         m_bIsTrashAllowedToSpawn = false;
@@ -559,7 +570,7 @@ public:
         {
             if (Unit* pClosestTarget{ m_creature->FindNearestHostilePlayer(15.f) })
             {
-                if (DoCastSpellIfCan(pClosestTarget, SPELL_LIGHTNING_CLOUD) == CanCastResult::CAST_OK)
+                if (DoCastSpellIfCan(pClosestTarget, nsERIC_VESPER::SPELL_LIGHTNING_CLOUD) == CanCastResult::CAST_OK)
                 {
                     m_uiLightningCloud_Timer = 15000;
                 }
@@ -579,7 +590,7 @@ public:
             {
                 if (m_creature->IsWithinLOSInMap(pTargetLowestHP))
                 {
-                    if (DoCastSpellIfCan(pTargetLowestHP, SPELL_LIGHTNING_WAVE) == CanCastResult::CAST_OK)
+                    if (DoCastSpellIfCan(pTargetLowestHP, nsERIC_VESPER::SPELL_LIGHTNING_WAVE) == CanCastResult::CAST_OK)
                     {
                         m_uiLightningWave_Timer = urand(4000, 5000);
                     }
@@ -600,7 +611,7 @@ public:
             {
                 if (m_creature->IsWithinLOSInMap(pTarget))
                 {
-                    if (DoCastSpellIfCan(pTarget, SPELL_DRAINMANA) == CanCastResult::CAST_OK)
+                    if (DoCastSpellIfCan(pTarget, nsERIC_VESPER::SPELL_DRAINMANA) == CanCastResult::CAST_OK)
                     {
                         m_uiDrainMana_Timer = 3000;
                     }
@@ -617,7 +628,7 @@ public:
     {
         if (m_uiEnergize_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature, SPELL_ENERGIZE) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature, nsERIC_VESPER::SPELL_ENERGIZE) == CanCastResult::CAST_OK)
             {
                 m_creature->AttackStop();
             }
@@ -645,7 +656,52 @@ public:
             }
         }
 
-        npc_eric_dark_AI::EnterEvadeMode();
+        npc_eric_vesper_AI::EnterEvadeMode();
+    }
+
+    void RandomFightTexts(const uint32& uiDiff)
+    {
+        if (m_uiRandomFightText_Timer < uiDiff)
+        {
+            std::string strRandomText{};
+            const uint32 i{ urand(0, 3)};
+            switch (i)
+            {
+                case 0:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM0;
+                    break;
+                }
+                case 1:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM1;
+                    break;
+                }
+                case 2:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM2;
+                    break;
+                }
+                case 3:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM3;
+                    break;
+                }
+                default:
+                {
+                    sLog.outError("[SC] Brother Eric Vesper: RandomFightTexts(const uint32& uiDiff): i out of range.");
+                    break;
+                }
+            }
+
+            m_creature->MonsterSay(strRandomText);
+
+            m_uiRandomFightText_Timer = 30000;
+        }
+        else
+        {
+            m_uiRandomFightText_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -656,13 +712,15 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        if (!m_creature->HasAura(SPELL_ENERGIZE))
+        if (!m_creature->HasAura(nsERIC_VESPER::SPELL_ENERGIZE))
         {
             CastLightningCloud(uiDiff);
             CastLightningWave(uiDiff);
             DrainMana(uiDiff);
 
             ChannelEnergize(uiDiff);
+
+            RandomFightTexts(uiDiff);
         }
 
         if (m_creature->GetPower(POWER_MANA) >= m_creature->GetMaxPower(POWER_MANA))
@@ -672,9 +730,9 @@ public:
     }
 };
 
-CreatureAI* GetAI_npc_eric_dark(Creature* pCreature)
+CreatureAI* GetAI_npc_eric_vesper(Creature* pCreature)
 {
-    return new npc_eric_dark_AI(pCreature);
+    return new npc_eric_vesper_AI(pCreature);
 }
 
 // TODO: Behave like a toxic player too! ;)
@@ -998,8 +1056,8 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
-    pNewscript->Name = "npc_eric_dark";
-    pNewscript->GetAI = &GetAI_npc_eric_dark;
+    pNewscript->Name = "npc_eric_vesper";
+    pNewscript->GetAI = &GetAI_npc_eric_vesper;
     pNewscript->RegisterSelf();
 
     // Ambush Park
@@ -1013,6 +1071,4 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript->Name = "npc_darkcaller_rayn";
     pNewscript->GetAI = &GetAI_npc_darkcaller_rayn;
     pNewscript->RegisterSelf();
-
-    
 }

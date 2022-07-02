@@ -111,12 +111,6 @@ public:
         }
     }
 
-    void KilledUnit(Unit* /*pVictim*/) override
-    {
-        m_creature->HandleEmote(EMOTE_ONESHOT_QUESTION);
-        m_creature->MonsterSay(nsArdaeus::SayOnPlayersDeath(urand(0, 3)), LANG_UNIVERSAL);
-    }
-
     void SpawnSun()
     {
         if (Creature const* pSun{ m_creature->SummonCreature(nsArdaeus::NPC_SUN,
