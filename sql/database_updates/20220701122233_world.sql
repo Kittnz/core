@@ -466,3 +466,5 @@ replace into creature_involvedrelation (id, quest) values (60788, 40455);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60660,4663,'Boulderfist Truncheon',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+update creature_template set health_min = 6850, health_max = 7050, rank = 1, dmg_min = 325, dmg_max = 350 where entry = 60720;
