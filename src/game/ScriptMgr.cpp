@@ -2053,9 +2053,7 @@ void ScriptMgr::Initialize()
 {
     // Load database (must be called after SD2Config.SetSource).
     LoadDatabase();
-
-    sLog.outString("");
-
+    
     // Resize script ids to needed ammount of assigned ScriptNames (from core)
     m_NPC_scripts.resize(GetScriptIdsCount(), nullptr);
 
@@ -2119,12 +2117,6 @@ void ScriptMgr::LoadScriptTexts()
         } while (result->NextRow());
 
         delete result;
-
-        sLog.outString("");
-    }
-    else
-    {
-        sLog.outString("");
     }
 }
 
@@ -2169,12 +2161,6 @@ void ScriptMgr::LoadScriptTextsCustom()
         } while (result->NextRow());
 
         delete result;
-
-        sLog.outString("");
-    }
-    else
-    {
-        sLog.outString("");
     }
 }
 
