@@ -96,7 +96,6 @@ void LootStore::LoadLootTable()
     // Clearing store (for reloading case)
     Clear();
 
-    sLog.outString("%s :", GetName());
     //                                                 0      1     2                    3        4              5         6
     QueryResult* result = WorldDatabase.PQuery("SELECT entry, item, ChanceOrQuestChance, groupid, mincountOrRef, maxcount, condition_id FROM %s", GetName());
 

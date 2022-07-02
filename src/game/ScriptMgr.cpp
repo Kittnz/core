@@ -76,8 +76,6 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
     if (IsScriptScheduled())                                // function don't must be called in time scripts use.
         return;
 
-    sLog.outString("%s :", tablename);
-
     scripts.clear();                                        // need for reload support
 
     //                                                  0    1       2         3         4          5          6         7           8             9          10        11        12        13        14    15 16 17 18       19

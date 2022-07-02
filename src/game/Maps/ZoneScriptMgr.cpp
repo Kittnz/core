@@ -68,8 +68,6 @@ void ZoneScriptMgr::InitMapZoneScripts(uint32 mapId, Map* pMap)
         m_ZoneScriptsSet.insert(pScript);
         ++counter;
     }
-
-    sLog.outString("Loaded %u scripts on the map %u.", counter, mapId);
 }
 
 void ZoneScriptMgr::AddZone(uint32 zoneid, ZoneScript *handle)
