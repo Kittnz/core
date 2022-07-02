@@ -401,3 +401,68 @@ replace into creature_questrelation (id, quest) values (60781, 40450);
 replace into creature_involvedrelation (id, quest) values (60779, 40450);
 
 update creature_template set script_name = 'npc_chaser' where entry = 60779;
+
+-- To Strike Back : Witherbark Village
+delete from quest_template where entry = 40451;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40451,2,45,36,28,0,0,'To Strike Back : Witherbark Village','It has been a while since the Troll Hunter\'s of Stromgarde have had the chance to practice their trade. We have been confined defending our section of the city now for too long, under constant threat.\n\nOur main enemy is biding their time, and gathering their strength. The trolls have been at war with for generations, my fathers, their fathers, and their\'s have fought troll.\n\nWe will strike at them, to show them that Stromgarde will not lay down idle. Far to the east is Witherbark Village, go there, and kill ten Witherbark Shadow Hunters.','Travel to Witherbark Village and slay 10 Witherbark Shadow Hunters for Troll Hunter Penthar in Gallant Square at Stromgarde Keep.','Has the deed been done $C?','You make Stromgarde proud, the less trolls, the better for our ultimate survival.',0,0,0,0,0,0,0,0,2557,10,0,0,0,0,0,0,0,0,0,2275,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60827, 40451);
+replace into creature_involvedrelation (id, quest) values (60827, 40451);
+
+-- To Strike Back : Ruins of Zul'Rasaz
+delete from quest_template where entry = 40452;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40452,2,45,37,28,512,0,'To Strike Back : Ruins of Zul\'Rasaz','We have received information of a battle that took place in the troll city of Zul\'Rasaz, or what is left of it anyway. Deep within the hills to the north, hidden away is a troll city, destroyed by conflict and time. It would appear the Witherbark fought and defeated the Wildtusk.\n\nGo there, and thin them out so that they cannot harm us down here in Stromgarde.','Travel to the Ruins of Zul\'Rasaz and slay 8 Witherbark Rogues, 10 Witherbark Raiders, and 5 Witherbark Soothsayers for Troll Hunter Penthar in Gallant Square at Stromgarde Keep.','It may be hard to find the pass, but I am sure you will do what is neccesary.','You have done well, much better than I would have expected. Take this, as a thanks.',0,0,0,0,0,0,0,0,91785,8,91784,10,91786,5,0,0,0,0,0,2275,72,150,0,0,0,0,0,0,0,0,0,60657,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60827, 40452);
+replace into creature_involvedrelation (id, quest) values (60827, 40452);
+
+replace into item_template values
+ ('60657', '2', '0', 'Troll Hunter\'s Axe', '', '19228', '2', '0', '1', '49664', '12416', '13', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '39', '68', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Boulderfist Outpost
+delete from quest_template where entry = 40453;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40453,2,45,34,27,0,0,'The Boulderfist Outpost','The ogre\'s have caused us much headache, and have taken a section of the city from us. The last thing we need is more forces coming from outside of the walls to assist those that are within.\n\nTo the north just outside of the city is Boulder\'gor, a small outpost that is an ogre sanctuary. I need you to go there, and bring the fight to them, so that more do not come pouring into the city.\n\nBring me twenty Boulderfist Truncheon\'s as proof, and Stromgarde shall reward you.','Gather 20 Boulderfist Truncheon\'s for Sergeant Karster in Gallant Square at Stromgarde Keep.','Has the work been done?','The ogre\'s are a mighty foe, you\'ve done excellent work, though I always fear it is never enough, here as I promised.',60658,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2350,72,50,0,0,0,0,0,0,0,0,0,60659,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60788, 40453);
+replace into creature_involvedrelation (id, quest) values (60788, 40453);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60658,4663,'Boulderfist Truncheon',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(2562,60658,-90,1,1,1,0),
+(2564,60658,-100,1,1,1,0);
+
+replace into item_template values
+ ('60659', '4', '3', 'Strom Defender\'s Vest', '', '32360', '2', '0', '1', '29284', '7321', '5', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '14', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '236', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '100', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Farwell Commission
+delete from quest_template where entry = 40454;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40454,2,45,34,27,0,0,'Farwell Commission','A few weeks ago I had a ring commissioned from Old Farwell up at the Farwell stead far to the north. Old Farwell was once a prominent, and powerful wizard of the Kirin Tor, one who is now retired.\n\nThe ring is supposed to safeguard against the foul, and dark magic lingering within the city.\n\nYou can find the passage way on the north western corner of the Arathi Highlands leading into the mountains where his Stead is located.','Speak with Old Farwell at the Farwell Stead.','Yes?','Do I know you, is there something that I can help you with?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60788, 40454);
+replace into creature_involvedrelation (id, quest) values (91710, 40454);
+
+-- Farwell Commission
+delete from quest_template where entry = 40455;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40454,40455,2,45,34,27,0,0,'Farwell Commission','Oh, Sergeant Karster sent you? Well, it\'s good getting some work from time to time, my magical abilities haven\'t been tested for a while now.\n\n<Old Farwell produces a small, ornate ring, with a glowing violet gem.>\n\nThis ring should ward off any magical energies or foul tainting aura. Make sure you give my best to Sergeant Karster.','Return the Farwell Ring to Sergeant Karster in the Gallant Square at Stromgarde Keep.','Yes?','Old Farwell has done a lot for us here, this ring should be just what we need, thanks for delivering it.',60660,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60660,1,0,450,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91710, 40455);
+replace into creature_involvedrelation (id, quest) values (60788, 40455);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60660,4663,'Boulderfist Truncheon',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
