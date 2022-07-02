@@ -247,3 +247,66 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (5385, 40442);
 replace into creature_involvedrelation (id, quest) values (14463, 40442);
+
+-- Fel Energy Irregularities VI
+delete from quest_template where entry = 40443;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40442,40443,2,4,60,45,0,0,'Fel Energy Irregularities VI','Heh.. He has a question, does he?\n\n<The old, withered man lets out a crooked laugh, a wiry smirk resting upon his aged features.>\n\nI haven\'t spoken to Mahar Ba in a long, long time, if he wants information, than I need something done, favor or no favor!\n\nIf you want to know the truth, than I require something from you.\n\nWithin the Tainted Scar lies a secretive race of demon, the Dreadlord, I have been meaning to practice all sorts of magic and I need a singular heart. Bring me a Dreadlord Heart, and I shall tell you what I know.','Travel to the Tainted Scar, and speak with Daio the Decrepit.','Yes yes yes, do you have my heart?','A Dreadlord Heart, oh how I desired, and needed one. You\'ve done me a real favor, I shall answer your question.',60645,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6450,61,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (14463, 40443);
+replace into creature_involvedrelation (id, quest) values (14463, 40443);
+
+update quest_template set type = 1 where entry = 40443;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60645,3320,'Dreadlord Heart',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(8716,60645,-65,1,1,1,0);
+
+-- Fel Energy Irregularities VII
+delete from quest_template where entry = 40444;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40443,40444,2,4,60,45,0,0,'Fel Energy Irregularities VII','So, he desires to know about the Dark Portal, and the influx of fel energy? The demon\'s have been gathering for some time around the Tainted Scar, and have been using it as a safe haven close to The Dark Portal.\n\nWith the increase of Fel Energy, there is no doubt that they have plans for the future. This future though, may not come for some time given what I have heard.\n\nGo to Mahar Ba, and tell him to gather the best of his kin, and to prepare himself, time ticks slowly.\n\nNow, begone, I have repaid his favor.','Return the news to Watcher Mahar Ba at Nethergarde Keep.','Yes?','<Watcher Mahar Ba would look on with a slightly concerned look.>\n\nWe must begin to prepare, and keep the magical energies stable, you have given us a great deal of information, and without you we would have been unable to figure out these clues and unearth the answers we need for our future.\n\nThe Kirin Tor thanks you greatly for what you\'ve done, please, take one of these rewards, it is the -least- we can for how much trouble you have saved us.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7850,61,750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60646,1,60647,1,60648,1,60649,1,0,0,'');
+
+replace into creature_questrelation (id, quest) values (14463, 40444);
+replace into creature_involvedrelation (id, quest) values (5385, 40444);
+
+replace into item_template values
+ ('60646', '4', '0', 'Kirin Tor Shawl of Potency', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60647', '4', '0', 'Kirin Tor Shawl of Authority', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60648', '4', '0', 'Kirin Tor Shawl of Persecution', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60649', '4', '0', 'Kirin Tor Shawl of Oppresion', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
