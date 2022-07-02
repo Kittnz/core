@@ -22,6 +22,8 @@ public:
 
 private:
     // Phase 1
+    bool m_bHasAlreadyShoutedLifeDrain{};
+
     std::uint8_t m_uiChosenOne{};
 
     std::uint32_t m_uiCallSpirits_Timer{};
@@ -57,6 +59,7 @@ public:
         }
 
         // Phase 1
+        m_bHasAlreadyShoutedLifeDrain - false;
         m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS; // Set m_uiChosenOne out of range until CheckChosenOneTiming() assigns a value within range (0-5)
         m_uiCheckForTank_Timer = nsDaelus::CHECK_FOR_TANK_TIMER;
         m_uiCallSpirits_Timer = nsDaelus::CALL_SPIRITS_FIRST_TIMER;
@@ -73,9 +76,10 @@ public:
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->AddUnitState(UNIT_STAT_ROOT);
+
         m_creature->SetStandState(UNIT_STAND_STATE_KNEEL);
+
         m_creature->SetFactionTemplateId(nsDaelus::FACTION_NEUTRAL);
-        m_creature->SetHealthPercent(75.0f);
 
         m_uiPhase = 1;
 
@@ -214,12 +218,12 @@ public:
                                 AchievementKillFailed(); // Achievement failed if a Daelus consumes a spirit
                             }
 
-                            pMonk->DoKillUnit(pMonk);
-
                             if (m_creature->GetHealthPercent() < 100.f)
                             {
                                 m_creature->SetHealthPercent((m_creature->GetHealthPercent() + nsDaelus::REGENERATE_HEALTH_PERCENTAGE));
                             }
+
+                            pMonk->DoKillUnit(pMonk);
                         }
                     }
                 }
@@ -245,7 +249,7 @@ public:
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
         m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::PHASE_TWO), LANG_UNIVERSAL);
 
-        m_uiVulnerability_Timer = 30000;
+        m_uiVulnerability_Timer = nsDaelus::VULNERABLE_TIMER;
         m_uiPhase = 2;
     }
 
@@ -295,13 +299,24 @@ public:
                     }
                 }
 
-                m_creature->SetHealth(m_creature->GetHealth() + uint32(uiHealthPoints)); // After iteration of all player's are done, add all drained HPs to Daelus
+                if (!m_bHasAlreadyShoutedLifeDrain)
+                {
+                    m_creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::LIFEDRAIN), LANG_UNIVERSAL);
+                    m_bHasAlreadyShoutedLifeDrain = true;
+                }
+
+                m_creature->SetHealth((m_creature->GetHealth() + uint32(uiHealthPoints))); // After iteration of all player's are done, add all drained HPs to Daelus
             }
             else
             {
                 if (m_creature->IsNonMeleeSpellCasted()) // Check if Daeulus is still channeling his casting animation...
                 {
                     m_creature->RemoveAurasDueToSpell(nsDaelus::SPELL_LIFE_DRAIN_VISUAL); // ... if this is the case, STOP IT
+                }
+
+                if (m_bHasAlreadyShoutedLifeDrain)
+                {
+                    m_bHasAlreadyShoutedLifeDrain = false;
                 }
 
                 DoMeleeAttackIfReady(); // Do melee hits
@@ -348,7 +363,7 @@ public:
             return nullptr;
 
         auto candIt{ candidates.begin() };
-        std::advance(candIt, urand(0, candidates.size() - 1));
+        std::advance(candIt, urand(0, (candidates.size() - 1)));
         return *candIt;
     }
 
@@ -474,7 +489,7 @@ bool GossipHello_boss_daelus(Player* pPlayer, Creature* pCreature)
     if (m_pInstance)
     {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, nsDaelus::START_BUTTON, GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 1));
-        pPlayer->SEND_GOSSIP_MENU(0001, pCreature->GetObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(1000002, pCreature->GetObjectGuid());
     }
     else
     {
@@ -505,14 +520,14 @@ bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                         creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
                     });
 
-                DoAfterTime(pCreature, (5 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->SetStandState(UNIT_STAND_STATE_STAND);
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
                         creature->MonsterYell(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::START), LANG_UNIVERSAL);
                     });
 
-                DoAfterTime(pCreature, (8 * IN_MILLISECONDS), [creature = pCreature]()
+                DoAfterTime(pCreature, (9 * IN_MILLISECONDS), [creature = pCreature]()
                     {
                         creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                         creature->SetFactionTemplateId(nsDaelus::FACTION_SCARLET);
@@ -541,6 +556,8 @@ public:
     }
 
 private:
+    bool m_bSetHealthOnce{};
+
     instance_scarlet_citadel* m_pInstance{};
 
 public:
@@ -548,17 +565,17 @@ public:
     {
         if (IsChosenOne())
         {
-            m_creature->SetHealthPercent(1.f);
-
-            m_creature->SetObjectScale(1.8f);
+            m_creature->SetObjectScale(2.f);
             m_creature->UpdateModelData();
 
-            m_creature->SetSpeedRate(MOVE_WALK, .6f);
+            m_creature->SetSpeedRate(MOVE_RUN, .6f);
         }
 
         // Don't react to face-aggro, neither to damage
         SetMeleeAttack(false);
         SetCombatMovement(false);
+
+        m_bSetHealthOnce = false;
     }
 
     bool IsChosenOne()
@@ -575,10 +592,14 @@ public:
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        // Move to the boss
         if (Creature* pDaelus{ m_pInstance->GetSingleCreatureFromStorage(NPC_DAELUS) })
         {
             m_creature->MonsterMoveWithSpeed(pDaelus->GetPositionX(), pDaelus->GetPositionY(), pDaelus->GetPositionZ(), pDaelus->GetOrientation(), 1.2f, MOVE_PATHFINDING);
+        }
+
+        if (!m_bSetHealthOnce && IsChosenOne())
+        {
+            m_creature->SetHealthPercent(1.f);
         }
     }
 };

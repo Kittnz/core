@@ -26,32 +26,31 @@ namespace nsDaelus
     };
 
     // Phase 1
-    static constexpr std::uint32_t NPC_FALLEN_SPIRIT{ 2000013 };
-
     static constexpr std::uint32_t SPELL_RED_COLOR{ 26235 };
     static constexpr std::uint32_t SPELL_VULNERABILITY{ 26156 };
-    static constexpr std::uint32_t SPELL_SONICBURST{ 23918 };
     static constexpr std::uint32_t SPELL_LIFE_DRAIN_VISUAL{ 21157 };
-    static constexpr std::uint32_t SPELL_SUNDER_ARMOR{ 25051 };
+    static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
 
+    // Phase 2
+    static constexpr std::uint32_t VULNERABLE_TIMER{ 30000 };
+
+    // Phase 3
+    static constexpr std::uint32_t NPC_SPOTLIGHT{ 15631 };
+
+    // Fallen Spirit
+    static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 5.f }; // How many percent should Boss Daelus regenerate on each consume
+    static constexpr std::uint32_t NPC_FALLEN_SPIRIT{ 2000013 };
+    static constexpr std::uint32_t SPELL_SONICBURST{ 23918 };
+    static constexpr std::uint32_t CHOSEN_ONE_MIN_TIMER{ 120000 };
+    static constexpr std::uint32_t CHOSEN_ONE_MAX_TIMER{ 180000 };
     static constexpr std::uint32_t CALL_SPIRITS_FIRST_TIMER{ 5000 };
     static constexpr std::uint32_t CALL_SPIRITS_REPEAT_TIMER{ 30000 };
     static constexpr std::uint32_t INITIAL_SPAWN_CHOSEN_ONE_TIMER{ 90000 };
     static constexpr std::uint32_t CHECK_SPIRITS_REPEAT_TIMER{ 500 };
-    static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
-    static constexpr std::uint32_t CHOSEN_ONE_MIN_TIMER{ 120000 };
-    static constexpr std::uint32_t CHOSEN_ONE_MAX_TIMER{ 180000 };
+
+    // Sunder Armor
+    static constexpr std::uint32_t SPELL_SUNDER_ARMOR{ 25051 };
     static constexpr std::uint32_t SUNDER_ARMOR_TIMER{ 10000 };
-
-    static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 1.f }; // How many percent should Boss Daelus regenerate on each consume
-
-    // Phase 2
-
-
-
-    // Phase 3
-
-
 
     // Poison Cloud
     static constexpr std::uint32_t NPC_POISON_CLOUD{ 16363 };
@@ -72,7 +71,7 @@ namespace nsDaelus
     static constexpr std::uint32_t FACTION_SCARLET{ 67 };  // Scarlet Citadel Faction
     static constexpr std::uint32_t FACTION_NEUTRAL{ 189 }; // Neutral Faction
 
-    static constexpr auto START_BUTTON{ "START_BUTTON" };
+    static constexpr auto START_BUTTON{ "This will be your resting place, old-timer." };
 
     enum class CombatNotifications
     {
@@ -85,7 +84,8 @@ namespace nsDaelus
         RAIDWIPE,
         BOSSDIED,
         ACHIEVEMENT_FAILED,
-        POISONCLOUD
+        POISONCLOUD,
+        LIFEDRAIN
     };
 
     const std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNotifications)
@@ -94,19 +94,19 @@ namespace nsDaelus
         {
             case CombatNotifications::ABOUT_TO_START:
             {
-                return "ABOUT_TO_START";
+                return "You're about to face the thickest wall the Scarlet Crusade has ever built!";
             }
             case CombatNotifications::START:
             {
-                return "START";
+                return "MY FIST FOR THE SCARLET CRUSADE!";
             }
             case CombatNotifications::PHASE_ONE:
             {
-                return "PHASE_ONE";
+                return "With this fist, I become the impenetrable wall of the Crusade!";
             }
             case CombatNotifications::PHASE_TWO:
             {
-                return "PHASE_TWO";
+                return "Seems like luck favors the damned, but yours has run out!";
             }
             case CombatNotifications::PHASE_THREE:
             {
@@ -118,19 +118,23 @@ namespace nsDaelus
             }
             case CombatNotifications::RAIDWIPE:
             {
-                return "RAIDWIPE";
+                return "Justice for the Scarlet Crusade, justice for Azeroth!";
             }
             case CombatNotifications::BOSSDIED:
             {
-                return "BOSSDIED";
+                return "Light… <gasp> d- damn you … all.";
             }
             case CombatNotifications::ACHIEVEMENT_FAILED:
             {
-                return "ACHIEVEMENT_FAILED";
+                return "Has he sent nothing but mindless husks? Disappointing.";
             }
             case CombatNotifications::POISONCLOUD:
             {
-                return "POISONCLOUD";
+                return "The Light curses you, with every second your own flesh and blood burn your very being.";
+            }
+            case CombatNotifications::LIFEDRAIN:
+            {
+                return "I am not so easily crumbled!";
             }
             default:
             {

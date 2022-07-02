@@ -90,7 +90,18 @@ namespace nsArdaeus
         START,
         RAIDWIPE,
         BOSSDIED,
-        ACHIEVEMENT_FAILED
+        ACHIEVEMENT_FAILED,
+        INVAR_ONE_ARM,
+        ARELLAS_FIRELEAF,
+        HOLIA_SUNSHIELD,
+        FERREN_MARUCS,
+        YANA_BLOODSPEAR,
+        ORMAN_OF_STROMGARDE,
+        FELLARI_SWIFTARROW,
+        DORGAR_STOENBROW,
+        VALEA_TWINBLADES,
+        HARTHAL_TRUESIGHT,
+        ADMIRAL_BAERAN_WESTWIND
     };
 
     std::string [[nodiscard]] CombatNotification(const CombatNotifications& combatNotifications)
@@ -99,50 +110,67 @@ namespace nsArdaeus
         {
             case CombatNotifications::ABOUT_TO_START:
             {
-                return "ABOUT_TO_START";
+                return "Yours will be a painful death.";
             }
             case CombatNotifications::START:
             {
-                return "START";
+                return "I HOLD POWER YOU CAN NOT BEGIN TO FATHOM.";
             }
             case CombatNotifications::RAIDWIPE:
             {
-                return "RAIDWIPE";
+                return "None may stay against the Scarlet Crusade, by my magic you’ve found your end.";
             }
             case CombatNotifications::BOSSDIED:
             {
-                return "BOSSDIED";
+                return "My soul joins those who I’ve lost in eternity.";
             }
             case CombatNotifications::ACHIEVEMENT_FAILED:
             {
-                return "ACHIEVEMENT_FAILED";
+                return "You pale in comparison to the other Scourge forces I have faced.";
             }
-        }
-    }
-
-    std::string [[nodiscard]] SayOnPlayersDeath(const uint8 uiRandomNumber)
-    {
-        switch (uiRandomNumber)
-        {
-            case 0:
+            case CombatNotifications::INVAR_ONE_ARM:
             {
-                return "PLACEHOLDER0";
+                return "Your skill is missed Invar, my friend, your swift blade had always struck true.";
             }
-            case 1:
+            case CombatNotifications::ARELLAS_FIRELEAF:
             {
-                return "PLACEHOLDER1";
+                return "That damnable Necromancer took you away from us Arellas, the fire you commanded could’ve set the world aflame.";
             }
-            case 2:
+            case CombatNotifications::HOLIA_SUNSHIELD:
             {
-                return "PLACEHOLDER2";
+                return "Eternal sacrifice, sister Sunshield. A real blow dealt to our demonic adversaries.";
             }
-            case 3:
+            case CombatNotifications::FERREN_MARUCS:
             {
-                return "PLACEHOLDER3";
+                return "High Abbot, I still remember your sermons, you were gone too soon.";
             }
-            default:
+            case CombatNotifications::YANA_BLOODSPEAR:
             {
-                break;
+                return "I still remember the fights between you and Invar, you are greatly missed my friend.";
+            }
+            case CombatNotifications::ORMAN_OF_STROMGARDE:
+            {
+                return "Your heart belonged with the Crusade, and the display of strength as the Icecrown Glacier has inspired us all Orman.";
+            }
+            case CombatNotifications::FELLARI_SWIFTARROW:
+            {
+                return "Elor bindel felallan morin’aminor. I still remember the sound of that bow, Fellari.";
+            }
+            case CombatNotifications::DORGAR_STOENBROW:
+            {
+                return "That Thunder Ale has grown stale Dorgar, we never got to finish it.";
+            }
+            case CombatNotifications::VALEA_TWINBLADES:
+            {
+                return "Sweet Valea, I wish the Light didn’t take you away from me, you’ve left a void none will ever fill.";
+            }
+            case CombatNotifications::HARTHAL_TRUESIGHT:
+            {
+                return "The Light didn’t respond to many as it did to you Harthal, truly one of the most blessed Paladins to ever exist.";
+            }
+            case CombatNotifications::ADMIRAL_BAERAN_WESTWIND:
+            {
+                return "Admiral! I have saved you some rum, tell me of Northern coasts again.";
             }
         }
     }
