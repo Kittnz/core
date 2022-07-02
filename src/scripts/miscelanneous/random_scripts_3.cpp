@@ -2894,9 +2894,26 @@ bool QuestRewarded_npc_watcher_mahar_ba(Player* pPlayer, Creature* pQuestGiver, 
     return false;
 }
 
+bool QuestRewarded_npc_chaser(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40450) // Repowering Chaser
+    {
+        pQuestGiver->MonsterSayToPlayer("Initiating thank you protocols.... THANK YOU", pPlayer);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_chaser";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_chaser;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_watcher_mahar_ba";
