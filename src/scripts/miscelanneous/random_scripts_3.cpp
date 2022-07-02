@@ -2885,6 +2885,12 @@ bool QuestRewarded_npc_watcher_mahar_ba(Player* pPlayer, Creature* pQuestGiver, 
         }
     }
 
+    if (pQuest->GetQuestId() == 40444) // Fel Energy Irregularities VII
+    {
+        pQuestGiver->MonsterSayToPlayer("It is time to pray that the worst has not come.", pPlayer);
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_BOW);
+    }
+
     return false;
 }
 
