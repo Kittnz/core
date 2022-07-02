@@ -737,9 +737,9 @@ EndScriptData */
 
 
 // Grethok The Controller Script
-struct Mob_Grethok_The_ControllerAI : public ScriptedAI
+struct grethok_the_controllerAI : public ScriptedAI
 {
-    Mob_Grethok_The_ControllerAI(Creature* pCreature) : ScriptedAI(pCreature)
+    grethok_the_controllerAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         Reset();
     }
@@ -815,9 +815,9 @@ CreatureAI* GetZeroAI_boss_razorgore(Creature* pCreature)
     return new Zero_boss_razorgoreAI(pCreature);
 }
 
-CreatureAI* GetZeroAI_Mob_Grethok_The_Controller(Creature* pCreature)
+CreatureAI* GetZeroAI_grethok_the_controller(Creature* pCreature)
 {
-    return new Mob_Grethok_The_ControllerAI(pCreature);
+    return new grethok_the_controllerAI(pCreature);
 }
 
 #ifndef DEF_NPC_J_EEVEE_AI
@@ -1146,8 +1146,8 @@ void AddSC_random_scripts_2()
     newscript->RegisterSelf(true);
 
     newscript = new Script;
-    newscript->Name = "zero_Mob_Grethok_The_Controller";
-    newscript->GetAI = &GetZeroAI_Mob_Grethok_The_Controller;
+    newscript->Name = "grethok_the_controller";
+    newscript->GetAI = &GetZeroAI_grethok_the_controller;
     newscript->RegisterSelf(true);
 	
 	newscript = new Script;

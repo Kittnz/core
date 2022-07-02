@@ -29,3 +29,32 @@ replace into conditions (condition_entry, type, value1, value2, value3, value4, 
 replace into conditions (condition_entry, type, value1, value2, value3, value4, flags) values (393, 7, 202, 200, 0, 0, 0);
 
 replace into gameobject (guid, id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (32373, 90566, 0, -4861.05, 740.452, 249.389, 1.49226, 0, 0, 0.678801, 0.734323, 180, 180, 100, 1, 0, 0);
+
+delete from gossip_menu where entry = 50450;
+
+delete from creature_movement_scripts where id = 14;
+
+replace into gameobject (guid, id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (10080, 144069, 0, -10999.1, -3484.59, 104.045, 1.18682, 0, 0, 0.559193, 0.829038, -120, -120, 100, 1, 0, 0);
+
+replace into gameobject (guid, id, map, position_x, position_y, position_z, orientation, rotation0, rotation1, rotation2, rotation3, spawntimesecsmin, spawntimesecsmax, animprogress, state, spawn_flags, visibility_mod) values (32378, 90567, 0, -4855.03, 742.434, 249.325, -0.078541, 0, 0, -0.03926, 0.999229, 180, 180, 100, 1, 0, 0);
+
+update creature_ai_events set event_param1 = 15, event_param2 = 1 where creature_id = 2149 and id = 214902;
+update creature_ai_events set event_flags = 0 where id = 1308201;
+
+update creature_spells set probability_2 = 100 where entry = 201078;
+update creature_spells set probability_1 = 100 where entry = 180021;
+
+update creature_template set gossip_menu_id = 0 where gossip_menu_id = 50450;
+
+update creature_display_info_addon set gender = 1 where display_id = 6895;
+update creature_display_info_addon set display_id_other_gender = 6894 where display_id = 6895;
+
+update creature_display_info_addon set gender = 0 where display_id = 6894;
+update creature_display_info_addon set display_id_other_gender = 6895 where display_id = 6894;
+
+update creature_display_info_addon set gender = 1 where display_id = 15475;
+update creature_display_info_addon set display_id_other_gender = 15476 where display_id = 15475;
+
+update creature_display_info_addon set gender = 0 where display_id = 15476;
+update creature_display_info_addon set display_id_other_gender = 15475 where display_id = 15476;
+
