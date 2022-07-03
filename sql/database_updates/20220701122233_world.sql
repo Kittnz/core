@@ -247,3 +247,224 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (5385, 40442);
 replace into creature_involvedrelation (id, quest) values (14463, 40442);
+
+-- Fel Energy Irregularities VI
+delete from quest_template where entry = 40443;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40442,40443,2,4,60,45,0,0,'Fel Energy Irregularities VI','Heh.. He has a question, does he?\n\n<The old, withered man lets out a crooked laugh, a wiry smirk resting upon his aged features.>\n\nI haven\'t spoken to Mahar Ba in a long, long time, if he wants information, than I need something done, favor or no favor!\n\nIf you want to know the truth, than I require something from you.\n\nWithin the Tainted Scar lies a secretive race of demon, the Dreadlord, I have been meaning to practice all sorts of magic and I need a singular heart. Bring me a Dreadlord Heart, and I shall tell you what I know.','Travel to the Tainted Scar, and speak with Daio the Decrepit.','Yes yes yes, do you have my heart?','A Dreadlord Heart, oh how I desired, and needed one. You\'ve done me a real favor, I shall answer your question.',60645,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6450,61,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (14463, 40443);
+replace into creature_involvedrelation (id, quest) values (14463, 40443);
+
+update quest_template set type = 1 where entry = 40443;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60645,3320,'Dreadlord Heart',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(8716,60645,-65,1,1,1,0);
+
+-- Fel Energy Irregularities VII
+delete from quest_template where entry = 40444;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40443,40444,2,4,60,45,0,0,'Fel Energy Irregularities VII','So, he desires to know about the Dark Portal, and the influx of fel energy? The demon\'s have been gathering for some time around the Tainted Scar, and have been using it as a safe haven close to The Dark Portal.\n\nWith the increase of Fel Energy, there is no doubt that they have plans for the future. This future though, may not come for some time given what I have heard.\n\nGo to Mahar Ba, and tell him to gather the best of his kin, and to prepare himself, time ticks slowly.\n\nNow, begone, I have repaid his favor.','Return the news to Watcher Mahar Ba at Nethergarde Keep.','Yes?','<Watcher Mahar Ba would look on with a slightly concerned look.>\n\nWe must begin to prepare, and keep the magical energies stable, you have given us a great deal of information, and without you we would have been unable to figure out these clues and unearth the answers we need for our future.\n\nThe Kirin Tor thanks you greatly for what you\'ve done, please, take one of these rewards, it is the -least- we can for how much trouble you have saved us.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7850,61,750,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60646,1,60647,1,60648,1,60649,1,0,0,'');
+
+replace into creature_questrelation (id, quest) values (14463, 40444);
+replace into creature_involvedrelation (id, quest) values (5385, 40444);
+
+replace into item_template values
+ ('60646', '4', '0', 'Kirin Tor Shawl of Potency', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60647', '4', '0', 'Kirin Tor Shawl of Authority', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60648', '4', '0', 'Kirin Tor Shawl of Persecution', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60649', '4', '0', 'Kirin Tor Shawl of Oppresion', '', '24297', '3', '0', '1', '55008', '13752', '16', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '10', '13679', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Dominance of the Skies
+delete from quest_template where entry = 40445;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40445,2,215,10,5,512,0,'Dominance of the Skies','Hello there traveler, and welcome.\n\nThere is something that I must ask of you to ensure the safety of the wyvern here at the Roost.\n\nWyvern are creatures that roam and explore, it is not something that we can control, though sometimes the wyvern venture to far, and into the claws of Harpy.\n\nThe Windfury Harpy have gotten so bold as to organize scouting groups for wayward wyvern, and already we have lost one this past month, if we are to continue and keep our training, young wyvern safe, then we must take action.\n\nFar to the north, and the north west are Windfury Sorceress and Matriarch, they are the ones that need to be removed, go there, and make certain the welfare of our wyvern.','Slay 10 Windfury Sorceress\' and 10 Windfury Matriarch for Kolgo Highmane at Red Cloud Roost in Mulgore.','Have you had any luck, child?','Your actions have eased this troubled mind. We can now be more free with the wyvern and let them truly grow within this world, and for that, I must thank you.\n\nTake this, as a symbol of my thanks young one.',0,0,0,0,0,0,0,0,2965,10,2964,10,0,0,0,0,0,0,0,740,81,150,0,0,0,0,0,0,0,0,0,60650,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60816, 40445);
+replace into creature_involvedrelation (id, quest) values (60816, 40445);
+
+replace into item_template values
+ ('60650', '4', '0', 'Highmane Shawl', '', '27673', '2', '0', '1', '856', '214', '16', '-1', '-1', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '1', '6', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '12', '0', '0', '3',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Halting Bristleback Expansion
+delete from quest_template where entry = 40446;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40446,2,215,12,7,0,0,'Halting Bristleback Expansion','The Bristleback are a ruthless and uncaring tribe of Quillboar, who expand their territory and domain without care for diplomacy or good will. They have recently attacked Suntail Pass, causing the Spirit Walker\'s that reside here to vacate the cave just to the east.\n\nIn battle they ended up wounding me, luckily Elder Pyrestrider came to my rescue, and we both escaped their wrath.\n\nIf Suntail Pass is to remain a safe haven for travel, and for the Spirit Walker\'s to remain in peace, then the Quillboar must be eradicated.','Slay 10 Bristleback Trappers, 5 Bristleback Boars, and 8 Bristleback Rockshapers for Brave Proudspear at Suntail Pass in Mulgore.','The Bristleback hold incredible disregard for nature, have the Quillboar been dealt with?','With your assistance Suntail Pass is made much safer for travel.\n\nPerhaps now the Quillboar will have learned a lesson, and the Spirit Walker\'s can resume their tasks in peace.',0,0,0,0,0,0,0,0,60849,10,60848,6,60847,8,0,0,0,0,2000,680,81,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60822, 40446);
+replace into creature_involvedrelation (id, quest) values (60822, 40446);
+
+-- Continuing Ceremonies
+delete from quest_template where entry = 40447;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40447,2,215,12,7,0,0,'Continuing Ceremonies','The Quillboar expunged us from our sacred cave and vantage points overlooking the expansive Mulgore. It is not the cave itself I am worried about, but many of the ceremonies that must be held in the next few days to help pass the dead into the realm beyond.\n\nLeft behind in the Quillboar\'s rampage are tools, and charms that we will need to reclaim for the upcoming ceremonies, and I need you to get them for me.\n\nI lost the following items just to the east, A Silver Hawk\'s Feather, Ornate Spirit Beads, and the Drum of Passing.\n\nRecover them, and help the dead ease their way to the afterlife.','Collect the Silver Hawk\'s Feather, the Ornate Spirit Beads, and the Drum of Passing for Elder Pyrestrider at Suntail Pass in Mulgore.','Without the proper instruments, we cannot conduct our ancient rites and passages.','I have been expecting you, it seems that you were sent to aid us at a time of dire need. The spirits have sent you to aid me, and now I must aid you for your help.\n\nTake this, on behalf of the Spirit Walker\'s for allowing us to conduct what must be done.\n\nGo now, and walk softly friend.',60651,1,60652,1,60653,1,0,0,0,0,0,0,0,0,0,0,0,0,2000,680,81,150,0,0,0,0,0,0,0,0,0,60654,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60823, 40447);
+replace into creature_involvedrelation (id, quest) values (60823, 40447);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60651,28877,'Silver Hawk Feather',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60652,609,'Spirit Beads',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60653,18352,'Drum of Passing',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into item_template values
+ ('60654', '4', '0', 'Spiritual Feather', '', '19570', '2', '0', '1', '1228', '307', '12', '-1', '-1', '15',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '6', '1', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '21590', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into gameobject_template values
+(2010893,3,25452,'Carrying Basket',0,4,1,43,2010893,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
+(2010894,3,25481,'Ceremonial Container',0,4,1,43,2010894,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
+(2010895,3,25492,'Drum of Passing',0,4,1,43,2010895,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010893,60651,-100,0,1,1,0),
+(2010894,60652,-100,0,1,1,0),
+(2010895,60653,-100,0,1,1,0);
+
+-- A Mother's Concern
+delete from quest_template where entry = 40448;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40448,2,45,34,27,0,0,'A Mother\'s Concern','It\'s been a few weeks now since we\'ve had to send Brian away to live with some cousins of mine in the city. It\'s not the safest place, but it\'s much safer then around here, especially with all of the defenders around Gallant Square.\n\nI\'ve had a lot of worries since he left, and I just want to make sure he is okay. I\'ve prepared a lot of things to send to him so he feels a bit more comfortable during his stay, do you mind running them out for me, and making sure he gets them?\n\nYou can find him in Stromgarde, in Gallant Square, the part of the city that is under construction.','Bring the \'Packed Goods for Brian\' to Brian Livingstone at Gallant Square in Arathi Highlands.','Yes, can I help you?','Oh, hello there, this is from mom? I miss her quite a bit, but it\'s nice seeing family! The city is kind of fascinating too.',60655,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60655,1,0,750,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60780, 40448);
+replace into creature_involvedrelation (id, quest) values (60782, 40448);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60655,7914,'Packed Goods for Brian',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Protecting the Crops!
+delete from quest_template where entry = 40449;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40449,2,45,34,27,0,0,'Protecting the Crops!','Howdy friend!\n\nWe have been dealing with all sorts of problems ever since we first started settling here, from raptor, to giant spider, to ogre!\n\nChaser has done well enough with scaring off the local wildlife but they have just gotten too aggresive as of recently, from trampling on our fields to even fighting with us. It\'s gotten so bad infact I had to send my son into Stromgarde until things calmed down.\n\nIf you could clean up some of the critters, that would go much appreciated for me and my wife. About ten of those Plains Creeper\'s and ten more of the Highland Thrasher\'s should do just fine.','Slay 10 Plains Creeper\'s and 10 Highland Thrasher\'s for Oswald Livingstone at the Livingstone Croft in Arathi Highlands.','Have you had any luck just yet?','Oh, well my my, you\'ve really outdone yourself for us. Perhaps now we can finally get a plentiful harvest in for the season, here, take this, as a token of my thanks, its a spare.',0,0,0,0,0,0,0,0,2563,10,2560,10,0,0,0,0,0,0,0,2400,72,150,0,0,0,0,0,0,0,0,0,60656,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60781, 40449);
+replace into creature_involvedrelation (id, quest) values (60781, 40449);
+
+replace into item_template values
+ ('60656', '2', '6', 'Livingstone Pitchfork', '', '7464', '2', '0', '1', '43908', '10977', '17', '-1', '-1', '36',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '7', '4', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
+ '0', '62', '86', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '2', '0', '0', '85', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Repowering Chaser
+delete from quest_template where entry = 40450;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40450,2,45,34,27,0,0,'Repowering Chaser','Say there, you wouldn\'t happen to know anyone that knows a thing or two about engineering, would you? We picked up Chaser from Southshore about a year ago now, from a goblin merchant infact. He\'s been great, but, slowly he\'s been breaking down, or getting kinda slow.\n\nI was told that he would need a backup Gold Power Core at some point, and I think that might be what the issue is. The problem itself though is that we\'re so far out here, and I don\'t really know much about engineering to craft one, or have the resources on hand infact! If you could get one, I\'m sure Chaser would be quite happy.','Collect a Gold Power Core for Chaser at the Livingstone Croft in Arathi Highlands','Beeeeep!','<After inserting the Gold Power Core it takes a moment for Chaser to power up once again, the machine whirrs to life, beeping happily.>',10558,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2250,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60781, 40450);
+replace into creature_involvedrelation (id, quest) values (60779, 40450);
+
+update creature_template set script_name = 'npc_chaser' where entry = 60779;
+
+-- To Strike Back : Witherbark Village
+delete from quest_template where entry = 40451;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40451,2,45,36,28,0,0,'To Strike Back : Witherbark Village','It has been a while since the Troll Hunter\'s of Stromgarde have had the chance to practice their trade. We have been confined defending our section of the city now for too long, under constant threat.\n\nOur main enemy is biding their time, and gathering their strength. The trolls have been at war with for generations, my fathers, their fathers, and their\'s have fought troll.\n\nWe will strike at them, to show them that Stromgarde will not lay down idle. Far to the east is Witherbark Village, go there, and kill ten Witherbark Shadow Hunters.','Travel to Witherbark Village and slay 10 Witherbark Shadow Hunters for Troll Hunter Penthar in Gallant Square at Stromgarde Keep.','Has the deed been done $C?','You make Stromgarde proud, the less trolls, the better for our ultimate survival.',0,0,0,0,0,0,0,0,2557,10,0,0,0,0,0,0,0,0,0,2275,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60827, 40451);
+replace into creature_involvedrelation (id, quest) values (60827, 40451);
+
+-- To Strike Back : Ruins of Zul'Rasaz
+delete from quest_template where entry = 40452;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40452,2,45,37,28,512,0,'To Strike Back : Ruins of Zul\'Rasaz','We have received information of a battle that took place in the troll city of Zul\'Rasaz, or what is left of it anyway. Deep within the hills to the north, hidden away is a troll city, destroyed by conflict and time. It would appear the Witherbark fought and defeated the Wildtusk.\n\nGo there, and thin them out so that they cannot harm us down here in Stromgarde.','Travel to the Ruins of Zul\'Rasaz and slay 8 Witherbark Rogues, 10 Witherbark Raiders, and 5 Witherbark Soothsayers for Troll Hunter Penthar in Gallant Square at Stromgarde Keep.','It may be hard to find the pass, but I am sure you will do what is neccesary.','You have done well, much better than I would have expected. Take this, as a thanks.',0,0,0,0,0,0,0,0,91785,8,91784,10,91786,5,0,0,0,0,0,2275,72,150,0,0,0,0,0,0,0,0,0,60657,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60827, 40452);
+replace into creature_involvedrelation (id, quest) values (60827, 40452);
+
+replace into item_template values
+ ('60657', '2', '0', 'Troll Hunter\'s Axe', '', '19228', '2', '0', '1', '49664', '12416', '13', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '39', '68', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Boulderfist Outpost
+delete from quest_template where entry = 40453;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40453,2,45,34,27,0,0,'The Boulderfist Outpost','The ogre\'s have caused us much headache, and have taken a section of the city from us. The last thing we need is more forces coming from outside of the walls to assist those that are within.\n\nTo the north just outside of the city is Boulder\'gor, a small outpost that is an ogre sanctuary. I need you to go there, and bring the fight to them, so that more do not come pouring into the city.\n\nBring me twenty Boulderfist Truncheon\'s as proof, and Stromgarde shall reward you.','Gather 20 Boulderfist Truncheon\'s for Sergeant Karster in Gallant Square at Stromgarde Keep.','Has the work been done?','The ogre\'s are a mighty foe, you\'ve done excellent work, though I always fear it is never enough, here as I promised.',60658,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2350,72,50,0,0,0,0,0,0,0,0,0,60659,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60788, 40453);
+replace into creature_involvedrelation (id, quest) values (60788, 40453);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60658,4663,'Boulderfist Truncheon',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(2562,60658,-90,1,1,1,0),
+(2564,60658,-100,1,1,1,0);
+
+replace into item_template values
+ ('60659', '4', '3', 'Strom Defender\'s Vest', '', '32360', '2', '0', '1', '29284', '7321', '5', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '14', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '236', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '100', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Farwell Commission
+delete from quest_template where entry = 40454;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40454,2,45,34,27,0,0,'Farwell Commission','A few weeks ago I had a ring commissioned from Old Farwell up at the Farwell stead far to the north. Old Farwell was once a prominent, and powerful wizard of the Kirin Tor, one who is now retired.\n\nThe ring is supposed to safeguard against the foul, and dark magic lingering within the city.\n\nYou can find the passage way on the north western corner of the Arathi Highlands leading into the mountains where his Stead is located.','Speak with Old Farwell at the Farwell Stead.','Yes?','Do I know you, is there something that I can help you with?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60788, 40454);
+replace into creature_involvedrelation (id, quest) values (91710, 40454);
+
+-- Farwell Commission
+delete from quest_template where entry = 40455;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40454,40455,2,45,34,27,0,0,'Farwell Commission','Oh, Sergeant Karster sent you? Well, it\'s good getting some work from time to time, my magical abilities haven\'t been tested for a while now.\n\n<Old Farwell produces a small, ornate ring, with a glowing violet gem.>\n\nThis ring should ward off any magical energies or foul tainting aura. Make sure you give my best to Sergeant Karster.','Return the Farwell Ring to Sergeant Karster in the Gallant Square at Stromgarde Keep.','Yes?','Old Farwell has done a lot for us here, this ring should be just what we need, thanks for delivering it.',60660,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60660,1,0,450,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (91710, 40455);
+replace into creature_involvedrelation (id, quest) values (60788, 40455);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60660,4663,'Boulderfist Truncheon',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+update creature_template set health_min = 6850, health_max = 7050, rank = 1, dmg_min = 325, dmg_max = 350 where entry = 60720;

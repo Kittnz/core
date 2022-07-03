@@ -2212,7 +2212,7 @@ bool GossipHello_npc_ancestor_of_wisdom(Player* pPlayer, Creature* pCreature)
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    pPlayer->SEND_GOSSIP_MENU(60636, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(60863, pCreature->GetGUID());
     return true;
 }
 
@@ -2251,7 +2251,7 @@ bool GossipHello_npc_ancestor_of_virtue(Player* pPlayer, Creature* pCreature)
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    pPlayer->SEND_GOSSIP_MENU(60637, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(60864, pCreature->GetGUID());
     return true;
 }
 
@@ -2274,7 +2274,7 @@ bool GossipHello_npc_ancestor_of_humility(Player* pPlayer, Creature* pCreature)
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    pPlayer->SEND_GOSSIP_MENU(60638, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(60865, pCreature->GetGUID());
     return true;
 }
 
@@ -2362,9 +2362,9 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
             npc->RemoveAurasAtReset();
             });
 
-        Creature* NPC_cheer1 = pPlayer->FindNearestCreature(60639, 40.0F);
-        Creature* NPC_cheer2 = pPlayer->FindNearestCreature(60640, 40.0F);
-        Creature* NPC_cheer3 = pPlayer->FindNearestCreature(60641, 40.0F);
+        Creature* NPC_cheer1 = pPlayer->FindNearestCreature(60866, 40.0F);
+        Creature* NPC_cheer2 = pPlayer->FindNearestCreature(60867, 40.0F);
+        Creature* NPC_cheer3 = pPlayer->FindNearestCreature(60868, 40.0F);
 
         if (NPC_cheer1)
         {
@@ -2885,12 +2885,35 @@ bool QuestRewarded_npc_watcher_mahar_ba(Player* pPlayer, Creature* pQuestGiver, 
         }
     }
 
+    if (pQuest->GetQuestId() == 40444) // Fel Energy Irregularities VII
+    {
+        pQuestGiver->MonsterSayToPlayer("It is time to pray that the worst has not come.", pPlayer);
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_BOW);
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_chaser(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40450) // Repowering Chaser
+    {
+        pQuestGiver->MonsterSayToPlayer("Initiating thank you protocols.... THANK YOU", pPlayer);
+    }
+
     return false;
 }
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_chaser";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_chaser;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_watcher_mahar_ba";

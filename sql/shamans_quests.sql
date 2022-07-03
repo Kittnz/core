@@ -66,28 +66,28 @@ delete from creature_template where entry = 60348;
 replace into creature_template (entry, name, display_id1) values (60348, 'quest_40346_dummy_triger', 328);
 
 REPLACE INTO creature_template VALUES
-(60636, 3814, 0, 0, 0, 'Ancestor of Wisdom', '', 1404, 40, 40, 1752, 1752, 0, 0, 1890, 104, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40346, ''),
-(60637, 6550, 0, 0, 0, 'Ancestor of Virtue', '', 1404, 40, 40, 1752, 1752, 0, 0, 1890, 104, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40346, ''),
-(60638, 3895, 0, 0, 0, 'Ancestor of Humility', '', 1404, 40, 40, 1752, 1752, 0, 0, 1890, 104, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40346, '');
+(60863, 3814, 0, 0, 0, 'Ancestor of Wisdom', '', 1404, 40, 40, 1752, 1752, 0, 0, 1890, 104, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40346, ''),
+(60864, 6550, 0, 0, 0, 'Ancestor of Virtue', '', 1404, 40, 40, 1752, 1752, 0, 0, 1890, 104, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40346, ''),
+(60865, 3895, 0, 0, 0, 'Ancestor of Humility', '', 1404, 40, 40, 1752, 1752, 0, 0, 1890, 104, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 40346, '');
 
 REPLACE INTO creature_template_addon VALUES
-(60636, 0, 0, 0, 0, 0, 0, 9617),
-(60637, 0, 0, 0, 0, 0, 0, 9617),
-(60638, 0, 0, 0, 0, 0, 0, 9617);
+(60863, 0, 0, 0, 0, 0, 0, 9617),
+(60864, 0, 0, 0, 0, 0, 0, 9617),
+(60865, 0, 0, 0, 0, 0, 0, 9617);
 
-set @gossip_menu_id = 41073; set @magic_number = 60636;
+set @gossip_menu_id = 41073; set @magic_number = 60863;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, '<You can feel your ancestors gaze upon you>.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-set @gossip_menu_id = 41074; set @magic_number = 60637;
+set @gossip_menu_id = 41074; set @magic_number = 60864;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, '<You can feel your ancestors gaze upon you>.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-set @gossip_menu_id = 41075; set @magic_number = 60638;
+set @gossip_menu_id = 41075; set @magic_number = 60865;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, '<You can feel your ancestors gaze upon you>.'); 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
@@ -98,7 +98,7 @@ delete from quest_template where entry = 40347;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40346,40347,2,1638,40,40,0,0,'The Way of Spiritwalking IV','It is time to make the journey to meet with your ancestors, they know you more than you may know yourself but do not fear them. They look out for us all in the end, and they desire to see if you are truly ready to take up this mantle.\n\nAt the Spirit Rise in Thunder Bluff, they will be there, speak with the Ancestor of Wisdom, they will bring you through your next step.\n\nAnd lastly, goodluck $N, may the winds be at your back.','Travel to Thunder Bluff, and speak with the Ancestor of Wisdom.','Yes?','I have been expecting you.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,81,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (5390, 40347);
-replace into creature_involvedrelation (id, quest) values (60636, 40347);
+replace into creature_involvedrelation (id, quest) values (60863, 40347);
 
 update quest_template set requiredclasses = 64 where entry = 40347;
 update quest_template set requiredraces = 32 where entry = 40347;
@@ -107,17 +107,17 @@ update quest_template set requiredraces = 32 where entry = 40347;
 delete from quest_template where entry = 40348;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1,objectivetext2,objectivetext3) values (40347,40348,2,1638,40,40,512,0,'The Way of Spiritwalking V','We have been watching you for a long time, from the plains of Mulgore we gazed down upon your vigor and tenacity. You have improved much since those days long ago, and now, here you are, before me.\n\nIf you truly wish to be a Spiritwalker and learn our ways, then you must learn a lesson from the each of us. We can help guide you in the right direction, all you need to do is listen.\n\nSpeak with all three of us, and when you have heard our words, return to me.','Speak with the three Ancestors at Spirit Rise.','Have you spoken with everyone?','Do you understand the burdens of a Spiritwalker? It is to understand the lessons of the past, and to live in harmony with the spirit world. To pass this information on to those in the mortal realm, and to make sure these values never fade.\n\nYou have impressed us $N, you have done much for this world, and for the good of others and for that we are greatful.',0,0,0,0,0,0,0,0,60349,1,60350,1,60351,1,0,0,0,0,0,3850,81,450,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak to the Ancestor of Wisdom','Speak to the Ancestor of Virtue','Speak to the Ancestor of Humility');
 
-replace into creature_questrelation (id, quest) values (60636, 40348);
-replace into creature_involvedrelation (id, quest) values (60636, 40348);
+replace into creature_questrelation (id, quest) values (60863, 40348);
+replace into creature_involvedrelation (id, quest) values (60863, 40348);
 
 update quest_template set requiredclasses = 64 where entry = 40348;
 update quest_template set requiredraces = 32 where entry = 40348;
 
 update quest_template set rewspellcast = 45500 where entry = 40348;
 
-update creature_template set script_name = 'npc_ancestor_of_wisdom' where entry = 60636;
-update creature_template set script_name = 'npc_ancestor_of_virtue' where entry = 60637;
-update creature_template set script_name = 'npc_ancestor_of_humility' where entry = 60638;
+update creature_template set script_name = 'npc_ancestor_of_wisdom' where entry = 60863;
+update creature_template set script_name = 'npc_ancestor_of_virtue' where entry = 60864;
+update creature_template set script_name = 'npc_ancestor_of_humility' where entry = 60865;
 
 delete from creature_template where entry = 60349;
 replace into creature_template (entry, name, display_id1) values (60349, 'quest_40348_dummy_triger', 328);
@@ -228,10 +228,10 @@ update quest_template set requiredraces = 128 where entry = 40353;
 update quest_template set rewspellcast = 45504 where entry = 40353;
 
 REPLACE INTO creature_template VALUES
-(60639, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
-(60640, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
-(60641, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, '');
+(60866, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60867, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(60868, 901, 0, 0, 0, 'Toad', '', 0, 1, 1, 8, 8, 0, 0, 20, 188, 0, 1, 0.857143, 0, 18, 5, 0, 0, 0, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, '');
 
-update creature set id = 60639 where guid = 2569110;
-update creature set id = 60640 where guid = 2569099;
-update creature set id = 60641 where guid = 2569109;
+update creature set id = 60866 where guid = 2569110;
+update creature set id = 60867 where guid = 2569099;
+update creature set id = 60868 where guid = 2569109;

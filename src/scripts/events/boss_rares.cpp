@@ -458,73 +458,6 @@ struct boss_grugthok_the_seerAI : public ScriptedAI
     }
 };
 
-struct boss_screechclawAI : public ScriptedAI
-{
-    boss_screechclawAI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        Reset();
-    }
-
-    EventMap m_events;
-
-    void Reset() override
-    {
-        m_events.Reset();
-    }
-
-    void Aggro(Unit* pWho) override
-    {
-        m_creature->SetInCombatWithZone();
-
-        m_events.ScheduleEvent(EVENT_AOE_FEAR, Seconds(urand(20, 40)));
-        m_events.ScheduleEvent(EVENT_REND, Seconds(urand(10, 35)));
-        m_events.ScheduleEvent(EVENT_POISON_BOLT, Seconds(urand(30, 60)));
-    }
-
-    void UpdateAI(uint32 const uiDiff)  override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        m_events.Update(uiDiff);
-        while (auto l_EventId = m_events.ExecuteEvent())
-        {
-            switch (l_EventId)
-            {
-                case EVENT_AOE_FEAR:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_AOE_FEAR, CF_FORCE_CAST) == CAST_OK)
-                        m_events.Repeat(Seconds(40));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_REND:
-                {
-                    if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_REND) == CAST_OK)
-                        m_events.Repeat(Seconds(35));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-                case EVENT_POISON_BOLT:
-                {
-                    if (DoCastSpellIfCan(m_creature, SPELL_POISON_BOLT) == CAST_OK)
-                        m_events.Repeat(Seconds(60));
-                    else
-                        m_events.Repeat(100);
-
-                    break;
-                }
-            }
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
 struct boss_twilight_watcher_crendusAI : public ScriptedAI
 {
     boss_twilight_watcher_crendusAI(Creature* pCreature) : ScriptedAI(pCreature)
@@ -1090,11 +1023,6 @@ CreatureAI* GetAI_boss_grugthok_the_seer(Creature* pCreature)
     return new boss_grugthok_the_seerAI(pCreature);
 }
 
-CreatureAI* GetAI_boss_screechclaw(Creature* pCreature)
-{
-    return new boss_screechclawAI(pCreature);
-}
-
 CreatureAI* GetAI_boss_twilight_watcher_crendus(Creature* pCreature)
 {
     return new boss_twilight_watcher_crendusAI(pCreature);
@@ -1156,11 +1084,6 @@ void AddSC_boss_rares()
     newscript = new Script;
     newscript->Name = "boss_grugthok_the_seer";
     newscript->GetAI = &GetAI_boss_grugthok_the_seer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "boss_screechclaw";
-    newscript->GetAI = &GetAI_boss_screechclaw;
     newscript->RegisterSelf();
 
     newscript = new Script;
