@@ -2061,7 +2061,7 @@ void ScriptMgr::Initialize()
     for (uint32 i = 1; i < GetScriptIdsCount(); ++i)
     {
         if (!m_NPC_scripts[i])
-            sLog.outError("No script found for ScriptName '%s'.", GetScriptName(i));
+            sLog.outError("Script not found: %s.", GetScriptName(i));
     }
 
 }
