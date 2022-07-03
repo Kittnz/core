@@ -7,3 +7,25 @@ REPLACE INTO creature_loot_template VALUES (91917, 70057, 15, 1, 1, 1, 0);
 
 -- Lowered Dropchance of items from Corpsemuncher
 UPDATE creature_loot_template SET ChanceOrQuestChance = 15 WHERE item IN (83459, 83460, 83461, 83462, 83463);
+
+-- SHAMAN SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (17364, 0, 17364, 1, 0); -- Bloodlust Rank 1
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45509, 0, 45509, 1, 0); -- Stormstrike Rank 1
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45505, 0, 45505, 1, 0); -- Feral Spirit Rank 2
+-- PRIEST SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (15473, 0, 15473, 1, 0); -- Shadowform
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45562, 0, 45562, 1, 0); -- Proclaim Champion
+-- HUNTER SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3035, 0, 3035, 1, 0); -- Trueshot Rank 1
+-- DRUID SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45734, 24858, 45734, 2, 0); -- Owlkin Frenzy Chain Bugfix (Requires Owlkin Form)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (24858, 0, 24858, 1, 0); -- Moonkin Form
+-- WARLOCK SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45910, 0, 45910, 1, 0); -- Mana Funnel Rank 1
+-- PALADIN SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (2537, 0, 2537, 1, 0); -- Crusader Strike Rank 1
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (679, 0, 679, 1, 0); -- Holy Strike Rank 1
+
+update broadcast_text set male_text = 'The Horde has changed from what it once was. There was a time where I left the Horde, disillusioned by the growing influence of the power-hungry pawns of the Burning Legion.\n\nDuring my exile, I was taken prisoner by a group of humans, but was rescued by the Warchief.\n\nHearing his vision of the Horde free of demonic influence, guided by the shamans, I returned.' where entry = 5989;
+
+update item_template set spellcharges_1 = 10 where entry = 9449; -- Manual Crowd Pummeler
