@@ -137,7 +137,7 @@ void WardenMgr::LoadWardenChecks()
     } while (result->NextRow());
 
     sLog.outString();
-    sLog.outString(">> Loaded %u warden checks.", count);
+    sLog.outString("Loaded %u warden checks.", count);
 }
 
 void WardenMgr::LoadWardenModules()
@@ -162,7 +162,7 @@ void WardenMgr::LoadWardenModules()
     MANGOS_ASSERT(!(m_vMacModules.empty() && sWorld.getConfig(CONFIG_BOOL_AC_WARDEN_OSX_ENABLED)));
 
     sLog.outString();
-    sLog.outString(">> Loaded %u windows and %u mac modules.", m_vWindowsModules.size(), m_vMacModules.size());
+    sLog.outString("Loaded %u windows and %u mac modules.", m_vWindowsModules.size(), m_vMacModules.size());
 }
 
 void WardenMgr::LoadWardenModule(std::string module_name)

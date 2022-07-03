@@ -76,8 +76,6 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
     if (IsScriptScheduled())                                // function don't must be called in time scripts use.
         return;
 
-    sLog.outString("%s :", tablename);
-
     scripts.clear();                                        // need for reload support
 
     //                                                  0    1       2         3         4          5          6         7           8             9          10        11        12        13        14    15 16 17 18       19
@@ -2053,9 +2051,7 @@ void ScriptMgr::Initialize()
 {
     // Load database (must be called after SD2Config.SetSource).
     LoadDatabase();
-
-    sLog.outString("");
-
+    
     // Resize script ids to needed ammount of assigned ScriptNames (from core)
     m_NPC_scripts.resize(GetScriptIdsCount(), nullptr);
 
@@ -2065,7 +2061,7 @@ void ScriptMgr::Initialize()
     for (uint32 i = 1; i < GetScriptIdsCount(); ++i)
     {
         if (!m_NPC_scripts[i])
-            sLog.outError("No script found for ScriptName '%s'.", GetScriptName(i));
+            sLog.outError("Script not found: %s.", GetScriptName(i));
     }
 
 }
@@ -2119,12 +2115,6 @@ void ScriptMgr::LoadScriptTexts()
         } while (result->NextRow());
 
         delete result;
-
-        sLog.outString("");
-    }
-    else
-    {
-        sLog.outString("");
     }
 }
 
@@ -2169,12 +2159,6 @@ void ScriptMgr::LoadScriptTextsCustom()
         } while (result->NextRow());
 
         delete result;
-
-        sLog.outString("");
-    }
-    else
-    {
-        sLog.outString("");
     }
 }
 

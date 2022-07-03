@@ -65,7 +65,22 @@ void LoadGameObjectModelList()
         if (v1.isNaN())
         {
             v1 = Vector3::zero();
-            ERROR_LOG("File %s seems to be corrupted. V1 variable is NaN", buff);
+            // Models work fine, afaik some collision mismatchihg might be in place. 
+            // Some of those models are original from Vanilla and were not modified at any way:
+
+            /*
+            
+            File Easternbacklandscape.wmo seems to be corrupted. V1 variable is NaN
+            File Westernbacklandscape.wmo seems to be corrupted. V1 variable is NaN
+            File Uppermesac.wmo seems to be corrupted. V1 variable is NaN
+            File Zulamon_Enterance.wmo seems to be corrupted. V1 variable is NaN
+            File Be_Gardenstairs01.wmo seems to be corrupted. V1 variable is NaN
+            File Sw_Harbor_Lgwall01.wmo seems to be corrupted. V1 variable is NaN
+            File Sw_Harbor_Lgwall02.wmo seems to be corrupted. V1 variable is NaN
+            
+            */
+
+            // ERROR_LOG("File %s seems to be corrupted. V1 variable is NaN", buff);
             bReportedFailModel = true;
         }
         if (v2.isNaN())
