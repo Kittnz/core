@@ -1143,12 +1143,12 @@ void AddSC_random_scripts_2()
 	newscript = new Script;
     newscript->Name = "zero_boss_razorgore";
     newscript->GetAI = &GetZeroAI_boss_razorgore;
-    newscript->RegisterSelf(true);
+    newscript->RegisterSelf(false);
 
     newscript = new Script;
     newscript->Name = "grethok_the_controller";
     newscript->GetAI = &GetZeroAI_grethok_the_controller;
-    newscript->RegisterSelf(true);
+    newscript->RegisterSelf(false);
 	
 	newscript = new Script;
     newscript->Name = "TotemGlebe";
