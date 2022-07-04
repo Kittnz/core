@@ -436,6 +436,39 @@ CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
 }
 
 
+class npc_chaplain_and_sister_AI : public npc_escortAI
+{
+public:
+    explicit npc_chaplain_and_sister_AI(Creature* pCreature) : npc_escortAI(pCreature)
+    {
+        npc_chaplain_and_sister_AI::Reset();
+    }
+
+private:
+    std::uint32_t m_uiChat_Timer{};
+
+public:
+    void Reset() override
+    {
+        m_uiChat_Timer = 0;
+    }
+
+    void WaypointReached(const uint32 uiPointId) override
+    {
+
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+
+    }
+};
+
+CreatureAI* GetAI_npc_chaplain_and_sister(Creature* pCreature)
+{
+    return new npc_chaplain_and_sister_AI(pCreature);
+}
+
 //////////////////////////////////////////
 // Shadow Wing
 //////////////////////////////////////////
@@ -547,6 +580,11 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript = new Script;
     pNewscript->Name = "npc_citadel_interrogator";
     pNewscript->GetAI = &GetAI_npc_citadel_interrogator;
+    pNewscript->RegisterSelf();
+
+    pNewscript = new Script;
+    pNewscript->Name = "npc_chaplain_and_sister";
+    pNewscript->GetAI = &GetAI_npc_chaplain_and_sister;
     pNewscript->RegisterSelf();
 
     // Shadow Wing
