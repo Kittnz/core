@@ -27,10 +27,14 @@ enum ScarletCitadelUnit : uint32
     NPC_ABBENDIS = 2000003,
 
     // Caster's Nightmare Trash (First Wing)
-    NPC_ERIC_DARK = 2000004,
+    NPC_ERIC_VESPER = 2000004,
     NPC_CITADEL_INQUISITOR = 2000033,
     NPC_CITADEL_VALIANT = 2000034,
-    NPC_CITADEL_FOOTMAN = 2000035
+    NPC_CITADEL_FOOTMAN = 2000035,
+
+    // RP Event
+    NPC_SCARLET_CHAPLAIN = 2000005,
+    NPC_SCARLET_SISTER = 2000006
 };
 
 enum ScarletCitadelEncounter : uint32
@@ -39,6 +43,8 @@ enum ScarletCitadelEncounter : uint32
     TYPE_ARDAEUS,
     TYPE_MARIELLA,
     TYPE_ABBENDIS,
+
+    TYPE_ERIC_VESPER,
 
     MAX_ENCOUNTER
 };
@@ -58,7 +64,10 @@ enum ScarletCitadelData : uint32
     DATA_ARDAEUS_GUID,
     DATA_MARIELLA_GUID,
     DATA_ABBENDIS_GUID,
-    DATA_ERIC_DARK_GUID,
+    DATA_ERIC_VESPER_GUID,
+
+    DATA_SCARLET_CHAPLAIN_GUID,
+    DATA_SCARLET_SISTER_GUID,
 
     MAX_DATA
 };

@@ -15,6 +15,7 @@ class npc_eric_vesper_AI : public ScriptedAI
 public:
     explicit npc_eric_vesper_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         npc_eric_vesper_AI::Reset();
     }
 
@@ -31,6 +32,8 @@ private:
 
     std::vector<ObjectGuid> m_vSpawnedAdds;
 
+    instance_scarlet_citadel* m_pInstance{};
+
 public:
     void Reset() override
     {
@@ -40,13 +43,6 @@ public:
         m_uiEnergize_Timer = nsERIC_VESPER::TIMER_ENERGIZE;
         m_uiRandomFightText_Timer = nsERIC_VESPER::TIMER_RANDOM_TEXT;
 
-        DespawnAdds();
-
-        if (m_creature->HasAura(nsERIC_VESPER::SPELL_ENERGIZE))
-        {
-            m_creature->RemoveAurasDueToSpell(nsERIC_VESPER::SPELL_ENERGIZE);
-        }
-
         // Areatrigger
         m_bIsTrashAllowedToSpawn = true;
         m_uiCheckPulse = nsERIC_VESPER::TIMER_CHECK_PULSE;
@@ -54,17 +50,42 @@ public:
 
     void Aggro(Unit* /*pWho*/) override
     {
+        if (!m_pInstance)
+            return;
+
         m_creature->SetInCombatWithZone();
         m_creature->SetPower(POWER_MANA, 0);
+
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ERIC_VESPER, IN_PROGRESS);
+    }
+
+    void JustReachedHome() override
+    {
+        if (!m_pInstance)
+            return;
+
+        DespawnAdds();
+
+        if (m_creature->HasAura(nsERIC_VESPER::SPELL_ENERGIZE))
+        {
+            m_creature->RemoveAurasDueToSpell(nsERIC_VESPER::SPELL_ENERGIZE);
+        }
+
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ERIC_VESPER, FAIL);
     }
 
     void JustDied(Unit* /*pKiller*/) override
     {
+        if (!m_pInstance)
+            return;
+
         DespawnAdds();
 
         m_creature->SetRespawnDelay(7200); // Respawn Eric Dark once again after 2 hours if Boss Araeus isn't dead yet (partly handled in boss_ardaeus.cpp)
 
         m_creature->MonsterSay(nsERIC_VESPER::TEXT_DIED);
+
+        m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ERIC_VESPER, DONE);
     }
 
     void AreaTrigger(const uint32& uiDiff)
