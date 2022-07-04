@@ -7,6 +7,7 @@
 
 #include "scriptPCH.h"
 #include "scarlet_citadel.h"
+#include "boss_abbendis.hpp"
 
 
 struct boss_abbendisAI : public ScriptedAI
