@@ -99,8 +99,8 @@ REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `displa
 -- Reserved Range 1300000-1300100
 REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
 -- Bosses
-(1300000, 2000000, 0, 0, 0, 45, 0, 0, 67.3897, 13.3098, 16.8691, 6.2806, 25, 25, 0, 100, 100, 0, 1, 200),  -- Boss High Monk Daelus
-(1300001, 2000001, 0, 0, 0, 45, 0, 0, 283.91, -116.886, 16.8717, 3.14647, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss Grand Magi Ardaeus
+(1300000, 2000000, 0, 0, 0, 45, 0, 0, 67.3897, 13.3098, 16.8691, 6.2806, 25, 25, 0, 100, 100, 0, 1, 200),  -- Boss Sacred Fist Daelus
+(1300001, 2000001, 0, 0, 0, 45, 0, 0, 283.91, -116.886, 16.8717, 3.14647, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss Grand Sorcerer Ardaeus
 (1300002, 2000002, 0, 0, 0, 45, 0, 0, 188.304, 48.5719, 32.8437, 6.28209, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss High Inquisitor Mariella
 (1300003, 2000003, 0, 0, 0, 45, 0, 0, 420.76, -120.074, 35.7493, 1.55949, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss High General Abbendis
 -- Easter Eggs

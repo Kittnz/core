@@ -101,6 +101,14 @@ namespace nsChaplainAndSister
 		{ 232.759308f, -116.55590f, 15.988533f, 0.00288f }  // 6
 	};
 
+	static const float vfAreaTrigger[][5] =
+	{
+		{ 149.825424f, -63.006302f, 16.868986f, 0.f, 10.f }
+	};
+
+	static constexpr std::uint32_t TIMER_CHECK_PULSE{ 1000 };
+
+	// Event #1
 	static constexpr auto strChaplainConv_0_0{ "Lady Abbendis has been meditating for the past few days to communicate with the Light." };
 	static constexpr auto strSisterConv_0_0{ "Do you believe the Light will finally answer?" };
 	static constexpr auto strChaplainConv_0_1{ "Is that doubt I hear sister? Mumble around the wrong people and you will be hanged." };
@@ -109,6 +117,7 @@ namespace nsChaplainAndSister
 	static constexpr auto strSisterConv_0_2{ "You speak truthfully. I wonder what would happen if it'd ever cross our paths." };
 	static constexpr auto strChaplainConv_0_3{ "The Light's Justice will be met." };
 
+	// Event #2
 	static constexpr auto strChaplainConv_1_0{ "The Scourge will come." };
 	static constexpr auto strSisterConv_1_0{ "And we will be ready." };
 	static constexpr auto strChaplainConv_1_1{ "Without our other leaders we are lost." };
@@ -116,6 +125,7 @@ namespace nsChaplainAndSister
 	static constexpr auto strChaplainConv_1_2{ "Perhaps, if not we will forge it ourselves." };
 	static constexpr auto strSisterConv_1_2{ "It is nothing but the truth you're speaking my friend." };
 
+	// Event #3
 	static constexpr auto strChaplainConv_2_0{ "The new recruits will help us in our campaign to Northrend." };
 	static constexpr auto strSisterConv_2_0{ "Are we certain that attacking their very heart is the best decision?" };
 	static constexpr auto strChaplainConv_2_1{ "The Dread Citadel has fallen, without the Cult of the Damned the Scourge is nothing but fodder." };

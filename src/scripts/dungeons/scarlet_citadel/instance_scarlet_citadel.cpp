@@ -117,6 +117,7 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
 {
     switch (pCreature->GetEntry())
     {
+        // Bosses
         case ScarletCitadelUnit::NPC_DAELUS:
         {
             m_auiData[ScarletCitadelData::DATA_DAELUS_GUID] = pCreature->GetObjectGuid();
@@ -141,9 +142,22 @@ void instance_scarlet_citadel::OnCreatureCreate(Creature* pCreature)
             m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
-        case ScarletCitadelUnit::NPC_ERIC_DARK:
+        case ScarletCitadelUnit::NPC_ERIC_VESPER:
         {
-            m_auiData[ScarletCitadelData::DATA_ERIC_DARK_GUID] = pCreature->GetObjectGuid();
+            m_auiData[ScarletCitadelData::DATA_ERIC_VESPER_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
+            break;
+        }
+        // RP Event
+        case ScarletCitadelUnit::NPC_SCARLET_CHAPLAIN:
+        {
+            m_auiData[ScarletCitadelData::DATA_SCARLET_CHAPLAIN_GUID] = pCreature->GetObjectGuid();
+            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
+            break;
+        }
+        case ScarletCitadelUnit::NPC_SCARLET_SISTER:
+        {
+            m_auiData[ScarletCitadelData::DATA_SCARLET_SISTER_GUID] = pCreature->GetObjectGuid();
             m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
             break;
         }
