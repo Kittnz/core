@@ -3886,6 +3886,66 @@ bool ChatHandler::HandleBanListIPCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleWarnCharacterCommand(char* args)
+{
+    Player* target;
+    ObjectGuid playerGuid;
+    std::string target_name;
+    if (!ExtractPlayerTarget(&args, &target, &playerGuid, &target_name))
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PlayerCacheData const* playerData = sObjectMgr.GetPlayerDataByGUID(playerGuid.GetCounter());
+
+    if (!playerData)
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::string authorName = m_session ? m_session->GetPlayerName() : "Console";
+
+    char* reason = ExtractQuotedOrLiteralArg(&args);
+
+    if (!reason)
+    {
+        PSendSysMessage("You must provide a reason. Please try again.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    MangosStrings mstring = LANG_WARN_INFORM;
+    sWorld.WarnAccount(playerData->uiAccount, authorName, reason, "WARN");
+
+    if (target)
+    {
+        if (mstring == LANG_WARN_INFORM)
+        {
+            ChatHandler(target->GetSession()).PSendSysMessage(mstring, reason);
+            target->GetSession()->SendNotification(mstring, reason);
+
+            PSendSysMessage("|cFFFF1100 Account #%u (Character: %s) has been warned for: |r \n \"%s\"",
+                playerData->uiAccount, playerData->sName.c_str(), reason);
+        }
+        else
+        {
+            ChatHandler(target->GetSession()).PSendSysMessage(("|cFFFF1100 " + (std::string)GetMangosString(mstring) + "|r").c_str());
+            target->GetSession()->SendNotification(mstring);
+            // full warn text for GM
+            /*PSendSysMessage("|cFFFF1100 Account #%u (character %s) has been warned (warn id:%u) for |r \n \"%s\"",
+                playerData->uiAccount, playerData->sName.c_str(), mstring_id_reason, (std::string("WARN: ") + (char*)GetMangosString(mstring_id_reason)).c_str());
+            PSendSysMessage("|cFFFF1100 Account #%u (character %s): a note (warn id:%u) has been added |r \n \"%s\"",
+                playerData->uiAccount, playerData->sName.c_str(), mstring_id_reason, (std::string("NOTE: ") + (char*)GetMangosString(mstring_id_reason)).c_str());*/
+        }
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleRespawnCommand(char* /*args*/)
 {
     Player* pl = m_session->GetPlayer();
