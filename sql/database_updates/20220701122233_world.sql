@@ -63,8 +63,10 @@ replace into item_template values
  '0', '1', NULL);
 
 replace into creature_loot_template values
-(5974,60628,-100,1,1,1,0),
-(5975,60628,-100,1,1,1,0);
+(5974,60628,-90,1,1,1,0),
+(5975,60628,-90,1,1,1,0),
+(5977,60628,-90,1,1,1,0),
+(5978,60628,-90,1,1,1,0);
 
 -- Shadowsworn Pendant Bounty
 delete from quest_template where entry = 40431;
@@ -87,7 +89,7 @@ replace into item_template values
  '0', '1', NULL);
 
 replace into item_template values
- ('60632', '4', '2', 'Riftseeker Gloves', '', '5928', '2', '0', '1', '37368', '9342', '10', '-1', '-1', '58',
+ ('60632', '4', '2', 'Riftseeker Gloves', '', '14603', '2', '0', '1', '37368', '9342', '10', '-1', '-1', '58',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '13', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '93', '0', '0', '0',
@@ -159,7 +161,7 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60637,10923,'Pristine Helboar Brain',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 replace into creature_loot_template values
-(5993,60637,-10,1,1,1,0);
+(5993,60637,-40,1,1,1,0);
 
 -- Finding Private Holson
 delete from quest_template where entry = 40436;
@@ -206,7 +208,7 @@ update creature_template set script_name = 'npc_engineer_wigglestip' where entry
 
 -- Fel Energy Irregularities II
 delete from quest_template where entry = 40439;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40438,40439,2,4,54,45,0,0,'Fel Energy Irregularities II','Well, this news certainly reinforces my assumptions, and what I have been studying. The Blasted Land\'s has become even more unstable, the energies within the region are beginning to grow in power.\n\nI have been preparing a report that I need delivered to my superior\'s in the Kirin Tor, and I need you to deliver it at once. Communication at such a distance is impossible with the raging storms so I am relying on you.\n\n Travel to Dalaran at once, and deliver this report to Archmage Ansirem Runeweaver.','Travel to Dalaran, and deliver the Sealer Nethergarde Report to Archmage Ansirem Runeweaver.','Yes?','Ahh yes, I sensed that you would be coming, I can practically feel the energy from the letter you carry.\n\n<Upon taking the report, Ansirem Runeweaver would read with caution.>\n\nI see.\n\nSo it is going as predicted, it would appear we may need to be more hands on to manage the growing instability within the Blasted Lands, let us hope there is no outside interferance that is causing the increased magical irregularities.',60641,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60641,1,0,2650,61,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40438,40439,2,4,54,45,0,0,'Fel Energy Irregularities II','Well, this news certainly reinforces my assumptions, and what I have been studying. The Blasted Land\'s has become even more unstable, the energies within the region are beginning to grow in power.\n\nI have been preparing a report that I need delivered to my superior\'s in the Kirin Tor, and I need you to deliver it at once. Communication at such a distance is impossible with the raging storms so I am relying on you.\n\n Travel to Dalaran at once, and deliver this report to Archmage Ansirem Runeweaver.','Travel to Dalaran, and deliver the Sealed Nethergarde Report to Archmage Ansirem Runeweaever.','Yes?','Ahh yes, I sensed that you would be coming, I can practically feel the energy from the letter you carry.\n\n<Upon taking the report, Ansirem Runeweaver would read with caution.>\n\nI see.\n\nSo it is going as predicted, it would appear we may need to be more hands on to manage the growing instability within the Blasted Lands, let us hope there is no outside interferance that is causing the increased magical irregularities.',60641,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60641,1,0,2650,61,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (5385, 40439);
 replace into creature_involvedrelation (id, quest) values (2543, 40439);
@@ -250,7 +252,7 @@ replace into creature_involvedrelation (id, quest) values (14463, 40442);
 
 -- Fel Energy Irregularities VI
 delete from quest_template where entry = 40443;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40442,40443,2,4,60,45,0,0,'Fel Energy Irregularities VI','Heh.. He has a question, does he?\n\n<The old, withered man lets out a crooked laugh, a wiry smirk resting upon his aged features.>\n\nI haven\'t spoken to Mahar Ba in a long, long time, if he wants information, than I need something done, favor or no favor!\n\nIf you want to know the truth, than I require something from you.\n\nWithin the Tainted Scar lies a secretive race of demon, the Dreadlord, I have been meaning to practice all sorts of magic and I need a singular heart. Bring me a Dreadlord Heart, and I shall tell you what I know.','Travel to the Tainted Scar, and speak with Daio the Decrepit.','Yes yes yes, do you have my heart?','A Dreadlord Heart, oh how I desired, and needed one. You\'ve done me a real favor, I shall answer your question.',60645,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6450,61,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40442,40443,2,4,60,45,0,0,'Fel Energy Irregularities VI','Heh.. He has a question, does he?\n\n<The old, withered man lets out a crooked laugh, a wiry smirk resting upon his aged features.>\n\nI haven\'t spoken to Mahar Ba in a long, long time, if he wants information, than I need something done, favor or no favor!\n\nIf you want to know the truth, than I require something from you.\n\nWithin the Tainted Scar lies a secretive race of demon, the Dreadlord, I have been meaning to practice all sorts of magic and I need a singular heart. Bring me a Dreadlord Heart, and I shall tell you what I know.','Slay a Dreadlord within The Tainted Scar, and bring his Heart to Daio the Decrepit.','Yes yes yes, do you have my heart?','A Dreadlord Heart, oh how I desired, and needed one. You\'ve done me a real favor, I shall answer your question.',60645,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6450,61,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (14463, 40443);
 replace into creature_involvedrelation (id, quest) values (14463, 40443);
@@ -261,7 +263,7 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60645,3320,'Dreadlord Heart',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 replace into creature_loot_template values
-(8716,60645,-65,1,1,1,0);
+(8716,60645,-20,1,1,1,0);
 
 -- Fel Energy Irregularities VII
 delete from quest_template where entry = 40444;
