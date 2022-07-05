@@ -37,3 +37,9 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
  -- Manual Crowd Pummeler fix:
 update item_template set spellcharges_1 = 10 where entry = 9449;
+-- add engage /say line to Slaver Vilegrip when he is pulled: "I thought I would only be putting slacking miners in cages, now for a real fight!" 
+REPLACE INTO broadcast_text VALUES (30023, 'I thought I would only be putting slacking miners in cages, now for a real fight!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO creature_ai_scripts VALUES
+(2200019, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30023, 0, 0, 0, 0, 0, 0, 0, 0, 'Slaver Vilegrip - Say on Aggro');
+REPLACE INTO creature_ai_events VALUES
+(2200019, 60836, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200019, 0, 0, 'Slaver Vilegrip - Say on Aggro');
