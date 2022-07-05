@@ -292,3 +292,6 @@ update creature_template set script_name = 'npc_flying_mount' where entry = 5156
 delete from creature_template where entry = 60402;
 
 update quest_template set reqcreatureorgoid1 = 6560, type = 1 where entry in (40103, 40111);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1526
+update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 5 where id = 2010856;
