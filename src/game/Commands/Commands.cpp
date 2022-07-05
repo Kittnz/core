@@ -79,6 +79,8 @@
 #include <string.h>
 #include <typeinfo>
 #include <regex>
+#include <iomanip>
+#include <sstream>
 #include <ctime>
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
@@ -9028,6 +9030,113 @@ bool ChatHandler::HandleModifyMoneyCommand(char* args)
     }
 
     DETAIL_LOG(GetMangosString(LANG_NEW_MONEY), moneyuser, addmoney, chr->GetMoney());
+
+    return true;
+}
+
+std::string MakeTimeString(time_t timestamp)
+{
+    auto tm = *std::localtime(&timestamp);
+    
+    std::ostringstream ss;
+    ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+    return ss.str();
+}
+
+constexpr const char* ItemLogActionToString(LogItemAction action)
+{
+    switch (action)
+    {
+    case LogItemAction::Auctioned:
+        return "Auctioned";
+    case LogItemAction::Deleted:
+        return "Deleted";
+    case LogItemAction::Disenchanted:
+        return "Disenchanted";
+    case LogItemAction::Looted:
+        return "Looted";
+    case LogItemAction::Mailed:
+        return "Mailed";
+    case LogItemAction::MailReceived:
+        return "Received in Mail";
+    case LogItemAction::Sold:
+        return "Sold";
+    case LogItemAction::Traded:
+        return "Traded";
+    case LogItemAction::TradeReceived:
+        return "Received from Trade";
+    default:
+        return "<>";
+    }
+}
+
+bool ChatHandler::HandleItemLogCommand(char* args)
+{
+    constexpr uint32 limit = 100;
+
+    Player* target;
+    ObjectGuid playerGuid;
+    if (!ExtractPlayerTarget(&args, &target, &playerGuid))
+        return false;
+
+    int32 itemId;
+    if (!ExtractInt32(&args, itemId))
+    {
+        SendSysMessage("Supply item Id.");
+        return false;
+    }
+
+    if (itemId < 0)
+        itemId = 0;
+
+    PSendSysMessage("List of item logs for item ID %i : ", itemId);
+
+    if (target)
+    {
+        const auto& logs = target->GetItemLogs();
+        const auto& entryLogs = logs.find((uint32)itemId);
+        if (entryLogs != logs.end())
+        {
+            auto beginItr = entryLogs->second.begin();
+            auto itr = entryLogs->second.size() >= limit ? beginItr + limit : --entryLogs->second.end();
+
+            //now iterate backwards..
+            for (; itr != beginItr; --itr)
+            {
+                PSendSysMessage("%s: Item entry %u, count %u, guid %u %s.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
+            }
+
+            //one extra for beginitr
+            PSendSysMessage("%s: Item entry %u, count %u, guid %u %s.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
+        }
+
+    }
+    else
+    {
+        //target is offline, use playerGuid
+        std::unique_ptr<QueryResult> result = std::unique_ptr<QueryResult>{
+            CharacterDatabase.PQuery("SELECT itemLowGuid, itemEntry, itemCount, action, timestamp FROM character_item_logs WHERE playerLowGuid = '%u' AND itemEntry = '%u' ORDER BY timestamp DESC LIMIT %u", playerGuid.GetCounter(), (uint32)itemId, limit)
+        };
+
+        std::vector<LogItemInfo> logs;
+
+        do {
+            Field* fields = result->Fetch();
+            uint32 itemLowGuid = fields[0].GetUInt32();
+            uint32 itemEntry = fields[1].GetUInt32();
+            uint32 count = fields[2].GetUInt32();
+            uint32 action = fields[3].GetUInt32();
+            uint64 timestamp = fields[4].GetUInt64();
+
+            logs.push_back({ itemLowGuid, itemEntry, timestamp, count, static_cast<LogItemAction>(action) });
+        } while (result->NextRow());
+
+
+        for (auto itr = logs.rbegin(); itr != logs.rend(); ++itr)
+        {
+            PSendSysMessage("%s: Item entry %u, count %u, guid %u |cff1c9c27%s|r.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
+        }
+    }
 
     return true;
 }
