@@ -35,3 +35,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ah, the sooty air of Searing Gorge, feels great after the smoldering air of Blackrock Mountain and smells of riches and opportunities. One has to be a fool to not exploit it, I\'m sure the others feel the same. Now tell me, how can I help you, or how can you help me?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+ -- Manual Crowd Pummeler fix:
+update item_template set spellcharges_1 = 10 where entry = 9449;
