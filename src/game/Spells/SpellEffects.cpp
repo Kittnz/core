@@ -1934,6 +1934,120 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46003: // Illusions
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        uint32 displayid{ 0 };
+                        bool male = m_caster->ToPlayer()->GetGender() == GENDER_MALE;
+
+                        switch (m_CastItem->GetEntry())
+                        {
+                        case 51246: displayid = 15458;  break; // Sarah Sadwhistle 
+                        case 51247: displayid = 10008;  break; // Chromie
+                        case 51055: displayid = 18356;  break; // Tree Form
+                        case 51065: displayid = 4629;   break; // Shadow
+                        case 51209: displayid = 2176;   break; // Rat
+                        case 81145: displayid = 18251;  break; // Pandaren
+                        case 51066: displayid = 12030;  break; // Flamewaker
+                        case 51067: displayid = 8053;   break; // Bone Serpent
+                        case 51205: displayid = 14368;  break; // Ghost
+                        case 50435: displayid = 10543;  break; // Dreadlord
+                        case 50436: displayid = 7803;   break; // Smolderthorn Berserker
+                        case 50437: displayid = 4923;   break; // Naga Explorer
+                        case 50438: displayid = 11263;  break; // Naga Siren 
+                        case 80175: displayid = 6292;   break; // Bronze Whelpling
+                        case 50408: displayid = ((male) ? 150 : 876);  break; // Dryad
+                        case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
+                        case 80694: // Scourge
+                        {
+                            int models[3] = { 158, 612, 733 };
+                            int modelid = rand() % 3;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 51253: // Furbolg
+                        {
+                            int models[3] = { 6746, 5773, 11363 };
+                            int modelid = rand() % 3;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 50439: // Harpy
+                        {
+                            int models[3] = { 3022, 10872, 1352 };
+                            int modelid = rand() % 3;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 51200: // Goblin
+                        {
+                            int m_male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+                            int m_female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+                            int modelid = rand() % 9;
+                            displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
+                            break;
+                        }
+                        case 51201: // Worgen
+                        {
+                            int models[3] = { 522, 523, 524 };
+                            int modelid = rand() % 3;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 80648: // Gnoll
+                        {
+                            int models[4] = { 487, 383, 384, 491 };
+                            int modelid = rand() % 4;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 53008: // Two-headed Ogre
+                        {
+                            int models[7] = { 18065, 18066, 18067, 18068, 18069, 18070, 18182 };
+                            int modelid = rand() % 7;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 51206: // Banshee
+                        {
+                            int models[4] = { 8782, 10728, 10750, 10994 };
+                            int modelid = rand() % 4;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 51207: // Serpent Lord
+                        {
+                            int m_male[5] = { 4232, 4214, 4215, 4212, 4213 };
+                            int m_female[5] = { 4233, 4234, 4313, 4233, 4234 };
+                            int modelid = rand() % 5;
+                            displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
+                            break;
+                        }
+                        case 51208: // Succubus
+                        {
+                            int models[4] = { 10923, 10924, 10925, 10926 };
+                            int modelid = rand() % 4;
+                            displayid = static_cast<uint32>(models[modelid]);
+                            break;
+                        }
+                        case 50017: // Blood Elf
+                        case 51203: // High Elf
+                        {
+                            int m_male[6] = { 10375, 4245, 6779, 14394, 11671, 6549 };
+                            int m_female[6] = { 4729,  4729, 3293, 4730,  1643, 10381 };
+                            int modelid = rand() % 6;
+                            displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
+                            break;
+                        }
+                        default: break;
+                        }
+                        if (m_caster->ToPlayer()->GetDisplayId() == displayid)
+                            m_caster->ToPlayer()->DeMorph();
+                        else
+                            m_caster->ToPlayer()->SetDisplayId(displayid);
+                    }
+                }
                 case 46010: // Teleport to Guild House
                 {
                     if (m_caster && m_caster->IsPlayer())

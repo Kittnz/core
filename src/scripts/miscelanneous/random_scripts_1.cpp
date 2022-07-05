@@ -338,129 +338,6 @@ bool ItemUseSpell_turtle_party(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUseSpell_item_illusion(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    if (!pPlayer) return false;
-
-    if (pPlayer->InBattleGround())
-    {
-        pPlayer->GetSession()->SendNotification("Can't use this item on the battleground.", pPlayer->GetLevel());
-        return false;
-    }
-
-    if (pPlayer->GetNativeDisplayId() != pPlayer->GetDisplayId()) 
-    {
-        pPlayer->DeMorph();
-        return false;
-    }
-
-    uint32 displayid{ 0 };
-    bool male = pPlayer->GetGender() == GENDER_MALE;
-
-    switch (pItem->GetEntry())
-    {
-    case 51246: displayid = 15458; break; // Sarah Sadwhistle 
-    case 51247: displayid = 10008; break; // Chromie
-    case 51055: displayid = 18356;  break; // Tree Form
-    case 51065: displayid = 4629;  break; // Shadow
-    case 51209: displayid = 2176;  break; // Rat
-    case 81145: displayid = 18251; break; // Pandaren
-    case 51066: displayid = 12030; break; // Flamewaker
-    case 51067: displayid = 8053;  break; // Bone Serpent
-    case 51205: displayid = 14368; break; // Ghost
-    case 50435: displayid = 10543; break; // Dreadlord
-    case 50436: displayid = 7803; break; // Smolderthorn Berserker
-    case 50437: displayid = 4923; break; // Naga Explorer
-    case 50438: displayid = 11263; break; // Naga Siren 
-    case 50408: displayid = ((male) ? 150 : 876);  break; // Dryad
-    case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
-    case 80694: // Scourge
-    {
-        int models[3] = { 158, 612, 733 };
-        int modelid = rand() % 3;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 51253: // Furbolg
-    {
-        int models[3] = { 6746, 5773, 11363 };
-        int modelid = rand() % 3;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 50439: // Harpy
-    {
-        int models[3] = { 3022, 10872, 1352 };
-        int modelid = rand() % 3;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 51200: // Goblin
-    {
-        int m_male[9] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
-        int m_female[9] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
-        int modelid = rand() % 9;
-        displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
-        break;
-    }
-    case 51201: // Worgen
-    {
-        int models[3] = { 522, 523, 524 };
-        int modelid = rand() % 3;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 80648: // Gnoll
-    {
-        int models[4] = { 487, 383, 384, 491 };
-        int modelid = rand() % 4;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 53008: // Two-headed Ogre
-    {
-        int models[7] = { 18065, 18066, 18067, 18068, 18069, 18070, 18182 };
-        int modelid = rand() % 7;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 51206: // Banshee
-    {
-        int models[4] = { 8782, 10728, 10750, 10994 };
-        int modelid = rand() % 4;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 51207: // Serpent Lord
-    {
-        int m_male[5] = { 4232, 4214, 4215, 4212, 4213 };
-        int m_female[5] = { 4233, 4234, 4313, 4233, 4234 };
-        int modelid = rand() % 5;
-        displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
-        break;
-    }
-    case 51208: // Succubus
-    {
-        int models[4] = { 10923, 10924, 10925, 10926 };
-        int modelid = rand() % 4;
-        displayid = static_cast<uint32>(models[modelid]);
-        break;
-    }
-    case 50017: // Blood Elf
-    case 51203: // High Elf
-    {
-        int m_male[6]   = { 10375, 4245, 6779, 14394, 11671, 6549 };
-        int m_female[6] = { 4729,  4729, 3293, 4730,  1643, 10381 };
-        int modelid = rand() % 6;
-        displayid = static_cast<uint32>((male) ? m_male[modelid] : m_female[modelid]);
-        break;
-    }
-    default: break;
-    }
-    pPlayer->SetDisplayId(displayid);
-    return true;
-}
-
 bool ItemUseSpell_item_winter_tree(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
 	if (!pPlayer)
@@ -2454,7 +2331,8 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); 
         pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
         return true;
-    case 51686: // Feralas Gryphon
+    case 51569: // Riding Gryphon
+    case 51686: // Beaky (Gryphon)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3); 
         pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
         return true;
@@ -6508,41 +6386,6 @@ struct npc_speaker_gantoAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_speaker_ganto(Creature* _Creature) { return new npc_speaker_gantoAI(_Creature); }
 
-struct npc_stone_guardAI : public ScriptedAI
-{
-    npc_stone_guardAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset()
-    {
-        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
-    }
-    void UpdateAI(const uint32 diff)
-    {
-        std::list<Player*> players;
-        MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
-        MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-        Cell::VisitWorldObjects(me, searcher, 15.0f);
-
-        for (Player* pPlayer : players)
-        {
-            if ((pPlayer->HasItemCount(60102, 1, false) && !m_creature->IsInCombat()) || (pPlayer->IsInCombat()))
-            {
-                m_creature->Attack(pPlayer, true);
-                m_creature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
-                DoMeleeAttackIfReady();
-            }
-        }
-    }
-    void EnterCombat()
-    {
-        m_creature->MonsterSay("Interference of the masters property detected, dispatching intruders.");
-    }
-    void JustRespawned() { Reset(); }
-};
-
-CreatureAI* GetAI_npc_stone_guard(Creature* _Creature) { return new npc_stone_guardAI(_Creature); }
-
 bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -7053,11 +6896,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "npc_magtoor";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_magtoor;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_stone_guard";
-    newscript->GetAI = &GetAI_npc_stone_guard;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -7697,11 +7535,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_schnapps";
     newscript->pItemUseSpell = &ItemUseSpell_turtle_party;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_illusion";
-    newscript->pItemUseSpell = &ItemUseSpell_item_illusion;
     newscript->RegisterSelf();
 
     newscript = new Script;

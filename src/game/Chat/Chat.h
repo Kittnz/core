@@ -249,6 +249,7 @@ class ChatHandler
         bool HandleBanListAccountCommand(char* args);
         bool HandleBanListCharacterCommand(char* args);
         bool HandleBanListIPCommand(char* args);
+        bool HandleWarnCharacterCommand(char* args);
 
         bool HandleCastCommand(char* args);
         bool HandleCastSelfCommand(char* args);

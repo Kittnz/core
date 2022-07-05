@@ -2134,6 +2134,16 @@ void World::KickAllLess(AccountTypes sec)
                 session->KickPlayer();
 }
 
+void World::WarnAccount(uint32 accountId, std::string from, std::string reason, const char* type)
+{
+    LoginDatabase.escape_string(from);
+    reason = std::string(type) + ": " + reason;
+    LoginDatabase.escape_string(reason);
+
+    LoginDatabase.PExecute("INSERT INTO account_banned (id, bandate, unbandate, bannedby, banreason, active, realm) VALUES ('%u', UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+1, '%s', '%s', '0', %u)",
+        accountId, from.c_str(), reason.c_str(), realmID);
+}
+
 void World::BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author)
 {
     LoginDatabase.escape_string(reason);
