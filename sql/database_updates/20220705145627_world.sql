@@ -285,3 +285,10 @@ replace into object_scaling values (17370434099521284515, 1.4);
 -- Flying mount:
 
 update creature_template set script_name = 'npc_flying_mount' where entry = 51569;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/681
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1528
+
+delete from creature_template where entry = 60402;
+
+update quest_template set reqcreatureorgoid1 = 6560, type = 1 where entry in (40103, 40111);
