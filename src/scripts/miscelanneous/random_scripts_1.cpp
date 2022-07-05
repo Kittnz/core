@@ -2331,7 +2331,8 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2); 
         pPlayer->SEND_GOSSIP_MENU(1, pCreature->GetGUID());
         return true;
-    case 51686: // Feralas Gryphon
+    case 51569: // Riding Gryphon
+    case 51686: // Beaky (Gryphon)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3); 
         pPlayer->SEND_GOSSIP_MENU(90366, pCreature->GetGUID());
         return true;
