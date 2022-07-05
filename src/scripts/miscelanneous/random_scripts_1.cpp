@@ -6386,41 +6386,6 @@ struct npc_speaker_gantoAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_speaker_ganto(Creature* _Creature) { return new npc_speaker_gantoAI(_Creature); }
 
-struct npc_stone_guardAI : public ScriptedAI
-{
-    npc_stone_guardAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset()
-    {
-        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
-    }
-    void UpdateAI(const uint32 diff)
-    {
-        std::list<Player*> players;
-        MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
-        MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-        Cell::VisitWorldObjects(me, searcher, 15.0f);
-
-        for (Player* pPlayer : players)
-        {
-            if ((pPlayer->HasItemCount(60102, 1, false) && !m_creature->IsInCombat()) || (pPlayer->IsInCombat()))
-            {
-                m_creature->Attack(pPlayer, true);
-                m_creature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
-                DoMeleeAttackIfReady();
-            }
-        }
-    }
-    void EnterCombat()
-    {
-        m_creature->MonsterSay("Interference of the masters property detected, dispatching intruders.");
-    }
-    void JustRespawned() { Reset(); }
-};
-
-CreatureAI* GetAI_npc_stone_guard(Creature* _Creature) { return new npc_stone_guardAI(_Creature); }
-
 bool QuestRewarded_npc_magtoor(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -6931,11 +6896,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "npc_magtoor";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_magtoor;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_stone_guard";
-    newscript->GetAI = &GetAI_npc_stone_guard;
     newscript->RegisterSelf();
 
     newscript = new Script;
