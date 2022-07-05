@@ -445,6 +445,8 @@ void WorldSession::HandleSendMailCallback(WorldSession::AsyncMailSendRequest* re
                                 GetPlayerName(), GetAccountId(), item->GetProto()->Name1, item->GetEntry(), item->GetCount(), req->receiver.GetString().c_str(), rc_account);
             }
 
+            loadedPlayer->LogItem(item, LogItemAction::Mailed);
+
             loadedPlayer->MoveItemFromInventory(item->GetBagSlot(), item->GetSlot(), true);
             CharacterDatabase.BeginTransaction(loadedPlayer->GetGUIDLow());
             item->DeleteFromInventoryDB();                  // deletes item from character's inventory
@@ -755,6 +757,8 @@ void WorldSession::HandleMailTakeItem(WorldPacket& recv_data)
         m->state = MAIL_STATE_CHANGED;
         pl->MarkMailsUpdated();
         pl->RemoveMItem(it->GetGUIDLow());
+
+        loadedPlayer->LogItem(it, LogItemAction::MailReceived);
 
         uint32 count = it->GetCount();                      // save counts before store and possible merge with deleting
         it->SetState(ITEM_UNCHANGED);                       // need to set this state, otherwise item cannot be removed later, if necessary

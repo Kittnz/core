@@ -47,6 +47,8 @@
 #include <vector>
 #include <functional>
 #include <cstddef>
+#include <any>
+#include <deque>
 
 struct Mail;
 class Channel;
@@ -230,6 +232,30 @@ struct PlayerLevelInfo
 {
     uint8 stats[MAX_STATS] = { 0 };
 };
+
+enum class LogItemAction
+{
+    Looted = 1,
+    TradeReceived,
+    MailReceived,
+    Deleted,
+    Sold,
+    Disenchanted,
+    Traded,
+    Auctioned,
+    Mailed
+};
+
+struct LogItemInfo
+{
+    uint32 guidLow;
+    uint32 entry;
+    uint64 timestamp;
+    uint32 count;
+    LogItemAction action;
+};
+
+
 
 typedef std::list<uint32> PlayerCreateInfoSpells;
 
@@ -622,6 +648,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_BATTLEGROUND_DATA,
     PLAYER_LOGIN_QUERY_FORGOTTEN_SKILLS,
     PLAYER_LOGIN_QUERY_LOADVARIABLES,
+    PLAYER_LOGIN_QUERY_ITEM_LOGS,
 
     MAX_PLAYER_LOGIN_QUERY
 };
@@ -1039,6 +1066,9 @@ class Player final: public Unit
     private:
         std::unordered_map<PlayerVariables, std::string> m_variables;
 
+        std::unordered_map<uint32, std::deque<LogItemInfo>> m_itemLogs; // itemEntry, (lowGuid, struct)
+        std::vector<LogItemInfo> m_unsavedItemLogs;
+
         ObjectGuid m_lootGuid;
         Item* m_items[PLAYER_SLOTS_COUNT];
         uint32 m_currentBuybackSlot;
@@ -1204,6 +1234,11 @@ class Player final: public Unit
         void SendNewItem(Item* item, uint32 count, bool received, bool created, bool broadcast = false, bool showInChat = true);
         bool BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, uint8 bag, uint8 slot);
         void OnReceivedItem(Item* item);
+
+
+        const auto& GetItemLogs() const { return m_itemLogs; }
+
+        void LogItem(Item* item, LogItemAction action, uint32 count = 0);
 
         float GetReputationPriceDiscount(Creature const* pCreature) const;
 
@@ -1408,6 +1443,7 @@ class Player final: public Unit
         void LoadSkillsFromFields();
         void _LoadSpells(QueryResult* result);
         void _LoadPlayerVariables(QueryResult* result);
+        void _LoadPlayerItemLogs(QueryResult* result);
         bool _LoadHomeBind(QueryResult* result);
         void _LoadBGData(QueryResult* result);
         void _LoadIntoDataField(const char* data, uint32 startOffset, uint32 count);

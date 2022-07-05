@@ -154,6 +154,14 @@ void LootStore::LoadLootTable()
                 continue;
             }
 
+            /*modify item template entries now for questable items.*/
+
+            if (storeitem.needs_quest)
+            {
+                auto itemProto = const_cast<ItemPrototype*>(ObjectMgr::GetItemPrototype(storeitem.itemid));
+                itemProto->IsQuestItem = true;
+            }
+
             // Looking for the template of the entry
             // often entries are put together
             if (m_LootTemplates.empty() || tab->first != entry)

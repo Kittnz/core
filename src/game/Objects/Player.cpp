@@ -15269,6 +15269,8 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
     _LoadPlayerVariables(holder->GetResult(PLAYER_LOGIN_QUERY_LOADVARIABLES));
 
+    _LoadPlayerItemLogs(holder->GetResult(PLAYER_LOGIN_QUERY_ITEM_LOGS));
+
     // after spell load
     InitTalentForLevel();
 
@@ -16156,6 +16158,24 @@ void Player::_LoadPlayerVariables(QueryResult* result)
     }
 }
 
+void Player::_LoadPlayerItemLogs(QueryResult* result)
+{
+    //Ordered in FIRST is NEWEST
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 itemLowGuid = fields[0].GetUInt32();
+            uint32 itemEntry = fields[1].GetUInt32();
+            uint32 count = fields[2].GetUInt32();
+            uint32 action = fields[3].GetUInt32();
+            uint64 timestamp = fields[4].GetUInt64();
+            m_itemLogs[itemEntry].push_back({ itemLowGuid, itemEntry, timestamp, count, static_cast<LogItemAction>(action) });
+        } while (result->NextRow());
+    }
+}
+
 void Player::_LoadGroup(QueryResult *result)
 {
     //QueryResult *result = CharacterDatabase.PQuery("SELECT groupId FROM group_member WHERE memberGuid='%u'", GetGUIDLow());
@@ -16705,6 +16725,15 @@ void Player::SaveToDB(bool online, bool force)
     {
         CharacterDatabase.PExecute("REPLACE INTO `character_variables` VALUES('%u', '%u', '%s')", GetGUIDLow(), (uint32)pair.first, pair.second.c_str());
     }
+
+    //only have to save ones that havent been saved yet.
+    for (const auto& info : m_unsavedItemLogs)
+    {
+        CharacterDatabase.PExecute("INSERT INTO `character_item_logs` (`playerLowGuid`, `itemLowGuid`, `itemEntry`, `itemCount`, `action`, `timestamp`) VALUES ('%u', '%u', '%u', '%u', '%u', '%llu')",
+            GetGUIDLow(), info.guidLow, info.entry, info.count, info.action, info.timestamp);
+    }
+
+    m_unsavedItemLogs.clear();
 
     // Systeme de phasing
     sObjectMgr.SetPlayerWorldMask(GetGUIDLow(), GetWorldMask());
@@ -21925,6 +21954,19 @@ void Player::RewardHonorOnDeath()
     m_damageTakenHistory.clear();
 }
 
+void Player::LogItem(Item* item, LogItemAction action, uint32 count)
+{
+    uint32 quality = item->GetProto()->Quality;
+    //log if quality is high enough or quest item logging is enabled.
+    if ((quality >= sWorld.getConfig(CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY)) ||
+        (item->GetProto()->IsQuestItem && sWorld.getConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS)))
+    {
+        LogItemInfo info{ item->GetObjectGuid().GetCounter(), item->GetEntry(), (uint64)std::time(nullptr), !count ? item->GetCount() : count, action };
+        m_itemLogs[item->GetEntry()].push_front(info); // newest goes to front
+        m_unsavedItemLogs.push_back(std::move(info));
+    }
+}
+
 void Player::OnReceivedItem(Item* item)
 {
     // Get quality of the item
@@ -21936,6 +21978,8 @@ void Player::OnReceivedItem(Item* item)
     // Write to the extra loot log readable by GMs if quality is high (Config setting)
     if (quality >= sWorld.getConfig(CONFIG_UINT32_ITEM_RARELOOT_QUALITY))
         sLog.out(LOG_RARELOOTS, "%s loots %ux%u with quality %u", GetShortDescription().c_str(), item->GetCount(),  item->GetEntry(), quality);
+
+    LogItem(item, LogItemAction::Looted);
 }
 
 

@@ -122,6 +122,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hasitem",        SEC_DEVELOPER, true,  &ChatHandler::HandleCharacterHasItemCommand,    "", nullptr },
         { "fillflys",       SEC_DEVELOPER,     true,  &ChatHandler::HandleCharacterFillFlysCommand,   "", nullptr },
         { "clean",          SEC_CONSOLE,  true,  nullptr,                                        "", characterCleanCommandTable },
+        { "itemlog",        SEC_DEVELOPER, true,     &ChatHandler::HandleItemLogCommand,          "", nullptr},
         { nullptr,          0,                   false, nullptr,                                       "", nullptr }
     };
 

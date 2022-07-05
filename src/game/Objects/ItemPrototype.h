@@ -486,6 +486,8 @@ struct ItemPrototype
     uint32 DestItemId = 0;                                  // Transmogrification
     uint32 SourceItemId = 0;                                // Transmogrification
 
+    bool IsQuestItem = false;
+
     mutable bool m_bDiscovered = false;                     // has item been discovered by players
 
     // helpers
