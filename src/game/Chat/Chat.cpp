@@ -66,6 +66,8 @@ ChatCommand * ChatHandler::getCommandTable()
         { "allip",          SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleBanAllIPCommand,            "", nullptr },
         { "character",      SEC_DEVELOPER,      true,  &ChatHandler::HandleBanCharacterCommand,        "", nullptr },
         { "ip",             SEC_DEVELOPER,      true,  &ChatHandler::HandleBanIPCommand,               "", nullptr },
+        { "ip",             SEC_DEVELOPER,      true,  &ChatHandler::HandleBanIPCommand,               "", nullptr },
+        { "warn",           SEC_MODERATOR,      true,  &ChatHandler::HandleWarnCharacterCommand,       "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
