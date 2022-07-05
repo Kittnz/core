@@ -281,3 +281,7 @@ replace into object_scaling values (17370417387618986410, 1.6);
 replace into object_scaling values (17370417387769981526, 1.2);
 replace into object_scaling values (17370434099504507298, 1.4);
 replace into object_scaling values (17370434099521284515, 1.4);
+
+-- Flying mount:
+
+update creature_template set script_name = 'npc_flying_mount' where entry = 51569;
