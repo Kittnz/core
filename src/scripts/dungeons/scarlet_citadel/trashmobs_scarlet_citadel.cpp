@@ -447,7 +447,8 @@ public:
 
 private:
     bool m_bEventStarted{};
-    std::uint32_t m_uiChat_Timer{};
+    bool m_bEventDone{};
+
     std::uint32_t m_uiCHeckPulse_Timer{};
 
     instance_scarlet_citadel* m_pInstance{};
@@ -456,7 +457,8 @@ public:
     void Reset() override
     {
         m_bEventStarted = false;
-        m_uiChat_Timer = 0;
+        m_bEventDone = false;
+
         m_uiCHeckPulse_Timer = nsChaplainAndSister::TIMER_CHECK_PULSE;
     }
 
@@ -508,53 +510,53 @@ public:
         if (!pScarletSister)
             return;
 
-        DoAfterTime(pScarletChaplain, (1 * IN_MILLISECONDS), [creature = pScarletChaplain]()
+        DoAfterTime(pScarletChaplain, (2 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
-            if (creature)
+            if (chaplain)
             {
-                creature->MonsterSay(nsChaplainAndSister::strChaplainConv_0_0, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_0, LANG_UNIVERSAL);
             }
         });
-        DoAfterTime(pScarletSister, (7 * IN_MILLISECONDS), [creature = pScarletSister]()
+        DoAfterTime(pScarletSister, (10 * IN_MILLISECONDS), [sister = pScarletSister]()
         {
-            if (creature)
+            if (sister)
             {
-                creature->MonsterSay(nsChaplainAndSister::strSisterConv_0_0, LANG_UNIVERSAL);
+                sister->MonsterSay(nsChaplainAndSister::strSisterConv_0_0, LANG_UNIVERSAL);
             }
         });
-        DoAfterTime(pScarletChaplain, (12 * IN_MILLISECONDS), [creature = pScarletChaplain]()
+        DoAfterTime(pScarletChaplain, (18 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
-            if (creature)
+            if (chaplain)
             {
-                creature->MonsterSay(nsChaplainAndSister::strChaplainConv_0_1, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_1, LANG_UNIVERSAL);
             }
         });
-        DoAfterTime(pScarletSister, (18 * IN_MILLISECONDS), [creature = pScarletSister]()
+        DoAfterTime(pScarletSister, (26 * IN_MILLISECONDS), [sister = pScarletSister]()
         {
-            if (creature)
+            if (sister)
             {
-                creature->MonsterSay(nsChaplainAndSister::strSisterConv_0_1, LANG_UNIVERSAL);
+                sister->MonsterSay(nsChaplainAndSister::strSisterConv_0_1, LANG_UNIVERSAL);
             }
         });
-        DoAfterTime(pScarletChaplain, (23 * IN_MILLISECONDS), [creature = pScarletChaplain]()
+        DoAfterTime(pScarletChaplain, (34 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
-            if (creature)
+            if (chaplain)
             {
-                creature->MonsterSay(nsChaplainAndSister::strChaplainConv_0_2, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_2, LANG_UNIVERSAL);
             }
         });
-        DoAfterTime(pScarletSister, (28 * IN_MILLISECONDS), [creature = pScarletSister]()
+        DoAfterTime(pScarletSister, (42 * IN_MILLISECONDS), [sister = pScarletSister]()
         {
-            if (creature)
+            if (sister)
             {
-                creature->MonsterSay(nsChaplainAndSister::strSisterConv_0_2, LANG_UNIVERSAL);
+                sister->MonsterSay(nsChaplainAndSister::strSisterConv_0_2, LANG_UNIVERSAL);
             }
         });
-        DoAfterTime(pScarletChaplain, (34 * IN_MILLISECONDS), [creature = pScarletChaplain]()
+        DoAfterTime(pScarletChaplain, (50 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
-            if (creature)
+            if (chaplain)
             {
-                creature->MonsterSay(nsChaplainAndSister::strChaplainConv_0_3, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_3, LANG_UNIVERSAL);
             }
         });
     }
