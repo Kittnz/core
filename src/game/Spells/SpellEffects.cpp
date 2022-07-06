@@ -2047,6 +2047,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         else
                             m_caster->ToPlayer()->SetDisplayId(displayid);
                     }
+                    return;
                 }
                 case 46010: // Teleport to Guild House
                 {
