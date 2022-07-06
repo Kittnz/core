@@ -9180,22 +9180,23 @@ bool ChatHandler::HandleItemLogCommand(char* args)
 
         std::vector<LogItemInfo> logs;
 
-        do {
-            Field* fields = result->Fetch();
-            uint32 itemLowGuid = fields[0].GetUInt32();
-            uint32 itemEntry = fields[1].GetUInt32();
-            uint32 count = fields[2].GetUInt32();
-            uint32 action = fields[3].GetUInt32();
-            uint64 timestamp = fields[4].GetUInt64();
+        if (result)
+            do {
+                Field* fields = result->Fetch();
+                uint32 itemLowGuid = fields[0].GetUInt32();
+                uint32 itemEntry = fields[1].GetUInt32();
+                uint32 count = fields[2].GetUInt32();
+                uint32 action = fields[3].GetUInt32();
+                uint64 timestamp = fields[4].GetUInt64();
 
-            logs.push_back({ itemLowGuid, itemEntry, timestamp, count, static_cast<LogItemAction>(action) });
-        } while (result->NextRow());
+                logs.push_back({ itemLowGuid, itemEntry, timestamp, count, static_cast<LogItemAction>(action) });
+            } while (result->NextRow());
 
 
-        for (auto itr = logs.rbegin(); itr != logs.rend(); ++itr)
-        {
-            PSendSysMessage("%s: Item entry %u, count %u, guid %u |cff1c9c27%s|r.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
-        }
+            for (auto itr = logs.rbegin(); itr != logs.rend(); ++itr)
+            {
+                PSendSysMessage("%s: Item entry %u, count %u, guid %u |cff1c9c27%s|r.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
+            }
     }
 
     return true;
