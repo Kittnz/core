@@ -1938,6 +1938,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
+                        if (m_caster->ToPlayer()->GetDisplayId() != m_caster->ToPlayer()->GetNativeDisplayId())
+                        {
+                            m_caster->ToPlayer()->DeMorph();
+                            return;
+                        }
+
                         std::uint32_t displayid{};
                         const bool bIsMale{ m_caster->ToPlayer()->GetGender() == GENDER_MALE };
 
@@ -2041,15 +2047,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 break;
                             }
                         }
-
-                        if (m_caster->ToPlayer()->GetDisplayId() == displayid)
-                        {
-                            m_caster->ToPlayer()->DeMorph();
-                        }
-                        else
-                        {
-                            m_caster->ToPlayer()->SetDisplayId(displayid);
-                        }
+                        m_caster->ToPlayer()->SetDisplayId(displayid);
                     }
 
                     return;
