@@ -2355,7 +2355,9 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
 
 void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 removeEntry = 0, uint32 count = 0)
 {
-    player->Unmount();
+    if(player->IsMounted())
+        player->Unmount();
+
     player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
     player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
     player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
