@@ -1761,12 +1761,13 @@ bool GossipSelect_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creatur
 
 bool GossipHello_npc_terry_palin(Player* pPlayer, Creature* pCreature)
 {
-
     CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51299);
 
     if (cInfo != nullptr)
         pPlayer->KilledMonster(cInfo, ObjectGuid());
 
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
 
     pPlayer->PrepareQuestMenu(pCreature->GetGUID());
     pPlayer->SEND_GOSSIP_MENU(90338, pCreature->GetGUID());
