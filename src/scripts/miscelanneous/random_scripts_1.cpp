@@ -307,16 +307,6 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    switch (pItem->GetEntry())
-    {
-    case 50234: pPlayer->LearnSpell(46058, false); break; // Outline: Traveler's Tent 
-    case 50235: pPlayer->LearnSpell(46060, false); break; // Outline: Fishing Boat
-    }
-    return true;
-}
-
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
@@ -7528,11 +7518,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_skin_change";
     newscript->pItemUseSpell = &ItemUseSpell_skin_changer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_survival_outline";
-    newscript->pItemUseSpell = &ItemUseSpell_item_survival_outline;
     newscript->RegisterSelf();
 
     newscript = new Script;
