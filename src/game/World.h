@@ -346,6 +346,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE,
     CONFIG_UINT32_BEGINNERS_GUILD_HORDE,
     CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT,
+    CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -595,6 +596,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_AC_WARDEN_PLAYERS_ONLY,
     CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS,
     CONFIG_BOOL_PTR,
+    CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -924,6 +926,7 @@ class World
 
         void KickAll();
         void KickAllLess(AccountTypes sec);
+        void WarnAccount(uint32 accountId, std::string from, std::string reason, const char* type = "WARNING");
         void BanAccount(uint32 accountId, uint32 duration, std::string reason, std::string const& author);
         BanReturn BanAccount(BanMode mode, std::string nameOrIP, uint32 duration_secs, std::string reason, std::string author);
         bool RemoveBanAccount(BanMode mode, std::string const& source, std::string const& message, std::string nameOrIP);

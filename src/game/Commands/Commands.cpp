@@ -79,6 +79,8 @@
 #include <string.h>
 #include <typeinfo>
 #include <regex>
+#include <iomanip>
+#include <sstream>
 #include <ctime>
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
@@ -3884,6 +3886,66 @@ bool ChatHandler::HandleBanListIPCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleWarnCharacterCommand(char* args)
+{
+    Player* target;
+    ObjectGuid playerGuid;
+    std::string target_name;
+    if (!ExtractPlayerTarget(&args, &target, &playerGuid, &target_name))
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PlayerCacheData const* playerData = sObjectMgr.GetPlayerDataByGUID(playerGuid.GetCounter());
+
+    if (!playerData)
+    {
+        PSendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::string authorName = m_session ? m_session->GetPlayerName() : "Console";
+
+    char* reason = ExtractQuotedOrLiteralArg(&args);
+
+    if (!reason)
+    {
+        PSendSysMessage("You must provide a reason. Please try again.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    MangosStrings mstring = LANG_WARN_INFORM;
+    sWorld.WarnAccount(playerData->uiAccount, authorName, reason, "WARN");
+
+    if (target)
+    {
+        if (mstring == LANG_WARN_INFORM)
+        {
+            ChatHandler(target->GetSession()).PSendSysMessage(mstring, reason);
+            target->GetSession()->SendNotification(mstring, reason);
+
+            PSendSysMessage("|cFFFF1100 Account #%u (Character: %s) has been warned for: |r \n \"%s\"",
+                playerData->uiAccount, playerData->sName.c_str(), reason);
+        }
+        else
+        {
+            ChatHandler(target->GetSession()).PSendSysMessage(("|cFFFF1100 " + (std::string)GetMangosString(mstring) + "|r").c_str());
+            target->GetSession()->SendNotification(mstring);
+            // full warn text for GM
+            /*PSendSysMessage("|cFFFF1100 Account #%u (character %s) has been warned (warn id:%u) for |r \n \"%s\"",
+                playerData->uiAccount, playerData->sName.c_str(), mstring_id_reason, (std::string("WARN: ") + (char*)GetMangosString(mstring_id_reason)).c_str());
+            PSendSysMessage("|cFFFF1100 Account #%u (character %s): a note (warn id:%u) has been added |r \n \"%s\"",
+                playerData->uiAccount, playerData->sName.c_str(), mstring_id_reason, (std::string("NOTE: ") + (char*)GetMangosString(mstring_id_reason)).c_str());*/
+        }
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleRespawnCommand(char* /*args*/)
 {
     Player* pl = m_session->GetPlayer();
@@ -4329,8 +4391,8 @@ bool ChatHandler::HandleInstanceStatsCommand(char* /*args*/)
 bool ChatHandler::HandleGMListFullCommand(char* /*args*/)
 {
     ///- Get the accounts with GM Level >0
-    QueryResult *result = LoginDatabase.PQuery("SELECT username, rank FROM account"
-                          "WHERE rank > 0");
+    QueryResult *result = LoginDatabase.Query("SELECT username, rank FROM account"
+                          " WHERE rank > 0");
     if (result)
     {
         SendSysMessage(LANG_GMLIST);
@@ -9029,6 +9091,114 @@ bool ChatHandler::HandleModifyMoneyCommand(char* args)
     }
 
     DETAIL_LOG(GetMangosString(LANG_NEW_MONEY), moneyuser, addmoney, chr->GetMoney());
+
+    return true;
+}
+
+std::string MakeTimeString(time_t timestamp)
+{
+    auto tm = *std::localtime(&timestamp);
+    
+    std::ostringstream ss;
+    ss << std::put_time(&tm, "%Y-%m-%d %H:%M:%S");
+    return ss.str();
+}
+
+constexpr const char* ItemLogActionToString(LogItemAction action)
+{
+    switch (action)
+    {
+    case LogItemAction::Auctioned:
+        return "Auctioned";
+    case LogItemAction::Deleted:
+        return "Deleted";
+    case LogItemAction::Disenchanted:
+        return "Disenchanted";
+    case LogItemAction::Looted:
+        return "Looted";
+    case LogItemAction::Mailed:
+        return "Mailed";
+    case LogItemAction::MailReceived:
+        return "Received in Mail";
+    case LogItemAction::Sold:
+        return "Sold";
+    case LogItemAction::Traded:
+        return "Traded";
+    case LogItemAction::TradeReceived:
+        return "Received from Trade";
+    default:
+        return "<>";
+    }
+}
+
+bool ChatHandler::HandleItemLogCommand(char* args)
+{
+    constexpr uint32 limit = 100;
+
+    Player* target;
+    ObjectGuid playerGuid;
+    if (!ExtractPlayerTarget(&args, &target, &playerGuid))
+        return false;
+
+    int32 itemId;
+    if (!ExtractInt32(&args, itemId))
+    {
+        SendSysMessage("Supply item Id.");
+        return false;
+    }
+
+    if (itemId < 0)
+        itemId = 0;
+
+    PSendSysMessage("List of item logs for item ID %i : ", itemId);
+
+    if (target)
+    {
+        const auto& logs = target->GetItemLogs();
+        const auto& entryLogs = logs.find((uint32)itemId);
+        if (entryLogs != logs.end())
+        {
+            auto beginItr = entryLogs->second.begin();
+            auto itr = entryLogs->second.size() >= limit ? beginItr + limit : --entryLogs->second.end();
+
+            //now iterate backwards..
+            for (; itr != beginItr; --itr)
+            {
+                PSendSysMessage("%s: Item entry %u, count %u, guid %u %s.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
+            }
+
+            //one extra for beginitr
+            PSendSysMessage("%s: Item entry %u, count %u, guid %u %s.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
+        }
+
+    }
+    else
+    {
+        //target is offline, use playerGuid
+        std::unique_ptr<QueryResult> result = std::unique_ptr<QueryResult>{
+            CharacterDatabase.PQuery("SELECT itemLowGuid, itemEntry, itemCount, action, timestamp FROM character_item_logs WHERE playerLowGuid = '%u' AND itemEntry = '%u' ORDER BY timestamp DESC LIMIT %u", playerGuid.GetCounter(), (uint32)itemId, limit)
+        };
+
+        std::vector<LogItemInfo> logs;
+
+        if (result)
+            do {
+                Field* fields = result->Fetch();
+                uint32 itemLowGuid = fields[0].GetUInt32();
+                uint32 itemEntry = fields[1].GetUInt32();
+                uint32 count = fields[2].GetUInt32();
+                uint32 action = fields[3].GetUInt32();
+                uint64 timestamp = fields[4].GetUInt64();
+
+                logs.push_back({ itemLowGuid, itemEntry, timestamp, count, static_cast<LogItemAction>(action) });
+            } while (result->NextRow());
+
+
+            for (auto itr = logs.rbegin(); itr != logs.rend(); ++itr)
+            {
+                PSendSysMessage("%s: Item entry %u, count %u, guid %u |cff1c9c27%s|r.", MakeTimeString(itr->timestamp).c_str(), itr->entry, itr->count, itr->guidLow, ItemLogActionToString(itr->action));
+            }
+    }
 
     return true;
 }

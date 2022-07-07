@@ -488,6 +488,7 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
                         player->AutoStoreLoot(pItem->loot); // can be lost if no space
                     pItem->loot.clear();
                     sLog.out(LOG_LOOTS, "%s disenchants item [Entry : %u] %s", _player->GetShortDescription().c_str(), pItem->GetEntry(), lguid.GetString().c_str());
+                    player->LogItem(pItem, LogItemAction::Disenchanted, 1);
                     pItem->SetLootState(ITEM_LOOT_REMOVED);
                     player->DestroyItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
                     break;

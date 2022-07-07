@@ -420,6 +420,8 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
                 pl->GetShortDescription().c_str(), it->GetGuidStr().c_str(), it->GetEntry(), 
                 auctioneerGuid.GetString().c_str(), bid, buyout, auction_time, AH->GetHouseId());
 
+    pl->LogItem(it, LogItemAction::Auctioned);
+
     auctionHouse->AddAuction(AH);
 
     sAuctionMgr.AddAItem(it);

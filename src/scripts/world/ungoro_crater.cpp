@@ -233,6 +233,7 @@ struct npc_ringoAI : public FollowerAI
 
         //what does actually happen here? Emote? Aura?
         m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
+        m_creature->SetFactionTemplateId(35);
     }
 
     void ClearFaint()
@@ -259,10 +260,14 @@ struct npc_ringoAI : public FollowerAI
         }
 
         SetFollowPaused(false);
+        m_creature->SetFactionTemplateId(113);
     }
 
     void UpdateFollowerAI(const uint32 uiDiff) override
     {
+        if (HasFollowState(STATE_FOLLOW_PAUSED))
+            m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
+
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
             if (HasFollowState(STATE_FOLLOW_POSTEVENT))

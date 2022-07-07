@@ -288,6 +288,7 @@ void AddSC_boss_ardaeus();
 void AddSC_boss_daelus();
 void AddSC_boss_mariella();
 void AddSC_instance_scarlet_citadel();
+void AddSC_trash_bosses_scarlet_citadel();
 void AddSC_trash_mobs_scarlet_citadel();
 
 // Hateforge Quarry
@@ -605,6 +606,7 @@ void AddScripts()
     AddSC_boss_daelus();
     AddSC_boss_mariella();
     AddSC_instance_scarlet_citadel();
+    AddSC_trash_bosses_scarlet_citadel();
     AddSC_trash_mobs_scarlet_citadel();
 
     // Hateforge Quarry
