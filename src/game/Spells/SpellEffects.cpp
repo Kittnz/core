@@ -1934,6 +1934,124 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 46003: // Illusions
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        if (m_caster->ToPlayer()->GetDisplayId() != m_caster->ToPlayer()->GetNativeDisplayId())
+                        {
+                            m_caster->ToPlayer()->DeMorph();
+                            return;
+                        }
+
+                        std::uint32_t displayid{};
+                        const bool bIsMale{ m_caster->ToPlayer()->GetGender() == GENDER_MALE };
+
+                        switch (m_CastItem->GetEntry())
+                        {
+                            case 51246: displayid = 15458;  break; // Sarah Sadwhistle 
+                            case 51247: displayid = 10008;  break; // Chromie
+                            case 51055: displayid = 18356;  break; // Tree Form
+                            case 51065: displayid = 4629;   break; // Shadow
+                            case 51209: displayid = 2176;   break; // Rat
+                            case 81145: displayid = 18251;  break; // Pandaren
+                            case 51066: displayid = 12030;  break; // Flamewaker
+                            case 51067: displayid = 8053;   break; // Bone Serpent
+                            case 51205: displayid = 14368;  break; // Ghost
+                            case 50435: displayid = 10543;  break; // Dreadlord
+                            case 50436: displayid = 7803;   break; // Smolderthorn Berserker
+                            case 50437: displayid = 4923;   break; // Naga Explorer
+                            case 50438: displayid = 11263;  break; // Naga Siren 
+                            case 80175: displayid = 6292;   break; // Bronze Whelpling
+                            case 50408: displayid = bIsMale ? 150 : 876;  break; // Dryad
+                            case 51836: displayid = (15393 + urand(0, 5)); break; // Murloc
+                            case 80694: // Scourge
+                            {
+                                const std::uint32_t models[] = { 158, 612, 733 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 51253: // Furbolg
+                            {
+                                const std::uint32_t models[] = { 6746, 5773, 11363 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 50439: // Harpy
+                            {
+                                const std::uint32_t models[] = { 3022, 10872, 1352 };
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 51200: // Goblin
+                            {
+                                const std::uint32_t m_male[] = { 7170, 7102, 8847, 7185, 7809, 15095, 15096, 15097, 7209 };
+                                const std::uint32_t m_female[] = { 9553, 15094, 10744, 15094, 11675, 15094, 7175, 11689, 10651 };
+                                const std::uint32_t modelid{ urand(0, 8) };
+
+                                displayid = bIsMale ? m_male[modelid] : m_female[modelid];
+                                break;
+                            }
+                            case 51201: // Worgen
+                            {
+                                const std::uint32_t models[] = { 522, 523, 524 };
+                                int modelid = rand() % 3;
+                                displayid = models[urand(0, 2)];
+                                break;
+                            }
+                            case 80648: // Gnoll
+                            {
+                                const std::uint32_t models[] = { 487, 383, 384, 491 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 53008: // Two-headed Ogre
+                            {
+                                const std::uint32_t models[] = { 18065, 18066, 18067, 18068, 18069, 18070, 18182 };
+                                displayid = models[urand(0, 6)];
+                                break;
+                            }
+                            case 51206: // Banshee
+                            {
+                                const std::uint32_t models[] = { 8782, 10728, 10750, 10994 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 51207: // Serpent Lord
+                            {
+                                const std::uint32_t m_male[5] = { 4232, 4214, 4215, 4212, 4213 };
+                                const std::uint32_t m_female[5] = { 4233, 4234, 4313, 4233, 4234 };
+                                const std::uint32_t modelid{ urand(0, 4) };
+
+                                displayid = bIsMale ? m_male[modelid] : m_female[modelid];
+                                break;
+                            }
+                            case 51208: // Succubus
+                            {
+                                const std::uint32_t models[] = { 10923, 10924, 10925, 10926 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
+                            case 50017: // Blood Elf
+                            case 51203: // High Elf
+                            {
+                                const std::uint32_t m_male[6] = { 10375, 4245, 6779, 14394, 11671, 6549 };
+                                const std::uint32_t m_female[6] = { 4729,  4729, 3293, 4730,  1643, 10381 };
+                                const std::uint32_t modelid{ urand(0, 5) };
+
+                                displayid = bIsMale ? m_male[modelid] : m_female[modelid];
+                                break;
+                            }
+                            default:
+                            {
+                                break;
+                            }
+                        }
+                        m_caster->ToPlayer()->SetDisplayId(displayid);
+                    }
+
+                    return;
+                }
                 case 46010: // Teleport to Guild House
                 {
                     if (m_caster && m_caster->IsPlayer())

@@ -158,6 +158,9 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                                     trader->GetName(), trader->GetSession()->GetAccountId());
                 }
 
+                _player->LogItem(myItems[i], LogItemAction::Traded);
+                trader->LogItem(myItems[i], LogItemAction::TradeReceived);
+
                 // store
                 trader->MoveItemToInventory(traderDst, myItems[i], true, true);
             }
@@ -173,6 +176,9 @@ void WorldSession::moveItems(Item* myItems[], Item* hisItems[])
                                     hisItems[i]->GetProto()->Name1, hisItems[i]->GetEntry(), hisItems[i]->GetCount(),
                                     _player->GetName(), _player->GetSession()->GetAccountId());
                 }
+
+                trader->LogItem(hisItems[i], LogItemAction::Traded);
+                _player->LogItem(hisItems[i], LogItemAction::TradeReceived);
 
                 // store
                 _player->MoveItemToInventory(playerDst, hisItems[i], true, true);

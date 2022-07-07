@@ -7,95 +7,11 @@
 
 #include "scriptPCH.h"
 #include "scarlet_citadel.h"
+#include "trashmobs_scarlet_citadel.hpp"
 
-
-static const float vfTeleportDestinations[][4] =
-{
-    { 231.569946f, 48.830078f, (32.822887f + 0.1f), 3.130378f } // Boss Mariella
-};
-
-class npc_citadel_anti_exploit_AI : public ScriptedAI
-{
-public:
-    explicit npc_citadel_anti_exploit_AI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        npc_citadel_anti_exploit_AI::Reset();
-    }
-
-private:
-    uint16 m_uiCheckPulse{};
-
-    static constexpr uint32 PULSE_TIMER{ 500 };
-    static constexpr uint32 SPELL_STUN{ 27880 };
-    static constexpr float PERMITTED_AREA{ 20.f };
-    static constexpr auto WARNING_MESSAGE{ "You are not allowed to leave this area." };
-
-public:
-    void Reset() override
-    {
-        m_uiCheckPulse = PULSE_TIMER;
-
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
-        m_creature->SetVisibility(VISIBILITY_OFF);
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (m_uiCheckPulse < uiDiff)
-        {
-            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
-            for (const auto& player : list)
-            {
-                if (Player* pPlayer{ player.getSource() })
-                {
-                    if (!pPlayer->IsGameMaster() && pPlayer->IsInRange3d(
-                        m_creature->GetPositionX(),
-                        m_creature->GetPositionY(),
-                        m_creature->GetPositionZ(),
-                        0.0f, PERMITTED_AREA))
-                    {
-                        pPlayer->AddAura(SPELL_STUN);
-
-                        DoAfterTime(pPlayer, (3 * IN_MILLISECONDS), [player = pPlayer]()
-                            {
-                                if (player)
-                                {
-                                    static_cast<Unit*>(player)->NearTeleportTo(
-                                        vfTeleportDestinations[0][0],
-                                        vfTeleportDestinations[0][1],
-                                        vfTeleportDestinations[0][2],
-                                        vfTeleportDestinations[0][3]
-                                    );
-                                }
-                            });
-
-                        DoAfterTime(pPlayer, (5 * IN_MILLISECONDS), [player = pPlayer]()
-                            {
-                                if (player)
-                                {
-                                    ChatHandler(player).SendSysMessage(WARNING_MESSAGE);
-                                }
-                            });
-                    }
-                }
-            }
-
-            m_uiCheckPulse = PULSE_TIMER;
-        }
-        else
-        {
-            m_uiCheckPulse -= uiDiff;
-        }
-    }
-};
-
-CreatureAI* GetAI_npc_citadel_anti_exploit(Creature* pCreature)
-{
-    return new npc_citadel_anti_exploit_AI(pCreature);
-}
 
 //////////////////////////////////////////
-// FIRST WING (Caster's Nightmare)
+// Caster's Nightmare Wing
 //////////////////////////////////////////
 
 class npc_citadel_inquisitor_AI : public ScriptedAI
@@ -107,25 +23,20 @@ public:
     }
 
 private:
-    static constexpr uint32 SPELL_HOLY_NOVA{ 23858 };
-    static constexpr uint32 SPELL_COUNTERSPELL{ 20537 };
-    static constexpr uint32 SPELL_DIVINE_SHIELD{ 1020 };
-    static constexpr uint32 SPELL_GREATER_HEAL{ 24208 };
-
-    uint32 m_uiCounterSpell_Timer{};
-    uint32 m_uiHolyNova_Timer{};
-    uint32 m_uiGreaterHeal_Timer{};
-
     bool m_bCastedDivineShieldOnce{};
+
+    std::uint32_t m_uiCounterSpell_Timer{};
+    std::uint32_t m_uiHolyNova_Timer{};
+    std::uint32_t m_uiGreaterHeal_Timer{};
 
 public:
     void Reset() override
     {
-        m_uiCounterSpell_Timer = 2000;
-        m_uiHolyNova_Timer = 1000;
-        m_uiGreaterHeal_Timer = 5000;
-
         m_bCastedDivineShieldOnce = false;
+
+        m_uiCounterSpell_Timer = nsCitadelInquisitor::INITIAL_TIMER_COUNTERSPELL;
+        m_uiHolyNova_Timer = nsCitadelInquisitor::TIMER_HOLY_NOVA;
+        m_uiGreaterHeal_Timer = nsCitadelInquisitor::TIMER_GREATER_HEAL;
 
         m_creature->SetNoCallAssistance(true); // Link groups manually
     }
@@ -138,9 +49,9 @@ public:
             {
                 if (pRandomTarget->IsNonMeleeSpellCasted(true))
                 {
-                    if (DoCastSpellIfCan(pRandomTarget, SPELL_COUNTERSPELL) == CAST_OK)
+                    if (DoCastSpellIfCan(pRandomTarget, nsCitadelInquisitor::SPELL_COUNTERSPELL) == CAST_OK)
                     {
-                        m_uiCounterSpell_Timer = urand(5000, 8000);
+                        m_uiCounterSpell_Timer = urand(nsCitadelInquisitor::TIMER_MIN_COUNTERSPELL, nsCitadelInquisitor::TIMER_MAX_COUNTERSPELL);
                     }
                 }
             }
@@ -159,9 +70,9 @@ public:
             {
                 if (pFriendlyTarget->GetHealthPercent() < 90.f)
                 {
-                    if (DoCastSpellIfCan(m_creature, SPELL_HOLY_NOVA) == CanCastResult::CAST_OK)
+                    if (DoCastSpellIfCan(m_creature, nsCitadelInquisitor::SPELL_HOLY_NOVA) == CanCastResult::CAST_OK)
                     {
-                        m_uiHolyNova_Timer = 1000;
+                        m_uiHolyNova_Timer = nsCitadelInquisitor::TIMER_HOLY_NOVA;
                     }
                 }
             }
@@ -176,7 +87,7 @@ public:
     {
         if (m_creature->GetHealthPercent() < 10.f && !m_bCastedDivineShieldOnce)
         {
-            if (DoCastSpellIfCan(m_creature, SPELL_DIVINE_SHIELD) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature, nsCitadelInquisitor::SPELL_DIVINE_SHIELD) == CanCastResult::CAST_OK)
             {
                 m_bCastedDivineShieldOnce = true;
             }
@@ -193,16 +104,18 @@ public:
                 {
                     if (pFriendlyTarget->GetHealthPercent() < 40.f)
                     {
-                        if (DoCastSpellIfCan(pFriendlyTarget, SPELL_GREATER_HEAL) == CanCastResult::CAST_OK)
+                        if (DoCastSpellIfCan(pFriendlyTarget, nsCitadelInquisitor::SPELL_GREATER_HEAL) == CanCastResult::CAST_OK)
                         {
-                            m_uiGreaterHeal_Timer = 5000;
+                            m_uiGreaterHeal_Timer = nsCitadelInquisitor::TIMER_GREATER_HEAL;
                         }
                     }
                 }
             }
         }
         else
+        {
             m_uiGreaterHeal_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -234,18 +147,14 @@ public:
     }
 
 private:
-    static constexpr uint32 SPELL_CHARGE{ 26561 };
-    static constexpr uint32 SPELL_CLEAVE{ 26350 };
-    static constexpr uint32 SPELL_SONICBURST{ 23918 };
-
-    uint32 m_uiCharge_Timer{};
-    uint32 m_uiCleave_Timer{};
+    std::uint32_t m_uiCharge_Timer{};
+    std::uint32_t m_uiCleave_Timer{};
 
 public:
     void Reset() override
     {
-        m_uiCharge_Timer = 10000;
-        m_uiCleave_Timer = 5000;
+        m_uiCharge_Timer = nsCitadelValiant::TIMER_CHARGE;
+        m_uiCleave_Timer = nsCitadelValiant::TIMER_CLEAVE;
 
         m_creature->SetNoCallAssistance(true); // Link groups manually
     }
@@ -260,14 +169,14 @@ public:
                 {
                     if (chargeTarget->IsNonMeleeSpellCasted(false, false, true))
                     {
-                        if (DoCastSpellIfCan(chargeTarget, SPELL_CHARGE) == CanCastResult::CAST_OK)
+                        if (DoCastSpellIfCan(chargeTarget, nsCitadelValiant::SPELL_CHARGE) == CanCastResult::CAST_OK)
                         {
                             if (m_creature->IsInRange3d(chargeTarget->GetPositionX(), chargeTarget->GetPositionY(), chargeTarget->GetPositionZ(), 0.0f, 2.f))
                             {
-                                DoCast(m_creature, SPELL_SONICBURST);
+                                DoCast(m_creature, nsCitadelValiant::SPELL_SONICBURST);
                             }
 
-                            m_uiCharge_Timer = 10000;
+                            m_uiCharge_Timer = nsCitadelValiant::TIMER_CHARGE;
                         }
                     }
                 }
@@ -283,9 +192,9 @@ public:
     {
         if (m_uiCleave_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature, SPELL_CLEAVE) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature, nsCitadelValiant::SPELL_CLEAVE) == CanCastResult::CAST_OK)
             {
-                m_uiCleave_Timer = 5000;
+                m_uiCleave_Timer = nsCitadelValiant::TIMER_CLEAVE;
             }
         }
         else
@@ -320,19 +229,15 @@ public:
         npc_citadel_footman_AI::Reset();
     }
 
-private:
-    static constexpr uint32 SPELL_DISARM{ 6713 };
-    static constexpr uint32 SPELL_FRENZY{ 8269 };
-    static constexpr uint32 SPELL_HAMSTRING{ 26141 };
-    
+private:    
     uint32 m_uiDisarm_Timer{};
     uint32 m_uiFrenzy_Timer{};
 
 public:
     void Reset() override
     {
-        m_uiDisarm_Timer = 1000;
-        m_uiFrenzy_Timer = 15000;
+        m_uiDisarm_Timer = nsCitadelFootman::INITIAL_TIMER_DISARM;
+        m_uiFrenzy_Timer = nsCitadelFootman::INITIAL_TIMER_FRENZY;
 
         m_creature->SetNoCallAssistance(true); // Link groups manually
     }
@@ -341,13 +246,13 @@ public:
     {
         if (m_uiDisarm_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature, SPELL_DISARM) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature, nsCitadelFootman::SPELL_DISARM) == CanCastResult::CAST_OK)
             {
-                DoCast(m_creature->GetVictim(), SPELL_HAMSTRING);
+                DoCast(m_creature->GetVictim(), nsCitadelFootman::SPELL_HAMSTRING);
 
                 m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 
-                m_uiDisarm_Timer = 7000;
+                m_uiDisarm_Timer = nsCitadelFootman::TIMER_DISARM;
             }
         }
         else
@@ -360,9 +265,9 @@ public:
     {
         if (m_uiFrenzy_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature, SPELL_FRENZY) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature, nsCitadelFootman::SPELL_FRENZY) == CanCastResult::CAST_OK)
             {
-                m_uiFrenzy_Timer = 120000; // Just renew spell if enemy isn't dead already
+                m_uiFrenzy_Timer = nsCitadelFootman::TIMER_FRENZY; // Just renew spell if enemy isn't dead already
             }
         }
         else
@@ -388,352 +293,10 @@ CreatureAI* GetAI_npc_citadel_footman(Creature* pCreature)
     return new npc_citadel_footman_AI(pCreature);
 }
 
-namespace nsERIC_VESPER
-{
-    static const LocationXYZO vfMoveTo[] =
-    {
-        { 128.883f, -48.6615f, 15.99f, 1.55f },
-        { 132.825f, -48.7298f, 15.99f, 1.55f },
-        { 125.016f, -48.6871f, 15.99f, 1.55f },
-        { 125.081f, -36.9308f, 15.99f, 1.55f },
-        { 128.847f, -36.9513f, 15.99f, 1.55f },
-        { 132.736f, -36.8489f, 15.99f, 1.55f },
-        { 132.777f, -25.3095f, 15.99f, 1.55f },
-        { 128.892f, -25.3187f, 15.99f, 1.55f },
-        { 125.063f, -25.3278f, 15.99f, 1.55f },
-        { 125.035f, -13.6799f, 15.99f, 1.55f },
-        { 128.917f, -13.6573f, 15.99f, 1.55f },
-        { 132.745f, -13.7459f, 15.99f, 1.55f },
-        { 132.766f, -2.05773f, 15.99f, 1.55f },
-        { 128.937f, -2.03679f, 15.99f, 1.55f },
-        { 125.003f, -2.01526f, 15.99f, 1.55f },
-        { 125.066f,  9.52406f, 15.99f, 1.55f },
-        { 128.944f,  9.48699f, 15.99f, 1.55f },
-        { 132.826f,  9.47718f, 15.99f, 1.55f }
-    };
 
-    static constexpr auto TEXT_DIED{ "If only I- I could <cough> .. glance upon an evening’s star <cough> one last time." };
-    static constexpr auto TEXT_SUMMON_ADDS{ "The enemy has gone past the Sacred Fist, avenge our fallen brother!" };
-    static constexpr auto TEXT_RANDOM0{ "All your efforts are in vain." };
-    static constexpr auto TEXT_RANDOM1{ "It’s too late to turn back now!" };
-    static constexpr auto TEXT_RANDOM2{ "Vile Scourge." };
-    static constexpr auto TEXT_RANDOM3{ "Even the afterlife abandons mongrels like you!" };
-
-    static constexpr uint32 SPELL_LIGHTNING_CLOUD{ 25033 };
-    static constexpr uint32 SPELL_LIGHTNING_WAVE{ 24819 };
-    static constexpr uint32 SPELL_ENERGIZE{ 25685 };
-    static constexpr uint32 SPELL_DRAINMANA{ 25676 };
-
-    static constexpr uint32 FACTION_HOSTILE{ 67 };
-
-    static const std::vector<uint32> vTrashEntryList{ NPC_CITADEL_INQUISITOR, NPC_CITADEL_VALIANT, NPC_CITADEL_FOOTMAN };
-    static const std::vector<std::pair<LocationXYZO, uint32>>pairlol
-    {
-        std::make_pair(nsERIC_VESPER::vfMoveTo[0], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[1], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[2], vTrashEntryList[2]),
-        std::make_pair(nsERIC_VESPER::vfMoveTo[3], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[4], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[5], vTrashEntryList[2]),
-        std::make_pair(nsERIC_VESPER::vfMoveTo[6], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[7], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[8], vTrashEntryList[2]),
-        std::make_pair(nsERIC_VESPER::vfMoveTo[9], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[10], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[11], vTrashEntryList[2]),
-        std::make_pair(nsERIC_VESPER::vfMoveTo[12], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[13], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[14], vTrashEntryList[2]),
-        std::make_pair(nsERIC_VESPER::vfMoveTo[15], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[16], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[17], vTrashEntryList[2])
-    };
-}
-
-class npc_eric_vesper_AI : public ScriptedAI
-{
-public:
-    explicit npc_eric_vesper_AI(Creature* pCreature) : ScriptedAI(pCreature)
-    {
-        npc_eric_vesper_AI::Reset();
-    }
-
-private:
-    uint32 m_uiLightningCloud_Timer{};
-    uint32 m_uiLightningWave_Timer{};
-    uint32 m_uiDrainMana_Timer{};
-    uint32 m_uiEnergize_Timer{};
-    uint32 m_uiRandomFightText_Timer{};
-
-    // Areatrigger
-    bool m_bIsTrashAllowedToSpawn{};
-    uint16 m_uiCheckPulse{};
-
-    std::vector<ObjectGuid> m_vSpawnedAdds;
-
-public:
-    void Reset() override
-    {
-        m_uiLightningCloud_Timer = 5000;
-        m_uiLightningWave_Timer = 1000;
-        m_uiDrainMana_Timer = 5000;
-        m_uiEnergize_Timer = 300000; // 5 Minutes
-        m_uiRandomFightText_Timer = 30000;
-
-        DespawnAdds();
-
-        if (m_creature->HasAura(nsERIC_VESPER::SPELL_ENERGIZE))
-            m_creature->RemoveAurasDueToSpell(nsERIC_VESPER::SPELL_ENERGIZE);
-
-        // Areatrigger
-        m_uiCheckPulse = 1000;
-        m_bIsTrashAllowedToSpawn = true;
-    }
-
-    void Aggro(Unit* /*pWho*/) override
-    {
-        m_creature->SetInCombatWithZone();
-        m_creature->SetPower(POWER_MANA, 0);
-    }
-
-    void JustDied(Unit* /*pKiller*/) override
-    {
-        DespawnAdds();
-
-        m_creature->SetRespawnDelay(7200); // Respawn Eric Dark once again after 2 hours if Boss Araeus isn't dead yet (partly handled in boss_ardaeus.cpp)
-
-        m_creature->MonsterSay(nsERIC_VESPER::TEXT_DIED);
-    }
-
-    void AreaTrigger(const uint32& uiDiff)
-    {
-        if (m_uiCheckPulse < uiDiff)
-        {
-            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
-            for (const auto& itr : PlayerList)
-            {
-                if (!itr.getSource()->IsGameMaster() && !itr.getSource()->HasAuraType(SPELL_AURA_FEIGN_DEATH) && itr.getSource()->IsAlive())
-                {
-                    if (itr.getSource()->IsInRange3d(128.86f, -9.69f, 15.98f, 0.f, 12.f)) // Middle of the Wing
-                    {
-                        SummonAdds();
-                    }
-                }
-            }
-
-            m_uiCheckPulse = 500;
-        }
-        else
-        {
-            m_uiCheckPulse -= uiDiff;
-        }
-    }
-
-    void SummonAdds()
-    {
-        for (const auto& itr : nsERIC_VESPER::pairlol)
-        {
-            if (Creature* pSummoned{ m_creature->SummonCreature(itr.second, 147.f, -60.f, 17.f, 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
-            {
-                pSummoned->MonsterMoveWithSpeed(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO, 5, MOVE_PATHFINDING);
-                pSummoned->SetHomePosition(itr.first.m_fX, itr.first.m_fY, itr.first.m_fZ, itr.first.m_fO);
-
-                if (!pSummoned->IsInCombat())
-                {
-                    pSummoned->HandleEmote(EMOTE_STATE_READY2H);
-                }
-
-                m_vSpawnedAdds.push_back(pSummoned->GetObjectGuid());
-            }
-        }
-        
-        m_creature->SetFactionTemplateId(nsERIC_VESPER::FACTION_HOSTILE);
-        m_creature->MonsterYell(nsERIC_VESPER::TEXT_SUMMON_ADDS);
-        m_creature->HandleEmote(EMOTE_ONESHOT_EXCLAMATION);
-
-        m_bIsTrashAllowedToSpawn = false;
-    }
-
-    void DespawnAdds()
-    {
-        if (!m_vSpawnedAdds.empty())
-        {
-            if (const auto map{ m_creature->GetMap() })
-            {
-                for (const auto& guid : m_vSpawnedAdds)
-                {
-                    if (Creature* pCreature{ map->GetCreature(guid) })
-                    {
-                        if (TemporarySummon* tmpSumm{ static_cast<TemporarySummon*>(pCreature) })
-                        {
-                            tmpSumm->UnSummon();
-                        }
-                    }
-                }
-
-                m_vSpawnedAdds.clear();
-            }
-        }
-    }
-
-    void CastLightningCloud(const uint32& uiDiff)
-    {
-        if (m_uiLightningCloud_Timer < uiDiff)
-        {
-            if (Unit* pClosestTarget{ m_creature->FindNearestHostilePlayer(15.f) })
-            {
-                if (DoCastSpellIfCan(pClosestTarget, nsERIC_VESPER::SPELL_LIGHTNING_CLOUD) == CanCastResult::CAST_OK)
-                {
-                    m_uiLightningCloud_Timer = 15000;
-                }
-            }
-        }
-        else
-        {
-            m_uiLightningCloud_Timer -= uiDiff;
-        }
-    }
-
-    void CastLightningWave(const uint32& uiDiff)
-    {
-        if (m_uiLightningWave_Timer < uiDiff)
-        {
-            if (Unit* pTargetLowestHP{ m_creature->FindLowestHpHostileUnit(50.f) })
-            {
-                if (m_creature->IsWithinLOSInMap(pTargetLowestHP))
-                {
-                    if (DoCastSpellIfCan(pTargetLowestHP, nsERIC_VESPER::SPELL_LIGHTNING_WAVE) == CanCastResult::CAST_OK)
-                    {
-                        m_uiLightningWave_Timer = urand(4000, 5000);
-                    }
-                }
-            }
-        }
-        else
-        {
-            m_uiLightningWave_Timer -= uiDiff;
-        }
-    }
-
-    void DrainMana(const uint32& uiDiff)
-    {
-        if (m_uiDrainMana_Timer < uiDiff)
-        {
-            if (Unit* pTarget{ m_creature->GetHostileCasterInRange(0, 50.f) })
-            {
-                if (m_creature->IsWithinLOSInMap(pTarget))
-                {
-                    if (DoCastSpellIfCan(pTarget, nsERIC_VESPER::SPELL_DRAINMANA) == CanCastResult::CAST_OK)
-                    {
-                        m_uiDrainMana_Timer = 3000;
-                    }
-                }
-            }
-        }
-        else
-        {
-            m_uiDrainMana_Timer -= uiDiff;
-        }
-    }
-
-    void ChannelEnergize(const uint32& uiDiff)
-    {
-        if (m_uiEnergize_Timer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature, nsERIC_VESPER::SPELL_ENERGIZE) == CanCastResult::CAST_OK)
-            {
-                m_creature->AttackStop();
-            }
-        }
-        else
-        {
-            m_uiEnergize_Timer -= uiDiff;
-        }
-    }
-
-    void DoExplosion()
-    {
-        Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
-        if (PlayerList.isEmpty())
-            return;
-
-        for (const auto& itr : PlayerList)
-        {
-            if (Player* pPlayer{ itr.getSource() })
-            {
-                if (pPlayer->IsAlive() && !pPlayer->IsGameMaster())
-                {
-                    m_creature->DoKillUnit(pPlayer);
-                }
-            }
-        }
-
-        npc_eric_vesper_AI::EnterEvadeMode();
-    }
-
-    void RandomFightTexts(const uint32& uiDiff)
-    {
-        if (m_uiRandomFightText_Timer < uiDiff)
-        {
-            std::string strRandomText{};
-            const uint32 i{ urand(0, 3)};
-            switch (i)
-            {
-                case 0:
-                {
-                    strRandomText = nsERIC_VESPER::TEXT_RANDOM0;
-                    break;
-                }
-                case 1:
-                {
-                    strRandomText = nsERIC_VESPER::TEXT_RANDOM1;
-                    break;
-                }
-                case 2:
-                {
-                    strRandomText = nsERIC_VESPER::TEXT_RANDOM2;
-                    break;
-                }
-                case 3:
-                {
-                    strRandomText = nsERIC_VESPER::TEXT_RANDOM3;
-                    break;
-                }
-                default:
-                {
-                    sLog.outError("[SC] Brother Eric Vesper: RandomFightTexts(const uint32& uiDiff): i out of range.");
-                    break;
-                }
-            }
-
-            m_creature->MonsterSay(strRandomText);
-
-            m_uiRandomFightText_Timer = 30000;
-        }
-        else
-        {
-            m_uiRandomFightText_Timer -= uiDiff;
-        }
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (m_bIsTrashAllowedToSpawn)
-            AreaTrigger(uiDiff);
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        if (!m_creature->HasAura(nsERIC_VESPER::SPELL_ENERGIZE))
-        {
-            CastLightningCloud(uiDiff);
-            CastLightningWave(uiDiff);
-            DrainMana(uiDiff);
-
-            ChannelEnergize(uiDiff);
-
-            RandomFightTexts(uiDiff);
-        }
-
-        if (m_creature->GetPower(POWER_MANA) >= m_creature->GetMaxPower(POWER_MANA))
-            DoExplosion();
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_eric_vesper(Creature* pCreature)
-{
-    return new npc_eric_vesper_AI(pCreature);
-}
+//////////////////////////////////////////
+// Ambush Park
+//////////////////////////////////////////
 
 // TODO: Behave like a toxic player too! ;)
 class npc_citadel_interrogator_AI : public ScriptedAI
@@ -745,43 +308,35 @@ public:
     }
 
 private:
-    static constexpr uint32 SPELL_STEALTH{ 1787 };
-    static constexpr uint32 SPELL_FRENZY{ 8269 };
-    static constexpr uint32 SPELL_BLIND{ 2094 };
-    static constexpr uint32 SPELL_EVASION{ 5277 };
-    static constexpr uint32 SPELL_EVISCERATE{ 11300 };
-    static constexpr uint32 SPELL_GOUGE{ 11286 };
-    static constexpr uint32 SPELL_SINISTER_STRIKE{ 11294 };
-
-    uint32 m_uiBlind_Timer{};
-    uint32 m_uiGouge_Timer{};
-    uint32 m_uiSinisterStrike_Timer{};
-
-    uint8 m_uiSinisterStrikeHits{};
-
     bool m_bAlreadyUsedFrenzy{};
     bool m_bAlreadyUsedEvasion{};
+
+    std::uint8_t m_uiSinisterStrikeHits{};
+
+    std::uint32_t m_uiBlind_Timer{};
+    std::uint32_t m_uiGouge_Timer{};
+    std::uint32_t m_uiSinisterStrike_Timer{};
 
 public:
     void Reset() override
     {
-        m_uiSinisterStrike_Timer = urand(2000, 3000);
-        m_uiGouge_Timer = 8000;
-        m_uiBlind_Timer = 12000;
+        m_uiSinisterStrike_Timer = urand(nsCitadelInterrogator::TIMER_MIN_SINISTER_STRIKE, nsCitadelInterrogator::TIMER_MAX_SINISTER_STRIKE);
+        m_uiGouge_Timer = nsCitadelInterrogator::INITIAL_TIMER_GAUGE;
+        m_uiBlind_Timer = nsCitadelInterrogator::INITIAL_TIMER_BLIND;
 
         m_uiSinisterStrikeHits = 0;
 
         m_bAlreadyUsedFrenzy = false;
         m_bAlreadyUsedEvasion = false;
 
-        m_creature->AddAura(SPELL_STEALTH);
+        m_creature->AddAura(nsCitadelInterrogator::SPELL_STEALTH);
     }
 
     void GoFrenzy()
     {
         if (m_creature->HealthBelowPct(25) && !m_bAlreadyUsedFrenzy)
         {
-            if (DoCastSpellIfCan(m_creature, SPELL_FRENZY) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature, nsCitadelInterrogator::SPELL_FRENZY) == CanCastResult::CAST_OK)
             {
                 m_bAlreadyUsedFrenzy = true;
             }
@@ -792,7 +347,7 @@ public:
     {
         if (m_creature->HealthBelowPct(50) && !m_bAlreadyUsedEvasion)
         {
-            if (DoCastSpellIfCan(m_creature, SPELL_EVASION) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature, nsCitadelInterrogator::SPELL_EVASION) == CanCastResult::CAST_OK)
             {
                 m_bAlreadyUsedEvasion = true;
             }
@@ -801,18 +356,18 @@ public:
 
     void DoEviscerate()
     {
-        DoCastSpellIfCan(m_creature->GetVictim(), SPELL_EVISCERATE);
+        DoCastSpellIfCan(m_creature->GetVictim(), nsCitadelInterrogator::SPELL_EVISCERATE);
     }
 
     void DoBlind(const uint32& uiDiff)
     {
         if (m_uiBlind_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_BLIND) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsCitadelInterrogator::SPELL_BLIND) == CanCastResult::CAST_OK)
             {
                 m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 
-                m_uiBlind_Timer = urand(12000, 15000);
+                m_uiBlind_Timer = urand(nsCitadelInterrogator::TIMER_MIN_BLIND, nsCitadelInterrogator::TIMER_MAX_BLIND);
             }
         }
         else
@@ -825,11 +380,11 @@ public:
     {
         if (m_uiGouge_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_GOUGE) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsCitadelInterrogator::SPELL_GOUGE) == CanCastResult::CAST_OK)
             {
                 m_creature->GetThreatManager().modifyThreatPercent(m_creature->GetVictim(), -100);
 
-                m_uiGouge_Timer = urand(8000, 10000);
+                m_uiGouge_Timer = urand(nsCitadelInterrogator::TIMER_MIN_GAUGE, nsCitadelInterrogator::TIMER_MAX_GAUGE);
             }
         }
         else
@@ -842,9 +397,9 @@ public:
     {
         if (m_uiSinisterStrike_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SINISTER_STRIKE) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsCitadelInterrogator::SPELL_SINISTER_STRIKE) == CanCastResult::CAST_OK)
             {
-                m_uiSinisterStrike_Timer = urand(2000, 3000);
+                m_uiSinisterStrike_Timer = urand(nsCitadelInterrogator::TIMER_MIN_SINISTER_STRIKE, nsCitadelInterrogator::TIMER_MAX_SINISTER_STRIKE);
                 ++m_uiSinisterStrikeHits;
 
                 if (m_uiSinisterStrikeHits >= 5)
@@ -881,165 +436,236 @@ CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
 }
 
 
-class npc_darkcaller_rayn_AI : public ScriptedAI
+class npc_chaplain_and_sister_AI : public ScriptedAI
 {
 public:
-    explicit npc_darkcaller_rayn_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit npc_chaplain_and_sister_AI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        npc_darkcaller_rayn_AI::Reset();
+        m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
+        npc_chaplain_and_sister_AI::Reset();
     }
 
 private:
-    static constexpr uint32 SPELL_SHADOWFORM{ 15473 };
+    bool m_bEventStarted{};
+    bool m_bEventDone{};
 
-    static constexpr uint32 SPELL_MIND_CONTROL{ 785 };
-    static constexpr uint32 SPELL_SHADOW_VOLLEY{ 21341 };
-    static constexpr uint32 SPELL_MIND_FLAY{ 26143 };
-    static constexpr uint32 SPELL_IMPENDING_DOOM{ 19702 };
+    std::uint32_t m_uiCHeckPulse_Timer{};
 
-    uint32 m_uiMindControl_Timer{};
-    uint32 m_uiShadowVolley_Timer{};
-    uint32 m_uiMindFlay_Timer{};
-    uint32 m_uiImpendingDoom_Timer{};
-
-    uint32 m_uiShadowformCheck_Timer{};
+    instance_scarlet_citadel* m_pInstance{};
 
 public:
     void Reset() override
     {
-        m_uiMindControl_Timer = 15000;
-        m_uiShadowVolley_Timer = 5000;
-        m_uiMindFlay_Timer = 8000;
-        m_uiImpendingDoom_Timer = 6000;
+        m_bEventStarted = false;
+        m_bEventDone = false;
 
-        m_uiShadowformCheck_Timer = 500;
+        m_uiCHeckPulse_Timer = nsChaplainAndSister::TIMER_CHECK_PULSE;
     }
 
-    void JustDied(Unit* /*pKiller*/) override
+    void AreaTriggerActivated(const uint32& uiDiff)
     {
-        m_creature->SetRespawnDelay(604800); // Once dead, set respawntimer to 7 days
-    }
+        /*
+        if (m_pInstance->GetData(ScarletCitadelEncounter::TYPE_ERIC_VESPER) != DONE) // TODO: Remove comment after testing
+            return;
+        */
 
-    void CheckForShadowform(const uint32& uiDiff)
-    {
-        if (m_uiShadowformCheck_Timer < uiDiff)
+        if (m_uiCHeckPulse_Timer < uiDiff)
         {
-            if (!m_creature->HasAura(SPELL_SHADOWFORM))
+            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& itr : PlayerList)
             {
-                m_creature->AddAura(SPELL_SHADOWFORM);
-            }
-
-            m_uiShadowformCheck_Timer = 500;
-        }
-        else
-        {
-            m_uiShadowformCheck_Timer -= uiDiff;
-        }
-    }
-
-    void DoMindControl(const uint32& uiDiff)
-    {
-        if (m_uiMindControl_Timer < uiDiff)
-        {
-            if (m_creature->GetThreatManager().getThreatList().size() > 1)
-            {
-                if (Unit* pRandomTarget{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER) })
+                if (!itr.getSource()->IsGameMaster() && itr.getSource()->IsAlive())
                 {
-                    if (m_creature->IsWithinLOSInMap(pRandomTarget))
+                    if (itr.getSource()->IsInRange3d(
+                        nsChaplainAndSister::vfAreaTrigger[0][0],
+                        nsChaplainAndSister::vfAreaTrigger[0][1],
+                        nsChaplainAndSister::vfAreaTrigger[0][2],
+                        nsChaplainAndSister::vfAreaTrigger[0][3],
+                        nsChaplainAndSister::vfAreaTrigger[0][4]))
                     {
-                        if (DoCastSpellIfCan(pRandomTarget, SPELL_MIND_CONTROL) == CanCastResult::CAST_OK)
+                        if (!m_bEventStarted)
                         {
-                            m_uiMindControl_Timer = urand(15000, 25000);
+                            StartEvent();
+                            m_bEventStarted = true;
                         }
                     }
                 }
             }
+
+            m_uiCHeckPulse_Timer = nsChaplainAndSister::TIMER_CHECK_PULSE;
         }
         else
         {
-            m_uiMindControl_Timer -= uiDiff;
+            m_uiCHeckPulse_Timer -= uiDiff;
         }
     }
 
-    void CastShadowVolley(const uint32& uiDiff)
+    void StartEvent()
     {
-        if (m_uiShadowVolley_Timer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature, SPELL_SHADOW_VOLLEY) == CanCastResult::CAST_OK)
-            {
-                m_uiShadowVolley_Timer = urand(6000, 8000);
-            }
-        }
-        else
-        {
-            m_uiShadowVolley_Timer -= uiDiff;
-        }
-    }
+        Creature* pScarletChaplain{ m_pInstance->GetSingleCreatureFromStorage(NPC_SCARLET_CHAPLAIN) };
+        if (!pScarletChaplain)
+            return;
 
-    void ChannelMindFlay(const uint32& uiDiff)
-    {
-        if (m_uiMindFlay_Timer < uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_MIND_FLAY) == CanCastResult::CAST_OK)
-            {
-                m_uiMindFlay_Timer = urand(18000, 22000);
-            }
-        }
-        else
-        {
-            m_uiMindFlay_Timer -= uiDiff;
-        }
-    }
+        Creature* pScarletSister{ m_pInstance->GetSingleCreatureFromStorage(NPC_SCARLET_SISTER) };
+        if (!pScarletSister)
+            return;
 
-    void CastImpendingDoom(const uint32& uiDiff)
-    {
-        if (m_uiImpendingDoom_Timer < uiDiff)
+        static const std::uint32_t uiRndEvent{ urand(0, 1) };
+
+        DoAfterTime(pScarletChaplain, (2 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
-            if (Unit* pRandomManaTarget{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_RANDOM, 0, nullptr, SELECT_FLAG_PLAYER | SELECT_FLAG_POWER_MANA) })
+            if (chaplain)
             {
-                if (DoCastSpellIfCan(pRandomManaTarget, SPELL_IMPENDING_DOOM) == CanCastResult::CAST_OK)
-                {
-                    m_uiImpendingDoom_Timer = 5500;
-                }
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 0 : 7], LANG_UNIVERSAL);
             }
-        }
-        else
+        });
+        DoAfterTime(pScarletSister, (10 * IN_MILLISECONDS), [sister = pScarletSister]()
         {
-            m_uiImpendingDoom_Timer -= uiDiff;
-        }
+            if (sister)
+            {
+                sister->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 1 : 8], LANG_UNIVERSAL);
+            }
+        });
+        DoAfterTime(pScarletChaplain, (18 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
+        {
+            if (chaplain)
+            {
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 2 : 9], LANG_UNIVERSAL);
+            }
+        });
+        DoAfterTime(pScarletSister, (26 * IN_MILLISECONDS), [sister = pScarletSister]()
+        {
+            if (sister)
+            {
+                sister->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 3 : 10], LANG_UNIVERSAL);
+            }
+        });
+        DoAfterTime(pScarletChaplain, (34 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
+        {
+            if (chaplain)
+            {
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 4 : 11], LANG_UNIVERSAL);
+            }
+        });
+        DoAfterTime(pScarletSister, (42 * IN_MILLISECONDS), [sister = pScarletSister]()
+        {
+            if (sister)
+            {
+                sister->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 5 : 12], LANG_UNIVERSAL);
+            }
+        });
+        DoAfterTime(pScarletChaplain, (50 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
+        {
+            if (chaplain)
+            {
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 6 : 13], LANG_UNIVERSAL);
+            }
+        });
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        CheckForShadowform(uiDiff);
-
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        DoMindControl(uiDiff);
-        CastShadowVolley(uiDiff);
-        ChannelMindFlay(uiDiff);
-        CastImpendingDoom(uiDiff);
-
-        DoMeleeAttackIfReady();
+        AreaTriggerActivated(uiDiff);
     }
 };
 
-CreatureAI* GetAI_npc_darkcaller_rayn(Creature* pCreature)
+CreatureAI* GetAI_npc_chaplain_and_sister(Creature* pCreature)
 {
-    return new npc_darkcaller_rayn_AI(pCreature);
+    return new npc_chaplain_and_sister_AI(pCreature);
 }
+
+//////////////////////////////////////////
+// Shadow Wing
+//////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////////
+// MISC
+//////////////////////////////////////////
+
+class npc_citadel_anti_exploit_AI : public ScriptedAI
+{
+public:
+    explicit npc_citadel_anti_exploit_AI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_citadel_anti_exploit_AI::Reset();
+    }
+
+private:
+    std::uint32_t m_uiCheckPulse{};
+
+public:
+    void Reset() override
+    {
+        m_uiCheckPulse = nsAntiExploit::PULSE_TIMER;
+
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetVisibility(VISIBILITY_OFF);
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (m_uiCheckPulse < uiDiff)
+        {
+            Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& player : list)
+            {
+                if (Player * pPlayer{ player.getSource() })
+                {
+                    if (!pPlayer->IsGameMaster() && pPlayer->IsInRange3d(
+                        m_creature->GetPositionX(),
+                        m_creature->GetPositionY(),
+                        m_creature->GetPositionZ(),
+                        0.0f, nsAntiExploit::PERMITTED_AREA))
+                    {
+                        pPlayer->AddAura(nsAntiExploit::SPELL_STUN);
+
+                        DoAfterTime(pPlayer, (3 * IN_MILLISECONDS), [player = pPlayer]()
+                            {
+                                if (player)
+                                {
+                                    static_cast<Unit*>(player)->NearTeleportTo(
+                                        nsAntiExploit::vfTeleportDestinations[0][0],
+                                        nsAntiExploit::vfTeleportDestinations[0][1],
+                                        nsAntiExploit::vfTeleportDestinations[0][2],
+                                        nsAntiExploit::vfTeleportDestinations[0][3]
+                                    );
+                                }
+                            });
+
+                        DoAfterTime(pPlayer, (5 * IN_MILLISECONDS), [player = pPlayer]()
+                            {
+                                if (player)
+                                {
+                                    ChatHandler(player).SendSysMessage(nsAntiExploit::WARNING_MESSAGE);
+                                }
+                            });
+                    }
+                }
+            }
+
+            m_uiCheckPulse = nsAntiExploit::PULSE_TIMER;
+        }
+        else
+        {
+            m_uiCheckPulse -= uiDiff;
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_citadel_anti_exploit(Creature* pCreature)
+{
+    return new npc_citadel_anti_exploit_AI(pCreature);
+}
+
 
 void AddSC_trash_mobs_scarlet_citadel()
 {
     Script* pNewscript;
 
-    pNewscript = new Script;
-    pNewscript->Name = "npc_citadel_anti_exploit";
-    pNewscript->GetAI = &GetAI_npc_citadel_anti_exploit;
-    pNewscript->RegisterSelf();
-
-    // FIRST WING (Caster's Nightmare)
+    // Caster's Nightmare Wing
     pNewscript = new Script;
     pNewscript->Name = "npc_citadel_inquisitor";
     pNewscript->GetAI = &GetAI_npc_citadel_inquisitor;
@@ -1055,20 +681,23 @@ void AddSC_trash_mobs_scarlet_citadel()
     pNewscript->GetAI = &GetAI_npc_citadel_footman;
     pNewscript->RegisterSelf();
 
-    pNewscript = new Script;
-    pNewscript->Name = "npc_eric_vesper";
-    pNewscript->GetAI = &GetAI_npc_eric_vesper;
-    pNewscript->RegisterSelf();
-
     // Ambush Park
     pNewscript = new Script;
     pNewscript->Name = "npc_citadel_interrogator";
     pNewscript->GetAI = &GetAI_npc_citadel_interrogator;
     pNewscript->RegisterSelf();
 
-    // Shadow Wing
     pNewscript = new Script;
-    pNewscript->Name = "npc_darkcaller_rayn";
-    pNewscript->GetAI = &GetAI_npc_darkcaller_rayn;
+    pNewscript->Name = "npc_chaplain_and_sister";
+    pNewscript->GetAI = &GetAI_npc_chaplain_and_sister;
+    pNewscript->RegisterSelf();
+
+    // Shadow Wing
+
+
+    // Misc
+    pNewscript = new Script;
+    pNewscript->Name = "npc_citadel_anti_exploit";
+    pNewscript->GetAI = &GetAI_npc_citadel_anti_exploit;
     pNewscript->RegisterSelf();
 }

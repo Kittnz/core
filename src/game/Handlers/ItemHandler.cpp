@@ -285,6 +285,8 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
         return;
     }
 
+    _player->LogItem(pItem, LogItemAction::Deleted, count);
+
     if (count)
     {
         uint32 i_count = count;
@@ -618,6 +620,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
             _player->SendSellError(SELL_ERR_CANT_SELL_ITEM, pCreature, itemGuid, 0);
             return;
         }
+        _player->LogItem(pItem, LogItemAction::Sold, count);
 
         pItem->SetCount(pItem->GetCount() - count);
         _player->ItemRemovedQuestCheck(pItem->GetEntry(), count);
@@ -634,6 +637,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
     }
     else
     {
+        _player->LogItem(pItem, LogItemAction::Sold);
         _player->ItemRemovedQuestCheck(pItem->GetEntry(), pItem->GetCount());
         _player->RemoveItem(pItem->GetBagSlot(), pItem->GetSlot(), true);
         _player->InterruptSpellsWithCastItem(pItem);

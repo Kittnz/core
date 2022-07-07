@@ -249,6 +249,7 @@ class ChatHandler
         bool HandleBanListAccountCommand(char* args);
         bool HandleBanListCharacterCommand(char* args);
         bool HandleBanListIPCommand(char* args);
+        bool HandleWarnCharacterCommand(char* args);
 
         bool HandleCastCommand(char* args);
         bool HandleCastSelfCommand(char* args);
@@ -505,6 +506,7 @@ class ChatHandler
         bool HandleSaveAllCommand(char* args);
 
         // Turtle WoW
+        bool HandleItemLogCommand(char* args);
         bool HandleSendMailsCommand(char* args);
         bool HandleBalanceCommand(char* args);
         bool HandleMailboxCommand(char* args);

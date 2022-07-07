@@ -130,7 +130,23 @@ namespace nsDaelus
             }
             case CombatNotifications::POISONCLOUD:
             {
-                return "The Light curses you, with every second your own flesh and blood burn your very being.";
+                const std::uint32_t i{ urand(0, 2) };
+                if (i == 0)
+                {
+                    return "The Light curses you, with every second your own flesh and blood burn your very being.";
+                }
+                else if (i == 1)
+                {
+                    return "By my wrath your soul will succumb to the Light's justice!";
+                }
+                else if (i == 2)
+                {
+                    return "Your own mind will be your greatest enemy. The Light shall burn you!";
+                }
+                else
+                {
+                    return "";
+                }
             }
             case CombatNotifications::LIFEDRAIN:
             {
