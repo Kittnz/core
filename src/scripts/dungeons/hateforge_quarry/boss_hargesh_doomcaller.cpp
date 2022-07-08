@@ -1,6 +1,7 @@
 
 #include "scriptPCH.h"
 
+
 struct Location
 {
     float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};
@@ -12,6 +13,13 @@ static const Location vfSpawnPoint[] =
     { -8283.150391f, -3740.716309f, 137.77f, 2.820284f }
 };
 
+static constexpr std::uint32_t NPC_FACELESS_TERROR{ 60738 };
+static constexpr std::uint32_t SPELL_IMMOLATE{ 11668 };
+static constexpr std::uint32_t SPELL_SHADOW_BOLT_VOLLEY{ 27646 };
+static constexpr std::uint32_t SPELL_SHADOW_BOLT{ 12739 };
+static constexpr std::uint32_t SPELL_IMMUNE_ALL{ 29230 };
+static constexpr std::uint32_t SPELL_SHADOW_CHANNELING{ 12380 };
+
 class boss_hargesh_doomcallerAI : public ScriptedAI
 {
 public:
@@ -21,24 +29,15 @@ public:
     }
 
 private:
-    static constexpr uint32 NPC_FACELESS_TERROR{ 60738 };
-
-    static constexpr uint32 SPELL_IMMOLATE{ 11668 };
-    static constexpr uint32 SPELL_SHADOW_BOLT_VOLLEY{ 27646 };
-    static constexpr uint32 SPELL_SHADOW_BOLT{ 12739 };
-    static constexpr uint32 SPELL_IMMUNE_ALL{ 29230 };
-    static constexpr uint32 SPELL_SHADOW_CHANNELING{ 12380 };
-
-
-    uint8 m_uiDeadCounter{};
-
-    uint32 m_uiImmolate_Timer{};
-    uint32 m_uiShadowBoltVolley_Timer{};
-    uint32 m_uiShadowBolt_Timer{};
-    uint32 m_uiCheckIfAddsAreDead_Timer{};
-
     bool m_bPhaseTwo{};
     bool m_bAddsAreDead{};
+
+    std::uint8_t m_uiDeadCounter{};
+
+    std::uint32_t m_uiImmolate_Timer{};
+    std::uint32_t m_uiShadowBoltVolley_Timer{};
+    std::uint32_t m_uiShadowBolt_Timer{};
+    std::uint32_t m_uiCheckIfAddsAreDead_Timer{};
 
     std::vector<ObjectGuid> m_vFacelessTerror;
 
@@ -70,10 +69,14 @@ public:
         if (m_uiImmolate_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_IMMOLATE) == CanCastResult::CAST_OK)
+            {
                 m_uiImmolate_Timer = 30000;
+            }
         }
         else
+        {
             m_uiImmolate_Timer -= uiDiff;
+        }
     }
 
     void CastShadowBoltVolley(const uint32& uiDiff)
@@ -81,10 +84,14 @@ public:
         if (m_uiShadowBoltVolley_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_BOLT_VOLLEY) == CanCastResult::CAST_OK)
+            {
                 m_uiShadowBoltVolley_Timer = 90000;
+            }
         }
         else
+        {
             m_uiShadowBoltVolley_Timer -= uiDiff;
+        }
     }
 
     void CastShadowBolt(const uint32& uiDiff)
@@ -92,10 +99,14 @@ public:
         if (m_uiShadowBolt_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SHADOW_BOLT) == CanCastResult::CAST_OK)
+            {
                 m_uiShadowBolt_Timer = 10000;
+            }
         }
         else
+        {
             m_uiShadowBolt_Timer -= uiDiff;
+        }
     }
 
     void PhaseTwo()
@@ -114,7 +125,7 @@ public:
         {
             if (Player* pPlayer{ itr.getSource() })
             {
-                if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
+                if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster() && m_vFacelessTerror.size() < 3)
                 {
                     if (Creature* pFacelessTerror0{ m_creature->SummonCreature(NPC_FACELESS_TERROR,
                         vfSpawnPoint[0].m_fX,
@@ -239,6 +250,7 @@ CreatureAI* GetAI_boss_hargesh_doomcaller(Creature* pCreature)
 {
     return new boss_hargesh_doomcallerAI(pCreature);
 }
+
 
 void AddSC_boss_hargesh_doomcaller()
 {
