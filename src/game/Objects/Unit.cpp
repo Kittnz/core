@@ -2017,6 +2017,14 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
         // Need remove it later
         if (mod->m_amount <= 0)
             existExpired = true;
+
+        if (HasAura(45560) && pCaster->IsUnit() && (*i)->GetSpellProto()->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD>()) // CUSTOM reflective shields
+        {
+            //20% of currentAbsorb
+            const int32 damage = currentAbsorb * 0.2f;
+            CastCustomSpell(pCaster->ToUnit(), 45561, &damage, nullptr, nullptr, true);
+        }
+
     }
 
     // Remove all expired absorb auras
