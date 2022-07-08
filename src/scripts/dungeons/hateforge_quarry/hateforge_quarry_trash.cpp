@@ -2,6 +2,13 @@
 #include "scriptPCH.h"
 
 
+namespace nsCleric
+{
+    static constexpr std::uint32_t SPELL_SHADOW_WORD_PAIN{ 10894 };
+    static constexpr std::uint32_t SPELL_GREATER_HEAL{ 10965 };
+    static constexpr std::uint32_t SPELL_IMMOLATE{ 11668 };
+};
+
 class mob_hateforge_clericAI : public ScriptedAI
 {
 public:
@@ -11,19 +18,14 @@ public:
     }
 
 private:
-    static constexpr uint32 SPELL_SHADOW_WORD_PAIN{ 10894 };
-    static constexpr uint32 SPELL_GREATER_HEAL{ 10965 };
-    static constexpr uint32 SPELL_IMMOLATE{ 11668 };
-
-    uint32 m_uiHealNearbyAllies_Timer{};
     bool m_bShadowWordPainAlreadyCastedOnce{};
+    std::uint32_t m_uiHealNearbyAllies_Timer{};
 
 public:
     void Reset() override
     {
-        m_uiHealNearbyAllies_Timer = 4000;
-
         m_bShadowWordPainAlreadyCastedOnce = false;
+        m_uiHealNearbyAllies_Timer = 4000;
     }
 
     void CheckIfNearbyAllyNeedsHealing(const uint32& uiDiff)
@@ -32,14 +34,16 @@ public:
         {
             if (Unit* pFriendlyTarget{ m_creature->FindLowestHpFriendlyUnit(40.f) })
             {
-                if (DoCastSpellIfCan(pFriendlyTarget, SPELL_GREATER_HEAL) == CanCastResult::CAST_OK)
+                if (DoCastSpellIfCan(pFriendlyTarget, nsCleric::SPELL_GREATER_HEAL) == CanCastResult::CAST_OK)
                 {
                     m_uiHealNearbyAllies_Timer = urand(8000, 10000);
                 }
             }
         }
         else
+        {
             m_uiHealNearbyAllies_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -49,8 +53,10 @@ public:
 
         if (!m_bShadowWordPainAlreadyCastedOnce)
         {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_IMMOLATE) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsCleric::SPELL_IMMOLATE) == CanCastResult::CAST_OK)
+            {
                 m_bShadowWordPainAlreadyCastedOnce = true;
+            }
         }
 
         CheckIfNearbyAllyNeedsHealing(uiDiff);
@@ -65,6 +71,11 @@ CreatureAI* GetAI_mob_hateforge_clericAI(Creature* pCreature)
 }
 
 
+namespace nsTaskMaster
+{
+    static constexpr std::uint32_t SPELL{ 56522 };
+};
+
 class mob_hateforge_taskmasterAI : public ScriptedAI
 {
 public:
@@ -74,9 +85,7 @@ public:
     }
 
 private:
-    static constexpr uint32 SPELL{ 56522 };
-
-    uint32 m_uiSpell_Timer{};
+    std::uint32_t m_uiSpell_Timer{};
 
 public:
     void Reset() override
@@ -90,14 +99,16 @@ public:
         {
             if (Unit* pFriendlyTarget{ m_creature->SelectRandomFriendlyTarget(nullptr, 40.f) })
             {
-                if (DoCastSpellIfCan(pFriendlyTarget, SPELL) == CanCastResult::CAST_OK)
+                if (DoCastSpellIfCan(pFriendlyTarget, nsTaskMaster::SPELL) == CanCastResult::CAST_OK)
                 {
                     m_uiSpell_Timer = 30000;
                 }
             }
         }
         else
+        {
             m_uiSpell_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -115,6 +126,11 @@ CreatureAI* GetAI_mob_hateforge_taskmasterAI(Creature* pCreature)
 }
 
 
+namespace nsFireblade
+{
+    static constexpr std::uint32_t SPELL{ 56524 };
+};
+
 class mob_twilight_firebladeAI : public ScriptedAI
 {
 public:
@@ -124,8 +140,6 @@ public:
     }
     
 private:
-    static constexpr uint32 SPELL{ 56524 };
-
     bool m_bSpellAlreadyCastedOnce{};
 
 public:
@@ -138,7 +152,7 @@ public:
     {
         if (Unit* pFriendlyTarget{ m_creature->SelectRandomFriendlyTarget(nullptr, 40.f) })
         {
-            if (DoCastSpellIfCan(pFriendlyTarget, SPELL) == CanCastResult::CAST_OK)
+            if (DoCastSpellIfCan(pFriendlyTarget, nsFireblade::SPELL) == CanCastResult::CAST_OK)
             {
                 m_bSpellAlreadyCastedOnce = true;
             }
@@ -151,7 +165,9 @@ public:
             return;
 
         if (!m_bSpellAlreadyCastedOnce)
+        {
             CastSpell();
+        }
 
         DoMeleeAttackIfReady();
     }

@@ -59,7 +59,7 @@ public:
         }
 
         // Phase 1
-        m_bHasAlreadyShoutedLifeDrain - false;
+        m_bHasAlreadyShoutedLifeDrain = false;
         m_uiChosenOne = nsDaelus::NUMBER_OF_ADDS; // Set m_uiChosenOne out of range until CheckChosenOneTiming() assigns a value within range (0-5)
         m_uiCheckForTank_Timer = nsDaelus::CHECK_FOR_TANK_TIMER;
         m_uiCallSpirits_Timer = nsDaelus::CALL_SPIRITS_FIRST_TIMER;

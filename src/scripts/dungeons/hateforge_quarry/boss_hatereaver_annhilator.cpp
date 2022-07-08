@@ -2,6 +2,13 @@
 #include "scriptPCH.h"
 
 
+static constexpr std::int32_t VOICE_SCRIPT_AGGRO{ -1999957 };
+static constexpr std::int32_t VOICE_SCRIPT_DEAD{ -1999958 };
+
+static constexpr std::uint32_t SPELL_KNOCKBACK{ 28438 };
+static constexpr std::uint32_t SPELL_CLEAVE{ 19983 };
+static constexpr std::uint32_t SPELL_WAR_STOMP{ 11876 };
+
 class boss_hatereaver_annhilatorAI : public ScriptedAI
 {
 public:
@@ -10,16 +17,9 @@ public:
         boss_hatereaver_annhilatorAI::Reset();
     }
 
-    static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999957 };
-    static constexpr int32 VOICE_SCRIPT_DEAD{ -1999958 };
-
-    static constexpr uint32 SPELL_KNOCKBACK{ 28438 };
-    static constexpr uint32 SPELL_CLEAVE{ 19983 };
-    static constexpr uint32 SPELL_WAR_STOMP{ 11876 };
-
-    uint32 m_uiKnockback_Timer{};
-    uint32 m_uiCleave_Timer{};
-    uint32 m_uiWarStomp{};
+    std::uint32_t m_uiKnockback_Timer{};
+    std::uint32_t m_uiCleave_Timer{};
+    std::uint32_t m_uiWarStomp{};
 
     void Reset() override
     {
@@ -43,10 +43,14 @@ public:
         if (m_uiKnockback_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_KNOCKBACK) == CanCastResult::CAST_OK)
+            {
                 m_uiKnockback_Timer = 30000;
+            }
         }
         else
+        {
             m_uiKnockback_Timer -= uiDiff;
+        }
     }
 
     void CastCleave(const uint32& uiDiff)
@@ -54,10 +58,14 @@ public:
         if (m_uiCleave_Timer < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CanCastResult::CAST_OK)
+            {
                 m_uiCleave_Timer = 40000;
+            }
         }
         else
+        {
             m_uiCleave_Timer -= uiDiff;
+        }
     }
 
     void CastWarStomp(const uint32& uiDiff)
@@ -65,10 +73,14 @@ public:
         if (m_uiWarStomp < uiDiff)
         {
             if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_WAR_STOMP) == CanCastResult::CAST_OK)
+            {
                 m_uiWarStomp = 45000;
+            }
         }
         else
+        {
             m_uiWarStomp -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
