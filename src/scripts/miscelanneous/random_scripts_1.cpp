@@ -307,16 +307,6 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
     return false;
 }
 
-bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    switch (pItem->GetEntry())
-    {
-    case 50234: pPlayer->LearnSpell(46058, false); break; // Outline: Traveler's Tent 
-    case 50235: pPlayer->LearnSpell(46060, false); break; // Outline: Fishing Boat
-    }
-    return true;
-}
-
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
@@ -2305,6 +2295,7 @@ public:
 
             player->SetFlying(false);
             player->UpdateSpeed(MOVE_SWIM, false, 1.0F);
+            player->UpdateSpeed(MOVE_RUN, false, player->GetSpeedRatePersistance(MOVE_RUN));
 
             player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
             WorldPacket stop_swim(MSG_MOVE_STOP_SWIM, 31);
@@ -2351,47 +2342,53 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
     return false;
 }
 
+
+void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 removeEntry = 0, uint32 count = 0)
+{
+    if(player->IsMounted())
+        player->Unmount();
+
+    player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
+    player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
+    player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
+    player->SetFlying(true);
+    if (removeEntry)
+    {
+        player->DestroyItemCount(removeEntry, count ? count : 1, true);
+        player->SaveInventoryAndGoldToDB();
+    }
+    player->InterruptNonMeleeSpells(true);
+    player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+}
+
 bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         if (p_Player->HasItemCount(422, 1)) // Goldshire Quest Gryphon
         {
-            p_Player->GetSession()->SendNotification("You will be dismounted in 30 seconds.");
-            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18274);
-            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
-            p_Player->SetFlying(true);
-            p_Player->DestroyItemCount(422, 1, true);
-            p_Player->SaveInventoryAndGoldToDB();
-            p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+            SetFlying(p_Player, 30, 18274, 422, 1);
         }
         else
             p_Player->PMonsterEmote("The gryphon recognizes you and doesn't seem to be satisfied. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2 || uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
-        p_Player->GetSession()->SendNotification("Your flight will last 45 seconds.");
+        uint32 mountId = 0;
         switch (uiAction)
         {
-        case GOSSIP_ACTION_INFO_DEF + 2: p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);   break; // Gryphon
-        case GOSSIP_ACTION_INFO_DEF + 3: p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18274); break; // Wywern
-        case GOSSIP_ACTION_INFO_DEF + 4: p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 18279); break; // Bronze Drake
+        case GOSSIP_ACTION_INFO_DEF + 2: mountId = 295;   break; // Gryphon
+        case GOSSIP_ACTION_INFO_DEF + 3: mountId = 18274; break; // Wywern
+        case GOSSIP_ACTION_INFO_DEF + 4: mountId = 18279; break; // Bronze Drake
         }
-        p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(45000));
-        p_Player->SetFlying(true);
-        p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+
+        SetFlying(p_Player, 45, mountId);
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
     {
         if (p_Player->HasItemCount(3770, 1)) // Durotar Quest wyvern
         {
-            p_Player->GetSession()->SendNotification("You will be dismounted in 30 seconds.");
-            p_Player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, 295);
-            p_Player->m_Events.AddEvent(new StopFlyingAfterTime(p_Player->GetGUID()), p_Player->m_Events.CalculateTime(30 * IN_MILLISECONDS));
-            p_Player->SetFlying(true);
-            p_Player->DestroyItemCount(3770, 1, true);
-            p_Player->SaveInventoryAndGoldToDB();
-            p_Player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+            SetFlying(p_Player, 30, 295, 3770, 1);
         }
         else
             p_Player->PMonsterEmote("The wyvern recognizes you and doesn't seem to be satisfied. Perhaps a handful of Mutton Chops could do some good?", nullptr, false);
@@ -7521,11 +7518,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_skin_change";
     newscript->pItemUseSpell = &ItemUseSpell_skin_changer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_survival_outline";
-    newscript->pItemUseSpell = &ItemUseSpell_item_survival_outline;
     newscript->RegisterSelf();
 
     newscript = new Script;

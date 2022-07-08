@@ -435,7 +435,6 @@ CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
     return new npc_citadel_interrogator_AI(pCreature);
 }
 
-
 class npc_chaplain_and_sister_AI : public ScriptedAI
 {
 public:
@@ -447,7 +446,6 @@ public:
 
 private:
     bool m_bEventStarted{};
-    bool m_bEventDone{};
 
     std::uint32_t m_uiCHeckPulse_Timer{};
 
@@ -457,7 +455,6 @@ public:
     void Reset() override
     {
         m_bEventStarted = false;
-        m_bEventDone = false;
 
         m_uiCHeckPulse_Timer = nsChaplainAndSister::TIMER_CHECK_PULSE;
     }
@@ -510,53 +507,54 @@ public:
         if (!pScarletSister)
             return;
 
+        static const std::uint32_t uiRndEvent{ urand(0, 1) };
         DoAfterTime(pScarletChaplain, (2 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
             if (chaplain)
             {
-                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_0, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 0 : 7], LANG_UNIVERSAL);
             }
         });
         DoAfterTime(pScarletSister, (10 * IN_MILLISECONDS), [sister = pScarletSister]()
         {
             if (sister)
             {
-                sister->MonsterSay(nsChaplainAndSister::strSisterConv_0_0, LANG_UNIVERSAL);
+                sister->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 1 : 8], LANG_UNIVERSAL);
             }
         });
         DoAfterTime(pScarletChaplain, (18 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
             if (chaplain)
             {
-                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_1, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 2 : 9], LANG_UNIVERSAL);
             }
         });
         DoAfterTime(pScarletSister, (26 * IN_MILLISECONDS), [sister = pScarletSister]()
         {
             if (sister)
             {
-                sister->MonsterSay(nsChaplainAndSister::strSisterConv_0_1, LANG_UNIVERSAL);
+                sister->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 3 : 10], LANG_UNIVERSAL);
             }
         });
         DoAfterTime(pScarletChaplain, (34 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
             if (chaplain)
             {
-                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_2, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 4 : 11], LANG_UNIVERSAL);
             }
         });
         DoAfterTime(pScarletSister, (42 * IN_MILLISECONDS), [sister = pScarletSister]()
         {
             if (sister)
             {
-                sister->MonsterSay(nsChaplainAndSister::strSisterConv_0_2, LANG_UNIVERSAL);
+                sister->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 5 : 12], LANG_UNIVERSAL);
             }
         });
         DoAfterTime(pScarletChaplain, (50 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
             if (chaplain)
             {
-                chaplain->MonsterSay(nsChaplainAndSister::strChaplainConv_0_3, LANG_UNIVERSAL);
+                chaplain->MonsterSay(nsChaplainAndSister::strConversation[uiRndEvent ? 6 : 13], LANG_UNIVERSAL);
             }
         });
     }
