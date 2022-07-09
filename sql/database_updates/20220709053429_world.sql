@@ -302,10 +302,134 @@ replace into gameobject_loot_template values
 
 -- The Harvest Golem Mystery VII
 delete from quest_template where entry = 40476;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40475,40476,2,14,17,10,0,0,'The Harvest Golem Mystery VII','$N I have all materials to create a new Harvest Golem. If my calculations are correct, I should be able to rewire his mind.\n\nI need your help. The Harvest Golem will be hostile at first, and the Rewiring Spell requires all my concentration. I need you to draw the golem\'s attention until I\'m finished.','Help Maltimor Gartside with casting the Rewiring Spell.','The rewiring was successful.','This is good, really good. Given time, we will be able to rewire all golems in Westfall.\n\nBut only if their production stops.',0,0,0,0,0,0,0,0,60375,1,0,0,0,0,0,0,0,0,0,1350,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40475,40476,2,14,17,10,0,0,'The Harvest Golem Mystery VII','$N I have all materials to create a new Harvest Golem. If my calculations are correct, I should be able to rewire his mind.\n\nI need your help. The Harvest Golem will be hostile at first, and the Rewiring Spell requires all my concentration. I need you to draw the golem\'s attention until I\'m finished.','Help Maltimor Gartside with casting the Rewiring Spell.','The rewiring was successful.','This is good, really good. Given time, we will be able to rewire all golems in Westfall.\n\nBut only if their production stops.',0,0,0,0,0,0,0,0,60375,1,0,0,0,0,0,0,0,0,0,1350,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Help Maltimor Gartside with casting the Rewiring Spell');
 
 replace into creature_questrelation (id, quest) values (60858, 40476);
 replace into creature_involvedrelation (id, quest) values (60858, 40476);
 
 REPLACE INTO creature_template VALUES (60871, 379, 0, 0, 0, 'Harvest Reaper', '', 0, 17, 18, 386, 417, 0, 0, 765, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7342, 0, 0, 0, 1150, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8405008, 0, 0, 0, '');
+
+-- The Harvest Golem Mystery VIII
+delete from quest_template where entry = 40477;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40476,40477,2,14,17,14,0,0,'The Harvest Golem Mystery VIII','I will handle rewiring the golems of Westfall. It will take months, maybe years, but it will be done. I am not a fighter. And the Defias can still easily produce new ones faster than I can rewire them. We need to halt the production.\n\nFortunately, I know where we can find the shipments of Animation Runes. Go to the Jangolode Mine and Gold Coast Quarry. The Defias hide their runes deep inside, awaiting transport to their underground foundry. Take all the runes and bring them to me.\n\nAnd yes, I promised you the rest of the story. So where did we end? The arrival of Defias. Very soon, they started producing Harvest Golems on their own. How they figured it out- it is a mystery. I have my suspicions though. To produce such a Rune, a powerful mage is needed. The Defias have mages on their own, of course, but none of them is powerful enough, to my knowledge, to make it.\n\nI think they are working with the person who turned the golems hostile in the first place. Their original creator. His identity is still unknown to me. I hope you will find some clues with the shipment.','Gather the Jangolode Mine Shipment, and the Gold Coast Shipment to Maltimor Gartside at the Gartside Plot in Westfall.','Have you retrieved the Rune Shipments?','You found the note attached to one of the crates? But it\'s all written in gibberish? Don\'t worry, we will figure it out.\n\nFor now, we need to handle another problem.',60682,1,60683,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1400,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60858, 40477);
+replace into creature_involvedrelation (id, quest) values (60858, 40477);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60682,1501,'Jangolode Mine Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60683,35465,'Gold Coast Shipment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'Has a small note attached to it.',0);
+
+replace into gameobject_template values
+(2010899,3,24111,'Jangolode Shipment',0,4,1,43,2010899,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,''),
+(2010900,3,24111,'Gold Coast Shipment',0,4,1,43,2010900,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010899,60682,-100,0,1,1,0),
+(2010900,60683,-100,0,1,1,0);
+
+-- The Harvest Golem Mystery IX
+delete from quest_template where entry = 40478;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40477,40478,2,1581,19,15,0,0,'The Harvest Golem Mystery IX','The goblins of Defias produce harvest golems deep inside their underground hideout. The People\'s Militia in Sentinel Hill have been trying to find its location lately. Maybe they have discovered its whereabouts. If not, they will probably need your help.\n\nOnce you are inside, find the workshop and slay their leader. This will stop their manufacturing operations for good.\n\nIn the meantime, I will reach out to Hewen. If anyone will be able to decipher this note, it\'s him, or at least one of his contacts.','Venture into the Deadmines and slay Gilnid, once done, return to Maltimor Gartside at the Gartside Plot in Westfall.','Have you found the Defias hideout?','The Deadmines... Interesting. I\'m glad that you made it out alive. With their leader dead, I can focus on rewiring the remaining golems.\n\nThat, and finding the person responsible for all of this.',0,0,0,0,0,0,0,0,1763,1,0,0,0,0,0,0,0,0,2500,1550,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60684,1,60685,1,60686,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60858, 40478);
+replace into creature_involvedrelation (id, quest) values (60858, 40478);
+
+update quest_template set type = 81 where entry = 40478;
+
+replace into item_template values
+ ('60684', '4', '2', 'Tinkering Belt', '', '17237', '2', '0', '1', '1164', '291', '6', '-1', '-1', '20',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '3', '4', '2',
+ '5', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '42', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '25', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60685', '4', '1', 'Safety Wraps', '', '16664', '2', '0', '1', '980', '245', '9', '-1', '-1', '20',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '2', '7', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '16', '0', '0', '5',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '20', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60686', '2', '5', 'Harvest Golem Arm', '', '6806', '2', '0', '1', '9056', '2264', '17', '-1', '-1', '20',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '7', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3400', '0',
+ '0', '39', '58', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '65', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Harvest Golem Mystery X
+delete from quest_template where entry = 40479;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40478,40479,2,14,20,15,0,0,'The Harvest Golem Mystery X','When you were gone, I spoke with Hewen about this mysterious note. It turned out, as I expected, that it is some kind of cypher. Worry not, as he recognized it. Go back to Sentinel Hill and talk with him. He will explain it better than I can.\n\nFinally, we are getting closer to delivering vengeance upon those who wronged the people of Westfall.','Talk with Christopher Hewen at Sentinel Hill in Westfall.','It\'s you, $N! I missed you! How\'s it going?','Great job with these golems, stopping the Defias and whatnot. You and Maltimor did more for these lands than the People\'s Militia has ever done, and no one will know about your exploits…\n\nSuch are the whims of history, pal. But you didn\'t come here for a friendly talk, ay?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,300,72,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60858, 40479);
+replace into creature_involvedrelation (id, quest) values (8934, 40479);
+
+-- The Harvest Golem Mystery XI
+delete from quest_template where entry = 40480;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40479,40480,2,14,20,15,0,0,'The Harvest Golem Mystery XI','So about this cypher... I cannot read it. But my dear colleague, Franklin Hamar, who lives in Lakeshire used the same cypher when trading with Defias.\n\nDon\'t look at me like that! It was him, not me. I would never ever trade with these vile people...\n\nRegardless, he will be able to read it for you. He will probably need some convincing, but you can do it for sure. And since you are going to Lakeshire... could you please ask about my damn shipment?','Talk with Franklin Hamar in Lakeshire.','I offer only the finest goods.','What? Give me that.\n\n<Franklin Hamar looks on the note.>\n\nYes, I can read it. But everything has a price.',60687,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60687,1,0,400,72,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (8934, 40480);
+replace into creature_involvedrelation (id, quest) values (3091, 40480);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60687,8927,'Encrypted Note',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The Harvest Golem Mystery XII
+delete from quest_template where entry = 40481;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40480,40481,2,14,22,15,0,0,'The Harvest Golem Mystery XII','I can decipher this for you, of course. But first: you say a word to any guard in the town that I can do this, you\'re gone. And second: it will cost you. You\'re lucky that I\'m in need of an adventurer to perform some easy and simple tasks...\n\nFirst, I need silk. But not any kind of silk. Spider silk bathed in moonlight, extraordinarily beautiful. Hard to get though. Only found in Duskwood, to my knowledge. Bring me at least ten samples, we will see if it\'s good enough.','Gather 10 Moonlight Silk samples for Franklin Hamar in Lakeshire.','Got the silk? I haven\'t got all day.','Extraordinary. These are good enough.',60688,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1350,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (3091, 40481);
+replace into creature_involvedrelation (id, quest) values (3091, 40481);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60688,24898,'Moonlight Silk',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(949,60688,-60,1,1,1,0),
+(930,60688,-60,1,1,1,0),
+(569,60688,-60,1,1,1,0),
+(539,60688,-60,1,1,1,0),
+(217,60688,-60,1,1,1,0);
+
+-- The Harvest Golem Mystery XIII
+delete from quest_template where entry = 40482;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40481,40482,2,14,22,15,0,0,'The Harvest Golem Mystery XIII','Alright, you helped me well. I will spare you running errands and just send you to do what you do best. Kill.\n\nGnolls in the hills of Redridge have been giving me and other traders a hard time lately. It\'s bad for business. I lost two shipments with rare materials this month only! They probably still hoard them somewhere in their camps up north. Check it out.\n\nI want you to look especially for one lost shipment - rare needles from Lordaeron. You will know when you see them.','Find Lordaeron Needles amonst the gnoll hovels. for Franklin Hamar in Lakeshire.','Less talking, more doing.','Extraordinary. Great work. Those needles will serve me well. So thin, so durable. But I\'m getting ahead of myself.\n\nI made a promise. Let me decipher this message.',60689,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1300,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (3091, 40482);
+replace into creature_involvedrelation (id, quest) values (3091, 40482);
+
+update creature_template set script_name = 'npc_franklin_hamar' where entry = 3091;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60689,22464,'Lordaeron Needles',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into gameobject_template values
+(2010901,3,24106,'Lordaeron Stamped Crate',0,4,1,43,2010901,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010901,60689,-100,0,1,1,0);
+
+-- The Harvest Golem Mystery XIV
+delete from quest_template where entry = 40483;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40482,40483,2,14,25,15,0,0,'The Harvest Golem Mystery XIV','If I were you, I would go back to Westfall. This seems serious.','Go back to Maltimor.','Finally, it\'s you. Were you able to decipher the note?','So the person who may manufacture the runes lives close to Darkshire. We need to hurry then, there is no time to waste. Tales of your exploits have probably reached him already.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,350,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (3091, 40483);
+replace into creature_involvedrelation (id, quest) values (60858, 40483);
+
+-- The Harvest Golem Mystery XV
+delete from quest_template where entry = 40484;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40483,40484,2,14,25,15,0,0,'The Harvest Golem Mystery XV','Venture to Darkshire, and ask the Night Watch about the whereabouts of F.W.. If he was right with his suspicions, they would know where to find him.\n\nI pray to Light that he still hasn\'t moved out of Duskwood.\n\nQuestion him. And if you find him guilty... do not wait for Stormwind\'s justice. Kill him, avenge the people of Westfall.','Talk with the Night Watch about the location of F.W.','The Night Watch stands firm against the darkness that surrounds us.','You are asking me if I have seen a suspicious man in Darkshire? My dear, all people here are suspicious!\n\n<Althea Ebonlocke laughs.>\n\nJokes aside, I may know who you are talking about.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60858, 40484);
+replace into creature_involvedrelation (id, quest) values (264, 40484);
 
