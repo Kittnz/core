@@ -86,9 +86,6 @@ uint32 RingBoss[] =
                 9032, // Hedrum
         };
 
-//Used to prevent trigger for more than 1 player
-bool EventInProgress{};
-
 /*######
 ## npc_grimstone
 ######*/
@@ -143,9 +140,6 @@ struct npc_grimstoneAI : public npc_escortAI
         CanWalk = false;
         ArenaChallenge = false;
         GroupIsWiped = false;
-
-        // Unlocking Trigger event
-        EventInProgress = false;
     }
 
     void DoGate(uint32 id, uint32 state)
@@ -537,13 +531,8 @@ bool AreaTrigger_at_ring_of_law(Player* pPlayer, AreaTriggerEntry const *at)
             }
             return false;
         }
-
-        if (!EventInProgress)
-        {
             pInstance->SetData(TYPE_RING_OF_LAW, IN_PROGRESS);
             pPlayer->SummonCreature(NPC_GRIMSTONE, 625.559f, -205.618f, -52.735f, 2.609f, TEMPSUMMON_DEAD_DESPAWN, 0);
-            EventInProgress = true;
-        }
     }
     return false;
 }

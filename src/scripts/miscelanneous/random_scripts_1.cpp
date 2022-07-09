@@ -8,6 +8,12 @@ void DoAfterTime(Player* player, uint32 p_time, Functor&& function)
     player->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), player->m_Events.CalculateTime(p_time));
 }
 
+template <typename Functor>
+void DoAfterTime(GameObject* pGO, const uint32& p_time, Functor&& function)
+{
+    pGO->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pGO->m_Events.CalculateTime(p_time));
+}
+
 class DemorphAfterTime : public BasicEvent 
 {
 public:
@@ -305,16 +311,6 @@ bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTarg
     else 
         ChatHandler(pPlayer).SendSysMessage("You can't use this item.");    
     return false;
-}
-
-bool ItemUseSpell_item_survival_outline(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    switch (pItem->GetEntry())
-    {
-    case 50234: pPlayer->LearnSpell(46058, false); break; // Outline: Traveler's Tent 
-    case 50235: pPlayer->LearnSpell(46060, false); break; // Outline: Fishing Boat
-    }
-    return true;
 }
 
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
@@ -5215,59 +5211,89 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
-struct go_scarlet_attack_trigger : public GameObjectAI
+namespace nsScarletAttackTrigger
 {
-    explicit go_scarlet_attack_trigger(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = 1000; }
+    static constexpr std::uint32_t GO_TriggerConditionDummy{ 1000170 };
+    static constexpr std::uint32_t NPC_VLADEUS_SPRINGRIVER{ 50674 };
+    static constexpr std::uint32_t QUEST_THANDOL_SPAN{ 80703 };
+    static constexpr std::uint32_t TIMER_UPDATE{ 1000 };
+}
 
-    uint32 m_uiUpdateTimer;
+class go_scarlet_attack_trigger : public GameObjectAI
+{
+public:
+    explicit go_scarlet_attack_trigger(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = nsScarletAttackTrigger::TIMER_UPDATE; }
 
-    void UpdateAI(uint32 const uiDiff) override
+private:
+    std::uint32_t m_uiUpdateTimer{};
+
+public:
+    void UpdateAI(const uint32 uiDiff) override
     {     
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> players;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 10.0f, true, false);
-            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-            Cell::VisitWorldObjects(me, searcher, 10.0f);
-            for (Player* pPlayer : players)
-            {
-                if (pPlayer->GetQuestStatus(80703) == QUEST_STATUS_INCOMPLETE && 
-                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[0] == 0 || 
-                    pPlayer->GetQuestStatusData(80703)->m_creatureOrGOcount[1] == 0)
-                {
-                    GameObject* event_running = pPlayer->FindNearestGameObject(1000170, 30.0F);
-                    if (!event_running)
-                    {
-                        pPlayer->SummonGameObject(1000170, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 180, true);
+            std::list<Player*> lPlayers;
+            me->WorldObject::GetAlivePlayerListInRange(me, lPlayers, 10.f);
 
-                        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer]() {
-                            Map* map = sMapMgr.FindMap(0);
-                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                            player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                            });
-                        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS, [player = pPlayer]() {
-                            Map* map = sMapMgr.FindMap(0);
-                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                            player->SummonCreature(50673, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                            });
-                        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer]() {
-                            Map* map = sMapMgr.FindMap(0);
-                            player->SummonCreature(50673, -2458.82F, -2494.24F, 78.5F, 4.0F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                            Creature* vladeus_spawned = player->FindNearestCreature(50674, 30.0F);
-                            if (!vladeus_spawned)
-                                player->SummonCreature(50674, -2458.19F, -2512.90F, 78.5F, 1.9F, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS);
-                            });
+            for (const auto& player : lPlayers)
+            {
+                if (player->GetQuestStatus(nsScarletAttackTrigger::QUEST_THANDOL_SPAN) == QUEST_STATUS_INCOMPLETE &&
+                    player->GetQuestStatusData(nsScarletAttackTrigger::QUEST_THANDOL_SPAN)->m_creatureOrGOcount[0] == 0 ||
+                    player->GetQuestStatusData(nsScarletAttackTrigger::QUEST_THANDOL_SPAN)->m_creatureOrGOcount[1] == 0)
+                {
+                    if (player->FindNearestGameObject(nsScarletAttackTrigger::GO_TriggerConditionDummy, 30.f))
+                    {
+                        return;
                     }
-                    else return;                    
+                    else
+                    {
+                        player->SummonGameObject(nsScarletAttackTrigger::GO_TriggerConditionDummy, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 180, true);
+
+                        DoAfterTime(me, 2 * IN_MILLISECONDS, [GO = me]()
+                        {
+                            if (GO)
+                            {
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                            }
+                        });
+                        DoAfterTime(me, 20 * IN_MILLISECONDS, [GO = me]()
+                        {
+                            if (GO)
+                            {
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                            }
+                        });
+                        DoAfterTime(me, 40 * IN_MILLISECONDS, [GO = me]()
+                        {
+                            if (GO)
+                            {
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+
+                                if (!GO->FindNearestCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, 30.f))
+                                {
+                                    GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS);
+                                }
+                            }
+                        });
+                    }                   
                 }
             }
-            m_uiUpdateTimer = 1000;
+
+            m_uiUpdateTimer = nsScarletAttackTrigger::TIMER_UPDATE;
         }
-        else m_uiUpdateTimer -= uiDiff;
+        else
+        {
+            m_uiUpdateTimer -= uiDiff;
+        }
     }
 }; 
 
-GameObjectAI* GetAI_go_scarlet_attack_trigger(GameObject* gameobject) { return new go_scarlet_attack_trigger(gameobject); } 
+GameObjectAI* GetAI_go_scarlet_attack_trigger(GameObject* gameobject)
+{
+    return new go_scarlet_attack_trigger(gameobject);
+} 
 
 
 bool GossipHello_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature)
@@ -7528,11 +7554,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_skin_change";
     newscript->pItemUseSpell = &ItemUseSpell_skin_changer;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_survival_outline";
-    newscript->pItemUseSpell = &ItemUseSpell_item_survival_outline;
     newscript->RegisterSelf();
 
     newscript = new Script;
