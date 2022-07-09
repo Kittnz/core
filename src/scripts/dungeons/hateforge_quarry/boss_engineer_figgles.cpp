@@ -2,6 +2,10 @@
 #include "scriptPCH.h"
 
 
+static constexpr std::int32_t VOICE_SCRIPT_AGGRO{ -1999955 };
+static constexpr std::int32_t VOICE_SCRIPT_DEAD{ -1999956 };
+static constexpr std::uint32_t SPELL_CORROSIVE_POISON{ 24111 };
+
 class boss_engineer_figglesAI : public ScriptedAI
 {
 public:
@@ -10,15 +14,12 @@ public:
         boss_engineer_figglesAI::Reset();
     }
 
-    static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999955 };
-    static constexpr int32 VOICE_SCRIPT_DEAD{ -1999956 };
-
-    static constexpr uint32 SPELL_CORROSIVE_POISON{ 24111 };
-
-    uint32 m_uiCorrosivePoison_Timer{};
+    bool m_bCorrosivePoisonCastedOnce{};
+    std::uint32_t m_uiCorrosivePoison_Timer{};
 
     void Reset() override
     {
+        m_bCorrosivePoisonCastedOnce = false;
         m_uiCorrosivePoison_Timer = 10000;
     }
 
@@ -37,10 +38,12 @@ public:
         if (m_uiCorrosivePoison_Timer < uiDiff)
         {
             DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CORROSIVE_POISON);
-            // No Timer reset, this spell should only be casted once
+            m_bCorrosivePoisonCastedOnce = true;
         }
         else
+        {
             m_uiCorrosivePoison_Timer -= uiDiff;
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
@@ -48,7 +51,10 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
-        CastCorrosivePoison(uiDiff);
+        if (!m_bCorrosivePoisonCastedOnce)
+        {
+            CastCorrosivePoison(uiDiff);
+        }
 
         DoMeleeAttackIfReady();
     }

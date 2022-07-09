@@ -435,7 +435,6 @@ CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
     return new npc_citadel_interrogator_AI(pCreature);
 }
 
-
 class npc_chaplain_and_sister_AI : public ScriptedAI
 {
 public:
@@ -447,7 +446,6 @@ public:
 
 private:
     bool m_bEventStarted{};
-    bool m_bEventDone{};
 
     std::uint32_t m_uiCHeckPulse_Timer{};
 
@@ -457,7 +455,6 @@ public:
     void Reset() override
     {
         m_bEventStarted = false;
-        m_bEventDone = false;
 
         m_uiCHeckPulse_Timer = nsChaplainAndSister::TIMER_CHECK_PULSE;
     }
@@ -511,7 +508,6 @@ public:
             return;
 
         static const std::uint32_t uiRndEvent{ urand(0, 1) };
-
         DoAfterTime(pScarletChaplain, (2 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
             if (chaplain)

@@ -2668,6 +2668,14 @@ bool GossipHello_npc_jabbey(Player* pPlayer, Creature* pCreature)
         }
     }
 
+    if (pPlayer->GetQuestStatus(40466) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pCreature->GetEntry() == 8139 && !pPlayer->HasItemCount(60670, 1, false))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I was sent by Radgan Deepblaze to obtain something...", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        }
+    }
+
     pPlayer->SEND_GOSSIP_MENU(8139, pCreature->GetGUID());
     return true;
 }
@@ -2683,6 +2691,21 @@ bool GossipSelect_npc_jabbey(Player* pPlayer, Creature* pCreature, uint32 uiSend
         if (pPlayer->HasItemCount(60597, 1, false))
         {
             pCreature->MonsterSayToPlayer("Hey now, hush, I don't need everyone knowing my business. Here it is, if you ever need more, you know where to find me bub!", pPlayer);
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->AddItem(60670);
+        if (pPlayer->HasItemCount(60670, 1, false))
+        {
+            pCreature->MonsterSayToPlayer("Oh, that, I was wondering if he would ever pick it up, I put a lot of time in obtaining this information. Now, go on before someone notices us.", pPlayer);
             pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
@@ -2906,9 +2929,199 @@ bool QuestRewarded_npc_chaser(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool GossipHello_npc_orvak_sternrock(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40460) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 30.0F))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Tell me your story Orvak.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60833, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_orvak_sternrock(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 50 * IN_MILLISECONDS);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("I was once the High Foreman of the Shadowforge Miners Union, me and my men helped build many of the halls of the city itself, and worked tirelessly to appease the Senators of their plots, and whims. We kept our loyalty, and we worked hard, given benefits for our work.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("It was when the plans of the Senate failed, and the Master became upset did their wrath upon us only grow, the project at Hateforge Quarry put many to their limit, and pulled us away from our home to work in dangerous conditions without any regards for what we did in the past.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 15000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("We were given impossible tasks, which we could not complete and I was placed to blame. Many of my fellow miners betrayed me, and a new High Foreman was put into my place, those that remained loyal were enslaved, and the rest of us, were exiled. We ended up travelling in exile for days, many of those that were once part of the Caraven died in those early days.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 30000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("I was betrayed, backstabbed, and wronged, my heart burns hotter than the Blackrock Mountain, and I demand revenge. Do you see why I ask for help? No doubt you have your reasons to stop the Dark Iron, let me guide your hand, and we shall both be satisfied.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 50000);
+
+            DoAfterTime(pPlayer, 58 * IN_MILLISECONDS, [player = pPlayer]() {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60375))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestRewarded_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40474) // The Harvest Golem Mystery V
+    {
+        pQuestGiver->MonsterTextEmote("Maltimor Gartside looks into the blueprints.", pPlayer);
+        pQuestGiver->MonsterSay("Weird... but clever.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Really? Goblins are insane.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("So it is possible...");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_CHEER);
+            });
+    }
+
+    return false;
+}
+
+bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40476) // The Harvest Golem Mystery VII
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->HandleEmote(EMOTE_STATE_WORK);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->HandleEmote(EMOTE_STATE_NONE);
+                pQuestGiver->SummonCreature(60871, -10279.18F, 1920.43F, 34.23F, 3.99F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30 * IN_MILLISECONDS);
+            }, 5000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Get ready! I will now activate the golem! Draw its attention, and I will cast the Rewiring Spell. Don't damage it too much, it needs to remain intact!");
+                pQuestGiver->HandleEmote(EMOTE_STATE_NONE);
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 9000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->CastSpell(pQuestGiver, 13540, false); // Green Channeling
+                Creature* harvest_reaper = pQuestGiver->FindNearestCreature(60871, 30.0F);
+                harvest_reaper->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+                harvest_reaper->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                harvest_reaper->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+            }, 10000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->CastSpell(pQuestGiver, 24171, false);
+                if (Creature* harvest_reaper = pQuestGiver->FindNearestCreature(60871, 30.0F))
+                {
+                    harvest_reaper->SetFactionTemporary(35, TEMPFACTION_RESTORE_COMBAT_STOP);
+                    harvest_reaper->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                }
+
+            }, 30000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("It worked!");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+
+            }, 31000);
+
+        DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer]() {
+            if (Creature* harvest_reaper = player->FindNearestCreature(60871, 30.0F))
+            {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60375))
+                    player->KilledMonster(cInfo, ObjectGuid());
+            }
+            });
+
+    }
+    return false;
+}
+
+bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40482) // The Harvest Golem Mystery XIII
+    {
+        pQuestGiver->MonsterTextEmote("Franklin Hamar looks into the note.", pPlayer);
+        pQuestGiver->MonsterSay("Awful handwriting, it's like the person writing this was blind. Alright, here it goes. Listen carefully.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Tell G. that the people in Darkshire are getting delicious. Sorry, suspicious.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("The Night Watch is eyeing my shack every day. I need to move out soon if the production of runes is to continue.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 24 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Send someone. Stormwind shall fall, yadda yadda, F.W. The end.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 32 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Interesting note, friend.Youand Hewen might be in trouble.But that's none of my business.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+    }
+    
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_franklin_hamar";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_franklin_hamar;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_maltimor_gartside";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_maltimor_gartside;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_maltimor_gartside;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_orvak_sternrock";
+    newscript->pGossipHello = &GossipHello_npc_orvak_sternrock;
+    newscript->pGossipSelect = &GossipSelect_npc_orvak_sternrock;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_chaser";
