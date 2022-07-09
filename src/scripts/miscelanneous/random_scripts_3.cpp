@@ -3021,7 +3021,7 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
                 pQuestGiver->HandleEmote(EMOTE_STATE_NONE);
-                pQuestGiver->SummonCreature(60871, -10279.18F, 1920.43F, 34.23F, 3.99F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 35 * IN_MILLISECONDS);
+                pQuestGiver->SummonCreature(60871, -10279.18F, 1920.43F, 34.23F, 3.99F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 30 * IN_MILLISECONDS);
             }, 5000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
@@ -3071,9 +3071,45 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40482) // The Harvest Golem Mystery XIII
+    {
+        pQuestGiver->MonsterTextEmote("Franklin Hamar looks into the note.", pPlayer);
+        pQuestGiver->MonsterSay("Awful handwriting, it's like the person writing this was blind. Alright, here it goes. Listen carefully.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Tell G. that the people in Darkshire are getting delicious. Sorry, suspicious.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 16 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("The Night Watch is eyeing my shack every day. I need to move out soon if the production of runes is to continue.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 24 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Send someone. Stormwind shall fall, yadda yadda, F.W. The end.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 32 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Interesting note, friend.Youand Hewen might be in trouble.But that's none of my business.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+    }
+    
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_franklin_hamar";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_franklin_hamar;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_maltimor_gartside";
