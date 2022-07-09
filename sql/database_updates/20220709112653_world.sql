@@ -771,3 +771,16 @@ REPLACE INTO `creature_movement_scripts` (`id`, `delay`, `command`, `datalong`, 
 UPDATE `creature_movement` SET `script_id` = 470008 WHERE `id` = 28272 AND `point` = 33;
 
 UPDATE `creature` SET `spawn_flags` = 1 WHERE `guid` IN (28275, 28276, 28297, 28277, 28278, 28279, 28298, 28280, 28282, 28283, 28299, 28284, 28272, 28273, 28295, 28274);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1560
+
+delete from gameobject_loot_template where entry = 2010841 and item = 60191;
+update quest_template set type = 81, zoneorsort = 209 where entry = 40281;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1551
+
+update quest_template set objectives = 'Kill First Mate McGillicuddy.' where entry = 40183;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1532
+
+update quest_template set details = 'The dark magic within Hawk\'s Vigil has seemingly appeared out of nowhere, its presence went undetected by myself and my kin for quite a while.\n\nOr at the least has only cropped up at the last few weeks at a level where many, like myself and Marge, would have come to notice it.\n\nI am under the belief that either a dormant force has been slowly gaining power for some time, or that perhaps something, or some one, has recently come to Hawk\'s Vigil with such potency.\n\nI wish you luck in finding what is causing the tainting darkness, I sensed something similar before the third war and do not wish to re-live the experience. Tell Marge what little I know, it may be of assistance.' where entry = 55217;
