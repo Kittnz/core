@@ -220,5 +220,92 @@ replace into creature_loot_template values
 (114,60676,-80,1,1,1,0),
 (115,60676,-80,1,1,1,0);
 
+-- The Harvest Golem Mystery II
+delete from quest_template where entry = 40471;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40470,40471,2,14,14,10,512,0,'The Harvest Golem Mystery II','Alright! Eager for additional work, aren\'t we?\n\nSo, my... employer is looking for even more animation runes for his experiments. Bring me an additional ten runes, and you will be greatly rewarded. But, be careful. They will accept only intact runes. Try not to damage them too much with this weapon of yours.\n\nOne more thing. Don\'t get yourself killed. Those harvest machines pack a punch, and I need you to run more errands for me.\n\nHah,I\'m joking. But seriously. Take care of yourself.','Gather 10 Intact Animation Runes from Harvest Golems in Westfall for Christopher Hewen at Sentinel Hill.','Have you collected the runes already?','Good job! And all of them are of extraordinary quality, too! I didn\'t think that you could do it, to be fair. The last adventurer helping me... let\'s just say, he got harvested, if you know what I mean. It\'s great to finally have someone who knows what they\'re doing.\n\nSo, would you want to help me once more? I need something else to be done, and I cannot leave Sentinel Hill for now. You know, I\'m waiting for a shipment of supplies from Redridge and it could arrive any moment.',60677,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1000,1350,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60678,1,60679,1,0,0,0,0,0,0,'');
 
+replace into creature_questrelation (id, quest) values (8934, 40471);
+replace into creature_involvedrelation (id, quest) values (8934, 40471);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60677,20984,'Intact Animation Rune',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(480,60677,-40,1,1,1,0),
+(36,60677,-40,1,1,1,0),
+(115,60677,-40,1,1,1,0),
+(114,60677,-40,1,1,1,0);
+
+replace into item_template values
+ ('60678', '4', '3', 'Westfall Hauberk', '', '11563', '2', '0', '1', '1688', '422', '5', '-1', '-1', '18',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '3', '4', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '148', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '1', '0', '0', '80', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60679', '4', '1', 'Westfall Rancher Boots', '', '6190', '2', '0', '1', '900', '225', '8', '-1', '-1', '18',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '2', '3', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Harvest Golem Mystery III
+delete from quest_template where entry = 40472;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40471,40472,2,14,14,8,0,0,'The Harvest Golem Mystery III','I knew you wouldn\'t pass another opportunity to earn some coin. Ever been to Stormwind City? Oh, what am I saying, of course you did. In the northern part of the city, there is a district inhabited mostly by non-humans.\n\nDwarves, gnomes, even high elves lately. One of my dear friends, a gnomish engineer with a lovely name: Lilliam, lives there. I need you to tell him that Hewen sent you. He will give you a paper: a blueprint, even. You know what a blueprint is? Good. So, take the blueprint, come back to me, and I will pay you.\n\nEasy enough! Good luck.','Collect the Harvester Blueprint from Lilliam Sparkspindle in Stormwind City.','What is it? Don\'t you see, $R, that I am kind of busy?','Hewen sent you? This son of a trogg couldn\'t even visit me himself? Preposterous! I got his blueprint, but if you knew how much hassle it cost me! If you only knew! Tell Hewen that next time he orders something from me, he pays double!',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,350,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (8934, 40472);
+replace into creature_involvedrelation (id, quest) values (5518, 40472);
+
+-- The Harvest Golem Mystery IV
+delete from quest_template where entry = 40473;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40472,40473,2,14,14,8,0,0,'The Harvest Golem Mystery IV','Here you have it. The Harvester Blueprint. The goblin, who sold it to me... I wish I never see his green face again! Bah!\n\nI looked into these blueprints. I don\'t know for what Hewen needs it, but it is nothing good, I tell you! This is a machine of death and destruction! I am only giving you this, because he is my old friend and I... hope he still has some brain left in his greedy head.','Bring the Harvester Blueprint back to Christopher Hewen at Sentinel Hill in Westfall.','Ahhh, $N already! You got the paper?','The Harvester Blueprints...\n\n<Christopher Hewen looks into the blueprints and makes a disgruntled face.>\n\nTo be frank, my hard-working friend, I don\'t understand any of it! But it doesn\'t matter, as I am only the messenger, a humble servant. Those papers are for my employer, who, if you are willing, you will meet soon!\n\nI would deliver them myself, but, believe me or not, those damned supplies have still not arrived! Also, traveling through these beautiful, golden plains became so dangerous lately. I am certain that you can handle it, though. Care to help me for one last time, friend?',60680,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60680,1,0,350,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (5518, 40473);
+replace into creature_involvedrelation (id, quest) values (8934, 40473);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60680,7601,'The Harvester Blueprint',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The Harvest Golem Mystery V
+delete from quest_template where entry = 40474;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40473,40474,2,14,15,8,0,0,'The Harvest Golem Mystery V','Okay, listen then. I need you to bring this blueprint to a man named Maltimor Gartside. Maltimor. Gartside. Got it? Good.\n\nHe\'s an old man, in his fifties, maybe sixties. Long, gray hair, kind of skinny, pale skin. Hard to miss, you will know it\'s him. Yes, he\'s my employer. And yes, I know where he lives.\n\nWouldn\'t want you to scour through all of Westfall, of course. Go west of Sentinel Hill, but north of Moonbrook. He lives in a solitary cottage, usually spends his time outside of it. Don\'t know why, didn\'t ask, didn\'t care. So, you meet him, tell him I said hello and give him the blueprints. Easy!\n\nAlso, please, be careful. It is very, very important that those blueprints don\'t fall into the hands of those bandits with red bandanas, the Defias, as they call themselves. Light be with you, friend.','Deliver the Harvester Blueprint to Maltimor Gartside at the Gartside Plot in Westfall.','Who are you? What do you want from me?','Blueprints from Hewen, finally. He couldn\'t be any slower with it. Let me see what is written inside...',60680,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60680,1,0,350,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (8934, 40474);
+replace into creature_involvedrelation (id, quest) values (60858, 40474);
+
+update creature_template set script_name = 'npc_maltimor_gartside' where entry = 60858;
+
+-- The Harvest Golem Mystery VI
+delete from quest_template where entry = 40475;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40474,40475,2,14,15,10,0,0,'The Harvest Golem Mystery VI','Excuse me for my bad manners. I was so excited to finally lay my hands on those blueprints. My name is Maltimor Gartside, and I was born in the old Kingdom of Alterac. I moved to Westfall just before the First War. I have seen much, but never have I seen these lands in such a sorry state\n\nYou see, young $C, many years ago, a certain salesman arrived in Westfall. An ambitious fellow, he brought with him a new commodity- Harvest Golems. At first, farmers were overjoyed.\n\nThe new golems worked flawlessly, gathering crops for them, and scaring the wildlife away. So, more and more golems were being purchased. In a few years, they outnumbered the farmers. And then… It happened.\n\nGolems turned on their owners. In a few weeks, almost all farms across Westfall were lost to the mechanical menace. To make matters worse, the Defias arrived. So it was only natural that the people of Westfall linked the sudden change of attitude to the Brotherhood.\n\nI, however, believe that it is a mere coincidence. That someone else manipulated the golems to behave this way, and now, of course the Defias are using the situation to their advantage.\n\nI will continue the story later, $N. For now, let\'s get to the matters at hand. I have a request for you. I want to help the people of Westfall, and I think I have the solution. Yet, I need some materials.\n\nGo to Moonbrook. Before it got overrun by the Defias, the smith always had a stash of useful engineering equipment hidden near his forge, check there.','Recover the Old Engineering Tools for Maltimor Gartside at the Gartside Plot in Westfall.','Have you found the equipment?','Engineering tools. And they are all still intact. Unexpected, but a welcome surprise. Now I have all we need.',60681,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,800,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60858, 40475);
+replace into creature_involvedrelation (id, quest) values (60858, 40475);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60681,7840,'Old Engineering Tools',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+delete from gameobject_template where entry = 2010898;
+replace into gameobject_template values
+(2010898,3,23434,'Forgotten Trunk',0,4,1,43,2010898,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from gameobject_loot_template where entry = 2010898;
+replace into gameobject_loot_template values
+(2010898,60681,-100,0,1,1,0);
+
+-- The Harvest Golem Mystery VII
+delete from quest_template where entry = 40476;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40475,40476,2,14,17,10,0,0,'The Harvest Golem Mystery VII','$N I have all materials to create a new Harvest Golem. If my calculations are correct, I should be able to rewire his mind.\n\nI need your help. The Harvest Golem will be hostile at first, and the Rewiring Spell requires all my concentration. I need you to draw the golem\'s attention until I\'m finished.','Help Maltimor Gartside with casting the Rewiring Spell.','The rewiring was successful.','This is good, really good. Given time, we will be able to rewire all golems in Westfall.\n\nBut only if their production stops.',0,0,0,0,0,0,0,0,60375,1,0,0,0,0,0,0,0,0,0,1350,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60858, 40476);
+replace into creature_involvedrelation (id, quest) values (60858, 40476);
+
+REPLACE INTO creature_template VALUES (60871, 379, 0, 0, 0, 'Harvest Reaper', '', 0, 17, 18, 386, 417, 0, 0, 765, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7342, 0, 0, 0, 1150, 0, 0, 0, '', 1, 1, 0, 0, 3, 0, 0, 0, 8405008, 0, 0, 0, '');
 
