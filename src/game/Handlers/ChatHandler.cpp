@@ -660,7 +660,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
     {
         PlayerPointer playerPointer(GetPlayerPointer());
-        if (lang != LANG_ADDON && playerPointer->GetLevel() < sWorld.getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL))
+        if (lang != LANG_ADDON && playerPointer->GetLevel() < sWorld.GetMinChatLevel())
         {
             ChatHandler(this).SendSysMessage("You cannot talk yet.");
             return;
