@@ -241,7 +241,7 @@ public:
 
         if (m_creature->GetPositionZ() < 135.f)
         {
-            EnterEvadeMode();
+            boss_hargesh_doomcallerAI::EnterEvadeMode();
             return;
         }
 
