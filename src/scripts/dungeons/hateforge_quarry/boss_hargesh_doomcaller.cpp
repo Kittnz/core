@@ -13,7 +13,9 @@ static const Location vfSpawnPoint[] =
     { -8283.150391f, -3740.716309f, 137.77f, 2.820284f }
 };
 
+static constexpr std::uint32_t NPC_HARGESH_DOOMCALLER{ 60737 };
 static constexpr std::uint32_t NPC_FACELESS_TERROR{ 60738 };
+
 static constexpr std::uint32_t SPELL_IMMOLATE{ 11668 };
 static constexpr std::uint32_t SPELL_SHADOW_BOLT_VOLLEY{ 27646 };
 static constexpr std::uint32_t SPELL_SHADOW_BOLT{ 12739 };
@@ -62,6 +64,16 @@ public:
     void JustDied(Unit* /*pKiller*/) override
     {
         DespawnFacelessTerror();
+    }
+
+    void EnterEvadeMode() override
+    {
+        m_creature->RemoveAurasDueToSpell(SPELL_SHADOW_CHANNELING);
+        m_creature->RemoveAurasDueToSpell(SPELL_IMMUNE_ALL);
+        m_creature->SetRooted(false);
+        m_creature->ClearUnitState(UNIT_STAT_ROOT);
+
+        ScriptedAI::EnterEvadeMode();
     }
 
     void CastImmolate(const uint32& uiDiff)
@@ -195,7 +207,9 @@ public:
             m_uiCheckIfAddsAreDead_Timer = 500;
         }
         else
+        {
             m_uiCheckIfAddsAreDead_Timer -= uiDiff;
+        }
     }
 
     void DespawnFacelessTerror()
@@ -225,6 +239,12 @@ public:
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
+        if (m_creature->GetPositionZ() < 135.f)
+        {
+            EnterEvadeMode();
+            return;
+        }
+
         if (!m_bPhaseTwo || m_bAddsAreDead)
         {
             CastImmolate(uiDiff);
@@ -232,7 +252,7 @@ public:
             CastShadowBolt(uiDiff);
         }
 
-        if (m_creature->HealthBelowPct(60) && !m_bPhaseTwo) // Boss' health is below 60% and phase two didn't start yet
+        if (m_creature->HealthBelowPct(60) && !m_bPhaseTwo)
         {
             PhaseTwo();
         }
@@ -252,6 +272,77 @@ CreatureAI* GetAI_boss_hargesh_doomcaller(Creature* pCreature)
 }
 
 
+class npc_faceless_terrorAI : public ScriptedAI
+{
+public:
+    explicit npc_faceless_terrorAI(Creature* pCreature) : ScriptedAI(pCreature)
+    {
+        npc_faceless_terrorAI::Reset();
+    }
+
+private:
+    bool m_bCalledEvade{};
+    std::uint32_t m_uiRaidWipeCheck_Timer{};
+
+public:
+    void Reset() override
+    {
+        m_bCalledEvade = false;
+        m_uiRaidWipeCheck_Timer = 5000;
+    }
+
+    void CheckForRaidWipe(const uint32& uiDiff)
+    {
+        if (m_uiRaidWipeCheck_Timer < uiDiff)
+        {
+            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
+            for (const auto& itr : PlayerList)
+            {
+                if (Player* pPlayer{ itr.getSource() })
+                {
+                    if (Creature* pCreature{ GetClosestCreatureWithEntry(pPlayer, NPC_HARGESH_DOOMCALLER, 250.f) })
+                    {
+                        if (boss_hargesh_doomcallerAI* hargesh_doomcaller{ dynamic_cast<boss_hargesh_doomcallerAI*>(pCreature->AI()) })
+                        {
+                            hargesh_doomcaller->ScriptedAI::EnterEvadeMode();
+                            m_bCalledEvade = true;
+
+                            break;
+                        }
+                    }
+                }
+            }
+
+            m_uiRaidWipeCheck_Timer = 5000;
+        }
+        else
+        {
+            m_uiRaidWipeCheck_Timer -= uiDiff;
+        }
+    }
+
+    void UpdateAI(const uint32 uiDiff) override
+    {
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+        {
+            if (!m_bCalledEvade)
+            {
+                CheckForRaidWipe(uiDiff);
+            }
+        }
+        else
+        {
+            DoMeleeAttackIfReady();
+        }
+    }
+};
+
+CreatureAI* GetAI_npc_faceless_terror(Creature* pCreature)
+{
+    return new npc_faceless_terrorAI(pCreature);
+}
+
+
 void AddSC_boss_hargesh_doomcaller()
 {
     Script* pNewscript;
@@ -259,5 +350,10 @@ void AddSC_boss_hargesh_doomcaller()
     pNewscript = new Script;
     pNewscript->Name = "boss_hargesh_doomcaller";
     pNewscript->GetAI = &GetAI_boss_hargesh_doomcaller;
+    pNewscript->RegisterSelf();
+
+    pNewscript = new Script;
+    pNewscript->Name = "npc_faceless_terror";
+    pNewscript->GetAI = &GetAI_npc_faceless_terror;
     pNewscript->RegisterSelf();
 }
