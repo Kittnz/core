@@ -45,7 +45,7 @@ update quest_template set type = 1 where entry = 40462;
 
 -- The True High Foreman
 delete from quest_template where entry = 40463;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40461,40463,2,5098,51,45,0,0,'The True High Foreman','Bargul Blackhammer\n\nThat vile scum has been working to get the position of High Foreman now for years, attempting every underhanded tactic that he could think of.\n\nFrom violence, to deceit, nothing was off the table for scum such as him.\n\nThe idea of the Hateforge Quarry was an idea Bargul came up with, and sent to the senate. He ended up convincing the lot of them, and worked in tandam to get me outed from my position.\n\nBargul Blackhammer holds my title now from a position of underhanded fraud, and I want him to hold it no longer.\n\nWithin the Hateforge Quarry, Bargul Blackhammer oversee\'s the work from atop of his tower with an iron fist, kill him for all of the chaos he has caused, and recover the Senate\'s Orders from around his possessions.','Slay Bargul Blackhammer, and recover the Senate\'s Orders for Orvak Sternrock at the Blackrock Pass in Burning Steppes.','Have you culled that wretch from this world yet?','<A look of pleasure sets across Orvak\'s face, breaking his grim visage.>\n\nYou\'ve done well, it makes me want to grin knowing that Bargul\'s plans have ended in his demise, despite all of the death he has brought around him, I would have loved to see his face as he knew his life was about to end.\n\n<Orvak lets out a sigh of relief.>\n\nMe and the others here gathered something that you may find useful in your journies, one hand washes the other, so to speak.\n\nAlso, take this key, I do not intend to return to the mountain. It should open a chest within the Black Vault, if they haven\'t already taken it. away.',60664,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60665,1,60666,1,60667,1,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40461,40463,2,5098,51,45,0,0,'The True High Foreman','Bargul Blackhammer\n\nThat vile scum has been working to get the position of High Foreman now for years, attempting every underhanded tactic that he could think of.\n\nFrom violence, to deceit, nothing was off the table for scum such as him.\n\nThe idea of the Hateforge Quarry was an idea Bargul came up with, and sent to the senate. He ended up convincing the lot of them, and worked in tandam to get me outed from my position.\n\nBargul Blackhammer holds my title now from a position of underhanded fraud, and I want him to hold it no longer.\n\nWithin the Hateforge Quarry, Bargul Blackhammer oversee\'s the work from atop of his tower with an iron fist, kill him for all of the chaos he has caused, and recover the Senate\'s Orders from around his possessions.','Slay Bargul Blackhammer, and recover the Senate\'s Orders for Orvak Sternrock at the Blackrock Pass in Burning Steppes.','Have you culled that wretch from this world yet?','<A look of pleasure sets across Orvak\'s face, breaking his grim visage.>\n\nYou\'ve done well, it makes me want to grin knowing that Bargul\'s plans have ended in his demise, despite all of the death he has brought around him, I would have loved to see his face as he knew his life was about to end.\n\n<Orvak lets out a sigh of relief.>\n\nMe and the others here gathered something that you may find useful in your journies, one hand washes the other, so to speak.\n\nAlso, take this key, I do not intend to return to the mountain. It should open a chest within the Black Vault, if they haven\'t already taken it. away.',60664,1,0,0,0,0,0,0,60735,1,0,0,0,0,0,0,0,0,0,6150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60665,1,60666,1,60667,1,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (60833, 40463);
 replace into creature_involvedrelation (id, quest) values (60833, 40463);
@@ -127,7 +127,7 @@ replace into creature_loot_template values
 
 -- To Purchase Secret Information
 delete from quest_template where entry = 40466;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40465,40466,2,46,55,45,0,0,'To Purchase Secret Information','During my time in the mountain I had met all kinds of characters within the Grim Patron, one of which was a rather ambitious goblin who said he could get me almost anything.\n\nA few months ago I requisitioned him for information on where to acquire a Arcane Golem Core. Last I recall, he frequents Steamwheedle Port in Tanaris, and goes by the name \'Jabbey\', aparently a lot of people know him.\n\nTravel there, and get me the Arcane Golem Core Information from him, just mention my name and he should know what you are looking for.','Collect the Arcane Golem Core Information from Jabbey in Steamwheedle Port and return to Radgan Deepblaze at Blackrock Pass in Burning Steppes.','Have you spoken with Jabbey?','Hey look, it means a lot for you to travel all that distance for me, I made it worth your while in coin, now lets see...',60670,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7500,1500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40465,40466,2,46,55,45,0,0,'To Purchase Secret Information','During my time in the mountain I had met all kinds of characters within the Grim Guzzler, one of which was a rather ambitious goblin who said he could get me almost anything.\n\nA few months ago I requisitioned him for information on where to acquire a Arcane Golem Core. Last I recall, he frequents Steamwheedle Port in Tanaris, and goes by the name \'Jabbey\', aparently a lot of people know him.\n\nTravel there, and get me the Arcane Golem Core Information from him, just mention my name and he should know what you are looking for.','Collect the Arcane Golem Core Information from Jabbey in Steamwheedle Port and return to Radgan Deepblaze at Blackrock Pass in Burning Steppes.','Have you spoken with Jabbey?','Hey look, it means a lot for you to travel all that distance for me, I made it worth your while in coin, now lets see...',60670,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7500,1500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (60834, 40466);
 replace into creature_involvedrelation (id, quest) values (60834, 40466);
@@ -302,7 +302,7 @@ replace into gameobject_loot_template values
 
 -- The Harvest Golem Mystery VII
 delete from quest_template where entry = 40476;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40475,40476,2,14,17,10,0,0,'The Harvest Golem Mystery VII','$N I have all materials to create a new Harvest Golem. If my calculations are correct, I should be able to rewire his mind.\n\nI need your help. The Harvest Golem will be hostile at first, and the Rewiring Spell requires all my concentration. I need you to draw the golem\'s attention until I\'m finished.','Help Maltimor Gartside with casting the Rewiring Spell.','The rewiring was successful.','This is good, really good. Given time, we will be able to rewire all golems in Westfall.\n\nBut only if their production stops.',0,0,0,0,0,0,0,0,60375,1,0,0,0,0,0,0,0,0,0,1350,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Help Maltimor Gartside with casting the Rewiring Spell');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40475,40476,2,14,17,10,1,0,'The Harvest Golem Mystery VII','$N I have all materials to create a new Harvest Golem. If my calculations are correct, I should be able to rewire his mind.\n\nI need your help. The Harvest Golem will be hostile at first, and the Rewiring Spell requires all my concentration. I need you to draw the golem\'s attention until I\'m finished.','Help Maltimor Gartside with casting the Rewiring Spell.','The rewiring was successful.','This is good, really good. Given time, we will be able to rewire all golems in Westfall.\n\nBut only if their production stops.',0,0,0,0,0,0,0,0,60375,1,0,0,0,0,0,0,0,0,0,1350,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Help Maltimor Gartside with casting the Rewiring Spell');
 
 replace into creature_questrelation (id, quest) values (60858, 40476);
 replace into creature_involvedrelation (id, quest) values (60858, 40476);
@@ -432,4 +432,206 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation (id, quest) values (60858, 40484);
 replace into creature_involvedrelation (id, quest) values (264, 40484);
+
+-- The Harvest Golem Mystery XVI
+delete from quest_template where entry = 40485;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40484,40485,2,14,25,15,0,0,'The Harvest Golem Mystery XVI','A few months ago, a mysterious, blind man moved in to an abandoned shack south of Darkshire. A goblin accompanied him, helping him with everyday tasks for exchange for mentorship. He was a renowned engineer, of some kind. Strange couple, that\'s for sure. He paid us very well for protection and privacy. So I had my right to be suspicious. Especially as a commander of Night Watch.\n\nAnd I was right.\n\n Regularly, late at night, strange people were visiting him. I couldn\'t get too close, but they were trading, for sure. I still don\'t have any evidence against him, though.\n\nHowever, I wouldn\'t be too mad if he disappeared silently. There is something sinister going on. Do what you want with him.','Talk with F.W. in the shack south of Darkshire.','Have you found him?','The people of Westfall are safe. Thank you, $N. These lands will heal in time.',0,0,0,0,0,0,0,0,60854,1,60859,1,0,0,0,0,0,0,0,2750,72,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60690,1,60691,1,60692,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (264, 40485);
+replace into creature_involvedrelation (id, quest) values (60858, 40485);
+
+replace into item_template values
+ ('60690', '4', '0', 'Eye of Farad', '', '66245', '3', '0', '1', '17020', '4255', '23', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '5', '0', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60691', '4', '3', 'Shoulderpads of Gazzirik', '', '28792', '3', '0', '1', '8156', '2039', '3', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '7', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '149', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '70', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60692', '4', '2', 'Golemslayer Mitts', '', '4438', '3', '0', '1', '3468', '867', '10', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '3', '3',
+ '7', '4', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '58', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '35', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '1', NULL);
+
+update creature_template set script_name = 'npc_farad_wrightsow' where entry = 60854;
+update creature_template set unit_flags = 32768 where entry = 60859;
+
+set @gossip_menu_id = 41171; set @magic_number = 30025;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Of course it was him, the old fool. He thinks that my death will fix everything... Oh, how wrong he is. My death will change nothing!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41171; set @magic_number = 30024;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Dammit. I knew they would find me. Alas, all good things come to an end. Before we fight for our lifes, tell me who sent you. Was it Maltimor?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Farad on death:
+REPLACE INTO broadcast_text VALUES (30026, 'If only you knew... Maltimor, I hope the Twisting Nether... takes you...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO creature_ai_scripts VALUES
+(2200020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30026, 0, 0, 0, 0, 0, 0, 0, 0, 'Farad - Say upon Death');
+REPLACE INTO creature_ai_events VALUES
+(2200020, 60836, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200020, 0, 0, 'Farad - Say upon Death');
+-- Gazzirik on death:
+REPLACE INTO broadcast_text VALUES (30027, 'That was a bad deal...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO creature_ai_scripts VALUES
+(2200021, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30027, 0, 0, 0, 0, 0, 0, 0, 0, 'Gazzirik - Say upon Death');
+REPLACE INTO creature_ai_events VALUES
+(2200021, 60836, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200021, 0, 0, 'Gazzirik - Say upon Death');
+
+-- Investigating Hateforge
+delete from quest_template where entry = 40486;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40486,2,46,50,45,0,0,'Investigating Hateforge','Bah, what a wasteland to be assigned to, it\'s insulting.\n\nI want to get out of here as soon as I can, and to do so I need some work done, I take it you are willing to help huh?\n\nThe Dark Iron are up to something, and it\'s my job to confirm that -something- is going on. What I need you to do is scout the entrance of the Quarry, and confirm Ironforge\'s suspicions.\n\nTravel up there, peak in the entrance, and come back, easy ye?','Explore the entrance to The Hateforge Quarry and return to Senator Granitebeard at Morgan\'s Vigil in Burning Steppes.','So, have you ventured up the ridge?','Hmm, so there is something going on up there.\n\nHold on just a minute, I got to write a report of my findings and send it to the highest authority.',0,0,0,0,0,0,0,0,60376,1,0,0,0,0,0,0,0,0,0,2250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Explore the entrance to The Hateforge Quarry');
+
+replace into creature_questrelation (id, quest) values (60869, 40486);
+replace into creature_involvedrelation (id, quest) values (60869, 40486);
+
+update quest_template set type = 1 where entry = 40486;
+
+REPLACE INTO creature_template VALUES
+(60376, 328, 0, 0, 0, 'quest_40486_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO gameobject_template VALUES
+(2010903, 5, 381, 'Quest 40486 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_exploration_trigger');
+
+REPLACE INTO gameobject (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (2010903, 0, -8168, -3104, 200.485, 1.6558, 0, 0, 0.736512, 0.676424, 300, 300, 100, 1, 0, 0);
+
+-- The Hateforge Report
+delete from quest_template where entry = 40487;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40486,40487,2,46,52,45,0,0,'The Hateforge Report','<Senator Granitebeard makes quick work of writing his report, sealing it and stamping it with the seal of Ironforge.>\n\nThere, I need you to take this to Ironforge, at once, and report it to King Magni Bronzebeard, it should hold all relevant information based off what I have seen, and what you have reported back to myself.\n\nBe quick, our enemies plot against us.','Take the Hateforge Report to King Magni Bronzebeard in Ironforge.','Yes?','What brings you to Ironforge, how can you assist the Bronzebeard?',60693,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60693,1,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60869, 40487);
+replace into creature_involvedrelation (id, quest) values (2784, 40487);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60693,7743,'The Hateforge Report',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The King's Response
+delete from quest_template where entry = 40488;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40487,40488,2,46,52,45,0,0,'The King\'s Response','<Magni would take the Hateforge Report, beginning to read it over with a calculated interest.>\n\nThe Dark Iron have been our foe for quite a while now, and I will not forgive them for what they have done.\n\nIt has been a while since we have discovered the efforts going on within the Burning Steppes, it was only a matter of discovering -what- was going on there.\n\nIt would appear that the Twilight Hammer has taken an interest in the project, they have been spotted entering.\n\nTake my response to Senator Gravelbelt, you are dismissed.','Bring Magni\'s Authorization to Senator Gravelbelt at Morgan\'s Vigil in Burning Steppes.','Yes?','So, how did things go in the capital?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (2784, 40488);
+replace into creature_involvedrelation (id, quest) values (60869, 40488);
+
+-- Assaulting Hateforge
+delete from quest_template where entry = 40489;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40488,40489,2,5098,57,45,0,0,'Assaulting Hateforge','It would appear that The Hateforge Quarry is of great concern to the King, and he has given me the authority to recruit any on behalf of the kingdom.\n\nIf you are wanting to gain favor with Magni than this would be a good opportunity.\n\nI am looking for anyone to venture deep into the Hateforge Quarry and remove the presence of the Twilight Hammer within. If you are interested, I would suggest bringing fellow adventurers, a group of mercenaries, or some kind of brigade.\n\nIf you end up completing the task, return to Magni himself, and he will reward you.','Venture into The Hateforge Quarry and remove the presence of the Twilight Hammer from deep within, when completed, return to King Magni Bronzebeard in Ironforge.','Is there anything I can help you with?','<King Magni Bronzebeard would nod his head stoutly.>\n\nThe defence of the kingdom requires us to be steadfast in all manners, I have no doubt you have really shaken things up for our enemy, and put a stop to their plans.\n\nOn behalf of my people I reward you with an item from our armory, may it serve you well.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60694,1,60695,1,60696,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60869, 40489);
+replace into creature_involvedrelation (id, quest) values (2784, 40489);
+
+update quest_template set type = 81 where entry = 40489;
+
+replace into item_template values
+ ('60694', '4', '3', 'Crown of Grobi', '', '26330', '3', '0', '1', '92968', '23242', '1', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '30', '5', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '302', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '70', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60695', '4', '0', 'Sigil of Heritage', '', '31905', '3', '0', '1', '65700', '16425', '11', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '14', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60696', '2', '4', 'Rubyheart Mallet', '', '28776', '3', '0', '1', '189444', '47361', '13', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '9', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '62', '115', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9417', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Rumors of Hateforge Brew
+delete from quest_template where entry = 40490;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40490,2,5098,54,45,512,0,'Rumors of Hateforge Brew','There be rumors floatin\' around about somethin\' called \'Hateforge Brew\'. The Dark Iron refer to it as something with reverance, and I know they aint makin\' no ale in there.\n\nThe name is a cover up for somethin\' else and we gotta find out just what that somethin\' else is, ye get me? I do know that they have Chemist\'s within the Quarry, and my bet is they are linked to this Hateforge Brew.\n\nI need you to head in there, gather me a Dark Iron Vial and some Hateforge Chemistry Documents. I bet they have them stashed away somewhere in there about what\'s going on.','Delve into the Hateforge Quarry and recover a Dark Iron Vial, and the Hateforge Chemistry Documents, then return to Varlag Duskbeard at Morgan\'s Vigil in Burning Steppes.','You get a whiff of what\'s goin on in there yet?','Ahh, would you look at all this huh?!\n\nThose crafty bastards sure were keeping their secrets, I\'ll make sure to send this back to Ironforge when I get the chance, and they can look everything over, nice job eh?\n\nI got some extra Thunder Ale for you, oh and me ol\' gloves, they should treat you nicely, I got a new pair.',60697,1,60698,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6450,0,0,0,0,0,0,0,0,0,0,0,2686,10,60699,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60870, 40490);
+replace into creature_involvedrelation (id, quest) values (60870, 40490);
+
+update quest_template set type = 1 where entry = 40490;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60697,3663,'Dark Iron Vial',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60698,7601,'Hateforge Chemistry Documents',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50543);
+
+REPLACE INTO page_text VALUES
+(50543,'<Complex diagrams show various magical properties being mixed with molten lava.>\n\nHATEFORGE BREW is a nickname for the secret project that the upper class wants to keep under-wraps, all who study this document must keep their lips -sealed-.\n\nPunishment for leaking secrets from this document is trial in the Ring of Law.\n\n\n\n TO YOU, THE HATEFORGE CHEMIST. STUDY THE CHARTS AND DIAGRAMS, CONTINUE THE EXPERIMENTS. FAILURE IS -NOT- AN OPTION!!!',0);
+
+replace into creature_loot_template values
+(60717,60697,-100,1,1,1,0);
+
+replace into gameobject_template values
+(2010902,3,23432,'Sealed Documents Container',0,4,1,43,2010902,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010902,60698,-100,0,1,1,0);
+
+replace into item_template values
+ ('60699', '4', '2', 'Varlag\'s Clutches', '', '18981', '2', '0', '1', '43452', '10863', '10', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '9', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '96', '0', '0', '0',
+ '0', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Scrap Forager
+delete from quest_template where entry = 40491;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40491,2,46,54,47,0,0,'Scrap Forager','Greetings strangers, it seems some recruits from this new horde are arriving at last. I\'ll keep this short, we\re not doing so well here, its like everything is being hold together by worg spit, and the lack of resources certainly doesn\'t help. I\'ll say its about time we fixed that.\n\nDark iron tends to be quite scarce in the surface of the steppes, but most creatures around there parts carry some on their person whether it be baubles, equipment or sitting in their stomach. Venture out and collect me a sizeable amount of scraps so I can keep forging equipment for our grunts to keep the hold safe.','Scavenge 50 Dark Iron Scraps from various creatures in Burning Steppes and return to Blacksmith Torren in Karfang Hold.','Hard times call for desperate measures, knowing how to make do with what you have draws the line between life and death.','That\'s quite a haul, I\'m impressed. Joining this new horde might not be so bad after all. You\'ve scavenged so much I even have surplus to forge you an equipment of your choice. I believe you will wear it well.',22528,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5025,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60700,1,60701,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60762, 40491);
+replace into creature_involvedrelation (id, quest) values (60762, 40491);
+
+update creature_template set npc_flags = 16391 where entry = 60762;
+
+replace into item_template values
+ ('60700', '2', '1', 'Scrapforged Battleaxe', '', '28349', '2', '0', '1', '207572', '51893', '17', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '20', '7', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3400', '0',
+ '0', '125', '187', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '85', '0', '0', '0', '0', '30', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60701', '4', '4', 'Scrapforged Helm', '', '27338', '2', '0', '1', '60530', '12160', '1', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '14', '7', '19',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '456', '0', '5', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '70', '0', '0', '0', '0', '10', '0', '0', '0',
+ '0', '1', NULL);
 

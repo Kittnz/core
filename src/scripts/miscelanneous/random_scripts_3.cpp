@@ -3053,8 +3053,11 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                pQuestGiver->MonsterSay("It worked!");
-                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                if (Creature* harvest_reaper = pQuestGiver->FindNearestCreature(60871, 30.0F))
+                {
+                    pQuestGiver->MonsterSay("It worked!");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }
                 pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
             }, 31000);
@@ -3062,8 +3065,15 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
         DoAfterTime(pPlayer, 31 * IN_MILLISECONDS, [player = pPlayer]() {
             if (Creature* harvest_reaper = player->FindNearestCreature(60871, 30.0F))
             {
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60375))
-                    player->KilledMonster(cInfo, ObjectGuid());
+                if (player->IsAlive())
+                {
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60375))
+                        player->KilledMonster(cInfo, ObjectGuid());
+                }
+                else
+                {
+                    player->SetQuestStatus(40476, QUEST_STATUS_FAILED);
+                }
             }
             });
 
@@ -3094,7 +3104,7 @@ bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Qu
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 32 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSay("Interesting note, friend.Youand Hewen might be in trouble.But that's none of my business.");
+            npc->MonsterSay("Interesting note, friend. You and Hewen might be in trouble. But that's none of my business.");
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
     }
@@ -3102,9 +3112,60 @@ bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Qu
     return false;
 }
 
+bool GossipHello_npc_farad_wrightsow(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40485) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 30.0F))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Did you produce Animation Runes for the Defias?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60854, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_farad_wrightsow(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+        {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Stare silently.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30024, pCreature->GetGUID());
+        }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+        {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Attack.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30025, pCreature->GetGUID());
+        }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+
+        Creature* gazzirik = pPlayer->FindNearestCreature(60859, 50.0F);
+        gazzirik->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+        gazzirik->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        gazzirik->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+
+        pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_farad_wrightsow";
+    newscript->pGossipHello = &GossipHello_npc_farad_wrightsow;
+    newscript->pGossipSelect = &GossipSelect_npc_farad_wrightsow;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_franklin_hamar";
