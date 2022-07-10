@@ -7,3 +7,8 @@ update creature_template set script_name = '' where script_name = 'larvae_cot';
 -- Change the amount of Delicious Elwynn Truffle given to player in 'Once Upon a Sheep' to 8. 
 
 update quest_template set reqitemcount1 = 8, srcitemcount = 8, objectives = 'Find 8 Lost Farm Sheep in Elwynn Forest and feed them Elwynn Truffles to bring them back to farm.' where entry = 60005;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1517
+
+update creature_questrelation set entry = 51266 where quest = 80409;
+update creature_involvedrelation set entry = 81041 where quest = 80409;
