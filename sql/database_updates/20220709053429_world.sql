@@ -821,47 +821,39 @@ replace into creature_loot_template values
 (60829,80674,20,1,1,1,0);
 -- Abyssal Council High Council Boss loottable revamp:
 -- Prince Skaldrenox.
-delete from creature_loot_template where item in (20515,20680,20681,20682);
+delete from creature_loot_template where item in (0,20515,20680,20681,20682,83562,83554);
 replace into creature_loot_template values
 (15203,20515,100,1,1,1,0),
 (15203,20681,50,2,1,1,0),
 (15203,20680,50,2,1,1,0),
 (15203,20682,50,3,1,1,0),
--- Skaldrenox's Rage (50%)???
-(15203,0,50,3,1,1,0),
--- Abyssal Flame (20%) ???
-(15203,0,20,4,1,1,0);
+(15203,83562,50,3,1,1,0),
+(15203,83554,20,4,1,1,0);
 -- High Marshal Whirlaxis:
-delete from creature_loot_template where item in (20515,20689,20690,20691);
+delete from creature_loot_template where item in (0,20515,20689,20690,20691,83564,83556);
 replace into creature_loot_template values
 (15204,20515,100,1,1,1,0),
 (15204,20690,50,2,1,1,0),
 (15204,20689,50,2,1,1,0),
 (15204,20691,50,3,1,1,0),
--- Tempest's Rage (%50) ???
-(15204,0,50,3,1,1,0),
--- Abyssal Wind (20%) ???
-(15204,0,20,4,1,1,0);
+(15204,83564,50,3,1,1,0),
+(15204,83556,20,4,1,1,0);
 -- Lord Skwol:
-delete from creature_loot_template where item in (20515,20683,20684,20685);
+delete from creature_loot_template where item in (0,20515,20683,20684,20685,83563,83557);
 replace into creature_loot_template values
 (15305,20515,100,1,1,1,0),
 (15305,20684,50,2,1,1,0),
 (15305,20683,50,2,1,1,0),
 (15305,20685,50,3,1,1,0),
--- Pearl of the Tides (%50) ???
-(15305,0,50,3,1,1,0),
--- Abyssal Wave (20%) ???
-(15305,0,20,4,1,1,0);
+(15305,83563,50,3,1,1,0),
+(15305,835570,20,4,1,1,0);
 -- Baron Kazum:
 update creature_loot_template set groupid = 0 where entry = 15205 and item = 30107;
-delete from creature_loot_template where item in (20686,20687,20688,20515);
+delete from creature_loot_template where item in (0,20686,20687,20688,20515,83565,83555);
 replace into creature_loot_template values
 (15205,20515,100,1,1,1,0),
 (15205,20686,50,2,1,1,0),
 (15205,20687,50,2,1,1,0),
 (15205,20688,50,3,1,1,0),
--- Blackstone Crown (%50)???
-(15205,0,50,3,1,1,0),
--- Abyssal Slate (20%)???
-(15205,0,20,4,1,1,0);
+(15205,83565,50,3,1,1,0),
+(15205,83555,20,4,1,1,0);
