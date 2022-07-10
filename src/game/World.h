@@ -347,6 +347,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_BEGINNERS_GUILD_HORDE,
     CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT,
     CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY,
+    CONFIG_UINT32_CHAT_MIN_LEVEL,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -965,6 +966,9 @@ class World
         void SetAnticrashRearmTimer(uint32 value) { m_anticrashRearmTimer = value; }
         uint32 GetAnticrashRearmTimer() const { return m_anticrashRearmTimer; }
 
+        uint32 GetMinChatLevel() const { return m_minChatLevel; }
+        void SetMinChatLevel(uint32 minLevel) { m_minChatLevel = minLevel; }
+
         /**
          * Async tasks, allow safe access to sessions (but not players themselves)
          * The tasks will be executed *while* maps are updated. So don't touch the mobs, pets, etc ...
@@ -1044,6 +1048,7 @@ class World
 
         uint32 m_MaintenanceTimeChecker = 0;
 
+        uint32 m_minChatLevel = 0;
         time_t m_startTime;
         time_t m_gameTime;
         uint32 m_gameDay;
