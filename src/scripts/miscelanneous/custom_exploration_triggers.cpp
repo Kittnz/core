@@ -21,13 +21,14 @@ struct custom_exploration_trigger : public GameObjectAI
             {
                 if (player->IsAlive())
                 {                    
-                    array<tuple<uint32, uint32, uint32>, 5> quests_and_objectives =
+                    array<tuple<uint32, uint32, uint32>, 6> quests_and_objectives =
                     {{                        
                         { 80204, 80203, 3000201 }, // Gathering Intel    
                         { 70029, 70028, 3000101 }, // What We Know  
                         { 39001, 20120, 3000102 }, // Curiosity Leads Us Forward         
-                        { 40295, 60343, 2010868 },  // Mystery of Lake Mennar
-                        { 40420, 60374, 2010890 }  // Nethergarde Scouting
+                        { 40295, 60343, 2010868 }, // Mystery of Lake Mennar
+                        { 40420, 60374, 2010890 }, // Nethergarde Scouting
+                        { 40486, 60376, 2010903 }  // Investigating Hateforge
                     }};
                     for (auto const& quest : quests_and_objectives)
                     {

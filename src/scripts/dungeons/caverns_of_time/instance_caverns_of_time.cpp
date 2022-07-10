@@ -1460,63 +1460,6 @@ struct harbinger_boss_cotAI : public ScriptedAI
     }
 };
 
-struct larvae_cotAI : public ScriptedAI
-{
-    explicit larvae_cotAI(Creature* c) : ScriptedAI(c)
-    {
-        Reset();
-    }
-
-    bool doOnce;
-    uint32 spellTimer;
-
-    enum
-    {
-        SPELL_DRAIN_LIFE = 26693,
-
-        NPC_HARBINGER = 65114
-    };
-
-    void Reset() override
-    {
-        doOnce = false;
-        spellTimer = 5000;
-
-    }
-
-    void UpdateAI(const uint32 uiDiff) override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-            return;
-
-        if (Creature* harbinger = m_creature->FindNearestCreature(NPC_HARBINGER, 100.0f, true))
-            if (harbinger->GetVictim())
-                m_creature->AddThreat(harbinger->GetVictim(), 100.0f);
-
-        if (spellTimer <= uiDiff)
-        {
-            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_DRAIN_LIFE))
-            {
-                if (Creature* harbinger = m_creature->FindNearestCreature(NPC_HARBINGER, 100.0f, true))
-                {
-                    harbinger->ModifyHealth(harbinger->GetHealth() + 100);
-                    m_creature->ModifyHealth(harbinger->GetHealth() - 100);
-                }
-                spellTimer = urand(5000, 7000);
-            }
-
-        }
-        else spellTimer -= uiDiff;
-
-        DoMeleeAttackIfReady();
-    }
-
-    void OnCombatStop() override
-    {
-        //m_creature->DespawnOrUnsummon(); // handled in Epochronos script when summoned
-    }
-};
-
 struct epochronos_boss_cotAI : public ScriptedAI
 {
     explicit epochronos_boss_cotAI(Creature* c) : ScriptedAI(c)
@@ -3208,11 +3151,6 @@ CreatureAI* GetAI_chronar_boss_cot(Creature* _Creature)
     return new chronar_boss_cotAI(_Creature);
 }
 
-CreatureAI* GetAI_larvae_cot(Creature* _Creature)
-{
-    return new larvae_cotAI(_Creature);
-}
-
 CreatureAI* GetAI_harbinger_boss_cot(Creature* _Creature)
 {
     return new harbinger_boss_cotAI(_Creature);
@@ -3329,11 +3267,6 @@ void AddSC_instance_caverns_of_time()
     newscript = new Script;
     newscript->Name = "epochronos_boss_cot";
     newscript->GetAI = &GetAIepochronos_boss_cot;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "larvae_cot";
-    newscript->GetAI = &GetAI_larvae_cot;
     newscript->RegisterSelf();
 
     newscript = new Script;

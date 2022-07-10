@@ -144,6 +144,19 @@ enum eSpells
     SPELL_CHARGE        = 22911,
 };
 
+bool QuestRewarded_boss_magni_bronzebeard(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40489) // Assaulting Hateforge
+    {
+        pQuestGiver->MonsterSay("Good fortunes to you, and your own, you walk this world with dignity and honor, I hope others will follow in your example.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 struct boss_magni_bronzebeardAI : public ScriptedAI
 {
 public:
@@ -340,6 +353,7 @@ void AddSC_ironforge()
     newscript->RegisterSelf();
 
     newscript = new Script;
+    newscript->pQuestRewardedNPC = &QuestRewarded_boss_magni_bronzebeard;
     newscript->Name = "boss_magni_bronzebeard";
     newscript->GetAI = &GetAI_boss_magni_bronzebeard;
     newscript->RegisterSelf();
