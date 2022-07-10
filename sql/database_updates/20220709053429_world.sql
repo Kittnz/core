@@ -605,3 +605,33 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
+
+-- Scrap Forager
+delete from quest_template where entry = 40491;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40491,2,46,54,47,0,0,'Scrap Forager','Greetings strangers, it seems some recruits from this new horde are arriving at last. I\'ll keep this short, we\re not doing so well here, its like everything is being hold together by worg spit, and the lack of resources certainly doesn\'t help. I\'ll say its about time we fixed that.\n\nDark iron tends to be quite scarce in the surface of the steppes, but most creatures around there parts carry some on their person whether it be baubles, equipment or sitting in their stomach. Venture out and collect me a sizeable amount of scraps so I can keep forging equipment for our grunts to keep the hold safe.','Scavenge 50 Dark Iron Scraps from various creatures in Burning Steppes and return to Blacksmith Torren in Karfang Hold.','Hard times call for desperate measures, knowing how to make do with what you have draws the line between life and death.','That\'s quite a haul, I\'m impressed. Joining this new horde might not be so bad after all. You\'ve scavenged so much I even have surplus to forge you an equipment of your choice. I believe you will wear it well.',22528,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5025,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60700,1,60701,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60762, 40491);
+replace into creature_involvedrelation (id, quest) values (60762, 40491);
+
+update creature_template set npc_flags = 16391 where entry = 60762;
+
+replace into item_template values
+ ('60700', '2', '1', 'Scrapforged Battleaxe', '', '28349', '2', '0', '1', '207572', '51893', '17', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '20', '7', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3400', '0',
+ '0', '125', '187', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '85', '0', '0', '0', '0', '30', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60701', '4', '4', 'Scrapforged Helm', '', '27338', '2', '0', '1', '60530', '12160', '1', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '14', '7', '19',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '456', '0', '5', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '70', '0', '0', '0', '0', '10', '0', '0', '0',
+ '0', '1', NULL);
+
