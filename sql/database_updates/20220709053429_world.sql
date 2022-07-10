@@ -473,7 +473,7 @@ replace into item_template values
 update creature_template set script_name = 'npc_farad_wrightsow' where entry = 60854;
 update creature_template set unit_flags = 32768 where entry = 60859;
 
-set @gossip_menu_id = 41171; set @magic_number = 30025;
+set @gossip_menu_id = 41172; set @magic_number = 30025;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Of course it was him, the old fool. He thinks that my death will fix everything... Oh, how wrong he is. My death will change nothing!');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
@@ -634,4 +634,13 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '6', '1', '0', '0', '70', '0', '0', '0', '0', '10', '0', '0', '0',
  '0', '1', NULL);
+-- NEW NPC FOR PTR 
+-- Masey Wirefuse, display ID 5425, level 38, humanoid,, no weapon, quest giver/gossip flags, greeting text : "Ironforge is nice and all, but I kind of miss Gnomeregan, it was just, cozy, and offered all kinds of progress in many fields you know?\n\nWell, maybe not, but either way it isn't all bad, there are still things to figure out and mysteries to solve."
+REPLACE INTO creature_template VALUES
+(60872, 5425, 0, 0, 0, 'Masey Wirefuse', '', 0, 38, 38, 1599, 1599, 0, 0, 1780, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
+set @gossip_menu_id = 41173; set @magic_number = 60872;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ironforge is nice and all, but I kind of miss Gnomeregan, it was just, cozy, and offered all kinds of progress in many fields you know?\n\nWell, maybe not, but either way it isn\'t all bad, there are still things to figure out and mysteries to solve.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
