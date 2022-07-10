@@ -656,3 +656,202 @@ update page_text set text = 'THE QUARRY\n\nSo there I was, Dear readers! There I
 update page_text set text = 'Asking about, apparently there have been a lotta movements in the area, travelling back and forth down the rocky roads. Guess the quarry ain\'t so disused anymore. Question is: what\'s it being used for? That ungodly smell seemed to be novel, no gunpowder there. The explosions seemed more frequent and violent, not just blasting apart rock for minerals. One brave (and equally stupid) goblin tried to meet with the foreman, Bargul, to find out what was going on. She never returned, but honestly, what did she expect to happen?\n\nAll I know is, where there\'s activity, there\'s production. Where there\'s production, there\'s business. And where there\'s business, there\'s gold! Far be it from me to tell you adventurin\' types where to spend your time and effort, but if I were you, I would be having a few words with the dwarves there to find out what\'s going on, and maybe become an early investor! Or at least sell their secrets. To me. Ideally.' where entry = 50540;
 update page_text set text = 'ZEPPELIN ACCIDENTS\n\nIt really is amazing what people will put up with for the sake of saving time and convenience. Now, I may have long since had shares in the Zeppelin transport companies. They are the lifeblood of travel, getting Orcs, Goblins, even colossal Tauren across the continents within days! Anyone smart enough would see this as a worthwhile investment.\n\nWe got ourselves competition now, though. Some upstarts started running air travel all the way to Kargath! That\'s right, the desert dust and winds, the bane of any airship, and these dumbos decided it was the perfect destination to run their routes to.\n\nNeedless to say, the results ain\'t pretty. Day after day we get reports of bodies drying in the desert sun, flung from the decking of the Zeppelins as they careen through the inhospitable winds! There are even reports of crashes and explosions, oh my oh my.' where entry = 50541;
 update page_text set text = 'Say what you want about Goblin engineering, the only fatalities we\'ve had so far on zeppelins were from people thinking they could shave minutes off their journeys by jumping off as we flew over their homes, or the occasionally cheeky mind control magic spell. Which of course, we take zero responsibility for – that much is in the small print when you agree to ride the aircraft.\n\nI don\'t think I need to elaborate. It\'s lunacy to take their transport, stick with the established routes. Stay safe! Stay alive! Give us your custom and not them!' where entry = 50542;
+-- new items and loot_tables:
+-- Hateforge Trash Items
+replace into item_template values
+ ('60702', '15', '0', 'Singed Cloth', '', '21470', '0', '0', '1', '6736', '1684', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60703', '15', '0', 'Chipped Miner\'s Union Badge', '', '31499', '0', '0', '1', '9224', '2306', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60704', '15', '0', 'Broken Flask', 'Has an acidic scent.', '6530', '0', '0', '1', '5932', '1483', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60705', '15', '0', 'Torn Union Flyer', 'Depicts a miner pointing at you, urging you to join the union.', '7695', '0', '0', '1', '11832', '2958', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60706', '15', '0', 'Worn Gear', '', '1221', '0', '0', '1', '3928', '982', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60707', '15', '0', 'Cracked Power Core', 'A green liquid is slowly oozing out of the crack.', '17923', '0', '0', '1', '4212', '1053', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60708', '15', '0', 'Ash-Covered Scroll', 'Contains hymns praising Ragnaros.', '1093', '0', '0', '1', '8624', '2156', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60709', '15', '0', 'Ashen Tinderbox', '', '12333', '0', '0', '1', '7528', '1882', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60710', '15', '0', 'Battered Horn', '', '6338', '0', '0', '1', '11452', '2863', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '2', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+-- loot table for items 60702-60710:
+-- Singed Cloth: (%25)
+replace into creature_loot_template values
+(60717,60702,25,1,1,1,0),
+(60718,60702,25,1,1,1,0),
+(60719,60702,25,1,1,1,0),
+(60720,60702,25,1,1,1,0),
+(60830,60702,25,1,1,1,0),
+(60831,60702,25,1,1,1,0),
+(60721,60702,25,1,1,1,0),
+(60722,60702,25,1,1,1,0),
+(60723,60702,25,1,1,1,0),
+(60724,60702,25,1,1,1,0),
+(60716,60702,25,1,1,1,0);
+-- Chipped Miner's Union Badge (%20)
+replace into creature_loot_template values
+(60721,60703,20,1,1,1,0),
+(60830,60703,20,1,1,1,0);
+-- Broken Flask (%25)
+replace into creature_loot_template values
+(60717,60704,25,1,1,1,0);
+-- Torn Union Flyer (%20)
+replace into creature_loot_template values
+(60723,60705,20,1,1,1,0),
+(60724,60705,20,1,1,1,0);
+-- Worn Gear (%25)
+replace into creature_loot_template values
+(60719,60706,25,1,1,1,0),
+(60720,60706,25,1,1,1,0),
+(60712,60706,25,1,1,1,0);
+-- Cracked Power Core (%15)
+replace into creature_loot_template values
+(60712,60707,15,1,1,1,0),
+(60719,60707,15,1,1,1,0),
+(60720,60707,15,1,1,1,0);
+-- Ash-Covered Scroll (%20)
+replace into creature_loot_template values
+(60718,60708,20,1,1,1,0);
+-- Ashen Tinderbox (%15)
+replace into creature_loot_template values
+(60717,60709,15,1,1,1,0),
+(60718,60709,15,1,1,1,0),
+(60719,60709,15,1,1,1,0),
+(60720,60709,15,1,1,1,0),
+(60830,60709,15,1,1,1,0),
+(60831,60709,15,1,1,1,0),
+(60721,60709,15,1,1,1,0),
+(60722,60709,15,1,1,1,0),
+(60723,60709,15,1,1,1,0),
+(60724,60709,15,1,1,1,0),
+(60716,60709,15,1,1,1,0);
+-- Battered Horn (%10)
+replace into creature_loot_template values
+(60723,60710,10,1,1,1,0),
+(60716,60710,10,1,1,1,0),
+(60722,60710,10,1,1,1,0);
+-- fixes for items 80670, 80674, 83564:
+-- boots bugfix.
+update item_template set inventory_type = 8, class = 4, subclass = 4 where entry = 80670;
+-- namefix.
+update item_template set name = 'Corrosive Core', spellid_1 = 48036 where entry = 80674;
+-- sword bugfix.
+update item_template set spellcharges_1 = 0 where entry = 83564;
+-- Add the following items to the loottable of mod ID 60829 with a 20% chance.
+replace into creature_loot_template values
+(60829,80670,20,1,1,1,0),
+(60829,80671,20,1,1,1,0),
+(60829,80672,20,1,1,1,0),
+(60829,80673,20,1,1,1,0),
+(60829,80674,20,1,1,1,0);
+-- Abyssal Council High Council Boss loottable revamp:
+-- Prince Skaldrenox.
+delete from creature_loot_template where item in (20515,20680,20681,20682);
+replace into creature_loot_template values
+(15203,20515,100,1,1,1,0),
+(15203,20681,50,2,1,1,0),
+(15203,20680,50,2,1,1,0),
+(15203,20682,50,3,1,1,0),
+-- Skaldrenox's Rage (50%)???
+(15203,0,50,3,1,1,0),
+-- Abyssal Flame (20%) ???
+(15203,0,20,4,1,1,0);
+-- High Marshal Whirlaxis:
+delete from creature_loot_template where item in (20515,20689,20690,20691);
+replace into creature_loot_template values
+(15204,20515,100,1,1,1,0),
+(15204,20690,50,2,1,1,0),
+(15204,20689,50,2,1,1,0),
+(15204,20691,50,3,1,1,0),
+-- Tempest's Rage (%50) ???
+(15204,0,50,3,1,1,0),
+-- Abyssal Wind (20%) ???
+(15204,0,20,4,1,1,0);
+-- Lord Skwol:
+delete from creature_loot_template where item in (20515,20683,20684,20685);
+replace into creature_loot_template values
+(15305,20515,100,1,1,1,0),
+(15305,20684,50,2,1,1,0),
+(15305,20683,50,2,1,1,0),
+(15305,20685,50,3,1,1,0),
+-- Pearl of the Tides (%50) ???
+(15305,0,50,3,1,1,0),
+-- Abyssal Wave (20%) ???
+(15305,0,20,4,1,1,0);
+-- Baron Kazum:
+update creature_loot_template set groupid = 0 where entry = 15205 and item = 30107;
+delete from creature_loot_template where item in (20686,20687,20688,20515);
+replace into creature_loot_template values
+(15205,20515,100,1,1,1,0),
+(15205,20686,50,2,1,1,0),
+(15205,20687,50,2,1,1,0),
+(15205,20688,50,3,1,1,0),
+-- Blackstone Crown (%50)???
+(15205,0,50,3,1,1,0),
+-- Abyssal Slate (20%)???
+(15205,0,20,4,1,1,0);
