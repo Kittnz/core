@@ -497,3 +497,111 @@ REPLACE INTO creature_ai_scripts VALUES
 (2200021, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30027, 0, 0, 0, 0, 0, 0, 0, 0, 'Gazzirik - Say upon Death');
 REPLACE INTO creature_ai_events VALUES
 (2200021, 60836, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200021, 0, 0, 'Gazzirik - Say upon Death');
+
+-- Investigating Hateforge
+delete from quest_template where entry = 40486;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40486,2,46,50,45,0,0,'Investigating Hateforge','Bah, what a wasteland to be assigned to, it\'s insulting.\n\nI want to get out of here as soon as I can, and to do so I need some work done, I take it you are willing to help huh?\n\nThe Dark Iron are up to something, and it\'s my job to confirm that -something- is going on. What I need you to do is scout the entrance of the Quarry, and confirm Ironforge\'s suspicions.\n\nTravel up there, peak in the entrance, and come back, easy ye?','Explore the entrance to The Hateforge Quarry and return to Senator Granitebeard at Morgan\'s Vigil in Burning Steppes.','So, have you ventured up the ridge?','Hmm, so there is something going on up there.\n\nHold on just a minute, I got to write a report of my findings and send it to the highest authority.',0,0,0,0,0,0,0,0,60376,1,0,0,0,0,0,0,0,0,0,2250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Explore the entrance to The Hateforge Quarry');
+
+replace into creature_questrelation (id, quest) values (60869, 40486);
+replace into creature_involvedrelation (id, quest) values (60869, 40486);
+
+update quest_template set type = 1 where entry = 40486;
+
+REPLACE INTO creature_template VALUES
+(60376, 328, 0, 0, 0, 'quest_40486_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO gameobject_template VALUES
+(2010903, 5, 381, 'Quest 40486 Custom Trigger', 0, 0, 0.01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'custom_exploration_trigger');
+
+REPLACE INTO gameobject (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (2010903, 0, -8168, -3104, 200.485, 1.6558, 0, 0, 0.736512, 0.676424, 300, 300, 100, 1, 0, 0);
+
+-- The Hateforge Report
+delete from quest_template where entry = 40487;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40486,40487,2,46,52,45,0,0,'The Hateforge Report','<Senator Granitebeard makes quick work of writing his report, sealing it and stamping it with the seal of Ironforge.>\n\nThere, I need you to take this to Ironforge, at once, and report it to King Magni Bronzebeard, it should hold all relevant information based off what I have seen, and what you have reported back to myself.\n\nBe quick, our enemies plot against us.','Take the Hateforge Report to King Magni Bronzebeard in Ironforge.','Yes?','What brings you to Ironforge, how can you assist the Bronzebeard?',60693,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60693,1,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60869, 40487);
+replace into creature_involvedrelation (id, quest) values (2784, 40487);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60693,7743,'The Hateforge Report',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The King's Response
+delete from quest_template where entry = 40488;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40487,40488,2,46,52,45,0,0,'The King\'s Response','<Magni would take the Hateforge Report, beginning to read it over with a calculated interest.>\n\nThe Dark Iron have been our foe for quite a while now, and I will not forgive them for what they have done.\n\nIt has been a while since we have discovered the efforts going on within the Burning Steppes, it was only a matter of discovering -what- was going on there.\n\nIt would appear that the Twilight Hammer has taken an interest in the project, they have been spotted entering.\n\nTake my response to Senator Gravelbelt, you are dismissed.','Bring Magni\'s Authorization to Senator Gravelbelt at Morgan\'s Vigil in Burning Steppes.','Yes?','So, how did things go in the capital?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (2784, 40488);
+replace into creature_involvedrelation (id, quest) values (60869, 40488);
+
+-- Assaulting Hateforge
+delete from quest_template where entry = 40489;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40488,40489,2,5098,57,45,0,0,'Assaulting Hateforge','It would appear that The Hateforge Quarry is of great concern to the King, and he has given me the authority to recruit any on behalf of the kingdom.\n\nIf you are wanting to gain favor with Magni than this would be a good opportunity.\n\nI am looking for anyone to venture deep into the Hateforge Quarry and remove the presence of the Twilight Hammer within. If you are interested, I would suggest bringing fellow adventurers, a group of mercenaries, or some kind of brigade.\n\nIf you end up completing the task, return to Magni himself, and he will reward you.','Venture into The Hateforge Quarry and remove the presence of the Twilight Hammer from deep within, when completed, return to King Magni Bronzebeard in Ironforge.','Is there anything I can help you with?','<King Magni Bronzebeard would nod his head stoutly.>\n\nThe defence of the kingdom requires us to be steadfast in all manners, I have no doubt you have really shaken things up for our enemy, and put a stop to their plans.\n\nOn behalf of my people I reward you with an item from our armory, may it serve you well.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8850,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60694,1,60695,1,60696,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60869, 40489);
+replace into creature_involvedrelation (id, quest) values (2784, 40489);
+
+update quest_template set type = 81 where entry = 40489;
+
+replace into item_template values
+ ('60694', '4', '3', 'Crown of Grobi', '', '26330', '3', '0', '1', '92968', '23242', '1', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '30', '5', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '302', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '70', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60695', '4', '0', 'Sigil of Heritage', '', '31905', '3', '0', '1', '65700', '16425', '11', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '14', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '25', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60696', '2', '4', 'Rubyheart Mallet', '', '28776', '3', '0', '1', '189444', '47361', '13', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '9', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '62', '115', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9417', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Rumors of Hateforge Brew
+delete from quest_template where entry = 40490;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40490,2,5098,54,45,512,0,'Rumors of Hateforge Brew','There be rumors floatin\' around about somethin\' called \'Hateforge Brew\'. The Dark Iron refer to it as something with reverance, and I know they aint makin\' no ale in there.\n\nThe name is a cover up for somethin\' else and we gotta find out just what that somethin\' else is, ye get me? I do know that they have Chemist\'s within the Quarry, and my bet is they are linked to this Hateforge Brew.\n\nI need you to head in there, gather me a Dark Iron Vial and some Hateforge Chemistry Documents. I bet they have them stashed away somewhere in there about what\'s going on.','Delve into the Hateforge Quarry and recover a Dark Iron Vial, and the Hateforge Chemistry Documents, then return to Varlag Duskbeard at Morgan\'s Vigil in Burning Steppes.','You get a whiff of what\'s goin on in there yet?','Ahh, would you look at all this huh?!\n\nThose crafty bastards sure were keeping their secrets, I\'ll make sure to send this back to Ironforge when I get the chance, and they can look everything over, nice job eh?\n\nI got some extra Thunder Ale for you, oh and me ol\' gloves, they should treat you nicely, I got a new pair.',60697,1,60698,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6450,0,0,0,0,0,0,0,0,0,0,0,2686,10,60699,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60870, 40490);
+replace into creature_involvedrelation (id, quest) values (60870, 40490);
+
+update quest_template set type = 1 where entry = 40490;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60697,3663,'Dark Iron Vial',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60698,7601,'Hateforge Chemistry Documents',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50543);
+
+REPLACE INTO page_text VALUES
+(50543,'<Complex diagrams show various magical properties being mixed with molten lava.>\n\nHATEFORGE BREW is a nickname for the secret project that the upper class wants to keep under-wraps, all who study this document must keep their lips -sealed-.\n\nPunishment for leaking secrets from this document is trial in the Ring of Law.\n\n\n\n TO YOU, THE HATEFORGE CHEMIST. STUDY THE CHARTS AND DIAGRAMS, CONTINUE THE EXPERIMENTS. FAILURE IS -NOT- AN OPTION!!!',0);
+
+replace into creature_loot_template values
+(60717,60697,-100,1,1,1,0);
+
+replace into gameobject_template values
+(2010902,3,23432,'Sealed Documents Container',0,4,1,43,2010902,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010902,60698,-100,0,1,1,0);
+
+replace into item_template values
+ ('60699', '4', '2', 'Varlag\'s Clutches', '', '18981', '2', '0', '1', '43452', '10863', '10', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '9', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '96', '0', '0', '0',
+ '0', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
