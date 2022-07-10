@@ -644,3 +644,8 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ironforge is nice and all, but I kind of miss Gnomeregan, it was just, cozy, and offered all kinds of progress in many fields you know?\n\nWell, maybe not, but either way it isn\'t all bad, there are still things to figure out and mysteries to solve.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- REDUCE DAMAGE of Har'gesh Doomcaller by 25%.
+update creature_template set dmg_min = 128, dmg_max = 175 where entry = 60737;
+-- change the spell timer of Hateforge Engineer's decoy dragonling to be 30 seconds instead of 10, (so he casts it every 30 seconds instead of every 10)
+update creature_spells set delayrepeatmin_1 = 30, delayrepeatmax_1 = 30 where entry = 180025;
