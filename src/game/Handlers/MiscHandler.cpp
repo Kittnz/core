@@ -796,10 +796,11 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
                 pPlayer->AreaExploredOrEventHappens(quest_id);
         }
     }
-
+    // SendAreaTriggerMessage("Area trigger found: %u", triggerId);
     // enter to tavern, not overwrite city rest
     if (sObjectMgr.IsTavernAreaTrigger(triggerId))
     {
+        // SendAreaTriggerMessage("Tavern trigger found: %u", triggerId);
         // set resting flag we are in the inn
         if (pPlayer->GetRestType() != REST_TYPE_IN_CITY)
             pPlayer->SetRestType(REST_TYPE_IN_TAVERN, triggerId);

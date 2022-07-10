@@ -571,3 +571,26 @@ update item_template set display_id = 12943 where entry = 60632;
 update item_template set display_id = 28742 where entry = 60611;
 
 update gameobject set spawntimesecsmin = 259200, spawntimesecsmax = 259200 where guid in (5008121, 5008122, 5008115, 5008113, 5008108, 5008107, 5008106, 5008112, 5008105, 5008111 );
+
+-- Tavern areatriggers:
+
+replace into areatrigger_tavern values (206, 'Dustwallow Marsh - Mudsprocket');
+replace into areatrigger_template values (206, 1, -4623.519, -3172.25, 34.81, 15, 0, 0, 0, 0);
+
+replace into areatrigger_tavern values (210, 'Durotar - Sparkwater Port');
+replace into areatrigger_template values (210, 1, 921.139, -5064.1, 8.02415, 15, 0, 0, 0, 0);
+
+replace into areatrigger_tavern values (1, 'Wetlands - Hawk\'s Vigil');
+replace into areatrigger_template values (1, 0, -3860.25, -1870.37, 142.278, 15, 0, 0, 0, 0);
+
+replace into areatrigger_tavern values (2, 'Tirisfal Uplands - Glenshire');
+replace into areatrigger_template values (2, 0, 1793.062, 2044.352, 120.885, 8, 0, 0, 0, 0);
+
+replace into areatrigger_tavern values (3, 'Quel\'Thalas - Alah\'Thalas');
+replace into areatrigger_template values (3, 0, 4232.658, -2778.113, 97.471, 40, 0, 0, 0, 0);
+
+replace into areatrigger_tavern values (4, 'Lapidis Isle - Caelan\'s Rest');
+replace into areatrigger_template values (4, 0, -11886.57, 3161.767, 16.511, 30, 0, 0, 0, 0);
+
+replace into areatrigger_tavern values (5, 'Gillijim\'s Isle - Maul\'ogg Refuge');
+replace into areatrigger_template values (5, 0, -14014.179, 2329.316, 60.123, 30, 0, 0, 0, 0);

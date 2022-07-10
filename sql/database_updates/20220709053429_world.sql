@@ -1,9 +1,17 @@
 -- Gaining Orvak's Trust
 delete from quest_template where entry = 40459;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40459,2,46,54,45,0,0,'Gaining Orvak\'s Trust','You want to help us out do you? Well we need to know we can trust you, after all, we have many enemies in this region, and most regions of the world, probably.\n\nYou can start by gathering Thaurrisan Badges, carried by the Dark Iron in the Ruins of Thaurrisan. Gather 15 of them, and bring them to Orvak Sternrock, he will know you mean business then.','Gather 15 Tharrusian Badges for Orvak Sternrock at the Blackrock Pass in Burning Steppes.','What is it you want $r?','Hmm, so you\'re the real deal huh, no way you\'re working with Shadowforge anyway.\n\nYou never can be certain, they have an alignment with the Twilight Hammer afterall.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40459,2,46,54,45,0,0,'Gaining Orvak\'s Trust','You want to help us out do you? Well we need to know we can trust you, after all, we have many enemies in this region, and most regions of the world, probably.\n\nYou can start by gathering Thaurrisan Badges, carried by the Dark Iron in the Ruins of Thaurrisan. Gather 15 of them, and bring them to Orvak Sternrock, he will know you mean business then.','Gather 15 Thaurissan Badges for Orvak Sternrock at the Blackrock Pass in Burning Steppes.','What is it you want $r?','Hmm, so you\'re the real deal huh, no way you\'re working with Shadowforge anyway.\n\nYou never can be certain, they have an alignment with the Twilight Hammer afterall.',60711,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (60834, 40459);
 replace into creature_involvedrelation (id, quest) values (60833, 40459);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60711,3110,'Thaurissan Badge',12,1,2048,1,-1,-1,1,15,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(7036,60711,-70,1,1,1,0),
+(7037,60711,-70,1,1,1,0),
+(7038,60711,-70,1,1,1,0);
 
 -- Hearing Orvak's Story
 delete from quest_template where entry = 40460;
@@ -644,3 +652,245 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ironforge is nice and all, but I kind of miss Gnomeregan, it was just, cozy, and offered all kinds of progress in many fields you know?\n\nWell, maybe not, but either way it isn\'t all bad, there are still things to figure out and mysteries to solve.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- REDUCE DAMAGE of Har'gesh Doomcaller by 25%.
+update creature_template set dmg_min = 128, dmg_max = 175 where entry = 60737;
+-- change the spell timer of Hateforge Engineer's decoy dragonling to be 30 seconds instead of 10, (so he casts it every 30 seconds instead of every 10)
+update creature_spells set delayrepeatmin_1 = 30, delayrepeatmax_1 = 30 where entry = 180025;
+-- remove (PAGE 1), (PAGE 2) etc. things from Gadgetzan Times Volume II.
+update page_text set text = 'SHREDDER TECH\n\nI always thought the name \'Shredder\' was a bit of a poor marketing choice, really. These mechanical machines are worth fifty goblin labourers, and they don\'t always have to shred, oh no! They can saw, rip, tear, shred, grind, smash, crush, the possibilities, Dear Reader, the possibilities are almost endless.\n\nMaybe you\'re a potential investor. Maybe you\'re some hoodwink who wants to rob the glorious oil guzzlers of their fused wiring to sell on the black market. Hey, I don\'t judge. In fact, if you get any, I\'ll pay a good price myself... Either way, here\'s the most recent investors:' where entry = 50537;
+update page_text set text = 'Ashenvale, the Warsong Lumber Camp. To see the scale of this operation is a marvel to behold. The entertainment of the Orcs and Elves stabbing each other just on the other side of the river is pretty amusing too.\n\nStonetalon Mountains, the Venture Co. in the Windshear Crag. I mean, yeah, the tree-huggers get another forest chopped down. But who cares, that valley was ugly as sin anyway, looks way better with a bit industrialisation.\n\nStranglethorn Vale, the Venture Co. near Lake Nazferiti. Keeping the geologists hard at work, these beasts rip through the undergrowth to allow the research to continue. Some beautiful crystals I hear they find out there, too.\n\nWestfall? I heard one fancy unit was shipped to somewhere in Westfall, but I\'ve not heard about where it\'s gone to, or who has it. Weird, disappeared into thin air...' where entry = 50538;
+update page_text set text = 'THE QUARRY\n\nSo there I was, Dear readers! There I was, taking a tour through the Burning Steppes to visit a colleague in Flame Crest. Let me paint the picture: the sun was high and scorching, the land was black as tar and burning, and the wildlife was equal parts ugly and dangerous.\n\nWhen suddenly, BOOM! The biggest explosion I ever did hear. Made the ground itself pulse, it did. Naturally, I just had to find out what could cause such a thing of beauty. Well, on the horizon I spied a deep green smoke plume coming from a quarry in the Eastern hills. Smell unlike anything I can compare it to, made my nose crinkle and my eyes water. I didn\'t get much closer, but I could see by the entrance to the quarry... those curious Dark Irons were milling about. Guarding the perimeter, shouting at each other in that strange Dwarvern dialect!' where entry = 50539;
+update page_text set text = 'Asking about, apparently there have been a lotta movements in the area, travelling back and forth down the rocky roads. Guess the quarry ain\'t so disused anymore. Question is: what\'s it being used for? That ungodly smell seemed to be novel, no gunpowder there. The explosions seemed more frequent and violent, not just blasting apart rock for minerals. One brave (and equally stupid) goblin tried to meet with the foreman, Bargul, to find out what was going on. She never returned, but honestly, what did she expect to happen?\n\nAll I know is, where there\'s activity, there\'s production. Where there\'s production, there\'s business. And where there\'s business, there\'s gold! Far be it from me to tell you adventurin\' types where to spend your time and effort, but if I were you, I would be having a few words with the dwarves there to find out what\'s going on, and maybe become an early investor! Or at least sell their secrets. To me. Ideally.' where entry = 50540;
+update page_text set text = 'ZEPPELIN ACCIDENTS\n\nIt really is amazing what people will put up with for the sake of saving time and convenience. Now, I may have long since had shares in the Zeppelin transport companies. They are the lifeblood of travel, getting Orcs, Goblins, even colossal Tauren across the continents within days! Anyone smart enough would see this as a worthwhile investment.\n\nWe got ourselves competition now, though. Some upstarts started running air travel all the way to Kargath! That\'s right, the desert dust and winds, the bane of any airship, and these dumbos decided it was the perfect destination to run their routes to.\n\nNeedless to say, the results ain\'t pretty. Day after day we get reports of bodies drying in the desert sun, flung from the decking of the Zeppelins as they careen through the inhospitable winds! There are even reports of crashes and explosions, oh my oh my.' where entry = 50541;
+update page_text set text = 'Say what you want about Goblin engineering, the only fatalities we\'ve had so far on zeppelins were from people thinking they could shave minutes off their journeys by jumping off as we flew over their homes, or the occasionally cheeky mind control magic spell. Which of course, we take zero responsibility for – that much is in the small print when you agree to ride the aircraft.\n\nI don\'t think I need to elaborate. It\'s lunacy to take their transport, stick with the established routes. Stay safe! Stay alive! Give us your custom and not them!' where entry = 50542;
+-- quest The Way of the Witch Doctor IV update main quest description of:
+update quest_template set details = 'With this serum you may speak with the spirit of the toad, he is a patient, and incredibly wise one. We trolls have been hexin\' our enemies for quite some time, and it is about time for you to pay respects.\n\nN\'ribbi is the one you seek, and he can be found deep in the Dustwallow Marsh, far to the south west, at the very edge of the Bluefen. Go there, and speak with him, bring this serum, and offer it to N\'ribbi as tribute.' where entry = 40352;
+-- new items and loot_tables:
+-- Hateforge Trash Items
+replace into item_template values
+ ('60702', '15', '0', 'Singed Cloth', '', '21470', '0', '0', '1', '6736', '1684', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60703', '15', '0', 'Chipped Miner\'s Union Badge', '', '31499', '0', '0', '1', '9224', '2306', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60704', '15', '0', 'Broken Flask', 'Has an acidic scent.', '6530', '0', '0', '1', '5932', '1483', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '3', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60705', '15', '0', 'Torn Union Flyer', 'Depicts a miner pointing at you, urging you to join the union.', '7695', '0', '0', '1', '11832', '2958', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60706', '15', '0', 'Worn Gear', '', '1221', '0', '0', '1', '3928', '982', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60707', '15', '0', 'Cracked Power Core', 'A green liquid is slowly oozing out of the crack.', '17923', '0', '0', '1', '4212', '1053', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60708', '15', '0', 'Ash-Covered Scroll', 'Contains hymns praising Ragnaros.', '1093', '0', '0', '1', '8624', '2156', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60709', '15', '0', 'Ashen Tinderbox', '', '12333', '0', '0', '1', '7528', '1882', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60710', '15', '0', 'Battered Horn', '', '6338', '0', '0', '1', '11452', '2863', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '2', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+-- loot table for items 60702-60710:
+-- Singed Cloth: (%25)
+replace into creature_loot_template values
+(60717,60702,25,1,1,1,0),
+(60718,60702,25,1,1,1,0),
+(60719,60702,25,1,1,1,0),
+(60720,60702,25,1,1,1,0),
+(60830,60702,25,1,1,1,0),
+(60831,60702,25,1,1,1,0),
+(60721,60702,25,1,1,1,0),
+(60722,60702,25,1,1,1,0),
+(60723,60702,25,1,1,1,0),
+(60724,60702,25,1,1,1,0),
+(60716,60702,25,1,1,1,0);
+-- Chipped Miner's Union Badge (%20)
+replace into creature_loot_template values
+(60721,60703,20,1,1,1,0),
+(60830,60703,20,1,1,1,0);
+-- Broken Flask (%25)
+replace into creature_loot_template values
+(60717,60704,25,1,1,1,0);
+-- Torn Union Flyer (%20)
+replace into creature_loot_template values
+(60723,60705,20,1,1,1,0),
+(60724,60705,20,1,1,1,0);
+-- Worn Gear (%25)
+replace into creature_loot_template values
+(60719,60706,25,1,1,1,0),
+(60720,60706,25,1,1,1,0),
+(60712,60706,25,1,1,1,0);
+-- Cracked Power Core (%15)
+replace into creature_loot_template values
+(60712,60707,15,1,1,1,0),
+(60719,60707,15,1,1,1,0),
+(60720,60707,15,1,1,1,0);
+-- Ash-Covered Scroll (%20)
+replace into creature_loot_template values
+(60718,60708,20,1,1,1,0);
+-- Ashen Tinderbox (%15)
+replace into creature_loot_template values
+(60717,60709,15,1,1,1,0),
+(60718,60709,15,1,1,1,0),
+(60719,60709,15,1,1,1,0),
+(60720,60709,15,1,1,1,0),
+(60830,60709,15,1,1,1,0),
+(60831,60709,15,1,1,1,0),
+(60721,60709,15,1,1,1,0),
+(60722,60709,15,1,1,1,0),
+(60723,60709,15,1,1,1,0),
+(60724,60709,15,1,1,1,0),
+(60716,60709,15,1,1,1,0);
+-- Battered Horn (%10)
+replace into creature_loot_template values
+(60723,60710,10,1,1,1,0),
+(60716,60710,10,1,1,1,0),
+(60722,60710,10,1,1,1,0);
+-- fixes for items 80670, 80674, 83564:
+-- boots bugfix.
+update item_template set inventory_type = 8, class = 4, subclass = 4 where entry = 80670;
+-- namefix.
+update item_template set name = 'Corrosive Core', spellid_1 = 48036 where entry = 80674;
+-- sword bugfix.
+update item_template set spellcharges_1 = 0 where entry = 83564;
+-- Add the following items to the loottable of mod ID 60829 with a 20% chance.
+replace into creature_loot_template values
+(60829,80670,20,1,1,1,0),
+(60829,80671,20,1,1,1,0),
+(60829,80672,20,1,1,1,0),
+(60829,80673,20,1,1,1,0),
+(60829,80674,20,1,1,1,0);
+-- Abyssal Council High Council Boss loottable revamp:
+-- Prince Skaldrenox.
+delete from creature_loot_template where item in (0,20515,20680,20681,20682,83562,83554);
+replace into creature_loot_template values
+(15203,20515,100,1,1,1,0),
+(15203,20681,50,2,1,1,0),
+(15203,20680,50,2,1,1,0),
+(15203,20682,50,3,1,1,0),
+(15203,83562,50,3,1,1,0),
+(15203,83554,20,4,1,1,0);
+-- High Marshal Whirlaxis:
+delete from creature_loot_template where item in (0,20515,20689,20690,20691,83564,83556);
+replace into creature_loot_template values
+(15204,20515,100,1,1,1,0),
+(15204,20690,50,2,1,1,0),
+(15204,20689,50,2,1,1,0),
+(15204,20691,50,3,1,1,0),
+(15204,83564,50,3,1,1,0),
+(15204,83556,20,4,1,1,0);
+-- Lord Skwol:
+delete from creature_loot_template where item in (0,20515,20683,20684,20685,83563,83557);
+replace into creature_loot_template values
+(15305,20515,100,1,1,1,0),
+(15305,20684,50,2,1,1,0),
+(15305,20683,50,2,1,1,0),
+(15305,20685,50,3,1,1,0),
+(15305,83563,50,3,1,1,0),
+(15305,835570,20,4,1,1,0);
+-- Baron Kazum:
+update creature_loot_template set groupid = 0 where entry = 15205 and item = 30107;
+delete from creature_loot_template where item in (0,20686,20687,20688,20515,83565,83555);
+replace into creature_loot_template values
+(15205,20515,100,1,1,1,0),
+(15205,20686,50,2,1,1,0),
+(15205,20687,50,2,1,1,0),
+(15205,20688,50,3,1,1,0),
+(15205,83565,50,3,1,1,0),
+(15205,83555,20,4,1,1,0);
+-- Add item 80801 as a drop to all mobs that also drop item 940.
+replace into reference_loot_template values
+(30075,80801,0,1,1,1,0);
+-- Add item 80793 as a drop to all mobs that also drop item 14557.
+REPLACE INTO creature_loot_template VALUES
+(9817 , 80793, 0.02, 0, 1, 1, 0),
+(10319, 80793, 0.02, 0, 1, 1, 0),
+(10400, 80793, 0.02, 0, 1, 1, 0),
+(10486, 80793, 0.02, 0, 1, 1, 0),
+(10488, 80793, 0.02, 0, 1, 1, 0),
+(11350, 80793, 0.02, 0, 1, 1, 0),
+(11352, 80793, 0.02, 0, 1, 1, 0),
+(11353, 80793, 0.02, 0, 1, 1, 0),
+(11361, 80793, 0.02, 0, 1, 1, 0),
+(11371, 80793, 0.02, 0, 1, 1, 0),
+(11551, 80793, 0.02, 0, 1, 1, 0),
+(11658, 80793, 0.02, 0, 1, 1, 0),
+(11662, 80793, 0.08, 0, 1, 1, 0),
+(11673, 80793, 0.02, 0, 1, 1, 0),
+(12463, 80793, 0.1 , 0, 1, 1, 0),
+(14821, 80793, 0.02, 0, 1, 1, 0),
+(11668, 80793, 0.02, 0, 1, 1, 0),
+(10407, 80793, 0.02, 0, 1, 1, 0),
+(11359, 80793, 0.02, 0, 1, 1, 0),
+(10317, 80793, 0.02, 0, 1, 1, 0),
+(15207, 80793, 0.04, 0, 1, 1, 0),
+(11949, 80793, 0.2 , 0, 1, 1, 0),
+(11659, 80793, 0.02, 0, 1, 1, 0),
+(91910, 80793, 0.02, 0, 1, 1, 0);
+replace into reference_loot_template values
+(150112,80793,0,1,1,1,0);
+-- Add item 80811 as a drop to all mobs that also drop item 12975.
+replace into reference_loot_template values
+(30023,80811,0,1,1,1,0);
+-- Add item 80817 as a drop to mob ID 5822 to the Group 6 loottable with a 65% chance.
+REPLACE INTO creature_loot_template VALUES
+(5822 , 80817, 65, 6, 1, 1, 0);

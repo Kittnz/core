@@ -1163,7 +1163,11 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY, "ItemRestoreLog.MinQuality", 3);
 
+    setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 0);
+
     setConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS, "ItemRestoreLog.QuestItems", false);
+
+    m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
 }

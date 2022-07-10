@@ -9032,6 +9032,29 @@ bool ChatHandler::HandleHCMessagesCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleMinChatLevelCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .minchatlevel <minlevel>");
+        return false;
+    }
+
+
+    int32 minLevel = -1;
+
+    ExtractInt32(&args, minLevel);
+
+    if (minLevel > 100 || minLevel <= 0)
+    {
+        SendSysMessage("Enter a valid level.");
+        return false;
+    }
+
+    sWorld.SetMinChatLevel((uint32)minLevel);
+    return true;
+}
+
 //Edit Player money
 bool ChatHandler::HandleModifyMoneyCommand(char* args)
 {
