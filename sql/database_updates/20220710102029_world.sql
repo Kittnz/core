@@ -10,5 +10,5 @@ update quest_template set reqitemcount1 = 8, srcitemcount = 8, objectives = 'Fin
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1517
 
-update creature_questrelation set entry = 51266 where quest = 80409;
-update creature_involvedrelation set entry = 81041 where quest = 80409;
+update creature_questrelation set id = 51266 where quest = 80409;
+update creature_involvedrelation set id = 81041 where quest = 80409;
