@@ -894,3 +894,8 @@ replace into reference_loot_template values
 -- Add item 80817 as a drop to mob ID 5822 to the Group 6 loottable with a 65% chance.
 REPLACE INTO creature_loot_template VALUES
 (5822 , 80817, 65, 6, 1, 1, 0);
+-- Change level of Gazzirik (entry 60859) to 24, and adjust all values accordingly.
+delete from creature_template where entry = 60859;
+REPLACE INTO creature_template VALUES
+(60859, 7182, 0, 0, 0, 'Gazzirik', '', 41163, 24, 24, 664, 664, 0, 0, 1026, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 36, 46, 0, 106, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 48, 'EventAI', 0, 3, 0, 0, 3, 20145, 0, 0, 0, 0, 0, 0, '');
+
