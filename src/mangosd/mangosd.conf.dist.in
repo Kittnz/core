@@ -2206,6 +2206,11 @@ Movement.PendingAckResponseTime = 2000
 #        Required security rank to assign ticket in escalation queue.
 #        Default: 7
 #
+#    GM.CheatGod
+#        Character will not die from damage.
+#                 0 (disable)
+#        Default: 1 (enable)
+#
 ###################################################################################################################
 
 GM.LoginState            = 2
@@ -2224,6 +2229,7 @@ GM.AllowPublicChannels   = 0
 GMTickets.Enable         = 1
 GMTickets.MinLevel       = 0
 GMTickets.Admin.Security = 7
+GM.CheatGod              = 1
 
 ###################################################################################################################
 # VISIBILITY AND RADIUSES
@@ -2794,6 +2800,11 @@ AHBot.itemcount = 50
 #        How often the the server will check if there are enough bots spawned.
 #        Default: 60000 (1 minute)
 #
+#    PlayerBot.AllowSaving
+#        Enables saving of character progress when a real character is loaded.
+#        Default: 0 - off
+#                 1 - on
+#
 #    PlayerBot.Debug
 #        Enables additional debugging information about bots that is printed in the console.
 #        Default: 0 - off
@@ -2840,6 +2851,7 @@ RandomBot.MinBots = 0
 RandomBot.MaxBots = 0
 RandomBot.Refresh = 60000
 
+PlayerBot.AllowSaving = 0
 PlayerBot.Debug = 0
 PlayerBot.UpdateMs = 1000
 PlayerBot.ShowInWhoList = 1

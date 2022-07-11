@@ -1435,6 +1435,7 @@ class Player final: public Unit
         void _SaveBGData();
         void _SaveStats();
         uint32 m_nextSave;
+        bool m_saveDisabled; // used for temporary bots and faction change
     public:
         // Saves a new character directly in the database, without creating a Player object in memory.
         static bool SaveNewPlayer(WorldSession* session, uint32 guidlow, std::string const& name, uint8 raceId, uint8 classId, uint8 gender, uint8 skin, uint8 face, uint8 hairStyle, uint8 hairColor, uint8 facialHair);
@@ -1449,6 +1450,7 @@ class Player final: public Unit
 
         uint32 GetSaveTimer() const { return m_nextSave; }
         void   SetSaveTimer(uint32 timer) { m_nextSave = timer; }
+        bool   IsSavingDisabled() const { return m_saveDisabled; }
 
         /*********************************************************/
         /***                    PET SYSTEM                     ***/
@@ -1497,6 +1499,7 @@ class Player final: public Unit
         float m_auraBaseMod[BASEMOD_END][MOD_END];
         SpellModList m_spellMods[MAX_SPELLMOD];
         uint32 m_lastFromClientCastedSpellID;
+        std::map<uint32, ItemSetEffect> m_itemSetEffects;
         
         bool IsNeedCastPassiveLikeSpellAtLearn(SpellEntry const* spellInfo) const;
         void SendInitialSpells() const;
@@ -1518,6 +1521,10 @@ class Player final: public Unit
 
         void CastItemCombatSpell(Unit* Target, WeaponAttackType attType);
         void CastItemUseSpell(Item* item, SpellCastTargets const& targets);
+
+        ItemSetEffect* GetItemSetEffect(uint32 setId);
+        ItemSetEffect* AddItemSetEffect(uint32 setId);
+        void RemoveItemSetEffect(uint32 setId);
 
         // needed by vanish and improved sap
         void CastHighestStealthRank();
@@ -1566,8 +1573,7 @@ class Player final: public Unit
                     ++spellCDItr;
             }
         }
-
-        std::vector<ItemSetEffect*> m_ItemSetEff;
+        
         uint32 m_castingSpell; // Last spell cast by client, or combo points if player is rogue
 
         /*********************************************************/
@@ -2327,7 +2333,6 @@ class Player final: public Unit
     private:
         Team m_team;
         ReputationMgr  m_reputationMgr;
-        bool m_DbSaveDisabled; // used for faction change
     public:
         static Team TeamForRace(uint8 race);
         Team GetTeam() const final { return m_team; }
