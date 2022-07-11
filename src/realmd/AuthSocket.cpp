@@ -341,6 +341,7 @@ bool AuthSocket::_HandleLogonChallenge()
     // Whether to continue handling the logon after prechecks or not
     bool handle_logon{ true };
 
+
     ///- Verify that this IP is not in the ip_banned table
     // No SQL injection possible (paste the IP address as passed by the socket)
     std::string address = get_remote_address();
@@ -403,7 +404,7 @@ bool AuthSocket::_HandleLogonChallenge()
             if (requireVerification && !verified)
             {
                 BASIC_LOG("[AuthChallenge] Account '%s' ('%s) and local IP %u 'email address requires email verification - rejecting login", _login.c_str(), get_remote_address().c_str(), ch->ip);
-                pkt << (uint8)WOW_FAIL_UNKNOWN_ACCOUNT;
+                pkt << (uint8)WOW_FAIL_PARENTCONTROL;
                 send((char const*)pkt.contents(), pkt.size());
                 return true;
             }
