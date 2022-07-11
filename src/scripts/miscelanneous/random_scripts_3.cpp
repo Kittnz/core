@@ -3157,9 +3157,38 @@ bool GossipSelect_npc_farad_wrightsow(Player* pPlayer, Creature* pCreature, uint
     return true;
 }
 
+bool QuestRewarded_npc_darkseer_geshtol(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40492) // Fueling the Blood Fury
+    {
+        pQuestGiver->MonsterSay("The power within these hearts shall aid me, but it is weak, and faded, if I am to truly master my magic, than I need something much stronger.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    if (pQuest->GetQuestId() == 40493) // Fueling the Blood Fury
+    {
+        pQuestGiver->CastSpell(pQuestGiver, 24318, false); // Enrage
+        pQuestGiver->MonsterSay("The power flows through my veins! I feel stronger, and mighty! With this, we shall dominate our enemies!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+        npc->HandleEmote(EMOTE_ONESHOT_LAUGH);
+            });
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_darkseer_geshtol";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_darkseer_geshtol;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_farad_wrightsow";
