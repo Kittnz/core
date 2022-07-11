@@ -1961,6 +1961,18 @@ void WorldBotAI::UpdateInCombatAI_Druid()
             }
         }
 
+        if (m_spells.druid.pRemoveCurse)
+        {
+            if (Unit* pFriend = SelectDispelTarget(m_spells.druid.pRemoveCurse))
+            {
+                if (CanTryToCastSpell(pFriend, m_spells.druid.pRemoveCurse))
+                {
+                    if (DoCastSpell(pFriend, m_spells.druid.pRemoveCurse) == SPELL_CAST_OK)
+                        return;
+                }
+            }
+        }
+
         if (m_spells.druid.pInnervate &&
             me->GetVictim() &&
             (me->GetHealthPercent() > 40.0f) &&
