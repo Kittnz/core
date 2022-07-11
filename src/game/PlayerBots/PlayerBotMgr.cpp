@@ -50,7 +50,7 @@ PlayerBotMgr::~PlayerBotMgr()
 
 void PlayerBotMgr::LoadConfig()
 {
-    m_enableRandomBots = sConfig.GetBoolDefault("RandomBot.Enable", true);
+    m_confEnableRandomBots = sConfig.GetBoolDefault("RandomBot.Enable", true);
     m_confMinRandomBots = sConfig.GetIntDefault("RandomBot.MinBots", 3);
     m_confMaxRandomBots = sConfig.GetIntDefault("RandomBot.MaxBots", 10);
     m_confRandomBotsRefresh = sConfig.GetIntDefault("RandomBot.Refresh", 60000);
@@ -2162,8 +2162,7 @@ void PlayerBotMgr::WorldBotCreator()
 bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
 {
     uint32 accountId = 0;
-    PlayerBotEntry* e = nullptr;
-    std::map<uint32, PlayerBotEntry*>::iterator iter = m_bots.find(guid);
+    auto iter = m_bots.find(guid);
     if (iter == m_bots.end())
         accountId = account;
     else
@@ -2175,24 +2174,39 @@ bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 
         return false;
     }
 
+    WorldBotAI* ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
+
+    std::shared_ptr<PlayerBotEntry> e;
     if (iter != m_bots.end())
     {
+        if (ai) // new AI
+            e->ai.reset(ai);
+
         e = iter->second;
     }
     else
     {
-        WorldBotAI* ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
-        e = new PlayerBotEntry();
+        e = std::make_shared<PlayerBotEntry>();
         e->state = PB_STATE_LOADING;
         e->playerGUID = guid;
         e->chance = 100;
         e->accountId = accountId;
         e->isChatBot = false;
-        e->ai = ai;
-        ai->botEntry = e;
-        m_bots[guid] = e;
+        ai->botEntry = e.get();
+        
+        if (ai)
+        {
+            e->ai.reset(ai);
+        }
+        else
+        {
+            e->ai.reset(new PlayerBotAI(nullptr));
+        }
+
+        m_bots.insert({ guid , e });
     }
 
+    e->ai->botEntry = e.get();
     e->state = PB_STATE_LOADING;
     WorldSession* session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS);
     session->SetBot(e);
