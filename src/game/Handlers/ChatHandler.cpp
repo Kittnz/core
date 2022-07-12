@@ -47,6 +47,7 @@
 #include "rapidjson/document.h"
 #include "rapidjson/rapidjson.h"
 #include <regex>
+#include "re2/re2.h"
 
 bool WorldSession::ProcessChatMessageAfterSecurityCheck(std::string& msg, uint32 lang, uint32 msgType)
 {
@@ -466,8 +467,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			if (strstr(msg.c_str(), "Entries:"))
 			{
+                std::string categoryIDString = msg;
+                re2::RE2::GlobalReplace(&categoryIDString, "[^0-9]*([0-9]+).*", R"(\1)");
 
-				std::string categoryIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+                //std::string categoryIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 				uint8 categoryID = 0;
 
 				if (categoryIDString.empty() || categoryIDString.length() > 3)
@@ -508,8 +511,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 			if (strstr(msg.c_str(), "Buy:"))
 			{
+                std::string itemIDString = msg;
+                re2::RE2::GlobalReplace(&itemIDString, "[^0-9]*([0-9]+).*", R"(\1)");
 
-				std::string itemIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+				//std::string itemIDString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 				uint32 itemID = 0;
 
 				if (itemIDString.empty() || itemIDString.length() > 6)
@@ -590,7 +595,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             // syntax: ChangeTitle:#
             if (strstr(msg.c_str(), "ChangeTitle:"))
             {
-                std::string titleIDstring = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+                std::string titleIDstring = msg;
+
+                re2::RE2::GlobalReplace(&titleIDstring, "[^0-9]*([0-9]+).*", R"(\1)");
+               // std::string titleIDstring = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
                 int titleID = 0;
 
                 if (titleIDstring.empty() || titleIDstring.length() > 3)
@@ -644,7 +652,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             {
                 msg = msg.substr(msg.find("limit=") + 6, 2);   // 6 = "limit=".length(), 2 = read only 2 digits
 
-                std::string limitString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
+                std::string limitString = msg;
+                re2::RE2::GlobalReplace(&limitString, "[^0-9]*([0-9]+).*", R"(\1)");
+
+               // std::string limitString = std::regex_replace(msg.c_str(), std::regex("[^0-9]*([0-9]+).*"), std::string("$1"));
 
                 if (limitString.empty() || limitString.length() > 2)
                     return;
@@ -691,6 +702,12 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             ChatHandler(this).SendSysMessage("You cannot talk yet.");
             return;
         }
+    }
+
+    if (lang != LANG_ADDON && type != CHAT_MSG_WHISPER)
+    {
+        //TODO regex checks.
+        //re2::RE2::FullMatch()
     }
 
     // Message handling
