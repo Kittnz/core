@@ -616,7 +616,7 @@ replace into item_template values
 
 -- Scrap Forager
 delete from quest_template where entry = 40491;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40491,2,46,54,47,0,0,'Scrap Forager','Greetings strangers, it seems some recruits from this new horde are arriving at last. I\'ll keep this short, we\re not doing so well here, its like everything is being hold together by worg spit, and the lack of resources certainly doesn\'t help. I\'ll say its about time we fixed that.\n\nDark iron tends to be quite scarce in the surface of the steppes, but most creatures around there parts carry some on their person whether it be baubles, equipment or sitting in their stomach. Venture out and collect me a sizeable amount of scraps so I can keep forging equipment for our grunts to keep the hold safe.','Scavenge 50 Dark Iron Scraps from various creatures in Burning Steppes and return to Blacksmith Torren in Karfang Hold.','Hard times call for desperate measures, knowing how to make do with what you have draws the line between life and death.','That\'s quite a haul, I\'m impressed. Joining this new horde might not be so bad after all. You\'ve scavenged so much I even have surplus to forge you an equipment of your choice. I believe you will wear it well.',22528,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5025,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60700,1,60701,1,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40491,2,46,54,47,0,0,'Scrap Forager','Greetings strangers, it seems some recruits from this new horde are arriving at last. I\'ll keep this short, we\'re not doing so well here, its like everything is being hold together by worg spit, and the lack of resources certainly doesn\'t help. I\'ll say its about time we fixed that.\n\nDark iron tends to be quite scarce in the surface of the steppes, but most creatures around there parts carry some on their person whether it be baubles, equipment or sitting in their stomach. Venture out and collect me a sizeable amount of scraps so I can keep forging equipment for our grunts to keep the hold safe.','Scavenge 50 Dark Iron Scraps from various creatures in Burning Steppes and return to Blacksmith Torren in Karfang Hold.','Hard times call for desperate measures, knowing how to make do with what you have draws the line between life and death.','That\'s quite a haul, I\'m impressed. Joining this new horde might not be so bad after all. You\'ve scavenged so much I even have surplus to forge you an equipment of your choice. I believe you will wear it well.',22528,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5025,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60700,1,60701,1,0,0,0,0,0,0,'');
 
 replace into creature_questrelation (id, quest) values (60762, 40491);
 replace into creature_involvedrelation (id, quest) values (60762, 40491);
@@ -752,59 +752,59 @@ replace into item_template values
 -- loot table for items 60702-60710:
 -- Singed Cloth: (%25)
 replace into creature_loot_template values
-(60717,60702,25,1,1,1,0),
-(60718,60702,25,1,1,1,0),
-(60719,60702,25,1,1,1,0),
-(60720,60702,25,1,1,1,0),
-(60830,60702,25,1,1,1,0),
-(60831,60702,25,1,1,1,0),
-(60721,60702,25,1,1,1,0),
-(60722,60702,25,1,1,1,0),
-(60723,60702,25,1,1,1,0),
-(60724,60702,25,1,1,1,0),
-(60716,60702,25,1,1,1,0);
+(60717,60702,6,1,1,1,0),
+(60718,60702,6,1,1,1,0),
+(60719,60702,6,1,1,1,0),
+(60720,60702,6,1,1,1,0),
+(60830,60702,6,1,1,1,0),
+(60831,60702,6,1,1,1,0),
+(60721,60702,6,1,1,1,0),
+(60722,60702,6,1,1,1,0),
+(60723,60702,6,1,1,1,0),
+(60724,60702,6,1,1,1,0),
+(60716,60702,6,1,1,1,0);
 -- Chipped Miner's Union Badge (%20)
 replace into creature_loot_template values
-(60721,60703,20,1,1,1,0),
-(60830,60703,20,1,1,1,0);
+(60721,60703,6,1,1,1,0),
+(60830,60703,6,1,1,1,0);
 -- Broken Flask (%25)
 replace into creature_loot_template values
-(60717,60704,25,1,1,1,0);
+(60717,60704,6,1,1,1,0);
 -- Torn Union Flyer (%20)
 replace into creature_loot_template values
-(60723,60705,20,1,1,1,0),
-(60724,60705,20,1,1,1,0);
+(60723,60705,6,1,1,1,0),
+(60724,60705,6,1,1,1,0);
 -- Worn Gear (%25)
 replace into creature_loot_template values
-(60719,60706,25,1,1,1,0),
-(60720,60706,25,1,1,1,0),
-(60712,60706,25,1,1,1,0);
+(60719,60706,6,1,1,1,0),
+(60720,60706,6,1,1,1,0),
+(60712,60706,6,1,1,1,0);
 -- Cracked Power Core (%15)
 replace into creature_loot_template values
-(60712,60707,15,1,1,1,0),
-(60719,60707,15,1,1,1,0),
-(60720,60707,15,1,1,1,0);
+(60712,60707,6,1,1,1,0),
+(60719,60707,6,1,1,1,0),
+(60720,60707,6,1,1,1,0);
 -- Ash-Covered Scroll (%20)
 replace into creature_loot_template values
-(60718,60708,20,1,1,1,0);
+(60718,60708,6,1,1,1,0);
 -- Ashen Tinderbox (%15)
 replace into creature_loot_template values
-(60717,60709,15,1,1,1,0),
-(60718,60709,15,1,1,1,0),
-(60719,60709,15,1,1,1,0),
-(60720,60709,15,1,1,1,0),
-(60830,60709,15,1,1,1,0),
-(60831,60709,15,1,1,1,0),
-(60721,60709,15,1,1,1,0),
-(60722,60709,15,1,1,1,0),
-(60723,60709,15,1,1,1,0),
-(60724,60709,15,1,1,1,0),
-(60716,60709,15,1,1,1,0);
+(60717,60709,6,1,1,1,0),
+(60718,60709,6,1,1,1,0),
+(60719,60709,6,1,1,1,0),
+(60720,60709,6,1,1,1,0),
+(60830,60709,6,1,1,1,0),
+(60831,60709,6,1,1,1,0),
+(60721,60709,6,1,1,1,0),
+(60722,60709,6,1,1,1,0),
+(60723,60709,6,1,1,1,0),
+(60724,60709,6,1,1,1,0),
+(60716,60709,6,1,1,1,0);
 -- Battered Horn (%10)
 replace into creature_loot_template values
-(60723,60710,10,1,1,1,0),
-(60716,60710,10,1,1,1,0),
-(60722,60710,10,1,1,1,0);
+(60723,60710,6,1,1,1,0),
+(60716,60710,6,1,1,1,0),
+(60722,60710,6,1,1,1,0);
 -- fixes for items 80670, 80674, 83564:
 -- boots bugfix.
 update item_template set inventory_type = 8, class = 4, subclass = 4 where entry = 80670;
@@ -813,6 +813,7 @@ update item_template set name = 'Corrosive Core', spellid_1 = 48036 where entry 
 -- sword bugfix.
 update item_template set spellcharges_1 = 0 where entry = 83564;
 -- Add the following items to the loottable of mod ID 60829 with a 20% chance.
+update creature_template set loot_id = 60829 where entry = 60829;
 replace into creature_loot_template values
 (60829,80670,20,1,1,1,0),
 (60829,80671,20,1,1,1,0),
@@ -894,3 +895,188 @@ replace into reference_loot_template values
 -- Add item 80817 as a drop to mob ID 5822 to the Group 6 loottable with a 65% chance.
 REPLACE INTO creature_loot_template VALUES
 (5822 , 80817, 65, 6, 1, 1, 0);
+-- Change level of Gazzirik (entry 60859) to 24, and adjust all values accordingly.
+delete from creature_template where entry = 60859;
+REPLACE INTO creature_template VALUES
+(60859, 7182, 0, 0, 0, 'Gazzirik', '', 41163, 24, 24, 664, 664, 0, 0, 1026, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 36, 46, 0, 106, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 48, 'EventAI', 0, 3, 0, 0, 3, 20145, 0, 0, 0, 0, 0, 0, '');
+
+-- Fueling the Blood Fury
+delete from quest_template where entry = 40492;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40492,2,46,52,45,0,0,'Fueling the Blood Fury','Whelping, I need your assistance.\n\nThe Blood Fury itself remains untapped to its full potential, long has it been since we have followed the demons and worked in tandam with their magic to become stronger. I intend to explore what may be possible without their help. My dark magic is practiced, and ready for use, I simply need the correct regeants.\n\nThis is where you come in.\n\nWithin the Burning Steppes are imps of a demonic nature, no doubt remnants of the burning legion, battle them, and bring me five of their scolding hearts.','Bring 5 Scalding Flamekin Hearts to Darkseer Geshtol at Karfang Hold in Burning Steppes.','The Blood Fury burns within us, and needs to be strengthened.','These shall do nicely, now. Let us see what power they truly hold.',60712,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5300,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60763, 40492);
+replace into creature_involvedrelation (id, quest) values (60763, 40492);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60712,3320,'Scalding Flamekin Heart',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(9776,60712,-60,1,1,1,0),
+(9777,60712,-60,1,1,1,0),
+(9778,60712,-60,1,1,1,0),
+(9779,60712,-60,1,1,1,0);
+
+update creature_template set script_name = 'npc_darkseer_geshtol' where entry = 60763;
+
+-- Fueling the Blood Fury
+delete from quest_template where entry = 40493;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40492,40493,2,46,54,45,0,0,'Fueling the Blood Fury','This region does not possess the potency that I am looking for, but I do know a place that does.\n\nFar to the southeast is the Blasted Lands. It is where I came into this world, in awe by it\'s skies and the lush swamp. All that remains now is a hellish wasteland akin to what the Outland is.\n\nIt is there that demons rove the land and the energies of the Dark Portal itself fester and pulse.\n\nGo there, and kill a Felguard Sentry that watches the portal, bring me a Large Felguard Heart.','Bring a Large Felguard Heart from the Blasted Lands to Darkseer Geshtol at Karfang Hold in Burning Steppes.','I will not wait forever, have you done as I asked whelp?','This heart belonged to a powerful Felguard, one that desired to serve its masters tirelessly.\n\n<Darkseer Geshtol would examine it carefully.>\n\nIt would appear there are no large flaws, this should work nicely. You\'ve done well out there and have done well for us, I have gathered something you might find useful for all of the hard work.\n\nNow... Lets see what this is capable of...',60713,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5650,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60763, 40493);
+replace into creature_involvedrelation (id, quest) values (60763, 40493);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60713,3320,'Large Felguard Heart',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(6011,60713,-25,1,1,1,0);
+
+-- The Firegut Task
+delete from quest_template where entry = 40494;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40494,2,46,53,45,0,0,'The Firegut Task','How disgusting.\n\nYou people dare call yourself the Horde, yet you know nothing about the Horde. We are the True Horde, the first and the very best.\n\nI see no thirst for battle in your eyes, I see no glory, I see nothing. You\'re nothing more than a worm living in the legend of the real Horde.\n\n You are lucky I promised Karfang to indulge fools such as you. But if you truly want to not be a simple pest in the eyes of our clan you have to prove your skill as a warrior.\n\nUse whatever trickery you believe would aid you. I challenge you to take on the Firegut Ogres, slay them and prove yourself.\n\nNow go or forever be shamed for your utter powerlessness.','Slay 15 Firegut Ogres, 10 Firegut Ogre Mages, and 8 Firegut Brutes for Taskmaster Ok\'gog at Karfang Hold in Burning Steppes.','Hmph. Pathetic fool.','The stench of ogre blood bathes you $c. You might not be useless after all.',0,0,0,0,0,0,0,0,7033,15,7034,10,7035,8,0,0,0,0,0,5100,76,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60774, 40494);
+replace into creature_involvedrelation (id, quest) values (60774, 40494);
+
+-- Forest Troll Scum
+delete from quest_template where entry = 40495;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40494,40495,2,1583,60,48,512,0,'Forest Troll Scum','Fine, you\'ve earned yourself the right to breathe the air in Karfang Hold.\n\nBut I have one last trial for you. A grudge, yes, that\'s what this is.\n\nAll the Blackhands were nothing but fools, the father was a misguided mongrel who was fooled by the wretched Gul\'dan. Maim isn\'t even worth mentioning, he died a fool\'s death, nothing more deserving for his kind.\n\nAnd Rend? Rend is kneeling before that despicable dragon and doomed the entirety of the Blackrock Clan. But that\'s not even his worst call yet.\n\nHe made a forest frog his strategist.\n\nWar Master Voone?\n\n<Ok\'gog yells that name angrily.>\n\nWar Master? He\'s nothing but a disgusting frog that must meet his end. Bring me his tusks and prove once and for all that the Horde led by a wretch who grew up amongst Humans has at least a quarter of the former glory of the True Horde.','Kill War Master Voone in Lower Blackrock Spire and bring his tusks back to Taskmaster Ok\'gog at Karfang Hold in Burning Steppes.','Hmph, War Master.','The arrogant fool lays dead. Ah to be alive $r. I tell you, hearing the demise of those you hate while you\'re still well enough to eat, drink and kill feels like the embrace of a cold and grim fate. But we hold it into our arms with pride and we would never let go. Such is life living under the Horde\'s name, we greet death with open arms and weapons ready.',60714,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6400,76,250,0,0,0,0,0,0,0,0,0,60715,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60774, 40495);
+replace into creature_involvedrelation (id, quest) values (60774, 40495);
+
+update quest_template set type = 81 where entry = 40495;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60714,1416,'War Master Voone\'s Tusks',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(9237,60714,-100,1,1,1,0);
+
+replace into item_template values
+ ('60715', '4', '0', 'Taskmaster Whip', '', '10301', '2', '0', '1', '48136', '12034', '12', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0', '0', '0', '0',
+ '0', '0', '0', '8815', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Raider's Revenge
+delete from quest_template where entry = 40496;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40496,2,46,56,54,0,0,'Raider\'s Revenge','I have fought in many battles, against the Alliance, orcs, demons, ogres... Yet I never expected to face my own clan.\n\nMy clan no longer. A few days ago I was patrolling the wastes on my trusty wolf, Skullshatter. I encountered Rend\'s soldiers. Before I could do anything, they attacked! I was outnumbered. I manged to escape, but they hurt my wolf. I thought it to be only a scratch, as he suffered worse many times. Unfortunately, the arrow was poisoned and he died a few hours later.\n\nI do not mourn his death. This was his purpose, after all. He joined his brothers and will now hunt among the ancestors. But I want revenge. If only I wasn\'t so severly needed here... $R, go south of here, to the Pillar of Ash and slay as many Blackrock as you can. Bring me their heads. Forty will do.','Bring 40 Blackrock Heads to Raider Fargosh in Karfang Hold.','Have you exacted revenge in my name?','Good. I feel better now. Yet, there is still much to do.',60716,40,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60765, 40496);
+replace into creature_involvedrelation (id, quest) values (60765, 40496);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60716,1310,'Blackrock Head',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(7029,60716,-95,1,1,1,0),
+(9605,60716,-95,1,1,1,0),
+(7027,60716,-95,1,1,1,0),
+(7025,60716,-95,1,1,1,0),
+(7026,60716,-95,1,1,1,0),
+(7028,60716,-95,1,1,1,0);
+
+-- Raider's New Mount
+delete from quest_template where entry = 40497;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40496,40497,2,46,56,47,0,0,'Raider\'s New Mount','Good. Now, a new task awaits you. As I said, I cannot leave this place. Not until I have a new wolf.\n\nSteal one from the Blackrock. Here, take this trap. Catch one of Blackrock\'s worgs, and bring him, or her, to me.','Catch a Blackrock Worg and bring him back to Raider Fargosh in Karfang Hold.','If you need a new trap, just talk to me.','This one will do. I will get to training them as soon I can.',0,0,0,0,0,0,0,0,60375,1,0,0,0,0,0,0,60720,1,0,4800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Blackrock Worg Captured');
+
+replace into creature_questrelation (id, quest) values (60765, 40497);
+replace into creature_involvedrelation (id, quest) values (60765, 40497);
+
+REPLACE INTO item_template VALUES
+(60720, 12, 0, 'Worg Trap', '', 20629, 1, 0, 1, 0, 0, 0, -1, -1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+-- Additional notes: Player is given Worg Trap (display id 20629) when accepting the quest. It should work exactly like in quest Plagued Lands https://classic.wowhead.com/quest=2118/plagued-lands Worg trap is an on use consumable item working like Tharnariun\'s Hope https://classic.wowhead.com/item=7586/tharnariuns-hope Player uses the item to put the trap on the ground, Blackrock Worg walks in and becomes friendly and follows the player.
+
+-- Alternatively if this proves too time costly to implement player can use the trap on the worg and the worg enters his inventory, quest then requires this item to be completed: Captured Blackrock Worg (display id 16207)
+
+-- Raider's Raid
+delete from quest_template where entry = 40498;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40497,40498,2,1583,58,50,0,0,'Raide\'s Raid','Last thing to do. In the Blackrock Spire, they breed wolves. Go there, and slay the alpha. Gizrul the Slavener is his name.\n\nHit them where it hurts. Let them know my pain.','Slay Gizrul the Slavener in Blackrock Spire, then report to Raider Fargosh in Karfang Hold.','Revenge is close.','I knew you had it. You severely weakened the Blackrock Clan with your feat. Without the alpha, it will take years to rebuild their worg population.\n\nSoon, I will once again ride to battle. Thank you, $c. Take this, a gift from myself.',0,0,0,0,0,0,0,0,10268,1,0,0,0,0,0,0,0,0,15000,6600,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60717,1,60718,1,60719,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60765, 40498);
+replace into creature_involvedrelation (id, quest) values (60765, 40498);
+
+update quest_template set type = 81 where entry = 40498;
+
+replace into item_template values
+ ('60717', '4', '2', 'Worg Rider Sash', '', '18980', '2', '0', '1', '37368', '9342', '6', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '16', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '84', '0', '0', '0',
+ '0', '0', '0', '14027', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60718', '4', '1', 'Sootwalker Sandals', '', '16822', '2', '0', '1', '47128', '11782', '8', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '14', '3', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '51', '0', '5', '0',
+ '0', '0', '0', '9415', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '35', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60719', '2', '0', 'Axe of Falgosh', '', '9118', '2', '0', '1', '176516', '44129', '21', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '8', '6', '4',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2400', '0',
+ '0', '64', '105', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '75', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Preventative Antidote
+delete from quest_template where entry = 40499;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40499,2,46,54,47,0,0,'Preventative Antidote','Greetings, recruit of the new horde. I suppose you\'re here to aid? Then I got the task for you. To the west of the hold you can find the deadly venomtip and deathlash scorpids, their body might be fragile but their venom killed many aspiring orcs. I know how to brew an antidote to cure such ailments, but problem is that the antidote is made from the venom glands of the scorpids themselves.\n\nGo out there and collect their glands, if you survive your efforts will save many lives. If you perish trying then you\'ll be forgotten like the rest.','Collect 8 Venomtip Venom Glands and 6 Deathlash Venom Glands and return to Soresh in Karfang Hold.','Can never be too prepared in these hostile lands.','It seems you endured their stings and lived to tell the tale. Many lives will be saved thanks to your work. Please accept what little I have as payment.',60721,8,60722,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6000,5450,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60773, 40499);
+replace into creature_involvedrelation (id, quest) values (60773, 40499);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60721,6427,'Deathlash Venom Gland',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0),
+(60722,1423,'Venomtip Venom Gland',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(9695,60721,-80,1,1,1,0),
+(9691,60722,-80,1,1,1,0);
+
+-- Removing Vital Assets
+delete from quest_template where entry = 40500;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40500,2,46,58,50,0,0,'Removing Vital Assets','Can\'t you see I\'m busy? Oh, the whelpling wants to make itself useful, then I have the task for you. Venture west near the doorstep of the Blackrock Mountain and you shall find the Blackrock Stronghold, where they prepare for assaults against those that would oppose their manipulative masters, truly fools to blindly follow them.\n\nSlay their battlemasters and retrieve the stronghold documents where they plan their attacks. Now go and make yourself useful!','Kill 10 Blackrock Battlemasters and retrieve the Stronghold Documents. Return to Molk in Karfang Hold when you\'re finished.','I don\'t have time to chat when there are things to be done, so get moving.','So you\'ve done as I asked. Let\'s see what\'s in the documents. <Molk takes the document from you and stares intently for a few seconds> It appears my suspicions were correct, we are their top target for "treason" with Kargath next in line. Bah! The fools don\'t even know what they\'re fighting for anymore. With their numbers thinned their plans won\'t come into fruition. It seems you are more useful than you look, whelpling.',60723,1,0,0,0,0,0,0,7029,10,0,0,0,0,0,0,0,0,12000,4650,76,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60769, 40500);
+replace into creature_involvedrelation (id, quest) values (60769, 40500);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60723,3331,'Stronghold Documents',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into gameobject_template values
+(2010904,3,183,'Stronghold Documents',0,4,1,43,2010904,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010904,60723,-100,0,1,1,0);
+-- Reduce Sell Price
+update item_template set sell_price = 842, buy_price = 3368 where entry = 60702;
+update item_template set sell_price = 1153, buy_price = 4612 where entry = 60703;
+update item_template set sell_price = 1283, buy_price = 5132 where entry = 60704;
+update item_template set sell_price = 1479, buy_price = 5916 where entry = 60705;
+update item_template set sell_price = 1523, buy_price = 6092 where entry = 60708;
+update item_template set sell_price = 984, buy_price = 3936 where entry = 60709;
+update item_template set sell_price = 1502, buy_price = 6008 where entry = 60710;
+-- Dalaran Reputation Rewards
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (60724, 'Dalarani Conjurer\'s Hat', '', 4, 1, 7, 4, 15911, 1, 60, 0, -1, -1, 128922, 32230, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 60, 87, 0, 0, 70, 0, 65, 0, 0, 0, 0, 0, 10, 5, 30, 7, 12, 23729, 1, 0, 0, -1, 0, -1, 18384, 1, 0, 0, -1, 0, -1, 0, 61, 7);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60725, 'Ring of Flowing Leylines', '', 4, 0, 1, 4, 31800, 0, 60, 1, -1, -1, 165923, 41480, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 0, 65, 0, 0, 0, 0, 0, 5, 5, 8, 14127, 1, 0, 0, -1, 0, -1, 0, 61, 7);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60726, 'Spellguard\'s Shield', '', 4, 6, 6, 3, 18701, 1, 60, 0, -1, -1, 105312, 26328, 14, 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 100, 2217, 42, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 7, 13, 9344, 1, 0, 0, -1, 0, -1, 0, 61, 6);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (60727, 'Pauldrons of Sealed Magics', '', 4, 3, 5, 3, 25677, 1, 60, 0, -1, -1, 112909, 28227, 3, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 70, 286, 0, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 7, 13, 15465, 1, 0, 0, -1, 0, -1, 9416, 1, 0, 0, 0, 0, 0, 0, 61, 6);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60728, 'Boots of the Hermit Magi', '', 4, 1, 7, 3, 26261, 1, 60, 0, -1, -1, 72909, 18227, 8, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 40, 63, 0, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 5, 12, 7, 11, 6, 10, 9317, 1, 0, 0, 0, 0, -1, 0, 61, 6);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (60729, 'Skulker\'s Gloves', '', 4, 2, 8, 3, 24768, 1, 60, 0, -1, -1, 76926, 19231, 10, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 35, 113, 0, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 3, 12, 4, 12, 7, 10, 15464, 1, 0, 0, -1, 0, -1, 13679, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60730, 'Girdle of the Warden', '', 4, 4, 6, 3, 26437, 1, 60, 0, -1, -1, 78209, 19552, 6, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 45, 380, 0, 0, 65, 0, 49, 0, 0, 0, 0, 0, 0, 4, 8, 3, 12, 7, 15, 13675, 1, 0, 0, -1, 0, -1, 0, 0, 0);
