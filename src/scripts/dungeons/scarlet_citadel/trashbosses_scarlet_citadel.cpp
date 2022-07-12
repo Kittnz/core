@@ -20,6 +20,7 @@ public:
     }
 
 private:
+
     std::uint32_t m_uiLightningCloud_Timer{};
     std::uint32_t m_uiLightningWave_Timer{};
     std::uint32_t m_uiDrainMana_Timer{};
@@ -81,7 +82,7 @@ public:
 
         DespawnAdds();
 
-        m_creature->SetRespawnDelay(7200); // Respawn Eric Dark once again after 2 hours if Boss Araeus isn't dead yet (partly handled in boss_ardaeus.cpp)
+        m_creature->SetRespawnDelay(nsERIC_VESPER::TWO_HOURS); // Respawn Eric Dark once again after 2 hours if Boss Araeus isn't dead yet (partly handled in boss_ardaeus.cpp)
 
         m_creature->MonsterSay(nsERIC_VESPER::TEXT_DIED);
 
@@ -269,34 +270,34 @@ public:
         if (m_uiRandomFightText_Timer < uiDiff)
         {
             std::string strRandomText{};
-            const uint32 i{ urand(0, 3) };
-            switch (i)
+            const std::uint32_t uiRnd{ urand(0, 3) };
+            switch (uiRnd)
             {
-            case 0:
-            {
-                strRandomText = nsERIC_VESPER::TEXT_RANDOM0;
-                break;
-            }
-            case 1:
-            {
-                strRandomText = nsERIC_VESPER::TEXT_RANDOM1;
-                break;
-            }
-            case 2:
-            {
-                strRandomText = nsERIC_VESPER::TEXT_RANDOM2;
-                break;
-            }
-            case 3:
-            {
-                strRandomText = nsERIC_VESPER::TEXT_RANDOM3;
-                break;
-            }
-            default:
-            {
-                sLog.outError("[SC] Brother Eric Vesper: RandomFightTexts(const uint32& uiDiff): i out of range.");
-                break;
-            }
+                case 0:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM0;
+                    break;
+                }
+                case 1:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM1;
+                    break;
+                }
+                case 2:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM2;
+                    break;
+                }
+                case 3:
+                {
+                    strRandomText = nsERIC_VESPER::TEXT_RANDOM3;
+                    break;
+                }
+                default:
+                {
+                    sLog.outError("[SC] Brother Eric Vesper: RandomFightTexts(const uint32& uiDiff): i out of range.");
+                    break;
+                }
             }
 
             m_creature->MonsterSay(strRandomText);
@@ -356,6 +357,7 @@ public:
     }
 
 private:
+
     std::uint32_t m_uiMindControl_Timer{};
     std::uint32_t m_uiShadowVolley_Timer{};
     std::uint32_t m_uiMindFlay_Timer{};
@@ -376,7 +378,7 @@ public:
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        m_creature->SetRespawnDelay(604800); // Once dead, set respawntimer to 7 days
+        m_creature->SetRespawnDelay(nsRayn::SEVEN_DAYS);
     }
 
     void CheckForShadowform(const uint32& uiDiff)

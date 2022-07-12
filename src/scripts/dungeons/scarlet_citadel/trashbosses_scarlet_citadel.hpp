@@ -65,6 +65,7 @@ namespace nsERIC_VESPER
     static constexpr std::uint32_t TIMER_CHECK_PULSE{ 1000 };
 
     static constexpr std::uint32_t FACTION_HOSTILE{ 67 };
+    static constexpr std::uint32_t TWO_HOURS{ 7200 };
 
     static const std::vector<std::uint32_t> vTrashEntryList{ NPC_CITADEL_INQUISITOR, NPC_CITADEL_VALIANT, NPC_CITADEL_FOOTMAN };
     static const std::vector<std::pair<LocationXYZO, std::uint32_t>>pairlol
@@ -87,7 +88,6 @@ namespace nsRayn
     static constexpr std::uint32_t SPELL_MIND_FLAY{ 26143 };
     static constexpr std::uint32_t SPELL_IMPENDING_DOOM{ 19702 };
 
-
     static constexpr std::uint32_t TIMER_SHADOWFORM_CHECK{ 500 };
 
     static constexpr std::uint32_t INITIAL_TIMER_MIND_CONTROL{ 15000 };
@@ -101,4 +101,6 @@ namespace nsRayn
     static constexpr std::uint32_t TIMER_MAX_MIND_FLAY{ 22000 };
     static constexpr std::uint32_t INITIAL_TIMER_IMPENDING_DOOM{ 6000 };
     static constexpr std::uint32_t TIMER_IMPENDING_DOOM{ 5500 };
+
+    static constexpr std::uint32_t SEVEN_DAYS{ 604800 };
 }

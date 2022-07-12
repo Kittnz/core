@@ -10,16 +10,20 @@
 #include "boss_abbendis.hpp"
 
 
-struct boss_abbendisAI : public ScriptedAI
+class boss_abbendisAI : public ScriptedAI
 {
+public:
     explicit boss_abbendisAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
         m_pInstance = static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData());
         boss_abbendisAI::Reset();
     }
 
+private:
+
     instance_scarlet_citadel* m_pInstance{};
 
+public:
     void Reset() override
     {
 
