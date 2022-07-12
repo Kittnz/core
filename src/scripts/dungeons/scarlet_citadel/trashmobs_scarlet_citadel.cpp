@@ -23,6 +23,7 @@ public:
     }
 
 private:
+
     bool m_bCastedDivineShieldOnce{};
 
     std::uint32_t m_uiCounterSpell_Timer{};
@@ -147,6 +148,7 @@ public:
     }
 
 private:
+
     std::uint32_t m_uiCharge_Timer{};
     std::uint32_t m_uiCleave_Timer{};
 
@@ -229,9 +231,10 @@ public:
         npc_citadel_footman_AI::Reset();
     }
 
-private:    
-    uint32 m_uiDisarm_Timer{};
-    uint32 m_uiFrenzy_Timer{};
+private:
+
+    std::uint32_t m_uiDisarm_Timer{};
+    std::uint32_t m_uiFrenzy_Timer{};
 
 public:
     void Reset() override
@@ -400,6 +403,7 @@ public:
             if (DoCastSpellIfCan(m_creature->GetVictim(), nsCitadelInterrogator::SPELL_SINISTER_STRIKE) == CanCastResult::CAST_OK)
             {
                 m_uiSinisterStrike_Timer = urand(nsCitadelInterrogator::TIMER_MIN_SINISTER_STRIKE, nsCitadelInterrogator::TIMER_MAX_SINISTER_STRIKE);
+
                 ++m_uiSinisterStrikeHits;
 
                 if (m_uiSinisterStrikeHits >= 5)
@@ -435,6 +439,7 @@ CreatureAI* GetAI_npc_citadel_interrogator(Creature* pCreature)
     return new npc_citadel_interrogator_AI(pCreature);
 }
 
+
 class npc_chaplain_and_sister_AI : public ScriptedAI
 {
 public:
@@ -445,6 +450,7 @@ public:
     }
 
 private:
+
     bool m_bEventStarted{};
 
     std::uint32_t m_uiCHeckPulse_Timer{};
@@ -590,6 +596,7 @@ public:
     }
 
 private:
+
     std::uint32_t m_uiCheckPulse{};
 
 public:
@@ -608,7 +615,7 @@ public:
             Map::PlayerList const& list{ m_creature->GetMap()->GetPlayers() };
             for (const auto& player : list)
             {
-                if (Player * pPlayer{ player.getSource() })
+                if (Player* pPlayer{ player.getSource() })
                 {
                     if (!pPlayer->IsGameMaster() && pPlayer->IsInRange3d(
                         m_creature->GetPositionX(),
@@ -619,25 +626,26 @@ public:
                         pPlayer->AddAura(nsAntiExploit::SPELL_STUN);
 
                         DoAfterTime(pPlayer, (3 * IN_MILLISECONDS), [player = pPlayer]()
+                        {
+                            if (player)
                             {
-                                if (player)
-                                {
-                                    static_cast<Unit*>(player)->NearTeleportTo(
-                                        nsAntiExploit::vfTeleportDestinations[0][0],
-                                        nsAntiExploit::vfTeleportDestinations[0][1],
-                                        nsAntiExploit::vfTeleportDestinations[0][2],
-                                        nsAntiExploit::vfTeleportDestinations[0][3]
-                                    );
-                                }
-                            });
+                                static_cast<Unit*>(player)->NearTeleportTo
+                                (
+                                    nsAntiExploit::vfTeleportDestinations[0][0],
+                                    nsAntiExploit::vfTeleportDestinations[0][1],
+                                    nsAntiExploit::vfTeleportDestinations[0][2],
+                                    nsAntiExploit::vfTeleportDestinations[0][3]
+                                );
+                            }
+                        });
 
                         DoAfterTime(pPlayer, (5 * IN_MILLISECONDS), [player = pPlayer]()
+                        {
+                            if (player)
                             {
-                                if (player)
-                                {
-                                    ChatHandler(player).SendSysMessage(nsAntiExploit::WARNING_MESSAGE);
-                                }
-                            });
+                                ChatHandler(player).SendSysMessage(nsAntiExploit::WARNING_MESSAGE);
+                            }
+                        });
                     }
                 }
             }
