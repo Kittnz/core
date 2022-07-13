@@ -1,4 +1,4 @@
-REPLACE INTO `skill_line_ability` VALUES
+replace into `skill_line_ability` VALUES
 (69, 6, 116, 0, 128, 1, 0, 0, 0, 0, 0),
 (246, 45, 264, 0, 13, 1, 0, 2, 0, 0, 0),
 (248, 44, 196, 0, 71, 1, 0, 2, 0, 0, 0),
