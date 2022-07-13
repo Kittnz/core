@@ -1106,3 +1106,167 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 REPLACE INTO creature_template VALUES
 (60377, 328, 0, 0, 0, 'quest_40502_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Of New and Old III
+delete from quest_template where entry = 40503;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40502,40503,2,46,52,45,0,0,'Of New and Old III','I put my faith on Eitrigg\'s word, for he knows much about the Old Horde and it\'s ways. If Karfang wishes to leave the Blackrock Clan and find a new beginning, then he must prove his loyalties. I have prepared a letter to send back to him, make sure it arrives in due time $r.\n\nStrength, and honor.','Bring the Warchief\'s Response to Karfang at Karfang Hold in Burning Steppes.','Yes?','<Karfang looks out at the Warchief\'s Response, beginning to read with caution.>\n\nSo it appears the Warchief is asking us for a test of loyalty, he shall receive his demands.',60733,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60733,1,0,800,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (4949, 40503);
+replace into creature_involvedrelation (id, quest) values (60770, 40503);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60733,7694,'Warchief\'s Response',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50545);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50545, 'To Warleader Karfang.\n\nI have read your letter, and have listened.\n\nThe Horde is not stranger to hardships, and adversity. All of us have had to struggle and make hard decisions as you have. We are a band of equals who share values of wisdom and honor to the wartorn and battered of this world.\n\nIf you truly wish to prove your loyalties to me as Warchief then I require something from you.\n\nThe Twilight Hammer have begun to show themselves in your region, they are a threat to this world. Remove them for me, and I will know your word is true.\n\n THRALL, WARCHIEF OF THE HORDE.', 0);
+
+-- Of New and Old IV
+delete from quest_template where entry = 40504;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40503,40504,2,5098,57,45,0,0,'Of New and Old IV','I know what it is the Warchief speaks, the Twilight Hammer has recently moved into the Hateforge Quarry, located just south of here.\n\nIt is an annoyance that was eventually going to draw in more attention from our former masters, and was something we would need to deal with eventually, now I implore you to help us with it.\n\nWe may have the strength to fight deep, but to stop the Twilight Hammer lurking deep within the Dark Iron clutches, requires covert strength, not brute strength.\n\nAs Warleader, I ask you to remove the Twilight presence on my behalf.','Venture into the Hateforge Quarry, and remove the Twilight Hammer presence within for Karfang in Karfang Hold.','Has it been done?','On behalf of everyone here, you have done us a great service in securing our future, entrance within the Horde means we may get out of this ashen wasteland eventually.\n\nI have seen much in my time on Outland, and in the Blackrock Mountain, but I look forward in what is to come, and for that you have my gratitude.',0,0,0,0,0,0,0,0,60737,1,0,0,0,0,0,0,0,0,0,4650,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60734,1,60735,1,60736,1,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60770, 40504);
+replace into creature_involvedrelation (id, quest) values (60770, 40504);
+
+update quest_template set type = 81 where entry = 40504;
+
+replace into item_template values
+ ('60734', '2', '7', 'Blade of the Warleader', '', '20358', '3', '0', '1', '171092', '42773', '21', '-1', '-1', '62',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '7', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2300', '0',
+ '0', '75', '101', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9139', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '90', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60735', '4', '0', 'Obsidian Gem Choker', '', '66200', '3', '0', '1', '42796', '10699', '2', '-1', '-1', '62',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '14521', '1', '0', '0', '-1', '0', '-1', '9415', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60736', '4', '4', 'Battlemaster Helm', '', '26115', '3', '0', '1', '59740', '14935', '1', '-1', '-1', '62',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '19', '3', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '492', '0', '0', '0',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '13384', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '80', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Protecting Fresh Blood
+delete from quest_template where entry = 40505;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40505,2,5098,56,48,0,0,'Protecting Fresh Blood','We have had many join our ranks from the various battle groups dotted around the Burning Steppes, their names etched in paper marking their transfer to Karfang Hold.\n\nTo protect those that joined us we will need to destroy the documents that may lead any suspicious Blackrock our way.\n\nYou will find the Transfer Documents amongst the small camps around the Pillar of Ash, search high and low, and burn any you find.','Destroy the three Transfer Documents for Karfang at Karfang Hold in Burning Steppes.','Have you destroyed the documents $R?','The runts of our group will now be invisible to the Blackrock Clan, vanished from thin air with no trace of where they have gone.\n\nThere is still work to do.',0,0,0,0,0,0,0,0,-2010905,1,-2010906,1,-2010907,1,0,0,0,0,0,5200,76,125,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60770, 40505);
+replace into creature_involvedrelation (id, quest) values (60770, 40505);
+
+REPLACE INTO gameobject_template VALUES 
+(2010905, 10, 25894, 'Transfer Documents I', 0, 0, 1, 43, -1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010906, 10, 25894, 'Transfer Documents II', 0, 0, 1, 43, -1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010907, 10, 25894, 'Transfer Documents III', 0, 0, 1, 43, -1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Protecting Fresh Blood
+delete from quest_template where entry = 40505;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40505,2,46,56,48,0,0,'Protecting Fresh Blood','We have had many join our ranks from the various battle groups dotted around the Burning Steppes, their names etched in paper marking their transfer to Karfang Hold.\n\nTo protect those that joined us we will need to destroy the documents that may lead any suspicious Blackrock our way.\n\nYou will find the Transfer Documents amongst the small camps around the Pillar of Ash, search high and low, and burn any you find.','Destroy the three Transfer Documents for Karfang at Karfang Hold in Burning Steppes.','Have you destroyed the documents $R?','The runts of our group will now be invisible to the Blackrock Clan, vanished from thin air with no trace of where they have gone.\n\nThere is still work to do.',0,0,0,0,0,0,0,0,-2010905,1,-2010906,1,-2010907,1,0,0,0,0,0,5200,76,125,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60770, 40505);
+replace into creature_involvedrelation (id, quest) values (60770, 40505);
+
+-- Report to Molk
+delete from quest_template where entry = 40506;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40505,40506,2,46,56,48,0,0,'Report to Molk','We will need to cover all of our tracks if we want to make it out of here alive. Karfang Hold is fortified, but not fortified enough to survive such an onslaught if they get wind of what is going on.\n\nMolk is my strategist, and should know our next move, speak with him.','Speak with Molk in Karfang Hold.','Yes?','You will need to be prepared for what is to come outsider.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,400,76,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60770, 40506);
+replace into creature_involvedrelation (id, quest) values (60769, 40506);
+
+-- Destroy All Traces...
+delete from quest_template where entry = 40507;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40506,40507,2,46,56,48,0,0,'Destroy All Traces...','I hope you understand that we are using you for our benefit. Do not take this the wrong way, for we are not looking to con, or cheat you.\n\nWe simply require assistance to achieve our goals, goals that a Blackrock Orc cannot be seen doing, lest our betrayal be discovered.\n\nWe need to destroy all traces of Karfang Hold, the records of its construction and garrison lay within the Blackrock Stronghold to the West. Gather these documents and return them to me so that I can make sure they are removed properly.\n\nBe careful, it is a well defended location.','Recover the \'Garrison and Supply Documents\' from Blackrock Stronghold and return to Karfang at Karfang Hold in Burning Steppes.','If I were you I would suggest bringing backup.','Picked through the bones have you?\n\n<Karfang lets out a small laugh.>\n\nThis would be what we were looking for, an excellent job outsider, Molk was expecting shoddy work from one of your kin, but you did well.',60737,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6100,76,175,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60769, 40507);
+replace into creature_involvedrelation (id, quest) values (60770, 40507);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60737,9467,'Garrison and Supply Documents',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into gameobject_template values
+(2010908,3,25894,'Garrison and Supply Documents',0,4,1,43,2010908,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010908,60737,-100,0,1,1,0);
+
+-- Take No Chances
+delete from quest_template where entry = 40508;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40507,40508,2,46,57,50,0,0,'Take No Chances','Raz\'gol Deadtusk, the name makes me regret what is to come.\n\nHe was one of the first I told of my plot to depart from the Old Horde, a dearest friend from the days on Outland. He was too stubborn to accept, his loyalties rigid, and hard.\n\nHe will not be coming with us, and we both know what must be done.\n\nIt hurts me to ask it, but Raz\'gol Deadtusk must be slain, should he find out that I went through with my idea his loyalties to me will be pitted against the Blackrock Clan, and I cannot trust him to hold to his word.\n\nYou will find him atop of the large spire in the Pillar of Ash, he looks down upon the region with an iron glare, slay him, and bring his blade back to me as proof of your deed.\n\n$N , do not make him suffer.','Slay Raz\'gol Deadtusk atop the Spire looming over The Pillar of Ash and bring The Deadtusk Blade to Karfang at Karfang Hold in Burning Steppes.','We do what we must.','<A deep and heavy sigh escapes Karfang, his face full of emotion.>\n\nI was always impressed with this sword and the way in which he wielded it, he fought with tenacity, and strength, he shall be remembered for it.',60738,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6100,76,175,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60770, 40508);
+replace into creature_involvedrelation (id, quest) values (60770, 40508);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60738,18232,'The Deadtusk Blade',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set script_name = 'npc_karfang' where entry = 60770;
+update creature_template set loot_id = 60835 where entry = 60835;
+
+replace into creature_loot_template values
+(60835,60738,-100,1,1,1,0);
+
+-- The Final Crack
+delete from quest_template where entry = 40509;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40508,40509,2,1583,59,50,512,0,'The Final Crack','There is one crack left that can break everything apart. His name is Zigris, Quartermaster for the Bloodaxe Legion deep within the Blackrock Spire.\n\nUpon setting out we borrowed all manner of tools and supplies to begin construction of Karfang Hold, these materials will eventually need to be collected. It will only be a matter of time until he will press to look for them.\n\n I am asking of you to slay Quartermaster Zigris, without him, there will be none who can figure out our motives.\n\nYou will find him within the Blackrock Mountain, at Blackrock Spire\'s lower portions.','Slay Quartermaster Zigris deep in the Blackrock Spire for Karfang at Karfang Hold in Burning Steppes.','Have you braved the Blackrock Mountain?','<Karfang\'s old features begin to crack a smile.>\n\nI cannot express my thanks, for this, and everything done.\n\n<Karfang would remove a ring from his finger.>\n\nThis ring was taken upon my entrance to this world, from some noble human lord in battle.\n\nThis keepsake is now yours, thank you.',0,0,0,0,0,0,0,0,9736,1,0,0,0,0,0,0,0,0,25000,6500,76,200,0,0,0,0,0,0,0,0,0,60739,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60770, 40509);
+replace into creature_involvedrelation (id, quest) values (60770, 40509);
+
+update quest_template set type = 81 where entry = 40509;
+
+replace into item_template values
+ ('60739', '4', '0', 'Tarnished Lancelot Ring', 'Bearing the crest of a forgotten family.', '66219', '3', '0', '1', '63568', '15892', '11', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '2', '6', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '21593', '1', '0', '0', '-1', '0', '-1', '9140', '1',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+ 
+-- Broodling Imposters?!
+delete from quest_template where entry = 40510;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40510,2,1537,54,45,0,0,'Broodling Imposters?!','Howdy there friend! Wanna hear a little story I was told from a friend? It\'s so crazy you wouldn\'t believe it!\n\nAparently while she was venturing through the Burning Steppes she ran across a Black Dragonflight Whelp, which, isn\'t out of the normal, given just how many there is in the region. When she ended up shooting it, no blood came out, just puffs of smoke, and whirrs of machinery!\n\n Upon inspection it was discovered to have been a mechanical creation layered with replica skin, can you believe that?!\n\nNow that sure is magnificent engineering, so magnificent it has fooled even the dragons. I\'d like to see how it was done, if you wouldn\'t mind helping. Get me six bundles of Robotic Broodling Guts from each one you find, that should be enough to figure things out.','Gather 6 Robotic Broodling Guts from robotic whelps in Burning Steppes for Masey Wirefuse in Ironforge.','You found any of them fake whelps?','Wow, this is complicated stuff!\n\n<Masey looks baffled by the sheer complexity of the parts!>\n\nThis was truly a piece of art, no wonder those black dragons were fooled.\n\nI\'m gonna take some time to figure out how this stuff works, thanks again.',60740,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,5300,54,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60872, 40510);
+replace into creature_involvedrelation (id, quest) values (60872, 40510);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60740,7840,'Robotic Broodling Guts',12,1,2048,1,-1,-1,1,6,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(60713,60740,-70,1,1,1,0);
+
+-- To Eperius' Aid
+delete from quest_template where entry = 40511;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40511,2,45,35,28,0,0,'To Eperius\' Aid','Ah poor Eperius, she ran like the lightning and kicked like a mule. Since her wound from our last encounter with ogres she refused to eat anything and I fear for the worse. Everything we tried has failed, but I have one last idea.\n\nI heard rumors about a magical grain, its taste so sweet and gives your horse enough energy to gallop from Stormwind and back. Alas the location of it was lost long ago and I don\'t have any leads on it.\n\nPerhaps someone in Refuge Pointe knows something about it, you should check there. While you\'re gone I\'ll make sure she is well comfortable, please make haste as I don\'t know how much longer she can last.','Go to Refuge Pointe to see if anyone has any knowledge about the magical grains.','Hello, welcome to Refuge Point. How can I help you?','A magical grain you say? Its been a long time since I\'ve heard about it.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1050,2750,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60786, 40511);
+replace into creature_involvedrelation (id, quest) values (2788, 40511);
+
+-- Eperius Needs Grains
+delete from quest_template where entry = 40512;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40511,40512,2,45,35,28,0,0,'Eperius Needs Grains','Magical grains huh? Well I\'m the one that enchanted them long long ago. They were made to help the cavalry and help the livestock plow the fields faster and longer, but then tragedy struck.\n\nThe orcs invaded what is now known as Gor\'shek Farm and the entire stock of the grain has been lost since then. If you\'re lucky you might still find a sack of it, presuming the orcs didn\'t get their filthy hands on it.\n\nI wish you good luck and I hope we meet again one day.','Find a sack of the Magical Grains in Gor\'shek Farm in Arathi Highlands.','I don\'t know how much longer she can last.','You found it! Her recovery will be slow but I believe she\'ll back on the road hunting trolls with our cavalrymen in no time. This is all I have in my pockets, even if not much you made this old handler happy today. Thank you.',60741,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6000,3000,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (2788, 40512);
+replace into creature_involvedrelation (id, quest) values (60786, 40512);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60741,16206,'Magical Grains',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into gameobject_template values
+(2010909,3,22828,'Sack of Magical Grains',0,4,1,43,2010909,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_loot_template values
+(2010909,60741,-100,0,1,1,0);
