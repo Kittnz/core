@@ -1270,3 +1270,5 @@ replace into gameobject_template values
 
 replace into gameobject_loot_template values
 (2010909,60741,-100,0,1,1,0);
+-- Change Pendant of the Faceless drop chance from Har'gesh Doomcaller to 0.5%
+update creature_loot_template set ChanceOrQuestChance = 0.005 where item = 60551 and entry = 60737;
