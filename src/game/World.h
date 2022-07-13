@@ -881,6 +881,7 @@ class World
          // Only for GMs with ticket notification ON
         void SendGMTicketText(int32 string_id, ...);
         void SendGMTicketText(const char* text);
+        void SendGMTextFlags(uint32 accountFlags, int32 string_id, ...);
         void SendGMText(int32 string_id, ...);
         void SendGlobalText(const char* text, WorldSession *self);
         void SendGlobalMessage(WorldPacket *packet, WorldSession *self = 0, uint32 team = 0);

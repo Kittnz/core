@@ -94,6 +94,7 @@ class AccountMgr
         uint32 GetCharactersCount(uint32 acc_id);
         std::string CalculateShaPassHash(std::string& name, std::string& password);
 
+        uint32 GetFlags(uint32 accountId);
         static bool normalizeString(std::string& utf8str);
         // Nostalrius
         void Update(uint32 diff);
