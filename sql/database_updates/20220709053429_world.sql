@@ -596,7 +596,7 @@ REPLACE INTO page_text VALUES
 (50543,'<Complex diagrams show various magical properties being mixed with molten lava.>\n\nHATEFORGE BREW is a nickname for the secret project that the upper class wants to keep under-wraps, all who study this document must keep their lips -sealed-.\n\nPunishment for leaking secrets from this document is trial in the Ring of Law.\n\n\n\n TO YOU, THE HATEFORGE CHEMIST. STUDY THE CHARTS AND DIAGRAMS, CONTINUE THE EXPERIMENTS. FAILURE IS -NOT- AN OPTION!!!',0);
 
 replace into creature_loot_template values
-(60717,60697,-100,1,1,1,0);
+(60717,60697,-100,2,1,1,0);
 
 replace into gameobject_template values
 (2010902,3,23432,'Sealed Documents Container',0,4,1,43,2010902,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
