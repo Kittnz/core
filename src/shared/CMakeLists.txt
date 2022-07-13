@@ -172,7 +172,7 @@ if(UNIX)
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 8)
       message(WARNING "Core requires GCC of 8 or higher.")
     elseif (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.1)
-      target_link_libraries(shared stdc++fs)
+      target_link_libraries(shared PUBLIC stdc++fs)
     endif()
   endif()
 
