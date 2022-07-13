@@ -250,7 +250,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
         SendPacket(&data);
         std::stringstream oss;
         oss << "Attempt to create character of invalid Class (" << int(class_) << ") or Race (" << int(race_) << ")";
-        ProcessAnticheatAction("PassiveAnticheat", oss.str().c_str(), CHEAT_ACTION_LOG);
+        ProcessAnticheatAction("PassiveAnticheat", oss.str().c_str(), CHEAT_ACTION_INFO_LOG);
         return;
     }
 
@@ -260,7 +260,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
         SendPacket(&data);
         std::stringstream oss;
         oss << "Attempt to create character of non-playable Race (" << int(race_) << ")";
-        ProcessAnticheatAction("PassiveAnticheat", oss.str().c_str(), CHEAT_ACTION_LOG);
+        ProcessAnticheatAction("PassiveAnticheat", oss.str().c_str(), CHEAT_ACTION_INFO_LOG);
         return;
     }
 
@@ -269,7 +269,7 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket & recv_data)
     {
         data << (uint8)CHAR_NAME_NO_NAME;
         SendPacket(&data);
-        ProcessAnticheatAction("PassiveAnticheat", "Attempt to create character with invalid name", CHEAT_ACTION_LOG);
+        ProcessAnticheatAction("PassiveAnticheat", "Attempt to create character with invalid name", CHEAT_ACTION_INFO_LOG);
         return;
     }
 
@@ -544,6 +544,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     ASSERT(pCurrChar->GetSession() == this);
     SetPlayer(pCurrChar);
+    m_antiCheat->NewPlayer();
 
     if (sWorld.getConfig(CONFIG_BOOL_TRANSMOG_ENABLED))
     {

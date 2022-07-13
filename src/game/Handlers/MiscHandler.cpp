@@ -49,6 +49,7 @@
 #include "MasterPlayer.h"
 #include "GossipDef.h"
 #include "GameEventMgr.h"
+#include "Anticheat/Warden/Warden.hpp"
 
 #ifdef WIN32
 #include "..\zlib\zlib.h"
@@ -732,7 +733,7 @@ void WorldSession::HandleResurrectResponseOpcode(WorldPacket & recv_data)
 
     if (!guid) // Cheating attempt
     {
-        ProcessAnticheatAction("PassiveAnticheat", "Instant resurrect hack detected", CHEAT_ACTION_LOG | CHEAT_ACTION_REPORT_GMS);
+        ProcessAnticheatAction("PassiveAnticheat", "Instant resurrect hack detected", CHEAT_ACTION_PROMPT_LOG);
         return;
     }
 
@@ -1236,11 +1237,11 @@ void WorldSession::HandleRequestPetInfoOpcode(WorldPacket & /*recv_data */)
 
 void WorldSession::HandleWardenDataOpcode(WorldPacket & recv_data)
 {
-    if (!m_warden)
+    if (!m_antiCheat)
     {
         sLog.outWarden("HandleWardenDataOpcode: warden interface not found!");
         return;
     }
 
-    m_warden->HandleWardenDataOpcode(recv_data);
+    m_antiCheat->WardenPacket(recv_data);
 }

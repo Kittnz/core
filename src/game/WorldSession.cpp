@@ -42,7 +42,8 @@
 #include "SocialMgr.h"
 
 #include "PlayerBotMgr.h"
-#include "Anticheat.h"
+#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Movement/Movement.hpp"
 #include "Language.h"
 #include "Auth/Sha1.h"
 #include "ChannelMgr.h"
@@ -51,6 +52,7 @@
 #include "AccountMgr.h"
 #include "MasterPlayer.h"
 #include "miscelanneous/feature_transmog.h"
+#include "Anticheat/Warden/Warden.hpp"
 
 // select opcodes appropriate for processing in Map::Update context for current session state
 static bool MapSessionFilterHelper(WorldSession* session, OpcodeHandler const& opHandle)
@@ -78,7 +80,7 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
     m_ah_list_recvd(false), _scheduleBanLevel(0),
     _accountFlags(0), m_idleTime(WorldTimer::getMSTime()), _player(nullptr), m_Socket(sock), _security(sec), _accountId(id), _logoutTime(0), m_inQueue(false),
     m_playerLoading(false), m_playerLogout(false), m_playerRecentlyLogout(false), m_playerSave(false), m_sessionDbcLocale(sWorld.GetAvailableDbcLocale(locale)),
-    m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_warden(nullptr), m_cheatData(nullptr),
+    m_sessionDbLocaleIndex(sObjectMgr.GetIndexForLocale(locale)), m_latency(0), m_tutorialState(TUTORIALDATA_UNCHANGED), m_cheatData(nullptr),
     m_bot(nullptr), m_lastReceivedPacketTime(0), _clientOS(CLIENT_OS_UNKNOWN), _gameBuild(0),
     _charactersCount(10), _characterMaxLevel(0), _clientHashComputeStep(HASH_NOT_COMPUTED),
     m_lastPubChannelMsgTime(0), m_moveRejectTime(0), m_masterPlayer(nullptr),
@@ -92,6 +94,8 @@ WorldSession::WorldSession(uint32 id, WorldSocket *sock, AccountTypes sec, time_
     }
     else
         m_Address = "<BOT>";
+
+    m_lastUpdateTime = WorldTimer::getMSTime();
 }
 
 /// WorldSession destructor
@@ -115,7 +119,6 @@ WorldSession::~WorldSession()
         while (i.next(packet))
             delete packet;
 
-    delete m_warden;
     delete m_cheatData;
 }
 
@@ -263,8 +266,10 @@ bool WorldSession::Update(PacketFilter& updater)
     if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_UNIQUE_SESSION_UPDATE) && sessionUpdateTime > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_UNIQUE_SESSION_UPDATE))
         sLog.out(LOG_PERFORMANCE, "Slow session update: %ums. Account %u on IP %s", sessionUpdateTime, GetAccountId(), GetRemoteAddress().c_str());
 
-    if (m_Socket && !m_Socket->IsClosed() && m_warden)
-        m_warden->Update();
+    if (m_Socket && !m_Socket->IsClosed() && m_antiCheat)
+        m_antiCheat->Update(WorldTimer::getMSTimeDiffToNow(m_lastUpdateTime));
+
+    m_lastUpdateTime = WorldTimer::getMSTime();
 
     //check if we are safe to proceed with logout
     //logout procedure should happen only in World::UpdateSessions() method!!!
@@ -860,37 +865,16 @@ void WorldSession::ExecuteOpcode(OpcodeHandler const& opHandle, WorldPacket* pac
         LogUnprocessedTail(packet);
 }
 
-void WorldSession::InitWarden(BigNumber* k)
+void WorldSession::InitAntiCheatSession(BigNumber* k)
 {
-    m_warden = sAnticheatMgr->CreateWardenFor(this, k);
+    m_antiCheat = GetAnticheatLib()->NewSession(this, *k);
 }
 
-void WorldSession::InitCheatData(Player* pPlayer)
-{
-    if (m_cheatData)
-        m_cheatData->InitNewPlayer(pPlayer);
-    else
-        m_cheatData = sAnticheatMgr->CreateAnticheatFor(pPlayer);
-}
-
-MovementAnticheat* WorldSession::GetCheatData()
-{
-    return m_cheatData ? m_cheatData : (m_cheatData = sAnticheatMgr->CreateAnticheatFor(GetPlayer()));
-}
 
 void WorldSession::ProcessAnticheatAction(const char* detector, const char* reason, uint32 cheatAction, uint32 banSeconds)
 {
     const char* action = "";
-    if (cheatAction & CHEAT_ACTION_MUTE_PUB_CHANS)
-    {
-        action = "Muted from public channels.";
-        if (GetSecurity() == SEC_PLAYER)
-        {
-            LoginDatabase.PExecute("UPDATE account SET flags = flags | 0x%x WHERE id = %u", ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS, GetAccountId());
-            SetAccountFlags(GetAccountFlags() | ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS);
-        }
-    }
-    if (cheatAction & CHEAT_ACTION_BAN_IP_ACCOUNT)
+    if (cheatAction & CHEAT_ACTION_BAN_IP)
     {
         action = "Account+IP banned.";
         if (GetSecurity() == SEC_PLAYER)
@@ -915,9 +899,9 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
         if (GetSecurity() == SEC_PLAYER)
             KickPlayer();
     }
-    else if (cheatAction & CHEAT_ACTION_REPORT_GMS)
+    else if (cheatAction & CHEAT_ACTION_INFO_LOG)
         action = "Announced to GMs.";
-    else if (!(cheatAction & CHEAT_ACTION_LOG))
+    else if (!(cheatAction & CHEAT_ACTION_INFO_LOG))
         return;
 
     std::string playerDesc;
@@ -930,14 +914,8 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
         playerDesc = oss.str();
     }
 
-    if ((cheatAction & CHEAT_ACTION_GLOBAL_ANNOUNNCE) && (cheatAction >= CHEAT_ACTION_KICK))
-    {
-        std::stringstream oss;
-        oss << "|r[|c1f40af20AC |cffff0000" << detector << "|r]: Player " << _player->GetName() << ", Cheat: " << reason << ", Penalty: " << action;
-        sWorld.SendGlobalText(oss.str().c_str(), this);
-    }
 
-    if (cheatAction & CHEAT_ACTION_REPORT_GMS)
+    if (cheatAction & CHEAT_ACTION_INFO_LOG)
     {
         std::stringstream oss;
         oss << "Player " << playerDesc << ", Cheat: " << reason;
@@ -945,7 +923,7 @@ void WorldSession::ProcessAnticheatAction(const char* detector, const char* reas
         if (cheatAction >= CHEAT_ACTION_KICK)
             oss << ", Penalty: " << action;
 
-        sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, detector, oss.str().c_str());
+        sWorld.SendGMTextFlags(ACCOUNT_FLAG_SHOW_ANTICHEAT, LANG_GM_ANNOUNCE_COLOR, detector, oss.str().c_str());
     }
 
     sLog.outAnticheat(detector, playerDesc.c_str(), reason, action);

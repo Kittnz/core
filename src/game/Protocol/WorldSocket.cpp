@@ -29,6 +29,7 @@
 #include "WorldSocket.h"
 #include "WorldSocketMgr.h"
 #include "AddonHandler.h"
+#include "Anticheat/Anticheat.hpp"
 
 #include "Opcodes.h"
 #include "MangosSocketImpl.h"
@@ -316,16 +317,27 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->SetAccountFlags(accFlags);
     m_Session->SetOS(clientOs);
     m_Session->LoadTutorialsData();
-    m_Session->InitWarden(&K);
+    m_Session->InitAntiCheatSession(&K);
+
+    //m_Session->InitWarden(&K);
 
     // In case needed sometime the second arg is in microseconds 1 000 000 = 1 sec
     ACE_OS::sleep(ACE_Time_Value(0, 10000));
 
     sWorld.AddSession(m_Session);
 
-    // Create and send the Addon packet
-    if (sAddOnHandler.BuildAddonPacket(&recvPacket, &SendAddonPacked))
-        SendPacket(SendAddonPacked);
+    // when false, the client sent invalid addon data.  kick!
+    WorldPacket addonPacket;
+    if (!m_Session->GetAntiCheat()->ReadAddonInfo(&recvPacket, addonPacket))
+    {
+        sLog.out(LOG_ANTICHEAT_BASIC, "WorldSocket::HandleAuthSession: Account %s (id %u) IP %s sent bad addon info.  Kicking.",
+            account.c_str(), id, GetRemoteAddress().c_str());
+        return -1;
+    }
+
+    // if anything was written to the packet, send it
+    if (addonPacket.wpos())
+        SendPacket(addonPacket);
 
     return 0;
 }
