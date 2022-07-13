@@ -129,7 +129,6 @@ replace into shop_items values
 (188, 5, 81158, 'Armored Frostmane Bear', 400),
 (189, 5, 81091, 'Big Blizzard Bear', 500),
 (190, 5, 81102, 'Darkmoon Dancing Bear', 300),
-(221, 5, 13325, 'Fluorescent Mechanostrider', 120), 
 -- (222, 5, 81238, 'Turbo-Charged Flying Machine', 350), 
 (223, 5, 81239, 'Happy Whimsyshire Cloud', 200), 
 (224, 5, 81240, 'Sad Whimsyshire Cloud', 200), 
