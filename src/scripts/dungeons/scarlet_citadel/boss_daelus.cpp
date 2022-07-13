@@ -174,11 +174,14 @@ public:
             }
         }
 
-        std::list<Creature*> lClouds; // Shouldn't be more then 1 spawned at the same time, but do a list just in case
-        GetCreatureListWithEntryInGrid(lClouds, m_creature, nsDaelus::NPC_POISON_CLOUD, 80.0f);
-        for (const auto& cloud : lClouds)
+        if (true)
         {
-            cloud->DeleteLater();
+            std::list<Creature*> lClouds; // Shouldn't be more then 1 spawned at the same time, but do a list just in case
+            GetCreatureListWithEntryInGrid(lClouds, m_creature, nsDaelus::NPC_POISON_CLOUD, 80.0f);
+            for (const auto& cloud : lClouds)
+            {
+                cloud->DeleteLater();
+            }
         }
     }
 
@@ -344,7 +347,7 @@ public:
             ++itr; // Skipping top-aggro if there is more then 1 player in list
         }
 
-        for (; itr != tList.end(); ++itr)
+        for ( ; itr != tList.end() ; ++itr)
         {
             if (Player* pPlayer{ m_creature->GetMap()->GetPlayer((*itr)->getUnitGuid()) })
             {
@@ -360,11 +363,15 @@ public:
         }
 
         if (candidates.empty())
+        {
             return nullptr;
-
-        auto candIt{ candidates.begin() };
-        std::advance(candIt, urand(0, (candidates.size() - 1)));
-        return *candIt;
+        }
+        else
+        {
+            auto candIt{ candidates.begin() };
+            std::advance(candIt, urand(0, (candidates.size() - 1)));
+            return *candIt;
+        }
     }
 
     void DoPoisonCloud(const uint32& uiDiff)
@@ -380,13 +387,13 @@ public:
                 try
                 {
                     DoAfterTime(pPlayer, (6 * IN_MILLISECONDS), [player = pPlayer]()
+                    {
+                        if (player && player->HasAura(nsDaelus::SPELL_GREEN_GLOW_VISUAL))
                         {
-                            if (player && player->HasAura(nsDaelus::SPELL_GREEN_GLOW_VISUAL))
-                            {
-                                player->RemoveAurasDueToSpell(nsDaelus::SPELL_GREEN_GLOW_VISUAL);
-                                player->CastSpell(player, nsDaelus::SPELL_POISON_CLOUD, true);
-                            }
-                        });
+                            player->RemoveAurasDueToSpell(nsDaelus::SPELL_GREEN_GLOW_VISUAL);
+                            player->CastSpell(player, nsDaelus::SPELL_POISON_CLOUD, true);
+                        }
+                    });
                 }
                 catch (const std::runtime_error& e)
                 {
@@ -435,7 +442,9 @@ public:
                 nsDaelus::GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER);
         }
         else
+        {
             sLog.outError("[SC] Boss Daelus: SpawnAchievementReward() called but no pKiller found!");
+        }
     }
 
     void AchievementKillFailed()
@@ -477,11 +486,6 @@ public:
     }
 };
 
-CreatureAI* GetAI_boss_daelus(Creature* pCreature)
-{
-    return new boss_daelusAI(pCreature);
-}
-
 bool GossipHello_boss_daelus(Player* pPlayer, Creature* pCreature)
 {
     instance_scarlet_citadel const* m_pInstance{ static_cast<instance_scarlet_citadel*>(pCreature->GetInstanceData()) };
@@ -496,7 +500,6 @@ bool GossipHello_boss_daelus(Player* pPlayer, Creature* pCreature)
         sLog.outError("[SC] Boss Daelus: Boss spawned outside of dungeon!");
         pPlayer->CLOSE_GOSSIP_MENU();
     }
-
 
     return true;
 }
@@ -516,23 +519,23 @@ bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiS
             try
             {
                 DoAfterTime(pCreature, (2 * IN_MILLISECONDS), [creature = pCreature]()
-                    {
-                        creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
-                    });
+                {
+                    creature->MonsterSay(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::ABOUT_TO_START), LANG_UNIVERSAL);
+                });
 
                 DoAfterTime(pCreature, (7 * IN_MILLISECONDS), [creature = pCreature]()
-                    {
-                        creature->SetStandState(UNIT_STAND_STATE_STAND);
-                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
-                        creature->MonsterYell(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::START), LANG_UNIVERSAL);
-                    });
+                {
+                    creature->SetStandState(UNIT_STAND_STATE_STAND);
+                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
+                    creature->MonsterYell(nsDaelus::CombatNotification(nsDaelus::CombatNotifications::START), LANG_UNIVERSAL);
+                });
 
                 DoAfterTime(pCreature, (9 * IN_MILLISECONDS), [creature = pCreature]()
-                    {
-                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                        creature->SetFactionTemplateId(nsDaelus::FACTION_SCARLET);
-                        creature->SetInCombatWithZone();
-                    });
+                {
+                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    creature->SetFactionTemplateId(nsDaelus::FACTION_SCARLET);
+                    creature->SetInCombatWithZone();
+                });
             }
             catch (const std::runtime_error& e)
             {
@@ -546,6 +549,12 @@ bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiS
     return true;
 }
 
+CreatureAI* GetAI_boss_daelus(Creature* pCreature)
+{
+    return new boss_daelusAI(pCreature);
+}
+
+
 class npc_fallen_spiritAI : public ScriptedAI
 {
 public:
@@ -556,6 +565,7 @@ public:
     }
 
 private:
+
     bool m_bSetHealthOnce{};
 
     instance_scarlet_citadel* m_pInstance{};
@@ -608,6 +618,7 @@ CreatureAI* GetAI_npc_fallen_spirit(Creature* pCreature)
 {
     return new npc_fallen_spiritAI(pCreature);
 }
+
 
 void AddSC_boss_daelus()
 {

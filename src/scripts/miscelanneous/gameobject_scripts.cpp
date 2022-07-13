@@ -51,10 +51,14 @@ enum
     SPELL_SUMMON_GHOST_SABER    = 5968,
 };
 
-bool GOHello_go_cat_figurine(Player* pPlayer, GameObject* pGo)
+bool GOHello_go_cat_figurine(Player* pPlayer, GameObject* /*pGo*/)
 {
-    pPlayer->CastSpell(pPlayer, SPELL_SUMMON_GHOST_SABER, true);
-    return false;
+    if (pPlayer)
+    {
+        pPlayer->CastSpell(pPlayer, SPELL_SUMMON_GHOST_SABER, true);
+    }
+
+    return true;
 }
 
 /*######
@@ -64,6 +68,9 @@ bool GOHello_go_cat_figurine(Player* pPlayer, GameObject* pGo)
 
 bool GOHello_go_eastern_crystal_pylon(Player* pPlayer, GameObject* pGo)
 {
+    if (!pPlayer || !pGo)
+        return true;
+
     if (pGo->GetGoType() == GAMEOBJECT_TYPE_QUESTGIVER)
     {
         pPlayer->PrepareQuestMenu(pGo->GetGUID());
@@ -71,13 +78,18 @@ bool GOHello_go_eastern_crystal_pylon(Player* pPlayer, GameObject* pGo)
     }
 
     if (pPlayer->GetQuestStatus(4287) == QUEST_STATUS_INCOMPLETE)
+    {
         pPlayer->AreaExploredOrEventHappens(4287);
+    }
 
     return true;
 }
 
 bool GOHello_go_western_crystal_pylon(Player* pPlayer, GameObject* pGo)
 {
+    if (!pPlayer || !pGo)
+        return true;
+
     if (pGo->GetGoType() == GAMEOBJECT_TYPE_QUESTGIVER)
     {
         pPlayer->PrepareQuestMenu(pGo->GetGUID());
@@ -85,13 +97,18 @@ bool GOHello_go_western_crystal_pylon(Player* pPlayer, GameObject* pGo)
     }
 
     if (pPlayer->GetQuestStatus(4288) == QUEST_STATUS_INCOMPLETE)
+    {
         pPlayer->AreaExploredOrEventHappens(4288);
+    }
 
     return true;
 }
 
 bool GOHello_go_northern_crystal_pylon(Player* pPlayer, GameObject* pGo)
 {
+    if (!pPlayer || !pGo)
+        return true;
+
     if (pGo->GetGoType() == GAMEOBJECT_TYPE_QUESTGIVER)
     {
         pPlayer->PrepareQuestMenu(pGo->GetGUID());
@@ -99,7 +116,9 @@ bool GOHello_go_northern_crystal_pylon(Player* pPlayer, GameObject* pGo)
     }
 
     if (pPlayer->GetQuestStatus(4285) == QUEST_STATUS_INCOMPLETE)
+    {
         pPlayer->AreaExploredOrEventHappens(4285);
+    }
 
     return true;
 }
@@ -111,6 +130,9 @@ bool GOHello_go_northern_crystal_pylon(Player* pPlayer, GameObject* pGo)
 
 bool GOHello_go_barov_journal(Player* pPlayer, GameObject* pGo)
 {
+    if (!pPlayer || !pGo)
+        return true;
+
     if (pPlayer->HasSkill(SKILL_TAILORING) && pPlayer->GetSkillValueBase(SKILL_TAILORING) >= 285)
     {
         if (!pPlayer->HasSpell(26086))
@@ -119,21 +141,29 @@ bool GOHello_go_barov_journal(Player* pPlayer, GameObject* pGo)
             pPlayer->SEND_GOSSIP_MENU(8121, pGo->GetObjectGuid());
         }
         else
+        {
             pPlayer->SEND_GOSSIP_MENU(8122, pGo->GetObjectGuid());
+        }
     }
     else
+    {
         pPlayer->SEND_GOSSIP_MENU(8120, pGo->GetObjectGuid());
+    }
 
     return true;
 }
 
-bool GossipSelect_go_barov_journal(Player* pPlayer, GameObject* pGo, uint32 uiSender, uint32 uiAction)
+bool GossipSelect_go_barov_journal(Player* pPlayer, GameObject* /*pGo*/, uint32 uiSender, uint32 uiAction)
 {
+    if (!pPlayer)
+        return true;
+
     if (uiAction == GOSSIP_ACTION_INFO_DEF)
     {
         pPlayer->CastSpell(pPlayer, 26095, false);
         pPlayer->CLOSE_GOSSIP_MENU();
     }
+
     return true;
 }
 
@@ -141,8 +171,12 @@ bool GossipSelect_go_barov_journal(Player* pPlayer, GameObject* pGo, uint32 uiSe
 ## go_greater_moonlight
 ######*/
 
-bool GOHello_go_greater_moonlight(Player* pPlayer, GameObject* pGo) {
-    auto zone = pPlayer->GetZoneId();
+bool GOHello_go_greater_moonlight(Player* pPlayer, GameObject* pGo)
+{
+    if (!pPlayer || !pGo)
+        return true;
+
+    const std::uint32_t zone = pPlayer->GetZoneId();
 
     if (zone == 493) // Moonglade
     {
@@ -152,16 +186,24 @@ bool GOHello_go_greater_moonlight(Player* pPlayer, GameObject* pGo) {
             switch (pGo->GetGUIDLow())
             {
                 case 3998422: // Darnassus
+                {
                     pPlayer->TeleportTo(WorldLocation(1, 10150.45f, 2602.12f, 1330.82f, 5.03f));
                     break;
+                }
                 case 3998424: // Stormwind
+                {
                     pPlayer->TeleportTo(WorldLocation(0, -8748.27f, 1074.27f, 90.52f, 4.17f));
                     break;
+                }
                 case 3998425: // Ironforge
+                {
                     pPlayer->TeleportTo(WorldLocation(0, -4663.39f, -956.23f, 500.37f, 5.73f));
                     break;
+                }
                 default:
-                    return false;
+                {
+                    return true;
+                }
             }
         }
         else
@@ -169,20 +211,29 @@ bool GOHello_go_greater_moonlight(Player* pPlayer, GameObject* pGo) {
             switch(pGo->GetGUID())
             {
                 case 3998423: // Thunderbluff
+                {
                     pPlayer->TeleportTo(WorldLocation(1, -1031.73f, -230.42f, 160.18f, 3.12f));
                     break;
+                }
                 case 3998426: // Undercity
+                {
                     pPlayer->TeleportTo(WorldLocation(0, 1642.41f, 239.9f, 62.59f, 3.01f));
                     break;
+                }
                 case 3998427: // Orgrimmar
+                {
                     pPlayer->TeleportTo(WorldLocation(1, 1971.18f, -4259.45f, 32.21f, 4.0f));
                     break;
+                }
                 default:
-                    return false;
+                {
+                    return true;
+                }
             }
         }
-    
-    } else {
+    }
+    else
+    {
         pPlayer->TeleportTo(WorldLocation(1, 7577.0f, -2188.9f, 475.3f, 5.03f));
     }
 
@@ -193,10 +244,16 @@ bool GOHello_go_greater_moonlight(Player* pPlayer, GameObject* pGo) {
 ## go_field_repair_bot_74A
 ######*/
 
-bool GOHello_go_field_repair_bot_74A(Player* pPlayer, GameObject* pGo)
+bool GOHello_go_field_repair_bot_74A(Player* pPlayer, GameObject* /*pGo*/)
 {
+    if (!pPlayer)
+        return true;
+
     if (pPlayer->HasSkill(SKILL_ENGINEERING) && pPlayer->GetSkillValueBase(SKILL_ENGINEERING) >= 300 && !pPlayer->HasSpell(22704))
+    {
         pPlayer->CastSpell(pPlayer, 22864, false);
+    }
+
     return true;
 }
 
@@ -204,10 +261,15 @@ bool GOHello_go_field_repair_bot_74A(Player* pPlayer, GameObject* pGo)
 ## go_orb_of_command
 ######*/
 
-bool GOHello_go_orb_of_command(Player* pPlayer, GameObject* pGo)
+bool GOHello_go_orb_of_command(Player* pPlayer, GameObject* /*pGo*/)
 {
+    if (!pPlayer)
+        return true;
+
     if (pPlayer->GetQuestRewardStatus(7761))
+    {
         pPlayer->TeleportTo(469, -7664.76f, -1100.87f, 399.679f, 0.561981f);
+    }
 
     return true;
 }
@@ -216,36 +278,46 @@ bool GOHello_go_orb_of_command(Player* pPlayer, GameObject* pGo)
 ## go_resonite_cask
 ######*/
 
-enum
+bool GOHello_go_resonite_cask(Player* /*pPlayer*/, GameObject* pGO)
 {
-    NPC_GOGGEROC    = 11920
-};
+    if (!pGO)
+        return true;
 
-bool GOHello_go_resonite_cask(Player* pPlayer, GameObject* pGO)
-{
     if (pGO->GetGoType() == GAMEOBJECT_TYPE_GOOBER)
-        pGO->SummonCreature(NPC_GOGGEROC, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000);
+    {
+        pGO->SummonCreature(11920, 0.0f, 0.0f, 0.0f, 0.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 300000);
+    }
 
-    return false;
+    return true;
 }
 
 /*######
 ## go_tablet_of_madness
 ######*/
 
-bool GOHello_go_tablet_of_madness(Player* pPlayer, GameObject* pGo)
+bool GOHello_go_tablet_of_madness(Player* pPlayer, GameObject* /*pGo*/)
 {
+    if (!pPlayer)
+        return true;
+
     if (pPlayer->HasSkill(SKILL_ALCHEMY) && pPlayer->GetSkillValue(SKILL_ALCHEMY) >= 300 && !pPlayer->HasSpell(24266))
+    {
         pPlayer->CastSpell(pPlayer, 24267, false);
+    }
+
     return true;
 }
 
 // go_silithyste
 bool GOHello_go_silithyste(Player* pPlayer, GameObject* pGo)
 {
-    // Histoire de pas recaster, car dans ce cas ca annule l'ancien buff, et ca spawn un autre monticule ...
-    if (pPlayer->HasAura(29519, EFFECT_INDEX_0))
+    if (!pPlayer || !pGo)
         return true;
+
+    if (pPlayer->HasAura(29519, EFFECT_INDEX_0))
+    {
+        return true;
+    }
 
     pPlayer->CastSpell(pPlayer, 29519, true);
 
@@ -253,15 +325,16 @@ bool GOHello_go_silithyste(Player* pPlayer, GameObject* pGo)
              pPlayer->GetName(),
              pPlayer->GetGUIDLow(), pPlayer->GetSession()->GetAccountId(), pPlayer->GetSession()->GetRemoteAddress().c_str());
 
-
-    // On despawn seulement ceux qui sont la temporairement (Blizzlike ?)
     if (pGo->GetEntry() == 181597)
     {
         pGo->SetLootState(GO_JUST_DEACTIVATED);
         pGo->AddObjectToRemoveList();
     }
     else
+    {
         pGo->SetLootState(GO_JUST_DEACTIVATED);
+    }
+
     return true;
 }
 
@@ -276,18 +349,22 @@ UPDATE creature_template SET npc_flags = 0 WHERE entry=9136;
 
 bool GOHello_go_restes_sha_ni(Player* pPlayer, GameObject* pGo)
 {
-    // Completion de la quete
+    if (!pPlayer || !pGo)
+        return true;
+
     if (pPlayer->GetQuestStatus(3821) == QUEST_STATUS_INCOMPLETE)
+    {
         pPlayer->AreaExploredOrEventHappens(3821);
-    // Invoquer (ou non) l'esprit.
+    }
+
     if (!pGo->FindNearestCreature(9136, 10.0f, true))
     {
         if (pPlayer->GetQuestStatus(3821) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(3821) == QUEST_STATUS_COMPLETE)
         {
             pGo->SummonCreature(9136, -7919.9f, -2603.8f, 223.345f, 5.13f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
-            return true;
         }
     }
+
     return true;
 }
 
@@ -299,39 +376,45 @@ bool GOHello_go_restes_sha_ni(Player* pPlayer, GameObject* pGo)
 
 enum
 {
-    QUEST_GLYPH_CHASING                 = 8309,
-    ITEM_GEOLOGIST_TRANSCRIPTION_KIT    = 20453,
-    ITEM_HIVE_ZORA_RUBBING              = 20454,
-    ITEM_HIVE_ASHI_RUBBING              = 20455,
-    ITEM_HIVE_REGAL_RUBBING             = 20456,
+    QUEST_GLYPH_CHASING = 8309,
+    ITEM_GEOLOGIST_TRANSCRIPTION_KIT = 20453,
+    ITEM_HIVE_ZORA_RUBBING = 20454,
+    ITEM_HIVE_ASHI_RUBBING = 20455,
+    ITEM_HIVE_REGAL_RUBBING = 20456
 };
 
-// gossip menu 20000 : Le cristal est couvert de glyphes et de runes compliqu�s. Vous n'y comprenez rien.
 template <int REWARD_ITEM>
 bool GOHello_go_Hive_Glyphed_Crystal(Player* pPlayer, GameObject* pGo)
 {
+    if (!pPlayer || pGo)
+        return true;
+
     pPlayer->PlayerTalkClass->CloseGossip();
     pPlayer->PlayerTalkClass->ClearMenus();
 
-    if (pPlayer->GetQuestStatus(QUEST_GLYPH_CHASING) == QUEST_STATUS_INCOMPLETE &&
-        pPlayer->HasItemCount(ITEM_GEOLOGIST_TRANSCRIPTION_KIT, 1) &&
-        !pPlayer->HasItemCount(REWARD_ITEM, 1))
+    if (pPlayer->GetQuestStatus(QUEST_GLYPH_CHASING) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(ITEM_GEOLOGIST_TRANSCRIPTION_KIT, 1) && !pPlayer->HasItemCount(REWARD_ITEM, 1))
+    {
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Use the transcription device to gather a rubbing.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
+    }
 
     pPlayer->SEND_GOSSIP_MENU(7770, pGo->GetGUID());
+
     return true;
 }
 
 template <int REWARD_ITEM>
-bool GOSelect_go_Hive_Glyphed_Crystal(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+bool GOSelect_go_Hive_Glyphed_Crystal(Player* pPlayer, GameObject* /*pGo*/, uint32 sender, uint32 action)
 {
+    if (!pPlayer)
+        return true;
+
     pPlayer->PlayerTalkClass->CloseGossip();
     pPlayer->PlayerTalkClass->ClearMenus();
 
-    if (pPlayer->GetQuestStatus(QUEST_GLYPH_CHASING) == QUEST_STATUS_INCOMPLETE &&
-        pPlayer->HasItemCount(ITEM_GEOLOGIST_TRANSCRIPTION_KIT, 1) &&
-        !pPlayer->HasItemCount(REWARD_ITEM, 1))
+    if (pPlayer->GetQuestStatus(QUEST_GLYPH_CHASING) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(ITEM_GEOLOGIST_TRANSCRIPTION_KIT, 1) && !pPlayer->HasItemCount(REWARD_ITEM, 1))
+    {
         pPlayer->AddItem(REWARD_ITEM, 1);
+    }
 
     return true;
 }
@@ -399,7 +482,8 @@ struct go_bells : public GameObjectAI
                         _soundId = BELLTOLLTRIBAL; // drum sound
                         break;
                 }
-            break;
+
+                break;
             }
             case GO_ALLIANCE_BELL:
             {
@@ -418,9 +502,11 @@ struct go_bells : public GameObjectAI
                         _soundId = BELLTOLLALLIANCE;   // human bell sound
                         break;
                 }
-            break;
+
+                break;
             }
-        default:
+
+            default:
             sLog.outError("go_bells() called with invalid object, ID: %u", me->GetEntry());
         }
     }
@@ -466,6 +552,7 @@ struct go_bells : public GameObjectAI
             }
         }
     }
+
 private:
     EventMap _events;
     uint32 _soundId;
@@ -493,8 +580,9 @@ enum DarkmoonFaireMusicEvents
     GAME_EVENT_DARKMOON_FAIRE_THUNDER = 5
 };
 
-struct go_darkmoon_faire_music : public GameObjectAI
+class go_darkmoon_faire_music : public GameObjectAI
 {
+public:
     go_darkmoon_faire_music(GameObject* gobj) : GameObjectAI(gobj)
     {
         _events.ScheduleEvent(EVENT_DFM_START_MUSIC, Seconds(1));
@@ -503,21 +591,28 @@ struct go_darkmoon_faire_music : public GameObjectAI
     void UpdateAI(const uint32 diff)
     {
         _events.Update(diff);
-        while (uint32 eventId = _events.ExecuteEvent())
+        while (std::uint32_t eventId = _events.ExecuteEvent())
         {
             switch (eventId)
             {
                 case EVENT_DFM_START_MUSIC:
+                {
                     if (sGameEventMgr.IsActiveEvent(GAME_EVENT_DARKMOON_FAIRE_ELWYNN) || sGameEventMgr.IsActiveEvent(GAME_EVENT_DARKMOON_FAIRE_THUNDER))
+                    {
                         me->PlayDistanceSound(MUSIC_DARKMOON_FAIRE_MUSIC);
+                    }
 
                     _events.ScheduleEvent(EVENT_DFM_START_MUSIC, Seconds(300)); // 5 min.
                     break;
+                }
                 default:
+                {
                     break;
+                }
             }
         }
     }
+
 private:
     EventMap _events;
 };
@@ -526,6 +621,7 @@ GameObjectAI* GetAI_go_darkmoon_faire_music(GameObject* gameobject)
 {
     return new go_darkmoon_faire_music(gameobject);
 }
+
 
 void AddSC_go_scripts()
 {
@@ -538,76 +634,76 @@ void AddSC_go_scripts()
 
     newscript = new Script;
     newscript->Name = "go_cat_figurine";
-    newscript->pGOHello =           &GOHello_go_cat_figurine;
+    newscript->pGOHello = &GOHello_go_cat_figurine;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_eastern_crystal_pylon";
-    newscript->pGOHello =           &GOHello_go_eastern_crystal_pylon;
+    newscript->pGOHello = &GOHello_go_eastern_crystal_pylon;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_northern_crystal_pylon";
-    newscript->pGOHello =           &GOHello_go_northern_crystal_pylon;
+    newscript->pGOHello = &GOHello_go_northern_crystal_pylon;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_western_crystal_pylon";
-    newscript->pGOHello =           &GOHello_go_western_crystal_pylon;
+    newscript->pGOHello = &GOHello_go_western_crystal_pylon;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_barov_journal";
-    newscript->pGOHello =           &GOHello_go_barov_journal;
-    newscript->pGOGossipSelect =    &GossipSelect_go_barov_journal;
+    newscript->pGOHello = &GOHello_go_barov_journal;
+    newscript->pGOGossipSelect = &GossipSelect_go_barov_journal;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_field_repair_bot_74A";
-    newscript->pGOHello =           &GOHello_go_field_repair_bot_74A;
+    newscript->pGOHello = &GOHello_go_field_repair_bot_74A;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_orb_of_command";
-    newscript->pGOHello =           &GOHello_go_orb_of_command;
+    newscript->pGOHello = &GOHello_go_orb_of_command;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_resonite_cask";
-    newscript->pGOHello =           &GOHello_go_resonite_cask;
+    newscript->pGOHello = &GOHello_go_resonite_cask;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_tablet_of_madness";
-    newscript->pGOHello =           &GOHello_go_tablet_of_madness;
+    newscript->pGOHello = &GOHello_go_tablet_of_madness;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_silithyste";
-    newscript->pGOHello =           &GOHello_go_silithyste;
+    newscript->pGOHello = &GOHello_go_silithyste;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_restes_sha_ni";
-    newscript->pGOHello =           &GOHello_go_restes_sha_ni;
+    newscript->pGOHello = &GOHello_go_restes_sha_ni;
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_Hive_Regal_Glyphed_Crystal";
-    newscript->pGOHello =           &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_REGAL_RUBBING>);
-    newscript->pGOGossipSelect =    &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_REGAL_RUBBING>);
+    newscript->pGOHello = &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_REGAL_RUBBING>);
+    newscript->pGOGossipSelect = &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_REGAL_RUBBING>);
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_Hive_Ashi_Glyphed_Crystal";
-    newscript->pGOHello =           &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_ASHI_RUBBING>);
-    newscript->pGOGossipSelect =    &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_ASHI_RUBBING>);
+    newscript->pGOHello = &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_ASHI_RUBBING>);
+    newscript->pGOGossipSelect = &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_ASHI_RUBBING>);
     newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_Hive_Zora_Glyphed_Crystal";
-    newscript->pGOHello =           &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_ZORA_RUBBING>);
-    newscript->pGOGossipSelect =    &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_ZORA_RUBBING>);
+    newscript->pGOHello = &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_ZORA_RUBBING>);
+    newscript->pGOGossipSelect = &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_ZORA_RUBBING>);
     newscript->RegisterSelf();
 
     newscript = new Script;

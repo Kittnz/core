@@ -60,8 +60,8 @@ namespace nsDaelus
     static constexpr std::uint32_t POISON_CLOUD_TIMER{ 60000 };
 
     // Achievement
-    static constexpr uint32 GO_ACHIEVEMENT_CHEST{ 0000 };                 // Chest to loot the achievement reward
-    static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
+    static constexpr std::uint32_t GO_ACHIEVEMENT_CHEST{ 0000 };                 // Chest to loot the achievement reward
+    static constexpr std::uint32_t GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
     static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
     {
         { 0.f } // TODO: Check rotation
