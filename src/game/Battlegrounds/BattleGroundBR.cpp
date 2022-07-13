@@ -121,9 +121,9 @@ void BattleGroundBR::EndBattleGround(Team winner)
 {
     Team loser = (winner == ALLIANCE) ? HORDE : ALLIANCE;
     // rewards
-    RewardReputationToTeam(1008, 50, winner);
-    RewardHonorToTeam(145, winner);
-    RewardHonorToTeam(25, loser);
+    RewardReputationToTeam(1008, 100, winner);
+    RewardHonorToTeam(200, winner);
+    RewardHonorToTeam(50, loser);
 
     BattleGround::EndBattleGround(winner);
 }
