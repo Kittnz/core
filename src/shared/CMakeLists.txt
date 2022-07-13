@@ -176,11 +176,11 @@ if(UNIX)
     endif()
   endif()
 
-  target_link_libraries(shared ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
+  target_link_libraries(shared PUBLIC ${ACE_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} )
 endif(UNIX)
 
 if(MINGW)
-  target_link_libraries(shared ${ACE_LIBRARIES} -lws2_32)
+  target_link_libraries(shared PUBLIC ${ACE_LIBRARIES} -lws2_32)
 endif()
 
 target_link_libraries(shared PUBLIC re2::re2)
