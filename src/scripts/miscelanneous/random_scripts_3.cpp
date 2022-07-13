@@ -3207,7 +3207,7 @@ bool GossipSelect_npc_young_blackrock_worg(Player* pPlayer, Creature* pCreature,
         {
             pPlayer->DestroyItemCount(60720, 1, true);
             pPlayer->SaveInventoryAndGoldToDB();
-            pCreature->DespawnOrUnsummon();;
+            pCreature->DespawnOrUnsummon();
             pPlayer->CLOSE_GOSSIP_MENU();
             return true;
         }
@@ -3245,9 +3245,51 @@ bool GossipSelect_npc_eitrigg(Player* pPlayer, Creature* pCreature, uint32 uiSen
     return true;
 }
 
+bool QuestRewarded_npc_karfang(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40508) // Take No Chances
+    {
+        pQuestGiver->MonsterSay("In the name of Raz'gol, a warrior of the Horde, a soldier until his last breath. Go with honor friend, you will not be forgotten.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 2 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_SALUTE);
+
+            Creature* molk = npc->FindNearestCreature(60769, 15.0F);
+            molk->HandleEmote(EMOTE_ONESHOT_SALUTE);
+            Creature* councilor_vargek = npc->FindNearestCreature(60772, 15.0F);
+            councilor_vargek->HandleEmote(EMOTE_ONESHOT_SALUTE);
+            });
+    }
+
+
+    if (pQuest->GetQuestId() == 40509) // The Final Crack
+    {
+        pQuestGiver->MonsterSay("Without you, we surely would have had our plans discovered, for that I am grateful of your service.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("Your name shall echo with honor for the actions you have taken, walk softly, noble soldier of the Horde.");
+            });
+
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->HandleEmote(EMOTE_ONESHOT_BOW);
+            });
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_karfang";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_karfang;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_eitrigg";
