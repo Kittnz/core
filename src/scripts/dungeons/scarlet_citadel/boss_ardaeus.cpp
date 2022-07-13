@@ -36,13 +36,14 @@ public:
     }
 
 private:
-    std::list<ObjectGuid>m_lSummonedCallForHelpNPCs;
+
+    bool m_bAchievementKillFailed{};
+
+    std::uint32_t m_uiCallForHelp_Timer{};
 
     ObjectGuid m_uiSunGuid{};
 
-    uint32 m_uiCallForHelp_Timer{};
-
-    bool m_bAchievementKillFailed{};
+    std::list<ObjectGuid>m_lSummonedCallForHelpNPCs;
 
     instance_scarlet_citadel* m_pInstance{};
 
@@ -100,7 +101,7 @@ public:
 
         m_creature->MonsterSay(nsArdaeus::CombatNotification(nsArdaeus::CombatNotifications::BOSSDIED), LANG_UNIVERSAL);
 
-        m_creature->SetRespawnDelay(604800);
+        m_creature->SetRespawnDelay(nsArdaeus::SEVEN_DAYS);
 
         m_pInstance->SetData(ScarletCitadelEncounter::TYPE_ARDAEUS, DONE);
 
@@ -151,7 +152,7 @@ public:
         if (m_uiCallForHelp_Timer < uiDiff)
         {
             const auto uiRnd{ urand(0, nsArdaeus::MAX_SPAWN_POINTS) }; // Pick a random NPC
-            uint64 uiStatueNpcGUID{};
+            ObjectGuid uiStatueNpcGUID{};
 
             // Summon an invisible NPC in front of the random chosen statue which does a visual effect to the summoned creature
             Creature* pStatueNPC{ m_creature->SummonCreature(nsArdaeus::ARDAEUS_STATUE_NPC,
@@ -295,13 +296,14 @@ public:
     }
 
 private:
-    uint32 m_uiDamageDone{};
-    uint32 m_uiIncreaseSpeed_Timer{};
-    uint32 m_uiAchievement_Timer{};
 
     float m_fUpwardSpeed{}; // Do we ever want to change this value? Move to constexpr if not
     float m_fDownwardSpeed{};
     float m_fNewPositionZ{};
+
+    std::uint32_t m_uiDamageDone{};
+    std::uint32_t m_uiIncreaseSpeed_Timer{};
+    std::uint32_t m_uiAchievement_Timer{};
 
     instance_scarlet_citadel* m_pInstance{};
 
@@ -424,6 +426,7 @@ CreatureAI* GetAI_npc_sunAI(Creature* pCreature)
 {
     return new npc_sunAI(pCreature);
 }
+
 
 bool GossipHello_boss_ardaeus(Player* pPlayer, Creature* pCreature)
 {
