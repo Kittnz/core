@@ -2983,6 +2983,19 @@ bool GossipSelect_npc_orvak_sternrock(Player* pPlayer, Creature* pCreature, uint
     return true;
 }
 
+bool QuestRewarded_npc_orvak_sternrock(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40463) // The True High Foreman
+    {
+        pQuestGiver->MonsterSay("Been an honor working with you.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_SALUTE);
+    }
+
+    return false;
+}
+
 bool QuestRewarded_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -3297,6 +3310,7 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_orvak_sternrock";
     newscript->pGossipHello = &GossipHello_npc_orvak_sternrock;
     newscript->pGossipSelect = &GossipSelect_npc_orvak_sternrock;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_orvak_sternrock;
     newscript->RegisterSelf();
 
     newscript = new Script;
