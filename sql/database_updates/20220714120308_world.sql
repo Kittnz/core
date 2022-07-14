@@ -41,3 +41,23 @@ replace into item_template values
  '0', '1', NULL);
 -- QUEST 'Removing Vital Assets' (entry 40500), change completion text to the following.
 update quest_template set offerrewardtext = 'So, you\'ve done as I asked. Let\'s see what\'s in those documents.\n\n<Molk takes the documents from you, and stares intently for a few seconds.>\n\nWell, this will surely put a hamper on their plans, the information here must have taken them a while to acquire, and without it they have no leads.\n\nYou are more useful then you look, whelpling.\n\nTake this gold, as a thank you from myself.' where entry = 40500;
+-- Add the following rewards to the quest 'Fueling the Blood Fury' (entry 40493), CHOICE BETWEEN 2.
+replace into item_template values
+ ('60742', '4', '1', 'Darkseer Acolyte Robe', '', '15232', '2', '0', '1', '61220', '15305', '5', '-1', '-1', '61',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '78', '0', '0', '0',
+ '0', '10', '0', '9325', '1', '0', '0', '-1', '0', '-1', '9295', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+replace into item_template values
+ ('60743', '2', '15', 'Demonblood Dirk', '', '20414', '2', '0', '1', '184756', '46189', '21', '-1', '-1', '61',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1700', '0',
+ '0', '51', '73', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '5', '0', '7689', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+update quest_template set rewchoiceitemid1 = 60742, rewchoiceitemcount1 = 1, rewchoiceitemid2 = 60743, rewchoiceitemcount2 = 1 where entry = 40493;
