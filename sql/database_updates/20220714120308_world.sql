@@ -66,10 +66,32 @@ update quest_template set details = 'Greetings stranger, it seems some new recru
 -- Prismatic Crystal.
 update item_template set required_reputation_faction = 61, required_reputation_rank = 5, quality = 3, spellcooldown_1 = 3600000 where entry = 80805;
 -- Change display ID of  Argon Halmantle (entry 91982) to 3542.
-update creature_template set display_id1 = 3542 where entry = 91982.
+update creature_template set display_id1 = 3542 where entry = 91982;
 -- Change subname of NPC Mistress Katalla to <Worg Master>.
 update creature_template set subname = 'Worg Master' where entry = 60775;
 -- Quest 'Make the Right Choice' (Entry 60036) update main description to the following.
 update quest_template set details = 'I\'ve heard rumors of some zealous fanatics that still reside within Stratholme. Alas, it is these kinds of fanatics that I require something from, a Righteous Orb to be exact for a new design I patterned long ago.\n\nI also need another kind of orb, a Flawless Draenethyst Sphere, I was told it has, unique properties from other designers.\n\nProblem is, I don\'t know where to get it, perhaps someone knows something about it, so ask around. For all we know it could be in some blasted land.' where entry = 60036;
 -- Quest 'The True High Foreman' (entry 40463), remove the following from completion.
 update quest_template set offerrewardtext = 'Also, take this key, I do not intend to return to the mountain. It should open a chest within the Black Vault, if they haven\'t already taken it away.' where entry = 40463;
+
+delete from creature_ai_scripts where id in (2200019,2200020,2200021);
+delete from creature_ai_events where id in (2200019,2200020,2200021);
+-- Slaver Vilegrip on death:
+REPLACE INTO creature_ai_scripts VALUES
+(2200019, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30023, 0, 0, 0, 0, 0, 0, 0, 0, 'Slaver Vilegrip - Say on Aggro');
+REPLACE INTO creature_ai_events VALUES
+(2200019, 60836, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200019, 0, 0, 'Slaver Vilegrip - Say on Aggro');
+-- Farad on death:
+REPLACE INTO broadcast_text VALUES (30026, 'If only you knew... Maltimor, I hope the Twisting Nether... takes you...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO creature_ai_scripts VALUES
+(2200020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30026, 0, 0, 0, 0, 0, 0, 0, 0, 'Farad - Say upon Death');
+REPLACE INTO creature_ai_events VALUES
+(2200020, 60854, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200020, 0, 0, 'Farad - Say upon Death');
+-- Gazzirik on death:
+REPLACE INTO broadcast_text VALUES (30027, 'That was a bad deal...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+REPLACE INTO creature_ai_scripts VALUES
+(2200021, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30027, 0, 0, 0, 0, 0, 0, 0, 0, 'Gazzirik - Say upon Death');
+REPLACE INTO creature_ai_events VALUES
+(2200021, 60859, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200021, 0, 0, 'Gazzirik - Say upon Death');
+
+
