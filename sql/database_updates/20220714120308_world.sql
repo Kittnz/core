@@ -27,3 +27,5 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60733,7694,'Warchief\'s Response',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50545);
 
 REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50545, 'To Warleader Karfang.\n\nI have read your letter, and have listened.\n\nThe Horde is not stranger to hardships, and adversity. All of us have had to struggle and make hard decisions as you have. We are a band of equals who share values of wisdom and honor to the wartorn and battered of this world.\n\nIf you truly wish to prove your loyalties to me as Warchief then I require something from you.\n\nThe Twilight Hammer have begun to show themselves in your region, they are a threat to this world. Remove them for me, and I will know your word is true.\n\n THRALL, WARCHIEF OF THE HORDE.', 0);
+-- rename item Axe of Falgosh (60719) to Axe of Fargosh.
+update item_template set name = 'Axe of Fargosh' where entry = 60719;
