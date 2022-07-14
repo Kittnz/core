@@ -63,3 +63,5 @@ replace into item_template values
 update quest_template set rewchoiceitemid1 = 60742, rewchoiceitemcount1 = 1, rewchoiceitemid2 = 60743, rewchoiceitemcount2 = 1 where entry = 40493;
 -- Quest Scrap Forager (entry 40491), change main description to the following.
 update quest_template set details = 'Greetings stranger, it seems some new recruits from this new Horde are arriving at last.\n\nI\'ll keep this short, we\'re not doing so well here. It\'s like everything is being held together by worg spit, and the lack of resources certainly doesn\'t help. I\'ll say it\'s about time we fixed that.\n\nDark Iron tends to be quite scarce in the surface of the steppes, though it is carried by many. Whether it be baubles, equipment, or sitting in a creature stomach.\n\nVenture out and collect me a sizeable amount of scraps so I can keep forging equipment for our grunts to keep Karfang Hold safe.' where entry = 40491;
+-- Prismatic Crystal.
+update item_template set required_reputation_faction = 61, required_reputation_rank = 5, quality = 3, spellcooldown_1 = 3600000 where entry = 80805;
