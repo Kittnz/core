@@ -115,3 +115,11 @@ replace into item_template values
  '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
 
+update creature_template set script_name = '' where entry = 3144;
+
+
+replace into creature_template_addon (entry, mount, bytes1, b2_0_sheath, b2_1_flags, emote, moveflags, auras) VALUES (60830, 0, 0, 0, 0, 233, 0, '');
+
+update creature_addon set emote = 0 where guid in (2571413, 2571414, 2571419, 2571420, 2571579, 2571431, 2571585, 2571420 , 2571419, 2571414, 2571413, 2571586, 2571579, 2571431);
+
+delete from item_template where entry = 60707;
