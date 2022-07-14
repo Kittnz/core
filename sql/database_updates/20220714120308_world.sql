@@ -39,3 +39,5 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
+-- QUEST 'Removing Vital Assets' (entry 40500), change completion text to the following.
+update quest_template set offerrewardtext = 'So, you\'ve done as I asked. Let\'s see what\'s in those documents.\n\n<Molk takes the documents from you, and stares intently for a few seconds.>\n\nWell, this will surely put a hamper on their plans, the information here must have taken them a while to acquire, and without it they have no leads.\n\nYou are more useful then you look, whelpling.\n\nTake this gold, as a thank you from myself.' where entry = 40500;
