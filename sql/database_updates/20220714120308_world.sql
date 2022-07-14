@@ -73,7 +73,7 @@ update creature_template set subname = 'Worg Master' where entry = 60775;
 update quest_template set details = 'I\'ve heard rumors of some zealous fanatics that still reside within Stratholme. Alas, it is these kinds of fanatics that I require something from, a Righteous Orb to be exact for a new design I patterned long ago.\n\nI also need another kind of orb, a Flawless Draenethyst Sphere, I was told it has, unique properties from other designers.\n\nProblem is, I don\'t know where to get it, perhaps someone knows something about it, so ask around. For all we know it could be in some blasted land.' where entry = 60036;
 -- Quest 'The True High Foreman' (entry 40463), remove the following from completion.
 update quest_template set offerrewardtext = 'Also, take this key, I do not intend to return to the mountain. It should open a chest within the Black Vault, if they haven\'t already taken it away.' where entry = 40463;
-
+-- Farad - Say upon Death, Gazzirik - Say upon Death and Slaver Vilegrip - Say on Aggro fixes.
 delete from creature_ai_scripts where id in (2200019,2200020,2200021);
 delete from creature_ai_events where id in (2200019,2200020,2200021);
 -- Slaver Vilegrip on death:
@@ -93,5 +93,6 @@ REPLACE INTO creature_ai_scripts VALUES
 (2200021, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30027, 0, 0, 0, 0, 0, 0, 0, 0, 'Gazzirik - Say upon Death');
 REPLACE INTO creature_ai_events VALUES
 (2200021, 60859, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200021, 0, 0, 'Gazzirik - Say upon Death');
-
-
+-- Scrapforged Items for Scrap Forager.
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (60700, 'Scrapforged Helmet', '', 4, 4, 6, 2, 27338, 1, 0, 0, -1, -1, 49312, 12328, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 70, 456, 0, 0, 59, 0, 7, 0, 5, 0, 0, 0, 0, 4, 12, 7, 12, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (60701, 'Scrapforged Greataxe', '', 2, 1, 1, 2, 28349, 1, 0, 0, -1, -1, 207512, 51878, 17, 1, 0, 0, 1, 1, 0, 114, 179, 3200, 0, 0, 85, 0, 0, 0, 59, 0, 7, 0, 5, 0, 0, 0, 0, 4, 20, 7, 10, 0, 0, 0);
