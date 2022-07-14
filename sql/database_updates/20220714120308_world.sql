@@ -1,0 +1,29 @@
+-- Of New and Old II
+delete from quest_template where entry = 40502;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40501,40502,2,46,52,45,0,0,'Of New and Old II','Another wishes to join the Horde, so be it.\n\nI do hold concerns with those from the Blackrock Clan, for their evil runs deep, corrupted to the core. We have dealt with Old Horde refugees in the past but not an entire group looking to join us.\n\nEitrigg was once apart of the Blackrock Clan, and perhaps knows more about this \'Karfang\'. Speak with him, and figure out what he knows.','Speak with Eitrigg to find out info about Karfang for Thrall in Orgrimmar.','Yes?','Hmm, Karfang you say?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,76,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40502;
+delete from creature_involvedrelation where quest = 40502;
+replace into creature_questrelation (id, quest) values (4949, 40502);
+replace into creature_involvedrelation (id, quest) values (3144, 40502);
+
+delete  from creature_template where entry = 60377;
+update creature_template set script_name = '' where entry = 3144;
+
+delete from gossip_menu where entry = 41175;
+delete from npc_text where ID = 30028;
+delete from broadcast_text where entry = 30028;
+
+-- Of New and Old III
+delete from quest_template where entry = 40503;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40502,40503,2,46,52,45,0,0,'Of New and Old III','I haven\'t heard that name in some time, though I certainly remember it.\n\nKarfang fought with the Blackrock Clan during our invasion of Azeroth, and rose through the ranks quickly. From my knowledge, he was a strong warrior, though not as blood thirsty as others.\n\nThe Karfang I remember was smart enough to deny suicidal orders, or challenge leadership when required, I am not surprised he has lasted this long.\n\nKarfang can be trusted, he is certainly wise enough to see the doom of the Old Horde before him.\n\nThrall gives approval on my word take the Warchief\'s Response to Karfang Hold, we will see if he can prove his loyalties.','Bring the Warchief\'s Response to Karfang at Karfang Hold in Burning Steppes.','Yes?','<Karfang looks out at the Warchief\'s Response, beginning to read with caution.>\n\nSo it appears the Warchief is asking us for a test of loyalty, he shall receive his demands.',60733,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60733,1,0,1000,76,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+delete from creature_questrelation where quest = 40503;
+delete from creature_involvedrelation where quest = 40503;
+replace into creature_questrelation (id, quest) values (3144, 40503);
+replace into creature_involvedrelation (id, quest) values (60770, 40503);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60733,7694,'Warchief\'s Response',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50545);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50545, 'To Warleader Karfang.\n\nI have read your letter, and have listened.\n\nThe Horde is not stranger to hardships, and adversity. All of us have had to struggle and make hard decisions as you have. We are a band of equals who share values of wisdom and honor to the wartorn and battered of this world.\n\nIf you truly wish to prove your loyalties to me as Warchief then I require something from you.\n\nThe Twilight Hammer have begun to show themselves in your region, they are a threat to this world. Remove them for me, and I will know your word is true.\n\n THRALL, WARCHIEF OF THE HORDE.', 0);
