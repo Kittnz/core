@@ -3219,32 +3219,6 @@ bool GossipSelect_npc_young_blackrock_worg(Player* pPlayer, Creature* pCreature,
     return true;
 }
 
-bool GossipHello_npc_eitrigg(Player* pPlayer, Creature* pCreature)
-{
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    if (pPlayer->GetQuestStatus(40502) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Thrall has asked if you know anything about the Blackrock Orc named Karfang, he wishes to join the Horde.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
-    pPlayer->SEND_GOSSIP_MENU(3573, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_eitrigg(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-        {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60377))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-            pPlayer->SEND_GOSSIP_MENU(30028, pCreature->GetGUID());
-        }
-
-    return true;
-}
-
 bool QuestRewarded_npc_karfang(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -3289,12 +3263,6 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_karfang";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_karfang;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_eitrigg";
-    newscript->pGossipHello = &GossipHello_npc_eitrigg;
-    newscript->pGossipSelect = &GossipSelect_npc_eitrigg;
     newscript->RegisterSelf();
 
     newscript = new Script;
