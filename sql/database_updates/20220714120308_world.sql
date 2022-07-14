@@ -29,3 +29,13 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50545, 'To Warleader Karfang.\n\nI have read your letter, and have listened.\n\nThe Horde is not stranger to hardships, and adversity. All of us have had to struggle and make hard decisions as you have. We are a band of equals who share values of wisdom and honor to the wartorn and battered of this world.\n\nIf you truly wish to prove your loyalties to me as Warchief then I require something from you.\n\nThe Twilight Hammer have begun to show themselves in your region, they are a threat to this world. Remove them for me, and I will know your word is true.\n\n THRALL, WARCHIEF OF THE HORDE.', 0);
 -- rename item Axe of Falgosh (60719) to Axe of Fargosh.
 update item_template set name = 'Axe of Fargosh' where entry = 60719;
+-- Add the following item as a loot reward for the quest 'Forest Troll Scum' (entry 40495) , it must be hidden until completion
+replace into item_template values
+ ('60715', '4', '0', 'Taskmaster Whip', '', '10301', '2', '0', '1', '48824', '12206', '12', '-1', '-1', '63',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '8815', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
