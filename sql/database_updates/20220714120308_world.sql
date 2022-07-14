@@ -67,5 +67,7 @@ update quest_template set details = 'Greetings stranger, it seems some new recru
 update item_template set required_reputation_faction = 61, required_reputation_rank = 5, quality = 3, spellcooldown_1 = 3600000 where entry = 80805;
 -- Change display ID of  Argon Halmantle (entry 91982) to 3542.
 update creature_template set display_id1 = 3542 where entry = 91982.
--- change subname of NPC Mistress Katalla to <Worg Master>.
+-- Change subname of NPC Mistress Katalla to <Worg Master>.
 update creature_template set subname = 'Worg Master' where entry = 60775;
+-- Quest 'Make the Right Choice' (Entry 60036) update main description to the following.
+update quest_template set details = 'I\'ve heard rumors of some zealous fanatics that still reside within Stratholme. Alas, it is these kinds of fanatics that I require something from, a Righteous Orb to be exact for a new design I patterned long ago.\n\nI also need another kind of orb, a Flawless Draenethyst Sphere, I was told it has, unique properties from other designers.\n\nProblem is, I don\'t know where to get it, perhaps someone knows something about it, so ask around. For all we know it could be in some blasted land.' where entry = 60036;
