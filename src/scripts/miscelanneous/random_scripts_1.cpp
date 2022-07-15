@@ -2372,11 +2372,10 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         if (p_Player->HasItemCount(422, 1)) // Goldshire Quest Gryphon
-        {
             SetFlying(p_Player, 30, 18274, 422, 1);
-        }
         else
-            p_Player->PMonsterEmote("The gryphon recognizes you and doesn't seem to be satisfied. Perhaps a handful of famous Dwarven Mild could do some good?", nullptr, false);
+            p_Player->GetSession()->SendNotification("Requires Dwarven Mild.");
+
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2 || uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
@@ -2397,7 +2396,7 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
             SetFlying(p_Player, 30, 295, 3770, 1);
         }
         else
-            p_Player->PMonsterEmote("The wyvern recognizes you and doesn't seem to be satisfied. Perhaps a handful of Mutton Chops could do some good?", nullptr, false);
+            p_Player->GetSession()->SendNotification("Requires Mutton Chop.");
     }
     p_Player->CLOSE_GOSSIP_MENU();
     return true;
