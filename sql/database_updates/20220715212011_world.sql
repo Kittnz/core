@@ -141,3 +141,7 @@ UPDATE `creature_template` SET `movement_type`=2, `inhabit_type`=1 WHERE `entry`
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1574
 
 update quest_template set rewmoneymaxlevel = rewxp * 2.6 where zoneorsort = 408 and rewmoneymaxlevel = 0;
+
+-- Hateforge Quarry meeting stone:
+
+replace into gameobject_template (entry, type, displayId, name, faction, flags, size, data0, data1, data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13, data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, mingold, maxgold, phase_quest_id, script_name) values (1772027, 23, 5495, 'Meeting Stone', 35, 0, 1, 52, 60, 5103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
