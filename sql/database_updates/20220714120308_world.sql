@@ -236,3 +236,5 @@ REPLACE INTO npc_vendor VALUES
 (80959, 60750, 0, 0, 0, 0),
 (80959, 60751, 0, 0, 0, 0),
 (80959, 60752, 0, 0, 0, 0);
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1585
+update quest_template set rewxp = 210 where entry = 70048;
