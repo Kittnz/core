@@ -41,6 +41,19 @@
 
 ChatCommand * ChatHandler::getCommandTable()
 {
+#ifdef USE_ANTICHEAT
+    //Private table, must be in module
+#include "Anticheat/AnticheatChatCommands.h"
+#else
+    //Public table
+    static ChatCommand anticheatCommandTable[] =
+    {
+        { "info",     SEC_ADMINISTRATOR, true,  &ChatHandler::HandleAnticheatInfoCommand,	nullptr },
+        { nullptr,   0,                  false, nullptr,									nullptr },
+    };
+
+#endif
+
     static ChatCommand accountSetCommandTable[] =
     {
         { "gmlevel",        SEC_ADMINISTRATOR,        true,  &ChatHandler::HandleAccountSetGmLevelCommand,   "", nullptr },
@@ -475,13 +488,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,         0,                  false, nullptr,                                         "", nullptr }
     };
 
-    static ChatCommand anticheatCommandTable[] =
-    {
-        { "server",         SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleAnticheatCommand,            "", nullptr },
-        { "warden",         SEC_ADMINISTRATOR,   true, nullptr,                                          "", anticheatWardenCommandTable },
-        { "client",         SEC_ADMINISTRATOR,    true, nullptr,                                          "", anticheatClientCommandTable },
-        { nullptr,          0,                 false, nullptr,                                         "", nullptr }
-    };
     static ChatCommand ticketCommandTable[] =
     {
         { "close",         SEC_DEVELOPER,  true,  &ChatHandler::HandleGMTicketCloseByIdCommand,        "", nullptr },

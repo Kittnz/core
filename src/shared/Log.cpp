@@ -307,6 +307,8 @@ void Log::Initialize()
     logFiles[LOG_LEVELUP] = openLogFile("LevelupLogFile", nullptr, "a");
     logFiles[LOG_PERFORMANCE] = openLogFile("PerformanceLog.File", nullptr, "a");
     logFiles[LOG_MONEY_TRADES] = openLogFile("LogMoneyTrades", nullptr, "a");
+    logFiles[LOG_ANTICHEAT_DEBUG] = openLogFile("AnticheatDebugLogFile", nullptr, "a");
+    logFiles[LOG_ANTICHEAT_BASIC] = openLogFile("AnticheatLogFile", nullptr, "a");
     logFiles[LOG_MAIL_AH] = openLogFile("LogMailAH", nullptr, "a");
     logFiles[LOG_GM_CRITICAL] = openLogFile("CriticalCommandsLogFile", nullptr, "a");
     logFiles[LOG_CHAT_SPAM] = openLogFile("ChatSpamLogFile", nullptr, "a");

@@ -68,7 +68,6 @@ set (game_SRCS
     AI/ScriptedPetAI.cpp
     AI/TotemAI.cpp
     Autoscaling/AutoScaler.cpp
-    Anticheat/Anticheat.cpp
     AuctionHouse/AuctionHouseMgr.cpp
     Battlegrounds/BattleGround.cpp
     Battlegrounds/BattleGroundAB.cpp
@@ -263,7 +262,8 @@ set (game_SRCS
     AI/ScriptedInstance.h
     AI/ScriptedPetAI.h
     AI/TotemAI.h
-    Anticheat/Anticheat.h
+    Anticheat/libanticheat.hpp
+    Anticheat/Anticheat.hpp
     AuctionHouse/AuctionHouseMgr.h
     Battlegrounds/BattleGround.h
     Battlegrounds/BattleGroundAB.h
@@ -432,18 +432,42 @@ endif()
 
 if(USE_ANTICHEAT)
   list(APPEND game_SRCS
-      Anticheat/MovementAnticheat/MovementAnticheat.cpp
-      Anticheat/MovementAnticheat/MovementAnticheat.h
-      Anticheat/WardenAnticheat/Warden.cpp
-      Anticheat/WardenAnticheat/Warden.h
-      Anticheat/WardenAnticheat/WardenMac.cpp
-      Anticheat/WardenAnticheat/WardenMac.h
-      Anticheat/WardenAnticheat/WardenWin.cpp
-      Anticheat/WardenAnticheat/WardenWin.h
-      Anticheat/WardenAnticheat/WardenMgr.cpp
-      Anticheat/WardenAnticheat/WardenMgr.h
-      Anticheat/WardenAnticheat/WardenKeyGen.h
+      Anticheat/Antispam/Antispam.cpp
+      Anticheat/Antispam/Antispam.hpp
+      Anticheat/Antispam/AntispamMgr.cpp
+      Anticheat/Antispam/AntispamMgr.hpp
+      Anticheat/Movement/Movement.cpp
+      Anticheat/Movement/Movement.hpp
+      Anticheat/Warden/Warden.cpp
+      Anticheat/Warden/Warden.hpp
+      Anticheat/Warden/WardenKeyGeneration.h
+      Anticheat/Warden/WardenMac.cpp
+      Anticheat/Warden/WardenMac.hpp
+      Anticheat/Warden/WardenWin.cpp
+      Anticheat/Warden/WardenWin.hpp
+      Anticheat/Warden/WardenModule.cpp
+      Anticheat/Warden/WardenModule.hpp
+      Anticheat/Warden/WardenModuleMgr.cpp
+      Anticheat/Warden/WardenModuleMgr.hpp
+      Anticheat/Warden/WardenScan.cpp
+      Anticheat/Warden/WardenScan.hpp
+      Anticheat/Warden/WardenScanMgr.cpp
+      Anticheat/Warden/WardenScanMgr.hpp
+      Anticheat/AddonHandler.cpp
+      Anticheat/AntiCheatChatCommands.h
+      Anticheat/AntiCheatChatCommandsFunctions.cpp
+      Anticheat/AntiCheatChatCommandsFunctions.h
+      Anticheat/Config.cpp
+      Anticheat/Config.hpp
+      Anticheat/cyclic.hpp
+      Anticheat/dldist.hpp
+      Anticheat/priority.hpp
+      Anticheat/libanticheat.cpp
   )
+  else()
+    list(APPEND game_SRCS
+        Anticheat/Anticheat.cpp
+    )
 endif()
 
 

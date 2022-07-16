@@ -512,6 +512,14 @@ class ChatHandler
         bool HandleQuitCommand(char* args);
         bool HandleSaveAllCommand(char* args);
 
+#ifdef USE_ANTICHEAT
+        public:
+#include "Anticheat/AnticheatChatCommandsFunctions.h"
+       protected:
+#else
+        bool HandleAnticheatInfoCommand(char* args);
+#endif
+
         // Turtle WoW
         bool HandleItemLogCommand(char* args);
         bool HandleSendMailsCommand(char* args);

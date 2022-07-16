@@ -54,7 +54,8 @@
 #include "ZoneScript.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
-#include "Anticheat.h"
+#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Movement/Movement.hpp"
 #include "CreatureLinkingMgr.h"
 #include "TemporarySummon.h"
 #include "ScriptedEscortAI.h"
@@ -821,7 +822,7 @@ void Creature::Update(uint32 update_diff, uint32 diff)
             if (unreachableTarget)
                 if (GetVictim())
                     if (Player* victimPlayer = GetVictim()->ToPlayer())
-                        if (victimPlayer->GetCheatData() && victimPlayer->GetCheatData()->IsInKnockBack())
+                        if(victimPlayer->GetSession()->GetAntiCheat()->IsInKnockBack())
                             unreachableTarget = false;
             if (unreachableTarget)
             {

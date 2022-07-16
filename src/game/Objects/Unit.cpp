@@ -59,7 +59,8 @@
 #include "MoveSpline.h"
 #include "packet_builder.h"
 #include "Chat.h"
-#include "Anticheat.h"
+#include "Anticheat.hpp"
+#include "Anticheat/Movement/Movement.hpp"
 #include "CreatureLinkingMgr.h"
 #include "MovementPacketSender.h"
 #include "TWDebuff/TWDebuff.hpp"
@@ -6588,7 +6589,7 @@ void Unit::CheckPendingMovementChanges()
         // Not resendable change.
         if (oldestChange.movementChangeType == KNOCK_BACK)
         {
-            pController->GetCheatData()->OnFailedToAckChange();
+            //pController->GetCheatData()->OnFailedToAckChange();
             PopPendingMovementChange();
             return;
         }
@@ -6596,7 +6597,7 @@ void Unit::CheckPendingMovementChanges()
         if (oldestChange.resent)
         {
             // Change was resent but still no reply. Enforce the flags.
-            pController->GetCheatData()->OnFailedToAckChange();
+           // pController->GetCheatData()->OnFailedToAckChange();
             ResolvePendingMovementChange(oldestChange, true);
             PopPendingMovementChange();
         }
@@ -9619,7 +9620,9 @@ void Unit::KnockBack(float angle, float horizontalSpeed, float verticalSpeed)
         SetJumpInitialSpeed(verticalSpeed);
 
         if (Player* pPlayer = ToPlayer())
-            GetPlayerMovingMe()->GetCheatData()->OnKnockBack(pPlayer, horizontalSpeed, verticalSpeed, vcos, vsin);
+        {
+            ToPlayer()->GetSession()->GetAntiCheat()->KnockBack(horizontalSpeed, verticalSpeed, vcos, vsin);
+        }
     }
 }
 
