@@ -457,6 +457,7 @@ class ChatHandler
 
         bool HandleSetTimeCommand(char* args);
 
+        bool HandleGUIDCommand(char* args);
         bool HandleItemMoveCommand(char* args);
         bool HandleDeMorphCommand(char* args);
         bool HandleGroupInfoCommand(char* args);

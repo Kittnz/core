@@ -74,3 +74,6 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+-- Custom skins handling in 1.16.1:
+update item_template set description = '', spellid_1 = 56053, script_name = '' where name like '%Skin Change Token%';
