@@ -421,6 +421,12 @@ typedef std::unordered_map<uint32, NpcText> NpcTextMap;
 typedef std::unordered_map<uint32, VendorItemData> CacheVendorItemMap;
 typedef std::unordered_map<uint32, TrainerSpellData> CacheTrainerSpellMap;
 
+struct CustomCharacterSkinEntry
+{
+    uint32 male_id;
+    uint32 female_id;
+};
+
 enum SkillRangeType
 {
     SKILL_RANGE_LANGUAGE,                                   // 300..300
@@ -636,7 +642,7 @@ class ObjectMgr
         typedef std::unordered_map<uint32, RepSpilloverTemplate> RepSpilloverTemplateMap;
 
         typedef std::unordered_map<uint32, PointOfInterest> PointOfInterestMap;
-
+        typedef std::unordered_map<uint32, CustomCharacterSkinEntry> CustomCharacterSkinMap;
         typedef std::unordered_map<uint32, PetCreateSpellEntry> PetCreateSpellMap;
 
         static Player* GetPlayer(const char* name) { return ObjectAccessor::FindPlayerByName(name);}
@@ -762,6 +768,7 @@ class ObjectMgr
         GraveYardData const* FindGraveYardData(uint32 id, uint32 zone) const;
         void LoadWorldSafeLocsFacing();
         float GetWorldSafeLocFacing(uint32 id) const;
+        CustomCharacterSkinEntry const* GetCustomCharacterSkin(uint32 token_id);
 
         AreaTriggerTeleport const* GetAreaTriggerTeleport(uint32 trigger) const
         {
@@ -776,6 +783,7 @@ class ObjectMgr
 
         void LoadAreaTriggers();
         void LoadCustomGraveyards();
+        void LoadCustomCharacterSkins();
 
         AreaTriggerEntry const* GetAreaTrigger(uint32 id) const
         {
@@ -1525,6 +1533,7 @@ class ObjectMgr
         AreaTriggerTeleportMap      m_AreaTriggerTeleportMap;
         QuestStartingItemMap   m_QuestStartingItemsMap;
         BGEntranceTriggerMap m_BGEntranceTriggersMap;
+        CustomCharacterSkinMap    m_CustomCharacterSkinMap;
 
         RepRewardRateMap    m_RepRewardRateMap;
         RepOnKillMap        m_RepOnKillMap;
