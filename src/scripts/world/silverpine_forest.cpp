@@ -87,7 +87,7 @@ bool GossipSelect_npc_astor_hadren(Player* pPlayer, Creature* pCreature, uint32 
 ## npc_deathstalker_erland
 #####*/
 
-enum
+enum DeathstalkerErlandData
 {
     SAY_START_1         = 481,
     SAY_START_2         = 482,
@@ -106,7 +106,7 @@ enum
     QUEST_ERLAND        = 435,
     NPC_RANE            = 1950,
     NPC_QUINN           = 1951,
-    FACTION_ESCORTEE    = 232,
+    FACTION_ESCORTEE    = 232
 };
 
 struct npc_deathstalker_erlandAI : public npc_escortAI
