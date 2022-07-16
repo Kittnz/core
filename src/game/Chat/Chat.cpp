@@ -570,6 +570,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "replenish",      SEC_DEVELOPER,       false, &ChatHandler::HandleReplenishCommand,           "", nullptr },
         { "dismount",       SEC_DEVELOPER,       false, &ChatHandler::HandleDismountCommand,            "", nullptr },
         { "gps",            SEC_OBSERVER,        false, &ChatHandler::HandleGPSCommand,                 "", nullptr },
+        { "guid",           SEC_MODERATOR,       false, &ChatHandler::HandleGUIDCommand,                "", nullptr },
         { "help",           SEC_OBSERVER,        true,  &ChatHandler::HandleHelpCommand,                "", nullptr },
         { "itemmove",       SEC_DEVELOPER,       false, &ChatHandler::HandleItemMoveCommand,            "", nullptr },
         { "cooldown",       SEC_DEVELOPER,       false, &ChatHandler::HandleCooldownCommand,            "", nullptr },
