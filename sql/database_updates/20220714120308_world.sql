@@ -154,3 +154,6 @@ REPLACE INTO npc_vendor VALUES
 (6376, 83577, 0, 0, 0, 0),
 (6382, 83577, 0, 0, 0, 0),
 (12776, 83577, 0, 0, 0, 0);
+-- items fix.
+update item_template set spelltrigger_2 = 1 where entry = 19826;
+update item_template set spelltrigger_2 = 1 where entry = 19827;
