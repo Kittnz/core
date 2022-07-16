@@ -6263,6 +6263,189 @@ bool ChatHandler::HandleModifyGenderCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleModifyStrengthCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    if (amount < 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pTarget->SetModifierValue(UNIT_MOD_STAT_STRENGTH, BASE_VALUE, (float)amount);
+    pTarget->UpdateAllStats();
+
+    PSendSysMessage(LANG_YOU_CHANGE_STR, pTarget->GetName(), amount);
+
+    if (needReportToTarget(pTarget->ToPlayer()))
+        ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_STR_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyAgilityCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    if (amount < 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pTarget->SetModifierValue(UNIT_MOD_STAT_AGILITY, BASE_VALUE, (float)amount);
+    pTarget->UpdateAllStats();
+
+    PSendSysMessage(LANG_YOU_CHANGE_AGI, pTarget->GetName(), amount);
+
+    if (needReportToTarget(pTarget->ToPlayer()))
+        ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_AGI_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyStaminaCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    if (amount < 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pTarget->SetModifierValue(UNIT_MOD_STAT_STAMINA, BASE_VALUE, (float)amount);
+    pTarget->UpdateAllStats();
+
+    if (pTarget->IsAlive())
+        pTarget->SetHealth(pTarget->GetMaxHealth());
+
+    PSendSysMessage(LANG_YOU_CHANGE_STA, pTarget->GetName(), amount);
+
+    if (needReportToTarget(pTarget->ToPlayer()))
+        ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_STA_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyIntellectCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    if (amount < 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pTarget->SetModifierValue(UNIT_MOD_STAT_INTELLECT, BASE_VALUE, (float)amount);
+    pTarget->UpdateAllStats();
+
+    PSendSysMessage(LANG_YOU_CHANGE_INT, pTarget->GetName(), amount);
+
+    if (needReportToTarget(pTarget->ToPlayer()))
+        ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_INT_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
+bool ChatHandler::HandleModifySpiritCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        PSendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int32 amount;
+    if (!ExtractInt32(&args, amount))
+        return false;
+
+    if (amount < 0)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pTarget->SetModifierValue(UNIT_MOD_STAT_SPIRIT, BASE_VALUE, (float)amount);
+    pTarget->UpdateAllStats();
+
+    PSendSysMessage(LANG_YOU_CHANGE_SPI, pTarget->GetName(), amount);
+
+    if (needReportToTarget(pTarget->ToPlayer()))
+        ChatHandler(pTarget->ToPlayer()).PSendSysMessage(LANG_YOURS_SPI_CHANGED, GetNameLink().c_str(), amount);
+
+    return true;
+}
+
 bool ChatHandler::HandleModifyMeleeApCommand(char* args)
 {
     if (!*args)

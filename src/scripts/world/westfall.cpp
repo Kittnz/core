@@ -20,16 +20,20 @@
 ## npc_daphne_stilwell
 ######*/
 
-constexpr int32 SAY_DS_START = -1000293;
-constexpr int32 SAY_DS_DOWN_1 = -1000294;
-constexpr int32 SAY_DS_DOWN_2 = -1000295;
-constexpr int32 SAY_DS_DOWN_3 = -1000296;
-constexpr int32 SAY_DS_PROLOGUE = -1000297;
-constexpr uint32 SPELL_SHOOT = 6660;
-constexpr uint32 QUEST_TOME_VALOR = 1651;
-constexpr uint32 NPC_DEFIAS_RAIDER = 6180;
-constexpr uint32 EQUIP_ID_RIFLE = 2511;
-constexpr uint32 DAPHNE_SHOOT_CD = 2000;
+enum DaphneStilwellData
+{
+    SAY_DS_START        = 2360,
+    SAY_DS_DOWN_1       = 5269,
+    SAY_DS_DOWN_2       = 2369,
+    SAY_DS_DOWN_3       = 2358,
+    SAY_DS_PROLOGUE     = 3090,
+
+    SPELL_SHOOT         = 6660,
+    QUEST_TOME_VALOR    = 1651,
+    NPC_DEFIAS_RAIDER   = 6180,
+    EQUIP_ID_RIFLE      = 2511,
+    DAPHNE_SHOOT_CD     = 2000
+};
 
 enum Wave
 {
@@ -379,12 +383,16 @@ CreatureAI* GetAI_npc_daphne_stilwell(Creature* pCreature)
 ## npc_defias_traitor
 ######*/
 
-constexpr int32 SAY_START = -1000101;
-constexpr int32 SAY_PROGRESS = -1000102;
-constexpr int32 SAY_END = -1000103;
-constexpr int32 SAY_AGGRO_1 = -1000104;
-constexpr int32 SAY_AGGRO_2 = -1000105;
-constexpr uint8 QUEST_DEFIAS_BROTHERHOOD = 155;
+enum DefiasTraitorData
+{
+    SAY_START                   = 9,
+    SAY_PROGRESS                = 10,
+    SAY_END                     = 11,
+    SAY_AGGRO_1                 = 489,
+    SAY_AGGRO_2                 = 485,
+
+    QUEST_DEFIAS_BROTHERHOOD    = 155
+};
 
 struct npc_defias_traitorAI : public npc_escortAI
 {
