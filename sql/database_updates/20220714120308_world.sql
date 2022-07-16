@@ -121,3 +121,15 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
  '0', '1', NULL);
+
+REPLACE INTO gameobject_template VALUES
+(2010910, 5, 24364, 'PUNISHMENT FOR THOSE THAT DO NOT WORK HARD', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010911, 5, 24364, 'NO ENTRY UNLESS GRANTED BY HIGH FOREMAN', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010912, 5, 24364, 'JUSTICE DEMANDS SACRIFICE', 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010913, 9, 25430, 'RULES AND REGULATIONS BOARD', 0, 0, 1, 50546, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO page_text VALUES
+(50546, 'RULES FOR THE WORKER\n\nWork hard under the watchful gaze of the Overseer\'s, failure to do the work will result in enslavement.\n\nA full day of work is only complete upon Bargul Blackhammer\'s word.\n\nTaskmasters are here to increase production, do NOT question them.\n\n', 50547),
+(50547, 'ANY INJURY NEEDS TO BE REPORTED TO A CLERIC.\n\nSpeak with crew chief\'s for daily instructions.\n\nNO LETTERS OF ANY KIND WHILE WORK IS IN PROGRESS.\n\nOrders from Shadowforge must be adhered to -ALWAYS-\n\n', 50548),
+(50548, 'THE FIRELORD WATCHES OVER US ALL, THERE CAN BE NO FAILURES HERE.', 0);
+
