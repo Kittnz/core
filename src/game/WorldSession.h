@@ -34,6 +34,7 @@
 #include "MapNodes/AbstractPlayer.h"
 #include "WhisperTargetLimits.h"
 
+
 #include <optional>
 
 struct ItemPrototype;
@@ -54,7 +55,12 @@ class CharacterHandler;
 class MovementInfo;
 class WorldSession;
 class Warden;
-class MovementAnticheat;
+namespace Anticheat
+{
+    class Movement;
+}
+class SessionAnticheatInterface;
+
 class BigNumber;
 class BehaviorAnalyzer;
 class MasterPlayer;
@@ -204,7 +210,13 @@ enum PacketDumpType
 enum AccountFlags
 {
     ACCOUNT_FLAG_MUTED_FROM_PUBLIC_CHANNELS     = 0x1,
-    ACCOUNT_FLAG_MUTED_PAUSING                  = 0x2
+    ACCOUNT_FLAG_MUTED_PAUSING                  = 0x2,
+    ACCOUNT_FLAG_SILENCED = 0x4,
+    ACCOUNT_FLAG_SHOW_ANTICHEAT = 0x8,
+    ACCOUNT_FLAG_SHOW_ANTISPAM = 0x10,
+    ACCOUNT_FLAG_HIDDEN = 0x20,
+    ACCOUNT_FLAG_SHOW_SUSPICIOUS = 0x40,
+    ACCOUNT_FLAG_ALWAYS_DESERTER_ON_LEAVE = 0x80
 };
 
 //class to deal with packet processing
@@ -481,8 +493,13 @@ class WorldSession
         uint32 m_disconnectTimer;
 
         // Warden / Anticheat
-        void InitWarden(BigNumber* K);
-        Warden* GetWarden() const { return m_warden; }
+        //void InitWarden(BigNumber* K);
+        //Warden* GetWarden() const { return m_warden; }
+
+        std::unique_ptr<SessionAnticheatInterface> m_antiCheat;
+        SessionAnticheatInterface* GetAntiCheat() const { return m_antiCheat.get(); }
+
+        void InitAntiCheatSession(BigNumber * K);
 
         bool AllowPacket(uint16 opcode);
         void ProcessAnticheatAction(const char* detector, const char* reason, uint32 action, uint32 banTime = 0 /* Perm ban */);
@@ -492,8 +509,8 @@ class WorldSession
         void ComputeClientHash();
         bool IsClientHashComputed() const { return _clientHashComputeStep != HASH_NOT_COMPUTED; }
 
-        void InitCheatData(Player* pPlayer);
-        MovementAnticheat* GetCheatData();
+        //void InitCheatData(Player* pPlayer);
+        //Anticheat::Movement* GetCheatData();
 
         void AddScript(std::string name, WorldSessionScript* script)
         {
@@ -536,6 +553,8 @@ class WorldSession
         uint32      _accountFlags;
 
         uint32 m_idleTime;
+
+        uint32 m_lastUpdateTime;
 
     public:                                                 // opcodes handlers
 
@@ -913,8 +932,7 @@ class WorldSession
         LockedQueue<WorldPacket*, std::mutex> _recvQueue[PACKET_PROCESS_MAX_TYPE];
         bool _receivedPacketType[PACKET_PROCESS_MAX_TYPE];
 
-        Warden* m_warden;
-        MovementAnticheat* m_cheatData;
+        Anticheat::Movement* m_cheatData;
         std::string m_username;
         uint32 _floodPacketsCount[FLOOD_MAX_OPCODES_TYPE];
         PlayerBotEntry* m_bot;

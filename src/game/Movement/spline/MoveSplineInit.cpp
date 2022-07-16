@@ -25,6 +25,8 @@
 #include "Anticheat.h"
 #include "WorldPacket.h"
 
+#include "Anticheat/Movement/Movement.hpp"
+
 namespace Movement
 {
 UnitMoveType SelectSpeedType(uint32 moveFlags)
@@ -122,8 +124,8 @@ int32 MoveSplineInit::Launch()
 
     args.splineId = splineCounter++;
 
-    if (Player* pPlayer = unit.ToPlayer())
-        pPlayer->GetCheatData()->ResetJumpCounters();
+    /*if (Player* pPlayer = unit.ToPlayer())
+        pPlayer->GetCheatData()->ResetJumpCounters();*/
 
     unit.m_movementInfo.SetMovementFlags((MovementFlags)moveFlags);
     move_spline.SetMovementOrigin(movementType);

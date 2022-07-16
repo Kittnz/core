@@ -32,7 +32,7 @@
 #include "Mail.h"
 #include "Util.h"
 #include "Chat.h"
-#include "Anticheat.h"
+#include "Anticheat.hpp"
 
 extern bool IsPlayerHardcore(uint32 lowGuid);
 // please DO NOT use iterator++, because it is slower than ++iterator!!!
@@ -293,12 +293,12 @@ void WorldSession::HandleAuctionSellItem(WorldPacket & recv_data)
     // Client limit
     if (bid > 2000000000 || buyout > 2000000000)
     {
-        ProcessAnticheatAction("GoldDupe", "Putting too high auction price", CHEAT_ACTION_LOG);
+        ProcessAnticheatAction("GoldDupe", "Putting too high auction price", CHEAT_ACTION_INFO_LOG);
         return;
     }
     if (buyout && bid > buyout)
     {
-        ProcessAnticheatAction("GoldDupe", "bid > buyout", CHEAT_ACTION_LOG);
+        ProcessAnticheatAction("GoldDupe", "bid > buyout", CHEAT_ACTION_INFO_LOG);
         return;
     }
 

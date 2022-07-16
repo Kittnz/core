@@ -82,6 +82,7 @@
 #include <iomanip>
 #include <sstream>
 #include <ctime>
+#include "Anticheat/Anticheat.hpp"
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
@@ -6582,6 +6583,16 @@ bool ChatHandler::HandleSaveAllCommand(char* /*args*/)
     return true;
 }
 
+#ifndef USE_ANTICHEAT
+
+bool ChatHandler::HandleAnticheatInfoCommand(char* args)
+{
+    SendSysMessage("Anticheat is not built with server!");
+    return true;
+}
+
+#endif
+
 //Send mail by command
 bool ChatHandler::HandleSendMailCommand(char* args)
 {
@@ -11931,8 +11942,8 @@ bool ChatHandler::HandleAnticheatCommand(char* args)
         return false;
 
     PSendSysMessage("Cheat report on player '%s' (GUID %u)", player->GetName(), player->GetGUIDLow());
-    if (player->GetCheatData())
-        player->GetCheatData()->HandleCommand(this);
+    /*if (player->GetCheatData())
+        player->GetCheatData()->HandleCommand(this);*/
 
     return true;
 }

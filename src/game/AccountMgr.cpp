@@ -410,6 +410,18 @@ void AccountMgr::AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_
     it->second[instanceId] = enterTime;
 }
 
+uint32 AccountMgr::GetFlags(uint32 accountId)
+{
+    QueryResult* result = LoginDatabase.PQuery("SELECT flags FROM account WHERE id='%u'", accountId);
+    if (result)
+    {
+        uint32 val = result->Fetch()[0].GetUInt32();
+        delete result;
+        return val;
+    }
+    return 0;
+}
+
 bool AccountMgr::IsPlayerAccount(uint32 gmlevel)
 {
     return gmlevel == SEC_PLAYER;
@@ -451,7 +463,8 @@ uint32 AccountPersistentData::CountWhispersTo(MasterPlayer* from, MasterPlayer* 
 
 bool AccountPersistentData::CanWhisper(MasterPlayer* player) const
 {
-    return sAnticheatMgr->CanWhisper(*this, player);
+    return true;
+   // return sAnticheatLib->CanWhisper(*this, player);
 }
 
 uint32 AccountPersistentData::GetWhisperScore(MasterPlayer* from, MasterPlayer* target) const

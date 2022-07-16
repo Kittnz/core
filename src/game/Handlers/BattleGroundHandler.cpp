@@ -118,13 +118,13 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
 
     if (bgTypeId == BATTLEGROUND_TYPE_NONE)
     {
-        ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for invalid BG type", CHEAT_ACTION_LOG);
+        //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for invalid BG type", CHEAT_ACTION_INFO_LOG);
         return;
     }
 
     if (bgTypeId == BATTLEGROUND_AV && joinAsGroup)
     {
-        ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for AV as group", CHEAT_ACTION_LOG);
+        //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for AV as group", CHEAT_ACTION_INFO_LOG);
         return;
     }
 
@@ -135,7 +135,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
             auto const& bgQueuePos = _player->GetBattleGroundEntryPoint();
             if (_player->GetMapId() != bgQueuePos.mapId || !_player->IsWithinDist3d(bgQueuePos, 50.0f))
             {
-                ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through out of range portal", CHEAT_ACTION_LOG);
+                //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through out of range portal", CHEAT_ACTION_INFO_LOG);
                 return;
             }
         }
@@ -143,7 +143,7 @@ void WorldSession::HandleBattlemasterJoinOpcode(WorldPacket & recv_data)
         {
             if (!_player->GetNPCIfCanInteractWith(guid, UNIT_NPC_FLAG_BATTLEMASTER) && !_player->IsAllowedToQueueBGDueToTabard())
             {
-                ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through invalid creature", CHEAT_ACTION_LOG);
+                //ProcessAnticheatAction("PassiveAnticheat", "Attempt to queue for BG through invalid creature", CHEAT_ACTION_INFO_LOG);
                 return;
             }
         }

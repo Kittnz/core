@@ -27,7 +27,7 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "UpdateMask.h"
-#include "Anticheat.h"
+#include "Anticheat.hpp"
 
 void WorldSession::HandleLearnTalentOpcode(WorldPacket & recv_data)
 {
@@ -76,7 +76,7 @@ void WorldSession::HandleUnlearnSkillOpcode(WorldPacket & recv_data)
     {
         std::stringstream reason;
         reason << "Attempt to unlearn not unlearnable skill #" << skill_id;
-        ProcessAnticheatAction("PassiveAnticheat", reason.str().c_str(), CHEAT_ACTION_LOG);
+        ProcessAnticheatAction("PassiveAnticheat", reason.str().c_str(), CHEAT_ACTION_INFO_LOG);
         return;
     }
     

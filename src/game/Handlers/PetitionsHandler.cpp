@@ -107,13 +107,10 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     }
 
     // Check guild petition name (use whisper type - 6)
-    if (AntispamInterface *a = sAnticheatMgr->GetAntispam())
+    if (sAnticheatLib->ValidateGuildName(name))
     {
-        if (a->filterMessage(name))
-        {
-            SendGuildCommandResult(GUILD_CREATE_S, name, ERR_GUILD_NAME_INVALID);
-            return;
-        }
+        SendGuildCommandResult(GUILD_CREATE_S, name, ERR_GUILD_NAME_INVALID);
+        return;
     }
 
     ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(charterid);

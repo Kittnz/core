@@ -935,7 +935,11 @@ struct RacialSpells
     uint32 spells[MAX_RACIAL_SPELLS] = { 0 };
 };
 
-class MovementAnticheat;
+namespace Anticheat
+{
+    class Movement;
+}
+
 
 struct AuraSaveStruct
 {
@@ -2606,8 +2610,6 @@ public:
     public:
         bool CanSpeak() const;
         bool FallGround(uint8 fallMode);
-
-        MovementAnticheat* GetCheatData() const { return m_session->GetCheatData(); }
         void OnDisconnected();
         void RelocateToLastClientPosition();
         void GetSafePosition(float &x, float &y, float &z, Transport* onTransport = nullptr) const override;
