@@ -157,3 +157,7 @@ REPLACE INTO npc_vendor VALUES
 -- items fix.
 update item_template set spelltrigger_2 = 1 where entry = 19826;
 update item_template set spelltrigger_2 = 1 where entry = 19827;
+-- add weapon 60546 to npc Har'gesh Doomcaller.
+set @equip_template = 20147; set @weapon_1 = 60546; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60737;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
