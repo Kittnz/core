@@ -96,3 +96,28 @@ REPLACE INTO creature_ai_events VALUES
 -- Scrapforged Items for Scrap Forager.
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (60700, 'Scrapforged Helmet', '', 4, 4, 6, 2, 27338, 1, 0, 0, -1, -1, 49312, 12328, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 70, 456, 0, 0, 59, 0, 7, 0, 5, 0, 0, 0, 0, 4, 12, 7, 12, 0, 0, 0);
 replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, random_property, required_reputation_faction, required_reputation_rank) values (60701, 'Scrapforged Greataxe', '', 2, 1, 1, 2, 28349, 1, 0, 0, -1, -1, 207512, 51878, 17, 1, 0, 0, 1, 1, 0, 114, 179, 3200, 0, 0, 85, 0, 0, 0, 59, 0, 7, 0, 5, 0, 0, 0, 0, 4, 20, 7, 10, 0, 0, 0);
+
+-- Polymorph Enslavement!
+delete from quest_template where entry = 40513;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40513,2,215,11,5,512,0,'Polymorph Enslavement!','Baaaaa! You must help me!\n\nThe wizard in the house turned me into this form while I was out travelling.\n\nBaaaaa! Baaa!\n\nYou got to do something, he\'s residing just inside the farmhouse, kill him, and bring his Azureborn Ring to me so I can be released from this torture!\n\nBaaaaaa!\n\n<The sheep looks at you with pleading eyes.>','Gather the Azureborn Ring from Kalman Azureborn in Durotar for Lashog.','Hurry, I cannot stand another second of this! Baaaa!','Hurry, smash the ring, it contains the magic that has kept me enslaved!',60744,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,800,76,100,0,0,0,0,0,0,0,0,0,60745,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest) values (60846, 40513);
+replace into creature_involvedrelation (id, quest) values (60846, 40513);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60744,9837,'Azureborn Ring',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set loot_id = 60845 where entry = 60845;
+update creature_template set script_name = 'npc_lashog' where entry = 60846;
+replace into creature_loot_template values
+(60845,60744,-100,1,1,1,0);
+
+replace into item_template values
+ ('60745', '4', '0', 'Smashed Azureborn Ring', '', '9837', '2', '0', '1', '412', '103', '11', '-1', '-1', '12',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '1', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
