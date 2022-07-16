@@ -132,4 +132,25 @@ REPLACE INTO page_text VALUES
 (50546, 'RULES FOR THE WORKER\n\nWork hard under the watchful gaze of the Overseer\'s, failure to do the work will result in enslavement.\n\nA full day of work is only complete upon Bargul Blackhammer\'s word.\n\nTaskmasters are here to increase production, do NOT question them.\n\n', 50547),
 (50547, 'ANY INJURY NEEDS TO BE REPORTED TO A CLERIC.\n\nSpeak with crew chief\'s for daily instructions.\n\nNO LETTERS OF ANY KIND WHILE WORK IS IN PROGRESS.\n\nOrders from Shadowforge must be adhered to -ALWAYS-\n\n', 50548),
 (50548, 'THE FIRELORD WATCHES OVER US ALL, THERE CAN BE NO FAILURES HERE.', 0);
-
+-- Spellbook Drops. Loot table for items 83571, 83572, 83573, 83574, 83575, 83576:
+replace into creature_loot_template values
+(91928,83571,20,1,1,1,0),
+(60735,83576,10,1,1,1,0),
+(12459,83572,3,1,1,1,0),
+(65122,83573,35,1,1,1,0),
+(11492,83574,10,1,1,1,0),
+(11032,83575,10,1,1,1,0);
+-- vwndors who selling item 83577:
+REPLACE INTO npc_vendor VALUES
+(5520, 83577, 0, 0, 0, 0),
+(5749, 83577, 0, 0, 0, 0),
+(5750, 83577, 0, 0, 0, 0),
+(5753, 83577, 0, 0, 0, 0),
+(5815, 83577, 0, 0, 0, 0),
+(6027, 83577, 0, 0, 0, 0),
+(6328, 83577, 0, 0, 0, 0),
+(6373, 83577, 0, 0, 0, 0),
+(6374, 83577, 0, 0, 0, 0),
+(6376, 83577, 0, 0, 0, 0),
+(6382, 83577, 0, 0, 0, 0),
+(12776, 83577, 0, 0, 0, 0);
