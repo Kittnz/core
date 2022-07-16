@@ -140,6 +140,8 @@ replace into creature_loot_template values
 (65122,83573,35,1,1,1,0),
 (11492,83574,10,1,1,1,0),
 (11032,83575,10,1,1,1,0);
+REPLACE INTO gameobject_loot_template VALUES
+(2010867,83570,20,1,1,1,0);
 -- vwndors who selling item 83577:
 REPLACE INTO npc_vendor VALUES
 (5520, 83577, 0, 0, 0, 0),
