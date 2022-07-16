@@ -38,15 +38,15 @@ void DoAfterTime(Creature* creature, const uint32 p_time, Functor&& function)
 ## npc_rinji
 ######*/
 
-enum
+enum RinjiData
 {
-    SAY_RIN_FREE            = -1000403,
-    SAY_RIN_BY_OUTRUNNER    = -1000404,
-    SAY_RIN_HELP_1          = -1000405,
-    SAY_RIN_HELP_2          = -1000406,
-    SAY_RIN_COMPLETE        = -1000407,
-    SAY_RIN_PROGRESS_1      = -1000408,
-    SAY_RIN_PROGRESS_2      = -1000409,
+    SAY_RIN_FREE            = 3787,
+    SAY_RIN_BY_OUTRUNNER    = 3827,
+    SAY_RIN_HELP_1          = 3862,
+    SAY_RIN_HELP_2          = 3861,
+    SAY_RIN_COMPLETE        = 3790,
+    SAY_RIN_PROGRESS_1      = 3817,
+    SAY_RIN_PROGRESS_2      = 3818,
 
     QUEST_RINJI_TRAPPED     = 2742,
     NPC_RANGER              = 2694,
@@ -231,7 +231,14 @@ CreatureAI* GetAI_npc_rinji(Creature* pCreature)
     return new npc_rinjiAI(pCreature);
 }
 
-// Lard Lost His Lunch:
+/*######
+## go_lards_picnic_basket
+######*/
+
+enum LardsPicnicBasketData
+{
+    NPC_KIDNAPPEUR_VILEBRANCH = 14748
+};
 
 bool GOHello_go_lards_picnic_basket(Player* pPlayer, GameObject* pGo)
 {
@@ -245,9 +252,9 @@ bool GOHello_go_lards_picnic_basket(Player* pPlayer, GameObject* pGo)
             gAI->SetData(1, 1);
         }
 
-        pGo->SummonCreature(14748, 408.75F, -4823.33F, 10.92F, 4.70F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
-        pGo->SummonCreature(14748, 409.01F, -4830.60F, 10.58F, 1.55F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
-        pGo->SummonCreature(14748, 413.80F, -4826.17F, 11.111F, 3.3F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+        pGo->SummonCreature(NPC_KIDNAPPEUR_VILEBRANCH, 408.75F, -4823.33F, 10.92F, 4.70F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+        pGo->SummonCreature(NPC_KIDNAPPEUR_VILEBRANCH, 409.01F, -4830.60F, 10.58F, 1.55F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
+        pGo->SummonCreature(NPC_KIDNAPPEUR_VILEBRANCH, 413.80F, -4826.17F, 11.111F, 3.3F, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 15 * IN_MILLISECONDS);
     }
     return true;
 }
@@ -696,6 +703,7 @@ struct go_corrupted_crystal : public GameObjectAI
         else
             m_uiDialogueTimer -= uiDiff;
     }
+
     bool CheckCanStartEvent()
     {
         return state;
