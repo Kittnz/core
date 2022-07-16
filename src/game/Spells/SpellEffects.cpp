@@ -1934,6 +1934,36 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 56053: // Skin Change Tokens:
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        uint32 item_entry = m_CastItem->GetEntry();
+                        bool is_male = m_caster->ToPlayer()->GetGender() == GENDER_MALE;
+
+                        int8 bytes = -1;
+
+                        CustomCharacterSkinEntry const* custom_skin = sObjectMgr.GetCustomCharacterSkin(item_entry);
+
+                        if (custom_skin)
+                        {
+                            if (is_male) bytes = custom_skin->male_id; else bytes = custom_skin->female_id;
+
+                            if (bytes > 0)
+                            {
+                                m_caster->ToPlayer()->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
+                                m_caster->ToPlayer()->SetDisplayId(15435);
+                                m_caster->ToPlayer()->m_Events.AddLambdaEventAtOffset([player = m_caster->ToPlayer()]() {player->DeMorph(); }, 250);
+                                return;
+                            }
+                            else
+                            {
+                                ChatHandler(m_caster->ToPlayer()).SendSysMessage("This skin is not supported by your character's gender.");
+                                return;
+                            }
+                        }
+                    }
+                }
                 case 46003: // Illusions
                 {
                     if (m_caster && m_caster->IsPlayer())

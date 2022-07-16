@@ -230,86 +230,25 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
 {
     uint32 item_entry = pItem->GetEntry();
+    bool is_male = pPlayer->GetGender() == GENDER_MALE;
+
     int8 bytes = -1;
 
-    bool male = pPlayer->GetGender() == GENDER_MALE;
-
-    switch (pPlayer->GetRace()) 
+    CustomCharacterSkinEntry const* custom_skin = sObjectMgr.GetCustomCharacterSkin(item_entry);
+   
+    if (custom_skin)
     {
-        case RACE_HUMAN:
-            switch (item_entry)
-            {
-            case 50105: if (!male) bytes = 10; break;                                // Human: Scarlet Inquisitor
-            case 50106: bytes = 11; break;                                           // Human: Scholomance Student F&M
-            case 81210: if (male) bytes = 12; else bytes = 13; break;                // Human: Death Knight
-            case 83091: if (male) bytes = static_cast<uint8>(irand(13, 15)); break;  // Human: Necrotic Corruption
-            case 83090: if (male) bytes = 16; else bytes = static_cast<uint8>(irand(12, 14)); break;  // Human: Wizardly Attire
-            }
-            break;
-        case RACE_DWARF:
-            switch (item_entry)
-            {
-            case 50204: if (male) bytes = static_cast<uint8>(irand(9, 12)); else bytes = 9; break;  // Dwarf: Wildhammer Clan
-            case 50205: if (male) bytes = 13; else bytes = 14; break;                               // Dwarf: Dark Iron
-            case 50206: if (male) bytes = static_cast<uint8>(irand(16, 17)); break;                 // Dwarf: Earthen 
-            case 81229: if (male) bytes = 23; break;                                                // Dwarf: Death Knight
-            }
-            break;
-        case RACE_ORC:
-            switch (item_entry)
-            {
-            case 50207: if (male) bytes = static_cast<uint8>(irand(0, 1) == 0 ? 9 : 11); else bytes = 9; break; // Orc: Blackrock Clan
-            case 50208: bytes = 10; break;                                                                      // Orc: Chaos F&M
-            case 50209: if (male) bytes = 12; break;                                                            // Orc: Mag'Har
-            case 81255: if (male)bytes = static_cast<uint8>(irand(0, 1) == 0 ? 14 : 16); break;                 // Orc: Dreadskull Clan I & II
-            }
-            break;
-        case RACE_TROLL:
-            switch (item_entry)
-            {
-            case 50210: if (male) bytes = 19; else bytes = static_cast<uint8>(irand(0, 1) == 0 ? 14 : 15);  break;                                               // Troll: Forest
-            case 50211: if (male) bytes = 16; break;                                                                 // Troll: Sandfury Clan 
-            case 51010: bytes = 12; break;                                                                           // Troll: Dark F&M
-            case 51011: if (male) bytes = 13; else bytes = 7;  break;                                                // Troll: Ice
-            case 81208: bytes = 20; break;                                                                           // Troll: Zombie F&M
-            }
-            break;
-        case RACE_GNOME:
-            switch (item_entry)
-            {
-            case 81230: if (male) bytes = 6; else bytes = 5; break; // Gnome: Scholomanc Student
-            case 50212: if (male) bytes = 5; else bytes = 7; break; // Gnome: Leper
-            }
-            break;
-        case RACE_HIGH_ELF:
-            switch (item_entry)
-            {
-            case 81206: bytes = 16; break; // High Elf: Dark Ranger
-            case 81209: if (male) bytes = 17; else bytes = 15; break; // High Elf: Blood Elf
-            }
-            break;
-        case RACE_TAUREN:
-            switch (item_entry)
-            {
-            case 81228: if (male) bytes = 19; else bytes = 11; break; // Tauren: Spirit Walker
-            }
-            break;
-        case RACE_NIGHTELF:
-            switch (item_entry)
-            {
-            case 83092: if (male) bytes = static_cast<uint8>(irand(13, 15)); else bytes = static_cast<uint8>(irand(9, 10)); break; // Night Elf: Cenraion Cirle
-            }
-            break;
+        if (is_male) bytes = custom_skin->male_id; else bytes = custom_skin->female_id;
+
+        if (bytes > 0)
+        {
+            pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
+            pPlayer->SetDisplayId(15435);
+            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
+        }
+        else
+            ChatHandler(pPlayer).SendSysMessage("This skin is not supported by your character's gender.");
     }
-
-    if (bytes > -1) 
-    {
-        pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
-        pPlayer->SetDisplayId(15435); 
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-    } 
-    else 
-        ChatHandler(pPlayer).SendSysMessage("You can't use this item.");    
     return false;
 }
 
