@@ -72,7 +72,7 @@ void ReactorAI::AttackStart(Unit *p)
 
 void ReactorAI::UpdateAI(const uint32 uiDiff)
 {
-    if (!m_creature->SelectHostileTarget() || !m_creature->IsTargetable(true, false))
+    if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         return;
 
     if (!m_CreatureSpells.empty())
