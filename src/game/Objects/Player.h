@@ -479,7 +479,7 @@ struct SkillStatusData
 typedef std::unordered_map<uint32, SkillStatusData> SkillStatusMap;
 
 constexpr uint32 GNOMECAR_DISPLAYID = 2490;
-constexpr uint32 GOBLINCAR_DISPLAYID = 10318;
+constexpr uint32 GOBLINCAR_DISPLAYID = 18320;
 
 enum PlayerSlots
 {

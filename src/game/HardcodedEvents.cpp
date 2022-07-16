@@ -2034,8 +2034,6 @@ void RacePlayer::GoRaceMode()
 			ang = (ang >= 0) ? ang : 2 * M_PI_F + ang;
 			pl->SetOrientation(ang);
 
-			pl->SetDisplayId(INVISIBLE_MODELID);
-
 			auto SpawnControllerForTeamLambda = [this, pl](uint32 ControllerEntryId)
 			{
 				if (Creature* CarController = pl->SummonCreature(ControllerEntryId, pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(), pl->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 30 * MINUTE * IN_MILLISECONDS))
@@ -2060,9 +2058,10 @@ void RacePlayer::GoRaceMode()
 			{
 			case MiracleRaceSide::Gnome:
 			{
-				pl->Mount(GNOMECAR_DISPLAYID);
-				SpawnControllerForTeamLambda(50529);
-				break;
+                pl->Mount(GNOMECAR_DISPLAYID);
+                SpawnControllerForTeamLambda(50529);
+                pl->SetDisplayId(INVISIBLE_MODELID);
+                break;
 			}
 			case MiracleRaceSide::Goblin:
 				pl->Mount(GOBLINCAR_DISPLAYID);
