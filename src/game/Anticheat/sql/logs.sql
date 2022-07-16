@@ -29,6 +29,5 @@ CREATE TABLE `logs_spamdetect` (
   `fromIP` varchar(16) NOT NULL,
   `fromFingerprint` int(10) unsigned NOT NULL,
   `comment` varchar(8192) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `guid` (`fromGuid`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
