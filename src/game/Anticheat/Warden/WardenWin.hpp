@@ -18,6 +18,57 @@ struct ChallengeResponseEntry;
 class WorldSession;
 class BigNumber;
 
+
+enum class SharedDataField
+{
+    TimeZoneBias,
+    LargePageMinimum,
+    SuiteMask,
+    MitigationPolicies,
+    NumberOfPhysicalPages,
+    SharedDataFlags,
+    TestRetInstruction,
+    QpcFrequency,
+    QpcSystemTimeIncrement,
+    UnparkedProcessorCount,
+    EnclaveFeatureMask,
+    QpcData
+};
+
+typedef struct _KSYSTEM_TIME
+{
+    ULONG LowPart;
+    LONG High1Time;
+    LONG High2Time;
+} KSYSTEM_TIME, * PKSYSTEM_TIME;
+
+struct SharedDataCompact
+{
+    KSYSTEM_TIME TimeZoneBias;
+    ULONG LargePageMinimum;
+    ULONG SuiteMask;
+    UCHAR MitigationPolicies;
+    ULONG NumberOfPhysicalPages;
+    ULONG SharedDataFlags;
+    ULONGLONG TestResInstruction;
+    LONGLONG QpcFrequency;
+    ULONGLONG QpcSystemTimeIncrement;
+    ULONG UnparkedProcessorCount;
+    ULONG EnclaveFeatureMask;
+    USHORT QpcData;
+};
+
+enum class OsVersion
+{
+    None = 0,
+    WindowsXP,
+    WindowsVista,
+    Windows7,
+    Windows8,
+    Windows10AndUp
+};
+
+
 #pragma pack (push, 1)
 struct WIN_SYSTEM_INFO {
     union {
@@ -41,6 +92,8 @@ struct WIN_SYSTEM_INFO {
 
 static_assert(sizeof(WIN_SYSTEM_INFO) == 0x24, "WIN_SYSTEM_INFO wrong size");
 
+constexpr uint32 MaxReadSize = 0x03C6 + sizeof(USHORT);
+
 class WardenWin final : public Warden
 {
     private:
@@ -52,6 +105,13 @@ class WardenWin final : public Warden
 
         bool _sysInfoSaved;
         bool _proxifierFound;
+
+        ULONG _majorVersion = 0;
+        ULONG _minorVersion = 0;
+        OsVersion _osVersion = OsVersion::None;
+        uint32 _readsizeLeft = MaxReadSize;
+
+        std::unique_ptr<SharedDataCompact> _sharedData;
 
         std::string _hypervisors;
 
@@ -70,6 +130,17 @@ class WardenWin final : public Warden
 
         // send module initialization information (function offsets, etc.)
         virtual void InitializeClient();
+
+        template <typename T>
+        void Convert(T& val, std::vector<uint8>& buffer, SharedDataField field)
+        {
+            val = *reinterpret_cast<T*>(&buffer[GetSharedDataFieldOffset(field)]);
+        }
+
+        void ConvertPrintData(std::vector<uint8>& buffer);
+        void SetOSVersion();
+        void FinalizeDataCapture(std::vector<uint8>& fullBuffer);
+        uint32 GetSharedDataFieldOffset(SharedDataField field);
 
         /* 
             (a, b) initialization packet options:
@@ -120,6 +191,10 @@ class WardenWin final : public Warden
         void BuildFileHashInit(const std::string &module, bool asyncparam, uint32 openOffset, uint32 sizeOffset,
             uint32 readOffset, uint32 closeOffset, ByteBuffer &out) const;
         void BuildTimingInit(const std::string &module, uint32 offset, bool set, ByteBuffer &out) const;
+
+        std::shared_ptr<WindowsScan> MakeDynamicDataScan(WardenWin* warden, uint32& offset,
+            uint32& sizeLeft,
+            std::vector<uint8>& output);
 
     public:
         static void LoadScriptedScans();

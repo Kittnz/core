@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2017-2018 namreeb (legal@namreeb.org)
- *
+ * Jamey(boor) 2022
  * This is private software and may not be shared under any circumstances,
  * absent permission of namreeb.
  */
@@ -28,6 +28,774 @@
 #include <memory>
 #include <sstream>
 #include <iomanip>
+#include <locale>
+#include <codecvt>
+#include <type_traits>
+#include <unordered_map>
+
+
+typedef enum _NT_PRODUCT_TYPE
+{
+    NtProductWinNt = 1,
+    NtProductLanManNt = 2,
+    NtProductServer = 3
+} NT_PRODUCT_TYPE;
+
+typedef enum _ALTERNATIVE_ARCHITECTURE_TYPE
+{
+    StandardDesign = 0,
+    NEC98x86 = 1,
+    EndAlternatives = 2
+} ALTERNATIVE_ARCHITECTURE_TYPE;
+
+using ULONG = unsigned long;
+using USHORT = unsigned short;
+using UCHAR = unsigned char;
+using ULONGLONG = unsigned long long;
+using BOOLEAN = unsigned char;
+using DWORD = unsigned long;
+using DWORD64 = uint64_t;
+using LONG = long;
+
+/*
+*     LargePageMinimum,
+    SuiteMask,
+    MitigationPolicies,
+    NumberOfPhysicalPages,
+    SharedDataFlags,
+    TestRetInstruction,
+    QpcFrequency,
+    QpcSystemTimeIncrement,
+    UnparkedProcessorCount,
+    EnclaveFeatureMask,
+    QpcData
+*/
+
+uint32 WardenWin::GetSharedDataFieldOffset(SharedDataField field)
+{
+    switch (field)
+    {
+    case SharedDataField::TimeZoneBias:
+        return 0x20;
+    case SharedDataField::LargePageMinimum:
+        return 0x0244;
+    case SharedDataField::SuiteMask:
+        return 0x02D0;
+    case SharedDataField::MitigationPolicies:
+        return 0x02D5;
+    case SharedDataField::NumberOfPhysicalPages:
+        return 0x02E8;
+    case SharedDataField::SharedDataFlags:
+        return 0x02F0;
+    case SharedDataField::TestRetInstruction:
+        return 0x02F8;
+    case SharedDataField::QpcFrequency:
+        return 0x0300;
+    case SharedDataField::QpcSystemTimeIncrement:
+        return 0x0358;
+    case SharedDataField::UnparkedProcessorCount:
+        return 0x03C0;
+    case SharedDataField::EnclaveFeatureMask:
+        return 0x036C;
+    case SharedDataField::QpcData:
+        return 0x03C6;
+    default:
+        return 0xBEEF;
+    }
+
+    /*static std::unordered_map<SharedDataField, std::unordered_map<OsVersion, uint32>> table =
+    {
+        {SharedDataField::TimeZoneBias, 
+            {
+                {OsVersion::WindowsXP, }
+            }
+        },
+
+    };*/
+}
+
+void WardenWin::SetOSVersion()
+{
+    //expects _minor and _major version to be here.
+    if (_majorVersion == 5)
+    {
+        _osVersion = OsVersion::WindowsXP;
+    }
+
+    if (_majorVersion == 6)
+    {
+        if (_minorVersion == 0)
+            _osVersion = OsVersion::WindowsVista;
+
+        if (_minorVersion == 1)
+            _osVersion = OsVersion::Windows7;
+
+        if (_minorVersion == 2 || _minorVersion == 3)
+            _osVersion = OsVersion::Windows8;
+    }
+
+    if (_majorVersion >= 10)
+        _osVersion = OsVersion::Windows10AndUp;
+}
+
+
+
+#pragma pack(push, 1)
+template <OsVersion Version, typename = void>
+struct AIT_SAMPLING_PART
+{
+
+};
+
+template <OsVersion Version>
+struct AIT_SAMPLING_PART<Version, typename std::enable_if_t<
+    ((Version) >= OsVersion::WindowsVista)>>
+{
+    ULONG                         AitSamplingValue;
+    ULONG                         AppCompatFlag;
+    ULONGLONG                     RNGSeedVersion;
+    ULONG                         GlobalValidationRunlevel;
+    LONG                          TimeZoneBiasStamp;
+};
+
+template <OsVersion Version, typename = void>
+struct BUILDNUMBER_PART
+{
+
+};
+
+template <OsVersion Version>
+struct BUILDNUMBER_PART<Version, typename std::enable_if_t<
+    ((Version) == OsVersion::WindowsXP)>>
+{
+    ULONG                         Reserved2[8];
+};
+
+template <OsVersion Version>
+struct BUILDNUMBER_PART<Version, typename std::enable_if_t<
+    ((Version) == OsVersion::WindowsVista || Version == OsVersion::Windows7)>>
+{
+    ULONG                         Reserved2[7];
+};
+
+template <OsVersion Version>
+struct BUILDNUMBER_PART<Version, typename std::enable_if_t<
+    ((Version) == OsVersion::Windows8)>>
+{
+    ULONG                         Reserved2;
+};
+
+template <OsVersion Version>
+struct BUILDNUMBER_PART<Version, typename std::enable_if_t<
+    ((Version) == OsVersion::Windows10AndUp)>>
+{
+    ULONG                         NtBuildNumber;
+};
+
+
+template <OsVersion Version, typename = void>
+struct TSC_PART
+{
+
+};
+
+template <OsVersion Version>
+struct TSC_PART<Version, typename std::enable_if_t<
+    (Version == OsVersion::Windows7)>>
+{
+    union {
+        UCHAR TscQpcData;
+        struct {
+            UCHAR TscQpcEnabled : 1;        // 0x01
+            UCHAR TscQpcSpareFlag : 1;      // 0x02
+            UCHAR TscQpcShift : 6;          // 0xFC
+        };
+    };
+};
+
+template <OsVersion Version>
+struct TSC_PART<Version, typename std::enable_if_t<
+    ((Version) == OsVersion::Windows10AndUp)>>
+{
+    UCHAR VirtualizationFlags;
+};
+
+
+template <OsVersion Version, typename = void>
+struct TSC_PART_2
+{
+
+};
+
+template <OsVersion Version>
+struct TSC_PART_2<Version, typename std::enable_if_t<
+    (Version == OsVersion::Windows7 || Version == OsVersion::Windows10AndUp)>>
+{
+    UCHAR TscQpcPad[2];
+};
+
+template <OsVersion Version>
+struct TSC_PART_2<Version, typename std::enable_if_t<
+    ((Version) == OsVersion::Windows8)>>
+{
+    UCHAR Reserved12[3];
+};
+
+template <OsVersion Version, typename = void>
+struct TRACELOG_PART
+{
+
+};
+
+template <OsVersion Version>
+struct TRACELOG_PART<Version, typename std::enable_if_t<
+    (Version == OsVersion::WindowsXP)>>
+{
+    ULONG TraceLogging;
+};
+
+template <OsVersion Version>
+struct TRACELOG_PART<Version, typename std::enable_if_t<
+    ((Version) >= OsVersion::WindowsVista)>>
+{
+    ULONG SharedDataFlags;
+};
+
+
+template <OsVersion Version, typename = void>
+struct PAD_PART_1
+{
+
+};
+
+template <OsVersion Version>
+struct PAD_PART_1<Version, typename std::enable_if_t<
+    (Version >= OsVersion::Windows7)>>
+{
+    ULONG DataFlagsPad[1];
+};
+
+
+template <OsVersion Version, typename = void>
+struct QPC_SYSTEM_TIME
+{
+
+};
+
+template <OsVersion Version>
+struct QPC_SYSTEM_TIME<Version, typename std::enable_if_t<
+    (Version == OsVersion::Windows8)>>
+{
+    ULONG QpcSystemTimeIncrement32;
+    ULONG QpcInterruptTimeIncrement32;
+};
+
+
+
+template <OsVersion Version> 
+struct KUSER_SHARED_DATA
+{
+    ULONG                         TickCountLowDeprecated;
+    ULONG                         TickCountMultiplier;
+    KSYSTEM_TIME                  InterruptTime;
+    KSYSTEM_TIME                  SystemTime;
+    KSYSTEM_TIME                  TimeZoneBias;
+    USHORT                        ImageNumberLow;
+    USHORT                        ImageNumberHigh;
+    WCHAR                         NtSystemRoot[0x0104];
+    ULONG                         MaxStackTraceDepth;
+    ULONG                         CryptoExponent;
+    ULONG                         TimeZoneId;
+    ULONG                         LargePageMinimum;
+    AIT_SAMPLING_PART<Version>    SamplingPart;
+    BUILDNUMBER_PART<Version>     BuildNumberPart;
+    NT_PRODUCT_TYPE               NtProductType;
+    BOOLEAN                       ProductTypeIsValid;
+    BOOLEAN                       Reserved0[1]; // same for V
+    USHORT                        NativeProcessorArchitecture; // dont read on lower than 6.2
+    ULONG                         NtMajorVersion;
+    ULONG                         NtMinorVersion;
+    BOOLEAN                       ProcessorFeatures[0x40];
+    ULONG                         Reserved1;
+    ULONG                         Reserved3;
+    ULONG                         TimeSlip;
+    ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+    ULONG                         BootId; // ULONG AltArchitecturePad [1] pre win 10.
+    LARGE_INTEGER                 SystemExpirationDate;
+    ULONG                         SuiteMask;
+    BOOLEAN                       KdDebuggerEnabled;
+    union { //NXSupportPolicy pre 6.2
+        UCHAR MitigationPolicies;
+        struct {
+            UCHAR NXSupportPolicy : 2;
+                UCHAR SEHValidationPolicy : 2;
+            UCHAR CurDirDevicesSkippedForDlls : 2;
+            UCHAR Reserved : 2;
+        };
+    };
+
+    USHORT                        CyclesPerYield; // dont read for < 1903
+    ULONG                         ActiveConsoleId;
+    ULONG                         DismountCount;
+    ULONG                         ComPlusPackage;
+    ULONG                         LastSystemRITEventTickCount;
+    ULONG                         NumberOfPhysicalPages;
+    BOOLEAN                       SafeBootMode;
+    TSC_PART<Version>             TscPart;
+    TSC_PART_2<Version>           TscPart2;
+    TRACELOG_PART<Version>        Tracelog;
+    PAD_PART_1<Version>           Pad;
+    ULONGLONG                     TestRetInstruction;
+    LONGLONG                      QpcFrequency;
+    ULONG                         SystemCall;
+    ULONG                         Reserved2;
+    ULONGLONG                     SystemCallPad[2];
+    union {
+        KSYSTEM_TIME volatile TickCount;
+        ULONG64 volatile TickCountQuad;
+    };
+    ULONG                         Cookie;
+    ULONG                         CookiePad[1];
+    LONGLONG                      ConsoleSessionForegroundProcessId;
+    ULONGLONG                     TimeUpdateLock;
+    ULONGLONG                     BaselineSystemTimeQpc;
+    ULONGLONG                     BaselineInterruptTimeQpc;
+    ULONGLONG                     QpcSystemTimeIncrement;
+    ULONGLONG                     QpcInterruptTimeIncrement;
+    QPC_SYSTEM_TIME<Version>      QpcSystemTimePart;
+    UCHAR                         QpcSystemTimeIncrementShift;
+    UCHAR                         QpcInterruptTimeIncrementShift;
+};
+#pragma pack(pop)
+
+/*
+* ULONG                         Reserved1;
+    ULONG                         Reserved3;
+    ULONG                         TimeSlip;
+    ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+    ULONG                         BootId;
+    LARGE_INTEGER                 SystemExpirationDate;
+    ULONG                         SuiteMask;
+    BOOLEAN                       KdDebuggerEnabled;
+    union {
+        UCHAR MitigationPolicies;
+        struct {
+            UCHAR NXSupportPolicy : 2;s
+            UCHAR SEHValidationPolicy : 2;
+            UCHAR CurDirDevicesSkippedForDlls : 2;
+            UCHAR Reserved : 2;
+        };
+    };
+    USHORT                        CyclesPerYield;
+    ULONG                         ActiveConsoleId;
+    ULONG                         DismountCount;
+    ULONG                         ComPlusPackage;
+    ULONG                         LastSystemRITEventTickCount;
+    ULONG                         NumberOfPhysicalPages;
+    BOOLEAN                       SafeBootMode;
+    union {
+        UCHAR VirtualizationFlags;
+        struct {
+            UCHAR ArchStartedInEl2 : 1;
+            UCHAR QcSlIsSupported : 1;
+        };
+    };
+    UCHAR                         Reserved12[2];
+    union {
+        ULONG SharedDataFlags;
+        struct {
+            ULONG DbgErrorPortPresent : 1;
+            ULONG DbgElevationEnabled : 1;
+            ULONG DbgVirtEnabled : 1;
+            ULONG DbgInstallerDetectEnabled : 1;
+            ULONG DbgLkgEnabled : 1;
+            ULONG DbgDynProcessorEnabled : 1;
+            ULONG DbgConsoleBrokerEnabled : 1;
+            ULONG DbgSecureBootEnabled : 1;
+            ULONG DbgMultiSessionSku : 1;
+            ULONG DbgMultiUsersInSessionSku : 1;
+            ULONG DbgStateSeparationEnabled : 1;
+            ULONG SpareBits : 21;
+        } DUMMYSTRUCTNAME2;
+    } DUMMYUNIONNAME2;
+    ULONG                         DataFlagsPad[1];
+    ULONGLONG                     TestRetInstruction;
+    LONGLONG                      QpcFrequency;
+    ULONG                         SystemCall;
+    ULONG                         Reserved2;
+    ULONGLONG                     SystemCallPad[2];
+    union {
+        KSYSTEM_TIME TickCount;
+        ULONG64      TickCountQuad;
+        struct {
+            ULONG ReservedTickCountOverlay[3];
+            ULONG TickCountPad[1];
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME3;
+    ULONG                         Cookie;
+    ULONG                         CookiePad[1];
+    LONGLONG                      ConsoleSessionForegroundProcessId;
+    ULONGLONG                     TimeUpdateLock;
+    ULONGLONG                     BaselineSystemTimeQpc;
+    ULONGLONG                     BaselineInterruptTimeQpc;
+    ULONGLONG                     QpcSystemTimeIncrement;
+    ULONGLONG                     QpcInterruptTimeIncrement;
+    UCHAR                         QpcSystemTimeIncrementShift;
+    UCHAR                         QpcInterruptTimeIncrementShift;
+    USHORT                        UnparkedProcessorCount;
+    ULONG                         EnclaveFeatureMask[4];
+    ULONG                         TelemetryCoverageRound;
+    USHORT                        UserModeGlobalLogger[16];
+    ULONG                         ImageFileExecutionOptions;
+    ULONG                         LangGenerationCount;
+    ULONGLONG                     Reserved4;
+    ULONGLONG                     InterruptTimeBias;
+    ULONGLONG                     QpcBias;
+    ULONG                         ActiveProcessorCount;
+    UCHAR                         ActiveGroupCount;
+    UCHAR                         Reserved9;
+    union {
+        USHORT QpcData;
+        struct {
+            UCHAR QpcBypassEnabled;
+            UCHAR QpcShift;
+        };
+    };
+    LARGE_INTEGER                 TimeZoneBiasEffectiveStart;
+    LARGE_INTEGER                 TimeZoneBiasEffectiveEnd;
+    XSTATE_CONFIGURATION          XState;
+    KSYSTEM_TIME                  FeatureConfigurationChangeStamp;
+    ULONG                         Spare;
+    ULONG64                       UserPointerAuthMask;
+*/
+
+struct KUSER_PRE_BUILDNUMBER_DATA_1 
+{
+    ULONG                         TickCountLowDeprecated;
+    ULONG                         TickCountMultiplier;
+    KSYSTEM_TIME                  InterruptTime;
+    KSYSTEM_TIME                  SystemTime;
+    KSYSTEM_TIME                  TimeZoneBias;
+    USHORT                        ImageNumberLow;
+    USHORT                        ImageNumberHigh;
+    //wchar systemroot[260] would be here;
+};
+struct KUSER_BUILDNUMBER_FEATURES_DATA 
+{
+    ULONG                         MaxStackTraceDepth;
+    ULONG                         CryptoExponent;
+    ULONG                         TimeZoneId;
+    ULONG                         LargePageMinimum;
+    ULONG                         AitSamplingValue;
+    ULONG                         AppCompatFlag;
+    ULONGLONG                     RNGSeedVersion;
+    ULONG                         GlobalValidationRunlevel;
+    LONG                          TimeZoneBiasStamp;
+    ULONG                         NtBuildNumber;
+    NT_PRODUCT_TYPE               NtProductType;
+    BOOLEAN                       ProductTypeIsValid;
+    BOOLEAN                       Reserved0[1];
+    USHORT                        NativeProcessorArchitecture;
+    ULONG                         NtMajorVersion;
+    ULONG                         NtMinorVersion;
+    BOOLEAN                       ProcessorFeatures[64];
+    ULONG                         Reserved1;
+    ULONG                         Reserved3;
+    ULONG                         TimeSlip;
+    ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+    ULONG                         BootId;
+    LARGE_INTEGER                 SystemExpirationDate;
+    ULONG                         SuiteMask;
+    BOOLEAN                       KdDebuggerEnabled;
+    union {
+        UCHAR MitigationPolicies;
+        struct {
+            UCHAR NXSupportPolicy : 2;
+            UCHAR SEHValidationPolicy : 2;
+            UCHAR CurDirDevicesSkippedForDlls : 2;
+            UCHAR Reserved : 2;
+        };
+    };
+    USHORT                        CyclesPerYield;
+    ULONG                         ActiveConsoleId;
+    ULONG                         DismountCount;
+    ULONG                         ComPlusPackage;
+    ULONG                         LastSystemRITEventTickCount;
+    ULONG                         NumberOfPhysicalPages;
+    BOOLEAN                       SafeBootMode;
+};
+
+struct KUSER_POST_BUILDNUMBER_UNION_MISC_1 
+{
+    union {
+        UCHAR VirtualizationFlags;
+        struct {
+            UCHAR ArchStartedInEl2 : 1;
+            UCHAR QcSlIsSupported : 1;
+        };
+    };
+    UCHAR                         Reserved12[2];
+    union {
+        ULONG SharedDataFlags;
+        struct {
+            ULONG DbgErrorPortPresent : 1;
+            ULONG DbgElevationEnabled : 1;
+            ULONG DbgVirtEnabled : 1;
+            ULONG DbgInstallerDetectEnabled : 1;
+            ULONG DbgLkgEnabled : 1;
+            ULONG DbgDynProcessorEnabled : 1;
+            ULONG DbgConsoleBrokerEnabled : 1;
+            ULONG DbgSecureBootEnabled : 1;
+            ULONG DbgMultiSessionSku : 1;
+            ULONG DbgMultiUsersInSessionSku : 1;
+            ULONG DbgStateSeparationEnabled : 1;
+            ULONG SpareBits : 21;
+        } DUMMYSTRUCTNAME2;
+    } DUMMYUNIONNAME2;
+    ULONG                         DataFlagsPad[1];
+    ULONGLONG                     TestRetInstruction;
+    LONGLONG                      QpcFrequency;
+    ULONG                         SystemCall;
+    ULONG                         Reserved2;
+    ULONGLONG                     SystemCallPad[2];
+    union {
+        KSYSTEM_TIME TickCount;
+        ULONG64      TickCountQuad;
+        struct {
+            ULONG ReservedTickCountOverlay[3];
+            ULONG TickCountPad[1];
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME3;
+    ULONG                         Cookie;
+    ULONG                         CookiePad[1];
+    LONGLONG                      ConsoleSessionForegroundProcessId;
+    ULONGLONG                     TimeUpdateLock;
+    ULONGLONG                     BaselineSystemTimeQpc;
+    ULONGLONG                     BaselineInterruptTimeQpc;
+    ULONGLONG                     QpcSystemTimeIncrement;
+    ULONGLONG                     QpcInterruptTimeIncrement;
+    UCHAR                         QpcSystemTimeIncrementShift;
+    UCHAR                         QpcInterruptTimeIncrementShift;
+    USHORT                        UnparkedProcessorCount;
+    ULONG                         EnclaveFeatureMask[4];
+    ULONG                         TelemetryCoverageRound;
+    USHORT                        UserModeGlobalLogger[16];
+    ULONG                         ImageFileExecutionOptions;
+    ULONG                         LangGenerationCount;
+    ULONGLONG                     Reserved4;
+    ULONGLONG                     InterruptTimeBias;
+    ULONGLONG                     QpcBias;
+    ULONG                         ActiveProcessorCount;
+    UCHAR                         ActiveGroupCount;
+    UCHAR                         Reserved9;
+};
+
+struct KUSER_MODIFIED_XSTATE_CONFIGURATION
+{
+    // Mask of all enabled features
+    DWORD64 EnabledFeatures;
+
+    // Mask of volatile enabled features
+    DWORD64 EnabledVolatileFeatures;
+
+    // Total size of the save area for user states
+    DWORD Size;
+
+    // Control Flags
+    union {
+        DWORD ControlFlags;
+        struct
+        {
+            DWORD OptimizedSave : 1;
+            DWORD CompactionEnabled : 1;
+        };
+    };
+
+    // List of features
+    //XSTATE_FEATURE Features[MAXIMUM_XSTATE_FEATURES]; disable read
+
+    //KUSER_MODIFIED_XSTATE_CONFIGURATION_2 here
+    
+
+    //dont read this VVVVVVVVV
+    
+    // List which holds size of each user and supervisor state supported by CPU
+    //DWORD AllFeatures[MAXIMUM_XSTATE_FEATURES];
+
+    // Mask of all supervisor features that are exposed to user-mode
+    //DWORD64 EnabledUserVisibleSupervisorFeatures;
+};
+
+struct KUSER_MODIFIED_XSTATE_CONFIGURATION_2
+{
+    // Mask of all supervisor features
+    DWORD64 EnabledSupervisorFeatures;
+
+    // Mask of features that require start address to be 64 byte aligned
+    DWORD64 AlignedFeatures;
+
+    // Total size of the save area for user and supervisor states
+    DWORD AllFeatureSize;
+};
+
+struct KUSER_POST_BUILDNUMBER_UNION_MISC_2 
+{
+    union {
+        USHORT QpcData;
+        struct {
+            UCHAR QpcBypassEnabled;
+            UCHAR QpcShift;
+        };
+    };
+    LARGE_INTEGER                               TimeZoneBiasEffectiveStart;
+    LARGE_INTEGER                               TimeZoneBiasEffectiveEnd;
+    KUSER_MODIFIED_XSTATE_CONFIGURATION         XState;
+    KUSER_MODIFIED_XSTATE_CONFIGURATION_2       XState2;
+    KSYSTEM_TIME                                FeatureConfigurationChangeStamp;
+    ULONG                                       Spare;
+    ULONG64                                     UserPointerAuthMask;
+};
+
+struct KUSER_SHARED_DATA_STRUCTURED 
+{
+    KUSER_PRE_BUILDNUMBER_DATA_1 PreBuildData;
+    KUSER_BUILDNUMBER_FEATURES_DATA BuildFeaturesData;
+    KUSER_POST_BUILDNUMBER_UNION_MISC_1 PostBuildUnionDataMisc;
+    KUSER_POST_BUILDNUMBER_UNION_MISC_2 PostBuildUnionDataMisc2;
+};
+
+
+
+struct _KUSER_SHARED_DATA_WINDOWS_10
+{
+    ULONG                         TickCountLowDeprecated;
+    ULONG                         TickCountMultiplier;
+    KSYSTEM_TIME                  InterruptTime;
+    KSYSTEM_TIME                  SystemTime;
+    KSYSTEM_TIME                  TimeZoneBias;
+    USHORT                        ImageNumberLow;
+    USHORT                        ImageNumberHigh;
+    WCHAR                         NtSystemRoot[260];
+    ULONG                         MaxStackTraceDepth;
+    ULONG                         CryptoExponent;
+    ULONG                         TimeZoneId;
+    ULONG                         LargePageMinimum;
+    ULONG                         AitSamplingValue;
+    ULONG                         AppCompatFlag;
+    ULONGLONG                     RNGSeedVersion;
+    ULONG                         GlobalValidationRunlevel;
+    LONG                          TimeZoneBiasStamp;
+    ULONG                         NtBuildNumber;
+    NT_PRODUCT_TYPE               NtProductType;
+    BOOLEAN                       ProductTypeIsValid;
+    BOOLEAN                       Reserved0[1];
+    USHORT                        NativeProcessorArchitecture;
+    ULONG                         NtMajorVersion;
+    ULONG                         NtMinorVersion;
+    BOOLEAN                       ProcessorFeatures[64];
+    ULONG                         Reserved1;
+    ULONG                         Reserved3;
+    ULONG                         TimeSlip;
+    ALTERNATIVE_ARCHITECTURE_TYPE AlternativeArchitecture;
+    ULONG                         BootId;
+    LARGE_INTEGER                 SystemExpirationDate;
+    ULONG                         SuiteMask;
+    BOOLEAN                       KdDebuggerEnabled;
+    union {
+        UCHAR MitigationPolicies;
+        struct {
+            UCHAR NXSupportPolicy : 2;
+            UCHAR SEHValidationPolicy : 2;
+            UCHAR CurDirDevicesSkippedForDlls : 2;
+            UCHAR Reserved : 2;
+        };
+    };
+    USHORT                        CyclesPerYield;
+    ULONG                         ActiveConsoleId;
+    ULONG                         DismountCount;
+    ULONG                         ComPlusPackage;
+    ULONG                         LastSystemRITEventTickCount;
+    ULONG                         NumberOfPhysicalPages;
+    BOOLEAN                       SafeBootMode;
+    union {
+        UCHAR VirtualizationFlags;
+        struct {
+            UCHAR ArchStartedInEl2 : 1;
+            UCHAR QcSlIsSupported : 1;
+        };
+    };
+    UCHAR                         Reserved12[2];
+    union {
+        ULONG SharedDataFlags;
+        struct {
+            ULONG DbgErrorPortPresent : 1;
+            ULONG DbgElevationEnabled : 1;
+            ULONG DbgVirtEnabled : 1;
+            ULONG DbgInstallerDetectEnabled : 1;
+            ULONG DbgLkgEnabled : 1;
+            ULONG DbgDynProcessorEnabled : 1;
+            ULONG DbgConsoleBrokerEnabled : 1;
+            ULONG DbgSecureBootEnabled : 1;
+            ULONG DbgMultiSessionSku : 1;
+            ULONG DbgMultiUsersInSessionSku : 1;
+            ULONG DbgStateSeparationEnabled : 1;
+            ULONG SpareBits : 21;
+        } DUMMYSTRUCTNAME2;
+    } DUMMYUNIONNAME2;
+    ULONG                         DataFlagsPad[1];
+    ULONGLONG                     TestRetInstruction;
+    LONGLONG                      QpcFrequency;
+    ULONG                         SystemCall;
+    ULONG                         Reserved2;
+    ULONGLONG                     SystemCallPad[2];
+    union {
+        KSYSTEM_TIME TickCount;
+        ULONG64      TickCountQuad;
+        struct {
+            ULONG ReservedTickCountOverlay[3];
+            ULONG TickCountPad[1];
+        } DUMMYSTRUCTNAME;
+    } DUMMYUNIONNAME3;
+    ULONG                         Cookie;
+    ULONG                         CookiePad[1];
+    LONGLONG                      ConsoleSessionForegroundProcessId;
+    ULONGLONG                     TimeUpdateLock;
+    ULONGLONG                     BaselineSystemTimeQpc;
+    ULONGLONG                     BaselineInterruptTimeQpc;
+    ULONGLONG                     QpcSystemTimeIncrement;
+    ULONGLONG                     QpcInterruptTimeIncrement;
+    UCHAR                         QpcSystemTimeIncrementShift;
+    UCHAR                         QpcInterruptTimeIncrementShift;
+    USHORT                        UnparkedProcessorCount;
+    ULONG                         EnclaveFeatureMask[4];
+    ULONG                         TelemetryCoverageRound;
+    USHORT                        UserModeGlobalLogger[16];
+    ULONG                         ImageFileExecutionOptions;
+    ULONG                         LangGenerationCount;
+    ULONGLONG                     Reserved4;
+    ULONGLONG                     InterruptTimeBias;
+    ULONGLONG                     QpcBias;
+    ULONG                         ActiveProcessorCount;
+    UCHAR                         ActiveGroupCount;
+    UCHAR                         Reserved9;
+    union {
+        USHORT QpcData;
+        struct {
+            UCHAR QpcBypassEnabled;
+            UCHAR QpcShift;
+        };
+    };
+    LARGE_INTEGER                 TimeZoneBiasEffectiveStart;
+    LARGE_INTEGER                 TimeZoneBiasEffectiveEnd;
+    XSTATE_CONFIGURATION          XState;
+    KSYSTEM_TIME                  FeatureConfigurationChangeStamp;
+    ULONG                         Spare;
+    ULONG64                       UserPointerAuthMask;
+};
+
+
+constexpr uint32 SKIP_NTSYSTEM_ROOT_SIZE = sizeof(_KUSER_SHARED_DATA_WINDOWS_10::NtSystemRoot);
+
 
 namespace
 {
@@ -64,6 +832,10 @@ static constexpr uint32 sOfsDevice4 = 0xA8;
 static constexpr uint32 sOfsWardenModule = 0xCE897C;
 static constexpr uint32 sOfsWardenSysInfo = 0x228;
 static constexpr uint32 sOfsWardenWinSysInfo = 0x08;
+
+static constexpr uint32 sOfsSharedData = 0x7FFE0000;
+static constexpr uint32 sOfsSharedDataMajorVersion = 0x026C;
+static constexpr uint32 sOfsSharedDataMinorVersion = 0x0270;
 
 // TODO: Identify drivers for other hypervisors and add detections for them too
 constexpr struct
@@ -391,6 +1163,75 @@ bool ValidateEndSceneHook(const std::vector<uint8> &code)
     return code.size() == 200 && copy.size() < 15;
 }
 }
+
+void WardenWin::FinalizeDataCapture(std::vector<uint8>& fullBuffer)
+{
+    SetOSVersion();
+    ConvertPrintData(fullBuffer);
+};
+
+
+
+void WardenWin::ConvertPrintData(std::vector<uint8>& buffer)
+{
+    if (!_sharedData)
+        _sharedData = std::make_unique<SharedDataCompact>();
+
+
+    auto& data = *_sharedData;
+    Convert(data.EnclaveFeatureMask, buffer, SharedDataField::EnclaveFeatureMask);
+    Convert(data.LargePageMinimum, buffer, SharedDataField::LargePageMinimum);
+    Convert(data.MitigationPolicies, buffer, SharedDataField::MitigationPolicies);
+    Convert(data.NumberOfPhysicalPages, buffer, SharedDataField::NumberOfPhysicalPages);
+    Convert(data.QpcData, buffer, SharedDataField::QpcData);
+    Convert(data.QpcFrequency, buffer, SharedDataField::QpcFrequency);
+    Convert(data.QpcSystemTimeIncrement, buffer, SharedDataField::QpcSystemTimeIncrement);
+    Convert(data.SharedDataFlags, buffer, SharedDataField::SharedDataFlags);
+    Convert(data.SuiteMask, buffer, SharedDataField::SuiteMask);
+    Convert(data.TestResInstruction, buffer, SharedDataField::TestRetInstruction);
+    Convert(data.TimeZoneBias, buffer, SharedDataField::TimeZoneBias);
+    Convert(data.UnparkedProcessorCount, buffer, SharedDataField::UnparkedProcessorCount);
+}
+
+constexpr uint32 ReadChunkSize = 0xEE;
+
+std::shared_ptr<WindowsScan> WardenWin::MakeDynamicDataScan(WardenWin* warden, uint32& offset,
+    uint32& sizeLeft,
+    std::vector<uint8>& output)
+{
+    Scan::CheckT callback = [&offset, &sizeLeft, &output](const Warden* warden, ByteBuffer& buff)
+    {
+        auto const wardenWin = const_cast<WardenWin*>(reinterpret_cast<const WardenWin*>(warden));
+        auto const result = buff.read<uint8>();
+
+        if (!!result)
+        {
+            sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read dynamic data from account %u ip %s",
+                wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
+
+            return false;
+        }
+
+        //read chunk and put it in.
+        uint32 sizeRead = sizeLeft >= ReadChunkSize ? ReadChunkSize : sizeLeft;
+        buff.read(&output[offset], sizeRead);
+
+        //check if we need to requeue ourselves or finalize.
+        sizeLeft -= sizeRead;
+        offset += sizeRead;
+
+        if (!sizeLeft)
+            wardenWin->FinalizeDataCapture(output);
+        else
+            wardenWin->EnqueueScans({ wardenWin->MakeDynamicDataScan(wardenWin, offset, sizeLeft, output) });
+        return false;
+    };
+
+    uint32 sizeRead = sizeLeft >= ReadChunkSize ? ReadChunkSize : sizeLeft;
+    return std::make_shared<WindowsMemoryScan>(sOfsSharedData + offset, sizeRead, callback, "Datascan", WinAllBuild | InitialLogin);
+}
+
+
 
 void WardenWin::LoadScriptedScans()
 {
@@ -905,6 +1746,143 @@ void WardenWin::LoadScriptedScans()
 
         return false;
     }), "Proxifier check", WinAllBuild | InitialLogin));
+
+
+    //begin fingerprint warden scans.
+
+    constexpr uint32 preBuiltData1Offset = sOfsSharedData;
+    constexpr uint32 preBuiltData2Offset = preBuiltData1Offset + sizeof(KUSER_PRE_BUILDNUMBER_DATA_1) + SKIP_NTSYSTEM_ROOT_SIZE;
+    constexpr uint32 buildNumberOffset = preBuiltData2Offset;
+    constexpr uint32 postBuildDataUnionMiscOffset = buildNumberOffset + sizeof(KUSER_BUILDNUMBER_FEATURES_DATA);
+    constexpr uint32 postBuildDataUnionMisc2Offset = postBuildDataUnionMiscOffset + sizeof(KUSER_POST_BUILDNUMBER_UNION_MISC_1);
+
+    auto dat = new KUSER_SHARED_DATA_STRUCTURED;
+
+
+
+
+    const auto fingerprintScan4 = std::make_shared<WindowsMemoryScan>(postBuildDataUnionMisc2Offset,
+        sizeof(KUSER_POST_BUILDNUMBER_UNION_MISC_2),
+        [dat](const Warden* warden, ByteBuffer& buff)
+    {
+        auto const wardenWin = const_cast<WardenWin*>(reinterpret_cast<const WardenWin*>(warden));
+        auto const result = buff.read<uint8>();
+
+        if (!!result)
+        {
+            sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read postBuildDataUnionMiscOffset from account %u ip %s",
+                wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
+
+            return true;
+        }
+
+        KUSER_POST_BUILDNUMBER_UNION_MISC_2 data;
+
+        buff.read(reinterpret_cast<uint8*>(&data), sizeof(KUSER_POST_BUILDNUMBER_UNION_MISC_2));
+
+        dat->PostBuildUnionDataMisc2 = data;
+
+        return false;
+    }, "Fingerprinting 4", WinAllBuild | InitialLogin);
+
+
+    const auto fingerprintScan3 = std::make_shared<WindowsMemoryScan>(postBuildDataUnionMiscOffset,
+        sizeof(KUSER_POST_BUILDNUMBER_UNION_MISC_1),
+        [dat, fingerprintScan4](const Warden* warden, ByteBuffer& buff)
+    {
+        auto const wardenWin = const_cast<WardenWin*>(reinterpret_cast<const WardenWin*>(warden));
+        auto const result = buff.read<uint8>();
+
+        if (!!result)
+        {
+            sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read postBuildDataUnionMiscOffset from account %u ip %s",
+                wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
+
+            return true;
+        }
+
+        KUSER_POST_BUILDNUMBER_UNION_MISC_1 data;
+
+        buff.read(reinterpret_cast<uint8*>(&data), sizeof(KUSER_POST_BUILDNUMBER_UNION_MISC_1));
+
+        dat->PostBuildUnionDataMisc = data;
+
+        wardenWin->EnqueueScans({ fingerprintScan4 });
+
+        return false;
+    }, "Fingerprinting 3", WinAllBuild | InitialLogin);
+
+    const auto fingerprintScan2 = std::make_shared<WindowsMemoryScan>(buildNumberOffset,
+        sizeof(KUSER_BUILDNUMBER_FEATURES_DATA),
+        [dat, fingerprintScan3](const Warden* warden, ByteBuffer& buff)
+    {
+        auto const wardenWin = const_cast<WardenWin*>(reinterpret_cast<const WardenWin*>(warden));
+        auto const result = buff.read<uint8>();
+
+        if (!!result)
+        {
+            sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read buildNumberOffset from account %u ip %s",
+                wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
+
+            return true;
+        }
+
+        KUSER_BUILDNUMBER_FEATURES_DATA data;
+        buff.read(reinterpret_cast<uint8*>(&data), sizeof(KUSER_BUILDNUMBER_FEATURES_DATA));
+
+        dat->BuildFeaturesData = data;
+
+        wardenWin->EnqueueScans({ fingerprintScan3 });
+        return false;
+    }, "Fingerprinting 2", WinAllBuild | InitialLogin);
+
+
+    
+
+
+    uint32* size = new uint32;
+    *size = MaxReadSize;
+    uint32* offset = new uint32;
+    *offset = 0;
+
+    std::vector<uint8>* vec = new std::vector<uint8>();
+    vec->resize(*size);
+
+
+    sWardenScanMgr.AddWindowsScan(std::make_shared<WindowsMemoryScan>(sOfsSharedData + sOfsSharedDataMajorVersion
+        , sOfsSharedDataMinorVersion - sOfsSharedDataMajorVersion + sizeof(ULONG),
+        [dat, offset, size, vec](const Warden* warden, ByteBuffer& buff)
+    {
+        auto const wardenWin = const_cast<WardenWin*>(reinterpret_cast<const WardenWin*>(warden));
+        auto const result = buff.read<uint8>();
+
+        if (!!result)
+        {
+            sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Failed to read preBuiltData1Offset from account %u ip %s",
+                wardenWin->_session->GetAccountId(), wardenWin->_session->GetRemoteAddress().c_str());
+
+            return false;//always return false for now, this is just data processing.
+        }
+
+        ULONG minorVersion = 0;
+        ULONG majorVersion = 0;
+
+        buff.read(reinterpret_cast<uint8*>(&majorVersion), sizeof(ULONG));
+        buff.read(reinterpret_cast<uint8*>(&minorVersion), sizeof(ULONG));
+
+        wardenWin->_majorVersion = majorVersion;
+        wardenWin->_minorVersion = minorVersion;
+
+
+
+        using convert_type = std::codecvt_utf8<wchar_t>;
+        std::wstring_convert<convert_type, wchar_t> converter;
+
+
+        wardenWin->EnqueueScans({ wardenWin->MakeDynamicDataScan(wardenWin, *offset, *size, *vec) });
+
+        return false;
+    }, "WinVersionGet", WinAllBuild | InitialLogin));
 }
 
 void WardenWin::BuildLuaInit(const std::string &module, bool fastcall, uint32 offset, ByteBuffer &out) const
