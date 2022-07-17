@@ -110,6 +110,11 @@ class WardenWin final : public Warden
         ULONG _minorVersion = 0;
         OsVersion _osVersion = OsVersion::None;
         uint32 _readsizeLeft = MaxReadSize;
+        uint32 _dataOffset = 0;
+        bool _triggerPrintSave = false;
+
+        std::vector<uint8> _inDataBuffer;
+
 
         std::unique_ptr<SharedDataCompact> _sharedData;
 
