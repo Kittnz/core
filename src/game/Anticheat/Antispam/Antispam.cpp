@@ -18,6 +18,7 @@
 #include "Timer.h"
 #include "Database/DatabaseEnv.h"
 #include "Language.h"
+#include "Player.h"
 
 #include <string>
 #include <unordered_set>

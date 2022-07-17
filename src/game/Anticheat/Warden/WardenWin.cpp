@@ -48,15 +48,6 @@ typedef enum _ALTERNATIVE_ARCHITECTURE_TYPE
     EndAlternatives = 2
 } ALTERNATIVE_ARCHITECTURE_TYPE;
 
-using ULONG = unsigned long;
-using USHORT = unsigned short;
-using UCHAR = unsigned char;
-using ULONGLONG = unsigned long long;
-using BOOLEAN = unsigned char;
-using DWORD = unsigned long;
-using DWORD64 = uint64_t;
-using LONG = long;
-
 /*
 *     LargePageMinimum,
     SuiteMask,
