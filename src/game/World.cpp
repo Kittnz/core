@@ -1518,6 +1518,8 @@ void World::SetInitialWorldSettings()
 	sObjectMgr.LoadCorpses();
     sLog.outString("Loading loot tables...");    
     LoadLootTables();
+    sLog.outString("Loading custom character skins...");
+    sObjectMgr.LoadCustomCharacterSkins();
     sLog.outString("Loading fishing base level requirements...");
     sObjectMgr.LoadFishingBaseSkillLevel();
     sLog.outString("Loading NPC gossips...");

@@ -107,7 +107,7 @@ CreatureAI* GetAI_npc_bartleby(Creature* pCreature)
 // Full quest event implementation (Missing Diplomat part 8 id:1447).
 // Author: Kampeador
 //-----------------------------------------------------------------------------
-enum
+enum DashelStonefistData
 {
     // ids from "broadcast_text" table
     SAY_PROGRESS_1_DAS = 1961, // Now you're gonna get it good, "PlayerName".

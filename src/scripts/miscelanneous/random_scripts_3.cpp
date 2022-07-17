@@ -3269,9 +3269,47 @@ bool QuestRewarded_npc_karfang(Player* pPlayer, Creature* pQuestGiver, Quest con
     return false;
 }
 
+bool QuestRewarded_npc_lashog(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40513) // Polymorph Enslavement!
+    {
+        pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+        pQuestGiver->SetDisplayId(1653); // Orc
+    }
+
+    pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+        {
+            pQuestGiver->MonsterSay("I AM FREE! AT LONG LAST FREE FROM THAT CURSED FORM!");
+            pQuestGiver->HandleEmote(EMOTE_ONESHOT_ROAR);
+        }, 1000);
+
+    pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+        {
+            pQuestGiver->MonsterSay("Take that ring, I cannot stand to look at it, thank you for everything, I will leave when I have collected myself.");
+            pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+        }, 8000);
+
+    pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+        {
+            pQuestGiver->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            pQuestGiver->SetDisplayId(856); // Sheep
+            pQuestGiver->CastSpell(pQuestGiver, 24085, false); // Transform Visual
+            return true;
+        }, 60000);
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_lashog";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_lashog;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_karfang";

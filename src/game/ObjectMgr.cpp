@@ -5066,6 +5066,15 @@ float ObjectMgr::GetWorldSafeLocFacing(uint32 id) const
     return 0.0f;
 }
 
+CustomCharacterSkinEntry const* ObjectMgr::GetCustomCharacterSkin(uint32 token_id)
+{
+    auto skin = m_CustomCharacterSkinMap.find(token_id);
+    if (skin != m_CustomCharacterSkinMap.end())
+        return &skin->second;
+
+    return nullptr;
+}
+
 void ObjectMgr::LoadAreaTriggerTeleports()
 {
     m_AreaTriggerTeleportMap.clear();                                  // need for reload case
@@ -7175,6 +7184,27 @@ bool ObjectMgr::LoadTrainerGreetings()
     } while (result->NextRow());
 
     return true;
+}
+
+void ObjectMgr::LoadCustomCharacterSkins()
+{
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT * FROM `custom_character_skins`"));
+
+    if (!result)
+        return;
+    do
+    {
+        Field* fields = result->Fetch();
+        CustomCharacterSkinEntry custom_character_skin;
+
+        uint32 token_id = fields[0].GetUInt32();
+
+        custom_character_skin.male_id = fields[1].GetUInt32();
+        custom_character_skin.female_id = fields[2].GetUInt32();
+
+        m_CustomCharacterSkinMap[token_id] = custom_character_skin;
+
+    } while (result->NextRow());
 }
 
 void ObjectMgr::LoadFishingBaseSkillLevel()
