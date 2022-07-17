@@ -301,6 +301,10 @@ PlayerSocial *SocialMgr::LoadFromDB(QueryResult *result, ObjectGuid const& guid)
 
         ObjectGuid friendGuid = ObjectGuid(HIGHGUID_PLAYER, friendLowGuid);
 
+        // character deleted from account, don't load it until it's restored
+        if (!sObjectMgr.GetPlayerAccountIdByGUID(friendGuid))
+            continue;
+
         social->m_playerSocialMap[friendGuid] = FriendInfo(flags);
 
         if (flags & SOCIAL_FLAG_IGNORED)

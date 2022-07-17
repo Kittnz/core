@@ -333,8 +333,10 @@ void ChatHandler::HandleCharacterDeletedRestoreHelper(DeletedInfo const& delInfo
         return;
     }
 
-    CharacterDatabase.PExecute("UPDATE characters SET name='%s', account='%u', deleteDate=NULL, deleteInfos_Name=NULL, deleteInfos_Account=NULL WHERE deleteDate IS NOT NULL AND guid = %u",
+    // use blocking query as we need to reload character into cache
+    CharacterDatabase.DirectPExecute("UPDATE characters SET name='%s', account='%u', deleteDate=NULL, deleteInfos_Name=NULL, deleteInfos_Account=NULL WHERE deleteDate IS NOT NULL AND guid = %u",
         delInfo.name.c_str(), delInfo.accountId, delInfo.lowguid);
+    sObjectMgr.LoadPlayerCacheData(delInfo.lowguid);
 }
 
 /**
