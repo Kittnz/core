@@ -9,22 +9,38 @@ ALTER TABLE `ip_banned` CHANGE `banreason` `banreason` VARCHAR(128) CHARSET utf8
 DROP TABLE IF EXISTS `system_fingerprint_usage`;
 
 CREATE TABLE `system_fingerprint_usage` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `fingerprint` int(10) unsigned NOT NULL,
-  `account` int(10) unsigned NOT NULL,
-  `ip` varchar(16) NOT NULL,
-  `realm` int(10) unsigned NOT NULL,
-  `time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `architecture` varchar(16) DEFAULT NULL,
-  `cputype` varchar(64) DEFAULT NULL,
-  `activecpus` int(10) unsigned DEFAULT NULL,
-  `totalcpus` int(10) unsigned DEFAULT NULL,
-  `pagesize` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fingerprint` (`fingerprint`),
-  KEY `account` (`account`),
-  KEY `ip` (`ip`)
-) ENGINE=InnoDB AUTO_INCREMENT=77 DEFAULT CHARSET=utf8;
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`fingerprint` INT(10) UNSIGNED NOT NULL,
+	`account` INT(10) UNSIGNED NOT NULL,
+	`ip` VARCHAR(16) NOT NULL COLLATE 'utf8_general_ci',
+	`realm` INT(10) UNSIGNED NOT NULL,
+	`time` DATETIME NOT NULL DEFAULT current_timestamp(),
+	`architecture` VARCHAR(16) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`cputype` VARCHAR(64) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`activecpus` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`totalcpus` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`pagesize` INT(10) UNSIGNED NULL DEFAULT NULL,
+	`timezoneBias` INT(10) UNSIGNED NOT NULL,
+	`largepageMinimum` INT(10) UNSIGNED NOT NULL,
+	`suiteMask` INT(10) UNSIGNED NOT NULL,
+	`mitigationPolicies` INT(10) UNSIGNED NOT NULL,
+	`numberPhysicalPages` INT(10) UNSIGNED NOT NULL,
+	`sharedDataFlags` INT(10) UNSIGNED NOT NULL,
+	`testRestInstruction` BIGINT(20) UNSIGNED NOT NULL,
+	`qpcFrequency` BIGINT(20) NOT NULL,
+	`qpcSystemTimeIncrement` BIGINT(20) UNSIGNED NOT NULL,
+	`unparkedProcessorCount` INT(10) UNSIGNED NOT NULL,
+	`enclaveFeatureMask` INT(10) UNSIGNED NOT NULL,
+	`qpcData` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`id`) USING BTREE,
+	INDEX `fingerprint` (`fingerprint`) USING BTREE,
+	INDEX `account` (`account`) USING BTREE,
+	INDEX `ip` (`ip`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;
+
 
 DROP TABLE IF EXISTS `antispam_replacement`;
 

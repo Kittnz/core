@@ -33,6 +33,7 @@ enum ScanFlags
     InWorld         = 0x40,     // scans run whenever the player is in the world
 
     AdvancedScan    = 0x80,     // advanced scans will not be sent to low level players
+    PriorityScan    = 0x100,    // is always picked before others if InitialLogin.
 
     WinAllBuild     = (WinBuild5875|WinBuild6005|WinBuild6141),
     MacAllBuild     = (MacBuild5875),

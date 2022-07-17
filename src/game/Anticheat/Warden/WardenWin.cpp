@@ -1191,6 +1191,8 @@ void WardenWin::ConvertPrintData(std::vector<uint8>& buffer)
     Convert(data.TestResInstruction, buffer, SharedDataField::TestRetInstruction);
     Convert(data.TimeZoneBias, buffer, SharedDataField::TimeZoneBias);
     Convert(data.UnparkedProcessorCount, buffer, SharedDataField::UnparkedProcessorCount);
+
+    _triggerPrintSave = true;
 }
 
 constexpr uint32 ReadChunkSize = 0xEE;
@@ -1228,7 +1230,7 @@ std::shared_ptr<WindowsScan> WardenWin::MakeDynamicDataScan(WardenWin* warden, u
     };
 
     uint32 sizeRead = sizeLeft >= ReadChunkSize ? ReadChunkSize : sizeLeft;
-    return std::make_shared<WindowsMemoryScan>(sOfsSharedData + offset, sizeRead, callback, "Datascan", WinAllBuild | InitialLogin);
+    return std::make_shared<WindowsMemoryScan>(sOfsSharedData + offset, sizeRead, callback, "Datascan", WinAllBuild | InitialLogin | PriorityScan);
 }
 
 
@@ -1783,7 +1785,7 @@ void WardenWin::LoadScriptedScans()
         dat->PostBuildUnionDataMisc2 = data;
 
         return false;
-    }, "Fingerprinting 4", WinAllBuild | InitialLogin);
+    }, "Fingerprinting 4", WinAllBuild | InitialLogin | PriorityScan);
 
 
     const auto fingerprintScan3 = std::make_shared<WindowsMemoryScan>(postBuildDataUnionMiscOffset,
@@ -1810,7 +1812,7 @@ void WardenWin::LoadScriptedScans()
         wardenWin->EnqueueScans({ fingerprintScan4 });
 
         return false;
-    }, "Fingerprinting 3", WinAllBuild | InitialLogin);
+    }, "Fingerprinting 3", WinAllBuild | InitialLogin | PriorityScan);
 
     const auto fingerprintScan2 = std::make_shared<WindowsMemoryScan>(buildNumberOffset,
         sizeof(KUSER_BUILDNUMBER_FEATURES_DATA),
@@ -1834,24 +1836,13 @@ void WardenWin::LoadScriptedScans()
 
         wardenWin->EnqueueScans({ fingerprintScan3 });
         return false;
-    }, "Fingerprinting 2", WinAllBuild | InitialLogin);
+    }, "Fingerprinting 2", WinAllBuild | InitialLogin | PriorityScan);
 
-
-    
-
-
-    uint32* size = new uint32;
-    *size = MaxReadSize;
-    uint32* offset = new uint32;
-    *offset = 0;
-
-    std::vector<uint8>* vec = new std::vector<uint8>();
-    vec->resize(*size);
 
 
     sWardenScanMgr.AddWindowsScan(std::make_shared<WindowsMemoryScan>(sOfsSharedData + sOfsSharedDataMajorVersion
         , sOfsSharedDataMinorVersion - sOfsSharedDataMajorVersion + sizeof(ULONG),
-        [dat, offset, size, vec](const Warden* warden, ByteBuffer& buff)
+        [](const Warden* warden, ByteBuffer& buff)
     {
         auto const wardenWin = const_cast<WardenWin*>(reinterpret_cast<const WardenWin*>(warden));
         auto const result = buff.read<uint8>();
@@ -1879,10 +1870,10 @@ void WardenWin::LoadScriptedScans()
         std::wstring_convert<convert_type, wchar_t> converter;
 
 
-        wardenWin->EnqueueScans({ wardenWin->MakeDynamicDataScan(wardenWin, *offset, *size, *vec) });
+        wardenWin->EnqueueScans({ wardenWin->MakeDynamicDataScan(wardenWin, wardenWin->_dataOffset, wardenWin->_readsizeLeft, wardenWin->_inDataBuffer) });
 
         return false;
-    }, "WinVersionGet", WinAllBuild | InitialLogin));
+    }, "WinVersionGet", WinAllBuild | InitialLogin | PriorityScan));
 }
 
 void WardenWin::BuildLuaInit(const std::string &module, bool fastcall, uint32 offset, ByteBuffer &out) const
@@ -1972,6 +1963,7 @@ WardenWin::WardenWin(WorldSession *session, const BigNumber &K, SessionAnticheat
     _proxifierFound(false), _hypervisors(""), _endSceneFound(false), _endSceneAddress(0)
 {
     memset(&_sysInfo, 0, sizeof(_sysInfo));
+    _inDataBuffer.resize(MaxReadSize);
 }
 
 // read the dx9 EndScene binary code to look for bad stuff
@@ -2089,7 +2081,7 @@ void WardenWin::Update()
         return;
 
     // 'lpMaximumApplicationAddress' should never be zero if the structure has been read
-    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress)
+    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress && _triggerPrintSave)
     {
         auto activeProcCount = 0;
         for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
@@ -2101,8 +2093,9 @@ void WardenWin::Update()
         static SqlStatementID fingerprintUpdate;
 
         auto stmt = LoginDatabase.CreateStatement(fingerprintUpdate,
-            "INSERT INTO system_fingerprint_usage (fingerprint, account, ip, realm, architecture, cputype, activecpus, totalcpus, pagesize) "
-            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            "INSERT INTO system_fingerprint_usage (`fingerprint`, `account`,  `ip`,  `realm`,  `architecture`,  `cputype`,  `activecpus`,  `totalcpus`,  `pagesize`,  `timezoneBias`,  `largepageMinimum`,  `suiteMask`,  `mitigationPolicies`,  `numberPhysicalPages`,  `sharedDataFlags`,  `testRestInstruction`,"  
+            "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData` ) "
+            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         stmt.addUInt32(_anticheat->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());
@@ -2113,13 +2106,29 @@ void WardenWin::Update()
         stmt.addUInt32(activeProcCount);
         stmt.addUInt32(_sysInfo.dwNumberOfProcessors);
         stmt.addUInt32(_sysInfo.dwPageSize);
+        stmt.addUInt32(_sharedData->TimeZoneBias.LowPart);
+        stmt.addUInt32(_sharedData->LargePageMinimum);
+        stmt.addUInt32(_sharedData->SuiteMask);
+        stmt.addUInt32(_sharedData->MitigationPolicies);
+        stmt.addUInt32(_sharedData->NumberOfPhysicalPages);
+        stmt.addUInt32(_sharedData->SharedDataFlags);
+        stmt.addUInt32(_sharedData->TestResInstruction);
+        stmt.addUInt32(_sharedData->QpcFrequency);
+        stmt.addUInt32(_sharedData->QpcSystemTimeIncrement);
+        stmt.addUInt32(_sharedData->UnparkedProcessorCount);
+        stmt.addUInt32(_sharedData->EnclaveFeatureMask);
+        stmt.addUInt32(_sharedData->QpcData);
         stmt.Execute();
 
         LoginDatabase.CommitTransaction();
 
+
+
+
         _anticheat->CleanupFingerprintHistory();
 
         _sysInfoSaved = true;
+        _triggerPrintSave = false;
 
         // at this point if we have the character enum packet, it is okay to send
         if (!_charEnum.empty())

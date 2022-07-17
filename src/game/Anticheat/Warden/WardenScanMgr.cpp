@@ -238,6 +238,7 @@ void WardenScanMgr::AddWindowsScan(std::shared_ptr<WindowsScan> scan)
 std::vector<std::shared_ptr<const Scan>> WardenScanMgr::GetRandomScans(ScanFlags flags) const
 {
     std::vector<std::shared_ptr<const Scan>> matches;
+    std::vector<std::shared_ptr<const Scan>> prioMatches;
     matches.reserve(m_scans.size());
 
     // save those scans which match the requested flags
@@ -265,7 +266,10 @@ std::vector<std::shared_ptr<const Scan>> WardenScanMgr::GetRandomScans(ScanFlags
         if (!!(scan->flags & InWorld) && !(flags & InWorld))
             continue;
 
-        matches.push_back(scan);
+        if ((scan->flags & (InitialLogin | PriorityScan)) == (InitialLogin | PriorityScan))
+            prioMatches.push_back(scan);
+        else
+            matches.push_back(scan);
     }
 
     std::random_device rd;
@@ -273,6 +277,8 @@ std::vector<std::shared_ptr<const Scan>> WardenScanMgr::GetRandomScans(ScanFlags
 
     // randomize the order of matching scans
     std::shuffle(matches.begin(), matches.end(), g);
+
+    matches.insert(matches.begin(), prioMatches.begin(), prioMatches.end());
 
     // determine how many of the identified scans we can fit into the client's request and response buffers
     size_t request = 0, reply = 0;
