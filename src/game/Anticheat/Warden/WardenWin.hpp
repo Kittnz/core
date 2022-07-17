@@ -43,8 +43,9 @@ typedef union _LARGE_INTEGER {
     LONGLONG QuadPart;
 } LARGE_INTEGER;
 
+#define MAXIMUM_XSTATE_FEATURES             (64)
 
-ypedef struct _XSTATE_FEATURE {
+typedef struct _XSTATE_FEATURE {
     DWORD Offset;
     DWORD Size;
 } XSTATE_FEATURE, * PXSTATE_FEATURE;
