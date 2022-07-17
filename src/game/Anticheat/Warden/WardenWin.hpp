@@ -24,10 +24,72 @@ using ULONG = unsigned long;
 using USHORT = unsigned short;
 using UCHAR = unsigned char;
 using ULONGLONG = unsigned long long;
+using LONGLONG = long long;
 using BOOLEAN = unsigned char;
-using DWORD = unsigned long;
 using DWORD64 = uint64_t;
 using LONG = long;
+using ULONG64 = uint64_t;
+using WCHAR = wchar_t;
+
+typedef union _LARGE_INTEGER {
+    struct {
+        DWORD LowPart;
+        LONG HighPart;
+    } DUMMYSTRUCTNAME;
+    struct {
+        DWORD LowPart;
+        LONG HighPart;
+    } u;
+    LONGLONG QuadPart;
+} LARGE_INTEGER;
+
+
+ypedef struct _XSTATE_FEATURE {
+    DWORD Offset;
+    DWORD Size;
+} XSTATE_FEATURE, * PXSTATE_FEATURE;
+
+typedef struct _XSTATE_CONFIGURATION {
+    // Mask of all enabled features
+    DWORD64 EnabledFeatures;
+
+    // Mask of volatile enabled features
+    DWORD64 EnabledVolatileFeatures;
+
+    // Total size of the save area for user states
+    DWORD Size;
+
+    // Control Flags
+    union {
+        DWORD ControlFlags;
+        struct
+        {
+            DWORD OptimizedSave : 1;
+            DWORD CompactionEnabled : 1;
+        };
+    };
+
+    // List of features
+    XSTATE_FEATURE Features[MAXIMUM_XSTATE_FEATURES];
+
+    // Mask of all supervisor features
+    DWORD64 EnabledSupervisorFeatures;
+
+    // Mask of features that require start address to be 64 byte aligned
+    DWORD64 AlignedFeatures;
+
+    // Total size of the save area for user and supervisor states
+    DWORD AllFeatureSize;
+
+    // List which holds size of each user and supervisor state supported by CPU
+    DWORD AllFeatures[MAXIMUM_XSTATE_FEATURES];
+
+    // Mask of all supervisor features that are exposed to user-mode
+    DWORD64 EnabledUserVisibleSupervisorFeatures;
+
+} XSTATE_CONFIGURATION, * PXSTATE_CONFIGURATION;
+
+
 #endif
 
 
