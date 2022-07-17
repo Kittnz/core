@@ -18,6 +18,7 @@ public:
     }
 
 private:
+
     bool m_bShadowWordPainAlreadyCastedOnce{};
     std::uint32_t m_uiHealNearbyAllies_Timer{};
 
@@ -73,7 +74,8 @@ CreatureAI* GetAI_mob_hateforge_clericAI(Creature* pCreature)
 
 namespace nsTaskMaster
 {
-    static constexpr std::uint32_t SPELL{ 56522 };
+    static constexpr std::uint32_t SPELL1{ 56522 };
+    static constexpr std::uint32_t SPELL2{ 13608 };
 };
 
 class mob_hateforge_taskmasterAI : public ScriptedAI
@@ -85,29 +87,49 @@ public:
     }
 
 private:
-    std::uint32_t m_uiSpell_Timer{};
+
+    bool m_bSpell1_AlreadyCasted{};
+    std::uint32_t m_uiSpell1_Timer{};
+    std::uint32_t m_uiSpell2_Timer{};
 
 public:
     void Reset() override
     {
-        m_uiSpell_Timer = 1000;
+        m_bSpell1_AlreadyCasted = false;
+        m_uiSpell1_Timer = 5000;
+        m_uiSpell2_Timer = 1000;
     }
 
-    void CastSpell(const uint32& uiDiff)
+    void CastSpell1(const uint32& uiDiff)
     {
-        if (m_uiSpell_Timer < uiDiff)
+        if (m_uiSpell1_Timer < uiDiff)
         {
-            if (Unit* pFriendlyTarget{ m_creature->SelectRandomFriendlyTarget(nullptr, 40.f) })
+            if (Unit* pFriendlyTarget{ m_creature->SelectRandomFriendlyTarget(nullptr, 5.f) })
             {
-                if (DoCastSpellIfCan(pFriendlyTarget, nsTaskMaster::SPELL) == CanCastResult::CAST_OK)
+                if (DoCastSpellIfCan(pFriendlyTarget, nsTaskMaster::SPELL1) == CanCastResult::CAST_OK)
                 {
-                    m_uiSpell_Timer = 30000;
+                    m_bSpell1_AlreadyCasted = true;
                 }
             }
         }
         else
         {
-            m_uiSpell_Timer -= uiDiff;
+            m_uiSpell1_Timer -= uiDiff;
+        }
+    }
+
+    void CastSpell2(const uint32& uiDiff)
+    {
+        if (m_uiSpell2_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), nsTaskMaster::SPELL2) == CanCastResult::CAST_OK)
+            {
+                m_uiSpell2_Timer = 35000;
+            }
+        }
+        else
+        {
+            m_uiSpell2_Timer -= uiDiff;
         }
     }
 
@@ -115,6 +137,13 @@ public:
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (!m_bSpell1_AlreadyCasted)
+        {
+            CastSpell1(uiDiff);
+        }
+
+        CastSpell2(uiDiff);
 
         DoMeleeAttackIfReady();
     }
@@ -140,22 +169,32 @@ public:
     }
     
 private:
+
     bool m_bSpellAlreadyCastedOnce{};
+    std::uint32_t m_uiSpell_Timer{};
 
 public:
     void Reset() override
     {
         m_bSpellAlreadyCastedOnce = false;
+        m_uiSpell_Timer = 1000;
     }
 
-    void CastSpell()
+    void CastSpell(const uint32& uiDiff)
     {
-        if (Unit* pFriendlyTarget{ m_creature->SelectRandomFriendlyTarget(nullptr, 40.f) })
+        if (m_uiSpell_Timer < uiDiff)
         {
-            if (DoCastSpellIfCan(pFriendlyTarget, nsFireblade::SPELL) == CanCastResult::CAST_OK)
+            if (Unit* pFriendlyTarget{ m_creature->SelectRandomFriendlyTarget(nullptr, 10.f) })
             {
-                m_bSpellAlreadyCastedOnce = true;
+                if (DoCastSpellIfCan(pFriendlyTarget, nsFireblade::SPELL) == CanCastResult::CAST_OK)
+                {
+                    m_bSpellAlreadyCastedOnce = true;
+                }
             }
+        }
+        else
+        {
+            m_uiSpell_Timer -= uiDiff;
         }
     }
 
@@ -166,7 +205,7 @@ public:
 
         if (!m_bSpellAlreadyCastedOnce)
         {
-            CastSpell();
+            CastSpell(uiDiff);
         }
 
         DoMeleeAttackIfReady();
