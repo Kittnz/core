@@ -1749,12 +1749,10 @@ void WardenWin::LoadScriptedScans()
     constexpr uint32 postBuildDataUnionMiscOffset = buildNumberOffset + sizeof(KUSER_BUILDNUMBER_FEATURES_DATA);
     constexpr uint32 postBuildDataUnionMisc2Offset = postBuildDataUnionMiscOffset + sizeof(KUSER_POST_BUILDNUMBER_UNION_MISC_1);
 
-    auto dat = new KUSER_SHARED_DATA_STRUCTURED;
 
 
 
-
-    const auto fingerprintScan4 = std::make_shared<WindowsMemoryScan>(postBuildDataUnionMisc2Offset,
+    /*const auto fingerprintScan4 = std::make_shared<WindowsMemoryScan>(postBuildDataUnionMisc2Offset,
         sizeof(KUSER_POST_BUILDNUMBER_UNION_MISC_2),
         [dat](const Warden* warden, ByteBuffer& buff)
     {
@@ -1827,7 +1825,7 @@ void WardenWin::LoadScriptedScans()
 
         wardenWin->EnqueueScans({ fingerprintScan3 });
         return false;
-    }, "Fingerprinting 2", WinAllBuild | InitialLogin | PriorityScan);
+    }, "Fingerprinting 2", WinAllBuild | InitialLogin | PriorityScan);*/
 
 
 
