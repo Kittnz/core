@@ -22,6 +22,11 @@ static constexpr std::uint32_t SPELL_SHADOW_BOLT{ 12739 };
 static constexpr std::uint32_t SPELL_IMMUNE_ALL{ 29230 };
 static constexpr std::uint32_t SPELL_SHADOW_CHANNELING{ 12380 };
 
+static constexpr std::int32_t VOICE_SCRIPT_AGGRO{ -1999959 };
+static constexpr std::int32_t VOICE_SCRIPT_PHASE2{ -1999960 };
+static constexpr std::int32_t VOICE_SCRIPT_DIED{ -1999961 };
+
+
 class boss_hargesh_doomcallerAI : public ScriptedAI
 {
 public:
@@ -31,6 +36,7 @@ public:
     }
 
 private:
+
     bool m_bPhaseTwo{};
     bool m_bAddsAreDead{};
 
@@ -61,8 +67,14 @@ public:
         DespawnFacelessTerror();
     }
 
+    void Aggro(Unit* /*pWho*/) override
+    {
+        DoScriptText(VOICE_SCRIPT_AGGRO, m_creature);
+    }
+
     void JustDied(Unit* /*pKiller*/) override
     {
+        DoScriptText(VOICE_SCRIPT_DIED, m_creature);
         DespawnFacelessTerror();
     }
 
@@ -163,7 +175,7 @@ public:
                         m_vFacelessTerror.push_back(pFacelessTerror1->GetObjectGuid()); // Store add's GUID to remove them manually on failed boss attempt
                     }
 
-                    m_creature->MonsterSay("The Void hungers for more souls, let it consume you.", LANG_UNIVERSAL);
+                    DoScriptText(VOICE_SCRIPT_PHASE2, m_creature);
                 }
             }
         }
