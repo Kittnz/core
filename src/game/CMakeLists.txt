@@ -454,9 +454,9 @@ if(USE_ANTICHEAT)
       Anticheat/Warden/WardenScanMgr.cpp
       Anticheat/Warden/WardenScanMgr.hpp
       Anticheat/AddonHandler.cpp
-      Anticheat/AntiCheatChatCommands.h
-      Anticheat/AntiCheatChatCommandsFunctions.cpp
-      Anticheat/AntiCheatChatCommandsFunctions.h
+      Anticheat/AnticheatChatCommands.h
+      Anticheat/AnticheatChatCommandsFunctions.cpp
+      Anticheat/AnticheatChatCommandsFunctions.h
       Anticheat/Config.cpp
       Anticheat/Config.hpp
       Anticheat/cyclic.hpp
