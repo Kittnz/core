@@ -17,6 +17,7 @@
 #include <thread>
 #include <memory>
 #include <array>
+#include <unordered_map>
 
 class WorldSession;
 
