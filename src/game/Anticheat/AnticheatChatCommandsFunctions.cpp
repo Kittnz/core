@@ -4,6 +4,8 @@
 #include "Config.hpp"
 #include "Antispam/AntispamMgr.hpp"
 #include "Antispam/Antispam.hpp"
+#include "Player.h"
+#include "ObjectMgr.h"
 
 bool ChatHandler::HandleAnticheatInfoCommand(char* args)
 {
