@@ -1367,7 +1367,7 @@ class ObjectMgr
         SavedVariablesVector m_SavedVariables;
 
         // Caching Player Data
-        void LoadPlayerCacheData();
+        void LoadPlayerCacheData(uint32 lowGuid = 0);
         PlayerCacheData* GetPlayerDataByGUID(uint32 lowGuid) const;
         PlayerCacheData* GetPlayerDataByName(std::string const& name) const;
         void GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData*>& data) const;
