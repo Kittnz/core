@@ -29,7 +29,7 @@ OFFSET_WINMAIN_CALL_PART            = 0x0000999C, // 1 byte. Calling WinMain (re
 OFFSET_STR_DISCORD_OVERLAY          = 0x003FFF60, // Original value is some kind of CRT error. 
 OFFSET_SOUND_SOFTWARE_CHANNELS      = 0x0005728C, // Sound channel count, default game value is 12.
 OFFSET_SOUND_HARDWARE_CHANNELS      = 0x00057250, // Sound channel count, default game value is 12.
-OFFSET_SOUND_MEMORY_CACHE           = 0x000572E6, // Sound channel count, default game value is 4.
+OFFSET_SOUND_MEMORY_CACHE           = 0x000572C8, // Sound channel count, default game value is 4.
 };
 
 #define NEW_BUILD 7000u
