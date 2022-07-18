@@ -44,4 +44,4 @@
 </head>
 <body>
 Hi! You got to this page via bnet.marlam.in which has been discontinued. You'll be redirected to the <a href='/'>wow.tools frontpage</a> shortly...
-<meta http-equiv="refresh" content="5;url=https://wow.tools/" /><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v652eace1692a40cfa3763df669d7439c1639079717194" integrity="sha512-Gi7xpJR8tSkrpF7aordPZQlW2DLtzUlZcumS8dMQjwDHEnw9I7ZLyiOj/6tZStRBGtGgN6ceN6cMH8z7etPGlw==" data-cf-beacon='{"rayId":"729986da5db2914c","token":"5d3b27d2e1594e4498d03a0b275004ef","version":"2022.6.0","si":100}' crossorigin="anonymous"></script>
+<meta http-equiv="refresh" content="5;url=https://wow.tools/" /><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v652eace1692a40cfa3763df669d7439c1639079717194" integrity="sha512-Gi7xpJR8tSkrpF7aordPZQlW2DLtzUlZcumS8dMQjwDHEnw9I7ZLyiOj/6tZStRBGtGgN6ceN6cMH8z7etPGlw==" data-cf-beacon='{"rayId":"72ca44176ee490dc","token":"5d3b27d2e1594e4498d03a0b275004ef","version":"2022.6.0","si":100}' crossorigin="anonymous"></script>
