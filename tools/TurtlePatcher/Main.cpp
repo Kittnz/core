@@ -31,6 +31,7 @@ OFFSET_SOUND_SOFTWARE_CHANNELS      = 0x0005728C, // Sound channel count, defaul
 OFFSET_SOUND_HARDWARE_CHANNELS      = 0x00057250, // Sound channel count, default game value is 12.
 OFFSET_SOUND_MEMORY_CACHE           = 0x000572C8, // Sound channel count, default game value is 4.
 OFFSET_NAMEPLATE_DISTANCE           = 0x0040c448, // 20 yards is the default value, increased to 41 yards.
+OFFSET_LARGE_ADDRESS_AWARE          = 0x00000126, // Allows the game use up to 4GB RAM.
 };
 
 #define NEW_BUILD 7000u
@@ -168,6 +169,10 @@ void PatchBinary(FILE* hWoW)
 	char patch_11[] = { 0x00, 0x00, 0x24, 0x42 };
 	fseek(hWoW, OFFSET_NAMEPLATE_DISTANCE, SEEK_SET);
 	fwrite(patch_11, sizeof(patch_11), 1, hWoW);
+
+	char patch_12[] = { 0x2F, 0x01 };
+	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
+	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 }
 
 constexpr int max_path = 260;
