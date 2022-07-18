@@ -797,8 +797,10 @@ struct instance_stratholme : public ScriptedInstance
             {
                 if (m_uiGateTrapTimers[i][1] <= uiDiff)
                 {
-                    DoUseDoorOrButton(m_ratTrapGateGUID[2 * i]);
-                    DoUseDoorOrButton(m_ratTrapGateGUID[2 * i + 1]);
+                    if (GameObject* pGo = instance->GetGameObject(m_ratTrapGateGUID[2 * i]))
+                        pGo->SetGoState(GO_STATE_ACTIVE);
+                    if (GameObject* pGo = instance->GetGameObject(m_ratTrapGateGUID[2 * i + 1]))
+                        pGo->SetGoState(GO_STATE_ACTIVE);
                     m_uiGateTrapTimers[i][1] = 0;
                 }
                 else
@@ -994,8 +996,10 @@ struct instance_stratholme : public ScriptedInstance
 
         DEBUG_LOG("SD2: Instance Stratholme - Rat Trap activated %i.", uiGate);
         // close the gates
-        DoUseDoorOrButton(m_ratTrapGateGUID[2 * uiGate]);
-        DoUseDoorOrButton(m_ratTrapGateGUID[2 * uiGate + 1]);
+        if (GameObject* pGo = instance->GetGameObject(m_ratTrapGateGUID[2 * uiGate]))
+            pGo->SetGoState(GO_STATE_READY);
+        if (GameObject* pGo = instance->GetGameObject(m_ratTrapGateGUID[2 * uiGate + 1]))
+            pGo->SetGoState(GO_STATE_READY);
 
         // set timer to reset the trap
         m_uiGateTrapTimers[uiGate][0] = 30 * MINUTE * IN_MILLISECONDS;

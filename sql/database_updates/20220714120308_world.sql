@@ -238,3 +238,37 @@ REPLACE INTO npc_vendor VALUES
 (80959, 60752, 0, 0, 0, 0);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1585
 update quest_template set rewxp = 210 where entry = 70048;
+-- Lady Meldralis Windsong, display ID 18770, level 25, faction 371, humanoid, no weapon, quest/gossip flags, gossip text : "I hope you are well, is there anything that you require?"
+-- Technician Nel’doriel, display ID 18022, level 20, faction 371, humanoid, no weapon, quest/gossip flags, gossip text : "Two plus three times four... What do you want?"
+-- Broken Arcane Golem, display ID 18022, level 13, faction 371, mechanical, no weapon
+-- Ansela Dawnshield, display ID 18225 , level 28, faction 371, humanoid, weapon 80500, quest/gossip flags, gossip text: "The light watches over all, do not forget that."
+-- NPC Bart Natheldon, change greeting text to the following : "Azeroth sure is a mystical place, the more you read the more you can find out."
+REPLACE INTO creature_template VALUES
+(60874, 18770, 0, 0, 0, 'Lady Meldralis Windsong', '', 0, 25, 25, 712, 712, 0, 0, 1026, 371, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60875, 18022, 0, 0, 0, 'Technician Nel\'doriel', '', 0, 20, 20, 629, 629, 0, 0, 852, 371, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60876, 18022, 0, 0, 0, 'Broken Arcane Golem', '', 0, 13, 13, 314, 314, 0, 0, 511, 371, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 21, 27, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 9, 0, 1892, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 50, 'EventAI', 1, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60877, 18225, 0, 0, 0, 'Ansela Dawnshield', '', 0, 28, 28, 750, 750, 0, 0, 1090, 371, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 37, 46, 0, 112, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 55, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, '');
+
+set @gossip_menu_id = 41178; set @magic_number = 60784;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Azeroth sure is a mystical place, the more you read the more you can find out.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41177; set @magic_number = 60877;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The light watches over all, do not forget that.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41176; set @magic_number = 60875;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Two plus three times four... What do you want?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41175; set @magic_number = 60874;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I hope you are well, is there anything that you require?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
