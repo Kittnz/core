@@ -32,12 +32,13 @@ OFFSET_SOUND_HARDWARE_CHANNELS      = 0x00057250, // Sound channel count, defaul
 OFFSET_SOUND_MEMORY_CACHE           = 0x000572C8, // Sound channel count, default game value is 4.
 OFFSET_NAMEPLATE_DISTANCE           = 0x0040c448, // 20 yards is the default value, increased to 41 yards.
 OFFSET_LARGE_ADDRESS_AWARE          = 0x00000126, // Allows the game use up to 4GB RAM.
+OFFSET_SOUND_IN_BACKGROUND          = 0x003A4869, // Allows the game to play music while user is alt-tabbed.
 };
 
 #define NEW_BUILD 7000u
-#define NEW_VISUAL_BUILD "7000"
+#define NEW_VISUAL_BUILD "7001"
 #define NEW_VISUAL_VERSION "1.16.0"
-#define NEW_BUILD_DATE "Dec 27 2021"
+#define NEW_BUILD_DATE "Jul 18 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-V.mpq"
@@ -173,6 +174,10 @@ void PatchBinary(FILE* hWoW)
 	char patch_12[] = { 0x2F, 0x01 };
 	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
 	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
+
+	char patch_13[] = { 0x27 };
+	fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
+	fwrite(patch_13, sizeof(patch_13), 1, hWoW);
 }
 
 constexpr int max_path = 260;
