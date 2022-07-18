@@ -12,21 +12,24 @@
 
 enum OriginalValues
 {
-OFFSET_NET_VERSION = 0x001B2122,               // 2 bytes.Original value : unsigned short "5875"
-OFFSET_PVP_RANK_CHECK = 0x002093B0,            // 6 bytes. Remove check for PvP rank for player's title field.
-OFFSET_VISUAL_VERSION = 0x00437C04,			   // String. Original value: "1.12.1"
-OFFSET_VISUAL_BUILD = 0x00437BFC,			   // String. Original value: "5875"
-OFFSET_VISUAL_BUILD_DATE = 0x00434798,		   // String. Original value: "Sep 19 2006"
-OFFSET_KOREAN_WEBSITE_FILTER = 0x0045CCD8,	   // String. Original value: "*.worldofwarcraft.co.kr"
-OFFSET_CHINA_WEBSITE_FILTER = 0x0045CC9C,	   // String. Original value: "*.wowchina.com"
-OFFSET_SHELLCODE_LOAD_DLL = 0x00004122,		   // A small storage for Discord DLL code.
-OFFSET_ORIGINAL_FOV_VALUE = 0x004089B4,		   // Original FoV value.
-OFFSET_DWARF_MAGE_VALUE_1 = 0x000706E5,		   // Removal of Blizzard's hackfix for Dwarf Mages.
-OFFSET_DWARF_MAGE_VALUE_2 = 0x000706EB,		   // Removal of Blizzard's hackfix for Dwarf Mages.
-OFFSET_DWARF_MAGE_VALUE_3 = 0x0007075D,		   // Removal of Blizzard's hackfix for Dwarf Mages.
-OFFSET_DWARF_MAGE_VALUE_4 = 0x00070763,		   // Removal of Blizzard's hackfix for Dwarf Mages.
-OFFSET_WINMAIN_CALL_PART = 0x0000999C,		   // 1 byte. Calling WinMain (replaced with Discord DLL)
-OFFSET_STR_DISCORD_OVERLAY = 0x003FFF60,	   // Original value is some kind of CRT error. 
+OFFSET_NET_VERSION                  = 0x001B2122, // 2 bytes.Original value : unsigned short "5875"
+OFFSET_PVP_RANK_CHECK               = 0x002093B0, // 6 bytes. Remove check for PvP rank for player's title field.
+OFFSET_VISUAL_VERSION               = 0x00437C04, // String. Original value: "1.12.1"
+OFFSET_VISUAL_BUILD                 = 0x00437BFC, // String. Original value: "5875"
+OFFSET_VISUAL_BUILD_DATE            = 0x00434798, // String. Original value: "Sep 19 2006"
+OFFSET_KOREAN_WEBSITE_FILTER        = 0x0045CCD8, // String. Original value: "*.worldofwarcraft.co.kr"
+OFFSET_CHINA_WEBSITE_FILTER         = 0x0045CC9C, // String. Original value: "*.wowchina.com"
+OFFSET_SHELLCODE_LOAD_DLL           = 0x00004122, // A small storage for Discord DLL code.
+OFFSET_ORIGINAL_FOV_VALUE           = 0x004089B4, // Original FoV value.
+OFFSET_DWARF_MAGE_VALUE_1           = 0x000706E5, // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_DWARF_MAGE_VALUE_2           = 0x000706EB, // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_DWARF_MAGE_VALUE_3           = 0x0007075D, // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_DWARF_MAGE_VALUE_4           = 0x00070763, // Removal of Blizzard's hackfix for Dwarf Mages.
+OFFSET_WINMAIN_CALL_PART            = 0x0000999C, // 1 byte. Calling WinMain (replaced with Discord DLL)
+OFFSET_STR_DISCORD_OVERLAY          = 0x003FFF60, // Original value is some kind of CRT error. 
+OFFSET_SOUND_SOFTWARE_CHANNELS      = 0x0005728C, // Sound channel count, default game value is 12.
+OFFSET_SOUND_HARDWARE_CHANNELS      = 0x00057250, // Sound channel count, default game value is 12.
+OFFSET_SOUND_MEMORY_CACHE           = 0x000572E6, // Sound channel count, default game value is 4.
 };
 
 #define NEW_BUILD 7000u
@@ -133,10 +136,6 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_PVP_RANK_CHECK, SEEK_SET);
 	fwrite(patch_5, sizeof(patch_5), 1, hWoW);
 
-	//char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
-	//fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
-	//fwrite(patch_6, sizeof(patch_6), 1, hWoW);
-
 	char patch_7[] = { 0xFE };
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_1, SEEK_SET);
 	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
@@ -146,6 +145,24 @@ void PatchBinary(FILE* hWoW)
 	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
 	fseek(hWoW, OFFSET_DWARF_MAGE_VALUE_4, SEEK_SET);
 	fwrite(patch_7, sizeof(patch_7), 1, hWoW);
+
+	// Optional changes, to be considered:
+
+	char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
+	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
+	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
+
+	char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
+	fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
+	fwrite(patch_8, sizeof(patch_8), 1, hWoW);
+
+	char patch_9[] = { 0x9C, 0x5C, 0x83, 0x00 };
+	fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
+	fwrite(patch_9, sizeof(patch_9), 1, hWoW);
+
+	char patch_10[] = { 0x9C, 0x5C, 0x83, 0x00 };
+	fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
+	fwrite(patch_10, sizeof(patch_10), 1, hWoW);
 }
 
 constexpr int max_path = 260;
