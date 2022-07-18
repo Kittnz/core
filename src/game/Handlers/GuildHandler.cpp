@@ -520,7 +520,7 @@ void WorldSession::HandleGuildSetPublicNoteOpcode(WorldPacket& recvPacket)
     recvPacket >> name;
     recvPacket >> note;
 
-    if (!normalizePlayerName(name) || !normalizePlayerName(note))
+    if (!normalizePlayerName(name) || !normalizePlayerName(note, GUILD_NOTE_MAX_LENGTH))
         return;
 
     Guild* guild = sGuildMgr.GetGuildById(GetPlayer()->GetGuildId());
@@ -560,7 +560,7 @@ void WorldSession::HandleGuildSetOfficerNoteOpcode(WorldPacket& recvPacket)
     recvPacket >> name;
     recvPacket >> note;
 
-    if (!normalizePlayerName(name) || !normalizePlayerName(note))
+    if (!normalizePlayerName(name) || !normalizePlayerName(note, GUILD_NOTE_MAX_LENGTH))
         return;
 
     Guild* guild = sGuildMgr.GetGuildById(GetPlayer()->GetGuildId());
@@ -620,7 +620,7 @@ void WorldSession::HandleGuildRankOpcode(WorldPacket& recvPacket)
     recvPacket >> rankname;
     DEBUG_LOG("WORLD: Changed RankName to %s , Rights to 0x%.4X", rankname.c_str(), rights);
 
-    if (!normalizePlayerName(rankname))
+    if (!normalizePlayerName(rankname, 25))
         return;
 
     guild->SetRankName(rankId, rankname);
@@ -707,7 +707,7 @@ void WorldSession::HandleGuildChangeInfoTextOpcode(WorldPacket& recvPacket)
     std::string GINFO;
     recvPacket >> GINFO;
 
-    if (!normalizePlayerName(GINFO))
+    if (!normalizePlayerName(GINFO, GUILD_INFO_MAX_LENGTH))
         return;
 
     if (GINFO.size() > GUILD_INFO_MAX_LENGTH)
