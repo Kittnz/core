@@ -410,20 +410,12 @@ bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* so
     if (script.summonCreature.flags & SF_SUMMONCREATURE_SET_RUN)
         pCreature->SetWalk(false);
 
-    switch (script.summonCreature.attackTarget)
+    if (script.summonCreature.attackTarget >= 0)
     {
-        case TARGET_T_OWNER_OR_SELF:
-            break;
-        default:
+        if (Unit* pAttackTarget = ToUnit(GetTargetByType(pSummoner, ToUnit(target), this, script.summonCreature.attackTarget)))
         {
-            if (Creature* pCreatureSummoner = pSummoner->ToCreature())
-            {
-                if (Unit* pAttackTarget = ToUnit(GetTargetByType(pSummoner, ToUnit(target), this, script.summonCreature.attackTarget)))
-                {
-                    if (pCreature->AI())
-                        pCreature->AI()->AttackStart(pAttackTarget);
-                }
-            }
+            if (pCreature->AI())
+                pCreature->AI()->AttackStart(pAttackTarget);
         }
     }
 
