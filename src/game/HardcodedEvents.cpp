@@ -2011,18 +2011,7 @@ void RacePlayer::GoRaceMode()
 			// read first point
 			const RaceCheckpoint& startPoint = raceEvent->GetCheckpoint(0);
 
-			pl->Unmount();
 			pl->GetPosition(savedPlPos);
-
-			//Creature* raceCar = pl->SummonCreature(GOBLINCAR_CREATURE_ENTRY,
-			//	startPoint.pos.x,
-			//	startPoint.pos.y,
-			//	startPoint.pos.z,
-			//	startPoint.pos.o,
-			//	TEMPSUMMON_DEAD_DESPAWN,
-			//	10 * MINUTE);
-			//carGuid = raceCar->GetObjectGuid();
-			//raceCar->AI()->InformGuid(pl->GetObjectGuid());
 
 			// rotate car to next point
 			const RaceCheckpoint& nextPoint = raceEvent->GetCheckpoint(1);
@@ -2053,6 +2042,9 @@ void RacePlayer::GoRaceMode()
 				}
 			};
 
+            if (pl->IsMounted())
+                pl->Unmount(false);  
+
 			float startY = startPoint.pos.y + 5.0f;
 			switch (side)
 			{
@@ -2073,13 +2065,12 @@ void RacePlayer::GoRaceMode()
 				break;
 			}
 
-			//pl->SetFly(true);
 			pl->TeleportTo(map->GetId(), startPoint.pos.x, startY, startPoint.pos.z, pl->GetOrientation(), 0, [this]()
 			{
 				LeaveRaceMode();
 			});
 
-			pl->PlayDirectMusic(6077);
+			pl->PlayDirectMusic(30215);
 
 			// spawn initial checkpoint effect
 			GameObject* checkPointEffect = pl->SummonGameObject(CHECKPOINT_EFFECT_GOBJECT, nextCheckpoint.pos.x, nextCheckpoint.pos.y, nextCheckpoint.pos.z, nextCheckpoint.pos.o, 0.0f, 0.0f, 0.0f, 0.0f, 300 * 1000);
@@ -2090,9 +2081,7 @@ void RacePlayer::GoRaceMode()
 			pl->UpdateVisibilityOf(pl, checkPointEffect);
 			pl->SetSpeedRatePersistance(MOVE_RUN, 4.0f);
 			pl->UpdateSpeed(MOVE_RUN, false, 4.0f);
-
-			// Set ability bar
-
+            pl->SetFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER);
 
 			bIsRaceMode = true;
 		}
@@ -2112,13 +2101,13 @@ void RacePlayer::LeaveRaceMode()
 			pl->TeleportTo(savedPlPos);
 			pl->SetDisplayId(pl->GetNativeDisplayId());
 			pl->SetRooted(false);
-			pl->Unmount();
+			pl->Unmount(false);
 			pl->RemoveExclusiveVisibleObject(checkpointEffectGuid);
 			pl->SetSpeedRatePersistance(MOVE_RUN, 1.0f);
 			pl->UpdateSpeed(MOVE_RUN, false, 1.0f);
 			pl->SetCharm(nullptr);
 			pl->RemovePetActionBar();
-		//	pl->CastSpell(pl, 1604, true); // Dazed spell
+            pl->RemoveFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER);
 		}
 
 		if (GameObject* checkpointEffect = map->GetGameObject(checkpointEffectGuid))
@@ -2138,7 +2127,6 @@ void RacePlayer::LeaveRaceMode()
 		{
 			controller->DespawnOrUnsummon();
 		}
-
 
 		bIsRaceMode = false;
 	}
