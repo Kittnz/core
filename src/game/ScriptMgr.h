@@ -339,10 +339,6 @@ enum eScriptCommand
                                                             // datalong = db_guid
     SCRIPT_COMMAND_QUEST_CREDIT             = 83,           // source = Player (from provided source or target)
                                                             // target = WorldObject (from provided source or target)
-
-    SCRIPT_COMMAND_DESPAWN_CREATURE_NEAR    = 84,           // source = Creature
-                                                            // datalong = entry to be despawned
-                                                            // datalong2 = maxrange
     SCRIPT_COMMAND_MAX,
 
     SCRIPT_COMMAND_DISABLED                 = 9999          // Script action was disabled during loading.
@@ -1020,12 +1016,6 @@ struct ScriptInfo
         {
             uint32 goGuid;                                  // datalong
         } loadGo;
-
-        struct
-        {
-            uint32 creatureEntry;                              // SCRIPT_COMMAND_DESPAWN_CREATURE_NEAR (84)
-            uint32 searchRange;
-        } despawnCreatureNear;
 
         struct
         {
