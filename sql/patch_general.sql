@@ -77,3 +77,14 @@ replace into item_template values
 
 -- Custom skins handling in 1.16.1:
 update item_template set description = '', spellid_1 = 56053, script_name = '' where name like '%Skin Change Token%';
+
+-- Adds missing Remove Lesser Curse to a mage trainer in Stormwind
+
+set @trainer = 331;
+set @spell = 1176;
+set @spellcost = 1800; 
+set @reqskill = 0; 
+set @reqskillvalue = 0; 
+set @player_level = 18; 
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
