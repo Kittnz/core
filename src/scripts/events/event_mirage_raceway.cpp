@@ -11,10 +11,8 @@
 
 // Spells:
 #define SALT_FLATS_RACE_SLOW 6601
-#define SALT_FLATS_RACE_NORMAL 6602  // Decreases run speed, value -16%
-#define SALT_FLATS_RACE_SPEED 6600  // Increases run speed, value +14%
+#define SALT_FLATS_RACE_SPEED 6600
 #define DAMAGE_CAR 7084
-#define I_CANT_DRIVE_55 31565 // What the actual fuck...
 #define EXPLOSIVE_SHEEP_PASSIVE 4051
 #define EXPLOSIVE_SHEEP 4050
 #define SPELL_BOMB 5134
@@ -262,8 +260,6 @@ struct npc_dolores_say : public ScriptedAI
 	}
 };
 
-// Ignore this for while:
-
 struct go_speed_up : public GameObjectAI
 {
     explicit go_speed_up(GameObject* pGo) : GameObjectAI(pGo)
@@ -283,8 +279,10 @@ struct go_speed_up : public GameObjectAI
 				float distSqr = me->GetDistanceSqr(player->GetPositionX(), player->GetPositionY(), player->GetPositionZ());
 				if (distSqr < SheepAcceptanceRadiusSqr)
 				{
-					// our client
-					player->CastSpell(player, 9175, true);
+					player->CastSpell(player, SALT_FLATS_RACE_SPEED, true);
+					player->UpdateSpeed(MOVE_RUN, false, 7.0F);
+					player->m_Events.AddLambdaEventAtOffset([player]() {player->UpdateSpeed(MOVE_RUN, false, 4.0F); }, 2500);
+
 					me->Despawn();
 					me->Delete();
 				}
@@ -314,7 +312,7 @@ struct npc_race_sheep : public ScriptedAI
 	std::set<ObjectGuid> racers;
 	uint32 checkTimer = 0;
 
-	static const uint32 CheckForRacersInterval = 10;
+	static const uint32 CheckForRacersInterval = 5;
 
 	void Reset() override
 	{
@@ -332,7 +330,7 @@ struct npc_race_sheep : public ScriptedAI
 
 			uint32 mountId = player->GetMountID();
 
-			if (mountId == GNOMECAR_DISPLAYID || mountId == GOBLINCAR_DISPLAYID)
+			if (player->HasFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER) && (mountId == GNOMECAR_DISPLAYID || mountId == GOBLINCAR_DISPLAYID))
 			{
 				racers.insert(unit->GetObjectGuid());
 			}
@@ -354,10 +352,9 @@ struct npc_race_sheep : public ScriptedAI
 					if (distSqr < SheepAcceptanceRadiusSqr)
 					{
 						uint32 mountId = player->GetMountID();
-						if (mountId == GNOMECAR_DISPLAYID || mountId == GOBLINCAR_DISPLAYID)
+					
+						if (player->HasFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER) && (mountId == GNOMECAR_DISPLAYID || mountId == GOBLINCAR_DISPLAYID))
 						{
-							// our client
-							// do not hurt a player with invisibility
 							if (player->HasAura(4079)) // Cloaking
 							{
 								iter++;
