@@ -915,6 +915,8 @@ bool Map::ScriptCommand_AttackStart(const ScriptInfo& script, WorldObject* sourc
 
     if (pAttacker->AI())
         pAttacker->AI()->AttackStart(pTarget);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -1064,6 +1066,8 @@ bool Map::ScriptCommand_Evade(const ScriptInfo& script, WorldObject* source, Wor
 
     if (pSource->AI() && pSource->IsAlive())
         pSource->AI()->EnterEvadeMode();
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -1298,6 +1302,8 @@ bool Map::ScriptCommand_SetMeleeAttack(const ScriptInfo& script, WorldObject* so
 
     if (pSource->AI())
         pSource->AI()->SetMeleeAttack(script.enableMelee.enabled);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -1315,6 +1321,8 @@ bool Map::ScriptCommand_SetCombatMovement(const ScriptInfo& script, WorldObject*
 
     if (pSource->AI())
         pSource->AI()->SetCombatMovement(script.combatMovement.enabled);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -2303,6 +2311,25 @@ bool Map::ScriptCommand_SetGossipMenu(ScriptInfo const& script, WorldObject* sou
     }
 
     pSource->SetDefaultGossipMenuId(script.setGossipMenu.gossipMenuId);
+
+    return false;
+}
+
+// SCRIPT_COMMAND_SEND_SCRIPT_EVENT (85)
+bool Map::ScriptCommand_SendScriptEvent(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    Creature* pSource = ToCreature(source);
+
+    if (!pSource)
+    {
+        sLog.outError("SCRIPT_COMMAND_SEND_SCRIPT_EVENT (script id %u) call for a nullptr or non-creature source (TypeId: %u), skipping.", script.id, source ? source->GetTypeId() : 0);
+        return ShouldAbortScript(script);
+    }
+
+    if (pSource->AI())
+        pSource->AI()->OnScriptEventHappened(script.sendScriptEvent.eventId, script.sendScriptEvent.eventData, target);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
