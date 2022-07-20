@@ -211,6 +211,10 @@ void AuctionHouseMgr::SendAuctionWonMail(AuctionEntry *auction)
         else
             RemoveAItem(pItem->GetGUIDLow());               // we have to remove the item, before we delete it !!
 
+
+        if (!bidder_accId)
+            bidder_accId = bidder->GetSession()->GetAccountId();
+
         sLog.out(LOG_MAIL_AH, "SendAuctionWonMail for auc Id %u, Sending to player bidder %s acc id %u.", auction->Id, bidder ? bidder->GetShortDescription().c_str() : "", bidder_accId);
 
         // will delete item or place to receiver mail list
@@ -271,7 +275,9 @@ void AuctionHouseMgr::SendAuctionSuccessfulMail(AuctionEntry * auction)
             owner->GetSession()->SendAuctionOwnerNotification(auction, true);
         }
 
-        sLog.out(LOG_MAIL_AH, "SendAuctionSuccessfulMail for auc Id %u, Sending to player %s acc id %u.", auction->Id, owner ? owner->GetShortDescription().c_str() : "", owner_accId);
+        if (!owner_accId)
+            owner_accId = owner->GetSession()->GetAccountId();
+        sLog.out(LOG_MAIL_AH, "SendAuctionSuccessfulMail for auc Id %u, Sending to player %s, money %u acc id %u.", auction->Id, owner ? owner->GetShortDescription().c_str() : "", profit, owner_accId);
 
         MailDraft(msgAuctionSuccessfulSubject.str(), auctionSuccessfulBody.str())
         .SetMoney(profit)
