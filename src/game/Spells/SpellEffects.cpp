@@ -3826,7 +3826,7 @@ void Spell::EffectDispel(SpellEffectIndex eff_idx)
                     {
                         if (CharmInfo *charm = unitTarget->GetCharmInfo())
                             if (FactionTemplateEntry const* ft = charm->GetOriginalFactionTemplate())
-                                if (ft->IsFriendlyTo(*m_caster->getFactionTemplateEntry()))
+                                if (ft->IsFriendlyTo(*m_caster->GetFactionTemplateEntry()))
                                     priority_dispel = dispel_list.size();
                     }
                     else if (positive == friendly)
