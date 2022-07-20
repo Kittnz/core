@@ -22818,7 +22818,7 @@ bool Player::SuspendWorldBuffs()
 
 	if (HasItemCount(83001, 1, true))
 	{
-		ChatHandler(this).PSendSysMessage("You already have suspended world effects.");
+		ChatHandler(this).SendSysMessage("You already have suspended world effects.");
 		return false;
 	}
 
@@ -22829,7 +22829,7 @@ bool Player::SuspendWorldBuffs()
 	} 
 	else if (InArena())
 	{
-		GetSession()->SendNotification("You can't do that while in Arena.");
+		GetSession()->SendNotification("You can't do that while in the Arena.");
 		return false;
 	}
 	else if (InBattleGround())
@@ -22909,7 +22909,7 @@ bool Player::SuspendWorldBuffs()
 
 	if (suspendMessage.empty())
 	{
-		ChatHandler(this).PSendSysMessage("No world effects found.");
+		ChatHandler(this).SendSysMessage("No world effects found.");
 		return false;
 	}
 	else
@@ -22917,8 +22917,8 @@ bool Player::SuspendWorldBuffs()
 		for (int i = 0; i < MAX_WORLD_BUFFS; i++)
 			RemoveAurasDueToSpell(WorldBuffs[i]);
 
-		ChatHandler(this).PSendSysMessage(suspendMessage.c_str());
-		ChatHandler(this).PSendSysMessage("While a world effect is suspended, you cannot benefit from it.");
+		ChatHandler(this).SendSysMessage(suspendMessage.c_str());
+		ChatHandler(this).SendSysMessage("While a world effect is suspended, you cannot benefit from it.");
 
 		// remove Chronoboon Displacer
 		DestroyItemCount(83000, 1, true);
@@ -22945,7 +22945,7 @@ bool Player::RestoreSuspendedWorldBuffs()
 	}
 	else if (InArena())
 	{
-		GetSession()->SendNotification("You can't do that while in Arena.");
+		GetSession()->SendNotification("You can't do that while in the Arena.");
 		return false;
 	}
 	else if (InBattleGround())
@@ -22965,7 +22965,7 @@ bool Player::RestoreSuspendedWorldBuffs()
 
 	if (!auras)
 	{
-		ChatHandler(this).PSendSysMessage("No suspended world effects found.");
+		ChatHandler(this).SendSysMessage("No suspended world effects found.");
 		// remove supercharged chronoboon displacer
 		DestroyItemCount(83001, 1, true);
 		SaveInventoryAndGoldToDB();
