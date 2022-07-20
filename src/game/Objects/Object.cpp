@@ -645,8 +645,8 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                     if (owner)
                     {
                         FactionTemplateEntry const *ft1, *ft2;
-                        ft1 = owner->getFactionTemplateEntry();
-                        ft2 = target->getFactionTemplateEntry();
+                        ft1 = owner->GetFactionTemplateEntry();
+                        ft2 = target->GetFactionTemplateEntry();
                         if (ft1 && ft2 && !ft1->IsFriendlyTo(*ft2) && owner->IsInSameRaidWith(target))
                             if (owner->IsInInterFactionMode() && target->IsInInterFactionMode())
                                 forceFriendly = true;
@@ -3251,7 +3251,7 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
     return victim;
 }
 
-FactionTemplateEntry const* WorldObject::getFactionTemplateEntry() const
+FactionTemplateEntry const* WorldObject::GetFactionTemplateEntry() const
 {
     FactionTemplateEntry const* entry = sObjectMgr.GetFactionTemplateEntry(GetFactionTemplateId());
     if (!entry)
@@ -3291,7 +3291,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
         if (selfPlayerOwner->IsGameMaster())
             return REP_NEUTRAL;
 
-        if (FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry())
+        if (FactionTemplateEntry const* targetFactionTemplateEntry = target->GetFactionTemplateEntry())
             if (ReputationRank const* repRank = selfPlayerOwner->GetReputationMgr().GetForcedRankIfAny(targetFactionTemplateEntry))
                 return *repRank;
     }
@@ -3300,7 +3300,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
         if (targetPlayerOwner->IsGameMaster())
             return REP_NEUTRAL;
 
-        if (FactionTemplateEntry const* selfFactionTemplateEntry = getFactionTemplateEntry())
+        if (FactionTemplateEntry const* selfFactionTemplateEntry = GetFactionTemplateEntry())
             if (ReputationRank const* repRank = targetPlayerOwner->GetReputationMgr().GetForcedRankIfAny(selfFactionTemplateEntry))
                 return *repRank;
     }
@@ -3335,7 +3335,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
 
         if (selfPlayerOwner)
         {
-            if (FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry())
+            if (FactionTemplateEntry const* targetFactionTemplateEntry = target->GetFactionTemplateEntry())
             {
                 if (ReputationRank const* repRank = selfPlayerOwner->GetReputationMgr().GetForcedRankIfAny(targetFactionTemplateEntry))
                     return *repRank;
@@ -3360,7 +3360,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
         }
     }
     // do checks dependant only on our faction
-    return GetFactionReactionTo(getFactionTemplateEntry(), target);
+    return GetFactionReactionTo(GetFactionTemplateEntry(), target);
 }
 
 ReputationRank WorldObject::GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target)
@@ -3369,7 +3369,7 @@ ReputationRank WorldObject::GetFactionReactionTo(FactionTemplateEntry const* fac
     if (!factionTemplateEntry)
         return REP_NEUTRAL;
 
-    FactionTemplateEntry const* targetFactionTemplateEntry = target->getFactionTemplateEntry();
+    FactionTemplateEntry const* targetFactionTemplateEntry = target->GetFactionTemplateEntry();
     if (!targetFactionTemplateEntry)
         return REP_NEUTRAL;
 
@@ -5482,7 +5482,7 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
             Player const* player = playerAffectingTarget ? playerAffectingTarget : playerAffectingAttacker;
             WorldObject const* object = playerAffectingTarget ? this : target;
 
-            if (FactionTemplateEntry const* factionTemplate = object->getFactionTemplateEntry())
+            if (FactionTemplateEntry const* factionTemplate = object->GetFactionTemplateEntry())
             {
                 if (!(player->GetReputationMgr().GetForcedRankIfAny(factionTemplate)))
                     if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(factionTemplate->faction))

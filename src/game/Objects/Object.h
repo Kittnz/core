@@ -945,7 +945,7 @@ class WorldObject : public Object
         virtual bool IsHostileTo(WorldObject const* target) const =0;
         virtual bool IsFriendlyTo(WorldObject const* target) const =0;
         virtual uint32 GetFactionTemplateId() const = 0;
-        FactionTemplateEntry const* getFactionTemplateEntry() const;
+        FactionTemplateEntry const* GetFactionTemplateEntry() const;
         virtual ReputationRank GetReactionTo(WorldObject const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target);
         bool IsValidAttackTarget(Unit const* target, bool checkAlive = true) const;
