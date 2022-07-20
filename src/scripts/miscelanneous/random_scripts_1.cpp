@@ -1695,16 +1695,16 @@ bool GossipSelect_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creatur
 }
 
 bool GossipHello_npc_terry_palin(Player* pPlayer, Creature* pCreature)
-{
-    CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51299);
-
-    if (cInfo != nullptr)
+{  
+    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(51299))
         pPlayer->KilledMonster(cInfo, ObjectGuid());
 
-    if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_VENDOR, GOSSIP_TEXT_BROWSE_GOODS, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_TRADE);
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+    if (pCreature->IsVendor())
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
     pPlayer->SEND_GOSSIP_MENU(90338, pCreature->GetGUID());
     return true;
 }
