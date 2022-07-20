@@ -190,4 +190,10 @@ set @player_level = 40;
 
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
 
-update item_template set description = '', spell_id1 = 56053, script_name = '' where name like '%Skin Change Token%';
+update item_template set description = '', spellid_1 = 56053, script_name = '' where name like '%Skin Change Token%';
+
+-- Fix Belts
+update item_template set spelltrigger_2 = 1 where entry = 19827;
+update item_template set spelltrigger_2 = 1 where entry = 19826;
+update item_template set spelltrigger_2 = 1 where entry = 21395;
+update item_template set stat_type2 = 7, stat_value2 = 24, stat_value1 = 14, stat_value3 = 0, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 19380;
