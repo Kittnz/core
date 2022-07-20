@@ -847,6 +847,18 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     // heal amount
                     basepoints[0] = triggerAmount * damage / 100;
                     pVictim->CastCustomSpell(pVictim, 15290, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
+
+                    uint32 improvedVampiric = pVictim->HasAura(45558) ? sSpellMgr.GetSpellEntry(45558)->EffectBasePoints[0] : 0;
+
+                    if (!improvedVampiric)
+                        improvedVampiric = pVictim->HasAura(45557) ? sSpellMgr.GetSpellEntry(45557)->EffectBasePoints[0] : 0;
+
+                    if (improvedVampiric)
+                    {
+                        basepoints[0] = improvedVampiric * damage / 100;
+                        if (basepoints[0])
+                            pVictim->CastCustomSpell(pVictim, 45966, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
+                    }
                     return SPELL_AURA_PROC_OK;                                // no hidden cooldown
                 }
 
