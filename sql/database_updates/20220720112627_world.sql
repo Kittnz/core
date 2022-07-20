@@ -266,3 +266,5 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60660,18813,'Farwell Ring',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
 -- Change ZONE ID in all The Harvest Golem Mystery quests to 40.
 update quest_template set zoneorsort = 40 where entry in (40470,40471,40472,40473,40474,40475,40476,40477,40470,40470,40479,40480,40481,40482,40483,40484,40485);
+-- Fix outline recipe.
+update item_template set spellid_1 = 46078 where entry = 65031;
