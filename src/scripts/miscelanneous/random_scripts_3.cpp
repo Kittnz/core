@@ -3302,9 +3302,39 @@ bool QuestRewarded_npc_lashog(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool QuestRewarded_npc_seer_mazek(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40521) // Desert Voodoo
+    {
+        pQuestGiver->MonsterSay("O, de powerful Loa! Smite ya enemies!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Da ogres of Dunemaul. Curse them!");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+            }, 5000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Let dem feel your fury...");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+            }, 10000);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_seer_mazek";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_seer_mazek;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_lashog";
