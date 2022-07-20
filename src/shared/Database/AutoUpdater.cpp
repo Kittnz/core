@@ -131,9 +131,18 @@ namespace DBUpdater
 
         //sort by modified-at ascending for oldest -> newest updates
         std::sort(updates.begin(), updates.end(), [](const FileMigration& e1, const FileMigration& e2)
-            {
-                return e1.ModifiedAt < e2.ModifiedAt;
-            });
+        {
+            if (e1.ModifiedAt < e2.ModifiedAt)
+                return true;
+
+            if (e1.ModifiedAt > e2.ModifiedAt)
+                return false;
+
+
+            //if we're here then both modifiedAt are the same, can happen with Git merges etc. We sort alphabetically by lowest -> oldest first.
+            return e1.Name < e2.Name;
+
+        });
 
         for (const auto& update : updates)
         {
