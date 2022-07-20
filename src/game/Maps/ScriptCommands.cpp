@@ -410,20 +410,12 @@ bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* so
     if (script.summonCreature.flags & SF_SUMMONCREATURE_SET_RUN)
         pCreature->SetWalk(false);
 
-    switch (script.summonCreature.attackTarget)
+    if (script.summonCreature.attackTarget >= 0)
     {
-        case TARGET_T_OWNER_OR_SELF:
-            break;
-        default:
+        if (Unit* pAttackTarget = ToUnit(GetTargetByType(pSummoner, ToUnit(target), this, script.summonCreature.attackTarget)))
         {
-            if (Creature* pCreatureSummoner = pSummoner->ToCreature())
-            {
-                if (Unit* pAttackTarget = ToUnit(GetTargetByType(pSummoner, ToUnit(target), this, script.summonCreature.attackTarget)))
-                {
-                    if (pCreature->AI())
-                        pCreature->AI()->AttackStart(pAttackTarget);
-                }
-            }
+            if (pCreature->AI())
+                pCreature->AI()->AttackStart(pAttackTarget);
         }
     }
 
@@ -915,6 +907,8 @@ bool Map::ScriptCommand_AttackStart(const ScriptInfo& script, WorldObject* sourc
 
     if (pAttacker->AI())
         pAttacker->AI()->AttackStart(pTarget);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -1064,6 +1058,8 @@ bool Map::ScriptCommand_Evade(const ScriptInfo& script, WorldObject* source, Wor
 
     if (pSource->AI() && pSource->IsAlive())
         pSource->AI()->EnterEvadeMode();
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -1298,6 +1294,8 @@ bool Map::ScriptCommand_SetMeleeAttack(const ScriptInfo& script, WorldObject* so
 
     if (pSource->AI())
         pSource->AI()->SetMeleeAttack(script.enableMelee.enabled);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -1315,6 +1313,8 @@ bool Map::ScriptCommand_SetCombatMovement(const ScriptInfo& script, WorldObject*
 
     if (pSource->AI())
         pSource->AI()->SetCombatMovement(script.combatMovement.enabled);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }
@@ -2291,26 +2291,37 @@ bool Map::ScriptCommand_QuestCredit(ScriptInfo const& script, WorldObject* sourc
     return false;
 }
 
-
-bool Map::ScriptCommand_DespawnCreatureNear(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+// SCRIPT_COMMAND_SET_GOSSIP_MENU (84)
+bool Map::ScriptCommand_SetGossipMenu(ScriptInfo const& script, WorldObject* source, WorldObject* target)
 {
-    Creature* creature = ToCreature(source);
+    Creature* pSource = ToCreature(source);
 
-    if (!creature)
+    if (!pSource)
     {
-        sLog.outError("SCRIPT_COMMAND_DESPAWN_CREATURE_NEAR(script id %u) call for a nullptr or non-creature source (TypeId: %u), skipping.", script.id, source ? source->GetTypeId() : 0);
+        sLog.outError("SCRIPT_COMMAND_SET_GOSSIP_MENU (script id %u) call for a nullptr or non-creature source (TypeId: %u), skipping.", script.id, source ? source->GetTypeId() : 0);
         return ShouldAbortScript(script);
     }
 
-    MaNGOS::AnyCreatureEntryInObjectRangeCheck u_check(creature, script.despawnCreatureNear.searchRange, script.despawnCreatureNear.creatureEntry);
+    pSource->SetDefaultGossipMenuId(script.setGossipMenu.gossipMenuId);
 
-    Creature* despawner = nullptr;
-    MaNGOS::CreatureLastSearcher<MaNGOS::AnyCreatureEntryInObjectRangeCheck> searcher(despawner, u_check);
+    return false;
+}
 
-    Cell::VisitAllObjects(creature, searcher, script.despawnCreatureNear.searchRange);
+// SCRIPT_COMMAND_SEND_SCRIPT_EVENT (85)
+bool Map::ScriptCommand_SendScriptEvent(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    Creature* pSource = ToCreature(source);
 
-    if (despawner)
-        despawner->DespawnOrUnsummon();
+    if (!pSource)
+    {
+        sLog.outError("SCRIPT_COMMAND_SEND_SCRIPT_EVENT (script id %u) call for a nullptr or non-creature source (TypeId: %u), skipping.", script.id, source ? source->GetTypeId() : 0);
+        return ShouldAbortScript(script);
+    }
+
+    if (pSource->AI())
+        pSource->AI()->OnScriptEventHappened(script.sendScriptEvent.eventId, script.sendScriptEvent.eventData, target);
+    else
+        return ShouldAbortScript(script);
 
     return false;
 }

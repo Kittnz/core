@@ -880,7 +880,8 @@ class Creature : public Unit
         bool HasQuest(uint32 quest_id) const override;
         bool HasInvolvedQuest(uint32 quest_id)  const override;
 
-        uint32 GetDefaultGossipMenuId() const override { return GetCreatureInfo()->gossip_menu_id; }
+        void SetDefaultGossipMenuId(uint32 menuId) { m_gossipMenuId = menuId; }
+        uint32 GetDefaultGossipMenuId() const override { return m_gossipMenuId; }
 
         GridReference<Creature> &GetGridRef() { return m_gridRef; }
         bool IsRegeneratingHealth() const { return HasCreatureState(CSTATE_REGEN_HEALTH); }
@@ -1032,6 +1033,7 @@ class Creature : public Unit
         uint16 m_creatureStateFlags;
         uint32 m_temporaryFactionFlags;                     // used for real faction changes (not auras etc)
         int32 m_reputationId;                               // Id of the creature's faction in the client reputations list.
+        uint32 m_gossipMenuId;
 
         SpellSchoolMask m_meleeDamageSchoolMask;
         uint32 m_originalEntry;

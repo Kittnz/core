@@ -426,6 +426,9 @@ class ChatHandler
         bool HandleTeleGroupCommand(char* args);
         bool HandleTeleNameCommand(char* args);
 
+        bool HandleTriggerActiveCommand(char* args);
+        bool HandleTriggerNearCommand(char* args);
+        bool HandleTriggerCommand(char* args);
 
         bool HandleUnBanAccountCommand(char* args);
         bool HandleUnBanCharacterCommand(char* args);

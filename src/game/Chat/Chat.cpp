@@ -438,10 +438,18 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleTeleAddCommand,             "", nullptr },
         { "del",            SEC_DEVELOPER,     true,  &ChatHandler::HandleTeleDelCommand,             "", nullptr },
-        { "name",           SEC_DEVELOPER, true,  &ChatHandler::HandleTeleNameCommand,            "", nullptr },
-        { "group",          SEC_DEVELOPER, false, &ChatHandler::HandleTeleGroupCommand,           "", nullptr },
-        { "",               SEC_OBSERVER, false, &ChatHandler::HandleTeleCommand,                "", nullptr },
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "name",           SEC_DEVELOPER,     true,  &ChatHandler::HandleTeleNameCommand,            "", nullptr },
+        { "group",          SEC_DEVELOPER,     false, &ChatHandler::HandleTeleGroupCommand,           "", nullptr },
+        { "",               SEC_OBSERVER,      false, &ChatHandler::HandleTeleCommand,                "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                        "", nullptr }
+    };
+
+    static ChatCommand triggerCommandTable[] =
+    {
+        { "active",         SEC_OBSERVER,   false, &ChatHandler::HandleTriggerActiveCommand,       "", nullptr },
+        { "near",           SEC_OBSERVER,   false, &ChatHandler::HandleTriggerNearCommand,         "", nullptr },
+        { "",               SEC_OBSERVER,   true,  &ChatHandler::HandleTriggerCommand,             "", nullptr },
+        { nullptr,          0,              false, nullptr,                                        "", nullptr }
     };
 
     static ChatCommand unbanCommandTable[] =
@@ -553,6 +561,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "reset",          SEC_DEVELOPER,       true,  nullptr,                                        "", resetCommandTable    },
         { "server",         SEC_PLAYER,          true,  nullptr,                                        "", serverCommandTable   },
         { "tele",           SEC_OBSERVER,        true,  nullptr,                                        "", teleCommandTable     },
+        { "trigger",        SEC_OBSERVER,        false, nullptr,                                        "", triggerCommandTable  },
         { "wp",             SEC_ADMINISTRATOR,   false, nullptr,                                        "", wpCommandTable       },
         { "service",        SEC_ADMINISTRATOR,   true,  nullptr,                                        "", serviceCommandTable  },
         { "worldstate",     SEC_ADMINISTRATOR,   false, nullptr,                                        "", worldStateCommandTable},
