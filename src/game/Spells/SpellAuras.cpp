@@ -1578,6 +1578,38 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
     Unit *target = GetTarget();
 
+    switch (GetSpellProto()->SpellFamilyName)
+    {
+        case SPELLFAMILY_HUNTER:
+        {
+            switch (GetId())
+            {
+                case 1002: //Turtle: eyes of the beast for CUSTOM new Improved Eyes of the beast
+                {
+                    auto caster = GetCaster();
+                    if (caster)
+                    {
+                        if (apply)
+                        {
+                            if (caster->HasSpell(19557)) // improved beast rank 1
+                                caster->CastSpell(caster, 45662, true);
+                            else if (caster->HasSpell(19558)) // improved beast rank 2
+                                caster->CastSpell(caster, 45663, true);
+                        }
+                        else
+                        {
+                            if (caster->HasSpell(19557))
+                                caster->RemoveAurasDueToSpell(45662);
+                            else if (caster->HasSpell(19558))
+                                caster->RemoveAurasDueToSpell(45663);
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+
     // AT APPLY
     if (apply)
     {
@@ -1723,6 +1755,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             }
             case SPELLFAMILY_SHAMAN:
                 break;
+
 
 
             case SPELLFAMILY_PRIEST:
