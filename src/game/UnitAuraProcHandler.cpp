@@ -853,7 +853,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     if (!improvedVampiric)
                         improvedVampiric = pVictim->HasAura(45557) ? sSpellMgr.GetSpellEntry(45557)->EffectBasePoints[0] : 0;
 
-                    if (improvedVampiric)
+                    if (improvedVampiric && damage)
                     {
                         basepoints[0] = improvedVampiric * damage / 100;
                         if (basepoints[0])
