@@ -7358,6 +7358,175 @@ void ChatHandler::ShowTriggerListHelper(AreaTriggerEntry const* atEntry)
         ShowTriggerTargetListHelper(atEntry->id, at, true);
 }
 
+bool ChatHandler::HandleTriggerCommand(char* args)
+{
+    AreaTriggerEntry const* atEntry = nullptr;
+
+    Player* player = m_session ? m_session->GetPlayer() : nullptr;
+
+    // select by args
+    if (*args)
+    {
+        uint32 atId;
+        if (!ExtractUint32KeyFromLink(&args, "Hareatrigger", atId))
+            return false;
+
+        if (!atId)
+            return false;
+
+        atEntry = sObjectMgr.GetAreaTrigger(atId);
+
+        if (!atEntry)
+        {
+            PSendSysMessage(LANG_COMMAND_GOAREATRNOTFOUND, atId);
+            SetSentErrorMessage(true);
+            return false;
+        }
+    }
+    // find nearest
+    else
+    {
+        if (!m_session)
+            return false;
+
+        float dist2 = MAP_SIZE * MAP_SIZE;
+
+        Player* player = m_session->GetPlayer();
+
+        // Search triggers
+        for (auto const& itr : sObjectMgr.GetAreaTriggersMap())
+        {
+            AreaTriggerEntry const* atTestEntry = &itr.second;
+            if (!atTestEntry)
+                continue;
+
+            if (atTestEntry->mapid != m_session->GetPlayer()->GetMapId())
+                continue;
+
+            float dx = atTestEntry->x - player->GetPositionX();
+            float dy = atTestEntry->y - player->GetPositionY();
+
+            float test_dist2 = dx * dx + dy * dy;
+
+            if (test_dist2 >= dist2)
+                continue;
+
+            dist2 = test_dist2;
+            atEntry = atTestEntry;
+        }
+
+        if (!atEntry)
+        {
+            SendSysMessage(LANG_COMMAND_NOTRIGGERFOUND);
+            SetSentErrorMessage(true);
+            return false;
+        }
+    }
+
+    ShowTriggerListHelper(atEntry);
+
+    int loc_idx = GetSessionDbLocaleIndex();
+
+    AreaTriggerTeleport const* at = sObjectMgr.GetAreaTriggerTeleport(atEntry->id);
+    if (at)
+        PSendSysMessage(LANG_TRIGGER_REQ_LEVEL, at->requiredLevel);
+
+    if (uint32 quest_id = sObjectMgr.GetQuestForAreaTrigger(atEntry->id))
+    {
+        SendSysMessage(LANG_TRIGGER_EXPLORE_QUEST);
+        ShowQuestListHelper(quest_id, loc_idx, player);
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandleTriggerActiveCommand(char* /*args*/)
+{
+    uint32 counter = 0;                                     // Counter for figure out that we found smth.
+
+    Player* player = m_session->GetPlayer();
+
+    // Search in AreaTable.dbc
+    for (auto const& itr : sObjectMgr.GetAreaTriggersMap())
+    {
+        AreaTriggerEntry const* atEntry = &itr.second;
+        if (!atEntry)
+            continue;
+
+        if (!IsPointInAreaTriggerZone(atEntry, player->GetMapId(), player->GetPositionX(), player->GetPositionY(), player->GetPositionZ()))
+            continue;
+
+        ShowTriggerListHelper(atEntry);
+
+        ++counter;
+    }
+
+    if (counter == 0)                                      // if counter == 0 then we found nth
+        SendSysMessage(LANG_COMMAND_NOTRIGGERFOUND);
+
+    return true;
+}
+
+bool ChatHandler::HandleTriggerNearCommand(char* args)
+{
+    float distance = (!*args) ? 10.0f : (float)atof(args);
+    float dist2 = distance * distance;
+    uint32 counter = 0;                                     // Counter for figure out that we found smth.
+
+    Player* player = m_session->GetPlayer();
+
+    // Search triggers
+    for (auto const& itr : sObjectMgr.GetAreaTriggersMap())
+    {
+        AreaTriggerEntry const* atEntry = &itr.second;
+        if (!atEntry)
+            continue;
+
+        if (atEntry->mapid != m_session->GetPlayer()->GetMapId())
+            continue;
+
+        float dx = atEntry->x - player->GetPositionX();
+        float dy = atEntry->y - player->GetPositionY();
+
+        if (dx * dx + dy * dy > dist2)
+            continue;
+
+        ShowTriggerListHelper(atEntry);
+
+        ++counter;
+    }
+
+    // Search trigger targets
+    for (auto const& itr : sObjectMgr.GetAreaTriggersMap())
+    {
+        AreaTriggerEntry const* atEntry = &itr.second;
+        if (!atEntry)
+            continue;
+
+        AreaTriggerTeleport const* at = sObjectMgr.GetAreaTriggerTeleport(atEntry->id);
+        if (!at)
+            continue;
+
+        if (at->destination.mapId != m_session->GetPlayer()->GetMapId())
+            continue;
+
+        float dx = at->destination.x - player->GetPositionX();
+        float dy = at->destination.y - player->GetPositionY();
+
+        if (dx * dx + dy * dy > dist2)
+            continue;
+
+        ShowTriggerTargetListHelper(atEntry->id, at);
+
+        ++counter;
+    }
+
+    if (counter == 0)                                      // if counter == 0 then we found nth
+        SendSysMessage(LANG_COMMAND_NOTRIGGERFOUND);
+
+    return true;
+}
+
 enum CreatureLinkType
 {
     CREATURE_LINK_RAW = -1,                   // non-link case

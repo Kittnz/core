@@ -742,6 +742,9 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (pCurrChar->HasChallenge(CHALLENGE_WAR_MODE))
         pCurrChar->SetPvP(true);
 
+    if (pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER))
+        pCurrChar->RemoveFlag(PLAYER_FLAGS, PLAYER_SALT_FLATS_RACER);
+
     // Apply at_login requests
     if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_SPELLS))
     {

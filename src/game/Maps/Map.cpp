@@ -1066,11 +1066,11 @@ void ScriptedEvent::SendEventToMainTargets(uint32 uiData)
 {
     if (Creature* pCreatureSource = ToCreature(GetSourceObject()))
         if (pCreatureSource->AI())
-            pCreatureSource->AI()->MapScriptEventHappened(this, uiData);
+            pCreatureSource->AI()->OnScriptEventHappened(m_uiEventId, uiData, nullptr);
 
     if (Creature* pCreatureTarget = ToCreature(GetTargetObject()))
         if (pCreatureTarget->AI())
-            pCreatureTarget->AI()->MapScriptEventHappened(this, uiData);
+            pCreatureTarget->AI()->OnScriptEventHappened(m_uiEventId, uiData, nullptr);
 }
 
 void ScriptedEvent::SendEventToAdditionalTargets(uint32 uiData)
@@ -1079,7 +1079,7 @@ void ScriptedEvent::SendEventToAdditionalTargets(uint32 uiData)
     {
         if (Creature* pCreature = ToCreature(m_Map.GetWorldObject(target.target)))
             if (pCreature->AI())
-                pCreature->AI()->MapScriptEventHappened(this, uiData);
+                pCreature->AI()->OnScriptEventHappened(m_uiEventId, uiData, nullptr);
     }
 
 }

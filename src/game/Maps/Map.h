@@ -848,8 +848,8 @@ class Map : public GridRefManager<NGridType>
         bool ScriptCommand_DespawnGameObject(ScriptInfo const& script, WorldObject* source, WorldObject* target);
         bool ScriptCommand_LoadGameObject(ScriptInfo const& script, WorldObject* source, WorldObject* target);
         bool ScriptCommand_QuestCredit(ScriptInfo const& script, WorldObject* source, WorldObject* target);
-        bool ScriptCommand_DespawnCreatureNear(ScriptInfo const& script, WorldObject* source, WorldObject* target);
-        
+        bool ScriptCommand_SetGossipMenu(ScriptInfo const& script, WorldObject* source, WorldObject* target);
+        bool ScriptCommand_SendScriptEvent(ScriptInfo const& script, WorldObject* source, WorldObject* target);
 
         // Add any new script command functions to the array.
         const ScriptCommandFunction m_ScriptCommands[SCRIPT_COMMAND_MAX] =
@@ -938,7 +938,8 @@ class Map : public GridRefManager<NGridType>
             &Map::ScriptCommand_DespawnGameObject,      // 81
             &Map::ScriptCommand_LoadGameObject,         // 82
             &Map::ScriptCommand_QuestCredit,            // 83
-            &Map::ScriptCommand_DespawnCreatureNear,    // 84
+            &Map::ScriptCommand_SetGossipMenu,          // 84
+            &Map::ScriptCommand_SendScriptEvent,        // 85
         };
 
     public:

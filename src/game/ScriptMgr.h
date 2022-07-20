@@ -107,7 +107,7 @@ enum eScriptCommand
                                                             // datalong4 = unique_distance
                                                             // dataint = eSummonCreatureFlags
                                                             // dataint2 = script_id
-                                                            // dataint3 = attack_target (see enum Target)
+                                                            // dataint3 = attack_target (see enum ScriptTarget)
                                                             // dataint4 = despawn_type (see enum TempSummonType)
                                                             // x/y/z/o = coordinates
     SCRIPT_COMMAND_OPEN_DOOR                = 11,           // source = GameObject (from datalong, provided source or target)
@@ -339,10 +339,12 @@ enum eScriptCommand
                                                             // datalong = db_guid
     SCRIPT_COMMAND_QUEST_CREDIT             = 83,           // source = Player (from provided source or target)
                                                             // target = WorldObject (from provided source or target)
-
-    SCRIPT_COMMAND_DESPAWN_CREATURE_NEAR    = 84,           // source = Creature
-                                                            // datalong = entry to be despawned
-                                                            // datalong2 = maxrange
+    SCRIPT_COMMAND_SET_GOSSIP_MENU          = 84,           // source = Creature
+                                                            // datalong = gossip_menu_id
+    SCRIPT_COMMAND_SEND_SCRIPT_EVENT        = 85,           // source = Creature
+                                                            // target = WorldObject
+                                                            // datalong = event_id
+                                                            // datalong2 = event_data
     SCRIPT_COMMAND_MAX,
 
     SCRIPT_COMMAND_DISABLED                 = 9999          // Script action was disabled during loading.
@@ -1021,11 +1023,18 @@ struct ScriptInfo
             uint32 goGuid;                                  // datalong
         } loadGo;
 
-        struct
+                                                            // SCRIPT_COMMAND_QUEST_CREDIT (83)
+
+        struct                                              // SCRIPT_COMMAND_SET_GOSSIP_MENU (84)
         {
-            uint32 creatureEntry;                              // SCRIPT_COMMAND_DESPAWN_CREATURE_NEAR (84)
-            uint32 searchRange;
-        } despawnCreatureNear;
+            uint32 gossipMenuId;                            // datalong
+        } setGossipMenu;
+
+        struct                                              // SCRIPT_COMMAND_SEND_SCRIPT_EVENT (85)
+        {
+            uint32 eventId;                                 // datalong
+            uint32 eventData;                               // datalong2
+        } sendScriptEvent;
 
         struct
         {
