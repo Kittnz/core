@@ -264,3 +264,5 @@ replace into creature_loot_template values
 -- Quest 'Farwell Commision' 40455 gives the wrong quest item, currently it gives 'Boulderfist Truncheon' but should instead give 'The Farwell Ring' (This item got overwritten, make a new one and give it at the start of this quest!):
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60660,18813,'Farwell Ring',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+-- Change ZONE ID in all The Harvest Golem Mystery quests to 40.
+update quest_template set zoneorsort = 40 where entry in (40470,40471,40472,40473,40474,40475,40476,40477,40470,40470,40479,40480,40481,40482,40483,40484,40485);
