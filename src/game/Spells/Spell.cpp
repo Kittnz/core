@@ -3849,38 +3849,24 @@ void Spell::cast(bool skipCheck)
     SendCastResult(castResult);
     InitializeDamageMultipliers();
 
-    // These proc flags should trigger on cast, not on spell hitting target.
+    // Trigger cast end procs
     if (m_canTrigger && m_casterUnit)
     {
-        uint32 procAttacker = m_procAttacker & ON_CAST_PROC_FLAGS;
-
-        if (procAttacker)
+        uint32 procEx = PROC_EX_CAST_END;
+        Unit* pTarget = m_targets.getUnitTarget() ? m_targets.getUnitTarget() : m_casterUnit;
+        for (const auto& target : m_UniqueTargetInfo)
         {
-            m_procAttacker &= ~(procAttacker);
-
-            uint32 procEx = PROC_EX_NONE;
-            Unit* pTarget = m_targets.getUnitTarget() ? m_targets.getUnitTarget() : m_casterUnit;
-            for (const auto& target : m_UniqueTargetInfo)
+            if (target.targetGUID == pTarget->GetObjectGuid())
             {
-                if (target.targetGUID == pTarget->GetObjectGuid())
-                {
-                    if (target.missCondition == SPELL_MISS_NONE)
-                        procEx = target.isCrit ? PROC_EX_CRITICAL_HIT : PROC_EX_NORMAL_HIT;
-                    else
-                        procEx = CreateProcExtendMask(nullptr, target.missCondition);
-                    break;
-                }
+                if (target.missCondition == SPELL_MISS_NONE)
+                    procEx |= target.isCrit ? PROC_EX_CRITICAL_HIT : PROC_EX_NORMAL_HIT;
+                else
+                    procEx |= CreateProcExtendMask(nullptr, target.missCondition);
+                break;
             }
-
-            m_casterUnit->ProcDamageAndSpell(pTarget, procAttacker, PROC_FLAG_NONE, procEx, 1, m_attackType, m_spellInfo, this);
         }
-    }
 
-    // Shaman totems. Trigger spell cast procs, but not others
-    if (m_spellInfo->IsTotemSummonSpell() && m_canTrigger && m_casterUnit)
-    {
-        uint32 procAttackerFlags = PROC_FLAG_SUCCESSFUL_SPELL_CAST | PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST;
-        m_casterUnit->ProcDamageAndSpell(m_casterUnit, procAttackerFlags, PROC_FLAG_NONE, PROC_EX_NORMAL_HIT, 1, m_attackType, m_spellInfo, this);
+        m_casterUnit->ProcDamageAndSpell(pTarget, m_procAttacker, PROC_FLAG_NONE, procEx, 1, m_attackType, m_spellInfo, this);
     }
 
     // Okay, everything is prepared. Now we need to distinguish between immediate and evented delayed spells
