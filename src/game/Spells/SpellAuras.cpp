@@ -5469,7 +5469,10 @@ void Aura::HandleShapeshiftBoosts(bool apply)
         case FORM_GHOSTWOLF:
         case FORM_AMBIENT:
         case FORM_GHOUL:
-        case FORM_SHADOW:
+        case FORM_SHADOW: // custom improved shadowform
+            if (target->HasSpell(45553))
+                spellId1 = 45553;
+            break;
         case FORM_STEALTH:
         case FORM_CREATURECAT:
         case FORM_CREATUREBEAR:
