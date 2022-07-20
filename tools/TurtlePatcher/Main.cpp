@@ -686,18 +686,18 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 		else
 		{
-			WriteLog("ERROR: Failed to open patch-U.mpq inside patch mpq");
-			ErrorBox("Failed to open patch-U.mpq inside patch mpq");
+			WriteLog("ERROR: Coudln't extract MPQ.");
+			ErrorBox("Your client is already updated.");
 			return 1;
 		}
 	}
 
 	if (hDialog == NULL)
 	{
-		WriteLog("INFO: User decide to abandon patch progress. Removing patch.");
+		WriteLog("INFO: User has cancelled update.");
 		if (fs::exists(PATCH_FILE))
 		{
-			WriteLog("Trying remove existing turtle patch.");
+			WriteLog("Removing patch files...");
 			fs::remove(PATCH_FILE);
 		}
 
@@ -709,25 +709,12 @@ int GuardedMain(HINSTANCE hInstance)
 		hDialog = NULL;
 	}
 
-	WriteLog("Unpacking complete, now we try to patch WoW.exe");
-
-	if (!fs::exists("WoW_Old.exe"))
-	{
-		WriteLog("Create WoW.exe backup - WoW_Old.exe");
-		fs::copy_file("WoW.exe", "WoW_Old.exe");
-	}
-	else
-	{
-		WriteLog("WoW_Old.exe is exist, we don't touch it");
-	}
+	WriteLog("Patching WoW.exe...");
 
 	if (int ErrCode = PatchWoWExe())
 	{
 		return ErrCode;
 	}
-
-
-	// modify version info
 
 #if 0
 	HMODULE hWoW = LoadLibrary("WoW.exe");
@@ -737,17 +724,13 @@ int GuardedMain(HINSTANCE hInstance)
 	HGLOBAL hVersionInfoHandle = LoadResource(hWoW, VersionInfo);
 	LPVOID pVerInfo = LockResource(hVersionInfoHandle);
 #endif
-	//BeginUpdateResource()
-	WriteLog("Everything is done. Now, we try to run a new WoW.exe");
-
-	// everything ready, close dialog and start WoW.exe
+	WriteLog("Update is complete, starting the game...");
 	if (hDialog != NULL)
 	{
 		DestroyWindow(hDialog);
 		hDialog = NULL;
 	}
 
-	// Remove downloaded patch, since we applied it
 #ifndef _DEBUG
 	fs::remove("wow-patch.mpq");
 #endif
@@ -760,7 +743,7 @@ int GuardedMain(HINSTANCE hInstance)
 	char WoWExe[24] = "WoW.exe";
 	if (!CreateProcess(NULL, WoWExe, NULL, NULL, FALSE, NORMAL_PRIORITY_CLASS, NULL, NULL, &info, &pInfo))
 	{
-		WriteLog("ERROR: Failed to run WoW.exe");
+		WriteLog("ERROR: Can't start WoW.exe");
 	}
 
 	return 0;
@@ -768,7 +751,7 @@ int GuardedMain(HINSTANCE hInstance)
 
 int UnhandledExceptionFilter(unsigned int code, struct _EXCEPTION_POINTERS *ep)
 {
-	MessageBox(NULL, "Can't patch WoW", "Critical Error", MB_OK | MB_ICONERROR);
+	MessageBox(NULL, "Can't patch WoW.", "Critical Error", MB_OK | MB_ICONERROR);
 	if (code == EXCEPTION_ACCESS_VIOLATION)
 	{
 		return EXCEPTION_EXECUTE_HANDLER;
