@@ -18613,7 +18613,7 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
 
     uint32 reqFaction = pProto->RequiredReputationFaction;
     if (!reqFaction && pProto->RequiredReputationRank > 0)
-        reqFaction = pCreature->getFactionTemplateEntry()->faction;
+        reqFaction = pCreature->GetFactionTemplateEntry()->faction;
 
     if (uint32(GetReputationRank(reqFaction)) < pProto->RequiredReputationRank)
     {
@@ -19651,7 +19651,7 @@ BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundType
 
 float Player::GetReputationPriceDiscount(Creature const* pCreature) const
 {
-    FactionTemplateEntry const* vendor_faction = pCreature->getFactionTemplateEntry();
+    FactionTemplateEntry const* vendor_faction = pCreature->GetFactionTemplateEntry();
     if (!vendor_faction || !vendor_faction->faction)
         return 1.0f;
 

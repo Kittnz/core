@@ -3302,9 +3302,114 @@ bool QuestRewarded_npc_lashog(Player* pPlayer, Creature* pQuestGiver, Quest cons
     return false;
 }
 
+bool QuestRewarded_npc_seer_mazek(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40521) // Desert Voodoo
+    {
+        pQuestGiver->MonsterSay("O, de powerful Loa! Smite ya enemies!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Da ogres of Dunemaul. Curse them!");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+            }, 5000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Let dem feel your fury...");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+            }, 10000);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_voljin(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40524) == QUEST_STATUS_INCOMPLETE)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have been sent on behalf of the Sandfury, they have been driven from their home.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(0, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_voljin(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "The Sandfury in Sandmoon Village remind me of the Darkspear.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30028, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I don't know them well, but they welcomed me in their village like a friend. They had to leave Zul'Farrak because of persecution and despotism of their leader. They ran away, because they saw what is happening there. They saw the darkness, the corruption.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30029, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60377))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30030, pCreature->GetGUID());
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_ekka(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40528) // Meat for Viceclaw!
+    {
+        pQuestGiver->MonsterSay("Viceclaw my dear. Da feast today!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                Creature* viceclaw = pQuestGiver->FindNearestCreature(60755, 15.0F);
+                viceclaw->MonsterTextEmote("Viceclaw: <cackles>");
+            }, 3000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Good boy.");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 5000);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ekka";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_ekka;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_voljin";
+    newscript->pGossipHello = &GossipHello_npc_voljin;
+    newscript->pGossipSelect = &GossipSelect_npc_voljin;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_seer_mazek";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_seer_mazek;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_lashog";
