@@ -670,10 +670,19 @@ void Spell::prepareDataForTriggerSystem()
     m_procAttacker = PROC_FLAG_NONE;
     m_procVictim = PROC_FLAG_NONE;
 
-    if (m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_CANT_TRIGGER_PROC)
+    if (m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) &&
+        m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS))
         m_canTrigger = false;         // Explicitly not allowed to trigger
     else if (m_CastItem)
-        m_canTrigger = false;         // Do not trigger from item cast spell
+    {
+        // Negative item effects do trigger procs. 
+        // Confirmed with Vengeance: Fiery Plate Gauntlets, Storm Gauntlets, Dark Iron Bomb, Force Reactive Disk, Judgement Set 8 Piece Bonus
+        // Flash Bomb also needs to trigger procs to remove Fear Ward.
+        if (!m_spellInfo->IsPositiveSpell())
+            m_canTrigger = true;
+        else
+            m_canTrigger = false;
+    }
     else if (m_originalCasterGUID.IsGameObject())   // Do not trigger anything if the spell is casted by using a game object (eg. Lightwell)
         m_canTrigger = false;
     else if (!m_IsTriggeredSpell)
@@ -868,7 +877,6 @@ void Spell::prepareDataForTriggerSystem()
         if (m_spellInfo->Effect[i] == SPELL_EFFECT_SCHOOL_DAMAGE && m_spellInfo->EffectImplicitTargetA[i] == TARGET_UNIT_CASTER)
             m_negativeEffectMask |= (1 << i);
     }
-
 }
 
 void Spell::CleanupTargetList()
@@ -992,8 +1000,11 @@ void Spell::CheckAtDelay(TargetInfo* pInf)
         }
     }
 
-    if (pTarget != m_caster && ((!m_spellInfo->IsPositiveSpell(m_caster, pTarget) &&
-            pTarget->IsImmuneToDamage(m_spellInfo->GetSpellSchoolMask(), m_spellInfo)) || pTarget->IsImmuneToSpell(m_spellInfo, pTarget == m_caster)))
+    if (pTarget != m_caster &&
+       ((!m_spellInfo->IsPositiveSpell(m_caster, pTarget) &&
+         pTarget->IsImmuneToDamage(m_spellInfo->GetSpellSchoolMask(), m_spellInfo)) ||
+         pTarget->IsImmuneToSpell(m_spellInfo, pTarget == m_caster) ||
+         !CheckTargetCreatureType(pTarget)))
         pInf->missCondition = SPELL_MISS_IMMUNE;
 
     if (pTarget->IsCreature() && ((Creature*)pTarget)->IsInEvadeMode())
@@ -1191,44 +1202,43 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             unitTarget = m_casterUnit;
         }
     }
-    else                                                    // in 1.12.1 we need explicit miss info
+    else if (missInfo == SPELL_MISS_MISS || missInfo == SPELL_MISS_RESIST || missInfo == SPELL_MISS_IMMUNE)
     {
-        if (pRealCaster && !IsNeedSendToClient())
-            pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, missInfo);
-
-        if (missInfo == SPELL_MISS_MISS || missInfo == SPELL_MISS_RESIST)
+        // in 1.12.1 we need explicit miss info
+        if (pRealUnitCaster && pRealUnitCaster != unit)
         {
-            if (pRealUnitCaster && pRealUnitCaster != unit)
+            if (!m_spellInfo->IsPositiveSpell() && (m_caster->IsVisibleForOrDetect(unit, unit, false) || m_spellInfo->HasAttribute(SPELL_ATTR_EX_IS_PICKPOCKET)))
             {
-                if (!m_spellInfo->IsPositiveSpell() && (m_caster->IsVisibleForOrDetect(unit, unit, false) || m_spellInfo->HasAttribute(SPELL_ATTR_EX_IS_PICKPOCKET)))
+                // SPELL_ATTR_EX2_NO_INITIAL_THREAT is only checked on hit
+                // test case: cast Starshards on target immune to Arcane (Manaclaw in Winterspring)
+                // target will aggro instantly, while not immune target will not until damage is dealt
+                bool combat = (!IsTriggeredByAura() || m_spellInfo->speed) &&
+                                !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT);
+
+                // Pickpocket can cause back attack if failed
+                if (m_spellInfo->HasAttribute(SPELL_ATTR_EX_IS_PICKPOCKET))
                 {
-                    bool combat = !IsTriggeredByAura() && !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT) && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO);
+                    pRealUnitCaster->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
+                    combat = true;
+                }
 
-                    // Pickpocket can cause back attack if failed
-                    if (m_spellInfo->HasAttribute(SPELL_ATTR_EX_IS_PICKPOCKET))
+                if (combat)
+                {
+                    if (!m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS))
                     {
-                        pRealUnitCaster->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                        combat = true;
+                        if (!unit->IsInCombat())
+                            unit->AttackedBy(pRealUnitCaster);
+
+                        unit->AddThreat(pRealUnitCaster);
+                        unit->SetInCombatWithAggressor(pRealUnitCaster);
                     }
 
-                    if (combat)
-                    {
-                        if (!m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS))
-                        {
-                            if (!unit->IsInCombat())
-                                unit->AttackedBy(pRealUnitCaster);
-
-                            unit->AddThreat(pRealUnitCaster);
-                            unit->SetInCombatWithAggressor(pRealUnitCaster);
-                        }
-                        
-                        pRealUnitCaster->SetInCombatWithVictim(unit);
-                    }
-                    else if (m_spellInfo->HasAttribute(SPELL_ATTR_EX3_OUT_OF_COMBAT_ATTACK))
-                    {
-                        unit->SetOutOfCombatWithAggressor(pRealUnitCaster);
-                        pRealUnitCaster->SetOutOfCombatWithVictim(unit);
-                    }
+                    pRealUnitCaster->SetInCombatWithVictim(unit);
+                }
+                else if (m_spellInfo->HasAttribute(SPELL_ATTR_EX3_OUT_OF_COMBAT_ATTACK))
+                {
+                    unit->SetOutOfCombatWithAggressor(pRealUnitCaster);
+                    pRealUnitCaster->SetOutOfCombatWithVictim(unit);
                 }
             }
         }
@@ -1288,7 +1298,14 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 }
             }
 
-            pCaster->ProcDamageAndSpell(unitTarget, pRealCaster ? procAttacker : PROC_FLAG_NONE, procVictim, procEx, addhealth, m_attackType, spellInfo, this);
+            pCaster->ProcDamageAndSpell(unitTarget, 
+                pRealCaster && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
+                m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
+                procEx,
+                addhealth,
+                m_attackType,
+                spellInfo,
+                this);
         }
 
         int32 gain = pCaster->DealHeal(unitTarget, addhealth, m_spellInfo, crit);
@@ -1353,10 +1370,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         procEx = CreateProcExtendMask(&damageInfo, missInfo);
         procVictim |= PROC_FLAG_TAKEN_ANY_DAMAGE;
 
-        // (HACK) trigger Vengeance on weapon crits for Paladins
-        // item procs should probably trigger for all classes, e.g. Judgement of Wisdom, but many issues to test for first. Paladin exclusive for now.
-        if (m_CastItem && m_casterUnit && m_casterUnit->GetClass() == CLASS_PALADIN && (procEx & PROC_EX_CRITICAL_HIT) && !(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_CANT_TRIGGER_PROC))
-            m_canTrigger = true;
         // JoR and JoC: Paladin melee spells trigger melee procs instead of magic
         if ((m_spellInfo->IsFitToFamilyMask<CF_PALADIN_JUDGEMENT_OF_RIGHTEOUSNESS>() && m_spellInfo->SpellIconID == 25) || 
             (m_spellInfo->SpellFamilyName == SPELLFAMILY_PALADIN && m_spellInfo->SpellIconID == 561 && m_spellInfo->SpellVisual == 0))
@@ -1366,8 +1379,17 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         }
         // Do triggers for unit (reflect triggers passed on hit phase for correct drop charge)
         if (m_canTrigger)
-            pCaster->ProcDamageAndSpell(unitTarget, pRealCaster ? procAttacker : PROC_FLAG_NONE, procVictim, procEx, damageInfo.damage, m_attackType, m_spellInfo, this);
-        
+        {
+            pCaster->ProcDamageAndSpell(unitTarget,
+                pRealCaster && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
+                m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
+                procEx,
+                damageInfo.damage,
+                m_attackType,
+                m_spellInfo,
+                this);
+        }
+
         if (m_caster->IsPlayer())
         {
             // trigger weapon enchants for weapon based spells; exclude spells that stop attack, because may break CC
@@ -1480,7 +1502,14 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             }
         }
 
-        pCaster->ProcDamageAndSpell(unitTarget, pRealCaster ? procAttacker : PROC_FLAG_NONE, procVictim, procEx, dmg, m_attackType, m_spellInfo, this);
+        pCaster->ProcDamageAndSpell(unitTarget,
+            pRealCaster && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
+            m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
+            procEx,
+            dmg,
+            m_attackType,
+            m_spellInfo,
+            this);
     }
 
     if (missInfo != SPELL_MISS_NONE)
@@ -1577,7 +1606,8 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                 unit->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_HITBYSPELL);
 
             // not break stealth by cast targeting
-            if (!(m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_BREAK_STEALTH))
+            // skip gobject caster because of buffs in wsg
+            if (!m_casterGo && !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NOT_BREAK_STEALTH))
             {
                 unit->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
                 unit->RemoveNonPassiveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
@@ -1585,7 +1615,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
 
             // for delayed spells ignore not visible explicit target
             if (m_delayed && unit == m_targets.getUnitTarget() &&
-                    !unit->IsVisibleForOrDetect(m_caster, m_caster, false))
+                !unit->IsVisibleForOrDetect(m_caster, m_caster, false))
             {
                 pRealCaster->SendSpellMiss(unit, m_spellInfo->Id, SPELL_MISS_EVADE);
                 ResetEffectDamageAndHeal();
@@ -1594,19 +1624,16 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
 
             // can cause back attack (if detected), stealth removed at Spell::cast if spell break it
             if ((!m_spellInfo->IsPositiveSpell() || m_spellInfo->HasEffect(SPELL_EFFECT_DISPEL)) &&
+                    !(pRealCaster->IsGameObject() && unit->IsPlayer()) && // hunter traps should not put you in combat
                     !m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_SAP>() && // Sap handled somewhere else. Without this, sap will remove stealth if the rogue is visible.
                     (m_spellInfo->Id == 6358 || // Exception to fix succubus seduction.
                      m_caster->IsVisibleForOrDetect(unit, unit, false)))
             {
-                if (!IsTriggeredByAura() && !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT) && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO))
+                if ((!IsTriggeredByAura() || m_spellInfo->speed || m_spellInfo->HasDirectThreatIncreaseEffect()) &&
+                    !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT) &&
+                    !m_spellInfo->HasAttribute(SPELL_ATTR_EX_THREAT_ONLY_ON_MISS) &&
+                    !m_spellInfo->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT))
                 {
-                    // use speedup check to avoid re-remove after above lines
-                    if (m_spellInfo->AttributesEx & SPELL_ATTR_EX_NOT_BREAK_STEALTH)
-                    {
-                        unit->RemoveSpellsCausingAura(SPELL_AURA_MOD_STEALTH);
-                        unit->RemoveNonPassiveSpellsCausingAura(SPELL_AURA_MOD_INVISIBILITY);
-                    }
-
                     // caster can be detected but have stealth aura
                     if (m_casterUnit)
                     {
@@ -1657,7 +1684,7 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
             {
                 if (unit->IsInCombat())
                 {
-                    if (!(m_spellInfo->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO))
+                    if (!m_spellInfo->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT))
                     {
                         pRealUnitCaster->SetInCombatWithAssisted(unit);
                         unit->GetHostileRefManager().threatAssist(pRealUnitCaster, 0.0f, m_spellInfo);
@@ -3850,7 +3877,7 @@ void Spell::cast(bool skipCheck)
     InitializeDamageMultipliers();
 
     // Trigger procs on cast end for caster.
-    if (m_canTrigger && m_casterUnit)
+    if (m_canTrigger && m_casterUnit && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS))
     {
         uint32 procEx = PROC_EX_CAST_END;
         Unit* pTarget = m_targets.getUnitTarget() ? m_targets.getUnitTarget() : m_casterUnit;
