@@ -1233,7 +1233,8 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 // Calculate spell tick count for spells
                 uint32 tick = 1; // Default tick = 1
 
-                if (procSpell->SpellIconID == 184 && procSpell->SpellVisual == 2253)
+                //CUSTOM Turtle wow conflag proc on pyroclasm
+                if ((procSpell->SpellIconID == 184 && procSpell->SpellVisual == 2253) || procSpell->IsFitToFamilyMask<CF_WARLOCK_CONFLAGRATE>())
                     tick = 1; // Feu de l'ame
                 // Hellfire have 15 tick
                 else if (procSpell->IsFitToFamilyMask<CF_WARLOCK_HELLFIRE>())
