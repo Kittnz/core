@@ -2286,7 +2286,15 @@ struct npc_marshal_windsorAI : npc_escortAI
                     {
                         pTemp->SetFactionTemplateId(11);
                         m_pInstance->SetData(TYPE_JAIL_SUPPLY_ROOM, DONE);
-                        pEscortAI->Start(false, GetPlayerForEscort()->GetObjectGuid());
+
+                        if (const auto pPlayer = GetPlayerForEscort())
+                        {
+                            pEscortAI->Start(false, pPlayer->GetObjectGuid());
+                        }
+                        else
+                        {
+                            sLog.outError("Player not found in [struct npc_marshal_windsorAI] WaypointReached(19).");
+                        }
                     }
                 }
                 break;

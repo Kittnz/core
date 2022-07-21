@@ -167,7 +167,7 @@ struct SpellPeriodicAuraLogInfo
     float  multiplier;
 };
 
-uint32 createProcExtendMask(SpellNonMeleeDamage *damageInfo, SpellMissInfo missCondition);
+uint32 CreateProcExtendMask(SpellNonMeleeDamage* damageInfo, SpellMissInfo missCondition);
 
 enum SpellAuraProcResult
 {
@@ -1290,7 +1290,7 @@ class Unit : public WorldObject
         bool IsNeutralToAll() const;
         bool IsContestedGuard() const
         {
-            if (FactionTemplateEntry const* entry = getFactionTemplateEntry())
+            if (FactionTemplateEntry const* entry = GetFactionTemplateEntry())
                 return entry->IsContestedGuardFaction();
 
             return false;

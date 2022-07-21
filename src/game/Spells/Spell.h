@@ -600,6 +600,7 @@ class Spell
             SpellMissInfo reflectResult:8;
             uint8  effectMask:8;
             bool   processed:1;
+            bool   isCrit:1;
             bool   deleted:1;
         };
 

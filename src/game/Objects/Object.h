@@ -945,7 +945,7 @@ class WorldObject : public Object
         virtual bool IsHostileTo(WorldObject const* target) const =0;
         virtual bool IsFriendlyTo(WorldObject const* target) const =0;
         virtual uint32 GetFactionTemplateId() const = 0;
-        FactionTemplateEntry const* getFactionTemplateEntry() const;
+        FactionTemplateEntry const* GetFactionTemplateEntry() const;
         virtual ReputationRank GetReactionTo(WorldObject const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target);
         bool IsValidAttackTarget(Unit const* target, bool checkAlive = true) const;
@@ -1083,7 +1083,7 @@ virtual uint32 GetLevel() const = 0;
         float GetSpellResistChance(Unit const* victim, uint32 schoolMask, bool innateResists) const;
         SpellMissInfo SpellHitResult(Unit *pVictim, SpellEntry const *spell, SpellEffectIndex effIndex, bool canReflect = false, Spell* spellPtr = nullptr);
         void ProcDamageAndSpell(Unit *pVictim, uint32 procAttacker, uint32 procVictim, uint32 procEx, uint32 amount, WeaponAttackType attType = BASE_ATTACK, SpellEntry const *procSpell = nullptr, Spell* spell = nullptr);
-        void CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 damage, SpellEntry const* spellInfo, SpellEffectIndex effectIndex, WeaponAttackType attackType = BASE_ATTACK, Spell* spell = nullptr);
+        void CalculateSpellDamage(SpellNonMeleeDamage* damageInfo, int32 damage, SpellEntry const* spellInfo, SpellEffectIndex effectIndex, WeaponAttackType attackType, Spell* spell, bool crit);
         int32 CalculateSpellDamage(Unit const* target, SpellEntry const* spellProto, SpellEffectIndex effect_index, int32 const* basePoints = nullptr, Spell* spell = nullptr) const;
         int32 SpellBonusWithCoeffs(SpellEntry const* spellProto, SpellEffectIndex effectIndex, int32 total, int32 benefit, int32 ap_benefit, DamageEffectType damagetype, bool donePart, WorldObject* pCaster, Spell* spell = nullptr) const;
         static float CalculateLevelPenalty(SpellEntry const* spellProto);

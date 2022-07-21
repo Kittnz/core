@@ -438,11 +438,15 @@ void SpellMgr::LoadSpellProcItemEnchant()
 
 bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const * spellProcEvent, uint32 EventProcFlag, SpellEntry const * procSpell, uint32 procFlags, uint32 procExtra)
 {
-    // No extra req need
-    uint32 procEvent_procEx = PROC_EX_NONE;
+    // Store extra req
+    uint32 procEvent_procEx = spellProcEvent ? spellProcEvent->procEx : PROC_EX_NONE;
 
     // check prockFlags for condition
     if ((procFlags & EventProcFlag) == 0)
+        return false;
+
+    // Either procs only on cast end, or only on hit.
+    if ((procExtra & PROC_EX_CAST_END) != (procEvent_procEx & PROC_EX_CAST_END))
         return false;
 
     // Always trigger for this
@@ -451,9 +455,6 @@ bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const * spellP
 
     if (spellProcEvent)     // Exist event data
     {
-        // Store extra req
-        procEvent_procEx = spellProcEvent->procEx;
-
         // For melee triggers
         if (procSpell == nullptr)
         {
@@ -477,7 +478,7 @@ bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const * spellP
     if (procEvent_procEx == PROC_EX_NONE)
     {
         // Don't allow proc from periodic heal if no extra requirement is defined
-        if (EventProcFlag & (PROC_FLAG_ON_DO_PERIODIC | PROC_FLAG_ON_TAKE_PERIODIC) && (procExtra & PROC_EX_PERIODIC_POSITIVE))
+        if (EventProcFlag & (PROC_FLAG_DEAL_HARMFUL_PERIODIC | PROC_FLAG_TAKE_HARMFUL_PERIODIC) && (procExtra & PROC_EX_PERIODIC_POSITIVE))
             return false;
 
         // No extra req, so can trigger for (damage/healing present) and hit/crit
@@ -490,7 +491,7 @@ bool SpellMgr::IsSpellProcEventCanTriggeredBy(SpellProcEventEntry const * spellP
         if (procEvent_procEx & PROC_EX_EX_TRIGGER_ALWAYS)
             return true;
         // Exist req for PROC_EX_NO_PERIODIC
-        if ((procEvent_procEx & PROC_EX_NO_PERIODIC) && (procFlags & (PROC_FLAG_ON_DO_PERIODIC | PROC_FLAG_ON_TAKE_PERIODIC | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT | PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT)))
+        if ((procEvent_procEx & PROC_EX_NO_PERIODIC) && (procFlags & (PROC_FLAG_DEAL_HARMFUL_PERIODIC | PROC_FLAG_TAKE_HARMFUL_PERIODIC | PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT | PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT)))
             return false;
         // Check Extra Requirement like (hit/crit/miss/resist/parry/dodge/block/immune/reflect/absorb and other)
         if (procEvent_procEx & procExtra)

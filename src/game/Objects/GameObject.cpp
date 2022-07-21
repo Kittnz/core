@@ -2103,7 +2103,7 @@ bool GameObject::IsHostileTo(WorldObject const* target) const
 
     // faction base cases
     FactionTemplateEntry const*tester_faction = sObjectMgr.GetFactionTemplateEntry(GetGOInfo()->faction);
-    FactionTemplateEntry const*target_faction = target->getFactionTemplateEntry();
+    FactionTemplateEntry const*target_faction = target->GetFactionTemplateEntry();
     if (!tester_faction || !target_faction)
         return false;
 
@@ -2149,7 +2149,7 @@ bool GameObject::IsFriendlyTo(WorldObject const* target) const
 
     // faction base cases
     FactionTemplateEntry const*tester_faction = sObjectMgr.GetFactionTemplateEntry(GetGOInfo()->faction);
-    FactionTemplateEntry const*target_faction = target->getFactionTemplateEntry();
+    FactionTemplateEntry const*target_faction = target->GetFactionTemplateEntry();
     if (!tester_faction || !target_faction)
         return false;
 

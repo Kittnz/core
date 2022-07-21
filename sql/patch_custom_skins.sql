@@ -1,1 +1,0 @@
-update item_template set description = '', spell_id1 = 56053, script_name = '' where name like '%Skin Change Token%';
