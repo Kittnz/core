@@ -805,7 +805,7 @@ enum SpellAttributesEx2
     SPELL_ATTR_EX2_UNK20                      = 0x00100000,            // 20
     SPELL_ATTR_EX2_DAMAGE_REDUCED_SHIELD      = 0x00200000,            // 21 for ice blocks, pala immunity buffs, priest absorb shields, but used also for other spells -> not sure!
     SPELL_ATTR_EX2_NO_INITIAL_THREAT          = 0x00400000,            // 22
-    SPELL_ATTR_EX2_IS_ARCANE_CONCENTRATION    = 0x00800000,            // 23 Only mage Arcane Concentration have this flag
+    SPELL_ATTR_EX2_PROC_COOLDOWN_ON_FAILURE   = 0x00800000,            // 23
     SPELL_ATTR_EX2_UNK24                      = 0x01000000,            // 24
     SPELL_ATTR_EX2_UNK25                      = 0x02000000,            // 25
     SPELL_ATTR_EX2_UNK26                      = 0x04000000,            // 26 unaffected by school immunity
@@ -963,17 +963,6 @@ enum ProcFlags
 
     PROC_FLAG_MAIN_HAND_WEAPON_SWING         = 0x00400000,   // 22 Taken off-hand melee attacks (no spells have it)
     PROC_FLAG_OFF_HAND_WEAPON_SWING          = 0x00800000,   // 23 Successful off-hand melee attacks  (no spells have it)
-
-    // CUSTOM FLAGS
-
-    PROC_FLAG_SUCCESSFUL_AOE                 = 0x01000000,   // 24 Nostalrius: AoE casted. Triggered only once, whatever the number of targets.
-    PROC_FLAG_SUCCESSFUL_SPELL_CAST          = 0x02000000,   // 25 Nostalrius: Spell cast successful (procs only once for AoE)
-
-    PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST     = 0x04000000,   // 26 Successful cast of a mana based spell (procs only once for AoE)
-    PROC_FLAG_SUCCESSFUL_CURE_SPELL_CAST     = 0x08000000,   // 27 Successful cast of curing spell (i.e. Cleanse)
-
-    PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT  = 0x10000000,   // 28 Successful do periodic (procs only on initial cast)
-    PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT       = 0x20000000    // 29 Taken spell periodic (procs only on initial cast)
 };
 
 #define MELEE_BASED_TRIGGER_MASK (PROC_FLAG_DEAL_MELEE_SWING        | \
