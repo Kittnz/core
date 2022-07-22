@@ -772,9 +772,6 @@ void Spell::prepareDataForTriggerSystem()
                     m_procAttacker = PROC_FLAG_DEAL_RANGED_ABILITY;
                     m_procVictim   = PROC_FLAG_TAKE_RANGED_ABILITY;
                 }
-
-                if (m_spellInfo->IsAreaOfEffectSpell())
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_AOE;
             }
             break;
         default:
@@ -801,26 +798,6 @@ void Spell::prepareDataForTriggerSystem()
                     m_procAttacker = PROC_FLAG_DEAL_HELPFUL_ABILITY;
                     m_procVictim = PROC_FLAG_TAKE_HELPFUL_ABILITY;
                 }
-
-                if (m_spellInfo->IsDispel())
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_CURE_SPELL_CAST;
-
-                if (aoe)
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_AOE;
-
-                if (m_spellInfo->IsSpellAppliesPeriodicAura())
-                {
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT;
-                    m_procVictim |= PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT;
-                }
-
-                // Always proc with PROC_FLAG_SUCCESSFUL_SPELL_CAST if not AoE or triggered spell
-                if (!aoe && !IsTriggered())
-                {
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_SPELL_CAST;
-                    if (m_powerCost > 0 && m_spellInfo->powerType == POWER_MANA)
-                        m_procAttacker |= PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST;
-                }
             }
             // Wands auto attack
             else if (m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_AUTOREPEAT_FLAG)
@@ -839,22 +816,6 @@ void Spell::prepareDataForTriggerSystem()
                 {
                     m_procAttacker = PROC_FLAG_DEAL_HARMFUL_ABILITY;
                     m_procVictim = PROC_FLAG_TAKE_HARMFUL_ABILITY;
-                }
-
-                if (aoe)
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_AOE;
-
-                if (m_spellInfo->IsSpellAppliesPeriodicAura())
-                {
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_PERIODIC_SPELL_HIT;
-                    m_procVictim |= PROC_FLAG_TAKEN_PERIODIC_SPELL_HIT;
-                }
-
-                if (!aoe && !IsTriggered())
-                {
-                    m_procAttacker |= PROC_FLAG_SUCCESSFUL_SPELL_CAST;
-                    if (m_powerCost > 0 && m_spellInfo->powerType == POWER_MANA)
-                        m_procAttacker |= PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST;
                 }
             }
             break;
@@ -1152,22 +1113,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             procAttacker &= ~(PROC_FLAG_DEAL_MELEE_ABILITY);
             procAttacker |= PROC_FLAG_DEAL_HARMFUL_SPELL;
         }
-        else if (procAttacker & (PROC_FLAG_SUCCESSFUL_SPELL_CAST | PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST))
-        {
-            // Secondary target on a successful spell cast. Remove these flags so we're not
-            // proccing beneficial auras multiple times. Also remove negative spell hit for
-            // chain lightning + clearcasting. Leave positive effects
-            // eg. Chain heal/lightning & Zandalarian Hero Charm
-            procAttacker &= ~(PROC_FLAG_SUCCESSFUL_SPELL_CAST | PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST |
-                PROC_FLAG_DEAL_HARMFUL_SPELL);
-        }
-        else if (procAttacker & (PROC_FLAG_SUCCESSFUL_AOE | PROC_FLAG_DEAL_HARMFUL_SPELL))
-        {
-            // Do not allow secondary hits for negative aoe spells (such as Arcane Explosion) 
-            // to proc beneficial abilities such as Clearcasting. Positive aoe spells can
-            // still trigger, as in the case of prayer of healing and inspiration...
-            procAttacker &= ~(PROC_FLAG_SUCCESSFUL_AOE | PROC_FLAG_DEAL_HARMFUL_SPELL);
-        }
     }
 
     // drop proc flags in case target not affected negative effects in negative spell
@@ -1176,7 +1121,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     if (((procAttacker | procVictim) & NEGATIVE_TRIGGER_MASK) &&
             !(target->effectMask & m_negativeEffectMask) && (missInfo == SPELL_MISS_NONE || missInfo == SPELL_MISS_REFLECT))
     {
-        procAttacker = procAttacker & PROC_FLAG_SUCCESSFUL_SPELL_CAST;
+        procAttacker = PROC_FLAG_NONE;
         procVictim   = PROC_FLAG_NONE;
     }
 
@@ -1294,7 +1239,6 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                     // stored in unused spell effect basepoints in main spell code
                     uint32 spellid = m_currentBasePoints[EFFECT_INDEX_1];
                     spellInfo = sSpellMgr.GetSpellEntry(spellid);
-                    procAttacker |= (PROC_FLAG_SUCCESSFUL_SPELL_CAST | PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST);
                 }
             }
 
@@ -1494,7 +1438,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             // Override proc flags for offensive dispel
             if (pCaster->IsHostileTo(unitTarget))
             {
-                procAttacker &= ~(PROC_FLAG_DEAL_HELPFUL_ABILITY | PROC_FLAG_SUCCESSFUL_CURE_SPELL_CAST);
+                procAttacker &= ~PROC_FLAG_DEAL_HELPFUL_ABILITY;
                 procAttacker |= PROC_FLAG_DEAL_HARMFUL_SPELL;
 
                 procVictim &= ~PROC_FLAG_TAKE_HELPFUL_ABILITY;
@@ -3898,10 +3842,7 @@ void Spell::cast(bool skipCheck)
 
         // Trigger procs for spells with no unit targets at cast time.
         if (m_UniqueTargetInfo.empty())
-        {
-            if (uint32 procAttacker = m_procAttacker & (PROC_FLAG_SUCCESSFUL_AOE | PROC_FLAG_SUCCESSFUL_SPELL_CAST | PROC_FLAG_SUCCESSFUL_MANA_SPELL_CAST))
-                m_casterUnit->ProcDamageAndSpell(nullptr, procAttacker, PROC_FLAG_NONE, PROC_EX_NORMAL_HIT, 1, m_attackType, m_spellInfo, this);
-        }
+            m_casterUnit->ProcDamageAndSpell(nullptr, m_procAttacker, PROC_FLAG_NONE, PROC_EX_NORMAL_HIT, 1, m_attackType, m_spellInfo, this);
     }
 
     // Okay, everything is prepared. Now we need to distinguish between immediate and evented delayed spells
