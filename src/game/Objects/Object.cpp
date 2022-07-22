@@ -3200,7 +3200,7 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
 
     // Magic case
 
-    if (pProto && pProto->AttributesEx3 & SPELL_ATTR_EX3_NO_INITIAL_AGGRO)
+    if (pProto && pProto->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT))
         return victim;
 
     if (spell && pProto && (pProto->DmgClass == SPELL_DAMAGE_CLASS_MAGIC || pProto->SpellVisual == 7250) && pProto->Dispel != DISPEL_POISON && !(pProto->Attributes & 0x10))
@@ -3510,7 +3510,8 @@ SpellMissInfo WorldObject::SpellHitResult(Unit* pVictim, SpellEntry const* spell
         return SPELL_MISS_EVADE;
 
     // Check for immune (use charges)
-    if (pVictim != this && pVictim->IsImmuneToSpell(spell, pVictim == this))
+    if (pVictim != this && !spell->HasAttribute(SPELL_ATTR_UNAFFECTED_BY_INVULNERABILITY) &&
+        pVictim->IsImmuneToSpell(spell, pVictim == this))
         return SPELL_MISS_IMMUNE;
 
     // All positive spells can`t miss

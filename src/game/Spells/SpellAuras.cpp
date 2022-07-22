@@ -7276,13 +7276,16 @@ void SpellAuraHolder::Update(uint32 diff)
             return;
         }
 
-        // Entering combat:
-        if (!GetSpellProto()->HasAttribute(SPELL_ATTR_EX_NO_THREAT) && !GetSpellProto()->HasAttribute(SPELL_ATTR_EX3_NO_INITIAL_AGGRO) &&
+        // enter combat
+        if (!GetSpellProto()->HasAttribute(SPELL_ATTR_EX_NO_THREAT) &&
+            !GetSpellProto()->HasAttribute(SPELL_ATTR_EX_THREAT_ONLY_ON_MISS) &&
+            !GetSpellProto()->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT) &&
             !IsPositive() && caster->IsVisibleForOrDetect(m_target, m_target, false))
         {
             m_target->SetInCombatWith(caster);
             caster->SetInCombatWith(m_target);
         }
+
         // unlimited range
         if (m_spellProto->Custom & SPELL_CUSTOM_CHAN_NO_DIST_LIMIT)
             return;
