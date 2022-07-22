@@ -2715,7 +2715,7 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
             if (urand(0, 10))
                 return;
             break;
-        // Vanish (not exist)
+        // Vanish
         case 18461:
         {
             unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOD_ROOT);
@@ -2727,7 +2727,7 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
                 return;
 
             // get highest rank of the Stealth spell
-            uint32 spellId = 0;
+            SpellEntry const* stealthSpellEntry = nullptr;
             const PlayerSpellMap& sp_list = ((Player*)unitTarget)->GetSpellMap();
             for (const auto& itr : sp_list)
             {
@@ -2741,20 +2741,24 @@ void Spell::EffectTriggerSpell(SpellEffectIndex eff_idx)
 
                 if (spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_STEALTH>())
                 {
-                    spellId = spellInfo->Id;
+                    stealthSpellEntry = spellInfo;
                     break;
                 }
             }
 
             // no Stealth spell found
-            if (!spellId)
+            if (!stealthSpellEntry)
+                return;
+
+            // not if prevented by faerie fire
+            if (unitTarget->IsImmuneToSpell(stealthSpellEntry, true))
                 return;
 
             // reset cooldown on it if needed
-            if (((Player*)unitTarget)->HasSpellCooldown(spellId))
-                ((Player*)unitTarget)->RemoveSpellCooldown(spellId);
+            if (((Player*)unitTarget)->HasSpellCooldown(stealthSpellEntry->Id))
+                ((Player*)unitTarget)->RemoveSpellCooldown(stealthSpellEntry->Id);
 
-            m_caster->CastSpell(unitTarget, spellId, true);
+            m_caster->CastSpell(unitTarget, stealthSpellEntry, true);
             return;
         }
         // just skip
