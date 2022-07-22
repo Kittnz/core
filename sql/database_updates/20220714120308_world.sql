@@ -77,20 +77,20 @@ update quest_template set offerrewardtext = 'Also, take this key, I do not inten
 delete from creature_ai_scripts where id in (2200019,2200020,2200021);
 delete from creature_ai_events where id in (2200019,2200020,2200021);
 -- Slaver Vilegrip on death:
-REPLACE INTO creature_ai_scripts VALUES
-(2200019, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30023, 0, 0, 0, 0, 0, 0, 0, 0, 'Slaver Vilegrip - Say on Aggro');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES 
+(2200019, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30023, 0, 0, 0, 0, 0, 0, 0, 0, 'Slaver Vilegrip - Say on Aggro');
 REPLACE INTO creature_ai_events VALUES
 (2200019, 60836, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200019, 0, 0, 'Slaver Vilegrip - Say on Aggro');
 -- Farad on death:
 REPLACE INTO broadcast_text VALUES (30026, 'If only you knew... Maltimor, I hope the Twisting Nether... takes you...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-REPLACE INTO creature_ai_scripts VALUES
-(2200020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30026, 0, 0, 0, 0, 0, 0, 0, 0, 'Farad - Say upon Death');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES 
+(2200020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30026, 0, 0, 0, 0, 0, 0, 0, 0, 'Farad - Say upon Death');
 REPLACE INTO creature_ai_events VALUES
 (2200020, 60854, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200020, 0, 0, 'Farad - Say upon Death');
 -- Gazzirik on death:
 REPLACE INTO broadcast_text VALUES (30027, 'That was a bad deal...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-REPLACE INTO creature_ai_scripts VALUES
-(2200021, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30027, 0, 0, 0, 0, 0, 0, 0, 0, 'Gazzirik - Say upon Death');
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES 
+(2200021, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30027, 0, 0, 0, 0, 0, 0, 0, 0, 'Gazzirik - Say upon Death');
 REPLACE INTO creature_ai_events VALUES
 (2200021, 60859, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200021, 0, 0, 'Gazzirik - Say upon Death');
 -- Scrapforged Items for Scrap Forager.
