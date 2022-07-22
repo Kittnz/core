@@ -2392,6 +2392,10 @@ bool Player::TeleportToBGEntryPoint()
     if (m_bgData.joinPos.x == 0.0f && m_bgData.joinPos.y == 0.0f && m_bgData.joinPos.z == 0.0f)
         m_bgData.joinPos = WorldLocation(m_homebindMapId, m_homebindX, m_homebindY, m_homebindZ, 0.0f);
 
+    // Remove AFK from player before BG teleport
+    if (HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_AFK))
+        RemoveFlag(PLAYER_FLAGS, PLAYER_FLAGS_AFK);
+
     return TeleportTo(m_bgData.joinPos);
 }
 
