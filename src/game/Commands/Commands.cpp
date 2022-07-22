@@ -8152,7 +8152,10 @@ bool ChatHandler::HandleGameObjectInfoCommand(char* args)
         pGameObject->GetDisplayId(),
         pGameObject->GetGoState(),
         pGameObject->getLootState());
-
+    if (pGameObject->GetVisibilityModifier())
+        PSendSysMessage("Visibility Modifier: %g", pGameObject->GetVisibilityModifier());
+    if (pGameObject->isActiveObject())
+        SendSysMessage("Active Object.");
     if (pGameObject->isSpawned())
         SendSysMessage("Object is spawned.");
     else

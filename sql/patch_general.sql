@@ -197,3 +197,10 @@ update item_template set spelltrigger_2 = 1 where entry = 19827;
 update item_template set spelltrigger_2 = 1 where entry = 19826;
 update item_template set spelltrigger_2 = 1 where entry = 21395;
 update item_template set stat_type2 = 7, stat_value2 = 24, stat_value1 = 14, stat_value3 = 0, spellid_3 = 13679, spelltrigger_3 = 1 where entry = 19380;
+
+-- Citadel Spells and stuff
+update item_template set stat_value1 = 25, stat_value2 = 25, spellid_3 = 9336 where entry = 84005;
+update item_template set spellid_1 = 7597 where entry = 84005;
+update item_template set spellid_1 = 46078 where entry = 65031;
+update item_template set name = 'Emblem of the Scarlet Crusade', max_count = 1 where entry = 84006;
+update item_template set stackable = 20 where entry = 65032;

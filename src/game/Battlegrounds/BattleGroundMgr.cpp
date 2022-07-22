@@ -1486,10 +1486,6 @@ void BattleGroundMgr::SendToBattleGround(Player *pl, uint32 instanceId, BattleGr
             team = pl->GetTeam();
         bg->GetTeamStartLoc(team, x, y, z, o);
 
-        // Remove AFK from player before BG teleport
-        if (pl->IsAFK())
-            pl->ToggleAFK();
-
         DETAIL_LOG("BATTLEGROUND: Sending %s to map %u, X %f, Y %f, Z %f, O %f", pl->GetName(), mapid, x, y, z, o);
         pl->TeleportTo(mapid, x, y, z, o);
     }
