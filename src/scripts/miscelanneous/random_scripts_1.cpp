@@ -1694,28 +1694,6 @@ bool GossipSelect_npc_aspirant_shadewalker(Player* p_Player, Creature* p_Creatur
     return true;
 }
 
-bool GossipHello_npc_lordaeron_alice(Player* p_Player, Creature* p_Creature)
-{
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Choose blue stone>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    p_Player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Choose red stone>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-    p_Player->SEND_GOSSIP_MENU(90201, p_Creature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_lordaeron_alice(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        p_Creature->MonsterTextEmote("Alice waves her hand in front of your face. Your reason for coming is no longer clear to you, and you forget what you know about the Ghosts of Lordaeron.");
-        p_Creature->MonsterSay("Go! Take the ferry back, and begone! Never return to this place if you value your life!", 33, 0);
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-        p_Creature->MonsterSay("Ah, so the truth is too enticing for you to look away. Very well. Go on ahead, and speak with whoever is here, or wait until someone arrives. It will be a difficult road for you, but I assure you it is the correct one.", 33, 0);
-
-    p_Player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 #define ELUNE_WINTER_QUEST 50318     
 #define EGGNOG_ITEM        17198      
 #define MOONKIN_FED        19705      
@@ -7273,12 +7251,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_lost_farm_sheep";
     newscript->pGossipHello = &GossipHello_npc_lost_farm_sheep;
     newscript->pGossipSelect = &GossipSelect_npc_lost_farm_sheep;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_lordaeron_alice";
-    newscript->pGossipHello = &GossipHello_npc_lordaeron_alice;
-    newscript->pGossipSelect = &GossipSelect_npc_lordaeron_alice;
     newscript->RegisterSelf();
 
     newscript = new Script;

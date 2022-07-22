@@ -63,3 +63,52 @@ update gameobject_template set name = 'Creaking Mailbox' where entry = 1000391;
 update gameobject_template set name = 'Damaged Mailbox' where entry = 177044;
 update gameobject_template set name = 'Thalassian Mailbox' where entry = 3000208;
 delete from gameobject_template where entry = 140908;
+
+-- Depreated stuff:
+delete from creature_template where entry = 50030;
+delete from creature_template where entry = 50029;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1609
+update quest_template set details = 'I\'m losing my mind down here. We\'ve been told to stay a bit under the roof for a while after the old Brightwater took a few cannonballs to the side.\n\nBeen forced to stay in refuge for a few days now and I\'m going loopy! Aaah, if only there was a way to get some booze... Wait a second, you can get booze.\n\nSince we can\'t, make a trip up to The Salty Sailor and get me the following... Ahem...\n\n5 Jugs of Bourbon\n3 Flagons of Mead\n10 Flasks of Port\n...and 10 Cherry Grogs!' where entry = 55025;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1610
+update item_template set quality = 3 where entry = 60372;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1596
+update creature_template set npc_flags = 16388 where entry = 91977;
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 851, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 852, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 853, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 854, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 922, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 923, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 924, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 925, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 926, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 927, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 928, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 1196, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 1197, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 1198, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2024, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2025, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2026, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2027, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2028, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2029, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2030, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2207, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2208, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2209, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2507, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2512, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 2515, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 3026, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 5439, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 11362, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 15903, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 15904, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 15905, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 15906, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 15907, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (91977, 15909, 0, 0, 0, 0);
