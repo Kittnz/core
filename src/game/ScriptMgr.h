@@ -66,6 +66,7 @@ enum eScriptCommand
                                                             // dataint = broadcast_text id. dataint2-4 optional for random selected text.
     SCRIPT_COMMAND_EMOTE                    = 1,            // source = Unit
                                                             // datalong1-4 = emote_id
+                                                            // dataint = (bool) is_targeted
     SCRIPT_COMMAND_FIELD_SET                = 2,            // source = Object
                                                             // datalong = field_id
                                                             // datalong2 = value
@@ -345,6 +346,10 @@ enum eScriptCommand
                                                             // target = WorldObject
                                                             // datalong = event_id
                                                             // datalong2 = event_data
+    SCRIPT_COMMAND_SET_PVP                  = 86,           // source = Player
+                                                            // datalong = (bool) 0 = off, 1 = on
+    SCRIPT_COMMAND_RESET_DOOR_OR_BUTTON     = 87,           // source = GameObject
+
     SCRIPT_COMMAND_MAX,
 
     SCRIPT_COMMAND_DISABLED                 = 9999          // Script action was disabled during loading.
@@ -533,6 +538,8 @@ struct ScriptInfo
         struct                                              // SCRIPT_COMMAND_EMOTE (1)
         {
             uint32 emoteId[MAX_EMOTE_ID];                   // datalong to datalong4
+            uint32 unused;                                  // data_flags
+            int32  isTargeted;                              // dataint
         } emote;
 
         struct                                              // SCRIPT_COMMAND_FIELD_SET (2)
@@ -1035,6 +1042,13 @@ struct ScriptInfo
             uint32 eventId;                                 // datalong
             uint32 eventData;                               // datalong2
         } sendScriptEvent;
+
+        struct                                              // SCRIPT_COMMAND_SET_PVP (86)
+        {
+            uint32 enabled;                                 // datalong
+        } setPvP;
+
+                                                            // SCRIPT_COMMAND_RESET_DOOR_OR_BUTTON (87)
 
         struct
         {

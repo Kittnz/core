@@ -3094,6 +3094,60 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool GossipHello_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40529) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60767, 1, 1))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Hand him the letter.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60858, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("I... I should explain. Yes, I was lying to you all this time. I made the golems, with the help of Farad and some goblin machinery. We had lived here, in Moonbrook, many years ago. We just wanted to escape this shithole. So we made the Harvest Golems, to help the farmers and, also, to get their money. But we knew that it was too expensive for an average farmer to buy one. So we were selling them for a low, low price. We were losing a lot of money on it.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("You probably already know where it is going. I'm not proud of this part. There was a catch. When everyone's fields were protected by golems, we would activate their true nature. They would become murderous machines. We would blame it on some vile warlock, or anyone else, it didn't matter. Only important thing was that we would be the only ones who could fix them, for a very high price.");
+                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 15000);
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("At least, that was the idea. In my greed, I activated the murderous killswitch when Farad was working with some golems in a workshop. I wanted him to die, so all the money would go to me.I learned later that he survived, and only got blinded. He hated me for it. But regardless, I saw the destruction I caused. I wanted to make the golems docile again… but our spell didn't work.");
+                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 30000);
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("Some mistake we made during construction, or just lack of skill, I will never know. I couldn't fix them. Westfall became a wasteland. And then, came the Defias, with Farad on their side. And you know the rest of this story. You may judge me, think of me as a monster. The truth is, that you are probably right. I was a monster. But I did everything I could to fix it. And by the Light, I can only hope that it is enough.");
+                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 45000);
+    }
+
+    DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+        player->DestroyItemCount(60767, 1, true);
+        player->SaveInventoryAndGoldToDB();
+
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60381))
+            player->KilledMonster(cInfo, ObjectGuid());
+        });
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -3337,7 +3391,7 @@ bool GossipHello_npc_voljin(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have been sent on behalf of the Sandfury, they have been driven from their home.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
-    pPlayer->SEND_GOSSIP_MENU(0, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(10540, pCreature->GetGUID());
 
     return true;
 }
@@ -3391,9 +3445,118 @@ bool QuestRewarded_npc_ekka(Player* pPlayer, Creature* pQuestGiver, Quest const*
     return false;
 }
 
+bool GossipHello_npc_ancient_spirit_wolf(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40532) == QUEST_STATUS_INCOMPLETE) // The Way Of The Spiritwolf III
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Pour the powder around the site of the Ancient Wolf Spirit.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pPlayer->GetQuestStatus(40533) == QUEST_STATUS_INCOMPLETE) // The Way Of The Spiritwolf IV
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to listen to your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
+    if (pPlayer->GetQuestStatus(40534) == QUEST_STATUS_INCOMPLETE) // The Way Of The Spiritwolf V
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " I am ready to challenge you, let us fight.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(66004, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_ancient_spirit_wolf(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60378))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("When I first prowled these forests I had a pack that followed me, they were my kin, and were loyal. I grew restless of their imperfections, and figured I could do better alone. I hunted, and fought with great glory, but I abandoned those close.");
+            }, 3000);
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("I was ambushed by a group of bear, and retreated to this very waterfall, where I was cornered, and alone, slain, only to now walk this world in a much different form. Had I kept my loyalties, and stayed with my pack, perhaps I would not have met an untimely fate. Do you understand what it is I teach you young one? You can be as powerful as the mountains, but if you are alone, you will eventually fall.");
+            }, 18000);
+
+        DoAfterTime(pPlayer, 28 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60379))
+                player->KilledMonster(cInfo, ObjectGuid());
+            });
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pCreature->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+struct npc_ancient_spirit_wolfAI : public ScriptedAI
+{
+    npc_ancient_spirit_wolfAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() { }
+    void UpdateAI(const uint32 diff)
+    {
+        if (m_creature->GetHealthPercent() < 10)
+        {
+            m_creature->CombatStop(true);
+            m_creature->ClearInCombat();
+            m_creature->SetFactionTemplateId(35);
+        }
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+        DoMeleeAttackIfReady();
+    }
+    void JustDied(Unit*) override { }
+    void EnterCombat() { }
+
+    void OnCombatStop()
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+        {
+            Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+            if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
+            {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60380))
+                    pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+            }
+        }
+    }
+
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_ancient_spirit_wolf(Creature* _Creature) { return new npc_ancient_spirit_wolfAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_ancient_spirit_wolf";
+    newscript->pGossipHello = &GossipHello_npc_ancient_spirit_wolf;
+    newscript->pGossipSelect = &GossipSelect_npc_ancient_spirit_wolf;
+    newscript->GetAI = &GetAI_npc_ancient_spirit_wolf;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_ekka";
@@ -3447,6 +3610,8 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_maltimor_gartside";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_maltimor_gartside;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_maltimor_gartside;
+    newscript->pGossipHello = &GossipHello_npc_maltimor_gartside;
+    newscript->pGossipSelect = &GossipSelect_npc_maltimor_gartside;
     newscript->RegisterSelf();
 
     newscript = new Script;
