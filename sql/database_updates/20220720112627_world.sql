@@ -268,3 +268,72 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 update quest_template set zoneorsort = 40 where entry in (40470,40471,40472,40473,40474,40475,40476,40477,40470,40470,40479,40480,40481,40482,40483,40484,40485);
 -- Fix outline recipe.
 update item_template set spellid_1 = 46078 where entry = 65031;
+-- The Way Of The Spiritwolf I
+delete from quest_template where entry = 40530;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40530,2,1637,40,40,0,0,'The Way Of The Spiritwolf I','I have been awaiting your arrival now for some time. I have heard tales your deeds from the very spirits themselves, and it is time to prove your worth as an Orc.\n\nIt is time for your next challenge, and to prove your worth to the very spirits themselves. If you think you are worthy for such a task, seek out Margok Hatewind at Camp Mojache, he will be your guide.','Travel to Camp Mojache and speak with Margok Hatewind.','Yes?','I have been expecting you, it is about time you have arrived. I have heard many tales of your prowess, but nw I shall see if such tales are true.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,250,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest)		values (3344 , 40530);
+replace into creature_involvedrelation (id, quest)	values (66005, 40530);
+update quest_template set requiredclasses = 64		where  entry = 40530;
+update quest_template set requiredraces = 2			where  entry = 40530;
+
+update creature_template set npc_flags = 3 where entry = 66005;
+
+-- The Way Of The Spiritwolf II
+delete from quest_template where entry = 40531;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40530,40531,2,1637,40,40,0,0,'The Way Of The Spiritwolf II','You have begun to find potency within your use of the elements, though now comes a different matter entirely. Within Feralas is an Ancient Wolf Spirit, one of whom can bestow great power upon the orc shaman\'s capable enough to prove their worth.\n\nIf you wish to prove yourself you must first gather a Pristine Wolf Tooth from the Longtooth wolves in the region. Be patient, it may be hard to come across. When you have found one, bring it to me, and you can continue on this journey.','Hunt Wolves in Feralas to obtain a Pristine Wolf Tooth for Margok Hatewind.','Exert cunning, for the wolves of Feralas can be a rather intimidating foe.','<Margok Hatewind would inspect the tooth for some time.> Well, this would appear to be what I was looking for, you have displayed great patience, and great ability to hunt.',60768,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3150,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation (id, quest)		values (66005, 40531);
+replace into creature_involvedrelation (id, quest)	values (66005, 40531);
+update quest_template set requiredclasses = 64		where  entry = 40531;
+update quest_template set requiredraces = 2			where  entry = 40531;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60768,1227,'Pristine Wolf Tooth',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(5286,60768,-10,1,1,1,0),
+(5287,60768,-16,1,1,1,0),
+(5288,60768,-18,1,1,1,0);
+
+-- The Way Of The Spiritwolf III
+delete from quest_template where entry = 40532;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40531,40532,2,1637,40,40,0,0,'The Way Of The Spiritwolf III','It is said long ago, a large and magical wolf dominated these forests, and hunted with great power, only succumbing to a fatal wound near a large waterfall. It is here that you will take a powder I have grounded from the pristine tooth you brought me, to pour over this site. This ritual will be neccesary to gain the blessing of the Ancient Wolf Spirit.\n\nTo the south east of Camp Mojache is a large waterfall, find a way up, and there you will find the Wolf Spirit, do as I have instructed, and it will be willing to speak with you.','Hunt Wolves in Feralas to obtain a Pristine Wolf Tooth for Margok Hatewind.','<The Wolf Spirit seems to not notice your presence.>','Another comes to speak with me, you wish to prove yourself, do you think you\'re strong enough? These are all questions one must ask themselves before they approach me, for I am not one that you should dissappoint.',0,0,0,0,0,0,0,0,60378,1,0,0,0,0,0,0,0,0,0,3150,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Pour the powder around the site of the Ancient Wolf Spirit');
+
+replace into creature_questrelation (id, quest)		values (66005, 40532);
+replace into creature_involvedrelation (id, quest)	values (66004, 40532);
+update quest_template set requiredclasses = 64		where  entry = 40532;
+update quest_template set requiredraces = 2			where  entry = 40532;
+
+REPLACE INTO creature_template VALUES (60378, 328, 0, 0, 0, 'quest_40532_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set npc_flags = 3, script_name = 'npc_ancient_spirit_wolf' where entry = 66004;
+
+set @gossip_menu_id = 41182; set @magic_number = 66004;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<An eerie gaze pierces your soul.>');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- The Way Of The Spiritwolf IV
+delete from quest_template where entry = 40533;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40532,40533,2,1637,40,40,0,0,'The Way Of The Spiritwolf IV','If you wish to truly grow, orc, you must heed my advice as many before have. When you are ready to listen to my tale, speak with me, and I will tell you what I know, so that maybe you may learn a thing or two in your journies.','Listen to the Tale of the Ancient Spirit Wolf.','Yes?','Another comes to speak with me, you wish to prove yourself, do you think you\'re strong enough? These are all questions one must ask themselves before they approach me, for I am not one that you should dissappoint.',0,0,0,0,0,0,0,0,60379,1,0,0,0,0,0,0,0,0,0,3150,76,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Listen to the Tale of the Ancient Spirit Wolf');
+
+replace into creature_questrelation (id, quest)		values (66004, 40533);
+replace into creature_involvedrelation (id, quest)	values (66004, 40533);
+update quest_template set requiredclasses = 64		where  entry = 40533;
+update quest_template set requiredraces = 2			where  entry = 40533;
+
+REPLACE INTO creature_template VALUES (60379, 328, 0, 0, 0, 'quest_40533_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- The Way Of The Spiritwolf V
+delete from quest_template where entry = 40534;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40533,40534,2,1637,40,40,0,0,'The Way Of The Spiritwolf V','You listen, and listen well, perhaps you are worthy afterall. I have one final challenge for you, one to prove that you are truly worthy of my power. I challenge you to combat, show me your abilities, and show me your strength.\n\nIf you truly have the strength to defeat me, and can take my advice in heed, you will truly embody the my spirit, and I will grant you my gift.\n\nIf you think you are worthy enough to challenge me, speak with me once more. Make sure you are ready, for I will not hold back.','Prove your strength to the Ancient Spirit Wolf.','Do you truly think you are ready?','Well orc, you are stronger then I had anticipated, and carry all the traits of the wolf, I am honored to bless you with my power. May it bring you great power in the hunt, and strike terror into your enemies.',0,0,0,0,0,0,0,0,60380,1,0,0,0,0,0,0,0,0,0,4150,76,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Prove your strength to the Ancient Spirit Wolf.');
+
+replace into creature_questrelation (id, quest)		values (66004, 40534);
+replace into creature_involvedrelation (id, quest)	values (66004, 40534);
+update quest_template set requiredclasses = 64		where  entry = 40534;
+update quest_template set requiredraces = 2			where  entry = 40534;
+update quest_template set rewspellcast = 45505		where  entry = 40534;
+
+REPLACE INTO creature_template VALUES (60380, 328, 0, 0, 0, 'quest_40534_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
