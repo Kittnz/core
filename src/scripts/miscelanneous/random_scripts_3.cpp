@@ -3391,7 +3391,7 @@ bool GossipHello_npc_voljin(Player* pPlayer, Creature* pCreature)
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have been sent on behalf of the Sandfury, they have been driven from their home.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     }
 
-    pPlayer->SEND_GOSSIP_MENU(0, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(10540, pCreature->GetGUID());
 
     return true;
 }
