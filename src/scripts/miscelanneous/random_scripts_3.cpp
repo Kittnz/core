@@ -3094,6 +3094,60 @@ bool QuestAccept_npc_maltimor_gartside(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool GossipHello_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40529) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60767, 1, 1))
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Hand him the letter.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60858, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("I... I should explain. Yes, I was lying to you all this time. I made the golems, with the help of Farad and some goblin machinery. We had lived here, in Moonbrook, many years ago. We just wanted to escape this shithole. So we made the Harvest Golems, to help the farmers and, also, to get their money. But we knew that it was too expensive for an average farmer to buy one. So we were selling them for a low, low price. We were losing a lot of money on it.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("You probably already know where it is going. I'm not proud of this part. There was a catch. When everyone's fields were protected by golems, we would activate their true nature. They would become murderous machines. We would blame it on some vile warlock, or anyone else, it didn't matter. Only important thing was that we would be the only ones who could fix them, for a very high price.");
+                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 15000);
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("At least, that was the idea. In my greed, I activated the murderous killswitch when Farad was working with some golems in a workshop. I wanted him to die, so all the money would go to me.I learned later that he survived, and only got blinded. He hated me for it. But regardless, I saw the destruction I caused. I wanted to make the golems docile again… but our spell didn't work.");
+                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 30000);
+
+        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+            {
+                pCreature->MonsterSay("Some mistake we made during construction, or just lack of skill, I will never know. I couldn't fix them. Westfall became a wasteland. And then, came the Defias, with Farad on their side. And you know the rest of this story. You may judge me, think of me as a monster. The truth is, that you are probably right. I was a monster. But I did everything I could to fix it. And by the Light, I can only hope that it is enough.");
+                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 45000);
+    }
+
+    DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+        player->DestroyItemCount(60767, 1, true);
+        player->SaveInventoryAndGoldToDB();
+
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60381))
+            player->KilledMonster(cInfo, ObjectGuid());
+        });
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+
 bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -3556,6 +3610,8 @@ void AddSC_random_scripts_3()
     newscript->Name = "npc_maltimor_gartside";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_maltimor_gartside;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_maltimor_gartside;
+    newscript->pGossipHello = &GossipHello_npc_maltimor_gartside;
+    newscript->pGossipSelect = &GossipSelect_npc_maltimor_gartside;
     newscript->RegisterSelf();
 
     newscript = new Script;
