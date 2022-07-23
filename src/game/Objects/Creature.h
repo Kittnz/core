@@ -337,15 +337,16 @@ enum RegenStatsFlags
 
 enum CreatureStateFlag : uint16
 {
-    CSTATE_ALREADY_CALL_ASSIST = 0x0001,
+    CSTATE_ALREADY_CALL_ASSIST   = 0x0001,
     CSTATE_ALREADY_SEARCH_ASSIST = 0x0002,
-    CSTATE_REGEN_HEALTH = 0x0004,
-    CSTATE_REGEN_MANA = 0x0008,
-    CSTATE_INIT_AI_ON_RESPAWN = 0x0010,
-    CSTATE_COMBAT = 0x0020,
-    CSTATE_COMBAT_WITH_ZONE = 0x0040,
-    CSTATE_ESCORTABLE = 0x0080,
-    CSTATE_DESPAWNING = 0x0100,
+    CSTATE_REGEN_HEALTH          = 0x0004,
+    CSTATE_REGEN_MANA            = 0x0008,
+    CSTATE_INIT_AI_ON_RESPAWN    = 0x0010,
+    CSTATE_COMBAT                = 0x0020,
+    CSTATE_COMBAT_WITH_ZONE      = 0x0040,
+    CSTATE_ESCORTABLE            = 0x0080,
+    CSTATE_DESPAWNING            = 0x0100,
+    CSTATE_TARGETED_EMOTE        = 0x0200,
 };
 
 // Vendors
@@ -763,7 +764,7 @@ class Creature : public Unit
 
         MovementGeneratorType GetDefaultMovementType() const { return m_defaultMovementType; }
         void SetDefaultMovementType(MovementGeneratorType mgt) { m_defaultMovementType = mgt; }
-        void PauseOutOfCombatMovement();
+        void PauseOutOfCombatMovement(uint32 pauseTime = NPC_MOVEMENT_PAUSE_TIME);
 
         // for use only in LoadHelper, Map::Add Map::CreatureCellRelocation
         Cell const& GetCurrentCell() const { return m_currentCell; }
@@ -1088,6 +1089,29 @@ class ForcedDespawnDelayEvent : public BasicEvent
 
     private:
         Creature& m_owner;
+};
+
+class TargetedEmoteEvent : public BasicEvent
+{
+public:
+    explicit TargetedEmoteEvent(Creature& owner, ObjectGuid const& targetGuid, uint32 emoteId) : BasicEvent(), m_owner(owner), m_targetGuid(targetGuid), m_emoteId(emoteId) { }
+    bool Execute(uint64 e_time, uint32 p_time) override;
+
+private:
+    Creature& m_owner;
+    ObjectGuid m_targetGuid;
+    uint32 m_emoteId;
+};
+
+class TargetedEmoteCleanupEvent : public BasicEvent
+{
+public:
+    explicit TargetedEmoteCleanupEvent(Creature& owner, float orientation) : BasicEvent(), m_owner(owner), m_orientation(orientation) { }
+    bool Execute(uint64 e_time, uint32 p_time) override;
+
+private:
+    Creature& m_owner;
+    float m_orientation;
 };
 
 #endif
