@@ -2350,7 +2350,6 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
     if (pQuest->GetQuestId() == 40353) // The Way Of The Witch Doctor V
     {
         pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-        pQuestGiver->AddAura(15473);
         pPlayer->LearnSpell(45504, false);
 
         DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
