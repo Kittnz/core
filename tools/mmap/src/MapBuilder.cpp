@@ -169,14 +169,6 @@ namespace MMAP
             delete th;
 
         printf("Done.");
-    
-
-        for (TileList::iterator it = m_tiles.begin(); it != m_tiles.end(); ++it)
-        {
-            uint32 mapID = (*it).first;
-            if (!shouldSkipMap(mapID))
-                buildMap(mapID);
-        }
     }
 
     /**************************************************************************/
@@ -313,25 +305,6 @@ namespace MMAP
         }
 
         dtFreeNavMesh(navMesh);
-
-        m_cancel.store(false);
-        std::vector<TileBuilder*> workers;
-        for (unsigned int i = 0; i < 4; ++i)
-        {
-            workers.push_back(new TileBuilder(this, false, m_bigBaseUnit, m_debugOutput));
-        }
-
-        while (!m_tileQueue.Empty())
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-
-        m_cancel.store(true);
-
-        m_tileQueue.Cancel();
-
-        for (auto& th : workers)
-            delete th;
 
         printf("[Map %03i] Complete!                             \n\n", mapID);
     }
