@@ -36,3 +36,9 @@ UPDATE `quest_template` SET `OfferRewardText` = 'I have been expecting you.\n\nI
 UPDATE `quest_template` SET `Objectives` = 'Find the Ancient Wolf Spirit, and complete the ritual.' WHERE `entry` = 40532;
 
 UPDATE `quest_template` SET `RewSpellCast` = 45519 WHERE `entry` = 40534;
+
+-- Misc. random stuff:
+
+update creature_template set scale = 1.5 where entry = 51621;
+update creature_template set faction = 189 where entry = 7;
+update gameobject_template set faction = 35 where name like '%Mailbox%';
