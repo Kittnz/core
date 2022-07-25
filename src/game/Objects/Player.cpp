@@ -16197,6 +16197,8 @@ void Player::_LoadPlayerVariables(QueryResult* result)
             uint32 variableType = fields[0].GetUInt32();
             std::string value = fields[1].GetCppString();
 
+            SetPlayerVariable(static_cast<PlayerVariables>(variableType), value);
+
         } while (result->NextRow());
     }
 }
