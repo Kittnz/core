@@ -1160,7 +1160,50 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     if (pPlayerVictim)
     {
         if (pPlayerVictim->IsHardcore())
+        {
+            if (GetLevel() >= 10)
+            {
+                //figure out how player died.
+                //A tragedy has occurred. Hardcore character %s %s at level %u. May this sacrifice not be forgotten.
+
+                auto attacker = pPlayerVictim->GetFirstAttacker();
+
+                std::ostringstream deathReason;
+
+                if (attacker)
+                {
+                    if (attacker->IsPlayer())
+                        deathReason << "has fallen in PvP to " << attacker->GetName();
+                    else if (attacker->IsCreature())
+                        deathReason << "has fallen to " << attacker->GetName() << " (level " << attacker->GetLevel() << ")";
+                }
+                else
+                {
+                    //drowned maybe?
+                    if (pPlayerVictim->GetMirrorTimer(BREATH_TIMER) == 1 * IN_MILLISECONDS) // this is the end state of the drowning timer if someone died to it.
+                        deathReason << "has drowned";
+                    else if (pPlayerVictim->GetMirrorTimer(FIRE_TIMER) == 1 * IN_MILLISECONDS)
+                        deathReason << "has burned to death";
+                    else if (pPlayerVictim->GetMirrorTimer(FATIGUE_TIMER) == 1 * IN_MILLISECONDS)
+                        deathReason << "has died from exhaustion";
+
+                    deathReason << "died of natural causes";
+                }
+
+
+                sWorld.SendWorldTextChecked(50300, [level = pVictim->GetLevel()](Player* player) -> bool
+                {
+                    auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
+                    if (!levelCheck.has_value())
+                        return true;
+
+                    if (std::atoi(levelCheck.value().c_str()) <= level)
+                        return true;
+                    return false;
+                }, pVictim->GetName(), deathReason.str().c_str(), pVictim->GetLevel());
+            }
             pPlayerVictim->LogHCDeath();
+        }
         pPlayerVictim->RewardHonorOnDeath();
     }
 
@@ -3438,10 +3481,6 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
                 continue;
 
             ++negativeAuras;
-            if (negativeAuras > MaxClientDebuffs)
-            {
-
-            }
         }
 
         if (negativeAuras > sWorld.getConfig(CONFIG_UINT32_DEBUFF_LIMIT))
@@ -3455,6 +3494,7 @@ bool Unit::AddSpellAuraHolder(SpellAuraHolder *holder)
         if (negativeAuras > MaxClientDebuffs) // client debuff limit, activate addon-view.
         {
             sTWDebuff->AddDebuff(this, holder);
+            m_customDebuffs.insert({ holder->GetId(), holder });
         }
 
         /*uint32 negativeAuras = GetNegativeAurasCount();
@@ -3485,6 +3525,14 @@ uint32 Unit::GetNegativeAurasCount()
         ++count;
     }
     return count;
+}
+
+std::multimap<uint32, SpellAuraHolder*>* Unit::GetCustomDebuffs()
+{
+    if (m_customDebuffs.empty())
+        return nullptr;
+
+    return &m_customDebuffs;
 }
 
 bool Unit::RemoveAuraDueToDebuffLimit(SpellAuraHolder* currentAura)
@@ -4012,6 +4060,18 @@ void Unit::RemoveSpellAuraHolder(SpellAuraHolder *holder, AuraRemoveMode mode)
             break;
         }
     }
+
+    for (auto itr = m_customDebuffs.begin(); itr != m_customDebuffs.end(); ++itr)
+    {
+        if (itr->second == holder)
+        {
+            //notify everyone looking at unit
+            sTWDebuff->RemoveDebuff(this, holder);
+            m_customDebuffs.erase(itr);
+            break;
+        }
+    }
+
     if (!foundInMap)
         sLog.outInfo("[Crash/Auras] Removing aura holder *not* in holders map ! Aura %u on %s", holder->GetId(), GetName());
     holder->SetRemoveMode(mode);
