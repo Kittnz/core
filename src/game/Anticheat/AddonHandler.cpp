@@ -12,7 +12,11 @@
 #include "Util.h"
 #include "Database/DatabaseImpl.h"
 #include "Database/DatabaseEnv.h"
+#ifdef WIN32
+#include "..\zlib\zlib.h"
+#else
 #include "zlib.h"
+#endif
 
 #include <memory>
 
