@@ -1630,7 +1630,18 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     {
                         auto caster = GetCaster();
                         if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
+                        {
+                            //remove buff and their counterparts if something's wrong.
+                            if (target)
+                            {
+                                target->RemoveAurasDueToSpell(45563);
+                                target->RemoveAurasDueToSpell(45564);
+                                target->RemoveAurasDueToSpell(45565);
+                                target->RemoveAurasDueToSpell(45569);
+                                target->RemoveAurasDueToSpell(45568);
+                            }
                             return;
+                        }
 
                         auto playerCaster = caster->ToPlayer();
                         playerCaster->SetChampion(target->GetGUID());
