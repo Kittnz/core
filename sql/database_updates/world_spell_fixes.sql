@@ -74,7 +74,7 @@ replace into spell_mod (id, castingtimeindex) values (47209, 0);
 replace into spell_mod (id, castingtimeindex) values (47210, 0); 
 replace into spell_mod (id, castingtimeindex) values (47211, 0); 
 
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1548
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1548 --
 replace into spell_mod (id, castingtimeindex) values (47242, 0); 
 
 -- Ensures that Goblins start Hatred with the Alliance parent faction (469) and High Elves start friendly.
