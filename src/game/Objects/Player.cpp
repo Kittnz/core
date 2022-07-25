@@ -1770,13 +1770,21 @@ void Player::CinematicEnd()
     cinematic_elapsed_time = 0;
 }
 
-void Player::LogHCDeath()
+Unit* Player::GetFirstAttacker() const
 {
     auto attacker = GetAttackers().size() > 0 ? (*GetAttackers().begin()) : nullptr;
-    uint32 attackerEntry = 0;
-    if (attacker && attacker->ToCreature())
-        attackerEntry = attacker->ToCreature()->GetEntry();
+    return attacker;
+}
 
+void Player::LogHCDeath()
+{
+    
+    auto attacker = GetFirstAttacker();
+    uint32 attackerEntry = 0;
+
+    if (attacker && attacker->IsCreature())
+        attackerEntry = attacker->ToCreature()->GetEntry();
+    
     CharacterDatabase.DirectPExecute("REPLACE INTO `hardcore_deaths` VALUES(%u, %u, %u, %u, %u, %f, %f, %f, %u)", GetGUIDLow(), GetRace(), GetClass(), GetLevel(), attackerEntry,
         GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
 }
@@ -5038,19 +5046,6 @@ void Player::KillPlayer()
     if (IsHardcore())
     {
         SetHardcoreStatus(HARDCORE_MODE_STATUS_DEAD);
-        if (GetLevel() >= 10)
-        {
-            sWorld.SendWorldTextChecked(50300, [level = GetLevel()](Player* player) -> bool
-            {
-                auto levelCheck = player->GetPlayerVariable(PlayerVariables::HardcoreMessageLevel);
-                if (!levelCheck.has_value())
-                    return true;
-
-                if (std::atoi(levelCheck.value().c_str()) <= level)
-                    return true;
-                return false;
-            }, GetName(), GetLevel());
-        }
         PlayDirectMusic(1171, this);
         GetSession()->SendNotification("YOU HAVE DIED.\nYou will be disconnected in 120 seconds.");
         ChatHandler(this).SendSysMessage("YOU HAVE DIED.\nYou will be disconnected in 120 seconds.");

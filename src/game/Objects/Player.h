@@ -2009,6 +2009,14 @@ class Player final: public Unit
         uint8 m_MirrorTimerFlags;
         uint8 m_MirrorTimerFlagsLast;
     public:
+
+        uint32 GetMirrorTimer(MirrorTimerType timer) const
+        {
+            if (timer < MAX_TIMERS)
+                return m_MirrorTimer[timer];
+            return 0;
+        }
+
         uint32 EnvironmentalDamage(EnvironmentalDamageType type, uint32 damage);
         void UpdateMirrorTimers();
         void StopMirrorTimers()
@@ -2076,7 +2084,8 @@ class Player final: public Unit
         void SendCinematicStart(uint32 CinematicSequenceId);
 
         void CinematicEnd();
-        void CinematicStart(uint32 id);
+        void CinematicStart(uint32 id)
+            ;
 
         void LogHCDeath();
 
@@ -2115,6 +2124,8 @@ class Player final: public Unit
         void SetCannotBeDetectedTimer(uint32 milliseconds) { m_cannotBeDetectedTimer = milliseconds; };
         bool CanBeDetected() const override { return m_cannotBeDetectedTimer <= 0; }
 
+
+        Unit* GetFirstAttacker() const;
         // Nostalrius
         // Gestion des PlayerAI
         PlayerAI* i_AI;

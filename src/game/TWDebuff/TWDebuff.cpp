@@ -6,7 +6,7 @@
 
 #include "rapidjson/stringbuffer.h"
 
-void TWDebuff::SendNewDebuff(Player* player, SpellAuraHolder* aura)
+void TWDebuff::SendNewDebuff(Player* player, SpellAuraHolder* aura, bool add)
 {
 	if (!aura || !player)
 		return;
@@ -26,20 +26,31 @@ void TWDebuff::SendNewDebuff(Player* player, SpellAuraHolder* aura)
 	rapidjson::Value dataObject{ rapidjson::kObjectType };
 
 	dataObject.AddMember("id", spellId, d.GetAllocator());
+
 	std::string textureName(spellIconEntry->TextureFilename);
 	auto ref = rapidjson::StringRef(textureName.c_str());
 	auto nameRef = rapidjson::StringRef(spellInfo->SpellName[sWorld.GetDefaultDbcLocale()].c_str());
 	auto tooltipRef = rapidjson::StringRef(spellInfo->ParsedTooltip.c_str());
+	if (add)
+	{
 
-	dataObject.AddMember("texture", ref, d.GetAllocator());
-	dataObject.AddMember("stackAmount", aura->GetStackAmount(), d.GetAllocator());
-	dataObject.AddMember("dispel", spellInfo->Dispel, d.GetAllocator());
-	dataObject.AddMember("name", nameRef, d.GetAllocator());
-	dataObject.AddMember("tooltip", tooltipRef, d.GetAllocator());
-	
+		dataObject.AddMember("texture", ref, d.GetAllocator());
+		dataObject.AddMember("stackAmount", aura->GetStackAmount(), d.GetAllocator());
+		dataObject.AddMember("dispel", spellInfo->Dispel, d.GetAllocator());
+		dataObject.AddMember("name", nameRef, d.GetAllocator());
+		dataObject.AddMember("tooltip", tooltipRef, d.GetAllocator());
 
-	d.AddMember("opcode", "ADD", d.GetAllocator());
-	d.AddMember("data", dataObject, d.GetAllocator());
+
+		d.AddMember("opcode", "ADD", d.GetAllocator());
+		d.AddMember("data", dataObject, d.GetAllocator());
+
+	}
+	else
+	{
+		//remove, only send id
+		d.AddMember("opcode", "REMOVE", d.GetAllocator());
+		d.AddMember("data", dataObject, d.GetAllocator());
+	}
 	
 	rapidjson::StringBuffer buffer;
 	rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
@@ -59,7 +70,7 @@ void TWDebuff::AddDebuff(Unit* target, SpellAuraHolder* debuff)
 	{
 		auto player = sObjectAccessor.FindPlayer(it->second);
 		if (player)
-			SendNewDebuff(player, debuff);
+			SendNewDebuff(player, debuff, true);
 		++it;
 	}
 }
@@ -94,6 +105,28 @@ void TWDebuff::RegisterTarget(Player* seer, ObjectGuid targetGuid)
 	auto target = ObjectAccessor::GetUnit(*seer, targetGuid);
 	if (target)
 	{
+		auto customDebuffs = target->GetCustomDebuffs();
+		if (customDebuffs)
+		{
+			for (const auto& holder : *customDebuffs)
+			{
+				SendNewDebuff(seer, holder.second, true);
+			}
+		}
+	}
+}
 
+void TWDebuff::RemoveDebuff(Unit* target, SpellAuraHolder* debuff)
+{
+	//notify all seers of target that a new debuff has been removed.
+	auto seerItrPair = m_targetHolder.equal_range(target->GetObjectGuid());
+
+	auto it = seerItrPair.first;
+	while (it != seerItrPair.second)
+	{
+		auto player = sObjectAccessor.FindPlayer(it->second);
+		if (player)
+			SendNewDebuff(player, debuff, false);
+		++it;
 	}
 }

@@ -26,8 +26,9 @@ public:
 		return &instance;
 	}
 
-	void SendNewDebuff(Player* player, SpellAuraHolder* aura);
+	void SendNewDebuff(Player* player, SpellAuraHolder* aura, bool add);
 	void AddDebuff(Unit* target, SpellAuraHolder* debuff);
+	void RemoveDebuff(Unit* targetm, SpellAuraHolder* debuff);
 	void RegisterTarget(Player* player, ObjectGuid targetGuid);
 
 private:

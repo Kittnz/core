@@ -799,6 +799,8 @@ class Unit : public WorldObject
     private:
         void CleanupDeletedAuras();
 
+        std::multimap<uint32, SpellAuraHolder*> m_customDebuffs;
+
     public:
         // removing specific aura stack
         void RemoveAura(Aura* aura, AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
@@ -833,6 +835,7 @@ class Unit : public WorldObject
         void RemoveArenaAuras(bool onleave, AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
         bool RemoveAuraDueToDebuffLimit(SpellAuraHolder* currentAura); // Returns true if we remove 'currentAura'
         uint32 GetNegativeAurasCount(); // Limit debuffs to 16
+        std::multimap<uint32, SpellAuraHolder*>* GetCustomDebuffs();
 
         // removing specific aura FROM stack by diff reasons and selections
         void RemoveAuraHolderFromStack(uint32 spellId, uint32 stackAmount = 1, ObjectGuid casterGuid = ObjectGuid(), AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
