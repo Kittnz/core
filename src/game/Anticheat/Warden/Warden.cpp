@@ -31,7 +31,11 @@
 #include <openssl/md5.h>
 #include <openssl/sha.h>
 
-#include <zlib.h>
+#ifdef WIN32
+#include "..\zlib\zlib.h"
+#else
+#include "zlib.h"
+#endif
 
 #include <algorithm>
 #include <memory>
