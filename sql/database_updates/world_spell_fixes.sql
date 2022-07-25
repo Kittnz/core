@@ -81,6 +81,8 @@ replace into spell_mod (id, castingtimeindex) values (47242, 0);
 -- The same values cannot be present in the client itself due to causing glitch of unknown nature. 
 update faction set base_rep_race_mask1 = 589, base_rep_race_mask2 = 434 where id = 469;
 
+UPDATE skill_line_ability SET learn_on_get_skill = 0 WHERE id = 36284;
+
 -- Restore old values for coefficients, not sure if needed:
 update spell_template set effectbonuscoefficient1 = 1, effectbonuscoefficient2 = -1, effectbonuscoefficient3 = -1 where entry = 1;
 update spell_template set effectbonuscoefficient1 = 0, effectbonuscoefficient2 = -1, effectbonuscoefficient3 = -1 where entry = 3;
