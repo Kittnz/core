@@ -34,7 +34,7 @@
 #include "Chat.h"
 #include "ItemPrototype.h"
 
-#define STUPID_RESTRICTIONS true
+#define STUPID_RESTRICTIONS false
 #define TRANSMOG_CURRENCY 51217
 
 TransmogMgr::TransmogMgr(Player* owner) : _owner(owner)
