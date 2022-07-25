@@ -4328,6 +4328,14 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
 
         switch (m_spellInfo->Id)
         {
+
+            case 45505:
+            case 45514:
+            {
+                // CUSTOM feral spirit scaling.
+                spawnCreature->InitStatsForLevel(m_casterUnit->GetLevel());
+            }break;
+
             case 17166: // Release Umi's Yeti - Quest Are We There, Yeti? Part 3
             {
                 spawnCreature->MonsterTextEmote(-1900169);
@@ -7065,9 +7073,26 @@ void Spell::EffectDestroyAllTotems(SpellEffectIndex /*eff_idx*/)
     if (!m_casterUnit)
         return;
 
-    for (int slot = 0;  slot < MAX_TOTEM_SLOT; ++slot)
+    for (int slot = 0; slot < MAX_TOTEM_SLOT; ++slot)
+    {
         if (Totem* totem = m_casterUnit->GetTotem(TotemSlot(slot)))
+        {
+            if (m_spellInfo->Id == 45513)
+            {
+                //restore mana too.
+                uint32 spellId = totem->GetUInt32Value(UNIT_CREATED_BY_SPELL);
+
+                if (auto spellInfo = sSpellMgr.GetSpellEntry(spellId))
+                {
+                    m_casterUnit->ModifyPower(POWER_MANA, spellInfo->GetManaCost() / 100 * 25);
+                }
+            }
             totem->UnSummon();
+        }
+    }
+
+
+
 }
 
 void Spell::EffectDurabilityDamage(SpellEffectIndex eff_idx)

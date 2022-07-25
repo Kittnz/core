@@ -821,12 +821,12 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             {
                 foundPlayer = true;
 
-                DealDamage(player, damage / 10, cleanDamage, damagetype, damageSchoolMask, spiritLinkProto, durabilityLoss, spell);
+                DealDamage(player, damage / 100 * 15, cleanDamage, damagetype, damageSchoolMask, spiritLinkProto, durabilityLoss, spell);
             }
         }
 
         if (foundPlayer)
-            damage -= damage / 10;
+            damage -= damage / 100 * 15;
     }
 
 
