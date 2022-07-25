@@ -8888,3 +8888,5 @@ set @reqskillvalue = 0; -- not needed for class spells
 set @player_level = 20;
 
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+update item_template set stat_value2 = 3 where entry = 10412; -- Belt of the Fang
