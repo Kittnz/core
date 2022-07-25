@@ -37,13 +37,13 @@ OFFSET_TEXTEMOTE_SOUND_RACE_ID_CHECK          = 0x00059289, // Allows the game t
 OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game to play emote sounds for High Elves.
 };
 
-#define NEW_BUILD 7000u
-#define NEW_VISUAL_BUILD "7001"
-#define NEW_VISUAL_VERSION "1.16.0"
-#define NEW_BUILD_DATE "Jul 18 2022"
+#define NEW_BUILD 7010u
+#define NEW_VISUAL_BUILD "7010"
+#define NEW_VISUAL_VERSION "1.16.1"
+#define NEW_BUILD_DATE "Jul 25 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-V.mpq"
+#define PATCH_FILE "Data\\patch-W.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
@@ -161,9 +161,10 @@ void PatchBinary(FILE* hWoW)
 
 	// Optional changes, to be considered:
 
-	char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
-	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
-	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
+    //  Optional for https://github.com/slowtorta/turtlewow-improved-fov
+    //	char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
+    //	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
+    //	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
 
 	char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
 	fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
