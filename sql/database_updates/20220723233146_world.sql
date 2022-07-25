@@ -42,3 +42,4 @@ UPDATE `quest_template` SET `RewSpellCast` = 45519 WHERE `entry` = 40534;
 update creature_template set scale = 1.5 where entry = 51621;
 update creature_template set faction = 189 where entry = 7;
 update gameobject_template set faction = 35 where name like '%Mailbox%';
+update item_template set display_id = 4738 where name = 'Fishing Boat';
