@@ -9,7 +9,11 @@
 
 #include "Platform/Define.h"
 #include "Auth/ARC4.h"
+#ifdef WIN32
+#include "..\zlib\zlib.h"
+#else
 #include "zlib.h"
+#endif
 
 #include <openssl/md5.h>
 
