@@ -1161,7 +1161,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     {
         if (pPlayerVictim->IsHardcore())
         {
-            if (GetLevel() >= 10)
+            if (pPlayerVictim->GetLevel() >= 10)
             {
                 //figure out how player died.
                 //A tragedy has occurred. Hardcore character %s %s at level %u. May this sacrifice not be forgotten.
