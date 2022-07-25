@@ -81,8 +81,16 @@ void TWDebuff::RegisterTarget(Player* seer, ObjectGuid targetGuid)
 
 	auto oldTargetItr = m_unitTargets.find(seerGuid);
 
+	if (targetGuid.IsEmpty())
+	{
+		if (oldTargetItr != m_unitTargets.end())
+			m_unitTargets.erase(oldTargetItr);
+		return;
+	}
+
 	if (oldTargetItr != m_unitTargets.end())
 	{
+
 		auto targetHolderItrPair = m_targetHolder.equal_range(oldTargetItr->second);
 		if (targetHolderItrPair.first != targetHolderItrPair.second)
 		{
