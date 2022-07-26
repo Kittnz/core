@@ -429,7 +429,7 @@ struct PlayerCacheData
     float fOrientation;
     bool bInFlight;
 };
-typedef std::map<uint32 /*guid*/, PlayerCacheData*> PlayerCacheDataMap;
+typedef std::map<uint32 /*guid*/, PlayerCacheData> PlayerCacheDataMap;
 
 struct FactionChangeMountData
 {
@@ -1241,10 +1241,11 @@ class ObjectMgr
         SavedVariablesVector m_SavedVariables;
 
         // Caching Player Data
-        void LoadPlayerCacheData();
-        PlayerCacheData* GetPlayerDataByGUID(uint32 lowGuid) const;
-        PlayerCacheData* GetPlayerDataByName(std::string const& name) const;
-        void GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData*>& data) const;
+        void LoadPlayerCacheData(uint32 lowGuid = 0);
+        PlayerCacheData* GetPlayerDataByGUID(uint32 lowGuid);
+        PlayerCacheData const* GetPlayerDataByGUID(uint32 lowGuid) const;
+        PlayerCacheData const* GetPlayerDataByName(std::string const& name) const;
+        void GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData const*>& data) const;
         PlayerCacheData* InsertPlayerInCache(Player* pPlayer);
         PlayerCacheData* InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 uiGender, uint32 account, std::string const& name, uint32 level, uint32 zoneId);
         void DeletePlayerFromCache(uint32 lowGuid);

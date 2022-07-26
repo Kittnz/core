@@ -161,9 +161,6 @@ ObjectMgr::~ObjectMgr()
 
     for (auto& itr : m_CacheTrainerSpellMap)
         itr.second.Clear();
-
-    for (auto& itr : m_playerCacheData)
-        delete itr.second;
 }
 
 void ObjectMgr::LoadAllIdentifiers()
@@ -648,24 +645,39 @@ void ObjectMgr::LoadSavedVariable()
 }
 
 // Caching player data
-void ObjectMgr::LoadPlayerCacheData()
+void ObjectMgr::LoadPlayerCacheData(uint32 lowGuid)
 {
-    m_playerCacheData.clear();
-    m_playerNameToGuid.clear();
+    std::unique_ptr<QueryResult> result;
+    if (!lowGuid)
+    {
+        // load all characters (likely at startup)
+        m_playerCacheData.clear();
+        m_playerNameToGuid.clear();
 
-    std::unique_ptr<QueryResult> result(CharacterDatabase.Query(
-        //       0       1       2        3         4          5       6        7          8      9             10            11            12             13
-        "SELECT `guid`, `race`, `class`, `gender`, `account`, `name`, `level`, `zone`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `current_taxi_path` FROM `characters`;"));
+        result.reset(CharacterDatabase.Query(
+            //       0       1       2        3         4          5       6        7          8      9             10            11            12             13
+            "SELECT `guid`, `race`, `class`, `gender`, `account`, `name`, `level`, `zone`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `current_taxi_path` FROM `characters`;"));
+    }
+    else
+    {
+        // load a single character (likely just restored)
+        result.reset(CharacterDatabase.PQuery(
+            //       0       1       2        3         4          5       6        7          8      9             10            11            12             13
+            "SELECT `guid`, `race`, `class`, `gender`, `account`, `name`, `level`, `zone`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `current_taxi_path` FROM `characters` WHERE `guid`=%u;", lowGuid));
+    }
 
-    uint32 total_count = 0;
+    uint32 totalCount = 0;
 
     if (!result)
     {
-        BarGoLink bar(1);
-        bar.step();
+        if (!lowGuid)
+        {
+            BarGoLink bar(1);
+            bar.step();
 
-        sLog.outString();
-        sLog.outString(">> Loaded 0 cached player data ...");
+            sLog.outString();
+            sLog.outString(">> Loaded 0 cached player data ...");
+        }
         return;
     }
 
@@ -686,23 +698,34 @@ void ObjectMgr::LoadPlayerCacheData()
             UpdatePlayerCachedPosition(data, fields[8].GetUInt32(), fields[9].GetFloat(), fields[10].GetFloat(),
                 fields[11].GetFloat(), fields[12].GetFloat(), !fields[13].GetCppString().empty());
         }
-        ++total_count;
+        ++totalCount;
     }
     while (result->NextRow());
 
-    sLog.outString();
-    sLog.outString(">> Loaded %u players in cache.", total_count);
+    if (!lowGuid)
+    {
+        sLog.outString();
+        sLog.outString(">> Loaded %u players in cache.", totalCount);
+    }
 }
 
-PlayerCacheData* ObjectMgr::GetPlayerDataByGUID(uint32 guidLow) const
+PlayerCacheData* ObjectMgr::GetPlayerDataByGUID(uint32 guidLow)
 {
     auto itr = m_playerCacheData.find(guidLow);
     if (itr != m_playerCacheData.end())
-        return itr->second;
+        return &itr->second;
     return nullptr;
 }
 
-PlayerCacheData* ObjectMgr::GetPlayerDataByName(std::string const& name) const
+PlayerCacheData const* ObjectMgr::GetPlayerDataByGUID(uint32 guidLow) const
+{
+    auto itr = m_playerCacheData.find(guidLow);
+    if (itr != m_playerCacheData.end())
+        return &itr->second;
+    return nullptr;
+}
+
+PlayerCacheData const* ObjectMgr::GetPlayerDataByName(std::string const& name) const
 {
     if (ObjectGuid guid = GetPlayerGuidByName(name))
         return GetPlayerDataByGUID(guid.GetCounter());
@@ -748,7 +771,7 @@ uint8 ObjectMgr::GetPlayerClassByGUID(ObjectGuid guid) const
 
     uint32 lowguid = guid.GetCounter();
 
-    if (PlayerCacheData* data = GetPlayerDataByGUID(lowguid))
+    if (PlayerCacheData const* data = GetPlayerDataByGUID(lowguid))
     {
         return data->uiClass;
     }
@@ -800,7 +823,7 @@ void ObjectMgr::UpdatePlayerCachedPosition(Player* pPlayer)
     if (iter == m_playerCacheData.end())
         data = InsertPlayerInCache(pPlayer);
     else
-        data = iter->second;
+        data = &iter->second;
 
     if (!data)
         return;
@@ -815,7 +838,7 @@ void ObjectMgr::UpdatePlayerCachedPosition(uint32 lowGuid, uint32 mapId, float p
     if (iter == m_playerCacheData.end())
         return;
 
-    UpdatePlayerCachedPosition(iter->second, mapId, posX, posY, posZ, o, inFlight);
+    UpdatePlayerCachedPosition(&iter->second, mapId, posX, posY, posZ, o, inFlight);
 }
 
 void ObjectMgr::UpdatePlayerCachedPosition(PlayerCacheData* data, uint32 mapId, float posX, float posY, float posZ, float o, bool inFlight)
@@ -835,7 +858,7 @@ void ObjectMgr::UpdatePlayerCache(Player* pPlayer)
     if (iter == m_playerCacheData.end())
         data = InsertPlayerInCache(pPlayer);
     else
-        data = iter->second;
+        data = &iter->second;
 
     if (!data)
         return;
@@ -858,14 +881,11 @@ void ObjectMgr::UpdatePlayerCache(PlayerCacheData* data, uint32 race, uint32 _cl
 
 PlayerCacheData* ObjectMgr::InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 gender, uint32 accountId, std::string const& name, uint32 level, uint32 zoneId)
 {
-    auto data = new PlayerCacheData;
-    data->uiGuid = lowGuid;
-    UpdatePlayerCache(data, race, _class, gender, accountId, name, level, zoneId);
-
-    m_playerCacheData[lowGuid] = data;
+    PlayerCacheData& data = m_playerCacheData[lowGuid];
+    data.uiGuid = lowGuid;
+    UpdatePlayerCache(&data, race, _class, gender, accountId, name, level, zoneId);
     m_playerNameToGuid[name] = lowGuid;
-
-    return data;
+    return &data;
 }
 
 void ObjectMgr::DeletePlayerFromCache(uint32 lowGuid)
@@ -873,7 +893,7 @@ void ObjectMgr::DeletePlayerFromCache(uint32 lowGuid)
     auto itr = m_playerCacheData.find(lowGuid);
     if (itr != m_playerCacheData.end())
     {
-        auto itr2 = m_playerNameToGuid.find(itr->second->sName);
+        auto itr2 = m_playerNameToGuid.find(itr->second.sName);
         if (itr2 != m_playerNameToGuid.end())
             m_playerNameToGuid.erase(itr2);
         m_playerCacheData.erase(itr);
@@ -887,16 +907,16 @@ void ObjectMgr::ChangePlayerNameInCache(uint32 guidLow, std::string const& oldNa
     {
         m_playerNameToGuid.erase(oldName);
         m_playerNameToGuid[newName] = guidLow;
-        itr->second->sName = newName;
+        itr->second.sName = newName;
     }
 }
 
-void ObjectMgr::GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData*>& data) const
+void ObjectMgr::GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData const*>& data) const
 {
     for (const auto& iter : m_playerCacheData)
     {
-        if (iter.second->uiAccount == accountId)
-            data.push_back(iter.second);
+        if (iter.second.uiAccount == accountId)
+            data.push_back(&iter.second);
     }
 }
 
