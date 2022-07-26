@@ -8964,3 +8964,16 @@ replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VA
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45734, 24858, 45734, 2, 0); -- Owlkin Frenzy (Requires Owlkin Form)
 -- HUNTER SPELLCHAIN
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3035, 0, 0, 1, 0); -- Trueshot Rank 1
+
+-- PALADIN SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (8823, 2537, 2537, 2, 0); -- Crusader Strike Rank 2 
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (8824, 8823, 2537, 3, 0); -- Crusader Strike Rank 3
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10336, 8824, 2537, 4, 0); -- Crusader Strike Rank 4
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10337, 10336, 2537, 5, 0); -- Crusader Strike Rank 5
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (678, 679, 679, 2, 0); -- Holy Strike Rank 2
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (1866, 678, 679, 3, 0); -- Holy Strike Rank 3
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (680, 1866, 679, 4, 0); -- Holy Strike Rank 4
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (2495, 680, 679, 5, 0); -- Holy Strike Rank 5
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (5569, 2495, 679, 6, 0); -- Holy Strike Rank 6
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10332, 5569, 679, 7, 0); -- Holy Strike Rank 7
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10333, 10332, 679, 8, 0); -- Holy Strike Rank 8
