@@ -424,8 +424,10 @@ void World::LoadConfigSettings(bool reload)
         }
     }
 
+#ifdef USE_ANTICHEAT
     sAnticheatConfig.SetSource("anticheat.conf");
     sAnticheatConfig.loadConfigSettings();
+#endif
 
     ///- Read the player limit and the Message of the day from the config file
     SetPlayerLimit(sConfig.GetIntDefault("PlayerLimit", DEFAULT_PLAYER_LIMIT), true);
