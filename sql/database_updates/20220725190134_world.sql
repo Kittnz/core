@@ -1,20 +1,20 @@
 
 -- Fix shields stacking with each other, water shield, earth shield and lightning shield
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 0, 45527);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 1, 324);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 2, 325);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 3, 905);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 4, 945);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 5, 8134);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 6, 10431);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 7, 10432);
-INSERT INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 8, 45525);
-INSERT INTO `spell_group_stack_rules` (`group_id`, `stack_rule`) VALUES (2000, 1);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 0, 45527);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 1, 324);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 2, 325);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 3, 905);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 4, 945);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 5, 8134);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 6, 10431);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 7, 10432);
+REPLACE INTO `spell_group` (`group_id`, `group_spell_id`, `spell_id`) VALUES (2000, 8, 45525);
+REPLACE INTO `spell_group_stack_rules` (`group_id`, `stack_rule`) VALUES (2000, 1);
 
 
 -- add cooldown of 3 seconds between procs of earth and water shield
-INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) VALUES (45527, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
-INSERT INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) VALUES (45525, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+REPLACE INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) VALUES (45527, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
+REPLACE INTO `spell_proc_event` (`entry`, `SchoolMask`, `SpellFamilyName`, `SpellFamilyMask0`, `SpellFamilyMask1`, `SpellFamilyMask2`, `procFlags`, `procEx`, `ppmRate`, `CustomChance`, `Cooldown`) VALUES (45525, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3);
 
 
 -- add custom flag unique aura 1 target max to all lightning shields because of new thunderhead talent.
