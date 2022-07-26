@@ -77,7 +77,7 @@ void TWDebuff::AddDebuff(Unit* target, SpellAuraHolder* debuff)
 
 void TWDebuff::RegisterTarget(Player* seer, ObjectGuid targetGuid)
 {
-	const auto seerGuid = seer->GetObjectGuid();
+	/*const auto seerGuid = seer->GetObjectGuid();
 
 	auto oldTargetItr = m_unitTargets.find(seerGuid);
 
@@ -121,7 +121,7 @@ void TWDebuff::RegisterTarget(Player* seer, ObjectGuid targetGuid)
 				SendNewDebuff(seer, holder.second, true);
 			}
 		}
-	}
+	}*/
 }
 
 void TWDebuff::RemoveDebuff(Unit* target, SpellAuraHolder* debuff)
