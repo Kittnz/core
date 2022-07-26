@@ -8977,3 +8977,405 @@ replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VA
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (5569, 2495, 679, 6, 0); -- Holy Strike Rank 6
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10332, 5569, 679, 7, 0); -- Holy Strike Rank 7
 replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10333, 10332, 679, 8, 0); -- Holy Strike Rank 8
+
+-- spell cursed af
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45911, 45910, 45910, 2, 0); -- Mana Funnel Rank 2
+
+-- Mana Funnel (Rank 1)
+set @trainer = 3326;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 461;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5171;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3324;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5496;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 988;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3326;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5172;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 459;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 4564;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 4565;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 4563;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5612;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 2126;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3325;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3172;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5495;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5173;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 460;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 906;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3156;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 2127;
+set @spell = 47328;
+set @spellcost = 11000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 40;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+
+-- Mana Funnel (Rank 2)
+set @trainer = 3326;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 461;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5171;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3324;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5496;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 988;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3326;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5172;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 459;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 4564;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 4565;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 4563;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5612;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 2126;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3325;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3172;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5495;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 5173;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 460;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 906;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 3156;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
+
+set @trainer = 2127;
+set @spell = 47301;
+set @spellcost = 15000; -- in copper
+set @reqskill = 0; -- not needed for class spells
+set @reqskillvalue = 0; -- not needed for class spells
+set @player_level = 50;
+
+replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
