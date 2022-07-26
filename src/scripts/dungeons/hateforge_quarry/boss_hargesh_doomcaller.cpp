@@ -4,7 +4,7 @@
 
 struct Location
 {
-    float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};
+    float m_fX{}, m_fY{}, m_fZ{}, m_fO{};
 };
 
 static const Location vfSpawnPoint[] =
@@ -149,38 +149,28 @@ public:
         {
             if (Player* pPlayer{ itr.getSource() })
             {
-                if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster() && m_vFacelessTerror.size() < 3)
+                if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster())
                 {
-                    if (Creature* pFacelessTerror0{ m_creature->SummonCreature(NPC_FACELESS_TERROR,
-                        vfSpawnPoint[0].m_fX,
-                        vfSpawnPoint[0].m_fY,
-                        vfSpawnPoint[0].m_fZ,
-                        vfSpawnPoint[0].m_fO,
-                        TEMPSUMMON_MANUAL_DESPAWN) }) // Despawn adds manually on failed boss attempt
-                    {
-                        pFacelessTerror0->AI()->AttackStart(pPlayer);
-
-                        m_vFacelessTerror.push_back(pFacelessTerror0->GetObjectGuid()); // Store add's GUID to remove them manually on failed boss attempt
-                    }
-
                     if (Creature* pFacelessTerror1{ m_creature->SummonCreature(NPC_FACELESS_TERROR,
-                        vfSpawnPoint[1].m_fX,
-                        vfSpawnPoint[1].m_fY,
-                        vfSpawnPoint[1].m_fZ,
-                        vfSpawnPoint[1].m_fO,
-                        TEMPSUMMON_MANUAL_DESPAWN) }) // Despawn adds manually on failed boss attempt
+                        vfSpawnPoint[0].m_fX, vfSpawnPoint[0].m_fY, vfSpawnPoint[0].m_fZ, vfSpawnPoint[0].m_fO, TEMPSUMMON_MANUAL_DESPAWN) })
                     {
                         pFacelessTerror1->AI()->AttackStart(pPlayer);
+                        m_vFacelessTerror.push_back(pFacelessTerror1->GetObjectGuid());
+                    }
 
-                        m_vFacelessTerror.push_back(pFacelessTerror1->GetObjectGuid()); // Store add's GUID to remove them manually on failed boss attempt
+                    if (Creature* pFacelessTerror2{ m_creature->SummonCreature(NPC_FACELESS_TERROR,
+                        vfSpawnPoint[0].m_fX, vfSpawnPoint[0].m_fY, vfSpawnPoint[0].m_fZ, vfSpawnPoint[0].m_fO, TEMPSUMMON_MANUAL_DESPAWN) })
+                    {
+                        pFacelessTerror2->AI()->AttackStart(pPlayer);
+                        m_vFacelessTerror.push_back(pFacelessTerror2->GetObjectGuid());
                     }
 
                     DoScriptText(VOICE_SCRIPT_PHASE2, m_creature);
+                    m_bPhaseTwo = true;
+                    return;
                 }
             }
         }
-
-        m_bPhaseTwo = true;
     }
 
     void CheckIfAddsAreDead(const uint32& uiDiff)
@@ -197,7 +187,7 @@ public:
                         {
                             ++m_uiDeadCounter;
 
-                            if (m_uiDeadCounter == 2) // Both adds are dead
+                            if (m_uiDeadCounter == m_vFacelessTerror.size()) // Check if all summoned adds are dead
                             {
                                 m_creature->RemoveAurasDueToSpell(SPELL_SHADOW_CHANNELING);
                                 m_creature->RemoveAurasDueToSpell(SPELL_IMMUNE_ALL);
