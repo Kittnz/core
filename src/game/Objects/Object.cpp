@@ -4832,7 +4832,7 @@ uint32 WorldObject::DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* 
     if (pVictim == this)
         return 0;
 
-    return DealDamage(pVictim, damage, cleanDamage, damagetype, damageSchoolMask, spellProto, durabilityLoss, spell, addThreat);
+    return pVictim->DealDamage(pVictim, damage, cleanDamage, damagetype, damageSchoolMask, spellProto, durabilityLoss, spell, addThreat);
 }
 
 bool WorldObject::CheckAndIncreaseCastCounter()
