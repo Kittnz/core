@@ -8890,3 +8890,77 @@ set @player_level = 20;
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
 
 update item_template set stat_value2 = 3 where entry = 10412; -- Belt of the Fang
+
+-- SHAMAN SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45521, 17364, 17364, 2, 0); -- Bloodlust Rank 2
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45511, 45509, 45509, 2, 0); -- Stormstrike Rank 2
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45514, 45505, 45505, 2, 0); -- Feral Spirit Rank 2
+-- PRIEST SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45553, 15473, 15473, 2, 0); -- Improved Shadowform (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45555, 15473, 15473, 3, 0); -- Pain Spike (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45554, 15473, 15473, 4, 0); -- Shadow Mend (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45564, 45562, 45562, 2, 0); -- Champion's Bond (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45565, 45562, 45562, 3, 0); -- Empower Champion (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45567, 45562, 45562, 4, 0); -- Revive Champion (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45569, 45562, 45562, 5, 0); -- Champion's Resolve (Spellchain to require Proclaim Champion)
+-- WARRIOR SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45599, 11605, 45599, 1, 0); -- Decisive Strike (Rank 1) (Requires Slam Rank 4)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45560, 45599, 45599, 2, 45961); -- Decisive Strike (Rank 2) (Requires both Decisive Strike Rank 1 and Slam Rank 5)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45961, 11605, 1464, 5, 0); -- Slam (Rank 5) (Requires Slam Rank 5)
+-- HUNTER SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3036, 3035, 3035, 2, 0); -- Trueshot Rank 2
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3037, 3036, 3035, 3, 0); -- Trueshot Rank 3
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3038, 3037, 3035, 4, 0); -- Trueshot Rank 4
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3668, 3038, 3035, 5, 0); -- Trueshot Rank 5
+-- DRUID SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (24858, 45734, 45734, 2, 0); -- Owlkin Frenzy (Requires Owlkin Form)
+-- WARLOCK SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45911, 45910, 45910, 2, 0); -- Mana Funnel Rank 2 (Require Mana Funnel Rank 1)
+-- PALADIN SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (8823, 2537, 2537, 2, 0); -- Crusader Strike Rank 2 
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (8824, 8823, 2537, 3, 0); -- Crusader Strike Rank 3
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10336, 8824, 2537, 4, 0); -- Crusader Strike Rank 4
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10337, 10336, 2537, 5, 0); -- Crusader Strike Rank 5
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (678, 679, 679, 2, 0); -- Holy Strike Rank 2
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (1866, 678, 679, 3, 0); -- Holy Strike Rank 3
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (680, 1866, 679, 4, 0); -- Holy Strike Rank 4
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (2495, 680, 679, 5, 0); -- Holy Strike Rank 5
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (5569, 2495, 679, 6, 0); -- Holy Strike Rank 6
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10332, 5569, 679, 7, 0); -- Holy Strike Rank 7
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (10333, 10332, 679, 8, 0); -- Holy Strike Rank 8
+
+-- PRIEST SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45553, 15473, 15473, 2, 0); -- Improved Shadowform (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45555, 15473, 15473, 2, 0); -- Pain Spike (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45554, 15473, 15473, 2, 0); -- Shadow Mend (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45564, 45562, 45562, 2, 0); -- Champion's Bond (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45565, 45562, 45562, 2, 0); -- Empower Champion (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45567, 45562, 45562, 2, 0); -- Revive Champion (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45569, 45562, 45562, 2, 0); -- Champion's Resolve (Spellchain to require Proclaim Champion)
+-- DRUID SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (24858, 45734, 45734, 1, 0); -- Owlkin Frenzy (Requires Owlkin Form)
+-- WARRIOR SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45599, 11605, 1464, 1, 0); -- Decisive Strike (Rank 1) (Requires Slam Rank 4)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45560, 45599, 1464, 2, 45961); -- Decisive Strike (Rank 2) (Requires both Decisive Strike Rank 1 and Slam Rank 5)
+-- DRUID SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45734, 24858, 45734, 2, 0); -- Owlkin Frenzy (Requires Owlkin Form)
+-- HUNTER SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3035, 0, 0, 1, 0); -- Trueshot Rank 1
+
+-- PRIEST SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45553, 15473, 15473, 2, 0); -- Improved Shadowform (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45555, 15473, 15473, 2, 0); -- Pain Spike (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45554, 15473, 15473, 2, 0); -- Shadow Mend (Spellchain to require Shadowform talent)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45564, 45562, 45562, 2, 0); -- Champion's Bond (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45565, 45562, 45562, 2, 0); -- Empower Champion (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45567, 45562, 45562, 2, 0); -- Revive Champion (Spellchain to require Proclaim Champion)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45569, 45562, 45562, 2, 0); -- Champion's Resolve (Spellchain to require Proclaim Champion)
+-- DRUID SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (24858, 45734, 45734, 1, 0); -- Owlkin Frenzy (Requires Owlkin Form)
+-- WARRIOR SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45599, 11605, 1464, 1, 0); -- Decisive Strike (Rank 1) (Requires Slam Rank 4)
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45560, 45599, 1464, 2, 45961); -- Decisive Strike (Rank 2) (Requires both Decisive Strike Rank 1 and Slam Rank 5)
+-- DRUID SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (45734, 24858, 45734, 2, 0); -- Owlkin Frenzy (Requires Owlkin Form)
+-- HUNTER SPELLCHAIN
+replace into spell_chain (spell_id, prev_spell, first_spell, rank, req_spell) VALUES (3035, 0, 0, 1, 0); -- Trueshot Rank 1
