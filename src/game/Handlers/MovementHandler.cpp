@@ -489,9 +489,6 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recvData)
         if (!VerifyMovementInfo(movementInfo))
             break;
 
-        if (_player->IsSelfMover() && !m_antiCheat->SpeedChangeAck(movementInfo, recvData, speedReceived))
-            return;
-
         Player* pPlayerMover = pMover->ToPlayer();
 
         if ((pMover == _player->GetMover()) && (!pPlayerMover || !pPlayerMover->IsBeingTeleported()))
@@ -514,6 +511,9 @@ void WorldSession::HandleForceSpeedChangeAckOpcodes(WorldPacket &recvData)
     float newSpeedRate = speedReceived / baseMoveSpeed[move_type];
     pMover->SetSpeedRateReal(move_type, newSpeedRate);
     MovementPacketSender::SendSpeedChangeToObservers(pMover, move_type, speedReceived);
+
+    if (_player->IsSelfMover())
+        m_antiCheat->SpeedChangeAck(movementInfo, recvData, speedReceived);
 }
 
 /*
