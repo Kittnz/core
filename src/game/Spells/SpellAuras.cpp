@@ -4841,7 +4841,8 @@ void Aura::HandleModPowerRegen(bool apply, bool Real)       // drinking
     if (!Real)
         return;
 
-    Powers pt = GetTarget()->GetPowerType();
+    Unit* pTarget = GetTarget();
+    Powers pt = pTarget->GetPowerType();
     if (m_modifier.periodictime == 0)
     {
         // Anger Management (only spell use this aura for rage)
@@ -4854,7 +4855,20 @@ void Aura::HandleModPowerRegen(bool apply, bool Real)       // drinking
     m_periodicTimer = 5000;
 
     if (m_modifier.m_miscvalue == POWER_MANA)
-        (GetTarget())->UpdateManaRegen();
+    {
+        // Brilliance Aura (Custom Mage Talent)
+        if (GetId() == 45408 && apply)
+        {
+            if (Player* pCaster = ToPlayer(GetCaster()))
+            {
+                if (pCaster != pTarget)
+                    m_modifier.m_amount = pCaster->GetManaRegen() * (m_modifier.m_amount / 100.0f);
+                else
+                    m_modifier.m_amount = 0;
+            }
+        }
+        pTarget->UpdateManaRegen();
+    }
 
     m_isPeriodic = apply;
 }

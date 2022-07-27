@@ -1622,6 +1622,7 @@ class Player final: public Unit
 
         void RewardRage(uint32 damage, bool attacker);
         uint8 GetComboPoints() const { return m_comboPoints; }
+        float GetManaRegen() const { return m_modManaRegen; }
         ObjectGuid const& GetComboTargetGuid() const { return m_comboTargetGuid; }
 
         void AddComboPoints(Unit* target, int8 count);
