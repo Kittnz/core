@@ -299,7 +299,6 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 					}
 				}
 
-
 				// Nightelf Guards
 				if (m_creature->GetFactionTemplateId() == 79)
 				{
@@ -482,195 +481,196 @@ void GuardEventAI::ReceiveEmote(Player* pPlayer, const uint32 uiEmote)
 							break;
 						}
 					}
+				}
 
-					// Dwarf Guards
-					if (m_creature->GetFactionTemplateId() == 57)
+				// Dwarf Guards
+				if (m_creature->GetFactionTemplateId() == 57)
+				{
+					switch (uiEmote)
 					{
-						switch (uiEmote)
+
+						// General greeting
+						case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
 						{
-
-							// General greeting
-							case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
-									if (CheckEmoteCooldown())
+									const auto TextRandom = urand(1, 6);
+									switch (TextRandom)
 									{
-										const auto TextRandom = urand(1, 6);
-										switch (TextRandom)
-										{
-											case 1: {m_creature->MonsterSay("I do hope the mountain is warm enough for ye.", Language::LANG_COMMON); break; }
-											case 2: {m_creature->MonsterSay("Stop by at the inn for some relaxation.", Language::LANG_COMMON); break; }
-											case 3: {m_creature->MonsterSay("The mountain, home of the dwarves, is open to all of the Alliance.", Language::LANG_COMMON); break; }
-											case 4: {m_creature->MonsterSay("Welcome to Ironforge, Traveler. Don't miss out a good beer in one of our Taverns.", Language::LANG_COMMON); break; }
-											case 5: {m_creature->MonsterSay("Ha! It's good to see ye again. Pull up a chair by the hearth.", Language::LANG_COMMON); break; }
-											case 6: {m_creature->MonsterSay("Greetings, Pal. Come talk to me when you get lost!", Language::LANG_COMMON); break; }
-										}
-										switch (TextRandom)
-										{
-											case 1: case 2: case 3: case 4: case 5: case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
-										}
+										case 1: {m_creature->MonsterSay("I do hope the mountain is warm enough for ye.", Language::LANG_COMMON); break; }
+										case 2: {m_creature->MonsterSay("Stop by at the inn for some relaxation.", Language::LANG_COMMON); break; }
+										case 3: {m_creature->MonsterSay("The mountain, home of the dwarves, is open to all of the Alliance.", Language::LANG_COMMON); break; }
+										case 4: {m_creature->MonsterSay("Welcome to Ironforge, Traveler. Don't miss out a good beer in one of our Taverns.", Language::LANG_COMMON); break; }
+										case 5: {m_creature->MonsterSay("Ha! It's good to see ye again. Pull up a chair by the hearth.", Language::LANG_COMMON); break; }
+										case 6: {m_creature->MonsterSay("Greetings, Pal. Come talk to me when you get lost!", Language::LANG_COMMON); break; }
+									}
+									switch (TextRandom)
+									{
+										case 1: case 2: case 3: case 4: case 5: case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
 									}
 								}
-								break;
 							}
+							break;
+						}
 
-							// Salute
-							case TEXTEMOTE_SALUTE:
+						// Salute
+						case TEXTEMOTE_SALUTE:
+						{
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
-									if (CheckEmoteCooldown())
+									const auto TextRandom = urand(1, 4);
+									switch (TextRandom)
 									{
-										const auto TextRandom = urand(1, 4);
-										switch (TextRandom)
-										{
-											case 1: {m_creature->MonsterSay("For the Bronzebeards!", Language::LANG_COMMON); break; }
-											case 2: {m_creature->MonsterSay("For King Magni!", Language::LANG_COMMON); break; }
-											case 3: {m_creature->MonsterSay("At your service.", Language::LANG_COMMON); break; }
-											case 4: {m_creature->MonsterSay("We keep you protected. Be welcome in our City.", Language::LANG_COMMON); break; }
-										}
-										switch (TextRandom)
-										{
-											case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+										case 1: {m_creature->MonsterSay("For the Bronzebeards!", Language::LANG_COMMON); break; }
+										case 2: {m_creature->MonsterSay("For King Magni!", Language::LANG_COMMON); break; }
+										case 3: {m_creature->MonsterSay("At your service.", Language::LANG_COMMON); break; }
+										case 4: {m_creature->MonsterSay("We keep you protected. Be welcome in our City.", Language::LANG_COMMON); break; }
+									}
+									switch (TextRandom)
+									{
+										case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
 
-										}
 									}
 								}
-								break;
 							}
+							break;
+						}
 
-							// Bye
-							case TEXTEMOTE_BYE:
+						// Bye
+						case TEXTEMOTE_BYE:
+						{
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+								if (CheckEmoteCooldown())
 								{
-									if (CheckEmoteCooldown())
+									const auto TextRandom = urand(1, 4);
+									switch (TextRandom)
 									{
-										const auto TextRandom = urand(1, 4);
-										switch (TextRandom)
-										{
-											case 1: {m_creature->MonsterSay("Come back if you crave for some beer in a warm inn, will ya?", Language::LANG_COMMON); break; }
-											case 2: {m_creature->MonsterSay("Well met, Travevller. Stay safe and kill some creatures out there!", Language::LANG_COMMON); break; }
-											case 3: {m_creature->MonsterSay("Don't forget, the mountain welcomes everyone of the Alliance!", Language::LANG_COMMON); break; }
-											case 4: {m_creature->MonsterSay("Be blessed with fortune, friend!", Language::LANG_COMMON); break; }
-										}
-										switch (TextRandom)
-										{
-											case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
-										}
+										case 1: {m_creature->MonsterSay("Come back if you crave for some beer in a warm inn, will ya?", Language::LANG_COMMON); break; }
+										case 2: {m_creature->MonsterSay("Well met, Travevller. Stay safe and kill some creatures out there!", Language::LANG_COMMON); break; }
+										case 3: {m_creature->MonsterSay("Don't forget, the mountain welcomes everyone of the Alliance!", Language::LANG_COMMON); break; }
+										case 4: {m_creature->MonsterSay("Be blessed with fortune, friend!", Language::LANG_COMMON); break; }
+									}
+									switch (TextRandom)
+									{
+										case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
 									}
 								}
-								break;
 							}
+							break;
+						}
 
-							// Joke
-							case TEXTEMOTE_JOKE:
+						// Joke
+						case TEXTEMOTE_JOKE:
+						{
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
-									if (CheckEmoteCooldown())
+									const auto TextRandom = urand(1, 4);
+									switch (TextRandom)
 									{
-										const auto TextRandom = urand(1, 4);
-										switch (TextRandom)
-										{
-											case 1: {m_creature->MonsterSay("That's one for the inn. Bahahaha!", Language::LANG_COMMON); break; }
-											case 2: {m_creature->MonsterSay("By King Magnis beard! BAHahaha. Where'd you got that one from?!", Language::LANG_COMMON); break; }
-											case 3: {m_creature->MonsterSay("Hahaha! I don't drink anymore... 'course, I don't drink any less either! BAHAHAhahaha!", Language::LANG_COMMON); break; }
-											case 4: {m_creature->MonsterSay("Hm... Maybe i need more beer to laugh about that.", Language::LANG_COMMON); break; }
-										}
-										switch (TextRandom)
-										{
-											case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
-											case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
-										}
+										case 1: {m_creature->MonsterSay("That's one for the inn. Bahahaha!", Language::LANG_COMMON); break; }
+										case 2: {m_creature->MonsterSay("By King Magnis beard! BAHahaha. Where'd you got that one from?!", Language::LANG_COMMON); break; }
+										case 3: {m_creature->MonsterSay("Hahaha! I don't drink anymore... 'course, I don't drink any less either! BAHAHAhahaha!", Language::LANG_COMMON); break; }
+										case 4: {m_creature->MonsterSay("Hm... Maybe i need more beer to laugh about that.", Language::LANG_COMMON); break; }
+									}
+									switch (TextRandom)
+									{
+										case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+										case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
 									}
 								}
-								break;
 							}
+							break;
+						}
 
-							// Flex
-							case TEXTEMOTE_FLEX:
+						// Flex
+						case TEXTEMOTE_FLEX:
+						{
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
-									if (CheckEmoteCooldown())
+									const auto TextRandom = urand(1, 4);
+									switch (TextRandom)
 									{
-										const auto TextRandom = urand(1, 4);
-										switch (TextRandom)
-										{
-											case 1: {m_creature->MonsterSay("What glorious muscles!", Language::LANG_COMMON); break; }
-											case 2: {m_creature->MonsterSay("Ironforge will be surely safe with you stoping by.", Language::LANG_COMMON); break; }
-											case 3: {m_creature->MonsterSay("You try to impress a dwarf with muscles? Look, i am 50% muscles and 50% beer! BAHAHA!", Language::LANG_COMMON); break; }
-											case 4: {m_creature->MonsterSay("You are as slender as a straw of wheat!", Language::LANG_COMMON); break; }
-										}
-										switch (TextRandom)
-										{
-											case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_APPLAUD); break; }
-											case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_FLEX); break; }
-											case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
-										}
+										case 1: {m_creature->MonsterSay("What glorious muscles!", Language::LANG_COMMON); break; }
+										case 2: {m_creature->MonsterSay("Ironforge will be surely safe with you stoping by.", Language::LANG_COMMON); break; }
+										case 3: {m_creature->MonsterSay("You try to impress a dwarf with muscles? Look, i am 50% muscles and 50% beer! BAHAHA!", Language::LANG_COMMON); break; }
+										case 4: {m_creature->MonsterSay("You are as slender as a straw of wheat!", Language::LANG_COMMON); break; }
+									}
+									switch (TextRandom)
+									{
+										case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_APPLAUD); break; }
+										case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_FLEX); break; }
+										case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
 									}
 								}
-								break;
 							}
+							break;
+						}
 
-							// Taunt
-							case TEXTEMOTE_TAUNT:
+						// Taunt
+						case TEXTEMOTE_TAUNT:
+						{
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+								if (CheckEmoteCooldown())
 								{
-									if (CheckEmoteCooldown())
+									const auto TextRandom = urand(1, 5);
+									switch (TextRandom)
 									{
-										const auto TextRandom = urand(1, 5);
-										switch (TextRandom)
-										{
-											case 1: {m_creature->MonsterSay("By the stinking fart of a Troll, you're lucky i am on duty right now!", Language::LANG_COMMON); break; }
-											case 2: {m_creature->MonsterSay("You should back off before i lose... My... TEMPER!", Language::LANG_COMMON); break; }
-											case 3: {m_creature->MonsterSay("You shouldn't put your bare hand in a forge, you might burn yourself.", Language::LANG_COMMON); break; }
-											case 4: {m_creature->MonsterSay("My arms might be small but so is your brain!", Language::LANG_COMMON); break; }
-											case 5: {m_creature->MonsterSay("I hope i misheared that.", Language::LANG_COMMON); break; }
-										}
-										switch (TextRandom)
-										{
-											case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_ROAR); break; }
-											case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
-											case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
-										}
+										case 1: {m_creature->MonsterSay("By the stinking fart of a Troll, you're lucky i am on duty right now!", Language::LANG_COMMON); break; }
+										case 2: {m_creature->MonsterSay("You should back off before i lose... My... TEMPER!", Language::LANG_COMMON); break; }
+										case 3: {m_creature->MonsterSay("You shouldn't put your bare hand in a forge, you might burn yourself.", Language::LANG_COMMON); break; }
+										case 4: {m_creature->MonsterSay("My arms might be small but so is your brain!", Language::LANG_COMMON); break; }
+										case 5: {m_creature->MonsterSay("I hope i misheared that.", Language::LANG_COMMON); break; }
+									}
+									switch (TextRandom)
+									{
+										case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_ROAR); break; }
+										case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
+										case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
 									}
 								}
-								break;
 							}
+							break;
+						}
 
-							// Tickle
-							case TEXTEMOTE_TICKLE:
+						// Tickle
+						case TEXTEMOTE_TICKLE:
+						{
+							if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
 							{
-								if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+								if (CheckEmoteCooldown())
 								{
-									if (CheckEmoteCooldown())
+									const auto TextRandom = urand(1, 5);
+									switch (TextRandom)
 									{
-										const auto TextRandom = urand(1, 5);
-										switch (TextRandom)
-										{
-											case 1: {m_creature->MonsterSay("Bahaha! Stop it Pal!", Language::LANG_COMMON); break; }
-											case 2: {m_creature->MonsterSay("G-ggg... Bahahaha!", Language::LANG_COMMON); break; }
-											case 3: {m_creature->MonsterSay("Oi, Mate. You... can't... just... tickle the guards around here! HAHA!", Language::LANG_COMMON); break; }
-											case 4: {m_creature->MonsterSay("You... know i wear an armor with tickle-resistance + 10, right?", Language::LANG_COMMON); break; }
-											case 5: {m_creature->MonsterSay("Hey! Stay away from me!", Language::LANG_COMMON); break; }
-										}
-										switch (TextRandom)
-										{
-											case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
-											case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
-											case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_ATTACKUNARMED); break; }
-										}
+										case 1: {m_creature->MonsterSay("Bahaha! Stop it Pal!", Language::LANG_COMMON); break; }
+										case 2: {m_creature->MonsterSay("G-ggg... Bahahaha!", Language::LANG_COMMON); break; }
+										case 3: {m_creature->MonsterSay("Oi, Mate. You... can't... just... tickle the guards around here! HAHA!", Language::LANG_COMMON); break; }
+										case 4: {m_creature->MonsterSay("You... know i wear an armor with tickle-resistance + 10, right?", Language::LANG_COMMON); break; }
+										case 5: {m_creature->MonsterSay("Hey! Stay away from me!", Language::LANG_COMMON); break; }
+									}
+									switch (TextRandom)
+									{
+										case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+										case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+										case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_ATTACKUNARMED); break; }
 									}
 								}
-								break;
 							}
+							break;
 						}
 					}
 				}
+				
 				// EasterEgg
 				if (m_creature->GetFactionTemplateId() == 85)
 				{
