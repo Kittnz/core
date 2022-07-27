@@ -2553,15 +2553,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     return;
                 }
             }
-
-            switch (m_spellInfo->Id)
-            {
-            case 45954:
-            case 45953:
-            {
-
-            }break;
-            }
             break;
         }
         case SPELLFAMILY_SHAMAN:
