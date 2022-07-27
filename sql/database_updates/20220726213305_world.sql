@@ -145,6 +145,6 @@ set @player_level = 30;
 replace into npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel) values (@trainer,@spell,@spellcost,@reqskill,@reqskillvalue,@player_level);
 
 -- Item fixes Dragunovi
-update item_template set max_count = 1, spellid_1 = 48035, spellid_2 = 15464 where entry = 80675; 
-update item_template set max_count = 1, spellid_1 = 48036, stat_value1 = 0 where entry = 80647;
-update item_template set spellid_2 = 15464 where entry = 21389;
+UPDATE item_template SET max_count = 1, spellid_1 = 48035, spellid_2 = 15464 WHERE entry = 80674;
+UPDATE item_template SET max_count = 1, spellid_1 = 48037, stat_value1 = 0 WHERE entry = 80547;
+UPDATE item_template SET spellid_2 = 15464 WHERE entry = 21389;
