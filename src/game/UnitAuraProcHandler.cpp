@@ -249,8 +249,17 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
 
     /// [TODO]
     /// Delete all these spells, and manage it via the DB (spell_proc_event)
-    if (procSpell)
+    if (procSpell && !(procExtra & PROC_EX_CAST_END))
     {
+        // Sanctified Command (Custom Paladin Talent)
+        if (spellProto->Id == 45954 || spellProto->Id == 45955)
+        {
+            // Judgement of Command
+            if (procSpell->SpellIconID == 561 && procSpell->DmgClass == 2 && procSpell->SpellVisual == 0)
+                return SPELL_PROC_TRIGGER_OK;
+            else
+                return SPELL_PROC_TRIGGER_FAILED;
+        }
         // Eye for an Eye
         if (spellProto->SpellIconID == 1820)
         {
@@ -1054,6 +1063,59 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 
             switch (dummySpell->Id)
             {
+                // Sanctified Command (Custom Paladin Talent)
+                case 45954:
+                case 45955:
+                {
+                    if (Player* pPlayer = ToPlayer())
+                    {
+                        uint32 sealSpellId;
+                        switch (procSpell->Id)
+                        {
+                            case 20467: // Rank 1
+                                sealSpellId = 20375;
+                                break;
+                            case 20963: // Rank 2
+                                sealSpellId = 20915;
+                                break;
+                            case 20964: // Rank 3
+                                sealSpellId = 20918;
+                                break;
+                            case 20965: // Rank 4
+                                sealSpellId = 20919;
+                                break;
+                            case 20966: // Rank 5
+                                sealSpellId = 20920;
+                                break;
+                            default:
+                                return SPELL_AURA_PROC_FAILED;
+                        }
+
+                        SpellEntry const* pSeal = sSpellMgr.GetSpellEntry(sealSpellId);
+                        if (!pSeal)
+                            return SPELL_AURA_PROC_FAILED;
+
+                        float const manaEffectiveness = float(triggerAmount) / 100.0f;
+                        uint32 const manaAmount = pSeal->manaCost * manaEffectiveness;
+
+                        Group* group = pPlayer->GetGroup();
+                        if (group)
+                        {
+                            for (auto itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
+                            {
+                                auto member = itr->getSource();
+                                if (member->GetPowerType() == POWER_MANA && pPlayer->GetDistance(member) < 15.0f)
+                                    EnergizeBySpell(member, dummySpell->Id, manaAmount, POWER_MANA);
+                            }
+                        }
+                        else
+                            EnergizeBySpell(this, dummySpell->Id, manaAmount, POWER_MANA);
+
+                        return SPELL_AURA_PROC_OK;
+                    }
+
+                    return SPELL_AURA_PROC_FAILED;
+                }
                 // Holy Power (Redemption Armor set)
                 case 28789:
                 {
