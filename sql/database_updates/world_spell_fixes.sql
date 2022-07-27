@@ -1,4 +1,5 @@
 -- Restore custom flags (vmangos field):
+-- Refresh file's hash to apply after spell_template. Can we have a better solution for this please?
 update spell_template set customflags = 1 where entry in (9574, 9658, 10452, 11971, 13444, 15502, 15572, 16145, 16168, 16536, 16914, 17401, 17402, 21081, 22433, 22713, 23341, 24317, 25051, 25651, 25668, 27991);
 update spell_template set customflags = 2 where entry in (21847, 24131, 24134, 24135);
 update spell_template set customflags = 4 where entry in (24933, 25029, 25032);
