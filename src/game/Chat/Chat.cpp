@@ -48,8 +48,8 @@ ChatCommand * ChatHandler::getCommandTable()
     //Public table
     static ChatCommand anticheatCommandTable[] =
     {
-        { "info",     SEC_ADMINISTRATOR, true,  &ChatHandler::HandleAnticheatInfoCommand,	nullptr },
-        { nullptr,   0,                  false, nullptr,									nullptr },
+        { "info",       SEC_ADMINISTRATOR,        true,  &ChatHandler::HandleAnticheatInfoCommand,  "", nullptr },
+        { nullptr,      0,                        false, nullptr,                                   "", nullptr }
     };
 
 #endif
