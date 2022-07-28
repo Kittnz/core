@@ -42,3 +42,6 @@ update quest_template set requiredraces = 434 where entry in (756, 758, 754, 748
 
 update creature_template set display_id1 = 18926 where entry = 50038;
 replace into creature_display_info_addon (display_id) values (18926);
+
+-- https://database.turtle-wow.org/?item=60593
+update item_template set spellcharges_1 = -1, spellcategory_1 = 11, spellcategorycooldown_1 = 1000 where entry = 60593;
