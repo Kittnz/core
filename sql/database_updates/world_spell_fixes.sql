@@ -11,20 +11,6 @@ update spell_template set customflags = 256 where entry in (118, 339, 700, 710, 
 update spell_template set customflags = 384 where entry in (2070, 6770, 11297, 19725);
 update spell_template set customflags = 1024 where entry in (588, 3235, 3284, 3417, 3418, 3616, 3637, 5111, 5301, 5680, 6718, 6752, 6947, 7090, 7165, 7276, 8247, 8279, 8393, 8599, 8601, 8876, 9205, 9460, 9941, 10022, 10072, 10074, 10095, 11838, 11919, 11966, 11984, 12099, 12246, 12529, 12539, 12546, 12556, 12627, 12787, 12898, 13299, 13616, 13767, 14178, 15088, 15097, 15876, 16140, 16563, 16577, 16592, 17327, 17467, 18148, 18268, 18943, 18950, 18968, 19030, 19194, 19195, 19396, 19626, 19640, 19817, 19818, 21061, 21857, 22128, 22578, 22735, 22856, 24692, 25592, 26341, 27987, 28126, 29526);
 
--- Misc. pet & mount fixes:
-update spell_template set effect2 = 0 where entry = 46064;
-update spell_template set effectmiscvalue1 = 90978 where entry = 46519;
-update spell_template set effectmiscvalue1 = 50091 where entry = 46453;
-update spell_template set effectmiscvalue1 = 81019 where entry = 46496;
-update spell_template set effectmiscvalue1 = 50098 where entry = 46450;
-update spell_template set effectmiscvalue1 = 90977 where entry = 46225;
-update spell_template set effectmiscvalue1 = 90979 where entry = 46520;
-update spell_template set effectmiscvalue1 = 50102 where entry = 46446;
-update spell_template set effectmiscvalue1 = 81102 where entry = 18363;
-update spell_template set effectmiscvalue1 = 80314 where entry = 46516;
-update spell_template set effectmiscvalue1 = 80319 where entry = 46513; 
-update spell_template set effectmiscvalue1 = 80313 where entry = 46515; 
-update spell_template set effectmiscvalue1 = 81005 where entry = 46451;
 -- Arcane Missiles: aggro on hit, not cast.
 update spell_template set attributesex3 = 0 where entry in (5143,5144,5145,8416,8417,10211,10212,25345);  
 -- Fix Wyvern Sting not being removed on taking damage.
@@ -32,7 +18,6 @@ update spell_template set proccharges=1 where (procflags & 1048576) && (aurainte
 -- Triggered dot aura by Wyvern Sting should be a debuff.
 update spell_template set customflags=customflags | 2 where entry in (24131, 24134, 24135);
 replace into spell_mod (id, interruptflags) values (46498, 1), (46499, 1);
-
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1119
 -- Blademaster's Blindfold helm isn't adding +5 polearms on character skill window:
 replace into spell_template values (46041, 0, 38, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 101, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 6, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1527, 0, 0, 'Increased Polearms +5', 16712190, '', 16712190, 'Increased Polearm +5.', 16712190, '', 16712190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
