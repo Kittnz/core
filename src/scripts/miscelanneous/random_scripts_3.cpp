@@ -2182,7 +2182,7 @@ bool QuestAccept_npc_sage_palerunner(Player* pPlayer, Creature* pQuestGiver, Que
         pQuestGiver->CastSpell(pQuestGiver, 13236, false);
 
         DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->MonsterSayToPlayer("Spirits, it is I, Sage Palerunner, I call from the mortal plane to bring another into the fold. He has already braved the harsh wilds to gather the Spiritleaf required, he shows true bravery in the face of adversity.", player);
+            npc->MonsterSayToPlayer("Spirits, it is I, Sage Palerunner, I call from the mortal plane to bring another into the fold. They have already braved the harsh wilds to gather the Spiritleaf required, they show true bravery in the face of adversity.", player);
             });
         DoAfterTime(pPlayer, 13 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->MonsterSayToPlayer("I ask of you to allow your magic to flow through into their body, and be blessed by the Earthmother's gift. They will be the bearer of our culture, and our traditions, from now until the end of time.", player);

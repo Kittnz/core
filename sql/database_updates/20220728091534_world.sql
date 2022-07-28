@@ -45,3 +45,6 @@ replace into creature_display_info_addon (display_id) values (18926);
 
 -- https://database.turtle-wow.org/?item=60593
 update item_template set spellcharges_1 = -1, spellcategory_1 = 11, spellcategorycooldown_1 = 1000 where entry = 60593;
+
+-- New recipes should be comsumed on use:
+update item_template set spellcharges_1 = -1, spellcategory_1 = 11, spellcategorycooldown_1 = 1000 where entry in (83570, 83571, 83572, 83573, 83574, 83575);
