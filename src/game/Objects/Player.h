@@ -2330,7 +2330,7 @@ public:
 
         return Unit::IsPvP();
     }
-
+    
     bool HasChallenge(Challenges challenge) const
     {
         static std::unordered_map<uint32, uint32> challenge_spells
@@ -2730,7 +2730,7 @@ public:
         void SendEarnedTitles();
         void ChangeTitle(uint8 title);
         void UpdateAppearance();
-        // Titles System End
+        bool HasAllZonesExplored();
 
 		// General send addon message
 	public:
