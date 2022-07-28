@@ -35,3 +35,5 @@ replace into npc_vendor (entry, item) values (51533, 50238);
 delete from npc_vendor where item = 51705;
 
 update item_template set display_id = 16368 where entry = 11508;
+
+update quest_template set requiredraces = 434 where entry in (756, 758, 754, 748, 759, 760);
