@@ -817,6 +817,13 @@ void Spell::prepareDataForTriggerSystem()
                     m_procAttacker = PROC_FLAG_DEAL_HARMFUL_ABILITY;
                     m_procVictim = PROC_FLAG_TAKE_HARMFUL_ABILITY;
                 }
+
+                // Holy Strike (Custom Paladin Spell) should proc Seals
+                if (IsNextMeleeSwingSpell())
+                {
+                    m_procAttacker |= PROC_FLAG_DEAL_MELEE_SWING;
+                    m_procVictim |= PROC_FLAG_TAKE_MELEE_SWING;
+                }
             }
             break;
         }
