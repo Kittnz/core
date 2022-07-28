@@ -20357,3 +20357,6 @@ update spell_template set effectbonuscoefficient1 = 0, effectbonuscoefficient2 =
 update spell_template set effectbonuscoefficient1 = 0, effectbonuscoefficient2 = -1, effectbonuscoefficient3 = -1 where entry = 31954;
 update spell_template set effectbonuscoefficient1 = 0, effectbonuscoefficient2 = -1, effectbonuscoefficient3 = -1 where entry = 32061;
 update spell_template set effectbonuscoefficient1 = 0, effectbonuscoefficient2 = -1, effectbonuscoefficient3 = -1 where entry = 46041;
+
+-- Add spell power scaling to Retribution Aura.
+UPDATE `spell_template` SET `effectBonusCoefficient1`=0.033 WHERE `name` = "Retribution Aura" && `effectApplyAuraName1`=15;
