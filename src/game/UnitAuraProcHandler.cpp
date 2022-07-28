@@ -1297,6 +1297,18 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                         return SPELL_AURA_PROC_FAILED;
                     break;
                 }
+                // Shield Specialization (custom mana gain on block)
+                case 20148:
+                case 20149:
+                case 20150:
+                {
+                    int32 const mana = int32(GetMaxPower(POWER_MANA) * 0.02);
+                    if (!mana)
+                        return SPELL_AURA_PROC_FAILED;
+
+                    CastCustomSpell(this, trigger_spell_id, &mana, nullptr, nullptr, true);
+                    return SPELL_AURA_PROC_OK;
+                }
             }
             break;
         case SPELLFAMILY_MAGE:
