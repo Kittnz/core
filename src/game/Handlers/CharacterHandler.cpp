@@ -789,7 +789,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         if (!pCurrChar->HasSpell(197)) pCurrChar->LearnSpell(197, false); // Two-Handed Axes
     }
 
-    if ((pCurrChar->GetUInt32Value(PLAYER_EXPLORED_ZONES_1) == 0xFFFFFFFF) && !pCurrChar->HasTitle(TITLE_CARTOGRAPHER))
+    if (pCurrChar->HasAllZonesExplored() && !pCurrChar->HasTitle(TITLE_CARTOGRAPHER))
         pCurrChar->AwardTitle(TITLE_CARTOGRAPHER);
 
     // show time before shutdown if shutdown planned.

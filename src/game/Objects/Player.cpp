@@ -6515,6 +6515,27 @@ void Player::SendCinematicStart(uint32 CinematicSequenceId)
     CinematicStart(CinematicSequenceId);
 }
 
+bool Player::HasAllZonesExplored()
+{
+    bool eligible_for_title = true;
+    uint32 real_full_mask[64] = { 2010894079, 2910840791, 4092591999, 4159176642, 3858756511, 4026023823, 4294967295, 3737057278,
+                                  4017878143, 2013200879, 3219107839, 4244608735, 4294487806, 2004877311, 3757768694, 1052810207,
+                                  4279995774, 1968108503, 4225761231, 134051762,  4294967286, 26951655,   4294967132, 3882221119,
+                                  2147483647, 4230745023, 4024424187, 3475038170, 1877164032, 4293917693, 2160577215, 562752434,
+                                  4294154226, 1637374, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65536, 2150825648 };
+
+    for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
+    {
+        bool explored_chunk = ((GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) == real_full_mask[i]));
+        if (!explored_chunk)
+        {
+            eligible_for_title = false;
+            break;
+        }
+    }
+    return eligible_for_title;
+}
+
 void Player::CheckAreaExploreAndOutdoor()
 {
     if (!IsAlive())
@@ -6586,17 +6607,7 @@ void Player::CheckAreaExploreAndOutdoor()
     {
         SetUInt32Value(PLAYER_EXPLORED_ZONES_1 + offset, (uint32)(currFields | val));
 
-        bool eligible_for_title = true;
-        for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
-        {
-            bool explored_chunk = (GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) == 0xFFFFFFFF);
-            if (!explored_chunk)
-            {
-                eligible_for_title = false;
-                break;
-            }
-        }
-        if (eligible_for_title)
+        if (HasAllZonesExplored())
             AwardTitle(TITLE_CARTOGRAPHER);
 
         const auto *p = AreaEntry::GetByAreaFlagAndMap(areaFlag, GetMapId());
