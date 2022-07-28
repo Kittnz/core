@@ -275,6 +275,8 @@ ChatCommand * ChatHandler::getCommandTable()
     {
         { "hp",             SEC_DEVELOPER,     false, &ChatHandler::HandleModifyHPCommand,            "", nullptr },
         { "mana",           SEC_DEVELOPER,     false, &ChatHandler::HandleModifyManaCommand,          "", nullptr },
+        { "rage",           SEC_DEVELOPER,     false, &ChatHandler::HandleModifyRageCommand,          "", nullptr },
+        { "energy",         SEC_DEVELOPER,     false, &ChatHandler::HandleModifyEnergyCommand,        "", nullptr },
         { "money",          SEC_DEVELOPER,     false, &ChatHandler::HandleModifyMoneyCommand,         "", nullptr },
         { "speed",          SEC_DEVELOPER, false, &ChatHandler::HandleModifyASpeedCommand,         "", nullptr },
         { "scale",          SEC_DEVELOPER,     false, &ChatHandler::HandleModifyScaleCommand,         "", nullptr },
