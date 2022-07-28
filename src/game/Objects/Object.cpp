@@ -4533,11 +4533,10 @@ uint32 WorldObject::SpellDamageBonusDone(Unit* pVictim, SpellEntry const* spellP
         for (const auto i : mModDamagePercentDone)
         {
             if ((i->GetModifier()->m_miscvalue & spellProto->GetSpellSchoolMask()) &&
+                // no benefit for wands
                 i->GetSpellProto()->EquippedItemClass == -1 &&
-                (spellProto->EquippedItemClass == -1 || spellProto->SpellVisual == 5620 /*Holy Shield*/) &&
-                // -1 == any item class (not wand then)
-                i->GetSpellProto()->EquippedItemInventoryTypeMask == 0)
-                // 0 == any inventory type (not wand then)
+                i->GetSpellProto()->EquippedItemInventoryTypeMask == 0 &&
+                !(spellProto->EquippedItemClass == ITEM_CLASS_WEAPON && spellProto->EquippedItemSubClassMask & (1 << ITEM_SUBCLASS_WEAPON_WAND)))
             {
                 DoneTotalMod *= (i->GetModifier()->m_amount + 100.0f) / 100.0f;
             }
