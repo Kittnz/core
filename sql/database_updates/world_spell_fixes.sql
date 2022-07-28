@@ -25,9 +25,6 @@ update spell_template set effectmiscvalue1 = 80314 where entry = 46516;
 update spell_template set effectmiscvalue1 = 80319 where entry = 46513; 
 update spell_template set effectmiscvalue1 = 80313 where entry = 46515; 
 update spell_template set effectmiscvalue1 = 81005 where entry = 46451;
-update spell_template set interruptflags = '11' where entry = 27831; 
--- Hack school instead.
-update spell_template set school=1 where entry=23513;
 -- Arcane Missiles: aggro on hit, not cast.
 update spell_template set attributesex3 = 0 where entry in (5143,5144,5145,8416,8417,10211,10212,25345);  
 -- Fix Wyvern Sting not being removed on taking damage.
@@ -39,23 +36,6 @@ replace into spell_mod (id, interruptflags) values (46498, 1), (46499, 1);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1119
 -- Blademaster's Blindfold helm isn't adding +5 polearms on character skill window:
 replace into spell_template values (46041, 0, 38, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 101, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 6, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1527, 0, 0, 'Increased Polearms +5', 16712190, '', 16712190, 'Increased Polearm +5.', 16712190, '', 16712190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
-
--- Sagefish issues:
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1163
-update spell_template set spelliconid = 1779 where entry = 25702;
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/233
-update spell_template set spelliconid = 1779 where entry = 25700;
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1339
--- Guild teleport spell should be interruptable:
-update spell_template set interruptflags = 31 where entry = 46010; -- Goes to DBC.
-replace into spell_mod (id, castingtimeindex, interruptflags) values (46010, 6, 31); -- Temp. server-side.
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/338
--- Chillwind Chimera (Winterspring) Lighting Breath should be interruptable:
-update spell_template set interruptflags = 11 where entry = 15797; -- Goes to DBC.
-replace into spell_mod (id, interruptflags, comment) values (15797, 11, 'Lighting Breath - Interrupt flags.'); -- Temp. server-side.
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1347
--- Bomb should not ignore LOS:
-replace into spell_mod (id, attributesex2, comment) values (8858, 0, 'Bomb - Remove No LoS flag (Dark Iron Demolitionist)'); 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/256
 UPDATE `skill_line_ability` SET `superseded_by_spell` = 0 WHERE `id` = 9395;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/972
@@ -64,19 +44,6 @@ update spell_template set effectitemtype1 = 46600 where entry  = 46600;
 -- Fixes Well Fed buff for some seasonal food like Winter Veil cookies
 UPDATE `spell_template` SET `Effect2`=6, `EffectDieSides2`=1, `EffectBaseDice2`=1, `EffectImplicitTargetA2`=1, `EffectApplyAuraName2`=23, `EffectAmplitude2`=10000, `EffectTriggerSpell2`=24870 WHERE `entry`=24869;
 UPDATE `spell_template` SET `EffectRealPointsPerLevel1`=0.25, `EffectRealPointsPerLevel2`=0.25, `EffectBaseDice1`=0, `EffectBaseDice2`=0, `EffectBasePoints2`=0 WHERE `entry`=24870;
--- Fixed radius of Consumption spell for Void Zone in Four Horsemen (use same value than TBC DBCs)
-UPDATE spell_template SET EffectRadiusIndex1=7 WHERE entry=28865;
-
--- Steel Plate * recipes casttimer index:
-replace into spell_mod (id, castingtimeindex) values (47206, 0); 
-replace into spell_mod (id, castingtimeindex) values (47207, 0); 
-replace into spell_mod (id, castingtimeindex) values (47208, 0); 
-replace into spell_mod (id, castingtimeindex) values (47209, 0); 
-replace into spell_mod (id, castingtimeindex) values (47210, 0); 
-replace into spell_mod (id, castingtimeindex) values (47211, 0); 
-
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1548 --
-replace into spell_mod (id, castingtimeindex) values (47242, 0); 
 
 -- Ensures that Goblins start Hatred with the Alliance parent faction (469) and High Elves start friendly.
 -- The same values cannot be present in the client itself due to causing glitch of unknown nature. 
