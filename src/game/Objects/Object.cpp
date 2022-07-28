@@ -4534,7 +4534,7 @@ uint32 WorldObject::SpellDamageBonusDone(Unit* pVictim, SpellEntry const* spellP
         {
             if ((i->GetModifier()->m_miscvalue & spellProto->GetSpellSchoolMask()) &&
                 i->GetSpellProto()->EquippedItemClass == -1 &&
-                spellProto->EquippedItemClass == -1 &&
+                (spellProto->EquippedItemClass == -1 || spellProto->SpellVisual == 5620 /*Holy Shield*/) &&
                 // -1 == any item class (not wand then)
                 i->GetSpellProto()->EquippedItemInventoryTypeMask == 0)
                 // 0 == any inventory type (not wand then)
