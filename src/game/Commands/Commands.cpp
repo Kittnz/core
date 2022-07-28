@@ -6203,6 +6203,82 @@ bool ChatHandler::HandleModifyManaCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleModifyEnergyCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    int32 energy = atoi(args) * 10;
+    int32 energym = atoi(args) * 10;
+
+    if (energy <= 0 || energym <= 0 || energym < energy)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Player* chr = GetSelectedPlayer();
+    if (!chr)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // check online security
+    if (HasLowerSecurity(chr))
+        return false;
+
+    PSendSysMessage(LANG_YOU_CHANGE_ENERGY, GetNameLink(chr).c_str(), energy / 10, energym / 10);
+    if (needReportToTarget(chr))
+        ChatHandler(chr).PSendSysMessage(LANG_YOURS_ENERGY_CHANGED, GetNameLink().c_str(), energy / 10, energym / 10);
+
+    chr->SetMaxPower(POWER_ENERGY, energym);
+    chr->SetPower(POWER_ENERGY, energy);
+
+    DETAIL_LOG(GetMangosString(LANG_CURRENT_ENERGY), chr->GetMaxPower(POWER_ENERGY));
+
+    return true;
+}
+
+bool ChatHandler::HandleModifyRageCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    int32 rage = atoi(args) * 10;
+    int32 ragem = atoi(args) * 10;
+
+    if (rage <= 0 || ragem <= 0 || ragem < rage)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Player* chr = GetSelectedPlayer();
+    if (chr == nullptr)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    // check online security
+    if (HasLowerSecurity(chr))
+        return false;
+
+    PSendSysMessage(LANG_YOU_CHANGE_RAGE, GetNameLink(chr).c_str(), rage / 10, ragem / 10);
+    if (needReportToTarget(chr))
+        ChatHandler(chr).PSendSysMessage(LANG_YOURS_RAGE_CHANGED, GetNameLink().c_str(), rage / 10, ragem / 10);
+
+    chr->SetMaxPower(POWER_RAGE, ragem);
+    chr->SetPower(POWER_RAGE, rage);
+
+    return true;
+}
+
 bool ChatHandler::HandleModifyGenderCommand(char* args)
 {
     if (!*args)

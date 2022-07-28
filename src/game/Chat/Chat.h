@@ -344,6 +344,8 @@ class ChatHandler
 
         bool HandleModifyHPCommand(char* args);
         bool HandleModifyManaCommand(char* args);
+        bool HandleModifyRageCommand(char* args);
+        bool HandleModifyEnergyCommand(char* args);
         bool HandleModifyMoneyCommand(char* args);
         bool HandleModifyASpeedCommand(char* args);
         bool HandleModifyScaleCommand(char* args);
