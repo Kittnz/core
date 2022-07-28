@@ -37,3 +37,8 @@ delete from npc_vendor where item = 51705;
 update item_template set display_id = 16368 where entry = 11508;
 
 update quest_template set requiredraces = 434 where entry in (756, 758, 754, 748, 759, 760);
+
+-- Baby Moonkin correct display_id:
+
+update creature_template set display_id1 = 18926 where entry = 50038;
+replace into creature_display_info_addon (display_id) values (18926);
