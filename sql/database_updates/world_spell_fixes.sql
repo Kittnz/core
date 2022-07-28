@@ -10,31 +10,7 @@ update spell_template set customflags = 129 where entry in (7386, 7405, 8380, 11
 update spell_template set customflags = 256 where entry in (118, 339, 700, 710, 1062, 1090, 1130, 2637, 2856, 2878, 2937, 5195, 5196, 5627, 5782, 6213, 6215, 7967, 8040, 8064, 8994, 9484, 9485, 9852, 9853, 10234, 10326, 10955, 11444, 12098, 12540, 12824, 12825, 12826, 13323, 13579, 14323, 14324, 14325, 14621, 15534, 15822, 15970, 16798, 17738, 18647, 18657, 18658, 19970, 19971, 19972, 19973, 19974, 20183, 20184, 20185, 20186, 20187, 20188, 20280, 20281, 20282, 20283, 20284, 20285, 20286, 20300, 20301, 20302, 20303, 20304, 20344, 20345, 20346, 20354, 20355, 20411, 20412, 20413, 20414, 20663, 20989, 21183, 22274, 23603, 24004, 24360, 24698, 25751, 25752, 25753, 25757, 25758, 25942, 25943, 27565, 27760, 28270, 28271, 28272, 28456, 29124, 29848);
 update spell_template set customflags = 384 where entry in (2070, 6770, 11297, 19725);
 update spell_template set customflags = 1024 where entry in (588, 3235, 3284, 3417, 3418, 3616, 3637, 5111, 5301, 5680, 6718, 6752, 6947, 7090, 7165, 7276, 8247, 8279, 8393, 8599, 8601, 8876, 9205, 9460, 9941, 10022, 10072, 10074, 10095, 11838, 11919, 11966, 11984, 12099, 12246, 12529, 12539, 12546, 12556, 12627, 12787, 12898, 13299, 13616, 13767, 14178, 15088, 15097, 15876, 16140, 16563, 16577, 16592, 17327, 17467, 18148, 18268, 18943, 18950, 18968, 19030, 19194, 19195, 19396, 19626, 19640, 19817, 19818, 21061, 21857, 22128, 22578, 22735, 22856, 24692, 25592, 26341, 27987, 28126, 29526);
-
--- Arcane Missiles: aggro on hit, not cast.
-update spell_template set attributesex3 = 0 where entry in (5143,5144,5145,8416,8417,10211,10212,25345);  
--- Fix Wyvern Sting not being removed on taking damage.
-update spell_template set proccharges=1 where (procflags & 1048576) && (aurainterruptflags & 2) && (proccharges = 0);
--- Triggered dot aura by Wyvern Sting should be a debuff.
 update spell_template set customflags=customflags | 2 where entry in (24131, 24134, 24135);
-replace into spell_mod (id, interruptflags) values (46498, 1), (46499, 1);
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1119
--- Blademaster's Blindfold helm isn't adding +5 polearms on character skill window:
-replace into spell_template values (46041, 0, 38, 0, 0, 0, 192, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 101, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 6, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 229, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1527, 0, 0, 'Increased Polearms +5', 16712190, '', 16712190, 'Increased Polearm +5.', 16712190, '', 16712190, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/256
-UPDATE `skill_line_ability` SET `superseded_by_spell` = 0 WHERE `id` = 9395;
--- https://github.com/slowtorta/turtlewow-bug-tracker/issues/972
-update spell_template set effectimplicittargeta1= 1 where entry in (19184,19387,19388,19389,19390);
-update spell_template set effectitemtype1 = 46600 where entry  = 46600;
--- Fixes Well Fed buff for some seasonal food like Winter Veil cookies
-UPDATE `spell_template` SET `Effect2`=6, `EffectDieSides2`=1, `EffectBaseDice2`=1, `EffectImplicitTargetA2`=1, `EffectApplyAuraName2`=23, `EffectAmplitude2`=10000, `EffectTriggerSpell2`=24870 WHERE `entry`=24869;
-UPDATE `spell_template` SET `EffectRealPointsPerLevel1`=0.25, `EffectRealPointsPerLevel2`=0.25, `EffectBaseDice1`=0, `EffectBaseDice2`=0, `EffectBasePoints2`=0 WHERE `entry`=24870;
-
--- Ensures that Goblins start Hatred with the Alliance parent faction (469) and High Elves start friendly.
--- The same values cannot be present in the client itself due to causing glitch of unknown nature. 
-update faction set base_rep_race_mask1 = 589, base_rep_race_mask2 = 434 where id = 469;
-
-UPDATE skill_line_ability SET learn_on_get_skill = 0 WHERE id = 36284;
 
 -- Restore old values for coefficients, not sure if needed:
 update spell_template set effectbonuscoefficient1 = 1, effectbonuscoefficient2 = -1, effectbonuscoefficient3 = -1 where entry = 1;
