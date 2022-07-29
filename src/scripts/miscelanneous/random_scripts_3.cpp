@@ -3430,8 +3430,8 @@ bool QuestRewarded_npc_ekka(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
             {
-                Creature* viceclaw = pQuestGiver->FindNearestCreature(60755, 15.0F);
-                viceclaw->MonsterTextEmote("Viceclaw: <cackles>");
+                if (Creature* viceclaw = pQuestGiver->FindNearestCreature(60755, 15.0F))
+                    viceclaw->MonsterTextEmote("Viceclaw: <cackles>");
             }, 3000);
 
         pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
