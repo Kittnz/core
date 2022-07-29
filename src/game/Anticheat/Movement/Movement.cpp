@@ -397,7 +397,7 @@ bool Movement::HandleAnticheatTests(MovementInfo& movementInfo, WorldSession* se
         auto const serverSpeed = _me->GetXZFlagBasedSpeed(movementInfo.moveFlags);
         auto const clientSpeed = GetXZFlagBasedClientSpeed(movementInfo.moveFlags);
 
-        if (movementInfo.jump.xyspeed > expected)
+        /*if (movementInfo.jump.xyspeed > expected)
         {
             _anticheat->RecordCheatInternal(CHEAT_TYPE_OVERSPEED_JUMP,
                 "Lateral jump speed is too high (%f > %f) flags 0x%lx -> 0x%lx old server: %f old client: %f new server: %f new client: %f opcode: %s",
@@ -409,7 +409,7 @@ bool Movement::HandleAnticheatTests(MovementInfo& movementInfo, WorldSession* se
             _anticheat->GetMovementDebugString(str);
 
             sLog.out(LOG_ANTICHEAT_BASIC, "%s", str.c_str());
-        }
+        }*/
     }
 
     // Not allowed to change horizontal speed while jumping (unless it was zero)

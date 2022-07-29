@@ -467,7 +467,8 @@ void Warden::Update()
     if (!!_timeoutClock && WorldTimer::getMSTime() > _timeoutClock)
     {
         sLog.out(LOG_ANTICHEAT_BASIC, "WARDEN: Account %u ip %s timeout", _session->GetAccountId(), _session->GetRemoteAddress().c_str());
-        _session->KickPlayer();
+        //_session->KickPlayer();
+        _timeoutClock = 0;
         return;
     }
 
