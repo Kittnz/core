@@ -18,6 +18,4 @@ update quest_template set prevquestid = 0 where entry = 364;
 update quest_template set nextquestinchain = 0 where entry = 363;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1618
--- Probably intentional?
--- update creature_template set flags_extra = flags_extra - 524288 where entry in (91980, 91981);
--- update creature_template set flags_extra = flags_extra - 8 where entry in (91980, 91981);
+update creature_template set flags_extra = 2 where entry in (91980, 91981);
