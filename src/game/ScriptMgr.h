@@ -1413,7 +1413,6 @@ class ScriptMgr
         void LoadDatabase();
 
         void LoadScriptTexts();
-        void LoadScriptTextsCustom();
         void LoadScriptWaypoints();
         void LoadEscortData();
 

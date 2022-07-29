@@ -2079,7 +2079,6 @@ void ScriptMgr::Initialize()
 void ScriptMgr::LoadDatabase()
 {
     LoadScriptTexts();
-    LoadScriptTextsCustom();
     LoadScriptWaypoints();
     LoadEscortData();
 }
@@ -2120,50 +2119,6 @@ void ScriptMgr::LoadScriptTexts()
 
             if (pTemp.Type > CHAT_TYPE_ZONE_YELL)
                 sLog.outErrorDb("Entry %i in table `script_texts` has Type %u but this Chat Type does not exist.", iId, pTemp.Type);
-
-            m_mTextDataMap[iId] = pTemp;
-        } while (result->NextRow());
-
-        delete result;
-    }
-}
-
-void ScriptMgr::LoadScriptTextsCustom()
-{
-    sObjectMgr.LoadMangosStrings(WorldDatabase, "custom_texts", TEXT_SOURCE_CUSTOM_START, TEXT_SOURCE_CUSTOM_END, true);
-
-    QueryResult* result = WorldDatabase.PQuery("SELECT entry, sound, type, language, emote FROM custom_texts WHERE entry BETWEEN %i AND %i", TEXT_SOURCE_CUSTOM_END, TEXT_SOURCE_CUSTOM_START);
-
-    if (result)
-    {
-        do
-        {
-            Field* pFields = result->Fetch();
-            StringTextData pTemp;
-
-            int32 iId              = pFields[0].GetInt32();
-            pTemp.SoundId        = pFields[1].GetUInt32();
-            pTemp.Type           = pFields[2].GetUInt32();
-            pTemp.Language       = pFields[3].GetUInt32();
-            pTemp.Emote          = pFields[4].GetUInt32();
-
-            if (iId >= 0)
-            {
-                sLog.outErrorDb("Entry %i in table `custom_texts` is not a negative value.", iId);
-                continue;
-            }
-
-            if (pTemp.SoundId)
-            {
-                if (!sObjectMgr.GetSoundEntry(pTemp.SoundId))
-                    sLog.outErrorDb("Entry %i in table `custom_texts` has soundId %u but sound does not exist.", iId, pTemp.SoundId);
-            }
-
-            if (!GetLanguageDescByID(pTemp.Language))
-                sLog.outErrorDb("Entry %i in table `custom_texts` using Language %u but Language does not exist.", iId, pTemp.Language);
-
-            if (pTemp.Type > CHAT_TYPE_ZONE_YELL)
-                sLog.outErrorDb("Entry %i in table `custom_texts` has Type %u but this Chat Type does not exist.", iId, pTemp.Type);
 
             m_mTextDataMap[iId] = pTemp;
         } while (result->NextRow());
