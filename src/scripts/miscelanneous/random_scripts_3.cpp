@@ -3210,10 +3210,13 @@ bool GossipSelect_npc_farad_wrightsow(Player* pPlayer, Creature* pCreature, uint
     {
         pPlayer->CLOSE_GOSSIP_MENU();
 
-        Creature* gazzirik = pPlayer->FindNearestCreature(60859, 50.0F);
-        gazzirik->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
-        gazzirik->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        gazzirik->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+        Creature* gazzirik = pPlayer->FindNearestCreature(60859, 75.0F);
+        if (gazzirik)
+        {
+            gazzirik->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+            gazzirik->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            gazzirik->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+        }
 
         pCreature->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
         pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
