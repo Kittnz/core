@@ -1,1 +1,1 @@
-drop table custom_texts;
+drop table if exists custom_texts;
