@@ -14,3 +14,7 @@ update creature set position_x = -10035.79, position_y = 1980.40, position_z = 0
 update creature set spawntimesecsmin = 14400, spawntimesecsmax = 14400 where id in (65100, 65123, 65127);
 -- Remove charge from Tempest's Rage:
 update item_template set spellcharges_1 = 0 where entry = 83564;
+-- Some item fix:
+update item_template set spellid_1 = 9394 where entry = 60690;
+-- Fix Ritual of Refreshment:
+update item_template set script_name = '' where entry = 83002;
