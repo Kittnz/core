@@ -711,65 +711,8 @@ bool ItemUseSpell_item_chronoboon_displacer(Player* pPlayer, Item* pItem, const 
 	return true;
 }
 
-
-bool ItemUseSpell_item_mage_refreshment_table(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-
-	SpellCastResult castResult = SPELL_CAST_OK;
-
-	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
-		castResult = SPELL_FAILED_MOVING;
-	else if (pPlayer->IsInCombat())
-		castResult = SPELL_FAILED_AFFECTING_COMBAT;
-	else if (pPlayer->GetDeathState() == CORPSE)
-		castResult = SPELL_FAILED_CASTER_DEAD;
-
-	if (castResult == SPELL_CAST_OK)
-	{
-		// reagent Arcane Powder 2
-		uint32 tableReagent = 17020;
-		uint32 reagentCount = 2;
-		if (!pPlayer->HasItemCount(tableReagent, reagentCount, false))
-		{
-			pPlayer->GetSession()->SendNotification("Missing reagent: Arcane Powder(%u)", reagentCount);
-			castResult = SPELL_CAST_OK; // to should remove accidental cooldown
-		}
-		else
-		{
-			float dis{ 2.0F };
-			float x, y, z;
-			pPlayer->GetSafePosition(x, y, z);
-			x += dis * cos(pPlayer->GetOrientation());
-			y += dis * sin(pPlayer->GetOrientation());
-			pPlayer->PMonsterEmote("%s begins to conjure a refreshment table.", nullptr, false, pPlayer->GetName());
-			pPlayer->SummonGameObject(1000083, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
-			pPlayer->DestroyItemCount(tableReagent, reagentCount, true);
-			pPlayer->SaveInventoryAndGoldToDB();
-
-			return true;
-		}
-	}
-
-	ItemPrototype const* proto = pItem->GetProto();
-
-	if (SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(proto->Spells[0].SpellId))
-	{
-		if (castResult != SPELL_CAST_OK)
-			Spell::SendCastResult(pPlayer, spellInfo, castResult);
-
-		DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
-		{
-			player->RemoveSpellCooldown(spellId, true);
-		}
-		);
-	}
-	return true;
-}
-
-
 bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-
 	SpellCastResult castResult = SPELL_CAST_OK;
 
 	if (pPlayer->IsMoving() || pPlayer->IsBeingTeleported())
@@ -7479,11 +7422,6 @@ void AddSC_random_scripts_1()
 	newscript = new Script;
 	newscript->Name = "item_chronoboon_displacer";
 	newscript->pItemUseSpell = &ItemUseSpell_item_chronoboon_displacer;
-	newscript->RegisterSelf();
-
-	newscript = new Script;
-	newscript->Name = "item_mage_refreshment_table";
-	newscript->pItemUseSpell = &ItemUseSpell_item_mage_refreshment_table;
 	newscript->RegisterSelf();
 
 	newscript = new Script;
