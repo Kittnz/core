@@ -106,3 +106,5 @@ update item_template set max_count = 1, spellid_1 = 48037, stat_value1 = 0 where
 update item_template set spellid_1 = 7597, stat_value1 = 8 where entry = 80547;
 -- Change drop chance of Blackrock Head to 100% for the quest 'Raider's Revenge'.
 update creature_loot_template set chanceorquestchance = -100 where item = 60716;
+-- Update gossir for NPC 92196.
+update broadcast_text set male_text = 'Walk softly, like a calm leaf to the winds of fate. It is never a good idea to let yourself fade away, each moment we have can be used to improve, and hone our skills. Should you even waste but a moment, it could be the difference between life... and death on the battlefield.' where entry = 92196;
