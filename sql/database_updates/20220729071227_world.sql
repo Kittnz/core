@@ -120,3 +120,5 @@ replace into item_template values
  '0', '1', NULL);
 replace into creature_loot_template values
 (60735,60775,20,0,1,1,0);
+-- *Not an emergency* Underground copper node #1721.
+update gameobject set position_z = 23 where guid = 5225;
