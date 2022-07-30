@@ -4298,12 +4298,30 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
         spawnCreature->SetCreatorGuid(m_casterUnit->GetObjectGuid());
         spawnCreature->SetUInt32Value(UNIT_CREATED_BY_SPELL, m_spellInfo->Id);
 
+        uint32 totalGuardians = m_casterUnit->GetGuardiansCount();
+        float followAngle = PET_FOLLOW_ANGLE + (M_PI_F / 6) * totalGuardians;
+        while (followAngle > M_PI_F * 2)
+            followAngle -= M_PI_F * 2;
+        spawnCreature->SetFollowAngle(followAngle);
+
         spawnCreature->InitStatsForLevel(level, m_casterUnit);
         spawnCreature->GetCharmInfo()->SetPetNumber(pet_number, false);
 
         spawnCreature->AIM_Initialize();
 
         m_casterUnit->AddGuardian(spawnCreature);
+
+        // special cases before add to map
+        switch (m_spellInfo->Id)
+        {
+            case 45505: // Feral Spirit Rank 1
+            case 45514: // Feral Spirit Rank 2
+            {
+                spawnCreature->InitStatsForLevel(m_casterUnit->GetLevel());
+                spawnCreature->SetFollowAngle(PET_FOLLOW_ANGLE + count * M_PI_F);
+                break;
+            }
+        }
 
         map->Add((Creature*)spawnCreature);
 
@@ -4313,14 +4331,6 @@ void Spell::EffectSummonGuardian(SpellEffectIndex eff_idx)
 
         switch (m_spellInfo->Id)
         {
-
-            case 45505:
-            case 45514:
-            {
-                // CUSTOM feral spirit scaling.
-                spawnCreature->InitStatsForLevel(m_casterUnit->GetLevel());
-            }break;
-
             case 17166: // Release Umi's Yeti - Quest Are We There, Yeti? Part 3
             {
                 spawnCreature->MonsterTextEmote(-1900169);
