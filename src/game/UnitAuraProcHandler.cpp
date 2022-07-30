@@ -1096,20 +1096,8 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                             return SPELL_AURA_PROC_FAILED;
 
                         float const manaEffectiveness = float(triggerAmount) / 100.0f;
-                        uint32 const manaAmount = pSeal->manaCost * manaEffectiveness;
-
-                        Group* group = pPlayer->GetGroup();
-                        if (group)
-                        {
-                            for (auto itr = group->GetFirstMember(); itr != nullptr; itr = itr->next())
-                            {
-                                auto member = itr->getSource();
-                                if (member->GetPowerType() == POWER_MANA && pPlayer->GetDistance(member) < 15.0f)
-                                    EnergizeBySpell(member, dummySpell->Id, manaAmount, POWER_MANA);
-                            }
-                        }
-                        else
-                            EnergizeBySpell(this, dummySpell->Id, manaAmount, POWER_MANA);
+                        int32 const manaAmount = pSeal->manaCost * manaEffectiveness;
+                        CastCustomSpell(this, 45987, &manaAmount, nullptr, nullptr, true);
 
                         return SPELL_AURA_PROC_OK;
                     }
