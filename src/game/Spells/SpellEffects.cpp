@@ -1883,20 +1883,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         m_caster->ToPlayer()->TeleportTo(1, 16247.7F, 16305.58F, 20.89F, 3.47F);
                     return;
                 }
-                case 45407: // Ritual of Refreshment
-                {
-                    if (m_caster && m_caster->IsPlayer())
-                    {
-                        float dis{ 2.0F };
-                        float x, y, z;
-                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
-                        x += dis * cos(m_caster->ToPlayer()->GetOrientation());
-                        y += dis * sin(m_caster->ToPlayer()->GetOrientation());
-                        m_caster->ToPlayer()->PMonsterEmote("%s begins to conjure a refreshment table.", nullptr, false, m_caster->ToPlayer()->GetName());
-                        m_caster->ToPlayer()->SummonGameObject(1000083, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
-                    }
-                    return;
-                }
                 case 46002: // Goblin Brainwashing Device
                 {
                     if (m_caster && m_caster->IsPlayer())
@@ -7316,7 +7302,7 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
 
     pGameObj->SetRespawnTime(duration > 0 ? duration / IN_MILLISECONDS : 0);
     pGameObj->SetOwnerGuid(m_casterUnit->GetObjectGuid());
-
+    printf("cast %u caster %s\n", m_spellInfo->Id, m_casterUnit->GetName());
     if (m_casterUnit->GetTypeId() == TYPEID_PLAYER)
     {
         if (m_spellInfo->Id == 7359) // If Spell is Bright Campfire, increase survival skill
@@ -7333,6 +7319,11 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
                     break;
                 }
             }
+        }
+        else if (m_spellInfo->Id == 45407) // Ritual of Refreshment
+        {
+            if (Player* pPlayer = m_caster->ToPlayer())
+                pPlayer->MonsterTextEmote("%s begins to conjure a refreshment table.", pPlayer, false);
         }
 
         if (Group* group{ static_cast<Player*>(m_casterUnit)->GetGroup() })
