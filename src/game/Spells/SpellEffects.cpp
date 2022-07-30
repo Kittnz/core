@@ -7302,7 +7302,7 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
 
     pGameObj->SetRespawnTime(duration > 0 ? duration / IN_MILLISECONDS : 0);
     pGameObj->SetOwnerGuid(m_casterUnit->GetObjectGuid());
-    printf("cast %u caster %s\n", m_spellInfo->Id, m_casterUnit->GetName());
+    
     if (m_casterUnit->GetTypeId() == TYPEID_PLAYER)
     {
         if (m_spellInfo->Id == 7359) // If Spell is Bright Campfire, increase survival skill
