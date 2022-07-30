@@ -93,3 +93,11 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '35', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
+-- ON LIVE ADD THE FOLLOWING ITEM 60572 TO THE FOLLOWING NPCS DROP TABLES WITH DROP CHANCE OF 0.05% 60830, 60831, 60716.
+update creature_template set loot_id = 60716 where entry = 60716;
+update creature_template set loot_id = 60830 where entry = 60830;
+update creature_template set loot_id = 60831 where entry = 60831;
+replace into creature_loot_template values
+(60716,60572,0.05,1,1,1,0),
+(60830,60572,0.05,1,1,1,0),
+(60831,60572,0.05,1,1,1,0);
