@@ -8,6 +8,7 @@ update spell_template set castingtimeindex = 0 where entry = 46003;
 update spell_template set recoverytime = 0 where entry in (46460, 46472, 46457);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1733
 update item_template set allowable_race = -1 where entry = 5415;
+update item_template set allowable_race = -1 where entry = 5416;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1726
 update creature set position_x = -10035.79, position_y = 1980.40, position_z = 0 where guid = 89490;
 -- Fix Infinite Dragonspawns in Black Morass randomly respawn in seconds:
