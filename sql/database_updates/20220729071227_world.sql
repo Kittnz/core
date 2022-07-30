@@ -108,3 +108,15 @@ update item_template set spellid_1 = 7597, stat_value1 = 8 where entry = 80547;
 update creature_loot_template set chanceorquestchance = -100 where item = 60716;
 -- Update gossir for NPC 92196.
 update broadcast_text set male_text = 'Walk softly, like a calm leaf to the winds of fate. It is never a good idea to let yourself fade away, each moment we have can be used to improve, and hone our skills. Should you even waste but a moment, it could be the difference between life... and death on the battlefield.' where entry = 92196;
+-- ADD TO HIGH FOREMAN BARGUL BLACKHAMMER WITH A 20% CHANCE
+replace into item_template values
+ ('60775', '9', '0', 'Manual: Intervene', 'Contains teachings on ways to prevent harm to far away allies.', '1134', '4', '0', '1', '200000', '50000', '0', '1', '-1', '50',
+ '50', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '47277', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '7', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+replace into creature_loot_template values
+(60735,60775,20,0,1,1,0);
