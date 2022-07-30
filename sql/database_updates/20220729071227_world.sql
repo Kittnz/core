@@ -101,6 +101,8 @@ replace into creature_loot_template values
 (60716,60572,0.05,1,1,1,0),
 (60830,60572,0.05,1,1,1,0),
 (60831,60572,0.05,1,1,1,0);
--- Band of Calamity Fix and Revert Accidental Change on Item 
-update item_template set max_amount = 1, spellid_1 = 48037, stat_value1 = 0 where entry = 60547;
+-- Band of Calamity Fix and Revert Accidental Change on Item.
+update item_template set max_count = 1, spellid_1 = 48037, stat_value1 = 0 where entry = 60547;
 update item_template set spellid_1 = 7597, stat_value1 = 8 where entry = 80547;
+-- Change drop chance of Blackrock Head to 100% for the quest 'Raider's Revenge'.
+update creature_loot_template set chanceorquestchance = -100 where item = 60716;
