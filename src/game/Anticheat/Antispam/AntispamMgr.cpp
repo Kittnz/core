@@ -228,7 +228,7 @@ void AntispamMgr::LoadFromDB()
             _blacklist.emplace_back(entry, normEntry);
         } while (result->NextRow());
 
-    sLog.outString(">> %u blacklist entries loaded and normalized", _blacklist.size());
+    sLog.outString("%u blacklist entries loaded and normalized.", _blacklist.size());
 
     result.reset(LoginDatabase.Query("SELECT `from`, `to` FROM antispam_replacement"));
 
@@ -241,7 +241,7 @@ void AntispamMgr::LoadFromDB()
             _asciiReplace.emplace_back(fields[0].GetCppString(), fields[1].GetCppString());
         } while (result->NextRow());
 
-    sLog.outString(">> %u ASCII string replacements loaded", _asciiReplace.size());
+    sLog.outString("%u ASCII string replacements loaded.", _asciiReplace.size());
 
     result.reset(LoginDatabase.Query("SELECT `from`, `to` FROM antispam_unicode_replacement"));
 
@@ -265,7 +265,7 @@ void AntispamMgr::LoadFromDB()
             _unicodeReplace.emplace_back(key, value);
         } while (result->NextRow());
 
-    sLog.outString(">> %u unicode character replacements loaded", _unicodeReplace.size());
+    sLog.outString("%u unicode character replacements loaded.", _unicodeReplace.size());
 }
 
 void AntispamMgr::BlacklistAdd(const std::string &string_)

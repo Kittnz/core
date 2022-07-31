@@ -2092,6 +2092,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 444: m_caster->ToPlayer()->TeleportTo(0, -8809.33F, 1093.16F, 95.53F, 3.4F);   break; // Thalassian Alliance
                         case 436: m_caster->ToPlayer()->TeleportTo(0, -8341.12F, -836.33F, 225.91F, 0.8F);  break; // The Blackwing Guard
                         case 428: m_caster->ToPlayer()->TeleportTo(1, -9669.25F, -1967.92F, 0.51F, 0.3F);   break; // Conquistadores
+                        case 403: m_caster->ToPlayer()->TeleportTo(1, -7600.9F, -2337.65F, -190.2F, 5.08F); break; // Get Rich Or Die Grinding
                         default: break;
                         }
                     }

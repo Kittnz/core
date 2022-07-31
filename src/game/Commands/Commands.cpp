@@ -11457,7 +11457,7 @@ bool ChatHandler::HandleReloadAutoBroadcastCommand(char* args)
 bool ChatHandler::HandleReloadItemTemplate(char*)
 {
     sObjectMgr.LoadItemPrototypes();
-    SendSysMessage(">> Table `item_template` reloaded.");
+    SendSysMessage("Table `item_template` reloaded.");
     return true;
 }
 
