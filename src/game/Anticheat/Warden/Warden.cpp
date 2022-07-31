@@ -49,7 +49,7 @@ void Warden::LoadScriptedScans()
 
     WardenWin::LoadScriptedScans();
 
-    sLog.outBasic(">> %u scripted Warden scans loaded from anticheat module", sWardenScanMgr.Count() - start);
+    sLog.outBasic("%u scripted Warden scans loaded from anticheat module.", sWardenScanMgr.Count() - start);
 }
 
 Warden::Warden(WorldSession *session, const WardenModule *module, const BigNumber &K, SessionAnticheatInterface *anticheat) :

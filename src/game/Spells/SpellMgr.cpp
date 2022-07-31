@@ -2741,7 +2741,7 @@ void SpellMgr::CheckUsedSpells(char const* table)
         }
     } while (result->NextRow());
 
-    sLog.outString(">> Checked %u spells and %u spell masks", countSpells, countMasks);
+    sLog.outString("Checked %u spells and %u spell masks.", countSpells, countMasks);
 }
 
 bool SpellArea::IsFitToRequirements(Player const* player, uint32 newZone, uint32 newArea) const

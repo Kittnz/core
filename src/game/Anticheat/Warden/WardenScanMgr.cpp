@@ -212,7 +212,7 @@ void WardenScanMgr::loadFromDB()
         m_scans.emplace_back(std::shared_ptr<const Scan>(scan));
     } while (result->NextRow());
 
-    sLog.outBasic(">> %u Warden scans loaded from world database", m_scans.size());
+    sLog.outBasic("%u Warden scans loaded from world database.", m_scans.size());
 }
 
 void WardenScanMgr::AddMacScan(const MacScan *scan)

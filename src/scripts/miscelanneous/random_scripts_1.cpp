@@ -227,31 +227,6 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
     return false;
 }
 
-bool ItemUseSpell_skin_changer(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
-{
-    uint32 item_entry = pItem->GetEntry();
-    bool is_male = pPlayer->GetGender() == GENDER_MALE;
-
-    int8 bytes = -1;
-
-    CustomCharacterSkinEntry const* custom_skin = sObjectMgr.GetCustomCharacterSkin(item_entry);
-   
-    if (custom_skin)
-    {
-        if (is_male) bytes = custom_skin->male_id; else bytes = custom_skin->female_id;
-
-        if (bytes > 0)
-        {
-            pPlayer->SetByteValue(PLAYER_BYTES, 0, static_cast<uint8>(bytes));
-            pPlayer->SetDisplayId(15435);
-            pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(250));
-        }
-        else
-            ChatHandler(pPlayer).SendSysMessage("This skin is not supported by your character's gender.");
-    }
-    return false;
-}
-
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (!pPlayer) return false;
@@ -7382,11 +7357,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "item_hairdye";
     newscript->pItemUseSpell = &ItemUseSpell_hairdye;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_skin_change";
-    newscript->pItemUseSpell = &ItemUseSpell_skin_changer;
     newscript->RegisterSelf();
 
     newscript = new Script;

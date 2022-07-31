@@ -309,7 +309,7 @@ void CreatureGroupsManager::Load()
 
     if (!result)
     {
-        sLog.outErrorDb(">>  Loaded 0 creature groups. DB table `creature_groups` is empty!");
+        sLog.outErrorDb("Loaded 0 creature groups. DB table `creature_groups` is empty!");
         return;
     }
 

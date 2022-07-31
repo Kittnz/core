@@ -29,3 +29,7 @@ replace into custom_graveyards (id, name, map_id, zone_id, area_id, max_level, m
 (35, 'Lapidis Isle', 0, 409, 5051, 60, 0, -11505.1, 3509.7, 66.1, 2.04, 0, -11505.1, 3509.7, 66.1, 2.04),
 (36, 'Lapidis Isle', 0, 409, 5048, 60, 0, -11505.1, 3509.7, 66.1, 2.04, 0, -11505.1, 3509.7, 66.1, 2.04),
 (37, 'Lapidis Isle', 0, 409, 5046, 60, 0, -11505.1, 3509.7, 66.1, 2.04, 0, -11505.1, 3509.7, 66.1, 2.04);
+-- Delete the following duplicates from live:
+delete from item_template where entry in (83580, 83581, 83582, 83583);
+-- Change NPC Young Blackrock Worg's faction:
+update creature_template set faction = 35 where entry = 60873;
