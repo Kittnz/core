@@ -645,6 +645,9 @@ void BattleGround::EndBattleGround(Team winner)
     //we must set it this way, because end time is sent in packet!
     m_EndTime = TIME_TO_AUTOREMOVE;
 
+    if (GetTypeID() == BATTLEGROUND_BR)
+        m_EndTime = 15000;
+
     // If PvP week is active, award experience (5% to the winner team and 2.5% to the others)
     // always reward xp now.
     //if (sWorld.getConfig(CONFIG_FLOAT_RATE_HONOR) > 1.0f)
