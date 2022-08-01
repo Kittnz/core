@@ -1830,14 +1830,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
-                case 56066: // Tonal Stone: Kamio
+                case 56066: // Music tapes:
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        std::array<std::pair<uint32, uint32>, 2> items_and_sounds =
+                        std::array<std::pair<uint32, uint32>, 7> items_and_sounds =
                         { {
-                            { 70043, 30218 },
-                            { 70080, 30220 },
+                            { 70043, 30218 }, // Winds of Kamio
+                            { 70080, 30220 }, // Emerald Dream
+                            { 70081, 30297 }, // Bells of the Dawn
+                            { 70082, 30245 }, // Hourglass of Eternity
+                            { 70083, 15000 }, // Hyjal Summit
+                            { 70084, 30243 }, // Jaguero Isle
+                            { 70085, 30226 }, // Stratholme's Best Days
                         } };
 
                         for (auto const& data : items_and_sounds)
