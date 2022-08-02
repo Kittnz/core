@@ -76,6 +76,8 @@ enum CreatureFlagsExtra
     CREATURE_FLAG_EXTRA_NO_MOVEMENT_PAUSE            = 0x01000000,       // creature will not pause movement when player talks to it
     CREATURE_FLAG_EXTRA_ALWAYS_RUN                   = 0x02000000,       // creature will use run speed out of combat
     CREATURE_FLAG_EXTRA_NO_UNREACHABLE_EVADE         = 0x04000000,       // 67108864 Creature will not evade due to target being unreachable
+    CREATURE_FLAG_EXTRA_APPEAR_DEAD                  = 0x08000000,       // 134217728 Creature will have UNIT_DYNFLAG_DEAD applied
+    CREATURE_FLAG_EXTRA_NO_LEASH_EVADE               = 0x10000000,       // 268435456 Creature will not evade due to target running away
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
