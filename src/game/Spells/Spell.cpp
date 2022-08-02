@@ -1078,11 +1078,12 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
     if (getState() == SPELL_STATE_DELAYED && (WorldTimer::getMSTime() - target->timeDelay) <= unit->m_lastSanctuaryTime && !m_spellInfo->IsPositiveSpell())
         return;
 
-    // Get original caster (if exist) and calculate damage/healing from him data
-    WorldObject *pRealCaster = GetAffectiveCasterObject();
-    WorldObject *pCaster = pRealCaster ? pRealCaster : m_caster;
-    Unit* pUnitCaster = pCaster->ToUnit();
-    Unit* pRealUnitCaster = ToUnit(pRealCaster);
+    // Get original caster (if exist) and calculate damage/healing from his data
+    WorldObject* pCaster = GetAffectiveCasterObject();
+    if (!pCaster)
+        pCaster = m_caster;
+    Unit* pRealUnitCaster = m_originalCaster ? m_originalCaster : m_casterUnit;
+    WorldObject* pRealCaster = pRealUnitCaster ? pRealUnitCaster : m_caster;
 
     SpellMissInfo missInfo = target->missCondition;
     // Need init unitTarget by default unit (can changed in code on reflect)
@@ -1242,8 +1243,8 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
                 }
             }
 
-            pCaster->ProcDamageAndSpell(unitTarget, 
-                pRealCaster && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
+            pRealCaster->ProcDamageAndSpell(unitTarget,
+               !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
                 m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
                 procEx,
                 addhealth,
@@ -1254,7 +1255,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
 
         int32 gain = pCaster->DealHeal(unitTarget, addhealth, m_spellInfo, crit);
 
-        float classThreatModifier = pUnitCaster && pUnitCaster->GetClass() == CLASS_PALADIN ? 0.25f : 0.5f;
+        float classThreatModifier = pRealUnitCaster && pRealUnitCaster->GetClass() == CLASS_PALADIN ? 0.25f : 0.5f;
 
         if (pRealUnitCaster)
             unitTarget->GetHostileRefManager().threatAssist(pRealUnitCaster, float(gain) * classThreatModifier * sSpellMgr.GetSpellThreatMultiplier(m_spellInfo), m_spellInfo);
@@ -1324,8 +1325,8 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         // Do triggers for unit (reflect triggers passed on hit phase for correct drop charge)
         if (m_canTrigger)
         {
-            pCaster->ProcDamageAndSpell(unitTarget,
-                pRealCaster && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
+            pRealCaster->ProcDamageAndSpell(unitTarget,
+                !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
                 m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
                 procEx,
                 damageInfo.damage,
@@ -1446,8 +1447,8 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
             }
         }
 
-        pCaster->ProcDamageAndSpell(unitTarget,
-            pRealCaster && !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
+        pRealCaster->ProcDamageAndSpell(unitTarget,
+            !m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_CASTER_PROCS) ? procAttacker : PROC_FLAG_NONE,
             m_spellInfo->HasAttribute(SPELL_ATTR_EX3_SUPPRESS_TARGET_PROCS) ? PROC_FLAG_NONE : procVictim,
             procEx,
             dmg,
