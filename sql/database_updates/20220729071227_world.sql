@@ -1074,3 +1074,78 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '8', '1', '0', '0', '50', '0', '0', '0', '0', '46', '0', '0', '0',
  '0', '1', NULL);
+-- Carver Molsen, display ID 13091, level 21 elite , faction 17, humanoid, weapon 1 2844, weapon 2 4023, upon aggro say the following line : "You were a fool to come here, this is Defias land now."
+-- Larry Ryder, display ID 3370, level 30,  faction 12 , humanoid, no weapons, quest/greeting flags greeting text : "What is it you want? I'm busy, so move it along."
+-- Name = 'Krull Fireblood', subname = 'Warsong Outriders', level = 35, display_id1 = 4492. Make him have the following dialog: Since the death of Grommash Hellscream, our clan have been scattered around kalimdor, from Ashenvale down to the Thousand Needles.\n\nNowadays, only the most fierceful leaders of the Warsong Outriders are listened still. But one day, sooner or later... A new Warchief will arise! We are the ones who built Orgrimmar in a few days. All the citizens witness what have done the real sons of the Horde!\n\nWe'll never let some filthy night elves continue their outrageous sabotage.\n\nThe War-effort has no end. As long as the eternal nomadry will run the entire Kalimdor.
+-- Name = 'Kodiak Killbrew', subname = 'Get Rich Or Die Grinding', level = 42, display_id1 = 9283, equipment_id = 54. Make repair vendor and copy vendor menu from https://database.turtle-wow.org/?npc=1148
+-- Name = 'Aerdri', subname = 'Get Rich Or Die Grinding', level = 48, display_id1= 2221, equipment_id = 6087
+-- Name = 'Fiddlemaster', subname = 'Get Rich Or Die Grinding', level = 47, display_id1 = 7128
+-- Name = 'Koniwa', subname = 'Get Rich Or Die Grinding', level = 45, display_id1 = 4651. Make her have the following dialog: Well look who stumbled on this hole in the wall! Ya found our hideaway, those who're lookin to get rich or die grindin. Ya got coin? We'll take it. Ya thirsty? Plenty o'kegs inside. Work a bit on your skills, or just stare listlessly at a wall, we don't care here. Make do and lay low til they stop lookin for ya, then get back out there and find yer wealth!
+REPLACE INTO creature_template VALUES
+(60878, 13091, 0, 0, 0, 'Carver Molsen', '', 0, 21, 21, 1392, 1392, 0, 0, 740, 17, 0, 1, 1.14286, 0, 18, 5, 0, 1, 1, 101, 130, 0, 94, 1, 2000, 2000, 1, 32768, 0, 0, 0, 0, 0, 0, 29.6792, 40.8089, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_carver_molsen'),
+(60879, 3370, 0, 0, 0, 'Larry Ryder', '', 0, 30, 30, 1002, 1002, 0, 0, 1188, 12, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 61, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60880, 4492, 0, 0, 0, 'Krull Fireblood', 'Warsong Outriders', 0, 35, 35, 1342, 1342, 0, 0, 1373, 290, 1, 1, 1.14286, 1.35, 18, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60881, 9283, 0, 0, 0, 'Kodiak Killbrew', 'Get Rich Or Die Grinding', 0, 42, 42, 1981, 1981, 0, 0, 2246, 290, 16388, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 1, 768, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 54, 0, 0, 0, 0, 0, 0, ''),
+(60882, 2221, 0, 0, 0, 'Aerdri', 'Get Rich Or Die Grinding', 0, 48, 48, 2398, 2398, 0, 0, 2753, 290, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 74, 96, 0, 208, 1, 1000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.744, 86.273, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 6087, 0, 0, 0, 0, 0, 0, ''),
+(60883, 7128, 0, 0, 0, 'Fiddlemaster', 'Get Rich Or Die Grinding', 0, 47, 47, 2300, 2300, 0, 0, 2386, 290, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60884, 4651, 0, 0, 0, 'Koniwa', 'Get Rich Or Die Grinding', 0, 45, 45, 2217, 2217, 0, 0, 2725, 290, 1, 1, 1.14714, 0, 20, 5, 40, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20148; set @weapon_1 = 2844; set @weapon_2 = 4023; set @weapon_3 = 0; set @creature = 60878;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41185; set @magic_number = 60884;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Make her have the following dialog: Well look who stumbled on this hole in the wall! Ya found our hideaway, those who\'re lookin to get rich or die grindin. Ya got coin? We\'ll take it. Ya thirsty? Plenty o\'kegs inside.\n\nWork a bit on your skills, or just stare listlessly at a wall, we don\'t care here. Make do and lay low til they stop lookin for ya, then get back out there and find yer wealth!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41184; set @magic_number = 60880;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Since the death of Grommash Hellscream, our clan have been scattered around kalimdor, from Ashenvale down to the Thousand Needles.\n\nNowadays, only the most fierceful leaders of the Warsong Outriders are listened still. But one day, sooner or later... A new Warchief will arise! We are the ones who built Orgrimmar in a few days. All the citizens witness what have done the real sons of the Horde!\n\nWe\'ll never let some filthy night elves continue their outrageous sabotage.\n\nThe War-effort has no end. As long as the eternal nomadry will run the entire Kalimdor.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41183; set @magic_number = 60879;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What is it you want? I\'m busy, so move it along.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO npc_vendor  VALUES (60881, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2325, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2604, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2678, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2692, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 2928, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 3371, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 3372, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 3466, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 3682, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 3713, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 3777, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 3857, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 4291, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 4340, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 4341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 4342, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 4399, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 4400, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 6217, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 6256, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 6530, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 6532, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 7005, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 8343, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 8925, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 12228, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 12231, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 14341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 18256, 0, 0, 0, 0);
+REPLACE INTO npc_vendor  VALUES (60881, 50231, 0, 0, 0, 0);
