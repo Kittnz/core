@@ -190,3 +190,8 @@ REPLACE INTO creature_loot_template VALUES
 (91833, 30033, 0.5, 0, -30033, 1, 0),
 (91833, 30034, 0.01, 0, -30034, 1, 0),
 (91833, 30035, 0.0025, 0, -30035, 1, 0);
+-- Bengal Tigers sometimes give nothing when skinned, should always give leather.
+update skinning_loot_template set chanceorquestchance = 2.5 where entry = 91826 and item = 8169;
+update skinning_loot_template set chanceorquestchance = 5 where entry = 91826 and item = 8171;
+update skinning_loot_template set chanceorquestchance = 44 where entry = 91826 and item = 4304;
+update skinning_loot_template set chanceorquestchance = 48.5 where entry = 91826 and item = 8170;
