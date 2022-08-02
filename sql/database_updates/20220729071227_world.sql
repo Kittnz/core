@@ -937,3 +937,17 @@ REPLACE INTO creature_loot_template VALUES (60737, 60547, 20, 1, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60737, 60548, 20, 1, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60737, 60549, 20, 1, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60737, 60550, 20, 1, 1, 1, 0);
+-- change amount of drops for Alarus to 2 items. (Copy existing boss loottable)
+-- Change drop chance of Mantle of Twisted Damnation to 1% 
+delete from creature_loot_template where entry = 91928;
+REPLACE INTO creature_loot_template VALUES (91928, 51217, 100, 7, 2, 2, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83464, 1 , 2, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83465, 25, 4, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83466, 25, 4, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83467, 25, 4, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83468, 25, 4, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83469, 20, 3, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83470, 20, 3, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83471, 20, 3, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83472, 20, 3, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91928, 83571, 20, 3, 1, 1, 0);
