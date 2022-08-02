@@ -923,3 +923,17 @@ REPLACE INTO creature_loot_template VALUES (92134, 83243, 0.001, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92134, 83242, 0.001, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92134, 83241, 0.001, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92134, 60208, 50, 0, 1, 1, 0);
+-- Har'gesh Doomcaller <Twilight's Hammer>
+-- ADD FOLLOWING ITEMS TO HARGESH DOOMCALLER'S MAIN LOOTTABLE (GROUP 2):
+delete from creature_loot_template where entry = 60737;
+REPLACE INTO creature_loot_template VALUES (60737, 51217, 100, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 51045, 25, 2, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 51046, 25, 2, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 51047, 25, 2, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 51048, 25, 2, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 60551, 0.005, 3, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 60546, 20, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 60547, 20, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 60548, 20, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 60549, 20, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60737, 60550, 20, 1, 1, 1, 0);
