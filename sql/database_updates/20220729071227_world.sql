@@ -531,10 +531,10 @@ REPLACE INTO creature_loot_template VALUES (92144, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92144, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92144, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92144, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92144, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92144, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92144, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92144, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92144, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92144, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92144, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92144, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92144, 60208, 50, 0, 1, 1, 0);
 -- Captain Ironhoof <Southsea Freebooters> loot table.
 update creature_template set loot_id = 92142 where entry = 92142;
@@ -564,10 +564,10 @@ REPLACE INTO creature_loot_template VALUES (92142, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92142, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92142, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92142, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92142, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92142, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92142, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92142, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92142, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92142, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92142, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92142, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92142, 60208, 50, 0, 1, 1, 0);
 -- Captain Blackeye <Southsea Freebooters> loot table.
 update creature_template set loot_id = 92143 where entry = 92143;
@@ -597,10 +597,10 @@ REPLACE INTO creature_loot_template VALUES (92143, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92143, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92143, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92143, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92143, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92143, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92143, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92143, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92143, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92143, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92143, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92143, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92143, 60208, 50, 0, 1, 1, 0);
 -- 'Water Rat' Jorgy <Southsea Freebooters> loot table.
 REPLACE INTO creature_loot_template VALUES (91846, 1645, 2.4771, 0, 1, 1, 0);
@@ -629,10 +629,10 @@ REPLACE INTO creature_loot_template VALUES (91846, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91846, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91846, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91846, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92146, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92146, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92146, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92146, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92146, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92146, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92146, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92146, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92146, 60208, 50, 0, 1, 1, 0);
 -- Southsea Deckhand loot table.
 REPLACE INTO creature_loot_template VALUES (92140, 1645, 2.4771, 0, 1, 1, 0);
@@ -661,10 +661,10 @@ REPLACE INTO creature_loot_template VALUES (92140, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92140, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92140, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92140, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92140, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92140, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92140, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92140, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92140, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92140, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92140, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92140, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92140, 60208, 50, 0, 1, 1, 0);
 -- Southsea Corsair loot table.
 REPLACE INTO creature_loot_template VALUES (91845, 1645, 2.4771, 0, 1, 1, 0);
@@ -693,10 +693,10 @@ REPLACE INTO creature_loot_template VALUES (91845, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91845, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91845, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91845, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92145, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92145, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92145, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92145, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92145, 60208, 50, 0, 1, 1, 0);
 -- Foreman Darkskull <Southsea Freebooters> loot table.
 REPLACE INTO creature_loot_template VALUES (92141, 1645, 2.4771, 0, 1, 1, 0);
@@ -725,10 +725,10 @@ REPLACE INTO creature_loot_template VALUES (92141, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92141, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92141, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92141, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92141, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92141, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92141, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92141, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92141, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92141, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92141, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92141, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92141, 60208, 50, 0, 1, 1, 0);
 -- Southsea Sea Wolf loot table.
 REPLACE INTO creature_loot_template VALUES (92138, 1645, 2.4771, 0, 1, 1, 0);
@@ -757,10 +757,10 @@ REPLACE INTO creature_loot_template VALUES (92138, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92138, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92138, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92138, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92138, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92138, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92138, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92138, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92138, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92138, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92138, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92138, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92138, 60208, 50, 0, 1, 1, 0);
 -- Southsea Pillager loot table.
 REPLACE INTO creature_loot_template VALUES (91847, 1645, 2.4771, 0, 1, 1, 0);
@@ -789,10 +789,10 @@ REPLACE INTO creature_loot_template VALUES (91847, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91847, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91847, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91847, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92147, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92147, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92147, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92147, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92147, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92147, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92147, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92147, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92147, 60208, 50, 0, 1, 1, 0);
 -- Southsea Outlaw loot table.
 REPLACE INTO creature_loot_template VALUES (92139, 1645, 2.4771, 0, 1, 1, 0);
@@ -821,10 +821,10 @@ REPLACE INTO creature_loot_template VALUES (92139, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92139, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92139, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92139, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92139, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92139, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92139, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92139, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92139, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92139, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92139, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92139, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92139, 60208, 50, 0, 1, 1, 0);
 -- Southsea Bootlegger loot table.
 REPLACE INTO creature_loot_template VALUES (92135, 1645, 2.4771, 0, 1, 1, 0);
@@ -853,10 +853,10 @@ REPLACE INTO creature_loot_template VALUES (92135, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92135, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92135, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92135, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92135, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92135, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92135, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92135, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92135, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92135, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92135, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92135, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92135, 60208, 50, 0, 1, 1, 0);
 -- Southsea Distiller loot table.
 REPLACE INTO creature_loot_template VALUES (92136, 1645, 2.4771, 0, 1, 1, 0);
@@ -885,10 +885,10 @@ REPLACE INTO creature_loot_template VALUES (92136, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92136, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92136, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92136, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92136, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92136, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92136, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92136, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92136, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92136, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92136, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92136, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92136, 60208, 50, 0, 1, 1, 0);
 -- Southsea Miner loot table.
 update creature_template set loot_id = 92134 where entry = 92134;
@@ -918,10 +918,10 @@ REPLACE INTO creature_loot_template VALUES (92134, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92134, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92134, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92134, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92134, 83244, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92134, 83243, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92134, 83242, 0.001, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92134, 83241, 0.001, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92134, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92134, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92134, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (92134, 83241, 0.1, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92134, 60208, 50, 0, 1, 1, 0);
 -- Har'gesh Doomcaller <Twilight's Hammer>
 -- ADD FOLLOWING ITEMS TO HARGESH DOOMCALLER'S MAIN LOOTTABLE (GROUP 2):
@@ -951,3 +951,43 @@ REPLACE INTO creature_loot_template VALUES (91928, 83470, 20, 3, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91928, 83471, 20, 3, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91928, 83472, 20, 3, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91928, 83571, 20, 3, 1, 1, 0);
+-- Add https://database.turtle-wow.org/?item=83557 to Lord Skwol with a 40% chance.
+REPLACE INTO creature_loot_template VALUES (15305, 20684, 40, 4, 1, 1, 0);
+-- Increase drop chance of Abyssal Flame, Abyssal Slate and Abyssal Wind on their respective high council bosses to 40%
+update creature_loot_template set chanceorquestchance = 40 where entry = 15203 and item = 83554;
+update creature_loot_template set chanceorquestchance = 40 where entry = 15205 and item = 83555;
+update creature_loot_template set chanceorquestchance = 40 where entry = 15204 and item = 83556;
+-- Add Primordial Flame to Baron Charr's loottable with a 100% Chance
+REPLACE INTO creature_loot_template VALUES (14461, 83550, 100, 1, 1, 1, 0);
+-- Add Evershifting Stone to Avalanchion's loottable with a 100% chance.
+REPLACE INTO creature_loot_template VALUES (14464, 83551, 100, 1, 1, 1, 0);
+-- Add Unmelting Ice to Princess Tempestria's loottable with a 100% chance.
+REPLACE INTO creature_loot_template VALUES (14457, 83552, 100, 1, 1, 1, 0);
+-- Add Unyielding Gust to The Windreaver's loottable with a 100% chance.
+REPLACE INTO creature_loot_template VALUES (14454, 83553, 100, 1, 1, 1, 0);
+-- Add Pattern: Stormscale Leggings to Azuregos's loottable with a 40% chance.
+REPLACE INTO creature_loot_template VALUES (6109, 83544, 40, 2, 1, 1, 0);
+-- Add Pattern: Robe of Sacrifice to Lord Kazzak's loottable with a 40% chance.
+REPLACE INTO creature_loot_template VALUES (12397, 83545, 40, 2, 1, 1, 0);
+-- Add Pattern: Verdant Dreamer's Breastplate and Plans: Dream's Herald to https://database.turtle-wow.org/?npc=15293 vendor list.
+REPLACE INTO npc_vendor VALUES (15293, 83546, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (15293, 83548, 0, 0, 0, 0);
+-- Add Plans: Pauldron of Deflection to mobs that drop https://database.turtle-wow.org/?item=12717 and with the same drop chance percentages.
+REPLACE INTO creature_loot_template VALUES (11339, 83547, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (11352, 83547, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12397, 83547, 0.14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (11668, 83547, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (15325, 83547, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (16184, 83547, 5, 4, 1, 1, 0);
+-- Add Plans: Frostbound Slasher to the following mobs with the drop chances listed next to them:
+REPLACE INTO creature_loot_template VALUES (2253, 83549, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2252, 83549, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2248, 83549, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2249, 83549, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2251, 83549, 0.7, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2250, 83549, 0.7, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2256, 83549, 0.75, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2255, 83549, 0.75, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2254, 83549, 0.75, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2416, 83549, 0.75, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (2287, 83549, 1, 0, 1, 1, 0);
