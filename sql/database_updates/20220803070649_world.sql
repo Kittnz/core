@@ -13,7 +13,7 @@ update creature_template set script_name = 'boss_kintozo' where entry = 80269;
 -- Creature (Entry: 60884) is using display_id1 (0), but creature_display_info_addon data is missing for this id.
 -- Creature (Entry: 60884) does not have any valid display id
 
-update creature_template set display_id1 = 1504 where entry = 60884;
+update creature_template set display_id1 = 9424 where entry = 60884;
 
 -- Table `npc_trainer` have data for creature (Entry: 3689) without trainer flag, ignore
 
@@ -51,3 +51,7 @@ update quest_template set rewspellcast = 0 where entry in (40527, 40520);
 
 delete from spell_chain where spell_id in (45521, 45961, 45514, 17364, 45505, 45969 );
 
+-- Misc. DB fixes:
+
+update item_template set display_id = 8665 where entry = 65021;
+update item_template set spellppmRate_1 = 3.5 where entry = 65008;
