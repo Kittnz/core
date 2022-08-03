@@ -4366,6 +4366,9 @@ void Spell::finish(bool ok)
             if (m_spellInfo->Id == 18540 && !m_IsTriggeredSpell
                 && !pPlayer->HasSpellCooldown(m_spellInfo->Id))
                 pPlayer->ToPlayer()->SendClearCooldown(18540, pPlayer);
+            if (m_spellInfo->Id == 45908 && !m_IsTriggeredSpell
+                && !pPlayer->HasSpellCooldown(m_spellInfo->Id))
+                pPlayer->ToPlayer()->SendClearCooldown(45908, pPlayer);
         }
     }
 

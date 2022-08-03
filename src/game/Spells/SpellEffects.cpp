@@ -4976,8 +4976,23 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
         bonus = unitTarget->SpellDamageBonusTaken(m_casterUnit, m_spellInfo, eff_idx, bonus, SPELL_DIRECT_DAMAGE);
     }
 
+    // Legion Strike - Warlock Felguard Pet
+    if (m_spellInfo->Id == 47350 && bonus > 0)
+    {
+        uint32 count = 0;
+        for (const auto& ihit : m_UniqueTargetInfo)
+            if (ihit.effectMask & (1 << eff_idx))
+                ++count;
+
+        if (count)
+            bonus /= count;                    // divide to all targets
+
+        if (!bonus)
+            bonus = 1;
+    }
+
     // prevent negative damage
-    m_damage += uint32(bonus > 0 ? bonus : 0);
+    m_damage += uint32(bonus > 0 ? bonus : 0); 
 }
 
 void Spell::EffectThreat(SpellEffectIndex eff_idx)
@@ -7390,7 +7405,15 @@ void Spell::EffectSummonDemon(SpellEffectIndex eff_idx)
         pSummon->CastSpell(pSummon, 22707, true);
 
         // Inferno effect
-        pSummon->CastSpell(pSummon, 22703, true, nullptr);
+        pSummon->CastSpell(pSummon, 22703, true);
+    }
+    else if (m_spellInfo->EffectMiscValue[eff_idx] == 17252) // Summon Felguard
+    {
+        // Enslave demon effect, without mana cost and cooldown
+        m_caster->CastSpell(pSummon, 20882, true);
+
+        // Short root spell
+        pSummon->CastSpell(pSummon, 22707, true);
     }
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER && m_spellInfo->Id == 1122)
