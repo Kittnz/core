@@ -27,3 +27,27 @@ delete from gossip_menu_option where menu_id = 50450;
 -- creature_template for this entry has MovementType WAYPOINT_MOTION_TYPE(2), did you intend to use creature_movement_template?
 	
 delete from creature_movement where id = 27973;
+
+-- Table `creature` has creature (GUID: 2554948) with non existing creature entry 50071, skipped.
+-- Table `creature` has creature (GUID: 2554950) with non existing creature entry 50072, skipped.
+
+delete from creature where id in (50071, 50072);
+
+-- Table 'gameobject_loot_template' entry 2010841 (gameobject lootid) not exist but used as loot id in DB.
+
+update gameobject_template set data1 = 0 where entry = 2010841;
+
+-- Quest 40527 has `RewSpellCast` = 60766 but spell 60766 does not exist, quest will not have a spell reward.
+-- Quest 40520 has `RewSpellCast` = 60762 but spell 60762 does not exist, quest will not have a spell reward.
+
+update quest_template set rewspellcast = 0 where entry in (40527, 40520);
+
+-- Spell 45521 (prev: 17364, first: 17364, rank: 2, req: 0) already added (talent or spell ability with forward) and non need in `spell_chain`
+-- Spell 45961 (prev: 11605, first: 1464, rank: 5, req: 0) already added (talent or spell ability with forward) and non need in `spell_chain`
+-- Spell 45514 (prev: 45505, first: 45505, rank: 2, req: 0) already added (talent or spell ability with forward) and non need in `spell_chain`
+-- Spell 17364 (prev: 0, first: 17364, rank: 1, req: 0) already added (talent or spell ability with forward) and non need in `spell_chain`
+-- Spell 45505 (prev: 0, first: 45505, rank: 1, req: 0) already added (talent or spell ability with forward) and non need in `spell_chain`
+-- Spell 45969 (prev: 9830, first: 5221, rank: 6, req: 0) already added (talent or spell ability with forward) and non need in `spell_chain`
+
+delete from spell_chain where spell_id in (45521, 45961, 45514, 17364, 45505, 45969 );
+
