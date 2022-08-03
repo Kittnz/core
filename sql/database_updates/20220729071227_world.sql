@@ -693,11 +693,11 @@ REPLACE INTO creature_loot_template VALUES (91845, 30048, 2.5, 0, -30048, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91845, 30049, 0.5, 0, -30049, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91845, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91845, 30074, 0.01, 0, -30074, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83244, 0.1, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83243, 0.1, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83242, 0.1, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 83241, 0.1, 0, 1, 1, 0);
-REPLACE INTO creature_loot_template VALUES (92145, 60208, 50, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91845, 83244, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91845, 83243, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91845, 83242, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91845, 83241, 0.1, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (91845, 60208, 50, 0, 1, 1, 0);
 -- Foreman Darkskull <Southsea Freebooters> loot table.
 REPLACE INTO creature_loot_template VALUES (92141, 1645, 2.4771, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (92141, 4306, 10.5505, 0, 1, 2, 0);
@@ -1712,3 +1712,5 @@ update quest_template set requiredraces = 589 where entry = 40411;
 REPLACE INTO gameobject_template VALUES
 (2010697, 2, 39, 'Wooden Chair', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 update gameobject set id = 2010697 where guid = 1270031;
+-- deleted wrong loot id.
+delete from creature_loot_template where entry = 92145;
