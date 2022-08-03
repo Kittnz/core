@@ -1706,3 +1706,5 @@ REPLACE INTO creature_loot_template VALUES (60830, 84012, 0.0025, 5, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60830, 84013, 0.085, 5, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60830, 84014, 0.085, 5, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60830, 84015, 0.085, 5, 1, 1, 0);
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1792
+update quest_template set requiredraces = 589 where entry = 40411;
