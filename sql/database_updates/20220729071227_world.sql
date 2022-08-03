@@ -1711,4 +1711,4 @@ update quest_template set requiredraces = 589 where entry = 40411;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1791
 REPLACE INTO gameobject_template VALUES
 (2010697, 2, 39, 'Wooden Chair', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
-update gameobject set id = 2010697 where position_x between -3952.97 and -3952.95 and guid = 1270031;
+update gameobject set id = 2010697 where guid = 1270031;
