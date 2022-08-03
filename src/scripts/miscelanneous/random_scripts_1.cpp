@@ -1962,25 +1962,6 @@ bool GossipSelect_npc_lost_farm_sheep(Player* pPlayer, Creature* pCreature, uint
     return true;
 }
 
-
-bool GossipHello_daenerys(Player* pPlayer, Creature* pCreature)
-{
-    if (!pPlayer->HasItemCount(50236, 1, true))
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Do... do you want me to hold that cloak for you?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-    pPlayer->SEND_GOSSIP_MENU(90002, pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_daenerys(Player* player, Creature* creature, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF) {
-        creature->PMonsterSay("Thanks, a good friend of mine crafted this cloak using one of Drogon's scales. You can have it, I don't need it anymore.");
-        player->AddItem(50236, 1);
-    }
-    player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
 bool GossipHello_title_masker(Player* pPlayer, Creature* pCreature)
 {
     pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm not interested, goodbye.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
@@ -7217,12 +7198,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "lil_foot_pet";
     newscript->GetAI = &GetAI_lil_foot_pet;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "daenerys";
-    newscript->pGossipHello = &GossipHello_daenerys;
-    newscript->pGossipSelect = &GossipSelect_daenerys;
     newscript->RegisterSelf();
 
     newscript = new Script;
