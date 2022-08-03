@@ -990,7 +990,7 @@ public:
     int32 GetDuration() const;
     int32 GetMaxDuration() const;
     int32 CalculateDuration(WorldObject const* caster = nullptr) const;
-    uint32 GetCastTime(Spell* spell = nullptr) const;
+    uint32 GetCastTime(WorldObject* caster, Spell* spell = nullptr) const;
     char* GetIcon(uint32 ID) const;
     uint32 GetCastTimeForBonus(DamageEffectType damagetype) const;
     uint16 GetAuraMaxTicks() const;
