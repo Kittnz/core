@@ -1708,3 +1708,7 @@ REPLACE INTO creature_loot_template VALUES (60830, 84014, 0.085, 5, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60830, 84015, 0.085, 5, 1, 1, 0);
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1792
 update quest_template set requiredraces = 589 where entry = 40411;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1791
+REPLACE INTO gameobject_template VALUES
+(2010697, 2, 39, 'Wooden Chair', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+update gameobject set id = 2010697 where position_x between -3952.97 and -3952.95 and guid = 1270031;
