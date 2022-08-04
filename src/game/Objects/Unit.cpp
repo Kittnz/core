@@ -5967,6 +5967,7 @@ bool Unit::IsShapeShifted() const
 bool Unit::IsInDisallowedMountForm()
 {
     // Turtle WoW custom, some morphs should be allowed to use mounts
+    // What a piece of shit code, lmao:
     switch (GetDisplayId()) 
     {
         case 4245:
@@ -6005,6 +6006,7 @@ bool Unit::IsInDisallowedMountForm()
         case 4234:
         case 4313:
         case 15458:
+        case 18251:
         case 10008:
         case 278:
             return false;
