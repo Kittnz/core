@@ -1334,7 +1334,6 @@ struct refreshment_portal_clicks : public GameObjectAI
 
         return true;
     }
-
 };
 
 GameObjectAI* GetAI_refreshment_portal_clicks(GameObject* gameobject)
@@ -1407,32 +1406,25 @@ GameObjectAI* GetAI_refreshment_table_clicks(GameObject* gameobject)
 
 struct soulwell_portal_clicks : public GameObjectAI
 {
-
     explicit soulwell_portal_clicks(GameObject* pGo) : GameObjectAI(pGo)
     {
         m_uiUpdateTimer = 1000;
+        portal_life = 25 * IN_MILLISECONDS;
         clickers = 0;
         needed_clickers = 3;
         hold = 0;
         needed_hold = 3 * IN_MILLISECONDS;
-        portal_life = 25 * IN_MILLISECONDS;
-        rune_time = 0;
-        rune_summoned = false;
         portal_timed_out = false;
     }
 
     uint32 m_uiUpdateTimer;
+    uint32 portal_life;
     int clickers;
     int needed_clickers;
     int hold;
     int needed_hold;
-    int portal_life;
-    int rune_time;
 
-    bool rune_summoned;
     bool portal_timed_out;
-
-    GameObject* purple_rune_big;
 
     void UpdateAI(uint32 const uiDiff) override
     {
@@ -1454,8 +1446,8 @@ struct soulwell_portal_clicks : public GameObjectAI
             {
                 // stop players channeling in case nobody clicks
                 for (auto clicker : players)
-                    if (clicker->HasAura(23642))
-                        clicker->RemoveAura(23642, EFFECT_INDEX_0);
+                    if (clicker->HasAura(45924))
+                        clicker->RemoveAurasDueToSpell(45924);
                 me->Delete();
                 return;
             }
@@ -1463,47 +1455,32 @@ struct soulwell_portal_clicks : public GameObjectAI
             clickers = 0;
 
             for (auto clicker : players)
-                if (clicker->HasAura(23642))
+                if (clicker->HasAura(45924))
                     clickers++;
-
-            if (rune_summoned)
-                rune_time++;
-
-            if (rune_time > 2)
-            {
-                float x = me->GetPositionX();
-                float y = me->GetPositionY();
-                float z = me->GetPositionZ();
-
-                //soulwell
-                if (GameObject* soulwell = me->SummonGameObject(1000089, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true))
-                {
-                    soulwell->SetOwnerGuid(me->GetOwnerGuid());
-                    purple_rune_big->Delete();
-                    me->Delete();
-                    return;
-                }
-            }
 
             if (clickers >= needed_clickers)
             {
                 if (hold >= needed_hold)
                 {
-                    // stop players channeling
                     for (auto clicker : players)
-                        if (clicker->HasAura(23642))
-                            clicker->RemoveAura(23642, EFFECT_INDEX_0);
+                        if (clicker->HasAura(45924))
+                        {
+                            // stop players channeling
+                            clicker->RemoveAurasDueToSpell(45924);
+                            // cast visual arcane explosion
+                            clicker->CastSpell(clicker, 16510, false);
+                        }
 
                     float x = me->GetPositionX();
                     float y = me->GetPositionY();
                     float z = me->GetPositionZ();
 
-                    // purple rune on the ground
-                    if (purple_rune_big = me->SummonGameObject(2005014, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 5, true))
-                        rune_summoned = true;
+                    // summon orange basket clickable object
+                    me->SummonGameObject(1000089, x, y, z + 0.375f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
 
-                    me->SetVisible(false);
-
+                    // despawn portal
+                    me->Delete();
+                    return;
                 }
                 else
                     hold += IN_MILLISECONDS;
@@ -1523,13 +1500,11 @@ struct soulwell_portal_clicks : public GameObjectAI
         if (!Unit->ToPlayer()->IsInCombat() && !Unit->ToPlayer()->IsBeingTeleported()
             && Unit->ToPlayer()->GetDeathState() != CORPSE && !Unit->ToPlayer()->IsMoving())
         {
-            Unit->ToPlayer()->AddAura(23642);
-            Unit->ToPlayer()->HandleEmoteCommand(EMOTE_STATE_POINT);
+            Unit->ToPlayer()->CastSpell(Unit->ToPlayer(), 45924, false);
         }
 
         return true;
     }
-
 };
 
 GameObjectAI* GetAI_soulwell_portal_clicks(GameObject* gameobject)
