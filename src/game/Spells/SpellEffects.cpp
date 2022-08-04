@@ -1853,20 +1853,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         return;
                     }
                 }
-                case 45920: // Ritual of Souls
-                {
-                    if (m_caster && m_caster->IsPlayer())
-                    {
-                        float dis{ 2.0F };
-                        float x, y, z;
-                        m_caster->ToPlayer()->GetSafePosition(x, y, z);
-                        x += dis * cos(m_caster->ToPlayer()->GetOrientation());
-                        y += dis * sin(m_caster->ToPlayer()->GetOrientation());
-                        m_caster->ToPlayer()->PMonsterEmote("%s begins a Soulwell ritual.", nullptr, false, m_caster->ToPlayer()->GetName());
-                        m_caster->ToPlayer()->SummonGameObject(1000087, x, y, z + 0.5F, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, true);
-                    }
-                    return;
-                }
                 case 46012: // Portable Wormhole Generator
                 {
                     if (m_caster && m_caster->IsPlayer())
@@ -7345,6 +7331,11 @@ void Spell::EffectTransmitted(SpellEffectIndex eff_idx)
         {
             if (Player* pPlayer = m_caster->ToPlayer())
                 pPlayer->MonsterTextEmote("%s begins to conjure a refreshment table.", pPlayer, false);
+        }
+        else if (m_spellInfo->Id == 45920) // Ritual of Souls
+        {
+            if (Player* pPlayer = m_caster->ToPlayer())
+                pPlayer->MonsterTextEmote("%s begins a Soulwell ritual.", pPlayer, false);
         }
 
         if (Group* group{ static_cast<Player*>(m_casterUnit)->GetGroup() })
