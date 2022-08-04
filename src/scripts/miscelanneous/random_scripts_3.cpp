@@ -3584,7 +3584,7 @@ struct npc_sunchaserAI : public ScriptedAI
     void Reset() { }
     void UpdateAI(const uint32 diff)
     {
-        if (m_creature->GetHealthPercent() < 10)
+        if (m_creature->GetHealthPercent() < 50)
         {
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
