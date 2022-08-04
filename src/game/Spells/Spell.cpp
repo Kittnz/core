@@ -5567,9 +5567,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
 
                 if (m_spellInfo->HasAttribute(SPELL_ATTR_EX_IS_PICKPOCKET))
                 {
-                    if (unitTarget->GetTypeId() == TYPEID_PLAYER)
+                    if (target->GetTypeId() == TYPEID_PLAYER)
                         return SPELL_FAILED_BAD_TARGETS;
-                    else if ((unitTarget->GetCreatureTypeMask() & CREATURE_TYPEMASK_HUMANOID_OR_UNDEAD) == 0)
+                    else if ((target->GetCreatureTypeMask() & CREATURE_TYPEMASK_HUMANOID_OR_UNDEAD) == 0)
                         return SPELL_FAILED_TARGET_NO_POCKETS;
                 }
 
