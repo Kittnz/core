@@ -1714,3 +1714,40 @@ REPLACE INTO gameobject_template VALUES
 update gameobject set id = 2010697 where guid = 1270031;
 -- deleted wrong loot id.
 delete from creature_loot_template where entry = 92145;
+-- Quest 40535 add short description.
+update quest_template set objectives = 'Collect 2 pieces of Leg Meat from Adult Plainstriders for Trainer Tokala at Red Cloud Roost in Mulgore.' where entry = 40535;
+-- Quest 40535 add short description.
+update quest_template set objectives = 'Feed Sunchaser and defeat him in battle, once complete, return to Trainer Tokala at Red Cloud Roost in Mulgore.' where entry = 40536;
+-- Quest 40535 add short description.
+update quest_template set objectives = 'Gather a Pristine Harpy Feather from Windfury Harpies for Trainer Tokala at Red Cloud Roost in Mulgore.' where entry = 40537;
+-- Quest 60011 update details.
+update quest_template set details = 'Paladin! As protectors of the weak, we have a responsibility to cast justice upon the wicked. Countless times you will experience insurmountable foes, some ferocious and brutal while others act with cunning.\n\nOne such enemy resides deep inside Elwynn Forest, at the very end of the Forest\'s Edge. The foul creature\'s name is Hogger. He surrounds himself with his gnoll underlings, acting as the alpha among them. Be careful not to get caught outnumbered.\n\nTo bring justice to your adversaries, you must believe in the light to guide you. Bring along your trusted allies, venture forth and quench this evil before it does any more harm.\n\nMay the light be with you!' where entry = 60011;
+-- update broadcast_text of npc 60851.
+update broadcast_text set male_text = 'Your curious face tells me you want to know who we are or what we do...\n\n<Ley-Technician Vorthal sighs exasperatedly.>\n\nWe are the Thalassian Alliance, an organization with the noble goal of helping refugees, my people, the High Elves, and of course, supporting our new Alliance allies in whatever they do.\n\nNow, if you will excuse me, I need to fix this blasted orb, so, unless you happen to be an expert in ley lines or mana currents, go entertain yourself elsewhere and stop wasting my time!' where entry = 60851;
+-- NPC Sunchaser should not be killable in the quest 40536.
+update creature_template set health_min = 350, health_max = 350 where entry = 60821;
+update creature set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 60821;
+-- Set disenchant ID of item 60500 to 48.
+update item_template set disenchant_id = 48 where entry = 60500;
+-- Rename orb of pure light to orb of purified light.
+update item_template set name = 'Orb of Purified Light' where entry = 60783;
+-- NPCs 15203, 15204, 15205 should drop 20515 with a 100% chance.
+REPLACE INTO creature_loot_template VALUES (15203, 20515, 100, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (15204, 20515, 100, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (15205, 20515, 100, 1, 1, 1, 0);
+-- Reduce drop chance of 'Technique: Die by the Sword' to 4%.
+update gameobject_loot_template set chanceorquestchance = 4 where item = 83570;
+-- Reduce drop chance of 'Codex: Shadow Mend' to 4%.
+update creature_loot_template set chanceorquestchance = 4 where item = 83571;
+-- missing world drops.
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60788, 'Sandals of Inner Peace', '', 4, 1, 7, 4, 28664, 2, 36, 0, -1, -1, 25215, 6303, 8, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 50, 44, 0, 0, 41, 0, 61, 0, 0, 0, 0, 0, 0, 5, 10, 6, 15, 14521, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (60789, 'Finke\'s Accelerator', 'Guaranteed time dilation! Finkle Einhorn is not responsible for any malfunctions and untimely death via aging.', 4, 0, 1, 4, 3257, 2, 37, 0, -1, -1, 41452, 10363, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 0, 61, 0, 0, 0, 0, 0, 0, 8815, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+-- New World Epics drops:
+-- Sandals of Inner Peace.
+REPLACE INTO reference_loot_template VALUES (30035, 60788, 0, 1, 1, 1, 0);
+-- Finke's Accelerator.
+REPLACE INTO reference_loot_template VALUES (30036, 60789, 0, 1, 1, 1, 0);
+-- Bladebane Armguards.
+REPLACE INTO reference_loot_template VALUES (30051, 14550, 0, 1, 1, 1, 0);
+-- Abyssal Wave.
+REPLACE INTO creature_loot_template VALUES (15305, 83557, 40, 1, 1, 1, 0);
