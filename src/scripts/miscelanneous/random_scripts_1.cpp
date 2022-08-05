@@ -386,31 +386,6 @@ bool ItemUseSpell_item_holy_wings(Player* pPlayer, Item* pItem, const SpellCastT
     return false;
 }
 
-enum PlayerMounting
-{
-    STAG_MOUNT_DISPLAY = 17158,
-    SPELL_CHARM = 530,
-    SPELL_TAXI_INVISIBILITY = 16380
-};
-
-class StopUber : public BasicEvent
-{
-public:
-    explicit StopUber(uint64 player_guid, uint64 passenger_guid) : BasicEvent(), player_guid(player_guid), passenger_guid(passenger_guid) {}
-
-    bool Execute(uint64 e_time, uint32 p_time) override
-    {
-        Player* player = ObjectAccessor::FindPlayer(player_guid);
-        Player* passenger = ObjectAccessor::FindPlayer(passenger_guid);
-        if (player && passenger)
-            player->CancelTaxiRide(passenger);
-        return false;
-    }
-private:
-    uint64 player_guid;
-    uint64 passenger_guid;
-};
-
 bool ItemUseSpell_shop_racechange(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
     if (pPlayer->IsInCombat() || pPlayer->IsBeingTeleported() || (pPlayer->GetDeathState() == CORPSE) || pPlayer->IsMoving())

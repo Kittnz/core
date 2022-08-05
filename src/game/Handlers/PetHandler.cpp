@@ -193,11 +193,6 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
                     }
                     else                                    // charmed
                     {
-                        if (Player* passenger = pCharmedUnit->ToPlayer())
-                        {
-                            if (_player->IsTaxiDriver())
-                                _player->CancelTaxiRide(passenger);
-                        }
                         _player->Uncharm();
                     }    
                     break;
