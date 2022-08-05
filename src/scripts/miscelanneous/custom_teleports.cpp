@@ -57,11 +57,14 @@ struct custom_dungeon_portal : public GameObjectAI
                     // Temporary locked portals:  
                     switch (me->GetEntry())
                     {
-                    case 112920: 
-                        player->GetSession()->SendNotification("This raid is currently not available."); 
+                    case 112915: // Black Morass
+                        player->GetSession()->SendNotification("This dungeon is currently under rework and will return in the near future, please stay tuned.");
                         break;
-                    case 112923:
-                    case 112924:
+                    case 112920: // Scarlet Citadel
+                        player->GetSession()->SendNotification("This raid is currently not available.");
+                        break;
+                    case 112923: // Caverns of Time Placeholder Portal I(Entrance)
+                    case 112924: // Caverns of Time Placeholder Portal II (Entrance)
                         player->GetSession()->SendNotification("This dungeon is currently not available.");
                         break;
                     }
