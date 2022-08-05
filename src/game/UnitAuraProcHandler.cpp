@@ -885,10 +885,15 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     basepoints[0] = triggerAmount * damage / 100;
                     pVictim->CastCustomSpell(pVictim, 15290, &basepoints[0], nullptr, nullptr, true, castItem, triggeredByAura);
 
-                    uint32 improvedVampiric = pVictim->HasAura(45558) ? sSpellMgr.GetSpellEntry(45558)->EffectBasePoints[0] : 0;
+
+                    constexpr uint32 ManaGainEffectIndex = 1;
+
+                    int32 dieSides = sSpellMgr.GetSpellEntry(45557)->EffectDieSides[ManaGainEffectIndex];
+
+                    uint32 improvedVampiric = pVictim->HasAura(45558) ? sSpellMgr.GetSpellEntry(45558)->EffectBasePoints[ManaGainEffectIndex] + dieSides : 0;
 
                     if (!improvedVampiric)
-                        improvedVampiric = pVictim->HasAura(45557) ? sSpellMgr.GetSpellEntry(45557)->EffectBasePoints[0] : 0;
+                        improvedVampiric = pVictim->HasAura(45557) ? sSpellMgr.GetSpellEntry(45557)->EffectBasePoints[ManaGainEffectIndex] + dieSides : 0;
 
                     if (improvedVampiric && damage)
                     {
