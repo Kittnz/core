@@ -37,13 +37,13 @@ OFFSET_TEXTEMOTE_SOUND_RACE_ID_CHECK          = 0x00059289, // Allows the game t
 OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game to play emote sounds for High Elves.
 };
 
-#define NEW_BUILD 7010u
-#define NEW_VISUAL_BUILD "7010"
-#define NEW_VISUAL_VERSION "1.16.1"
-#define NEW_BUILD_DATE "Jul 25 2022"
+#define NEW_BUILD 7020u
+#define NEW_VISUAL_BUILD "7020"
+#define NEW_VISUAL_VERSION "1.16.2"
+#define NEW_BUILD_DATE "Aug 05 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-W.mpq"
+#define PATCH_FILE "Data\\patch-X.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
