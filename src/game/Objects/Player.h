@@ -2226,10 +2226,6 @@ class Player final: public Unit
         uint32 m_hardcoreInvGuildTimer;
         uint32 m_hardcoreSaveItemsTimer;
 
-        // For druids carrying players in a stag form
-        bool bIsTaxiPassenger = false;
-        bool bIsTaxiDriver = false;
-
         void SendMountResult(UnitMountResult result) const;
         void SendDismountResult(UnitDismountResult result) const;
         void UpdateCorpseReclaimDelay();
@@ -2310,15 +2306,6 @@ class Player final: public Unit
         uint32 GetDeathTimer() const { return m_deathTimer; }
         uint32 GetCorpseReclaimDelay(bool pvp) const;
         void SendCorpseReclaimDelay(bool load = false) const;
-
-        bool IsTaxiDriver() { return bIsTaxiDriver; };
-        bool IsTaxiPassenger() { return bIsTaxiPassenger; };
-
-        void SetTaxiPassengerStatus(bool status) { bIsTaxiPassenger = status; }
-        void SetTaxiDriverStatus(bool status) { bIsTaxiDriver = status; }
-        void CancelTaxiRide(Player* passenger);
-
-// Turtle WoW modes & challenges:  
 
 		// Giperion Turtle: Z limit should be customized
 		float ZFelldownLimit = -500.0f;
