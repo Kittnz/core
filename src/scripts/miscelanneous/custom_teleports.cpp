@@ -58,7 +58,7 @@ struct custom_dungeon_portal : public GameObjectAI
                     switch (me->GetEntry())
                     {
                     case 112915: // Black Morass
-                        player->GetSession()->SendNotification("This dungeon is currently under rework and will return in the near future, please stay tuned.");
+                        player->GetSession()->SendNotification("The Black Morass is currently being reworked and will be unavailable until it is completed in the near future, please stay tuned.");
                         break;
                     case 112920: // Scarlet Citadel
                         player->GetSession()->SendNotification("This raid is currently not available.");
