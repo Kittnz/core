@@ -6552,7 +6552,7 @@ bool Player::HasCompletedManyQuests()
         Field* fields = quest_count_query->Fetch();
         uint8 quest_count = fields[0].GetUInt8();
 
-        if (quest_count < 2000)
+        if (quest_count < 1700)
             return false;
 
         delete quest_count_query;
