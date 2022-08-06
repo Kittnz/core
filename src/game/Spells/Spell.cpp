@@ -3893,6 +3893,8 @@ void Spell::cast(bool skipCheck)
 
     if (m_casterUnit && IsMeleeAttackResetSpell() && !(m_spellInfo->AttributesEx2 & SPELL_ATTR_EX2_NOT_RESET_AUTO_ACTIONS))
     {
+        if (m_casterUnit->IsPlayer())
+            printf("%s reset\n", m_spellInfo->SpellName[0].c_str());
         m_casterUnit->ResetAttackTimer(BASE_ATTACK);
         if (m_casterUnit->HaveOffhandWeapon())
             m_casterUnit->ResetAttackTimer(OFF_ATTACK);
