@@ -22544,7 +22544,7 @@ void Player::AddToArenaQueue(bool queuedAsGroup)
     }
 
     BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
-    GroupQueueInfo * ginfo = bgQueue.AddGroup(this, grp ? grp : nullptr, bgTypeId, bgBracketId, false);
+    GroupQueueInfo * ginfo = bgQueue.AddGroup(this, grp ? grp : nullptr, bgTypeId, bgBracketId, false, 0, nullptr);
     uint32 avgTime = bgQueue.GetAverageQueueWaitTime(ginfo, bgBracketId);
     
     if (grp && queuedAsGroup)
