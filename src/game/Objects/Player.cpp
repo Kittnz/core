@@ -6541,6 +6541,27 @@ bool Player::HasAllZonesExplored()
     return eligible_for_title;
 }
 
+bool Player::HasCompletedManyQuests()
+{
+    bool eligible_for_title = true;
+
+    QueryResult* quest_count_query = CharacterDatabase.PQuery("SELECT COUNT(*) AS quest_count, guid FROM character_queststatus WHERE rewarded = 1 and guid = %u;", GetGUIDLow());
+
+    if (quest_count_query)
+    {
+        Field* fields = quest_count_query->Fetch();
+        uint8 quest_count = fields[0].GetUInt8();
+
+        if (quest_count < 2000)
+            return false;
+    }
+    else
+    {
+        return false;
+    }
+    return eligible_for_title;
+}
+
 void Player::CheckAreaExploreAndOutdoor()
 {
     if (!IsAlive())
@@ -13704,6 +13725,9 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
     // Atiesh Quests
     if (quest_id == 9270 /*Mage*/ || quest_id == 9269 /*Druid*/ || quest_id == 9271 /*Warlock*/ || quest_id == 9257 /*Priest*/)
         AwardTitle(TITLE_GUARDIAN_OF_TIRISFAL); // Guardian of Tirisfal
+
+    if (HasCompletedManyQuests() && !HasTitle(TITLE_LOREKEEPER))
+        AwardTitle(TITLE_LOREKEEPER);
 }
 
 void Player::FailQuest(uint32 questId)

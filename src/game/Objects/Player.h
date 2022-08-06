@@ -2719,6 +2719,7 @@ public:
         void ChangeTitle(uint8 title);
         void UpdateAppearance();
         bool HasAllZonesExplored();
+        bool HasCompletedManyQuests();
 
 		// General send addon message
 	public:
