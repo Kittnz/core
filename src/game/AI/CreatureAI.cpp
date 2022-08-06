@@ -441,7 +441,7 @@ void CreatureAI::SetCombatMovement(bool enabled)
             m_creature->GetMotionMaster()->MovementExpired(false);
             m_creature->GetMotionMaster()->MoveIdle();
         }
-        else if (enabled && (m_creature->GetMotionMaster()->GetCurrentMovementGeneratorType() == IDLE_MOTION_TYPE))
+        else if (enabled && (m_creature->GetMotionMaster()->IsUsingOutOfCombatMovementType()))
         {
             m_creature->GetMotionMaster()->MovementExpired(false);
             m_creature->GetMotionMaster()->MoveChase(pVictim);

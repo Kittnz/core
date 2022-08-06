@@ -55,7 +55,7 @@ uint8 const ConditionTargetsInternal[] =
                 CONDITION_REQ_TARGET_PLAYER,      //  3
                 CONDITION_REQ_ANY_WORLDOBJECT,    //  4
                 CONDITION_REQ_TARGET_PLAYER,      //  5
-                CONDITION_REQ_TARGET_PLAYER,      //  6
+                CONDITION_REQ_TARGET_UNIT,        //  6
                 CONDITION_REQ_TARGET_PLAYER,      //  7
                 CONDITION_REQ_TARGET_PLAYER,      //  8
                 CONDITION_REQ_TARGET_PLAYER,      //  9
@@ -200,7 +200,10 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
         }
         case CONDITION_TEAM:
         {
-            return (uint32(target->ToPlayer()->GetTeam()) == m_value1);
+            if (Player const* pPlayer = target->ToUnit()->GetCharmerOrOwnerPlayerOrPlayerItself())
+                return (pPlayer->GetTeam() == m_value1);
+
+            return m_value1 == TEAM_NONE;
         }
         case CONDITION_SKILL:
         {
