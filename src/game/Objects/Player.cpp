@@ -6554,6 +6554,8 @@ bool Player::HasCompletedManyQuests()
 
         if (quest_count < 2000)
             return false;
+
+        delete quest_count_query;
     }
     else
     {
