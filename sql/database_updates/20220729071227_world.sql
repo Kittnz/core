@@ -1751,3 +1751,5 @@ REPLACE INTO reference_loot_template VALUES (30036, 60789, 0, 1, 1, 1, 0);
 REPLACE INTO reference_loot_template VALUES (30051, 14550, 0, 1, 1, 1, 0);
 -- Abyssal Wave.
 REPLACE INTO creature_loot_template VALUES (15305, 83557, 40, 1, 1, 1, 0);
+-- Call of shadow, fixed with bugfix patch, new displayID.
+update item_template set display_id = 66281 where entry = 51046;
