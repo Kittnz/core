@@ -7957,6 +7957,7 @@ void Player::RemovedInsignia(Player* looterPlr, Corpse *corpse)
         return;
 
     WorldPacket data(SMSG_PLAYER_SKINNED,0);
+    data << uint8(0);
     GetSession()->SendPacket(&data);
 
     sObjectAccessor.ConvertCorpseForPlayer(GetObjectGuid(), looterPlr);
