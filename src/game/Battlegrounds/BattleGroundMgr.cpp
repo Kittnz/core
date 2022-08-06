@@ -1176,24 +1176,25 @@ BattleGround * BattleGroundMgr::GetBattleGroundTemplate(BattleGroundTypeId bgTyp
     return m_BattleGrounds[bgTypeId].empty() ? nullptr : m_BattleGrounds[bgTypeId].begin()->second;
 }
 
-uint32 BattleGroundMgr::CreateClientVisibleInstanceId(BattleGroundTypeId bgTypeId, BattleGroundBracketId bracket_id)
+uint32 BattleGroundMgr::CreateClientVisibleInstanceId(BattleGroundTypeId bgTypeId, BattleGroundBracketId bracketId)
 {
-    // we create here an instanceid, which is just for
-    // displaying this to the client and without any other use..
+    // here, we create an instanceid, which is just for
+    // displaying this to the client and without any other use.
     // the client-instanceIds are unique for each battleground-type
     // the instance-id just needs to be as low as possible, beginning with 1
     // the following works, because std::set is default ordered with "<"
-    // the optimalization would be to use as bitmask std::vector<uint32> - but that would only make code unreadable
-    uint32 lastId = 0;
-    ClientBattleGroundIdSet& ids = m_ClientBattleGroundIds[bgTypeId][bracket_id];
-    for (ClientBattleGroundIdSet::const_iterator itr = ids.begin(); itr != ids.end();)
+    // the optimization would be to use as bitmask std::vector<uint32> - but that would only make code unreadable
+    uint32 lastId = 1;
+    ClientBattleGroundIdSet& ids = m_ClientBattleGroundIds[bgTypeId][bracketId];
+    for (auto id : ids)
     {
-        if ((++lastId) != *itr)                             //if there is a gap between the ids, we will break..
+        if (lastId == id)
+            lastId++;
+        else
             break;
-        lastId = *itr;
     }
-    ids.insert(lastId + 1);
-    return lastId + 1;
+    ids.insert(lastId);
+    return lastId;
 }
 
 // create a new battleground that will really be used to play
