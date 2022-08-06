@@ -18823,8 +18823,9 @@ void Player::SetBattleGroundEntryPoint(uint32 mapId, float x, float y, float z, 
 void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queuedAtBGPortal /*= false*/)
 {
     // Already in BG ? Then we already have a teleport back point
-    if (InBattleGround())
+    if (InBattleGround() && !(FindMap() && !FindMap()->GetMapEntry()->Instanceable()))
         return;
+
     // chat command use case, or non-group join
     if (!leader || !leader->IsInWorld() || leader->IsTaxiFlying() || leader->GetMap()->IsDungeon() || leader->GetMap()->IsBattleGround())
         leader = this;
