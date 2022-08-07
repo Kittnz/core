@@ -1786,3 +1786,11 @@ update creature_template set name = 'Grellkin Sorcerer' where entry = 60601;
 update creature_template set name = 'Grellkin Scorcher' where entry = 60602;
 -- Change Armor of Arc'tiras to 3981.
 update creature_template set armor = 3981 where entry = 93107;
+-- Remove Bindings of Elements drop from Ravenous Strigoi.
+delete from creature_loot_template where entry = 91910 and item = 16671;
+-- Increase Guard Captain Gort's (92935) HP to 42959, and change damage to 665 - 789. Turning him into a proper boss.
+update creature_template set health_min = 42959, health_max = 42959, dmg_min = 665, dmg_max = 789 where entry = 92935;
+-- Tomb Bats, Crypt Fearfester and Skeletal Remains should NOT respawn after 5 minutes, change respawn timer to 3 hours.
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91921;
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91922;
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91924;
