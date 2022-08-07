@@ -1772,3 +1772,17 @@ REPLACE INTO npc_vendor VALUES (6779,  2931, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (15175, 2931, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60649, 2931, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (91865, 2931, 0, 0, 0, 0);
+-- Reduce the level of Aszosh Grimflame, Tham'Grarr, Black Bride, Damian, Volkan Cruelblade to 62.
+update creature_template set level_min = 62, level_max = 62 where entry = 80850;
+update creature_template set level_min = 62, level_max = 62 where entry = 80851;
+update creature_template set level_min = 62, level_max = 62 where entry = 80852;
+update creature_template set level_min = 62, level_max = 62 where entry = 80853;
+update creature_template set level_min = 62, level_max = 62 where entry = 80854;
+-- Nerf damage values of Hungry Vault Rat by 66%.
+update creature_template set dmg_min = 166, dmg_max = 183 where entry = 93106;
+-- Rename Frostbitten Grellkin Sorcerer to Grellkin Sorcerer.
+update creature_template set name = 'Grellkin Sorcerer' where entry = 60601;
+-- Rename Flamescorned Grellkin Scorcher to Grellkin Scorcher.
+update creature_template set name = 'Grellkin Scorcher' where entry = 60602;
+-- Change Armor of Arc'tiras to 3981.
+update creature_template set armor = 3981 where entry = 93107;
