@@ -1753,3 +1753,22 @@ REPLACE INTO reference_loot_template VALUES (30051, 14550, 0, 1, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (15305, 83557, 40, 1, 1, 1, 0);
 -- Call of shadow, fixed with bugfix patch, new displayID.
 update item_template set display_id = 66281 where entry = 51046;
+-- Add item 2931 to all poison reagent vendors.
+REPLACE INTO npc_vendor VALUES (1325,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (1326,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (1457,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (2622,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3090,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3135,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3334,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3490,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3542,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3551,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3561,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (3969,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (4585,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (5169,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (6779,  2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (15175, 2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60649, 2931, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (91865, 2931, 0, 0, 0, 0);
