@@ -40,7 +40,7 @@ OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game t
 #define NEW_BUILD 7020u
 #define NEW_VISUAL_BUILD "7020"
 #define NEW_VISUAL_VERSION "1.16.2"
-#define NEW_BUILD_DATE "Aug 05 2022"
+#define NEW_BUILD_DATE "Aug 08 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-X.mpq"
@@ -166,17 +166,35 @@ void PatchBinary(FILE* hWoW)
     //	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
     //	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
 
-	char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
-	fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
-	fwrite(patch_8, sizeof(patch_8), 1, hWoW);
+	// Sound in background opt-out:
 
-	char patch_9[] = { 0x9C, 0x5C, 0x83, 0x00 };
-	fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
-	fwrite(patch_9, sizeof(patch_9), 1, hWoW);
+    char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
+    fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
+    fwrite(patch_8, sizeof(patch_8), 1, hWoW);
+    
+    char patch_9[] = { 0x9C, 0x5C, 0x83, 0x00 };
+    fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
+    fwrite(patch_9, sizeof(patch_9), 1, hWoW);
+    
+    char patch_10[] = { 0x9C, 0x5C, 0x83, 0x00 };
+    fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
+    fwrite(patch_10, sizeof(patch_10), 1, hWoW);
 
-	char patch_10[] = { 0x9C, 0x5C, 0x83, 0x00 };
-	fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
-	fwrite(patch_10, sizeof(patch_10), 1, hWoW);
+	// Sound channel count original:
+
+	// char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
+	// fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
+	// fwrite(patch_8, sizeof(patch_8), 1, hWoW);
+	// 
+	// char patch_9[] = { 0x38, 0x5D, 0x83, 0x0 };
+	// fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
+	// fwrite(patch_9, sizeof(patch_9), 1, hWoW);
+	// 
+	// char patch_10[] = { 0x6C, 0x5C, 0x83, 0x00 };
+	// fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
+	// fwrite(patch_10, sizeof(patch_10), 1, hWoW);
+
+	// Sound channel count original, end.
 
 	char patch_11[] = { 0x00, 0x00, 0x24, 0x42 };
 	fseek(hWoW, OFFSET_NAMEPLATE_DISTANCE, SEEK_SET);
@@ -186,9 +204,19 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
 	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
-	char patch_13[] = { 0x27 };
+	// Sound in background
+
+	// char patch_13[] = { 0x27 };
+	// fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
+	// fwrite(patch_13, sizeof(patch_13), 1, hWoW);
+
+	// Sound in background original
+
+	char patch_13[] = { 0x14 };
 	fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 	fwrite(patch_13, sizeof(patch_13), 1, hWoW);
+
+	// Sound in background original, end
 }
 
 constexpr int max_path = 260;
