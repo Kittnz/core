@@ -467,7 +467,30 @@ void WorldSession::HandleTurnInPetitionOpcode(WorldPacket & recv_data)
 
     Item *charter = _player->GetItemByGuid(itemGuid);
     if (!charter)
+    {
+        // client bugs out sometimes and sends 0 if charter not in main bag
+        for (int i = INVENTORY_SLOT_BAG_START; i < INVENTORY_SLOT_BAG_END; ++i)
+        {
+            if (Bag* pBag = (Bag*)_player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            {
+                for (uint32 j = 0; j < pBag->GetBagSize(); ++j)
+                {
+                    if (Item* pItem = pBag->GetItemByPos(j))
+                    {
+                        if (pItem->GetProto()->ItemId == 5863)
+                        {
+                            charter = pItem;
+                            goto lblCharterFound;
+                        }
+                    }
+                }
+            }
+        }
+
         return;
+    }
+
+lblCharterFound:
 
     uint32 petitionguid = charter->GetEnchantmentId(EnchantmentSlot(0));
     DEBUG_LOG("Petition %u turned in by %s", petitionguid, _player->GetGuidStr().c_str());
