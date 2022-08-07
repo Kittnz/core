@@ -960,6 +960,9 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
         }
         case SPELLFAMILY_ROGUE:
         {
+            if (!pVictim || !pVictim->IsAlive())
+                return SPELL_AURA_PROC_FAILED;
+
             switch (dummySpell->Id)
             {
                 // Clean Escape
