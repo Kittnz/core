@@ -129,6 +129,7 @@ enum ClassFlag
 
     CF_WARLOCK_SIPHON_LIFE                  = 32,   // CM1 00000001
     CF_WARLOCK_CURSE_OF_DOOM                = 33,   // CM1 00000002
+    CF_WARLOCK_DEMON_SKIN_ARMOR             = 34,   // CM1 00000004
 
     // -- Priest (6)
     CF_PRIEST_POWER_WORD_SHIELD             = 0,    // CM0 00000001
