@@ -1800,3 +1800,8 @@ update creature_template set health_min = 42959, health_max = 42959, dmg_min = 6
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91921;
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91922;
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91924;
+-- Link NPC GUID 2568424 and 2568423 to NPC GUID 2568425 so that the former 2 mobs pull with the latter NPC. (Karazhan Crypt Pack).
+REPLACE INTO creature_linking VALUES (2568423, 2568425, 3);
+REPLACE INTO creature_linking VALUES (2568424, 2568425, 3);
+-- Link NPC GUID 2565645 and 2565646 so they pull together. (Karazhan Crypt Pack).
+REPLACE INTO creature_linking VALUES (2565645, 2565646, 3073);
