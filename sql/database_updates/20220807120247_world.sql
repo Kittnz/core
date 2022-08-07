@@ -23,3 +23,5 @@ UPDATE `spell_template` SET `spellVisual1` = 7916, WHERE `entry` = 46536;
 UPDATE `spell_template` SET `spellVisual1` = 7915, WHERE `entry` = 46518; -- Update Broom mount sound
 UPDATE `spell_template` SET `recoveryTime` = 30000, `spellVisual1` = 7914 WHERE `entry` = 45554; -- Update Shadow Mend visual and increases cooldown time.
 UPDATE `spell_template` SET `effectBonusCoefficient1` = 0.429 WHERE `entry` = 45554; -- Adds scaling to Shadow Mend
+UPDATE `spell_template` SET `spellVisual1` = 7913 WHERE `entry` = 45505; -- Update Feral Spirit spell visual
+UPDATE `spell_template` SET `spellVisual1` = 7913 WHERE `entry` = 45514;
