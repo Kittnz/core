@@ -1778,6 +1778,11 @@ update creature_template set level_min = 62, level_max = 62 where entry = 80851;
 update creature_template set level_min = 62, level_max = 62 where entry = 80852;
 update creature_template set level_min = 62, level_max = 62 where entry = 80853;
 update creature_template set level_min = 62, level_max = 62 where entry = 80854;
+-- Reduce level of Marrowspike, Archlich Enkhraz, Hivaxxis and Corpsemucher to 62 and remove skull indicator, add skull indicator to Arc'tiras.
+update creature_template set level_min = 62, level_max = 62 where entry = 91916;
+update creature_template set level_min = 62, level_max = 62 where entry = 91917;
+update creature_template set level_min = 62, level_max = 62 where entry = 91920;
+update creature_template set level_min = 62, level_max = 62 where entry = 91929;
 -- Nerf damage values of Hungry Vault Rat by 66%.
 update creature_template set dmg_min = 166, dmg_max = 183 where entry = 93106;
 -- Rename Frostbitten Grellkin Sorcerer to Grellkin Sorcerer.
