@@ -1308,7 +1308,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                     if (!mana)
                         return SPELL_AURA_PROC_FAILED;
 
-                    CastCustomSpell(this, trigger_spell_id, &mana, nullptr, nullptr, true);
+                    EnergizeBySpell(this, trigger_spell_id, mana, POWER_MANA);
                     return SPELL_AURA_PROC_OK;
                 }
                 // Primal Fury (custom version)
