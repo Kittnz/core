@@ -2186,7 +2186,7 @@ class Player final: public Unit
         bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
         HardcoreInteractionResult HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
-
+        void SpawnHardcoreGravestone();
         static std::string HardcoreResultToString(HardcoreInteractionResult result);
 
         bool SetupHardcoreMode();

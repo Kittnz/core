@@ -214,7 +214,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
     ObjectGuid guid;
     recv_data >> guid;
 
-    const GameObjectInfo *info = ObjectMgr::GetGameObjectInfo(entryID);
+    const GameObjectInfo *info = sObjectMgr.GetGameObjectInfo(entryID);
     if (info)
     {
         std::string Name = info->name;
@@ -229,7 +229,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
                     Name = gl->Name[loc_idx];
             }
         }
-        DETAIL_LOG("WORLD: CMSG_GAMEOBJECT_QUERY '%s' - Entry: %u. ", info->name, entryID);
+        DETAIL_LOG("WORLD: CMSG_GAMEOBJECT_QUERY '%s' - Entry: %u. ", info->name.c_str(), entryID);
         WorldPacket data(SMSG_GAMEOBJECT_QUERY_RESPONSE, 150);
         data << uint32(entryID);
         data << uint32(info->type);

@@ -1221,7 +1221,7 @@ void World::RestoreLostGOs()
 
         if (command.find("add") != std::string::npos)
         {
-            const GameObjectInfo* gInfo = ObjectMgr::GetGameObjectInfo(entryOrGuid);
+            const GameObjectInfo* gInfo = sObjectMgr.GetGameObjectInfo(entryOrGuid);
 
             if (!gInfo)
             {

@@ -2793,7 +2793,7 @@ bool ChatHandler::ExtractLocationFromLink(char** text, uint32& mapid, float& x, 
             if (!ExtractUInt32(&idS, id))
                 return false;
 
-            if (ObjectMgr::GetGameObjectInfo(id))
+            if (sObjectMgr.GetGameObjectInfo(id))
             {
                 FindGOData worker(id, m_session ? m_session->GetPlayer() : nullptr);
 

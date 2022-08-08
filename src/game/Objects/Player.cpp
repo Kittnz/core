@@ -2879,7 +2879,7 @@ bool Player::CanInteractWithGameObject(GameObject const* pGo, uint32 gameobject_
             return true;
 
         sLog.outError("CanInteractWithGameObject: GameObject '%s' [GUID: %u] is too far away from player %s [GUID: %u] to be used by him",
-            pGo->GetGOInfo()->name, pGo->GetGUIDLow(), GetName(), GetGUIDLow());
+            pGo->GetGOInfo()->name.c_str(), pGo->GetGUIDLow(), GetName(), GetGUIDLow());
     }
 
     return false;
@@ -5052,7 +5052,7 @@ void Player::KillPlayer()
 
         sLog.out(LOG_HARDCORE_MODE, "Player %s dead on %f %f %f %u, level %u", GetName(), GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetLevel());
 
-
+        SpawnHardcoreGravestone();
         BuildPlayerRepop();
 
         m_hardcoreKickTimer = 120 * IN_MILLISECONDS;
@@ -5081,6 +5081,22 @@ void Player::KillPlayer()
         else
             sLog.outErrorDb("Internal DB error. Rollback refund actions on account %u", GetSession()->GetAccountId());
     }
+}
+
+void Player::SpawnHardcoreGravestone()
+{
+    GameObjectInfo goInfo;
+    goInfo.name = std::string("Grave of ") + m_name;
+    goInfo.displayId = 499;
+    goInfo.type = GAMEOBJECT_TYPE_GENERIC;
+    goInfo._generic.floatingTooltip = 1;
+    goInfo._generic.highlight = 1;
+
+    uint32 entry = sObjectMgr.GetMaxGameObjectInfoEntry() + 1;
+    goInfo.id = entry;
+    sObjectMgr.AddGameobjectInfo(std::move(goInfo));
+
+    SummonGameObject(entry, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation(), 0, 0, 0, 0, 24 * HOUR * IN_MILLISECONDS, false);
 }
 
 Corpse* Player::CreateCorpse()

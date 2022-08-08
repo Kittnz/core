@@ -39,10 +39,15 @@
 // from `gameobject_template`
 struct GameObjectInfo
 {
+    GameObjectInfo() : id(0), type(0), displayId(0), faction(0), flags(0), size(1.0f), MinMoneyLoot(0), MaxMoneyLoot(0), PhaseQuestId(0), ScriptId(0)
+    {
+        memset(raw.data, 0, sizeof(raw.data));
+    };
+
     uint32  id;
     uint32  type;
     uint32  displayId;
-    char   *name;
+    std::string name;
     uint32  faction;
     uint32  flags;
     float   size;
