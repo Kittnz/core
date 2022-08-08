@@ -1308,6 +1308,25 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                     CastCustomSpell(this, trigger_spell_id, &mana, nullptr, nullptr, true);
                     return SPELL_AURA_PROC_OK;
                 }
+                // Primal Fury (custom version)
+                case 45719:
+                case 45720:
+                {
+                    if (GetShapeshiftForm() == FORM_CAT)
+                    {
+                        if (triggeredByAura->GetEffIndex() == 0)
+                            return SPELL_AURA_PROC_FAILED;
+
+                        if (!procSpell || !procSpell->HasEffect(SPELL_EFFECT_ADD_COMBO_POINTS))
+                            return SPELL_AURA_PROC_FAILED;
+                    }
+                    else // bear
+                    {
+                        if (triggeredByAura->GetEffIndex() == 1)
+                            return SPELL_AURA_PROC_FAILED;
+                    }
+                    break;
+                }
             }
             break;
         case SPELLFAMILY_MAGE:
