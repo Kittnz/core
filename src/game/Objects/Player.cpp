@@ -5092,11 +5092,12 @@ void Player::SpawnHardcoreGravestone()
     goInfo._generic.floatingTooltip = 1;
     goInfo._generic.highlight = 1;
 
-    uint32 entry = sObjectMgr.GetMaxGameObjectInfoEntry() + 1;
+    uint32 const entry = sObjectMgr.GetMaxGameObjectInfoEntry() + 1;
     goInfo.id = entry;
     sObjectMgr.AddGameobjectInfo(std::move(goInfo));
 
-    SummonGameObject(entry, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation(), 0, 0, 0, 0, 24 * HOUR * IN_MILLISECONDS, false);
+    uint32 const duration = GetLevel() < 10 ? (15 * MINUTE * IN_MILLISECONDS) : (24 * HOUR * IN_MILLISECONDS);
+    SummonGameObject(entry, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation(), 0, 0, 0, 0, duration, false);
 }
 
 Corpse* Player::CreateCorpse()
