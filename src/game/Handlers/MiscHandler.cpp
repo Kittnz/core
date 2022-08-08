@@ -983,8 +983,7 @@ void WorldSession::HandlePlayedTime(WorldPacket& /*recv_data*/)
     data << uint32(_player->GetLevelPlayedTime());
     SendPacket(&data);
 
-    // Turtle WoW: Show total death count
-    ChatHandler(_player).PSendSysMessage("Total deaths: %u", _player->GetTotalDeathCount());
+    ChatHandler(_player).PSendSysMessage("Death counter: %u | Quests completed: %u", _player->GetTotalDeathCount(), _player->GetTotalQuestCount());
 }
 
 void WorldSession::HandleInspectOpcode(WorldPacket& recv_data)
