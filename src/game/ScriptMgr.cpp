@@ -318,7 +318,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                         }
                     }
 
-                    GameObjectInfo const* info = ObjectMgr::GetGameObjectInfo(data->id);
+                    GameObjectInfo const* info = sObjectMgr.GetGameObjectInfo(data->id);
                     if (!info)
                     {
                         sLog.outErrorDb("Table `%s` has gameobject with invalid entry (GUID: %u Entry: %u) in SCRIPT_COMMAND_RESPAWN_GAMEOBJECT for script id %u", tablename, tmp.GetGOGuid(), data->id, tmp.id);
@@ -376,7 +376,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                         }
                     }
 
-                    GameObjectInfo const* info = ObjectMgr::GetGameObjectInfo(data->id);
+                    GameObjectInfo const* info = sObjectMgr.GetGameObjectInfo(data->id);
                     if (!info)
                     {
                         sLog.outErrorDb("Table `%s` has gameobject with invalid entry (GUID: %u Entry: %u) in %s for script id %u", tablename, tmp.GetGOGuid(), data->id, (tmp.command == SCRIPT_COMMAND_OPEN_DOOR ? "SCRIPT_COMMAND_OPEN_DOOR" : "SCRIPT_COMMAND_CLOSE_DOOR"), tmp.id);
@@ -975,7 +975,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                     {
                         if (tmp.startScriptForAll.objectEntry)
                         {
-                            if (!ObjectMgr::GetGameObjectInfo(tmp.startScriptForAll.objectEntry))
+                            if (!sObjectMgr.GetGameObjectInfo(tmp.startScriptForAll.objectEntry))
                             {
                                 if (!sObjectMgr.IsExistingGameObjectId(tmp.startScriptForAll.objectEntry))
                                 {
@@ -1061,7 +1061,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             }
             case SCRIPT_COMMAND_SUMMON_OBJECT:
             {
-                if (!ObjectMgr::GetGameObjectInfo(tmp.summonObject.gameobject_entry))
+                if (!sObjectMgr.GetGameObjectInfo(tmp.summonObject.gameobject_entry))
                 {
                     if (!sObjectMgr.IsExistingGameObjectId(tmp.summonObject.gameobject_entry))
                     {
@@ -1214,7 +1214,7 @@ bool ScriptMgr::CheckScriptTargets(uint32 targetType, uint32 targetParam1, uint3
         }
         case TARGET_T_NEAREST_GAMEOBJECT_WITH_ENTRY:
         {
-            if (!ObjectMgr::GetGameObjectInfo(targetParam1))
+            if (!sObjectMgr.GetGameObjectInfo(targetParam1))
             {
                 if (!sObjectMgr.IsExistingGameObjectId(targetParam1))
                     sLog.outErrorDb("Table `%s` has target_param1 = %u for id %u, but this gameobject_template does not exist.", tableName, targetParam1, tableEntry);

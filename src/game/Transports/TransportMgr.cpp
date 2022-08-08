@@ -60,7 +60,7 @@ void TransportMgr::LoadTransportTemplates()
     {
         Field* fields = result->Fetch();
         uint32 entry = fields[0].GetUInt32();
-        GameObjectInfo const* goInfo = ObjectMgr::GetGameObjectInfo(entry);
+        GameObjectInfo const* goInfo = sObjectMgr.GetGameObjectInfo(entry);
         if (goInfo == nullptr)
         {
             sLog.outErrorDb("Transport %u has no associated GameObjectTemplate from `gameobject_template` , skipped.", entry);
@@ -69,7 +69,7 @@ void TransportMgr::LoadTransportTemplates()
 
         if (goInfo->moTransport.taxiPathId >= sTaxiPathNodesByPath.size())
         {
-            sLog.outErrorDb("Transport %u (name: %s) has an invalid path specified in `gameobject_template`.`data0` (%u) field, skipped.", entry, goInfo->name, goInfo->moTransport.taxiPathId);
+            sLog.outErrorDb("Transport %u (name: %s) has an invalid path specified in `gameobject_template`.`data0` (%u) field, skipped.", entry, goInfo->name.c_str(), goInfo->moTransport.taxiPathId);
             continue;
         }
 

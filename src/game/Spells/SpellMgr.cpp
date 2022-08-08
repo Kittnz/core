@@ -1981,7 +1981,7 @@ void SpellMgr::LoadSpellScriptTarget()
                 if (!targetEntry)
                     break;
 
-                if (!sGOStorage.LookupEntry<GameObjectInfo>(targetEntry))
+                if (!sObjectMgr.GetGameObjectInfo(targetEntry))
                 {
                     if (!sObjectMgr.IsExistingGameObjectId(targetEntry))
                         sLog.outErrorDb("Table `spell_script_target`: gameobject template entry %u does not exist.", targetEntry);

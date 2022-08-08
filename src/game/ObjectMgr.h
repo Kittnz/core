@@ -251,6 +251,9 @@ typedef std::unordered_map<uint32, SoundEntriesEntry> SoundEntryMap;
 typedef std::unordered_map<uint32,GameObjectData> GameObjectDataMap;
 typedef GameObjectDataMap::value_type GameObjectDataPair;
 
+// ordered map so we can get max id easily
+typedef std::map<uint32, GameObjectInfo> GameObjectInfoMap;
+
 class FindGOData
 {
     public:
@@ -649,11 +652,29 @@ class ObjectMgr
         static Player* GetPlayer(const char* name) { return ObjectAccessor::FindPlayerByName(name);}
         static Player* GetPlayer(ObjectGuid guid) { return ObjectAccessor::FindPlayer(guid); }
 
-        static GameObjectInfo const *GetGameObjectInfo(uint32 id) { return sGOStorage.LookupEntry<GameObjectInfo>(id); }
+        GameObjectInfo const* GetGameObjectInfo(uint32 id)
+        {
+            auto itr = m_GameObjectInfoMap.find(id);
+            if (itr != m_GameObjectInfoMap.end())
+                return &itr->second;
+
+            return nullptr;
+        }
+        uint32 GetMaxGameObjectInfoEntry() const
+        {
+            if (m_GameObjectInfoMap.empty())
+                return 0;
+
+            return m_GameObjectInfoMap.rbegin()->first;
+        }
+        GameObjectInfoMap const& GetGameObjectInfoMap() const
+        {
+            return m_GameObjectInfoMap;
+        }
 
         void LoadGameobjectInfo();
         void CheckGameObjectInfos();
-        void AddGameobjectInfo(GameObjectInfo *goinfo);
+        void AddGameobjectInfo(GameObjectInfo&& goinfo);
         void LoadGameObjectDisplayInfoAddon();
         void LoadGameobjectsRequirements();
         GameObjectUseRequirement const* GetGameObjectUseRequirement(ObjectGuid guid) const;
@@ -1645,6 +1666,7 @@ class ObjectMgr
         FactionTemplatesMap m_FactionTemplatesMap;
 
         SoundEntryMap m_SoundEntriesMap;
+        GameObjectInfoMap m_GameObjectInfoMap;
 
         typedef std::vector<std::unique_ptr<SkillLineAbilityEntry>> SkillLineAbiilityStore;
         SkillLineAbiilityStore m_SkillLineAbilities;

@@ -3631,7 +3631,7 @@ void ObjectMgr::LoadQuests()
         for (int j = 0; j < QUEST_OBJECTIVES_COUNT; ++j)
         {
             int32 id = qinfo->ReqCreatureOrGOId[j];
-            if (id < 0 && !sGOStorage.LookupEntry<GameObjectInfo>(-id))
+            if (id < 0 && !GetGameObjectInfo(-id))
             {
                 sLog.outErrorDb("Quest %u has `ReqCreatureOrGOId%d` = %i but gameobject %u does not exist, quest can't be done.",
                                 qinfo->GetQuestId(), j + 1, id, uint32(-id));
@@ -5403,7 +5403,7 @@ inline void CheckGOLockId(GameObjectInfo const* goInfo, uint32 dataN, uint32 N)
 
 inline void CheckGOLinkedTrapId(GameObjectInfo const* goInfo, uint32 dataN, uint32 N)
 {
-    if (GameObjectInfo const* trapInfo = sGOStorage.LookupEntry<GameObjectInfo>(dataN))
+    if (GameObjectInfo const* trapInfo = sObjectMgr.GetGameObjectInfo(dataN))
     {
         if (trapInfo->type != GAMEOBJECT_TYPE_TRAP)
             sLog.outErrorDb("Gameobject (Entry: %u GoType: %u) have data%d=%u but GO (Entry %u) have not GAMEOBJECT_TYPE_TRAP (%u) type.",
@@ -5458,71 +5458,99 @@ inline void CheckGOConsumable(GameObjectInfo const* goInfo, uint32 dataN, uint32
 
 void ObjectMgr::LoadGameobjectInfo()
 {
-    SQLGameObjectLoader loader;
-    loader.Load(sGOStorage);
+    m_GameObjectInfoMap.clear();                           // need for reload case
+
+    //                                                               0        1       2            3       4          5        6       7        8        9        10       11       12       13       14       15       16       17        18        19        20        21        22        23        24        25        26        27        28        29        30        31         32         33                34
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name` FROM `gameobject_template`"));
+
+    if (!result)
+        return;
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 entry = fields[0].GetUInt32();
+        GameObjectInfo& data = m_GameObjectInfoMap[entry];
+        data.id = entry;
+        data.type = fields[1].GetUInt32();
+        data.displayId = fields[2].GetUInt32();
+        data.name = fields[3].GetCppString();
+        data.faction = fields[4].GetUInt32();
+        data.flags = fields[5].GetUInt32();
+        data.size = fields[6].GetFloat();
+        for (int i = 0; i < 24; i++)
+            data.raw.data[i] = fields[7 + i].GetUInt32();
+        data.MinMoneyLoot = fields[31].GetUInt32();
+        data.MaxMoneyLoot = fields[32].GetUInt32();
+        data.PhaseQuestId = fields[33].GetUInt32();
+        data.ScriptId = sScriptMgr.GetScriptId(fields[34].GetString());
+
+    } while (result->NextRow());
+
     CheckGameObjectInfos();
 }
 
 void ObjectMgr::CheckGameObjectInfos()
 {
     // some checks
-    for (auto itr = sGOStorage.begin<GameObjectInfo>(); itr != sGOStorage.end<GameObjectInfo>(); ++itr)
+    for (auto itr = m_GameObjectInfoMap.begin(); itr != m_GameObjectInfoMap.end(); ++itr)
     {
-        if (itr->size <= 0.0f)                           // prevent use too small scales
+        if (itr->second.size <= 0.0f)                           // prevent use too small scales
         {
             ERROR_DB_STRICT_LOG("Gameobject (Entry: %u GoType: %u) have too small size=%f",
-                itr->id, itr->type, itr->size);
-            const_cast<GameObjectInfo*>(*itr)->size =  DEFAULT_OBJECT_SCALE;
+                itr->second.id, itr->second.type, itr->second.size);
+            const_cast<GameObjectInfo*>(&itr->second)->size =  DEFAULT_OBJECT_SCALE;
         }
 
-        if (itr->type >= GAMEOBJECT_TYPE_MAX)
+        if (itr->second.type >= GAMEOBJECT_TYPE_MAX)
         {
             sLog.outErrorDb("Gameobject (Entry: %u) have invalid type=%u in template, forcing it to type GENERIC (5) instead.",
-                            itr->id, itr->type);
-            const_cast<GameObjectInfo*>(*itr)->type = GAMEOBJECT_TYPE_GENERIC;
-            memset(const_cast<GameObjectInfo*>(*itr)->raw.data, 0, sizeof(GameObjectInfo::raw.data));
+                            itr->second.id, itr->second.type);
+            const_cast<GameObjectInfo*>(&itr->second)->type = GAMEOBJECT_TYPE_GENERIC;
+            memset(const_cast<GameObjectInfo*>(&itr->second)->raw.data, 0, sizeof(GameObjectInfo::raw.data));
         }
 
-        switch (itr->type)
+        switch (itr->second.type)
         {
             case GAMEOBJECT_TYPE_DOOR:                      //0
             {
-                if (itr->door.lockId)
-                    CheckGOLockId(*itr, itr->door.lockId, 1);
-                CheckGONoDamageImmuneId(*itr, itr->door.noDamageImmune, 3);
+                if (itr->second.door.lockId)
+                    CheckGOLockId(&itr->second, itr->second.door.lockId, 1);
+                CheckGONoDamageImmuneId(&itr->second, itr->second.door.noDamageImmune, 3);
                 break;
             }
             case GAMEOBJECT_TYPE_BUTTON:                    //1
             {
-                if (itr->button.lockId)
-                    CheckGOLockId(*itr, itr->button.lockId, 1);
-                if (itr->button.linkedTrapId)              // linked trap
-                    CheckGOLinkedTrapId(*itr, itr->button.linkedTrapId, 3);
-                CheckGONoDamageImmuneId(*itr, itr->button.noDamageImmune, 4);
+                if (itr->second.button.lockId)
+                    CheckGOLockId(&itr->second, itr->second.button.lockId, 1);
+                if (itr->second.button.linkedTrapId)              // linked trap
+                    CheckGOLinkedTrapId(&itr->second, itr->second.button.linkedTrapId, 3);
+                CheckGONoDamageImmuneId(&itr->second, itr->second.button.noDamageImmune, 4);
                 break;
             }
             case GAMEOBJECT_TYPE_QUESTGIVER:                //2
             {
-                if (itr->questgiver.lockId)
-                    CheckGOLockId(*itr, itr->questgiver.lockId, 0);
-                CheckGONoDamageImmuneId(*itr, itr->questgiver.noDamageImmune, 5);
+                if (itr->second.questgiver.lockId)
+                    CheckGOLockId(&itr->second, itr->second.questgiver.lockId, 0);
+                CheckGONoDamageImmuneId(&itr->second, itr->second.questgiver.noDamageImmune, 5);
                 break;
             }
             case GAMEOBJECT_TYPE_CHEST:                     //3
             {
-                if (itr->chest.lockId)
-                    CheckGOLockId(*itr, itr->chest.lockId, 0);
+                if (itr->second.chest.lockId)
+                    CheckGOLockId(&itr->second, itr->second.chest.lockId, 0);
 
-                CheckGOConsumable(*itr, itr->chest.consumable, 3);
+                CheckGOConsumable(&itr->second, itr->second.chest.consumable, 3);
 
-                if (itr->chest.linkedTrapId)              // linked trap
-                    CheckGOLinkedTrapId(*itr, itr->chest.linkedTrapId, 7);
+                if (itr->second.chest.linkedTrapId)              // linked trap
+                    CheckGOLinkedTrapId(&itr->second, itr->second.chest.linkedTrapId, 7);
                 break;
             }
             case GAMEOBJECT_TYPE_TRAP:                      //6
             {
-                if (itr->trap.lockId)
-                    CheckGOLockId(*itr, itr->trap.lockId, 0);
+                if (itr->second.trap.lockId)
+                    CheckGOLockId(&itr->second, itr->second.trap.lockId, 0);
                 /* disable check for while, too many nonexistent spells
                 if (goInfo->trap.spellId)                   // spell
                     CheckGOSpellId(goInfo,goInfo->trap.spellId,3);
@@ -5530,62 +5558,62 @@ void ObjectMgr::CheckGameObjectInfos()
                 break;
             }
             case GAMEOBJECT_TYPE_CHAIR:                     //7
-                CheckAndFixGOChairHeightId(*itr, itr->chair.height, 1);
+                CheckAndFixGOChairHeightId(&itr->second, itr->second.chair.height, 1);
                 break;
             case GAMEOBJECT_TYPE_SPELL_FOCUS:               //8
             {
-                if (itr->spellFocus.focusId)
+                if (itr->second.spellFocus.focusId)
                 {
-                    if (!sSpellFocusObjectStore.LookupEntry(itr->spellFocus.focusId))
+                    if (!sSpellFocusObjectStore.LookupEntry(itr->second.spellFocus.focusId))
                         sLog.outErrorDb("Gameobject (Entry: %u GoType: %u) have data0=%u but SpellFocus (Id: %u) not exist.",
-                            itr->id, itr->type, itr->spellFocus.focusId, itr->spellFocus.focusId);
+                            itr->second.id, itr->second.type, itr->second.spellFocus.focusId, itr->second.spellFocus.focusId);
                 }
 
-                if (itr->spellFocus.linkedTrapId)        // linked trap
-                    CheckGOLinkedTrapId(*itr, itr->spellFocus.linkedTrapId, 2);
+                if (itr->second.spellFocus.linkedTrapId)        // linked trap
+                    CheckGOLinkedTrapId(&itr->second, itr->second.spellFocus.linkedTrapId, 2);
                 break;
             }
             case GAMEOBJECT_TYPE_GOOBER:                    //10
             {
-                if (itr->goober.lockId)
-                    CheckGOLockId(*itr, itr->goober.lockId, 0);
+                if (itr->second.goober.lockId)
+                    CheckGOLockId(&itr->second, itr->second.goober.lockId, 0);
 
-                CheckGOConsumable(*itr, itr->goober.consumable, 3);
+                CheckGOConsumable(&itr->second, itr->second.goober.consumable, 3);
 
-                if (itr->goober.pageId)                  // pageId
+                if (itr->second.goober.pageId)                  // pageId
                 {
-                    if (!sPageTextStore.LookupEntry<PageText>(itr->goober.pageId))
+                    if (!sPageTextStore.LookupEntry<PageText>(itr->second.goober.pageId))
                         sLog.outErrorDb("Gameobject (Entry: %u GoType: %u) have data7=%u but PageText (Entry %u) not exist.",
-                            itr->id, itr->type, itr->goober.pageId, itr->goober.pageId);
+                            itr->second.id, itr->second.type, itr->second.goober.pageId, itr->second.goober.pageId);
                 }
                 /* disable check for while, too many nonexistent spells
                 if (goInfo->goober.spellId)                 // spell
                     CheckGOSpellId(goInfo,goInfo->goober.spellId,10);
                 */
-                CheckGONoDamageImmuneId(*itr, itr->goober.noDamageImmune, 11);
-                if (itr->goober.linkedTrapId)            // linked trap
-                    CheckGOLinkedTrapId(*itr, itr->goober.linkedTrapId, 12);
+                CheckGONoDamageImmuneId(&itr->second, itr->second.goober.noDamageImmune, 11);
+                if (itr->second.goober.linkedTrapId)            // linked trap
+                    CheckGOLinkedTrapId(&itr->second, itr->second.goober.linkedTrapId, 12);
                 break;
             }
             case GAMEOBJECT_TYPE_AREADAMAGE:                //12
             {
-                if (itr->areadamage.lockId)
-                    CheckGOLockId(*itr, itr->areadamage.lockId, 0);
+                if (itr->second.areadamage.lockId)
+                    CheckGOLockId(&itr->second, itr->second.areadamage.lockId, 0);
                 break;
             }
             case GAMEOBJECT_TYPE_CAMERA:                    //13
             {
-                if (itr->camera.lockId)
-                    CheckGOLockId(*itr, itr->camera.lockId, 0);
+                if (itr->second.camera.lockId)
+                    CheckGOLockId(&itr->second, itr->second.camera.lockId, 0);
                 break;
             }
             case GAMEOBJECT_TYPE_MO_TRANSPORT:              //15
             {
-                if (itr->moTransport.taxiPathId)
+                if (itr->second.moTransport.taxiPathId)
                 {
-                    if (itr->moTransport.taxiPathId >= sTaxiPathNodesByPath.size() || sTaxiPathNodesByPath[itr->moTransport.taxiPathId].empty())
+                    if (itr->second.moTransport.taxiPathId >= sTaxiPathNodesByPath.size() || sTaxiPathNodesByPath[itr->second.moTransport.taxiPathId].empty())
                         sLog.outErrorDb("Gameobject (Entry: %u GoType: %u) have data0=%u but TaxiPath (Id: %u) not exist.",
-                            itr->id, itr->type, itr->moTransport.taxiPathId, itr->moTransport.taxiPathId);
+                            itr->second.id, itr->second.type, itr->second.moTransport.taxiPathId, itr->second.moTransport.taxiPathId);
                 }
                 break;
             }
@@ -5600,33 +5628,38 @@ void ObjectMgr::CheckGameObjectInfos()
             case GAMEOBJECT_TYPE_SPELLCASTER:               //22
             {
                 // always must have spell
-                CheckGOSpellId(*itr, itr->spellcaster.spellId, 0);
+                CheckGOSpellId(&itr->second, itr->second.spellcaster.spellId, 0);
                 break;
             }
             case GAMEOBJECT_TYPE_FLAGSTAND:                 //24
             {
-                if (itr->flagstand.lockId)
-                    CheckGOLockId(*itr, itr->flagstand.lockId, 0);
-                CheckGONoDamageImmuneId(*itr, itr->flagstand.noDamageImmune, 5);
+                if (itr->second.flagstand.lockId)
+                    CheckGOLockId(&itr->second, itr->second.flagstand.lockId, 0);
+                CheckGONoDamageImmuneId(&itr->second, itr->second.flagstand.noDamageImmune, 5);
                 break;
             }
             case GAMEOBJECT_TYPE_FISHINGHOLE:               //25
             {
-                if (itr->fishinghole.lockId)
-                    CheckGOLockId(*itr, itr->fishinghole.lockId, 4);
+                if (itr->second.fishinghole.lockId)
+                    CheckGOLockId(&itr->second, itr->second.fishinghole.lockId, 4);
                 break;
             }
             case GAMEOBJECT_TYPE_FLAGDROP:                  //26
             {
-                if (itr->flagdrop.lockId)
-                    CheckGOLockId(*itr, itr->flagdrop.lockId, 0);
-                CheckGONoDamageImmuneId(*itr, itr->flagdrop.noDamageImmune, 3);
+                if (itr->second.flagdrop.lockId)
+                    CheckGOLockId(&itr->second, itr->second.flagdrop.lockId, 0);
+                CheckGONoDamageImmuneId(&itr->second, itr->second.flagdrop.noDamageImmune, 3);
                 break;
             }
         }
     }
 }
 
+void ObjectMgr::AddGameobjectInfo(GameObjectInfo&& goinfo)
+{
+    auto itr = m_GameObjectInfoMap.emplace(goinfo.id, goinfo);
+    MANGOS_ASSERT(itr.second);
+}
 
 void ObjectMgr::LoadGameobjectsRequirements()
 {
@@ -6627,22 +6660,22 @@ void ObjectMgr::LoadGameObjectForQuests()
 {
     m_GameObjectForQuestSet.clear();                         // need for reload case
 
-    if (!sGOStorage.GetMaxEntry())
+    if (m_GameObjectInfoMap.empty())
     {
         return;
     }
 
     // collect GO entries for GO that must activated
-    for (auto itr = sGOStorage.begin<GameObjectInfo>(); itr < sGOStorage.end<GameObjectInfo>(); ++itr)
+    for (auto itr = m_GameObjectInfoMap.begin(); itr != m_GameObjectInfoMap.end(); ++itr)
     {
-        switch (itr->type)
+        switch (itr->second.type)
         {
             case GAMEOBJECT_TYPE_QUESTGIVER:
             {
-                if (m_GOQuestRelations.find(itr->id) != m_GOQuestRelations.end() ||
-                        m_GOQuestInvolvedRelations.find(itr->id) != m_GOQuestInvolvedRelations.end())
+                if (m_GOQuestRelations.find(itr->second.id) != m_GOQuestRelations.end() ||
+                        m_GOQuestInvolvedRelations.find(itr->second.id) != m_GOQuestInvolvedRelations.end())
                 {
-                    m_GameObjectForQuestSet.insert(itr->id);
+                    m_GameObjectForQuestSet.insert(itr->second.id);
                 }
 
                 break;
@@ -6650,36 +6683,36 @@ void ObjectMgr::LoadGameObjectForQuests()
             case GAMEOBJECT_TYPE_CHEST:
             {
                 // scan GO chest with loot including quest items
-                uint32 loot_id = itr->GetLootId();
+                uint32 loot_id = itr->second.GetLootId();
 
                 // always activate to quest, GO may not have loot, OR find if GO has loot for quest.
-                if (itr->chest.questId || LootTemplates_Gameobject.HaveQuestLootFor(loot_id))
+                if (itr->second.chest.questId || LootTemplates_Gameobject.HaveQuestLootFor(loot_id))
                 {
-                    m_GameObjectForQuestSet.insert(itr->id);
+                    m_GameObjectForQuestSet.insert(itr->second.id);
                 }
                 break;
             }
             case GAMEOBJECT_TYPE_GENERIC:
             {
-                if (itr->_generic.questID)               // quest related objects, has visual effects
+                if (itr->second._generic.questID)               // quest related objects, has visual effects
                 {
-                    m_GameObjectForQuestSet.insert(itr->id);
+                    m_GameObjectForQuestSet.insert(itr->second.id);
                 }
                 break;
             }
             case GAMEOBJECT_TYPE_SPELL_FOCUS:
             {
-                if (itr->spellFocus.questID)             // quest related objects, has visual effect
+                if (itr->second.spellFocus.questID)             // quest related objects, has visual effect
                 {
-                    m_GameObjectForQuestSet.insert(itr->id);
+                    m_GameObjectForQuestSet.insert(itr->second.id);
                 }
                 break;
             }
             case GAMEOBJECT_TYPE_GOOBER:
             {
-                if (itr->goober.questId > 0)             // quests objects
+                if (itr->second.goober.questId > 0)             // quests objects
                 {
-                    m_GameObjectForQuestSet.insert(itr->id);
+                    m_GameObjectForQuestSet.insert(itr->second.id);
                 }
                 break;
             }
@@ -7108,7 +7141,7 @@ bool ObjectMgr::LoadQuestGreetings()
             }
             case QUESTGIVER_GAMEOBJECT:
             {
-                if (!ObjectMgr::GetGameObjectInfo(entry))
+                if (!sObjectMgr.GetGameObjectInfo(entry))
                 {
                     sLog.outErrorDb("Table `quest_greeting` have entry for nonexistent gameobject template (Entry: %u), ignore", entry);
                     continue;
@@ -7721,10 +7754,10 @@ void ObjectMgr::LoadGossipMenu()
                 if (m_GossipMenusMap.find(cInfo->gossip_menu_id) == m_GossipMenusMap.end())
                     sLog.outErrorDb("Creature (Entry: %u) has gossip_menu_id = %u for nonexistent menu", cInfo->entry, cInfo->gossip_menu_id);
 
-    for (auto itr = sGOStorage.begin<GameObjectInfo>(); itr < sGOStorage.end<GameObjectInfo>(); ++itr)
-        if (uint32 menuid = itr->GetGossipMenuId())
+    for (auto itr = m_GameObjectInfoMap.begin(); itr != m_GameObjectInfoMap.end(); ++itr)
+        if (uint32 menuid = itr->second.GetGossipMenuId())
             if (m_GossipMenusMap.find(menuid) == m_GossipMenusMap.end())
-                ERROR_DB_STRICT_LOG("Gameobject (Entry: %u) has gossip_menu_id = %u for nonexistent menu", itr->id, menuid);
+                ERROR_DB_STRICT_LOG("Gameobject (Entry: %u) has gossip_menu_id = %u for nonexistent menu", itr->second.id, menuid);
 }
 
 void ObjectMgr::LoadGossipMenuItems()
@@ -7750,8 +7783,8 @@ void ObjectMgr::LoadGossipMenuItems()
             if (itr.first)
                 menu_ids.insert(itr.first);
 
-        for (auto itr = sGOStorage.begin<GameObjectInfo>(); itr < sGOStorage.end<GameObjectInfo>(); ++itr)
-            if (uint32 menuid = itr->GetGossipMenuId())
+        for (auto itr = m_GameObjectInfoMap.begin(); itr != m_GameObjectInfoMap.end(); ++itr)
+            if (uint32 menuid = itr->second.GetGossipMenuId())
                 menu_ids.erase(menuid);
     }
 
