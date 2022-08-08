@@ -1001,6 +1001,9 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
             // Seal of Righteousness - melee proc dummy
             if ((dummySpell->IsFitToFamilyMask<CF_PALADIN_SEALS>()) && triggeredByAura->GetEffIndex() == EFFECT_INDEX_0)
             {
+                if (!pVictim)
+                    return SPELL_AURA_PROC_FAILED;
+
                 if (GetTypeId() != TYPEID_PLAYER)
                     return SPELL_AURA_PROC_FAILED;
 
