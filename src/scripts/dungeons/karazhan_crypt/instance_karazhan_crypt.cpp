@@ -32,11 +32,18 @@ struct instance_karazhan_crypt : public ScriptedInstance
     {
         if (pCreature->IsAlive() && !pCreature->IsInCombat())
             pCreature->SetInCombatWithZone();
+
+        switch (pCreature->GetEntry())
+        {
+        case 92935: // Guard Captain Gort
+            pCreature->MonsterSay("You have come farther than most. Now you will join us in this crypt!");
+            break;
+        }        
     }
 
     void OnCreatureDeath(Creature* boss) override
     {
-        switch (boss->GetEntry()) // Bonespike Construst
+        switch (boss->GetEntry())
         {
         case 91920:
         {
@@ -58,6 +65,12 @@ struct instance_karazhan_crypt : public ScriptedInstance
                 boss->MonsterSay("Another... corpse... to the pile.");
                 boss->PlayDirectMusic(6762);
             }
+            break;
+        }
+        case 92935: // Guard Captain Gort
+        {
+            boss->MonsterSay("His grips holds me no longer... Find the runes and set us free...");
+            boss->PlayDirectMusic(6762);
             break;
         }
         }
