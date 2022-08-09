@@ -5030,7 +5030,7 @@ void Spell::TakeCastItem()
         }
     }
 
-    if (expendable && withoutCharges)
+    if (m_forceConsumeItem || expendable && withoutCharges)
     {
         uint32 count = 1;
         Item* castItem = m_CastItem;
@@ -5038,6 +5038,8 @@ void Spell::TakeCastItem()
         ClearCastItem();
         // Destroying the item involved in a spell interrupts the spell. So delete the item once we cleared the spell cast item.
         ((Player*)m_caster)->DestroyItemCount(castItem, count, true);
+        if (m_forceConsumeItem)
+            ((Player*)m_caster)->SaveInventoryAndGoldToDB();
     }
 }
 
@@ -5480,7 +5482,7 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
         }
 
         // Loatheb Corrupted Mind spell failed
-        if (!m_IsCastByItem && !m_IsTriggeredSpell)
+        if (!m_CastItem && !m_IsTriggeredSpell)
         {
             Unit::AuraList const& auraClassScripts = m_casterUnit->GetAurasByType(SPELL_AURA_OVERRIDE_CLASS_SCRIPTS);
             for (const auto auraClassScript : auraClassScripts)
