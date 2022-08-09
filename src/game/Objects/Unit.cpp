@@ -1836,15 +1836,7 @@ void Unit::DealMeleeDamage(CalcDamageInfo *damageInfo, bool durabilityLoss)
                 // Damage shield effects do benefit from damage done bonuses, including spell power if bonus coefficient is set.
                 // For example Flame Wrath has a coefficient of 1, making it scale with 100% of spell power.
                 damage = pVictim->SpellDamageBonusDone(this, pSpellProto, (*i)->GetEffIndex(), damage, SPELL_DIRECT_DAMAGE, (*i)->GetStackAmount());
-
-                // apply SpellBaseDamageBonusTaken for mobs only
-                // for example, Death Talon Seethers with Aura of Flames reflect 1200 damage to tanks with Mark of Flame
-                if (pVictim->IsCreature())
-                {
-                    int32 spellDmgTakenBonus = this->SpellBaseDamageBonusTaken(pSpellProto->GetSpellSchoolMask());
-                    // don't allow damage shields to be reduced by Blessing of Sanctuary, etc.
-                    if (spellDmgTakenBonus > 0) damage += spellDmgTakenBonus;
-                }
+                damage = SpellDamageBonusTaken(pVictim, pSpellProto, (*i)->GetEffIndex(), damage, SPELL_DIRECT_DAMAGE, (*i)->GetStackAmount());
 
                 //Calculate absorb resist ??? no data in opcode for this possibly unable to absorb or resist?
                 //uint32 absorb;
