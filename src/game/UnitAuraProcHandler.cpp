@@ -303,20 +303,6 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
             if ((procFlag & (PROC_FLAG_DEAL_MELEE_ABILITY | PROC_FLAG_DEAL_RANGED_ABILITY)) && (procSpell->School != SPELL_SCHOOL_NORMAL))
                 return SPELL_PROC_TRIGGER_OK;
         }
-        // DRUID
-        // Omen of Clarity
-        if (spellProto->Id == 16864)
-        {
-            if ((procFlag & (PROC_FLAG_DEAL_MELEE_SWING | PROC_FLAG_DEAL_MELEE_ABILITY)))
-            {
-                if (roll_chance_u(10))
-                    return SPELL_PROC_TRIGGER_OK;
-                else
-                    return SPELL_PROC_TRIGGER_ROLL_FAILED;
-            }
-                
-            return SPELL_PROC_TRIGGER_FAILED;
-        }
         // PRIEST
         // Inspiration
         if (spellProto->SpellIconID == 79 && spellProto->SpellFamilyName == SPELLFAMILY_PRIEST)
