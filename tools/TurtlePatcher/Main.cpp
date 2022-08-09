@@ -37,13 +37,13 @@ OFFSET_TEXTEMOTE_SOUND_RACE_ID_CHECK          = 0x00059289, // Allows the game t
 OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game to play emote sounds for High Elves.
 };
 
-#define NEW_BUILD 7020u
-#define NEW_VISUAL_BUILD "7020"
-#define NEW_VISUAL_VERSION "1.16.2"
-#define NEW_BUILD_DATE "Aug 08 2022"
+#define NEW_BUILD 7030u
+#define NEW_VISUAL_BUILD "7030"
+#define NEW_VISUAL_VERSION "1.16.3"
+#define NEW_BUILD_DATE "Aug 10 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-X.mpq"
+#define PATCH_FILE "Data\\patch-Z.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
@@ -166,7 +166,6 @@ void PatchBinary(FILE* hWoW)
     //	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
     //	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
 
-	// Sound in background opt-out:
 
     char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
     fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
