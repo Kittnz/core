@@ -37,7 +37,7 @@ INSTANTIATE_SINGLETON_1(RealmList);
 static RealmBuildInfo ExpectedRealmdClientBuilds[] =
 {
 	// {7010,  1, 16, 1, ' ', {{0x11, 0x37, 0x90, 0xEB, 0xAD, 0xFC, 0xC2, 0x4B, 0x68, 0x1E, 0x1D, 0xBB, 0xF1, 0x1A, 0xB4, 0x86, 0xEF, 0x28, 0xC0, 0xF7}}, {{}}},
-	{7020,  1, 16, 2, ' ', {{}}, {{}}}, 
+	{7030,  1, 16, 3, ' ', {{}}, {{}}}, 
     {0,     0, 0, 0,  ' ', {{}}, {{}}} // terminator
 };
 
