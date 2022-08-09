@@ -19,3 +19,16 @@ update creature_template set scale = 0.3 where entry = 51585;
 update quest_template set reqitemcount1 = 7 where entry = 60041;
 
 update item_template set flags = 0 where entry = 60613;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1860
+
+update quest_template set rewrepfaction1 = 76, rewrepvalue1 = 300 where entry = 40504;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1858
+
+update creature_template set display_id1 = 1065 where entry = 1488;
+update creature_template set display_id1 = 317 where entry = 1490;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1837
+
+update creature_template set loot_id = 11911 where entry in (91980, 91772);
