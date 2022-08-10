@@ -1808,3 +1808,18 @@ REPLACE INTO creature_linking VALUES (2568424, 2568425, 3);
 REPLACE INTO creature_linking VALUES (2565645, 2565646, 3073);
 -- quest 'bristleback expansion' , 'Continuing Ceremonies' reduce money reward to 2 silver it is currently 20.
 update quest_template set reworreqmoney = 220 where entry in (40446,40447);
+-- NPC health and dmg fixes.
+update creature_template set health_min = 12352, health_max = 12864 where entry = 91912;
+update creature_template set health_min = 15092, health_max = 15134 where entry = 91918;
+update creature_template set health_min = 11565, health_max = 11965 where entry = 91923;
+update creature_template set health_min = 10510, health_max = 10754 where entry = 91925;
+update creature_template set health_min = 11405, health_max = 12060 where entry = 91926;
+update creature_template set health_min = 12551, health_max = 12684 where entry = 91930;
+update creature_template set health_min = 18089, health_max = 18089, dmg_min = 1062, dmg_max = 1095 where entry = 60596;
+update creature_template set health_min = 11223, health_max = 11563, dmg_min = 515, dmg_max = 532 where entry = 60597;
+update creature_template set health_min = 11923, health_max = 11963, dmg_min = 535, dmg_max = 572 where entry = 60598;
+update creature_template set health_min = 12143, health_max = 12207, dmg_min = 547, dmg_max = 591 where entry = 60599;
+update creature_template set health_min = 12243, health_max = 12307, dmg_min = 517, dmg_max = 531 where entry = 60601;
+update creature_template set health_min = 12253, health_max = 12309, dmg_min = 518, dmg_max = 534 where entry = 60602;
+update creature_template set health_min = 12180, health_max = 12263, dmg_min = 521, dmg_max = 537 where entry = 60603;
+update creature_template set health_min = 12592, health_max = 12630, dmg_min = 585, dmg_max = 597 where entry = 60604;
