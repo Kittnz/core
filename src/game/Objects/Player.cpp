@@ -759,7 +759,8 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
         Relocate(4581.768066f, -286.879120f, 268.380000f, 4.655499f);
         SetMap(sMapMgr.CreateMap(451, this));
     }
-    else if (GetSession()->GetSecurity() == SEC_PLAYER)
+    else if (!sWorld.getConfig(CONFIG_BOOL_GM_START_ON_GM_ISLAND) ||
+             GetSession()->GetSecurity() == SEC_PLAYER)
     {
         SetLocationMapId(info->mapId);
         Relocate(info->positionX, info->positionY, info->positionZ, info->orientation);
@@ -847,7 +848,8 @@ bool Player::Create(uint32 guidlow, std::string const& name, uint8 race, uint8 c
     // original spells
     LearnDefaultSpells();
 
-    if (GetSession()->GetSecurity() == SEC_PLAYER)
+    if (!sWorld.getConfig(CONFIG_BOOL_GM_START_ON_GM_ISLAND) ||
+        GetSession()->GetSecurity() == SEC_PLAYER)
     {
         // Starting items
         for (const auto& item_id_itr : info->item)

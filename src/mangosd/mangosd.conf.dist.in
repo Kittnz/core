@@ -1540,6 +1540,10 @@ GM.AllowTrades = 1
 
 GM.AllowPublicChannels = 1
 
+# GM.StartOnGMIsland. Spawn GM account characters on GM island.
+
+GM.StartOnGMIsland = 1
+
 # GMTickets.Enable. Allow opening support tickets.
 
 GMTickets.Enable = 1
