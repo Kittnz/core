@@ -5498,6 +5498,13 @@ bool WorldObject::IsValidAttackTarget(Unit const* target, bool checkAlive) const
     // PvP checks
     if (playerAffectingAttacker && playerAffectingTarget)
     {
+
+        if (playerAffectingAttacker->GetGroup() && playerAffectingTarget->GetGroup())
+        {
+            if (playerAffectingAttacker->GetGroup() == playerAffectingTarget->GetGroup())
+                return false;
+        }
+
         if (playerAffectingAttacker->m_duel && playerAffectingAttacker->m_duel->opponent == playerAffectingTarget && playerAffectingAttacker->m_duel->startTime != 0)
             return true;
 
