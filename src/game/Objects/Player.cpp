@@ -8281,7 +8281,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
             Creature *creature = GetMap()->GetCreature(guid);
 
             // must be in range and creature must be alive for pickpocket and must be dead for another loot
-            if (!creature || creature->IsAlive() != (loot_type == LOOT_PICKPOCKETING) || !creature->IsWithinDistInMap(this, INTERACTION_DISTANCE))
+            if (!creature || creature->IsAlive() != (loot_type == LOOT_PICKPOCKETING) || !creature->IsWithinDistInMap(this, INTERACTION_DISTANCE + creature->GetCombatReach()))
             {
                 SendLootRelease(guid);
                 return;
@@ -23415,6 +23415,8 @@ uint8 Player::GetTotalQuestCount()
     {
         Field* fields = quest_count_query->Fetch();
         quest_count = fields[0].GetUInt8();
+
+        delete quest_count_query;
     }
 
     return quest_count;
