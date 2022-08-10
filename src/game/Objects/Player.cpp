@@ -23414,7 +23414,7 @@ uint8 Player::GetTotalQuestCount()
     if (quest_count_query)
     {
         Field* fields = quest_count_query->Fetch();
-        quest_count = fields[0].GetUInt8();
+        quest_count = fields[0].GetUInt32();
 
         delete quest_count_query;
     }
