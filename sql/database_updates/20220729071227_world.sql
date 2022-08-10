@@ -1796,12 +1796,15 @@ update creature_template set armor = 3981 where entry = 93107;
 delete from creature_loot_template where entry = 91910 and item = 16671;
 -- Increase Guard Captain Gort's (92935) HP to 42959, and change damage to 665 - 789. Turning him into a proper boss.
 update creature_template set health_min = 42959, health_max = 42959, dmg_min = 665, dmg_max = 789 where entry = 92935;
--- Tomb Bats, Crypt Fearfester and Skeletal Remains should NOT respawn after 5 minutes, change respawn timer to 3 hours.
+-- Tomb Bats, Crypt Fearfester, Risen Crypt Guards and Skeletal Remains should NOT respawn after 5 minutes, change respawn timer to 3 hours.
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91921;
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91922;
 update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91924;
+update creature set spawntimesecsmin = 10800, spawntimesecsmax = 10800 where id = 91925;
 -- Link NPC GUID 2568424 and 2568423 to NPC GUID 2568425 so that the former 2 mobs pull with the latter NPC. (Karazhan Crypt Pack).
 REPLACE INTO creature_linking VALUES (2568423, 2568425, 3);
 REPLACE INTO creature_linking VALUES (2568424, 2568425, 3);
 -- Link NPC GUID 2565645 and 2565646 so they pull together. (Karazhan Crypt Pack).
 REPLACE INTO creature_linking VALUES (2565645, 2565646, 3073);
+-- quest 'bristleback expansion' , 'Continuing Ceremonies' reduce money reward to 2 silver it is currently 20.
+update quest_template set reworreqmoney = 220 where entry in (40446,40447);
