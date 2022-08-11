@@ -205,6 +205,7 @@ enum ClassFlag
     CF_DRUID_SWIFTMEND                      = 33,   // CM1 00000002
     CF_DRUID_DISPELLS                       = 34,   // CM1 00000004
     CF_DRUID_GROWL                          = 35,   // CM1 00000008
+    CF_DRUID_TIGERS_FURY                    = 36,   // CM1 00000010
 
     // -- Rogue (8)
     CF_ROGUE_THROW                          = 0,    // CM0 00000001
