@@ -3734,3 +3734,49 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- Change drop raiting for:
+update creature_loot_template set ChanceOrQuestChance = 0.02 where item = 84012;
+update creature_loot_template set ChanceOrQuestChance = 1.2 where item = 60258;
+update creature_loot_template set ChanceOrQuestChance = 1.2 where item = 60551;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 60442;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 81384;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 83275;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 83274;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 81374;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 81363;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 81379;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 83269;
+update creature_loot_template set ChanceOrQuestChance = 2 where item = 61020;
+-- Make 83571, 83572, 83570, 60775 blue rarity and change drop rate to 15% for all.
+update item_template set quality = 3 where entry in (83571,83572,83570,60775);
+REPLACE INTO creature_loot_template VALUES (91928, 83571, 15, 3, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12459, 83572, 15, 1, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60735, 60775, 15, 0, 1, 1, 0);
+REPLACE INTO gameobject_loot_template VALUES (2010867, 83570, 15, 4, 1, 1, 0);
+-- Change resp time of mining veins in Hateforge Excavation.
+update gameobject set spawntimesecsmin = 2700, spawntimesecsmax = 2700 where guid in
+(4013461,
+ 4013439,
+ 4013460,
+ 4013456,
+ 4013448,
+ 4013465,
+ 4013464,
+ 4013467,
+ 4013488,
+ 4013489,
+ 4013498,
+ 4013500,
+ 4013501,
+ 4013502,
+ 4013511,
+ 4013513,
+ 4013514,
+ 5008095,
+ 5008096,
+ 5008097,
+ 5008100,
+ 5008103,
+ 5008101);
+-- Quest 'Drifting Across the Sand' make shareable.
+update quest_template set QuestFlags = 520 where entry = 40519;
