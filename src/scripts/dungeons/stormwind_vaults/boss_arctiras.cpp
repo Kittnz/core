@@ -94,7 +94,7 @@ struct boss_ArctirasAI : public GenericSpellMob
 		case eArctirasStages::Stage3_ActivateAdditionalSpell:
 			{
 				me->MonsterTextEmote("Arc'tiras is destabilizing!", nullptr, true);
-				constexpr uint32 FrostNovaCooldown = (4 * IN_MILLISECONDS) + 500;
+				constexpr uint32 FrostNovaCooldown = (6 * IN_MILLISECONDS) + 500;
 				GenericAISpell& FrostNova = AddSpell(SPELL_FROST_NOVA, FrostNovaCooldown, FrostNovaCooldown, GENERIC_TARGET_SELF);
 				FrostNova.SpellCastFlag = CF_TRIGGERED;
 				Stage = eArctirasStages::Stage4_Rest;
