@@ -67,8 +67,12 @@ void GuardAI::MoveInLineOfSight(Unit *pWho)
     {
         // Assignment, not a typo.
         if (isAttackingFriend = IsAttackingPlayerOrFriendly(pWho))
-            if ((attackRadius < 30.0f))
+        {
+            if (attackRadius < 30.0f)
                 attackRadius = 30.0f;
+        }
+        else if (!pWho->IsPvP()) // lower aggro distance against non flagged players
+            attackRadius /= 2.0f;
     }
 
     if (!m_creature->IsWithinDistInMap(pWho, attackRadius, true, false))
