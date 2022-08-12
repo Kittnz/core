@@ -10,7 +10,7 @@ INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalo
 (55003, 0, 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Defias Messenger - Disable Combat Movement');
 DELETE FROM `creature_ai_scripts` WHERE `id`=55001;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
-(55001, 0, 0, 39, 55001, 55002, 0, 0, 0, 0, 0, 0, 50, 50, 0, 0, 0, 0, 0, 0, 3, 'Defias Messenger - Start Script To Say Text if Enemy is Alliance'),
+(55001, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 479, 478, 473, 0, 0, 0, 0, 0, 3, 'Defias Messenger - Say Text if Enemy is Alliance'),
 (55001, 0, 1, 39, 55004, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 3, 'Defias Messenger - Start Script to Become Killable if Enemy is Alliance'),
 (55001, 0, 2, 39, 55003, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 2, 'Defias Messenger - Start Script To Summon Guards if Enemy is Horde');
 DELETE FROM `generic_scripts` WHERE `id`=55004;
