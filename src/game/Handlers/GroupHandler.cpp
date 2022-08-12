@@ -468,10 +468,9 @@ void WorldSession::HandleRaidTargetUpdateOpcode(WorldPacket & recv_data)
     uint8  x;
     recv_data >> x;
 
-    Group *group = GetPlayer()->GetGroup();
-    if (!group || group->isBGGroup())
+    Group* group = GetPlayer()->GetGroup();
+    if (!group)
         group = GetPlayer()->GetOriginalGroup();
-
     if (!group)
         return;
 
