@@ -130,13 +130,7 @@ bool isFrostPhase;
 // BroadcastText system is obviously broken. Reads in sound IDs from DB as 0, so we do our own.
 void PlaySound(Unit* source, uint32 soundId, bool playToZone = false)
 {
-    if (playToZone)
-    {
-        if (Map* pZone = source->GetMap())
-            pZone->PlayDirectSoundToMap(soundId);
-    }
-    else
-        source->PlayDirectSound(soundId);
+    source->PlayDirectSound(soundId); // PlayDirectSound already uses SendMessageToSet (and thus plays sounds for everyone in visibility distance..)
 }
 
 Player* GetNearbyEnemyPlayer(Unit* self, const float& dist)
