@@ -5657,7 +5657,8 @@ void ObjectMgr::CheckGameObjectInfos()
 
 void ObjectMgr::AddGameobjectInfo(GameObjectInfo&& goinfo)
 {
-    auto itr = m_GameObjectInfoMap.emplace(goinfo.id, goinfo);
+    const uint32 id = goinfo.id;
+    auto itr = m_GameObjectInfoMap.emplace(id, std::move(goinfo));
     MANGOS_ASSERT(itr.second);
 }
 

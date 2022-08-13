@@ -5087,8 +5087,11 @@ void Player::KillPlayer()
 
 void Player::SpawnHardcoreGravestone()
 {
+    std::ostringstream ss;
+    ss << "Grave of " << m_name << " (level " << GetLevel() << ")";
+
     GameObjectInfo goInfo;
-    goInfo.name = std::string("Grave of ") + m_name;
+    goInfo.name = ss.str();
     goInfo.displayId = 499;
     goInfo.type = GAMEOBJECT_TYPE_GENERIC;
     goInfo._generic.floatingTooltip = 1;
@@ -5098,7 +5101,7 @@ void Player::SpawnHardcoreGravestone()
     goInfo.id = entry;
     sObjectMgr.AddGameobjectInfo(std::move(goInfo));
 
-    uint32 const duration = GetLevel() < 10 ? (15 * MINUTE * IN_MILLISECONDS) : (24 * HOUR * IN_MILLISECONDS);
+    uint32 const duration = GetLevel() < 10 ? (GetLevel() * MINUTE * IN_MILLISECONDS) : (GetLevel() * GetLevel() * 2 * MINUTE * IN_MILLISECONDS);
     SummonGameObject(entry, GetPositionX(), GetPositionY(), GetPositionZ(), GetOrientation(), 0, 0, 0, 0, duration, false);
 }
 
