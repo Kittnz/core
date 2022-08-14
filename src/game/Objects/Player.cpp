@@ -5400,22 +5400,13 @@ void Player::RepopAtGraveyard()
     if (IsAlive())
     {
         if (ClosestGrave)
-            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, 0, std::move(recover));
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
     }
     else
     {
         CustomGraveyardEntry const* CustomGrave = sObjectMgr.GetCustomGraveyard(GetMapId(), GetZoneId(), GetAreaId(), GetLevel());
 
         if (CustomGrave)
-        {
-            TeleportTo(GetTeam() == TEAM_ALLIANCE ? 
-                CustomGrave->map_alliance, CustomGrave->x_alliance, CustomGrave->y_alliance, CustomGrave->z_alliance, CustomGrave->orientation_alliance :
-                CustomGrave->map_horde, CustomGrave->x_horde, CustomGrave->y_horde, CustomGrave->z_horde, CustomGrave->orientation_horde);
-        }
-
-        // If no grave found, stay at the current location
-        // and don't show spirit healer location
-        if (ClosestGrave && !CustomGrave)
         {
             // Release spirit from transport => Teleport alive at nearest graveyard.
             if (GetTransport())
@@ -5424,7 +5415,23 @@ void Player::RepopAtGraveyard()
                 ResurrectPlayer(1.0f);
             }
 
-            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, 0, std::move(recover));
+            if (GetTeam() == TEAM_ALLIANCE)
+                TeleportTo(CustomGrave->map_alliance, CustomGrave->x_alliance, CustomGrave->y_alliance, CustomGrave->z_alliance, CustomGrave->orientation_alliance, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+            else
+                TeleportTo(CustomGrave->map_horde,    CustomGrave->x_horde,    CustomGrave->y_horde,    CustomGrave->z_horde,    CustomGrave->orientation_horde,    TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
+        }
+        // If no grave found, stay at the current location
+        // and don't show spirit healer location
+        else if (ClosestGrave)
+        {
+            // Release spirit from transport => Teleport alive at nearest graveyard.
+            if (GetTransport())
+            {
+                GetTransport()->RemovePassenger(this);
+                ResurrectPlayer(1.0f);
+            }
+
+            TeleportTo(ClosestGrave->map_id, ClosestGrave->x, ClosestGrave->y, ClosestGrave->z, orientation, TELE_TO_NOT_UNSUMMON_PET, std::move(recover));
         }
 
         // Fix invisible spirit healer if you die close to graveyard.

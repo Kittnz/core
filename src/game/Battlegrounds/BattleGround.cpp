@@ -1325,7 +1325,7 @@ void BattleGround::ReturnPlayersToHomeGY()
     // return bastards back homie
     for (const auto& itr : m_Players)
     {
-        auto player = sObjectMgr.GetPlayer(itr.first);
+        auto player = GetBgMap()->GetPlayer(itr.first);
 
         if (!player || player->IsGameMaster())
             continue;
