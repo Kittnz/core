@@ -12,3 +12,6 @@ update creature_template set type = 3 where entry = 60503;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1891
 update quest_template set zoneorsort = 209 where entry in (60108, 60109);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1832
+update quest_template set rewrepfaction1 = 76 where entry in (40538, 40539);
