@@ -4901,6 +4901,7 @@ void Aura::HandleAuraModIncreaseHealth(bool apply, bool Real)
     switch (GetId())
     {
         case 12976:                                         // Warrior Last Stand triggered spell
+        case 45709:                                         // Druid Berserk triggered spell
         {
             if (Real)
             {
