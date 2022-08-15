@@ -3784,3 +3784,9 @@ update quest_template set QuestFlags = 520 where entry = 40519;
 update quest_template set objectives = 'Bring back 7 Elwynn Pumpkins to Gramma Stonefield.', RequestItemsText = 'Oh, tell me you have managed to find my harvest! At least 7 of my sweet pumpkins?' where entry = 60041;
 -- Make Elwynn Pumpkin stack to 7.
 update item_template set stackable = 7 where entry = 51325;
+-- Make master raxxieth immune to banish.
+update creature_template set mechanic_immune_mask = 131072 where entry = 92110;
+-- Remove spell 172 and spell 348 from npc 80207, set scale of npc 80201 to 0.4.
+update creature_template set spell_id1 = 0, spell_id2 = 0, spell_list_id = 0, scale = 0.4 where entry = 80207;
+-- Please fix the respawn timer for https://database.turtle-wow.org/?npc=14123.
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 14123;
