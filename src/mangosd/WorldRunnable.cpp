@@ -35,31 +35,33 @@
 
 #include "Database/DatabaseEnv.h"
 
+// Target server framerate is 1000/WORLD_SLEEP_CONST
 #define WORLD_SLEEP_CONST 50
 
-/// Heartbeat for the World
+// Heartbeat for the World
 void WorldRunnable::operator()()
 {
-    ///- Init new SQL thread for the world database
+    // Init new SQL thread for the world database
     WorldDatabase.ThreadStart();                                // let thread do safe mySQL requests (one connection call enough)
     sWorld.InitResultQueue();
 
     Master::ArmAnticrash();
     uint32 anticrashRearmTimer = 0;
 
-    uint32 realCurrTime = 0;
-    uint32 realPrevTime = WorldTimer::tick();
+    // Aim for WORLD_SLEEP_CONST update times
+    // If we update slower, update again immediately.
+    // If we update faster, then slow down!
+    auto prevTime = WorldTimer::getMSTime();
+    uint32 currTime = 0u;
 
-    uint32 prevSleepTime = 0;                               // used for balanced full tick time length near WORLD_SLEEP_CONST
-
-    ///- While we have not World::m_stopEvent, update the world
+    // While we have not World::m_stopEvent, update the world
     while (!World::IsStopped())
     {
         ++World::m_worldLoopCounter;
-        realCurrTime = WorldTimer::getMSTime();
 
-        uint32 diff = WorldTimer::tick();
-        sWorld.SetLastDiff(diff);
+        currTime = WorldTimer::getMSTime();
+        auto diff = WorldTimer::getMSTimeDiff(prevTime, currTime);
+
         if (sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE) && diff > sWorld.getConfig(CONFIG_UINT32_PERFLOG_SLOW_WORLD_UPDATE))
             sLog.out(LOG_PERFORMANCE, "Slow world update: %ums", diff);
 
@@ -82,19 +84,21 @@ void WorldRunnable::operator()()
         }
 
         sWorld.Update(diff);
-        realPrevTime = realCurrTime;
 
-        // diff (D0) include time of previous sleep (d0) + tick time (t0)
-        // we want that next d1 + t1 == WORLD_SLEEP_CONST
-        // we can't know next t1 and then can use (t0 + d1) == WORLD_SLEEP_CONST requirement
-        // d1 = WORLD_SLEEP_CONST - t0 = WORLD_SLEEP_CONST - (D0 - d0) = WORLD_SLEEP_CONST + d0 - D0
-        if (diff <= WORLD_SLEEP_CONST+prevSleepTime)
-        {
-            prevSleepTime = WORLD_SLEEP_CONST+prevSleepTime-diff;
-            std::this_thread::sleep_for(std::chrono::milliseconds(prevSleepTime));
-        }
-        else
-            prevSleepTime = 0;
+        // diff is the actual time since last tick
+        // updateTime is the actual time taken to update this round
+        // aim for WORLD_SLEEP_CONST tickrate
+
+        // Update at the target 1000/WORLD_SLEEP_CONST framerate
+        // Previous implementation attempted to smooth diffs out, but did not
+        // account properly for the spikes which using a constant causes.
+        // If a smoothing filter is desired, consider a moving average
+        // or other simple filter.
+        auto updateTime = WorldTimer::getMSTimeDiffToNow(currTime);
+        prevTime = currTime;
+
+        if (updateTime < WORLD_SLEEP_CONST)
+            std::this_thread::sleep_for(std::chrono::milliseconds(WORLD_SLEEP_CONST - updateTime));
     }
 
     sLog.outString("Shutting down world...");
@@ -109,6 +113,6 @@ void WorldRunnable::operator()()
     sLog.outString("Unloading all maps...");
     sMapMgr.UnloadAll(); // unload all grids (including locked in memory)
 
-    ///- End the database thread
+    // End the database thread
     WorldDatabase.ThreadEnd(); // free mySQL thread resources
 }
