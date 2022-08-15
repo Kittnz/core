@@ -13072,13 +13072,6 @@ bool ChatHandler::HandleReloadGmLevelsCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleReloadLeashAreasCommand(char* args)
-{
-    Creature::LoadMaxLeashAreaMultiplier();
-    SendSysMessage("Leash Area Multipliers reloaded.");
-    return true;
-}
-
 bool ChatHandler::HandleMountCommand(char* /*args*/)
 {
     Player* player = m_session->GetPlayer();

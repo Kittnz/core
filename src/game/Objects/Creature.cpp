@@ -2407,32 +2407,6 @@ void Creature::SaveRespawnTime()
         GetMap()->GetPersistentState()->SaveCreatureRespawnTime(GetGUIDLow(), time(nullptr) + m_respawnDelay + m_corpseDecayTimer / IN_MILLISECONDS);
 }
 
-static std::unordered_map<uint32, float> extensionMultipliers;
-
-float Creature::GetMaxLeashAreaMultiplier(uint32 entry)
-{
-    auto itr = extensionMultipliers.find(entry);
-
-    if (itr != extensionMultipliers.end())
-        return itr->second;
-    return 4.0f; // default 4 * max threat radius
-}
-
-void Creature::LoadMaxLeashAreaMultiplier()
-{
-    extensionMultipliers.clear();
-
-    std::unique_ptr<QueryResult> result = std::unique_ptr<QueryResult>(WorldDatabase.Query("SELECT `entry`, `multiplier` FROM `creature_max_leash_multipliers`"));
-
-    if (result)
-    {
-        do {
-            auto fields = result->Fetch();
-            extensionMultipliers[fields[0].GetUInt32()] = fields[1].GetFloat();
-        } while (result->NextRow());
-    }
-}
-
 bool Creature::IsOutOfThreatArea(Unit* pVictim) const
 {
     if (HasExtraFlag(CREATURE_FLAG_EXTRA_NO_LEASH_EVADE))
@@ -2449,12 +2423,8 @@ bool Creature::IsOutOfThreatArea(Unit* pVictim) const
     {
         // Use attack distance in distance check if threat radius is lower. This prevents creature bounce in and out of combat every update tick.
         float threatAreaDistance = std::max(GetAttackDistance(pVictim) * 1.5f, sWorld.getConfig(CONFIG_FLOAT_THREAT_RADIUS));
-        float maxThreatDistance = threatAreaDistance * GetMaxLeashAreaMultiplier(GetEntry());
-
-
         bool inThreatArea = IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance) || pVictim->IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, threatAreaDistance);
-        bool isInMaxThreatRange = IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, maxThreatDistance) || pVictim->IsWithinDist3d(m_combatStartX, m_combatStartY, m_combatStartZ, maxThreatDistance);
-        if (!inThreatArea && (GetLastLeashExtensionTime() + 7 < time(nullptr) || !isInMaxThreatRange))
+        if (!inThreatArea && (GetLastLeashExtensionTime() + 12 < time(nullptr)))
             return true;
     }
 
