@@ -3782,3 +3782,5 @@ update gameobject set spawntimesecsmin = 2700, spawntimesecsmax = 2700 where gui
 update quest_template set QuestFlags = 520 where entry = 40519;
 -- Change short description of https://database.turtle-wow.org/?quest=60041 to Bring back 7 Elwynn Pumpkins to Gramma Stonefield.
 update quest_template set objectives = 'Bring back 7 Elwynn Pumpkins to Gramma Stonefield.', RequestItemsText = 'Oh, tell me you have managed to find my harvest! At least 7 of my sweet pumpkins?' where entry = 60041;
+-- Make Elwynn Pumpkin stack to 7.
+update item_template set stackable = 7 where entry = 51325;
