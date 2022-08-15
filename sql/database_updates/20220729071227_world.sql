@@ -3790,3 +3790,10 @@ update creature_template set mechanic_immune_mask = 131072 where entry = 92110;
 update creature_template set spell_id1 = 0, spell_id2 = 0, spell_list_id = 0, scale = 0.4 where entry = 80207;
 -- Please fix the respawn timer for https://database.turtle-wow.org/?npc=14123.
 update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 14123;
+-- Increase drop chance of grimoire: demon portal to 10%.
+update creature_loot_template set chanceorquestchance = 10 where item = 83572;
+-- Crown of Corruption , change drop chance to 0.5%.
+update creature_loot_template set chanceorquestchance = 0.5 where item = 60258;
+-- Make Elwynn Pumpkin drop from Riverpaw Runt and Riverpaw Outrunner at 8%.
+REPLACE INTO creature_loot_template VALUES (97, 51325, -8, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (478, 51325, -8, 0, 1, 1, 0);
