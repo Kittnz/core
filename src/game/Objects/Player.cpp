@@ -18884,7 +18884,7 @@ void Player::SetBattleGroundEntryPoint(uint32 mapId, float x, float y, float z, 
 void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queuedAtBGPortal /*= false*/)
 {
     // Already in BG ? Then we already have a teleport back point
-    if (InBattleGround() && !(FindMap() && !FindMap()->GetMapEntry()->Instanceable()))
+    if (InBattleGround() && !(FindMap() && !FindMap()->GetMapEntry()->IsBattleGround()))
         return;
 
     // chat command use case, or non-group join
@@ -18904,7 +18904,13 @@ void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queued
         // If map is dungeon find linked graveyard
         if (leader->GetMap()->IsDungeon())
         {
-            if (const WorldSafeLocsEntry* entry = sObjectMgr.GetClosestGraveYard(leader->GetPositionX(), leader->GetPositionY(), leader->GetPositionZ(), leader->GetMapId(), leader->GetTeam()))
+            if (AreaTriggerTeleport const* at = sObjectMgr.GetGoBackTrigger(leader->GetMapId()))
+            {
+                m_bgData.joinPos = at->destination;
+                m_bgData.m_needSave = true;
+                return;
+            }
+            else if (WorldSafeLocsEntry const* entry = sObjectMgr.GetClosestGraveYard(leader->GetPositionX(), leader->GetPositionY(), leader->GetPositionZ(), leader->GetMapId(), leader->GetTeam()))
             {
                 m_bgData.joinPos = WorldLocation(entry->map_id, entry->x, entry->y, entry->z, sObjectMgr.GetWorldSafeLocFacing(entry->ID));
                 m_bgData.m_needSave = true;
