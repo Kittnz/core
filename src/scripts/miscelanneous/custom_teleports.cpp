@@ -23,6 +23,22 @@ struct custom_dungeon_portal : public GameObjectAI
 
             for (Player* player : players)
             {
+                bool available = true;
+
+                switch (me->GetEntry())
+                {
+                case 112920: // Scarlet Citadel
+                    player->GetSession()->SendNotification("This raid is currently not available.");
+                    available = false;
+                    break;
+                case 112923: // Caverns of Time Placeholder Portal I  (Entrance)
+                case 112924: // Caverns of Time Placeholder Portal II (Entrance)
+                case 112915: // Black Morass
+                    player->GetSession()->SendNotification("This dungeon is currently not available.");
+                    available = false;
+                    break;
+                }
+
                 if (!player->IsInCombat())
                 {
                     if (!player->IsAlive())
@@ -48,26 +64,16 @@ struct custom_dungeon_portal : public GameObjectAI
                         const auto& [portal_id, destination, min_level ] = teleport;
                         if (me->GetEntry() == portal_id)
                         {
+                            
                             if (player->GetLevel() >= min_level)
-                                player->TeleportTo(destination);
+                            {
+                                if (available)
+                                    player->TeleportTo(destination);
+                            }
                             else 
                                 player->GetSession()->SendNotification("Your level is too low.");
                         }
                     }    
-                    // Temporary locked portals:  
-                    switch (me->GetEntry())
-                    {
-                    case 112915: // Black Morass
-                        player->GetSession()->SendNotification("The Black Morass is currently being reworked and will be unavailable until it is completed in the near future, please stay tuned.");
-                        break;
-                    case 112920: // Scarlet Citadel
-                        player->GetSession()->SendNotification("This raid is currently not available.");
-                        break;
-                    case 112923: // Caverns of Time Placeholder Portal I(Entrance)
-                    case 112924: // Caverns of Time Placeholder Portal II (Entrance)
-                        player->GetSession()->SendNotification("This dungeon is currently not available.");
-                        break;
-                    }
 
                 }
             }
