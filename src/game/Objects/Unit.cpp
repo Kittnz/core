@@ -7776,7 +7776,25 @@ uint32 Unit::GetCreatureType() const
             return CREATURE_TYPE_HUMANOID;
     }
     else
+    {
+        if (GetTransForm())
+        {
+            if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(GetTransForm()))
+            {
+                for (uint32 i = 0; i < MAX_EFFECT_INDEX; i++)
+                {
+                    if (pSpellEntry->EffectApplyAuraName[i] == SPELL_AURA_TRANSFORM)
+                    {
+                        if (CreatureInfo const* pInfo = sObjectMgr.GetCreatureTemplate(pSpellEntry->EffectMiscValue[i]))
+                            return pInfo->type;
+                        break;
+                    }
+                }
+            }
+        }
+
         return ((Creature*)this)->GetCreatureInfo()->type;
+    }
 }
 
 void Unit::SetSpeedRatePersistance(UnitMoveType mtype, float speed)
