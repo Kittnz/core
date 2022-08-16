@@ -2047,7 +2047,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
             {
                 targetMode = TARGET_UNIT_FRIEND;
                 auto playerTarget = ObjectAccessor::GetUnit(*m_casterUnit, m_casterUnit->GetTargetGuid());
-                if (playerTarget && playerTarget->IsPlayer())
+                if (playerTarget && playerTarget->IsPlayer() && !playerTarget->IsHostileTo(m_casterUnit))
                     m_targets.setUnitTarget(playerTarget);
             }
         }break;
