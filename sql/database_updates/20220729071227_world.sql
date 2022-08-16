@@ -3800,3 +3800,12 @@ update creature_loot_template set chanceorquestchance = 0.5 where item = 60258;
 -- Make Elwynn Pumpkin drop from Riverpaw Runt and Riverpaw Outrunner at 8%.
 REPLACE INTO creature_loot_template VALUES (97, 51325, -8, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (478, 51325, -8, 0, 1, 1, 0);
+-- Total drop chance fixed to 100.
+update creature_loot_template set chanceorquestchance = 14 where entry = 65114 and item in(
+61015,
+61024,
+61033,
+61038,
+61042,
+61044,
+61057);
