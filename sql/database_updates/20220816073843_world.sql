@@ -43,3 +43,6 @@ update quest_template set questlevel = 20 where entry = 40120;
 
 -- Boots > Chest
 update item_template set inventory_type = 5 where entry = 65023;
+
+-- Sunnyglade bosses nerf:
+update creature_template set health_min = 10000, health_max = 10000 where entry in (93005, 93000);
