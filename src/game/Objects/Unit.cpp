@@ -1138,11 +1138,11 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                 //figure out how player died.
                 //A tragedy has occurred. Hardcore character %s %s at level %u. May this sacrifice not be forgotten.
 
-                auto attacker = pPlayerVictim->GetFirstAttacker();
+                auto attacker = this;
 
                 std::ostringstream deathReason;
 
-                if (attacker)
+                if (attacker && attacker != pVictim)
                 {
                     if (attacker->IsPlayer())
                         deathReason << "has fallen in PvP to " << attacker->GetName();
@@ -1158,8 +1158,8 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                         deathReason << "has burned to death";
                     else if (pPlayerVictim->GetMirrorTimer(FATIGUE_TIMER) == 1 * IN_MILLISECONDS)
                         deathReason << "has died from exhaustion";
-
-                    deathReason << "died of natural causes";
+                    else
+                        deathReason << "died of natural causes";
                 }
 
 
