@@ -1,0 +1,5 @@
+-- Reduce chance to spawn bug on death for Tortured Sentinel and Tortured Druid
+DELETE FROM `creature_ai_events` WHERE `creature_id`=12179;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1217901, 12179, 0, 6, 0, 50, 0, 0, 0, 0, 0, 1217901, 0, 0, 'Tortured Sentinel - Cast Summon Hive\'Ashi Drones on Death');
+DELETE FROM `creature_ai_events` WHERE `creature_id`=12178;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1217801, 12178, 0, 6, 0, 50, 0, 0, 0, 0, 0, 1217801, 0, 0, 'Tortured Druid - Cast Summon Hive\'Ashi Drones on Death');
