@@ -123,7 +123,7 @@ struct npc_private_hendelAI : public ScriptedAI
     // guards
     Creature* m_guards[2];
     // allies (Archmage Tervosh, Jaina, Pained)
-    Creature* m_allies[3];
+    ObjectGuid m_allies[3];
     // original allies (the ones that are in Theramore), should be not avaliable during event
     Creature* m_alliesOriginal[3];
     // trigger used to invoke cell in Theramore tower to disable original NPCs during event
@@ -148,7 +148,7 @@ struct npc_private_hendelAI : public ScriptedAI
             guard = nullptr;
         for (ptrdiff_t i = 0; i < 3; ++i)
         {
-            m_allies[i] = nullptr;
+            m_allies[i] = ObjectGuid();
             m_alliesOriginal[i] = nullptr;
         }
         m_cellTrigger = nullptr;
@@ -244,28 +244,26 @@ struct npc_private_hendelAI : public ScriptedAI
             for (ptrdiff_t i = 0; i < 3; ++i)
             {
                 // hardcoded orientation 3.0f. Prevent pausing event, if player has left a map cell(summon with ActiveObject=true)
-                m_allies[i] = m_creature->SummonCreature(spawns[i].entry, spawns[i].x, spawns[i].y, spawns[i].z, 3.0f, TEMPSUMMON_MANUAL_DESPAWN, 0, true);
-
-                // summon allies
-                if (m_allies[i])
+                if (Creature* pCreature = m_creature->SummonCreature(spawns[i].entry, spawns[i].x, spawns[i].y, spawns[i].z, 3.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 300000, true))
                 {
+                    m_allies[i] = pCreature->GetObjectGuid();
                     // disable gossip and quest giver flags during at the beginning of the event for Tervosh
-                    if (m_allies[i]->GetEntry() == NPC_TERVOSH)
-                        m_allies[i]->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
-                    else if (m_allies[i]->GetEntry() == NPC_JAINA) // Jaina shouldn't have gossip flag during event
-                        m_allies[i]->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    if (pCreature->GetEntry() == NPC_TERVOSH)
+                        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                    else if (pCreature->GetEntry() == NPC_JAINA) // Jaina shouldn't have gossip flag during event
+                        pCreature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
 
                     // rare case: horde players attack NPC during event so make them unattackable for them
-                    m_allies[i]->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_IMMUNE_TO_NPC);
+                    pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_ATTACKABLE_1 | UNIT_FLAG_IMMUNE_TO_NPC);
                     // visual teleport spell
-                    m_allies[i]->CastSpell(m_allies[i], TELEPORT_VISUAL, false);
+                    pCreature->CastSpell(pCreature, TELEPORT_VISUAL, false);
                     // move allies to the destination points
-                    m_allies[i]->GetMotionMaster()->MovePoint(0, spawns[i].dest_x, spawns[i].dest_y, spawns[i].dest_z, MOVE_PATHFINDING | MOVE_RUN_MODE);
+                    pCreature->GetMotionMaster()->MovePoint(0, spawns[i].dest_x, spawns[i].dest_y, spawns[i].dest_z, MOVE_PATHFINDING | MOVE_RUN_MODE);
                 }
             }
 
             // Tervosh is index 0
-            Creature* tervosh = m_allies[0];
+            Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]);
             if (!tervosh)
                 return;
 
@@ -310,8 +308,9 @@ struct npc_private_hendelAI : public ScriptedAI
                 // if ally is valid
                 if (m_allies[i])
                 {
-                    static_cast<TemporarySummon*>(m_allies[i])->UnSummon();
-                    m_allies[i] = nullptr;
+                    if (Creature* pCreature = m_creature->GetMap()->GetCreature(m_allies[i]))
+                        static_cast<TemporarySummon*>(pCreature)->UnSummon();
+                    m_allies[i] = ObjectGuid();
                 }
                 else
                 {
@@ -413,16 +412,22 @@ struct npc_private_hendelAI : public ScriptedAI
             if (m_nextPhaseDelayTimer < uiDiff)
             {
                 // make allies face private hendel
-                for (const auto& ally : m_allies)
-                    ally->SetFacingToObject(m_creature);
+                for (const auto& allyGuid : m_allies)
+                {
+                    if (Creature* pCreature = m_creature->GetMap()->GetCreature(allyGuid))
+                        pCreature->SetFacingToObject(m_creature);
+                }
 
                 // Tervosh is index 0
-                Creature* tervosh = m_allies[0];
-                // make private hendel facing Tervosh with stun emote
-                m_creature->SetFacingToObject(tervosh);
-                m_creature->HandleEmote(EMOTE_STATE_STUN);
+                if (Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]))
+                {
+                    // make private hendel facing Tervosh with stun emote
+                    m_creature->SetFacingToObject(tervosh);
+                    m_creature->HandleEmote(EMOTE_STATE_STUN);
 
-                tervosh->CastSpell(m_creature, SPELL_ENCAGE, false);
+                    tervosh->CastSpell(m_creature, SPELL_ENCAGE, false);
+                }
+                
                 // switch to speech phase
                 m_mdQuestPhase = MDQP_SPEECH;
 
@@ -451,8 +456,8 @@ struct npc_private_hendelAI : public ScriptedAI
                     }
 
                     // Tervosh is index 0
-                    Creature* tervosh = m_allies[0];
-                    DoScriptText(SAY_PROGRESS_1_TER, tervosh);
+                    if (Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]))
+                        DoScriptText(SAY_PROGRESS_1_TER, tervosh);
                     m_nextPhaseDelayTimer = 6000; // next phase in 6 seconds
                 } break;
                 case 1: // say1
@@ -463,8 +468,8 @@ struct npc_private_hendelAI : public ScriptedAI
                 case 2: // cast teleport
                 {
                     // Tervosh is index 0
-                    Creature* tervosh = m_allies[0];
-                    tervosh->CastSpell(m_creature, SPELL_TELEPORT, false);
+                    if (Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]))
+                        tervosh->CastSpell(m_creature, SPELL_TELEPORT, false);
                     m_nextPhaseDelayTimer = 1500; // next phase in 1.5 seconds
                 } break;
                 case 3:
@@ -473,9 +478,10 @@ struct npc_private_hendelAI : public ScriptedAI
                     m_creature->SetVisibility(VISIBILITY_OFF);
 
                     // Tervosh is index 0
-                    Creature* tervosh = m_allies[0];
                     // Its now possible to turn quest in.
-                    tervosh->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+                    if (Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]))
+                        tervosh->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
+
                     // Set quest completed
                     Player* player = m_creature->GetMap()->GetPlayer(m_playerGuid);
                     if (player)
@@ -486,16 +492,17 @@ struct npc_private_hendelAI : public ScriptedAI
                 case 4: // say2
                 {
                     // Tervosh is index 0
-                    Creature* tervosh = m_allies[0];
-                    DoScriptText(SAY_PROGRESS_3_TER, tervosh);
+                    if (Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]))
+                        DoScriptText(SAY_PROGRESS_3_TER, tervosh);
+
                     // speech delay for the say dialog index 3
                     m_nextPhaseDelayTimer = 8000; // next phase in 8 seconds
                 } break;
                 case 5: // say3
                 {
                     // Tervosh is index 0
-                    Creature* tervosh = m_allies[0];
-                    DoScriptText(SAY_PROGRESS_4_TER, tervosh);
+                    if (Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]))
+                        DoScriptText(SAY_PROGRESS_4_TER, tervosh);
 
                     // switch phase to complete
                     m_mdQuestPhase = MDQP_COMPLETE;
@@ -520,35 +527,38 @@ struct npc_private_hendelAI : public ScriptedAI
                 case 0: // Tervosh bows + say4
                 {
                     // Tervosh is index 0
-                    Creature* tervosh = m_allies[0];
-                    tervosh->HandleEmote(EMOTE_ONESHOT_BOW);
-                    DoScriptText(SAY_FAREWELL_TER, tervosh);
+                    if (Creature* tervosh = m_creature->GetMap()->GetCreature(m_allies[0]))
+                    {
+                        tervosh->HandleEmote(EMOTE_ONESHOT_BOW);
+                        DoScriptText(SAY_FAREWELL_TER, tervosh);
+                    }
                     m_nextPhaseDelayTimer = 6000; // next phase in 6 seconds
                 }break;
                 case 1: // Jaina waves
                 {
                     // Jaina is index 1
-                    Creature* jaina = m_allies[1];
-                    jaina->HandleEmote(EMOTE_ONESHOT_WAVE);
+                    if (Creature* jaina = m_creature->GetMap()->GetCreature(m_allies[1]))
+                        jaina->HandleEmote(EMOTE_ONESHOT_WAVE);
                     m_nextPhaseDelayTimer = 4000; // next phase in 4 seconds
                 } break;
                 case 2: // Jaina casts teleport spell
                 {
                     // Jaina is index 1
-                    Creature* jaina = m_allies[1];
-                    jaina->CastSpell(jaina, SPELL_TELEPORT_GROUP, false);
+                    if (Creature* jaina = m_creature->GetMap()->GetCreature(m_allies[1]))
+                        jaina->CastSpell(jaina, SPELL_TELEPORT_GROUP, false);
                     m_nextPhaseDelayTimer = 4000; // next phase in 4 seconds
                 } break;
                 case 3: // Final, despawn
                 {
                     // remove allies
-                    for (auto& ally : m_allies)
+                    for (auto& allyGuid : m_allies)
                     {
                         // if ally is valid
-                        if (ally)
+                        if (allyGuid)
                         {
-                            static_cast<TemporarySummon*>(ally)->UnSummon();
-                            ally = nullptr;
+                            if (Creature* pCreature = m_creature->GetMap()->GetCreature(allyGuid))
+                                static_cast<TemporarySummon*>(pCreature)->UnSummon();
+                            allyGuid = ObjectGuid();
                         }
                     }
 
@@ -590,16 +600,16 @@ struct npc_private_hendelAI : public ScriptedAI
     void SummonedCreatureDespawn(Creature* creature) override 
     {
         // No dangling pointers
-        for (auto& ally : m_allies)
+        for (auto& allyGuid : m_allies)
         {
-            if (ally == creature)
-                ally = 0;
+            if (allyGuid == creature->GetObjectGuid())
+                allyGuid = ObjectGuid();
         }
 
         for (auto& guard : m_guards)
         {
             if (guard == creature)
-                guard = 0;
+                guard = nullptr;
         }
     }
 };
