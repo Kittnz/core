@@ -721,6 +721,13 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                     }
                     *data << m_uint32Values[index];
                 }
+                else if (index == UNIT_MOD_CAST_SPEED)
+                {
+                    if (m_floatValues[index] < 0.001f)
+                        *data << float(0.0f);
+                    else
+                        *data << m_floatValues[index];
+                }
                 else
                 {
                     // send in current format (float as float, uint32 as uint32)
