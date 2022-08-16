@@ -1138,7 +1138,9 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
                 //figure out how player died.
                 //A tragedy has occurred. Hardcore character %s %s at level %u. May this sacrifice not be forgotten.
 
-                auto attacker = this;
+                Unit* attacker = GetCharmerOrOwnerPlayerOrPlayerItself();
+                if (!attacker)
+                    attacker = this;
 
                 std::ostringstream deathReason;
 
