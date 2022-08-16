@@ -59,7 +59,7 @@ ObjectMgr sObjectMgr;
 
 #include "utf8cpp/utf8.h"
 
-bool normalizePlayerName(std::string& name, size_t max_len)
+bool normalizePlayerName(std::string& name, size_t max_len, bool checkCaps)
 {
     if (name.empty())
         return false;
@@ -75,9 +75,12 @@ bool normalizePlayerName(std::string& name, size_t max_len)
     if (len > max_len)
         return false;
 
-    wstr_buf[0] = wcharToUpper(wstr_buf[0]);
-    for (size_t i = 1; i < len; ++i)
-        wstr_buf[i] = wcharToLower(wstr_buf[i]);
+    if (checkCaps)
+    {
+        wstr_buf[0] = wcharToUpper(wstr_buf[0]);
+        for (size_t i = 1; i < len; ++i)
+            wstr_buf[i] = wcharToLower(wstr_buf[i]);
+    }
 
     return WStrToUtf8(wstr_buf, name);
 }
