@@ -3530,6 +3530,13 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
     PlayerPointer plr = sess->GetPlayerPointer();
     ASSERT(plr);
 
+    std::string stringType = type;
+
+    if (sess->GetSecurity() >= SEC_MODERATOR || (target && target->GetSession() && target->GetSession()->GetSecurity() >= SEC_MODERATOR))
+    {
+        stringType += "|GM";
+    }
+
     if (target)
         sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
