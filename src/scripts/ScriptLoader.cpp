@@ -264,10 +264,6 @@ void AddSC_instance_karazhan_crypt();
 void AddSC_instance_crescent_grove();
 void AddSC_boss_xmas_wolf();
 void AddSC_boss_nerubian_overseer();
-void AddSC_boss_gerastrasz();
-void AddSC_boss_chromie();
-void AddSC_boss_chronormu();
-void AddSC_instance_caverns_of_time();
 void AddSC_mirage_raceway();
 void AddSC_gardening();
 void AddSC_boss_dark_reaver();
@@ -307,6 +303,10 @@ void AddSC_boss_major_resonating_crystalAI();
 void AddSC_boss_thamgrarr();
 void AddSC_boss_volkan_cruelblade();
 void AddSC_instance_stormwind_vaults();
+
+// Black Morass
+void AddSC_black_morass_trash();
+void AddSC_instance_black_morass();
 
 // Misc
 void AddSC_npc_ptr();
@@ -581,10 +581,6 @@ void AddScripts()
     AddSC_instance_crescent_grove();
     AddSC_boss_xmas_wolf();
     AddSC_boss_nerubian_overseer();
-    AddSC_boss_gerastrasz();
-    AddSC_boss_chromie();
-    AddSC_boss_chronormu();
-    AddSC_instance_caverns_of_time();
     AddSC_mirage_raceway();
     AddSC_gardening();
     AddSC_boss_dark_reaver();
@@ -615,6 +611,10 @@ void AddScripts()
     AddSC_boss_hargesh_doomcaller();
     AddSC_boss_hatereaver_annhilator();
     AddSC_trash_mobs_hateforge_quarry();
+
+    // Black Morass
+    AddSC_black_morass_trash();
+    AddSC_instance_black_morass();
 
     // Misc
     AddSC_npc_ptr();

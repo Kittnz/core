@@ -50,11 +50,10 @@ dungeons/blackwing_lair/boss_razorgore.cpp
 dungeons/blackwing_lair/boss_vaelastrasz.cpp
 dungeons/blackwing_lair/boss_victor_nefarius.cpp
 dungeons/blackwing_lair/instance_blackwing_lair.cpp
-dungeons/caverns_of_time/instance_caverns_of_time.cpp
-dungeons/caverns_of_time/instance_caverns_of_time.h
-dungeons/caverns_of_time/black_morass/boss_chromie.cpp
-dungeons/caverns_of_time/black_morass/boss_chronormu.cpp
-dungeons/caverns_of_time/black_morass/boss_gerastrasz.cpp
+dungeons/caverns_of_time/black_morass/black_morass_trash.cpp
+dungeons/caverns_of_time/black_morass/black_morass_trash.hpp
+dungeons/caverns_of_time/black_morass/instance_black_morass.cpp
+dungeons/caverns_of_time/black_morass/instance_black_morass.h
 dungeons/deadmines/boss_mr_smite.cpp
 dungeons/deadmines/deadmines.cpp
 dungeons/deadmines/deadmines.h
