@@ -1,6 +1,6 @@
 
 -- Remove Worldbuffs in Scarlet Citadel
-REPLACE INTO `instance_buff_removal` (`mapId`, `auraId`, `enabled`, `flags`, `comment`) VALUES
+REPLACE INTO `instance_buff_removal` (`map_id`, `spell_id`, `enabled`, `flags`, `comment`) VALUES
 (45, 22888, 0, 0, "Rallying Cry"),
 (45, 16609, 0, 0, "Warchief's blessing"),
 (45, 24425, 0, 0, "Spirit of Zandalar"),
