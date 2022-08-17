@@ -1,4 +1,24 @@
 
+-- Remove Worldbuffs in Scarlet Citadel
+REPLACE INTO `instance_buff_removal` (`mapId`, `auraId`, `enabled`, `flags`, `comment`) VALUES
+(45, 22888, 0, 0, "Rallying Cry"),
+(45, 16609, 0, 0, "Warchief's blessing"),
+(45, 24425, 0, 0, "Spirit of Zandalar"),
+(45, 26393, 0, 0, "Elune's Blessing"),
+(45, 15366, 0, 0, "Songflower Serenade"),
+(45, 22818, 0, 0, "Mol'dar's Moxie (15% stam)"),
+(45, 22820, 0, 0, "Slip'kik's Savvy (3% spellcrit)"),
+(45, 22817, 0, 0, "Fengus' Ferocity (200 AP)"),
+(45, 28681, 0, 0, "Soul Revival (Scourge Invasion Buff)"),
+(45, 23735, 0, 0, "Sayge's Dark Fortune of Strength"),
+(45, 23736, 0, 0, "Sayge's Dark Fortune of Agility"),
+(45, 23737, 0, 0, "Sayge's Dark Fortune of Stamina"),
+(45, 23738, 0, 0, "Sayge's Dark Fortune of Spirit"),
+(45, 23766, 0, 0, "Sayge's Dark Fortune of Intelligence"),
+(45, 23767, 0, 0, "Sayge's Dark Fortune of Armor"),
+(45, 23768, 0, 0, "Sayge's Dark Fortune of Damage"),
+(45, 23769, 0, 0, "Sayge's Dark Fortune of Resistance");
+
 -- Custom Graveyard
 REPLACE INTO `custom_graveyards` (`id`, `name`, `map_id`, `zone_id`, `area_id`, `max_level`, `map_gy_alliance`, `gy_x_alliance`, `gy_y_alliance`, `gy_z_alliance`, `orientation_alliance`, `map_gy_horde`, `gy_x_horde`, `gy_y_horde`, `gy_z_horde`, `orientation_horde`) VALUES
 (30, 'Scarlet Citadel', 45, 0, 0, 60, 0, 2603.33, -534.807, 89, 2.46552, 0, 2603.33, -534.807, 89, 2.46552);
