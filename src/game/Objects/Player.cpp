@@ -1102,7 +1102,7 @@ uint32 Player::EnvironmentalDamage(EnvironmentalDamageType type, uint32 damage)
 
     if (type == DAMAGE_FALL && !IsAlive())                  // DealDamage not apply item durability loss at self damage
     {
-        DEBUG_LOG("We are fall to death, loosing 10 percents durability");
+        DEBUG_LOG("We fell to death, losing 10 percent durability");
         DurabilityLossAll(0.10f, false);
         // durability lost message
         WorldPacket data2(SMSG_DURABILITY_DAMAGE_DEATH, 0);
@@ -21337,6 +21337,20 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 		SkillValues[SkillId] = GetSkillValuePure(SkillId);
 	}
 
+    for (const auto& SkillElemPair : mSkillStatus)
+    {
+        uint32 SkillId = SkillElemPair.first;
+        if (!IsLanguageSkill(SkillId))
+        {
+            auto SkillValueIter = SkillValues.find(SkillId);
+            if (SkillValueIter != SkillValues.end())
+            {
+                uint16 MaxSkill = GetPureMaxSkillValue(SkillId);
+                SetSkill(SkillId, SkillValueIter->second, MaxSkill);
+            }
+        }
+    }
+
     m_DbSaveDisabled = true;
     if (!ChangeSpellsForRace(oldRace, newRace))
     {
@@ -21373,24 +21387,13 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     LearnDefaultSpells();
 
-    if (GetTeam() == ALLIANCE)
+    uint32 newTeam = TeamForRace(newRace);
+    
+    if (newTeam == ALLIANCE)
         GetTaxi().LoadTaxiMask("3456411898 2148078928 49991 0 0 0 0 0 ");
     else
         GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");
 
-	for (const auto& SkillElemPair : mSkillStatus)
-	{
-		uint32 SkillId = SkillElemPair.first;
-		if (!IsLanguageSkill(SkillId))
-		{
-			auto SkillValueIter = SkillValues.find(SkillId);
-			if (SkillValueIter != SkillValues.end())
-			{
-				uint16 MaxSkill = GetPureMaxSkillValue(SkillId);
-				SetSkill(SkillId, SkillValueIter->second, MaxSkill);
-			}
-		}
-	}
 
     SetFactionForRace(newRace);
 
