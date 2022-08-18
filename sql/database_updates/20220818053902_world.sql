@@ -158,3 +158,5 @@ update item_template set item_level = 63, required_level = 58, dmg_max1 = 92 whe
 update item_template set item_level = 63, required_level = 58, armor = 121, stat_value2 = 15 where entry = 60807;
 update item_template set item_level = 63, required_level = 58, dmg_min1 = 103, dmg_max1 = 209 where entry = 60808;
 update item_template set item_level = 63, required_level = 58, stat_value1 = 19 where entry = 60809;
+-- Change respawn of 2010898, 2010900, 2010899, 2010901, 126158, 2739, 2741, 2740, 2742, 176189 to 5 seconds.
+update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 5 where id in (2010898, 2010900, 2010899, 2010901, 126158, 2739, 2741, 2740, 2742, 176189);
