@@ -193,6 +193,7 @@ struct boss_razuviousAI : public ScriptedAI
                 if (i == 1)
                     rpBuddy = pAdd->GetObjectGuid();
                 summonedAdds.push_back(std::make_pair(pAdd->GetObjectGuid(), false /*was mind controllerd*/));
+                pAdd->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY1H);
             }
         }
     }
