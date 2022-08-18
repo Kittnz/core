@@ -138,3 +138,23 @@ update quest_template set rewrepfaction1 = 530, rewrepvalue1 = 150, reworreqmone
 update quest_template set rewxp = 650, rewrepfaction1 = 530, rewrepvalue1 = 150 where entry = 820;
 -- Quest=40389 change this to 250 darkspear tribe rep, there's trivial quests in Sen'jin that give 250, this should as well.
 update quest_template set rewrepfaction1 = 530, rewrepvalue1 = 250 where entry = 40389;
+-- Rename this to simply "Chew Toy".
+update item_template set name = 'Chew Toy' where entry = 5362;
+-- Item Fixes and Adjustments
+update item_template set bonding = 1 where entry = 60799;
+update item_template set display_id =  24046 where entry = 60806;
+update item_template set subclass = 1, armor = 32 where entry = 84037;
+update item_template set bonding = 1 where entry = 60646;
+update item_template set bonding = 1 where entry = 60647;
+update item_template set bonding = 1 where entry = 60648;
+update item_template set bonding = 1 where entry = 60649;
+update item_template set item_level = 54 where entry = 60616;
+update item_template set spellid_1 = 14521, spelltrigger_1 = 1, stat_type1 = 5 where entry = 9402;
+-- Nerf Crypt Trash Drops to Level 58
+update item_template set item_level = 63, required_level = 58, stat_value1 = 5, spellid_1 = 9414 where entry = 60803;
+update item_template set item_level = 63, required_level = 58, shadow_res = 10 where entry = 60804;
+update item_template set item_level = 63, required_level = 58 where entry = 60805;
+update item_template set item_level = 63, required_level = 58, dmg_max1 = 92 where entry = 60806;
+update item_template set item_level = 63, required_level = 58, armor = 121, stat_value2 = 15 where entry = 60807;
+update item_template set item_level = 63, required_level = 58, dmg_min1 = 103, dmg_max1 = 209 where entry = 60808;
+update item_template set item_level = 63, required_level = 58, stat_value1 = 19 where entry = 60809;
