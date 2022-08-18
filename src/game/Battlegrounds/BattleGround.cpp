@@ -1524,7 +1524,7 @@ Creature* BattleGround::AddCreature(uint32 entry, uint32 type, float x, float y,
 
     CreatureCreatePos pos(map, x, y, z, o);
 
-    if (!creature->Create(map->GenerateLocalLowGuid(HIGHGUID_UNIT), pos, cinfo, TEAM_NONE, entry))
+    if (!creature->Create(map->GenerateLocalLowGuid(HIGHGUID_UNIT), pos, cinfo, entry))
     {
         sLog.outError("Battleground::AddCreature: cannot create creature (entry: %u) for BG (map: %u, instance id: %u)!", entry, m_MapId, m_ClientInstanceID);
         delete creature;

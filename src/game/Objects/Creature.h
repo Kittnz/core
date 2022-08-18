@@ -55,7 +55,7 @@ enum CreatureFlagsExtra
     CREATURE_FLAG_EXTRA_SUMMON_GUARD                 = 0x00000008,       // creature summons a guard if an opposite faction player gets near or attacks
     CREATURE_FLAG_EXTRA_NO_BLOCK                     = 0x00000010,       // creature can't block
     CREATURE_FLAG_EXTRA_NO_CRUSH                     = 0x00000020,       // creature can't do crush attacks
-    CREATURE_FLAG_EXTRA_NO_XP_AT_KILL                = 0x00000040,       // creature kill does not provide XP
+    CREATURE_FLAG_EXTRA_FIXED_Z                      = 0x00000040,       // creature does not fall
     CREATURE_FLAG_EXTRA_INVISIBLE                    = 0x00000080,       // creature is always invisible for player (mostly trigger creatures)
     CREATURE_FLAG_EXTRA_NOT_TAUNTABLE                = 0x00000100,       // creature is immune to taunt auras and effect attack me
     CREATURE_FLAG_EXTRA_AGGRO_ZONE                   = 0x00000200,       // creature sets itself in combat with zone on aggro
@@ -101,6 +101,7 @@ struct CreatureInfo
 {
     uint32  entry;
     uint32  display_id[MAX_DISPLAY_IDS_PER_CREATURE];
+    uint32 mount_display_id;
     char*   name;
     char*   subname;
     uint32  gossip_menu_id;
@@ -153,6 +154,7 @@ struct CreatureInfo
     uint32  spells[CREATURE_MAX_SPELLS];
     uint32  spell_list_id;
     uint32  pet_spell_list_id;
+    uint32 const* auras;
     uint32  gold_min;
     uint32  gold_max;
     char const* ai_name;
@@ -197,8 +199,6 @@ struct CreatureData
 {
     std::array<uint32, MAX_CREATURE_IDS_PER_SPAWN> creature_id = {};
     WorldLocation position;
-    uint32 display_id = 0;
-    int32 equipment_id = 0;
     uint32 spawntimesecsmin = 0;
     uint32 spawntimesecsmax = 0;
     float wander_distance = 0.0f;
@@ -236,16 +236,16 @@ struct CreatureData
     }
 };
 
-// from `creature_addon` and `creature_template_addon`tables
+// from `creature_addon` table
 struct CreatureDataAddon
 {
-    uint32 guidOrEntry;
-    uint32 mount;
-    uint32 bytes1;
+    uint32 guid;
+    uint32 display_id;
+    int32  mount_display_id;
+    int32  equipment_id;
+    uint8  stand_state;
     uint8  sheath_state;                                    // SheathState
-    uint8  flags;                                           // UnitBytes2_Flags
-    uint32 emote;
-    uint32 move_flags;
+    uint32 emote_state;
     uint32 const* auras;                                    // loaded as char* "spell1 spell2 ... "
 };
 
@@ -524,9 +524,9 @@ class Creature : public Unit
         void AddToWorld() override;
         void RemoveFromWorld() override;
 
-        bool Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* cinfo, Team team, uint32 firstCreatureId, const CreatureData *data = nullptr, GameEventCreatureData const* eventData = nullptr);
-        bool LoadCreatureAddon(bool reload = false);
-        void UnloadCreatureAddon(const CreatureDataAddon* data);
+        bool Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* cinfo, uint32 firstCreatureId, const CreatureData *data = nullptr, GameEventCreatureData const* eventData = nullptr);
+        void LoadDefaultAuras(uint32 const* auras, bool reload);
+        void LoadCreatureAddon(bool reload = false);
 
         // CreatureGroups
         CreatureGroup* GetCreatureGroup() const { return m_creatureGroup; }
@@ -656,7 +656,7 @@ class Creature : public Unit
 
         bool HasSpell(uint32 spellID) const override;
 
-        bool UpdateEntry(uint32 entry, Team team = ALLIANCE, const CreatureData* data = nullptr, GameEventCreatureData const* eventData = nullptr, bool preserveHPAndPower = true);
+        bool UpdateEntry(uint32 entry, const CreatureData* data = nullptr, GameEventCreatureData const* eventData = nullptr, bool preserveHPAndPower = true);
 
         void ApplyGameEventSpells(GameEventCreatureData const* eventData, bool activated);
         bool UpdateStats(Stats stat) override;
@@ -686,7 +686,7 @@ class Creature : public Unit
         CreatureDataAddon const* GetCreatureAddon() const;
         CreatureData const* GetCreatureData() const;
 
-        static uint32 ChooseDisplayId(const CreatureInfo *cinfo, const CreatureData *data = nullptr, GameEventCreatureData const* eventData = nullptr);
+        static uint32 ChooseDisplayId(CreatureInfo const* cinfo, CreatureData const* data = nullptr, CreatureDataAddon const* addon = nullptr, GameEventCreatureData const* eventData = nullptr);
 
         std::string GetAIName() const;
         std::string GetScriptName() const;
@@ -999,8 +999,8 @@ class Creature : public Unit
     protected:
         bool MeetsSelectAttackingRequirement(Unit* pTarget, SpellEntry const* pSpellInfo, uint32 selectFlags) const;
 
-        bool CreateFromProto(uint32 guidlow, CreatureInfo const* cinfo, Team team, uint32 firstCreatureId, const CreatureData *data = nullptr, GameEventCreatureData const* eventData = nullptr);
-        bool InitEntry(uint32 entry, Team team=ALLIANCE, const CreatureData* data = nullptr, GameEventCreatureData const* eventData = nullptr);
+        bool CreateFromProto(uint32 guidlow, CreatureInfo const* cinfo, uint32 firstCreatureId, CreatureData const* data = nullptr, GameEventCreatureData const* eventData = nullptr);
+        bool InitEntry(uint32 entry, CreatureData const* data = nullptr, CreatureDataAddon const* addon = nullptr, GameEventCreatureData const* eventData = nullptr);
 
         uint32 m_groupLootTimer;                            // (msecs)timer used for group loot
         uint32 m_groupLootId;                               // used to find group which is looting corpse
