@@ -1,1305 +1,217 @@
 
--- The stand state is the only useful part of this byte field.
-ALTER TABLE `creature_addon`
-	ADD COLUMN `stand_state` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' AFTER `bytes1`;
+-- Remove Worldbuffs in Scarlet Citadel
+REPLACE INTO `instance_buff_removal` (`map_id`, `spell_id`, `enabled`, `flags`, `comment`) VALUES
+(45, 22888, 0, 0, "Rallying Cry"),
+(45, 16609, 0, 0, "Warchief's blessing"),
+(45, 24425, 0, 0, "Spirit of Zandalar"),
+(45, 26393, 0, 0, "Elune's Blessing"),
+(45, 15366, 0, 0, "Songflower Serenade"),
+(45, 22818, 0, 0, "Mol'dar's Moxie (15% stam)"),
+(45, 22820, 0, 0, "Slip'kik's Savvy (3% spellcrit)"),
+(45, 22817, 0, 0, "Fengus' Ferocity (200 AP)"),
+(45, 28681, 0, 0, "Soul Revival (Scourge Invasion Buff)"),
+(45, 23735, 0, 0, "Sayge's Dark Fortune of Strength"),
+(45, 23736, 0, 0, "Sayge's Dark Fortune of Agility"),
+(45, 23737, 0, 0, "Sayge's Dark Fortune of Stamina"),
+(45, 23738, 0, 0, "Sayge's Dark Fortune of Spirit"),
+(45, 23766, 0, 0, "Sayge's Dark Fortune of Intelligence"),
+(45, 23767, 0, 0, "Sayge's Dark Fortune of Armor"),
+(45, 23768, 0, 0, "Sayge's Dark Fortune of Damage"),
+(45, 23769, 0, 0, "Sayge's Dark Fortune of Resistance");
 
-UPDATE creature_addon SET stand_state = (bytes1 & 0xFF) WHERE bytes1 != 0;
+-- Custom Graveyard
+REPLACE INTO `custom_graveyards` (`id`, `name`, `map_id`, `zone_id`, `area_id`, `max_level`, `map_gy_alliance`, `gy_x_alliance`, `gy_y_alliance`, `gy_z_alliance`, `orientation_alliance`, `map_gy_horde`, `gy_x_horde`, `gy_y_horde`, `gy_z_horde`, `orientation_horde`) VALUES
+(30, 'Scarlet Citadel', 45, 0, 0, 60, 0, 2603.33, -534.807, 89, 2.46552, 0, 2603.33, -534.807, 89, 2.46552);
 
--- Redesign the addon table.
-ALTER TABLE `creature_addon`
-	COMMENT='Extra data for creature spawn.',
-	ADD COLUMN `display_id` SMALLINT UNSIGNED NOT NULL DEFAULT '0' AFTER `guid`,
-	CHANGE COLUMN `mount` `mount_display_id` SMALLINT NOT NULL DEFAULT '-1' AFTER `display_id`,
-	ADD COLUMN `equipment_id` INT NOT NULL DEFAULT '-1' AFTER `mount_display_id`,
-	CHANGE COLUMN `b2_0_sheath` `sheath_state` TINYINT(3) UNSIGNED NOT NULL DEFAULT '1' AFTER `stand_state`,
-	CHANGE COLUMN `emote` `emote_state` SMALLINT UNSIGNED NOT NULL DEFAULT '0' AFTER `sheath_state`,
-	CHANGE COLUMN `auras` `auras` TEXT NULL DEFAULT NULL AFTER `emote_state`,
-	DROP COLUMN `bytes1`,
-	DROP COLUMN `b2_1_flags`,
-	DROP COLUMN `moveflags`;
+-- Teleport
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES
+(500, 32.5495, 13.2999, 16.869, 6.28138, 45, 'ScarletCitadel');
 
--- Remove the No XP flag since we can use multiplier.
-UPDATE `creature_template` SET `xp_multiplier`=0, `flags_extra`=`flags_extra`-64 WHERE (`flags_extra` & 64);
+-- Dungeon is a 40 man raid with 7 day reset timer
+REPLACE INTO `map_template` (`entry`, `parent`, `map_type`, `linked_zone`, `player_limit`, `reset_delay`, `ghost_entrance_map`, `ghost_entrance_x`, `ghost_entrance_y`, `map_name`, `script_name`) VALUES
+(45, 0, 2, 0, 40, 7, -1, 0, 0, 'Scarlet Citadel', 'instance_scarlet_citadel');
 
--- Add new Fixed Z flag to creatures that have the movement flag.
-UPDATE `creature_template` SET `flags_extra`=`flags_extra`|64 WHERE `entry` IN (9496, 10415, 15185, 15221, 15222, 15384, 17066);
+-- GOs
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+-- Doors
+(5000000, 0, 3751, 'SC_ENTERANCE_DOOR', 0, 52, 1.7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000001, 0, 444, 'SC_VENDOR_DOOR_LEFT', 0, 52, 1.39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000002, 0, 444, 'SC_VENDOR_DOOR_RIGHT', 0, 52, 1.39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000003, 0, 444, 'SC_DAELUS_DOOR', 0, 52, 1.39, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000004, 0, 444, 'SC_DAELUS_DOOR_LOCKED', 0, 52, 1.39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000005, 0, 3751, 'SC_NOLIN_DOOR_LOCKED', 0, 52, 1.85, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000006, 0, 444, 'SC_ARDAEUS_ENTRANCE_DOOR', 0, 52, 1.58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000007, 0, 444, 'SC_ARDAEUS_EXIT_DOOR', 0, 52, 1.39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000008, 0, 444, 'SC_MARIELLA_DOOR', 0, 52, 1.58, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000009, 0, 1207, 'SC_RIGHT_WING_DOOR', 0, 52, 0.8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000010, 0, 6385, 'SC_ABBENDIS_ENTRANCE_DOOR', 0, 52, 1.5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000011, 0, 443, 'SC_ABBENDIS_LOCKED_DOOR', 0, 52, 1.35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+-- Misc
+(5000012, 5, 6679, 'SC_SUMMONING_CIRCLE', 0, 52, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000013, 3, 23431, 'SC_MIRELLAS_ACHIEVEMENT_CHEST', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(5000014, 3, 23431, 'SC_ARDAEUS_ACHIEVEMENT_CHEST', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
--- Move non standard stand or emote state to guid data.
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (100, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79161, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79159, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79142, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79182, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79178, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79187, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79175, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79154, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79131, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79183, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79145, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79185, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79127, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79174, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79163, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79194, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79172, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79169, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (84082, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79155, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79143, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79162, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79135, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79158, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79190, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79160, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79156, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79140, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79176, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79128, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79179, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79181, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79133, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79148, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79146, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79129, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79136, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79173, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79137, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79134, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79149, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79157, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79164, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79180, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79184, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79191, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79144, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (4687, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79241, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79224, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79220, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79192, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79219, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79221, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79231, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79193, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79234, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79239, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79258, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79251, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79238, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79216, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79226, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79255, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79240, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79130, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79215, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79250, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79256, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79237, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79248, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79236, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79232, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79252, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79210, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79225, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79235, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79249, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79253, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79257, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79259, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79261, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (79271, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (40020, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (40013, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (40011, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (40007, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46222, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (37061, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1795, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (54164, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46212, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46213, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46214, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46215, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (39850, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (54423, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (54422, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (57168, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (14389, 0, 173);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2013, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (47572, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2556118, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2556119, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2556117, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26136, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564000, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87442, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2084, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555380, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555392, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555405, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555403, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555407, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555400, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555385, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555388, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555368, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555377, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555372, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555395, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555386, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555387, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555360, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555364, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555378, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (93301, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (102, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555740, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (39856, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (53036, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (39849, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (84825, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (86149, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (95115, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87185, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87192, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87184, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87172, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87180, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87177, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87174, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87178, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87186, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87173, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87175, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87179, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87181, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87182, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87183, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87188, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87189, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87190, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87191, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87193, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87194, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87195, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150484, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150485, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150487, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150516, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150508, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150512, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245648, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150480, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150509, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150493, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150479, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150521, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150526, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150486, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150492, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150501, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150478, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150519, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150524, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150496, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150489, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150505, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150488, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150518, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150498, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150506, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150527, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150502, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150515, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150525, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150523, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150522, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150520, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150517, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150511, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150510, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150507, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150503, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150499, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150495, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150494, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150490, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150483, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245647, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245646, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (4216, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (87187, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (47391, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (81085, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (5579, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46327, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46566, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2011, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (81252, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (81348, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (9474, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (24778, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (7723, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (48641, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46321, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554882, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46332, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6460, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2561839, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (224, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (51680, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (3431, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554878, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554885, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (95116, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (95126, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2559533, 0, 12);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1181941, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1182163, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (38004, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1182162, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (27660, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (44187, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (8969, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (8971, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1182164, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1181943, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1182165, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (39094, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6609, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150709, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150711, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150754, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150737, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150734, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150717, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150724, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150745, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150716, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150725, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150748, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150721, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245750, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150708, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150740, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150736, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245752, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245655, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150756, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150718, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150710, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150757, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150731, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150720, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150747, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150738, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150753, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150752, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150735, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150728, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150730, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245751, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150713, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150741, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150732, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150722, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150714, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150744, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150715, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150726, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150727, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150733, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150739, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150742, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150743, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150746, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150750, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150751, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150755, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245749, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (46717, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (45225, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33973, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554881, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (13175, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (56945, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150556, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150546, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245643, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150570, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150576, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150542, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150571, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150551, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150565, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150562, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245642, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150548, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150559, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150558, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150533, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150574, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150572, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150536, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150538, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150544, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150566, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150555, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150539, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150567, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150575, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245641, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150557, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150545, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150552, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150535, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150577, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150573, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150569, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150568, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150561, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150560, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150553, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150549, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150543, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150540, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150537, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150534, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150530, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150529, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150528, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150453, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150469, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150449, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150455, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150467, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150461, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150452, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150435, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150440, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150430, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150442, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150434, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150458, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150468, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150462, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150439, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150456, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150473, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150472, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150446, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150433, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150448, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150443, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150444, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245638, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150457, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150429, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150437, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150465, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150459, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150466, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150476, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150438, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150436, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150445, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150428, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150451, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245636, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150477, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150475, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150474, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150471, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150470, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150460, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245637, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563413, 1, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150827, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150857, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245654, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150840, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150808, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150825, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150824, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150828, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150837, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245754, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245756, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150814, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150833, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150853, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150821, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150813, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150846, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150852, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150826, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150851, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150847, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150820, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150817, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150834, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150838, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150841, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150835, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150830, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150850, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150854, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150842, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150849, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150839, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150855, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150848, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150810, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150818, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150809, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150811, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150815, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150816, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150822, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150831, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150832, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150836, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150843, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150844, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150845, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150856, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245755, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (4670, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (705, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150768, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150765, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150792, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150790, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150761, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150777, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150781, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150787, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150758, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150771, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150760, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150784, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150772, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150786, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150793, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150785, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150789, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150807, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150801, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150766, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150775, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150767, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150805, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245758, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150774, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150788, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150800, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150780, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150783, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150763, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150798, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245757, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150799, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245656, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150797, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150759, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150764, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150770, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (1245753, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150776, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150778, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150782, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150791, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150794, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150795, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150796, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150802, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150803, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150804, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (150806, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564012, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (4681, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554874, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554875, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6166, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554883, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554876, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554877, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6471, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554879, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (65607, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2554880, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (15031, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2561303, 0, 13);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (4770, 0, 13);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (9462, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49314, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49194, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (29590, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (7463, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (30682, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49657, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (11220, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (53297, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6397, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (42798, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (86184, 5, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560071, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (393, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2132, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2146, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2141, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2133, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2148, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2130, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (395, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2128, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2136, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2131, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2368, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (542, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (9566, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32329, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49199, 0, 193);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (42296, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563983, 6, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (50003, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49656, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92997, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2569608, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (50004, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555744, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (37062, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (7448, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32347, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33808, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (24707, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560897, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (51676, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (13166, 0, 173);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (47898, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563253, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2561623, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (48925, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49084, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49082, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49085, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49081, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49087, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49079, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49086, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49083, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49080, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49078, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49257, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49288, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49313, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (39088, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49391, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49577, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49575, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49380, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49386, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49400, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49576, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49574, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49399, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49394, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49393, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49392, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49379, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49378, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49377, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49369, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49368, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49367, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49609, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49371, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49382, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49396, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49370, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49650, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49395, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49381, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49372, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (31870, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (49655, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (3419, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (5569, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (23229, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (37523, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (24781, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (5799, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6823, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6882, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (42917, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (50381, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (9443, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (9473, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (4672, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (90956, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (90954, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (29210, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (17627, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (24268, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563258, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (31804, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (31864, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2561838, 4, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (31877, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (13180, 0, 173);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (44557, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (68946, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (4685, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (42916, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (37064, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (45439, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92623, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92626, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92628, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92621, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92625, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92627, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92848, 0, 93);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92884, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (37096, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (7444, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92909, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92911, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (42331, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (37853, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (92912, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (93209, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (3417, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6402, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (6613, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (35937, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (400386, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (7325, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (7973, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (40428, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (12325, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (13170, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (13989, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (23708, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (30013, 0, 173);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (24784, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26767, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26761, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26766, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26765, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26764, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26763, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26762, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (26760, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562736, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32294, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32293, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32292, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33023, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33026, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33011, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33015, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33022, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33006, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33014, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33024, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33021, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33018, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33016, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33013, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33012, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33010, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33009, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33008, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33007, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563703, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32349, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563526, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32380, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32379, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32378, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32829, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32817, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32820, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32846, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32824, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32814, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32836, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32843, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32815, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32839, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32847, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32841, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32835, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32810, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32838, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32845, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32828, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32812, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32816, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32826, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32823, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32849, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32848, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32844, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32840, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32837, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32834, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32833, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32832, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32831, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32830, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32827, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32825, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32822, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32821, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32819, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32818, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32813, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (32811, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (33148, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555399, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555393, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555408, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555397, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555365, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555374, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555384, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555371, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555381, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555361, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (39059, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (42753, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (43097, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (50005, 8, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (84079, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (85781, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (85782, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555748, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555375, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555379, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555398, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555362, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555389, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555366, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555409, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555382, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555402, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555394, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555370, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555404, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555406, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555391, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555367, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555363, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555369, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555390, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555383, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555396, 0, 4);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555769, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567917, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567875, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565695, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567915, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565666, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567879, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567920, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565527, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567886, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565691, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565687, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565694, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565470, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567921, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2568430, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565476, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567913, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565480, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565653, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567918, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567929, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565502, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565535, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565467, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565548, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567908, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567889, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567914, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565539, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565492, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565537, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565529, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565473, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565541, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567880, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565533, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565668, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565488, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565696, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565688, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565568, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565481, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565417, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567890, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565672, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567877, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565547, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565681, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565474, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565546, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565686, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565479, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565654, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567905, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565674, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565549, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567919, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565673, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565689, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565498, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565528, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565538, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567881, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565567, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565491, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565420, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565526, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565490, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565466, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565468, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565469, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565471, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565472, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565682, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565477, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565487, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565525, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565494, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565495, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565496, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565497, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565499, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565500, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565501, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565503, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565504, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565530, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565531, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565532, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565534, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565536, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565544, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565550, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565569, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565651, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565652, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565667, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565669, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565683, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565684, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565685, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565690, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565692, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565693, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567876, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567885, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567887, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567888, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567891, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567907, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567909, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567910, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567911, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567912, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567916, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2567930, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2568429, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2555745, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2556082, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2561112, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560542, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560392, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560393, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560346, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560383, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560538, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560546, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560394, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560465, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560438, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560343, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560395, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560382, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560541, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560386, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560345, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560537, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560544, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560545, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560573, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2569067, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2560070, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562439, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562466, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562438, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562440, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562442, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562452, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562443, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562445, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2562441, 0, 10);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563181, 0, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563187, 0, 379);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563190, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563191, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563193, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563242, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563256, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563257, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563259, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563264, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563266, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563991, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563994, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563995, 3, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563996, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563998, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2563999, 1, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564001, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564537, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564541, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564539, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564538, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564556, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564506, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2564507, 0, 234);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565331, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565333, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565338, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565332, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565318, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565335, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565315, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565305, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565320, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565325, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565344, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565306, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565340, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565302, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565343, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565312, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565328, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565329, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565311, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565303, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565304, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565307, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565308, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565309, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565310, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565313, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565314, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565316, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565317, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565319, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565321, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565322, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565323, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565324, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565326, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565327, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565330, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565334, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565336, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565337, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565339, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565341, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565342, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2565617, 1, 69);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571574, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571575, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570398, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570412, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570369, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570517, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570424, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570453, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570687, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570295, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570589, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570447, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570319, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570586, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570406, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570422, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570380, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570322, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570694, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570431, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570303, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570304, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570317, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570379, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570365, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570518, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570428, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570404, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570418, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570289, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570454, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570370, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570449, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570393, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570321, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570441, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570437, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570433, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570333, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570286, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570417, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570519, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570554, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570334, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570305, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570287, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570394, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570444, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570327, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570455, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570208, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570400, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570363, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570513, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570290, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570678, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570440, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570411, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570338, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570285, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570288, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570291, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570294, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570296, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570297, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570314, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570315, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570318, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570326, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570331, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570332, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570336, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570337, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570364, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570366, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570367, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570368, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570378, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570381, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570849, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570389, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570390, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570395, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570397, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570399, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570401, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570402, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570403, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570407, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570408, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570409, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570413, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570415, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570419, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570420, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570421, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570425, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570426, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570427, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570429, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570430, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570439, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570442, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570443, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570448, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570456, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570511, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570512, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570514, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570587, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570679, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570680, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570684, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570685, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570686, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570688, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2570693, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571554, 7, 0);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571436, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571441, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571410, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571409, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571425, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571433, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571434, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571427, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571426, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571405, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571438, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571440, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571408, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571431, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571435, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571415, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571406, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571404, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571590, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571651, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571649, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571585, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571445, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571646, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571444, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571588, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571579, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571583, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571584, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571591, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571442, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571443, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571446, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571448, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571453, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571580, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571581, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571647, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571648, 0, 233);
-INSERT INTO `creature_addon` (`guid`, `stand_state`, `emote_state`) VALUES (2571650, 0, 233);
+-- Reserved Range 650000-650100
+-- DELETE FROM `gameobject` WHERE `guid` BETWEEN 5000000 AND 5000013; -- Erase deprecated GOs
 
--- Add auras and mount display id to creature template.
-ALTER TABLE `creature_template`
-	ADD COLUMN `mount_display_id` SMALLINT(5) UNSIGNED NOT NULL DEFAULT '0' AFTER `display_id4`,
-	ADD COLUMN `auras` TEXT NULL DEFAULT NULL AFTER `pet_spell_list_id`;
+REPLACE INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+-- Daelus' Room
+(650000, 5000000, 45, 25.3835, 13.3128, 16.869, 6.28138, 0, 0, 0.000902565, -1, 0, 0, 100, 1, 1, 533.333),
+(650001, 5000001, 45, 19.7918, -2.30051, 16.869, 6.27707, 0, 0, 0.00306001, -0.999995, 0, 0, 100, 1, 1, 533.333),
+(650002, 5000002, 45, 19.7611, 28.8518, 16.869, 0.00172281, 0, 0, 0.000861406, 1, 0, 0, 100, 1, 1, 533.333),
+(650003, 5000003, 45, 114.999, 28.9187, 16.869, 3.13861, 0, 0, 0.999999, 0.00149079, 0, 0, 100, 1, 1, 533.333),
+(650004, 5000004, 45, 114.915, -2.19142, 16.869, 3.12486, 0, 0, 0.999965, 0.00836561, 0, 0, 100, 1, 1, 533.333),
+-- Nolin's Room
+(650005, 5000005, 45, 171.915, -126.624, 16.869, 1.56309, 0, 0, 0.704379, 0.709825, 300, 300, 100, 1, 1, 533.333),
+-- Ardaeus' Room
+(650006, 5000006, 45, 250.217, -116.853, 16.8702, 0.0105844, 0, 0, 0.00529215, 0.999986, 0, 0, 100, 0, 1, 533.333),
+(650007, 5000007, 45, 306.483, -116.88, 33.705, 3.12978, 0, 0, 0.999983, 0.00590698, 0, 0, 100, 1, 1, 533.333),
+-- Mariella's Room
+(650008, 5000008, 45, 220.03, 48.4829, 33.7034, 3.14467, 0, 0, 0.999999, -0.0015388, 0, 0, 100, 0, 1, 533.333),
+-- Right Wing's Door
+(650009, 5000009, 45, 332.627, -55.8007, 33.7003, 3.13626, 0, 0, 0.999996, 0.00266476, 0, 0, 100, 1, 1, 533.333),
+-- Abbendis' Room
+(650010, 5000010, 45, 421.206, -8.97886, 37.7045, 4.70785, 0, 0, 0.70871, -0.7055, 0, 0, 100, 0, 1, 533.333),
+(650011, 5000011, 45, 421.228, -144.38, 35.0195, 4.69175, 0, 0, 0.714365, -0.699774, 0, 0, 100, 1, 1, 533.333);
 
--- Move the auras to creature template.
-UPDATE
-    `creature_template` T1, `creature_template_addon` T2
-SET
-    T1.`auras` = T2.`auras`
-WHERE
-    T1.`entry` = T2.`entry` && (T2.`auras` IS NOT NULL) && (T2.`auras` != '');
+-- NPCs
+REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES
+(2000000, 18683, 0, 0, 0, 'Sacred Fist Daelus', 'The Scarlet Crusade', 0, 63, 63, 700000, 700000, 5000000, 5000000, 4500, 67, 0, 1.5, 1.5, 1.6, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 'boss_daelus'),
+(2000001, 18671, 0, 0, 0, 'Grand Sorcerer Ardaeus', 'The Scarlet Crusade', 0, 63, 63, 500000, 500000, 5000000, 5000000, 6000, 67, 0, 1.5, 1.5, 1.6, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 15, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 'boss_ardaeus'),
+(2000002, 18676, 0, 0, 0, 'High Inquisitor Mariella', 'The Scarlet Crusade', 0, 63, 63, 795000, 795000, 5000000, 5000000, 3000, 67, 0, 1.5, 1.5, 1.6, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 'boss_mariella'),
+(2000003, 10431, 0, 0, 0, 'High General Abbendis', 'The Scarlet Crusade', 0, 63, 63, 500000, 500000, 5000000, 5000000, 4500, 67, 0, 1.5, 1.5, 1.6, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 320113, 391250, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 2130689, 0, 'boss_abbendis'),
+(2000004, 18678, 0, 0, 0, 'Brother Eric Vesper', 'The Scarlet Crusade', 0, 63, 63, 1250000, 1250000, 50000, 50000, 4500, 35, 0, 1, 2.14286, 1.8, 20, 5, 0, 3, 1, 5000, 7000, 0, 290, 1, 1500, 1800, 2, 0, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 864999, 964999, '', 0, 3, 0, 0, 3, 200003, 0, 0, 3167436667, 0, 0, 0, 'npc_eric_vesper'),
+(2000005, 10529, 0, 0, 0, 'Scarlet Chaplain', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_chaplain_and_sister'),
+(2000006, 10529, 0, 0, 0, 'Scarlet Sister', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(2000007, 221, 0, 0, 0, 'Nolin', 'The Goose', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 1.3, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(2000008, 5556, 0, 0, 0, 'Bokkeum', 'Nolin''s Pet', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 0.7, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(2000009, 10529, 0, 0, 0, 'SECOND_WING_TRASH_PLACEHOLDER', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(2000010, 10529, 0, 0, 0, 'Malor', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(2000011, 10529, 0, 0, 0, 'Jordan', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(2000012, 10529, 0, 0, 0, 'Durgen', 'The Scarlet Crusade', 0, 60, 60, 500000, 500000, 5000000, 5000000, 0, 35, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(2000013, 10045, 0, 0, 0, 'Fallen Spirit', 'The Scarlet Crusade', 0, 61, 61, 500000, 500000, 5000000, 5000000, 0, 67, 0, 1.5, 1.5, 1, 20, 5, 0, 3, 1, 5000, 7000, 0, 100, 1, 1000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 220, 320, 100, 7, 72, 0, 0, 0, 250, 15, 15, 15, 250, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'npc_fallen_spirit'),
+(2000014, 18680, 0, 0, 0, 'Citadel Inquisitor', 'The Scarlet Crusade', 0, 63, 63, 16250, 16250, 25680, 25680, 3555, 67, 0, 1, 1.14286, 1, 20, 5, 0, 3, 1, 2400, 3900, 0, 284, 1, 1150, 1265, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 2865, 3746, '', 0, 3, 0, 0, 3, 200000, 0, 0, 1022049875, 0, 0, 0, 'npc_citadel_inquisitor'),
+(2000015, 18687, 0, 0, 0, 'Citadel Valiant', 'The Scarlet Crusade', 0, 63, 63, 21125, 21125, 0, 0, 4190, 67, 0, 1, 1.14286, 1, 20, 5, 0, 3, 1, 3900, 4300, 0, 284, 1, 1150, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 2865, 3746, '', 0, 3, 0, 0, 3, 200001, 0, 0, 1022049875, 0, 0, 0, 'npc_citadel_valiant'),
+(2000016, 15866, 0, 0, 0, 'Void Zone', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 0.1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_voidzone'),
+(2000017, 850, 0, 0, 0, 'Felhound', 'Mariella''s Slave', 0, 62, 62, 25000, 25000, 500000, 500000, 1900, 67, 0, 1, 1.14286, 1, 20, 5, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 2, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 1, 0, 0, 3, 0, 0, 0, 1073741823, 32, 308, 0, 'npc_felhound'),
+(2000018, 15866, 0, 0, 0, 'Kill Zone', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 0.2, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_killzone'),
+(2000019, 18495, 0, 0, 0, 'Sun', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_sun'),
+(2000020, 10529, 0, 0, 0, 'Invar One-Arm', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_invar_onearm'),
+(2000021, 10529, 0, 0, 0, 'Arellas Fireleaf', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_arellas_fireleaf'),
+(2000022, 10529, 0, 0, 0, 'Holia Sunshield', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_holia_sunshield'),
+(2000023, 10529, 0, 0, 0, 'Ferren Marcus', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_ferren_marcus'),
+(2000024, 10529, 0, 0, 0, 'Yana Bloodspear', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_yana_bloodspear'),
+(2000025, 10529, 0, 0, 0, 'Orman of Stromgarde', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_orman_stromgarde'),
+(2000026, 10529, 0, 0, 0, 'Fellari Swiftarrow', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_fellari_swiftarrow'),
+(2000027, 10529, 0, 0, 0, 'Dorgar Stoenbrow', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_dorgar_stoenbrow'),
+(2000028, 10529, 0, 0, 0, 'Valea Twinblades', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_valea_twinblades'),
+(2000029, 10529, 0, 0, 0, 'Harthal Truesight', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_harthal_truesight'),
+(2000030, 10529, 0, 0, 0, 'Admiral Barean Westwind', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_admiral_barean_westwind'),
+(2000031, 10529, 0, 0, 0, 'ARDAEUS_STATUE_NPC', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, ''),
+(2000032, 10529, 0, 0, 0, 'ANTI_EXPLOIT_TELEPORTER', '', 0, 1, 1, 666, 666, 0, 0, 20, 370, 33554432, 2.4, 1.42857, 1, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 33554496, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2097152, 0, 'npc_citadel_anti_exploit'),
+(2000033, 18680, 0, 0, 0, 'Citadel Inquisitor', 'The Scarlet Crusade', 0, 62, 62, 165000, 165000, 135000, 135000, 3600, 67, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 1900, 2150, 0, 100, 1, 3000, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 8, 0, 0, 0, 250, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 200002, 0, 0, 3167436667, 0, 0, 0, 'npc_citadel_inquisitor'),
+(2000034, 18687, 0, 0, 0, 'Citadel Valiant', 'The Scarlet Crusade', 0, 61, 61, 210000, 210000, 0, 0, 4400, 67, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 2965, 3665, 0, 100, 1, 1480, 3700, 0, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 8, 0, 0, 0, 250, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 200001, 0, 0, 3167436667, 0, 0, 0, 'npc_citadel_valiant'),
+(2000035, 18675, 0, 0, 0, 'Citadel Footman', 'The Scarlet Crusade', 0, 60, 60, 180000, 180000, 0, 0, 4000, 67, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 2650, 3200, 0, 100, 1, 1000, 2000, 0, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 8, 0, 0, 0, 250, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 200000, 0, 0, 3167436667, 0, 0, 0, 'npc_citadel_footman'),
+(2000036, 18681, 0, 0, 0, 'Citadel Interrogator', 'The Scarlet Crusade', 0, 62, 62, 190000, 190000, 0, 0, 4100, 67, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 2650, 3200, 0, 100, 1, 1000, 2000, 0, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 8, 0, 0, 0, 250, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 200004, 0, 0, 3167436667, 0, 0, 0, 'npc_citadel_interrogator'),
+(2000037, 18679, 0, 0, 0, 'Darkcaller Rayn', 'The Scarlet Crusade', 0, 62, 62, 190000, 190000, 0, 0, 3900, 67, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 2350, 2900, 0, 100, 1, 3500, 2000, 0, 0, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 8, 0, 0, 0, 250, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 3, 0, 0, 3, 200005, 0, 0, 3167436667, 0, 0, 0, 'npc_darkcaller_rayn');
 
--- Move the mount to creature template.
-UPDATE
-    `creature_template` T1, `creature_template_addon` T2
-SET
-    T1.`mount_display_id` = T2.`mount`
-WHERE
-    T1.entry = T2.entry && T2.mount != 0;
 
--- Move non standard spawn display id to creature addon.
-UPDATE `creature_addon` SET `display_id`=89 WHERE `guid`=80127;
-UPDATE `creature_addon` SET `display_id`=89 WHERE `guid`=80137;
-UPDATE `creature_addon` SET `display_id`=89 WHERE `guid`=80145;
-UPDATE `creature_addon` SET `display_id`=89 WHERE `guid`=80262;
-INSERT INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipment_id`, `stand_state`, `sheath_state`, `emote_state`, `auras`) VALUES (80881, 3258, -1, -1, 0, 1, 0, '');
+-- Reserved Range 1300000-1300100
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `display_id`, `equipment_id`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
+-- Bosses
+(1300000, 2000000, 0, 0, 0, 45, 0, 0, 67.3897, 13.3098, 16.8691, 6.2806, 25, 25, 0, 100, 100, 0, 1, 200),  -- Boss Sacred Fist Daelus
+(1300001, 2000001, 0, 0, 0, 45, 0, 0, 283.91, -116.886, 16.8717, 3.14647, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss Grand Sorcerer Ardaeus
+(1300002, 2000002, 0, 0, 0, 45, 0, 0, 188.304, 48.5719, 32.8437, 6.28209, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss High Inquisitor Mariella
+(1300003, 2000003, 0, 0, 0, 45, 0, 0, 420.76, -120.074, 35.7493, 1.55949, 25, 25, 0, 100, 100, 0, 1, 200), -- Boss High General Abbendis
+-- Easter Eggs
+(1300004, 2000008, 0, 0, 0, 45, 0, 0, 174.662, -156.664, 16.1426, 3.13743, 25, 25, 0, 100, 100, 0, 0, 0), -- Nolin
+(1300005, 2000007, 0, 0, 0, 45, 0, 0, 174.667, -155.46, 16.2131, 3.13743, 25, 25, 0, 100, 100, 0, 0, 0),  -- Nolin's Pet (Bokkeum)
+-- First Wing Trash
+(1300006, 2000004, 0, 0, 0, 45, 0, 0, 128.852, -73.6235, 15.9885, 1.56192, 25, 25, 0, 100, 100, 0, 0, 0), -- Eric Black
+-- Ambush Park
+(1300007, 2000036, 0, 0, 0, 45, 0, 200004, 159.388, -73.4126, 16.4383, 5.57385, 7200, 7200, 0, 100, 100, 0, 0, 0), -- Citadel Interrogator
+(1300008, 2000036, 0, 0, 0, 45, 0, 200004, 160.215, -105.74, 16.6029, 0.867746, 7200, 7200, 0, 100, 100, 0, 0, 0), -- Citadel Interrogator
+(1300009, 2000036, 0, 0, 0, 45, 0, 200004, 194.047, -76.657, 16.3321, 3.68339, 7200, 7200, 0, 100, 100, 0, 0, 0),  -- Citadel Interrogator
+(1300010, 2000036, 0, 0, 0, 45, 0, 200004, 192.524, -104.285, 16.2855, 2.51708, 7200, 7200, 0, 100, 100, 0, 0, 0), -- Citadel Interrogator
+(1300011, 2000036, 0, 0, 0, 45, 0, 200004, 182.289, -57.3441, 16.869, 4.72405, 7200, 7200, 0, 100, 100, 0, 0, 0),  -- Citadel Interrogator
+(1300012, 2000036, 0, 0, 0, 45, 0, 200004, 209.626, -57.4301, 16.869, 3.96025, 7200, 7200, 0, 100, 100, 0, 0, 0),  -- Citadel Interrogator
+(1300013, 2000036, 0, 0, 0, 45, 0, 200004, 209.906, -95.2465, 16.869, 3.15719, 7200, 7200, 0, 100, 100, 0, 0, 0),  -- Citadel Interrogator
+(1300014, 2000036, 0, 0, 0, 45, 0, 200004, 209.675, -122.707, 16.869, 2.35412, 7200, 7200, 0, 100, 100, 0, 0, 0),  -- Citadel Interrogator
+(1300015, 2000036, 0, 0, 0, 45, 0, 200004, 171.899, -122.853, 16.869, 1.55891, 7200, 7200, 0, 100, 100, 0, 0, 0),  -- Citadel Interrogator
+(1300016, 2000036, 0, 0, 0, 45, 0, 200004, 144.634, -122.575, 16.869, 0.854016, 7200, 7200, 0, 100, 100, 0, 0, 0), -- Citadel Interrogator
+(1300017, 2000036, 0, 0, 0, 45, 0, 200004, 144.257, -84.8893, 16.869, 6.26541, 7200, 7200, 0, 100, 100, 0, 0, 0),  -- Citadel Interrogator
+-- Vendors
+(1300019, 2000010, 0, 0, 0, 45, 0, 0, 10.4733, -5.30098, 16.869, 0.333276, 25, 25, 0, 100, 100, 0, 0, 0), -- Malor
+(1300019, 2000011, 0, 0, 0, 45, 0, 0, 10.4092, 32.8486, 16.869, 5.83813, 25, 25, 0, 100, 100, 0, 0, 0),   -- Jordan
+(1300020, 2000012, 0, 0, 0, 45, 0, 0, 225.379, -133.486, 15.9885, 1.5644, 25, 25, 0, 100, 100, 0, 0, 0),  -- Durgen
+-- Shadow Wing
+(1300021, 2000037, 0, 0, 0, 45, 0, 200005, 231.214, 63.3696, 32.8229, 4.71373, 25, 25, 0, 100, 100, 0, 0, 0), -- Darkcaller Rayn
+-- RP Event
+(1300022, 2000005, 0, 0, 0, 45, 0, 0, 172.061, -89.7261, 16.0093, 1.24109, 25, 25, 0, 100, 100, 0, 0, 0), -- Scarlet Chaplain
+(1300023, 2000006, 0, 0, 0, 45, 0, 0, 172.84, -87.1637, 16.0093, 4.36108, 25, 25, 0, 100, 100, 0, 0, 0); -- Scarlet Sister
 
--- Move non standard spawn equipment id to creature addon.
-UPDATE `creature_addon` SET `equipment_id`=1715 WHERE `guid`=8969;
-UPDATE `creature_addon` SET `equipment_id`=1715 WHERE `guid`=8971;
-UPDATE `creature_addon` SET `equipment_id`=1715 WHERE `guid`=27660;
-UPDATE `creature_addon` SET `equipment_id`=1715 WHERE `guid`=38004;
-UPDATE `creature_addon` SET `equipment_id`=1715 WHERE `guid`=44187;
-UPDATE `creature_addon` SET `equipment_id`=151 WHERE `guid`=90658;
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (27128, 4645);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (51717, 5360);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (51720, 5360);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (51724, 5361);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (92287, 429);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (92288, 2058);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (92289, 2058);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (92290, 2058);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (92291, 2058);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (955546, 918);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (955642, 918);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (966377, 782);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (971923, 1070);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (971926, 1072);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (971928, 1070);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2555926, 6182);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2559935, 51260);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2559947, 3161);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2560379, 16096);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2560380, 16096);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2560381, 16096);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561012, 3348);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561307, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561308, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561309, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561310, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561311, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561312, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561313, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561314, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561315, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561316, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561317, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561318, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561319, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561320, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561321, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561322, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561323, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561324, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561325, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561326, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561327, 544);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2561770, 12737);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563732, 16399);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563896, 3748);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563897, 3748);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563898, 3748);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563899, 3748);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563900, 3748);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563901, 3748);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2563902, 3748);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2564577, 55124);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565016, 13236);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565172, 55001);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565173, 55001);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565174, 55001);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565176, 55001);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565177, 55001);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565179, 55001);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565347, 14516);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2565572, 10440);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2566211, 5760);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2566221, 5760);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568008, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568022, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568058, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568065, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568068, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568070, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568071, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568076, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568077, 10605);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2568078, 1835);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2569151, 20068);
-INSERT INTO `creature_addon` (`guid`, `equipment_id`) VALUES (2569557, 4282);
 
--- Drop display and equipment override from creature spawn table.
-ALTER TABLE `creature`
-	DROP COLUMN `display_id`,
-	DROP COLUMN `equipment_id`;
+REPLACE INTO `creature_equip_template` (`entry`, `equipentry1`, `equipentry2`, `equipentry3`) VALUES
+(200000, 10825, 0, 0), -- Citadel Footman 2H Sword
+(200001, 13623, 0, 0), -- Citadel Valiant 2H Sword
+(200002, 22394, 0, 0), -- Citadel Inquisitor Staff
+(200003, 22391, 0, 0), -- Eric Dark Staff
+(200004, 13504, 23743, 0), -- Citadel Interrogator 2x1H Sword
+(200005, 13722, 0, 0); -- Citadel Rayllusionist Staff
 
--- Drop creature template addon.
-DROP TABLE `creature_template_addon`;
 
--- These creatures should not have mount assigned.
-UPDATE `creature_template` SET `mount_display_id`=0 WHERE `entry` IN (464, 469);
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(18671, 1, 1, 0, 0), -- Citadel Archwizard
+(18672, 1, 1, 0, 0), -- High General Abbendis
+(18673, 1, 1, 0, 0), -- Citadel Bishop
+(18674, 1, 1, 0, 0), -- Citadel Clergyman
+(18675, 1, 1, 0, 0), -- Citadel Footman
+(18676, 1, 1, 0, 0), -- Grand Inquisitor Boss
+(18677, 1, 1, 0, 0), -- Citadel High Cleric
+(18678, 1, 1, 0, 0), -- Illusion Boss
+(18679, 1, 1, 0, 0), -- Citadel Illusionist
+(18680, 1, 1, 0, 0), -- Citadel Inquisitor
+(18681, 1, 1, 0, 0), -- Citadel Interrogator
+(18683, 1, 1, 0, 0), -- Citadel Monk
+(18684, 1, 1, 0, 0), -- High Monk Daelus
+(18685, 1, 1, 0, 0), -- Paladin Halidus
+(18686, 1, 1, 0, 0), -- Citadel Praetorian
+(18687, 1, 1, 0, 0), -- Citadel Spellblade
+(18688, 1, 1, 0, 0), -- Citadel Valiant
+(18689, 1, 1, 0, 0), -- Citadel Watchman
+(18690, 1, 1, 0, 0), -- Citadel Zealot
+(18682, 1, 1, 0, 0); -- Citadel Monk
 
--- Bad auras data.
-DELETE FROM `creature_addon` WHERE `guid` IN (46, 133);
 
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`) VALUES 
+(1000000, 1000000), -- Boss Mariella
+(1000001, 1000001), -- Boss Ardaeus
+(1000002, 1000002); -- Boss Daelus
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(1000000, 'It seems Mistress Abbendis was rash when choosing the new blood, if you were to have faced me at the entrance you wouldn''t have made it this far.$B\nLook at you, monster, abomination. The way you move, the way you fight, the way you speak it''s all driven by the strings of your Dark Master. If there''s any morality left in you, pray to what you once knew as a powerful being.$B\nI have wasted breath on you, despicable creature, come and meet your end!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0), -- Boss Mariella
+(1000001, 'For years, I have studied the arcane. My role in the order was different, yet meaningful. I have seen the work of necromancers in my studies. Never would I have imagined standing against such a powerful abomination as yourself.$B\nI believe it to be mockery-the fact you stand before me and have yet to attack. Do you, who carry the shame of your dark master, overestimate yourself this much? Alas, I will give you the satisfaction you seek.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0), -- Boss Ardaeus
+(1000002, 'I like to remember the Monastery as it used to be.$B\nA place of worship and joy, a place where the young would come in search of greater purpose. Sparring within these very halls, there were many I''ve taught them how to defend themselves and what they stood for.$B\nMany were taken by the Light, butchered, and maimed by this unreasonable world. Nothing but toys to creatures like you that lavish in the pain and sorrow of righteous good people. I curse you, all of you. You believe us so weak to be defeated by a handful of wretched minions of the Scourge?$B\nCount your steps, they will be your last. When we are done with you, our shipwrights will be ready and we will find justice by our own means.$B\nYour downfall comes fools, I will protect the order!$B\nFor the Scarlet Crusade!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0); -- Boss Daelus
+
+REPLACE INTO `creature_linking_template` (`entry`, `map`, `master_entry`, `flag`, `search_range`) VALUES
+('2000033', '45', '2000034', '1', '8'),
+('2000034', '45', '2000035', '1', '8'),
+('2000035', '45', '2000033', '1', '8');
+
+-- SC Drops:
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (84000, 'Pulseseeker', '', 2, 15, 1, 4, 61068, 1, 60, 1, -1, -1, 783412, 195853, 13, 3, 0, 0, 1, 1, 0, 94, 141, 1800, 0, 0, 75, 0, 0, 0, 73, 0, 65, 0, 0, 0, 0, 0, 0, 3, 10, 26693, 2, 0, 0, -1, 0, -1, 15464, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (84001, 'Rose of Sanguine Rage', '', 4, 0, 1, 4, 31779, 1, 60, 0, -1, -1, 358312, 89578, 23, 6, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 83, 0, 0, 0, 0, 0, 0, 0, 0, 5, 12, 17872, 1, 0, 0, -1, 0, -1, 18382, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (84002, 'Headguard of the Scarlet Bastion', '', 4, 4, 6, 4, 14957, 1, 60, 0, -1, -1, 247853, 61963, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 100, 757, 0, 0, 83, 0, 65, 0, 0, 0, 0, 0, 0, 3, 20, 5, 14, 7, 30, 13669, 1, 0, 0, 0, 0, 0, 14249, 1, 0, 0, -1, 0, -1, 18049, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (84003, 'Signet of the Broken Oath', '', 4, 0, 1, 4, 31655, 1, 60, 0, -1, -1, 241005, 60251, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 83, 0, 65, 0, 0, 0, 0, 0, 0, 5, 10, 18015, 1, 0, 0, -1, 0, -1, 21523, 1, 0, 0, -1, 0, -1, 23727, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (84004, 'Subjugator''s Boots', '', 4, 2, 8, 4, 66248, 1, 60, 0, -1, -1, 305217, 76304, 8, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 166, 0, 0, 83, 0, 65, 0, 0, 0, 0, 0, 0, 3, 28, 7, 24, 9132, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (84005, 'Blindfold of the Scarlet Marksman', 'Those that blinded are those that truly see.', 4, 3, 5, 4, 5878, 1, 60, 0, -1, -1, 364609, 91152, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 85, 425, 0, 0, 83, 0, 65, 0, 0, 0, 0, 0, 0, 3, 30, 7, 16, 15466, 1, 0, 0, -1, 0, -1, 9132, 1, 0, 0, -1, 0, -1, 14049, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (84006, 'Banner of the Scarlet Crusade', 'Soaked in the blood of those devoted to this zealous crusade.', 4, 0, 1, 4, 23954, 1, 0, 0, -1, -1, 380702, 95175, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 13681, 1, 0, 0, 0, 0, 0, 9336, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+
+-- Daelus Items Pog
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (84030, 'Gauntlet of a Thousand Cuts', '', 2, 13, 1, 4, 32534, 1, 60, 0, -1, -1, 1061503, 265375, 21, 3, 0, 0, 1, 1, 0, 75, 140, 1500, 0, 0, 75, 0, 0, 0, 88, 0, 65, 0, 0, 0, 0, 0, 0, 7597, 1, 0, 0, -1, 0, -1, 16405, 2, 0, 5, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (84031, 'Consecrated Sigil', '', 4, 0, 1, 4, 23435, 1, 60, 1, -1, -1, 408425, 102106, 12, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88, 0, 65, 0, 0, 0, 0, 0, 0, 18382, 1, 0, 0, -1, 0, -1, 18044, 1, 0, 0, -1, 0, -1, 21531, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmrate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3, random_property, required_reputation_faction, required_reputation_rank) values (84032, 'Kilt of the Devoted', '', 4, 1, 7, 4, 66249, 1, 60, 0, -1, -1, 412345, 103086, 7, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 75, 116, 0, 0, 88, 0, 65, 0, 0, 0, 0, 0, 0, 5, 20, 7, 24, 6, 30, 14776, 1, 0, 0, -1, 0, -1, 18035, 1, 0, 0, -1, 0, -1, 21523, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (84033, 'Bulwark of the Light', '', 4, 6, 6, 4, 26868, 1, 60, 0, -1, -1, 621505, 155376, 14, 4, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 120, 3423, 64, 0, 88, 0, 65, 0, 0, 0, 0, 0, 0, 7, 19, 13675, 1, 0, 0, -1, 0, -1, 28325, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, random_property, required_reputation_faction, required_reputation_rank) values (84034, 'Girdle of the Insane Zealot', '', 4, 4, 6, 4, 66250, 1, 60, 0, -1, -1, 195209, 48802, 6, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 55, 554, 0, 0, 88, 0, 65, 0, 0, 0, 0, 0, 0, 4, 15, 3, 15, 7, 20, 7598, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (84035, 'Fists of the Red Dawn', '', 4, 2, 8, 4, 66251, 1, 60, 0, -1, -1, 251892, 62973, 10, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 40, 158, 0, 0, 88, 0, 65, 0, 0, 0, 0, 0, 0, 4, 22, 3, 12, 7, 20, 7597, 1, 0, 0, -1, 0, -1, 18186, 1, 0, 0, -1, 0, -1, 0, 0, 0);
+replace into item_template (entry, name, description, class, subclass, material, quality, display_id, bonding, required_level, max_count, allowable_class, allowable_race, buy_price, sell_price, inventory_type, sheath, flags, extra_flags, buy_count, stackable, container_slots, dmg_min1, dmg_max1, delay, dmg_type1, ammo_type, max_durability, armor, block, bag_family, item_level, range_mod, disenchant_id, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, stat_type1, stat_value1, stat_type2, stat_value2, spellid_1, spelltrigger_1, spellcharges_1, spellppmrate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1, spellid_2, spelltrigger_2, spellcharges_2, spellppmrate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, random_property, required_reputation_faction, required_reputation_rank) values (84036, 'Loop of Acceleration', '', 4, 0, 1, 4, 34189, 1, 60, 1, -1, -1, 461262, 115315, 11, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88, 0, 65, 0, 0, 0, 0, 0, 0, 5, 10, 7, 10, 13679, 1, 0, 0, 0, 0, 0, 14798, 1, 0, 0, -1, 0, -1, 0, 0, 0);
