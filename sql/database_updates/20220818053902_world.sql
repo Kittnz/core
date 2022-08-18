@@ -121,3 +121,20 @@ REPLACE INTO npc_vendor VALUES (60885, 3466, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60885, 3857, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60885, 5956, 0, 0, 0, 0);
 REPLACE INTO npc_vendor VALUES (60885, 18567, 0, 0, 0, 0);
+-- Quest 308 this should be a repeatable quest.
+update quest_template set questflags = 8 where entry = 308;
+-- Recover quest end reply for quest 808.
+update broadcast_text set male_text = 'I thank you $N. And my  brother thanks you.' where entry = 983;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41029, 983, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30032, 'There are many secrets in this swamp, it just takes a keen eye to search for it.');
+replace into npc_text (ID, BroadcastTextID0) values (983, 30032);
+-- Change description of quest 40262.
+update quest_template set details = 'You have learned how to tame a beast using your own skills, you must also know how to train it. Before we move with that, I want you to know this. Some beasts do not accept the undead as their masters, either because you seem a delicious snack or since their natural mechanism advises them not to.\n\nLuckily with the aid of the Cult of Forgotten Shadow, we hunters were taught a small incantation that would soothe the mind of the beast, and it would merely alter the thought that you\'d be alive.\n\nOnly use this incantation on pets that will not accept an undead master! Now, as I\'ve mentioned before, on your countless adventures that are to follow, you will gain skills and you must train your pet to do so as well. I am not able to teach you how to do that, but I know who can.\n\nTravel to the Undercity, in the War Quarter speak to Diane Willowfield. It has been my utmost pleasure to teach you. Go now and show the living that the Forsaken are no mere walking corpses.' where entry = 40262;
+-- Add +150 Darkspear Tribe rep to this quest quest=810 add 1s money reward, nerf xp reward to 500.
+update quest_template set rewxp = 500, rewrepfaction1 = 530, rewrepvalue1 = 150, reworreqmoney = 100 where entry = 810;
+-- Add +150 Darkspear Tribe rep to this quest quest=811 | quest says something about a reward and it doesn't even give silver, add 1s and 15c as money reward. give reward x1 this item: item=6452.
+update quest_template set rewrepfaction1 = 530, rewrepvalue1 = 150, reworreqmoney = 115, rewitemid1 = 6452, rewitemcount1 = 1 where entry = 811;
+-- Quest give a ridiculous amount of exp, nerf it to 650 and add +150 Darkspear Tribe rep to it: quest=820.
+update quest_template set rewxp = 650, rewrepfaction1 = 530, rewrepvalue1 = 150 where entry = 820;
+-- Quest=40389 change this to 250 darkspear tribe rep, there's trivial quests in Sen'jin that give 250, this should as well.
+update quest_template set rewrepfaction1 = 530, rewrepvalue1 = 250 where entry = 40389;
