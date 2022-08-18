@@ -1226,6 +1226,9 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
     // Get triggered aura spell info
     SpellEntry const* auraSpellInfo = triggeredByAura->GetSpellProto();
 
+    // Allow overwritting caster
+    Unit* pCaster = this;
+
     // Basepoints of trigger aura
     int32 triggerAmount = triggeredByAura->GetModifier()->m_amount;
 
@@ -1547,6 +1550,11 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                         sLog.outError("Unit::HandleProcTriggerSpell: Spell %u not handled in LShield", auraSpellInfo->Id);
                         return SPELL_AURA_PROC_FAILED;
                 }
+                
+                // Make original aura caster cast the damage spell, so his spell power is used.
+                if (Unit* pAuraCaster = triggeredByAura->GetCaster())
+                    if (IsWithinDistInMap(pAuraCaster, VISIBILITY_DISTANCE_NORMAL))
+                        pCaster = pAuraCaster;
             }
             // Lightning Shield (The Ten Storms set)
             else if (auraSpellInfo->Id == 23551)
@@ -1630,13 +1638,13 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
         return SPELL_AURA_PROC_FAILED;
 
     if (basepoints[EFFECT_INDEX_0] || basepoints[EFFECT_INDEX_1] || basepoints[EFFECT_INDEX_2])
-        CastCustomSpell(target, trigger_spell_id,
+        pCaster->CastCustomSpell(target, trigger_spell_id,
                         basepoints[EFFECT_INDEX_0] ? &basepoints[EFFECT_INDEX_0] : nullptr,
                         basepoints[EFFECT_INDEX_1] ? &basepoints[EFFECT_INDEX_1] : nullptr,
                         basepoints[EFFECT_INDEX_2] ? &basepoints[EFFECT_INDEX_2] : nullptr,
                         true, castItem, triggeredByAura);
     else
-        CastSpell(target, trigger_spell_id, true, castItem, triggeredByAura, GetObjectGuid(), nullptr, procSpell);
+        pCaster->CastSpell(target, trigger_spell_id, true, castItem, triggeredByAura, pCaster->GetObjectGuid(), nullptr, procSpell);
 
     if (cooldown)
         AddSpellCooldown(trigger_spell_id, 0, time(nullptr) + cooldown);
