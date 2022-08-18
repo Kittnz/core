@@ -1,0 +1,9 @@
+REPLACE INTO creature_loot_template VALUES (11793, 60780, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (11794, 60780, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12219, 60780, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12220, 60780, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12223, 60780, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12224, 60780, 0.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12225, 60780, 2.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12258, 60780, 2.5, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (12237, 60780, 10, 0, 1, 1, 0);
