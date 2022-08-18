@@ -162,3 +162,7 @@ update item_template set item_level = 63, required_level = 58, stat_value1 = 19 
 update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 5 where id in (2010898, 2010900, 2010899, 2010901, 126158, 2739, 2741, 2740, 2742, 176189);
 -- Remove shadow immunity from Alarus and give him 75 Shadow Resistance instead. 
 update creature_template set school_immune_mask = 0, shadow_res = 75 where entry = 91928;
+-- Change Half-Buried Treasure Chests (379545) so they only give 1 Sack of Gems instead of 3, and 1 Greater Frost Protection Potion instead of 2.
+update gameobject_loot_template set mincountorref = 1, maxcount = 1 where item in (11938,13456);
+-- Alarus should drop 2 rare items instead of 1. Just copy his loottable to another number.
+update creature_loot_template set ChanceOrQuestChance = 21.15 where item in (83469, 83470, 83471, 83472);
