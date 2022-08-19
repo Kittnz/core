@@ -131,9 +131,22 @@ struct stormwind_vault_rat_trap : public GameObjectAI
                         rat_door_2->UseDoorOrButton();
                     }
 
-                    DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, door_1 = rat_door_1, door_2 = rat_door_2]() {
-                        door_1->ResetDoorOrButton();
-                        door_2->ResetDoorOrButton();
+                    auto ratDoorGuid1 = rat_door_1 ? rat_door_1->GetObjectGuid() : ObjectGuid{};
+                    auto ratDoorGuid2 = rat_door_2 ? rat_door_2->GetObjectGuid() : ObjectGuid{};
+
+                    DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, door_1_guid = ratDoorGuid1, door_2_guid = ratDoorGuid2]() {
+
+                        if (!player->GetMap())
+                            return;
+
+                        GameObject* ratDoor1 = player->GetMap()->GetGameObject(door_1_guid);
+                        GameObject* ratDoor2 = player->GetMap()->GetGameObject(door_2_guid);
+
+                        if (ratDoor1)
+                            ratDoor1->ResetDoorOrButton();
+
+                        if (ratDoor2)
+                            ratDoor2->ResetDoorOrButton();
                         });
 
                     DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer]() {
