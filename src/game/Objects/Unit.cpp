@@ -2014,20 +2014,24 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
         if (mod->m_amount <= 0)
             existExpired = true;
 
-        if (HasAura(45560) && this != pCaster && pCaster->IsUnit() && (*i)->GetSpellProto()->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD>()) // CUSTOM reflective shields
+        // CUSTOM priest talent Reflective Shields
+        if (GetClass() == CLASS_PRIEST && HasAura(45560) && this != pCaster && pCaster->IsUnit() &&
+            (*i)->GetSpellProto()->IsFitToFamily<SPELLFAMILY_PRIEST, CF_PRIEST_POWER_WORD_SHIELD>())
         {
-            //20% of currentAbsorb
-            const int32 damage = currentAbsorb * 0.2f;
+            // 20% of currentAbsorb
+            int32 const damage = currentAbsorb * 0.2f;
             if (damage)
             {
-                m_Events.AddLambdaEventAtOffset([this, casterGuid = pCaster->GetObjectGuid(), damage]() {
-                    auto pCaster = sObjectAccessor.FindPlayer(casterGuid);
-                    if(pCaster)
-                        CastCustomSpell(pCaster->ToUnit(), 45561, &damage, nullptr, nullptr, true);
+                m_Events.AddLambdaEventAtOffset([this, victimGuid = pCaster->GetObjectGuid(), damage]()
+                {
+                    if (Map* pMap = FindMap())
+                    {
+                        if (Unit* pVictim = pMap->GetUnit(victimGuid))
+                            CastCustomSpell(pVictim->ToUnit(), 45561, &damage, nullptr, nullptr, true);
+                    }
                 }, 1);
             }
         }
-
     }
 
     // Remove all expired absorb auras
