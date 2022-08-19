@@ -8849,6 +8849,15 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
     if (!ExtractUint32KeyFromLink(&args, "Hcreature_entry", id))
         return false;
 
+    // Forbid manually spawning mobs which break scripts if they are duplicated.
+    switch (id)
+    {
+        case 1842: // Highlord Taelan Fordring
+            SendSysMessage("You are not allowed to manually spawn that creature. Talk to a developer.");
+            SetSentErrorMessage(true);
+            return false;
+    }
+
     CreatureInfo const* cinfo = ObjectMgr::GetCreatureTemplate(id);
     if (!cinfo)
     {
@@ -9135,31 +9144,40 @@ bool ChatHandler::HandleNpcDeleteCommand(char* args)
         return false;
     }
 
+    // Forbid manually spawning mobs which break scripts if they are duplicated.
+    switch (unit->GetEntry())
+    {
+        case 1842: // Highlord Taelan Fordring
+            SendSysMessage("You are not allowed to manually delete that creature. Talk to a developer.");
+            SetSentErrorMessage(true);
+            return false;
+    }
+
     switch (unit->GetSubtype())
     {
-    case CREATURE_SUBTYPE_GENERIC:
-    {
-        unit->CombatStop();
-        if (CreatureData const* data = sObjectMgr.GetCreatureData(unit->GetGUIDLow()))
+        case CREATURE_SUBTYPE_GENERIC:
         {
-            Creature::AddToRemoveListInMaps(unit->GetGUIDLow(), data);
-            Creature::DeleteFromDB(unit->GetGUIDLow(), data);
+            unit->CombatStop();
+            if (CreatureData const* data = sObjectMgr.GetCreatureData(unit->GetGUIDLow()))
+            {
+                Creature::AddToRemoveListInMaps(unit->GetGUIDLow(), data);
+                Creature::DeleteFromDB(unit->GetGUIDLow(), data);
+            }
+            else
+                unit->AddObjectToRemoveList();
+            break;
         }
-        else
-            unit->AddObjectToRemoveList();
-        break;
-    }
-    case CREATURE_SUBTYPE_PET:
-        ((Pet*)unit)->Unsummon(PET_SAVE_AS_CURRENT);
-        break;
-    case CREATURE_SUBTYPE_TOTEM:
-        ((Totem*)unit)->UnSummon();
-        break;
-    case CREATURE_SUBTYPE_TEMPORARY_SUMMON:
-        ((TemporarySummon*)unit)->UnSummon();
-        break;
-    default:
-        return false;
+        case CREATURE_SUBTYPE_PET:
+            ((Pet*)unit)->Unsummon(PET_SAVE_AS_CURRENT);
+            break;
+        case CREATURE_SUBTYPE_TOTEM:
+            ((Totem*)unit)->UnSummon();
+            break;
+        case CREATURE_SUBTYPE_TEMPORARY_SUMMON:
+            ((TemporarySummon*)unit)->UnSummon();
+            break;
+        default:
+            return false;
     }
 
     SendSysMessage(LANG_COMMAND_DELCREATMESSAGE);
