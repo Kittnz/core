@@ -2027,7 +2027,7 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
                     if (Map* pMap = FindMap())
                     {
                         if (Unit* pVictim = pMap->GetUnit(victimGuid))
-                            CastCustomSpell(pVictim->ToUnit(), 45561, &damage, nullptr, nullptr, true);
+                            CastCustomSpell(pVictim, 45561, &damage, nullptr, nullptr, true);
                     }
                 }, 1);
             }
