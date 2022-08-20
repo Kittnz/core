@@ -1,1 +1,0 @@
-UPDATE `spell_template` SET `attributesEx` = `attributesEx` | 128 WHERE entry IN(21063, 21064);

@@ -1,1 +1,0 @@
-update creature_template set name = 'Bael Modan Golem' where entry = 60442;

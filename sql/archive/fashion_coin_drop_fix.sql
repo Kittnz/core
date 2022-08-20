@@ -1,1 +1,0 @@
-update creature_loot_template set chanceorquestchance = 100 where item = 51217;

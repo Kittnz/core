@@ -1,1 +1,0 @@
-update quest_template set questflags = 8 where entry = 60065;

@@ -1,1 +1,0 @@
-update item_template set sheath = 0 where entry = 83453;

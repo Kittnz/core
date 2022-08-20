@@ -1,1 +1,0 @@
-update gameobject_template set data2 = 5087 where entry = 379548;

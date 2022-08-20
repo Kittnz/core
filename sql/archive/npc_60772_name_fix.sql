@@ -1,1 +1,0 @@
-update creature_template set name = 'Councilor Vargek' where entry = 60772;

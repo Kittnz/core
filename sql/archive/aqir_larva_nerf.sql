@@ -1,1 +1,0 @@
-update creature_template set script_name = '' where entry = 65115;
