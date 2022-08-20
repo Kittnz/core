@@ -23431,9 +23431,9 @@ void Player::SendAddonMessage(std::string prefix, std::string message, Player* f
 	GetSession()->SendPacket(&data);
 }
 
-uint8 Player::GetTotalQuestCount()
+uint32 Player::GetTotalQuestCount()
 {
-    uint8 quest_count = 0;
+    uint32 quest_count = 0;
 
     QueryResult* quest_count_query = CharacterDatabase.PQuery("SELECT COUNT(*) AS quest_count, guid FROM character_queststatus WHERE rewarded = 1 and guid = %u;", GetGUIDLow());
 

@@ -2196,7 +2196,7 @@ class Player final: public Unit
 
         void UpdateTotalDeathCount();
         uint32 GetTotalDeathCount() const { return m_totalDeathCount; };
-        uint8  GetTotalQuestCount();
+        uint32  GetTotalQuestCount();
 
         /*********************************************************/
         /***                 MISC GAME SYSTEMS                 ***/
