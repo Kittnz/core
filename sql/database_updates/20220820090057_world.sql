@@ -156,3 +156,31 @@ update quest_template set rewxp = 630 where entry = 70051;
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1969
 
 update gameobject set spawntimesecsmin = 7200, spawntimesecsmax = 7200 where guid in (5008116, 5008117);
+
+-- https://database.turtle-wow.org/?npc=922 are stuck undeground alot
+
+update creature set position_x = -9701.59, position_y = -4032.88, position_z = -9.3691 where guid = 32692;
+update creature set position_x = -9733.64, position_y = -4066.1,  position_z = -7.65416 where guid = 34158;
+update creature set position_x = -9833.01, position_y = -4166.06, position_z = -3.82848 where guid = 35230;
+update creature set position_x = -9700.15, position_y = -3965.88, position_z = 2.42555 where guid = 35251;
+update creature set position_x = -9767.1,  position_y = -4100.25, position_z = -6.36123 where guid = 35252;
+update creature set position_x = -9900.51, position_y = -4266.59, position_z = -4.61402 where guid = 35253;
+update creature set position_x = -9700.58, position_y = -4000.34, position_z = 0.98252 where guid = 37376;
+update creature set position_x = -11056.5, position_y = -4068.69, position_z = -5.14192 where guid = 37590;
+update creature set position_x = -9666.95, position_y = -3967.06, position_z = -9.86884 where guid = 37591;
+update creature set position_x = -9743.23, position_y = -4027.73, position_z = 6.79941 where guid = 38684;
+update creature set position_x = -9802.07, position_y = -4158.17, position_z = -2.37193 where guid = 38685;
+update creature set position_x = -9702.47, position_y = -3912.48, position_z = 3.86439 where guid = 38687;
+update creature set position_x = -9762.35, position_y = -4084.46, position_z = 0.021444 where guid = 38689;
+update creature set position_x = -9814.01, position_y = -4119.4,  position_z = 3.91088 where guid = 38691;
+update creature set position_x = -10941.7, position_y = -4207.12, position_z = 0.0772 where guid = 38694;
+update creature set position_x = -10882.8, position_y = -4187.08, position_z = 5.47756 where guid = 38719;
+update creature set position_x = -10891.1, position_y = -4161.32, position_z = 5.41886 where guid = 38720;
+update creature set position_x = -10818.1, position_y = -4242.47, position_z = 1.79609 where guid = 38754;
+update creature set position_x = -9846.63, position_y = -4158.63, position_z = 0.94299 where guid = 38760;
+update creature set position_x = -9857.72, position_y = -4127.32, position_z = 12.7739 where guid = 38762;
+update creature set position_x = -9984.33, position_y = -4292.09, position_z = 1.31476 where guid = 38763;
+update creature set position_x = -9934.31, position_y = -4241.89, position_z = 2.71027 where guid = 38764;
+update creature set position_x = -9898.84, position_y = -4217.92, position_z = 2.29258 where guid = 38765;
+update creature set position_x = -10915.3, position_y = -4131.91, position_z = 9.70558 where guid = 38766;
+update creature set position_x = -10849.8, position_y = -4283.15, position_z = -11.5076 where guid = 38873;
