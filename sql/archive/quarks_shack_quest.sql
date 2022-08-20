@@ -1,1 +1,0 @@
-delete from creature_involvedrelation where quest = 80305 and id = 80801;

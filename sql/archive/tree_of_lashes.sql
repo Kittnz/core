@@ -1,1 +1,0 @@
-REPLACE INTO gameobject_template VALUES (2010796, 9, 25251, 'Tree of Lashes', 0, 0, 1, 50526, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');

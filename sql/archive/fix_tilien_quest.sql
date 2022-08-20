@@ -1,1 +1,0 @@
-UPDATE `creature_ai_scripts` SET `datalong` = 30 WHERE `id` = 184004 AND `command` = 26;

@@ -1,1 +1,0 @@
-update faction set reputation_flags1 = 0 where id = 609;

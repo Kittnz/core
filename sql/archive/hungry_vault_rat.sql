@@ -1,1 +1,0 @@
-update creature_template set health_min = 1682, health_max = 1682 where entry = 93106;

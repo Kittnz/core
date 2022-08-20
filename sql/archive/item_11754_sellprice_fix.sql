@@ -1,1 +1,0 @@
-update item_template set sell_price = 100 where entry = 11754;
