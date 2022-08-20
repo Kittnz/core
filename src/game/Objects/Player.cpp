@@ -23433,17 +23433,7 @@ void Player::SendAddonMessage(std::string prefix, std::string message, Player* f
 
 uint32 Player::GetTotalQuestCount()
 {
-    uint32 quest_count = 0;
-
-    QueryResult* quest_count_query = CharacterDatabase.PQuery("SELECT COUNT(*) AS quest_count, guid FROM character_queststatus WHERE rewarded = 1 and guid = %u;", GetGUIDLow());
-
-    if (quest_count_query)
-    {
-        Field* fields = quest_count_query->Fetch();
-        quest_count = fields[0].GetUInt32();
-
-        delete quest_count_query;
-    }
-
-    return quest_count;
+    return std::count_if(mQuestStatus.begin(), mQuestStatus.end(), [](decltype(mQuestStatus)::value_type value) -> bool {
+        return value.second.uState != QUEST_DELETED && value.second.m_rewarded;
+    });
 }
