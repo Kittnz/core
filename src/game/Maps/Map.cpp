@@ -1634,15 +1634,17 @@ void Map::RemoveAllObjectsInRemoveList()
         WorldObject* obj = *i_objectsToRemove.begin();
         i_objectsToRemove.erase(i_objectsToRemove.begin());
 
+        if (!obj)
+            continue;
+
         switch (obj->GetTypeId())
         {
             case TYPEID_CORPSE:
             {
-                Corpse* corpse = GetCorpse(obj->GetObjectGuid());
-                if (!corpse)
+                if (obj->FindMap() != this)
                     sLog.outError("Try delete corpse/bones %u that not in map", obj->GetGUIDLow());
                 else
-                    Remove(corpse, true);
+                    Remove((Corpse*)obj, true);
                 break;
             }
             case TYPEID_DYNAMICOBJECT:
