@@ -150,7 +150,7 @@ struct boss_majordomoAI : public ScriptedAI
                 {
                     if (Creature* pAdd = m_creature->GetMap()->GetCreature(guid))
                     {
-                        if (pAdd->IsAlive() && AddVivant > 0)
+                        if (pAdd->IsAlive())
                         {
                             CreatureInfo const* cinfo = pAdd->GetCreatureInfo();
                             pAdd->SetBaseWeaponDamage(BASE_ATTACK, MINDAMAGE, cinfo->dmg_min + cinfo->dmg_min / AddVivant);
