@@ -138,6 +138,13 @@ void WorldSession::HandlePetAction(WorldPacket& recv_data)
                     if (!GetPlayer()->IsValidAttackTarget(TargetUnit))
                         return;
 
+                    // prevent pets from pulling bosses through walls and gates
+                    if (!TargetUnit->IsInCombat() &&
+                        GetPlayer()->GetMap()->GetMapEntry()->IsDungeon() &&
+                       !GetPlayer()->IsWithinLOSInMap(TargetUnit) &&
+                       !pCharmedUnit->IsWithinLOSInMap(TargetUnit))
+                        return;
+
                     pCharmedUnit->ClearUnitState(UNIT_STAT_FOLLOW);
                     // This is true if pet has no target or has target but targets differs.
                     if (pCharmedUnit->GetVictim() != TargetUnit || (pCharmedUnit->GetVictim() == TargetUnit && !pCharmedUnit->GetCharmInfo()->IsCommandAttack()) || pCharmedUnit->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_POSSESSED))

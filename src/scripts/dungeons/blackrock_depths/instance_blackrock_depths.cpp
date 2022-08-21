@@ -76,7 +76,7 @@ struct instance_blackrock_depths : ScriptedInstance
     uint64 m_uiDwarfRuneF01GUID;
     uint64 m_uiDwarfRuneG01GUID;
 
-    uint64 m_uiGoMagnusGUID;
+    uint64 m_uiMagmusGUID;
 
     uint64 m_uiRocknotGUID;
     uint64 m_uiNagmaraGUID;
@@ -143,7 +143,7 @@ struct instance_blackrock_depths : ScriptedInstance
         m_uiDoomrelGUID = 0;
         m_uiDoperelGUID = 0;
 
-        m_uiGoMagnusGUID = 0;
+        m_uiMagmusGUID = 0;
 
         // Ring of Law Challenge
         m_uiTheldrenGUID = 0;
@@ -257,8 +257,8 @@ struct instance_blackrock_depths : ScriptedInstance
             case NPC_RIBBLY_S_CRONY:
                 m_lRibblySCronyMobGUIDList.push_back(pCreature->GetGUID());
                 break;
-            case 9938:
-                m_uiGoMagnusGUID = pCreature->GetGUID();
+            case NPC_MAGMUS:
+                m_uiMagmusGUID = pCreature->GetGUID();
                 break;
             case NPC_ARENA_SPECTATOR:
                 m_lArenaSpectatorMobGUIDList.push_back(pCreature->GetGUID());
@@ -772,7 +772,7 @@ struct instance_blackrock_depths : ScriptedInstance
                 {
                     DoOpenDoor(m_uiGoGolemNGUID);
                     DoOpenDoor(m_uiGoGolemSGUID);
-                    if (Creature* magnus = instance->GetCreature(m_uiGoMagnusGUID))
+                    if (Creature* magnus = instance->GetCreature(m_uiMagmusGUID))
                     {
                         DoScriptText(YELL_MAGMUS, magnus);
                         std::list<Creature*> AnvilrageList;
