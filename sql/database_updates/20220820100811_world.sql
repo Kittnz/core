@@ -256,8 +256,8 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 (82002, 4, 0, 'Tabard of the Ashbringer', 'Filled with light.', 34374, 4, 0, 1, 0, 0, 19, -1, -1, 85, 60, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 25824, 0, 0, 0, 3600000, 0, -1, 17623, 1, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
 
 REPLACE INTO `creature_template` (`entry`, `display_id1`, `display_id2`, `display_id3`, `display_id4`, `mount_display_id`, `name`, `subname`, `gossip_menu_id`, `level_min`, `level_max`, `health_min`, `health_max`, `mana_min`, `mana_max`, `armor`, `faction`, `npc_flags`, `speed_walk`, `speed_run`, `scale`, `detection_range`, `call_for_help_range`, `leash_range`, `rank`, `xp_multiplier`, `dmg_min`, `dmg_max`, `dmg_school`, `attack_power`, `dmg_multiplier`, `base_attack_time`, `ranged_attack_time`, `unit_class`, `unit_flags`, `dynamic_flags`, `beast_family`, `trainer_type`, `trainer_spell`, `trainer_class`, `trainer_race`, `ranged_dmg_min`, `ranged_dmg_max`, `ranged_attack_power`, `type`, `type_flags`, `loot_id`, `pickpocket_loot_id`, `skinning_loot_id`, `holy_res`, `fire_res`, `nature_res`, `frost_res`, `shadow_res`, `arcane_res`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`, `spell_list_id`, `pet_spell_list_id`, `auras`, `gold_min`, `gold_max`, `ai_name`, `movement_type`, `inhabit_type`, `civilian`, `racial_leader`, `regeneration`, `equipment_id`, `trainer_id`, `vendor_id`, `mechanic_immune_mask`, `school_immune_mask`, `flags_extra`, `phase_quest_id`, `script_name`) VALUES
-(2000090, 9477, 0, 0, 0, 0, 'Tirion Fordring', NULL, 0, 61, 61, 25150, 25150, 2486, 2486, 1091, 250, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 244, 703, 0, 278, 1, 2000, 2000, 2, 64, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, '17622', 0, 0, '', 0, 3, 0, 0, 3, 1855, 0, 0, 3167436667, 0, 0, 0, 'duplicate_tirion_fordring'),
-(2000091, 18675, 0, 0, 0, 0, 'Spirit of Alexandros Mograine', NULL, 0, 83, 83, 13945000, 13945000, 2129000, 2129000, 10643, 35, 3, 1, 1.14286, 1, 20, 5, 0, 3, 1, 16336, 22546, 0, 290, 1, 1500, 1700, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '17622', 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 0, 0, 'npc_alexandros_mograine'),
+(2000090, 9477, 0, 0, 0, 0, 'Tirion Fordring', NULL, 60900, 61, 61, 25150, 25150, 2486, 2486, 1091, 250, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 244, 703, 0, 278, 1, 2000, 2000, 2, 64, 0, 0, 0, 0, 0, 0, 172.1, 240.07, 100, 7, 0, 0, 0, 0, 0, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 0, '17622', 0, 0, '', 0, 3, 0, 0, 3, 1855, 0, 0, 3167436667, 0, 0, 0, 'duplicate_tirion_fordring'),
+(2000091, 18675, 0, 0, 0, 0, 'Spirit of Alexandros Mograine', 'The Ashbringer', 60901, 83, 83, 13945000, 13945000, 2129000, 2129000, 10643, 35, 3, 1, 1.14286, 1, 20, 5, 0, 3, 1, 16336, 22546, 0, 290, 1, 1500, 1700, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '17622', 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 3167436667, 0, 0, 0, 'npc_alexandros_mograine'),
 (2000092, 10545, 0, 0, 0, 0, 'Grand Crusader Dathrohan', NULL, 0, 63, 63, 495000, 495000, 0, 0, 4200, 189, 0, 1, 1.14286, 0, 20, 5, 0, 3, 1, 2500, 3500, 0, 290, 1, 1480, 1700, 1, 0, 0, 0, 0, 0, 0, 0, 220.81, 320.77, 100, 7, 0, 92301, 0, 0, 0, 15, 15, 15, 15, 15, 0, 0, 0, 0, 0, 0, NULL, 461, 2307, '', 0, 3, 0, 0, 3, 10812, 0, 0, 3167436667, 0, 0, 0, 'duplicate_dathrohan_balnazzar');
 
 REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES
@@ -275,4 +275,16 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (92301, 82002, 100, 0, 1, 1, 0); -- Tabard of the Ashbringer
 
 -- Assign Item "Orb of Pure Light" to NPC "Highlord Mograine"
-UPDATE `creature_template` SET `loot_id` = '92300' WHERE `entry` = 16062;
+UPDATE `creature_template` SET `loot_id` = 92300 WHERE `entry` = 16062;
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(1000050, 'We are about to witness a miracle of the Light. Alexandros Mograine is soon to be in our presence.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0), -- Tirion Fordring
+(1000051, 'I cannot rest. Not until I see the Scarlet Crusade fall and not until my son faces justice for killing his father.$B\nBut do not worry, someone else is to fulfill that task. Even in my rage, I would wish to hold my children in my arms for the last time. I am ready to rest on the other side, $N.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0); -- Spirit of Alexandros Mograine
+
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`) VALUES 
+(1000050, 1000050), -- Tirion Fordring
+(1000051, 1000051); -- Spirit of Alexandros Mograine
+
+REPLACE INTO `gossip_menu` (`entry`, `text_id`, `condition_id`) VALUES
+(60900, 1000050, 0),
+(60901, 1000051, 0);
