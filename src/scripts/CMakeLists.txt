@@ -193,6 +193,7 @@ dungeons/stratholme/boss_nerubenkan.cpp
 dungeons/stratholme/boss_order_of_silver_hand.cpp
 dungeons/stratholme/boss_postmaster_malown.cpp
 dungeons/stratholme/boss_ramstein_the_gorger.cpp
+dungeons/stratholme/boss_sc_attunement.cpp
 dungeons/stratholme/boss_timmy_the_cruel.cpp
 dungeons/stratholme/instance_stratholme.cpp
 dungeons/stratholme/stratholme.cpp
