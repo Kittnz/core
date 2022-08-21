@@ -3851,8 +3851,8 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
 
     result = urand(1, 100);
 
-    pCreature->PMonsterEmote("Agne rolls a dice for %s... %u!", nullptr, false, pPlayer->GetName(),
-        result);
+    pCreature->PMonsterEmote("%s rolls a dice for %s... %u!", nullptr, false,
+                             pCreature->GetName(), pPlayer->GetName(), result);
 
     amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
