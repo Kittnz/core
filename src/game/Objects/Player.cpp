@@ -5092,7 +5092,19 @@ void Player::SpawnHardcoreGravestone()
 
     GameObjectInfo goInfo;
     goInfo.name = ss.str();
-    goInfo.displayId = 499;
+
+    if (GetLevel() >= 50)
+        goInfo.displayId = 2452;
+    else if (GetLevel() >= 40)
+        goInfo.displayId = 19;
+    else if (GetLevel() >= 30)
+        goInfo.displayId = 399;
+    else if (GetLevel() >= 20)
+        goInfo.displayId = 403;
+    else
+        goInfo.displayId = GetTeam() == HORDE ? 499 : 22660;
+
+
     goInfo.type = GAMEOBJECT_TYPE_GENERIC;
     goInfo._generic.floatingTooltip = 1;
     goInfo._generic.highlight = 1;
