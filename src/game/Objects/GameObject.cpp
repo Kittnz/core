@@ -872,7 +872,7 @@ void GameObject::SaveToDB(uint32 mapid)
 
     // updated in DB
     std::ostringstream ss;
-    ss << "INSERT INTO `gameobject` VALUES ( "
+    ss << "REPLACE INTO `gameobject` VALUES ( "
        << GetGUIDLow() << ", "
        << GetEntry() << ", "
        << mapid << ", "
@@ -891,10 +891,7 @@ void GameObject::SaveToDB(uint32 mapid)
        << m_isActiveObject << ", "
        << m_visibilityModifier << ")";
 
-    WorldDatabase.BeginTransaction();
-    WorldDatabase.PExecuteLog("DELETE FROM `gameobject` WHERE `guid` = '%u'", GetGUIDLow());
-    WorldDatabase.PExecuteLog("%s", ss.str().c_str());
-    WorldDatabase.CommitTransaction();
+    sWorld.ExecuteUpdate("%s", ss.str().c_str());
 }
 
 bool GameObject::LoadFromDB(uint32 guid, Map *map)
@@ -993,9 +990,9 @@ void GameObject::DeleteFromDB() const
     sMapPersistentStateMgr.DoForAllStatesWithMapId(GetMapId(), GetInstanceId(), worker);
 
     sObjectMgr.DeleteGOData(GetGUIDLow());
-    WorldDatabase.PExecuteLog("DELETE FROM gameobject WHERE guid = '%u'", GetGUIDLow());
-    WorldDatabase.PExecuteLog("DELETE FROM game_event_gameobject WHERE guid = '%u'", GetGUIDLow());
-    WorldDatabase.PExecuteLog("DELETE FROM gameobject_battleground WHERE guid = '%u'", GetGUIDLow());
+    sWorld.ExecuteUpdate("DELETE FROM gameobject WHERE guid = '%u'", GetGUIDLow());
+    sWorld.ExecuteUpdate("DELETE FROM game_event_gameobject WHERE guid = '%u'", GetGUIDLow());
+    sWorld.ExecuteUpdate("DELETE FROM gameobject_battleground WHERE guid = '%u'", GetGUIDLow());
 }
 
 GameObjectInfo const *GameObject::GetGOInfo() const
