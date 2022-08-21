@@ -367,6 +367,15 @@ struct GossipMenus
     uint16          conditionId;
 };
 
+struct GuildHouseEntry
+{
+    uint32 map_id;
+    float position_x;
+    float position_y;
+    float position_z;
+    float orientation;
+};
+
 typedef std::multimap<uint32,GossipMenus> GossipMenusMap;
 typedef std::pair<GossipMenusMap::const_iterator, GossipMenusMap::const_iterator> GossipMenusMapBounds;
 typedef std::multimap<uint32,GossipMenuItems> GossipMenuItemsMap;
@@ -640,6 +649,7 @@ class ObjectMgr
         typedef std::map<uint32, AreaTriggerTeleport> AreaTriggerTeleportMap;
         typedef std::unordered_map<uint32, BattlegroundEntranceTrigger> BGEntranceTriggerMap;
         typedef std::unordered_map<uint32, CustomGraveyardEntry> CustomGraveyardMap;
+        typedef std::unordered_map<uint32, GuildHouseEntry> GuildHouseMap;
 
         typedef std::unordered_map<uint32, RepRewardRate > RepRewardRateMap;
         typedef std::unordered_map<uint32, ReputationOnKillEntry> RepOnKillMap;
@@ -681,6 +691,7 @@ class ObjectMgr
         std::map<uint32, GameObjectUseRequirement> _gobjRequirements;
 
         void PackGroupIds();
+        void LoadGuildHouses();
         Group* GetGroupByMember(ObjectGuid memberGuid);
         Group* GetGroupById(uint32 id) const;
         void AddGroup(Group* group);
@@ -786,6 +797,7 @@ class ObjectMgr
         void LoadWorldSafeLocsFacing();
         float GetWorldSafeLocFacing(uint32 id) const;
         CustomCharacterSkinEntry const* GetCustomCharacterSkin(uint32 token_id);
+        GuildHouseEntry const* GetGuildHouse(uint32 player_guild);
 
         AreaTriggerTeleport const* GetAreaTriggerTeleport(uint32 trigger) const
         {
@@ -1551,6 +1563,7 @@ class ObjectMgr
         QuestStartingItemMap   m_QuestStartingItemsMap;
         BGEntranceTriggerMap m_BGEntranceTriggersMap;
         CustomCharacterSkinMap    m_CustomCharacterSkinMap;
+        GuildHouseMap    m_GuildHouseMap;
 
         RepRewardRateMap    m_RepRewardRateMap;
         RepOnKillMap        m_RepOnKillMap;

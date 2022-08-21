@@ -5092,7 +5092,19 @@ void Player::SpawnHardcoreGravestone()
 
     GameObjectInfo goInfo;
     goInfo.name = ss.str();
-    goInfo.displayId = 499;
+
+    if (GetLevel() >= 50)
+        goInfo.displayId = 2452;
+    else if (GetLevel() >= 40)
+        goInfo.displayId = 19;
+    else if (GetLevel() >= 30)
+        goInfo.displayId = 399;
+    else if (GetLevel() >= 20)
+        goInfo.displayId = 403;
+    else
+        goInfo.displayId = GetTeam() == HORDE ? 499 : 22660;
+
+
     goInfo.type = GAMEOBJECT_TYPE_GENERIC;
     goInfo._generic.floatingTooltip = 1;
     goInfo._generic.highlight = 1;
@@ -23431,19 +23443,9 @@ void Player::SendAddonMessage(std::string prefix, std::string message, Player* f
 	GetSession()->SendPacket(&data);
 }
 
-uint8 Player::GetTotalQuestCount()
+uint32 Player::GetTotalQuestCount()
 {
-    uint8 quest_count = 0;
-
-    QueryResult* quest_count_query = CharacterDatabase.PQuery("SELECT COUNT(*) AS quest_count, guid FROM character_queststatus WHERE rewarded = 1 and guid = %u;", GetGUIDLow());
-
-    if (quest_count_query)
-    {
-        Field* fields = quest_count_query->Fetch();
-        quest_count = fields[0].GetUInt32();
-
-        delete quest_count_query;
-    }
-
-    return quest_count;
+    return std::count_if(mQuestStatus.begin(), mQuestStatus.end(), [](decltype(mQuestStatus)::value_type value) -> bool {
+        return value.second.uState != QUEST_DELETED && value.second.m_rewarded;
+    });
 }

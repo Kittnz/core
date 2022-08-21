@@ -5550,6 +5550,25 @@ bool ChatHandler::HandleGMSocialsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleLoSCommand(char* args)
+{
+    Unit* target = GetSelectedUnit();
+
+    if (!target)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (m_session->GetPlayer()->IsWithinLOSInMap(target))
+        SendSysMessage("Target is in line of sight.");
+    else
+        SendSysMessage("Target is NOT in line of sight.");
+
+    return true;
+}
+
 bool ChatHandler::HandleGPSCommand(char* args)
 {
     WorldObject* obj = nullptr;

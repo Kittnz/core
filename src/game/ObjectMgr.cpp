@@ -5271,6 +5271,39 @@ void ObjectMgr::PackGroupIds()
     m_GroupIds.Set(groupId);
 }
 
+GuildHouseEntry const* ObjectMgr::GetGuildHouse(uint32 player_guild)
+{
+    auto guild_house = m_GuildHouseMap.find(player_guild);
+    if (guild_house != m_GuildHouseMap.end())
+        return &guild_house->second;
+
+    return nullptr;
+}
+
+void ObjectMgr::LoadGuildHouses()
+{
+    std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT * FROM `guild_house`"));
+
+    if (!result)
+        return;
+    do
+    {
+        Field* fields = result->Fetch();
+        GuildHouseEntry guild_house;
+
+        uint32 guild_id = fields[0].GetUInt32();
+
+        guild_house.map_id = fields[1].GetUInt32();
+        guild_house.position_x = fields[2].GetFloat();
+        guild_house.position_y = fields[3].GetFloat();
+        guild_house.position_z = fields[4].GetFloat();
+        guild_house.orientation = fields[5].GetFloat();
+
+        m_GuildHouseMap[guild_id] = guild_house;
+
+    } while (result->NextRow());
+}
+
 void ObjectMgr::SetHighestGuids()
 {
     std::unique_ptr<QueryResult> result(CharacterDatabase.Query("SELECT MAX(`guid`) FROM `characters`"));
