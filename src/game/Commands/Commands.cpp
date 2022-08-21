@@ -2321,6 +2321,7 @@ bool ChatHandler::HandleLinkGraveCommand(char* args)
         return false;
     }
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     if (sObjectMgr.AddGraveYardLink(g_id, zoneId, g_team))
         PSendSysMessage(LANG_COMMAND_GRAVEYARDLINKED, g_id, zoneId);
     else
@@ -2424,6 +2425,7 @@ bool ChatHandler::HandleNpcSetWanderDistanceCommand(char* args)
         pCreature->SetDeathState(JUST_DIED);
         pCreature->Respawn();
     }
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     pCreature->SaveToDB();
 
     return true;
@@ -2823,6 +2825,7 @@ bool ChatHandler::HandleTeleAddCommand(char* args)
     tele.mapId = player->GetMapId();
     tele.name = name;
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     if (sObjectMgr.AddGameTele(tele))
         SendSysMessage(LANG_COMMAND_TP_ADDED);
     else
@@ -2842,6 +2845,7 @@ bool ChatHandler::HandleTeleDelCommand(char* args)
 
     std::string name = args;
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     if (!sObjectMgr.DeleteGameTele(name))
     {
         SendSysMessage(LANG_COMMAND_TELE_NOTFOUND);
@@ -8095,6 +8099,7 @@ bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
 
     obj->SetRespawnTime(0);                                 // not save respawn time
     obj->Delete();
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     obj->DeleteFromDB();
 
     PSendSysMessage(LANG_COMMAND_DELOBJMESSAGE, obj->GetGUIDLow());
@@ -8139,6 +8144,7 @@ bool ChatHandler::HandleGameObjectTurnCommand(char* args)
 
     map->Add(obj);
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     obj->SaveToDB();
     obj->Refresh();
 
@@ -8189,6 +8195,7 @@ bool ChatHandler::HandleGameObjectScaleCommand(char* args)
 
     map->Add(obj);
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     obj->SaveToDB();
     obj->Refresh();
 
@@ -8315,6 +8322,7 @@ bool ChatHandler::HandleGameObjectMoveCommand(char* args)
         map->Add(obj);
     }
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     obj->SaveToDB();
     obj->Refresh();
 
@@ -8371,6 +8379,7 @@ bool ChatHandler::HandleGameObjectRotateCommand(char* args)
     obj->SetFloatValue(GAMEOBJECT_FACING, o);
     obj->UpdateRotationFields(0.0F, 0.0F);
     map->Add(obj);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     obj->SaveToDB();
     obj->Refresh();
 
@@ -8441,6 +8450,7 @@ bool ChatHandler::HandleGameObjectAddCommand(char* args)
     pGameObj->SetRespawnTime(300); // Default 5 min.
 
     // fill the gameobject data and save to the db
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     pGameObj->SaveToDB(map->GetId());
 
     // this will generate a new guid if the object is in an instance
@@ -8888,6 +8898,7 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
         return false;
     }
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     pCreature->SaveToDB(map->GetId());
 
     uint32 db_guid = pCreature->GetGUIDLow();
@@ -8934,6 +8945,7 @@ bool ChatHandler::HandleNpcAddVendorItemCommand(char* args)
         return false;
     }
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     sObjectMgr.AddVendorItem(vendor_entry, itemId, maxcount, incrtime, itemflags);
 
     ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(itemId);
@@ -8963,7 +8975,8 @@ bool ChatHandler::HandleNpcScaleCommand(char* args)
 
     uint32 npc_entry = npc ? npc->GetEntry() : 0;
 
-    WorldDatabase.PExecuteLog("UPDATE `creature_template` set `scale` = %f where entry = %u", scale, npc_entry);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` set `scale` = %f where entry = %u", scale, npc_entry);
 
     npc->SetObjectScale(scale);
     npc->UpdateModelData();
@@ -9019,7 +9032,8 @@ bool ChatHandler::HandleNpcAddLootCommand(char* args)
 
     uint32 creature = npc ? npc->GetEntry() : 0;
 
-    WorldDatabase.PExecuteLog("REPLACE INTO `creature_loot_template` (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) VALUES (%u, %u, %f, 5, 1, 1)", creature, item, chance);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("REPLACE INTO `creature_loot_template` (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) VALUES (%u, %u, %f, 5, 1, 1)", creature, item, chance);
     PSendSysMessage("Item %u has been added to NPC %u loot table, group 5, chance %f.", item, creature, chance);
     SendSysMessage("All changes will take place after the server restart");
     return true;
@@ -9047,6 +9061,7 @@ bool ChatHandler::HandleNpcDelVendorItemCommand(char* args)
         return false;
     }
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     if (!sObjectMgr.RemoveVendorItem(vendor->GetEntry(), itemId))
     {
         PSendSysMessage(LANG_ITEM_NOT_IN_LIST, itemId);
@@ -9110,7 +9125,8 @@ bool ChatHandler::HandleNpcFlagCommand(char* args)
 
     pCreature->SetUInt32Value(UNIT_NPC_FLAGS, npcFlags);
 
-    WorldDatabase.PExecuteLog("UPDATE creature_template SET npc_flags = '%u' WHERE entry = '%u'", npcFlags, pCreature->GetEntry());
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE creature_template SET npc_flags = '%u' WHERE entry = '%u'", npcFlags, pCreature->GetEntry());
 
     SendSysMessage(LANG_VALUE_SAVED_REJOIN);
 
@@ -9158,10 +9174,12 @@ bool ChatHandler::HandleNpcDeleteCommand(char* args)
         case CREATURE_SUBTYPE_GENERIC:
         {
             unit->CombatStop();
-            if (CreatureData const* data = sObjectMgr.GetCreatureData(unit->GetGUIDLow()))
+            uint32 lowguid = unit->GetGUIDLow();
+            if (CreatureData const* data = sObjectMgr.GetCreatureData(lowguid))
             {
-                Creature::AddToRemoveListInMaps(unit->GetGUIDLow(), data);
-                Creature::DeleteFromDB(unit->GetGUIDLow(), data);
+                Creature::AddToRemoveListInMaps(lowguid, data);
+                sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+                Creature::DeleteFromDB(lowguid, data);
             }
             else
                 unit->AddObjectToRemoveList();
@@ -9234,7 +9252,8 @@ bool ChatHandler::HandleNpcMoveCommand(char* args)
         }
     }
 
-    WorldDatabase.PExecuteLog("UPDATE creature SET position_x = '%f', position_y = '%f', position_z = '%f', orientation = '%f' WHERE guid = '%u'", x, y, z, o, lowguid);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE creature SET position_x = '%f', position_y = '%f', position_z = '%f', orientation = '%f' WHERE guid = '%u'", x, y, z, o, lowguid);
     PSendSysMessage(LANG_COMMAND_CREATUREMOVED);
     return true;
 }
@@ -9255,7 +9274,8 @@ bool ChatHandler::HandleNpcSpeedCommand(char* args)
     }
 
     pCreature->UpdateSpeed(MOVE_WALK, false, mod);
-    WorldDatabase.PExecuteLog("UPDATE creature_template SET speed_walk = %f WHERE entry = %u", mod, pCreature->GetEntry());
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE creature_template SET speed_walk = %f WHERE entry = %u", mod, pCreature->GetEntry());
     return true;
 }
 
@@ -9294,7 +9314,8 @@ bool ChatHandler::HandleNpcFactionIdCommand(char* args)
     }
 
     // and DB
-    WorldDatabase.PExecuteLog("UPDATE creature_template SET faction = '%u' WHERE entry = '%u'", factionId, pCreature->GetEntry());
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE creature_template SET faction = '%u' WHERE entry = '%u'", factionId, pCreature->GetEntry());
 
     return true;
 }
@@ -9315,7 +9336,8 @@ bool ChatHandler::HandleNpcSpawnTimeCommand(char* args)
 
     uint32 u_guidlow = pCreature->GetGUIDLow();
 
-    WorldDatabase.PExecuteLog("UPDATE creature SET spawntimesecsmin=%i WHERE guid=%u", stime, u_guidlow);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE creature SET spawntimesecsmin=%i WHERE guid=%u", stime, u_guidlow);
     pCreature->SetRespawnDelay(stime);
     PSendSysMessage(LANG_COMMAND_SPAWNTIME, stime);
 
@@ -9347,6 +9369,7 @@ bool ChatHandler::HandleNpcSetDeathStateCommand(char* args)
     else
         pData->spawn_flags &= ~SPAWN_FLAG_DEAD;
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     pCreature->SaveToDB();
 
     pCreature->Respawn();
@@ -10049,6 +10072,7 @@ bool ChatHandler::HandleWpAddCommand(char* args)
 
     float x, y, z;
     m_session->GetPlayer()->GetPosition(x, y, z);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     if (!sWaypointMgr.AddNode(wpOwner->GetEntry(), wpOwner->GetGUIDLow(), wpPointId, wpDestination, x, y, z))
     {
         PSendSysMessage(LANG_WAYPOINT_NOTCREATED, wpPointId, wpOwner->GetGuidStr().c_str(), wpPathId, WaypointManager::GetOriginString(wpDestination).c_str());
@@ -10255,6 +10279,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
 
     if (subCmd == "del")                                    // Remove WP, no additional command required
     {
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         sWaypointMgr.DeleteNode(wpOwner->GetEntry(), wpOwner->GetGUIDLow(), wpId, wpPathId, wpSource);
 
         if (TemporarySummonWaypoint* wpCreature = dynamic_cast<TemporarySummonWaypoint*>(targetCreature))
@@ -10283,6 +10308,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
         // Move visual waypoint
         targetCreature->NearTeleportTo(x, y, z, targetCreature->GetOrientation());
 
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         sWaypointMgr.SetNodePosition(wpOwner->GetEntry(), wpOwner->GetGUIDLow(), wpId, wpPathId, wpSource, x, y, z);
 
         PSendSysMessage(LANG_WAYPOINT_CHANGED);
@@ -10294,6 +10320,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
         if (!ExtractUInt32(&args, waittime))
             return false;
 
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         sWaypointMgr.SetNodeWaittime(wpOwner->GetEntry(), wpOwner->GetGUIDLow(), wpId, wpPathId, wpSource, waittime);
     }
     else if (subCmd == "scriptid")
@@ -10302,6 +10329,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
         if (!ExtractUInt32(&args, scriptId))
             return false;
 
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         if (!sWaypointMgr.SetNodeScriptId(wpOwner->GetEntry(), wpOwner->GetGUIDLow(), wpId, wpPathId, wpSource, scriptId))
             PSendSysMessage(LANG_WAYPOINT_INFO_UNK_SCRIPTID, scriptId);
     }
@@ -10311,6 +10339,7 @@ bool ChatHandler::HandleWpModifyCommand(char* args)
         if (!ExtractFloat(&args, ori))
             return false;
 
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         sWaypointMgr.SetNodeOrientation(wpOwner->GetEntry(), wpOwner->GetGUIDLow(), wpId, wpPathId, wpSource, ori);
     }
 
@@ -11766,7 +11795,10 @@ bool ChatHandler::HandleNpcGroupAddCommand(char* args)
     leader->SetCreatureGroup(group);
     target->GetMotionMaster()->Initialize();
     if (dbsave)
+    {
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         group->SaveToDb();
+    } 
     PSendSysMessage("Group added for creature %u. Leader %u, Angle %f, Dist %f", target->GetGUIDLow(), leader->GetGUIDLow(), angle, dist);
     return true;
 }
@@ -11815,7 +11847,10 @@ bool ChatHandler::HandleNpcGroupAddRelCommand(char* args)
     leader->SetCreatureGroup(group);
     target->GetMotionMaster()->Initialize();
     if (dbsave)
+    {
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
         group->SaveToDb();
+    }
     PSendSysMessage("Group added for creature %u. Leader %u, Angle %f, Dist %f", target->GetGUIDLow(), leader->GetGUIDLow(), angle, dist);
     return true;
 }
@@ -11838,6 +11873,7 @@ bool ChatHandler::HandleNpcGroupDelCommand(char* args)
         return false;
     }
 
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     if (g->GetOriginalLeaderGuid() == target->GetObjectGuid())
     {
         g->DeleteFromDb();
@@ -13296,6 +13332,7 @@ bool ChatHandler::HandleCreaturePathSetup(char* /*args*/)
         target->SetDeathState(JUST_DIED);
         target->Respawn();
     }
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     target->SaveToDB();
     target->GetMotionMaster()->Initialize();
     sWaypointMgr.DeletePath(target->GetGUIDLow());
@@ -13330,6 +13367,7 @@ bool ChatHandler::HandleCreaturePathAddPoint(char* /*args*/)
     }
 
     uint32 pointId = 0;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     if (!sWaypointMgr.AddNode(0, target->GetGUIDLow(), pointId, PATH_FROM_GUID, m_session->GetPlayer()->GetPositionX(), m_session->GetPlayer()->GetPositionY(), m_session->GetPlayer()->GetPositionZ()))
     {
         SendSysMessage("Internal error at add waypoint. Please use .path setup for clear waypoints and setup again");
@@ -13375,6 +13413,7 @@ bool ChatHandler::HandleCreaturePathLaunch(char* /*args*/)
     delete result;
 
     target->SetDefaultMovementType(WAYPOINT_MOTION_TYPE);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     target->SaveToDB();
     target->GetMotionMaster()->Initialize();
     target->MonsterSay("Path loaded.", 0);
