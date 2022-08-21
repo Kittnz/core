@@ -140,6 +140,7 @@ void AddSC_boss_nerubenkan();
 void AddSC_boss_cannon_master_willey();
 void AddSC_boss_baroness_anastari();
 void AddSC_boss_ramstein_the_gorger();
+void AddSC_boss_sc_attunement();
 void AddSC_boss_timmy_the_cruel();
 void AddSC_boss_postmaster_malown();
 void AddSC_boss_dathrohan_balnazzar();
@@ -449,6 +450,7 @@ void AddScripts()
     AddSC_boss_cannon_master_willey();
     AddSC_boss_baroness_anastari();
     AddSC_boss_ramstein_the_gorger();
+    AddSC_boss_sc_attunement();
     AddSC_boss_timmy_the_cruel();
     AddSC_boss_postmaster_malown();
     AddSC_boss_dathrohan_balnazzar();
