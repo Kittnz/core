@@ -585,6 +585,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "revive",         SEC_DEVELOPER,       true,  &ChatHandler::HandleReviveCommand,              "", nullptr },
         { "replenish",      SEC_DEVELOPER,       false, &ChatHandler::HandleReplenishCommand,           "", nullptr },
         { "dismount",       SEC_DEVELOPER,       false, &ChatHandler::HandleDismountCommand,            "", nullptr },
+        { "los",            SEC_OBSERVER,        false, &ChatHandler::HandleLoSCommand,                 "", nullptr },
         { "gps",            SEC_OBSERVER,        false, &ChatHandler::HandleGPSCommand,                 "", nullptr },
         { "guid",           SEC_MODERATOR,       false, &ChatHandler::HandleGUIDCommand,                "", nullptr },
         { "help",           SEC_OBSERVER,        true,  &ChatHandler::HandleHelpCommand,                "", nullptr },
