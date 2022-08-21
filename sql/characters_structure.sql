@@ -676,164 +676,6 @@ CREATE TABLE `characters`  (
 ) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Player System' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Table structure for characters_namecleanup2020_2
--- ----------------------------
-DROP TABLE IF EXISTS `characters_namecleanup2020_2`;
-CREATE TABLE `characters_namecleanup2020_2`  (
-  `guid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Global Unique Identifier',
-  `account` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Account Identifier',
-  `name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `race` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `class` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `gender` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `level` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `xp` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `money` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `playerBytes` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `playerBytes2` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `playerFlags` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `position_x` float NOT NULL DEFAULT 0,
-  `position_y` float NOT NULL DEFAULT 0,
-  `position_z` float NOT NULL DEFAULT 0,
-  `map` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Map Identifier',
-  `orientation` float NOT NULL DEFAULT 0,
-  `taximask` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `online` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `cinematic` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `totaltime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `leveltime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `logout_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `is_logout_resting` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `rest_bonus` float NOT NULL DEFAULT 0,
-  `resettalents_multiplier` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `resettalents_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `trans_x` float NOT NULL DEFAULT 0,
-  `trans_y` float NOT NULL DEFAULT 0,
-  `trans_z` float NOT NULL DEFAULT 0,
-  `trans_o` float NOT NULL DEFAULT 0,
-  `transguid` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `extra_flags` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `stable_slots` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-  `at_login` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `zone` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `death_expire_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `taxi_path` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `honorRankPoints` float NOT NULL DEFAULT 0,
-  `honorHighestRank` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `honorStanding` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `honorLastWeekHK` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `honorLastWeekCP` decimal(11, 1) NOT NULL DEFAULT 0.0,
-  `honorStoredHK` int(11) NOT NULL DEFAULT 0,
-  `honorStoredDK` int(11) NOT NULL DEFAULT 0,
-  `watchedFaction` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `drunk` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
-  `health` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power1` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power2` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power3` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power4` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power5` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `exploredZones` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `equipmentCache` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `ammoId` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `actionBars` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `deleteInfos_Account` int(10) UNSIGNED NULL DEFAULT NULL,
-  `deleteInfos_Name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `deleteDate` bigint(20) NULL DEFAULT NULL,
-  `area` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `world_phase_mask` int(11) NULL DEFAULT 0,
-  `customFlags` int(11) NOT NULL DEFAULT 0,
-  `city_protector` tinyint(4) NOT NULL DEFAULT 0,
-  `regexFilterCount` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `isGMCharacter` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-  `ignore_titles` tinyint(4) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`guid`) USING BTREE,
-  INDEX `idx_account`(`account`) USING BTREE,
-  INDEX `idx_online`(`online`) USING BTREE,
-  INDEX `idx_name`(`name`) USING BTREE
-) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Player System' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Table structure for characters_renameaftermerge2021
--- ----------------------------
-DROP TABLE IF EXISTS `characters_renameaftermerge2021`;
-CREATE TABLE `characters_renameaftermerge2021`  (
-  `guid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Global Unique Identifier',
-  `account` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Account Identifier',
-  `name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `race` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `class` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `gender` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `level` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `xp` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `money` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `playerBytes` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `playerBytes2` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `playerFlags` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `position_x` float NOT NULL DEFAULT 0,
-  `position_y` float NOT NULL DEFAULT 0,
-  `position_z` float NOT NULL DEFAULT 0,
-  `map` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Map Identifier',
-  `orientation` float NOT NULL DEFAULT 0,
-  `taximask` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `online` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `cinematic` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `totaltime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `leveltime` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `logout_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `is_logout_resting` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `rest_bonus` float NOT NULL DEFAULT 0,
-  `resettalents_multiplier` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `resettalents_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `trans_x` float NOT NULL DEFAULT 0,
-  `trans_y` float NOT NULL DEFAULT 0,
-  `trans_z` float NOT NULL DEFAULT 0,
-  `trans_o` float NOT NULL DEFAULT 0,
-  `transguid` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `extra_flags` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `stable_slots` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-  `at_login` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `zone` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `death_expire_time` bigint(20) UNSIGNED NOT NULL DEFAULT 0,
-  `taxi_path` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `honorRankPoints` float NOT NULL DEFAULT 0,
-  `honorHighestRank` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `honorStanding` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `honorLastWeekHK` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `honorLastWeekCP` decimal(11, 1) NOT NULL DEFAULT 0.0,
-  `honorStoredHK` int(11) NOT NULL DEFAULT 0,
-  `honorStoredDK` int(11) NOT NULL DEFAULT 0,
-  `watchedFaction` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `drunk` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
-  `health` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power1` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power2` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power3` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power4` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `power5` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `exploredZones` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `equipmentCache` longtext CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `ammoId` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `actionBars` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  `deleteInfos_Account` int(10) UNSIGNED NULL DEFAULT NULL,
-  `deleteInfos_Name` varchar(12) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `deleteDate` bigint(20) NULL DEFAULT NULL,
-  `area` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `world_phase_mask` int(11) NULL DEFAULT 0,
-  `customFlags` int(11) NOT NULL DEFAULT 0,
-  `city_protector` tinyint(4) NOT NULL DEFAULT 0,
-  `regexFilterCount` int(10) UNSIGNED NOT NULL DEFAULT 0,
-  `isGMCharacter` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
-  `ignore_titles` tinyint(4) NOT NULL DEFAULT 0,
-  `mortality_status` tinyint(4) NOT NULL DEFAULT 0,
-  `total_deaths` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`guid`) USING BTREE,
-  INDEX `idx_account`(`account`) USING BTREE,
-  INDEX `idx_online`(`online`) USING BTREE,
-  INDEX `idx_name`(`name`) USING BTREE
-) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Player System' ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
 -- Table structure for corpse
 -- ----------------------------
 DROP TABLE IF EXISTS `corpse`;
@@ -1055,6 +897,21 @@ CREATE TABLE `guild_bank_log`  (
   PRIMARY KEY (`log_id`) USING BTREE,
   INDEX `stamp`(`stamp`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for guild_house
+-- ----------------------------
+
+DROP TABLE IF EXISTS `guild_house`;
+CREATE TABLE `guild_house`  (
+  `guild_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Identifier',
+  `map_id` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
+  `position_x` float NOT NULL DEFAULT 0,
+  `position_y` float NOT NULL DEFAULT 0,
+  `position_z` float NOT NULL DEFAULT 0,
+  `orientation` float NOT NULL DEFAULT 0,
+  PRIMARY KEY (`guild_id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Teleportation coordinates for Guild Housing' ROW_FORMAT = FIXED;
 
 -- ----------------------------
 -- Table structure for guild_bank_money
