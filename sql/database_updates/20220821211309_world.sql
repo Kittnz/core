@@ -60,3 +60,9 @@ REPLACE INTO `gameobject` VALUES ( 5009635, 2010693, 1, -3740.1, -3421.37, 37.01
 DELETE FROM gameobject WHERE guid = '5009635';
 DELETE FROM game_event_gameobject WHERE guid = '5009635';
 DELETE FROM gameobject_battleground WHERE guid = '5009635';
+DELETE FROM creature WHERE guid=73394;
+DELETE FROM creature_addon WHERE guid=73394;
+DELETE FROM creature_movement WHERE id=73394;
+DELETE FROM game_event_creature WHERE guid=73394;
+DELETE FROM game_event_creature_data WHERE guid=73394;
+DELETE FROM creature_battleground WHERE guid=73394;
