@@ -112,3 +112,4 @@ UPDATE creature SET position_x = '-2672.686035', position_y = '-3493.599854', po
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (835,-2657.105957,-3348.582520,33.227024,0.954880,1,'blackhorn');
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (836,-3826.023926,-3414.432129,37.921436,6.119401,1,'deserter');
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (837,-4352.449707,-4387.490234,3.511532,3.684428,1,'westhaven');
+INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (838,-6235.822266,-3675.779785,300.824829,1.267141,0,'zeth');
