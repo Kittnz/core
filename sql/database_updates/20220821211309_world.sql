@@ -120,3 +120,9 @@ INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orient
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (843,-1541.744629,-4926.876465,5.722693,2.821892,1,'anchorsedge');
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (844,2924.919678,-3206.939209,169.343552,5.184366,1,'forestsong');
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (845,5636.918945,-1091.863525,379.597260,4.316959,1,'betrayershrine');
+DELETE FROM creature WHERE guid=90395;
+DELETE FROM creature_addon WHERE guid=90395;
+DELETE FROM creature_movement WHERE id=90395;
+DELETE FROM game_event_creature WHERE guid=90395;
+DELETE FROM game_event_creature_data WHERE guid=90395;
+DELETE FROM creature_battleground WHERE guid=90395;
