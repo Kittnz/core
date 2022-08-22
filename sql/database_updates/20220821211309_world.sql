@@ -109,3 +109,4 @@ DELETE FROM game_event_creature WHERE guid=73405;
 DELETE FROM game_event_creature_data WHERE guid=73405;
 DELETE FROM creature_battleground WHERE guid=73405;
 UPDATE creature SET position_x = '-2672.686035', position_y = '-3493.599854', position_z = '33.554554', orientation = '4.250914' WHERE guid = '73702';
+INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (835,-2657.105957,-3348.582520,33.227024,0.954880,1,'blackhorn');
