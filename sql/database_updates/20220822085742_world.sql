@@ -27,3 +27,8 @@ DELETE FROM creature_movement WHERE id=2561268;
 DELETE FROM game_event_creature WHERE guid=2561268;
 DELETE FROM game_event_creature_data WHERE guid=2561268;
 DELETE FROM creature_battleground WHERE guid=2561268;
+
+-- Changes by SHANG
+DELETE FROM gameobject WHERE guid = '5000494';
+DELETE FROM game_event_gameobject WHERE guid = '5000494';
+DELETE FROM gameobject_battleground WHERE guid = '5000494';
