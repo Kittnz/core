@@ -3652,7 +3652,7 @@ void MigrationFile::AddRowFormat(char const* format, ...)
 void MigrationFile::CommitUpdates()
 {
     hasChanges = false;
-    std::string command = "cd \"" + sWorld.GetWorldUpdatesDirectory() + "\" && git add --all && git commit -m \"Live changes.\" && git pull --rebase && git push";
+    std::string command = "cd \"" + sWorld.GetWorldUpdatesDirectory() + "\" && git add --all && git commit -m \"Direct world update.\" && git pull --rebase && git push";
     system(command.c_str());
 }
 
