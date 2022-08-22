@@ -118,3 +118,4 @@ INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orient
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (841,-7277.807617,-3488.045410,323.130249,4.726835,0,'redbrand');
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (842,-6564.370117,-2749.224121,303.900970,6.211236,0,'corthan');
 INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (843,-1541.744629,-4926.876465,5.722693,2.821892,1,'anchorsedge');
+INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (844,2924.919678,-3206.939209,169.343552,5.184366,1,'forestsong');
