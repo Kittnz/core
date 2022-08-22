@@ -1726,7 +1726,7 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
         auto faction1 = sObjectMgr.GetFactionEntry(21); // Booty Bay
         if (faction1)
         {
-            pPlayer->GetReputationMgr().SetReputation(faction1, -12000);
+            pPlayer->GetReputationMgr().SetSingleReputation(faction1, -12000);
 
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60333))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
