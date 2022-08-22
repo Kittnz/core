@@ -366,7 +366,6 @@ class ChatHandler
         bool HandleNpcAddWeaponCommand(char* args);
         bool HandleNpcAddVendorItemCommand(char* args);
         bool HandleNpcScaleCommand(char* args);
-        bool HandleNpcAddLootCommand(char* args);
         bool HandleNpcAIInfoCommand(char* args);
         bool HandleNpcSetWanderDistanceCommand(char* args);
         bool HandleNpcDeleteCommand(char* args);
