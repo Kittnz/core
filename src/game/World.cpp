@@ -188,6 +188,9 @@ void World::InternalShutdown()
 	//TODO free addSessQueue
 
 	m_broadcaster.reset();
+
+    if (m_autoCommitThread.joinable())
+        m_autoCommitThread.join();
 }
 
 /// Find a session by its id
@@ -1176,6 +1179,37 @@ void World::LoadConfigSettings(bool reload)
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
+
+    // Migration for auto committing updates.
+    setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
+    auto pathString = sConfig.GetStringDefault("Database.AutoUpdate.Path", "");
+    auto worldUpdateFolder = sConfig.GetStringDefault("Database.AutoUpdate.WorldUpdateName", "World");
+    std::filesystem::path folderPath{ pathString };
+    std::filesystem::directory_entry worldUpdatePath{ folderPath / worldUpdateFolder };
+    m_worldUpdatesDirectory = fs::absolute(worldUpdatePath.path()).string();
+    time_t curr;
+    tm local;
+    time(&curr);                                        // get current time_t value
+    local = *(localtime(&curr));                        // dereference and assign
+    char fName[128];
+    sprintf(fName, "%04d%02d%02d%02d%02d%02d_world.sql", local.tm_year + 1900, local.tm_mon + 1, local.tm_mday, local.tm_hour, local.tm_min, local.tm_sec);
+    m_worldUpdatesMigration = m_worldUpdatesDirectory + "/" + fName;
+}
+
+void autoCommitWorkerThread()
+{
+    time_t lastUpdateTime = time(0);
+    while (!sWorld.IsStopped())
+    {
+        time_t now = time(0);
+        if (sWorld.GetMigration().HasChanges() &&
+           (lastUpdateTime + sWorld.getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES) * MINUTE) < now)
+        {
+            lastUpdateTime = now;
+            sWorld.GetMigration().CommitUpdates();
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 }
 
 void charactersDatabaseWorkerThread()
@@ -1712,6 +1746,9 @@ void World::SetInitialWorldSettings()
                                               std::chrono::milliseconds(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_FREQUENCY)));
 
     m_charDbWorkerThread.reset(new std::thread(&charactersDatabaseWorkerThread));
+
+    if (getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES))
+        m_autoCommitThread = std::thread(&autoCommitWorkerThread);
 
 	uint32 uTransmogFillStartTime = WorldTimer::getMSTime();
 	sObjectMgr.FillPossibleTransmogs();
@@ -3547,4 +3584,95 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
         sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", type, chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
         sLog.out(LOG_CHAT, "[%s] %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+}
+
+void MigrationFile::SetAuthor(std::string const& author)
+{
+    if (!sWorld.getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES))
+        return;
+
+    if (author != lastAuthor)
+    {
+        FILE* pFile;
+        pFile = fopen(sWorld.GetWorldUpdatesMigration().c_str(), "a");
+        if (pFile)
+        {
+            fprintf(pFile, "\n-- Changes by %s\n", author.c_str());
+            fclose(pFile);
+        }
+        lastAuthor = author;
+    }
+}
+
+void MigrationFile::AddRow(char const* row)
+{
+    if (!row)
+        return;
+
+    if (!sWorld.getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES))
+        return;
+
+    FILE* pFile;
+    pFile = fopen(sWorld.GetWorldUpdatesMigration().c_str(), "a");
+    if (pFile)
+    {
+        fprintf(pFile, "%s;\n", row);
+        fclose(pFile);
+        hasChanges = true;
+    }
+}
+
+void MigrationFile::AddRowFormat(char const* format, ...)
+{
+    if (!format)
+        return;
+
+    if (!sWorld.getConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES))
+        return;
+
+    va_list ap;
+    char szQuery[MAX_QUERY_LEN];
+    va_start(ap, format);
+    int res = vsnprintf(szQuery, MAX_QUERY_LEN, format, ap);
+    va_end(ap);
+
+    if (res == -1)
+        return;
+
+    FILE* pFile;
+    pFile = fopen(sWorld.GetWorldUpdatesMigration().c_str(), "a");
+    if (pFile)
+    {
+        fprintf(pFile, "%s;\n", szQuery);
+        fclose(pFile);
+        hasChanges = true;
+    }
+}
+
+void MigrationFile::CommitUpdates()
+{
+    hasChanges = false;
+    std::string command = "cd \"" + sWorld.GetWorldUpdatesDirectory() + "\" && git add --all && git commit -m \"Live changes.\" && git pull --rebase && git push";
+    system(command.c_str());
+}
+
+bool World::ExecuteUpdate(char const* format, ...)
+{
+    if (!format)
+        return false;
+
+    va_list ap;
+    char szQuery[MAX_QUERY_LEN];
+    va_start(ap, format);
+    int res = vsnprintf(szQuery, MAX_QUERY_LEN, format, ap);
+    va_end(ap);
+
+    if (res == -1)
+    {
+        sLog.outError("SQL Query truncated (and not execute) for format: %s", format);
+        return false;
+    }
+
+    GetMigration().AddRow(szQuery);
+    return WorldDatabase.PExecuteLog(szQuery);
 }

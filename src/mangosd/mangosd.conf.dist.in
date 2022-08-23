@@ -37,6 +37,10 @@ Database.AutoUpdate.AuthUpdateName = "unused"
 Database.AutoUpdate.CharUpdateName = "unused"
 Database.AutoUpdate.WorldUpdateName = "database_updates"
 
+# Automatically committing world changes to github. Set to 0 to disable.
+
+AutoCommit.Minutes = 0
+
 # Database.Connections. Amount of connections to database which will be used for SELECT queries. Maximum 16 connections per database.
 
 LoginDatabase.Connections = 4
