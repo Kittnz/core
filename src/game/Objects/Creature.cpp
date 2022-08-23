@@ -1427,12 +1427,8 @@ void Creature::SaveToDB(uint32 mapid)
         data.spawn_flags |= SPAWN_FLAG_ACTIVE;
 
     // updated in DB
-    WorldDatabase.BeginTransaction();
-
-    WorldDatabase.PExecuteLog("DELETE FROM creature WHERE guid=%u", GetGUIDLow());
-
     std::ostringstream ss;
-    ss << "INSERT INTO creature VALUES ("
+    ss << "REPLACE INTO `creature` VALUES ("
        << GetGUIDLow() << ","
        << data.creature_id[0] << ","
        << data.creature_id[1] << ","
@@ -1451,10 +1447,7 @@ void Creature::SaveToDB(uint32 mapid)
        << GetDefaultMovementType() << ","                  // default movement generator type
        << data.spawn_flags << ","
        << m_visibilityModifier << ")";
-
-    WorldDatabase.PExecuteLog("%s", ss.str().c_str());
-
-    WorldDatabase.CommitTransaction();
+    sWorld.ExecuteUpdate("%s", ss.str().c_str());
 }
 
 void Creature::SelectLevel(const CreatureInfo *cinfo, float percentHealth, float percentMana)
@@ -1770,12 +1763,12 @@ void Creature::DeleteFromDB(uint32 lowguid, CreatureData const* data)
     sObjectMgr.DeleteCreatureData(lowguid);
 
     WorldDatabase.BeginTransaction();
-    WorldDatabase.PExecuteLog("DELETE FROM creature WHERE guid=%u", lowguid);
-    WorldDatabase.PExecuteLog("DELETE FROM creature_addon WHERE guid=%u", lowguid);
-    WorldDatabase.PExecuteLog("DELETE FROM creature_movement WHERE id=%u", lowguid);
-    WorldDatabase.PExecuteLog("DELETE FROM game_event_creature WHERE guid=%u", lowguid);
-    WorldDatabase.PExecuteLog("DELETE FROM game_event_creature_data WHERE guid=%u", lowguid);
-    WorldDatabase.PExecuteLog("DELETE FROM creature_battleground WHERE guid=%u", lowguid);
+    sWorld.ExecuteUpdate("DELETE FROM creature WHERE guid=%u", lowguid);
+    sWorld.ExecuteUpdate("DELETE FROM creature_addon WHERE guid=%u", lowguid);
+    sWorld.ExecuteUpdate("DELETE FROM creature_movement WHERE id=%u", lowguid);
+    sWorld.ExecuteUpdate("DELETE FROM game_event_creature WHERE guid=%u", lowguid);
+    sWorld.ExecuteUpdate("DELETE FROM game_event_creature_data WHERE guid=%u", lowguid);
+    sWorld.ExecuteUpdate("DELETE FROM creature_battleground WHERE guid=%u", lowguid);
     WorldDatabase.CommitTransaction();
 }
 

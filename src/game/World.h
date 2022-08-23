@@ -348,6 +348,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT,
     CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY,
     CONFIG_UINT32_CHAT_MIN_LEVEL,
+    CONFIG_UINT32_AUTO_COMMIT_MINUTES,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -729,6 +730,18 @@ namespace MaNGOS
     };
 }
 
+struct MigrationFile
+{
+    bool hasChanges = false;;
+    std::string lastAuthor;
+
+    void SetAuthor(std::string const& author);
+    void AddRow(char const* row);
+    void AddRowFormat(char const* format, ...);
+    void CommitUpdates();
+    bool HasChanges() const { return hasChanges; }
+};
+
 /// The World
 class World
 {
@@ -947,6 +960,10 @@ class World
         static uint32 GetRelocationAINotifyDelay() { return m_relocation_ai_notify_delay; }
 
         std::string const& GetWardenModuleDirectory() const { return m_wardenModuleDirectory; }
+        std::string const& GetWorldUpdatesDirectory() const { return m_worldUpdatesDirectory; }
+        std::string const& GetWorldUpdatesMigration() const { return m_worldUpdatesMigration; }
+        MigrationFile& GetMigration() { return m_worldMigration; };
+        bool ExecuteUpdate(char const* format, ...);
 
         void ProcessCliCommands();
         void QueueCliCommand(CliCommandHolder* commandHolder) { cliCmdQueue.add(commandHolder); }
@@ -1082,6 +1099,9 @@ class World
         std::string m_dataPath;
         std::string m_honorPath;
         std::string m_wardenModuleDirectory;
+        std::string m_worldUpdatesDirectory;
+        std::string m_worldUpdatesMigration;
+        MigrationFile m_worldMigration;
 
         // for max speed access
         static float m_MaxVisibleDistanceOnContinents;
@@ -1108,6 +1128,7 @@ class World
         //used versions
         uint32 m_anticrashRearmTimer = 0;
         std::unique_ptr<std::thread> m_charDbWorkerThread;
+        std::thread m_autoCommitThread;
 
         typedef std::unordered_map<uint32, ArchivedLogMessage> LogMessagesMap;
         LogMessagesMap m_logMessages;

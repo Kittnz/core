@@ -5071,7 +5071,7 @@ bool ObjectMgr::AddGraveYardLink(uint32 id, uint32 zoneId, Team team, bool inDB)
     // add link to DB
     if (inDB)
     {
-        WorldDatabase.PExecuteLog("INSERT INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) "
+        sWorld.ExecuteUpdate("INSERT INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) "
                                   "VALUES ('%u', '%u','%u')", id, zoneId, uint32(team));
     }
 
@@ -7465,7 +7465,7 @@ bool ObjectMgr::AddGameTele(GameTele& tele)
 
     m_GameTeleMap[new_id] = tele;
 
-    return WorldDatabase.PExecuteLog("INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (%u,%f,%f,%f,%f,%u,'%s')",
+    return sWorld.ExecuteUpdate("INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (%u,%f,%f,%f,%f,%u,'%s')",
                                      new_id, tele.x, tele.y, tele.z, tele.o, tele.mapId, tele.name.c_str());
 }
 
@@ -7483,7 +7483,7 @@ bool ObjectMgr::DeleteGameTele(std::string const& name)
     {
         if (itr->second.wnameLow == wname)
         {
-            WorldDatabase.PExecuteLog("DELETE FROM `game_tele` WHERE `name` = '%s'", itr->second.name.c_str());
+            sWorld.ExecuteUpdate("DELETE FROM `game_tele` WHERE `name` = '%s'", itr->second.name.c_str());
             m_GameTeleMap.erase(itr);
             return true;
         }
@@ -7997,7 +7997,7 @@ void ObjectMgr::AddVendorItem(uint32 entry, uint32 item, uint32 maxcount, uint32
     VendorItemData& vList = m_CacheVendorItemMap[entry];
     vList.AddItem(item, maxcount, incrtime, itemflags, 0);
 
-    WorldDatabase.PExecuteLog("INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`) VALUES('%u','%u','%u','%u','%u')", entry, item, maxcount, incrtime, itemflags);
+    sWorld.ExecuteUpdate("INSERT INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`) VALUES('%u','%u','%u','%u','%u')", entry, item, maxcount, incrtime, itemflags);
 }
 
 bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item)
@@ -8010,7 +8010,7 @@ bool ObjectMgr::RemoveVendorItem(uint32 entry, uint32 item)
         return false;
 
     iter->second.RemoveItem(item);
-    WorldDatabase.PExecuteLog("DELETE FROM `npc_vendor` WHERE `entry`='%u' AND `item`='%u'", entry, item);
+    sWorld.ExecuteUpdate("DELETE FROM `npc_vendor` WHERE `entry`='%u' AND `item`='%u'", entry, item);
     return true;
 }
 
