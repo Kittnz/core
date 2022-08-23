@@ -1605,7 +1605,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
                 if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(238))
                     hardcoreGuild->DelMember(GetObjectGuid());
 
-                GetSession()->LogoutPlayer(true);
+                GetSession()->LogoutRequest(time(nullptr) - 20);
                 return;
             }
             else
