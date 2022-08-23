@@ -9530,6 +9530,33 @@ bool ChatHandler::HandleMinChatLevelCommand(char* args)
     return true;
 }
 
+
+bool ChatHandler::HandlePvPCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* chr = GetSelectedPlayer();
+    if (!chr)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    chr->UpdatePvP(value, true);
+    PSendSysMessage("PvP of character %s set to %s.", chr->GetName(), value ? "on" : "off");
+    return true;
+}
+
 //Edit Player money
 bool ChatHandler::HandleModifyMoneyCommand(char* args)
 {

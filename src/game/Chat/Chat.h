@@ -227,6 +227,7 @@ class ChatHandler
 		bool HandleTurtleCinematic(char *args);
 		bool HandleGetSkillValueCommand(char *args);
         bool HandleHCMessagesCommand(char* args);
+        bool HandlePvPCommand(char* args);
         bool HandleMinChatLevelCommand(char* args);
 
         // Reload        
