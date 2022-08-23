@@ -1024,3 +1024,11 @@ REPLACE INTO `creature` VALUES (2572131,60904,0,0,0,0,-6395.41,-4276.99,343.909,
 REPLACE INTO `creature` VALUES (2572132,60905,0,0,0,0,-6389.78,-4250.46,343.135,6.1407,25,25,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2572133,60905,0,0,0,0,-6363.14,-4253.52,340.772,4.87858,25,25,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2572134,60906,0,0,0,0,-6356.99,-4284.55,339.204,4.50709,25,25,0,100,100,0,0,0);
+UPDATE creature SET position_x = '-6356.810059', position_y = '-4283.747559', position_z = '339.204254', orientation = '1.420472' WHERE guid = '2572134';
+DELETE FROM creature WHERE guid=2572105;
+DELETE FROM creature_addon WHERE guid=2572105;
+DELETE FROM creature_movement WHERE id=2572105;
+DELETE FROM game_event_creature WHERE guid=2572105;
+DELETE FROM game_event_creature_data WHERE guid=2572105;
+DELETE FROM creature_battleground WHERE guid=2572105;
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (846,-6475.227051,-4230.616211,345.669983,4.206882,0,'scalebane');
