@@ -1548,3 +1548,156 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- DAVENBURG NPC LIST
+-- Commando Harwall <Kul Tiras> , display ID 18972 , level 51 elite, faction 1693, humanoid, weapon1 : 7327, quest/greeting flags, greeting text : "My job is to understand the enemy, and to find their weakpoints.\n\n I could comment on the many flaws of Stormwind but that is not why I am here.\n\n What is it I can do for you $R?
+-- Darwin Holdfall <Kul Tiras>, display ID 18973 , level 45, faction 1693, humanoid, no weapon, quest/greeting flags, greeting text : "Stormwind was kind enough to offer us accomodations and a place to hold our Embassy. I feel it will be quite a while until the two kingdoms see eye to eye to stand together."
+-- Kelly Vaulstone <Fisherman>, display ID 18975 , level 30, faction 1693, humanoid, weapon: 6256, quest/greeting flags, greeting text : "This harbor aint too shabby for fishing!"
+-- Petty Officer Milldough <Kul Tiras>, display ID 18976 , level 50, faction 1693, humanoid, no weapon, quest/greeting flags, greeting text : "It can be difficult to control the rabble of sailors and the animosity between them and the marines.\n\n It is where Petty Officers like myself come in."
+-- Quartermaster Alden <Kul Tiras>, display ID 18977 , level 52, faction 1693, humanoid, no weapon, quest/greeting/VENDOR flags, greeting text : "The Nation of Kul Tiras is generous to its loyal subjects and those that swear fealty.\n\n Our loyalties and dedication lay with the Kingdom of Lordaeron, and that of the Old Alliance.\n\n Where do your loyalties lay?
+-- Sailor Borus <Kul Tiras>, display ID 18978 , level 41, faction 1693, humanoid, weapon 5392, quest/greeting flags, greeting text : "Stormwind, it isn't as bad as those in Boralus make it out to be."
+-- Sailor Shalwynd <Kul Tiras>, display ID 18979 , level 41, faction 1693, humanoid, weapon 3368, quest/greeting flags, greeting text : "You do not know the sheer pleasure of being able to stretch your legs on dry land after such a long expedition."
+-- Sailor Valia <Kul Tiras>, display ID 18980 , level 40, faction 1693, humanoid, no weapon, quest/greeting flags, greeting text : "What can I do for you mainlander?"
+-- Vice Admiral Renhoff <Kul Tiras>, display ID 18981 , level 60 elite, faction 1693, humanoid, weapon 23505, weapon2 15335, quest/greeting flags, greeting text : "I have been sent on behalf of the Lord Admiral to engage in diplomacy with our southern neighbors.\n\n I have been curious to see if the nobility here are true to the old ways, and to see what respect they hold for the fallen sister kingdoms to the north.\n\n If Kul Tiras and Stormwind are to ever stand side by side then brutal truths must be laid out for all to understand bluntly.\n\n There is no truces to be had with Blackbloods, and no honor to be made standing alongside those that destroyed what once was."
+-- Marine Dalus, display ID 18656, level 55, faction 1693, humanoid, weapon1 :4560, weapon 2: 4130, quest/greeting flags, greeting text : "It is not often I get to speak with a Mainlander."
+-- Marine Hornby, display ID 18652, level 55, faction 1693, humanoid, weapon1 :4560, weapon 2: 4130, quest/greeting flags, greeting text : "The sea is harsh and filled with secrets, there is still more for us to explore, and more for expeditions to chart on maps.\n\n You can count on us finding the unveiled of this world."
+-- Marine Larwell, display ID 18653, level 55, faction 1693, humanoid, weapon1 :4560, weapon 2: 4130, quest/greeting flags, greeting text : "I haven't been to Stormwind in a long time, its nice to see how much it has changed."
+-- Deckmaster Javin, dispaly ID 18974, level 48, faction 1693, humanoid, weapon1 :1296, quest/greeting flags, greeting text : "You be standing on the Old Tide, ship of Kul Tiras, and I am the Deskmaster here.\n\n Do not cause me any issues on the boat, $C."
+REPLACE INTO creature_template VALUES
+(60926, 18972, 0, 0, 0, 0, 'Commando Harwall', 'Kul Tiras', 0, 51, 51, 7322, 7322, 2100, 0, 0, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 290, 301, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60927, 18973, 0, 0, 0, 0, 'Darwin Holdfall', 'Kul Tiras', 0, 45, 45, 2217, 2217, 0, 0, 2725, 1693, 3, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60928, 18975, 0, 0, 0, 0, 'Kelly Vaulstone', 'Fisherman', 0, 30, 30, 1179, 1179, 0, 0, 1240, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 47, 60, 0, 134, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 53, 74, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60929, 18976, 0, 0, 0, 0, 'Petty Officer Milldough', 'Kul Tiras', 0, 50, 50, 2990, 2990, 0, 0, 2958, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 103, 140, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60930, 18977, 0, 0, 0, 0, 'Quartermaster Alden', 'Kul Tiras', 0, 52, 52, 3082, 3082, 0, 0, 2669, 1693, 7, 1, 1.14286, 0, 20, 5, 0, 0, 1, 106, 136, 0, 234, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.4704, 96.8968, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60931, 18978, 0, 0, 0, 0, 'Sailor Borus', 'Kul Tiras', 0, 41, 41, 1981, 1981, 0, 0, 2397, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60932, 18979, 0, 0, 0, 0, 'Sailor Shalwynd', 'Kul Tiras', 0, 41, 41, 1981, 1981, 0, 0, 2397, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60933, 18980, 0, 0, 0, 0, 'Sailor Valia', 'Kul Tiras', 0, 40, 40, 1752, 1752, 0, 0, 1890, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60934, 18981, 0, 0, 0, 0, 'Vice Admiral Renhoff', 'Kul Tiras', 0, 60, 60, 7326, 7326, 0, 0, 3075, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 789, 840, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.9488, 82.4296, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 416, 548, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60935, 18656, 0, 0, 0, 0, 'Marine Dalus', 'Kul Tiras', 0, 55, 55, 3643, 3643, 0, 0, 3272, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60936, 18652, 0, 0, 0, 0, 'Marine Hornby', 'Kul Tiras', 0, 55, 55, 3643, 3643, 0, 0, 3272, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60937, 18653, 0, 0, 0, 0, 'Marine Larwell', 'Kul Tiras', 0, 55, 55, 3643, 3643, 0, 0, 3272, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60938, 18974, 0, 0, 0, 0, 'Deckmaster Javin', '', 41107, 48, 48, 2800, 2800, 0, 0, 2386, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO creature_display_info_addon VALUES (18972, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18973, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18975, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18976, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18977, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18978, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18979, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18980, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18981, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18974, 0, 0, 0, 0);
+
+set @equip_template = 20187; set @weapon_1 = 1296; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60938;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20186; set @weapon_1 = 4560; set @weapon_2 = 4130; set @weapon_3 = 0; set @creature = 60937;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20185; set @weapon_1 = 4560; set @weapon_2 = 4130; set @weapon_3 = 0; set @creature = 60936;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20184; set @weapon_1 = 4560; set @weapon_2 = 4130; set @weapon_3 = 0; set @creature = 60935;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20183; set @weapon_1 = 23505; set @weapon_2 = 15335; set @weapon_3 = 0; set @creature = 60934;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20182; set @weapon_1 = 3368; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60932;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20181; set @weapon_1 = 5392; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60931;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20180; set @weapon_1 = 6256; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60928;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20179; set @weapon_1 = 7327; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60926;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41206; set @magic_number = 60938;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You be standing on the Old Tide, ship of Kul Tiras, and I am the Deskmaster here.\n\nDo not cause me any issues on the boat, $C.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41205; set @magic_number = 60937;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I haven\'t been to Stormwind in a long time, its nice to see how much it has changed.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41204; set @magic_number = 60936;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The sea is harsh and filled with secrets, there is still more for us to explore, and more for expeditions to chart on maps.\n\nYou can count on us finding the unveiled of this world.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41203; set @magic_number = 60935;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It is not often I get to speak with a Mainlander.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41202; set @magic_number = 60934;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I have been sent on behalf of the Lord Admiral to engage in diplomacy with our southern neighbors.\n\nI have been curious to see if the nobility here are true to the old ways, and to see what respect they hold for the fallen sister kingdoms to the north.\n\nIf Kul Tiras and Stormwind are to ever stand side by side then brutal truths must be laid out for all to understand bluntly.\n\nThere is no truces to be had with Blackbloods, and no honor to be made standing alongside those that destroyed what once was.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41201; set @magic_number = 60933;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What can I do for you mainlander?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41200; set @magic_number = 60932;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You do not know the sheer pleasure of being able to stretch your legs on dry land after such a long expedition.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41199; set @magic_number = 60931;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Stormwind, it isn\'t as bad as those in Boralus make it out to be.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41198; set @magic_number = 60930;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Nation of Kul Tiras is generous to its loyal subjects and those that swear fealty.\n\nOur loyalties and dedication lay with the Kingdom of Lordaeron, and that of the Old Alliance.\n\nWhere do your loyalties lay?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41197; set @magic_number = 60929;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'It can be difficult to control the rabble of sailors and the animosity between them and the marines.\n\n It is where Petty Officers like myself come in.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41196; set @magic_number = 60928;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'This harbor aint too shabby for fishing!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41195; set @magic_number = 60927;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Stormwind was kind enough to offer us accomodations and a place to hold our Embassy. I feel it will be quite a while until the two kingdoms see eye to eye to stand together.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41194; set @magic_number = 60926;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'My job is to understand the enemy, and to find their weakpoints.\n\nI could comment on the many flaws of Stormwind but that is not why I am here.\n\nWhat is it I can do for you $R?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
