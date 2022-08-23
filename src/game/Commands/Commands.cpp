@@ -5546,6 +5546,25 @@ bool ChatHandler::HandleGMSocialsCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleLoSCommand(char* args)
+{
+    Unit* target = GetSelectedUnit();
+
+    if (!target)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (m_session->GetPlayer()->IsWithinLOSInMap(target))
+        SendSysMessage("Target is in line of sight.");
+    else
+        SendSysMessage("Target is NOT in line of sight.");
+
+    return true;
+}
+
 bool ChatHandler::HandleGPSCommand(char* args)
 {
     WorldObject* obj = nullptr;
@@ -8968,60 +8987,6 @@ bool ChatHandler::HandleNpcScaleCommand(char* args)
     npc->SetObjectScale(scale);
     npc->UpdateModelData();
 
-    return true;
-}
-
-bool ChatHandler::HandleNpcAddLootCommand(char* args)
-{
-    if (!*args)
-    {
-        SendSysMessage(LANG_BAD_VALUE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    uint32 item = 0;
-
-    char* cId = ExtractKeyFromLink(&args, "Hitem");
-    if (!cId)
-        return false;
-
-    if (!ExtractUInt32(&cId, item))
-    {
-        std::string itemName = cId;
-        WorldDatabase.escape_string(itemName);
-        QueryResult* result = WorldDatabase.PQuery("SELECT entry FROM item_template WHERE name = '%s'", itemName.c_str());
-        if (!result)
-        {
-            PSendSysMessage(LANG_COMMAND_COULDNOTFIND, cId);
-            SetSentErrorMessage(true);
-            return false;
-        }
-        item = result->Fetch()->GetUInt16();
-        delete result;
-    }
-
-    float chance = (float)atof(args);
-
-    if (chance > 100 || chance < -100)
-    {
-        SendSysMessage("Please use value between -100 for quest drop and 100 for normal drop.");
-        return false;
-    }
-
-    Creature* npc = GetSelectedCreature();
-
-    if (!npc)
-    {
-        SendSysMessage("You need a target.");
-        return false;
-    }
-
-    uint32 creature = npc ? npc->GetEntry() : 0;
-
-    WorldDatabase.PExecuteLog("REPLACE INTO `creature_loot_template` (entry, item, chanceorquestchance, groupid, mincountorref, maxcount) VALUES (%u, %u, %f, 5, 1, 1)", creature, item, chance);
-    PSendSysMessage("Item %u has been added to NPC %u loot table, group 5, chance %f.", item, creature, chance);
-    SendSysMessage("All changes will take place after the server restart");
     return true;
 }
 

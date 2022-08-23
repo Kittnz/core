@@ -5092,7 +5092,19 @@ void Player::SpawnHardcoreGravestone()
 
     GameObjectInfo goInfo;
     goInfo.name = ss.str();
-    goInfo.displayId = 499;
+
+    if (GetLevel() >= 50)
+        goInfo.displayId = 2452;
+    else if (GetLevel() >= 40)
+        goInfo.displayId = 19;
+    else if (GetLevel() >= 30)
+        goInfo.displayId = 399;
+    else if (GetLevel() >= 20)
+        goInfo.displayId = 403;
+    else
+        goInfo.displayId = GetTeam() == HORDE ? 499 : 22660;
+
+
     goInfo.type = GAMEOBJECT_TYPE_GENERIC;
     goInfo._generic.floatingTooltip = 1;
     goInfo._generic.highlight = 1;
@@ -8103,6 +8115,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                     }
 
                     loot->FillLoot(lootid, LootTemplates_Gameobject, this, !groupRules, false);
+                    loot->GenerateMoneyLoot(go->GetGOInfo()->MinMoneyLoot, go->GetGOInfo()->MaxMoneyLoot);
                     if (go->GetInstanceId())
                         go->GetMap()->BindToInstanceOrRaid(this, go->GetRespawnTimeEx(), false);
 
@@ -8153,7 +8166,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                         break;
                     default:
                         loot->FillLoot(item->GetEntry(), LootTemplates_Item, this, true, item->GetProto()->MaxMoneyLoot == 0);
-                        loot->generateMoneyLoot(item->GetProto()->MinMoneyLoot, item->GetProto()->MaxMoneyLoot);
+                        loot->GenerateMoneyLoot(item->GetProto()->MinMoneyLoot, item->GetProto()->MaxMoneyLoot);
                         item->SetLootState(ITEM_LOOT_CHANGED);
                         item->SetGeneratedLoot(true);
                         break;
