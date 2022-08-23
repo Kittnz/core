@@ -3635,9 +3635,32 @@ struct npc_carver_molsenAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_carver_molsen(Creature* _Creature) { return new npc_carver_molsenAI(_Creature); }
 
+struct npc_sellick_vossAI : public ScriptedAI
+{
+    npc_sellick_vossAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("Theramore was weak, to side with the Horde is betrayal after all who died! We will not be stopped so easily, the Vengeful Mariner will not forget!");
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_sellick_voss(Creature* _Creature) { return new npc_sellick_vossAI(_Creature); }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_sellick_voss";
+    newscript->GetAI = &GetAI_npc_sellick_voss;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_carver_molsen";
