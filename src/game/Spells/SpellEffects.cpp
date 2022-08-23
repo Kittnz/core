@@ -1556,8 +1556,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 case 8897:                                 // Destroy Rocket Boots
                 {
                     m_caster->CastSpell(unitTarget, 8893, true);
-                    m_caster->CastSpell(unitTarget, 13158, true);
-
                     return;
                 }
                 case 23185:                                 // Aura of Frost
@@ -2057,36 +2055,22 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        switch (m_caster->ToPlayer()->GetGuildId())
-                        {                        
-                        case 189: m_caster->ToPlayer()->TeleportTo(1, 7301.3F, -1523.8F, 179.8F, 1.4F);     break; // Rush'n Attack                     
-                        case 172: m_caster->ToPlayer()->TeleportTo(1, -3134.49F, 2415.03F, 253.12F, 5.5F);  break; // Traveler
-                        case 415: m_caster->ToPlayer()->TeleportTo(0, 1568.51F, -3062.9F, 78.08F, 1.97F);   break; // The Crusade
-                        case 212: m_caster->ToPlayer()->TeleportTo(1, -5546.96F, -4071.97F, -58.50F, 3.2F); break; // Rats
-                        case 3:   m_caster->ToPlayer()->TeleportTo(0, -1853.48F, -4091.64F, 9.81F, 4.7F);   break; // Thunder Ale Brewing Co
-                        case 168: m_caster->ToPlayer()->TeleportTo(1, 2934.71F, -4762.13F, 234.06F, 5.6F);  break; // Macrochelys
-                        case 226: m_caster->ToPlayer()->TeleportTo(1, 1017.24F, -2225.02F, 93.09F, 5.15F);  break; // Warsong Outriders
-                        case 254: m_caster->ToPlayer()->TeleportTo(1, 7.71F, -3619.13F, 27.22F, 2.5F);      break; // Southfury Trading Co
-                        case 49:  m_caster->ToPlayer()->TeleportTo(0, 2743.08F, -1032.77F, 112.89F, 5.32F); break; // The Scarlet Crusade
-                        case 358: m_caster->ToPlayer()->TeleportTo(0, 2102.03F, -865.82F, 109.5F, 0.7F);    break; // The Scourge 
-                        case 176: m_caster->ToPlayer()->TeleportTo(1, -10707.2F, 2483.1F, 7.9F, 3.4F);      break; // Philanthropy
-                        case 215: m_caster->ToPlayer()->TeleportTo(0, -5895.49F, -3600.1F, 350.5F, 4.01F);  break; // Heirs of Quel'Thalas
-                        case 346: m_caster->ToPlayer()->TeleportTo(1, 2372.3F, -2527.9F, 108.6F, 0.3F);     break; // Hand of Wrath
-                        case 322: m_caster->ToPlayer()->TeleportTo(1, 1557.9F, -2887.1F, 183.3F, 1.9F);     break; // Ered Ruin
-                        case 339: m_caster->ToPlayer()->TeleportTo(1, -727.7F, -3943.3F, 23.48F, 5.5F);     break; // Golden Moon
-                        case 363: m_caster->ToPlayer()->TeleportTo(1, 7118.21F, -3926.49F, 704.3F, 0.2F);   break; // School of the Dragonhawk
-                        case 351: m_caster->ToPlayer()->TeleportTo(0, -10377.1F, -3374.04F, 21.82F, 1.8F);  break; // Blacktooth Grin
-                        case 295: m_caster->ToPlayer()->TeleportTo(0, 843.65F, -5069.647F, 8.589F, 0.53F);  break; // Nephilim
-                        case 376: m_caster->ToPlayer()->TeleportTo(0, -10598.617F, -40.95F, 35.9F, 5.89F);  break; // The Lions Pride Legion
-                        case 76:  m_caster->ToPlayer()->TeleportTo(1, -11523.83F, -4660.29F, 3.005F, 2.2F); break; // Schmetterlingsbrigade
-                        case 466: m_caster->ToPlayer()->TeleportTo(1, -6904.55F, -4238.45F, 11.81F, 0.6F);  break; // Hard Knocks Society
-                        case 444: m_caster->ToPlayer()->TeleportTo(0, -8809.33F, 1093.16F, 95.53F, 3.4F);   break; // Thalassian Alliance
-                        case 436: m_caster->ToPlayer()->TeleportTo(0, -8341.12F, -836.33F, 225.91F, 0.8F);  break; // The Blackwing Guard
-                        case 428: m_caster->ToPlayer()->TeleportTo(1, -9669.25F, -1967.92F, 0.51F, 0.3F);   break; // Conquistadores
-                        case 403: m_caster->ToPlayer()->TeleportTo(1, -7600.9F, -2337.65F, -190.2F, 5.08F); break; // Get Rich Or Die Grinding
-                        case 504: m_caster->ToPlayer()->TeleportTo(0, -3850.1F, -2403.2F, 172.2F, 5.49F);   break; // Hawks Talon
-                        case 283: m_caster->ToPlayer()->TeleportTo(0, -734.2F, -318.9F, 18.2F, 1.29F);      break; // The Silver Crusade
-                        default: break;
+                        uint32 guild_id = m_caster->ToPlayer()->GetGuildId();
+
+                        if (!guild_id)                            
+                        {
+                            m_caster->ToPlayer()->GetSession()->SendNotification("You don't have a guild.");
+                            return;
+                        }
+
+                        GuildHouseEntry const* guild_house = sObjectMgr.GetGuildHouse(guild_id);
+
+                        if (guild_house)
+                            m_caster->ToPlayer()->TeleportTo(guild_house->map_id, guild_house->position_x, guild_house->position_y, guild_house->position_z, guild_house->orientation);
+                        else
+                        {
+                            m_caster->ToPlayer()->GetSession()->SendNotification("Your guild doesn't have a guild house yet.");
+                            return;
                         }
                     }
                     return;

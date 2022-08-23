@@ -184,3 +184,54 @@ update creature set position_x = -9934.31, position_y = -4241.89, position_z = 2
 update creature set position_x = -9898.84, position_y = -4217.92, position_z = 2.29258 where guid = 38765;
 update creature set position_x = -10915.3, position_y = -4131.91, position_z = 9.70558 where guid = 38766;
 update creature set position_x = -10849.8, position_y = -4283.15, position_z = -11.5076 where guid = 38873;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1977
+update item_template set disenchant_id = 45 where entry = 83287;
+
+-- Remove Some of the Armor Penetration Spells from Sentinel Reputation Items
+update item_template set spellid_2 = 0 where entry = 60747;
+update item_template set spellid_2 = 0 where entry = 60750;
+update item_template set spellid_2 = 0 where entry = 60751;
+update item_template set max_count = 1, spellid_2 = 48029 where entry = 60752;
+-- Remove AP from Crown of Corruption and Ring of Demonic Fury
+update item_template set spellid_2 = 0, spellid_1 = 13679 where entry = 60258;
+update item_template set spellid_2 = 0, spellid_1 = 13679 where entry = 83217;
+-- Change Tempest's Rage to be Unique
+update item_template set max_count = 1 where entry = 83564;
+-- Otherworldy Name Fix
+update item_template set name = 'Otherworldly Blade' where entry = 51793;
+update item_template set name = 'Otherworldly Rifle' where entry = 51794;
+update item_template set name = 'Otherworldly Robe' where entry = 51792;
+-- Integrate New Stats to Nerubian Overseer Items
+update item_template set spellid_2 = 14521, spelltrigger_2 = 1 where entry = 51737;
+update item_template set spellid_2 = 48034, spelltrigger_2 = 1, shadow_res = 10 where entry = 51734;
+update item_template set spellid_2 = 18022, stat_value3 = 22, item_level = 75 where entry = 51740;
+-- New Vault Rare Trash Drop Blues
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1741
+
+update quest_template set type = 81 where entry = 40427;
+update quest_template set type = 81 where entry = 40426;
+update quest_template set type = 81 where entry = 40425;
+update quest_template set type = 81 where entry = 40490;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1736
+
+update creature_template set ai_name = 'EventAI' where entry = 92135;
+update creature_template set ai_name = 'EventAI' where entry = 92136;
+update creature_template set ai_name = 'EventAI' where entry = 92138;
+update creature_template set ai_name = 'EventAI' where entry = 92139;
+update creature_template set ai_name = 'EventAI' where entry = 92140;
+update creature_template set ai_name = 'EventAI' where entry = 91847;
+
+replace into creature_ai_events (id, creature_id, condition_id, event_type, event_inverse_phase_mask, event_chance, event_flags, event_param1, event_param2, event_param3, event_param4, action1_script, action2_script, action3_script, comment) values
+(1020, 92135, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Southsea Bootlegger - Flee at 15% HP'),
+(1021, 92136, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Southsea Distiller - Flee at 15% HP'),
+(1022, 92138, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Southsea Sea Wolf - Flee at 15% HP'),
+(1023, 92138, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Southsea Outlaw - Flee at 15% HP'),
+(1024, 92140, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Southsea Deckhand - Flee at 15% HP'),
+(1025, 91847, 0, 2, 0, 100, 0, 15, 0, 0, 0, 12203, 0, 0, 'Southsea Pillager - Flee at 15% HP');
+
+-- Remove riding requirement from the Immoral Charger:
+
+update item_template set required_skill = 0, required_skill_rank = 0 where entry = 80692;

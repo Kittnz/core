@@ -1726,7 +1726,7 @@ bool GossipSelect_npc_vip_invite(Player* pPlayer, Creature* pCreature, uint32 /*
         auto faction1 = sObjectMgr.GetFactionEntry(21); // Booty Bay
         if (faction1)
         {
-            pPlayer->GetReputationMgr().SetReputation(faction1, -12000);
+            pPlayer->GetReputationMgr().SetSingleReputation(faction1, -12000);
 
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60333))
                 pPlayer->KilledMonster(cInfo, ObjectGuid());
@@ -3851,8 +3851,8 @@ bool GossipSelect_npc_agne_gambler(Player* pPlayer, Creature* pCreature, uint32 
 
     result = urand(1, 100);
 
-    pCreature->PMonsterEmote("Agne rolls a dice for %s... %u!", nullptr, false, pPlayer->GetName(),
-        result);
+    pCreature->PMonsterEmote("%s rolls a dice for %s... %u!", nullptr, false,
+                             pCreature->GetName(), pPlayer->GetName(), result);
 
     amountToAward = handleRecords(pPlayer, amount, result);
     if (amountToAward > 0)
@@ -4964,6 +4964,7 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
 namespace nsScarletAttackTrigger
 {
     static constexpr std::uint32_t GO_TriggerConditionDummy{ 1000170 };
+    static constexpr std::uint32_t NPC_SCARLET_RECRUIT{ 50673 };
     static constexpr std::uint32_t NPC_VLADEUS_SPRINGRIVER{ 50674 };
     static constexpr std::uint32_t QUEST_THANDOL_SPAN{ 80703 };
     static constexpr std::uint32_t TIMER_UPDATE{ 1000 };
@@ -5003,27 +5004,28 @@ public:
                         {
                             if (GO)
                             {
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
                             }
                         });
                         DoAfterTime(me, 20 * IN_MILLISECONDS, [GO = me]()
                         {
                             if (GO)
                             {
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
                             }
                         });
                         DoAfterTime(me, 40 * IN_MILLISECONDS, [GO = me]()
                         {
                             if (GO)
                             {
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
+                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
 
                                 if (!GO->FindNearestCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, 30.f))
                                 {
-                                    GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS);
+                                    if (Creature* pVladeus = GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS))
+                                        pVladeus->HandleEmote(EMOTE_ONESHOT_BEG);
                                 }
                             }
                         });
