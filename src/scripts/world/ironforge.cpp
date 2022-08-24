@@ -312,18 +312,82 @@ bool GossipHello_npc_blacksmithing_specialisations(Player* pPlayer, Creature* pC
 
 bool GossipSelect_npc_blacksmithing_specialisations(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
 {
+    auto RemoveQuest = [](Player* player, uint32 questId)
+    {
+        player->RemoveQuest(questId);
+        player->SetQuestStatus(questId, QUEST_STATUS_NONE);
+        player->getQuestStatusMap()[questId].m_rewarded = false;
+    };
+
+    auto GetKnownItemRecipes = [](Player* player, std::vector<uint32>& recipes)
+    {
+        for (uint32 i = 1; i < sItemStorage.GetMaxEntry(); ++i)
+        {
+            ItemPrototype const* pItem = sItemStorage.LookupEntry<ItemPrototype >(i);
+            if (!pItem)
+                continue;
+            
+            if (pItem->RequiredSkill != 164)
+                continue;
+
+            if (pItem->RequiredSpell)
+                continue;
+
+            if (!pItem->Spells[0].SpellId)
+                continue;
+
+            if (SpellEntry const* pTeachSpell = sSpellMgr.GetSpellEntry(pItem->Spells[0].SpellId))
+            {
+                if (pTeachSpell->Effect[0] == SPELL_EFFECT_LEARN_SPELL && 
+                    pTeachSpell->EffectTriggerSpell[0] != 0 &&
+                    player->HasSpell(pTeachSpell->EffectTriggerSpell[0]))
+                {
+                    recipes.push_back(pTeachSpell->EffectTriggerSpell[0]);
+                }
+            }
+        }
+    };
+
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->RemoveSpell(SPELL_WEAPONSMITH, false, false);
-        pPlayer->RemoveQuest(QUEST_WEAPONSMITH_ALLIANCE);
-        pPlayer->RemoveQuest(QUEST_WEAPONSMITH_HORDE);
+        std::vector<uint32> recipes;
+        GetKnownItemRecipes(pPlayer, recipes);
+        uint32 currentSkill = pPlayer->GetSkillValuePure(164);
+        uint32 maxSkill = pPlayer->GetSkillMaxPure(164);
+        pPlayer->SetSkill(164, 0, 0);
+        RemoveQuest(pPlayer, QUEST_WEAPONSMITH_ALLIANCE);
+        RemoveQuest(pPlayer, QUEST_WEAPONSMITH_HORDE);
+        pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer, currentSkill, maxSkill, recipes]()
+        {
+            pPlayer->LearnSpell(2018, false);
+            pPlayer->LearnSpell(3100, false);
+            pPlayer->LearnSpell(3538, false);
+            pPlayer->LearnSpell(9785, false);
+            pPlayer->SetSkill(164, currentSkill, maxSkill);
+            for (auto spellId : recipes)
+                pPlayer->LearnSpell(spellId, false);
+        }, 1000);
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pPlayer->RemoveSpell(SPELL_ARMORSMITH, false, false);
-        pPlayer->RemoveQuest(QUEST_ARMORSMITH_ALLIANCE);
-        pPlayer->RemoveQuest(QUEST_ARMORSMITH_HORDE);
+        std::vector<uint32> recipes;
+        GetKnownItemRecipes(pPlayer, recipes);
+        uint32 currentSkill = pPlayer->GetSkillValuePure(164);
+        uint32 maxSkill = pPlayer->GetSkillMaxPure(164);
+        pPlayer->SetSkill(164, 0, 0);
+        RemoveQuest(pPlayer, QUEST_ARMORSMITH_ALLIANCE);
+        RemoveQuest(pPlayer, QUEST_ARMORSMITH_HORDE);
+        pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer, currentSkill, maxSkill, recipes]()
+        {
+            pPlayer->LearnSpell(2018, false);
+            pPlayer->LearnSpell(3100, false);
+            pPlayer->LearnSpell(3538, false);
+            pPlayer->LearnSpell(9785, false);
+            pPlayer->SetSkill(164, currentSkill, maxSkill);
+            for (auto spellId : recipes)
+                pPlayer->LearnSpell(spellId, false);
+        }, 1000);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
