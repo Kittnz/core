@@ -4961,93 +4961,6 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
     return true;
 }
 
-namespace nsScarletAttackTrigger
-{
-    static constexpr std::uint32_t GO_TriggerConditionDummy{ 1000170 };
-    static constexpr std::uint32_t NPC_SCARLET_RECRUIT{ 50673 };
-    static constexpr std::uint32_t NPC_VLADEUS_SPRINGRIVER{ 50674 };
-    static constexpr std::uint32_t QUEST_THANDOL_SPAN{ 80703 };
-    static constexpr std::uint32_t TIMER_UPDATE{ 1000 };
-}
-
-class go_scarlet_attack_trigger : public GameObjectAI
-{
-public:
-    explicit go_scarlet_attack_trigger(GameObject* pGo) : GameObjectAI(pGo) { m_uiUpdateTimer = nsScarletAttackTrigger::TIMER_UPDATE; }
-
-private:
-    std::uint32_t m_uiUpdateTimer{};
-
-public:
-    void UpdateAI(const uint32 uiDiff) override
-    {     
-        if (m_uiUpdateTimer < uiDiff)
-        {
-            std::list<Player*> lPlayers;
-            me->WorldObject::GetAlivePlayerListInRange(me, lPlayers, 10.f);
-
-            for (const auto& player : lPlayers)
-            {
-                if (player->GetQuestStatus(nsScarletAttackTrigger::QUEST_THANDOL_SPAN) == QUEST_STATUS_INCOMPLETE &&
-                    player->GetQuestStatusData(nsScarletAttackTrigger::QUEST_THANDOL_SPAN)->m_creatureOrGOcount[0] == 0 ||
-                    player->GetQuestStatusData(nsScarletAttackTrigger::QUEST_THANDOL_SPAN)->m_creatureOrGOcount[1] == 0)
-                {
-                    if (player->FindNearestGameObject(nsScarletAttackTrigger::GO_TriggerConditionDummy, 30.f))
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        player->SummonGameObject(nsScarletAttackTrigger::GO_TriggerConditionDummy, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), 0.f, 0.f, 0.f, 0.f, 0.f, 180, true);
-
-                        DoAfterTime(me, 2 * IN_MILLISECONDS, [GO = me]()
-                        {
-                            if (GO)
-                            {
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                            }
-                        });
-                        DoAfterTime(me, 20 * IN_MILLISECONDS, [GO = me]()
-                        {
-                            if (GO)
-                            {
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-                            }
-                        });
-                        DoAfterTime(me, 40 * IN_MILLISECONDS, [GO = me]()
-                        {
-                            if (GO)
-                            {
-                                GO->SummonCreature(nsScarletAttackTrigger::NPC_SCARLET_RECRUIT, -2458.82f, -2494.24f, 78.5f, 4.0f, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 5 * IN_MILLISECONDS);
-
-                                if (!GO->FindNearestCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, 30.f))
-                                {
-                                    if (Creature* pVladeus = GO->SummonCreature(nsScarletAttackTrigger::NPC_VLADEUS_SPRINGRIVER, -2458.19f, -2512.90f, 78.5f, 1.9f, TEMPSUMMON_TIMED_DESPAWN, 60 * MINUTE * IN_MILLISECONDS))
-                                        pVladeus->HandleEmote(EMOTE_ONESHOT_BEG);
-                                }
-                            }
-                        });
-                    }                   
-                }
-            }
-
-            m_uiUpdateTimer = nsScarletAttackTrigger::TIMER_UPDATE;
-        }
-        else
-        {
-            m_uiUpdateTimer -= uiDiff;
-        }
-    }
-}; 
-
-GameObjectAI* GetAI_go_scarlet_attack_trigger(GameObject* gameobject)
-{
-    return new go_scarlet_attack_trigger(gameobject);
-} 
-
-
 bool GossipHello_npc_vladeus_interrogation(Player* pPlayer, Creature* pCreature)
 {
     if (pPlayer->GetQuestStatus(80705) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80705)->m_creatureOrGOcount[0] == 0)
@@ -6827,11 +6740,6 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_vladeus_interrogation";
     newscript->pGossipHello = &GossipHello_npc_vladeus_interrogation;
     newscript->pGossipSelect = &GossipSelect_npc_vladeus_interrogation;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_scarlet_attack_trigger";
-    newscript->GOGetAI = &GetAI_go_scarlet_attack_trigger;
     newscript->RegisterSelf();
 
     newscript = new Script;
