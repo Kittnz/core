@@ -267,7 +267,7 @@ CreatureAI* GetAI_npc_aqir_add(Creature* pCreature)
 
 
 
-void AddSC_boss_gerastrasz()
+void AddSC_black_morass_trash()
 {
     Script* pNewscript{};
 
