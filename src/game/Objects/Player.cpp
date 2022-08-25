@@ -21341,6 +21341,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     uint8 oldRace = GetRace();
     bool bChangeTeam = (TeamForRace(oldRace) != TeamForRace(newRace));
+    uint32 mapId = GetMapId();
 
 	//Key - SkillId, Value - Skill value
 	std::unordered_map<uint32, uint16> SkillValues;
@@ -21400,13 +21401,40 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     LearnDefaultSpells();
 
-    uint32 newTeam = TeamForRace(newRace);
-    
+    Team newTeam = TeamForRace(newRace);
+    /*
     if (newTeam == ALLIANCE)
         GetTaxi().LoadTaxiMask("3456411898 2148078928 49991 0 0 0 0 0 ");
     else
-        GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");
+        GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");*/
 
+
+    std::vector<uint32> learnableNodes;
+
+    for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
+    {
+        TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
+        if (!node || node->map_id != mapId)
+            continue;
+
+        if (!m_taxi.IsTaximaskNodeKnown(node->ID))
+            continue;
+
+        //taxi is known, find nearest path for opposite faction and learn that instead.
+        if (uint32 newNode = sObjectMgr.GetNearestTaxiNode(node->x, node->y, node->z, node->map_id, newTeam))
+            learnableNodes.push_back(newNode);
+    }
+
+    // reset taxi state and learn all learnableNodes.   
+    if (newTeam == ALLIANCE)
+        GetTaxi().LoadTaxiMask("2 0 0 0 0 0 0 0 ");
+    else
+        GetTaxi().LoadTaxiMask("32 0 0 0 0 0 0 0 ");
+
+    for (uint32 node : learnableNodes)
+    {
+        GetTaxi().SetTaximaskNode(node);
+    }
 
     SetFactionForRace(newRace);
 
