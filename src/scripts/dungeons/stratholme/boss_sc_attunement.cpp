@@ -32,7 +32,7 @@ static const Location vfSpawnPoints[NUMBER_OF_ADDS] =
 };
 
 static constexpr std::uint32_t SPELL_HOLY_LIGHT{ 25292 };
-static constexpr std::uint32_t SPELL_HOLY_SHOCK{ 20930 };
+static constexpr std::uint32_t SPELL_HOLY_SHOCK{ 25902 };
 static constexpr std::uint32_t SPELL_HOLY_STRIKE{ 17284 };
 static constexpr std::uint32_t SPELL_DIVINE_SHIELD{ 1020 };
 static constexpr std::uint32_t SPELL_BLADE_STORM{ 9632 };
@@ -98,7 +98,7 @@ public:
         return m_Phase;
     }
 
-    void CastHolyLight(const uint32& uiDiff, const std::uint32_t& uiMinTimer, const std::uint32_t& uiMaxTimer)
+    void CastHolyLight(const uint32& uiDiff, const std::uint32_t& uiMinTimer, const std::uint32_t& uiMaxTimer) // TODO: Doesn't cast, it's instant atm
     {
         if (m_uiHolyLight_Timer < uiDiff)
         {
@@ -119,7 +119,7 @@ public:
         {
             if (Unit* pVictim{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_BOTTOMAGGRO, 0) })
             {
-                const std::int32_t iDamage{ int32(urand(2500, 3000)) };
+                const std::int32_t iDamage{ irand(3000, 3500) };
                 m_creature->CastCustomSpell(pVictim, SPELL_HOLY_SHOCK, &iDamage, nullptr, nullptr, true);
 
                 m_uiHolyShock_Timer = uiTimer;
@@ -131,7 +131,7 @@ public:
         }
     }
 
-    void DoHolyStrike(const uint32& uiDiff, const std::uint32_t& uiTimer)
+    void DoHolyStrike(const uint32& uiDiff, const std::uint32_t& uiTimer) // TODO: Doesn't work at all
     {
         if (m_uiHolyStrike_Timer < uiDiff)
         {
@@ -146,7 +146,7 @@ public:
         }
     }
 
-    void SummonAdds()
+    void SummonAdds() // TODO: Crashes the server
     {
         for (std::uint8_t i{ 0 }; i < NUMBER_OF_ADDS; ++i)
         {
@@ -236,7 +236,7 @@ public:
     {
         m_creature->MonsterYell("Horsemen! Trample them!");
 
-        // TODO: While the boss is in the middle of the room, bubbled and whirlwinding, 4 horsemen spirits should spawn in the corners.
+        // TODO: While the boss is bubbled and whirlwinding, 4 horsemen spirits should spawn in the corners and run in circles.
     }
 
     void UpdateAI(const uint32 uiDiff) override
