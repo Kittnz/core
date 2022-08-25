@@ -102,6 +102,7 @@ struct boss_dathrohan_balnazzarAI : public ScriptedAI
     uint32 m_uiMindControl_Timer{};
     uint32 m_uiTransform_Timer{};
     bool m_bTransformed{};
+    bool m_bScarletCitadelBossSpawned{};
 
     uint64 MCPlayerGuid{};
     float MCPlayerAggro{};
@@ -120,6 +121,7 @@ struct boss_dathrohan_balnazzarAI : public ScriptedAI
         m_uiMindControl_Timer = 18000;
         m_uiTransform_Timer = 0;
         m_bTransformed = false;
+        m_bScarletCitadelBossSpawned = false;
 
         MCPlayerGuid = 0;
         MCPlayerAggro = 0;
@@ -162,24 +164,27 @@ struct boss_dathrohan_balnazzarAI : public ScriptedAI
         }
 
         // Summon SC Attunement Boss
-        Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
-        if (!PlayerList.isEmpty())
+        if (!m_bScarletCitadelBossSpawned)
         {
-            constexpr std::uint32_t QUEST_SEEK_HELP_ELSEWHERE{ 20001 };
-            constexpr std::uint32_t QUEST_TO_WAKE_THE_ASHBRINGER{ 20002 };
-            constexpr std::uint32_t ITEM_ORB_OF_PURE_LIGHT{ 82000 };
-
-            for (const auto& itr : PlayerList)
+            Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
+            if (!PlayerList.isEmpty())
             {
-                if (Player* pPlayer{ itr.getSource() })
-                {
-                    if ((pPlayer->GetQuestStatus(QUEST_TO_WAKE_THE_ASHBRINGER) == QUEST_STATUS_INCOMPLETE) &&
-                        (pPlayer->GetQuestStatus(QUEST_SEEK_HELP_ELSEWHERE) == QUEST_STATUS_COMPLETE) &&
-                        pPlayer->HasItemCount(ITEM_ORB_OF_PURE_LIGHT))
-                    {
-                        m_creature->SummonCreature(2000092, 3433.235107f, -3049.212402f, 136.506256f, 4.664114f);
+                constexpr std::uint32_t QUEST_SEEK_HELP_ELSEWHERE{ 20001 };
+                constexpr std::uint32_t QUEST_TO_WAKE_THE_ASHBRINGER{ 20002 };
+                constexpr std::uint32_t ITEM_ORB_OF_PURE_LIGHT{ 82000 };
 
-                        break;
+                for (const auto& itr : PlayerList)
+                {
+                    if (Player* pPlayer{ itr.getSource() })
+                    {
+                        if ((pPlayer->GetQuestStatus(QUEST_TO_WAKE_THE_ASHBRINGER) == QUEST_STATUS_INCOMPLETE) &&
+                            (pPlayer->GetQuestStatus(QUEST_SEEK_HELP_ELSEWHERE) == QUEST_STATUS_COMPLETE) &&
+                            pPlayer->HasItemCount(ITEM_ORB_OF_PURE_LIGHT))
+                        {
+                            m_creature->SummonCreature(2000092, 3433.235107f, -3049.212402f, 136.506256f, 4.664114f);
+                            m_bScarletCitadelBossSpawned = true;
+                            break;
+                        }
                     }
                 }
             }
