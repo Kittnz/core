@@ -21,12 +21,22 @@ public:
 
 private:
 
+    std::uint32_t m_uiCleave_Timer{};
+    std::uint32_t m_uiSandBreath_Timer{};
+    std::uint32_t m_uiTimeStop_Timer{};
+    std::uint32_t m_uiFrenzy_Timer{};
+
     instance_black_morass* m_pInstance{};
 
 public:
     void Reset() override
     {
+        m_uiCleave_Timer = 5000;
+        m_uiSandBreath_Timer = 30000;
+        m_uiTimeStop_Timer = 40000;
+        m_uiFrenzy_Timer = 120000;
 
+        m_creature->SetActiveObjectState(true);
     }
 
     void Aggro(Unit* /*pWho*/) override
@@ -51,13 +61,85 @@ public:
         if (!m_pInstance)
             return;
 
+        m_creature->SetRespawnDelay(604800);
+
         m_pInstance->SetData(BlackMorassEncounter::TYPE_CHRONORMU, DONE);
+    }
+
+    void EnterEvadeMode() override
+    {
+        if (m_creature->GetFactionTemplateId() != 35)
+        {
+            m_creature->SetObjectScale(.75f);
+            m_creature->AddAura(SPELL_PARTICLES_GREEN);
+            m_creature->AddAura(SPELL_SLEEP_VISUAL);
+            m_creature->SetStandState(UNIT_STAND_STATE_SLEEP);
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
+
+        if (m_creature->HasAura(SPELL_SLEEP_VISUAL))
+        {
+            m_creature->RemoveAurasDueToSpell(SPELL_SLEEP_VISUAL);
+            m_creature->SetStandState(UNIT_STAND_STATE_STAND);
+        }
+
+        if (m_uiCleave_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_CLEAVE) == CAST_OK)
+            {
+                m_uiCleave_Timer = urand(6000, 8000);
+            }
+        }
+        else
+        {
+            m_uiCleave_Timer -= uiDiff;
+        }
+
+        if (m_uiSandBreath_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_SAND_BREATH) == CAST_OK)
+            {
+                m_uiSandBreath_Timer = 30000;
+            }
+        }
+        else
+        {
+            m_uiSandBreath_Timer -= uiDiff;
+        }
+
+        if (m_uiTimeStop_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature->GetVictim(), SPELL_TIME_LAPSE) == CAST_OK)
+            {
+                DoPlaySoundToSet(m_creature, SOUND_CTHUNE_WOUND);
+
+                m_uiTimeStop_Timer = 40000;
+            }
+        }
+        else
+        {
+            m_uiTimeStop_Timer -= uiDiff;
+        }
+
+        if (m_uiFrenzy_Timer < uiDiff)
+        {
+            if (DoCastSpellIfCan(m_creature, SPELL_ENRAGE) == CAST_OK)
+            {
+                DoScriptText(EMOTE_FRENZY, m_creature);
+
+                m_uiFrenzy_Timer = 120000;
+            }
+        }
+        else
+        {
+            m_uiFrenzy_Timer -= uiDiff;
+        }
+
 
         DoMeleeAttackIfReady();
     }
@@ -68,9 +150,11 @@ CreatureAI* GetAI_boss_chronormu(Creature* pCreature)
     return new boss_chronormuAI(pCreature);
 }
 
+
 void AddSC_boss_chronormu()
 {
     Script* pNewscript{};
+
     pNewscript = new Script;
     pNewscript->Name = "boss_chronormu";
     pNewscript->GetAI = &GetAI_boss_chronormu;
