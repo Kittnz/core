@@ -3653,9 +3653,52 @@ struct npc_sellick_vossAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_sellick_voss(Creature* _Creature) { return new npc_sellick_vossAI(_Creature); }
 
+bool GOHello_go_abandoned_murloc(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(40541) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pGo->GetEntry() == 2010918)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Check the Murloc Hut.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30033, pGo->GetGUID());
+        }
+
+        if (pGo->GetEntry() == 2010919)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Check the Murloc Nest.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->SEND_GOSSIP_MENU(30034, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_abandoned_murloc(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60383))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60384))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_abandoned_murloc";
+    newscript->pGOHello = &GOHello_go_abandoned_murloc;
+    newscript->pGOGossipSelect = &GOSelect_go_abandoned_murloc;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_sellick_voss";
