@@ -292,3 +292,4 @@ DELETE FROM gameobject WHERE guid = '5009653';
 DELETE FROM game_event_gameobject WHERE guid = '5009653';
 DELETE FROM gameobject_battleground WHERE guid = '5009653';
 REPLACE INTO `gameobject` VALUES ( 5009654, 181734, 1, 432.114, -702.558, 68.75, 3.24423, 0, 0, 0.998683, -0.0512985, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (847,1337.366699,1741.015991,142.226669,0.008433,1,'powdertown');
