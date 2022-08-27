@@ -1988,6 +1988,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             case 28169:                                     // Mutating Injection
             {
                 Unit* caster = GetCaster();
+
+                if (!caster)
+                    return;
                 // Mutagen Explosion
                 if (m_removeMode == AuraRemoveMode::AURA_REMOVE_BY_DISPEL)
                 {
