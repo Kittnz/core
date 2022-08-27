@@ -288,3 +288,7 @@ DELETE FROM gameobject WHERE guid = '5009652';
 DELETE FROM game_event_gameobject WHERE guid = '5009652';
 DELETE FROM gameobject_battleground WHERE guid = '5009652';
 REPLACE INTO `gameobject` VALUES ( 5009653, 181734, 1, 438.674, -701.735, 68.75, 3.59766, 0, 0, 0.974112, -0.226065, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5009653';
+DELETE FROM game_event_gameobject WHERE guid = '5009653';
+DELETE FROM gameobject_battleground WHERE guid = '5009653';
+REPLACE INTO `gameobject` VALUES ( 5009654, 181734, 1, 432.114, -702.558, 68.75, 3.24423, 0, 0, 0.998683, -0.0512985, 300, 300, 100, 1, 0, 0);
