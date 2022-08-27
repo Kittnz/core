@@ -227,6 +227,7 @@ class ChatHandler
 		bool HandleTurtleCinematic(char *args);
 		bool HandleGetSkillValueCommand(char *args);
         bool HandleHCMessagesCommand(char* args);
+        bool HandlePvPCommand(char* args);
         bool HandleMinChatLevelCommand(char* args);
 
         // Reload        
@@ -298,6 +299,9 @@ class ChatHandler
         bool HandleGoCommand(char* args);
         bool HandleGoCreatureCommand(char* args);
         bool HandleGoObjectCommand(char* args);
+        bool HandleGoTargetCommand(char* args);
+        bool HandleGoTaxinodeCommand(char* args);
+        bool HandleGoTriggerCommand(char* args);
         bool HandleGoXYZCommand(char* args);
         bool HandleGoCorpseCommand(char*);
 
@@ -477,6 +481,7 @@ class ChatHandler
         bool HandleGetDistanceCommand(char* args);
         bool HandleDieCommand(char* args);
         bool HandleFearCommand(char* args);
+        bool HandleAoEDamageCommand(char* args);
         bool HandleDamageCommand(char* args);
         bool HandleReviveCommand(char* args);
         bool HandleReplenishCommand(char* args);

@@ -2036,6 +2036,38 @@ bool ChatHandler::HandleFearCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleAoEDamageCommand(char* args)
+{
+    int32 damage_int = 1000;
+    ExtractInt32(&args, damage_int);
+
+    if (damage_int <= 0)
+        return false;
+
+    uint32 damage = uint32(damage_int);
+
+    int32 max_range = 10;
+    ExtractInt32(&args, max_range);
+
+    if (max_range <= 0)
+        return false;
+
+    Player* pPlayer = m_session->GetPlayer();
+
+    std::list<Unit*> targetsList;
+    MaNGOS::AnyAoETargetUnitInObjectRangeCheck u_check(pPlayer, pPlayer, max_range);
+    MaNGOS::UnitListSearcher<MaNGOS::AnyAoETargetUnitInObjectRangeCheck> searcher(targetsList, u_check);
+    Cell::VisitAllObjects(pPlayer, searcher, max_range);
+
+    for (Unit* pTarget : targetsList)
+    {
+        pPlayer->DealDamage(pTarget, damage, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
+        pPlayer->SendAttackStateUpdate(HITINFO_AFFECTS_VICTIM, pTarget, 0, SPELL_SCHOOL_MASK_NORMAL, damage, 0, 0, VICTIMSTATE_NORMAL, 0);
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleDamageCommand(char* args)
 {
     if (!*args)
@@ -7626,6 +7658,101 @@ bool ChatHandler::HandleTriggerNearCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleGoTargetCommand(char* /*args*/)
+{
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget || !m_session->GetPlayer()->GetSelectionGuid() || !m_session->GetPlayer()->IsInMap(pTarget))
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    m_session->GetPlayer()->NearTeleportTo(pTarget->GetPosition(), TELE_TO_GM_MODE);
+
+    return true;
+}
+
+bool ChatHandler::HandleGoTaxinodeCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+
+    uint32 nodeId;
+    if (!ExtractUint32KeyFromLink(&args, "Htaxinode", nodeId))
+        return false;
+
+    TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(nodeId);
+    if (!node)
+    {
+        PSendSysMessage(LANG_COMMAND_GOTAXINODENOTFOUND, nodeId);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (node->x == 0.0f && node->y == 0.0f && node->z == 0.0f)
+    {
+        PSendSysMessage(LANG_INVALID_TARGET_COORD, node->x, node->y, node->map_id);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    return HandleGoHelper(pPlayer, node->map_id, node->x, node->y, &node->z);
+}
+
+static char const* const areatriggerKeys[] =
+{
+    "Hareatrigger",
+    "Hareatrigger_target",
+    nullptr
+};
+
+bool ChatHandler::HandleGoTriggerCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+
+    if (!*args)
+        return false;
+
+    char* atIdStr = ExtractKeyFromLink(&args, areatriggerKeys);
+    if (!atIdStr)
+        return false;
+
+    uint32 atId;
+    if (!ExtractUInt32(&atIdStr, atId))
+        return false;
+
+    if (!atId)
+        return false;
+
+    AreaTriggerEntry const* atEntry = sObjectMgr.GetAreaTrigger(atId);
+    if (!atEntry)
+    {
+        PSendSysMessage(LANG_COMMAND_GOAREATRNOTFOUND, atId);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool to_target = ExtractLiteralArg(&args, "target");
+    if (!to_target && *args)                                // can be fail also at syntax error
+        return false;
+
+    if (to_target)
+    {
+        AreaTriggerTeleport const* at = sObjectMgr.GetAreaTriggerTeleport(atId);
+        if (!at)
+        {
+            PSendSysMessage(LANG_AREATRIGER_NOT_HAS_TARGET, atId);
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        return HandleGoHelper(pPlayer, at->destination.mapId, at->destination.x, at->destination.y, &at->destination.z);
+    }
+    else
+        return HandleGoHelper(pPlayer, atEntry->mapid, atEntry->x, atEntry->y, &atEntry->z);
+}
+
 enum CreatureLinkType
 {
     CREATURE_LINK_RAW = -1,                   // non-link case
@@ -9514,6 +9641,33 @@ bool ChatHandler::HandleMinChatLevelCommand(char* args)
     }
 
     sWorld.SetMinChatLevel((uint32)minLevel);
+    return true;
+}
+
+
+bool ChatHandler::HandlePvPCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* chr = GetSelectedPlayer();
+    if (!chr)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool value;
+    if (!ExtractOnOff(&args, value))
+    {
+        SendSysMessage(LANG_USE_BOL);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    chr->UpdatePvP(value, true);
+    PSendSysMessage("PvP of character %s set to %s.", chr->GetName(), value ? "on" : "off");
     return true;
 }
 

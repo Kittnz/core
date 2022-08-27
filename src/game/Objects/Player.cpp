@@ -1605,7 +1605,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
                 if (Guild* hardcoreGuild = sGuildMgr.GetGuildById(238))
                     hardcoreGuild->DelMember(GetObjectGuid());
 
-                GetSession()->LogoutPlayer(true);
+                GetSession()->LogoutRequest(time(nullptr) - 20);
                 return;
             }
             else
@@ -8115,6 +8115,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                     }
 
                     loot->FillLoot(lootid, LootTemplates_Gameobject, this, !groupRules, false);
+                    loot->GenerateMoneyLoot(go->GetGOInfo()->MinMoneyLoot, go->GetGOInfo()->MaxMoneyLoot);
                     if (go->GetInstanceId())
                         go->GetMap()->BindToInstanceOrRaid(this, go->GetRespawnTimeEx(), false);
 
@@ -8165,7 +8166,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                         break;
                     default:
                         loot->FillLoot(item->GetEntry(), LootTemplates_Item, this, true, item->GetProto()->MaxMoneyLoot == 0);
-                        loot->generateMoneyLoot(item->GetProto()->MinMoneyLoot, item->GetProto()->MaxMoneyLoot);
+                        loot->GenerateMoneyLoot(item->GetProto()->MinMoneyLoot, item->GetProto()->MaxMoneyLoot);
                         item->SetLootState(ITEM_LOOT_CHANGED);
                         item->SetGeneratedLoot(true);
                         break;
@@ -21340,6 +21341,7 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     uint8 oldRace = GetRace();
     bool bChangeTeam = (TeamForRace(oldRace) != TeamForRace(newRace));
+    uint32 mapId = GetMapId();
 
 	//Key - SkillId, Value - Skill value
 	std::unordered_map<uint32, uint16> SkillValues;
@@ -21399,13 +21401,40 @@ bool Player::ChangeRace(uint8 newRace, uint8 newGender, uint32 playerbyte1, uint
 
     LearnDefaultSpells();
 
-    uint32 newTeam = TeamForRace(newRace);
-    
+    Team newTeam = TeamForRace(newRace);
+    /*
     if (newTeam == ALLIANCE)
         GetTaxi().LoadTaxiMask("3456411898 2148078928 49991 0 0 0 0 0 ");
     else
-        GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");
+        GetTaxi().LoadTaxiMask("561714688 282102432 52408 0 0 0 0 0 ");*/
 
+
+    std::vector<uint32> learnableNodes;
+
+    for (uint32 i = 1; i < sObjectMgr.GetMaxTaxiNodeId(); ++i)
+    {
+        TaxiNodesEntry const* node = sObjectMgr.GetTaxiNodeEntry(i);
+        if (!node || node->map_id != mapId)
+            continue;
+
+        if (!m_taxi.IsTaximaskNodeKnown(node->ID))
+            continue;
+
+        //taxi is known, find nearest path for opposite faction and learn that instead.
+        if (uint32 newNode = sObjectMgr.GetNearestTaxiNode(node->x, node->y, node->z, node->map_id, newTeam))
+            learnableNodes.push_back(newNode);
+    }
+
+    // reset taxi state and learn all learnableNodes.   
+    if (newTeam == ALLIANCE)
+        GetTaxi().LoadTaxiMask("2 0 0 0 0 0 0 0 ");
+    else
+        GetTaxi().LoadTaxiMask("32 0 0 0 0 0 0 0 ");
+
+    for (uint32 node : learnableNodes)
+    {
+        GetTaxi().SetTaximaskNode(node);
+    }
 
     SetFactionForRace(newRace);
 

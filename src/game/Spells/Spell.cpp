@@ -5791,13 +5791,12 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
     else if (m_targets.IsEmpty())
     {
         // check LOS for ground targeted AOE spells like Blizzard, Flamestrike ...
-        if (m_caster->IsPlayer() && m_targets.m_targetMask & TARGET_FLAG_DEST_LOCATION)
+        if (m_caster->IsPlayer() && (m_targets.m_targetMask & TARGET_FLAG_DEST_LOCATION) &&
+            m_targets.m_destX && m_targets.m_destY && m_targets.m_destZ &&
+            !m_spellInfo->HasAttribute(SPELL_ATTR_EX2_IGNORE_LOS) && !m_IsTriggeredSpell &&
+            !m_caster->IsWithinLOS(m_targets.m_destX, m_targets.m_destY, m_targets.m_destZ))
         {
-            if (m_targets.m_destX && m_targets.m_destY && m_targets.m_destZ)
-            {
-                if (!m_IsTriggeredSpell && !m_caster->IsWithinLOS(m_targets.m_destX, m_targets.m_destY, m_targets.m_destZ))
-                    return SPELL_FAILED_LINE_OF_SIGHT;
-            }
+            return SPELL_FAILED_LINE_OF_SIGHT;
         }
     }
 

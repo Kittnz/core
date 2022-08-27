@@ -95,6 +95,10 @@ class ReputationMgr
         {
             return SetReputation(factionEntry, standing, false);
         }
+        bool SetSingleReputation(FactionEntry const* factionEntry, int32 standing)
+        {
+            return SetReputation(factionEntry, standing, false, true);
+        }
         bool ModifyReputation(FactionEntry const* factionEntry, int32 standing, bool noSpillover = false)
         {
             return SetReputation(factionEntry, standing, true, noSpillover);

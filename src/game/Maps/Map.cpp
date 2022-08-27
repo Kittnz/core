@@ -2645,14 +2645,14 @@ void Map::AddRelocatedUnit(Unit *obj)
 {
     if (_processingUnitsRelocation)
         return;
-    std::unique_lock<std::mutex> lock(i_unitsRelocated_lock);
+    std::lock_guard<std::mutex> lock(i_unitsRelocated_lock);
     i_unitsRelocated.insert(obj);
 }
 
 void Map::RemoveRelocatedUnit(Unit *obj)
 {
     ASSERT(!_processingUnitsRelocation);
-    std::unique_lock<std::mutex> lock(i_unitsRelocated_lock);
+    std::lock_guard<std::mutex> lock(i_unitsRelocated_lock);
     i_unitsRelocated.erase(obj);
 }
 

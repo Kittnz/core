@@ -1897,7 +1897,8 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         caster->CastSpell(target, 11828, true, caster->ToPlayer()->GetItemByGuid(GetCastItemGuid()), this);
                 break;
             case 12479:                                     // Hex of Jammal'an
-                target->CastSpell(target, 12480, true, nullptr, this);
+                if (target)
+                    target->CastSpell(target, 12480, true, nullptr, this);
                 return;
             case 12774:                                     // (DND) Belnistrasz Idol Shutdown Visual
             {
@@ -1987,6 +1988,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             case 28169:                                     // Mutating Injection
             {
                 Unit* caster = GetCaster();
+
+                if (!caster)
+                    return;
                 // Mutagen Explosion
                 if (m_removeMode == AuraRemoveMode::AURA_REMOVE_BY_DISPEL)
                 {
