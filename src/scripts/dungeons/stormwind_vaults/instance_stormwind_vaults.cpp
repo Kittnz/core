@@ -20,8 +20,9 @@ enum mob_entries
 
 enum object_entries
 {
-    rat_door_one = 3000275,
-    rat_door_two = 3000276
+    NPC_VAULT_RAT   = 93106,
+    GO_RAT_DOOR_ONE = 3000275,
+    GO_RAT_DOOR_TWO = 3000276,
 };
 
 const string dialog_lines[3] = { 
@@ -96,68 +97,64 @@ struct stormwind_vault_rat_trap : public GameObjectAI
 {
     explicit stormwind_vault_rat_trap(GameObject* pGo) : GameObjectAI(pGo)
     {
-        m_uiJustUsedTimer = 1;
+        m_uiStep = 0;
         m_uiUpdateTimer = 300;
     }
 
-    uint32 m_uiJustUsedTimer;
+    uint32 m_uiStep;
     uint32 m_uiUpdateTimer;
 
     void UpdateAI(uint32 const uiDiff) override
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            GameObject* rat_event_activated = me->FindNearestGameObject(3000274, 5.0f);
-
-            if (!rat_event_activated)
+            switch (m_uiStep)
             {
-                std::list<Player*> players;
-                MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f);
-                MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
-
-                Cell::VisitWorldObjects(me, searcher, 5.0f);
-
-                for (Player* pPlayer : players)
+                case 0: // Not Activated
                 {
-                    me->SummonGameObject(3000274, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1800, true); // 30 minutes
-                    pPlayer->PlayDirectMusic(8740);
-
-                    GameObject* rat_door_1 = me->FindNearestGameObject(rat_door_one, 20.0F);
-                    GameObject* rat_door_2 = me->FindNearestGameObject(rat_door_two, 20.0F);
-
-                    if (rat_door_1 && rat_door_2)
+                    if (Player* pPlayer = me->FindNearestPlayer(5.0f))
                     {
-                        rat_door_1->UseDoorOrButton();
-                        rat_door_2->UseDoorOrButton();
+                        pPlayer->PlayDirectMusic(8740);
+                        if (GameObject* pDoor = me->FindNearestGameObject(GO_RAT_DOOR_ONE, 20.0F))
+                            pDoor->SetGoState(GO_STATE_READY);
+                        if (GameObject* pDoor = me->FindNearestGameObject(GO_RAT_DOOR_TWO, 20.0F))
+                            pDoor->SetGoState(GO_STATE_READY);
+                        m_uiStep = 1;
+                        m_uiUpdateTimer = 1000;
                     }
-
-                    auto ratDoorGuid1 = rat_door_1 ? rat_door_1->GetObjectGuid() : ObjectGuid{};
-                    auto ratDoorGuid2 = rat_door_2 ? rat_door_2->GetObjectGuid() : ObjectGuid{};
-
-                    DoAfterTime(pPlayer, 50 * IN_MILLISECONDS, [player = pPlayer, door_1_guid = ratDoorGuid1, door_2_guid = ratDoorGuid2]() {
-
-                        if (!player->GetMap())
-                            return;
-
-                        GameObject* ratDoor1 = player->GetMap()->GetGameObject(door_1_guid);
-                        GameObject* ratDoor2 = player->GetMap()->GetGameObject(door_2_guid);
-
-                        if (ratDoor1)
-                            ratDoor1->ResetDoorOrButton();
-
-                        if (ratDoor2)
-                            ratDoor2->ResetDoorOrButton();
-                        });
-
-                    DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer]() {
-                        int n = 15;
-                        for (int i = 0; i < n; ++i)
-                        {
-                            player->SummonCreature(93106, player->GetPositionX() + urand (1,4), player->GetPositionY() + urand(1,4), player->GetPositionZ(), player->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 350 * IN_MILLISECONDS);
-                        }
-                        });
+                    else
+                        m_uiUpdateTimer = 300;
+                    break;
                 }
-                m_uiUpdateTimer = 300;
+                case 1: // Summon Mobs
+                {
+                    if (Player* pPlayer = me->FindNearestPlayer(5.0f))
+                    {
+                        for (int i = 0; i < 15; ++i)
+                        {
+                            if (Creature* pMob = pPlayer->SummonCreature(NPC_VAULT_RAT, pPlayer->GetPositionX() + urand(1, 4), pPlayer->GetPositionY() + urand(1, 4), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 350 * IN_MILLISECONDS))
+                                pMob->AI()->AttackStart(pPlayer);
+                        }
+                        m_uiStep = 2;
+                    }
+                    m_uiUpdateTimer = 1000;
+                    break;
+                }
+                case 2: // Wait For Clear
+                {
+                    if (!me->FindNearestPlayer(5.0f) || !me->FindNearestCreature(NPC_VAULT_RAT, 5.0f))
+                    {
+                        if (GameObject* pDoor = me->FindNearestGameObject(GO_RAT_DOOR_ONE, 20.0F))
+                            pDoor->SetGoState(GO_STATE_ACTIVE);
+                        if (GameObject* pDoor = me->FindNearestGameObject(GO_RAT_DOOR_TWO, 20.0F))
+                            pDoor->SetGoState(GO_STATE_ACTIVE);
+                        m_uiStep = 0;
+                        m_uiUpdateTimer = 60 * MINUTE * IN_MILLISECONDS;
+                    }
+                    else
+                        m_uiUpdateTimer = 1000;
+                    break;
+                }
             }
         }
         else

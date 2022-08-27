@@ -15,7 +15,7 @@ update creature_template set display_id1 = 13459 where entry = 60887;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1981
 
-update creature_template set flags_extra = 64 where entry = 2673;
+update creature_template set xp_multiplier = 0, flags_extra = 0 where entry = 2673;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1139
 

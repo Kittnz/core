@@ -286,24 +286,28 @@ bool ReputationMgr::SetReputation(FactionEntry const* factionEntry, int32 standi
     if (!factionEntry)
         return false;
 
-    bool res = false;
-    // if spillover definition exists in DB
-    if (const RepSpilloverTemplate *repTemplate = sObjectMgr.GetRepSpilloverTemplate(factionEntry->ID))
+    if (!noSpillover)
     {
-        for (uint32 i = 0; i < MAX_SPILLOVER_FACTIONS; ++i)
+        // if spillover definition exists in DB
+        if (RepSpilloverTemplate const* repTemplate = sObjectMgr.GetRepSpilloverTemplate(factionEntry->ID))
         {
-            if (!noSpillover && repTemplate->faction[i])
+            for (uint32 i = 0; i < MAX_SPILLOVER_FACTIONS; ++i)
             {
-                if (m_player->GetReputationRank(repTemplate->faction[i]) <= ReputationRank(repTemplate->faction_rank[i]))
+                if (repTemplate->faction[i])
                 {
-                    // bonuses are already given, so just modify standing by rate
-                    int32 spilloverRep = standing * repTemplate->faction_rate[i];
-                    SetOneFactionReputation(sObjectMgr.GetFactionEntry(repTemplate->faction[i]), spilloverRep, incremental);
+                    if (m_player->GetReputationRank(repTemplate->faction[i]) <= ReputationRank(repTemplate->faction_rank[i]))
+                    {
+                        // bonuses are already given, so just modify standing by rate
+                        int32 spilloverRep = standing * repTemplate->faction_rate[i];
+                        SetOneFactionReputation(sObjectMgr.GetFactionEntry(repTemplate->faction[i]), spilloverRep, incremental);
+                    }
                 }
             }
         }
     }
+    
     // spillover done, update faction itself
+    bool res = false;
     FactionStateList::iterator faction = m_factions.find(RepListID(factionEntry->reputationListID));
     if (faction != m_factions.end())
     {

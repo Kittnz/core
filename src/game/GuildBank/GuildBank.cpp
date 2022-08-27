@@ -87,6 +87,9 @@ enum BankCommLimits
 	ADDON_MAX_PACKET_SIZE = 2096,
 };
 
+constexpr uint32 AllianceGuildNpcEntry = 80917;
+constexpr uint32 HordeGuildNpcEntry = 80918;
+
 GuildBank::GuildBank()
 {
 }
@@ -115,6 +118,13 @@ void GuildBank::SetGuild(Guild* guild)
 void GuildBank::HandleAddonMessages(std::string msg, Player* player)
 {
 	SetPlayer(player);
+
+
+	//Should rather do a full search on all nearby creatures and check their flag for GOSSIP_FLAG_GUILD_BANKER but this works for now..
+	const uint32 findCreatureEntry = player->GetTeamId() == TEAM_HORDE ? HordeGuildNpcEntry : AllianceGuildNpcEntry;
+
+	if (!player->FindNearestCreature(findCreatureEntry, INTERACTION_DISTANCE))
+		return;
 
 	if (b_saveLock)
 	{
