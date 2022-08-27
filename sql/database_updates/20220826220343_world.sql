@@ -106,3 +106,4 @@ DELETE FROM game_event_gameobject WHERE guid = '5009651';
 DELETE FROM gameobject_battleground WHERE guid = '5009651';
 UPDATE creature SET position_x = '-140.532303', position_y = '-4641.928223', position_z = '5.570496', orientation = '1.433632' WHERE guid = '2572233';
 UPDATE `creature_template` set `scale` = 1.000000 where entry = 14738;
+REPLACE INTO `creature` VALUES (2572234,60942,0,0,0,1,-2644.92,-3331.35,33.2828,0.95488,25,25,0,100,100,0,0,0);
