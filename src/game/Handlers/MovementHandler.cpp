@@ -1098,18 +1098,21 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
             // TODO: discard movement packets after the player is rooted
             if (pPlayerMover->IsAlive())
             {
-                // Nostalrius : pas mort quand on chute
-                if (pPlayerMover->InBattleGround())
-                    pPlayerMover->EnvironmentalDamage(DAMAGE_FALL_TO_VOID, pPlayerMover->GetHealth());
-                else
-                    pPlayerMover->EnvironmentalDamage(DAMAGE_FALL_TO_VOID, pPlayerMover->GetHealth() / 2);
-                // pl can be alive if GM/etc
-                if (!pPlayerMover->IsAlive())
+                if (!pPlayerMover->IsHardcore()) // just repop at graveyard, no killing for HCs
                 {
-                    // change the death state to CORPSE to prevent the death timer from
-                    // starting in the next player update
-                    pPlayerMover->KillPlayer();
-                    pPlayerMover->BuildPlayerRepop();
+                    // Nostalrius : pas mort quand on chute
+                    if (pPlayerMover->InBattleGround())
+                        pPlayerMover->EnvironmentalDamage(DAMAGE_FALL_TO_VOID, pPlayerMover->GetHealth());
+                    else
+                        pPlayerMover->EnvironmentalDamage(DAMAGE_FALL_TO_VOID, pPlayerMover->GetHealth() / 2);
+                    // pl can be alive if GM/etc
+                    if (!pPlayerMover->IsAlive())
+                    {
+                        // change the death state to CORPSE to prevent the death timer from
+                        // starting in the next player update
+                        pPlayerMover->KillPlayer();
+                        pPlayerMover->BuildPlayerRepop();
+                    }
                 }
             }
 
