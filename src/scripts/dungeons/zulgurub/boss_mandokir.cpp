@@ -701,9 +701,12 @@ struct mob_ohganAI : public ScriptedAI
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
+            if (!m_creature->IsAlive()) // Is this necessary?
+                return;
+
             if (Creature* pMandokir{ m_creature->FindNearestCreature(NPC_MANDOKIR, 100.f) })
             {
-                if (pMandokir->GetVictim())
+                if (pMandokir->IsAlive() && pMandokir->GetVictim())
                 {
                     m_creature->AI()->AttackStart(pMandokir->GetVictim());
                 }
