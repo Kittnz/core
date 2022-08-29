@@ -2155,6 +2155,69 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
         pCaster->DealDamage(caster, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
     }
 
+    if (Player* pPlayer = ToPlayer())
+    {
+        if (Group* pGroup = pPlayer->GetGroup())
+        {
+            AuraList const& vSplitDamageGroupPct = GetAurasByType(SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT);
+            for (AuraList::const_iterator i = vSplitDamageGroupPct.begin(), next; i != vSplitDamageGroupPct.end() && RemainingDamage >= 0; i = next)
+            {
+                next = i;
+                ++next;
+
+                // check damage school mask
+                if (((*i)->GetModifier()->m_miscvalue & schoolMask) == 0)
+                    continue;
+
+                float radius = Spells::GetSpellRadius(sSpellRadiusStore.LookupEntry((*i)->GetSpellProto()->EffectRadiusIndex[(*i)->GetEffIndex()]));
+
+                std::set<Player*> allies;
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    if (Player* pMember = itr->getSource())
+                    {
+                        // Not self.
+                        if (pMember == pPlayer)
+                            continue;
+
+                        if (!pMember->IsAlive())
+                            continue;
+
+                        if (!pPlayer->IsWithinDistInMap(pMember, radius))
+                            continue;
+
+                        allies.insert(pMember);
+                    }
+                }
+
+                // Damage can be splitted only if there are nearby allies
+                if (allies.empty())
+                    continue;
+
+                uint32 splitted = uint32(RemainingDamage * (*i)->GetModifier()->m_amount / 100.0f);
+
+                RemainingDamage -= int32(splitted);
+
+                if (!splitted)
+                    continue;
+
+                splitted = std::max<uint32>(1, splitted / allies.size());
+
+                for (auto const& pAlly : allies)
+                {
+                    uint32 split_absorb = 0;
+                    pCaster->DealDamageMods(pAlly, splitted, &split_absorb);
+
+                    pCaster->SendSpellNonMeleeDamageLog(pAlly, (*i)->GetSpellProto()->Id, splitted, schoolMask, split_absorb, 0, (damagetype == DOT), 0, false, true);
+
+                    CleanDamage cleanDamage = CleanDamage(splitted, BASE_ATTACK, MELEE_HIT_NORMAL, 0, 0);
+                    pCaster->DealDamage(pAlly, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
+                }
+            }
+        }
+    }
+    
+
     *absorb = damage - RemainingDamage - *resist;
 }
 

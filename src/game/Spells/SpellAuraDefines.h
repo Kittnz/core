@@ -327,9 +327,10 @@ enum AuraType
     SPELL_AURA_MOD_RATING = 189,
     SPELL_AURA_MOD_FACTION_REPUTATION_GAIN = 190,
     SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED = 191,
-    // Nostalrius
-    SPELL_AURA_AURA_SPELL = 192, // Ajoute les auras d'un sort tant que cet aura est actif.
-    TOTAL_AURAS=193
+    // Custom
+    SPELL_AURA_AURA_SPELL = 192, // Adds the auras of a spell while this aura is active.
+    SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT = 193, // Needed for Spirit Link.
+    TOTAL_AURAS=194
 };
 
 enum AreaAuraType
