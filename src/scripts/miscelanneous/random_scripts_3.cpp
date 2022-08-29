@@ -2149,7 +2149,7 @@ bool GossipSelect_npc_tholdan_mountainheart(Player* pPlayer, Creature* pCreature
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Huidgrar Azurebrow was the one who studied the stone, and taught others of its power, the name 'Azurestone' came from his name, and those that studied beneath him created 'The Azurestone Order'. The Order has been pivotol in many key points in history, from the War of the Three Hammers, to when the orcs were getting close to Ironforge itself!", player);
+            npc->MonsterSayToPlayer("Huidgrar Azurebrow was the one who studied the stone, and taught others of its power, the name 'Azurestone' came from his name, and those that studied beneath him created 'The Azurestone Order'. The Order has been pivotal in many key points in history, from the War of the Three Hammers, to when the orcs were getting close to Ironforge itself!", player);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             });
         DoAfterTime(pPlayer, 41 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
