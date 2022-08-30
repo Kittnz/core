@@ -189,7 +189,6 @@ replace into creature_involvedrelation	(id, quest) values (4944, 40558);
 
 REPLACE INTO creature_template VALUES
 (60388, 328, 0, 0, 0, 0, 'quest_40558_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
--- Additional notes: 
 
 -- Upon quest start, spawn NPC Kagoro (4972) at the following : Map1, X-3810.79, Y:-2763.20, Z: 34.60, Orientation: 2.394
 -- Have NPC Falgran Hastil walk towards the following coordinates. : Map1, X:-3809.80, Y:-2759.96, Z:35.37, Orientation : 5.29
@@ -296,4 +295,168 @@ replace into creature_loot_template values
 (4391,60816,-85,0,1,1,0),
 (4392,60816,-90,0,1,1,0),
 (4393,60816,-90,0,1,1,0);
+
+-- Ritual of Divination
+delete from quest_template where entry = 40562;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40561,40562,2,15,35,30,3,0,'Ritual of Divination','I shall need your protection during the ritual. Some unwanted spirits may also come. Dispose of them.\n\nLet\'s begin.','Protect Magus Halister during the ritual and report the finding to Garran Vimes at Theramore Isle in Dustwallow Marsh.','I heard terrible noises coming from the Mage Tower. What happened?','So it was the deserters. Very well, I suspected it, to be honest. These people have no honor. We shall send our best men to deal with them. But before this, I think the Horde should also get an explanation and... an apology.\n\nAnd when it comes to this Mariner, let me consult with some of my advisors. I think I may have heard of this man before.',0,0,0,0,0,0,0,0,60389,1,0,0,0,0,0,0,0,0,0,2850,1011,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Protect Magus Halister');
+
+replace into creature_questrelation		(id, quest) values (60731, 40562);
+replace into creature_involvedrelation	(id, quest) values (4944 , 40562);
+
+update creature_template set script_name = 'npc_magus_halister' where entry = 60731;
+
+REPLACE INTO creature_template VALUES
+(60389, 328, 0, 0, 0, 0, 'quest_40562_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Upon accepting the quest, Magus Halister begins to cast a spell.
+-- Magus Halister: Spirits! I call upon thee! If one called Paval Reethe is listening, come! We need your help!
+-- Two 'Disturbed Ghost' should spawn and attack Magus Halister and Magus Halister. If a player or magus dies the quest is failed.
+-- Upon defeating two spirits:
+-- Magus Halister says the following lines
+-- Paval Reethe! Come, if you want to see justice, I call upon you!
+-- Paval Reethe spawns at the location : Map1, X:-3748.31, Y:-4440.36, Z: 30.56, Orientation:2.75
+--  (Put a ghost effect on Pavel Reethe)
+-- (wait 2 seconds)
+-- Paval Reethe: Who disturbs my rest? Do I owe my service to the Alliance even in death? Let me pass to the Spirit Realm in peace.
+-- (Wait 5 seconds)
+-- Magus Halister: Paval Reethe. In life, you failed to uphold honor. You deserted your friends, your family. Now you have a chance to redeem yourself.
+-- (Wait 7 seconds)
+-- Paval Reethe: What do you want? Is this about Shady Rest Inn? You still haven\'t figured it out?
+-- (Wait 5 seconds)
+-- Magus Halister: Indeed. Tell us, what happened. Who burned the inn?
+-- (Wait 4 seconds)
+-- Paval Reethe: Isn\'t it obvious? The deserters did it. Not me, though. In my last days, I did what was right. I tried to stop them. That\'s why they left me in the swamp.
+-- (Wait 8 seconds)
+-- Magus Halister: Why? Why did they burn it?
+-- (Wait 4 seconds)
+-- Paval Reethe: Shady Rest Inn was open to everyone. Even us. We have spent many evenings there, laughing and drinking. But one time, some of our people got too drunk. They started meddling with the innkeeper. Until they said too much. Something about the Vengeful Mariner. They couldn\'t allow this to reach Theramore, so they burned the inn. No witnesses.
+-- (Wait 13 seconds)
+-- Magus Halister: Vengeful Mariner? 
+-- (Wait 3 seconds)
+-- Paval Reethe: I wanted to stop them, I wanted them to just, you know, talk it out. But they wouldn\'t listen. They beat me unconscious and threw me out in the swamp to die. After this, some of them wanted to blame it on the Horde, but in their drunken state, they could only find some old shield. Nonsense.
+-- (Wait 15 seconds)
+-- Magus Halister: Who is this Vengeful Mariner? Why couldn\'t the news about him reach Theramore? Speak, spirit!
+-- (Wait 8 seconds)
+-- Paval Reethe: I couldn't do anything to save them, right? I was alone. I couldn\'t save his family. I couldn\'t save his wife... his little son. Oh, what have we done...
+-- (Wait 8 seconds)
+-- Magus Halister: Paval Reethe, I command you to speak! Who is the Vengeful Mariner!?
+-- (Wait 6 seconds)
+-- Paval Reethe: You old fool. Do you really think so many deserters rally behind this halfwit Voss? Vengeful Mariner is our true leader. He is... you wouldn\'t understand, anyway.
+-- (Wait 10 seconds)
+-- (Delete the NPC of Pavel Reethe)
+-- Magus Halister: Paval! I curse you, come back! Reethe!
+-- (Wait 5 seconds)
+-- Magus Halister: Who is the Vengeful Mariner!? 
+-- (Wait 5 seconds)
+-- (EMOTE)Magus Halister sighs.
+-- Magus Halister: Well, looks like he left us for good. At least we got some answers out of him. Now, go back to Captain Garran 
+-- Vimes. He will know what to do next.
+-- (Wait 7 seconds, and complete quest) 
+
+-- To Meet Again
+delete from quest_template where entry = 40563;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40562,40563,2,15,35,30,0,0,'To Meet Again','Go to Falgran and tell him to arrange the meeting with the Horde. Explain the situation to them and... apologize for us blaming them. We need to make this right and show our good will.\n\nAfter this, meet me at the deserter\'s tower. We are going to deal with them.','Report back to Falgran Hastil on the road between Shady Rest Inn and the Lost Point.','Did our people really betray us?','The deserters. I knew they were vile people, but to burn innocents alive... Light, save the souls of these poor people.\n\nSo be it. Kagoro is already around here, we should meet him at once.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,800,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4944, 40563);
+replace into creature_involvedrelation	(id, quest) values (5088, 40563);
+
+-- The Second Meeting
+delete from quest_template where entry = 40564;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40563,40564,2,15,35,30,0,0,'The Second Meeting','Go to Falgran and tell him to arrange the meeting with the Horde. Explain the situation to them and... apologize for us blaming them. We need to make this right and show our good will.\n\nAfter this, meet me at the deserter\'s tower. We are going to deal with them.','Assist Falgran with the meeting.','Finally.','I hope Captain Vimes will share Kagoro\'s enthusiasm about this...',0,0,0,0,0,0,0,0,60390,1,0,0,0,0,0,0,0,0,0,750,1011,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Assist Falgran with the meeting');
+
+replace into creature_questrelation		(id, quest) values (5088, 40564);
+replace into creature_involvedrelation	(id, quest) values (4944, 40564);
+
+REPLACE INTO creature_template VALUES
+(60390, 328, 0, 0, 0, 0, 'quest_40564_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Additional notes:
+-- (SAME AS THE FIRST MEETING QUEST)
+-- Upon quest start, spawn NPC Kagoro at the following : Map1, X-3810.79, Y:-2763.20, Z: 34.60, Orientation: 2.394
+-- Have NPC Falgran Hastil walk towards the following coordinates. : Map1, X:-3809.80, Y:-2759.96, Z:35.37, Orientation : 5.29
+-- 
+-- (Wait 11 seconds)
+-- F: Kagoro! We are ready.
+-- (Wait 3 seconds)
+-- K: Falgran. 
+-- (Wait 2 seconds)
+-- F: Kagoro, on the behalf of the Alliance and the City of Theramore, I would like to apologize for not believing you and my false accusations. We are now certain that the deserters burned the inn.
+-- (Wait 10 seconds)
+-- K: I am relieved to hear it. Our investigation of Black Dragons yielded no results. But how did you learn of the truth?
+-- (Wait 7 seconds)
+-- F: Through the power of magic, of course. Arts of Divination. We communed with the spirit of Paval Reethe.
+-- (Wait 8 seconds)
+-- K: Extraordinary. Incredible sorcery, as always. But… why? Why did they burn the inn? 
+-- (Wait 6 seconds)
+-- F: Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed… something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.
+-- (Wait 13 seconds)
+-- K: The shield… Yes, it makes sense.
+-- (Wait 3 seconds)
+-- F: Paval Reethe wanted to stop them. He may have been a deserter, but he had some of his honor still left in his heart.
+-- (Wait 8 seconds)
+-- K: That\'s why they left him in the swamp. But, what was the information that was so precious to the deserters?
+-- (Wait 7 seconds)
+-- F: About this, we are not sure. Something about the Vengeful Mariner, their rumored true leader. Have you heard about him?
+-- (Wait 8 seconds)
+-- K: Vengeful Mariner… The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it\'s connected.
+-- (Wait 8 seconds)
+-- F: We will soon bring justice to the deserters for their crimes, thank you for your information Kagoro, the horde has helped plenty in these lands.
+-- (wait 10 seconds)
+-- K: We believe in justice the same way you alliance do, go with honor friend.
+-- (Wait 6 seconds, and have Kagoro dissapear)
+-- F:We should report to Captain Garran Vimes and let him know our discoveries.
+-- (Wait 10 seconds, and have Falgrin Hastil respawn in his original position)
+-- (QUEST IS COMPLETED) 
+
+-- And Justice for All
+delete from quest_template where entry = 40565;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40564,40565,2,15,35,30,0,0,'And Justice for All','It does appear that the Deserter\'s are behind the burning of the inn. If there is ever to be justice, we must stop them from continually dragging more and more of our most loyal into their ranks.\n\nThere shall be no quarter, they are wanted and we shall dole out justice, for all of the lives lost. For the deceit caused.\n\nDirectly to the west of Theramore, to the north eastern edge of the Quagmire is the Deserter\'s Hideout, it is there that they gain their strength. Find Sellick Voss, the new leader of the camp, slay him, and bring his medallion to me as proof of the deed.','Find Sellick Voss, slay him, and bring his medallion to Captain Garran Vimes at Theramore Isle in Dustwallow Marsh.','You fought well. I wish you could stay with me in Theramore as my personal assistant, but I know that adventure calls.','Without you, we would still be in the dark. Who knows, maybe you stopped another war between the Horde and the Alliance? You are a hero of Theramore, for all of the work you have done to ease the tensions, and solve this mystery.\n\nFor this, I would like you to take one of these weapons from my personal armory.\n\nConcerning the Vengeful Mariner. Sailors coming to Theramore have reported seeing a shadowy figure stalking the coast. Some of our fishermen have gone missing in recent months, too. It may be connected. But, a question remains. Why was he so important to the deserters, that they killed innocents to keep this a secret for just a while longer? We need to get to the bottom of this.',60817,1,0,0,0,0,0,0,60941,1,0,0,0,0,0,0,0,0,10000,3950,1011,1500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60818,1,60819,1,60820,1,60821,1,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4944, 40565);
+replace into creature_involvedrelation	(id, quest) values (4944, 40565);
+
+update quest_template set type = 1 where entry = 40565;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60817,1012,'Medallion of Voss',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into item_template values
+ ('60818', '2', '6', 'Garran\'s Pike', '', '22235', '3', '0', '1', '66820', '16705', '17', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '16', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '0',
+ '0', '81', '125', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '100', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60819', '4', '6', 'Dustwallow Defender', '', '7559', '3', '0', '1', '30420', '7605', '14', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '1108', '0', '0', '5',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '4', '0', '0', '100', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60820', '2', '15', 'Ornate Dagger of Jalvan', '', '20383', '3', '0', '1', '50624', '12656', '13', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '-3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1500', '0',
+ '0', '31', '47', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9397', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60821', '2', '18', 'Theramore Arbalest', '', '10671', '3', '0', '1', '39220', '9805', '15', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3400', '100',
+ '2', '59', '74', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '75', '0', '0', '0', '0', '44', '0', '0', '0',
+ '0', '1', NULL);
 
