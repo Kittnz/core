@@ -3690,9 +3690,72 @@ bool GOSelect_go_abandoned_murloc(Player* pPlayer, GameObject* pGo, uint32 sende
     return false;
 }
 
+bool GossipHello_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40554) == QUEST_STATUS_INCOMPLETE) // The Shield's Owner
+    {
+        Creature* talmand = pPlayer->FindNearestCreature(60949, 10.0F);
+        Creature* sleightor = pPlayer->FindNearestCreature(60950, 10.0F);
+        Creature* valnor = pPlayer->FindNearestCreature(60951, 10.0F);
+        if (talmand)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
+        }
+        if (sleightor)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
+        }
+        if (valnor)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
+        }
+    }
+
+    return true;
+}
+
+bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("Oh yes, a sizable force moved here recently... Very recently. They are the Grimtotem Tauren, though. At odds with the horde, as far as I am concerned. Good. Let them fight among themselves.");
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60385))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->MonsterSay("A Tauren? Well, I haven't seen any in a long time here. I heard something about Grimtotem in the north? You could have greater success asking closer to the Brackenwall Village. Maybe they know of some Tauren newcomers.");
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60386))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side during… the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60387))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_private_q_shields_owner";
+    newscript->pGossipHello = &GossipHello_npc_private_q_shields_owner;
+    newscript->pGossipSelect = &GossipSelect_npc_private_q_shields_owner;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_abandoned_murloc";
