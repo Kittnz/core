@@ -1,10 +1,9 @@
 delete from npc_vendor where entry in (80459, 80266, 80807, 80915);
 
-UPDATE creature_template SET npc_flags = 16388 WHERE npc_flags = 16388;
-UPDATE creature_template SET npc_flags = 7 WHERE npc_flags = 7;
-UPDATE creature_template SET npc_flags = 7 WHERE npc_flags = 7;
-UPDATE creature_template SET npc_flags = 7 WHERE npc_flags = 7;
-
+UPDATE creature_template SET npc_flags = 16388 WHERE entry = 80266;
+UPDATE creature_template SET npc_flags = 7 WHERE entry = 80459;
+UPDATE creature_template SET npc_flags = 7 WHERE entry = 80807;
+UPDATE creature_template SET npc_flags = 7 WHERE entry = 80915;
 
 replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (80266, 80500, 0, 0, 0, 0);
 replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (80266, 80501, 0, 0, 0, 0);
