@@ -173,7 +173,7 @@ int32 MoveSplineInit::Launch()
     // We need to fix this, in case of charges for example (if character has movement slowing effects)
     if (args.velocity > 4 * realSpeedRun && !args.flags.done) // From client
         mvtData.SetUnitSpeed(SMSG_SPLINE_SET_RUN_SPEED, unit.GetObjectGuid(), args.velocity);
-    if (oldMoveFlags & MOVEFLAG_ROOT)
+    if ((oldMoveFlags & MOVEFLAG_ROOT) && !args.flags.done)
         mvtData.SetSplineOpcode(SMSG_SPLINE_MOVE_UNROOT, unit.GetObjectGuid());
     if (oldMoveFlags & MOVEFLAG_WALK_MODE && !(moveFlags & MOVEFLAG_WALK_MODE)) // Switch to run mode
         mvtData.SetSplineOpcode(SMSG_SPLINE_MOVE_SET_RUN_MODE, unit.GetObjectGuid());

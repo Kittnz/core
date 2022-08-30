@@ -432,7 +432,7 @@ bool GossipSelect_npc_breanna_darrowmont(Player* pPlayer, Creature* pCreature, u
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        static const WorldLocation m_shalandis(42, 7679.61F, -5631.98, 0.4F, 5.3F);
+        static const WorldLocation m_shalandis(42, 7679.61f, -5631.98f, 0.4f, 5.3f);
         pPlayer->TeleportTo(m_shalandis);
     }
 

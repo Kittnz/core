@@ -17,9 +17,10 @@
 
 #include "MovementPacketSender.h"
 #include "Player.h"
+#include "Opcodes.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
-#include "Anticheat.h"
+#include "MoveSpline.h"
 
 // Spline packets are for units controlled by the server. "Force speed change" (wrongly named opcodes) and "move set speed" packets are for units controlled by a player.
 OpcodesList const moveTypeToOpcode[MAX_MOVE_TYPE][3] =
@@ -37,7 +38,7 @@ void MovementPacketSender::AddSpeedChangeToController(Unit* unit, UnitMoveType m
     Player* mover = unit->GetPlayerMovingMe();
     if (!mover)
     {
-        sLog.outError("MovementPacketSender::AddSpeedChangeToController: Incorrect use of the function. It was called on a unit controlled by the server!");
+        sLog.outError("MovementPacketSender::SendSpeedChangeToController: Incorrect use of the function. It was called on a unit controlled by the server!");
         return;
     }
 
@@ -61,7 +62,6 @@ void MovementPacketSender::SendSpeedChangeToController(Unit* unit, Player* mover
     data << unit->GetPackGUID();
     data << pendingChange.movementCounter;
     data << float(pendingChange.newValue);
-
     mover->GetSession()->SendPacket(&data);
 }
 
@@ -69,18 +69,12 @@ MovementChangeType MovementPacketSender::GetChangeTypeByMoveType(UnitMoveType mo
 {
     switch (moveType)
     {
-        case MOVE_WALK:
-            return SPEED_CHANGE_WALK;
-        case MOVE_RUN:
-            return SPEED_CHANGE_RUN;
-        case MOVE_RUN_BACK:
-            return SPEED_CHANGE_RUN_BACK;
-        case MOVE_SWIM:
-            return SPEED_CHANGE_SWIM;
-        case MOVE_SWIM_BACK:
-            return SPEED_CHANGE_SWIM_BACK;
-        case MOVE_TURN_RATE:
-            return RATE_CHANGE_TURN;
+        case MOVE_WALK:         return SPEED_CHANGE_WALK;
+        case MOVE_RUN:          return SPEED_CHANGE_RUN;
+        case MOVE_RUN_BACK:     return SPEED_CHANGE_RUN_BACK;
+        case MOVE_SWIM:         return SPEED_CHANGE_SWIM;
+        case MOVE_SWIM_BACK:    return SPEED_CHANGE_SWIM_BACK;
+        case MOVE_TURN_RATE:    return RATE_CHANGE_TURN;
         default:
             ASSERT(false && "MovementPacketSender::SendSpeedChangeToController Unsupported UnitMoveType");
     }
@@ -90,18 +84,12 @@ UnitMoveType MovementPacketSender::GetMoveTypeByChangeType(MovementChangeType mo
 {
     switch (moveType)
     {
-        case SPEED_CHANGE_WALK:
-            return MOVE_WALK;
-        case SPEED_CHANGE_RUN:
-            return MOVE_RUN;
-        case SPEED_CHANGE_RUN_BACK:
-            return MOVE_RUN_BACK;
-        case SPEED_CHANGE_SWIM:
-            return MOVE_SWIM;
-        case SPEED_CHANGE_SWIM_BACK:
-            return MOVE_SWIM_BACK;
-        case RATE_CHANGE_TURN:
-            return MOVE_TURN_RATE;
+        case SPEED_CHANGE_WALK:         return MOVE_WALK;
+        case SPEED_CHANGE_RUN:          return MOVE_RUN;
+        case SPEED_CHANGE_RUN_BACK:     return MOVE_RUN_BACK;
+        case SPEED_CHANGE_SWIM:         return MOVE_SWIM;
+        case SPEED_CHANGE_SWIM_BACK:    return MOVE_SWIM_BACK;
+        case RATE_CHANGE_TURN:          return MOVE_TURN_RATE;
         default:
             ASSERT(false && "MovementPacketSender::SendSpeedChangeToController Unsupported MovementChangeType");
     }
@@ -116,12 +104,23 @@ void MovementPacketSender::SendSpeedChangeToObservers(Unit* unit, UnitMoveType m
         return;
     }
 
-    WorldPacket data;
-    data.Initialize(moveTypeToOpcode[mtype][2], 8 + 30 + 4);
-    data << unit->GetPackGUID();
-    data << unit->m_movementInfo;
-    data << float(newSpeed);
-    unit->SendMovementMessageToSet(std::move(data), true, mover);
+    if (unit->movespline->Finalized())
+    {
+        WorldPacket data;
+        data.Initialize(moveTypeToOpcode[mtype][2], 8 + 30 + 4);
+        data << unit->GetPackGUID();
+        data << unit->m_movementInfo;
+        data << float(newSpeed);
+        unit->SendMovementMessageToSet(std::move(data), true, mover);
+    }
+    else
+    {
+        WorldPacket data;
+        data.Initialize(moveTypeToOpcode[mtype][0], 8 + 4);
+        data << unit->GetPackGUID();
+        data << float(newSpeed);
+        unit->SendMovementMessageToSet(std::move(data), true, mover);
+    }
 }
 
 void MovementPacketSender::SendSpeedChangeToAll(Unit* unit, UnitMoveType mtype, float newRate)
@@ -150,17 +149,17 @@ void MovementPacketSender::SendTeleportToController(Unit* unit, float x, float y
     unit->PushPendingMovementChange(pendingChange);
 
     MovementInfo mi = unit->m_movementInfo;
-    mi.UpdateTime(WorldTimer::getMSTime());
+    mi.SetAsServerSide();
     mi.ChangePosition(x, y, z, ang);
 
     WorldPacket data(MSG_MOVE_TELEPORT_ACK, 41);
     data << unit->GetPackGUID();
-    data << mCounter; // this value increments every time
+    data << mCounter;                                      // this value increments every time
     data << mi;
     mover->GetSession()->SendPacket(&data);
 }
 
-void MovementPacketSender::SendTeleportToObservers(Unit* unit)
+void MovementPacketSender::SendTeleportToObservers(Unit* unit, float x, float y, float z, float ang)
 {
     Player* mover = unit->GetPlayerMovingMe();
     if (!mover)
@@ -171,8 +170,14 @@ void MovementPacketSender::SendTeleportToObservers(Unit* unit)
 
     WorldPacket data(MSG_MOVE_TELEPORT, 64);
     data << unit->GetPackGUID();
-    data << unit->m_movementInfo;
-    unit->SendMovementMessageToSet(std::move(data), true, mover);
+
+    // copy moveinfo to change position to where player is teleporting
+    MovementInfo moveInfo = unit->m_movementInfo;
+    moveInfo.ChangePosition(x, y, z, ang);
+    data << moveInfo;
+
+    // not using SendMovementMessageToSet because we want the packet sent now
+    unit->SendObjectMessageToSet(&data, true, mover);
 }
 
 void MovementPacketSender::SendKnockBackToController(Unit* unit, float vcos, float vsin, float speedXY, float speedZ)
@@ -196,13 +201,12 @@ void MovementPacketSender::SendKnockBackToController(Unit* unit, float vcos, flo
     unit->PushPendingMovementChange(pendingChange);
 
     WorldPacket data(SMSG_MOVE_KNOCK_BACK, (8 + 4 + 4 + 4 + 4 + 4));
-
     data << unit->GetPackGUID();
     data << mCounter;
     data << float(vcos);                                    // x direction
     data << float(vsin);                                    // y direction
     data << float(speedXY);                                 // Horizontal speed
-    data << float(speedZ);                                 // Z Movement speed (vertical)
+    data << float(speedZ);                                  // Z Movement speed (vertical)
     mover->GetSession()->SendPacket(&data);
 }
 
@@ -216,7 +220,6 @@ void MovementPacketSender::SendKnockBackToObservers(Unit* unit, float vcos, floa
     }
 
     WorldPacket data(MSG_MOVE_KNOCK_BACK);
-
     data << unit->GetPackGUID();
     data << unit->m_movementInfo;
     data << vcos;
@@ -238,26 +241,10 @@ void MovementPacketSender::AddMovementFlagChangeToController(Unit* unit, Movemen
     MovementChangeType movementChangeType;
     switch (mFlag)
     {
-        case MOVEFLAG_ROOT:
-        {
-            movementChangeType = ROOT;
-            break;
-        }
-        case MOVEFLAG_WATERWALKING:
-        {
-            movementChangeType = WATER_WALK;
-            break;
-        }
-        case MOVEFLAG_HOVER:
-        {
-            movementChangeType = SET_HOVER;
-            break;
-        }
-        case MOVEFLAG_SAFE_FALL:
-        {
-            movementChangeType = FEATHER_FALL;
-            break;
-        }
+        case MOVEFLAG_ROOT:                 movementChangeType = ROOT; break;
+        case MOVEFLAG_WATERWALKING:         movementChangeType = WATER_WALK; break;
+        case MOVEFLAG_HOVER:                movementChangeType = SET_HOVER; break;
+        case MOVEFLAG_SAFE_FALL:            movementChangeType = FEATHER_FALL; break;
         default:
             sLog.outError("MovementPacketSender::AddMovementFlagChangeToController: Unsupported MovementFlag (%d), data not sent to client.", mFlag);
             return;
@@ -279,37 +266,18 @@ void MovementPacketSender::SendMovementFlagChangeToController(Unit* unit, Player
     uint16 opcode;
     switch (pendingChange.movementChangeType)
     {
-        case ROOT:
-        {
-            opcode = pendingChange.apply ? SMSG_FORCE_MOVE_ROOT : SMSG_FORCE_MOVE_UNROOT;
-            break;
-        }
-        case WATER_WALK:
-        {
-            opcode = pendingChange.apply ? SMSG_MOVE_WATER_WALK : SMSG_MOVE_LAND_WALK;
-            break;
-        }
-        case SET_HOVER:
-        {
-            opcode = pendingChange.apply ? SMSG_MOVE_SET_HOVER : SMSG_MOVE_UNSET_HOVER;
-            break;
-        }
-        case FEATHER_FALL:
-        {
-            opcode = pendingChange.apply ? SMSG_MOVE_FEATHER_FALL : SMSG_MOVE_NORMAL_FALL;
-            break;
-        }
+        case ROOT: opcode = pendingChange.apply ? SMSG_FORCE_MOVE_ROOT : SMSG_FORCE_MOVE_UNROOT; break;
+        case WATER_WALK: opcode = pendingChange.apply ? SMSG_MOVE_WATER_WALK : SMSG_MOVE_LAND_WALK; break;
+        case SET_HOVER: opcode = pendingChange.apply ? SMSG_MOVE_SET_HOVER : SMSG_MOVE_UNSET_HOVER; break;
+        case FEATHER_FALL: opcode = pendingChange.apply ? SMSG_MOVE_FEATHER_FALL : SMSG_MOVE_NORMAL_FALL; break;
         default:
-        {
             sLog.outError("MovementPacketSender::SendMovementFlagChangeToController: Unsupported movement change (%u), data not sent to client.", pendingChange.movementChangeType);
             return;
-        }
     }
 
     WorldPacket data(opcode, unit->GetPackGUID().size() + 4);
     data << unit->GetPackGUID();
     data << pendingChange.movementCounter;
-
     mover->GetSession()->SendPacket(&data);
 }
 
@@ -325,18 +293,10 @@ void MovementPacketSender::SendMovementFlagChangeToObservers(Unit* unit, Movemen
     uint16 opcode;
     switch (mFlag)
     {
-        case MOVEFLAG_ROOT:
-            opcode = apply ? MSG_MOVE_ROOT : MSG_MOVE_UNROOT;
-            break;
-        case MOVEFLAG_WATERWALKING:
-            opcode = MSG_MOVE_WATER_WALK;
-            break;
-        case MOVEFLAG_HOVER:
-            opcode = MSG_MOVE_HOVER;
-            break;
-        case MOVEFLAG_SAFE_FALL:
-            opcode = MSG_MOVE_FEATHER_FALL;
-            break;
+        case MOVEFLAG_ROOT:                 opcode = apply ? MSG_MOVE_ROOT : MSG_MOVE_UNROOT; break;
+        case MOVEFLAG_WATERWALKING:         opcode = MSG_MOVE_WATER_WALK; break;
+        case MOVEFLAG_HOVER:                opcode = MSG_MOVE_HOVER; break;
+        case MOVEFLAG_SAFE_FALL:            opcode = MSG_MOVE_FEATHER_FALL; break;
         default:
             sLog.outError("MovementPacketSender::SendMovementFlagChangeToObservers: Unsupported MovementFlag (%d), data not sent to client.", mFlag);
             return;
@@ -353,18 +313,10 @@ void MovementPacketSender::SendMovementFlagChangeToAll(Unit* unit, MovementFlags
     uint16 opcode;
     switch (mFlag)
     {
-        case MOVEFLAG_ROOT:
-            opcode = apply ? SMSG_SPLINE_MOVE_ROOT : SMSG_SPLINE_MOVE_UNROOT;
-            break;
-        case MOVEFLAG_WATERWALKING:
-            opcode = apply ? SMSG_SPLINE_MOVE_WATER_WALK : SMSG_SPLINE_MOVE_LAND_WALK;
-            break;
-        case MOVEFLAG_SAFE_FALL:
-            opcode = apply ? SMSG_SPLINE_MOVE_FEATHER_FALL : SMSG_SPLINE_MOVE_NORMAL_FALL;
-            break;
-        case MOVEFLAG_HOVER:
-            opcode = apply ? SMSG_SPLINE_MOVE_SET_HOVER : SMSG_SPLINE_MOVE_UNSET_HOVER;
-            break;
+        case MOVEFLAG_ROOT:             opcode = apply ? SMSG_SPLINE_MOVE_ROOT              : SMSG_SPLINE_MOVE_UNROOT; break;
+        case MOVEFLAG_WATERWALKING:     opcode = apply ? SMSG_SPLINE_MOVE_WATER_WALK        : SMSG_SPLINE_MOVE_LAND_WALK; break;
+        case MOVEFLAG_SAFE_FALL:        opcode = apply ? SMSG_SPLINE_MOVE_FEATHER_FALL      : SMSG_SPLINE_MOVE_NORMAL_FALL; break;
+        case MOVEFLAG_HOVER:            opcode = apply ? SMSG_SPLINE_MOVE_SET_HOVER         : SMSG_SPLINE_MOVE_UNSET_HOVER; break;
         default:
             sLog.outError("MovementPacketSender::SendMovementFlagChangeToAll: Unsupported MovementFlag (%d), data not sent to client.", mFlag);
             return;
@@ -372,6 +324,5 @@ void MovementPacketSender::SendMovementFlagChangeToAll(Unit* unit, MovementFlags
 
     WorldPacket data(opcode, unit->GetPackGUID().size() + 4);
     data << unit->GetPackGUID();
-
     unit->SendMovementMessageToSet(std::move(data), true);
 }
