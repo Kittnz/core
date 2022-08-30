@@ -206,84 +206,89 @@ enum SplineFlags
 
 class MovementInfo
 {
-public:
-  MovementInfo() : moveFlags(MOVEFLAG_NONE), time(0), ctime(0),
-                   t_time(0), s_pitch(0.0f), fallTime(0), splineElevation(0.0f) {}
+    public:
+        MovementInfo() : moveFlags(MOVEFLAG_NONE), stime(0), ctime(0),
+            t_time(0), s_pitch(0.0f), fallTime(0), splineElevation(0.0f) {}
 
-  // Read/Write methods
-  void Read(ByteBuffer &data);
-  void Write(ByteBuffer &data) const;
-  void CorrectData(Unit *mover = nullptr);
+        // Read/Write methods
+        void Read(ByteBuffer &data);
+        void Write(ByteBuffer &data) const;
+        void CorrectData(Unit* mover = nullptr);
 
-  // Movement flags manipulations
-  void AddMovementFlag(int f) { moveFlags |= f; }
-  void RemoveMovementFlag(int f) { moveFlags &= ~f; }
-  bool HasMovementFlag(int f) const { return moveFlags & f; }
-  MovementFlags GetMovementFlags() const { return MovementFlags(moveFlags); }
-  void SetMovementFlags(MovementFlags f) { moveFlags = f; }
+        // Movement flags manipulations
+        void AddMovementFlag(int f) { moveFlags |= f; }
+        void RemoveMovementFlag(int f) { moveFlags &= ~f; }
+        bool HasMovementFlag(int f) const { return moveFlags & f; }
+        MovementFlags GetMovementFlags() const { return MovementFlags(moveFlags); }
+        void SetMovementFlags(MovementFlags f) { moveFlags = f; }
 
-  // Position manipulations
-  Position const *GetPos() const { return &pos; }
-  void SetTransportData(ObjectGuid guid, float x, float y, float z, float o, uint32 time)
-  {
-    t_guid = guid;
-    t_pos.x = x;
-    t_pos.y = y;
-    t_pos.z = z;
-    t_pos.o = o;
-    t_time = time;
-  }
-  void ClearTransportData()
-  {
-    t_guid = ObjectGuid();
-    t_pos.x = 0.0f;
-    t_pos.y = 0.0f;
-    t_pos.z = 0.0f;
-    t_pos.o = 0.0f;
-    t_time = 0;
-  }
-  ObjectGuid const &GetTransportGuid() const { return t_guid; }
-  Position const *GetTransportPos() const { return &t_pos; }
-  Position *GetTransportPos() { return &t_pos; }
-  uint32 GetTransportTime() const { return t_time; }
-  uint32 GetFallTime() const { return fallTime; }
-  void ChangeOrientation(float o) { pos.o = o; }
-  void ChangePosition(float x, float y, float z, float o)
-  {
-    pos.x = x;
-    pos.y = y;
-    pos.z = z;
-    pos.o = o;
-  }
-  void UpdateTime(uint32 _time) { time = _time; }
+        // Position manipulations
+        Position const& GetPos() const { return pos; }
+        void SetTransportData(ObjectGuid guid, float x, float y, float z, float o, uint32 time)
+        {
+            t_guid = guid;
+            t_pos.x = x;
+            t_pos.y = y;
+            t_pos.z = z;
+            t_pos.o = o;
+            t_time = time;
+        }
+        void ClearTransportData()
+        {
+            t_guid = ObjectGuid();
+            t_pos.x = 0.0f;
+            t_pos.y = 0.0f;
+            t_pos.z = 0.0f;
+            t_pos.o = 0.0f;
+            t_time = 0;
+        }
+        ObjectGuid const& GetTransportGuid() const { return t_guid; }
+        Position const& GetTransportPos() const { return t_pos; }
+        Position& GetTransportPos() { return t_pos; }
+        uint32 GetTransportTime() const { return t_time; }
+        uint32 GetFallTime() const { return fallTime; }
+        void ChangeOrientation(float o) { pos.o = o; }
+        void ChangePosition(float x, float y, float z, float o) { pos.x = x; pos.y = y; pos.z = z; pos.o = o; }
+        void UpdateTime(uint32 _time) { stime = _time; }
+        void SetAsServerSide()
+        { 
+            uint32 const oldTime = stime;
+            stime = WorldTimer::getMSTime();
 
-  struct JumpInfo
-  {
-    JumpInfo() : velocity(0.f), sinAngle(0.f), cosAngle(0.f), xyspeed(0.f), startClientTime(0) {}
-    float velocity, sinAngle, cosAngle, xyspeed;
-    Position start;
-    uint32 startClientTime;
-  };
+            // Preserve order of server side packets.
+            if (oldTime >= stime)
+                stime = oldTime + 1;
 
-  JumpInfo const &GetJumpInfo() const { return jump; }
-  //private:
-  // common
-  uint32 moveFlags; // see enum MovementFlags
-  uint32 time;
-  uint32 ctime; // Client time
-  Position pos;
-  // transport
-  ObjectGuid t_guid;
-  Position t_pos;
-  uint32 t_time;
-  // swimming and unknown
-  float s_pitch;
-  // last fall time
-  uint32 fallTime;
-  // jumping
-  JumpInfo jump;
-  // spline
-  float splineElevation;
+            ctime = 0; // Not a client packet. Pauses extrapolation.
+        }
+
+        struct JumpInfo
+        {
+            JumpInfo() : zspeed(0.f), sinAngle(0.f), cosAngle(0.f), xyspeed(0.f), startClientTime(0) {}
+            float   zspeed, sinAngle, cosAngle, xyspeed;
+            Position start;
+            uint32 startClientTime;
+        };
+
+        JumpInfo const& GetJumpInfo() const { return jump; }
+    //private:
+        // common
+        uint32  moveFlags;                                  // see enum MovementFlags
+        uint32  stime; // Server time
+        uint32  ctime; // Client time
+        Position pos;
+        // transport
+        ObjectGuid t_guid;
+        Position t_pos;
+        uint32  t_time;
+        // swimming and unknown
+        float   s_pitch;
+        // last fall time
+        uint32  fallTime;
+        // jumping
+        JumpInfo jump;
+        // spline
+        float splineElevation;
 };
 
 inline ByteBuffer &operator<<(ByteBuffer &buf, MovementInfo const &mi)
@@ -876,10 +881,10 @@ class WorldObject : public Object
         Transport* GetTransport() const { return m_transport; }
         virtual void SetTransport(Transport * t) { m_transport = t; }
 
-        float GetTransOffsetX() const { return m_movementInfo.GetTransportPos()->x; }
-        float GetTransOffsetY() const { return m_movementInfo.GetTransportPos()->y; }
-        float GetTransOffsetZ() const { return m_movementInfo.GetTransportPos()->z; }
-        float GetTransOffsetO() const { return m_movementInfo.GetTransportPos()->o; }
+        float GetTransOffsetX() const { return m_movementInfo.GetTransportPos().x; }
+        float GetTransOffsetY() const { return m_movementInfo.GetTransportPos().y; }
+        float GetTransOffsetZ() const { return m_movementInfo.GetTransportPos().z; }
+        float GetTransOffsetO() const { return m_movementInfo.GetTransportPos().o; }
         uint32 GetTransTime() const { return m_movementInfo.GetTransportTime(); }
 
         void AddUnitMovementFlag(uint32 f) { m_movementInfo.moveFlags |= f; }

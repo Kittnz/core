@@ -466,8 +466,8 @@ class WorldSession
         void SetLatency(uint32 latency) { m_latency = latency; }
         uint32 GetGameBuild() const { return _gameBuild; }
         void SetGameBuild(uint32 v) { _gameBuild = v; }
-        ClientOSType GetOS() const { return _clientOS; }
-        void SetOS(ClientOSType os) { _clientOS = os; }
+        ClientOSType GetOS() const { return m_clientOS; }
+        void SetOS(ClientOSType os) { m_clientOS = os; }
         uint32 getDialogStatus(Player *pPlayer, Object* questgiver, uint32 defstatus);
         uint32 GetAccountMaxLevel() const { return _characterMaxLevel; }
         void SetAccountMaxLevel(uint32 l) { _characterMaxLevel = l; }
@@ -527,6 +527,7 @@ class WorldSession
 
         void ClearIncomingPacketsByType(PacketProcessing type);
         inline bool HasRecentPacket(PacketProcessing type) const { return _receivedPacketType[type]; }
+        bool HasClientMovementControl() const { return !m_clientMoverGuid.IsEmpty(); }
 
         void SetReceivedWhoRequest(bool v) { m_who_recvd = v; }
         bool ReceivedWhoRequest() const { return m_who_recvd; }
@@ -897,7 +898,6 @@ class WorldSession
         bool CanUseBank(ObjectGuid bankerGUID = ObjectGuid()) const;
         ObjectGuid m_currentBankerGUID;
 
-        bool VerifyMovementInfo(MovementInfo const& movementInfo, ObjectGuid const& guid) const;
         bool VerifyMovementInfo(MovementInfo const& movementInfo) const;
         void HandleMoverRelocation(Unit* pMover, MovementInfo& movementInfo);
 
@@ -908,7 +908,7 @@ class WorldSession
         void LogUnprocessedTail(WorldPacket *packet);
 
         Player *_player;
-        ObjectGuid _clientMoverGuid;
+        ObjectGuid m_clientMoverGuid;
         uint32 m_moveRejectTime;
         WorldSocket *m_Socket;
         std::string m_Address;
@@ -939,7 +939,7 @@ class WorldSession
         uint32 m_lastReceivedPacketTime;
         ClientIdentifiersMap _clientIdentifiers;
         std::string     _clientHash;
-        ClientOSType    _clientOS;
+        ClientOSType    m_clientOS;
         uint32          _gameBuild;
         uint32          _charactersCount;
         uint32          _characterMaxLevel;

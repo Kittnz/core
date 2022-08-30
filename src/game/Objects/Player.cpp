@@ -1577,7 +1577,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         }
 
         float x, y, z, o;
-        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_EXTRAPOLATION_PLAYER) && movespline->Finalized() && ExtrapolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.time, x, y, z, o))
+        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_EXTRAPOLATION_PLAYER) && movespline->Finalized() && ExtrapolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.stime, x, y, z, o))
         {
             GetMap()->DoPlayerGridRelocation(this, x, y, z, o);
             m_position.x = x;
@@ -2391,10 +2391,10 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
                 data << uint32(mapid);
                 if (m_transport)
                 {
-                    data << m_movementInfo.GetTransportPos()->x;
-                    data << m_movementInfo.GetTransportPos()->y;
-                    data << m_movementInfo.GetTransportPos()->z;
-                    data << m_movementInfo.GetTransportPos()->o;
+                    data << m_movementInfo.GetTransportPos().x;
+                    data << m_movementInfo.GetTransportPos().y;
+                    data << m_movementInfo.GetTransportPos().z;
+                    data << m_movementInfo.GetTransportPos().o;
                 }
                 else
                 {
@@ -15226,9 +15226,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
             if (!MaNGOS::IsValidMapCoord(x, y, z, o) ||
                     // transport size limited
-                    std::fabs(m_movementInfo.GetTransportPos()->x) > 250.0f ||
-                    std::fabs(m_movementInfo.GetTransportPos()->y) > 250.0f ||
-                    std::fabs(m_movementInfo.GetTransportPos()->z) > 250.0f)
+                    std::fabs(m_movementInfo.GetTransportPos().x) > 250.0f ||
+                    std::fabs(m_movementInfo.GetTransportPos().y) > 250.0f ||
+                    std::fabs(m_movementInfo.GetTransportPos().z) > 250.0f)
             {
                 sLog.outError("Player %s have invalid transport coordinates (X: %f Y: %f Z: %f O: %f). Teleport to bind location.",
                               guid.GetString().c_str(), x, y, z, o);
@@ -16763,10 +16763,10 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(m_resetTalentsMultiplier);
     uberInsert.addUInt64(uint64(m_resetTalentsTime));
 
-    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos()->x));
-    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos()->y));
-    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos()->z));
-    uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(m_movementInfo.GetTransportPos()->o)));
+    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().x));
+    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().y));
+    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().z));
+    uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(m_movementInfo.GetTransportPos().o)));
     if (m_transport)
         uberInsert.addUInt32(m_transport->GetGUIDLow());
     else
@@ -20917,7 +20917,7 @@ InventoryResult Player::CanEquipUniqueItem(ItemPrototype const* itemProto, uint8
 void Player::HandleFall(MovementInfo const& movementInfo)
 {
     // calculate total z distance of the fall
-    float z_diff = m_lastFallZ - movementInfo.GetPos()->z;
+    float z_diff = m_lastFallZ - movementInfo.GetPos().z;
     DEBUG_LOG("zDiff = %f", z_diff);
 
     //Players with low fall distance, Feather Fall or physical immunity (charges used) are ignored
@@ -20938,8 +20938,8 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 
             uint32 damage = (uint32)(damageperc * GetMaxHealth() * sWorld.getConfig(CONFIG_FLOAT_RATE_DAMAGE_FALL) * TakenTotalMod);
 
-            float height = movementInfo.GetPos()->z;
-            UpdateAllowedPositionZ(movementInfo.GetPos()->x, movementInfo.GetPos()->y, height);
+            float height = movementInfo.GetPos().z;
+            UpdateAllowedPositionZ(movementInfo.GetPos().x, movementInfo.GetPos().y, height);
 
             if (damage > 0)
             {
@@ -20950,7 +20950,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
                 // handle hardcore potential fall damage
                 if (IsHardcore())
                 {
-                    sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+                    sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), movementInfo.GetPos().x, movementInfo.GetPos().y, movementInfo.GetPos().z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
                     damage /= 10;
                 }
                 
@@ -20958,7 +20958,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
             }
 
             //Z given by moveinfo, LastZ, FallTime, WaterZ, MapZ, Damage, Safefall reduction
-            DEBUG_LOG("FALLDAMAGE z=%f sz=%f pZ=%f FallTime=%d mZ=%f damage=%d SF=%d" , movementInfo.GetPos()->z, height, GetPositionZ(), movementInfo.GetFallTime(), height, damage, safe_fall);
+            DEBUG_LOG("FALLDAMAGE z=%f sz=%f pZ=%f FallTime=%d mZ=%f damage=%d SF=%d" , movementInfo.GetPos().z, height, GetPositionZ(), movementInfo.GetFallTime(), height, damage, safe_fall);
         }
     }
 }
@@ -21079,8 +21079,8 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
 
 void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode)
 {
-    if (m_lastFallTime >= minfo.GetFallTime() || m_lastFallZ <= minfo.GetPos()->z || opcode == MSG_MOVE_FALL_LAND)
-        SetFallInformation(minfo.GetFallTime(), minfo.GetPos()->z);
+    if (m_lastFallTime >= minfo.GetFallTime() || m_lastFallZ <= minfo.GetPos().z || opcode == MSG_MOVE_FALL_LAND)
+        SetFallInformation(minfo.GetFallTime(), minfo.GetPos().z);
 }
 
 /**
