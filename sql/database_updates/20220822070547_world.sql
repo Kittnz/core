@@ -1716,10 +1716,11 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 -- Private Talmand, display id 11037, level 45, faction 894, humanoid, weapon 5085, gossip flags, gossip text: “We stand watch.”
 -- Private Sleightor , display id 18807, level 45, faction 894, humanoid, weapon 4560, gossip flags, gossip text: "Oh, the things I would do for a bottle of Dalaran Red…"
 -- Private Valnor, display id 3137, level 45, faction 894, humanoid, weapon 4560, gossip flags, gossip text: "I hate this swamp."
+-- Disturbed Ghost, display ID 14594, level 35, faction 16, undead, scale 1, had ghost effect
 REPLACE INTO creature_template VALUES
 (60939, 18934, 18935, 0, 0, 0, 'Deserter Exile', 'Daelin\'s Brigade', 0, 39, 41, 1828, 1902, 0, 0, 2033, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 72, 93, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.0304, 81.1668, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 71, 98, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60940, 18936, 0, 0, 0, 0, 'Deserter Turncoat', 'Daelin\'s Brigade', 0, 40, 42, 1902, 1981, 0, 0, 3420, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 101, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.9344, 85.1598, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 74, 102, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60941, 18937, 0, 0, 0, 0, 'Sellick Voss', 'Daelin\'s Brigade', 0, 43, 43, 5148, 5148, 0, 0, 2414, 16, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 153, 203, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.8462, 82.5551, 122, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_sellick_voss'),
+(60941, 18937, 0, 0, 0, 0, 'Sellick Voss', 'Daelin\'s Brigade', 0, 43, 43, 5148, 5148, 0, 0, 2414, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 153, 203, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.8462, 82.5551, 122, 7, 0, 60941, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_sellick_voss'),
 (60942, 18930, 18931, 0, 0, 0, 'Blackhorn Mystic', '', 0, 36, 37, 1468, 1536, 1631, 1631, 1480, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60943, 18932, 18933, 0, 0, 0, 'Blackhorn Warrior', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60944, 18938, 0, 0, 0, 0, 'Targos Hatewind', '', 0, 41, 41, 1981, 1981, 0, 0, 2397, 16, 0, 1, 1.14286, 1.45, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -1729,7 +1730,9 @@ REPLACE INTO creature_template VALUES
 (60948, 6108, 0, 0, 0, 0, 'Chieftain Razortusk', '', 0, 40, 40, 1752, 1752, 0, 0, 1890, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 60948, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60949, 11037, 0, 0, 0, 0, 'Private Talmand', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 894, 1, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_private_q_shields_owner'),
 (60950, 18807, 0, 0, 0, 0, 'Private Sleightor', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 894, 1, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_private_q_shields_owner'),
-(60951, 3137, 0, 0, 0, 0, 'Private Valnor', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 894, 1, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_private_q_shields_owner');
+(60951, 3137, 0, 0, 0, 0, 'Private Valnor', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 894, 1, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_private_q_shields_owner'),
+(60952, 14594, 0, 0, 0, 0, 'Disturbed Ghost', '', 0, 35, 35, 1342, 1342, 0, 0, 1373, 16, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60953, 2976, 0, 0, 0, 0, 'Paval Reethe', '', 0, 35, 35, 1342, 1342, 0, 0, 1149, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 4980, 0, 0, 0, 0, 2, 0, '');
 
 REPLACE INTO creature_display_info_addon VALUES (18931, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18933, 0, 0, 0, 0);
@@ -2084,3 +2087,97 @@ REPLACE INTO creature_loot_template VALUES (60947, 30056, 1, 0, -30056, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60947, 30057, 0.025, 0, -30057, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60947, 30058, 1, 0, -30058, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60947, 30059, 0.025, 0, -30059, 1, 0);
+-- Sellick Voss's loot.
+REPLACE INTO creature_loot_template VALUES (60941, 60817, -100, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 1645, 2.409, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 1685, 0.0077, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 1710, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 1725, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 2772, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 2775, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 2838, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3357, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3818, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3827, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3832, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3858, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3864, 0.0193, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3869, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3874, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3914, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3927, 4.7872, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 3928, 1.2912, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4300, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4305, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4306, 9.7441, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4338, 23.8784, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4339, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4416, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4417, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4419, 0.34, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4421, 0.48, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4422, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4424, 0.52, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4599, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4601, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4602, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4608, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4625, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 4637, 0.1041, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 5974, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 6149, 1.32, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7084, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7085, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7086, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7453, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7909, 0.054, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7910, 0.0116, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7911, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7912, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7971, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7975, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7976, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7989, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7990, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7991, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7992, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 7993, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 8029, 0.05, 0, 1, 1, 4);
+REPLACE INTO creature_loot_template VALUES (60941, 8385, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 8386, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 8387, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 8389, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 8390, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 8831, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 9293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 9295, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 9298, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10300, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10301, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10302, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10312, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10315, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10320, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10603, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10604, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10605, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 10606, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 11167, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 11202, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 11204, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 11208, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 11225, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 13068, 0.0039, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30025, 0.5, 0, -30025, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30026, 0.01, 0, -30026, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30027, 0.5, 0, -30027, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30028, 0.01, 0, -30028, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30029, 0.5, 0, -30029, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30030, 0.01, 0, -30030, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30036, 0.0025, 0, -30036, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30048, 2.5, 0, -30048, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30049, 0.5, 0, -30049, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30072, 0.5, 0, -30072, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30073, 0.0025, 0, -30073, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30074, 0.01, 0, -30074, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60941, 30075, 0.0025, 0, -30075, 1, 0);
