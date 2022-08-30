@@ -4405,6 +4405,7 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(UNIT_DYNAMIC_FLAGS);
     updateVisualBits.SetBit(UNIT_CHANNEL_SPELL);
     updateVisualBits.SetBit(UNIT_MOD_CAST_SPEED);
+    updateVisualBits.SetBit(UNIT_NPC_EMOTESTATE);
     updateVisualBits.SetBit(UNIT_FIELD_BYTES_2);
 
     updateVisualBits.SetBit(PLAYER_DUEL_ARBITER);
