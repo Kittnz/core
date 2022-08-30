@@ -1161,7 +1161,7 @@ REPLACE INTO creature_template VALUES
 (60913, 18940, 0, 0, 0, 0, 'Ancient Warrior', NULL, 0, 36, 39, 1536, 1604, 0, 0, 1664, 21, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60914, 18941, 0, 0, 0, 0, 'Ancient Warrior', NULL, 0, 36, 39, 1536, 1604, 0, 0, 1664, 21, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60915, 18942, 0, 0, 0, 0, 'Ancient Warrior', NULL, 0, 36, 39, 1536, 1604, 0, 0, 1664, 21, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60916, 18944, 0, 0, 0, 0, 'Forgotten Keeper', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 21, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 103, 140, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60916, 18944, 0, 0, 0, 0, 'Forgotten Keeper', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 103, 140, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60917, 18943, 0, 0, 0, 0, 'Marauder King Corthan', NULL, 0, 48, 48, 4179, 4179, 0, 0, 2432, 35, 3, 1, 1.14286, 0, 18, 5, 0, 1, 1, 273, 338, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 127, 155, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60918, 1193, 0, 0, 0, 0, 'Stonevault Brute', '', 0, 41, 42, 1981, 2059, 0, 0, 2397, 90, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 76, 97, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.984, 83.853, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 103, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60919, 726, 0, 0, 0, 0, 'Stonevault Pillager', NULL, 0, 43, 44, 2059, 2138, 1431, 1431, 2557, 90, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 68, 88, 0, 194, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 78, 107, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
@@ -1311,8 +1311,8 @@ set @casttarget_1 = 1;
 set @castflags_1 = 8;
 set @delayinitialmin_1 = 0; 
 set @delayinitialmax_1 = 0; 
-set @delayrepeatmin_1 = 0; 
-set @delayrepeatmax_1 = 0;
+set @delayrepeatmin_1 = 3; 
+set @delayrepeatmax_1 = 3;
 
 set @spellid_2 = 0;
 set @probability_2 = 0; 
@@ -1447,7 +1447,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 set @gossip_menu_id = 41192; set @magic_number = 60924;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We Redbrand fought alongside the king in the war of the beard ages ago, we hold a proud legacy and should not be judged lightly.');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We Redbrand fought alongside the king in the War of Three Hammers ages ago. We hold a proud legacy and should not be judged lightly.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -1706,24 +1706,30 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 -- Deserter Exile <Daelin's Brigade> , display IDs 18934 + 18935, level 39-41, faction 16, humanoid, scale 1, weapon1 : 852, weapon2 : 6182 
 -- Deserter Turncoat <Daelin's Brigade>, display ID 18936, level 40-42, faction 16, humanoid, scale 1, weapon 1 :4560, weapon2 : 18661 (Has 3420 Armor) 
 -- Sellick Voss <Daelin's Brigade>, display ID 18937, level 43, faction 16, humanoid, scale 1, weapon 1 :1493, weapon2 7786 (has a 1.3x faster attack speed), on pull, say the following line. "Theramore was weak, to side with the Horde is betrayal after all who died! We will not be stopped so easily, the Vengeful Mariner will not forget!
--- Blackhoof Mystic, display ID 18930 + 18931 level 36-37, faction 16, humanoid, scale 1.3, weapon1 : 2013, has 1631 mana, casts 930 every 9 seconds
--- Blackhoof Warrior, display ID 18932 + 18933 level 37-38, faction 16, humanoid, scale 1.3, weapon1 : 11964
+-- Blackhorn Mystic, display ID 18930 + 18931 level 36-37, faction 16, humanoid, scale 1.3, weapon1 : 2013, has 1631 mana, casts 930 every 9 seconds
+-- Blackhorn Warrior, display ID 18932 + 18933 level 37-38, faction 16, humanoid, scale 1.3, weapon1 : 11964
 -- Targos Hatewind, display ID 18938, level 41, faction 16, humanoid, scale 1.45, weapon 5300
 -- Asza , display ID 10584, level 32, faction 35, scale 1, dragonkin, no weapon, gossip/quest flags, greeting text : "<The whelp looks at you curiously.>"
 -- Murloc Tadpole, display ID 15984, level 10, faction 35, humanoid, scale 0.5, quest/greeting flags, greeting text "Mmrmmgl"
 -- Kraul Lookout, display ID 1963, level 37-38, faction 16, humanoid,  weapon 6333
 -- Chieftain Razortusk, display id 6108, level 40, faction 16, humanoid, weapon 7873
+-- Private Talmand, display id 11037, level 45, faction 894, humanoid, weapon 5085, gossip flags, gossip text: “We stand watch.”
+-- Private Sleightor , display id 18807, level 45, faction 894, humanoid, weapon 4560, gossip flags, gossip text: "Oh, the things I would do for a bottle of Dalaran Red…"
+-- Private Valnor, display id 3137, level 45, faction 894, humanoid, weapon 4560, gossip flags, gossip text: "I hate this swamp."
 REPLACE INTO creature_template VALUES
 (60939, 18934, 18935, 0, 0, 0, 'Deserter Exile', 'Daelin\'s Brigade', 0, 39, 41, 1828, 1902, 0, 0, 2033, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 72, 93, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 59.0304, 81.1668, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 71, 98, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60940, 18936, 0, 0, 0, 0, 'Deserter Turncoat', 'Daelin\'s Brigade', 0, 40, 42, 1902, 1981, 0, 0, 3420, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 101, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.9344, 85.1598, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 74, 102, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60941, 18937, 0, 0, 0, 0, 'Sellick Voss', 'Daelin\'s Brigade', 0, 43, 43, 5148, 5148, 0, 0, 2414, 16, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 153, 203, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.8462, 82.5551, 122, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_sellick_voss'),
-(60942, 18930, 18931, 0, 0, 0, 'Blackhoof Mystic', '', 0, 36, 37, 1468, 1536, 1631, 1631, 1480, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60943, 18932, 18933, 0, 0, 0, 'Blackhoof Warrior', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60942, 18930, 18931, 0, 0, 0, 'Blackhorn Mystic', '', 0, 36, 37, 1468, 1536, 1631, 1631, 1480, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60943, 18932, 18933, 0, 0, 0, 'Blackhorn Warrior', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60944, 18938, 0, 0, 0, 0, 'Targos Hatewind', '', 0, 41, 41, 1981, 1981, 0, 0, 2397, 16, 0, 1, 1.14286, 1.45, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60945, 10584, 0, 0, 0, 0, 'Asza', '', 0, 32, 32, 1743, 1743, 0, 0, 1304, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 50, 70, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60946, 15984, 0, 0, 0, 0, 'Murloc Tadpole', '', 0, 10, 10, 198, 198, 0, 0, 455, 35, 3, 1, 1.14286, 0.5, 20, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60947, 1963, 0, 0, 0, 0, 'Kraul Lookout', NULL, 0, 37, 38, 1536, 1604, 0, 0, 1651, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 52, 65, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60947, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 62, 86, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60948, 6108, 0, 0, 0, 0, 'Chieftain Razortusk', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 60948, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(60947, 1963, 0, 0, 0, 0, 'Kraul Lookout', '', 0, 37, 38, 1536, 1604, 0, 0, 1651, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 52, 65, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60947, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 62, 86, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60948, 6108, 0, 0, 0, 0, 'Chieftain Razortusk', '', 0, 40, 40, 1752, 1752, 0, 0, 1890, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 60948, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60949, 11037, 0, 0, 0, 0, 'Private Talmand', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 894, 1, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_private_q_shields_owner'),
+(60950, 18807, 0, 0, 0, 0, 'Private Sleightor', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 894, 1, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_private_q_shields_owner'),
+(60951, 3137, 0, 0, 0, 0, 'Private Valnor', '', 0, 45, 45, 2217, 2217, 0, 0, 2725, 894, 1, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_private_q_shields_owner');
 
 REPLACE INTO creature_display_info_addon VALUES (18931, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18933, 0, 0, 0, 0);
@@ -1734,6 +1740,18 @@ REPLACE INTO creature_display_info_addon VALUES (18937, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18930, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18932, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18938, 0, 0, 0, 0);
+
+set @equip_template = 20198; set @weapon_1 = 4560; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60951;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20197; set @weapon_1 = 4560; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60950;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20196; set @weapon_1 = 5085; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60949;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 20195; set @weapon_1 = 7873; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60948;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -1766,6 +1784,30 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20188; set @weapon_1 = 852; set @weapon_2 = 6182; set @weapon_3 = 0; set @creature = 60939;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41213; set @magic_number = 60916;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Long has it been since anyone has ventured to this place.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41212; set @magic_number = 60951;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I hate this swamp.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41211; set @magic_number = 60950;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Oh, the things I would do for a bottle of Dalaran Red...');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41210; set @magic_number = 60949;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We stand watch.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41208; set @magic_number = 60946;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 

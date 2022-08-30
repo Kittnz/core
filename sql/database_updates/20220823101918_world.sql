@@ -23,8 +23,8 @@ REPLACE INTO creature_template VALUES
 (60384, 328, 0, 0, 0, 0, 'quest_40541_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 REPLACE INTO gameobject_template VALUES
-(2010918, 1, 29560, 'Abandoned Murloc Hut', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_abandoned_murloc'),
-(2010919, 1, 29560, 'Abandoned Murloc Nest', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_abandoned_murloc');
+(2010918, 1, 23009, 'Abandoned Murloc Hut', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_abandoned_murloc'),
+(2010919, 1, 27020, 'Abandoned Murloc Nest', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_abandoned_murloc');
 
 replace into npc_text (ID, BroadcastTextID0) values (30033,30033);
 replace into npc_text (ID, BroadcastTextID0) values (30034,30034);
@@ -112,3 +112,164 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (5088, 40550);
 replace into creature_involvedrelation	(id, quest) values (3442, 40550);
+
+-- A Strangle Favor
+delete from quest_template where entry = 40551;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40550,40551,2,15,35,30,0,0,'A Strangle Favor','While I am busy translating this, you help me. Easy.\n\nI need something from Stranglethorn Vale. I know, it\'s far, but fortunately, we have a beautiful ship that will take you straight to Booty Bay! Wonderful, isn\'t it?\n\nI heard about some mining operations being done in the northern region, close to some lake or something. By no other than our competitor, Venture Company. I need you to go there and, ehm, borrow some stuff from them.\n\nBring me 10 samples of ‘the thing\' they are excavating. I heard it\'s some blue crystals. I think you will be able to find them on their dead bodies. But you didn\'t hear that from me.','Bring 10 Strange Blue Shards from the Venture Company in Stranglethorn Vale for Sputtervalve in Ratchet.','Got it?','Hah, good job. I hope you didn\'t have to dispose of too many Venture Co. workers… And I hope their insurance covers this!\n\n<Sputtervalve laughs.>\n\nLet\'s get to translating this thing.',60811,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2800,470,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (3442, 40551);
+replace into creature_involvedrelation	(id, quest) values (3442, 40551);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60811,20657,'Strange Blue Shard',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(1096, 60811, -80, 0, 1, 1, 0),
+(1097, 60811, -80, 0, 1, 1, 0),
+(1094, 60811, -80, 0, 1, 1, 0),
+(921 , 60811, -80, 0, 1, 1, 0);
+
+-- Back to Falgran
+delete from quest_template where entry = 40552;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40551,40552,2,15,35,30,0,0,'Back to Falgran','<Sputtervale focuses on the tablet.>\n\nTheir writing is not exactly like ours. They just draw some pictures, and you have to interpret it on your own. There are some clues that help you with grasping the meaning but...\n\nYou probably aren\'t interested in quillboar lore, yeah.\n\nSo, what I get from this: a band of quillboars wants to attack an inn. They go there with a raiding party, but they find the inn already burned to the ground. Then some angry pictures. I guess they wanted violence.\n\nSo, yeah. This is what I got from this, pal.','Report back to Falgran on the border with Barrens.','Were you able to translate the tablet?','So it wasn\'t them... Unless the quillboars are the masters of deception, we reached a dead end.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,1011,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (3442, 40552);
+replace into creature_involvedrelation	(id, quest) values (5088, 40552);
+
+-- Suspicious No More
+delete from quest_template where entry = 40553;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40552,40553,2,15,35,30,0,0,'Suspicious No More','Go and report our findings to Captain Vimes. I will stay here for some time, to watch over the inn. I got some reports that the Horde is sniffing around.\n\nIt can\'t mean anything good.','Report back to Captain Garran Vimes in Theramore.','Welcome back, $N. What did you discover?','Damn it. If it was the quillboars, it would make it so easy. Shame, but at least we ruled out one of the suspects.\n\nNevertheless, good work. Finally we got at least a step closer to solving this mystery. Please, take this gold as a reward from lady Jaina herself.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10000,500,1011,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (5088, 40553);
+replace into creature_involvedrelation	(id, quest) values (4944, 40553);
+
+-- The Shield's Owner
+delete from quest_template where entry = 40554;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1,objectivetext2,objectivetext3) values (40553,40554,2,15,35,30,0,0,'The Shield\'s Owner','I had a talk with one of our scouts. He is, well, responsible for spying on Camp Taurajo, deep in the barrens. And he is certain, and I believe him, that no Taurajo tauren ever wielded this shield.\n\nI tell you about this, because if it was really of Tauren craftsmanship, then the owner of the shield  must\'ve lived in the swamp for some time.\n\nI sent our infiltrators to check upon the Brackenwall Village, the horde outpost here for any sign of Taurens. While they are on their mission, I have a request. Gather intel from our watchtowers in the marsh. Maybe our soldiers remember something remarkable.','Gather information from the nearby watchtowers and return to Captain Garran Vimes in Thermore.','Were our scouts of any use?','So this is all we have. Well, it is a lead as good as any other. But what can we do with this information?',0,0,0,0,0,0,0,0,60385,1,60386,1,60387,1,0,0,0,0,0,950,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Report from Talmand','Report from Sleightor','Report from Valnor');
+
+replace into creature_questrelation		(id, quest) values (4944, 40554);
+replace into creature_involvedrelation	(id, quest) values (4944, 40554);
+
+REPLACE INTO creature_template VALUES
+(60385, 328, 0, 0, 0, 0, 'quest_40554_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60386, 328, 0, 0, 0, 0, 'quest_40554_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60387, 328, 0, 0, 0, 0, 'quest_40554_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- The Search for the Grave
+delete from quest_template where entry = 40555;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40554,40555,2,15,35,30,0,0,'The Search for the Grave','These Grimtotem have been under our constant observation since they moved into Dustwallow. They are a nasty bunch, but I assure you, if it was them, we would already know. However, if this tauren the scouts spoke of really existed, we could ask about him in Brackenwall Village.\n\nIn theory.\n\nTensions with the Horde are high, and I don\'t want my men to see us negotiate with them. I had way too many deserters in recent months. You could try to find his grave. The tauren mummify their dead, but since he was the only one here, I doubt the ogres knew about it. Just search for a graveyard, or something like this close to Brackenwall. I doubt you will find anything, but it is the only lead we have.\n\nAnd let\'s hope Lieutenant Caldwell returns soon with some information about Reethe.','Find the grave of a tauren warrior close to Brackenwall Village.','This grave is big enough to fit a tauren for sure. It\'s worth investigating.','In the grave, you find skeletal remains of a tauren. He must\'ve died at least a few years ago.\n\nThe grave, however, has been recently dug up and hastily buried with earth. The dirt is still loose, it must\'ve been no longer than a few weeks.\n\nSome equipment is buried with the tauren too. Leather straps, metal coins and pauldrons, and a beautiful, one handed axe.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,850,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4944, 40555);
+replace into gameobject_involvedrelation (id, quest) values (2010920, 40555);
+
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010920, 2, 49, 1, 'Turmoiled Grave', 32, '');
+
+-- Another Mystery to Solve
+delete from quest_template where entry = 40556;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40555,40556,2,15,35,30,0,0,'Another Mystery to Solve','Who dug up the grave? Why? Did they take the shield from it?\n\nMore questions, still no answers. You should report back to Captain Garran Vimes.','Go back to Captain Garran Vimes at Theramore Keep with your findings.','Have you found anything?','A dug-up grave of a tauren warrior… Another mystery, another question.\n\nLet me gather my thoughts on this.\n\nSo, $N, you say that he died a long time ago. It is no coincidence. The shield must\'ve been taken from his grave. But... why?\n\nWhy would anyone do this? This doesn\'t make any sense. If someone wanted us to blame the Horde, they could\'ve found a better way to do it for sure...',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation	(id, quest) values (2010920, 40556);
+replace into creature_involvedrelation	(id, quest) values (4944, 40556);
+
+-- The Troubles Ahead
+delete from quest_template where entry = 40557;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40553,40557,2,15,35,30,0,0,'The Troubles Ahead','Lieutenant Caldwell still hasn\'t returned from his mission to find Paval Reethe. I fear the worst. But, alas, we can only wait.\n\nWhen it comes to our investigation. Well, another dead end.\n\nHowever, Falgran reported that the horde has been sniffing around the inn. Please, assist him with this matter. He is where you met him before.','Meet with Falgran Hastil on the road between Shady Rest Inn and the Lost Point in Dustwallow Marsh.','$N! Nice to see you.','I suspect they might know something...',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4944, 40557);
+replace into creature_involvedrelation	(id, quest) values (5088, 40557);
+
+update quest_template set exclusivegroup = -40553 where entry IN (40553,40556);
+
+-- The Meeting with the Enemy
+delete from quest_template where entry = 40558;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40557,40558,2,15,35,30,0,0,'The Meeting with the Enemy','The Horde diplomat will be here any moment now. I wonder what they have to say...\n\nAnd, $N, please, try to remain calm and do not provoke them. I know it may prove hard because of our history, but they are just like you and me.\n\nJust much more green.','Assist Falgran with the meeting.','Back already? What did you learn?','You met with the Horde unauthorized? This could\'ve provoked a major diplomatic incident!\n\nAt least you learned important information.',0,0,0,0,0,0,0,0,60388,1,0,0,0,0,0,0,0,0,0,1050,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Assist Falgran with the meeting');
+
+replace into creature_questrelation		(id, quest) values (5088, 40558);
+replace into creature_involvedrelation	(id, quest) values (4944, 40558);
+
+REPLACE INTO creature_template VALUES
+(60388, 328, 0, 0, 0, 0, 'quest_40558_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+-- Additional notes: 
+
+-- Upon quest start, spawn NPC Kagoro at the following : Map1, X-3810.79, Y:-2763.20, Z: 34.60, Orientation: 2.394
+-- Have NPC Falgran Hastil walk towards the following coordinates. : Map1, X:-3809.80, Y:-2759.96, Z:35.37, Orientation : 5.29
+-- As Falgran is walking down, have him say the following line 2 seconds after he starts to move. 
+-- F: Remain calm…
+-- (Wait 8 seconds, and begin dialogue in /say.
+-- K: Hail, human. I am Kagoro, scout of the Horde 
+-- (Wait 5 seconds)
+-- F: I am Falgran Hastil, scout of Theramore. And this is $N. Why did you call for this meeting?
+-- (Wait 7 seconds)
+-- K: We saw you investigate the inn. We wanted to assure you it is not the Horde's doing.
+-- (Wait 7 seconds)
+-- F: We found this shield strapped to the wall of the inn. Do you have any recollection of this object?
+-- (Wait 8 seconds)
+-- K: Let me see.
+-- (EMOTE) <Kagoro investigates the shield thoroughly>
+-- (Wait 8 seconds)
+-- K: By the ancestors. Yes, I know this shield. It belonged to Wattapo, a tauren warrior who once lived in the Brackenwall Village. He died a long time ago.
+-- (Wait 10 seconds)
+-- F: Do you know how it could've ended up in the inn? We found his grave. It was recently disturbed.
+-- (Wait 6 seconds)
+-- K: To disturb the grave of a fallen warrior… I assure you, I know nothing of this.
+-- (Wait 5 seconds)
+-- F: It seems like someone wanted to make us blame you for the burning of the inn.
+-- (Wait 7 seconds)
+-- K: Indeed. Have you found anything else in the investigation?
+-- (Wait 6 seconds)
+-- F: Yes, quillboar footprints…
+-- (Wait 4 seconds)
+-- K: False lead.
+-- (Wait 3 seconds)
+-- F: I see you did some work too.
+-- (Wait 2 seconds)
+-- (EMOTE)<Kagoro nods>
+-- (Wait 3 seconds)
+-- F: And the badge of one of the deserters. Paval Reethe. We couldn't find Reethe, though. Have you seen him, by any chance?
+-- (Wait 8 seconds)
+-- K: This is… a delicate matter, and the actual reason I called for the meeting. Paval Reethe is dead.
+-- (Wait 7 seconds)
+-- F: He was a deserter. While I still would've preferred to arrest him and allow for a just trial, I understand that you killed him. We do not blame you.
+-- (Wait 9 seconds)
+-- K: If it only was that simple. We knew he was connected to the burning of the inn, and we wanted to investigate him. Before he could talk… we were attacked. By Theramore soldiers. One of them bore the name Caldwell.
+-- (Wait 10 seconds)
+-- F: Attacked? Unprovoked, by Theramore soldiers? I swear to the Light, orc. If you are lying…
+-- (Wait 6 seconds)
+-- K: I swear upon my ancestors and my warchief. They killed him in cold blood. Quick arrow pierced his heart. We also barely made it out alive.
+-- (Wait 8 seconds)
+-- F: Theramore soldiers would never… We shall investigate this. But if we find out that your words aren't true…
+-- (Wait 5 seconds)
+-- K: I am sorry for the loss of your comrades. While you investigate this, we shall follow another lead we have. Black dragonflight.
+-- (Wait 8 seconds)
+-- F: And we will investigate in Theramore. But be warned, orc. Your story doesn't add up.
+-- (Wait 6 seconds)
+-- K: Let's meet here once we know more. I hope you will find truth in your city of stones. Farewell.
+-- (Wait 6 seconds)
+-- F: Farewell, orc.
+-- Kagoro despawns 
+-- F: We are in deep trouble, $N. Report to Garran Vimes at once!
+-- (Wait 10 seconds, and reset Falgran Hastil to his original position)
+
+-- The Betrayal from Within
+delete from quest_template where entry = 40559;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40558,40559,2,15,35,30,0,0,'The Betrayal from Within','So the shield really belonged to the tauren from Brackenwall. Good work.\n\nOn the other hand, the reported killing of Paval Reethe by our soldiers is troubling. Deeply troubling. I cannot just trust the Horde on this. My role, as a captain, is not only to order, but also to serve.\n\nI\'m worried that Lieutenant Caldwell only acted in his self defence. But, if the orc was really speaking the truth, you may find some evidence in Caldwell\'s belongings. You can find his quarters downstairs. He was sent there with a soldier named Hallan, check hers too.\n\nI will prepare the report for lady Jaina.','Check the belongings of Caldwell and Hallan downstairs, then report to Captain Vimes.','Have you found their rooms? They should be downstairs.','This is embarrassing. Especially for me, as a Captain.',60812,1,60813,1,60814,1,0,0,0,0,0,0,0,0,0,0,0,0,0,850,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4944, 40559);
+replace into creature_involvedrelation	(id, quest) values (4944, 40559);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60812,18815,'Kul Tiran Badge',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60813,4804,'Hidden Weapons',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60814,13430,'Letter to Voss',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50549);
+
+REPLACE INTO page_text VALUES
+(50549, 'Voss,\n\nMy sabotage is working. Day by day, weapons are disappearing from the armory and no one notices. Soon, soldiers will fight with wooden sticks.\n\nI can\'t hide here anymore. Mere thought of staying here for a second longer with these traitors makes me sick. Let me and Hallan join you and your men. Soon, we will outnumber soldiers of Theramore. And then...\n\nHe will have his vengeance.\n\nCaldwell.', 0);
+
+REPLACE INTO gameobject_template VALUES
+(2010921, 3, 259, 'Theramore Trunk', 0, 4, 0.5, 43, 2010921, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010922, 3, 24637, 'Personal Belongings', 0, 4, 1, 43, 2010922, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010921,60812,-100,0,1,1,0),
+(2010921,60813,-100,0,1,1,0),
+(2010922,60814,-100,0,1,1,0);
