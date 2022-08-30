@@ -5442,6 +5442,43 @@ bool QuestRewarded_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest con
     return true;
 }
 
+bool GossipHello_npc_ansirem(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40561) == QUEST_STATUS_INCOMPLETE) // Preparation for Divination
+    {
+        Creature* ansirem = pPlayer->FindNearestCreature(2543, 10.0F);
+        if (ansirem)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Greetings. I am in need of Arcane Resonator for Magus Halister. Do you have it?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(2543, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_ansirem(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(60815);
+        if (pPlayer->HasItemCount(60815, 1, false))
+        {
+            pCreature->MonsterSay("Halister? I haven't heard from him in ages. We need to meet, as there is much to discuss. As for the Arcane Resonator, I can lend you one. But tell Halister that he needs to bring it back to me in person!");
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+}
+
 bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -6696,6 +6733,8 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_ansirem";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_ansirem;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_ansirem;
+    newscript->pGossipHello = &GossipHello_npc_ansirem;
+    newscript->pGossipSelect = &GossipSelect_npc_ansirem;
     newscript->RegisterSelf();
 
     newscript = new Script;

@@ -115,7 +115,7 @@ replace into creature_involvedrelation	(id, quest) values (3442, 40550);
 
 -- A Strangle Favor
 delete from quest_template where entry = 40551;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40550,40551,2,15,35,30,0,0,'A Strangle Favor','While I am busy translating this, you help me. Easy.\n\nI need something from Stranglethorn Vale. I know, it\'s far, but fortunately, we have a beautiful ship that will take you straight to Booty Bay! Wonderful, isn\'t it?\n\nI heard about some mining operations being done in the northern region, close to some lake or something. By no other than our competitor, Venture Company. I need you to go there and, ehm, borrow some stuff from them.\n\nBring me 10 samples of ‘the thing\' they are excavating. I heard it\'s some blue crystals. I think you will be able to find them on their dead bodies. But you didn\'t hear that from me.','Bring 10 Strange Blue Shards from the Venture Company in Stranglethorn Vale for Sputtervalve in Ratchet.','Got it?','Hah, good job. I hope you didn\'t have to dispose of too many Venture Co. workers… And I hope their insurance covers this!\n\n<Sputtervalve laughs.>\n\nLet\'s get to translating this thing.',60811,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2800,470,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40550,40551,2,15,35,30,0,0,'A Strangle Favor','While I am busy translating this, you help me. Easy.\n\nI need something from Stranglethorn Vale. I know, it\'s far, but fortunately, we have a beautiful ship that will take you straight to Booty Bay! Wonderful, isn\'t it?\n\nI heard about some mining operations being done in the northern region, close to some lake or something. By no other than our competitor, Venture Company. I need you to go there and, ehm, borrow some stuff from them.\n\nBring me 10 samples of ‘the thing\' they are excavating. I heard it\'s some blue crystals. I think you will be able to find them on their dead bodies. But you didn\'t hear that from me.','Bring 10 Strange Blue Shards from the Venture Company in Stranglethorn Vale for Sputtervalve in Ratchet.','Got it?','Hah, good job. I hope you didn\'t have to dispose of too many Venture Co. workers... And I hope their insurance covers this!\n\n<Sputtervalve laughs.>\n\nLet\'s get to translating this thing.',60811,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2800,470,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation		(id, quest) values (3442, 40551);
 replace into creature_involvedrelation	(id, quest) values (3442, 40551);
@@ -166,7 +166,7 @@ replace into gameobject_template (entry, type, displayid, size, name, flags, scr
 
 -- Another Mystery to Solve
 delete from quest_template where entry = 40556;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40555,40556,2,15,35,30,0,0,'Another Mystery to Solve','Who dug up the grave? Why? Did they take the shield from it?\n\nMore questions, still no answers. You should report back to Captain Garran Vimes.','Go back to Captain Garran Vimes at Theramore Keep with your findings.','Have you found anything?','A dug-up grave of a tauren warrior… Another mystery, another question.\n\nLet me gather my thoughts on this.\n\nSo, $N, you say that he died a long time ago. It is no coincidence. The shield must\'ve been taken from his grave. But... why?\n\nWhy would anyone do this? This doesn\'t make any sense. If someone wanted us to blame the Horde, they could\'ve found a better way to do it for sure...',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40555,40556,2,15,35,30,0,0,'Another Mystery to Solve','Who dug up the grave? Why? Did they take the shield from it?\n\nMore questions, still no answers. You should report back to Captain Garran Vimes.','Go back to Captain Garran Vimes at Theramore Keep with your findings.','Have you found anything?','A dug-up grave of a tauren warrior... Another mystery, another question.\n\nLet me gather my thoughts on this.\n\nSo, $N, you say that he died a long time ago. It is no coincidence. The shield must\'ve been taken from his grave. But... why?\n\nWhy would anyone do this? This doesn\'t make any sense. If someone wanted us to blame the Horde, they could\'ve found a better way to do it for sure...',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,1011,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into gameobject_questrelation	(id, quest) values (2010920, 40556);
 replace into creature_involvedrelation	(id, quest) values (4944, 40556);
@@ -191,10 +191,10 @@ REPLACE INTO creature_template VALUES
 (60388, 328, 0, 0, 0, 0, 'quest_40558_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 -- Additional notes: 
 
--- Upon quest start, spawn NPC Kagoro at the following : Map1, X-3810.79, Y:-2763.20, Z: 34.60, Orientation: 2.394
+-- Upon quest start, spawn NPC Kagoro (4972) at the following : Map1, X-3810.79, Y:-2763.20, Z: 34.60, Orientation: 2.394
 -- Have NPC Falgran Hastil walk towards the following coordinates. : Map1, X:-3809.80, Y:-2759.96, Z:35.37, Orientation : 5.29
 -- As Falgran is walking down, have him say the following line 2 seconds after he starts to move. 
--- F: Remain calm…
+-- F: Remain calm...
 -- (Wait 8 seconds, and begin dialogue in /say.
 -- K: Hail, human. I am Kagoro, scout of the Horde 
 -- (Wait 5 seconds)
@@ -211,13 +211,13 @@ REPLACE INTO creature_template VALUES
 -- (Wait 10 seconds)
 -- F: Do you know how it could've ended up in the inn? We found his grave. It was recently disturbed.
 -- (Wait 6 seconds)
--- K: To disturb the grave of a fallen warrior… I assure you, I know nothing of this.
+-- K: To disturb the grave of a fallen warrior... I assure you, I know nothing of this.
 -- (Wait 5 seconds)
 -- F: It seems like someone wanted to make us blame you for the burning of the inn.
 -- (Wait 7 seconds)
 -- K: Indeed. Have you found anything else in the investigation?
 -- (Wait 6 seconds)
--- F: Yes, quillboar footprints…
+-- F: Yes, quillboar footprints...
 -- (Wait 4 seconds)
 -- K: False lead.
 -- (Wait 3 seconds)
@@ -227,17 +227,17 @@ REPLACE INTO creature_template VALUES
 -- (Wait 3 seconds)
 -- F: And the badge of one of the deserters. Paval Reethe. We couldn't find Reethe, though. Have you seen him, by any chance?
 -- (Wait 8 seconds)
--- K: This is… a delicate matter, and the actual reason I called for the meeting. Paval Reethe is dead.
+-- K: This is... a delicate matter, and the actual reason I called for the meeting. Paval Reethe is dead.
 -- (Wait 7 seconds)
 -- F: He was a deserter. While I still would've preferred to arrest him and allow for a just trial, I understand that you killed him. We do not blame you.
 -- (Wait 9 seconds)
--- K: If it only was that simple. We knew he was connected to the burning of the inn, and we wanted to investigate him. Before he could talk… we were attacked. By Theramore soldiers. One of them bore the name Caldwell.
+-- K: If it only was that simple. We knew he was connected to the burning of the inn, and we wanted to investigate him. Before he could talk... we were attacked. By Theramore soldiers. One of them bore the name Caldwell.
 -- (Wait 10 seconds)
--- F: Attacked? Unprovoked, by Theramore soldiers? I swear to the Light, orc. If you are lying…
+-- F: Attacked? Unprovoked, by Theramore soldiers? I swear to the Light, orc. If you are lying...
 -- (Wait 6 seconds)
 -- K: I swear upon my ancestors and my warchief. They killed him in cold blood. Quick arrow pierced his heart. We also barely made it out alive.
 -- (Wait 8 seconds)
--- F: Theramore soldiers would never… We shall investigate this. But if we find out that your words aren't true…
+-- F: Theramore soldiers would never... We shall investigate this. But if we find out that your words aren't true...
 -- (Wait 5 seconds)
 -- K: I am sorry for the loss of your comrades. While you investigate this, we shall follow another lead we have. Black dragonflight.
 -- (Wait 8 seconds)
@@ -273,3 +273,27 @@ replace into gameobject_loot_template values
 (2010921,60812,-100,0,1,1,0),
 (2010921,60813,-100,0,1,1,0),
 (2010922,60814,-100,0,1,1,0);
+
+-- The Betrayal from Within
+delete from quest_template where entry = 40560;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40559,40560,2,15,35,30,0,0,'The Betrayal from Within','So it is true. My soldiers, whomst I thought as most loyal, were actually deserters. I wonder how many more hide in our midst.\n\nBut for now, let\'s gather the information. Caldwell and Hallan were deserters. They killed Paval Reethe, when he was questioned by the Horde. Did they do it just to spite the Horde, or... He knew something...\n\nOnce again, our findings lead us to the deserters in the swamp. Well, I doubt that we could make them talk. They hate us, maybe even more than they hate the Horde. Any mindless attack on their abode will not provide us with answers.\n\nWe need to turn to magic. Forbidden magic. If we had something that belonged to Paval Reethe, we could commune with his spirit. It is a dangerous practice, many would even consider it unethical.\n\nThe ends justify the means. And fortunately, we have his badge. Since he passed recently with unfinished business, his spirit may still be in Azeroth.\n\nGo to the Mage Tower here and explain the situation to Magus Halister.','Speak with Magus Halisterat the tower of Theramore Isle in Dustwallow Marsh.','I studied the Arcane Arts for decades. Yet I always craved... Something more.','The Ritual of Divination. Yes, I am able to perform it. But be wary, $r. It is extremely dangerous for the spirit, and for the caster.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,350,1011,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4944 , 40560);
+replace into creature_involvedrelation	(id, quest) values (60731, 40560);
+
+-- Preparation for Divination
+delete from quest_template where entry = 40561;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40560,40561,2,15,35,30,0,0,'Preparation for Divination','Very well. If it is Captain Vimes wish... who am I to say no. But, if we are to make the ritual as safe as possible to the spirit, and to us, I will need some rare ingredients. Your best bet would be buying them in Dalaran, if, well, it still existed.\n\nI have heard rumors that Kirin Tor is trying to rebuild the magical city, so if you don\'t mind traveling... Maybe they have some ingredients needed. The rest can be found in these swamps, if you have a keen eye.\n\nI need 1 Arcane Resonator from Dalaran, 3 Moonstones and 10 Swamp Ooze Ichors. I heard reports of ooze abominations in the south.','Bring 1 Arcane Resonator, 3 Moonstones and 10 Swamp Ooze Ichors to Magus Halister at Theramore Isle in Dustwallow Marsh.','Back from Dalaran already?','Ah, the Arcane Resonator. I thought this technology to be lost when Archimonde crushed Dalaran. Fortunately, Kirin Tor is tougher than I expected.\n\nShall we begin?',60815,1,1705,3,60816,10,0,0,0,0,0,0,0,0,0,0,0,0,0,2750,1011,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60731, 40561);
+replace into creature_involvedrelation	(id, quest) values (60731, 40561);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60815,31205,'Arcane Resonator',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60816,3663,'Swamp Ooze Ichor',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(4391,60816,-85,0,1,1,0),
+(4392,60816,-90,0,1,1,0),
+(4393,60816,-90,0,1,1,0);
+
