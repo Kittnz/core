@@ -284,11 +284,11 @@ void AnticheatLib::OfferExtrapolationData(
             str << "Start: (" << i.start.pos.x << ", " << i.start.pos.y << ", " << i.start.pos.z
                 << ") o: " << i.start.pos.o << " pitch: " << i.start.s_pitch << " flags: 0x"
                 << std::hex << i.start.moveFlags << std::dec << " Speed 1: " << i.speed1 << " Speed 2: " << i.speed2
-                << " Client time: " << i.start.ctime << " Server time: " << i.start.time << "\n"
+                << " Client time: " << i.start.ctime << " Server time: " << i.start.stime << "\n"
                 << "Their end: (" << i.theirEnd.pos.x << ", " << i.theirEnd.pos.y << ", " << i.theirEnd.pos.z
                 << ") o: " << i.theirEnd.pos.o << " pitch: " << i.theirEnd.s_pitch << " flags: 0x"
                 << std::hex << i.theirEnd.moveFlags << std::dec
-                << " Client time: " << i.theirEnd.ctime << " Server time: " << i.theirEnd.time << "\n"
+                << " Client time: " << i.theirEnd.ctime << " Server time: " << i.theirEnd.stime << "\n"
                 << "Extrapolated end position: (" << i.extrapEnd.x << ", " << i.extrapEnd.y << ", " << i.extrapEnd.z
                 << ") o: " << i.extrapEnd.o << "\n"
                 << "Error distance: " << i.errorDistance << "\n";
