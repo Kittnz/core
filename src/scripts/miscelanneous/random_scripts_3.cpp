@@ -3725,6 +3725,7 @@ bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatu
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         pCreature->MonsterSay("Oh yes, a sizable force moved here recently... Very recently. They are the Grimtotem Tauren, though. At odds with the horde, as far as I am concerned. Good. Let them fight among themselves.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60385))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
@@ -3732,6 +3733,7 @@ bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatu
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
         pCreature->MonsterSay("A Tauren? Well, I haven't seen any in a long time here. I heard something about Grimtotem in the north? You could have greater success asking closer to the Brackenwall Village. Maybe they know of some Tauren newcomers.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60386))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
@@ -3739,6 +3741,7 @@ bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatu
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
     {
         pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side during… the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60387))
             pPlayer->KilledMonster(cInfo, ObjectGuid());
     }
@@ -3747,9 +3750,65 @@ bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreatu
     return true;
 }
 
+bool GossipHello_npc_bert_mano(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40567) == QUEST_STATUS_INCOMPLETE) // Sleepwalking at Day
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, your wife seems to think she has evidence of you with another woman.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pPlayer->GetQuestStatus(40571) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F) && !pPlayer->FindNearestCreature(60954, 40.0F)) // Strange Bedfellows
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Present the Felbound Pendant.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(52017, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_bert_mano(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30035, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60391))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (pPlayer->FindNearestCreature(52017, 40.0F))
+        {
+            pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 0.06 * MINUTE * IN_MILLISECONDS);
+
+            pCreature->MonsterSay("Oh, you will regret doing that, Dear.");
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->SummonCreature(60954, pCreature->GetPositionX() + 2, pCreature->GetPositionY() + 2, pCreature->GetPositionZ() + 2, pCreature->GetOrientation() + 3.14, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0.1 * MINUTE * IN_MILLISECONDS);
+                }, 3000);
+
+        }
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_bert_mano";
+    newscript->pGossipHello = &GossipHello_npc_bert_mano;
+    newscript->pGossipSelect = &GossipSelect_npc_bert_mano;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_private_q_shields_owner";
