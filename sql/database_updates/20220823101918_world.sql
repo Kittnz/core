@@ -386,11 +386,11 @@ REPLACE INTO creature_template VALUES
 -- (Wait 7 seconds)
 -- F: Through the power of magic, of course. Arts of Divination. We communed with the spirit of Paval Reethe.
 -- (Wait 8 seconds)
--- K: Extraordinary. Incredible sorcery, as always. But… why? Why did they burn the inn? 
+-- K: Extraordinary. Incredible sorcery, as always. But... why? Why did they burn the inn? 
 -- (Wait 6 seconds)
--- F: Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed… something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.
+-- F: Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed... something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.
 -- (Wait 13 seconds)
--- K: The shield… Yes, it makes sense.
+-- K: The shield... Yes, it makes sense.
 -- (Wait 3 seconds)
 -- F: Paval Reethe wanted to stop them. He may have been a deserter, but he had some of his honor still left in his heart.
 -- (Wait 8 seconds)
@@ -398,7 +398,7 @@ REPLACE INTO creature_template VALUES
 -- (Wait 7 seconds)
 -- F: About this, we are not sure. Something about the Vengeful Mariner, their rumored true leader. Have you heard about him?
 -- (Wait 8 seconds)
--- K: Vengeful Mariner… The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it\'s connected.
+-- K: Vengeful Mariner... The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it\'s connected.
 -- (Wait 8 seconds)
 -- F: We will soon bring justice to the deserters for their crimes, thank you for your information Kagoro, the horde has helped plenty in these lands.
 -- (wait 10 seconds)
@@ -460,3 +460,109 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '75', '0', '0', '0', '0', '44', '0', '0', '0',
  '0', '1', NULL);
 
+-- Sleep Paralysis
+delete from quest_template where entry = 40566;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40566,2,11,21,17,0,0,'Sleep Paralysis','Excuse me, $c!\n\n<The lady seems to force a smile, but her eyes betray a deep fury.>\n\nYou look the gallant sort, the sort to help a poor damsel, yes? I find myself in need of some rather... odd substances. They may even be dangerous to acquire, but looking at you – I think you can certainly handle it. I will even pay some decent coin for your troubles!\n\nI need some poison. But not just any poison. There are spiders in a cave somewhere East of here, that have a very painful bite, even causing brief paralysis. If you could collect for me a few vials of their venom, I would be eternally grateful! Surely you aren\'t afraid of a few little arachnids, no?\n\nAnd what do you mean, why? Are you truly asking a lady her personal business?','Acquire five Leech Stalker Venom samples for Rose Dolohov.','Have you got what I need, or are you just being nosy?','Oh perfect, thank you! This should teach him a lesson. here\'s your silver, now shoo!',60822,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2000,1500,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (52045, 40566);
+replace into creature_involvedrelation	(id, quest) values (52045, 40566);
+
+update creature_template set npc_flags = 3 where entry = 52045;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60822,11980,'Leech Stalker Venom',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(4040,60822,-35,0,1,1,0),
+(1111,60822,-35,0,1,1,0);
+
+-- Sleepwalking at Day
+delete from quest_template where entry = 40567;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40566,40567,2,11,21,18,0,0,'Sleepwalking at Day','Oh, I can\'t do this.\n\n<She sighs loudly and massages her eyes.>\n\nMy fiancé is dog-tired all the time, disappears randomly during the night, and recently I found long black hair on his clothes.\n\nI just can\'t figure out how he could do this to me! But I must be certain. Please, $C, can you go look into this for me? Before I do anything rash. I can\'t even bear to speak to him, never mind go back to our old bedroom. Just find out his damned side of things, and tell me what lies he speaks. Any extra evidence you can find would be good too, I suppose.\n\n<She screws her face up tightly.> He\'s probably avoiding me and pretending to be useful, chopping wood by the lumber mill. Bert Mano is his name.','Speak to Bert Mano in Hawk\'s Vigil, and see where your investigation leads.','Can I help you?','Poison? Wow, this complicates things greatly. We may need to take a more direct approach.',0,0,0,0,0,0,0,0,60391,1,0,0,0,0,0,0,0,0,0,450,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Speak to Bert Mano');
+
+replace into creature_questrelation		(id, quest) values (52045, 40567);
+replace into creature_involvedrelation	(id, quest) values (52039, 40567);
+
+update creature_template set script_name = 'npc_bert_mano' where entry = 52017;
+
+REPLACE INTO creature_template VALUES
+(60391, 328, 0, 0, 0, 0, 'quest_40567_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into broadcast_text (entry, Male_Text) values (30035, 'What? She told this to a stranger? Oh by the light, this is… this is worse than I thought. Please, speak to Marge Blackwood, she is the investigator in this town, and responsible for several cases currently. Speak to her, she will explain it all. Somehow I think I\'m sleeping outside tonight anyhow.');
+replace into npc_text (ID, BroadcastTextID0) values (30035, 30035);
+
+-- Daydreaming at Night
+delete from quest_template where entry = 40568;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40567,40568,2,11,22,18,0,0,'Daydreaming at Night','Okay, okay, I know it looks bad. But Bert has been suffering with sleep paralysis of a very interesting kind, you see. The poor soul has something, and I have my suspicions what, reaching out to him during his dreams. I was skeptical too, until I witnessed it myself while observing him slumber.\n\nI am sure it is a demon! The peasants have countless stories of this sort of thing, but it\'s the first time I\'ve gotten irrefutable evidence of it happening! Regardless, my studies must be put on hold, if his marriage and, if you are correct, his life may be in danger.\n\nThis demon must be either expelled or brought into the physical plane, then killed. Unfortunately, I have very little idea how to do so directly. \n\n But I know who does. I made contact with a shady fellow in Stormwind. He conducts his business from a cabal hidden away in the basement of a tavern there. I do not know which one unfortunately. His name is Gakin the Darkbinder.\n\nPlease, hurry, $C. Bert isn\'t a perfect man, but he doesn\'t deserve this.','Find Gakin the Darkbinder in the basement of a tavern at Stormwind City.','Hmm?','From Hawk\'s Vigil? What a juicy predicament indeed!\n\n<He trails off into a quiet, throaty laughter.>',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (52039, 40568);
+replace into creature_involvedrelation	(id, quest) values (6122 , 40568);
+
+-- Sweet Dreams are Made of This
+delete from quest_template where entry = 40569;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40568,40569,2,11,24,18,0,0,'Sweet Dreams are Made of This','Okay, $R  your first task for me.\n\nWhat, you thought I would do this for free? No, no no! Oh by fel no. In any normal circumstance I would have you killed for stumbling down here, but it just so happens, I need some materials myself, and some of these will also be required to solve your. Predicament.\n\nA connection to the void will be required, plus some sort of tonic that elicits lucid dreaming to bring forth this night-demon of yours, and banish it. My colleagues have whispered about a certain location that may just do the trick!\n\n<He smirks wickedly.> \n\n Fire Scar Shrine. Name ring a bell? I doubt it. You can find it in Ashenvale, south west of Astranaar. There are foul beasts dwelling there, dog-like, ravenous and demonic. I need you to go there, kill them, and bring me their hearts. I will need one for you, but I never, ever work for free. Make it ten.','Go to Fire Scar Shrine in Ashenvale and gather the hearts of the demons described there for Gakin the Darkbinder at the Slaughtered Lamb in Stormwind City.','Have you given up yet?','Well well, look at those beautifully tainted hearts. Perfect. You have done me a great service today, $r. Here... When you feel strong enough, take one of my special creations, a token of thanks.',60823,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1750,0,0,0,0,0,0,0,0,0,0,0,9197,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (6122, 40569);
+replace into creature_involvedrelation	(id, quest) values (6122, 40569);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60823,3320,'Lesser Felguard Heart',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(3772,60823,-85,0,1,1,0);
+
+-- Back to Reality
+delete from quest_template where entry = 40570;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40569,40570,2,11,24,18,0,0,'Back to Reality','You know what? You\'ve actually impressed me, $r. I will consider your payment complete. Take this pendant back with you. It has a powerful tether which will draw demonic energies into our world. Needless to say it is HIGHLY forbidden, so do not show it to anyone but the one who sent you here.','Bring the Felbound Pendant to Marge Blackwood at Hawk\'s Vigil in Wetlands.','You have returned! What news do you bring?','This? This will do what I think it will, yes? Then I think I have one more thing to ask of you, $C.',60824,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60824,1,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (6122 , 40570);
+replace into creature_involvedrelation	(id, quest) values (52039, 40570);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60824,32073,'Felbound Pendant',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Strange Bedfellows
+delete from quest_template where entry = 40571;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40570,40571,2,11,25,18,0,0,'Strange Bedfellows','This is it. If you have any friends who can work discreetly, I suggest you contact them now.\n\nThe energy will be strongest either around Bert himself or where he sleeps. Hold out the pendant and see if it reacts. Hopefully, this will give you the opportunity to confront this demon and put an end to the torment.\n\nYou should probably take some evidence of its existence once you kill it, too, you know. So he can prove his situation and resolve the troubles with his fiance.','Find a way to summon the demon, slay it, and take its head to Bert Mano.','I haven\'t slept a wink. Not only with this damn evil presence, but my wife kicked me out the house too!','By the light, what is that! This is what tormented me for months? I... I think I remember those eyes, yes.\n\nAs much as it pains me to do so, I must show this to Rose. There is no other way to prove what she means to me, that I would never do what she thinks I did!\n\nAnd your name, friend? Ah, thank you $N.',60825,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,2500,72,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60826,1,60827,1,60828,1,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (52039, 40571);
+replace into creature_involvedrelation	(id, quest) values (52017, 40571);
+
+update quest_template set type = 1 where entry = 40571;
+update creature_template set npc_flags = 3 where entry = 52017;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60825,4777,'Hedania\'s Heart',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(60954,60825,-100,0,1,1,0);
+
+replace into item_template values
+ ('60826', '4', '0', 'Discarded Engagement Ring', '', '224', '2', '0', '1', '6240', '1560', '11', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '2', '5', '3',
+ '6', '5', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '4', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60827', '4', '1', 'Satin Blindfold', '', '12537', '2', '0', '1', '4412', '1103', '1', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '34', '0', '0', '0',
+ '0', '0', '0', '7676', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '45', '0', '0', '0', '0', '4', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60828', '2', '15', 'Jeweled Letter Opener', '', '6460', '2', '0', '1', '8352', '2088', '13', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '2', '3', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1800', '0',
+ '0', '15', '34', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '45', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
