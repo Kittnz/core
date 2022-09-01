@@ -54,10 +54,6 @@ ScriptMgr::ScriptMgr() : m_scheduledScripts(0)
 
 ScriptMgr::~ScriptMgr()
 {
-    // Free resources before library unload
-    for (const auto& script : m_NPC_scripts)
-        delete script;
-
     m_NPC_scripts.clear();
 
     num_sc_scripts = 0;
