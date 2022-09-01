@@ -129,6 +129,8 @@ enum ChallengeSpells
     SPELL_HARDCORE = 50001
 };
 
+constexpr uint32 LoreKeeperQuestRequirement = 1700;
+
 typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 
 // Spell modifier (used to modify other spells)
@@ -2722,7 +2724,6 @@ public:
         void ChangeTitle(uint8 title);
         void UpdateAppearance();
         bool HasAllZonesExplored();
-        bool HasCompletedManyQuests();
 
 		// General send addon message
 	public:
