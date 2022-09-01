@@ -792,7 +792,7 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (pCurrChar->HasAllZonesExplored() && !pCurrChar->HasTitle(TITLE_CARTOGRAPHER))
         pCurrChar->AwardTitle(TITLE_CARTOGRAPHER);
 
-    if (pCurrChar->HasCompletedManyQuests() && !pCurrChar->HasTitle(TITLE_LOREKEEPER))
+    if (pCurrChar->GetTotalQuestCount() >= LoreKeeperQuestRequirement && !pCurrChar->HasTitle(TITLE_LOREKEEPER))
         pCurrChar->AwardTitle(TITLE_LOREKEEPER);
 
     // show time before shutdown if shutdown planned.
