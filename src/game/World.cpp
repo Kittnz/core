@@ -108,6 +108,8 @@ float World::m_VisibleObjectGreyDistance = 0;
 float  World::m_relocation_lower_limit_sq = 10.f * 10.f;
 uint32 World::m_relocation_ai_notify_delay = 1000u;
 
+using namespace std::literals::chrono_literals;
+
 void LoadGameObjectModelList();
 
 World sWorld;
@@ -1212,16 +1214,32 @@ void autoCommitWorkerThread()
     }
 }
 
+constexpr uint32 MailReturnDelay = 30 * MINUTE * IN_MILLISECONDS;
+
 void charactersDatabaseWorkerThread()
 {
+    static uint32 returnDelay = MailReturnDelay;
+    static uint32 currentMs = WorldTimer::getMSTime();
+
     CharacterDatabase.ThreadStart();
     while (!sWorld.IsStopped())
     {
-        std::this_thread::sleep_for(std::chrono::minutes(30));
+        std::this_thread::sleep_for(5s);
         if (CharacterDatabase.HasAsyncQuery())
             continue;
+
+        uint32 diff = WorldTimer::getMSTimeDiffToNow(currentMs);
+        currentMs = WorldTimer::getMSTime();
+        
+        if (returnDelay >= diff)
+        {
+            returnDelay -= diff;
+            continue;
+        }
+
         Player::DeleteOldCharacters();
         sObjectMgr.ReturnOrDeleteOldMails(true);
+        returnDelay = MailReturnDelay;
     }
     CharacterDatabase.ThreadEnd();
 }
