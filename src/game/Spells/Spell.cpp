@@ -1389,7 +1389,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         pCaster->DealSpellDamage(&damageInfo, true);
 
         // Courroux Naturel a 20% de chance de faire proc WF.
-        if (m_spellInfo->Id == 17364 && pCaster->IsPlayer())
+        if ((m_spellInfo->Id == 17364 || m_spellInfo->Id == 45521) && pCaster->IsPlayer())
         {
             Player* pPlayer = pCaster->ToPlayer();
             Item *item = pPlayer->GetWeaponForAttack(BASE_ATTACK, true, true);

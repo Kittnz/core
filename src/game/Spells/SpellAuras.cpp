@@ -7873,7 +7873,8 @@ void SpellAuraHolder::CalculateForDebuffLimit()
     case 15326: // Blackout (Rank 5)
     case 15407: // Mind Flay
     case 16922: // Starfire Stun
-    case 17364: // Stormstrike
+    case 17364: // Stormstrike (Rank 1)
+    case 45521: // Stormstrike (Rank 2);
     case 16914: // Hurricane
     case 17794: // Shadow Vulnerability (Rank 1)
     case 17798: // Shadow Vulnerability (Rank 2)
