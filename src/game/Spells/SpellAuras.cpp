@@ -257,7 +257,8 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraModUseNormalSpeed,                     //191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
     // Nostalrius - custom
     &Aura::HandleAuraAuraSpell,
-    &Aura::HandleNoImmediateEffect,                         //193 SPELL_AURA_SPLIT_DAMAGE_PCT       implemented in Unit::CalculateAbsorbAndResist
+    &Aura::HandleNoImmediateEffect,                         //193 SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT       implemented in Unit::CalculateAbsorbAndResist
+    &Aura::HandleNoImmediateEffect,                         //194 SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN implemented in Unit::MeleeDamageBonusTaken and Unit::SpellDamageBonusTaken
 };
 
 static AuraType const frozenAuraTypes[] = { SPELL_AURA_MOD_ROOT, SPELL_AURA_MOD_STUN, SPELL_AURA_NONE };
