@@ -107,3 +107,16 @@ REPLACE INTO `gameobject` VALUES ( 5009677, 2003816, 1, -4585.8, -1806.75, 86.12
 REPLACE INTO `gameobject` VALUES ( 5009677, 2003816, 1, -4585.8, -1806.55, 86.1279, 1.52756, 0, 0, 0.691657, 0.722226, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5009677, 2003816, 1, -4585.8, -1806.75, 86.1279, 1.52756, 0, 0, 0.691657, 0.722226, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5009677, 2003816, 1, -4585.8, -1806.95, 86.1279, 1.52756, 0, 0, 0.691657, 0.722226, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5009678, 2003814, 1, -4588.03, -1807.03, 86.1272, 1.71606, 0, 0, 0.756555, 0.65393, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5009678, 2003814, 1, -4588.03, -1807.03, 86.1272, 2.23599, 0, 0, 0.899225, 0.437486, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5009678';
+DELETE FROM game_event_gameobject WHERE guid = '5009678';
+DELETE FROM gameobject_battleground WHERE guid = '5009678';
+REPLACE INTO `gameobject` VALUES ( 5009679, 2003814, 1, -4588.06, -1807.76, 86.1255, 4.24425, 0, 0, 0.851828, -0.523821, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5009679';
+DELETE FROM game_event_gameobject WHERE guid = '5009679';
+DELETE FROM gameobject_battleground WHERE guid = '5009679';
+REPLACE INTO `gameobject` VALUES ( 5009680, 2003814, 1, -4591.1, -1807.08, 86.1064, 1.83936, 0, 0, 0.795409, 0.606073, 300, 300, 100, 1, 0, 0);
+UPDATE creature SET position_x = '-4599.073730', position_y = '-1824.682495', position_z = '86.086601', orientation = '2.527374' WHERE guid = '2572303';
+UPDATE creature SET position_x = '-4599.788574', position_y = '-1824.178223', position_z = '86.074821', orientation = '2.527374' WHERE guid = '2572303';
+UPDATE creature SET position_x = '-4597.035645', position_y = '-1817.389526', position_z = '86.036354', orientation = '2.382076' WHERE guid = '2572307';
