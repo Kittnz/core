@@ -753,7 +753,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     }
     //Get in CombatState
     if ((pVictim != this) && (damagetype != DOT || (spellProto && spellProto->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))) &&
-       (!spellProto || !spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD)))
+       (!spellProto || (!spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD) && !spellProto->HasAttribute(SPELL_ATTR_EX_NO_THREAT))))
     {
         SetInCombatWithVictim(pVictim);
         pVictim->SetInCombatWithAggressor(this);
