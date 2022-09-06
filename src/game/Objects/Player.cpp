@@ -6774,18 +6774,9 @@ int32 Player::CalculateReputationGain(ReputationSource source, int32 rep, int32 
     {
         case REPUTATION_SOURCE_KILL:
             rate = sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_KILL);
-            // Ustaag <Nostalrius> : a priori, deja gere ailleurs... deque le mob est gris, la reput est divisee par 5.
-            /*if (MaNGOS::XP::GetGrayLevel(GetLevel()) >= creatureOrQuestLevel)
-                diffLvl = MaNGOS::XP::GetGrayLevel(GetLevel()) - creatureOrQuestLevel;
-            else
-                diffLvl = 0;*/
             break;
         case REPUTATION_SOURCE_QUEST:
             rate = sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_QUEST);
-            if (GetLevel() >= creatureOrQuestLevel + 25)  // Turtle WoW Custom, default is 5 levels of difference.
-                diffLvl = GetLevel() - creatureOrQuestLevel - 25;
-            else
-                diffLvl = 0;
             break;
         case REPUTATION_SOURCE_SPELL:
         default:
