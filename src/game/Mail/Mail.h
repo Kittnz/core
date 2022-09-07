@@ -92,9 +92,10 @@ enum MailStationery
  */
 enum MailState
 {
-    MAIL_STATE_UNCHANGED = 1,
-    MAIL_STATE_CHANGED   = 2,
-    MAIL_STATE_DELETED   = 3
+    MAIL_STATE_UNCHANGED   = 1,
+    MAIL_STATE_CHANGED     = 2,
+    MAIL_STATE_DELETED     = 3,
+    MAIL_STATE_HARD_DELETE = 4
 };
 /**
  * Answers contained in mails from auctionhouses.
@@ -323,7 +324,7 @@ struct Mail
     /// The time at which this mail was read.
     uint32 checked;
     /// The state of this mail.
-    MailState state;
+    MailState state = MAIL_STATE_UNCHANGED;
 
     /**
      * Adds an item to the mail.
