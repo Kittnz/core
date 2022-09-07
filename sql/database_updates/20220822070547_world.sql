@@ -1723,7 +1723,7 @@ REPLACE INTO creature_template VALUES
 (60940, 18936, 0, 0, 0, 0, 'Deserter Turncoat', 'Daelin\'s Brigade', 0, 40, 42, 1902, 1981, 0, 0, 3420, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 101, 0, 172, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.9344, 85.1598, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 74, 102, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60941, 18937, 0, 0, 0, 0, 'Sellick Voss', 'Daelin\'s Brigade', 0, 43, 43, 5148, 5148, 0, 0, 2414, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 153, 203, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.8462, 82.5551, 122, 7, 0, 60941, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_sellick_voss'),
 (60942, 18930, 18931, 0, 0, 0, 'Blackhorn Mystic', '', 0, 36, 37, 1468, 1536, 1631, 1631, 1480, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60943, 18932, 18933, 0, 0, 0, 'Blackhorn Warrior', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60943, 18932, 18933, 0, 0, 0, 'Blackhorn Warrior', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60944, 18938, 0, 0, 0, 0, 'Targos Hatewind', '', 0, 41, 41, 1981, 1981, 0, 0, 2397, 16, 0, 1, 1.14286, 1.45, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60945, 10584, 0, 0, 0, 0, 'Asza', '', 0, 32, 32, 1743, 1743, 0, 0, 1304, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 50, 70, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60946, 15984, 0, 0, 0, 0, 'Murloc Tadpole', '', 0, 10, 10, 198, 198, 0, 0, 455, 35, 3, 1, 1.14286, 0.5, 20, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -2183,3 +2183,255 @@ REPLACE INTO creature_loot_template VALUES (60941, 30072, 0.5, 0, -30072, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60941, 30073, 0.0025, 0, -30073, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60941, 30074, 0.01, 0, -30074, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60941, 30075, 0.0025, 0, -30075, 1, 0);
+-- Gelweg Darkbrow, display ID 18906, faction 35, level 46, humanoid, weapon 5291, vendor/quest/greeting flags, greeting text : "The desert be rife with opportunities, and chances to gain a little coin. I represent some interests across the ocean that are looking for rare and unique goods.\n\nPerhaps we can help eachother out, aye?\n\nOh, and uh, if you're looking for some cheddar, I got a bunch of it, they took my letter way too seriously." (Sells Fine Aged Cheddar)
+-- Curator Fizwhizzle, display ID 16023, faction 474, level 50, humanoid, no weapon, quest/greeting flags, greeting text: Hello there, and welcome to the Steamwheedle Art Museum, make yourself right at home, and enjoy a few fine works from the community. (This npc needs a clickable box that says the following "Tell me more about the Art Museum.", when clicked, he will open the following pagetext : Ahem, I've been told to read this out to anyone inquiring further, some if it might make no sense, at least it doesn't to me, so here we go...\n\n "The Art located here is created by players on the server, and is a community outlet to host more in the future, the museum may expand or grow depending on contributions made! We would like to thank each and every person who has contributed or submitted such fabulous artwork. ~ Turtle Staff"\n\n See, it doesn't make much sense to me either.
+-- Baggle Hackrust, display ID 7157, faction 474, level 44, humanoid, no weapon, quest flags
+-- Ginlo Taxxo , display ID 7164, faction 474, level 49, humanoid, no weapon, quest flags
+-- Technician Tixx, display ID 7109, level 25, faction 1682, weapon : 5956 ((IN THE MINING ANIMATION))
+-- Technician Steelbolt, display ID 7192, level 25, faction 1682, quest/greeting flags, greeting text : "Can you believe the luck, the only two shredders we had working out in this neck of the woods went and broke down!\n\n Now I'm stuck here repairing with hardly any parts to speak of." ((THIS NPC NEEDS TO BE IN THE USE/CRAFT ANIMATION))
+-- Head Technician Klazfit , display ID 7179, level 45, faction 1682, quest/greeting flags, greeting text : "I got sent from Sparkwater to look after this place, We got a lot of projects on the go around here, and us technician's make sure all the parts keep in working order.\n\n Anyway, what can I do for you?"
+-- Fusemaster Blammo, display ID 7338, level 50, faction 1682, humanoid, quest/greeting flags, greeting text : "Boy howdy, have you ever seen anything so magnificient, so beautiful? This baby could blow a crater the size of Sparkwater wherever we light this fuse, and its my job to make sure we don't blow ourselves into smithereens!\n\n Oh, I anticipate the day Nazz gives the thumbs up to use this thing, it'll be the greatest explosion ever seen on Azeroth!"
+-- Salrog, display ID 3744, level 36, faction 29, humanoid, quest flags, weapon : 11762
+-- Artemus Halloway, display ID 4107, faction 68 , humanoid,  quest/greeting flags, greeting text : "This is the last place I thought I would end up, believe me, but the goblins spend well, and I have business here."
+-- Shali Nosewrench <Trade Supplies> , display ID 10745, level 25, faction 1682, humanoid, VENDOR FLAGS, ((SELLS TRADE SUPPLIES))
+-- Tanzig Wexlight <General Goods>, display ID 7058, level 25, faction 1682, humanoid, VENDOR FLAGS ((SELLS GENERAL GOODS))
+-- Gig Xevno <Local Drunk>, display ID 7051, level 21, faction 1682, humanoid, greeting flags, greeting text : "Move it on pal, before you get me angry."
+-- Treenza Fastfeet, display ID 11388, level 39, faction 1682, humanoid, quest/greeting flags, greeting text : "Hope you're enjoying the town, its much better to be working with the Durotar Labor Union then those goons at Venture Co."
+-- Neekik Wazfinger <Innkeeper> , display ID 7130, level 22, faction 1682, humanoid, greeting flags, greeting text : "Welcome to Powder Town, hope you find whatever you're looking for here, or are just around to help out, make yourself comfortable." ((IS AN INNKEEPER))
+-- Security Officer Mort Tozzlefume, display ID 7171, level 55, faction 1682, humanoid, greeting/quest flags, weapon : 10761, greeting text : "Why hello there, I got problems that need fixed, you look like someone that might be able to fix problems.\n\n Perhaps there is something we can do to help eachother out yeah?"
+-- Powder Town Bruiser, display ID 11377, level 55, faction 1682, humanoid, weapon1 : 7945, weapon2 : 11586 ((IS A GUARD))
+-- Bogpaw Truthsay, display ID 3197, level 22, faction 35, humanoid, scale 1 weapon: 35, quest/greeting flags, greeting text : "You help-help us yes? Bogpaw see that you help us with many problem-problem!"
+-- Dagdag Mossbelt, display ID 714, level 19, faction 35, humanoid, scale 1.1, weapon 8196, quest/greeting flags : "No cause-cause trouble or me cut you!\n\n Me cut good, me cut best!"
+-- Ikk-ikk Fenfur <Leatherworking Supplies>, display ID 714, level 20, faction 35 , humanoid, scale 1.2, weapon 5956, vendor/repair flags ((SELLS LEATHERWORKING SUPPLIES))
+-- Rekk , display ID 714, level 8, faction 35, humanoid, scale 0.7, weapon 6256, vendor, ((SELLS Raw Bristle Whisker Catfish (6308))
+-- Muckhowl , display ID 714, level 9, faction 35, humanoid, scale 0.8, quest/greeting flags, greeting text : "You there, yes yes, I come from swamp called wetlands, you heard of yes yes?\n\n Big leader Gowlfang used to stay here, look for help help, but now he is fighting to become leader of Mosshide!\n\n I here to help guide people to him."
+-- NPC Gowlfang, make level 26 elite, equip with weapon1: 15231, change greeting text to the following : "Yes yes? What does $R want with Gowlfang?\n\n Gowlfang returns to Wetlands, Gowlfang be big-big leader here, and will reunite Mosshide yes yes!\n\n Gowlfang make strong tribe of gnoll-gnoll and you help-help!\n\n We do good yes yes!"
+REPLACE INTO creature_template VALUES
+(60955, 18906, 0, 0, 0, 0, 'Gelweg Darkbrow', NULL, 0, 46, 46, 2398, 2398, 0, 0, 2780, 35, 7, 1, 1.14286, 0, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '0'),
+(60956, 16023, 0, 0, 0, 0, 'Curator Fizwhizzle', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 474, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60957, 7157, 0, 0, 0, 0, 'Baggle Hackrust', NULL, 0, 44, 44, 2117, 2117, 0, 0, 2625, 474, 2, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60958, 7164, 0, 0, 0, 0, 'Ginlo Taxxo', NULL, 0, 49, 49, 2672, 2672, 0, 0, 2944, 474, 2, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 98, 133, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60959, 7109, 0, 0, 0, 0, 'Technician Tixx', NULL, 0, 25, 25, 712, 712, 0, 0, 1026, 1682, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 34, 50, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60960, 7192, 0, 0, 0, 0, 'Technician Steelbolt', NULL, 0, 25, 25, 712, 712, 0, 0, 1026, 1682, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 34, 50, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60961, 7179, 0, 0, 0, 0, 'Head Technician Klazfit', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 1682, 3, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60962, 7338, 0, 0, 0, 0, 'Fusemaster Blammo', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 1682, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60963, 3744, 0, 0, 0, 0, 'Salrog', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1480, 29, 2, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60964, 4107, 0, 0, 0, 0, 'Artemus Halloway', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1480, 68, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60965, 10745, 0, 0, 0, 0, 'Shali Nosewrench', 'Trade Supplies', 0, 25, 25, 712, 712, 0, 0, 1026, 1682, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 34, 50, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60966, 7058, 0, 0, 0, 0, 'Tanzig Wexlight', 'General Goods', 0, 25, 25, 712, 712, 0, 0, 1026, 1682, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 34, 50, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60967, 7051, 0, 0, 0, 0, 'Gig Xevno', 'Local Drunk', 0, 21, 21, 547, 547, 0, 0, 872, 1682, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 27, 34, 0, 94, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 34, 49, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60968, 11388, 0, 0, 0, 0, 'Treenza Fastfeet', NULL, 0, 39, 39, 1677, 1677, 0, 0, 1834, 1682, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60969, 7130, 0, 0, 0, 0, 'Neekik Wazfinger', 'Innkeeper', 0, 22, 22, 573, 573, 0, 0, 922, 1682, 133, 1, 1.14286, 0, 18, 5, 0, 0, 1, 70, 86, 0, 98, 1, 2500, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 42, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60970, 7171, 0, 0, 0, 0, 'Security Officer Mort Tozzlefume', NULL, 0, 55, 55, 3398, 3398, 0, 0, 4500, 1682, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 141, 170, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60971, 11377, 0, 0, 0, 0, 'Powder Town Bruiser', NULL, 0, 55, 55, 3398, 3398, 0, 0, 4500, 1682, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 141, 170, 0, 248, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 1, 714, 'EventAI', 0, 1, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60972, 3197, 0, 0, 0, 0, 'Bogpaw Truthsay', NULL, 0, 22, 22, 573, 573, 0, 0, 922, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 70, 86, 0, 98, 1, 2500, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 42, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60973, 714, 0, 0, 0, 0, 'Dagdag Mossbelt', NULL, 0, 19, 19, 510, 510, 0, 0, 765, 35, 3, 1, 1.14286, 1.1, 20, 5, 0, 0, 1, 36, 44, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 21, 32, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60974, 714, 0, 0, 0, 0, 'Ikk-ikk Fenfur', 'Leatherworking Supplies', 0, 20, 20, 580, 580, 2000, 2000, 852, 35, 16388, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 37, 45, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 32.8944, 45.2298, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 27, 40, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60975, 714, 0, 0, 0, 0, 'Rekk', NULL, 0, 8, 8, 170, 170, 0, 0, 406, 35, 4, 1, 1.14286, 0.7, 20, 5, 0, 0, 1, 11, 15, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.2064, 20.9088, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60976, 714, 0, 0, 0, 0, 'Shagu', NULL, 0, 9, 9, 176, 176, 0, 0, 20, 35, 3, 1, 1.14286, 0.8, 18, 5, 0, 0, 1, 9, 13, 0, 60, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.2064, 20.9088, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'eventai', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(91243, 3199, 0, 0, 0, 0, 'Gowlfang', '', 60018, 26, 26, 2250, 2250, 0, 0, 1574, 1682, 3, 1, 1.14286, 1.3, 20, 5, 0, 1, 1, 129, 166, 0, 110, 1, 2000, 2000, 1, 512, 0, 0, 0, 0, 0, 0, 35.1008, 48.2636, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 139, 186, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 10, 0, '');
+
+set @equip_template = 20208; set @weapon_1 = 15231; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 91243;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20207; set @weapon_1 = 6256; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60975;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20206; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60974;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20205; set @weapon_1 = 8196; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60973;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20204; set @weapon_1 = 35; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60972;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20203; set @weapon_1 = 7945; set @weapon_2 = 11586; set @weapon_3 = 0; set @creature = 60971;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20202; set @weapon_1 = 10761; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60970;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20201; set @weapon_1 = 11762; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60963;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20200; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60959;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20199; set @weapon_1 = 5291; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60955;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41227; set @magic_number = 60976;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You there, yes yes, I come from swamp called wetlands, you heard of yes yes?\n\nBig leader Gowlfang used to stay here, look for help help, but now he is fighting to become leader of Mosshide!\n\nI here to help guide people to him.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41226; set @magic_number = 60973;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'No cause-cause trouble or me cut you!\n\nMe cut good, me cut best!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41225; set @magic_number = 60972;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You help-help us yes? Bogpaw see that you help us with many problem-problem!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41224; set @magic_number = 60970;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why hello there, I got problems that need fixed, you look like someone that might be able to fix problems.\n\nPerhaps there is something we can do to help eachother out yeah?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41223; set @magic_number = 60969;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Powder Town, hope you find whatever you\'re looking for here, or are just around to help out, make yourself comfortable.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41222; set @magic_number = 60968;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hope you\'re enjoying the town, its much better to be working with the Durotar Labor Union then those goons at Venture Co.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41221; set @magic_number = 60967;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Move it on pal, before you get me angry.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41220; set @magic_number = 60964;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'This is the last place I thought I would end up, believe me, but the goblins spend well, and I have business here.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41219; set @magic_number = 60962;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Boy howdy, have you ever seen anything so magnificient, so beautiful? This baby could blow a crater the size of Sparkwater wherever we light this fuse, and its my job to make sure we don\'t blow ourselves into smithereens!\n\nOh, I anticipate the day Nazz gives the thumbs up to use this thing, it\'ll be the greatest explosion ever seen on Azeroth!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41218; set @magic_number = 60961;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I got sent from Sparkwater to look after this place, We got a lot of projects on the go around here, and us technician\'s make sure all the parts keep in working order.\n\nAnyway, what can I do for you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41217; set @magic_number = 60960;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Can you believe the luck, the only two shredders we had working out in this neck of the woods went and broke down!\n\nNow I\'m stuck here repairing with hardly any parts to speak of.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41215; set @magic_number = 60956;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hello there, and welcome to the Steamwheedle Art Museum, make yourself right at home, and enjoy a few fine works from the community.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41216, 609560, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30036, 'Ahem, I\'ve been told to read this out to anyone inquiring further, some if it might make no sense, at least it doesn\'t to me, so here we go...\n\n"The Art located here is created by players on the server, and is a community outlet to host more in the future, the museum may expand or grow depending on contributions made! We would like to thank each and every person who has contributed or submitted such fabulous artwork. ~ Turtle Staff"\n\nSee, it doesn\'t make much sense to me either.');
+replace into npc_text (ID, BroadcastTextID0) values (609560, 30036);
+
+REPLACE INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (41215, 4, 0, 'Tell me more about the Art Museum.', 0, 1, 3, 41216, 0, 0, 0, 0, '', 0, 0);
+
+set @gossip_menu_id = 41214; set @magic_number = 60955;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Gelweg Darkbrow, display ID 18906, faction 35, level 46, humanoid, weapon 5291, vendor/quest/greeting flags, greeting text : "The desert be rife with opportunities, and chances to gain a little coin. I represent some interests across the ocean that are looking for rare and unique goods.\n\nPerhaps we can help eachother out, aye?\n\nOh, and uh, if you\'re looking for some cheddar, I got a bunch of it, they took my letter way too seriously.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+REPLACE INTO broadcast_text VALUES (91243, 'Yes yes? What does $R want with Gowlfang?\n\nGowlfang returns to Wetlands, Gowlfang be big-big leader here, and will reunite Mosshide yes yes!\n\nGowlfang make strong tribe of gnoll-gnoll and you help-help!\n\nWe do good yes yes!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- Rekk
+REPLACE INTO npc_vendor VALUES (60975, 6308, 0, 0, 0, 0);
+-- Ikk-ikk Fenfur
+REPLACE INTO npc_vendor VALUES (60974, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 2325, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 2604, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 2605, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 4291, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 4340, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 4341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 4342, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 6260, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 6261, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 7005, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 8343, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 10290, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 14341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 50231, 0, 0, 0, 0);
+-- Neekik Wazfinger
+REPLACE INTO npc_vendor VALUES (60969, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 414, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 422, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 1707, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 2070, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 3927, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 8766, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 8932, 0, 0, 0, 0);
+-- Tanzig Wexlight
+REPLACE INTO npc_vendor VALUES (60966, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 2515, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 2519, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 2946, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 3030, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 3033, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 3107, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 3108, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 3131, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 3135, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 3137, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 4470, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 4471, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 4497, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 4498, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 6183, 0, 0, 0, 0);
+-- Gelweg Darkbrow
+REPLACE INTO npc_vendor VALUES (60955, 3927, 0, 0, 0, 0);
+-- Shali Nosewrench
+REPLACE INTO npc_vendor VALUES (60965, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 2324, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 2678, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 2692, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 3371, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 3372, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 3466, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 3713, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 3857, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 4291, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 4399, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 4400, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 6217, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 6530, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 6532, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 50231, 0, 0, 0, 0);
+-- Remove the following quests from the game: Kill-Kill Sagepaw!, Kill-Kill Mosshides!
+delete from quest_template where entry in (55033,55034);
