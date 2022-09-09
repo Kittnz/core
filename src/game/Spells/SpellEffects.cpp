@@ -1876,13 +1876,17 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        float dis{ 2.0F };
-                        float x, y, z;
-                        m_caster->GetSafePosition(x, y, z);
-                        x += dis * cos(m_caster->GetOrientation());
-                        y += dis * sin(m_caster->GetOrientation());
-                        m_caster->SummonGameObject(1000333, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+                        const float fDist{ 2.f };
+
+                        float fX{}, fY{}, fZ{};
+                        m_caster->GetSafePosition(fX, fY, fZ);
+
+                        fX += (fDist * cos(m_caster->GetOrientation()));
+                        fY += (fDist * sin(m_caster->GetOrientation()));
+
+                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 120, true);
                     }
+
                     return;
                 }
                 case 46001: // Portable Mailbox

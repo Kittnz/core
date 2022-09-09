@@ -597,7 +597,7 @@ struct StableSlotPricesEntry
     uint32 Price;                                           //          m_cost
 };
 
-#define MAX_TALENT_RANK 5
+constexpr std::uint8_t MAX_TALENT_RANK{ 5 };
 
 struct TalentEntry
 {
