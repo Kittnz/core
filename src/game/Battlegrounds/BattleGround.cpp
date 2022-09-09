@@ -376,7 +376,7 @@ void BattleGround::Update(uint32 diff)
                         if (Player* player = it->getSource())
                             ChatHandler(player).SendSysMessage("Not all players accepted queue. Match ended.");
 
-                    EndBattleGround(TEAM_NONE);
+                    EndNow();
                     return;
                 }
 
