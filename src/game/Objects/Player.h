@@ -2695,10 +2695,10 @@ public:
 
 		// Xerron Dual Spec
 	public:
-		bool HasSavedTalentSpec(int primaryOrSecondary);
-		std::string SpecTalentPoints(int primaryOrSecondary);
-		bool ActivateTalentSpec(int primaryOrSecondary);
-		bool SaveTalentSpec(int primaryOrSecondary);
+		bool HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
+		std::string SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary);
+		bool ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
+		bool SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
 		// Xerron Dual Spec End
 
         // Tanatos Transmog

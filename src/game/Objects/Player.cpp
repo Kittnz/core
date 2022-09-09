@@ -4242,56 +4242,66 @@ uint32 Player::GetResetTalentsCost() const
 
 bool Player::ResetTalents(bool no_cost)
 {
-    // not need after this call
+    // Not need after this call
     if (HasAtLoginFlag(AT_LOGIN_RESET_TALENTS))
+    {
         RemoveAtLoginFlag(AT_LOGIN_RESET_TALENTS, true);
+    }
 
     if (m_usedTalentCount == 0)
     {
-        UpdateFreeTalentPoints(false);                      // for fix if need counter
+        UpdateFreeTalentPoints(false); // For fix if need counter
+
         return false;
     }
 
-    uint32 cost = 0;
+    std::uint32_t uiCost{};
 
     if (!no_cost)
     {
-        cost = GetResetTalentsCost();
+        uiCost = GetResetTalentsCost();
 
-        if (GetMoney() < cost)
+        if (GetMoney() < uiCost)
         {
             SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, 0, 0, 0);
             return false;
         }
     }
 
-    for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
+    for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
     {
-        TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
+        TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
+        if (!talentInfo)
+            continue;
 
-        if (!talentInfo) continue;
-
-        TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
-
+        TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
         if (!talentTabInfo)
             continue;
 
-        // unlearn only talents for character class
-        // some spell learned by one class as normal spells or know at creation but another class learn it as talent,
+        // Unlearn only talents for character class
+        // Some spell learned by one class as normal spells or know at creation but another class learn it as talent,
         // to prevent unexpected lost normal learned spell skip another class talents
         if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
             continue;
 
-        for (uint32 j : talentInfo->RankID)
+        for (const std::uint32_t& j : talentInfo->RankID)
         {
-            SpellEntry const* pInfos = sSpellMgr.GetSpellEntry(j);
+            SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(j) };
             if (pInfos)
-                for (uint32 eff : pInfos->EffectTriggerSpell)
+            {
+                for (const std::uint32_t& eff : pInfos->EffectTriggerSpell)
+                {
                     if (eff)
+                    {
                         RemoveAurasDueToSpell(eff);
+                    }
+                }
+            }
 
             if (j)
+            {
                 RemoveSpell(j, !Spells::IsPassiveSpell(j), false);
+            }
         }
     }
 
@@ -4299,7 +4309,7 @@ bool Player::ResetTalents(bool no_cost)
 
     if (!no_cost)
     {
-        ModifyMoney(-(int32)cost);
+        ModifyMoney(-(int32)uiCost);
 
         ++m_resetTalentsMultiplier;
 
@@ -4311,12 +4321,15 @@ bool Player::ResetTalents(bool no_cost)
         m_resetTalentsTime = time(nullptr);
     }
 
-    // Warlock: remove Touch of Shadow aura:
+    // Warlock: Remove Touch of Shadow aura
     if (GetClass() == CLASS_WARLOCK && HasAura(18791))
+    {
         RemoveAurasDueToSpell(18791);
+    }
 
-    //FIXME: remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
+    //FIXME: Remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
     RemovePet(PET_SAVE_REAGENTS);
+
     return true;
 }
 
@@ -23198,155 +23211,164 @@ void Player::RemoveWorldBuffsIfAlreadySuspended()
 }
 
 // Checks if player has primary or secondary spec saved
-bool Player::HasSavedTalentSpec(int primaryOrSecondary)
+bool Player::HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-	QueryResult *talents = CharacterDatabase.PQuery("SELECT spec FROM character_spell_dual_spec "
-		" WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+    const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spec` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
-	if (!talents)
-		return false;
-
-	delete talents;
-	return true;
+	return static_cast<bool>(talents);
 }
 
 // Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
-std::string Player::SpecTalentPoints(int primaryOrSecondary)
+std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 {
-
-    // mage trees are messed up, disable for them untill i find a fix
+    // Mage trees are messed up, disable for them untill i find a fix
     if (GetClass() == CLASS_MAGE)
         return "";
 
-	QueryResult *savedTalents = CharacterDatabase.PQuery("SELECT spell FROM character_spell_dual_spec "
-		" WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+    const std::unique_ptr<QueryResult> savedTalents(CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and spec = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
 	if (!savedTalents)
 		return "";
 
-	int treeTalents[3] = { 0, 0, 0 };
+    std::vector<std::uint32_t> vTreeTalents = { 0, 0, 0 };
 
 	do
 	{
-		Field *fields = savedTalents->Fetch();
-		uint32 savedTalentID = fields[0].GetUInt32();
+        Field* fields{ savedTalents->Fetch() };
+        const std::uint32_t uiSavedTalentID{ fields[0].GetUInt32() };
 
-		for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+        for (std::uint32_t i{}; i < sTalentStore.GetNumRows(); ++i)
 		{
-			TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
-			if (!talentInfo) continue;
+            TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
+			if (!talentInfo)
+                continue;
 
-			TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
+            TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
 			if (!talentTabInfo)
 				continue;
+
 			if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
 				continue;
 
-			for (int j = 0; j < MAX_TALENT_RANK; ++j)
-               if (talentInfo->RankID[j] && talentInfo->RankID[j] == savedTalentID)
-                   treeTalents[talentTabInfo->tabpage] += j + 1;
+            for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
+            {
+                if (talentInfo->RankID[j] && talentInfo->RankID[j] == uiSavedTalentID)
+                {
+                    vTreeTalents[talentTabInfo->tabpage] += (j + 1);
+                }
+            }
 		}
 
 	} while (savedTalents->NextRow());
 
-
-	delete savedTalents;
-
-	return "(" + std::to_string(treeTalents[0]) + "/" + std::to_string(treeTalents[1]) + "/" + std::to_string(treeTalents[2]) + ")";
+	return "(" + std::to_string(vTreeTalents[0]) + "/" + std::to_string(vTreeTalents[1]) + "/" + std::to_string(vTreeTalents[2]) + ")";
 }
 
-// saves primary or secondary spec
-bool Player::SaveTalentSpec(int primaryOrSecondary)
+// Saves primary or secondary spec
+bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-	// prevent untalented saves
+	// Prevent untalented saves
 	if (m_usedTalentCount == 0)
 	{
-		ChatHandler(this).PSendSysMessage("No learned talents found.");
+		ChatHandler(this).SendSysMessage("No learned talents found.");
 		return false;
 	}
 
-	// make sure dual spec table is empty for spec=primaryOrSecondary to avoid duplicates
-	CharacterDatabase.DirectPExecute("DELETE FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
-
+	// Make sure dual spec table is empty for spec = uiPrimaryOrSecondary to avoid duplicates
+	CharacterDatabase.DirectPExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
     CharacterDatabase.BeginTransaction();
 
-	for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+    for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
 	{
-		TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
+        TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
+		if (!talentInfo)
+            continue;
 
-		if (!talentInfo) continue;
-
-		TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
-
+        TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
 		if (!talentTabInfo)
 			continue;
 
 		if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
 			continue;
 
-		for (int j = 0; j < MAX_TALENT_RANK; ++j)
+        for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
 		{
-			SpellEntry const* pInfos = sSpellMgr.GetSpellEntry(talentInfo->RankID[j]);
+            SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(talentInfo->RankID[j]) };
 
-			if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
-                CharacterDatabase.PExecute("INSERT INTO character_spell_dual_spec (guid, spell, spec) VALUES ('%u', '%u', '%i')", GetGUIDLow(), talentInfo->RankID[j], primaryOrSecondary);
+            if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
+            {
+                CharacterDatabase.PExecute("INSERT INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
+            }
 		}
 	}
 
     CharacterDatabase.CommitTransaction();
 
-	if (primaryOrSecondary == 1)
-		ChatHandler(this).PSendSysMessage("Primary Specialization Saved.");
-	else
-		ChatHandler(this).PSendSysMessage("Secondary Specialization Saved.");
+    if (uiPrimaryOrSecondary == 1)
+    {
+        ChatHandler(this).SendSysMessage("Primary Specialization Saved.");
+    }
+    else if (uiPrimaryOrSecondary == 2)
+    {
+        ChatHandler(this).SendSysMessage("Secondary Specialization Saved.");
+    }
 
-	CastSpell(this, 14867, true); // visual
+	CastSpell(this, 14867, true); // Visual
 
 	return true;
 }
 
-// activates primary or secondary spec
-bool Player::ActivateTalentSpec(int primaryOrSecondary)
+// Activates primary or secondary spec
+bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-
     ResetTalents(true);
 
-	QueryResult *talents = CharacterDatabase.PQuery("SELECT spell "
-		"FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+    const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
 	if (!talents)
 	{
-		// should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
-		if (primaryOrSecondary == 1)
-			ChatHandler(this).PSendSysMessage("Primary Specialization not saved.");
-		else
-			ChatHandler(this).PSendSysMessage("Secondary Specialization not saved.");
+		// Should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
+        if (uiPrimaryOrSecondary == 1)
+        {
+            ChatHandler(this).SendSysMessage("Primary Specialization not saved.");
+        }
+        else if (uiPrimaryOrSecondary == 2)
+        {
+            ChatHandler(this).SendSysMessage("Secondary Specialization not saved.");
+        }
+
 		return false;
 	}
 
 	do
 	{
-		Field *fields = talents->Fetch();
-		uint32 talentSpellId = fields[0].GetUInt32();
+        Field* fields{ talents->Fetch() };
+        const std::uint32_t uiTalentSpellId{ fields[0].GetUInt32() };
 
-		LearnSpell(talentSpellId, false, true);
+		LearnSpell(uiTalentSpellId, false, true);
 
 	} while (talents->NextRow());
 
-	delete talents;
+    if (uiPrimaryOrSecondary == 1)
+    {
+        ChatHandler(this).SendSysMessage("Primary Specialization Activated.");
+    }
+    else if (uiPrimaryOrSecondary == 2)
+    {
+        ChatHandler(this).SendSysMessage("Secondary Specialization Activated.");
+    }
 
-	if (primaryOrSecondary == 1)
-		ChatHandler(this).PSendSysMessage("Primary Specialization Activated.");
-	else
-		ChatHandler(this).PSendSysMessage("Secondary Specialization Activated.");
+	// Reset powers to avoid some bullshittery
+    if (GetPowerType() == POWER_RAGE)
+    {
+        SetPower(POWER_RAGE, 0);
+    }
+    else if (GetPowerType() == POWER_MANA)
+    {
+        SetPower(POWER_MANA, 0);
+    }
 
-	// reset powers to avoid some bullshittery
-	if (GetPowerType() == POWER_RAGE)
-		SetPower(POWER_RAGE, 0);
-	else if (GetPowerType() == POWER_MANA)
-		SetPower(POWER_MANA, 0);
-
-	// short stun
+	// Short stun
 	AddAura(27880);
 
 	SaveToDB();
