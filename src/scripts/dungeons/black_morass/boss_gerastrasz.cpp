@@ -101,7 +101,7 @@ public:
         {
             m_creature->MonsterYell("I am eternal!");
 
-            m_creature->SummonCreature(CREATURE_ECHO_OF_GERASTRASZ, pEcho->GetPositionX(), pEcho->GetPositionY(), pEcho->GetPositionZ(), pEcho->GetOrientation(), TEMPSUMMON_CORPSE_DESPAWN);
+            m_creature->SummonCreature(NPC_ECHO_OF_GERASTRASZ, pEcho->GetPositionX(), pEcho->GetPositionY(), pEcho->GetPositionZ(), pEcho->GetOrientation(), TEMPSUMMON_CORPSE_DESPAWN);
         }
     }
 
