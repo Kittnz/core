@@ -100,7 +100,7 @@ public:
 
     void JustSummoned(Creature* pSummoned) override
     {
-        if (pSummoned->GetEntry() == CREATURE_CHRONORMU)
+        if (pSummoned->GetEntry() == NPC_CHRONORMU)
         {
             m_guidChronormu = pSummoned->GetObjectGuid();
 
@@ -139,7 +139,7 @@ public:
 
         if (m_uiChronormu_Timer < uiDiff && !m_bIsChronormuSummoned)
         {
-            m_creature->SummonCreature(CREATURE_CHRONORMU, m_fX, m_fY, m_fZ, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
+            m_creature->SummonCreature(NPC_CHRONORMU, m_fX, m_fY, m_fZ, 0, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 300000);
         }
         else
         {
