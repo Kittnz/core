@@ -108,6 +108,12 @@ struct stormwind_vault_rat_trap : public GameObjectAI
     {
         if (m_uiUpdateTimer < uiDiff)
         {
+            if (me->GetMapId() != 35)
+            {
+                me->MonsterYell("Object spawned on wrong map!");
+                return;
+            }
+
             switch (m_uiStep)
             {
                 case 0: // Not Activated

@@ -4823,7 +4823,7 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
     if (!unitTarget->IsAlive())
         return;
 
-    if (m_spellInfo->Id == 17364) // Courroux naturel
+    if (m_spellInfo->Id == 17364 || m_spellInfo->Id == 45521) // Stormstrike
     {
         if (!m_casterUnit->IsAlive()) // CalculateMeleeDamage does not work in that case.
             return;

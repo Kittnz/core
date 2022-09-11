@@ -95,6 +95,14 @@ void MasterPlayer::SaveMails()
     for (PlayerMails::iterator itr = m_mail.begin(); itr != m_mail.end(); ++itr)
     {
         Mail *m = (*itr);
+
+        if (m->state == MAIL_STATE_HARD_DELETE)
+        {
+            static SqlStatementID hardDeleteMail;
+            auto stmt = CharacterDatabase.CreateStatement(hardDeleteMail, "DELETE FROM `mail` WHERE id = ?");
+            stmt.PExecute(m->messageID);
+        }
+
         if (m->state == MAIL_STATE_CHANGED)
         {
             SqlStatement stmt = CharacterDatabase.CreateStatement(updateMail, "UPDATE mail SET itemTextId = ?,has_items = ?, expire_time = ?, deliver_time = ?, money = ?, cod = ?, checked = ? WHERE id = ?");
@@ -281,8 +289,8 @@ void MasterPlayer::LoadMails(QueryResult *result)
     m_mail.clear();
     Player* player = GetSession()->GetPlayer();
     ASSERT(player);
-    //        0  1           2      3        4       5          6           7            8     9   10      11         12             13
-    //"SELECT id,messageType,sender,receiver,subject,itemTextId,expire_time,deliver_time,money,cod,checked,stationery,mailTemplateId,has_items FROM mail WHERE receiver = '%u' ORDER BY id DESC",GetGUIDLow()
+    //        0  1           2      3        4       5          6           7            8     9   10      11         12             13         14
+    //"SELECT id,messageType,sender,receiver,subject,itemTextId,expire_time,deliver_time,money,cod,checked,stationery,mailTemplateId,has_items,isDeleted FROM mail WHERE receiver = '%u' ORDER BY id DESC",GetGUIDLow()
     if (!result)
         return;
 
@@ -305,18 +313,16 @@ void MasterPlayer::LoadMails(QueryResult *result)
         m->mailTemplateId = fields[12].GetInt16();
         m->has_items = fields[13].GetBool();                // true, if mail have items or mail have template and items generated (maybe none)
 
-        if (m->mailTemplateId && !sMailTemplateStorage.LookupEntry<MailTemplateEntry>(m->mailTemplateId))
+        constexpr uint8 MailDeleted = 1;
+
+        if (fields[14].GetUInt8() == MailDeleted)
         {
-            sLog.outError("Player::_LoadMail - Mail (%u) have nonexistent MailTemplateId (%u), remove at load", m->messageID, m->mailTemplateId);
-            m->mailTemplateId = 0;
+            const auto timestamp = time(nullptr);
+            if (timestamp > m->expire_time + (60 * 60 * 24 * 31)) // turn soft deleted mails into hard deletions after 31 days expiry timer
+            {
+                m->state = MAIL_STATE_HARD_DELETE;
+            }
         }
-
-        m->state = MAIL_STATE_UNCHANGED;
-
-        m_mail.push_back(m);
-
-        if (m->mailTemplateId && !m->has_items)
-            m->prepareTemplateItems(player);
 
     }
     while (result->NextRow());

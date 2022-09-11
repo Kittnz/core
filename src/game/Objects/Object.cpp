@@ -63,7 +63,7 @@
 
 void MovementInfo::Read(ByteBuffer &data)
 {
-    time = WorldTimer::getMSTime();
+    stime = WorldTimer::getMSTime();
     data >> moveFlags;
     data >> ctime;
     data >> pos.x;
@@ -86,7 +86,7 @@ void MovementInfo::Read(ByteBuffer &data)
 
     if (HasMovementFlag(MOVEFLAG_JUMPING))
     {
-        data >> jump.velocity;
+        data >> jump.zspeed;
         data >> jump.cosAngle;
         data >> jump.sinAngle;
         data >> jump.xyspeed;
@@ -146,7 +146,7 @@ void MovementInfo::CorrectData(Unit* mover)
 void MovementInfo::Write(ByteBuffer &data) const
 {
     data << moveFlags;
-    data << time;
+    data << stime;
     data << pos.x;
     data << pos.y;
     data << pos.z;
@@ -167,7 +167,7 @@ void MovementInfo::Write(ByteBuffer &data) const
 
     if (HasMovementFlag(MOVEFLAG_JUMPING))
     {
-        data << jump.velocity;
+        data << jump.zspeed;
         data << jump.cosAngle;
         data << jump.sinAngle;
         data << jump.xyspeed;
@@ -395,7 +395,7 @@ void Object::BuildMovementUpdate(ByteBuffer * data, uint8 updateFlags) const
         MovementInfo m = wobject->m_movementInfo;
         if (!m.ctime)
         {
-            m.time = WorldTimer::getMSTime() + 1000;
+            m.stime = WorldTimer::getMSTime() + 1000;
             m.ChangePosition(wobject->GetPositionX(), wobject->GetPositionY(), wobject->GetPositionZ(), wobject->GetOrientation());
         }
         if (unit->ToCreature())
@@ -1207,7 +1207,7 @@ WorldObject::WorldObject() :
     worldMask = WORLD_DEFAULT_OBJECT;
     m_zoneScript = nullptr;
     m_transport = nullptr;
-    m_movementInfo.time = WorldTimer::getMSTime();
+    m_movementInfo.stime = WorldTimer::getMSTime();
 }
 
 void WorldObject::CleanupsBeforeDelete()

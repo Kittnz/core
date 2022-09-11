@@ -105,7 +105,7 @@ Movement::Movement(Player* me) :
 
 void Movement::KnockBack(float speedxy, float speedz, float cos, float sin)
 {
-    GetLastMovementInfo().jump.startClientTime = WorldTimer::getMSTime() - GetLastMovementInfo().time + GetLastMovementInfo().ctime;
+    GetLastMovementInfo().jump.startClientTime = WorldTimer::getMSTime() - GetLastMovementInfo().stime + GetLastMovementInfo().ctime;
     GetLastMovementInfo().jump.start.x = _me->GetPositionX();
     GetLastMovementInfo().jump.start.y = _me->GetPositionY();
     GetLastMovementInfo().jump.start.z = _me->GetPositionZ();
@@ -426,7 +426,7 @@ bool Movement::HandleAnticheatTests(MovementInfo& movementInfo, WorldSession* se
         _anticheat->RecordCheatInternal(CHEAT_TYPE_JUMP_SPEED_CHANGE,
             "Lateral jump speed changed from %f to %f flags 0x%lx -> 0x%lx opcode %s jump velocity: %f cos: %f sin: %f fall time: %d",
             GetLastMovementInfo().jump.xyspeed, movementInfo.jump.xyspeed, GetLastMovementInfo().moveFlags,
-            movementInfo.moveFlags, LookupOpcodeName(opcode), movementInfo.jump.velocity,
+            movementInfo.moveFlags, LookupOpcodeName(opcode), movementInfo.jump.zspeed,
             movementInfo.jump.cosAngle, movementInfo.jump.sinAngle, movementInfo.fallTime);
 
         std::string str;
@@ -437,7 +437,7 @@ bool Movement::HandleAnticheatTests(MovementInfo& movementInfo, WorldSession* se
     // use the first processed movement as a client/server clock sync
     if (!_serverInitTime || !_clientInitTime)
     {
-        _serverInitTime = movementInfo.time;
+        _serverInitTime = movementInfo.stime;
         _clientInitTime = movementInfo.ctime;
     }
     else
@@ -453,7 +453,7 @@ bool Movement::HandleAnticheatTests(MovementInfo& movementInfo, WorldSession* se
             // of only 0.8% movement speed.  therefore we will apply a tolerance of 500ms per minute since
             // the clock has synced.
 
-            auto const serverDiff = WorldTimer::getMSTimeDiff(movementInfo.time, _serverInitTime);
+            auto const serverDiff = WorldTimer::getMSTimeDiff(movementInfo.stime, _serverInitTime);
             auto const clientDiff = WorldTimer::getMSTimeDiff(movementInfo.ctime, _clientInitTime);
             auto const tolerance = std::max(5000.f, serverDiff * toleranceMultiplier);
 
@@ -925,7 +925,7 @@ bool Movement::IsTeleportAllowed(MovementInfo const& movementInfo, float& distan
         return true;
 
     // check valid destination coordinates
-    if (movementInfo.GetPos()->x == 0.0f || movementInfo.GetPos()->y == 0.0f || movementInfo.GetPos()->z == 0.0f)
+    if (movementInfo.GetPos().x == 0.0f || movementInfo.GetPos().y == 0.0f || movementInfo.GetPos().z == 0.0f)
         return true;
 
     // if knockbacked
@@ -1163,7 +1163,7 @@ size_t Movement::DumpMovement(std::string &out) const
 
     for (auto const &move : _moveHistory)
     {
-        str << move.movementInfo.ctime << ": age " << (now - move.movementInfo.time) << " flags 0x" << std::hex << move.movementInfo.moveFlags << std::dec
+        str << move.movementInfo.ctime << ": age " << (now - move.movementInfo.stime) << " flags 0x" << std::hex << move.movementInfo.moveFlags << std::dec
             << " at (" << move.movementInfo.pos.x << ", " << move.movementInfo.pos.y << ", " << move.movementInfo.pos.z
             << ")";
 

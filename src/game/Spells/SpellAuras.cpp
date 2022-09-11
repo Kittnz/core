@@ -257,6 +257,8 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraModUseNormalSpeed,                     //191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
     // Nostalrius - custom
     &Aura::HandleAuraAuraSpell,
+    &Aura::HandleNoImmediateEffect,                         //193 SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT       implemented in Unit::CalculateAbsorbAndResist
+    &Aura::HandleNoImmediateEffect,                         //194 SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN implemented in Unit::MeleeDamageBonusTaken and Unit::SpellDamageBonusTaken
 };
 
 static AuraType const frozenAuraTypes[] = { SPELL_AURA_MOD_ROOT, SPELL_AURA_MOD_STUN, SPELL_AURA_NONE };
@@ -853,7 +855,8 @@ bool Aura::CanProcFrom(SpellEntry const *spell, uint32 EventProcEx, uint32 procE
             else // Passive spells hits here only if resist/reflect/immune/evade
             {
                 // Passive spells can`t trigger if need hit (exclude cases when procExtra include non-active flags)
-                if ((EventProcEx & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT) & procEx) && !active)
+                if ((EventProcEx & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT) & procEx) && !active &&
+                   !(EventProcEx & (PROX_EX_NO_DAMAGE_MASK) & procEx))
                     return false;
             }
         }
@@ -7871,7 +7874,8 @@ void SpellAuraHolder::CalculateForDebuffLimit()
     case 15326: // Blackout (Rank 5)
     case 15407: // Mind Flay
     case 16922: // Starfire Stun
-    case 17364: // Stormstrike
+    case 17364: // Stormstrike (Rank 1)
+    case 45521: // Stormstrike (Rank 2)
     case 16914: // Hurricane
     case 17794: // Shadow Vulnerability (Rank 1)
     case 17798: // Shadow Vulnerability (Rank 2)
