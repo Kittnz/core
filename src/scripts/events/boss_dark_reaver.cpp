@@ -83,8 +83,6 @@ struct boss_dark_reaverAI : public ScriptedAI
     void Aggro(Unit *who) override
     {
         m_creature->MonsterYell(urand(0, 1) ? AGGRO_TEXT_1 : AGGRO_TEXT_2);
-        if (who->IsPlayer())
-            SetGroupFFAPvP(who->ToPlayer());
 
         me->RemoveAurasDueToSpell(SPELL_MOUNT);
     }
@@ -314,34 +312,6 @@ struct boss_dark_reaverAI : public ScriptedAI
             return GetRandomNearbyEnemyPlayer(self, attempt);
 
         return random;
-    }
-
-    void SetPvPDesired(Player* pPlayer)
-    {
-        if (!pPlayer->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_PVP_DESIRED))
-            pPlayer->SetFlag(PLAYER_FLAGS, PLAYER_FLAGS_PVP_DESIRED);
-        pPlayer->UpdatePvP(true);
-    }
-
-    void SetGroupFFAPvP(Player* pPlayer)
-    {
-        Group* pGroup = pPlayer->GetGroup();
-        if (!pGroup)
-        {
-            SetPvPDesired(pPlayer);
-            return;
-        }
-
-        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
-        {
-            if (Player *pMember = itr->getSource())
-            {
-                if (pMember->GetZoneId() == DEADWIND_PASS_ZONE)
-                {
-                    SetPvPDesired(pMember);
-                }
-            }
-        }
     }
 };
 

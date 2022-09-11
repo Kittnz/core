@@ -1577,7 +1577,7 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         }
 
         float x, y, z, o;
-        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_EXTRAPOLATION_PLAYER) && movespline->Finalized() && ExtrapolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.time, x, y, z, o))
+        if (IsInWorld() && sWorld.getConfig(CONFIG_BOOL_ENABLE_MOVEMENT_EXTRAPOLATION_PLAYER) && movespline->Finalized() && ExtrapolateMovement(m_movementInfo, WorldTimer::getMSTime() - m_movementInfo.stime, x, y, z, o))
         {
             GetMap()->DoPlayerGridRelocation(this, x, y, z, o);
             m_position.x = x;
@@ -2391,10 +2391,10 @@ bool Player::ExecuteTeleportFar(ScheduledTeleportData *data)
                 data << uint32(mapid);
                 if (m_transport)
                 {
-                    data << m_movementInfo.GetTransportPos()->x;
-                    data << m_movementInfo.GetTransportPos()->y;
-                    data << m_movementInfo.GetTransportPos()->z;
-                    data << m_movementInfo.GetTransportPos()->o;
+                    data << m_movementInfo.GetTransportPos().x;
+                    data << m_movementInfo.GetTransportPos().y;
+                    data << m_movementInfo.GetTransportPos().z;
+                    data << m_movementInfo.GetTransportPos().o;
                 }
                 else
                 {
@@ -4418,6 +4418,7 @@ void Player::InitVisibleBits()
     updateVisualBits.SetBit(UNIT_DYNAMIC_FLAGS);
     updateVisualBits.SetBit(UNIT_CHANNEL_SPELL);
     updateVisualBits.SetBit(UNIT_MOD_CAST_SPEED);
+    updateVisualBits.SetBit(UNIT_NPC_EMOTESTATE);
     updateVisualBits.SetBit(UNIT_FIELD_BYTES_2);
 
     updateVisualBits.SetBit(PLAYER_DUEL_ARBITER);
@@ -6595,29 +6596,6 @@ bool Player::HasAllZonesExplored()
     return eligible_for_title;
 }
 
-bool Player::HasCompletedManyQuests()
-{
-    bool eligible_for_title = true;
-
-    QueryResult* quest_count_query = CharacterDatabase.PQuery("SELECT COUNT(*) AS quest_count, guid FROM character_queststatus WHERE rewarded = 1 and guid = %u;", GetGUIDLow());
-
-    if (quest_count_query)
-    {
-        Field* fields = quest_count_query->Fetch();
-        uint8 quest_count = fields[0].GetUInt8();
-
-        if (quest_count < 1700)
-            return false;
-
-        delete quest_count_query;
-    }
-    else
-    {
-        return false;
-    }
-    return eligible_for_title;
-}
-
 void Player::CheckAreaExploreAndOutdoor()
 {
     if (!IsAlive())
@@ -6809,18 +6787,9 @@ int32 Player::CalculateReputationGain(ReputationSource source, int32 rep, int32 
     {
         case REPUTATION_SOURCE_KILL:
             rate = sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_KILL);
-            // Ustaag <Nostalrius> : a priori, deja gere ailleurs... deque le mob est gris, la reput est divisee par 5.
-            /*if (MaNGOS::XP::GetGrayLevel(GetLevel()) >= creatureOrQuestLevel)
-                diffLvl = MaNGOS::XP::GetGrayLevel(GetLevel()) - creatureOrQuestLevel;
-            else
-                diffLvl = 0;*/
             break;
         case REPUTATION_SOURCE_QUEST:
             rate = sWorld.getConfig(CONFIG_FLOAT_RATE_REPUTATION_LOWLEVEL_QUEST);
-            if (GetLevel() >= creatureOrQuestLevel + 25)  // Turtle WoW Custom, default is 5 levels of difference.
-                diffLvl = GetLevel() - creatureOrQuestLevel - 25;
-            else
-                diffLvl = 0;
             break;
         case REPUTATION_SOURCE_SPELL:
         default:
@@ -13783,7 +13752,7 @@ void Player::RewardQuest(Quest const *pQuest, uint32 reward, WorldObject* questE
     if (quest_id == 9270 /*Mage*/ || quest_id == 9269 /*Druid*/ || quest_id == 9271 /*Warlock*/ || quest_id == 9257 /*Priest*/)
         AwardTitle(TITLE_GUARDIAN_OF_TIRISFAL); // Guardian of Tirisfal
 
-    if (HasCompletedManyQuests() && !HasTitle(TITLE_LOREKEEPER))
+    if (GetTotalQuestCount() >= LoreKeeperQuestRequirement && !HasTitle(TITLE_LOREKEEPER))
         AwardTitle(TITLE_LOREKEEPER);
 }
 
@@ -15239,9 +15208,9 @@ bool Player::LoadFromDB(ObjectGuid guid, SqlQueryHolder *holder)
 
             if (!MaNGOS::IsValidMapCoord(x, y, z, o) ||
                     // transport size limited
-                    std::fabs(m_movementInfo.GetTransportPos()->x) > 250.0f ||
-                    std::fabs(m_movementInfo.GetTransportPos()->y) > 250.0f ||
-                    std::fabs(m_movementInfo.GetTransportPos()->z) > 250.0f)
+                    std::fabs(m_movementInfo.GetTransportPos().x) > 250.0f ||
+                    std::fabs(m_movementInfo.GetTransportPos().y) > 250.0f ||
+                    std::fabs(m_movementInfo.GetTransportPos().z) > 250.0f)
             {
                 sLog.outError("Player %s have invalid transport coordinates (X: %f Y: %f Z: %f O: %f). Teleport to bind location.",
                               guid.GetString().c_str(), x, y, z, o);
@@ -16776,10 +16745,10 @@ void Player::SaveToDB(bool online, bool force)
     uberInsert.addUInt32(m_resetTalentsMultiplier);
     uberInsert.addUInt64(uint64(m_resetTalentsTime));
 
-    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos()->x));
-    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos()->y));
-    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos()->z));
-    uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(m_movementInfo.GetTransportPos()->o)));
+    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().x));
+    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().y));
+    uberInsert.addFloat(finiteAlways(m_movementInfo.GetTransportPos().z));
+    uberInsert.addFloat(MapManager::NormalizeOrientation(finiteAlways(m_movementInfo.GetTransportPos().o)));
     if (m_transport)
         uberInsert.addUInt32(m_transport->GetGUIDLow());
     else
@@ -20930,7 +20899,7 @@ InventoryResult Player::CanEquipUniqueItem(ItemPrototype const* itemProto, uint8
 void Player::HandleFall(MovementInfo const& movementInfo)
 {
     // calculate total z distance of the fall
-    float z_diff = m_lastFallZ - movementInfo.GetPos()->z;
+    float z_diff = m_lastFallZ - movementInfo.GetPos().z;
     DEBUG_LOG("zDiff = %f", z_diff);
 
     //Players with low fall distance, Feather Fall or physical immunity (charges used) are ignored
@@ -20951,8 +20920,8 @@ void Player::HandleFall(MovementInfo const& movementInfo)
 
             uint32 damage = (uint32)(damageperc * GetMaxHealth() * sWorld.getConfig(CONFIG_FLOAT_RATE_DAMAGE_FALL) * TakenTotalMod);
 
-            float height = movementInfo.GetPos()->z;
-            UpdateAllowedPositionZ(movementInfo.GetPos()->x, movementInfo.GetPos()->y, height);
+            float height = movementInfo.GetPos().z;
+            UpdateAllowedPositionZ(movementInfo.GetPos().x, movementInfo.GetPos().y, height);
 
             if (damage > 0)
             {
@@ -20963,7 +20932,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
                 // handle hardcore potential fall damage
                 if (IsHardcore())
                 {
-                    sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), movementInfo.GetPos()->x, movementInfo.GetPos()->y, movementInfo.GetPos()->z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
+                    sLog.out(LOG_HARDCORE_MODE, "Player %s got a big fall damage on %f %f %f (real: %f %f %f) %u", GetName(), movementInfo.GetPos().x, movementInfo.GetPos().y, movementInfo.GetPos().z, GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId());
                     damage /= 10;
                 }
                 
@@ -20971,7 +20940,7 @@ void Player::HandleFall(MovementInfo const& movementInfo)
             }
 
             //Z given by moveinfo, LastZ, FallTime, WaterZ, MapZ, Damage, Safefall reduction
-            DEBUG_LOG("FALLDAMAGE z=%f sz=%f pZ=%f FallTime=%d mZ=%f damage=%d SF=%d" , movementInfo.GetPos()->z, height, GetPositionZ(), movementInfo.GetFallTime(), height, damage, safe_fall);
+            DEBUG_LOG("FALLDAMAGE z=%f sz=%f pZ=%f FallTime=%d mZ=%f damage=%d SF=%d" , movementInfo.GetPos().z, height, GetPositionZ(), movementInfo.GetFallTime(), height, damage, safe_fall);
         }
     }
 }
@@ -21092,8 +21061,8 @@ void Player::LearnTalent(uint32 talentId, uint32 talentRank)
 
 void Player::UpdateFallInformationIfNeed(MovementInfo const& minfo, uint16 opcode)
 {
-    if (m_lastFallTime >= minfo.GetFallTime() || m_lastFallZ <= minfo.GetPos()->z || opcode == MSG_MOVE_FALL_LAND)
-        SetFallInformation(minfo.GetFallTime(), minfo.GetPos()->z);
+    if (m_lastFallTime >= minfo.GetFallTime() || m_lastFallZ <= minfo.GetPos().z || opcode == MSG_MOVE_FALL_LAND)
+        SetFallInformation(minfo.GetFallTime(), minfo.GetPos().z);
 }
 
 /**
@@ -22793,8 +22762,10 @@ bool Player::SetupHardcoreMode()
     if (GetTradeData())
         TradeCancel(true);
 
+
+    
     // Delete mails TO and FROM
-    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE isDeleted = 0 AND (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
+    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
     if (resultMail)
     {
         do
@@ -22802,7 +22773,7 @@ bool Player::SetupHardcoreMode()
             Field* fields = resultMail->Fetch();
 
             uint32 mail_id = fields[0].GetUInt32();
-            CharacterDatabase.PExecute("UPDATE mail SET isDeleted = 1 WHERE id = '%u'", mail_id);
+            CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
             CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
             if (MasterPlayer* pl = GetSession()->GetMasterPlayer())
                 pl->RemoveMail(mail_id);

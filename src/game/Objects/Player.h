@@ -129,6 +129,8 @@ enum ChallengeSpells
     SPELL_HARDCORE = 50001
 };
 
+constexpr uint32 LoreKeeperQuestRequirement = 1700;
+
 typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 
 // Spell modifier (used to modify other spells)
@@ -1894,6 +1896,8 @@ class Player final: public Unit
         void HandleFall(MovementInfo const& movementInfo);
         bool IsFalling() const { return GetPositionZ() < m_lastFallZ; }
 
+        bool IsControlledByOwnClient() const { return m_session->HasClientMovementControl(); }
+
         void SetClientControl(Unit* target, uint8 allowMove);
         void SetMover(Unit* target) { m_mover = target ? target : this; }
         Unit* GetMover() const { return m_mover; }
@@ -2720,7 +2724,6 @@ public:
         void ChangeTitle(uint8 title);
         void UpdateAppearance();
         bool HasAllZonesExplored();
-        bool HasCompletedManyQuests();
 
 		// General send addon message
 	public:

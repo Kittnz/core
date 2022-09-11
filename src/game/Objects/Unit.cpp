@@ -509,7 +509,7 @@ void Unit::SendHeartBeat(bool includingSelf)
 
 void Unit::SendMovementPacket(uint16 opcode, bool includingSelf)
 {
-    m_movementInfo.UpdateTime(WorldTimer::getMSTime());
+    m_movementInfo.SetAsServerSide();
     WorldPacket data(opcode);
     data << GetPackGUID();
     data << m_movementInfo;
@@ -753,7 +753,7 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
     }
     //Get in CombatState
     if ((pVictim != this) && (damagetype != DOT || (spellProto && spellProto->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))) &&
-       (!spellProto || !spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD)))
+       (!spellProto || (!spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD) && !spellProto->HasAttribute(SPELL_ATTR_EX_NO_THREAT))))
     {
         SetInCombatWithVictim(pVictim);
         pVictim->SetInCombatWithAggressor(this);
@@ -2154,6 +2154,69 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
         CleanDamage cleanDamage = CleanDamage(splitted, BASE_ATTACK, MELEE_HIT_NORMAL, 0, 0);
         pCaster->DealDamage(caster, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
     }
+
+    if (Player* pPlayer = ToPlayer())
+    {
+        if (Group* pGroup = pPlayer->GetGroup())
+        {
+            AuraList const& vSplitDamageGroupPct = GetAurasByType(SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT);
+            for (AuraList::const_iterator i = vSplitDamageGroupPct.begin(), next; i != vSplitDamageGroupPct.end() && RemainingDamage >= 0; i = next)
+            {
+                next = i;
+                ++next;
+
+                // check damage school mask
+                if (((*i)->GetModifier()->m_miscvalue & schoolMask) == 0)
+                    continue;
+
+                float radius = Spells::GetSpellRadius(sSpellRadiusStore.LookupEntry((*i)->GetSpellProto()->EffectRadiusIndex[(*i)->GetEffIndex()]));
+
+                std::set<Player*> allies;
+                for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                {
+                    if (Player* pMember = itr->getSource())
+                    {
+                        // Not self.
+                        if (pMember == pPlayer)
+                            continue;
+
+                        if (!pMember->IsAlive())
+                            continue;
+
+                        if (!pPlayer->IsWithinDistInMap(pMember, radius))
+                            continue;
+
+                        allies.insert(pMember);
+                    }
+                }
+
+                // Damage can be splitted only if there are nearby allies
+                if (allies.empty())
+                    continue;
+
+                uint32 splitted = uint32(RemainingDamage * (*i)->GetModifier()->m_amount / 100.0f);
+
+                RemainingDamage -= int32(splitted);
+
+                if (!splitted)
+                    continue;
+
+                splitted = std::max<uint32>(1, splitted / allies.size());
+
+                for (auto const& pAlly : allies)
+                {
+                    uint32 split_absorb = 0;
+                    pCaster->DealDamageMods(pAlly, splitted, &split_absorb);
+
+                    pCaster->SendSpellNonMeleeDamageLog(pAlly, (*i)->GetSpellProto()->Id, splitted, schoolMask, split_absorb, 0, (damagetype == DOT), 0, false, true);
+
+                    CleanDamage cleanDamage = CleanDamage(splitted, BASE_ATTACK, MELEE_HIT_NORMAL, 0, 0);
+                    pCaster->DealDamage(pAlly, splitted, &cleanDamage, DOT, schoolMask, (*i)->GetSpellProto(), false);
+                }
+            }
+        }
+    }
+    
 
     *absorb = damage - RemainingDamage - *resist;
 }
@@ -5336,6 +5399,8 @@ uint32 Unit::SpellDamageBonusTaken(WorldObject* pCaster, SpellEntry const* spell
 
     // ..taken
     TakenTotalMod *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
+    if (spellProto->IsAreaOfEffectSpell())
+        TakenTotalMod *= GetTotalAuraMultiplier(SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN);
 
     // Taken fixed damage bonus auras
     int32 TakenAdvertisedBenefit = SpellBaseDamageBonusTaken(spellProto->GetSpellSchoolMask());
@@ -5816,6 +5881,8 @@ uint32 Unit::MeleeDamageBonusTaken(WorldObject* pCaster, uint32 pdamage, WeaponA
 
     // ..taken pct (by school mask)
     TakenPercent *= GetTotalAuraMultiplierByMiscMask(SPELL_AURA_MOD_DAMAGE_PERCENT_TAKEN, schoolMask);
+    if (spellProto && spellProto->IsAreaOfEffectSpell())
+        TakenPercent *= GetTotalAuraMultiplier(SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN);
 
     // ..taken pct (melee/ranged)
     if (attType == RANGED_ATTACK)
@@ -6183,12 +6250,6 @@ void Unit::TogglePlayerPvPFlagOnAttackVictim(Unit const* pVictim, bool touchOnly
 
                 if (pVictimPlayer)
                     pThisPlayer->UpdatePvPContested(true);
-
-                if (auto group = pThisPlayer->GetGroup(); group && group->IsCrossfaction() && !pVictim->GetMap()->IsDungeon())
-                {
-                    group->RemoveMember(pThisPlayer->GetObjectGuid(), GROUP_KICK);
-                    ChatHandler(pThisPlayer).SendSysMessage("You have been removed from the cross-faction party for engaging in PvP or attacking PvP enabled NPCs in the open world.");
-                }
 
                 pThisPlayer->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_ENTER_PVP_COMBAT);
             }
@@ -6669,7 +6730,7 @@ void Unit::CheckPendingMovementChanges()
 
     Player* pPlayer = ToPlayer();
     if (pPlayer && pPlayer->IsBeingTeleportedFar())
-        return;
+            return;
 
     Player* pController = GetPlayerMovingMe();
     if (!pController || !pController->IsInWorld() || !pController->GetSession()->IsConnected())
@@ -6723,7 +6784,7 @@ void Unit::CheckPendingMovementChanges()
         if (oldestChange.resent)
         {
             // Change was resent but still no reply. Enforce the flags.
-           // pController->GetCheatData()->OnFailedToAckChange();
+            //pController->GetCheatData()->OnFailedToAckChange();
             ResolvePendingMovementChange(oldestChange, true);
             PopPendingMovementChange();
         }
@@ -6738,23 +6799,23 @@ void Unit::CheckPendingMovementChanges()
 
             switch (oldestChange.movementChangeType)
             {
-            case ROOT:
-            case WATER_WALK:
-            case SET_HOVER:
-            case FEATHER_FALL:
-                MovementPacketSender::SendMovementFlagChangeToController(this, pController, oldestChange);
-                return;
-            case SPEED_CHANGE_WALK:
-            case SPEED_CHANGE_RUN:
-            case SPEED_CHANGE_RUN_BACK:
-            case SPEED_CHANGE_SWIM:
-            case SPEED_CHANGE_SWIM_BACK:
-            case RATE_CHANGE_TURN:
-                MovementPacketSender::SendSpeedChangeToController(this, pController, oldestChange);
-                return;
-            default:
-                sLog.outError("Unit::CheckPendingMovementChange - Unhandled resendable movement change type %u", oldestChange.movementChangeType);
-                return;
+                case ROOT:
+                case WATER_WALK:
+                case SET_HOVER:
+                case FEATHER_FALL:
+                    MovementPacketSender::SendMovementFlagChangeToController(this, pController, oldestChange);
+                    return;
+                case SPEED_CHANGE_WALK:
+                case SPEED_CHANGE_RUN:
+                case SPEED_CHANGE_RUN_BACK:
+                case SPEED_CHANGE_SWIM:
+                case SPEED_CHANGE_SWIM_BACK:
+                case RATE_CHANGE_TURN:
+                    MovementPacketSender::SendSpeedChangeToController(this, pController, oldestChange);
+                    return;
+                default:
+                    sLog.outError("Unit::CheckPendingMovementChange - Unhandled resendable movement change type %u", oldestChange.movementChangeType);
+                    return;
             }
         }
     }
@@ -6790,7 +6851,6 @@ void Unit::ResolvePendingMovementChanges(bool sendToClient, bool includingTelepo
         if ((change->movementChangeType != TELEPORT || includingTeleport) &&
             change->movementCounter == GetLastCounterForMovementChangeType(change->movementChangeType))
             ResolvePendingMovementChange(*change, sendToClient);
-
         m_pendingMovementChanges.erase(change);
     }
 }
@@ -6801,100 +6861,58 @@ void Unit::ResolvePendingMovementChange(PlayerMovementPendingChange& change, boo
     switch (change.movementChangeType)
     {
         case ROOT:
-        {
             if (change.apply)
                 RemoveUnitMovementFlag(MOVEFLAG_MASK_MOVING);
-
             SetRootedReal(change.apply);
-
             if (sendToClient)
                 MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_ROOT, change.apply);
-
             break;
-        }
         case WATER_WALK:
-        {
             SetWaterWalkingReal(change.apply);
-
             if (sendToClient)
                 MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_WATERWALKING, change.apply);
-
             break;
-        }
         case SET_HOVER:
-        {
             SetHoverReal(change.apply);
-
             if (sendToClient)
                 MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_HOVER, change.apply);
-
             break;
-        }
         case FEATHER_FALL:
-        {
             SetFeatherFallReal(change.apply);
-
             if (sendToClient)
                 MovementPacketSender::SendMovementFlagChangeToAll(this, MOVEFLAG_SAFE_FALL, change.apply);
-
             break;
-        }
         case SPEED_CHANGE_WALK:
-        {
             SetSpeedRateReal(MOVE_WALK, change.newValue / baseMoveSpeed[MOVE_WALK]);
-
             if (sendToClient)
                 MovementPacketSender::SendSpeedChangeToAll(this, MOVE_WALK, change.newValue / baseMoveSpeed[MOVE_WALK]);
-
             break;
-        }
         case SPEED_CHANGE_RUN:
-        {
             SetSpeedRateReal(MOVE_RUN, change.newValue / baseMoveSpeed[MOVE_RUN]);
-
             if (sendToClient)
                 MovementPacketSender::SendSpeedChangeToAll(this, MOVE_RUN, change.newValue / baseMoveSpeed[MOVE_RUN]);
-
             break;
-        }
         case SPEED_CHANGE_RUN_BACK:
-        {
             SetSpeedRateReal(MOVE_RUN_BACK, change.newValue / baseMoveSpeed[MOVE_RUN_BACK]);
-
             if (sendToClient)
                 MovementPacketSender::SendSpeedChangeToAll(this, MOVE_RUN_BACK, change.newValue / baseMoveSpeed[MOVE_RUN_BACK]);
-
             break;
-        }
         case SPEED_CHANGE_SWIM:
-        {
             SetSpeedRateReal(MOVE_SWIM, change.newValue / baseMoveSpeed[MOVE_SWIM]);
-
             if (sendToClient)
                 MovementPacketSender::SendSpeedChangeToAll(this, MOVE_SWIM, change.newValue / baseMoveSpeed[MOVE_SWIM]);
-
             break;
-        }
         case SPEED_CHANGE_SWIM_BACK:
-        {
             SetSpeedRateReal(MOVE_SWIM_BACK, change.newValue / baseMoveSpeed[MOVE_SWIM_BACK]);
-
             if (sendToClient)
                 MovementPacketSender::SendSpeedChangeToAll(this, MOVE_SWIM_BACK, change.newValue / baseMoveSpeed[MOVE_SWIM_BACK]);
-
             break;
-        }
         case RATE_CHANGE_TURN:
-        {
             SetSpeedRateReal(MOVE_TURN_RATE, change.newValue / baseMoveSpeed[MOVE_TURN_RATE]);
-
             if (sendToClient)
                 MovementPacketSender::SendSpeedChangeToAll(this, MOVE_TURN_RATE, change.newValue / baseMoveSpeed[MOVE_TURN_RATE]);
-
             break;
-        }
         case TELEPORT:
-        {
             if (Player* pPlayer = ToPlayer())
             {
                 if (pPlayer->IsBeingTeleportedNear())
@@ -6903,9 +6921,7 @@ void Unit::ResolvePendingMovementChange(PlayerMovementPendingChange& change, boo
                     SendHeartBeat(sendToClient);
                 }
             }
-
             break;
-        }
     }
 }
 
@@ -6957,7 +6973,7 @@ bool Unit::FindPendingMovementKnockbackChange(MovementInfo& movementInfo, uint32
     {
         if (pendingChange->movementCounter != movementCounter || pendingChange->movementChangeType != KNOCK_BACK
             || std::fabs(pendingChange->knockbackInfo.speedXY - movementInfo.jump.xyspeed) > 0.01f
-            || std::fabs(pendingChange->knockbackInfo.speedZ - movementInfo.jump.velocity) > 0.01f
+            || std::fabs(pendingChange->knockbackInfo.speedZ - movementInfo.jump.zspeed) > 0.01f
             || std::fabs(pendingChange->knockbackInfo.vcos - movementInfo.jump.cosAngle) > 0.01f
             || std::fabs(pendingChange->knockbackInfo.vsin - movementInfo.jump.sinAngle) > 0.01f)
             continue;
@@ -6977,36 +6993,12 @@ bool Unit::FindPendingMovementSpeedChange(float speedReceived, uint32 movementCo
         UnitMoveType moveTypeSent;
         switch (pendingChange->movementChangeType)
         {
-            case SPEED_CHANGE_WALK:
-            {
-                moveTypeSent = MOVE_WALK;
-                break;
-            }
-            case SPEED_CHANGE_RUN:
-            {
-                moveTypeSent = MOVE_RUN;
-                break;
-            }
-            case SPEED_CHANGE_RUN_BACK:
-            {
-                moveTypeSent = MOVE_RUN_BACK;
-                break;
-            }
-            case SPEED_CHANGE_SWIM:
-            {
-                moveTypeSent = MOVE_SWIM;
-                break;
-            }
-            case SPEED_CHANGE_SWIM_BACK:
-            {
-                moveTypeSent = MOVE_SWIM_BACK;
-                break;
-            }
-            case RATE_CHANGE_TURN:
-            {
-                moveTypeSent = MOVE_TURN_RATE;
-                break;
-            }
+            case SPEED_CHANGE_WALK:                 moveTypeSent = MOVE_WALK; break;
+            case SPEED_CHANGE_RUN:                  moveTypeSent = MOVE_RUN; break;
+            case SPEED_CHANGE_RUN_BACK:             moveTypeSent = MOVE_RUN_BACK; break;
+            case SPEED_CHANGE_SWIM:                 moveTypeSent = MOVE_SWIM; break;
+            case SPEED_CHANGE_SWIM_BACK:            moveTypeSent = MOVE_SWIM_BACK; break;
+            case RATE_CHANGE_TURN:                  moveTypeSent = MOVE_TURN_RATE; break;
             default:
                 continue;
         }
@@ -7036,7 +7028,9 @@ bool Unit::IsMovedByPlayer() const
         if (pPossessor->GetCharmGuid() == GetObjectGuid())
             return true;
 
-    return IsPlayer();
+    return IsPlayer() &&
+           movespline->Finalized() &&
+           static_cast<Player const*>(this)->IsControlledByOwnClient();
 }
 
 PlayerMovementPendingChange::PlayerMovementPendingChange()
@@ -7403,7 +7397,7 @@ void Unit::SetDeathState(DeathState s)
 
         i_motionMaster.Clear(false, true);
         i_motionMaster.MoveIdle();
-        StopMoving(true);
+        StopMoving(IsMoving());
 
         // Powers are cleared on death.
         SetPower(GetPowerType(), 0);
@@ -8897,16 +8891,12 @@ void Unit::StopMoving(bool force)
         return;
 
     Movement::MoveSplineInit init(*this, "StopMoving");
-    if (Transport* t = GetTransport()) {
+    if (Transport* t = GetTransport())
         init.SetTransport(t->GetGUIDLow());
-    }
 
-    if (!movespline->Finalized() || force) {
+    if (!movespline->Finalized() || force)
+    {
         init.SetStop(); // Will trigger CMSG_MOVE_SPLINE_DONE from client.
-        init.Launch();
-    }
-    else if (!IsPlayer()) {
-        init.SetFacing(GetOrientation());
         init.Launch();
     }
 
@@ -9645,8 +9635,7 @@ void Unit::NearLandTo(float x, float y, float z, float orientation)
 {
     m_movementInfo.RemoveMovementFlag(MOVEFLAG_JUMPING | MOVEFLAG_FALLINGFAR);
     m_movementInfo.ChangePosition(x, y, z, orientation);
-    m_movementInfo.UpdateTime(WorldTimer::getMSTime());
-    m_movementInfo.ctime = 0; // Not a client packet. Pauses extrapolation.
+    m_movementInfo.SetAsServerSide();
 
     WorldPacket data(MSG_MOVE_FALL_LAND, 41);
     data << GetPackGUID();
@@ -9665,7 +9654,6 @@ void Unit::TeleportPositionRelocation(float x, float y, float z, float orientati
     {
         player->SetPosition(x, y, z, orientation, true);
         player->m_movementInfo.ChangePosition(x, y, z, orientation);
-        player->m_movementInfo.UpdateTime(WorldTimer::getMSTime());
     }
     else if (crea)
     {
@@ -10507,10 +10495,10 @@ void Unit::UpdateSplineMovement(uint32 t_diff)
     Movement::Location loc = movespline->ComputePosition();
     if (Transport* t = GetTransport())
     {
-        m_movementInfo.GetTransportPos()->x = loc.x;
-        m_movementInfo.GetTransportPos()->y = loc.y;
-        m_movementInfo.GetTransportPos()->z = loc.z;
-        m_movementInfo.GetTransportPos()->o = loc.orientation;
+        m_movementInfo.GetTransportPos().x = loc.x;
+        m_movementInfo.GetTransportPos().y = loc.y;
+        m_movementInfo.GetTransportPos().z = loc.z;
+        m_movementInfo.GetTransportPos().o = loc.orientation;
         t->CalculatePassengerPosition(loc.x, loc.y, loc.z, &loc.orientation);
     }
     if (!MaNGOS::IsValidMapCoord(loc.x, loc.y, loc.z))
