@@ -16,7 +16,7 @@ static constexpr std::uint32_t SPELL_TWIN_TELEPORT_VISUAL{ 26638 };
 static constexpr std::uint32_t SPELL_GREEN_CHANNELING{ 13540 };
 static constexpr std::uint32_t SPELL_PARTICLES_GREEN{ 18951 };
 
-static constexpr std::uint32_t NPC_CHRONORMU{ 50117 };
+// static constexpr std::uint32_t NPC_CHRONORMU{ 50117 };
 
 static constexpr std::uint32_t SOUND_BODY_OF_KATHUNE{ 8674 };
 
