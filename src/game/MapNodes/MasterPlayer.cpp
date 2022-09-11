@@ -96,13 +96,6 @@ void MasterPlayer::SaveMails()
     {
         Mail *m = (*itr);
 
-        if (m->state == MAIL_STATE_HARD_DELETE)
-        {
-            static SqlStatementID hardDeleteMail;
-            auto stmt = CharacterDatabase.CreateStatement(hardDeleteMail, "DELETE FROM `mail` WHERE id = ?");
-            stmt.PExecute(m->messageID);
-        }
-
         if (m->state == MAIL_STATE_CHANGED)
         {
             SqlStatement stmt = CharacterDatabase.CreateStatement(updateMail, "UPDATE mail SET itemTextId = ?,has_items = ?, expire_time = ?, deliver_time = ?, money = ?, cod = ?, checked = ? WHERE id = ?");
@@ -312,17 +305,35 @@ void MasterPlayer::LoadMails(QueryResult *result)
         m->stationery = fields[11].GetUInt8();
         m->mailTemplateId = fields[12].GetInt16();
         m->has_items = fields[13].GetBool();                // true, if mail have items or mail have template and items generated (maybe none)
+        m->state = MAIL_STATE_UNCHANGED;
 
         constexpr uint8 MailDeleted = 1;
 
-        if (fields[14].GetUInt8() == MailDeleted)
+        bool isSoftDeleted = fields[14].GetUInt8() == MailDeleted;
+
+        if (isSoftDeleted)
         {
             const auto timestamp = time(nullptr);
             if (timestamp > m->expire_time + (60 * 60 * 24 * 31)) // turn soft deleted mails into hard deletions after 31 days expiry timer
             {
-                m->state = MAIL_STATE_HARD_DELETE;
+                static SqlStatementID hardDeleteMail;
+                auto stmt = CharacterDatabase.CreateStatement(hardDeleteMail, "DELETE FROM `mail` WHERE id = ?");
+                stmt.PExecute(m->messageID);
             }
+            continue;
         }
+
+        if (m->mailTemplateId && !sMailTemplateStorage.LookupEntry<MailTemplateEntry>(m->mailTemplateId))
+        {
+            sLog.outError("Player::_LoadMail - Mail (%u) have nonexistent MailTemplateId (%u), remove at load", m->messageID, m->mailTemplateId);
+            m->mailTemplateId = 0;
+        }
+        
+
+        m_mail.push_back(m);
+
+        if (m->mailTemplateId && !m->has_items)
+            m->prepareTemplateItems(player);
 
     }
     while (result->NextRow());
