@@ -8,13 +8,16 @@
 #pragma once
 
 
-enum BlackMorassUnit : uint32
+namespace BlackMorassUnits
 {
-    NPC_CHROMIE = 0000,
-    NPC_CHRONORMU = 50117,
-    NPC_GERASTRASZ = 0002,
-    NPC_ANTNORMI = 65125
-};
+    enum BlackMorassUnit : uint32
+    {
+        NPC_CHROMIE = 0000,
+        NPC_CHRONORMU = 50117,
+        NPC_GERASTRASZ = 0002,
+        NPC_ANTNORMI = 65125
+    };
+}
 
 enum BlackMorassEncounter : uint32
 {

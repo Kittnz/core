@@ -100,7 +100,7 @@ public:
 
     void JustSummoned(Creature* pSummoned) override
     {
-        if (pSummoned->GetEntry() == NPC_CHRONORMU)
+        if (pSummoned->GetEntry() == BlackMorassUnits::NPC_CHRONORMU)
         {
             m_guidChronormu = pSummoned->GetObjectGuid();
 
