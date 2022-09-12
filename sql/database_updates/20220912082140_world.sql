@@ -83,3 +83,13 @@ update item_template set required_level = 0 where entry = 60536;
 
 -- Quest 40368, reduce money reward to 5 silver
 update quest_template set reworreqmoney = 50 where entry = 40368;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2012
+update quest_template set offerrewardtext = 'It brings back good memories to work with the same tools she passed down to me.\n\nI get to weave the same stitches as the ones she taught me before she passed, and that warms my heart.\n\nYou\'ve been a real help to this little ol\' farm family, $N. Bless you.' where entry = 60008;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1884
+delete from skill_line_ability where id = 30038;
+update skill_line_ability set min_value = 250, max_value = 270 where id = 15079;
+
+-- Some grammar fixes:
+update quest_template set details = 'When Gnomeregan first sent us here, they tasked us to obtain an Azure Scale from the Blue Dragonflight. Sadly, we have not had the means to do so!\n\nWe\'ve been too busy with other projects, and—well—we didn\'t want to stir the hive. Especially since we don\'t have any actual military capabilities! Now with you around, there is a possibility!\n\nThe Dragonflight has gathered around Lake Mennar to the northwest. Get me an Azure Scale from the Blue Dragonflight, and make sure to bring buddies.\n\nI\'d hate to have you die on my account!' where entry = 40062;
