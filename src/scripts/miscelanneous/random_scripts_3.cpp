@@ -306,11 +306,18 @@ bool GOSelect_go_grain_sacks(Player* pPlayer, GameObject* pGo, uint32 sender, ui
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-		pGo->Deactivate(150);
-        // Purple smoke effect: 
-		pPlayer->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
+        if (!pPlayer->HasItemCount(5438, 1))
+        {
+            pPlayer->GetSession()->SendNotification("Requires Grelda\'s Poison Vial.");
+        }
+        else
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60323))
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            pGo->Deactivate(150);
+            // Purple smoke effect: 
+            pPlayer->SummonGameObject(2000560, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 150, true);
+        }
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
