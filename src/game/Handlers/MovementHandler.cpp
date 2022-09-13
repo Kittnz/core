@@ -1035,9 +1035,10 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
                 if (Transport* t = pPlayerMover->GetMap()->GetTransport(movementInfo.GetTransportGuid()))
                 {
                     t->AddPassenger(pPlayerMover);
-                    if (Pet* pet = pPlayerMover->GetPet())
-                        if (pet->GetTransport() != t)
-                            loadPetOnTransport = pet;
+                    if (Pet* pPet = pPlayerMover->GetPet())
+                        pPet->Unsummon(PET_SAVE_REAGENTS, pPlayerMover);
+                    if (Pet* pMiniPet = pPlayerMover->GetMiniPet())
+                        pMiniPet->Unsummon(PET_SAVE_AS_DELETED, pPlayerMover);
                 }
                 // fix an 1.12 client problem with transports
                 pPlayerMover->SetJustBoarded(true);

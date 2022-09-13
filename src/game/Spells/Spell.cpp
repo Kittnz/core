@@ -6584,6 +6584,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 if (pet->IsAlive())
                     return SPELL_FAILED_ALREADY_HAVE_SUMMON;
 
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
+
                 break;
             }
             // Don't make this check for SPELL_EFFECT_SUMMON_CRITTER, SPELL_EFFECT_SUMMON_WILD or SPELL_EFFECT_SUMMON_GUARDIAN.
@@ -6597,6 +6600,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
             case SPELL_EFFECT_SUMMON_POSSESSED:
                 if (m_casterUnit && m_casterUnit->GetCharmGuid())
                     return SPELL_FAILED_ALREADY_HAVE_CHARM;
+
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
                 break;
             case SPELL_EFFECT_SUMMON_PET:
             {
@@ -6606,6 +6612,16 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
 
                 if (m_casterUnit && m_casterUnit->GetCharmGuid())
                     return SPELL_FAILED_ALREADY_HAVE_CHARM;
+
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
+
+                break;
+            }
+            case SPELL_EFFECT_SUMMON_CRITTER:
+            {
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
 
                 break;
             }
