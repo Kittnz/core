@@ -415,6 +415,9 @@ bool GuardMgr::SummonGuard(Creature* pCivilian, Player* pEnemy)
     if (!pCivilian || !pEnemy)
         return false;
 
+    if (pEnemy->IsHardcore())
+        return false;
+
     uint32 const areaId = pCivilian->GetAreaId();
 
     auto itr = m_mAreaGuardInfo.find(areaId);
