@@ -1430,14 +1430,6 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
         case SPELLFAMILY_DRUID:
             break;
         case SPELLFAMILY_HUNTER:
-            switch (auraSpellInfo->Id)
-            {
-                // Patch 1.9: Aspect of the Pack and Aspect of the Cheetah - Periodic damage will no longer trigger the Dazed effect.
-                case 5118:  // Aspect of the Cheetah
-                case 13159: // Aspect of the Pack
-                    if (procFlags & (PROC_FLAG_DEAL_HARMFUL_PERIODIC | PROC_FLAG_TAKE_HARMFUL_PERIODIC))
-                        return SPELL_AURA_PROC_FAILED;
-            }
             break;
         case SPELLFAMILY_PALADIN:
         {
