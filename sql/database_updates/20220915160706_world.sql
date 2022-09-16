@@ -11,7 +11,7 @@ update item_template set bonding = 1 where entry = 50400;
 update item_template set item_level = 57 where entry = 60636;
 
 -- Missing barbershop item:
-replace into turtle_world.npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (50053, 80665, 0, 0, 0, 0);
+replace into npc_vendor (entry, item, maxcount, incrtime, itemflags, condition_id) values (50053, 80665, 0, 0, 0, 0);
 
 -- NPC Bright Crawler reduce damage by half	
 update creature_template set dmg_min = 110, dmg_max = 150 where entry = 91831;
