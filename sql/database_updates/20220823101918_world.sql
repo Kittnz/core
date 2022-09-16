@@ -946,5 +946,3 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50550, 'To Brother Neals\n\nThe information you have provided proved to be paramount in finding the criminal known as Carver Molsen and bringing him to justice. At last the murders of the Easton family have been avenged in the name of the light. Westfall grows just a bit hopeful thanks to your actions.\n\nThe person bearing this letter also managed to find the key for the Old Westfall Church, when this mess is cleaned up, and the land is restored, I do hope that you return.\n\nSigned Gryan Stoutmantle.', 0);
 
 update creature_template set script_name = 'npc_gryan_stoutmantle' where entry = 234;
-
--- Additional notes: Upon quest completion have Brother neals wave to the player, and say the following line. "Thanks for what you've done. The memories I hold in that church will not be forgotten, and perhaps, in time, there can be more made there when the land heals and the crops are sown. If the light is so gracious, we may have such a future, farewell $N, may your travels be safe now, ya hear?"
