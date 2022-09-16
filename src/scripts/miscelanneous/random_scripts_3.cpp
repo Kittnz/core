@@ -3852,61 +3852,70 @@ bool GossipSelect_npc_broter_neals(Player* pPlayer, Creature* pCreature, uint32 
     return true;
 }
 
-//bool QuestAccept_npc_gryan_stoutmantle(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
-//{
-//    if (!pQuestGiver)
-//        return false;
-//
-//    if (!pPlayer)
-//        return false;
-//
-//    bool first_item_added = false;
-//    bool second_item_added = false;
-//
-//    if (pQuest->GetQuestId() == 40603) // The Old Church of Westfall XI
-//    {
-//        if (!pPlayer->HasItemCount(60842, 1))
-//        {
-//            if (pPlayer->AddItem(60842))
-//                first_item_added = true;
-//        }
-//        else
-//            first_item_added = true;
-//
-//        if (!pPlayer->HasItemCount(60846, 1))
-//        {
-//            if (pPlayer->AddItem(60846))
-//                second_item_added = true;
-//        }
-//        else
-//            second_item_added = true;
-//
-//        if (!first_item_added || !second_item_added)
-//        {
-//            pPlayer->RemoveQuest(40603);
-//            pPlayer->SetQuestStatus(40603, QUEST_STATUS_NONE);
-//            pPlayer->GetSession()->SendNotification("Your bags are full!");
-//            return false;
-//        }
-//    }
-//
-//    return false;
-//}
+bool QuestRewarded_npc_broter_neals(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40603) // The Old Church of Westfall XI
+    {
+        pQuestGiver->MonsterSay("Thanks for what you've done. The memories I hold in that church will not be forgotten, and perhaps, in time, there can be more made there when the land heals and the crops are sown. If the light is so gracious, we may have such a future, farewell, may your travels be safe now, ya hear?");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool QuestAccept_npc_gryan_stoutmantle(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40603) // The Old Church of Westfall XI
+    {
+        if (!pPlayer->HasItemCount(60842, 1))
+        {
+            if (pPlayer->AddItem(60842))
+                first_item_added = true;
+        }
+        else
+            first_item_added = true;
+
+        if (!pPlayer->HasItemCount(60846, 1))
+        {
+            if (pPlayer->AddItem(60846))
+                second_item_added = true;
+        }
+        else
+            second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            pPlayer->RemoveQuest(40603);
+            pPlayer->SetQuestStatus(40603, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+
+    return false;
+}
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
-    //newscript = new Script;
-    //newscript->Name = "npc_gryan_stoutmantle";
-    //newscript->pQuestRewardedNPC = &QuestRewarded_npc_gryan_stoutmantle;
-    //newscript->RegisterSelf();
+    newscript = new Script;
+    newscript->Name = "npc_gryan_stoutmantle";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_gryan_stoutmantle;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_broter_neals";
     newscript->pGossipHello = &GossipHello_npc_broter_neals;
     newscript->pGossipSelect = &GossipSelect_npc_broter_neals;
-    //newscript->pQuestRewardedNPC = &QuestRewarded_npc_broter_neals;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_broter_neals;
     newscript->RegisterSelf();
 
     newscript = new Script;
