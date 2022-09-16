@@ -718,4 +718,231 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (60977, 40588);
 replace into creature_involvedrelation	(id, quest) values (5939 , 40588);
 
+-- Chasing Sand
+delete from quest_template where entry = 40589;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40589,2,440,45,40,0,0,'Chasing Sand','We sent out a crew weeks ago to begin doing some studies over the ruins down south and they haven\'t showed up yet, not even a peep.\n\nThe desert is a dangerous place so now rumor is going around they may have met some terrible fate. It is possible I suppose!\n\nWhat is really important is what we sent out with them, you see, when we trust someone, we usually give them some valueable gear, something worth a lot of coin, you dig?\n\nI need you to go out there and find that crew, or more importantly, get the Turbo-Scan Filtronomitor from whatever is left!\n\nThey should have been down near Southmoon Ruins, check around there.','Find the Steamwheedle Crew and return the Turbo-Scan Filtronomitor back to Baggle Hackrust at Steamwheedle Port in Tanaris.','That Turbo-Scan Filtronomitor is state of the art, losing that is like losing twenty goblins.','Oh baby, its still intact, look at this thing, a bit of heat damage, and some sand where it shouldn\'t be, but its not broken.\n\nYou saved us a heaping pile of gold recovering this thing, and that\'s like giving it to me yourself!\n\nHere, this should make up for the work you did.',60832,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10000,4950,1001,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
+replace into creature_questrelation		(id, quest) values (60957, 40589);
+replace into creature_involvedrelation	(id, quest) values (60957, 40589);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60832,7572,'Turbo-Scan Filtronomitor',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010926, 3, 25847, 'Turbo-Scan Filtronomitor', 0, 4, 0.5, 43, 2010926, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010926,60832,-100,0,1,1,0);
+
+-- Golden Glasshide Scales
+delete from quest_template where entry = 40590;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40590,2,440,46,40,0,0,'Golden Glasshide Scales','The desert, such a unique place, I\'ve heard rumors of people perishing from the harsh and brutal sands, the extreme heat, and the lack of water. It kind of reminds me of where I come from aye?\n\nIn such a place only the most brutal creatures can survive, one of which has spent its entire life within the sun.\n\nThe Glasshide Gazer has a distinctive golden scale that my benefactor wants to get ahold of.\n\nYou can find them down in the south roaming the vast desert, collect me twelve of these scales and I will make sure you get paid well.','Collect 12 Golden Glasshide Scales for Gelweg Darkbrow at Steamwheedle Port in Tanaris.','Aye, it be hot out there huh?\n\nAny luck with them scales?','Oh, would ye look at these, so bright and shiny, they practically look like golden coins!',60833,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4500,4550,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60955, 40590);
+replace into creature_involvedrelation	(id, quest) values (60955, 40590);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60833,7594,'Golden Glasshide Scale',12,1,2048,1,-1,-1,1,12,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(5420, 60833, -90, 0, 1, 1, 0);
+
+-- Favor for Gelweg
+delete from quest_template where entry = 40591;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40590,40591,2,440,48,40,0,0,'Favor for Gelweg','Hey, look I appreciate all you did for me with those scales, my higher ups at Shadowfor - Err, back out in the Eastern Kingdoms are going to be very pleased, and that pleases me!\n\nBut I just have one more favor to ask for you.\n\nDown to south you\'ll find a place called Southbreak Shore, it might be tricky, just a bit southeast of the Caverns of Time.\n\nAll along that coast are large Coast Striders, massive giants that roam the coast and call it home. Well you see, I need an eyeball from one of them, and I really don\'t think they\'ll give it to you, infact they probably will hate you for being there!\n\nSo, you go and gather a friend or two, get me an eyeball, and we finish our dealings, aye?','Gather a Sea Giant Eyeball for Gelwig Darkbrow at Steamwheedle Port in Tanaris.','Well I see you\'re not smashed to a pulp, any luck?','Would ye look at that? Well, you actually went ahead and did it then aye?\n\nMe and my benefactors appreciate all the work, this has really scratched off the main difficult things I needed.\n\nWell I suppose you earned something, here, take these, they should do you well, with all your adventuring and what not.',60834,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60835,1,60836,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60955, 40591);
+replace into creature_involvedrelation	(id, quest) values (60955, 40591);
+update quest_template set type = 1 where entry = 40591;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60834,7986,'Sea Giant Eyeball',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(5466, 60834, -80, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60835', '4', '0', 'Gelwig\'s Ring', '', '66202', '2', '0', '1', '31820', '7955', '11', '-1', '-1', '51',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '14', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '28', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60836', '4', '0', 'Darkbrow Scepter', '', '15930', '2', '0', '1', '43952', '10988', '23', '-1', '-1', '51',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '23727', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '28', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Gusting Vortex's
+delete from quest_template where entry = 40592;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40592,2,440,45,40,0,0,'Gusting Vortex\'s','This desert holds many secrets and magical properties, much of which is buried deep within the sand. Leaking emanations have begun to stir up the ground into swirling elementals of sand and wind!\n\nAt least, that is what I am here to look into anyway!\n\nTo get concrete proof I\'d like you to find one of the many Gusting Vortex\'s that roam all across Tanaris, kill them, and collect a single collection of Harmonized Sand.\n\nI warn you, Harmonized Sand is rare, and valueable, many brave travelers have died in search of it.\n\nNot all of the Gusting Vortex elementals will be within a harmonized state, so don\'t give up, and keep looking until you find it!','Slay Gusting Vortex, and find a single Harmonized Sand for Ginlo Taxxo at Steamwheedle Port in Tanaris.','Have you had any luck in finding that fabled Harmonized Sand?','Oh, would ye look at these, so bright and shiny, they practically look like golden coins!',60836,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2000,5850,1001,200,0,0,0,0,0,0,0,0,0,60837,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60958, 40592);
+replace into creature_involvedrelation	(id, quest) values (60958, 40592);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60836,31325,'Harmonized Sand',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(8667, 60836, -18, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60837', '4', '2', 'Dunewind Sash', '', '27976', '2', '0', '1', '19304', '4826', '6', '-1', '-1', '50',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '6', '7',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '74', '0', '0', '0',
+ '0', '0', '0', '7694', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '8', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Old Church of Westfall
+delete from quest_template where entry = 40593;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40593,2,40,13,8,0,0,'The Old Church of Westfall','Upon opening the chest you discover several old, and worn out items, various church tomes and writings with a small out of place letter resting at the top, it looks aged, and written in a shrewn handwritting which reads :\n\n<Carver, we have done as you asked and have forced the old man out, David was a bit rough and injured him. We made sure to -really- send a message, and he won\'t be coming back. We even got the key and locked the doors tight if anyone came back, they will soon understand it is their time to leave as well.>\n\nYou should bring this information to a higher authority.','Bring the Abandoned Letter to Gryan Stoutmantle at Sentinel Hill in Westfall.','Yes?','What is this, a letter?',60838,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60838,1,0,150,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into gameobject_questrelation	(id, quest) values (2010927, 40593);
+replace into creature_involvedrelation	(id, quest) values (234    , 40593);
+
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010927, 2, 23431, 1, 'Abandoned Footlocker', 32, '');
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60838,8927,'Abandoned Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- The Old Church of Westfall II
+delete from quest_template where entry = 40594;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40593,40594,2,40,14,8,0,0,'The Old Church of Westfall II','You found this at the Westfall Church?\n\nIt has been a long time since I have heard anything about that place, another abandoned relic of a potentially bright past. It is a shame what happened there, but it is a story that is much like the rest of the region.\n\nThe western side of Westfall was the first to be removed, and there are not many who remain who can give us information, many of those farmers were either murdered, or disappeared into secrecy.\n\nThere is someone that I can think of, Baros Alexston, he made something of himself after everything went down, and became an Architect in Stormwind City, you can find him in Cathedral Square if you don\'t mind looking into this matter, maybe he can give us some details about who ran the church, or even what happened to it.','Speak with Baros Alexston in Stormwind.','Yes?','Why hello there, are you here to inquire about civil architecture in the city of Stormwind?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,200,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (234 , 40594);
+replace into creature_involvedrelation	(id, quest) values (1646, 40594);
+
+-- The Old Church of Westfall III
+delete from quest_template where entry = 40595;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40594,40595,2,40,14,8,0,0,'The Old Church of Westfall III','Oh, so you speak of that old church, out in Westfall? It has been a long time since I have been there, and incredibly long time. I must say, but I do not think I will be much of a help, most of what I can remember is the sun beating down on me as I walked there and back.\n\n<Baros Alexston lets out a small laugh at the memory.>\n\nThe one who ran it was an old fellow though, always was quite nice, and cheerful. He raised many spirits of the downtrodden farmers back then and helped out where he could.\n\nSuch a shame that such a thing could happen to an honorable man. If you\'re looking for information, your best bet would probably be the Cathedral here in the city, find Bishop Farthing, he might have an idea.','Speak with Bishop Farthing at the Cathedral of Light in Stormwind.','Yes?','Why hello there, is there anything that I can help you with $r?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,150,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (1646, 40595);
+replace into creature_involvedrelation	(id, quest) values (1212, 40595);
+
+-- The Old Church of Westfall IV
+delete from quest_template where entry = 40596;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40595,40596,2,40,14,8,0,0,'The Old Church of Westfall IV','A priest from Westfall huh? Well that is certainly familiar, there was only one church there, and I recall him having had all sorts of trouble, from brigands to thugs who threatened to end his life. The light can be testing at times, but no one should go through something like that.\n\nHe spent some time here in the Cathedral of Light before he moved on to Northshire Abbey, he helps out around there from time to time, he goes by the name Brother Neals.','Speak with Brother Neals at the Northshire Abbey in Elwynn Forest.','Yes?','Oh, that is why you are here.\n\n It\'s been a long time since my Westfall days, but hopefully I can be of help.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,150,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (1212, 40596);
+replace into creature_involvedrelation	(id, quest) values (952 , 40596);
+
+-- The Old Church of Westfall V
+delete from quest_template where entry = 40597;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40596,40597,2,40,14,8,0,0,'The Old Church of Westfall V','So, you\'re here about the Old Church in Westfall huh? Well its been a while since anyone has asked about such a thing, the Cathedral inquired what happened, but nothing ended up coming of it.\n\nThe crooks got away with what they did, and so I decided I would just retire to some peaceful corner, only to hear that they are now here in Northshire as well.\n\n<Brother Neals lets out a soft sigh.>\n\nI\'ll go over what happened when you\'re ready, it might be a bit.','Listen to Brother Neals recounting of his time in Westfall.','Yes?','So, do you see what has happened, and who is behind it all now?',0,0,0,0,0,0,0,0,60392,1,0,0,0,0,0,0,0,0,0,350,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'Listen to Brother Neals');
+
+replace into creature_questrelation		(id, quest) values (952, 40597);
+replace into creature_involvedrelation	(id, quest) values (952, 40597);
+
+update creature_template set script_name = 'npc_broter_neals' where entry = 952;
+
+replace into creature_template values
+(60392, 328, 0, 0, 0, 0, 'quest_40597_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- The Old Church of Westfall VI
+delete from quest_template where entry = 40598;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40597,40598,2,40,16,8,0,0,'The Old Church of Westfall VI','Now that you\'ve heard my story you can understand what has happened. If anyone is responsible for shutting down the church and the murder of the Easton Family, my suspicions lay toward Carver Molsen. He inherited that farmstead and was always greedy for more, even going so far as to join the Defias.\n\nHopefully my information is relevant for you, perhaps you can bring it to Gryan Stoutmantle, he is in charge of the People\'s Militia there.','Bring your findings to Gryan Stoutmantle at Sentinel Hill in Westfall.','Yes?','So you find the priest who led the church, has he said anything about what happened?',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,250,72,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (952, 40598);
+replace into creature_involvedrelation	(id, quest) values (234, 40598);
+
+-- The Old Church of Westfall VII
+delete from quest_template where entry = 40599;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40598,40599,2,40,16,8,0,0,'The Old Church of Westfall VII','Carver Molsen.\n\nThis is a familiar name, he leads various gangs and crews of thugs in the region. If the rumors and word from Brother Neals is correct, then he is no doubt in possession of the missing deeds for both the Molsen and Easton plots.\n\nThere is an insider within Stormwind named Larry Ryder, he has given us some information on the Defias, perhaps he knows information on how to find this \'Carver Molsen\'.\n\nYou can find him in Stormwind, usually skulking about the Pig and Whistle in Old Town.','Find Larry Ryder, usually found at the Pig and Whistle in Stormwind.','Yes?','So, what you want information? It won\'t come easy.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,210,72,50,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (234  , 40599);
+replace into creature_involvedrelation	(id, quest) values (60879, 40599);
+
+-- The Old Church of Westfall VIII
+delete from quest_template where entry = 40600;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40599,40600,2,40,16,8,0,0,'The Old Church of Westfall VIII','Oh, I know who you\'re looking for, rowdy type, wants more than he has.\n\nYou know what I\'m talking about.\n\nIf you want information then I\'m going to need help, you do a favor for me, I do a favor for you, understood? I have a few contacts that are looking for a somewhat rare poison that comes from Greater Tarantula Venom. You can find it from those Greater Tarantulas out in Redridge Mountains.\n\nGo there, get me seven, and come back, easy right? So don\'t take that long, I don\'t like waiting.','Bring 7 Greater Taratula Venom to Larry Ryder in the Pig and Whistle in Stormwind.','Have you got the Venom yet? My contacts won\'t be happy waiting around.','Well, would you look at that, you survived the trip, most people around here don\'t really want to collect venom from giant spiders.\n\nEither way, you did good by me, so I\'ll do good by you.',60839,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1300,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60879, 40600);
+replace into creature_involvedrelation	(id, quest) values (60879, 40600);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60839,3152,'Greater Tarantula Venom',12,1,2048,1,-1,-1,1,7,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(505, 60839, -70, 0, 1, 1, 0);
+
+-- The Old Church of Westfall IX
+delete from quest_template where entry = 40601;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40600,40601,2,40,16,8,0,0,'The Old Church of Westfall IX','So, who was this about, Marven Horsen? Larsen Wormen?\n\n<Larry lets a crass smirk rest on his face.>\n\nCarver Molsen, he certainly is a character, hangs around that old farmstead, goes by the name \'The Dead Arce\' these days, used to be called the Easton Fields.\n\nYou got what you needed, now go on, and tell who you need to.','Bring the location of Carver Molsen to Gryan Stoutmantle at Sentinel Hill in Westfall.','Yes?','The Dead Acre huh, interesting.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,400,72,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60879, 40601);
+replace into creature_involvedrelation	(id, quest) values (234  , 40601);
+
+-- The Old Church of Westfall X
+delete from quest_template where entry = 40602;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40601,40602,2,40,22,15,0,0,'The Old Church of Westfall X','It is time for justice to be dealt. For the murder of the Easton family, and the disruption of peace in Westfall, Carven Molsen shall not be spared any mercy in these lands.\n\nBring some good news to the remaining people of Westfall, and travel to the Dead Acre, just to the south east. Kill him, and recover the Deed of Easton Fields , the Deed of Molsen Farm, and the Westfall Church Key.\n\nWith him gone, there may yet be hope for a future in these lands.','Travel to the Dead Arce, and kill Carver Molsen, recover the Deed to Easton Fields, the Deed to Molsen Farm and the Westfall Church for Gryan Stoutmantle at Sentinel Hill in Westfall.','Has he been brought to justice $N?','You have brought justice to the Eastons, and have removed a dangerous criminal from our lands, for that we cannot be more greatful.\n\nWith these Deeds there is hope we may resettle the land once the Defias threat is removed, let us hope such a future comes quick $N.\n\nFor your efforts I have prepared some items, they should serve you well.',60840,1,60841,1,60842,1,0,0,60878,1,0,0,0,0,0,0,0,0,0,1600,72,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60843,1,60844,1,60845,1,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (234, 40602);
+replace into creature_involvedrelation	(id, quest) values (234, 40602);
+update quest_template set type = 1 where entry = 40602;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60840,811,'Deed to Easton Fields',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60841,811,'Deed to Molsen Farm',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60842,16453,'Westfall Church Key',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010928, 3, 23434, 'Carver\'s Chest', 0, 4, 0.5, 43, 2010928, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010928,60841,-100,0,1,1,0),
+(2010928,60842,-100,0,1,1,0);
+
+replace into item_template values
+ ('60843', '4', '0', 'Drape of Westfall', '', '26173', '2', '0', '1', '5048', '1262', '16', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '3', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60844', '4', '6', 'The People\'s Defender', '', '4458', '2', '0', '1', '7688', '1922', '14', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '9', '494', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '4', '0', '0', '75', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60845', '2', '7', 'Blade of Sentinel Hill', '', '7313', '2', '0', '1', '8832', '2208', '21', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '3', '4', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '0',
+ '0', '20', '37', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '21', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Old Church of Westfall XI
+delete from quest_template where entry = 40603;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40602,40603,2,40,22,15,0,0,'The Old Church of Westfall XI','There is one last thing I ask of you in regards to the matter of the Old Westfall Church. Brother Neals is responsible for much of the information we have discovered, I have prepared a letter to be sent to him.\n\nI have also included the Westfall Church Key, when this land is restored to order, I would think of one no better to return it to working order.\n\nHead to Northshire Abbey, and bring it to him with my letter.','Deliver the Letter to Brother Neals, and the Westfall Church Key to Brother Neals at Northshire Abbey in Elwynn Forest.','So, what news comes from Westfall?','<Brother Neals reads the letter, his face easing, and an expression of relief washes over him.>\n\nIt feels good to know justice has been met out to that ruffian, for all the misery he has caused.\n\nI am just happy that my information was able to assist and bring justice to that lawless land.\n\n<Brother Neals takes the Westfall Church Key, tucking it into a pocket of his robe carefully.>',60842,1,60846,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,350,72,75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (952, 40603);
+replace into creature_involvedrelation	(id, quest) values (234, 40603);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60846,3020,'Letter to Brother Neals',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50550);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES (50550, 'To Brother Neals\n\nThe information you have provided proved to be paramount in finding the criminal known as Carver Molsen and bringing him to justice. At last the murders of the Easton family have been avenged in the name of the light. Westfall grows just a bit hopeful thanks to your actions.\n\nThe person bearing this letter also managed to find the key for the Old Westfall Church, when this mess is cleaned up, and the land is restored, I do hope that you return.\n\nSigned Gryan Stoutmantle.', 0);
+
+-- Additional notes: Upon quest completion have Brother neals wave to the player, and say the following line. "Thanks for what you've done. The memories I hold in that church will not be forgotten, and perhaps, in time, there can be more made there when the land heals and the crops are sown. If the light is so gracious, we may have such a future, farewell $N, may your travels be safe now, ya hear?"
