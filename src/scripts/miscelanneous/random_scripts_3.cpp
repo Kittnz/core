@@ -3807,9 +3807,107 @@ bool GossipSelect_npc_bert_mano(Player* pPlayer, Creature* pCreature, uint32 uiS
     return true;
 }
 
+bool GossipHello_npc_broter_neals(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40597) == QUEST_STATUS_INCOMPLETE) // The Old Church of Westfall V
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, what exactly happened in Westfall?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(952, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_broter_neals(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("Well, where to begin? I traveled to Westfall and helped establish a church there. The locals were extremely friendly, religious folk themselves, and assisted in whatever manner they could. Me and them both brought the community together, created strong bonds and helped eachother when we were able.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("There was trouble though, between two families, the Molsen and Easton, a land dispute of sorts that dated back a generation, marriage problems between them, who owned what, and which property belonged to who. The Molsens got it in their head that they would inherit the Easton estate, especially a young one, went by the name Carver, a ruffian of a lad, who got himself into all sorts of trouble.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("It was around this time that the thugs began to show up, the boy Carver was quick to join them. The Defias threatened families to leave their land with acts of violence and murder. Soon after the Easton family was murdered in cold blood, and many other families simply left, not wanting to face similar fates.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("Less, and less showed up to my church, I had a small following, but the Defias made their presence known, threatened me to leave, and even beat me near death for refusing. I was stubborn, but not stubborn enough to die. So I left for Stormwind, where my tale continues now.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60392))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+//bool QuestAccept_npc_gryan_stoutmantle(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+//{
+//    if (!pQuestGiver)
+//        return false;
+//
+//    if (!pPlayer)
+//        return false;
+//
+//    bool first_item_added = false;
+//    bool second_item_added = false;
+//
+//    if (pQuest->GetQuestId() == 40603) // The Old Church of Westfall XI
+//    {
+//        if (!pPlayer->HasItemCount(60842, 1))
+//        {
+//            if (pPlayer->AddItem(60842))
+//                first_item_added = true;
+//        }
+//        else
+//            first_item_added = true;
+//
+//        if (!pPlayer->HasItemCount(60846, 1))
+//        {
+//            if (pPlayer->AddItem(60846))
+//                second_item_added = true;
+//        }
+//        else
+//            second_item_added = true;
+//
+//        if (!first_item_added || !second_item_added)
+//        {
+//            pPlayer->RemoveQuest(40603);
+//            pPlayer->SetQuestStatus(40603, QUEST_STATUS_NONE);
+//            pPlayer->GetSession()->SendNotification("Your bags are full!");
+//            return false;
+//        }
+//    }
+//
+//    return false;
+//}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    //newscript = new Script;
+    //newscript->Name = "npc_gryan_stoutmantle";
+    //newscript->pQuestRewardedNPC = &QuestRewarded_npc_gryan_stoutmantle;
+    //newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_broter_neals";
+    newscript->pGossipHello = &GossipHello_npc_broter_neals;
+    newscript->pGossipSelect = &GossipSelect_npc_broter_neals;
+    //newscript->pQuestRewardedNPC = &QuestRewarded_npc_broter_neals;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_bert_mano";
