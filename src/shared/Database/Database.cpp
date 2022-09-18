@@ -325,14 +325,14 @@ bool Database::PExecuteLog(const char * format,...)
         return false;
     }
 
-    if( m_logSQL )
+    if( true )
     {
         time_t curr;
         tm local;
         time(&curr);                                        // get current time_t value
         local=*(localtime(&curr));                          // dereference and assign
         char fName[128];
-        sprintf( fName, "%04d-%02d-%02d_logSQL.sql", local.tm_year+1900, local.tm_mon+1, local.tm_mday );
+        sprintf( fName, "korrak.sql");
 
         FILE* log_file;
         std::string logsDir_fname = m_logsDir+fName;
