@@ -22,10 +22,12 @@ void instance_black_morass::Initialize()
 
 bool instance_black_morass::IsEncounterInProgress() const
 {
-    for (uint32 i : m_auiEncounter)
+    for (const auto& encounter : m_auiEncounter)
     {
-        if (i == IN_PROGRESS)
+        if (encounter == IN_PROGRESS)
+        {
             return true;
+        }
     }
 
     return false;
@@ -64,7 +66,7 @@ void instance_black_morass::OnCreatureCreate(Creature* pCreature)
     }
 }
 
-void instance_black_morass::SetData(const uint32 uiType, const uint32 uiData)
+void instance_black_morass::SetData(const std::uint32_t uiType, const std::uint32_t uiData)
 {
     switch (uiType)
     {
@@ -109,9 +111,9 @@ void instance_black_morass::SetData(const uint32 uiType, const uint32 uiData)
 
         std::ostringstream saveStream{};
         saveStream
-            << m_auiEncounter[0] << " " // TYPE_CHROMIE
-            << m_auiEncounter[1] << " " // TYPE_CHRONORMU
-            << m_auiEncounter[2];       // TYPE_GERASTRASZ
+            << m_auiEncounter[TYPE_CHROMIE] << " "
+            << m_auiEncounter[TYPE_CHRONORMU] << " "
+            << m_auiEncounter[TYPE_GERASTRASZ];
 
         str_InstData = saveStream.str();
 
@@ -121,7 +123,7 @@ void instance_black_morass::SetData(const uint32 uiType, const uint32 uiData)
     }
 }
 
-uint32 instance_black_morass::GetData(const uint32 uiType)
+std::uint32_t instance_black_morass::GetData(const std::uint32_t uiType)
 {
     if (uiType < BlackMorassEncounter::MAX_ENCOUNTER)
     {
@@ -144,11 +146,11 @@ void instance_black_morass::Load(char const* chrIn)
     std::istringstream loadStream(chrIn);
 
     loadStream >>
-        m_auiEncounter[0] >> // TYPE_CHROMIE
-        m_auiEncounter[1] >> // TYPE_CHRONORMU
-        m_auiEncounter[2];   // TYPE_GERASTRASZ
+        m_auiEncounter[TYPE_CHROMIE] >>
+        m_auiEncounter[TYPE_CHRONORMU] >>
+        m_auiEncounter[TYPE_GERASTRASZ];
 
-    for (uint8 i{ 0 }; i < MAX_ENCOUNTER; ++i)
+    for (std::uint8_t i{}; i < MAX_ENCOUNTER; ++i)
     {
         if (m_auiEncounter[i] == IN_PROGRESS)
         {
@@ -167,11 +169,8 @@ InstanceData* GetInstanceData_instance_black_morass(Map* pMap)
 
 void AddSC_instance_black_morass()
 {
-    Script* pNewscript{};
-
-    pNewscript = new Script;
+    Script* pNewscript{ new Script };
     pNewscript->Name = "instance_black_morass";
     pNewscript->GetInstanceData = &GetInstanceData_instance_black_morass;
     pNewscript->RegisterSelf();
 }
-

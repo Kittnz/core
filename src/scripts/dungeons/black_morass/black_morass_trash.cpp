@@ -27,7 +27,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -59,7 +59,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -91,7 +91,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -123,7 +123,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -155,7 +155,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -187,7 +187,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -219,7 +219,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -251,7 +251,7 @@ public:
 
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -264,7 +264,6 @@ CreatureAI* GetAI_npc_aqir_add(Creature* pCreature)
 {
     return new npc_aqir_addAI(pCreature);
 }
-
 
 
 void AddSC_black_morass_trash()

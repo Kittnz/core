@@ -77,7 +77,7 @@ public:
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -153,9 +153,7 @@ CreatureAI* GetAI_boss_chronormu(Creature* pCreature)
 
 void AddSC_boss_chronormu()
 {
-    Script* pNewscript{};
-
-    pNewscript = new Script;
+    Script* pNewscript{ new Script };
     pNewscript->Name = "boss_chronormu";
     pNewscript->GetAI = &GetAI_boss_chronormu;
     pNewscript->RegisterSelf();

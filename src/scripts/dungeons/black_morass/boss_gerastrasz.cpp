@@ -21,13 +21,13 @@ public:
 
 private:
 
-    std::uint32_t m_uiRainOfFire_Timer{};
-    std::uint32_t m_uiCleave_Timer{};
-    std::uint32_t m_uiBloodFunnel_Timer{};
-
     bool m_bFirstEchoSummoned{};
     bool m_bSecondEchoSummoned{};
     bool m_bThirdEchoSummoned{};
+
+    std::uint32_t m_uiRainOfFire_Timer{};
+    std::uint32_t m_uiCleave_Timer{};
+    std::uint32_t m_uiBloodFunnel_Timer{};
 
     ObjectGuid m_guidCurrentEcho{};
 
@@ -36,15 +36,15 @@ private:
 public:
     void Reset() override
     {
-        m_uiRainOfFire_Timer = urand(10000, 12000);
-        m_uiCleave_Timer = urand(3000, 6000);
-        m_uiBloodFunnel_Timer = 20000;
-
         m_bFirstEchoSummoned = false;
         m_bSecondEchoSummoned = false;
         m_bThirdEchoSummoned = false;
 
-        m_guidCurrentEcho = 0;
+        m_uiRainOfFire_Timer = urand(10000, 12000);
+        m_uiCleave_Timer = urand(3000, 6000);
+        m_uiBloodFunnel_Timer = 20000;
+
+        m_guidCurrentEcho.Clear();
     }
 
     void Aggro(Unit* /*pWho*/) override
@@ -86,10 +86,10 @@ public:
         if (DoCastSpellIfCan(m_creature, SPELL_FIRE_NOVA) == CAST_OK)
         {
             m_creature->MonsterYell("BAH! USELESS MINION!");
-            m_creature->MonsterTextEmote("Commander Gerastrasz ignites his own echo.");
 
             if (Creature* pEcho{ m_creature->GetMap()->GetCreature(m_guidCurrentEcho) })
             {
+                m_creature->MonsterTextEmote("Commander Gerastrasz ignites his own echo.");
                 m_creature->DealDamage(pEcho, pEcho->GetHealth(), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
             }
         }
@@ -119,7 +119,7 @@ public:
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -220,8 +220,7 @@ CreatureAI* GetAI_boss_gerastrasz(Creature* pCreature)
 
 void AddSC_boss_gerastrasz()
 {
-    Script* pNewscript{};
-    pNewscript = new Script;
+    Script* pNewscript{ new Script };
     pNewscript->Name = "boss_gerastrasz";
     pNewscript->GetAI = &GetAI_boss_gerastrasz;
     pNewscript->RegisterSelf();
