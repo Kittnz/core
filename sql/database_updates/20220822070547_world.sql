@@ -2355,7 +2355,7 @@ REPLACE INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`
 
 set @gossip_menu_id = 41214; set @magic_number = 60955;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Gelweg Darkbrow, display ID 18906, faction 35, level 46, humanoid, weapon 5291, vendor/quest/greeting flags, greeting text : "The desert be rife with opportunities, and chances to gain a little coin. I represent some interests across the ocean that are looking for rare and unique goods.\n\nPerhaps we can help eachother out, aye?\n\nOh, and uh, if you\'re looking for some cheddar, I got a bunch of it, they took my letter way too seriously.');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The desert be rife with opportunities, and chances to gain a little coin. I represent some interests across the ocean that are looking for rare and unique goods.\n\nPerhaps we can help each other out, aye?\n\nOh, and uh, if you\'re looking for some cheddar, I got a bunch of it, they took my letter way too seriously.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -2517,3 +2517,1584 @@ REPLACE INTO creature_loot_template VALUES (60878, 30023, 0.025, 0, -30023, 1, 0
 REPLACE INTO creature_loot_template VALUES (60878, 30024, 1, 0, -30024, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60878, 30037, 5, 0, -30037, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60878, 30038, 1, 0, -30038, 1, 0);
+-- Bramblethorn Quilboar, display ID 6093, level 15-16, faction 16, humanoid, scale 1.1, weapon1 : 13820
+-- Bramblethorn Boar, display ID 3027, level 15-16, faction 16, beast, scale 1, casts 7371 at start of fight
+-- Bramblethorn Thornweaver, display ID 6077, level 16-17, humanoid, scale 1.1 , waepon1 14706 (Has 623 mana, casts 782 on self at start of fight, casts 5178 every 3 seconds)
+-- Bramblethorn Trapper, display ID 1274, level 16-18, humanoid, scale 1.2, weapon1 : 15396 , casts 13608 every 10 seconds
+-- Bramblethorn Quilguard, display ID 6109 level 17-19, scale 1.4 humanoid weapon1 : 11763, casts 13737 every 12 seconds
+-- Bramblethorn Spirit, display ID 6114 level 16-18, undead, weapon1 : 23556, casts 6909 every 12 seconds)
+-- Bramblethorn Haunted, display ID 6105 level 16-18, undead, weapon1 : 1010  (Has 490 mana, casts 705 every 3 seconds)
+-- Gorras Thorncrusher, display ID 6115 level 20, scale 1.5, undead, weapon1 : 15418 , casts 19632 every 8 seconds, casts 15716 every 30 seconds
+-- Hemnock the Wise, display ID 6116, level 20, scale 1.3 humanoid, weapon1 : 15444 (Has 1026 mana, casts 23206 every 8 seconds, casts 8045 every 7 seconds)
+REPLACE INTO creature_template VALUES
+(60979, 6093, 0, 0, 0, 0, 'Bramblethorn Quilboar', NULL, 0, 15, 16, 328, 356, 0, 0, 689, 16, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 23, 30, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 60979, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 17, 27, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60980, 3027, 0, 0, 0, 0, 'Bramblethorn Boar', NULL, 0, 15, 16, 328, 356, 0, 0, 689, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 23, 30, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 1, 0, 60980, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 17, 27, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60981, 6077, 0, 0, 0, 0, 'Bramblethorn Thornweaver', NULL, 0, 16, 17, 325, 350, 623, 623, 625, 16, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 23, 30, 0, 80, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 60981, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 18, 29, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60982, 1274, 0, 0, 0, 0, 'Bramblethorn Trapper', NULL, 0, 16, 18, 386, 417, 0, 0, 782, 16, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 60982, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 20, 31, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60983, 6109, 0, 0, 0, 0, 'Bramblethorn Quilguard', NULL, 0, 17, 19, 417, 449, 0, 0, 800, 16, 0, 1, 1.14286, 1.4, 18, 5, 0, 0, 1, 27, 34, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 60983, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 24, 36, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60984, 6114, 0, 0, 0, 0, 'Bramblethorn Spirit', NULL, 0, 16, 18, 386, 417, 0, 0, 782, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 6, 0, 60984, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 20, 31, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60985, 6105, 0, 0, 0, 0, 'Bramblethorn Haunted', NULL, 0, 16, 18, 386, 417, 490, 490, 782, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 6, 0, 60985, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 20, 31, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60986, 6115, 0, 0, 0, 0, 'Gorras Thorncrusher', NULL, 0, 20, 20, 629, 629, 0, 0, 852, 16, 0, 1, 1.14286, 1.5, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 6, 0, 60986, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60987, 6116, 0, 0, 0, 0, 'Hemnock the Wise', NULL, 0, 20, 20, 629, 629, 1026, 1026, 852, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 60987, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20216; set @weapon_1 = 15444; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60987;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20215; set @weapon_1 = 15418; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60986;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20214; set @weapon_1 = 1010; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60985;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20213; set @weapon_1 = 23556; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60984;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20212; set @weapon_1 = 11763; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60983;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20211; set @weapon_1 = 15396; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60982;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20210; set @weapon_1 = 14706; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60981;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20209; set @weapon_1 = 13820; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60979;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Hemnock the Wise
+set @creature_entry = 60987;
+set @description = 'Bramblethorn: Hemnock the Wise';
+set @spell_list_id = 180065;
+
+set @spellid_1 = 23206; -- Chain Lightning
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 8; 
+set @delayrepeatmax_1 = 8;
+
+set @spellid_2 = 8045; -- Earth Shock
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 3; 
+set @delayinitialmax_2 = 3; 
+set @delayrepeatmin_2 = 7; 
+set @delayrepeatmax_2 = 7;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+
+-- Gorras Thorncrusher
+set @creature_entry = 60986;
+set @description = 'Bramblethorn: Gorras Thorncrusher';
+set @spell_list_id = 180064;
+
+set @spellid_1 = 19632; -- Cleave
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 8; 
+set @delayrepeatmax_1 = 8;
+
+set @spellid_2 = 15716; -- Enrage
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 5; 
+set @delayinitialmax_2 = 5; 
+set @delayrepeatmin_2 = 30; 
+set @delayrepeatmax_2 = 30;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Bramblethorn Haunted
+set @creature_entry = 60985;
+set @description = 'Bramblethorn: Bramblethorn Haunted';
+set @spell_list_id = 180063;
+
+set @spellid_1 = 705; -- Shadow Bolt
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 3; 
+set @delayrepeatmax_1 = 3;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Bramblethorn Spirit
+set @creature_entry = 60984;
+set @description = 'Bramblethorn: Bramblethorn Spirit';
+set @spell_list_id = 180062;
+
+set @spellid_1 = 6909; -- Curse of Thorns
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 12; 
+set @delayrepeatmax_1 = 12;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Bramblethorn Quilguard
+set @creature_entry = 60983;
+set @description = 'Bramblethorn: Bramblethorn Quilguard';
+set @spell_list_id = 180061;
+
+set @spellid_1 = 13737; -- Mortal Strike
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 12; 
+set @delayrepeatmax_1 = 12;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Bramblethorn Trapper
+set @creature_entry = 60982;
+set @description = 'Bramblethorn: Bramblethorn Trapper';
+set @spell_list_id = 180060;
+
+set @spellid_1 = 13608; -- Hooked Net
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 10; 
+set @delayrepeatmax_1 = 10;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Bramblethorn Thornweaver
+set @creature_entry = 60981;
+set @description = 'Bramblethorn: Bramblethorn Thornweaver';
+set @spell_list_id = 180059;
+
+set @spellid_1 = 782; -- Thorns
+set @probability_1 = 100; 
+set @casttarget_1 = 0; 
+set @castflags_1 = 0;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 600; 
+set @delayrepeatmax_1 = 600;
+
+set @spellid_2 = 5178; -- Wrath
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 1; 
+set @delayinitialmax_2 = 1; 
+set @delayrepeatmin_2 = 3; 
+set @delayrepeatmax_2 = 3;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Bramblethorn Boar
+set @creature_entry = 60980;
+set @description = 'Bramblethorn: Bramblethorn Boar';
+set @spell_list_id = 180058;
+
+set @spellid_1 = 7371; -- Boar Charge
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 600; 
+set @delayrepeatmax_1 = 600;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- Hemnock the Wise
+REPLACE INTO creature_loot_template VALUES (60987, 6661, 0.01, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30010, 0.01, 0, -30010, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30012, 0.01, 0, -30012, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30023, 0.01, 0, -30023, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 804, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 857, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 2453, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 3356, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 5543, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 5575, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 6211, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 6454, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 6663, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 7364, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 15313, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 14169, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 15496, 0.0633, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 1705, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 14368, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 1206, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 15019, 0.1898, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 1478, 0.32, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 954, 0.42, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 1712, 0.46, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30009, 0.5, 0, -30009, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30011, 0.5, 0, -30011, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 3012, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 3385, 0.9488, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 929, 1.3915, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 30008, 2.5, 0, -30008, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 1205, 2.6565, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 4306, 3.8583, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 4538, 4.2378, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 2589, 11.3219, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60987, 2592, 23.7824, 0, 1, 2, 0);
+-- Gorras Thorncrusher
+REPLACE INTO creature_loot_template VALUES (60986, 6661, 0.01, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30010, 0.01, 0, -30010, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30012, 0.01, 0, -30012, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30023, 0.01, 0, -30023, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 804, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 857, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 2453, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 3356, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 5543, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 5575, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 6211, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 6454, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 6663, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 7364, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 15313, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 14169, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 15496, 0.0633, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 1705, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 14368, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 1206, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 15019, 0.1898, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 1478, 0.32, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 954, 0.42, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 1712, 0.46, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30009, 0.5, 0, -30009, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30011, 0.5, 0, -30011, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 3012, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 3385, 0.9488, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 929, 1.3915, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 30008, 2.5, 0, -30008, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 1205, 2.6565, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 4306, 3.8583, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 4538, 4.2378, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 2589, 11.3219, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60986, 2592, 23.7824, 0, 1, 2, 0);
+-- Bramblethorn Haunted
+REPLACE INTO creature_loot_template VALUES (60985, 414, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 774, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 785, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 818, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 856, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 858, 1.2506, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 954, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 955, 0.56, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 1179, 2.4525, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 1180, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 1206, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 1210, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2287, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2450, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2452, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2455, 0.6637, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2589, 18.5358, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2592, 19.2885, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2601, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2657, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2770, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2771, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2835, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2836, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2882, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 2996, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 3012, 0.36, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 3311, 0.0243, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 3356, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 3393, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 3394, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4292, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4345, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4346, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4410, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4537, 9.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4541, 0.004, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 4605, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 5498, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 5503, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 5573, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 5574, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 5578, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6344, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6375, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6390, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6661, 0.01, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6663, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 6716, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 7288, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 10316, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 11039, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 30020, 0.5, 0, -30020, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 30021, 0.5, 0, -30021, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 30037, 2.5, 0, -30037, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60985, 30038, 0.5, 0, -30038, 1, 0);
+-- Bramblethorn Spirit
+REPLACE INTO creature_loot_template VALUES (60984, 414, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 774, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 785, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 818, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 856, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 858, 1.2506, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 954, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 955, 0.56, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 1179, 2.4525, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 1180, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 1206, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 1210, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2287, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2450, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2452, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2455, 0.6637, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2589, 18.5358, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2592, 19.2885, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2601, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2657, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2770, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2771, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2835, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2836, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2882, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 2996, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 3012, 0.36, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 3311, 0.0243, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 3356, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 3393, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 3394, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4292, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4345, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4346, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4410, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4537, 9.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4541, 0.004, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 4605, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 5498, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 5503, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 5573, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 5574, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 5578, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6344, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6375, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6390, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6661, 0.01, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6663, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 6716, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 7288, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 10316, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 11039, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 30020, 0.5, 0, -30020, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 30021, 0.5, 0, -30021, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 30037, 2.5, 0, -30037, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60984, 30038, 0.5, 0, -30038, 1, 0);
+-- Bramblethorn Quilguard
+REPLACE INTO creature_loot_template VALUES (60983, 414, 0.0035, 0, 3, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 14169, 0.0035, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 14728, 0.007, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 856, 0.0105, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 5573, 0.014, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 5574, 0.014, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2657, 0.0175, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 15496, 0.0175, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 765, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 785, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2287, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2450, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2452, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2453, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2601, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2775, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2836, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2882, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2996, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 3355, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 3356, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 3393, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 3394, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4292, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4345, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4346, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4410, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4541, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4592, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4605, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4957, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 5498, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 5503, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 5578, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6344, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6375, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6390, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6716, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 7288, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 10316, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 11039, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 11081, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 14368, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 15019, 0.028, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2771, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6661, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 6663, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2835, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 818, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2770, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 1206, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 3012, 0.34, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 954, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 1210, 0.4, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 30009, 0.5, 0, -30009, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 30038, 0.5, 0, -30038, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 955, 0.52, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 1180, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2455, 0.6953, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 858, 1.429, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 1179, 2.3339, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 30037, 2.5, 0, -30037, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 4537, 9.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2589, 18.0386, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60983, 2592, 19.3697, 0, 1, 2, 0);
+-- Bramblethorn Trapper
+REPLACE INTO creature_loot_template VALUES (60982, 414, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 774, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 785, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 818, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 856, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 858, 1.2506, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 954, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 955, 0.56, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 1179, 2.4525, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 1180, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 1206, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 1210, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2287, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2450, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2452, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2455, 0.6637, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2589, 18.5358, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2592, 19.2885, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2601, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2657, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2770, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2771, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2835, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2836, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2882, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 2996, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 3012, 0.36, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 3311, 0.0243, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 3356, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 3393, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 3394, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4292, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4345, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4346, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4410, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4537, 9.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4541, 0.004, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 4605, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 5498, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 5503, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 5573, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 5574, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 5578, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6344, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6375, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6390, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6661, 0.01, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6663, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 6716, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 7288, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 10316, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 11039, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 30020, 0.5, 0, -30020, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 30021, 0.5, 0, -30021, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 30037, 2.5, 0, -30037, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60982, 30038, 0.5, 0, -30038, 1, 0);
+-- Bramblethorn Thornweaver
+REPLACE INTO creature_loot_template VALUES (60981, 414, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 774, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 785, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 818, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 856, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 858, 1.2506, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 954, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 955, 0.56, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 1179, 2.4525, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 1180, 0.54, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 1206, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 1210, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2287, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2407, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2449, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2450, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2452, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2455, 0.6637, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2589, 18.5358, 0, 1, 3, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2592, 19.2885, 0, 1, 2, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2601, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2657, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2770, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2771, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2835, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2836, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2881, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2882, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2883, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 2996, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 3012, 0.36, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 3311, 0.0243, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 3356, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 3393, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 3394, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4292, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4293, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4294, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4345, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4346, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4349, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4410, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4537, 9.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4541, 0.004, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 4605, 0.04, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 5498, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 5503, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 5573, 0.0202, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 5574, 0.0121, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 5578, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 5972, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6344, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6348, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6375, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6390, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6391, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6661, 0.01, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6663, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 6716, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 7288, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 10316, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 11038, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 11039, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 30020, 0.5, 0, -30020, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 30021, 0.5, 0, -30021, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 30022, 0.5, 0, -30022, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 30037, 2.5, 0, -30037, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60981, 30038, 0.5, 0, -30038, 1, 0);
+-- Bramblethorn Boar
+REPLACE INTO creature_loot_template VALUES (60980, 768, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 769, 81.626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 771, 25.6911, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 774, 0.88, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 805, 0.25, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 818, 0.64, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 828, 0.25, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 856, 0.75, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 1210, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2447, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2449, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2555, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2598, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2770, 0.26, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 2835, 0.14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3171, 40.813, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3279, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3280, 0.3252, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3281, 0.3252, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3284, 0.4878, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3285, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3286, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3289, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3290, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3303, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3609, 0.2, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3642, 0.14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3644, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3649, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 3650, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4292, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4408, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4563, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4668, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4669, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4671, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4672, 0.24, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4674, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4675, 0.3252, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4680, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4686, 0.14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4687, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 4692, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 5571, 0.25, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 5572, 0.25, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 5573, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 5574, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 6271, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 7288, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 8181, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14086, 0.4878, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14089, 0.26, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14093, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14095, 0.24, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14098, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14099, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14102, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14110, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14115, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 14116, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15004, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15005, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15006, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15008, 0.2, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15013, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15015, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15297, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15299, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15300, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15301, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15302, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15472, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15473, 0.14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15476, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15478, 0.18, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15480, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15481, 0.1626, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15482, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15483, 0.14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 15484, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 30019, 0.5, 0, -30019, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 30020, 0.5, 0, -30020, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60980, 30021, 0.5, 0, -30021, 1, 0);		 
+-- Bramblethorn Quilboar
+REPLACE INTO creature_loot_template VALUES (60979, 2406, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2408, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2447, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2553, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2555, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2598, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2996, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 3610, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4409, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4541, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4605, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 5573, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 5574, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 6271, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 6342, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 6344, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 6347, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 6518, 0.02, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2775, 0.03, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 6661, 0.03, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 118, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4408, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4681, 0.06, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 3311, 0.0615, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 14116, 0.0615, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2287, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2657, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 6663, 0.08, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 774, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 3304, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 14115, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 15013, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 15300, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 15490, 0.12, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4693, 0.1229, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4687, 0.16, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 1210, 0.26, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 3013, 0.28, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 955, 0.3, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2835, 0.34, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2770, 0.38, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 1180, 0.42, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 1181, 0.46, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 30020, 0.5, 0, -30020, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 30021, 0.5, 0, -30021, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 30024, 0.5, 0, -30024, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 30038, 0.5, 0, -30038, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2455, 0.5532, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 818, 0.64, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 856, 0.75, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 858, 1.1678, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 1179, 1.7824, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 30018, 2.5, 0, -30018, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 4537, 7.84, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (60979, 2589, 32.6982, 0, 1, 3, 0);
+-- Bael Hardul Mountaineer <Explorer's League> , display ID 3870, level 55 guard, faction 55, humanoid, weapon1 : 12776
+-- 
+-- Borrin Dustshoulder <General Goods>, display ID 3432, level 20, faction 55, humanoid, weapon 1 : 12862
+-- 
+-- Darrak Redbrand <Redbrand Estate>, display ID 1400 , level 36, faction 55, humanoid, weapon1 : 1938, weapon 2 : 2081, quest/greeting flags, greeting text : "There is always adventure to be had, especially out in the far frontiers."
+-- 
+-- Brundah Cliffbrow <Innkeeper>, display ID 1841 , level 20, faction 55, humanoid, quest/greeting/vendor flags , greeting text : "Welcome, make yourself comfortable and at home, we have plenty of ale and lodging should you need a rest." ((SELLS COMMON FOOD/WATER ITEMS))
+-- 
+-- Throki Cliffbrow <Barkeep>, display ID 10693 , level 20, faction 55, humanoid, vendor flags ((SELLS ALE/ALCHOHOL) 
+-- 
+-- Grumnir Battlebeard <Explorers' League>, display ID 18986 , level 46, faction 55, quest/greeting flags, greeting text : "I've known Whitepeak ever since my time serving Ironforge.\n\n I'm certain he could use my experience and expertise out here, especially so far from home."
+-- 
+-- Mountaineer Truthforge <Explorers' League>, display ID 18992 , level 58, faction 55, humanoid, weapon1 : 60719, quest/greeting flags, greeting text : "We are far in hostile territory, practically surrounded by enemies. It is best to keep our whits about us and be ready for a fight.\n\n Are you looking to assist us here in Bael Hardul?"
+-- 
+-- Unilda Thunderstone <Explorers' League>, display ID 3063 , level 26, faction 55
+-- 
+-- Prospector Flinthammer <Explorers' League>, display ID 4595, level 37, faction 55, humanoid, weapon1 : 2901, quest/greeting flags, greeting text : "Kalimdor is surely to be full of rich and rare minerals that we don't often see on the Eastern Kingdoms and I'm sure of it, I just need to find what I'm looking for, that's all."
+REPLACE INTO creature_template VALUES
+(60988, 3870, 0, 0, 0, 0, 'Bael Hardul Mountaineer', 'Explorer\'s League', 3356, 55, 55, 4667, 4667, 0, 0, 4292, 55, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 240, 260, 0, 90, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 31.504, 43.318, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'GuardAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 525312, 0, '');
+
+set @equip_template = 20217; set @weapon_1 = 12776; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60988;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+-- Lead Explorer Whitepeak <Explorers' League>, display ID 18989 , level 50, faction 55, humanoid, weapon1 : 60522, quest/greeting flags, greeting text : "Welcome to Bael Hardul, this place was left here from the time of the Third War.\n\n Us dwarves contributed to help the Alliance during those times, battling against orc and demon alike until the unification and the battle at Mount Hyjal.\n\n This place was left abandoned, we've only just recently arrived to call it home for our future expeditions.\n\n We could certainly use the help if you're willing to offer assistance."
+
+-- Maloran Oakbranch, display ID 4180, level 23, faction 80, humanoid, quest/greeting flags, greeting text : "I am an emissary from Stonetalon Peak, and something of a guide to help Whitepeak and his kin traverse these lands without disturbing the natural order."
+-- 
+-- Spigol Kneebolt, display ID 3607, level 24, faction 64, humanoid, quest/greeting flags, greeting text : "I haven't ever been this far west! I'm excited to try some of my long time experiments now that I am free from scrutiny."
+-- 
+-- Engineer Tansi Sparkfuse, display ID 10569, level 35, faction 64, humanoid, weapon1 : 60544, quest/greeting flags, greeting text : "The life of an engineer, I thought I would be doing invention, but I mostly am a glorified mechanic helping fix broken devices and machinery.\n\n Oh well, atleast I'm working with tools."
+-- 
+-- Farmer Segwar Ironback, display ID 1849, level 17, faction 55, humanoid, weapon : 1485 quest/greeting flags, greeting text : "Do you know how long that farm took to fertilize?!\n\n <The dwarf is visibly upset>\n\n All that preparation just for some vultures to come and ruin everything. 
+-- ---
+-- Orman Granitemantle <Trade Supplies>, display ID 3434, level 20, faction 55, humanoid, weapon1 : 12856 vendor flags ((SELLS TRADE SUPPLIES))
+-- 
+-- Dugin Coalborn <Blacksmith> , display ID 3513, level 18, faction 55, humanoid, weapon1 : 5956, vendor/repair flags, ((Sells basic armor))
+-- 
+-- Garwen Loadstone <Explorers' League>, display ID 18984, level 25, faction 55, humanoid, quest/greeting flags, greeting text : "The Explorers' League is always looking for help, we are often stretched too thin to carry out our motivations and goals."
+-- 
+-- Begwynn Blackmallet <Leatherworking Supplies> , display ID 18982, level 30 , faction 55, humanoid, vendor flags, ((SELLS LEATHERWORKING SUPPLIES))
+-- 
+-- Harlek Vaultshield <Gyrocopter Pilot> , display ID 18988, level 32, faction 55, humanoid,  quest/greeting flags, greeting text : "The skies be calling my name but I can't be answering!\n\n The bloody flying machine went and broke down, and now I'm grounded like the rest of the peasantry.\n\n You know a thing about Gyrocranked Fizz-wobbled engines?"
+-- 
+-- Tarlegg Redbrand <Redbrand Estate>, display ID 18998, level 41, faction 55, humanoid, quest flags
+-- 
+-- Belwyth Redbrand <Redbrand Estate>, display ID 3313, level 50, faction 55, humanoid, quest/greeting flags, greeting text : "Why hello there, is there anything I can do for you?"
+-- 
+-- Gimle Redbrand <Redbrand Estate> , display ID 18985, level 56 elite, faction 55, humanoid, weapon1 : 15271, quest/greeting flags, greeting text : "I wouldn't mess with the Redbrand if I were ye."
+-- 
+-- Torwyn Battlebeard <Redbrand Historian> - display ID 18999, level 44, faction 55, humanoid, weapon1 : 12742, quest/greeting flags, greeting text : "Our history is rich and full of many tales, we once served as the right hand to the Bronzebeard, but there have been many terrible occurances as of the past generations.\n\n I have been looking for assistance on collecting many of our lost chronicles, do you think you can help us?"
+-- 
+-- Halfdan Coalborn <Redbrand Estate> , display ID 18987, level 56 elite, faction 55, humanoid, weapon1 : 14874, quest/greeting flags, greeting text : "I have been chosen as a champion to the Redbrand, to defend their kin and fight on their behalf.\n\n I suggest you do not cross in their path $C."
+-- 
+-- Magna Runecleave <Redbrand Estate> , display ID 18990, level 56 elite, faction 55, humanoid, weapon : 12883, quest/greeting flags, greeting text : "I am solemnly sworn to defend the interests of my lord."
+-- 
+-- Sailor Hylreth <Kul Tiras>, display ID 18994, level 15, faction 1693, humanoid ,  quest/greeting flags , greeting text : "The south isn't so bad after all, good ale, and a chance to stretch my weary sea legs from the long journey.\n\n What can I do for you mainlander?"
+-- 
+-- Sailor Capewind <Kul Tiras>, display ID 18995, level 12, faction 1693, humanoid, quest/greeting flags, greeting text : "<Sailor Capewind looks over you curiously>\n\n Is there something that you need, or are you just intrigued by the tabard.\n\n Never seen an islander before?
+-- 
+-- Sailor Brewen <Kul Tiras> display ID 18996, level 14, faction 1693, humanoid,  quest/greeting flags, greeting text : "All this money I've saved up, no better time to spend it then right now aye?" \n\n <Sailor Brewen laughs>
+-- 
+-- Sailor Pardol <Kul Tiras> display ID 18997, level 13, faction 1693, humanoid,  quest/greeting flags, greeting text : "You better back off before we have a problem, understood?
+-- 
+-- Emissary Godwin Valorcall <Kul Tiras Diplomat> , display ID 18983, level 50, faction 1693, humanoid,  quest/greeting flags, greeting text : "The ambitions and desires of Kul Tiras are a complicated matter, our goal here is to determine the true value of these southereners, and to see if mainlanders can truly be trusted.\n\n Should the nobility from Stormwind prove themselves loyal to the old ways and old causes, then perhaps there may be a future of cooperation.\n\n We shall see in time where the heart of Stormwind is rightly at."
+
+-- set @gossip_menu_id = 41227; set @magic_number = 60976;
+-- replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+-- replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You there, yes yes, I come from swamp called wetlands, you heard of yes yes?\n\nBig leader Gowlfang used to stay here, look for help help, but now he is fighting to become leader of Mosshide!\n\nI here to help guide people to him.');
+-- replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+-- update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
