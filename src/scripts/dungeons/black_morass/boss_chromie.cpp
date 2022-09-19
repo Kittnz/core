@@ -68,7 +68,7 @@ public:
         m_uiDialog1_Timer = 24000;
         m_uiDialog2_Timer = 40000;
 
-        m_guidChronormu = 0;
+        m_guidChronormu.Clear();
     }
 
     void Aggro(Unit* /*pWho*/) override
@@ -130,7 +130,7 @@ public:
         m_creature->UpdateCombatWithZoneState(false);
     }
 
-    void DoDialogue(const uint32& uiDiff)
+    void DoDialogue(const std::uint32_t& uiDiff)
     {
         if (m_creature->SelectHostileTarget() || m_creature->GetVictim())
         {
@@ -213,7 +213,7 @@ public:
         }
     }
 
-    void UpdateAI(const uint32 uiDiff) override
+    void UpdateAI(const std::uint32_t uiDiff) override
     {
         if (!IsFriendly())
         {
@@ -315,7 +315,7 @@ bool GossipHello_chromie(Player* pPlayer, Creature* pCreature)
     return false;
 }
 
-bool GossipSelect_chromie(Player* pPlayer, Creature* pCreature, const uint32 uiSender, const uint32 uiAction)
+bool GossipSelect_chromie(Player* pPlayer, Creature* pCreature, const std::uint32_t uiSender, const std::uint32_t uiAction)
 {
     pPlayer->CLOSE_GOSSIP_MENU();
 
@@ -339,9 +339,7 @@ CreatureAI* GetAI_boss_chromie(Creature* pCreature)
 
 void AddSC_boss_chromie()
 {
-    Script* pNewscript{};
-
-    pNewscript = new Script;
+    Script* pNewscript{ new Script };
     pNewscript->Name = "boss_chromie";
     pNewscript->GetAI = &GetAI_boss_chromie;
     pNewscript->RegisterSelf();

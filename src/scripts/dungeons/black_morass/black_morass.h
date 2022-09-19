@@ -8,7 +8,7 @@
 #pragma once
 
 
-enum BlackMorassUnit : uint32
+enum BlackMorassUnit : std::uint32_t
 {
     NPC_CHROMIE = 0000,
     NPC_CHRONORMU = 50117,
@@ -16,18 +16,18 @@ enum BlackMorassUnit : uint32
     NPC_ANTNORMI = 65125
 };
 
-enum BlackMorassEncounter : uint32
+enum BlackMorassEncounter : std::uint32_t
 {
-    TYPE_CHROMIE,
+    TYPE_CHROMIE = 0,
     TYPE_CHRONORMU,
     TYPE_GERASTRASZ,
 
     MAX_ENCOUNTER
 };
 
-enum BlackMorassData : uint32
+enum BlackMorassData : std::uint32_t
 {
-    DATA_CHROMIE_GUID,
+    DATA_CHROMIE_GUID = 0,
     DATA_CHRONORMU_GUID,
     DATA_GERASTRASZ_GUID,
 
@@ -40,13 +40,13 @@ struct LocationXYZO
 };
 
 template <typename Functor>
-void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
+void DoAfterTime(Creature* pCreature, const std::uint32_t& uiTime, Functor&& function)
 {
     pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(uiTime));
 }
 
 template <typename Functor>
-void DoAfterTime(Player* pPlayer, const uint32& uiTime, Functor&& function)
+void DoAfterTime(Player* pPlayer, const std::uint32_t& uiTime, Functor&& function)
 {
     pPlayer->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pPlayer->m_Events.CalculateTime(uiTime));
 }
@@ -64,14 +64,14 @@ public:
     void OnObjectCreate(GameObject* pGo) override;
     void OnCreatureCreate(Creature* pCreature) override;
 
-    void SetData(const uint32 uiType, const uint32 uiData) override;
-    uint32 GetData(const uint32 uiType) override;
+    void SetData(const std::uint32_t uiType, const std::uint32_t uiData) override;
+    uint32 GetData(const std::uint32_t uiType) override;
 
     char const* Save() override { return str_InstData.c_str(); }
     void Load(char const* chrIn) override;
 
 private:
-    uint32 m_auiEncounter[BlackMorassEncounter::MAX_ENCOUNTER]{};
-    uint64 m_auiData[BlackMorassData::MAX_DATA]{};
+    std::uint32_t m_auiEncounter[BlackMorassEncounter::MAX_ENCOUNTER]{};
+    std::uint64_t m_auiData[BlackMorassData::MAX_DATA]{};
     std::string str_InstData{};
 };
