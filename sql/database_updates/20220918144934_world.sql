@@ -21,3 +21,9 @@ update gameobject_loot_template set chanceorquestchance = -100 where entry = 100
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2146
 update gameobject set spawntimesecsmin = 150, spawntimesecsmax = 150 where id in (104564, 104575, 104574, 104569);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2138
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2137
+update quest_template set type = 0 where entry = 40226;
+update quest_template set type = 0 where entry = 40203;
+
