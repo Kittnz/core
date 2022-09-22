@@ -27,3 +27,32 @@ update gameobject set spawntimesecsmin = 150, spawntimesecsmax = 150 where id in
 update quest_template set type = 0 where entry = 40226;
 update quest_template set type = 0 where entry = 40203;
 
+-- Random stuff:
+UPDATE creature_template SET scale = 1.0 WHERE entry = 80965;
+
+UPDATE spell_template SET reagent5 = 0, reagentCount5 = 0 WHERE entry = 47033;
+-- Natural Materials should have elite mark because it requres to kill two elites in Feralas. Also if you read  comment from 2005 year [https://classic.wowhead.com/quest=3128/natural-materials#comments] you will find that it was "elite" before these trees became non-elite. So, please ass elite mark to quest or make [https://database.turtle-wow.org/?npc=7584] as usual mob like in modern vanilla classic. 
+update quest_template set type = 1, requiredraces = 434 where entry = 3128;
+
+-- make Rune of the Guard Captain https://database.turtle-wow.org/?item=19120 a unique item and for horde only 
+-- Make  Rune of the Wildhammer Clan  https://database.turtle-wow.org/?item=51755 a unique item and for alliance only 
+-- Change https://database.turtle-wow.org/?search=Stormpike+Insignia  Stormpike Insignia to be alliance only
+-- Change https://database.turtle-wow.org/?search=frostwolf+ins  Frostwolf Insignia to be horde only
+update item_template set max_count = 1, allowable_race = 434 where entry = 19120;
+update item_template set max_count = 1, allowable_race = 589 where entry = 51755;
+update item_template set allowable_race = 589 where name like '%Stormpike Insignia%';
+update item_template set allowable_race = 434 where name like '%Frostwolf Insignia%';
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/1937
+delete from creature_loot_template where item = 10781;
+delete from reference_loot_template where item = 10781;
+
+-- Add 30 sec use cooldown to https://database.turtle-wow.org/?item=60099 to avoid double click consuming batteries 
+update item_template set spellcooldown_1 = 30 where entry = 60099;
+update item_template set stackable = 10 where entry = 60098;
+
+-- Caravan Kodo still has the 10 minute cooldown, although it was reverted on other utility pets: https://database.turtle-wow.org/?spell=46483
+UPDATE spell_mod SET StartRecoveryTime = 0 WHERE Id = 46483;
+
+-- Duplicate
+delete from item_template where entry = 91762;
