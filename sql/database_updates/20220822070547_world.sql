@@ -4028,73 +4028,365 @@ REPLACE INTO creature_loot_template VALUES (60979, 30018, 2.5, 0, -30018, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60979, 4537, 7.84, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60979, 2589, 32.6982, 0, 1, 3, 0);
 -- Bael Hardul Mountaineer <Explorer's League> , display ID 3870, level 55 guard, faction 55, humanoid, weapon1 : 12776
--- 
 -- Borrin Dustshoulder <General Goods>, display ID 3432, level 20, faction 55, humanoid, weapon 1 : 12862
--- 
 -- Darrak Redbrand <Redbrand Estate>, display ID 1400 , level 36, faction 55, humanoid, weapon1 : 1938, weapon 2 : 2081, quest/greeting flags, greeting text : "There is always adventure to be had, especially out in the far frontiers."
--- 
 -- Brundah Cliffbrow <Innkeeper>, display ID 1841 , level 20, faction 55, humanoid, quest/greeting/vendor flags , greeting text : "Welcome, make yourself comfortable and at home, we have plenty of ale and lodging should you need a rest." ((SELLS COMMON FOOD/WATER ITEMS))
--- 
--- Throki Cliffbrow <Barkeep>, display ID 10693 , level 20, faction 55, humanoid, vendor flags ((SELLS ALE/ALCHOHOL) 
--- 
+-- Throki Cliffbrow <Barkeep>, display ID 10693 , level 20, faction 55, humanoid, vendor flags ((SELLS ALE/ALCHOHOL)
 -- Grumnir Battlebeard <Explorers' League>, display ID 18986 , level 46, faction 55, quest/greeting flags, greeting text : "I've known Whitepeak ever since my time serving Ironforge.\n\n I'm certain he could use my experience and expertise out here, especially so far from home."
--- 
 -- Mountaineer Truthforge <Explorers' League>, display ID 18992 , level 58, faction 55, humanoid, weapon1 : 60719, quest/greeting flags, greeting text : "We are far in hostile territory, practically surrounded by enemies. It is best to keep our whits about us and be ready for a fight.\n\n Are you looking to assist us here in Bael Hardul?"
--- 
 -- Unilda Thunderstone <Explorers' League>, display ID 3063 , level 26, faction 55
--- 
 -- Prospector Flinthammer <Explorers' League>, display ID 4595, level 37, faction 55, humanoid, weapon1 : 2901, quest/greeting flags, greeting text : "Kalimdor is surely to be full of rich and rare minerals that we don't often see on the Eastern Kingdoms and I'm sure of it, I just need to find what I'm looking for, that's all."
+-- Lead Explorer Whitepeak <Explorers' League>, display ID 18989 , level 50, faction 55, humanoid, weapon1 : 60522, quest/greeting flags, greeting text : "Welcome to Bael Hardul, this place was left here from the time of the Third War.\n\n Us dwarves contributed to help the Alliance during those times, battling against orc and demon alike until the unification and the battle at Mount Hyjal.\n\n This place was left abandoned, we've only just recently arrived to call it home for our future expeditions.\n\n We could certainly use the help if you're willing to offer assistance."
+-- Maloran Oakbranch, display ID 4180, level 23, faction 80, humanoid, quest/greeting flags, greeting text : "I am an emissary from Stonetalon Peak, and something of a guide to help Whitepeak and his kin traverse these lands without disturbing the natural order."
+-- Spigol Kneebolt, display ID 3607, level 24, faction 64, humanoid, quest/greeting flags, greeting text : "I haven't ever been this far west! I'm excited to try some of my long time experiments now that I am free from scrutiny."
+-- Engineer Tansi Sparkfuse, display ID 10569, level 35, faction 64, humanoid, weapon1 : 60544, quest/greeting flags, greeting text : "The life of an engineer, I thought I would be doing invention, but I mostly am a glorified mechanic helping fix broken devices and machinery.\n\n Oh well, atleast I'm working with tools."
+-- Farmer Segwar Ironback, display ID 1849, level 17, faction 55, humanoid, weapon : 1485 quest/greeting flags, greeting text : "Do you know how long that farm took to fertilize?!\n\n <The dwarf is visibly upset>\n\n All that preparation just for some vultures to come and ruin everything. 
+-- Orman Granitemantle <Trade Supplies>, display ID 3434, level 20, faction 55, humanoid, weapon1 : 12856 vendor flags ((SELLS TRADE SUPPLIES))
+-- Dugin Coalborn <Blacksmith> , display ID 3513, level 18, faction 55, humanoid, weapon1 : 5956, vendor/repair flags, ((Sells basic armor))
+-- Garwen Loadstone <Explorers' League>, display ID 18984, level 25, faction 55, humanoid, quest/greeting flags, greeting text : "The Explorers' League is always looking for help, we are often stretched too thin to carry out our motivations and goals."
+-- Begwynn Blackmallet <Leatherworking Supplies> , display ID 18982, level 30 , faction 55, humanoid, vendor flags, ((SELLS LEATHERWORKING SUPPLIES))
+-- Harlek Vaultshield <Gyrocopter Pilot> , display ID 18988, level 32, faction 55, humanoid,  quest/greeting flags, greeting text : "The skies be calling my name but I can't be answering!\n\n The bloody flying machine went and broke down, and now I'm grounded like the rest of the peasantry.\n\n You know a thing about Gyrocranked Fizz-wobbled engines?"
+-- Tarlegg Redbrand <Redbrand Estate>, display ID 18998, level 41, faction 55, humanoid, quest flags
+-- Belwyth Redbrand <Redbrand Estate>, display ID 3313, level 50, faction 55, humanoid, quest/greeting flags, greeting text : "Why hello there, is there anything I can do for you?"
+-- Gimle Redbrand <Redbrand Estate> , display ID 18985, level 56 elite, faction 55, humanoid, weapon1 : 15271, quest/greeting flags, greeting text : "I wouldn't mess with the Redbrand if I were ye."
+-- Torwyn Battlebeard <Redbrand Historian> - display ID 18999, level 44, faction 55, humanoid, weapon1 : 12742, quest/greeting flags, greeting text : "Our history is rich and full of many tales, we once served as the right hand to the Bronzebeard, but there have been many terrible occurances as of the past generations.\n\n I have been looking for assistance on collecting many of our lost chronicles, do you think you can help us?"
+-- Halfdan Coalborn <Redbrand Estate> , display ID 18987, level 56 elite, faction 55, humanoid, weapon1 : 14874, quest/greeting flags, greeting text : "I have been chosen as a champion to the Redbrand, to defend their kin and fight on their behalf.\n\n I suggest you do not cross in their path $C."
+-- Magna Runecleave <Redbrand Estate> , display ID 18990, level 56 elite, faction 55, humanoid, weapon : 12883, quest/greeting flags, greeting text : "I am solemnly sworn to defend the interests of my lord."
+-- Sailor Hylreth <Kul Tiras>, display ID 18994, level 15, faction 1693, humanoid ,  quest/greeting flags , greeting text : "The south isn't so bad after all, good ale, and a chance to stretch my weary sea legs from the long journey.\n\n What can I do for you mainlander?"
+-- Sailor Capewind <Kul Tiras>, display ID 18995, level 12, faction 1693, humanoid, quest/greeting flags, greeting text : "<Sailor Capewind looks over you curiously>\n\n Is there something that you need, or are you just intrigued by the tabard.\n\n Never seen an islander before?
+-- Sailor Brewen <Kul Tiras> display ID 18996, level 14, faction 1693, humanoid,  quest/greeting flags, greeting text : "All this money I've saved up, no better time to spend it then right now aye?" \n\n <Sailor Brewen laughs>
+-- Sailor Pardol <Kul Tiras> display ID 18997, level 13, faction 1693, humanoid,  quest/greeting flags, greeting text : "You better back off before we have a problem, understood?
+-- Emissary Godwin Valorcall <Kul Tiras Diplomat> , display ID 18983, level 50, faction 1693, humanoid,  quest/greeting flags, greeting text : "The ambitions and desires of Kul Tiras are a complicated matter, our goal here is to determine the true value of these southereners, and to see if mainlanders can truly be trusted.\n\n Should the nobility from Stormwind prove themselves loyal to the old ways and old causes, then perhaps there may be a future of cooperation.\n\n We shall see in time where the heart of Stormwind is rightly at."
 REPLACE INTO creature_template VALUES
-(60988, 3870, 0, 0, 0, 0, 'Bael Hardul Mountaineer', 'Explorer\'s League', 3356, 55, 55, 4667, 4667, 0, 0, 4292, 55, 1, 1, 1.14286, 0, 18, 5, 0, 0, 1, 240, 260, 0, 90, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 31.504, 43.318, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'GuardAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 525312, 0, '');
+(60988, 3870, 0, 0, 0, 0, 'Bael Hardul Mountaineer', 'Explorer\'s League', 3356, 55, 55, 4667, 4667, 0, 0, 4292, 55, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 240, 260, 0, 90, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 31.504, 43.318, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'GuardAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 525312, 0, ''),
+(60989, 3432, 0, 0, 0, 0, 'Borrin Dustshoulder', 'General Goods', 0, 20, 20, 629, 629, 0, 0, 852, 55, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60990, 1400, 0, 0, 0, 0, 'Darrak Redbrand', 'Redbrand Estate', 0, 36, 36, 1468, 1468, 0, 0, 1480, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60991, 1841, 0, 0, 0, 0, 'Brundah Cliffbrow', 'Innkeeper', 0, 20, 20, 629, 629, 0, 0, 852, 55, 135, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60992, 10693, 0, 0, 0, 0, 'Throki Cliffbrow', 'Barkeep', 0, 20, 20, 629, 629, 0, 0, 852, 55, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60993, 18986, 0, 0, 0, 0, 'Grumnir Battlebeard', 'Explorer\'s League', 0, 46, 46, 2398, 2398, 0, 0, 2780, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60994, 18992, 0, 0, 0, 0, 'Mountaineer Truthforge', 'Explorer\'s League', 0, 58, 58, 3875, 3875, 0, 0, 3408, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 106, 136, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 113, 153, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60995, 3063, 0, 0, 0, 0, 'Unilda Thunderstone', 'Explorer\'s League', 0, 26, 26, 787, 787, 0, 0, 1061, 55, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60996, 4595, 0, 0, 0, 0, 'Prospector Flinthammer', 'Explorer\'s League', 0, 37, 37, 2192, 2192, 0, 0, 1340, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60997, 18989, 0, 0, 0, 0, 'Lead Explorer Whitepeak', 'Explorer\'s League', 0, 50, 50, 2990, 2990, 0, 0, 2958, 55, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60998, 4180, 0, 0, 0, 0, 'Maloran Oakbranch', NULL, 0, 23, 23, 543, 543, 0, 0, 800, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 31, 38, 0, 100, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 42, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60999, 3607, 0, 0, 0, 0, 'Spigol Kneebolt', NULL, 0, 24, 24, 664, 664, 0, 0, 1026, 64, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 36, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 33, 48, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61000, 10569, 0, 0, 0, 0, 'Engineer Tansi Sparkfuse', NULL, 0, 35, 35, 1342, 1342, 0, 0, 1373, 64, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61001, 1849, 0, 0, 0, 0, 'Farmer Segwar Ironback', NULL, 0, 17, 17, 502, 502, 0, 0, 432, 55, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 8, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 18, 23, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61002, 3434, 0, 0, 0, 0, 'Orman Granitemantle', 'Trade Supplies', 0, 20, 20, 629, 629, 0, 0, 852, 55, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61003, 3513, 0, 0, 0, 0, 'Dugin Coalborn', 'Blacksmith', 0, 18, 18, 417, 417, 0, 0, 765, 55, 16388, 1, 1.14286, 0, 20, 5, 0, 0, 1, 41, 51, 0, 84, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 18, 23, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61004, 18984, 0, 0, 0, 0, 'Garwen Loadstone', 'Explorer\'s League', 0, 25, 25, 712, 712, 0, 0, 1026, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 39.5824, 54.4258, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 34, 50, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(61005, 18982, 0, 0, 0, 0, 'Begwynn Blackmallet', 'Leatherworking Supplies', 0, 30, 30, 1002, 1002, 0, 0, 1188, 55, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 43, 61, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61006, 18988, 0, 0, 0, 0, 'Harlek Vaultshield', 'Gyrocopter Pilot', 0, 32, 32, 976, 976, 0, 0, 1063, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 43, 52, 0, 128, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 52.7472, 72.5274, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 45, 64, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61007, 18998, 0, 0, 0, 0, 'Tarlegg Redbrand', 'Redbrand Estate', 0, 41, 41, 1981, 1981, 0, 0, 2397, 55, 2, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61008, 3313, 0, 0, 0, 0, 'Belwyth Redbrand', 'Redbrand Estate', 0, 50, 50, 2990, 2990, 0, 0, 2958, 55, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61009, 18985, 0, 0, 0, 0, 'Gimle Redbrand', 'Redbrand Estate', 0, 56, 56, 8397, 8397, 0, 0, 3271, 55, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61010, 18999, 0, 0, 0, 0, 'Torwyn Battlebeard', 'Redbrand Historian', 0, 44, 44, 2117, 2117, 0, 0, 2625, 55, 3, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61011, 18987, 0, 0, 0, 0, 'Halfdan Coalborn', 'Redbrand Estate', 0, 56, 56, 8397, 8397, 0, 0, 3271, 55, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61012, 18990, 0, 0, 0, 0, 'Magna Runecleave', 'Redbrand Estate', 0, 56, 56, 8397, 8397, 0, 0, 3271, 55, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61013, 18994, 0, 0, 0, 0, 'Sailor Hylreth', 'Kul Tiras', 0, 15, 15, 328, 328, 0, 0, 660, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 2, 0, ''),
+(61014, 18995, 0, 0, 0, 0, 'Sailor Capewind', 'Kul Tiras', 0, 12, 12, 247, 247, 0, 0, 573, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 30, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61015, 18996, 0, 0, 0, 0, 'Sailor Brewen', 'Kul Tiras', 0, 14, 14, 300, 300, 0, 0, 525, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 14, 19, 0, 70, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 15, 25, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61016, 18997, 0, 0, 0, 0, 'Sailor Pardol', 'Kul Tiras', 0, 13, 13, 273, 273, 0, 0, 608, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 30, 35, 0, 68, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 4, 19, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61017, 18983, 0, 0, 0, 0, 'Emissary Godwin Valorcall', 'Kul Tiras Diplomat', 0, 50, 50, 2990, 2990, 0, 0, 2958, 1693, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO creature_display_info_addon VALUES (18982, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18983, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18984, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18985, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18986, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18987, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18988, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18989, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18990, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18992, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18994, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18995, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18996, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18997, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18998, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18999, 0, 0, 0, 0);
+
+set @equip_template = 20230; set @weapon_1 = 12883; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61012;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20229; set @weapon_1 = 14874; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61011;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20228; set @weapon_1 = 12742; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61010;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20227; set @weapon_1 = 15271; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61009;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20226; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61003;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20225; set @weapon_1 = 12856; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61002;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20224; set @weapon_1 = 1485; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61001;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20223; set @weapon_1 = 60544; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61000;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20222; set @weapon_1 = 60522; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60997;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20221; set @weapon_1 = 2901; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60996;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20220; set @weapon_1 = 60719; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60994;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20219; set @weapon_1 = 1938; set @weapon_2 = 2081; set @weapon_3 = 0; set @creature = 60990;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20218; set @weapon_1 = 12862; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60989;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 20217; set @weapon_1 = 12776; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60988;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
--- Lead Explorer Whitepeak <Explorers' League>, display ID 18989 , level 50, faction 55, humanoid, weapon1 : 60522, quest/greeting flags, greeting text : "Welcome to Bael Hardul, this place was left here from the time of the Third War.\n\n Us dwarves contributed to help the Alliance during those times, battling against orc and demon alike until the unification and the battle at Mount Hyjal.\n\n This place was left abandoned, we've only just recently arrived to call it home for our future expeditions.\n\n We could certainly use the help if you're willing to offer assistance."
+set @gossip_menu_id = 41249; set @magic_number = 61017;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The ambitions and desires of Kul Tiras are a complicated matter, our goal here is to determine the true value of these southereners, and to see if mainlanders can truly be trusted.\n\nShould the nobility from Stormwind prove themselves loyal to the old ways and old causes, then perhaps there may be a future of cooperation.\n\nWe shall see in time where the heart of Stormwind is rightly at.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
--- Maloran Oakbranch, display ID 4180, level 23, faction 80, humanoid, quest/greeting flags, greeting text : "I am an emissary from Stonetalon Peak, and something of a guide to help Whitepeak and his kin traverse these lands without disturbing the natural order."
--- 
--- Spigol Kneebolt, display ID 3607, level 24, faction 64, humanoid, quest/greeting flags, greeting text : "I haven't ever been this far west! I'm excited to try some of my long time experiments now that I am free from scrutiny."
--- 
--- Engineer Tansi Sparkfuse, display ID 10569, level 35, faction 64, humanoid, weapon1 : 60544, quest/greeting flags, greeting text : "The life of an engineer, I thought I would be doing invention, but I mostly am a glorified mechanic helping fix broken devices and machinery.\n\n Oh well, atleast I'm working with tools."
--- 
--- Farmer Segwar Ironback, display ID 1849, level 17, faction 55, humanoid, weapon : 1485 quest/greeting flags, greeting text : "Do you know how long that farm took to fertilize?!\n\n <The dwarf is visibly upset>\n\n All that preparation just for some vultures to come and ruin everything. 
--- ---
--- Orman Granitemantle <Trade Supplies>, display ID 3434, level 20, faction 55, humanoid, weapon1 : 12856 vendor flags ((SELLS TRADE SUPPLIES))
--- 
--- Dugin Coalborn <Blacksmith> , display ID 3513, level 18, faction 55, humanoid, weapon1 : 5956, vendor/repair flags, ((Sells basic armor))
--- 
--- Garwen Loadstone <Explorers' League>, display ID 18984, level 25, faction 55, humanoid, quest/greeting flags, greeting text : "The Explorers' League is always looking for help, we are often stretched too thin to carry out our motivations and goals."
--- 
--- Begwynn Blackmallet <Leatherworking Supplies> , display ID 18982, level 30 , faction 55, humanoid, vendor flags, ((SELLS LEATHERWORKING SUPPLIES))
--- 
--- Harlek Vaultshield <Gyrocopter Pilot> , display ID 18988, level 32, faction 55, humanoid,  quest/greeting flags, greeting text : "The skies be calling my name but I can't be answering!\n\n The bloody flying machine went and broke down, and now I'm grounded like the rest of the peasantry.\n\n You know a thing about Gyrocranked Fizz-wobbled engines?"
--- 
--- Tarlegg Redbrand <Redbrand Estate>, display ID 18998, level 41, faction 55, humanoid, quest flags
--- 
--- Belwyth Redbrand <Redbrand Estate>, display ID 3313, level 50, faction 55, humanoid, quest/greeting flags, greeting text : "Why hello there, is there anything I can do for you?"
--- 
--- Gimle Redbrand <Redbrand Estate> , display ID 18985, level 56 elite, faction 55, humanoid, weapon1 : 15271, quest/greeting flags, greeting text : "I wouldn't mess with the Redbrand if I were ye."
--- 
--- Torwyn Battlebeard <Redbrand Historian> - display ID 18999, level 44, faction 55, humanoid, weapon1 : 12742, quest/greeting flags, greeting text : "Our history is rich and full of many tales, we once served as the right hand to the Bronzebeard, but there have been many terrible occurances as of the past generations.\n\n I have been looking for assistance on collecting many of our lost chronicles, do you think you can help us?"
--- 
--- Halfdan Coalborn <Redbrand Estate> , display ID 18987, level 56 elite, faction 55, humanoid, weapon1 : 14874, quest/greeting flags, greeting text : "I have been chosen as a champion to the Redbrand, to defend their kin and fight on their behalf.\n\n I suggest you do not cross in their path $C."
--- 
--- Magna Runecleave <Redbrand Estate> , display ID 18990, level 56 elite, faction 55, humanoid, weapon : 12883, quest/greeting flags, greeting text : "I am solemnly sworn to defend the interests of my lord."
--- 
--- Sailor Hylreth <Kul Tiras>, display ID 18994, level 15, faction 1693, humanoid ,  quest/greeting flags , greeting text : "The south isn't so bad after all, good ale, and a chance to stretch my weary sea legs from the long journey.\n\n What can I do for you mainlander?"
--- 
--- Sailor Capewind <Kul Tiras>, display ID 18995, level 12, faction 1693, humanoid, quest/greeting flags, greeting text : "<Sailor Capewind looks over you curiously>\n\n Is there something that you need, or are you just intrigued by the tabard.\n\n Never seen an islander before?
--- 
--- Sailor Brewen <Kul Tiras> display ID 18996, level 14, faction 1693, humanoid,  quest/greeting flags, greeting text : "All this money I've saved up, no better time to spend it then right now aye?" \n\n <Sailor Brewen laughs>
--- 
--- Sailor Pardol <Kul Tiras> display ID 18997, level 13, faction 1693, humanoid,  quest/greeting flags, greeting text : "You better back off before we have a problem, understood?
--- 
--- Emissary Godwin Valorcall <Kul Tiras Diplomat> , display ID 18983, level 50, faction 1693, humanoid,  quest/greeting flags, greeting text : "The ambitions and desires of Kul Tiras are a complicated matter, our goal here is to determine the true value of these southereners, and to see if mainlanders can truly be trusted.\n\n Should the nobility from Stormwind prove themselves loyal to the old ways and old causes, then perhaps there may be a future of cooperation.\n\n We shall see in time where the heart of Stormwind is rightly at."
+set @gossip_menu_id = 41248; set @magic_number = 61016;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You better back off before we have a problem, understood?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
--- set @gossip_menu_id = 41227; set @magic_number = 60976;
--- replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
--- replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You there, yes yes, I come from swamp called wetlands, you heard of yes yes?\n\nBig leader Gowlfang used to stay here, look for help help, but now he is fighting to become leader of Mosshide!\n\nI here to help guide people to him.');
--- replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
--- update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+set @gossip_menu_id = 41247; set @magic_number = 61015;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'All this money I\'ve saved up, no better time to spend it then right now aye?"\n\n<Sailor Brewen laughs.>');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41246; set @magic_number = 61014;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Sailor Capewind looks over you curiously.>\n\nIs there something that you need, or are you just intrigued by the tabard.\n\nNever seen an islander before?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41245; set @magic_number = 61013;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The south isn\'t so bad after all, good ale, and a chance to stretch my weary sea legs from the long journey.\n\nWhat can I do for you mainlander?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41244; set @magic_number = 61012;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am solemnly sworn to defend the interests of my lord.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41243; set @magic_number = 61011;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I have been chosen as a champion to the Redbrand, to defend their kin and fight on their behalf.\n\nI suggest you do not cross in their path $C.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41242; set @magic_number = 61010;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Our history is rich and full of many tales, we once served as the right hand to the Bronzebeard, but there have been many terrible occurances as of the past generations.\n\nI have been looking for assistance on collecting many of our lost chronicles, do you think you can help us?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41241; set @magic_number = 61009;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I wouldn\'t mess with the Redbrand if I were ye.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41240; set @magic_number = 61008;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why hello there, is there anything I can do for you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41239; set @magic_number = 61006;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The skies be calling my name but I can\'t be answering!\n\nThe bloody flying machine went and broke down, and now I\'m grounded like the rest of the peasantry.\n\nYou know a thing about Gyrocranked Fizz-wobbled engines?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41238; set @magic_number = 61004;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Explorers\' League is always looking for help, we are often stretched too thin to carry out our motivations and goals.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41237; set @magic_number = 61001;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Do you know how long that farm took to fertilize?!\n\n<The dwarf is visibly upset.>\n\nAll that preparation just for some vultures to come and ruin everything.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41236; set @magic_number = 61000;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The life of an engineer, I thought I would be doing invention, but I mostly am a glorified mechanic helping fix broken devices and machinery.\n\nOh well, atleast I\'m working with tools.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41235; set @magic_number = 60999;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I haven\'t ever been this far west! I\'m excited to try some of my long time experiments now that I am free from scrutiny.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41234; set @magic_number = 60998;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am an emissary from Stonetalon Peak, and something of a guide to help Whitepeak and his kin traverse these lands without disturbing the natural order.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41233; set @magic_number = 60997;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Bael Hardul, this place was left here from the time of the Third War.\n\nUs dwarves contributed to help the Alliance during those times, battling against orc and demon alike until the unification and the battle at Mount Hyjal.\n\nThis place was left abandoned, we\'ve only just recently arrived to call it home for our future expeditions.\n\nWe could certainly use the help if you\'re willing to offer assistance.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41232; set @magic_number = 60996;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Kalimdor is surely to be full of rich and rare minerals that we don\'t often see on the Eastern Kingdoms and I\'m sure of it, I just need to find what I\'m looking for, that\'s all.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41231; set @magic_number = 60994;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We are far in hostile territory, practically surrounded by enemies. It is best to keep our whits about us and be ready for a fight.\n\nAre you looking to assist us here in Bael Hardul?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41230; set @magic_number = 60993;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I\'ve known Whitepeak ever since my time serving Ironforge.\n\nI\'m certain he could use my experience and expertise out here, especially so far from home.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41229; set @magic_number = 60991;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome, make yourself comfortable and at home, we have plenty of ale and lodging should you need a rest.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41228; set @magic_number = 60990;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There is always adventure to be had, especially out in the far frontiers.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Begwynn Blackmallet
+REPLACE INTO npc_vendor VALUES (61005, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 2325, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 2604, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 2605, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 4291, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 4340, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 4341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 4342, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 6260, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 6261, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 7005, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 7289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 8343, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 10290, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 14341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 50231, 0, 0, 0, 0);
+-- Dugin Coalborn
+REPLACE INTO npc_vendor VALUES (61003, 285, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 286, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 287, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 718, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 847, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 848, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 849, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 850, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 1202, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 1845, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 1846, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 1852, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 1853, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 2445, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 17187, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 17188, 0, 0, 0, 0);
+-- Orman Granitemantle
+REPLACE INTO npc_vendor VALUES (61002, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 2324, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 2678, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 2692, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 2928, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 3371, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 3372, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 5640, 1, 7200, 3, 0);
+REPLACE INTO npc_vendor VALUES (61002, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 6217, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 6256, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 6272, 1, 7200, 3, 0);
+REPLACE INTO npc_vendor VALUES (61002, 6529, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 6530, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 7005, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 50231, 0, 0, 0, 0);
+-- Throki Cliffbrow
+REPLACE INTO npc_vendor VALUES (60992, 2593, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 2594, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 2595, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 2596, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 2723, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 4600, 0, 0, 0, 0);
+-- Brundah Cliffbrow
+REPLACE INTO npc_vendor VALUES (60991, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 414, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 422, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 1707, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 2070, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 3927, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 8766, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 8932, 0, 0, 0, 0);
+-- Borrin Dustshoulder
+REPLACE INTO npc_vendor VALUES (60989, 159 , 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 2515, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 2519, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 2946, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 3030, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 3033, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 3107, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 3108, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 3131, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 3135, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 3137, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 4470, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 4471, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 4497, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 4498, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 6183, 0, 0, 0, 0);
