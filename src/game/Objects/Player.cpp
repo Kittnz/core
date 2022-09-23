@@ -22575,12 +22575,12 @@ void Player::AddToArenaQueue(bool queuedAsGroup)
     if (GetLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
         return;
 
-    // check if in other queues
+    /* // check if in other queues
     if (InBattleGroundQueue())
     {
-        GetSession()->SendNotification("Unable to queue while currently in another queue");
+        GetSession()->SendNotification("Unable to queue while currently in another queue.");
         return;
-    }
+    } */
 
     // is deserter?
     if (!CanJoinToBattleground())
