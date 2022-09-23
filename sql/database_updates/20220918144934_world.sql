@@ -56,3 +56,9 @@ UPDATE spell_mod SET StartRecoveryTime = 0 WHERE Id = 46483;
 
 -- Duplicate
 delete from item_template where entry = 91762;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2149
+update creature_template set display_id1 = 2735 where entry = 12924;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2043
+UPDATE creature_template SET mechanic_immune_mask = 16384, school_immune_mask = 16 WHERE entry = 60829;
