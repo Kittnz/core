@@ -360,7 +360,7 @@ bool Group::AddMember(ObjectGuid guid, const char* name, uint8 joinMethod)
 
     SendUpdate();
 
-    constexpr const char* message = "This party has members from both factions. Engaging in PvP or attacking PvP enabled NPCs in the open world will result in getting removed from the party.";
+    constexpr const char* message = "This party has members from both factions. Engaging in PvP or attacking PvP enabled NPCs in the open world is forbidden.";
     if (!isBGGroup() && GetMembersCount() != 1) // dont check xfac groups and send message for leader-only groups.
     {
         bool wasCrossfaction = IsCrossfaction();
