@@ -89,3 +89,18 @@ DELETE FROM `creature_ai_scripts` WHERE `id`=377001;
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (377001, 0, 15, 7939, 34, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Bleakheart Shadowstalker - Cast Spell Sneak');
 INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (377001, 0, 15, 22766, 34, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Bleakheart Shadowstalker - Cast Spell Sneak');
 UPDATE `creature_template` SET `auras`='6947' WHERE `entry`=3770;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2179
+update quest_template set rewxp = 800, rewmoneymaxlevel = 480 where entry = 1133;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2185
+update item_template set spellid_1 = 0, description = '', required_skill = 0 where entry = 6183;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2175
+update quest_template set details = '<After studying the Enchanted Brass Key it would appear that Magus Valgon is stumped>.\n\nI do not think I can assist with this friend, the complexities of the magic may take many weeks to begin to crack, and I think you do not have such time to wait.\n\nI do know one who knows a great deal of magic, hidden away from the world. There is a hermit that remains somewhat hidden upon the island of Kazon, nestled in between both Gillijim and Lapidis Isle.\n\nGo there, and find Insom\'ni, he is a powerful troll, much more powerful then any I have met.\n\nIf there is any who could attune this key, it would be him.' where entry = 40169;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2187
+update quest_template set details = 'I knew you wouldn\'t pass another opportunity to earn some coin. Ever been to Stormwind City?\n\nOh, what am I saying, of course you did.\n\nIn the northern part of the city, there is a district inhabited mostly by non-humans. Dwarves, gnomes, even high elves lately.\n\nOne of my dear friends, a gnomish engineer with a lovely name: Lilliam, lives there. I need you to tell him that Hewen sent you.\n\nHe will give you a paper: a blueprint, even. You know what a blueprint is? Good. So, take the blueprint, come back to me, and I will pay you.\n\nEasy enough! Good luck.' where entry = 40472;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2186
+UPDATE `broadcast_text` SET `male_text` = 'Know that I love you always...' WHERE `entry` = 1285;
