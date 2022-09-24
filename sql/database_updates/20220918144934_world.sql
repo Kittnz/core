@@ -62,3 +62,30 @@ update creature_template set display_id1 = 2735 where entry = 12924;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2043
 UPDATE creature_template SET mechanic_immune_mask = 16384, school_immune_mask = 16 WHERE entry = 60829;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2178
+update creature_template set armor = 1097 where entry = 6233;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2177
+update creature_template set armor = 2052 where entry = 5434;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2176
+update item_template set stackable = 15 where entry = 60484;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2173
+update npc_trainer set spellcost = 5400 where spell = 3178;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2172
+update item_template set sheath = 3 where entry = 50049;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2171
+UPDATE creature_template SET mechanic_immune_mask = 608908883 WHERE entry in (92107, 92109, 92111, 92110);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2181
+DELETE FROM `creature_ai_events` WHERE `creature_id`=3770;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (377001, 3770, 0, 1, 0, 100, 0, 0, 10000, 0, 0, 377001, 0, 0, 'Bleakheart Shadowstalker - Cast Sneak OOC');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (377002, 3770, 0, 2, 0, 100, 0, 15, 0, 0, 0, 377002, 0, 0, 'Bleakheart Shadowstalker - Flee at 15% HP');
+DELETE FROM `creature_ai_scripts` WHERE `id`=377001;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (377001, 0, 15, 7939, 34, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Bleakheart Shadowstalker - Cast Spell Sneak');
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES (377001, 0, 15, 22766, 34, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Bleakheart Shadowstalker - Cast Spell Sneak');
+UPDATE `creature_template` SET `auras`='6947' WHERE `entry`=3770;
