@@ -1959,3 +1959,4 @@ REPLACE INTO `gameobject` VALUES ( 4000288, 180049, 1, -6151.13, -3918.87, -56.6
 DELETE FROM gameobject WHERE guid = '4000288';
 DELETE FROM game_event_gameobject WHERE guid = '4000288';
 DELETE FROM gameobject_battleground WHERE guid = '4000288';
+REPLACE INTO `gameobject` VALUES ( 5010629, 2010875, 1, -983.097, -3644.75, 19.2262, 5.44356, 0, 0, 0.407591, -0.913165, 300, 300, 100, 1, 0, 0);
