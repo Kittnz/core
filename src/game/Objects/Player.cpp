@@ -16857,6 +16857,7 @@ void Player::SaveToDB(bool online, bool force)
     {
         data->uiLevel = GetLevel();
         data->uiZoneId = GetCachedZoneId();
+        data->uiHardcoreStatus = GetHardcoreStatus();
     }
 }
 
@@ -22677,6 +22678,14 @@ uint16 Player::GetPureMaxSkillValue(uint32 skill) const
 }
 
 // for Hardcore mode
+void Player::SetHardcoreStatus(uint8 status)
+{
+    m_hardcoreStatus = status;
+
+    if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
+        pCache->uiHardcoreStatus = status;
+}
+
 Player::HardcoreInteractionResult Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
 {
     if (!IsHardcore() && !target->IsHardcore())

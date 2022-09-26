@@ -2186,7 +2186,8 @@ class Player final: public Unit
             LevelLimitExceeded
         };
 
-        void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
+        void SetHardcoreStatus(uint8 status);
+        uint8 GetHardcoreStatus() { return m_hardcoreStatus; };
         bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
         HardcoreInteractionResult HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
