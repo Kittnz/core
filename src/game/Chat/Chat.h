@@ -200,7 +200,6 @@ class ChatHandler
         // Deplacement
         bool HandleGoForwardCommand(char* args);
         bool HandleGoUpCommand(char* args);
-        bool HandleGoSniffNpcCommand(char* args);
 
         bool HandleGameObjectTempAddCommand(char *args);
         // Clean characters
@@ -379,8 +378,6 @@ class ChatHandler
         bool HandleNpcFlagCommand(char* args);
         bool HandleNpcInfoCommand(char* args);
         bool HandleNpcMoveCommand(char* args);
-        bool HandleNpcNearCommand(char* args);
-        bool HandleNpcSniffMoveCommand(char* args);
         bool HandleNpcPlayEmoteCommand(char* args);
         bool HandleNpcSayCommand(char* args);
         bool HandleNpcSpeedCommand(char* args);

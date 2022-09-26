@@ -8598,50 +8598,6 @@ bool ChatHandler::HandleGameObjectAddCommand(char* args)
     return true;
 }
 
-bool ChatHandler::HandleNpcNearCommand(char* args)
-{
-    float distance;
-    if (!ExtractOptFloat(&args, distance, 10.0f))
-        return false;
-
-    uint32 count = 0;
-
-    Player* pl = m_session->GetPlayer();
-    QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, position_x, position_y, position_z, map, "
-        "(POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) AS order_ "
-        "FROM creature WHERE map='%u' AND (POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) <= '%f' ORDER BY order_",
-        pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(),
-        pl->GetMapId(), pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(), distance * distance);
-
-    if (result)
-    {
-        do
-        {
-            Field* fields = result->Fetch();
-            uint32 guid = fields[0].GetUInt32();
-            uint32 entry = fields[1].GetUInt32();
-            float x = fields[2].GetFloat();
-            float y = fields[3].GetFloat();
-            float z = fields[4].GetFloat();
-            int mapid = fields[5].GetUInt16();
-
-            CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(entry);
-
-            if (!cInfo)
-                continue;
-
-            PSendSysMessage(LANG_GO_MIXED_LIST_CHAT, guid, PrepareStringNpcOrGoSpawnInformation<Creature>(guid).c_str(), entry, guid, cInfo->name, x, y, z, mapid);
-
-            ++count;
-        } while (result->NextRow());
-
-        delete result;
-    }
-
-    PSendSysMessage(LANG_COMMAND_NEAROBJMESSAGE, distance, count);
-    return true;
-}
-
 bool ChatHandler::HandleGameObjectNearCommand(char* args)
 {
     float distance;
@@ -8651,7 +8607,7 @@ bool ChatHandler::HandleGameObjectNearCommand(char* args)
     uint32 count = 0;
 
     Player* pl = m_session->GetPlayer();
-    QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, position_x, position_y, position_z, map, "
+    /*QueryResult* result = WorldDatabase.PQuery("SELECT guid, id, position_x, position_y, position_z, map, "
         "(POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) AS order_ "
         "FROM gameobject WHERE map='%u' AND (POW(position_x - '%f', 2) + POW(position_y - '%f', 2) + POW(position_z - '%f', 2)) <= '%f' ORDER BY order_",
         pl->GetPositionX(), pl->GetPositionY(), pl->GetPositionZ(),
@@ -8674,15 +8630,14 @@ bool ChatHandler::HandleGameObjectNearCommand(char* args)
             if (!gInfo)
                 continue;
 
-            PSendSysMessage(LANG_GO_MIXED_LIST_CHAT, guid, PrepareStringNpcOrGoSpawnInformation<GameObject>(guid).c_str(), entry, guid, gInfo->name.c_str(), x, y, z, mapid);
+            PSendSysMessage(LANG_GO_MIXED_LIST_CHAT, guid, PrepareStringNpcOrGoSpawnInformation<GameObject>(guid).c_str(), entry, guid, gInfo->name, x, y, z, mapid);
 
             ++count;
         }         while (result->NextRow());
 
         delete result;
-    }
+    }*/
 
-    /*
     MaNGOS::AllGameObjectsInRange check(pl, distance);
     std::list<GameObject*> gameObjects;
     MaNGOS::GameObjectListSearcher<MaNGOS::AllGameObjectsInRange> searcher(gameObjects, check);
@@ -8695,7 +8650,7 @@ bool ChatHandler::HandleGameObjectNearCommand(char* args)
             , go->GetName(), go->GetPositionX(), go->GetPositionY(), go->GetPositionZ(), go->GetMapId());
         ++count;
     }
-    */
+
     PSendSysMessage(LANG_COMMAND_NEAROBJMESSAGE, distance, count);
     return true;
 }
@@ -9374,63 +9329,6 @@ bool ChatHandler::HandleNpcMoveCommand(char* args)
     sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     sWorld.ExecuteUpdate("UPDATE creature SET position_x = '%f', position_y = '%f', position_z = '%f', orientation = '%f' WHERE guid = '%u'", x, y, z, o, lowguid);
     PSendSysMessage(LANG_COMMAND_CREATUREMOVED);
-    return true;
-}
-
-bool ChatHandler::HandleNpcSniffMoveCommand(char* args)
-{
-    Player* pPlayer = m_session->GetPlayer();
-    Creature* pCreature = GetSelectedCreature();
-
-    if (!pCreature)
-        return false;
-
-    uint32 guid;
-    if (!ExtractUInt32(&args, guid))
-        return false;
-
-    QueryResult* pQuery = CharacterDatabase.PQuery("SELECT map, position_x, position_y, position_z, orientation FROM sniffs_korrak.creature WHERE guid=%u", guid);
-    if (!pQuery)
-    {
-        SendSysMessage("Creature not found.");
-        SetSentErrorMessage(true);
-        return false;
-    }
-    else
-    {
-        Field* fields;
-        do
-        {
-            fields = pQuery->Fetch();
-            uint32 map = fields[0].GetUInt32();
-            if (map != pCreature->GetMapId())
-            {
-                SendSysMessage("Creature is on another map!");
-                break;
-            }
-
-            float x = fields[1].GetFloat();
-            float y = fields[2].GetFloat();
-            float z = fields[3].GetFloat();
-            float o = fields[4].GetFloat();
-
-            pCreature->SetHomePosition(x, y, z, o);
-            if (pCreature->IsMoving())
-                pCreature->StopMoving();
-            pCreature->GetMotionMaster()->MoveIdle();
-            pCreature->NearTeleportTo(x, y, z, o);
-
-            sWorld.GetMigration().SetAuthor(m_session->GetUsername());
-            sWorld.ExecuteUpdate("UPDATE `creature` SET `position_x` = %f, `position_y` = %f, `position_z` = %f, `orientation` = %f WHERE `guid` = %u", x, y, z, o, pCreature->GetGUIDLow());
-            PSendSysMessage("Moving creature %u to sniffed position of %u.", pCreature->GetGUIDLow(), guid);
-
-            break;
-
-        } while (pQuery->NextRow());
-
-        delete pQuery;
-    }
-    
     return true;
 }
 
@@ -11815,46 +11713,6 @@ bool ChatHandler::HandleGoUpCommand(char* args)
         pPlayer->GetRelativePositions(0.0f, 0.0f, add_z, x, y, z);
         pPlayer->NearLandTo(x, y, z, pPlayer->GetOrientation());
     }
-    return true;
-}
-
-bool ChatHandler::HandleGoSniffNpcCommand(char* args)
-{
-    Player* pPlayer = m_session->GetPlayer();
-    if (!pPlayer)
-        return false;
-
-    uint32 guid;
-    if (!ExtractUInt32(&args, guid))
-        return false;
-
-    QueryResult* pQuery = CharacterDatabase.PQuery("SELECT map, position_x, position_y, position_z, orientation FROM sniffs_korrak.creature WHERE guid=%u", guid);
-    if (!pQuery)
-    {
-        SendSysMessage("Creature not found.");
-        SetSentErrorMessage(true);
-        return false;
-    }
-    else
-    {
-        Field* fields;
-        do
-        {
-            fields = pQuery->Fetch();
-            uint32 map = fields[0].GetUInt32();
-            float x = fields[1].GetFloat();
-            float y = fields[2].GetFloat();
-            float z = fields[3].GetFloat();
-            float o = fields[4].GetFloat();
-
-            pPlayer->TeleportTo(map, x, y, z, o);
-            break;
-
-        } while (pQuery->NextRow());
-
-        delete pQuery;
-    }
-
     return true;
 }
 
