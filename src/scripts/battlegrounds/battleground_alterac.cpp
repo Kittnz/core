@@ -1521,49 +1521,6 @@ struct AV_NpcEventTroopsAI : public npc_escortAI
 
 enum
 {
-    SAY_KORRAK_SPAWN = 9038
-};
-
-/** Korrak should appear after 2 hours of battle */
-class npc_korrak_the_bloodragerAI: public ScriptedAI
-{
-    public:
-        npc_korrak_the_bloodragerAI(Creature* c) : ScriptedAI(c), m_appeared(false)
-        {
-            Reset();
-            m_yell = false;
-        }
-        void Reset() override
-        {
-        }
-        void UpdateAI(uint32 const diff) override
-        {
-            if (!m_appeared)
-            {
-                m_creature->DisappearAndDie();
-                m_creature->SetRespawnTime(7200);
-                m_appeared = true;
-                return;
-            }
-            else
-            {
-                if (!m_yell)
-                {
-                    DoScriptText(SAY_KORRAK_SPAWN, m_creature);
-                    m_yell = true;
-                }
-            }
-            if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-                return;
-            DoMeleeAttackIfReady();
-        }
-    protected:
-        bool        m_appeared;
-        bool        m_yell;
-};
-
-enum
-{
     SPELL_CHAIN_LIGHTNING  =   16006,
     SPELL_EARTHBIND_TOTEM  =   15786,
     SPELL_FLAME_SHOCK      =   15616,
@@ -4810,11 +4767,6 @@ CreatureAI* GetAI_npc_eventTroopsAV(Creature* pCreature)
     return new AV_NpcEventTroopsAI(pCreature);
 }
 
-CreatureAI* GetAI_npc_korrak_the_bloodrager(Creature* pCreature)
-{
-    return new npc_korrak_the_bloodragerAI(pCreature);
-}
-
 CreatureAI* GetAI_AV_WarRiderAI(Creature* pCreature)
 {
     return new AV_WarRiderAI(pCreature);
@@ -5464,11 +5416,6 @@ void AddSC_bg_alterac()
     newscript = new Script;
     newscript->Name = "npc_cavalry";
     newscript->GetAI = &GetAI_npc_eventTroopsAV;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_korrak_the_bloodrager";
-    newscript->GetAI = &GetAI_npc_korrak_the_bloodrager;
     newscript->RegisterSelf();
 
     newscript = new Script;
