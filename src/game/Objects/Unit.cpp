@@ -6491,15 +6491,6 @@ bool Unit::IsVisibleForOrDetect(WorldObject const* pDetector, WorldObject const*
         // if player is dead then he can't detect anyone in any cases
         if (!pDetectorPlayer->IsAlive())
             detect = false;
-
-        // GMs see any players, not higher GMs and all units
-        if (pDetectorPlayer->IsGameMaster())
-        {
-            if (IsPlayer())
-                return ToPlayer()->GetGMInvisibilityLevel() <= uint8(pDetectorPlayer->GetSession()->GetSecurity());
-
-            return true;
-        }
     }
     else
     {
@@ -6529,6 +6520,15 @@ bool Unit::IsVisibleForOrDetect(WorldObject const* pDetector, WorldObject const*
     // Visible units are always visible for all units
     if (m_Visibility == VISIBILITY_ON)
         return true;
+
+    // GMs see any players, not higher GMs and all units
+    if (pDetectorPlayer && pDetectorPlayer->IsGameMaster())
+    {
+        if (IsPlayer())
+            return ToPlayer()->GetGMInvisibilityLevel() <= uint8(pDetectorPlayer->GetSession()->GetSecurity());
+        
+        return true;
+    }
 
     // non faction visibility non-breakable for non-GMs
     if (m_Visibility == VISIBILITY_OFF)

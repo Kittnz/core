@@ -177,7 +177,6 @@ ChatCommand * ChatHandler::getCommandTable()
         { "corpse",         SEC_DEVELOPER, false, &ChatHandler::HandleGoCorpseCommand, "Teleports the user to their corpse.", nullptr },
         { "forward",        SEC_OBSERVER, false, &ChatHandler::HandleGoForwardCommand,           "", nullptr },
         { "up",             SEC_OBSERVER, false, &ChatHandler::HandleGoUpCommand,                "", nullptr },
-        { "sniffnpc",       SEC_OBSERVER, false, &ChatHandler::HandleGoSniffNpcCommand,          "", nullptr },
         { "",               SEC_DEVELOPER, false, &ChatHandler::HandleGoCommand,                  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
@@ -339,8 +338,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "yell",           SEC_DEVELOPER, false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
         { "setdeathstate",  SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
         { "group",          SEC_ADMINISTRATOR,     false, nullptr,                                        "", creatureGroupsCommandTable },
-        { "near",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcNearCommand,    "", nullptr },
-        { "sniffmove",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSniffMoveCommand,    "", nullptr },
+
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
