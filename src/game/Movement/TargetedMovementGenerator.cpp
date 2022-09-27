@@ -359,21 +359,8 @@ bool ChaseMovementGenerator<T>::Update(T &owner, const uint32 & time_diff)
 
     if (owner.movespline->Finalized())
     {
-        if (owner.IsPlayer())
-        {
-            // For players need to actually send the new orientation.
-            // Creatures automatically face their target in client.
-            if (!owner.HasInArc(i_target.getTarget(), 2 * M_PI_F / 3))
-            {
-                owner.SetInFront(i_target.getTarget());
-                owner.SetFacingTo(owner.GetAngle(i_target.getTarget()));
-            }
-        }
-        else
-        {
-            if (!owner.HasInArc(i_target.getTarget(), 0.01f))
-                owner.SetInFront(i_target.getTarget());
-        }
+        if (owner.IsCreature() && !owner.HasInArc(i_target.getTarget(), 0.01f))
+            owner.SetInFront(i_target.getTarget());
 
         if (m_bIsSpreading)
             m_bIsSpreading = false;
@@ -392,6 +379,9 @@ bool ChaseMovementGenerator<T>::Update(T &owner, const uint32 & time_diff)
 
         if (interrupted)
             owner.StopMoving();
+
+        if (interrupted || owner.IsPlayer() && !owner.HasInArc(i_target.getTarget(), M_PI_F / 2.0f))
+            owner.SetFacingTo(owner.GetAngle(i_target.getTarget()));
 
         m_spreadTimer.Update(time_diff);
         if (m_spreadTimer.Passed())
@@ -675,7 +665,7 @@ bool FollowMovementGenerator<T>::Update(T &owner, const uint32 & time_diff)
             _reachTarget(owner);
         }
         if (interrupted)
-            owner.StopMoving();
+            owner.StopMoving(true);
     }
     else if (m_bRecalculateTravel)
         owner.GetMotionMaster()->SetNeedAsyncUpdate();
