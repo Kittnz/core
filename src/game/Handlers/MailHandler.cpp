@@ -265,14 +265,10 @@ void WorldSession::HandleSendMail(WorldPacket& recv_data)
     else
     {
         // hardcore players interaction (additional checks for offline receivers)
-        QueryResult* result = CharacterDatabase.PQuery("SELECT mortality_status FROM characters WHERE guid='%u'", req->receiver);
-        uint32 hardcoreStatus = 0;
-        if (result)
-        {
-            Field* fields = result->Fetch();
-            hardcoreStatus = fields[0].GetUInt32();
-            delete result;
-        }
+        uint8 hardcoreStatus = 0;
+        if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(req->receiver.GetCounter()))
+            hardcoreStatus = pCache->uiHardcoreStatus;
+
         bool receiverIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);
         if (!GetPlayer()->IsHardcore() && receiverIsHardcore)
         {
