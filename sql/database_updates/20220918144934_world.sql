@@ -106,4 +106,4 @@ update quest_template set details = 'I knew you wouldn\'t pass another opportuni
 UPDATE `broadcast_text` SET `male_text` = 'Know that I love you always...' WHERE `entry` = 1285;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2180
-+update gameobject set spawntimesecsmin = 15, spawntimesecsmax = 20 where id = 19284;
+update gameobject set spawntimesecsmin = 15, spawntimesecsmax = 20 where id = 19284;
