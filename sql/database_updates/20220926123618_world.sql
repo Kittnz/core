@@ -2,6 +2,7 @@ SET @CGUID = 114000;
 
 -- Add missing creature spawns.
 INSERT INTO `creature` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `wander_distance`, `movement_type`, `spawntimesecsmin`, `spawntimesecsmax`) VALUES 
+(@CGUID+1, 13324, 30, 724.639, -19.4798, 50.6214, 3.43454, 3, 1, 120, 120),
 (@CGUID+1031, 10981, 30, -560.516, -483.553, 77.0221, 5.26788, 19.5712, 1, 430, 430),
 (@CGUID+902, 10983, 30, 20.8632, -139.72, 40.4579, 2.26758, 5.3428, 1, 430, 430),
 (@CGUID+903, 10983, 30, 3.4974, -140.057, 45.041, 1.44862, 0, 0, 430, 430),
@@ -925,6 +926,7 @@ INSERT INTO `creature_addon` (`guid`, `stand_state`) VALUES
 (@CGUID+994, 1);
 
 INSERT INTO `creature_battleground` (`guid`, `event1`, `event2`) VALUES
+(@CGUID+1, 15, 1), -- Firstaid Station - Alliance Defender Quest1
 (@CGUID+822, 15, 0), -- Firstaid Station - Alliance Defender Quest0
 (@CGUID+823, 15, 1), -- Firstaid Station - Alliance Defender Quest1
 (@CGUID+826, 15, 2), -- Firstaid Station - Alliance Defender Quest2
@@ -4359,7 +4361,223 @@ UPDATE `creature` SET `position_x` = -1364.410034, `position_y` = -220.335007, `
 UPDATE `creature` SET `position_x` = -1367.500000, `position_y` = -219.455002, `position_z` = 98.509903, `orientation` = 4.707960 WHERE `guid` = 150152;
 UPDATE `creature` SET `position_x` = -1376.310059, `position_y` = -219.307999, `position_z` = 99.454597, `orientation` = 4.607670 WHERE `guid` = 51987;
 UPDATE `creature` SET `position_x` = -1366.199951, `position_y` = -216.074005, `position_z` = 99.454201, `orientation` = 5.462880 WHERE `guid` = 51988;
-UPDATE `creature` SET `position_x`=-211.806625, `position_y`=-105.228661, `position_z`=79.189903, `orientation`=5.295108, `wander_distance`=3, `movement_type`=1 WHERE `guid`=52065;
-UPDATE `creature_template` SET `spell_list_id`=121590, `script_name`='' WHERE `entry`=12159;
-REPLACE INTO `creature_spells` (`entry`, `name`, `spellId_1`, `probability_1`, `castTarget_1`, `targetParam1_1`, `targetParam2_1`, `castFlags_1`, `delayInitialMin_1`, `delayInitialMax_1`, `delayRepeatMin_1`, `delayRepeatMax_1`, `scriptId_1`, `spellId_2`, `probability_2`, `castTarget_2`, `targetParam1_2`, `targetParam2_2`, `castFlags_2`, `delayInitialMin_2`, `delayInitialMax_2`, `delayRepeatMin_2`, `delayRepeatMax_2`, `scriptId_2`, `spellId_3`, `probability_3`, `castTarget_3`, `targetParam1_3`, `targetParam2_3`, `castFlags_3`, `delayInitialMin_3`, `delayInitialMax_3`, `delayRepeatMin_3`, `delayRepeatMax_3`, `scriptId_3`, `spellId_4`, `probability_4`, `castTarget_4`, `targetParam1_4`, `targetParam2_4`, `castFlags_4`, `delayInitialMin_4`, `delayInitialMax_4`, `delayRepeatMin_4`, `delayRepeatMax_4`, `scriptId_4`, `spellId_5`, `probability_5`, `castTarget_5`, `targetParam1_5`, `targetParam2_5`, `castFlags_5`, `delayInitialMin_5`, `delayInitialMax_5`, `delayRepeatMin_5`, `delayRepeatMax_5`, `scriptId_5`, `spellId_6`, `probability_6`, `castTarget_6`, `targetParam1_6`, `targetParam2_6`, `castFlags_6`, `delayInitialMin_6`, `delayInitialMax_6`, `delayRepeatMin_6`, `delayRepeatMax_6`, `scriptId_6`, `spellId_7`, `probability_7`, `castTarget_7`, `targetParam1_7`, `targetParam2_7`, `castFlags_7`, `delayInitialMin_7`, `delayInitialMax_7`, `delayRepeatMin_7`, `delayRepeatMax_7`, `scriptId_7`, `spellId_8`, `probability_8`, `castTarget_8`, `targetParam1_8`, `targetParam2_8`, `castFlags_8`, `delayInitialMin_8`, `delayInitialMax_8`, `delayRepeatMin_8`, `delayRepeatMax_8`, `scriptId_8`) VALUES (121590, 'Alterac Valley - Korrak the Bloodrager', 20276, 100, 1, 0, 0, 0, 0, 0, 15, 20, 0, 19129, 100, 1, 0, 0, 64, 5, 10, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 DELETE FROM `creature` WHERE `guid`=53112;
+UPDATE `gameobject` SET `position_x`=638.649, `position_y`=-32.1007, `position_z`=45.1324, `orientation`=4.66003, `rotation0`=0, `rotation1`=0, `rotation2`=-0.725374, `rotation3`=0.688355 WHERE `guid` IN (90354, 90355, 90368, 90369, 90382, 90383, 90396, 90397);
+
+-- Move Korrak
+UPDATE `creature` SET `position_x`=-211.806625, `position_y`=-105.228661, `position_z`=79.189903, `orientation`=5.295108, `wander_distance`=3, `movement_type`=1 WHERE `guid`=52065;
+UPDATE `creature_template` SET `spell_list_id`=121590, `script_name`='', `gold_min`=450000, `gold_max`=900000 WHERE `entry`=12159;
+REPLACE INTO `creature_spells` (`entry`, `name`, `spellId_1`, `probability_1`, `castTarget_1`, `targetParam1_1`, `targetParam2_1`, `castFlags_1`, `delayInitialMin_1`, `delayInitialMax_1`, `delayRepeatMin_1`, `delayRepeatMax_1`, `scriptId_1`, `spellId_2`, `probability_2`, `castTarget_2`, `targetParam1_2`, `targetParam2_2`, `castFlags_2`, `delayInitialMin_2`, `delayInitialMax_2`, `delayRepeatMin_2`, `delayRepeatMax_2`, `scriptId_2`, `spellId_3`, `probability_3`, `castTarget_3`, `targetParam1_3`, `targetParam2_3`, `castFlags_3`, `delayInitialMin_3`, `delayInitialMax_3`, `delayRepeatMin_3`, `delayRepeatMax_3`, `scriptId_3`, `spellId_4`, `probability_4`, `castTarget_4`, `targetParam1_4`, `targetParam2_4`, `castFlags_4`, `delayInitialMin_4`, `delayInitialMax_4`, `delayRepeatMin_4`, `delayRepeatMax_4`, `scriptId_4`, `spellId_5`, `probability_5`, `castTarget_5`, `targetParam1_5`, `targetParam2_5`, `castFlags_5`, `delayInitialMin_5`, `delayInitialMax_5`, `delayRepeatMin_5`, `delayRepeatMax_5`, `scriptId_5`, `spellId_6`, `probability_6`, `castTarget_6`, `targetParam1_6`, `targetParam2_6`, `castFlags_6`, `delayInitialMin_6`, `delayInitialMax_6`, `delayRepeatMin_6`, `delayRepeatMax_6`, `scriptId_6`, `spellId_7`, `probability_7`, `castTarget_7`, `targetParam1_7`, `targetParam2_7`, `castFlags_7`, `delayInitialMin_7`, `delayInitialMax_7`, `delayRepeatMin_7`, `delayRepeatMax_7`, `scriptId_7`, `spellId_8`, `probability_8`, `castTarget_8`, `targetParam1_8`, `targetParam2_8`, `castFlags_8`, `delayInitialMin_8`, `delayInitialMax_8`, `delayRepeatMin_8`, `delayRepeatMax_8`, `scriptId_8`) VALUES (121590, 'Alterac Valley - Korrak the Bloodrager', 20276, 100, 1, 0, 0, 0, 0, 0, 15, 20, 0, 19129, 100, 1, 0, 0, 64, 5, 10, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (12159, 30557, 100, 0, -30557, 1, 0);
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (12159, 12468, 5, 0, 1, 1, 0);
+UPDATE `item_template` SET `spellid_1`=3271, `spelltrigger_1`=2, `spellppmrate_1`=15 WHERE `entry`=12468;
+
+-- Gossip for Master Engineer Zinfizzlex.
+UPDATE `creature_template` SET `faction`=1194, `unit_flags`=832, `gossip_menu_id`=5122, `npc_flags`=1, `ai_name`='EventAI' WHERE `entry`=13377;
+INSERT INTO `npc_text` (`ID`, `Probability0`, `BroadcastTextID0`) VALUES (6168, 1, 8726);
+INSERT INTO `gossip_menu` (`entry`, `text_id`) VALUES (5122, 6168);
+INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (5122, 0, 0, 'Let\'s go, goblin!', 8727, 1, 1, -1, 0, 51220, 0, 0, NULL, 0, 2);
+INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (5122, 1, 0, 'Let\'s go, goblin!', 8727, 1, 1, -1, 0, 51221, 0, 0, NULL, 0, 3);
+DELETE FROM `gossip_scripts` WHERE `id`=51220;
+INSERT INTO `gossip_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(51220, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Horde) - Stand Up'),
+(51220, 0, 0, 4, 147, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Horde) - Remove Gossip Flag'),
+(51220, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8724, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Horde) - Say Text'),
+(51220, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Horde) - Emote Talk'),
+(51220, 1, 2, 60, 3, 0, 4000, 0, 0, 0, 0, 0, 0, 133770, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Horde) - Start Waypoints'),
+(51220, 1, 3, 22, 1214, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Horde) - Set Faction to Frostwolf Clan');
+DELETE FROM `gossip_scripts` WHERE `id`=51221;
+INSERT INTO `gossip_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(51221, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Alliance) - Stand Up'),
+(51221, 0, 0, 4, 147, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Alliance) - Remove Gossip Flag'),
+(51221, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8724, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Alliance) - Say Text'),
+(51221, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Alliance) - Emote Talk'),
+(51221, 1, 2, 60, 3, 0, 4000, 0, 0, 0, 0, 0, 0, 133771, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Alliance) - Start Waypoints'),
+(51221, 1, 3, 22, 1216, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex (Alliance) - Set Faction to Stormpike Guard');
+
+-- Events list for Master Engineer Zinfizzlex
+DELETE FROM `creature_ai_events` WHERE `creature_id`=13377;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1337701, 13377, 0, 11, 0, 100, 1, 0, 0, 0, 0, 1337701, 0, 0, 'Master Engineer Zinfizzlex - Set Stand State on Spawn');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1337701;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(1337701, 0, 0, 28, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Set Stand State to Dead');
+
+-- Horde waypoints for Master Engineer Zinfizzlex.
+INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+(133770, 1, -151.166672, 71.588539, 85.928726, 100.000000, 0, 0.000000, 0),
+(133770, 2, -173.954208, 22.861050, 77.759232, 100.000000, 0, 0.000000, 0),
+(133770, 3, -178.492233, -13.384914, 80.845726, 100.000000, 0, 0.000000, 0),
+(133770, 4, -189.020050, -33.730091, 76.151161, 100.000000, 0, 0.000000, 0),
+(133770, 5, -196.435852, -56.965038, 72.413719, 100.000000, 0, 0.000000, 0),
+(133770, 6, -203.316025, -77.674759, 74.997826, 100.000000, 0, 0.000000, 0),
+(133770, 7, -210.389328, -102.948082, 79.318810, 100.000000, 5000, 0.000000, 1337707),
+(133770, 8, -232.574448, -88.603905, 68.914459, 100.000000, 0, 0.000000, 0),
+(133770, 9, -247.675262, -82.354225, 58.983170, 100.000000, 0, 0.000000, 0),
+(133770, 10, -262.508514, -87.882957, 50.586319, 100.000000, 0, 0.000000, 0),
+(133770, 11, -285.127533, -109.047424, 28.139734, 100.000000, 0, 0.000000, 0),
+(133770, 12, -300.604095, -128.943817, 15.059515, 100.000000, 0, 0.000000, 0),
+(133770, 13, -320.687408, -161.321625, 9.438923, 100.000000, 0, 0.000000, 0),
+(133770, 14, -342.953217, -177.651901, 9.485640, 100.000000, 0, 0.000000, 0),
+(133770, 15, -370.414337, -185.240311, 13.126913, 100.000000, 0, 0.000000, 0),
+(133770, 16, -398.197113, -181.077072, 18.349977, 100.000000, 0, 0.000000, 0),
+(133770, 17, -414.333771, -184.603027, 25.721783, 100.000000, 0, 0.000000, 0),
+(133770, 18, -422.428680, -200.442154, 26.441994, 100.000000, 0, 0.000000, 0),
+(133770, 19, -425.853943, -219.792084, 24.925390, 100.000000, 0, 0.000000, 0),
+(133770, 20, -434.756256, -246.969833, 22.668995, 100.000000, 0, 0.000000, 0),
+(133770, 21, -441.719055, -264.755585, 21.000574, 100.000000, 0, 0.000000, 0),
+(133770, 22, -442.735413, -274.353882, 20.499338, 100.000000, 0, 0.000000, 0),
+(133770, 23, -480.997131, -281.967499, 26.713284, 100.000000, 0, 0.000000, 0),
+(133770, 24, -503.155334, -309.730530, 31.893482, 100.000000, 0, 0.000000, 0),
+(133770, 25, -518.849670, -334.047211, 34.142792, 100.000000, 0, 0.000000, 0),
+(133770, 26, -534.227234, -339.900848, 36.034100, 100.000000, 0, 0.000000, 0),
+(133770, 27, -551.580994, -332.048889, 38.474194, 100.000000, 0, 0.000000, 0),
+(133770, 28, -567.659363, -322.286316, 42.627743, 100.000000, 0, 0.000000, 0),
+(133770, 29, -585.520264, -320.216736, 47.942165, 100.000000, 0, 0.000000, 0),
+(133770, 30, -599.727661, -330.841156, 50.842155, 100.000000, 0, 0.000000, 0),
+(133770, 31, -614.401978, -341.531708, 54.851856, 100.000000, 0, 0.000000, 0),
+(133770, 32, -622.134827, -368.373016, 56.988609, 100.000000, 0, 0.000000, 0),
+(133770, 33, -625.525574, -387.057098, 58.689400, 100.000000, 0, 0.000000, 0),
+(133770, 34, -639.136292, -391.494385, 59.938988, 100.000000, 0, 0.000000, 0),
+(133770, 35, -657.416321, -384.763153, 63.049862, 100.000000, 0, 0.000000, 0),
+(133770, 36, -692.966064, -368.936615, 66.054482, 100.000000, 0, 0.000000, 0),
+(133770, 37, -702.175598, -366.116180, 66.413155, 100.000000, 0, 0.000000, 0),
+(133770, 38, -714.178284, -384.069763, 67.520004, 100.000000, 0, 0.000000, 0),
+(133770, 39, -719.375488, -402.089020, 67.698235, 100.000000, 0, 0.000000, 0),
+(133770, 40, -731.675293, -416.803772, 67.558243, 100.000000, 0, 0.000000, 0),
+(133770, 41, -747.971802, -426.845978, 66.592667, 100.000000, 0, 0.000000, 0),
+(133770, 42, -766.162292, -432.947784, 64.035744, 100.000000, 0, 0.000000, 0),
+(133770, 43, -792.446533, -443.219849, 57.274128, 100.000000, 0, 0.000000, 0),
+(133770, 44, -800.999268, -447.265320, 55.822033, 100.000000, 0, 0.000000, 0),
+(133770, 45, -822.516907, -434.443665, 53.350277, 100.000000, 0, 0.000000, 0),
+(133770, 46, -836.616760, -408.477478, 52.004486, 100.000000, 0, 0.000000, 0),
+(133770, 47, -859.731445, -393.514923, 49.247116, 100.000000, 0, 0.000000, 0),
+(133770, 48, -877.671326, -387.494263, 48.681721, 100.000000, 0, 0.000000, 0),
+(133770, 49, -897.241516, -383.817596, 48.769775, 100.000000, 0, 0.000000, 0),
+(133770, 50, -916.478577, -383.821930, 49.454884, 100.000000, 0, 0.000000, 0),
+(133770, 51, -954.615723, -392.531982, 48.839458, 100.000000, 0, 0.000000, 0),
+(133770, 52, -973.475037, -395.936218, 49.425426, 100.000000, 0, 0.000000, 0),
+(133770, 53, -992.721680, -397.359497, 50.168777, 100.000000, 0, 0.000000, 0),
+(133770, 54, -1012.658813, -395.254669, 50.762779, 100.000000, 0, 0.000000, 0),
+(133770, 55, -1030.852295, -389.626343, 50.869030, 100.000000, 0, 0.000000, 0),
+(133770, 56, -1054.734009, -373.170319, 51.513237, 100.000000, 0, 0.000000, 0),
+(133770, 57, -1072.902100, -367.552551, 51.513889, 100.000000, 0, 0.000000, 0),
+(133770, 58, -1110.687744, -359.744019, 51.551353, 100.000000, 0, 0.000000, 0),
+(133770, 59, -1146.750244, -352.083984, 51.253410, 100.000000, 0, 0.000000, 0),
+(133770, 60, -1174.647827, -358.109314, 52.244110, 100.000000, 0, 0.000000, 0),
+(133770, 61, -1183.913696, -360.801697, 52.644966, 100.000000, 0, 0.000000, 0),
+(133770, 62, -1202.340454, -365.431824, 54.517269, 100.000000, 0, 0.000000, 0),
+(133770, 63, -1211.667847, -366.924927, 55.964245, 100.000000, 0, 0.000000, 0),
+(133770, 64, -1230.599854, -366.144104, 58.554646, 100.000000, 0, 0.000000, 0),
+(133770, 65, -1239.932983, -362.639191, 59.834595, 100.000000, 0, 0.000000, 0),
+(133770, 66, -1247.781128, -346.367157, 59.381584, 100.000000, 0, 0.000000, 0),
+(133770, 67, -1249.314331, -336.855347, 59.647919, 100.000000, 0, 0.000000, 0),
+(133770, 68, -1257.507202, -315.078735, 62.885933, 100.000000, 1000, 0.000000, 1337768),
+(133770, 69, -1257.507202, -315.078735, 62.885933, 2.321288, 0, 0.000000, 0);
+
+-- Alliance waypoints for Master Engineer Zinfizzlex.
+INSERT INTO `creature_movement_special` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES
+(133771, 1, -151.166672, 71.588539, 85.928726, 100.000000, 0, 0.000000, 0),
+(133771, 2, -173.954208, 22.861050, 77.759232, 100.000000, 0, 0.000000, 0),
+(133771, 3, -178.492233, -13.384914, 80.845726, 100.000000, 0, 0.000000, 0),
+(133771, 4, -189.020050, -33.730091, 76.151161, 100.000000, 0, 0.000000, 0),
+(133771, 5, -196.435852, -56.965038, 72.413719, 100.000000, 0, 0.000000, 0),
+(133771, 6, -203.316025, -77.674759, 74.997826, 100.000000, 0, 0.000000, 0),
+(133771, 7, -210.389328, -102.948082, 79.318810, 100.000000, 5000, 0.000000, 1337707),
+(133771, 8, -198.285, -127.095, 78.1182, 100.000000, 0, 0.000000, 0),
+(133771, 9, -194.342, -137.488, 75.6489, 100.000000, 0, 0.000000, 0),
+(133771, 10, -185.305, -148.716, 67.855, 100.000000, 0, 0.000000, 0),
+(133771, 11, -171.908, -163.618, 54.4512, 100.000000, 0, 0.000000, 0),
+(133771, 12, -167.869, -178.146, 42.8199, 100.000000, 0, 0.000000, 0),
+(133771, 13, -161.41, -186.883, 36.0754, 100.000000, 0, 0.000000, 0),
+(133771, 14, -158.73, -201.043, 28.4684, 100.000000, 0, 0.000000, 0),
+(133771, 15, -158.671, -211.936, 22.6934, 100.000000, 0, 0.000000, 0),
+(133771, 16, -156.981, -226.694, 12.3466, 100.000000, 0, 0.000000, 0),
+(133771, 17, -140.393, -251.088, 6.76649, 100.000000, 0, 0.000000, 0),
+(133771, 18, -123.428, -255.689, 7.11001, 100.000000, 0, 0.000000, 0),
+(133771, 19, -106.436, -258.401, 6.62158, 100.000000, 0, 0.000000, 0),
+(133771, 20, -89.3856, -250.071, 6.66776, 100.000000, 0, 0.000000, 0),
+(133771, 21, -70.066, -240.863, 8.78626, 100.000000, 0, 0.000000, 0),
+(133771, 22, -52.421, -233.823, 10.273, 100.000000, 0, 0.000000, 0),
+(133771, 23, -45.7261, -231.406, 10.4631, 100.000000, 0, 0.000000, 0),
+(133771, 24, -26.741, -235.457, 9.76342, 100.000000, 0, 0.000000, 0),
+(133771, 25, -11.4866, -239.246, 10.8374, 100.000000, 0, 0.000000, 0),
+(133771, 26, 6.75262, -242.248, 12.1501, 100.000000, 0, 0.000000, 0),
+(133771, 27, 27.2295, -243.392, 14.1087, 100.000000, 0, 0.000000, 0),
+(133771, 28, 39.9025, -248.155, 14.8433, 100.000000, 0, 0.000000, 0),
+(133771, 29, 53.9916, -246.384, 15.8082, 100.000000, 0, 0.000000, 0),
+(133771, 30, 63.1596, -247.524, 16.3783, 100.000000, 0, 0.000000, 0),
+(133771, 31, 70.4778, -257.566, 18.5307, 100.000000, 0, 0.000000, 0),
+(133771, 32, 79.8027, -270.192, 22.6245, 100.000000, 0, 0.000000, 0),
+(133771, 33, 92.3733, -286.229, 27.6084, 100.000000, 0, 0.000000, 0),
+(133771, 34, 100.665, -302.301, 32.1352, 100.000000, 0, 0.000000, 0),
+(133771, 35, 108.595, -316.625, 36.2546, 100.000000, 0, 0.000000, 0),
+(133771, 36, 115.713, -336.834, 40.8396, 100.000000, 0, 0.000000, 0),
+(133771, 37, 122.616, -359.578, 43.2042, 100.000000, 0, 0.000000, 0),
+(133771, 38, 126.946, -376.941, 42.7076, 100.000000, 0, 0.000000, 0),
+(133771, 39, 138.874, -388.163, 42.3779, 100.000000, 0, 0.000000, 0),
+(133771, 40, 154.689, -396.81, 42.7799, 100.000000, 0, 0.000000, 0),
+(133771, 41, 178.649, -404.21, 42.618, 100.000000, 0, 0.000000, 0),
+(133771, 42, 194.947, -408.344, 42.8736, 100.000000, 0, 0.000000, 0),
+(133771, 43, 218.834, -414.558, 40.616, 100.000000, 0, 0.000000, 0),
+(133771, 44, 238.125, -418.033, 36.8211, 100.000000, 0, 0.000000, 0),
+(133771, 45, 253.565, -411.451, 31.3292, 100.000000, 0, 0.000000, 0),
+(133771, 46, 263.723, -402.188, 22.6252, 100.000000, 0, 0.000000, 0),
+(133771, 47, 273.492, -393.779, 13.2539, 100.000000, 0, 0.000000, 0),
+(133771, 48, 286.78, -386.964, 5.6759, 100.000000, 0, 0.000000, 0),
+(133771, 49, 303.343, -380.765, 0.644127, 100.000000, 0, 0.000000, 0),
+(133771, 50, 328.767, -383.162, -0.901976, 100.000000, 0, 0.000000, 0),
+(133771, 51, 347.677, -386.624, -0.296287, 100.000000, 0, 0.000000, 0),
+(133771, 52, 371.811, -390.511, -0.304359, 100.000000, 0, 0.000000, 0),
+(133771, 53, 397.124, -390.192, -1.2438, 100.000000, 0, 0.000000, 0),
+(133771, 54, 415.112, -383.399, -1.24379, 100.000000, 0, 0.000000, 0),
+(133771, 55, 426.065, -379.006, -1.24379, 100.000000, 0, 0.000000, 0),
+(133771, 56, 449.08, -374.944, -1.24259, 100.000000, 0, 0.000000, 0),
+(133771, 57, 468.372, -365.768, -1.2131, 100.000000, 0, 0.000000, 0),
+(133771, 58, 486.533, -354.121, -1.2438, 100.000000, 0, 0.000000, 0),
+(133771, 59, 498.601, -338.899, -1.08517, 100.000000, 0, 0.000000, 0),
+(133771, 60, 514.838, -330.414, -1.08463, 100.000000, 0, 0.000000, 0),
+(133771, 61, 530.044, -325.432, 1.65545, 100.000000, 0, 0.000000, 0),
+(133771, 62, 545.278, -324.249, 7.99735, 100.000000, 0, 0.000000, 0),
+(133771, 63, 558.746, -325.399, 16.4809, 100.000000, 0, 0.000000, 0),
+(133771, 64, 576.014, -330.836, 26.7523, 100.000000, 0, 0.000000, 0),
+(133771, 65, 592.992, -333.688, 30.5039, 100.000000, 0, 0.000000, 0),
+(133771, 66, 609.629, -333.492, 30.5278, 100.000000, 0, 0.000000, 0),
+(133771, 67, 623.264, -323.36, 30.1347, 100.000000, 0, 0.000000, 0),
+(133771, 68, 632.224, -304.095, 30.1384, 100.000000, 0, 0.000000, 0),
+(133771, 69, 636.473, -285.925, 30.1406, 100.000000, 0, 0.000000, 0),
+(133771, 70, 635.639, -270.12, 30.1307, 100.000000, 0, 0.000000, 0),
+(133771, 71, 634.199, -258.646, 32.921, 100.000000, 0, 0.000000, 0),
+(133771, 72, 633.034, -245.788, 35.468, 100.000000, 0, 0.000000, 0),
+(133771, 73, 630.221, -232.669, 37.3961, 100.000000, 0, 0.000000, 0),
+(133771, 74, 627.947, -217.007, 38.7436, 100.000000, 0, 0.000000, 0),
+(133771, 75, 625.373, -193.999, 38.8805, 100.000000, 0, 0.000000, 0),
+(133771, 76, 623.169, -179.309, 37.8069, 100.000000, 0, 0.000000, 0),
+(133771, 77, 621.102, -165.491, 35.9397, 100.000000, 0, 0.000000, 0),
+(133771, 78, 619.817, -152.676, 33.3684, 100.000000, 0, 0.000000, 0),
+(133771, 79, 619.48, -137.383, 33.4288, 100.000000, 0, 0.000000, 0),
+(133771, 80, 622.537, -121.823, 35.1312, 100.000000, 0, 0.000000, 0),
+(133771, 81, 627.111, -108.85, 38.5936, 100.000000, 0, 0.000000, 0),
+(133771, 82, 631.5, -93.9435, 41.3129, 100.000000, 0, 0.000000, 0),
+(133771, 83, 634.113, -82.2344, 41.4561, 100.000000, 0, 0.000000, 0),
+(133771, 84, 628.176, -67.624, 40.9402, 100.000000, 0, 0.000000, 0),
+(133771, 85, 610.53, -80.2208, 38.884, 100.000000, 0, 0.000000, 0),
+(133771, 86, 597.643, -88.7896, 38.7121, 100.000000, 0, 0.000000, 0),
+(133771, 87, 591.938, -82.774, 39.7882, 100.000000, 0, 0.000000, 0),
+(133771, 88, 585.916, -74.9617, 38.0029, 100.000000, 0, 0.000000, 0),
+(133771, 89, 578.157, -77.6273, 37.9186, 100.000000, 0, 0.000000, 0),
+(133771, 90, 569.722, -81.2366, 37.9234, 100.000000, 0, 0.000000, 0),
+(133771, 91, 560.998, -79.4397, 37.9485, 100.000000, 1000, 0.000000, 1337768),
+(133771, 92, 560.998, -79.4397, 37.9492, 5.99179, 0, 0.000000, 0);
+
+DELETE FROM `creature_movement_scripts` WHERE `id`=1337707;
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(1337707, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8787, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Say Text'),
+(1337707, 0, 0, 1, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Emote Exclamation'),
+(1337707, 0, 0, 25, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Set Run'),
+(1337707, 1, 0, 4, 46, 768, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Remove Immunity Flags');
+
+DELETE FROM `creature_movement_scripts` WHERE `id`=1337768;
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(1337768, 2, 0, 0, 0, 0, 0, 0, 50, 0, 23, 0, 8725, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Say Text'),
+(1337768, 2, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Emote Talk'),
+(1337768, 5, 0, 4, 147, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Master Engineer Zinfizzlex - Add Quest Giver Flag');
