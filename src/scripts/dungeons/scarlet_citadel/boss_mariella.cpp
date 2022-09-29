@@ -329,8 +329,11 @@ public:
 
     void SpawnKillZone(Creature* pCreature)
     {
-        if (Creature const* pKillZone{ pCreature->SummonCreature(nsMariella::NPC_KILLZONE, pCreature->GetPositionX(), pCreature->GetPositionY(),
-            (pCreature->GetPositionZ() + 0.25f), 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
+        if (Creature const* pKillZone{ pCreature->SummonCreature(nsMariella::NPC_KILLZONE,
+            pCreature->GetPositionX(),
+            pCreature->GetPositionY(),
+            (pCreature->GetPositionZ() + .25f),
+            0.f, TEMPSUMMON_MANUAL_DESPAWN) })
         {
             m_uiKillZoneGuid = pKillZone->GetObjectGuid();
         }
