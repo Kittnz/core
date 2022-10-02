@@ -2527,14 +2527,14 @@ REPLACE INTO creature_loot_template VALUES (60878, 30038, 1, 0, -30038, 1, 0);
 -- Gorras Thorncrusher, display ID 6115 level 20, scale 1.5, undead, weapon1 : 15418 , casts 19632 every 8 seconds, casts 15716 every 30 seconds
 -- Hemnock the Wise, display ID 6116, level 20, scale 1.3 humanoid, weapon1 : 15444 (Has 1026 mana, casts 23206 every 8 seconds, casts 8045 every 7 seconds)
 REPLACE INTO creature_template VALUES
-(60979, 6093, 0, 0, 0, 0, 'Bramblethorn Quilboar', NULL, 0, 15, 16, 328, 356, 0, 0, 689, 16, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 23, 30, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 60979, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 17, 27, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60979, 1274, 0, 0, 0, 0, 'Bramblethorn Quilboar', NULL, 0, 15, 16, 328, 356, 0, 0, 689, 16, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 23, 30, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 7, 0, 60979, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 17, 27, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60980, 3027, 0, 0, 0, 0, 'Bramblethorn Boar', NULL, 0, 15, 16, 328, 356, 0, 0, 689, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 23, 30, 0, 76, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 1, 0, 60980, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 17, 27, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60981, 6077, 0, 0, 0, 0, 'Bramblethorn Thornweaver', NULL, 0, 16, 17, 325, 350, 623, 623, 625, 16, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 23, 30, 0, 80, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 60981, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 18, 29, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60982, 1274, 0, 0, 0, 0, 'Bramblethorn Trapper', NULL, 0, 16, 18, 386, 417, 0, 0, 782, 16, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 60982, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 20, 31, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60983, 6109, 0, 0, 0, 0, 'Bramblethorn Quilguard', NULL, 0, 17, 19, 417, 449, 0, 0, 800, 16, 0, 1, 1.14286, 1.4, 18, 5, 0, 0, 1, 27, 34, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 60983, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 24, 36, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60984, 6114, 0, 0, 0, 0, 'Bramblethorn Spirit', NULL, 0, 16, 18, 386, 417, 0, 0, 782, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 6, 0, 60984, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 20, 31, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60985, 6105, 0, 0, 0, 0, 'Bramblethorn Haunted', NULL, 0, 16, 18, 386, 417, 490, 490, 782, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 27, 34, 0, 84, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 6, 0, 60985, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 20, 31, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60986, 6115, 0, 0, 0, 0, 'Gorras Thorncrusher', NULL, 0, 20, 20, 629, 629, 0, 0, 852, 16, 0, 1, 1.14286, 1.5, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 6, 0, 60986, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60986, 6115, 0, 0, 0, 0, 'Gorras Thorncrusher', NULL, 0, 20, 20, 629, 629, 0, 0, 852, 16, 0, 1, 1.14286, 1.5, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 6, 0, 60986, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60987, 6116, 0, 0, 0, 0, 'Hemnock the Wise', NULL, 0, 20, 20, 629, 629, 1026, 1026, 852, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 60987, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 20216; set @weapon_1 = 15444; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60987;
@@ -4057,6 +4057,7 @@ REPLACE INTO creature_loot_template VALUES (60979, 2589, 32.6982, 0, 1, 3, 0);
 -- Sailor Brewen <Kul Tiras> display ID 18996, level 14, faction 1693, humanoid,  quest/greeting flags, greeting text : "All this money I've saved up, no better time to spend it then right now aye?" \n\n <Sailor Brewen laughs>
 -- Sailor Pardol <Kul Tiras> display ID 18997, level 13, faction 1693, humanoid,  quest/greeting flags, greeting text : "You better back off before we have a problem, understood?
 -- Emissary Godwin Valorcall <Kul Tiras Diplomat> , display ID 18983, level 50, faction 1693, humanoid,  quest/greeting flags, greeting text : "The ambitions and desires of Kul Tiras are a complicated matter, our goal here is to determine the true value of these southereners, and to see if mainlanders can truly be trusted.\n\n Should the nobility from Stormwind prove themselves loyal to the old ways and old causes, then perhaps there may be a future of cooperation.\n\n We shall see in time where the heart of Stormwind is rightly at."
+-- Plateau Fleshripper, display ID 10825, faction 16,  level 17-19, beast
 REPLACE INTO creature_template VALUES
 (60988, 3870, 0, 0, 0, 0, 'Bael Hardul Mountaineer', 'Explorer\'s League', 3356, 55, 55, 4667, 4667, 0, 0, 4292, 55, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 240, 260, 0, 90, 1, 2000, 2000, 1, 36864, 0, 0, 0, 0, 0, 0, 31.504, 43.318, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'GuardAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 525312, 0, ''),
 (60989, 3432, 0, 0, 0, 0, 'Borrin Dustshoulder', 'General Goods', 0, 20, 20, 629, 629, 0, 0, 852, 55, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 41, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -4087,7 +4088,8 @@ REPLACE INTO creature_template VALUES
 (61014, 18995, 0, 0, 0, 0, 'Sailor Capewind', 'Kul Tiras', 0, 12, 12, 247, 247, 0, 0, 573, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 26, 30, 0, 66, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61015, 18996, 0, 0, 0, 0, 'Sailor Brewen', 'Kul Tiras', 0, 14, 14, 300, 300, 0, 0, 525, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 14, 19, 0, 70, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 15, 25, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61016, 18997, 0, 0, 0, 0, 'Sailor Pardol', 'Kul Tiras', 0, 13, 13, 273, 273, 0, 0, 608, 1693, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 30, 35, 0, 68, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 4, 19, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61017, 18983, 0, 0, 0, 0, 'Emissary Godwin Valorcall', 'Kul Tiras Diplomat', 0, 50, 50, 2990, 2990, 0, 0, 2958, 1693, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61017, 18983, 0, 0, 0, 0, 'Emissary Godwin Valorcall', 'Kul Tiras Diplomat', 0, 50, 50, 2990, 2990, 0, 0, 2958, 1693, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61018, 10825, 0, 0, 0, 0, 'Plateau Fleshripper', NULL, 0, 17, 19, 417, 449, 0, 0, 800, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 28, 33, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 27.2272, 37.4374, 100, 1, 0, 61018, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 REPLACE INTO creature_display_info_addon VALUES (18982, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18983, 0, 0, 0, 0);
@@ -4161,6 +4163,11 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20217; set @weapon_1 = 12776; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 60988;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41250, 952, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30037, 'Northshire Abbey sure is a nice, and quiet place.');
+replace into npc_text (ID, BroadcastTextID0) values (952, 30037);
+update creature_template set gossip_menu_id = 41250 where entry = 952;
 
 set @gossip_menu_id = 41249; set @magic_number = 61017;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
