@@ -571,6 +571,45 @@ GameObjectAI* GetAI_go_darkmoon_faire_music(GameObject* gameobject)
     return new go_darkmoon_faire_music(gameobject);
 }
 
+/*####
+## go_roleplay_event
+####*/
+
+struct go_roleplay_event : public GameObjectAI
+{
+    go_roleplay_event(GameObject* go) : GameObjectAI(go), m_warnTimer(0)
+    {
+    }
+
+    uint32 m_warnTimer;
+    static std::set<uint32> m_warnedPlayers;
+
+    void UpdateAI(uint32 const diff)
+    {
+        if (diff >= m_warnTimer)
+        {
+            if (Player* pPlayer = me->FindNearestPlayer(10.0f))
+            {
+                uint32 guid = pPlayer->GetGUIDLow();
+                if (m_warnedPlayers.find(guid) == m_warnedPlayers.end())
+                {
+                    pPlayer->GetSession()->SendNotification("You are entering an active roleplay event area!");
+                    m_warnedPlayers.insert(guid);
+                }
+            }
+            m_warnTimer = 5000;
+        }
+        else
+            m_warnTimer -= diff;
+    }
+};
+
+std::set<uint32> go_roleplay_event::m_warnedPlayers;
+
+GameObjectAI* GetAI_go_roleplay_event(GameObject* gameobject)
+{
+    return new go_roleplay_event(gameobject);
+}
 
 void AddSC_go_scripts()
 {
@@ -645,6 +684,11 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_darkmoon_faire_music";
     newscript->GOGetAI = &GetAI_go_darkmoon_faire_music;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_roleplay_event";
+    newscript->GOGetAI = &GetAI_go_roleplay_event;
     newscript->RegisterSelf();
 }
 
