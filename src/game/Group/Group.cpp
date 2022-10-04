@@ -360,7 +360,7 @@ bool Group::AddMember(ObjectGuid guid, const char* name, uint8 joinMethod)
 
     SendUpdate();
 
-    constexpr const char* message = "This party has members from both factions. Engaging in PvP or attacking PvP enabled NPCs in the open world will result in getting removed from the party.";
+    constexpr const char* message = "This party has members from both factions. Engaging in PvP or attacking PvP enabled NPCs in the open world is forbidden.";
     if (!isBGGroup() && GetMembersCount() != 1) // dont check xfac groups and send message for leader-only groups.
     {
         bool wasCrossfaction = IsCrossfaction();
@@ -2459,15 +2459,12 @@ bool Group::HandleHardcoreInteraction(Player * invitee)
         }
         else
         {
-            QueryResult* result = CharacterDatabase.PQuery("SELECT level, mortality_status FROM characters WHERE guid='%u'", itr.guid);
-            uint32 hardcoreStatus = 0;
             uint8 level = 0;
-            if (result)
+            uint8 hardcoreStatus = 0;
+            if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(itr.guid.GetCounter()))
             {
-                Field* fields = result->Fetch();
-                level = fields[0].GetUInt8();
-                hardcoreStatus = fields[1].GetUInt32();
-                delete result;
+                hardcoreStatus = pCache->uiHardcoreStatus;
+                level = pCache->uiLevel;
             }
 
             bool memberIsHardcore = (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD);

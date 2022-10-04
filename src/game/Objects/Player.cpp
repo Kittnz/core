@@ -16857,6 +16857,7 @@ void Player::SaveToDB(bool online, bool force)
     {
         data->uiLevel = GetLevel();
         data->uiZoneId = GetCachedZoneId();
+        data->uiHardcoreStatus = GetHardcoreStatus();
     }
 }
 
@@ -22575,12 +22576,12 @@ void Player::AddToArenaQueue(bool queuedAsGroup)
     if (GetLevel() < sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
         return;
 
-    // check if in other queues
+    /* // check if in other queues
     if (InBattleGroundQueue())
     {
-        GetSession()->SendNotification("Unable to queue while currently in another queue");
+        GetSession()->SendNotification("Unable to queue while currently in another queue.");
         return;
-    }
+    } */
 
     // is deserter?
     if (!CanJoinToBattleground())
@@ -22677,6 +22678,14 @@ uint16 Player::GetPureMaxSkillValue(uint32 skill) const
 }
 
 // for Hardcore mode
+void Player::SetHardcoreStatus(uint8 status)
+{
+    m_hardcoreStatus = status;
+
+    if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(GetGUIDLow()))
+        pCache->uiHardcoreStatus = status;
+}
+
 Player::HardcoreInteractionResult Player::HandleHardcoreInteraction(Player* target, bool checkLevelDiff)
 {
     if (!IsHardcore() && !target->IsHardcore())
