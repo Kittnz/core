@@ -1572,7 +1572,8 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading player corpses...");
 	sObjectMgr.LoadCorpses();
     sLog.outString("Loading loot tables...");    
-    LoadLootTables();
+    LootIdSet ids_set;
+    LoadLootTables(ids_set);
     sLog.outString("Loading custom character skins...");
     sObjectMgr.LoadCustomCharacterSkins();
     sLog.outString("Loading fishing base level requirements...");
@@ -1704,6 +1705,7 @@ void World::SetInitialWorldSettings()
     sMapMgr.Initialize();
     sLog.outString("Deleting expired bans...");
     sBattleGroundMgr.CreateInitialBattleGrounds();
+    CheckLootTemplates_Reference(ids_set);
     sLog.outString("Initiating zone scripts...");
     sZoneScriptMgr.InitZoneScripts();
     sLog.outString("Loading transport on continents...");
