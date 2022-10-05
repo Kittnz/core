@@ -1035,7 +1035,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             group->BroadcastPacket(&data, false);
 
             if (lang != LANG_ADDON)
+            {
+                // let game masters listen in on bg chat
+                if (Map* pMap = GetPlayer()->FindMap())
+                    pMap->SendToAllGMsNotInGroup(&data, group);
+
                 sWorld.LogChat(this, "BG", msg, nullptr, group->GetId());
+            }
+
             break;
         }
 
@@ -1051,7 +1058,14 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             group->BroadcastPacket(&data, false);
 
             if (lang != LANG_ADDON)
+            {
+                // let game masters listen in on bg chat
+                if (Map* pMap = GetPlayer()->FindMap())
+                    pMap->SendToAllGMsNotInGroup(&data, group);
+
                 sWorld.LogChat(this, "BG", msg, nullptr, group->GetId());
+            }
+
             break;
         }
 
