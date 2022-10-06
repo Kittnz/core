@@ -977,8 +977,6 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_ITEM_RARELOOT_QUALITY, "Item.RareLoot.Quality", ITEM_QUALITY_EPIC);
     setConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING, "Item.PreventDataMining", true);
 
-
-
     setConfig(CONFIG_UINT32_MAILSPAM_EXPIRE_SECS, "MailSpam.ExpireSecs", 0);
     setConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS, "MailSpam.MaxMails", 2);
 	setConfig(CONFIG_UINT32_MAILSPAM_LEVEL, "MailSpam.Level", 1);
@@ -986,6 +984,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_MAILSPAM_MONEY, "MailSpam.Money", 0);
     setConfig(CONFIG_BOOL_MAILSPAM_ITEM, "MailSpam.Item", false);
     setConfig(CONFIG_UINT32_COD_FORCE_TAG_MAX_LEVEL, "Mails.COD.ForceTag.MaxLevel", 0);
+
+    // Presents:
+    setConfig(CONFIG_BOOL_ANNIVERSARY, "Anniversary", true);
 
     setConfigMinMax(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT,       "AsyncTasks.Threads", 1, 1, 20);
     setConfig(CONFIG_BOOL_KICK_PLAYER_ON_BAD_PACKET,               "Network.KickOnBadPacket", false);
@@ -1167,7 +1168,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
     setConfig(CONFIG_BOOL_STATIC_OBJECT_LOS, "StaticObjectLOS", true);
     setConfig(CONFIG_BOOL_DUAL_SPEC, "DualSpec", false);
-
+    
     setConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL, "Hardcore.Disable.Duel", false);
 
     setConfig(CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT, "BattlegroundSV.MaxSparks", 100);
