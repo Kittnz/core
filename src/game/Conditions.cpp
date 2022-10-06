@@ -25,6 +25,7 @@
 #include "InstanceData.h"
 #include "HardcodedEvents.h"
 #include "World.h"
+#include "BattleGround.h"
 
 char const* conditionSourceToStr[] =
         {
@@ -45,65 +46,69 @@ char const* conditionSourceToStr[] =
 // Stores what params need to be provided to each condition type.
 // (source, target, map)
 uint8 const ConditionTargetsInternal[] =
-        {
-                CONDITION_REQ_NONE,               // -3
-                CONDITION_REQ_NONE,               // -2
-                CONDITION_REQ_NONE,               // -1
-                CONDITION_REQ_NONE,               //  0
-                CONDITION_REQ_TARGET_UNIT,        //  1
-                CONDITION_REQ_TARGET_PLAYER,      //  2
-                CONDITION_REQ_TARGET_PLAYER,      //  3
-                CONDITION_REQ_ANY_WORLDOBJECT,    //  4
-                CONDITION_REQ_TARGET_PLAYER,      //  5
-                CONDITION_REQ_TARGET_UNIT,        //  6
-                CONDITION_REQ_TARGET_PLAYER,      //  7
-                CONDITION_REQ_TARGET_PLAYER,      //  8
-                CONDITION_REQ_TARGET_PLAYER,      //  9
-                CONDITION_REQ_TARGET_PLAYER,      //  10
-                CONDITION_REQ_NONE,               //  11
-                CONDITION_REQ_NONE,               //  12
-                CONDITION_REQ_SOURCE_UNIT,        //  13
-                CONDITION_REQ_TARGET_PLAYER,      //  14
-                CONDITION_REQ_TARGET_UNIT,        //  15
-                CONDITION_REQ_SOURCE_WORLDOBJECT, //  16
-                CONDITION_REQ_TARGET_PLAYER,      //  17
-                CONDITION_REQ_MAP_OR_WORLDOBJECT, //  18
-                CONDITION_REQ_TARGET_PLAYER,      //  19
-                CONDITION_REQ_TARGET_WORLDOBJECT, //  20
-                CONDITION_REQ_TARGET_WORLDOBJECT, //  21
-                CONDITION_REQ_TARGET_PLAYER,      //  22
-                CONDITION_REQ_TARGET_PLAYER,      //  23
-                CONDITION_REQ_NONE,               //  24
-                CONDITION_REQ_NONE,               //  25
-                CONDITION_REQ_NONE,               //  26
-                CONDITION_REQ_TARGET_WORLDOBJECT, //  27
-                CONDITION_REQ_TARGET_WORLDOBJECT, //  28
-                CONDITION_REQ_TARGET_PLAYER,      //  29
-                CONDITION_REQ_TARGET_PLAYER,      //  30
-                CONDITION_REQ_SOURCE_WORLDOBJECT, //  31
-                CONDITION_REQ_SOURCE_UNIT,        //  32
-                CONDITION_REQ_MAP_OR_WORLDOBJECT, //  33
-                CONDITION_REQ_MAP_OR_WORLDOBJECT, //  34
-                CONDITION_REQ_MAP_OR_WORLDOBJECT, //  35
-                CONDITION_REQ_MAP_OR_WORLDOBJECT, //  36
-                CONDITION_REQ_BOTH_WORLDOBJECTS,  //  37
-                CONDITION_REQ_BOTH_WORLDOBJECTS,  //  38
-                CONDITION_REQ_TARGET_WORLDOBJECT, //  39
-                CONDITION_REQ_TARGET_UNIT,        //  40
-                CONDITION_REQ_TARGET_UNIT,        //  41
-                CONDITION_REQ_TARGET_UNIT,        //  42
-                CONDITION_REQ_TARGET_UNIT,        //  43
-                CONDITION_REQ_BOTH_WORLDOBJECTS,  //  44
-                CONDITION_REQ_TARGET_PLAYER,      //  45
-                CONDITION_REQ_TARGET_UNIT,        //  46
-                CONDITION_REQ_MAP_OR_WORLDOBJECT, //  47
-                CONDITION_REQ_TARGET_GAMEOBJECT,  //  48
-                CONDITION_REQ_TARGET_GAMEOBJECT,  //  49
-                CONDITION_REQ_MAP_OR_WORLDOBJECT, //  50
-                CONDITION_REQ_TARGET_PLAYER,      //  51
-                CONDITION_REQ_SOURCE_WORLDOBJECT, //  52
-                CONDITION_REQ_NONE,               //  53
-        };
+{
+        CONDITION_REQ_NONE,               // -3
+        CONDITION_REQ_NONE,               // -2
+        CONDITION_REQ_NONE,               // -1
+        CONDITION_REQ_NONE,               //  0
+        CONDITION_REQ_TARGET_UNIT,        //  1
+        CONDITION_REQ_TARGET_PLAYER,      //  2
+        CONDITION_REQ_TARGET_PLAYER,      //  3
+        CONDITION_REQ_ANY_WORLDOBJECT,    //  4
+        CONDITION_REQ_TARGET_PLAYER,      //  5
+        CONDITION_REQ_TARGET_UNIT,        //  6
+        CONDITION_REQ_TARGET_PLAYER,      //  7
+        CONDITION_REQ_TARGET_PLAYER,      //  8
+        CONDITION_REQ_TARGET_PLAYER,      //  9
+        CONDITION_REQ_TARGET_PLAYER,      //  10
+        CONDITION_REQ_NONE,               //  11
+        CONDITION_REQ_NONE,               //  12
+        CONDITION_REQ_SOURCE_UNIT,        //  13
+        CONDITION_REQ_TARGET_PLAYER,      //  14
+        CONDITION_REQ_TARGET_UNIT,        //  15
+        CONDITION_REQ_SOURCE_WORLDOBJECT, //  16
+        CONDITION_REQ_TARGET_PLAYER,      //  17
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  18
+        CONDITION_REQ_TARGET_PLAYER,      //  19
+        CONDITION_REQ_TARGET_WORLDOBJECT, //  20
+        CONDITION_REQ_TARGET_WORLDOBJECT, //  21
+        CONDITION_REQ_TARGET_PLAYER,      //  22
+        CONDITION_REQ_TARGET_PLAYER,      //  23
+        CONDITION_REQ_NONE,               //  24
+        CONDITION_REQ_NONE,               //  25
+        CONDITION_REQ_NONE,               //  26
+        CONDITION_REQ_TARGET_WORLDOBJECT, //  27
+        CONDITION_REQ_TARGET_WORLDOBJECT, //  28
+        CONDITION_REQ_TARGET_PLAYER,      //  29
+        CONDITION_REQ_TARGET_PLAYER,      //  30
+        CONDITION_REQ_SOURCE_WORLDOBJECT, //  31
+        CONDITION_REQ_SOURCE_UNIT,        //  32
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  33
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  34
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  35
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  36
+        CONDITION_REQ_BOTH_WORLDOBJECTS,  //  37
+        CONDITION_REQ_BOTH_WORLDOBJECTS,  //  38
+        CONDITION_REQ_TARGET_WORLDOBJECT, //  39
+        CONDITION_REQ_TARGET_UNIT,        //  40
+        CONDITION_REQ_TARGET_UNIT,        //  41
+        CONDITION_REQ_TARGET_UNIT,        //  42
+        CONDITION_REQ_TARGET_UNIT,        //  43
+        CONDITION_REQ_BOTH_WORLDOBJECTS,  //  44
+        CONDITION_REQ_TARGET_PLAYER,      //  45
+        CONDITION_REQ_TARGET_UNIT,        //  46
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  47
+        CONDITION_REQ_TARGET_GAMEOBJECT,  //  48
+        CONDITION_REQ_TARGET_GAMEOBJECT,  //  49
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  50
+        CONDITION_REQ_TARGET_PLAYER,      //  51
+        CONDITION_REQ_SOURCE_WORLDOBJECT, //  52
+        CONDITION_REQ_NONE,               //  53
+        CONDITION_REQ_TARGET_WORLDOBJECT, //  54
+        CONDITION_REQ_TARGET_GAMEOBJECT,  //  55
+        CONDITION_REQ_TARGET_WORLDOBJECT, //  56
+        CONDITION_REQ_MAP_OR_WORLDOBJECT, //  57
+};
 
 // Starts from 4th element so that -3 will return first element.
 uint8 const* ConditionTargets = &ConditionTargetsInternal[3];
@@ -589,6 +594,37 @@ bool inline ConditionEntry::Evaluate(WorldObject const* target, Map const* map, 
             timeinfo = localtime(&rawtime);
 
             return (timeinfo->tm_hour >= m_value1) && (timeinfo->tm_min >= m_value2) && (timeinfo->tm_hour <= m_value3) && (timeinfo->tm_min <= m_value4);
+        }
+        case CONDITION_DISTANCE_TO_POSITION:
+        {
+            return target->GetDistance3dToCenter(m_value1, m_value2, m_value3) <= m_value4;
+        }
+        case CONDITION_OBJECT_GO_STATE:
+        {
+            return target->ToGameObject()->GetGoState() == m_value1;
+        }
+        case CONDITION_NEARBY_PLAYER:
+        {
+            switch (m_value1)
+            {
+                case 0:
+                    return (bool)target->FindNearestPlayer(m_value2);
+                case 1:
+                    return (bool)target->ToUnit()->FindNearestHostilePlayer(m_value2);
+                case 2:
+                    return (bool)target->ToUnit()->FindNearestFriendlyPlayer(m_value2);
+            }
+            return false;
+        }
+        case CONDITION_BG_EVENT_ACTIVE:
+        {
+            if (!map)
+                map = target ? target->GetMap() : source->GetMap();
+
+            if (!map->IsBattleGround())
+                return false;
+
+            return ((BattleGroundMap*)map)->GetBG()->IsActiveEvent(m_value1, m_value2);
         }
     }
     return false;
@@ -1163,6 +1199,57 @@ bool ConditionEntry::IsValid()
             if (m_value4 > 59)
             {
                 sLog.outErrorDb("CONDITION_LOCAL_TIME (entry %u, type %d) has value4 greater than 59 minutes (%u), skipped", m_entry, m_condition, m_value4);
+                return false;
+            }
+            break;
+        }
+        case CONDITION_DISTANCE_TO_POSITION:
+        {
+            if (!MaNGOS::IsValidMapCoord(m_value1, m_value2, m_value3))
+            {
+                sLog.outErrorDb("CONDITION_DISTANCE_TO_POSITION (entry %u, type %d) has invalid coordinates, skipped", m_entry, m_condition);
+                return false;
+            }
+            if (m_value4 <= 0)
+            {
+                sLog.outErrorDb("CONDITION_DISTANCE_TO_POSITION (entry %u, type %d) does not have max distance set in value4, skipped", m_entry, m_condition);
+                return false;
+            }
+            break;
+        }
+        case CONDITION_OBJECT_GO_STATE:
+        {
+            if (m_value1 > GO_STATE_ACTIVE_ALTERNATIVE)
+            {
+                sLog.outErrorDb("CONDITION_OBJECT_GO_STATE (entry %u, type %u) has invalid GO state %u, skipped", m_entry, m_condition, m_value1);
+                return false;
+            }
+            break;
+        }
+        case CONDITION_NEARBY_PLAYER:
+        {
+            if (m_value1 < 0 || m_value1 > 2)
+            {
+                sLog.outErrorDb("CONDITION_NEARBY_PLAYER (entry %u, type %u) has invalid value1 %u, skipped", m_entry, m_condition, m_value1);
+                return false;
+            }
+            if (m_value2 <= 0)
+            {
+                sLog.outErrorDb("CONDITION_NEARBY_PLAYER (entry %u, type %d) does not have max distance set in value2, skipped", m_entry, m_condition);
+                return false;
+            }
+            break;
+        }
+        case CONDITION_BG_EVENT_ACTIVE:
+        {
+            if (m_value1 >= 255)
+            {
+                sLog.outErrorDb("CONDITION_BG_EVENT_ACTIVE (entry %u, type %u) has invalid value1 %u, skipped", m_entry, m_condition, m_value1);
+                return false;
+            }
+            if (m_value2 >= 255)
+            {
+                sLog.outErrorDb("CONDITION_BG_EVENT_ACTIVE (entry %u, type %u) has invalid value2 %u, skipped", m_entry, m_condition, m_value2);
                 return false;
             }
             break;

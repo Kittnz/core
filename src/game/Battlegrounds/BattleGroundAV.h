@@ -289,6 +289,9 @@ enum BG_AV_Events
 
     BG_AV_BOSS_IVUS_A           = 102,
     BG_AV_BOSS_LOKHOLAR_H       = 103,
+
+    BG_AV_RYSONS_BEACON_H       = 104,
+    BG_AV_RYSONS_BEACON_A       = 105,
 };
 
 enum BG_AV_Graveyards
