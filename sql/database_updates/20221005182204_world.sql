@@ -40,3 +40,4 @@ UPDATE creature SET position_x = '945.427673', position_y = '-640.766541', posit
 REPLACE INTO `gameobject` VALUES ( 5010669, 142102, 1, 914.866, -815.124, 167.973, 3.9067, 0, 0, 0.927714, -0.373291, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5010669, 142102, 1, 914.866, -815.124, 167.973, 2.26443, 0, 0, 0.905356, 0.424654, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5010669, 142102, 1, 914.866, -815.124, 167.973, 2.41209, 0, 0, 0.934212, 0.356718, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (856,-696.848633,1498.400757,8.696186,2.722353,0,'gilneas');
