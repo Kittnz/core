@@ -4125,20 +4125,27 @@ void Aura::HandleAuraModEffectImmunity(bool apply, bool /*Real*/)
 {
     Unit *target = GetTarget();
 
-    // when removing flag aura, handle flag drop
-    if (target->IsPlayer() && !target->HasAuraType(SPELL_AURA_MOD_POSSESS) && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION))
+    
+    if (target->IsPlayer())
     {
         Player* player = static_cast<Player*>(target);
 
-        if (apply)
-            player->pvpInfo.isPvPFlagCarrier = true;
-        else
+        // when removing flag aura, handle flag drop
+        if (!target->HasAuraType(SPELL_AURA_MOD_POSSESS) && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION))
         {
-            player->pvpInfo.isPvPFlagCarrier = false;
+            if (apply)
+                player->pvpInfo.isPvPFlagCarrier = true;
+            else
+            {
+                player->pvpInfo.isPvPFlagCarrier = false;
 
-            if (BattleGround* bg = player->GetBattleGround())
-                bg->EventPlayerDroppedFlag(player);
+                if (BattleGround* bg = player->GetBattleGround())
+                    bg->EventPlayerDroppedFlag(player);
+            }
         }
+        // Ryson's All Seeing Eye - drop the eye
+        if (!apply && GetId() == 21546 && player->GetMapId() == 30)
+            player->CastSpell(player, 21545, true);
     }
 
     target->ApplySpellImmune(GetId(), IMMUNITY_EFFECT, m_modifier.m_miscvalue, apply);

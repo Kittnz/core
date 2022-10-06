@@ -12233,6 +12233,22 @@ bool ChatHandler::HandleBGStopCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleBGCustomCommand(char* args)
+{
+    Player* chr = m_session->GetPlayer();
+    ASSERT(chr);
+    BattleGround* pBg = chr->GetBattleGround();
+    if (!pBg)
+    {
+        SendSysMessage("You are not in a battleground");
+        SetSentErrorMessage(true);
+        return false;
+    }
+    pBg->HandleCommand(chr, this, args);
+    return true;
+
+}
+
 bool ChatHandler::HandleGodCommand(char* args)
 {
     Player* pPlayer = GetSelectedPlayer();

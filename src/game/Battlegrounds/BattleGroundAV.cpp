@@ -1616,6 +1616,8 @@ void BattleGroundAV::Reset()
     m_ActiveEvents[BG_AV_EXPLOSIVES_EXPERT_H] = 0;
     m_ActiveEvents[BG_AV_LIEUTENANT_A]        = 0;
     m_ActiveEvents[BG_AV_LIEUTENANT_H]        = 0;
+    m_ActiveEvents[BG_AV_RYSONS_BEACON_H]     = 0;
+    m_ActiveEvents[BG_AV_RYSONS_BEACON_A]     = 0;
 
     for (BG_AV_Nodes i = BG_AV_NODES_DUNBALDAR_SOUTH; i <= BG_AV_NODES_FROSTWOLF_WTOWER; ++i)  // towers
         m_ActiveEvents[BG_AV_COMMANDER_A_MORTIMER + i - BG_AV_NODES_DUNBALDAR_SOUTH] = 0; // Commanders are alive

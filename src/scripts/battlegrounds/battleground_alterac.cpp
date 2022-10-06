@@ -5323,6 +5323,152 @@ CreatureAI* GetAI_npc_av_trigger_for_quest(Creature* creature)
     return new npc_av_trigger_for_questAI(creature);
 }
 
+enum
+{
+    GO_RYSONS_BEACON = 178605,
+    NPC_EAGLE = 13221,
+};
+
+bool ProcessEventId_event_rysons_beacon_horde(uint32 eventId, Object* source, Object* target, bool isStart)
+{
+    Player* pPlayer = ToPlayer(source);
+    if (!pPlayer)
+        return true;
+
+    if (pPlayer->FindNearestGameObject(GO_RYSONS_BEACON, 50.0f))
+    {
+        pPlayer->GetSession()->SendNotification("Another beacon is already spawned near you.");
+        return true;
+    }
+
+    BattleGround* pBG = pPlayer->GetBattleGround();
+    if (!pBG)
+    {
+        pPlayer->GetSession()->SendNotification("You are not in a battleground.");
+        return true;
+    }
+
+    if (pBG->IsActiveEvent(BG_AV_RYSONS_BEACON_H, 1))
+    {
+        pPlayer->GetSession()->SendNotification("Ryson's Eye is already observing this position.");
+        return true;
+    }
+
+    GameObject* pBeacon = pPlayer->SummonGameObject(GO_RYSONS_BEACON, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0, 0, 0, 0, 61000);
+    if (!pBeacon)
+        return true;
+
+    pPlayer->GetSession()->SendNotification("The beacon has been planted. Protect it for 60 seconds.");
+
+    WorldPacket data(SMSG_NOTIFICATION);
+    data << "The enemy has planted Ryson's Beacon in your base!";
+    pBG->SendPacketToTeam(ALLIANCE, &data);
+
+    pBeacon->m_Events.AddLambdaEventAtOffset([pBeacon, pBG]
+        {
+            if (!pBeacon->isSpawned())
+                return;
+
+            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, 633.282, -67.7342, 91.4057, 1.70274, TEMPSUMMON_MANUAL_DESPAWN, 60000))
+            {
+                pEagle->SetWanderDistance(15.0f);
+                pEagle->GetMotionMaster()->Initialize();
+            }
+
+            WorldPacket data(SMSG_NOTIFICATION);
+            data << "The eye in the sky has found Ryson's Beacon.\nYou may now spy on the enemy base.";
+            pBG->SendPacketToTeam(HORDE, &data);
+
+            pBG->SpawnEvent(BG_AV_RYSONS_BEACON_H, 1, true, true);
+            pBeacon->AddObjectToRemoveList();
+            
+        }, 60000);
+
+    return true;//to always override what could be in DB.
+}
+
+bool ProcessEventId_event_rysons_beacon_alliance(uint32 eventId, Object* source, Object* target, bool isStart)
+{
+    Player* pPlayer = ToPlayer(source);
+    if (!pPlayer)
+        return true;
+
+    if (pPlayer->FindNearestGameObject(GO_RYSONS_BEACON, 50.0f))
+    {
+        pPlayer->GetSession()->SendNotification("Another beacon is already spawned near you.");
+        return true;
+    }
+
+    BattleGround* pBG = pPlayer->GetBattleGround();
+    if (!pBG)
+    {
+        pPlayer->GetSession()->SendNotification("You are not in a battleground.");
+        return true;
+    }
+
+    if (pBG->IsActiveEvent(BG_AV_RYSONS_BEACON_A, 1))
+    {
+        pPlayer->GetSession()->SendNotification("Ryson's Eye is already observing this position.");
+        return true;
+    }
+
+    GameObject* pBeacon = pPlayer->SummonGameObject(GO_RYSONS_BEACON, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), 0, 0, 0, 0, 61000);
+    if (!pBeacon)
+        return true;
+
+    pPlayer->GetSession()->SendNotification("The beacon has been planted. Protect it for 60 seconds.");
+
+    WorldPacket data(SMSG_NOTIFICATION);
+    data << "The enemy has planted Ryson's Beacon in your base!";
+    pBG->SendPacketToTeam(HORDE, &data);
+
+    pBeacon->m_Events.AddLambdaEventAtOffset([pBeacon, pBG]
+        {
+            if (!pBeacon->isSpawned())
+                return;
+
+            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, -1323.61, -289.991, 140.6765, 0.350284, TEMPSUMMON_MANUAL_DESPAWN, 60000))
+            {
+                pEagle->SetWanderDistance(15.0f);
+                pEagle->GetMotionMaster()->Initialize();
+            }
+
+            WorldPacket data(SMSG_NOTIFICATION);
+            data << "The eye in the sky has found Ryson's Beacon.\nYou may now spy on the enemy base.";
+            pBG->SendPacketToTeam(ALLIANCE, &data);
+
+            pBG->SpawnEvent(BG_AV_RYSONS_BEACON_A, 1, true, true);
+            pBeacon->AddObjectToRemoveList();
+
+        }, 60000);
+
+    return true;//to always override what could be in DB.
+}
+
+bool ProcessEventId_event_rysons_beacon_destroyed(uint32 eventId, Object* source, Object* target, bool isStart)
+{
+    Player* pPlayer = ToPlayer(source);
+    if (!pPlayer)
+        return true;
+
+    BattleGround* pBG = pPlayer->GetBattleGround();
+    if (!pBG)
+        return true;
+
+    pPlayer->GetSession()->SendNotification("You have destroyed Ryson's Beacon.");
+
+    if (pPlayer->GetTeam() == HORDE)
+    {
+        pBG->SpawnEvent(BG_AV_RYSONS_BEACON_A, 0, true, true);
+    }
+    else
+    {
+        pBG->SpawnEvent(BG_AV_RYSONS_BEACON_H, 0, true, true);
+    }
+
+    return true;//to always override what could be in DB.
+}
+
 void AddSC_bg_alterac()
 {
     Script* newscript;
@@ -5454,5 +5600,20 @@ void AddSC_bg_alterac()
     newscript = new Script;
     newscript->Name = "npc_av_trigger_for_quest";
     newscript->GetAI = &GetAI_npc_av_trigger_for_quest;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "event_rysons_beacon_horde";
+    newscript->pProcessEventId = &ProcessEventId_event_rysons_beacon_horde;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "event_rysons_beacon_alliance";
+    newscript->pProcessEventId = &ProcessEventId_event_rysons_beacon_alliance;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "event_rysons_beacon_destroyed";
+    newscript->pProcessEventId = &ProcessEventId_event_rysons_beacon_destroyed;
     newscript->RegisterSelf();
 }

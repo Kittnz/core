@@ -3,6 +3,7 @@ SET @CGUID = 114000;
 -- Add missing creature spawns.
 INSERT INTO `creature` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `wander_distance`, `movement_type`, `spawntimesecsmin`, `spawntimesecsmax`) VALUES 
 (@CGUID+1, 13324, 30, 724.639, -19.4798, 50.6214, 3.43454, 3, 1, 120, 120),
+(@CGUID+2, 14021, 30, -114.061, 153.801, 197.987, 4.64258, 0, 0, 120, 120),
 (@CGUID+1031, 10981, 30, -560.516, -483.553, 77.0221, 5.26788, 19.5712, 1, 430, 430),
 (@CGUID+902, 10983, 30, 20.8632, -139.72, 40.4579, 2.26758, 5.3428, 1, 430, 430),
 (@CGUID+903, 10983, 30, 3.4974, -140.057, 45.041, 1.44862, 0, 0, 430, 430),
@@ -5119,6 +5120,17 @@ INSERT INTO `gameobject_battleground` (`guid`, `event1`, `event2`) VALUES
 (407739, 101, 0),
 (407740, 101, 0);
 
+-- Add spawn point for Ryson's All Seeing Eye.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `state`, `animprogress`) VALUES
+(407741, 178584, 30, -144.466, 251.373, 83.9058, 5.00909, 0, 0, -0.594823, 0.803857, 300, 300, 1, 100);
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `size`, `name`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`) VALUES (178584, 10, 621, 1, 'Ryson\'s All Seeing Eye', 1690, 0, 7838, 3000, 0, 1, 0, 0, 0, 0, 21546, 0, 0, 0, 19676, 0, 0, 0, 0, 0, 0, 0, 0, 1);
+
+-- Script on using Ryson's All Seeing Eye.
+DELETE FROM `event_scripts` WHERE `id`=7838;
+INSERT INTO `event_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(7838, 0, 0, 0, 0, 0, 0, 0, 114002, 0, 9, 2, 9034, 0, 0, 0, 0, 0, 0, 0, 0, 'Ryson\'s All Seeing Eye: Winterax Sentry - Yell Text');
+UPDATE `broadcast_text` SET `chat_type`=6 WHERE `entry`=9034;
+
 /*
 
 master ryson gossip texts
@@ -5144,10 +5156,20 @@ INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3
 -- 21548: (3: Target Is Team Alliance) And (21546: Target Has Aura 21546 Index 0)
 INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (21548, -1, 3, 21546, 0, 0, 0);
 
+UPDATE `npc_text` SET `Probability0`=1 WHERE `ID`=6167;
+INSERT INTO `npc_text` (`ID`, `Probability0`, `BroadcastTextID0`) VALUES (6135, 1, 8688);
+INSERT INTO `npc_text` (`ID`, `Probability0`, `BroadcastTextID0`) VALUES (6156, 1, 8699);
+INSERT INTO `npc_text` (`ID`, `Probability0`, `BroadcastTextID0`) VALUES (6157, 1, 8701);
+INSERT INTO `npc_text` (`ID`, `Probability0`, `BroadcastTextID0`) VALUES (6166, 1, 8720);
+
 INSERT INTO `gossip_menu` (`entry`, `text_id`, `condition_id`) VALUES
 -- Original gossip.
 (5121, 6166, 21546), -- I see that you have found the eye.$B$B<Master Ryson grins.>$B$BWell, give it to me!
 (5121, 6167, 0), -- The All Seeing Eye must be recovered!
+-- After the eye has been turned in.
+(5082, 6135, 0), -- The Eye sees all within its sphere of influence, $c. What is it that you wish to see?
+(5106, 6156, 0), -- You have only just begun to see the Eye's power, $c. If you wish to facilitate the abilities of the Eye, then there is a task that you must complete.
+(5107, 6157, 0); -- Take this beacon and advance upon the enemy's base. Make your way to the outside of their main stronghold and place the beacon in the center of the courtyard. Defend the beacon from attackers until the Eye has locked on the beacon's coordinates.$B$BOnce this is done, all activity outside the enemy's base will be viewable from here.$B$BWill you take on this task?
 
 INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES
 -- Original gossip.
@@ -5157,8 +5179,10 @@ INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`,
 (5082, 0, 0, 'I wish to see my enemies, Ryson. Show them to me.', 8692, 1, 1, -1, 0, 5082, 0, 0, NULL, 0, 0),
 (5082, 1, 0, 'The power of the Eye is unquestionable, Ryson, but what else can it do?', 8697, 1, 1, 5106, 0, 0, 0, 0, NULL, 0, 2),
 (5082, 2, 0, 'The power of the Eye is unquestionable, Ryson, but what else can it do?', 8698, 1, 1, 5106, 0, 0, 0, 0, NULL, 0, 3),
-(5106, 0, 0, 'What is this task?', 8700, 1, 1, 5107, 0, 0, 0, 0, NULL, 0, 0);
+(5106, 0, 0, 'What is this task?', 8700, 1, 1, 5107, 0, 0, 0, 0, NULL, 0, 0),
 (5107, 0, 0, 'Absolutely. Give me a beacon, Ryson.', 8702, 1, 1, -1, 0, 5107, 0, 0, NULL, 0, 0);
+
+UPDATE `creature_template` SET `gossip_menu_id`=5121, `npc_flags`=3 WHERE `entry`=13151;
 
 DELETE FROM `generic_scripts` WHERE `id`=51210;
 INSERT INTO `generic_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
@@ -5191,3 +5215,30 @@ DELETE FROM `gossip_scripts` WHERE `id`=5082;
 INSERT INTO `gossip_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (5082, 0, 0, 15, 21403, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Syndicate Master Ryson - Cast Spell Ryson\'s All Seeing Eye'),
 (5082, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8693, 0, 0, 0, 0, 0, 0, 0, 0, 'Syndicate Master Ryson - Say Text');
+
+DELETE FROM `gossip_scripts` WHERE `id`=5107;
+INSERT INTO `gossip_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(5107, 0, 0, 15, 21464, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 'Syndicate Master Ryson - Cast Spell Conjure Ryson\'s Beacon (Horde) DND'),
+(5107, 0, 0, 15, 21465, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 'Syndicate Master Ryson - Cast Spell Conjure Ryson\'s Beacon (Alliance) DND');
+
+-- Spell focus for Ryson's Beacon.
+INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+(407742, 300043, 30, 633.282, -67.7342, 41.4057, 1.70274, 0, 0, 0.752185, 0.658952, 300, 300, 100, 1, 0, 0),
+(407743, 300044, 30, -1323.61, -289.991, 90.6765, 0.350284, 0, 0, 0.174248, 0.984702, 300, 300, 100, 1, 0, 0);
+
+-- Remove wrong script form Ryson's Beacon.
+UPDATE `gameobject_template` SET `script_name`='' WHERE `entry`=178605;
+
+-- Add events for Ryson's Eye in the Sky to spawn.
+INSERT INTO `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (30, 104, 0, 'Ryson\'s Beacon Horde');
+INSERT INTO `battleground_events` (`map`, `event1`, `event2`, `description`) VALUES (30, 105, 0, 'Ryson\'s Beacon Alliance');
+INSERT INTO `scripted_event_id` (`id`, `script_name`) VALUES (7216, 'event_rysons_beacon_alliance');
+INSERT INTO `scripted_event_id` (`id`, `script_name`) VALUES (7219, 'event_rysons_beacon_horde');
+INSERT INTO `scripted_event_id` (`id`, `script_name`) VALUES (7218, 'event_rysons_beacon_destroyed');
+
+-- Correct data for Ryson's Eye in the Sky.
+UPDATE `creature_template` SET `faction`=1194, `unit_flags`=768, `xp_multiplier`=0, `inhabit_type`=5, `gold_min`=0, `gold_max`=0, `movement_type`=1 WHERE `entry`=13221;
+
+-- Target coordinates for Ryson's Eye in the Sky.
+INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation`) VALUES (21171, 30, 633.282, -67.7342, 81.4057, 0);
+INSERT INTO `spell_target_position` (`id`, `target_map`, `target_position_x`, `target_position_y`, `target_position_z`, `target_orientation`) VALUES (21425, 30, -1323.61, -289.991, 130.676, 0);
