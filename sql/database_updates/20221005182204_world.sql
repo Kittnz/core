@@ -41,3 +41,11 @@ REPLACE INTO `gameobject` VALUES ( 5010669, 142102, 1, 914.866, -815.124, 167.97
 REPLACE INTO `gameobject` VALUES ( 5010669, 142102, 1, 914.866, -815.124, 167.973, 2.26443, 0, 0, 0.905356, 0.424654, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5010669, 142102, 1, 914.866, -815.124, 167.973, 2.41209, 0, 0, 0.934212, 0.356718, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (856,-696.848633,1498.400757,8.696186,2.722353,0,'gilneas');
+
+-- Changes by TORTA
+DELETE FROM creature WHERE guid=2560983;
+DELETE FROM creature_addon WHERE guid=2560983;
+DELETE FROM creature_movement WHERE id=2560983;
+DELETE FROM game_event_creature WHERE guid=2560983;
+DELETE FROM game_event_creature_data WHERE guid=2560983;
+DELETE FROM creature_battleground WHERE guid=2560983;
