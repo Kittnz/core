@@ -119,3 +119,6 @@ REPLACE INTO `gameobject` VALUES ( 5010671, 2007444, 0, 527.61, -1467.98, 49.227
 DELETE FROM gameobject WHERE guid = '5010671';
 DELETE FROM game_event_gameobject WHERE guid = '5010671';
 DELETE FROM gameobject_battleground WHERE guid = '5010671';
+
+-- Changes by SHANG
+REPLACE INTO `gameobject` VALUES ( 5010672, 2010924, 1, -2153.91, -787.995, -2.57752, 1.68844, 0, 0, 0.747454, 0.664314, 300, 300, 100, 1, 0, 0);
