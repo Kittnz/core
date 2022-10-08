@@ -5293,3 +5293,12 @@ INSERT INTO `gameobject` (`guid`, `id`, `map`, `position_x`, `position_y`, `posi
 -- Correct faction for Winterax mobs.
 UPDATE `creature_template` SET `faction`=35 WHERE `entry`=14021;
 UPDATE `creature_template` SET `faction`=37 WHERE `entry` IN (10983, 10984, 11679, 12156, 12157, 13956, 13957, 13958);
+
+-- Bring back the old Korrak quests.
+UPDATE `quest_template` SET `Method`=3 WHERE `entry` IN (8272, 8271);
+UPDATE `quest_template` SET `Method`=2, `RewChoiceItemId4`=20648, `RewChoiceItemCount4`=1 WHERE `entry` IN (7181, 7202);
+UPDATE `quest_template` SET `OfferRewardText`='Well done. With Korrak dead, our full attention can be focused upon purging the Frostwolf filth from the region.', `RequestItemsText`='Be warned, soldier: The Frostwolf also hunt for Korrak.' WHERE `entry`=7202;
+UPDATE `quest_template` SET `OfferRewardText`='Only the invading Stormpike armies remain, soldier. Well done!', `RequestItemsText`='Be warned, soldier, the Stormpike also hunt for Korrak.' WHERE `entry`=7181;
+UPDATE `quest_template` SET `Objectives`='Should Korrak the Bloodrager make a return to the Snowfall Graveyard, seek him out and destroy him.$B$BReturn the Skull of Korrak to Warmaster Laggrond in the Hillsbrad Foothills.', `OfferRewardText`='Well done, $n. Even the mightiest magic couldn\'t revive Korrak now. You have exterminated a major threat from Alterac Valley, soldier.', `RequestItemsText`='Have you slain Korrak the Bloodrager, $c? The scouts reported his location to be around the Snowfall Graveyard.' WHERE `entry`=7381;
+UPDATE `quest_template` SET `Objectives`='Should Korrak the Bloodrager make a return to the Snowfall Graveyard, seek him out and destroy him.$B$BReturn the Skull of Korrak to Lieutenant Haggerdin in the Hillsbrad Foothills.', `OfferRewardText`='Well done, $n. Even the mightiest magic couldn\'t revive Korrak now. You have exterminated a major threat from Alterac Valley, soldier.', `RequestItemsText`='Have you slain Korrak the Bloodrager, $c? The scouts reported his location to be around the Snowfall Graveyard.' WHERE `entry`=7382;
+UPDATE `quest_template` SET `RewItemId1`=2459 WHERE `entry` IN (7181, 7202, 7382, 7381);
