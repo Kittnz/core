@@ -1301,8 +1301,18 @@ bool ConditionEntry::CanBeUsedWithoutPlayer(uint32 entry)
         case CONDITION_OR:
             return CanBeUsedWithoutPlayer(condition->m_value1) && CanBeUsedWithoutPlayer(condition->m_value2);
         default:
-            if (ConditionTargets[condition->m_condition] != CONDITION_REQ_TARGET_PLAYER)
-                return true;
+            switch (ConditionTargets[condition->m_condition])
+            {
+                // cant be used if requires target of any kind
+                case CONDITION_REQ_NONE:
+                case CONDITION_REQ_SOURCE_WORLDOBJECT:
+                case CONDITION_REQ_SOURCE_GAMEOBJECT:
+                case CONDITION_REQ_SOURCE_UNIT:
+                case CONDITION_REQ_SOURCE_CREATURE:
+                case CONDITION_REQ_ANY_WORLDOBJECT:
+                case CONDITION_REQ_MAP_OR_WORLDOBJECT:
+                    return true;
+            }
     }
     return false;
 }
