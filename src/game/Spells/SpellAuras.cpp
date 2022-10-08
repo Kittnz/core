@@ -4144,7 +4144,7 @@ void Aura::HandleAuraModEffectImmunity(bool apply, bool /*Real*/)
             }
         }
         // Ryson's All Seeing Eye - drop the eye
-        if (!apply && GetId() == 21546 && player->GetMapId() == 30)
+        if (!apply && GetId() == 21546 && player->GetMapId() == 30 && !player->FindNearestCreature(13151, 10.0f))
             player->CastSpell(player, 21545, true);
     }
 
