@@ -5326,6 +5326,8 @@ CreatureAI* GetAI_npc_av_trigger_for_quest(Creature* creature)
 enum
 {
     GO_RYSONS_BEACON = 178605,
+    GO_GLOBE_OF_SCRYING_H = 178439,
+    GO_GLOBE_OF_SCRYING_A = 178604,
     NPC_EAGLE = 13221,
 };
 
@@ -5369,11 +5371,13 @@ bool ProcessEventId_event_rysons_beacon_horde(uint32 eventId, Object* source, Ob
             if (!pBeacon->isSpawned())
                 return;
 
-            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, 633.282, -67.7342, 91.4057, 1.70274, TEMPSUMMON_MANUAL_DESPAWN, 60000))
+            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, 633.282f, -67.7342f, 91.4057f, 1.70274f, TEMPSUMMON_MANUAL_DESPAWN, 60000))
             {
                 pEagle->SetWanderDistance(15.0f);
                 pEagle->GetMotionMaster()->Initialize();
             }
+
+            pBeacon->SummonGameObject(GO_GLOBE_OF_SCRYING_H, -352.1f, -657.1f, 127.382f, 0.71f, 0, 0, 0, 0, 1440 * MINUTE * IN_MILLISECONDS, false);
 
             WorldPacket data(SMSG_NOTIFICATION);
             data << "The eye in the sky has found Ryson's Beacon.\nYou may now spy on the enemy base.";
@@ -5427,11 +5431,13 @@ bool ProcessEventId_event_rysons_beacon_alliance(uint32 eventId, Object* source,
             if (!pBeacon->isSpawned())
                 return;
 
-            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, -1323.61, -289.991, 140.6765, 0.350284, TEMPSUMMON_MANUAL_DESPAWN, 60000))
+            if (Creature* pEagle = pBeacon->SummonCreature(NPC_EAGLE, -1323.61f, -289.991f, 140.6765f, 0.350284f, TEMPSUMMON_MANUAL_DESPAWN, 60000))
             {
                 pEagle->SetWanderDistance(15.0f);
                 pEagle->GetMotionMaster()->Initialize();
             }
+
+            pBeacon->SummonGameObject(GO_GLOBE_OF_SCRYING_A, -352.1f, -657.1f, 127.382f, 0.71f, 0, 0, 0, 0, 1440 * MINUTE * IN_MILLISECONDS, false);
 
             WorldPacket data(SMSG_NOTIFICATION);
             data << "The eye in the sky has found Ryson's Beacon.\nYou may now spy on the enemy base.";
