@@ -4417,6 +4417,8 @@ REPLACE INTO npc_vendor VALUES (60989, 6183, 0, 0, 0, 0);
 -- B-33 Shredder <Venture Co.> display ID 1269, level 27, faction 47, mechanical, scale 1, (has 25% more armor, 25% more hp, deals 25% more damage)
 -- Rumbling Earth Elemental, displayID 9587, level 22-23 faction 16, elemental, scale 0.9 (Immune to earth damage, can not be bled, can not be poisoned, has 40% extra armor)
 -- Living Oil Blaze, display ID 4607 , level 23-24 , faction 16, elemental, scale 0.8 (Immune to fire damage, can not be bled, can not be poisoned, deals fire damage)
+-- Jochi, display ID 9429, level 36, faction 133, humanoid, scale 1, weapon : 60522, quest/greeting flags, greeting text : "<The centaur lady stares menacingly, arms folded, and tail swishing.>\n\n Who are you to speak to me? Did Warug send you? ((NON ATTACKABLE))
+-- Warcaller Dekshar , display ID 9448, level 40, faction 133, humanoid, scale 1.1, quest/greeting flags, greeting text : "There is a war to be won, and we must all contribute our part."
 REPLACE INTO creature_template VALUES
 (61019, 18969, 0, 0, 0, 0, 'Private Glenndel', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61020, 517, 0, 0, 0, 0, 'Bar\'thog the Wicked', NULL, 0, 42, 42, 1981, 1981, 2304, 2304, 2246, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 61020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 61, 84, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -4426,7 +4428,7 @@ REPLACE INTO creature_template VALUES
 (61024, 18993, 0, 0, 0, 0, 'Senior Foreman Nazz Firecracker', 'Retired Ace', 0, 56, 56, 8397, 8397, 0, 0, 3271, 1682, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61025, 18991, 0, 0, 0, 0, 'Mister Wick', NULL, 0, 63, 63, 22108, 22108, 0, 0, 4452, 1682, 0, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61026, 4548, 0, 0, 0, 0, 'War Crier Dar\'nakk', NULL, 0, 20, 20, 2904, 2904, 0, 0, 852, 85, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 85, 110, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 26.24, 36.08, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61027, 6967, 6933, 0, 0, 0, 'Leprous', 'Venture Co.', 0, 23, 24, 617, 664, 0, 0, 976, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 34, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 61027, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61027, 6967, 6933, 0, 0, 0, 'Leprous Worker', 'Venture Co.', 0, 23, 24, 617, 664, 0, 0, 976, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 34, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 61027, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61028, 2153, 0, 0, 0, 0, 'Overseer Vermintooth', 'Venture Co.', 0, 26, 26, 787, 787, 0, 0, 1061, 47, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 61028, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61029, 7197, 0, 0, 0, 0, 'Blacksand Engineer', 'Venture Co.', 0, 23, 24, 617, 664, 0, 0, 976, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 34, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 61029, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61030, 7200, 0, 0, 0, 0, 'Blacksand Laborer', 'Venture Co.', 0, 22, 23, 573, 617, 0, 0, 940, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 32, 41, 0, 100, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 61030, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 43, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -4438,7 +4440,16 @@ REPLACE INTO creature_template VALUES
 (61036, 13050, 0, 0, 0, 0, 'Oilmaster Higgle Wirefuse', NULL, 0, 30, 30, 1251, 1251, 2103, 2103, 1200, 47, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 54, 67, 0, 122, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 44.616, 61.347, 100, 7, 0, 61036, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 44, 62, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61037, 1269, 0, 0, 0, 0, 'B-33 Shredder', 'Venture Co.', 0, 27, 27, 890, 890, 0, 0, 1235, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 41, 57, 0, 112, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 9, 0, 61037, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 38, 55, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61038, 9587, 0, 0, 0, 0, 'Rumbling Earth Elemental', NULL, 0, 22, 23, 573, 617, 0, 0, 1316, 16, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 32, 41, 0, 100, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 61038, 0, 0, 0, 0, 200, 0, 50, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 43, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
-(61039, 4607, 0, 0, 0, 0, 'Living Oil Blaze', NULL, 0, 23, 24, 617, 664, 0, 0, 976, 16, 0, 1, 1.14286, 0.8, 18, 5, 0, 0, 1, 34, 43, 2, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 61039, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, '');
+(61039, 4607, 0, 0, 0, 0, 'Living Oil Blaze', NULL, 0, 23, 24, 617, 664, 0, 0, 976, 16, 0, 1, 1.14286, 0.8, 18, 5, 0, 0, 1, 34, 43, 2, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 61039, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
+(61040, 9429, 0, 0, 0, 0, 'Jochi', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 133, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61041, 9448, 0, 0, 0, 0, 'Warcaller Dekshar', '', 0, 40, 40, 1752, 1752, 0, 0, 1890, 133, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+
+
+set @equip_template = 20244; set @weapon_1 = 60522; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61040;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 20243; set @weapon_1 = 15863; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61036;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -4491,6 +4502,23 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20231; set @weapon_1 = 23124; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61020;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41256; set @magic_number = 61041;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There is a war to be won, and we must all contribute our part.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41255, 5601, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30039, 'We Magram are stuck in a war with our enemies, we are known for our bravery, unlike the Gelkis who live in caves...\n\n I am Khan here, what can you do for me?');
+replace into npc_text (ID, BroadcastTextID0) values (5601, 30039);
+update creature_template set gossip_menu_id = 41255 where entry = 5601;
+
+set @gossip_menu_id = 41254; set @magic_number = 61040;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<The centaur lady stares menacingly, arms folded, and tail swishing.>\n\nWho are you to speak to me? Did Warug send you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41253; set @magic_number = 61026;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
