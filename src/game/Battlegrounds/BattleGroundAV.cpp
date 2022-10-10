@@ -96,8 +96,6 @@ uint32 BattleGroundAV::getChallengeInvocationGoals(uint32 faction_id, uint32 cha
 
 void BattleGroundAV::initializeChallengeInvocationGoals(void)
 {
-    isSnivvle = false;
-    m_ui_Snivvle = 0;
     m_ui_buff_a = 120000 + urand(0,4)* 60000;
     m_ui_buff_h = 120000 + urand(0,4)* 60000;
 
@@ -806,14 +804,6 @@ DEBUG_LOG("BattleGroundAV: TeamIdx %i ", teamIdx);
 
 void BattleGroundAV::Update(uint32 diff)
 {
-    m_ui_Snivvle += diff;
-    if (m_ui_Snivvle >= 70000 && !isSnivvle)
-    {
-        SendYellToAll(791, LANG_UNIVERSAL, GetSingleCreatureGuid(BG_AV_SNIVVLE, 0));
-        isSnivvle = true;
-    }
-
-
     if (GetStatus() == STATUS_IN_PROGRESS)
     {
         /** Horde Captain buff during battle */
@@ -1607,7 +1597,6 @@ void BattleGroundAV::Reset()
     m_ActiveEvents[BG_AV_CAPTAIN_A]           = 0;
     m_ActiveEvents[BG_AV_CAPTAIN_H]           = 0;
     m_ActiveEvents[BG_AV_HERALD]              = 0;
-    m_ActiveEvents[BG_AV_SNIVVLE]             = 0;
     m_ActiveEvents[BG_AV_BOSS_A]              = 0;
     m_ActiveEvents[BG_AV_BOSS_H]              = 0;
     m_ActiveEvents[BG_AV_LANDMINES_ALLIANCE]  = 0;
