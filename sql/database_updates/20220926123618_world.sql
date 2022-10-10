@@ -5305,3 +5305,13 @@ UPDATE `quest_template` SET `RewItemId1`=2459 WHERE `entry` IN (7181, 7202, 7382
 
 -- Make quest givers and vendors non aggressive.
 UPDATE `creature_template` SET `flags_extra` = (`flags_extra` | 2) WHERE `entry` IN (2225, 3343, 3625, 4255, 4257, 5134, 5135, 5139, 10364, 10367, 12096, 12097, 13176, 13216, 13218, 13257, 13616, 13617, 13776, 13777, 13797, 13798, 13840, 13841, 14185, 14186, 14187, 14188);
+
+-- Fix issues with Snivvle.
+DELETE FROM `creature` WHERE `guid`=1247064;
+DELETE FROM `creature_battleground` WHERE `guid`=1247064;
+DELETE FROM `battleground_events` WHERE `map`=30 && `event1`=65;
+DELETE FROM `creature_ai_events` WHERE `creature_id`=11677;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1167702, 11677, 0, 11, 0, 100, 1, 0, 0, 0, 0, 1167702, 0, 0, 'Taskmaster Snivvle - Say on Spawn');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1167704, 11677, 0, 2, 0, 100, 1, 30, 0, 30000, 35000, 1167704, 0, 0, 'Taskmaster Snivvle - Cast Bloodlust at 30% HP');
+DELETE FROM `mangos_string` WHERE `entry`=791;
+UPDATE `creature_template` SET `unit_flags` = (`unit_flags` | 512) WHERE `entry` IN (11657, 11677, 13078, 13079, 13086, 13088);
