@@ -3902,9 +3902,27 @@ bool QuestAccept_npc_gryan_stoutmantle(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool QuestRewarded_npc_segwar_ironback(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40608) // Salvaging the Crops
+    {
+        pQuestGiver->MonsterSay("Without your effort we would have had to start fresh all over again, those blasted buzzards ruin everything!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_segwar_ironback";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_segwar_ironback;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_gryan_stoutmantle";
