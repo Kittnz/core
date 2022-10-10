@@ -2584,9 +2584,11 @@ bool QuestComplete_npc_AVBlood_collector(Player* pPlayer, Creature* pQuestGiver,
                         break;
                     case ITEM_IRONDEEP_SUPPLIES:
                         m_challenge = BG_AV_IRONDEEP_GROUND_ASSAULT;
+                        m_ressources_delivered *= 2; // make it easier to launch ground assault
                         break;
                     case ITEM_COLDTOOTH_SUPPLIES:
                         m_challenge = BG_AV_COLDTOOTH_GROUND_ASSAULT;
+                        m_ressources_delivered *= 2; // make it easier to launch ground assault
                         break;
                     case 17422:
                         m_challenge = 0;
