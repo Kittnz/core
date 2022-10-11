@@ -505,6 +505,7 @@ class BattleGroundAV : public BattleGround
         /** Challenge handler : air or ground assault, world boss assault */
         uint32 m_ui_buff_h;
         uint32 m_ui_buff_a;
+        bool m_blitzBuff;
 
         uint32 m_reinforcementLevel[BG_TEAMS_COUNT];
         uint32 m_challengeStatus[BG_TEAMS_COUNT][BG_AV_NB_CHALLENGES];

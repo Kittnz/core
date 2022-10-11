@@ -96,6 +96,7 @@ uint32 BattleGroundAV::getChallengeInvocationGoals(uint32 faction_id, uint32 cha
 
 void BattleGroundAV::initializeChallengeInvocationGoals(void)
 {
+    m_blitzBuff = false;
     m_ui_buff_a = 120000 + urand(0,4)* 60000;
     m_ui_buff_h = 120000 + urand(0,4)* 60000;
 
@@ -806,6 +807,33 @@ void BattleGroundAV::Update(uint32 diff)
 {
     if (GetStatus() == STATUS_IN_PROGRESS)
     {
+        // Custom short buff for lesser faction.
+        if (!m_blitzBuff)
+        {
+            uint32 hordeCount = 0;
+            uint32 allianceCount = 0;
+
+            for (const auto& itr : m_Players)
+            {
+                switch (itr.second.PlayerTeam)
+                {
+                    case HORDE:
+                        hordeCount++;
+                        break;
+                    case ALLIANCE:
+                        allianceCount++;
+                        break;
+                }
+            }
+
+            if (hordeCount > allianceCount)
+                CastSpellOnTeam(46438, ALLIANCE);
+            else if (allianceCount > hordeCount)
+                CastSpellOnTeam(46438, HORDE);
+
+            m_blitzBuff = true;
+        }
+
         /** Horde Captain buff during battle */
         if (m_ui_buff_h < diff)
         {
