@@ -1077,7 +1077,7 @@ replace into creature_loot_template values
 
 -- One of Us
 delete from quest_template where entry = 40616;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40615,40616,2,405,41,30,512,0,'One of Us','You are a hero among our tribe. When we crush our enemies underhoof, you will be at our side, yes?\n\n<She lets out another loud war cry, and for a moment, something approaching a smile appears on her savage face.>\n\nGo! Speak to true Khan! He has heard of your victories. It is time to join us, $N.','Speak to Khan Jera and follow his instructions.','$N.','From now, you are $N the Fearless! Walk among us with pride. We share with you, now.',0,0,0,0,0,0,0,0,60393,1,0,0,0,0,0,0,0,0,0,4000,93,1750,92,-2500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60394,1,60395,1,60396,1,0,0,0,0,'Speak to Khan Jera and follow his instructions');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40615,40616,2,405,41,30,512,0,'One of Us','You are a hero among our tribe. When we crush our enemies underhoof, you will be at our side, yes?\n\n<She lets out another loud war cry, and for a moment, something approaching a smile appears on her savage face.>\n\nGo! Speak to true Khan! He has heard of your victories. It is time to join us, $N.','Speak to Khan Jera and follow his instructions.','$N.','From now, you are $N the Fearless! Walk among us with pride. We share with you, now.',0,0,0,0,0,0,0,0,60393,1,0,0,0,0,0,0,0,0,0,4000,93,1750,92,-2500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60853,1,60854,1,60855,1,0,0,0,0,'Speak to Khan Jera and follow his instructions');
 
 replace into creature_questrelation		(id, quest) values (61040, 40616);
 replace into creature_involvedrelation	(id, quest) values ( 5601, 40616);
@@ -1096,7 +1096,7 @@ replace into broadcast_text (entry, Male_Text) values (30041, 'You have spirit o
 replace into npc_text (ID, BroadcastTextID0) values (560102, 30041);
 
 replace into item_template values
- ('60394', '4', '0', 'Dyad of Twitching Elven Ears', 'Perking at the slightest sound.', '21365', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
+ ('60853', '4', '0', 'Dyad of Twitching Elven Ears', 'Perking at the slightest sound.', '21365', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -1106,7 +1106,7 @@ replace into item_template values
  '0', '1', NULL);
 
 replace into item_template values
- ('60395', '4', '0', 'Blood of the First Khan', 'Blood of my blood.', '15711', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
+ ('60854', '4', '0', 'Blood of the First Khan', 'Blood of my blood.', '15711', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -1116,7 +1116,7 @@ replace into item_template values
  '0', '1', NULL);
 
 replace into item_template values
- ('60396', '4', '0', 'Ritual Dust of Satiation', 'Stirs something deep within.', '31324', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
+ ('60855', '4', '0', 'Ritual Dust of Satiation', 'Stirs something deep within.', '31324', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '5', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
@@ -1124,3 +1124,27 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0',
  '0', '1', NULL);
+
+-- The Maraudine Front
+delete from quest_template where entry = 40617;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40617,2,405,38,30,0,1,'The Maraudine Front','The Maraudine are the strongest in the region, and could pose a more significant threat if their leadership ever had the desire to spread influence.\n\nThey hold our most sacred site, Maraudon as home, for this alone, they should be wiped off the map.\n\nIf you truly wish to become an ally of the Magram, then you will need to prove yourself. Gather ten Maraudine Bracers, and bring them to me as proof of your loyalty.','Gather 10 Maraudine Bracers from Maraudine Centaur in and around the Valley of Spears, then return to Warcaller Dekshar at Magram Village in Desolace.','Ride into battle with swiftness, it is the only way to victory.','You have checked their arrogance, and weakened their position, this is good.\n\nI will spread word of your accomplishments outsider.',60856,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,275,93,350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61041, 40617);
+replace into creature_involvedrelation	(id, quest) values (61041, 40617);
+
+replace into item_template values
+ ('60856', '7', '0', 'Maraudine Bracer', '', '3652', '1', '0', '1', '300', '75', '0', '-1', '-1', '35',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into creature_loot_template values (4654,  60856, -100, 0, 1, 1, 0);
+replace into creature_loot_template values (4655,  60856, -45, 0, 1, 1, 0);
+replace into creature_loot_template values (4656,  60856, -45, 0, 1, 1, 0);
+replace into creature_loot_template values (4657,  60856, -45, 0, 1, 1, 0);
+replace into creature_loot_template values (4658,  60856, -50, 0, 1, 1, 0);
+replace into creature_loot_template values (11685, 60856, -80, 0, 1, 1, 0);
