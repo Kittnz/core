@@ -4419,6 +4419,8 @@ REPLACE INTO npc_vendor VALUES (60989, 6183, 0, 0, 0, 0);
 -- Living Oil Blaze, display ID 4607 , level 23-24 , faction 16, elemental, scale 0.8 (Immune to fire damage, can not be bled, can not be poisoned, deals fire damage)
 -- Jochi, display ID 9429, level 36, faction 133, humanoid, scale 1, weapon : 60522, quest/greeting flags, greeting text : "<The centaur lady stares menacingly, arms folded, and tail swishing.>\n\n Who are you to speak to me? Did Warug send you? ((NON ATTACKABLE))
 -- Warcaller Dekshar , display ID 9448, level 40, faction 133, humanoid, scale 1.1, quest/greeting flags, greeting text : "There is a war to be won, and we must all contribute our part."
+-- Almaudrak , display ID 12682, level 40 elite, faction 16, casts 10148 every 8 seconds, has 1350 mana (deals 10% more damage)
+-- Baelfyr, display ID 10906, level 41 elite, demon, scale 1.5, deals fire damage instead of normal, is immune to fire damage (has 25% more hp, and deals 25% more damage)
 REPLACE INTO creature_template VALUES
 (61019, 18969, 0, 0, 0, 0, 'Private Glenndel', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61020, 517, 0, 0, 0, 0, 'Bar\'thog the Wicked', NULL, 0, 42, 42, 1981, 1981, 2304, 2304, 2246, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 79, 0, 172, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 58.7664, 80.8038, 100, 7, 0, 61020, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 61, 84, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -4442,10 +4444,9 @@ REPLACE INTO creature_template VALUES
 (61038, 9587, 0, 0, 0, 0, 'Rumbling Earth Elemental', NULL, 0, 22, 23, 573, 617, 0, 0, 1316, 16, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 32, 41, 0, 100, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 61038, 0, 0, 0, 0, 200, 0, 50, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 43, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
 (61039, 4607, 0, 0, 0, 0, 'Living Oil Blaze', NULL, 0, 23, 24, 617, 664, 0, 0, 976, 16, 0, 1, 1.14286, 0.8, 18, 5, 0, 0, 1, 34, 43, 2, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 61039, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
 (61040, 9429, 0, 0, 0, 0, 'Jochi', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 133, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61041, 9448, 0, 0, 0, 0, 'Warcaller Dekshar', '', 0, 40, 40, 1752, 1752, 0, 0, 1890, 133, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
-
-
-
+(61041, 9448, 0, 0, 0, 0, 'Warcaller Dekshar', '', 0, 40, 40, 1752, 1752, 0, 0, 1890, 133, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61042, 12682, 0, 0, 0, 0, 'Almaudrak', NULL, 0, 40, 40, 4572, 4572, 1350, 1350, 1964, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 220, 283, 0, 156, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 61042, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 261, 345, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61043, 10906, 0, 0, 0, 0, 'Baelfyr', NULL, 0, 41, 41, 5584, 5584, 0, 0, 1619, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 336, 432, 2, 172, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 3, 0, 61043, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 298, 394, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 20244; set @weapon_1 = 60522; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61040;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -4544,6 +4545,105 @@ REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_t
 (2200022, 61026, 0, 1, 0, 100, 0, 1, 1, 600, 600, 2200022, 0, 0, 'War Crier Dar\'nakk - Say every 10 min');
 REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (2200022, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30038, 0, 0, 0, 0, 0, 0, 0, 0, 'War Crier Dar\'nakk - Say every 10 min');
+
+-- Almaudrak
+set @creature_entry = 61042;
+set @description = ': Almaudrak';
+set @spell_list_id = 180070;
+
+set @spellid_1 = 10148; -- Fireball
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 8; 
+set @delayrepeatmax_1 = 8;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
 -- Blacksand Mechanic
 set @creature_entry = 61031;
