@@ -30,9 +30,9 @@ ERROR:Table `creature` have creature (GUID: 2571760 Entry: 91912) with `spawntim
 ERROR:Table `creature` have creature (GUID: 2571761 Entry: 91912) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
 */
 
-update creature set spawntimesecsmax = 10800 where entry = 91912;
-update creature set spawntimesecsmax = 10800 where entry = 91915;
-update creature set spawntimesecsmax = 10800 where entry = 91926;
+update creature set spawntimesecsmax = 10800 where id = 91912;
+update creature set spawntimesecsmax = 10800 where id = 91915;
+update creature set spawntimesecsmax = 10800 where id = 91926;
 
 /*
  ERROR:Table 'creature_loot_template' entry 60717 item 84014: wrong mincountOrRef (0) - skipped
