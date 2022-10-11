@@ -1074,3 +1074,53 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 
 replace into creature_loot_template values
 (61043, 60852, -100, 0, 1, 1, 0);
+
+-- One of Us
+delete from quest_template where entry = 40616;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40615,40616,2,405,41,30,512,0,'One of Us','You are a hero among our tribe. When we crush our enemies underhoof, you will be at our side, yes?\n\n<She lets out another loud war cry, and for a moment, something approaching a smile appears on her savage face.>\n\nGo! Speak to true Khan! He has heard of your victories. It is time to join us, $N.','Speak to Khan Jera and follow his instructions.','$N.','From now, you are $N the Fearless! Walk among us with pride. We share with you, now.',0,0,0,0,0,0,0,0,60393,1,0,0,0,0,0,0,0,0,0,4000,93,1750,92,-2500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60394,1,60395,1,60396,1,0,0,0,0,'Speak to Khan Jera and follow his instructions');
+
+replace into creature_questrelation		(id, quest) values (61040, 40616);
+replace into creature_involvedrelation	(id, quest) values ( 5601, 40616);
+
+REPLACE INTO creature_template VALUES
+(60393, 328, 0, 0, 0, 0, 'quest_40616_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature_template set npc_flags = 3, script_name = 'npc_khan_jehn' where entry = 5601;
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41256, 560101, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30040, '<The Khan stares with wild eyes.>');
+replace into npc_text (ID, BroadcastTextID0) values (560101, 30040);
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41257, 560102, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30041, 'You have spirit of Magram. Drink. Share of our blood. Become Magram. Become strong. Become us!\n\n\<The towering Khan holds out a filled skull goblet filled with curdling red blood.>');
+replace into npc_text (ID, BroadcastTextID0) values (560102, 30041);
+
+replace into item_template values
+ ('60394', '4', '0', 'Dyad of Twitching Elven Ears', 'Perking at the slightest sound.', '21365', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '23217', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60395', '4', '0', 'Blood of the First Khan', 'Blood of my blood.', '15711', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '9163', '0', '0', '0', '600000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60396', '4', '0', 'Ritual Dust of Satiation', 'Stirs something deep within.', '31324', '3', '0', '1', '19116', '4779', '12', '-1', '-1', '42',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '21625', '1', '0', '0', '-1', '0', '-1', '21598', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '0', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
