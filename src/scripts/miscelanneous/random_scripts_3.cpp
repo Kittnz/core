@@ -3915,9 +3915,59 @@ bool QuestRewarded_npc_segwar_ironback(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool GossipHello_npc_khan_jehn(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40616) == QUEST_STATUS_INCOMPLETE) // One of Us
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Jochi sent me to you, Great Khan.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(560101, pCreature->GetGUID());
+        return true;
+    }
+
+    else
+    {
+        pPlayer->SEND_GOSSIP_MENU(5601, pCreature->GetGUID());
+        return true;
+    }
+}
+
+bool GossipSelect_npc_khan_jehn(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "No.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " <Drink the blood.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(560102, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60393))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_khan_jehn";
+    newscript->pGossipHello = &GossipHello_npc_khan_jehn;
+    newscript->pGossipSelect = &GossipSelect_npc_khan_jehn;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_segwar_ironback";
