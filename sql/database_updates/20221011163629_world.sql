@@ -8,3 +8,110 @@ REPLACE INTO `quest_template` (`entry`, `Method`, `ZoneOrSort`, `MinLevel`, `Max
 UPDATE `quest_template` SET `Type` = 0 WHERE `entry` = 55031;
 
 UPDATE `quest_template` SET `RequestItemsText` = 'You made it. I\'m so glad.\n\nMuch has happened over the last few years, $N: the creation of Teldrassil, the corruption of many of the forest creatures here and abroad, discovery of lands we thought lost to us like Feralas... so much, in so little time.\n\nBut those are just some of the reasons we are here, the most important being to protect our kind from further evil.' WHERE `entry` = 3116;
+
+update item_template set name = 'Head of Nefarian (Horde)' where entry = 19002;
+update item_template set name = 'Head of Nefarian (Alliance)' where entry = 19003;
+update item_template set disenchant_id = 65 where entry = 21890;
+delete from creature_template where entry = 5764;
+delete from creature where id = 5764;
+update spell_template set description = 'Unpack the MOLL-E so it can send and receive mail for 5 min.' where entry = 46001;
+update creature_loot_template set chanceorquestchance = -20 where item = 11148;
+
+/*
+ERROR:Table `creature` have creature (GUID: 2571759 Entry: 91915) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571758 Entry: 91915) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571718 Entry: 91926) with `spawntimesecsmax` (25) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571762 Entry: 91915) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571769 Entry: 91912) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571767 Entry: 91912) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571766 Entry: 91912) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571763 Entry: 91915) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571760 Entry: 91912) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+ERROR:Table `creature` have creature (GUID: 2571761 Entry: 91912) with `spawntimesecsmax` (300) value lower than `spawntimesecsmin` (10800), it will be adjusted to 10800.
+*/
+
+update creature set spawntimesecsmax = 10800 where entry = 91912;
+update creature set spawntimesecsmax = 10800 where entry = 91915;
+update creature set spawntimesecsmax = 10800 where entry = 91926;
+
+/*
+ ERROR:Table 'creature_loot_template' entry 60717 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60718 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60719 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60720 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60721 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60722 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60723 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60724 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60725 item 84014: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60717 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60718 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60719 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60720 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60721 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60722 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60723 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60724 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60725 item 84010: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60717 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60718 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60719 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60720 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60721 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60722 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60723 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60724 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60725 item 84011: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60717 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60718 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60719 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60720 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60721 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60722 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60723 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60724 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60725 item 84012: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60717 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60718 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60719 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60720 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60721 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60722 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60723 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60724 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60725 item 84013: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60717 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60718 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60719 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60720 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60721 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60722 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60723 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60724 item 84015: wrong mincountOrRef (0) - skipped
+ ERROR:Table 'creature_loot_template' entry 60725 item 84015: wrong mincountOrRef (0) - skipped
+*/
+
+update creature_loot_template set mincountOrRef = 1 where mincountOrRef = 0;
+
+/*
+
+ ERROR:Table `npc_trainer` have entry for nonexistent creature template (Entry: 1403), ignore
+ ERROR:Table `npc_trainer` have entry for nonexistent creature template (Entry: 1403), ignore
+ ERROR:Table `npc_trainer` have data for creature (Entry: 3689) without trainer flag, ignore
+
+*/
+
+delete from npc_trainer where entry in (3689, 1403);
+
+/*
+
+ ERROR:Creature (GUID: 2565495) does not exist but has a record in `creature_addon`
+ ERROR:Creature (GUID: 2565497) does not exist but has a record in `creature_addon`
+ ERROR:Creature (GUID: 2565498) does not exist but has a record in `creature_addon`
+ ERROR:Creature (GUID: 2565499) does not exist but has a record in `creature_addon`
+ ERROR:Creature (GUID: 2565500) does not exist but has a record in `creature_addon`
+ ERROR:Creature (GUID: 2565501) does not exist but has a record in `creature_addon`
+
+*/
+
+delete from creature_addon where guid in (2565495, 2565497, 2565498, 2565499, 2565500, 2565501);
