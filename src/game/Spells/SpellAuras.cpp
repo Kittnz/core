@@ -2025,7 +2025,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     target->RemoveAurasDueToSpell(29660);
                 break;
             }
-
             case 45568: // Proclaim Champion (Custom)
             {
                 auto caster = GetCaster();
@@ -2038,8 +2037,14 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 target->RemoveAurasDueToSpell(45569);
                 auto playerCaster = caster->ToPlayer();
                 playerCaster->SetChampion(ObjectGuid{});
-
-            }break;
+                break;
+            }
+            case 46434: // Burning Blood Visual (Custom)
+            {
+                if (target->IsAlive())
+                    target->m_Events.AddLambdaEventAtOffset([target]() { target->CastSpell(target, 3240, true); }, 500);
+                break;
+            }
         }
 
         if (m_removeMode == AURA_REMOVE_BY_DEATH) // redundant, AM is cancelled in aura holder removal
