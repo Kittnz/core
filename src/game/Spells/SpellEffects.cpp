@@ -543,18 +543,101 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
-            case 18955: // Ranshalla's Torch Trap
-            case 18993: // Ranshalla's Altar Trap
-            {
-                if (unitTarget)
-                    unitTarget->RemoveAurasDueToSpellByCancel(18953);
-                return;
-            }
-            case 18954: // Ranshalla Despawn
-            {
-                if (Creature* pRanshalla = ToCreature(unitTarget))
-                    pRanshalla->ForcedDespawn();
-            }
+                case 46436: // Winterax Ritual Suicide
+                {
+                    Player* pPlayer = m_caster->ToPlayer();
+                    if (!pPlayer)
+                        return;
+
+                    // Only in AV.
+                    if (pPlayer->GetMapId() != 30)
+                        return;
+
+                    if (!pPlayer->HasAura(46437))
+                        return;
+
+                    pPlayer->m_Events.AddLambdaEventAtOffset([pPlayer]() { pPlayer->SendSpellGo(pPlayer, 24240); }, 500);
+
+                    // Revive Korrak.
+                    if (Creature* pKorrak = pPlayer->FindNearestCreature(12159, 30.0f, false))
+                    {
+                        if (!pKorrak->IsAlive())
+                        {
+                            pKorrak->Respawn();
+                            pKorrak->m_Events.AddLambdaEventAtOffset([pKorrak]() { pKorrak->SendSpellGo(pKorrak, 24240); }, 500);
+                            return;
+                        }
+                    }
+
+                    // Damage enemies.
+                    std::set<Unit*> attackers = pPlayer->GetAttackers();
+                    if (attackers.size() > 2)
+                    {
+                        for (Unit* pAttacker : attackers)
+                        {
+                            if (pAttacker->GetFactionTemplateId() == 37)
+                                pAttacker->CastSpell(pAttacker, 6742, true);
+                            else
+                                pPlayer->CastSpell(pAttacker, 24328, true);
+                        }
+                        pPlayer->CastSpell(pPlayer, 28438, true);
+                        return;
+                    }
+
+                    // Buff friends.
+                    bool buffed = false;
+                    std::list<Player*> players;
+                    pPlayer->GetAlivePlayerListInRange(pPlayer, players, 10.0f);
+                    for (Player* pFriend : players)
+                    {
+                        if (pFriend == pPlayer)
+                            continue;
+
+                        if (pFriend->IsFriendlyTo(pPlayer))
+                        {
+                            pPlayer->CastSpell(pFriend, 23505, true);
+                            if (pFriend->HasAura(46437))
+                            {
+                                pFriend->SendSpellGo(pFriend, 24240);
+                                pFriend->CastSpell(pFriend, 46435, true);
+                                pFriend->CastSpell(pFriend, 46434, true);
+                                pFriend->RemoveAurasDueToSpellByCancel(46437);
+                            }
+                            buffed = true;
+                        }
+                    }
+
+                    if (buffed)
+                        return;
+
+                    // Summon group.
+                    if (Group* pGroup = pPlayer->GetGroup())
+                    {
+                        for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+                        {
+                            if (Player* pMember = itr->getSource())
+                            {
+                                if (pMember == pPlayer)
+                                    continue;
+
+                                pMember->SendSummonRequest(pPlayer->GetObjectGuid(), pPlayer->GetMapId(), pPlayer->GetZoneId(), pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ());
+                            }
+                        }
+                    }
+                    return;
+                }
+                case 18955: // Ranshalla's Torch Trap
+                case 18993: // Ranshalla's Altar Trap
+                {
+                    if (unitTarget)
+                        unitTarget->RemoveAurasDueToSpellByCancel(18953);
+                    return;
+                }
+                case 18954: // Ranshalla Despawn
+                {
+                    if (Creature* pRanshalla = ToCreature(unitTarget))
+                        pRanshalla->ForcedDespawn();
+                }
                 case 23383: // Alliance Flag Click
                 case 23384: // Horde Flag Click
                 {
@@ -6150,14 +6233,7 @@ void Spell::EffectSummonPlayer(SpellEffectIndex /*eff_idx*/)
             landingObject = pGo;
 
     landingObject->GetClosePoint(x, y, z, unitTarget->GetObjectBoundingRadius());
-
-    ((Player*)unitTarget)->SetSummonPoint(m_caster->GetMapId(), x, y, z);
-
-    WorldPacket data(SMSG_SUMMON_REQUEST, 8 + 4 + 4);
-    data << m_caster->GetObjectGuid();                      // summoner guid
-    data << uint32(m_caster->GetZoneId());                  // summoner zone
-    data << uint32(MAX_PLAYER_SUMMON_DELAY * IN_MILLISECONDS); // auto decline after msecs
-    ((Player*)unitTarget)->GetSession()->SendPacket(&data);
+    ((Player*)unitTarget)->SendSummonRequest(m_caster->GetObjectGuid(), m_caster->GetMapId(), m_caster->GetZoneId(), x, y, z);
 }
 
 void Spell::EffectActivateObject(SpellEffectIndex eff_idx)
