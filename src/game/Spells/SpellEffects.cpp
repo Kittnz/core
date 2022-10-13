@@ -2411,6 +2411,8 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 case 5229:                                  // Enrage
                 {
                     // Reduce base armor by 27% in Bear Form and 16% in Dire Bear Form
+                    if (Player* pPlayer = ToPlayer(unitTarget))
+                        pPlayer->CastSpell(pPlayer, 25503, true);
                     break;
                 }
                 case 29201: // Loatheb Corrupted Mind triggered sub spells
