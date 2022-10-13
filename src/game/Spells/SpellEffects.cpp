@@ -543,18 +543,19 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
         {
             switch (m_spellInfo->Id)
             {
-            case 18955: // Ranshalla's Torch Trap
-            case 18993: // Ranshalla's Altar Trap
-            {
-                if (unitTarget)
-                    unitTarget->RemoveAurasDueToSpellByCancel(18953);
-                return;
-            }
-            case 18954: // Ranshalla Despawn
-            {
-                if (Creature* pRanshalla = ToCreature(unitTarget))
-                    pRanshalla->ForcedDespawn();
-            }
+                case 18955: // Ranshalla's Torch Trap
+                case 18993: // Ranshalla's Altar Trap
+                {
+                    if (unitTarget)
+                        unitTarget->RemoveAurasDueToSpellByCancel(18953);
+                    return;
+                }
+                case 18954: // Ranshalla Despawn
+                {
+                    if (Creature* pRanshalla = ToCreature(unitTarget))
+                        pRanshalla->ForcedDespawn();
+                    return;
+                }
                 case 23383: // Alliance Flag Click
                 case 23384: // Horde Flag Click
                 {
