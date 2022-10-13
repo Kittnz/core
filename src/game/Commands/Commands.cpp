@@ -350,6 +350,56 @@ bool ChatHandler::HandleUnLearnCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleUnLearnOfflineCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    Player* target;
+    ObjectGuid target_guid;
+    std::string target_name;
+
+    // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r
+    uint32 spell_id = ExtractSpellIdFromLink(&args);
+    if (!spell_id)
+        return false;
+
+    bool allRanks = ExtractLiteralArg(&args, "all") != nullptr;
+    if (!allRanks)                                 // can be fail also at syntax error
+        return false;
+
+    ExtractPlayerTarget(&args, &target, &target_guid, &target_name);
+
+    if (target == NULL && target_guid)
+    {
+        QueryResult* result = CharacterDatabase.PQuery("SELECT * FROM `character_spell` WHERE `guid` = %u AND `spell` = %u", target_guid, spell_id);
+
+        if (result)
+        {
+            CharacterDatabase.PExecute("DELETE FROM `character_spell` WHERE `guid` = %u AND `spell` = %u", target_guid, spell_id);
+            PSendSysMessage("Spell %u removed from OFFLINE player %s", spell_id, target_name.c_str());
+            delete result;
+        }
+        else
+            SendSysMessage(LANG_FORGET_SPELL);
+    }
+    else if (target)
+    {
+        if (allRanks)
+            spell_id = sSpellMgr.GetFirstSpellInChain(spell_id);
+
+        if (target->HasSpell(spell_id))
+        {
+            target->RemoveSpell(spell_id, false, !allRanks);
+            PSendSysMessage("Spell %u removed from player %s", spell_id, target->GetName());
+        }
+        else
+            SendSysMessage(LANG_FORGET_SPELL);
+    }
+
+    return true;
+}
+
 bool ChatHandler::HandleCooldownCommand(char* args)
 {
     Unit* target = GetSelectedUnit();
