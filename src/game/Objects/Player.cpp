@@ -19305,7 +19305,19 @@ void Player::SendInitialPacketsBeforeAddToMap()
     // SMSG_SET_AURA_SINGLE
 
     data.Initialize(SMSG_LOGIN_SETTIMESPEED, 4 + 4);
-    data << uint32(secsToTimeBitFields(sWorld.GetGameTime()));
+    time_t timestamp = sWorld.GetGameTime();
+    if (GetMapId() == 1 && sWorld.getConfig(CONFIG_INT32_KALIMDOR_TIME_OFFSET))
+    {
+        tm* lt = localtime(&sWorld.GetGameTime());
+        int hour = lt->tm_hour + sWorld.getConfig(CONFIG_INT32_KALIMDOR_TIME_OFFSET);
+        if (hour > 23)
+            hour -= 24;
+        else if (hour < 0)
+            hour += 24;
+        lt->tm_hour = hour;
+        timestamp = mktime(lt);
+    }
+    data << uint32(secsToTimeBitFields(timestamp));
     data << (float)0.01666667f;                             // game speed
     GetSession()->SendPacket(&data);
 
