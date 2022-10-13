@@ -65,6 +65,7 @@ DBCStorage <QuestSortEntry> sQuestSortStore(QuestSortEntryfmt);
 
 DBCStorage <SkillLineEntry> sSkillLineStore(SkillLinefmt);
 DBCStorage <SkillRaceClassInfoEntry> sSkillRaceClassInfoStore(SkillRaceClassInfofmt);
+DBCStorage <SkillTiersEntry> sSkillTiersStore(SkillTiersfmt);
 SkillRaceClassInfoMap SkillRaceClassInfoBySkill;
 
 DBCStorage <SpellItemEnchantmentEntry> sSpellItemEnchantmentStore(SpellItemEnchantmentfmt);
@@ -175,7 +176,7 @@ void LoadDBCStores(std::string const& dataPath)
 {
     std::string dbcPath = dataPath + "dbc/";
 
-    const uint32 DBCFilesCount = 39;
+    const uint32 DBCFilesCount = 40;
 
     StoreProblemList bad_dbc_files;
 
@@ -206,6 +207,7 @@ void LoadDBCStores(std::string const& dataPath)
     LoadDBC(availableDbcLocales, bad_dbc_files, sQuestSortStore,           dbcPath, "QuestSort.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillLineStore,           dbcPath, "SkillLine.dbc");
     LoadDBC(availableDbcLocales, bad_dbc_files, sSkillRaceClassInfoStore,  dbcPath, "SkillRaceClassInfo.dbc");
+    LoadDBC(availableDbcLocales, bad_dbc_files, sSkillTiersStore,          dbcPath, "SkillTiers.dbc");
     for (uint32 i = 1; i < sSpellMgr.GetMaxSpellId(); ++i)
     {
         SpellEntry const * spell = sSpellMgr.GetSpellEntry(i);
