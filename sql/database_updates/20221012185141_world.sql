@@ -28,3 +28,10 @@ DELETE FROM creature_battleground WHERE guid=2568472;
 
 -- Changes by WILL
 REPLACE INTO `creature` VALUES (2572853,4221,0,0,0,1,9838.55,2436.83,1315.72,3.73654,3600,3600,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2572853;
+DELETE FROM creature_addon WHERE guid=2572853;
+DELETE FROM creature_movement WHERE id=2572853;
+DELETE FROM game_event_creature WHERE guid=2572853;
+DELETE FROM game_event_creature_data WHERE guid=2572853;
+DELETE FROM creature_battleground WHERE guid=2572853;
+REPLACE INTO `creature` VALUES (2572854,4221,0,0,0,0,-8365.93,1275.64,5.94216,0.036502,3600,3600,0,100,100,0,0,0);
