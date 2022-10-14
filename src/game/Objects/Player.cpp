@@ -18625,7 +18625,7 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
     if (!IsAlive())
         return false;
 
-    ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(item);
+    ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(item);
     if (!pProto)
     {
         SendBuyError(BUY_ERR_CANT_FIND_ITEM, nullptr, item, 0);
@@ -18635,6 +18635,35 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
     Creature *pCreature = GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_VENDOR);
     if (!pCreature)
     {
+        // Turtle: npc that restores thrown away items
+        if (pCreature = GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_ITEMRESTORE))
+        {
+            std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `stack_count` FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u LIMIT 1", GetGUIDLow(), item));
+            if (result)
+            {
+                Field* pFields = result->Fetch();
+                uint32 stackCount = pFields[0].GetUInt32();
+
+                uint32 price = pProto->BuyPrice * stackCount;
+                if (GetMoney() < price)
+                {
+                    SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, pCreature, item, 0);
+                    return false;
+                }
+
+                if (Item* pItem = StoreNewItemInInventorySlot(item, stackCount))
+                {
+                    SendNewItem(pItem, stackCount, true, false);
+                    LogModifyMoney(-int32(price), "BuyItem", vendorGuid, item);
+                    CharacterDatabase.DirectPExecute("DELETE FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u && `stack_count`=%u LIMIT 1", GetGUIDLow(), item, stackCount);
+                    return true;
+                }
+            }
+
+            SendBuyError(BUY_ERR_CANT_FIND_ITEM, pCreature, item, 0);
+            return false;
+        }
+
         DEBUG_LOG("WORLD: BuyItemFromVendor - %s not found or you can't interact with him.", vendorGuid.GetString().c_str());
         SendBuyError(BUY_ERR_DISTANCE_TOO_FAR, nullptr, item, 0);
         return false;
