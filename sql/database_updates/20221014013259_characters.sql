@@ -1,9 +1,8 @@
-CREATE TABLE `character_destroyed_items` (
-	`player_guid` INT UNSIGNED NOT NULL,
-	`item_entry` MEDIUMINT UNSIGNED NOT NULL,
-	`stack_count` MEDIUMINT UNSIGNED NOT NULL
-)
-COMMENT='items that players have thrown away'
-COLLATE='latin1_swedish_ci'
-ENGINE=InnoDB
-;
+DROP TABLE IF EXISTS `character_destroyed_items`;
+CREATE TABLE IF NOT EXISTS `character_destroyed_items` (
+  `player_guid` int(10) unsigned NOT NULL,
+  `item_entry` mediumint(8) unsigned NOT NULL,
+  `stack_count` mediumint(8) unsigned NOT NULL,
+  `time` bigint(20) unsigned NOT NULL,
+  KEY `player_guid` (`player_guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='items that players have thrown away';

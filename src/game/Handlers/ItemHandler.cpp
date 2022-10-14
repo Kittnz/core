@@ -292,7 +292,7 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
     // Turtle: save destroyed items so they can be restored
     if ((count <= pItem->GetCount()) &&
         (pProto->Quality >= ITEM_QUALITY_RARE || pProto->StartQuest))
-        CharacterDatabase.PExecute("INSERT INTO `character_destroyed_items` (`player_guid`, `item_entry`, `stack_count`) VALUES (%u, %u, %u)", _player->GetGUIDLow(), pProto->ItemId, count ? count : pItem->GetCount());
+        CharacterDatabase.PExecute("INSERT INTO `character_destroyed_items` (`player_guid`, `item_entry`, `stack_count`, `time`) VALUES (%u, %u, %u, %u)", _player->GetGUIDLow(), pProto->ItemId, count ? count : pItem->GetCount(), uint64(sWorld.GetGameTime()));
 
     if (count)
     {
@@ -808,7 +808,7 @@ void WorldSession::HandleListRestoreItemsCallBack(QueryResult* result, uint32 ac
         data << uint32(pProto->BuyPrice * stackCount);
         data << uint32(pProto->MaxDurability);
         data << uint32(stackCount);
-    } while (result->NextRow() && count < 255);
+    } while (result->NextRow() && count < 128);
 
     data.put<uint8>(countPos, count);
     session->SendPacket(&data);
@@ -829,7 +829,7 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
         {
             CharacterDatabase.AsyncPQuery(&WorldSession::HandleListRestoreItemsCallBack,
                 GetAccountId(), std::to_string(vendorguid.GetRawValue()),
-                "SELECT `item_entry`, `stack_count` FROM `character_destroyed_items` WHERE `player_guid`=%u LIMIT 255",
+                "SELECT `item_entry`, `stack_count` FROM `character_destroyed_items` WHERE `player_guid`=%u ORDER BY `time` DESC LIMIT 128",
                 _player->GetGUIDLow()
             );
             return;
