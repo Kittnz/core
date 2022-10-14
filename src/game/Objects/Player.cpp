@@ -477,7 +477,7 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
-    m_currentTicketCounter(0), m_castingSpell(0), m_repopAtGraveyardPending(false),
+    m_currentTicketCounter(0), m_castingSpell(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _transmogMgr(new TransmogMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
@@ -20956,12 +20956,12 @@ void Player::HandleFall(MovementInfo const& movementInfo)
     // calculate total z distance of the fall
     float z_diff = m_lastFallZ - movementInfo.GetPos().z;
     DEBUG_LOG("zDiff = %f", z_diff);
-
-    //Players with low fall distance, Feather Fall or physical immunity (charges used) are ignored
+    
+    // Players with low fall distance, Feather Fall or physical immunity (charges used) are ignored
     // 14.57 can be calculated by resolving damageperc formula below to 0
     if (z_diff >= 14.57f && !IsDead() && !IsGameMaster() &&
-            !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL) &&
-            !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL))
+        !HasAuraType(SPELL_AURA_HOVER) && !HasAuraType(SPELL_AURA_FEATHER_FALL) &&
+        !IsImmuneToDamage(SPELL_SCHOOL_MASK_NORMAL) && (m_lastTransportTime + 3000 < WorldTimer::getMSTime()))
     {
         //Safe fall, fall height reduction
         int32 safe_fall = GetTotalAuraModifier(SPELL_AURA_SAFE_FALL);

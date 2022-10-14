@@ -1896,6 +1896,7 @@ class Player final: public Unit
         }
         void HandleFall(MovementInfo const& movementInfo);
         bool IsFalling() const { return GetPositionZ() < m_lastFallZ; }
+        uint32 m_lastTransportTime; // Turtle: used to prevent fall damage from stepping off transport
 
         bool IsControlledByOwnClient() const { return m_session->HasClientMovementControl(); }
 
