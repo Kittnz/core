@@ -16013,6 +16013,10 @@ void Player::_LoadInventory(QueryResult *result, uint32 timediff, bool &has_epic
                         success = false;
                     }
                 }
+                else if (slot >= BUYBACK_SLOT_START && slot < BUYBACK_SLOT_END)
+                {
+                    AddItemToBuyBackSlot(item, proto->SellPrice * item->GetCount(), 0);
+                }
 
                 if (success)
                 {
@@ -16992,23 +16996,25 @@ bool Player::SaveAura(SpellAuraHolder* holder, AuraSaveStruct& saveStruct)
 
 void Player::_SaveInventory()
 {
-    // force items in buyback slots to new state
-    // and remove those that aren't already
+    // Turtle: save buyback items in db too, so they persist through logout
+    std::set<Item*> buyBackItems;
     for (uint8 i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
     {
-        Item *item = m_items[i];
-        if (!item || item->GetState() == ITEM_NEW) continue;
+        Item* item = m_items[i];
+        if (!item)
+            continue;
 
-        static SqlStatementID delInv ;
-        static SqlStatementID delItemInst ;
+        if (std::find(m_itemUpdateQueue.begin(), m_itemUpdateQueue.end(), item) == m_itemUpdateQueue.end())
+        {
+            buyBackItems.insert(item);
+            item->SetSlot(i);
+            item->SetContainer(nullptr);
 
-        SqlStatement stmt = CharacterDatabase.CreateStatement(delInv, "DELETE FROM character_inventory WHERE item = ?");
-        stmt.PExecute(item->GetGUIDLow());
+            if (item->GetState() == ITEM_UNCHANGED)
+                m_items[i]->FSetState(ITEM_CHANGED);
 
-        stmt = CharacterDatabase.CreateStatement(delItemInst, "DELETE FROM item_instance WHERE guid = ?");
-        stmt.PExecute(item->GetGUIDLow());
-
-        m_items[i]->FSetState(ITEM_NEW);
+            m_itemUpdateQueue.push_back(item);
+        }
     }
 
     // update enchantment durations
@@ -17023,7 +17029,8 @@ void Player::_SaveInventory()
         if (!item)
             continue;
 
-        if (item->GetState() != ITEM_REMOVED && item->GetState() != ITEM_STASHED)
+        if (item->GetState() != ITEM_REMOVED && item->GetState() != ITEM_STASHED &&
+            buyBackItems.find(item) == buyBackItems.end())
         {
             // Plusieurs tests anti dupli ...
             Item *test = GetItemByPos(item->GetBagSlot(), item->GetSlot());
