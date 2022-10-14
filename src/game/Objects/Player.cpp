@@ -18638,11 +18638,12 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
         // Turtle: npc that restores thrown away items
         if (pCreature = GetNPCIfCanInteractWith(vendorGuid, UNIT_NPC_FLAG_ITEMRESTORE))
         {
-            std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `stack_count` FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u LIMIT 1", GetGUIDLow(), item));
+            std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `stack_count`, `time` FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u LIMIT 1", GetGUIDLow(), item));
             if (result)
             {
                 Field* pFields = result->Fetch();
                 uint32 stackCount = pFields[0].GetUInt32();
+                uint64 timestamp = pFields[1].GetUInt64();
 
                 uint32 price = pProto->BuyPrice * stackCount;
                 if (GetMoney() < price)
@@ -18655,7 +18656,7 @@ bool Player::BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, 
                 {
                     SendNewItem(pItem, stackCount, true, false);
                     LogModifyMoney(-int32(price), "BuyItem", vendorGuid, item);
-                    CharacterDatabase.DirectPExecute("DELETE FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u && `stack_count`=%u LIMIT 1", GetGUIDLow(), item, stackCount);
+                    CharacterDatabase.DirectPExecute("DELETE FROM `character_destroyed_items` WHERE `player_guid`=%u && `item_entry`=%u && `stack_count`=%u && `time`=%u LIMIT 1", GetGUIDLow(), item, stackCount, timestamp);
                     return true;
                 }
             }
