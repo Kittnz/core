@@ -802,6 +802,7 @@ class WorldSession
         void HandleBuyItemInSlotOpcode(WorldPacket& recvPacket);
         void HandleBuyItemOpcode(WorldPacket& recvPacket);
         void HandleListInventoryOpcode(WorldPacket& recvPacket);
+        static void HandleListRestoreItemsCallBack(QueryResult* result, uint32 accountId, std::string guidStr);
         void HandleAutoStoreBagItemOpcode(WorldPacket& recvPacket);
         void HandleReadItemOpcode(WorldPacket& recvPacket);
         void HandleAutoEquipItemSlotOpcode(WorldPacket & recvPacket);
