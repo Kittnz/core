@@ -1028,6 +1028,9 @@ void WorldSession::HandleMoverRelocation(Unit* pMover, MovementInfo& movementInf
 
         if (movementInfo.HasMovementFlag(MOVEFLAG_ONTRANSPORT))
         {
+            // Turtle: fix fall damage from transport bug by preventing it for next few seconds
+            pPlayerMover->m_lastTransportTime = movementInfo.stime;
+
             //GetPlayer()->GetCheatData()->OnTransport(pPlayerMover, movementInfo.GetTransportGuid());
             Unit* loadPetOnTransport = nullptr;
             if (!pPlayerMover->GetTransport())
