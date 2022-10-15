@@ -3959,14 +3959,85 @@ bool GossipSelect_npc_khan_jehn(Player* pPlayer, Creature* pCreature, uint32 uiS
     return true;
 }
 
+bool QuestRewarded_npc_khan_jehn(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40616) // One of Us
+    {
+        pQuestGiver->MonsterYell("You are one of us now, the Magram has a champion! You shall bring us to victory!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_SHOUT);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_khan_shaka(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40629) == QUEST_STATUS_INCOMPLETE) // An Honorary Gelkis
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Yesu'gei said I have been summoned by you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(5602, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_khan_shaka(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "No.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " <Inhale deeply.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(560201, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60394))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_khan_shaka(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40629) // An Honorary Gelkis
+    {
+        pQuestGiver->MonsterSay("You are now blessed, you are the Earthstrider of our kin, the first to walk amongst us as an outsider, we honor you and your aid to the Gelkis cause.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     newscript = new Script;
+    newscript->Name = "npc_khan_shaka";
+    newscript->pGossipHello = &GossipHello_npc_khan_shaka;
+    newscript->pGossipSelect = &GossipSelect_npc_khan_shaka;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_khan_shaka;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
     newscript->Name = "npc_khan_jehn";
     newscript->pGossipHello = &GossipHello_npc_khan_jehn;
     newscript->pGossipSelect = &GossipSelect_npc_khan_jehn;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_khan_jehn;
     newscript->RegisterSelf();
 
     newscript = new Script;

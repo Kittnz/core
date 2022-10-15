@@ -5249,7 +5249,6 @@ REPLACE INTO creature_template VALUES
 (61044, 9419, 0, 0, 0, 0, 'Yesu\'gei', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 132, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61045, 9444, 0, 0, 0, 0, 'Warleader Temukar', NULL, 0, 42, 42, 4953, 4953, 0, 0, 2246, 132, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 269, 346, 0, 172, 1, 1258, 1384, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 7, 0, 13741, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (61046, 5561, 0, 0, 0, 0, 'Fontenus', NULL, 0, 41, 41, 5584, 5584, 4201, 4201, 1619, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 336, 432, 4, 172, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 4, 0, 61046, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 298, 394, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
-(61047, 9419, 0, 0, 0, 0, 'Khan Shaka', c, 0, 40, 40, 1752, 1752, 0, 0, 1890, 132, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61048, 1068, 0, 0, 0, 0, 'Tiny Gelkis Rumbler', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61049, 2716, 0, 0, 0, 0, 'Bonepaw Pup', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61050, 1731, 0, 0, 0, 0, 'Daron Truthkeeper', 'Renowned Scarlet Blacksmith', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
@@ -5272,11 +5271,15 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Daron lo
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
+delete from gossip_menu where entry = 41260 and text_id = 61047;
+delete from broadcast_text WHERE entry = 61047 and Male_Text = 'I am Shaka, I rule here, I lead the Gelkis, do not think to be bold, outsider, it would be unwise.';
+delete from npc_text where ID = 61047 and BroadcastTextID0 = 61047;
+
 set @gossip_menu_id = 41260; set @magic_number = 61047;
-replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am Shaka, I rule here, I lead the Gelkis, do not think to be bold, outsider, it would be unwise.');
-replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41260, 5602, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30044, 'I am Shaka, I rule here, I lead the Gelkis, do not think to be bold, outsider, it would be unwise.');
+replace into npc_text (ID, BroadcastTextID0) values (5602, 30044);
+update creature_template set gossip_menu_id = 41260 where entry = 5602;
 
 set @gossip_menu_id = 41259; set @magic_number = 61045;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
