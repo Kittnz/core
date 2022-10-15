@@ -4443,7 +4443,7 @@ REPLACE INTO creature_template VALUES
 (61037, 1269, 0, 0, 0, 0, 'B-33 Shredder', 'Venture Co.', 0, 27, 27, 890, 890, 0, 0, 1235, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 41, 57, 0, 112, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 9, 0, 61037, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 38, 55, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61038, 9587, 0, 0, 0, 0, 'Rumbling Earth Elemental', NULL, 0, 22, 23, 573, 617, 0, 0, 1316, 16, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 32, 41, 0, 100, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 61038, 0, 0, 0, 0, 200, 0, 50, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 43, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
 (61039, 4607, 0, 0, 0, 0, 'Living Oil Blaze', NULL, 0, 23, 24, 617, 664, 0, 0, 976, 16, 0, 1, 1.14286, 0.8, 18, 5, 0, 0, 1, 34, 43, 2, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 4, 0, 61039, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
-(61040, 9429, 0, 0, 0, 0, 'Jochi', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 133, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61040, 9429, 0, 0, 0, 0, 'Jochi', NULL, 0, 36, 36, 1468, 1468, 0, 0, 1420, 133, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 140, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61041, 9448, 0, 0, 0, 0, 'Warcaller Dekshar', '', 0, 40, 40, 1752, 1752, 0, 0, 1890, 133, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61042, 12682, 0, 0, 0, 0, 'Almaudrak', NULL, 0, 40, 40, 4572, 4572, 1350, 1350, 1964, 16, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 220, 283, 0, 156, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 45.7392, 62.8914, 100, 3, 0, 61042, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 261, 345, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61043, 10906, 0, 0, 0, 0, 'Baelfyr', NULL, 0, 41, 41, 5584, 5584, 0, 0, 1619, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 336, 432, 2, 172, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 3, 0, 61043, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 298, 394, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
@@ -4506,7 +4506,7 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 
 set @gossip_menu_id = 41256; set @magic_number = 61041;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There is a war to be won, and we must all contribute our part.');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What is it, do you not have the stomach to help us, to contribute?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -5236,3 +5236,163 @@ REPLACE INTO creature_display_info_addon VALUES (18997, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18998, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18999, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18969, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18991, 0, 0, 0, 0);
+REPLACE INTO creature_display_info_addon VALUES (18993, 0, 0, 0, 0);
+-- Yesu'gei , display ID 9419 , level 40, faction 132, weapon 60112, quest/greeting flags, greeting text : "<The elderly centaur raises his head to speak to you.>\n\n You are not of our tribe, yet you walk among us. What brings you here?"
+-- Warleader Temukar, display ID 9444, level 42 elite, faction 132, weapon 60719, quest/greeting flags, greeting text : "We are always under the threat of war, we must task ourselves for conflict, unless we be trampled like the many tribes before us."
+-- Fontenus , display ID 5561, level 41 elite, faction 16, (Has 4201 mana, Casts 10179 every 6 seconds, casts 6131 every 10 seconds, all damage is frost, is immune to frost, is immune to bleeds and poisons, has 20% more hp and damage then normal) 
+-- NPC Khan Shaka, add quest/greeting flags, add greeting text : "I am Shaka, I rule here, I lead the Gelkis, do not think to be bold, outsider, it would be unwise."
+-- Tiny Gelkis Rumbler, display ID 1068, faction 35, level 1, scale 0.3
+-- Bonepaw Pup, display ID 2716, faction 35, level 1, scale 0.3 
+-- Daron Truthkeeper <Renowned Scarlet Blacksmith>, display ID 1731, faction 35, level 50, scale 1, humanoid, weapon 5956, quest/greeting flags, greeting text : "<Daron looks somewhat confused by your presence.>\n\n Not often that we get outsiders, not in many years truthfully.\n\n Welcome either way, you need something?" ((Sells basic blacksmithing supplies, also can repair armor))
+REPLACE INTO creature_template VALUES
+(61044, 9419, 0, 0, 0, 0, 'Yesu\'gei', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 132, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61045, 9444, 0, 0, 0, 0, 'Warleader Temukar', NULL, 0, 42, 42, 4953, 4953, 0, 0, 2246, 132, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 269, 346, 0, 172, 1, 1258, 1384, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 7, 0, 13741, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
+(61046, 5561, 0, 0, 0, 0, 'Fontenus', NULL, 0, 41, 41, 5584, 5584, 4201, 4201, 1619, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 336, 432, 4, 172, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 4, 0, 61046, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 298, 394, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
+(61047, 9419, 0, 0, 0, 0, 'Khan Shaka', c, 0, 40, 40, 1752, 1752, 0, 0, 1890, 132, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61048, 1068, 0, 0, 0, 0, 'Tiny Gelkis Rumbler', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61049, 2716, 0, 0, 0, 0, 'Bonepaw Pup', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61050, 1731, 0, 0, 0, 0, 'Daron Truthkeeper', 'Renowned Scarlet Blacksmith', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20247; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61050;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20246; set @weapon_1 = 60719; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61045;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20245; set @weapon_1 = 60112; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61044;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41261; set @magic_number = 61050;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Daron looks somewhat confused by your presence.>\n\nNot often that we get outsiders, not in many years truthfully.\n\nWelcome either way, you need something?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41260; set @magic_number = 61047;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am Shaka, I rule here, I lead the Gelkis, do not think to be bold, outsider, it would be unwise.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41259; set @magic_number = 61045;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'We are always under the threat of war, we must task ourselves for conflict, unless we be trampled like the many tribes before us.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41258; set @magic_number = 61044;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<The elderly centaur raises his head to speak to you.>\n\nYou are not of our tribe, yet you walk among us. What brings you here?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Fontenus
+set @creature_entry = 61046;
+set @description = ': Fontenus';
+set @spell_list_id = 180071;
+
+set @spellid_1 = 10179; -- Frostbolt
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0; 
+set @delayinitialmax_1 = 0; 
+set @delayrepeatmin_1 = 6; 
+set @delayrepeatmax_1 = 6;
+
+set @spellid_2 = 6131; -- Frost Nova
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 3; 
+set @delayinitialmax_2 = 3; 
+set @delayrepeatmin_2 = 10; 
+set @delayrepeatmax_2 = 10;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+REPLACE INTO npc_vendor VALUES (61050, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 3466, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 3857, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 7995, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 18567, 0, 0, 0, 0);
