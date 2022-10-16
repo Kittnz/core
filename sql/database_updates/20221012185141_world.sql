@@ -210,3 +210,19 @@ REPLACE INTO `gameobject` VALUES ( 5010684, 176749, 451, 16916.5, 15671.5, 69.18
 DELETE FROM gameobject WHERE guid = '5010684';
 DELETE FROM game_event_gameobject WHERE guid = '5010684';
 DELETE FROM gameobject_battleground WHERE guid = '5010684';
+
+-- Changes by COUN
+DELETE FROM gameobject WHERE guid = '5010682';
+DELETE FROM game_event_gameobject WHERE guid = '5010682';
+DELETE FROM gameobject_battleground WHERE guid = '5010682';
+DELETE FROM gameobject WHERE guid = '5010680';
+DELETE FROM game_event_gameobject WHERE guid = '5010680';
+DELETE FROM gameobject_battleground WHERE guid = '5010680';
+DELETE FROM gameobject WHERE guid = '5010679';
+DELETE FROM game_event_gameobject WHERE guid = '5010679';
+DELETE FROM gameobject_battleground WHERE guid = '5010679';
+
+-- Changes by BOYO
+DELETE FROM gameobject WHERE guid = '5010678';
+DELETE FROM game_event_gameobject WHERE guid = '5010678';
+DELETE FROM gameobject_battleground WHERE guid = '5010678';
