@@ -1245,7 +1245,7 @@ update quest_template set type = 1 where entry = 40627;
 
 -- The Raging Oceans Blue
 delete from quest_template where entry = 40628;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40627,40628,2,405,41,30,0,0,'The Raging Oceans Blue','I have kept one bit of information from all the tribe, save the Khan himself, $N. Even Uthek, for all her wisdom, I do not trust to not act rashly upon this.\n\nWhile we do not fish much, the seas provide life and nourishment to surrounding creatures... which we may in turn eat. We rely on her as much as the land, this suffering land, despite what others may think. Which is what it pains me to say, something has angered the elements of the deeps too. I can feel it, $N.\n\nI sense, far to the north, where the mountains overlook the sea. There is something roiling, raging, ready to enact vengeance for the suffering land, or perhaps some transgressions I am not aware of. This is something we cannot ignore, and it will panic the Gelkis if it becomes common knowledge! Our village is not miles from the sea after all. We are not great swimmers.\n\nFind a way to quell this being, and I promise, you will become an honored visitor in this village. Perhaps more.','Find and quell the elemental Yesu’gei speaks of, once complete, return to Yesu\'gei, at Gelkis Village in Desolace.','Dare I ask if you have news?','That! That is a core! Is it over? Yes... I can feel peace dawning once more...',60858,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4000,92,1250,93,-2500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40627,40628,2,405,41,30,0,0,'The Raging Oceans Blue','I have kept one bit of information from all the tribe, save the Khan himself, $N. Even Uthek, for all her wisdom, I do not trust to not act rashly upon this.\n\nWhile we do not fish much, the seas provide life and nourishment to surrounding creatures... which we may in turn eat. We rely on her as much as the land, this suffering land, despite what others may think. Which is what it pains me to say, something has angered the elements of the deeps too. I can feel it, $N.\n\nI sense, far to the north, where the mountains overlook the sea. There is something roiling, raging, ready to enact vengeance for the suffering land, or perhaps some transgressions I am not aware of. This is something we cannot ignore, and it will panic the Gelkis if it becomes common knowledge! Our village is not miles from the sea after all. We are not great swimmers.\n\nFind a way to quell this being, and I promise, you will become an honored visitor in this village. Perhaps more.','Find and quell the elemental Yesu\'gei speaks of, once complete, return to Yesu\'gei, at Gelkis Village in Desolace.','Dare I ask if you have news?','That! That is a core! Is it over? Yes... I can feel peace dawning once more...',60858,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4000,92,1250,93,-2500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation		(id, quest) values (61044, 40628);
 replace into creature_involvedrelation	(id, quest) values (61044, 40628);
@@ -1321,3 +1321,176 @@ replace into creature_questrelation		(id, quest) values ( 5398, 40633);
 replace into creature_involvedrelation	(id, quest) values (61040, 40633);
 
 update quest_template set prevquestid = 40633 where entry in (40611,40610,40617,40618,40619);
+
+-- To Fix A Shredder or Two
+delete from quest_template where entry = 40634;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40634,2,406,25,19,0,0,'To Fix A Shredder or Two','THIS. WAS. NOT. IN. MY. CONTRACT.\n\nUn-freakin\'-believable!\n\nI had to crawl through the savannah and this dusty red rock to get here and find out there\'s nothing to work with?!\n\nKlazfit welcomed me with: "Deal with it, kid. You got a job to do kid." Son of a leper gnome!\n\nDon\'t tell him I said that. This is fine, it\'s okay, everything\'s fine. This is -NOT- fine! \n\n Listen up chum, you gotta do something. Blacksand Oil Fields, lots of spare parts laying about, the Venture Co. classic. Bring me as many as you can carry and you\'ll get paid handsomely.','Bring 30 Spare Parts to Technician Steelbolt at Powder Town in Stonetalon Mountains','How am I supposed to fix not one but -TWO- shredders with no parts?!?','Bummer, I actually gotta work now.\n\nYeah, yeah, here\'s your pay.',60861,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1500,2100,1001,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60960, 40634);
+replace into creature_involvedrelation	(id, quest) values (60960, 40634);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60861,11449,'Box of Spare Parts',12,1,2048,1,-1,-1,1,30,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010931, 3, 22933, 'Box of Spare Parts', 0, 4, 1, 43, 2010931, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010931,60861,-100,0,1,1,0);
+
+-- Gnomes Were Always A Leper
+delete from quest_template where entry = 40635;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40635,2,406,28,24,0,0,'Gnomes Were Always A Leper','Hey, how you doing chum?\n\nI\'m really positive you\'re here for work but I smell an amateur when I see one. My gut tells me you\'re more brawn than brain and I got the perfect deal for you, friend.\n\nSo listen up.\n\nRumors say the good ol\' gnome city got boomed with green, and it wasn\'t even us goblins, can you imagine that? Idiots called us suicidal but they gone and done that. Calling themselves leper gnomes now, they were always a leper if you ask me.\n\nWhat\'s even funnier is that they\'re now employed by the Venture Co.! Undermine ain\'t what it used to be, sounds like.\n\nLong story short, go show those idiots who the superior green is and bring me back those coils. Hear that? Coils. C-O-I-L-S.','Bring 10 Electrical Coils to Head Technician Klazfit at Powder Town in Stonetalon Mountains.','Too difficult for you, chum?','Never thought you had it in you kid.\n\nSheesh, is that someone\'s gut? Ugh, working with amateurs.\n\nTake the coin and get out of my sight.',60862,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1500,1900,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60961, 40635);
+replace into creature_involvedrelation	(id, quest) values (60961, 40635);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60862,1248,'Electrical Coil',12,1,2048,1,-1,-1,1,10,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61027, 60862, -70, 0, 1, 1, 0);
+
+-- Blacken Their Eyes
+delete from quest_template where entry = 40636;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40636,2,406,24,20,0,0,'Blacken Their Eyes','I\'m the law around here bub. Dis the law and you dis me, dis me and I have my boys turn you into gunpowder for our bomb, got it?\n\nGood.\n\nSince you\'re already here, I got a business proposition for you. You get to smack some lizards, peace still stands, everybody wins eh?\n\nNow listen, leaving the pure comedy aside, we got some real issues with the basilisks around here. Why? Well because they can fit a goblin in their mouth bub, that\'s why.\n\nAll you gotta do is go out there and kill some of them! Just some, gotta leave something for my boys too, right.\n\nSimple bread to earn, simple!','Kill 9 Blackened Basilisk and return Security Officer Mort Tozzlefume at Powder Town in Stonetalon Mountains.','I saw some poor kid getting eaten by one of those things yesterday.\n\nHorrifying sight, funny, but horrifying.','You made sure to leave some for my boys right?\n\nOne of the basilisks spit these after eating some of our townsfolk. Just take one.',0,0,0,0,0,0,0,0,4044,9,0,0,0,0,0,0,0,0,1000,1650,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60863,1,60864,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60970, 40636);
+replace into creature_involvedrelation	(id, quest) values (60970, 40636);
+
+replace into item_template values
+ ('60863', '4', '1', 'Wet Socks', '', '16798', '2', '0', '1', '2812', '703', '8', '-1', '-1', '24',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '7', '6', '-1',
+ '7', '-2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '30', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60864', '2', '15', 'Half-O-Staff', '', '6555', '2', '0', '1', '11500', '2875', '13', '-1', '-1', '24',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1600', '0',
+ '0', '14', '28', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '50', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Earth Rumble
+delete from quest_template where entry = 40637;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40636,40637,2,406,23,20,0,0,'Earth Rumble','Great job with them lizards bub! Left enough for my boys to have fun too. Eh, to be honest, some got eaten. But they had fun! Right? Don\'t look at me like that kid, I\'m a great boss! Do you think I got this job because I rubbed someone the good way?\n\nOof, can\'t take back those words. Still! New job handpicked just for you my uh very capable comrade, yes, comrade.\n\nThe very explosive nature of the Venture Co. seems to have woken up some very very angry earth elementals or something. Salrog was spouting some orcish spiritual nonsense.\n\nYou go deal with them and I pay you, best deal you\'ll get in Powder Town! That is if the town is still standing when you return.\n\nBlasted Venture Co., it was clearly them, right? Not the tests we\'ve been performing with the bombs, right?','Kill 7 Rumbling Earth Elementals and return to Security Officer Mort Tozzlefume at Powder Town in Stonetalon Mountains.','So, has the ground settled yet?','Great work kid, knew you were the perfect idi- man for the job!\n\nRemember when I said some of my boys died? Well, you can have some of their stuff I guess.',0,0,0,0,0,0,0,0,61038,7,0,0,0,0,0,0,0,0,1000,1750,1001,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60865,1,60866,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60970, 40637);
+replace into creature_involvedrelation	(id, quest) values (60970, 40637);
+
+replace into item_template values
+ ('60865', '4', '3', 'Goblin Chain Hauberk', '', '11563', '2', '0', '1', '6432', '1608', '5', '-1', '-1', '24',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '6', '4', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '199', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '90', '0', '0', '0', '0', '23', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60866', '0', '0', '', '', '6592', '0', '0', '1', '0', '0', '0', '-1', '-1', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Blasting Stonetalon!
+delete from quest_template where entry = 40638;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40638,2,406,23,20,0,0,'Blasting Stonetalon!','Busy day in the port, kid, always is. Since the day our big boss, the Warchief, had given us his blessing to make our home in this dusty place.\n\nNo complaints here, o\'course. We\'re just trying to get by and earn our keep after all.\n\nSpeaking of which, I\'ve sent an expedition to the Stonetalon Mountains. Our horned friends, the Tauren, told us of a place where we could freely toy with our engineering.\n\nMy most trusted man, Nazz, has been given the task to overview the construction of the BIGGEST bomb to ever exist.\n\nThis is one of the two things we can provide to the Horde. The other being the best economics in Kalimdor\n\nReport to Nazz in Powder Town, close to the Charred Vale. This is all for the good of the Horde!','Report to Nazz at Powder Town in Stonetalon Mountains.','Beat it, kid!','Nert sends yet another employee to me. Perfect, we need all the hands we can spare.',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1500,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (80178, 40638);
+replace into creature_involvedrelation	(id, quest) values (61024, 40638);
+
+-- Not Useless!
+delete from quest_template where entry = 40639;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40639,2,406,23,20,0,0,'Not Useless!','Heya kid, ready to do some actual work?\n\nYou\'ll be under my guidance, if I were you, I\'d worry about how large my pockets are because I am about to fill them if you\'re doing a good enough job.\n\nBackstory time. Notice from yours truly, most of the time the things I am about to say require a tax per sentence for the listener but since you came from Nert himself I am willing to eh, oversee it.\n\nAnyway, where was I, ah yes. I used to be a big shot in Undermine back in my day, there was nobody, and I mean nobody I wouldn\'t cheat, lie, kill or steal from for my own goals!\n\n<Nash rubs his hands and giggles quietly to himself as your skin begins to crawl.>\n\nNaw, don\'t worry kid, those days are behind me. I was saying, I and the Venture Co. got history and especially with this idiot they\'ve sent to oversee the oil fields.\n\nGo beat some of these idiots up and see if you can find any info on them.','Gather information from the Venture Co. Employees located around the Blacksand Oil Fields and return it to Senior Foreman Nazz Firecracker at Powder Town in Stonetalon Mountains.','Hurry it up bub, you wouldn\'t want me to finish sharpening this dagger.','Not, I repeat: NOT USELESS. Do you hear that you blasted maggots?\n\n<Nazz shouts for the whole town to hear.>\n\nI SAY IT AGAIN, NOT USELESS! UNLIKE THE LOT OF YOU.',60867,1,60868,1,60869,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1700,1001,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61024, 40639);
+replace into creature_involvedrelation	(id, quest) values (61024, 40639);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60867,3901,'Foreman\'s Instructions',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50551),
+(60868,7601,'Discrete Orders',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50553),
+(60869,5567,'RESPECT.THE.RULES',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',50556);
+
+replace into creature_loot_template values
+(61027, 60867,  -65, 0, 1, 1, 0),
+(61029, 60868,  -35, 0, 1, 1, 0),
+(61030, 60868,  -35, 0, 1, 1, 0),
+(61031, 60868,  -35, 0, 1, 1, 0),
+(61032, 60868,  -35, 0, 1, 1, 0),
+(61033, 60868,  -35, 0, 1, 1, 0),
+(61034, 60868,  -35, 0, 1, 1, 0),
+(61029, 60869, -100, 0, 1, 1, 0),
+(61030, 60869, -100, 0, 1, 1, 0),
+(61031, 60869, -100, 0, 1, 1, 0),
+(61032, 60869, -100, 0, 1, 1, 0),
+(61033, 60869, -100, 0, 1, 1, 0),
+(61034, 60869, -100, 0, 1, 1, 0);
+
+REPLACE INTO `page_text` (`entry`, `text`, `next_page`) VALUES
+(50551, 'This goes to all the lepers the company decided to hire for reasons I dare not question because it does not influence my paycheck whatsoever.\n\nYou bunch of second-rated engineers are meant to be near the pipes AT ALL TIMES. Anyone caught slacking or missing or praise be the golden bar one of them breaks all of you will suffer the consequences!', 50552),
+(50552, 'Also, for any other idiot that decides to come to me to speak about their wage or contract know that I will tie you up and feed you to the blasted creatures of the Charred Vale.\n\nP.S: WORK HARDER. We got to finish this project soon.\n\nP.S.S: Stay on your toes for the Horde\'s activity.\n\n-Oilmaster Higgle Wirefuse', 0),
+(50553, 'If this notice came into your hands then you\'ve been selected for a promotion! Obviously, there will be no pay increase, but you\'re still promoted. You\'ve been promoted to the Venture Co.\'s very own anti Powder Town brigade, when the time comes you and others will be sent to deal with the idiot Nash and his stupid, stupid brethren that decided to form a worker\'s union.', 50554),
+(50554, 'Imagine being so dumb not to haul all the gold to yourself! Not that I do that, of course. Every employee is treated the same, and by no means my wage is so much bigger than yours, never think of that!\n\nP.S: Wearing a bomb on your body and sacrificing yourself for the greater good of the company will ensure that your annual payment will be brought back to your family. And also they will be taken care of as any other citizen of the Undermine giving them a two months free medical voucher.', 50555),
+(50555, 'P.S.S: Burn this after you read it, imbecile.\n\n- Oilmaster Higgle Wirefuse', 0),
+(50556, 'Respect the Oilmaster.\n\nNo slacking.\n\nRespect the Oilmaster\n\nNo lunch break!\n\nRespect the Oilmaster...\n\nNo smoking or drinking while working!\n\nRespect the oilmaster.', 50557),
+(50557, 'Do not make that stupid joke about that one Hobgoblin!\n\nRespect the Oilmaster.\n\nDo no ask about your wage or contract.\n\nRespect the Oilmaster.\n\nWork accidents do not exist.\n\nRespect the Oilmaster.\n\nLAST RULE : RESPECT THE OIL MASTER.', 0);
+
+-- Nazz's Got A Plan
+delete from quest_template where entry = 40640;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40639,40640,2,406,23,20,0,0,'Nazz\'s Got A Plan','<Nazz reads the documents you brought him.>\n\nHoo boy, the Undermine at its finest.\n\nI remember those days. There is nothing worse than the Goblin nature, $N. The ones above will always work the other lot to death. And the other lot? They\'re trying to be the whip bearers rather than being whipped. Nothing worse, ain\'t NOTHING, NOTHING WORSE.\n\nThis is why the Union is a much better deal, most of us live equally, more or less. The Goblin nature applies here too, but in different ways and measures. Anyway, I got a plan.\n\n I need you to do what you do best, go out there, kill stuff, and bring the stuff back for money. Easy. Easy.\n\n All across Stonetalon, they go by the name \'Raging Cliff Stormer\' a huge lizard that shoots lightning. I need their scale for a shrink ray. Pretty much the electricity is what I need, the rest I am gonna ask some of our most "prestigious" engineers to make. Five of them will be enough!','Bring 5 Electric Scales back to Nazz at Powder Town in Stonetalon Mountains.','Any of them zapped you?','Great job kid, you deliver yet again!',60870,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1500,1800,1001,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61024, 40640);
+replace into creature_involvedrelation	(id, quest) values (61024, 40640);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60870,3347,'Electric Scale',12,1,2048,1,-1,-1,1,5,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(4009, 60870, -70, 0, 1, 1, 0);
+
+-- Grand Theft Shredder
+delete from quest_template where entry = 40641;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40640,40641,2,406,23,20,512,0,'Grand Theft Shredder','All right, shrink ray is done.\n\nYou\'re probably wondering why we need a damn shrink ray to kill that doofus Higgle, right? Well, we don\'t. Call this a pet project of mine. You\'re gonna go back into those fields, find the B-33 Shredder and beat it around a couple of times. Once the pilot is dead, it should automatically begin shrinking, just pick it up!\n\nDo. NOT. DAMAGE. IT\n\nJust wanted to make clear, after you beat it up real good, you\'ll use the shrink ray, pocket it up, and come back to me. While you cause this commotion, I have a friend of mine finding the location of their boss.','Steal B-33 Shredder and bring it back to Senior Foreman Nazz Firecracker at Powder Town in Stonetalon Mountains.','Remember this! It won\'t stay shrunk for a long time, so hurry it up!','Quick take it out and place it on the ground.\n\n<Nash grins.>\n\nFinally got my own shredder.',60871,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2150,1001,250,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60872,1,60873,1,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61024, 40641);
+replace into creature_involvedrelation	(id, quest) values (61024, 40641);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60871,31202,'Auto Shrunken B-33 Shredder',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61037, 60871, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60872', '4', '2', 'Firecracker Trousers', 'Said to be Nazz\'s backup pair.', '9535', '2', '0', '1', '5468', '1367', '7', '-1', '-1', '26',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '6', '7', '1',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '77', '0', '0', '0',
+ '0', '0', '0', '9138', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '60', '0', '0', '0', '0', '23', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60873', '4', '1', 'Powder Town Sash', '', '16787', '2', '0', '1', '2084', '521', '6', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '1', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '19', '0', '0', '0',
+ '0', '0', '0', '21360', '1', '0', '0', '-1', '0', '-1', '21345', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+
