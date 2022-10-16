@@ -595,6 +595,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "itemmove",       SEC_DEVELOPER,       false, &ChatHandler::HandleItemMoveCommand,            "", nullptr },
         { "cooldown",       SEC_DEVELOPER,       false, &ChatHandler::HandleCooldownCommand,            "", nullptr },
         { "unlearn",        SEC_DEVELOPER,       false, &ChatHandler::HandleUnLearnCommand,             "", nullptr },
+        { "unlearnoffline", SEC_DEVELOPER,       false, &ChatHandler::HandleUnLearnOfflineCommand,      "", nullptr },
         { "distance",       SEC_DEVELOPER,       false, &ChatHandler::HandleGetDistanceCommand,         "", nullptr },
         { "recall",         SEC_DEVELOPER,        false, &ChatHandler::HandleRecallCommand,              "", nullptr },
         { "save",           SEC_DEVELOPER,       false, &ChatHandler::HandleSaveCommand,                "", nullptr },

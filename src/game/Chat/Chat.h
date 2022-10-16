@@ -478,6 +478,7 @@ class ChatHandler
 
         bool HandleCooldownCommand(char* args);
         bool HandleUnLearnCommand(char* args);
+        bool HandleUnLearnOfflineCommand(char* args);
         bool HandleGetDistanceCommand(char* args);
         bool HandleDieCommand(char* args);
         bool HandleFearCommand(char* args);
