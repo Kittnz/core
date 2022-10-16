@@ -1494,3 +1494,39 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
  '0', '1', NULL);
 
+-- Lighting the Oilmaster
+delete from quest_template where entry = 40642;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40641,40642,2,406,23,20,0,0,'Lighting the Oilmaster','Right. While you were gone a friend of mine discovered the location of Higgle. And before you say it, yes, he\'s at the top of the stupid building. I had a hunch too, don\'t be a smartass about it.\n\nHiggle reminds me of our dark past bub, his stupid bossing around should end here. But, I know I am sending you on a pure suicide mission, you don\'t have to do it if you don\'t want to do it. But after all you\'ve done, I am more than sure you will.\n\nKid, I\'m proud I got an employee such as you. Stay on your toes, during your many, many trips to the oil fields they should be very alert right now. Humor this old Goblin, after Higgle\'s blood is spilled spare any who mean no harm, perhaps some of them will see reason and simply leave or seek a home in the union.\n\nWhatever your choice might be, do this one last job for me.','Kill Oilmaster Higgle Wirefuse and bring his head to Nazz at Powder Town in Stonetalon Mountains.','Goblin on Goblin, I wonder if this is also in our nature, $N.','Astounding work $N.',60874,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5000,2500,1001,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61024, 40642);
+replace into creature_involvedrelation	(id, quest) values (61024, 40642);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60874,40134,'Higgle Wirefuse\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61036, 60874, -100, 0, 1, 1, 0);
+
+-- A Rat Among Them
+delete from quest_template where entry = 40643;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40643,2,406,26,20,0,0,'A Rat Among Them','KABOOM!\n\nOh, sorry to startle you bub. What\'s up? Here to see the BOMB, right. Man, I tell you, this puppy got the power of the sun in it! For real, that\'s what Nash said and Nash is always saying the truth!\n\n Speaking of true things. One of the bruisers said there\'s a kobold among the Venture Co and he\'s their Overseer. Can you imagine that? A kobold, the Overseer.\n\n<Blammo laughs hysterically>\n\nI need to see this with my own eyes, but I can\'t leave the bomb! Say, won\'t you go kill that guy if he\'s real and bring me his candle?','Bring Vermintooth\'s Candle back to Fusemaster Blammo at Powder Town in Stonetalon Mountains.','You need to take candle!','You took it! You took the candle! He was real.\n\nKABOOOOOOOM\n\nSorry about that, my excitement is as explosive as this bomb.',60875,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2250,1001,175,0,0,0,0,0,0,0,0,0,6049,1,60876,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60962, 40643);
+replace into creature_involvedrelation	(id, quest) values (60962, 40643);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60875,1119,'Vermintooth\'s Candle',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61028, 60875, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60876', '4', '1', 'Fusemaster Mitts', '', '18858', '2', '0', '1', '3192', '798', '10', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '-6', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '19', '0', '6', '0',
+ '0', '0', '0', '9399', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+

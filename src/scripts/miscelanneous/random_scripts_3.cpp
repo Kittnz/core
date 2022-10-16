@@ -4022,9 +4022,27 @@ bool QuestRewarded_npc_khan_shaka(Player* pPlayer, Creature* pQuestGiver, Quest 
     return false;
 }
 
+bool QuestRewarded_npc_nazz_firecracker(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40642) // Lighting the Oilmaster
+    {
+        pQuestGiver->MonsterSay("You make this old man proud, kid... Not only did you take over those oilfields like it was your own backyard, but you've proudly delivered it into the Union's hands, with employees at that. That's right, some of the survivors even agreed to join us! You've made our little town just a bit safer, well as safe as it could be!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_WAVE);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_nazz_firecracker";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_nazz_firecracker;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_khan_shaka";
