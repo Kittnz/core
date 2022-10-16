@@ -578,6 +578,12 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                                 }
                             }
                         }
+
+                        if (appendValue & UNIT_NPC_FLAG_ITEMRESTORE)
+                        {
+                            appendValue &= ~UNIT_NPC_FLAG_ITEMRESTORE;
+                            appendValue |= UNIT_NPC_FLAG_VENDOR;
+                        }
                     }
 
                     *data << uint32(appendValue);

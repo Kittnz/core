@@ -278,14 +278,21 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
         return;
     }
 
+    ItemPrototype const* pProto = pItem->GetProto();
+
     // checked at client side and not have server side appropriate error output
-    if (pItem->GetProto()->Flags & ITEM_FLAG_INDESTRUCTIBLE)
+    if (pProto->Flags & ITEM_FLAG_INDESTRUCTIBLE)
     {
         _player->SendEquipError(EQUIP_ERR_CANT_DROP_SOULBOUND, nullptr, nullptr);
         return;
     }
 
     _player->LogItem(pItem, LogItemAction::Deleted, count);
+
+    // Turtle: save destroyed items so they can be restored
+    if ((count <= pItem->GetCount()) &&
+        (pProto->Quality >= ITEM_QUALITY_RARE || pProto->StartQuest))
+        CharacterDatabase.PExecute("INSERT INTO `character_destroyed_items` (`player_guid`, `item_entry`, `stack_count`, `time`) VALUES (%u, %u, %u, %u)", _player->GetGUIDLow(), pProto->ItemId, count ? count : pItem->GetCount(), uint64(sWorld.GetGameTime()));
 
     if (count)
     {
@@ -759,6 +766,56 @@ void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data)
     SendListInventory(guid);
 }
 
+void WorldSession::HandleListRestoreItemsCallBack(QueryResult* result, uint32 accountId, std::string guidStr)
+{
+    WorldSession* session = sWorld.FindSession(accountId);
+    if (!session)
+    {
+        delete result;
+        return;
+    }
+
+    if (!result)
+    {
+        session->SendNotification("You do not have any items that can be restored.");
+        return;
+    }
+
+    uint64 guid = 0;
+    sscanf(guidStr.c_str(), UI64FMTD, &guid);
+
+    WorldPacket data(SMSG_LIST_INVENTORY);
+    data << uint64(guid);
+    uint8 count = 0;
+    size_t countPos = data.wpos();
+    data << uint8(count);
+
+    do
+    {
+        Field* pFields = result->Fetch();
+        uint32 itemId = pFields[0].GetUInt32();
+        uint32 stackCount = pFields[1].GetUInt32();
+
+        ItemPrototype const* pProto = ObjectMgr::GetItemPrototype(itemId);
+        if (!pProto)
+            continue;
+
+        count++;
+        data << uint32(count);
+        data << uint32(itemId);
+        data << uint32(pProto->DisplayInfoID);
+        data << uint32(1);
+        data << uint32(pProto->BuyPrice * stackCount);
+        data << uint32(pProto->MaxDurability);
+        data << uint32(stackCount);
+    } while (result->NextRow() && count < 128);
+
+    data.put<uint8>(countPos, count);
+    session->SendPacket(&data);
+
+    delete result;
+}
+
 void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
 {
     DEBUG_LOG("WORLD: Sent SMSG_LIST_INVENTORY");
@@ -767,6 +824,17 @@ void WorldSession::SendListInventory(ObjectGuid vendorguid, uint8 menu_type)
 
     if (!pCreature)
     {
+        // Turtle: npc that restores thrown away items
+        if (pCreature = GetPlayer()->GetNPCIfCanInteractWith(vendorguid, UNIT_NPC_FLAG_ITEMRESTORE))
+        {
+            CharacterDatabase.AsyncPQuery(&WorldSession::HandleListRestoreItemsCallBack,
+                GetAccountId(), std::to_string(vendorguid.GetRawValue()),
+                "SELECT `item_entry`, `stack_count` FROM `character_destroyed_items` WHERE `player_guid`=%u ORDER BY `time` DESC LIMIT 128",
+                _player->GetGUIDLow()
+            );
+            return;
+        }
+
         DEBUG_LOG("WORLD: SendListInventory - %s not found or you can't interact with him.", vendorguid.GetString().c_str());
         _player->SendSellError(SELL_ERR_CANT_FIND_VENDOR, nullptr, ObjectGuid(), 0);
         return;
