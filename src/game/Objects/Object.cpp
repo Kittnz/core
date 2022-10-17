@@ -3882,6 +3882,10 @@ float WorldObject::GetSpellResistChance(Unit const* victim, uint32 schoolMask, b
         return (resistModHitChance * 0.01f);
     }
 
+    // Turtle: no resist chance for holy school
+    if (schoolMask & SPELL_SCHOOL_MASK_HOLY)
+        return 0.0f;
+
     uint32 const uiLevel = GetLevel();
 
     // Computing innate resists, resistance bonus when attacking a creature higher level. Not affected by modifiers.
