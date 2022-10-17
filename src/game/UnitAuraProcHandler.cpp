@@ -1556,6 +1556,13 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 trigger_spell_id = 23571;
                 target = this;
             }
+            // Elemental Focus
+            else if (auraSpellInfo->Id == 45541)
+            {
+                // prevent stacks going up to 4
+                if (HasAura(trigger_spell_id))
+                    return SPELL_AURA_PROC_FAILED;
+            }
             break;
         }
         default:
