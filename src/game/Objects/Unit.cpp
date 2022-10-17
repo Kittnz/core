@@ -1960,7 +1960,7 @@ void Unit::CalculateDamageAbsorbAndResist(WorldObject *pCaster, SpellSchoolMask 
     // NOSTALRIUS: Sorts binaires ne sont pas résistés.
     if (canResist && spellProto && spellProto->IsBinary())
         canResist = false;
-    else if (spellProto && spellProto->AttributesEx4 & SPELL_ATTR_EX4_IGNORE_RESISTANCES)
+    else if (spellProto && spellProto->HasAttribute(SPELL_ATTR_EX4_IGNORE_RESISTANCES))
         canResist = false;
 
     DEBUG_UNIT_IF(spellProto, this, DEBUG_SPELL_COMPUTE_RESISTS, "%s : Binary [%s]. Partial resists %s", spellProto->SpellName[2].c_str(), spellProto->IsBinary() ? "YES" : "NO", canResist ? "possible" : "impossible");
