@@ -3,6 +3,7 @@
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2282
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2282
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2268
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2262
 
 UPDATE `turtle_world`.`creature_template` SET `gold_min` = 0, `gold_max` = 0 WHERE `entry` = 60848;
 UPDATE `turtle_world`.`creature_template` SET `skinning_loot_id` = 3100 WHERE `entry` = 60848;
@@ -13,6 +14,8 @@ UPDATE `turtle_world`.`quest_template` SET `Details` = 'The quilboar activity in
 UPDATE `creature_template` SET `loot_id` = 91291 WHERE `entry` = 91291;
 DELETE FROM `creature_loot_template` WHERE `entry` = 91291;
 UPDATE `turtle_world`.`quest_template` SET `ZoneOrSort` = 796 WHERE `entry` = 40233;
+UPDATE `turtle_world`.`quest_template` SET `Details` = 'I have another task for you, $N. While you\'re hunting Sharptusk, look for any signs of battle plans.\n\nIt would give us a strategic advantage over them. If they are planning to attack us, then we best be ready for when they do.$BIf I had to guess, they would probably hide it in a safe location like a Cave.\n\nKill whoever is defending the plans and bring me their mane as proof.', `Objectives` = 'Brave Windfeather has asked you to kill and bring the mane of whoever is protecting the battle plans.\n\nThen look around for the attack plans.' WHERE `entry` = 60115;
+UPDATE `turtle_world`.`quest_template` SET `OfferRewardText` = 'What is this?\n\n\"Squealer\" was planning to attack us? I shall inform Chief Hawkwind immediately!\n\nYour actions speak highly of your dedication to protect our tribe. Earthmother guide your path, $N.' WHERE `entry` = 60115;
 REPlACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91291, 422, 0.0128, 0, 3, 3, 0);
 REPlACE INTO `turtle_world`.`creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91291, 785, 0.02, 0, 1, 1, 0);
 REPlACE INTO `turtle_world`.`creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (91291, 804, 0.08, 0, 1, 1, 0);
