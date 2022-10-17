@@ -132,3 +132,12 @@ DELETE FROM gameobject_battleground WHERE guid = '5010766';
 
 -- Changes by WILL
 REPLACE INTO `creature` VALUES (2572878,60575,0,0,0,0,-8418.13,1324.31,13.2413,3.7714,3600,3600,0,100,100,0,0,0);
+UPDATE creature SET position_x = '-8387.358398', position_y = '1332.476440', position_z = '5.229577', orientation = '0.451125' WHERE guid = '2572878';
+UPDATE creature SET position_x = '-8367.712891', position_y = '1338.824951', position_z = '7.042117', orientation = '6.180604' WHERE guid = '2572878';
+REPLACE INTO `creature` VALUES (2572879,51561,0,0,0,0,-8374.54,1326.27,5.23078,1.59192,3600,3600,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2572880,60929,0,0,0,0,-8371.99,1328.12,5.23057,3.7125,3600,3600,0,100,100,0,0,0);
+UPDATE creature SET position_x = '-8373.280273', position_y = '1327.109985', position_z = '5.231050', orientation = '3.631990' WHERE guid = '2572880';
+UPDATE creature SET position_x = '-8373.866211', position_y = '1326.796875', position_z = '5.231050', orientation = '3.631990' WHERE guid = '2572880';
+UPDATE creature SET position_x = '-8373.247070', position_y = '1327.127441', position_z = '5.231050', orientation = '3.631990' WHERE guid = '2572880';
+UPDATE creature SET position_x = '-8373.537109', position_y = '1326.972534', position_z = '5.231050', orientation = '3.631990' WHERE guid = '2572880';
+REPLACE INTO `creature` VALUES (2572881,4221,0,0,0,0,-8366.37,1330.54,5.97913,0.753511,3600,3600,0,100,100,0,0,0);
