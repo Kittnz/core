@@ -33,6 +33,10 @@ set (framework_SRCS
 	Network/MangosSocketImpl.h
 	Network/MangosSocketMgr.h
 	Network/MangosSocketMgrImpl.h
+        Network/Socket.h
+	Network/AsyncAcceptor.h
+	Network/SocketMgr.h
+	Network/NetworkThread.h
 	Platform/CompilerDefs.h
 	Platform/Define.h
 	Policies/CreationPolicy.h
@@ -82,6 +86,10 @@ source_group("LinkedReference"
 
 source_group("Dynamic"
   REGULAR_EXPRESSION Dynamic
+)
+
+source_group("Network"
+  REGULAR_EXPRESSION Network
 )
 
 include_directories(
