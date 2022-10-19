@@ -5496,3 +5496,114 @@ INSERT INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description`
 INSERT INTO `spell_template` (`entry`, `school`, `category`, `castUI`, `dispel`, `mechanic`, `attributes`, `attributesEx`, `attributesEx2`, `attributesEx3`, `attributesEx4`, `stances`, `stancesNot`, `targets`, `targetCreatureType`, `requiresSpellFocus`, `casterAuraState`, `targetAuraState`, `castingTimeIndex`, `recoveryTime`, `categoryRecoveryTime`, `interruptFlags`, `auraInterruptFlags`, `channelInterruptFlags`, `procFlags`, `procChance`, `procCharges`, `maxLevel`, `baseLevel`, `spellLevel`, `durationIndex`, `powerType`, `manaCost`, `manCostPerLevel`, `manaPerSecond`, `manaPerSecondPerLevel`, `rangeIndex`, `speed`, `modelNextSpell`, `stackAmount`, `totem1`, `totem2`, `reagent1`, `reagent2`, `reagent3`, `reagent4`, `reagent5`, `reagent6`, `reagent7`, `reagent8`, `reagentCount1`, `reagentCount2`, `reagentCount3`, `reagentCount4`, `reagentCount5`, `reagentCount6`, `reagentCount7`, `reagentCount8`, `equippedItemClass`, `equippedItemSubClassMask`, `equippedItemInventoryTypeMask`, `effect1`, `effect2`, `effect3`, `effectDieSides1`, `effectDieSides2`, `effectDieSides3`, `effectBaseDice1`, `effectBaseDice2`, `effectBaseDice3`, `effectDicePerLevel1`, `effectDicePerLevel2`, `effectDicePerLevel3`, `effectRealPointsPerLevel1`, `effectRealPointsPerLevel2`, `effectRealPointsPerLevel3`, `effectBasePoints1`, `effectBasePoints2`, `effectBasePoints3`, `effectBonusCoefficient1`, `effectBonusCoefficient2`, `effectBonusCoefficient3`, `effectMechanic1`, `effectMechanic2`, `effectMechanic3`, `effectImplicitTargetA1`, `effectImplicitTargetA2`, `effectImplicitTargetA3`, `effectImplicitTargetB1`, `effectImplicitTargetB2`, `effectImplicitTargetB3`, `effectRadiusIndex1`, `effectRadiusIndex2`, `effectRadiusIndex3`, `effectApplyAuraName1`, `effectApplyAuraName2`, `effectApplyAuraName3`, `effectAmplitude1`, `effectAmplitude2`, `effectAmplitude3`, `effectMultipleValue1`, `effectMultipleValue2`, `effectMultipleValue3`, `effectChainTarget1`, `effectChainTarget2`, `effectChainTarget3`, `effectItemType1`, `effectItemType2`, `effectItemType3`, `effectMiscValue1`, `effectMiscValue2`, `effectMiscValue3`, `effectTriggerSpell1`, `effectTriggerSpell2`, `effectTriggerSpell3`, `effectPointsPerComboPoint1`, `effectPointsPerComboPoint2`, `effectPointsPerComboPoint3`, `spellVisual1`, `spellVisual2`, `spellIconId`, `activeIconId`, `spellPriority`, `name`, `nameFlags`, `nameSubtext`, `nameSubtextFlags`, `description`, `descriptionFlags`, `auraDescription`, `auraDescriptionFlags`, `manaCostPercentage`, `startRecoveryCategory`, `startRecoveryTime`, `minTargetLevel`, `maxTargetLevel`, `spellFamilyName`, `spellFamilyFlags`, `maxAffectedTargets`, `dmgClass`, `preventionType`, `stanceBarOrder`, `dmgMultiplier1`, `dmgMultiplier2`, `dmgMultiplier3`, `minFactionId`, `minReputation`, `requiredAuraVision`, `customFlags`) VALUES (46435, 0, 21, 0, 0, 0, 262160, 0, 0, 268435456, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 101, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 6, 6, 6, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 299, 149, 29, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 79, 31, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 127, 0, 0, 0, 0, 0, 0, 0, 0, 870, 0, 95, 0, 0, 'Burning Blood', 4128894, '', 4128844, 'Increases the caster\'s movement speed by $s2% and the Physical damage it deals by $s1 for $d.', 4128894, 'The ritual sacrifice of an ally has ignited the cursed blood in which you were covered, causing you to go berserk. You die when this expires.', 4128894, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
 INSERT INTO `spell_template` (`entry`, `school`, `category`, `castUI`, `dispel`, `mechanic`, `attributes`, `attributesEx`, `attributesEx2`, `attributesEx3`, `attributesEx4`, `stances`, `stancesNot`, `targets`, `targetCreatureType`, `requiresSpellFocus`, `casterAuraState`, `targetAuraState`, `castingTimeIndex`, `recoveryTime`, `categoryRecoveryTime`, `interruptFlags`, `auraInterruptFlags`, `channelInterruptFlags`, `procFlags`, `procChance`, `procCharges`, `maxLevel`, `baseLevel`, `spellLevel`, `durationIndex`, `powerType`, `manaCost`, `manCostPerLevel`, `manaPerSecond`, `manaPerSecondPerLevel`, `rangeIndex`, `speed`, `modelNextSpell`, `stackAmount`, `totem1`, `totem2`, `reagent1`, `reagent2`, `reagent3`, `reagent4`, `reagent5`, `reagent6`, `reagent7`, `reagent8`, `reagentCount1`, `reagentCount2`, `reagentCount3`, `reagentCount4`, `reagentCount5`, `reagentCount6`, `reagentCount7`, `reagentCount8`, `equippedItemClass`, `equippedItemSubClassMask`, `equippedItemInventoryTypeMask`, `effect1`, `effect2`, `effect3`, `effectDieSides1`, `effectDieSides2`, `effectDieSides3`, `effectBaseDice1`, `effectBaseDice2`, `effectBaseDice3`, `effectDicePerLevel1`, `effectDicePerLevel2`, `effectDicePerLevel3`, `effectRealPointsPerLevel1`, `effectRealPointsPerLevel2`, `effectRealPointsPerLevel3`, `effectBasePoints1`, `effectBasePoints2`, `effectBasePoints3`, `effectBonusCoefficient1`, `effectBonusCoefficient2`, `effectBonusCoefficient3`, `effectMechanic1`, `effectMechanic2`, `effectMechanic3`, `effectImplicitTargetA1`, `effectImplicitTargetA2`, `effectImplicitTargetA3`, `effectImplicitTargetB1`, `effectImplicitTargetB2`, `effectImplicitTargetB3`, `effectRadiusIndex1`, `effectRadiusIndex2`, `effectRadiusIndex3`, `effectApplyAuraName1`, `effectApplyAuraName2`, `effectApplyAuraName3`, `effectAmplitude1`, `effectAmplitude2`, `effectAmplitude3`, `effectMultipleValue1`, `effectMultipleValue2`, `effectMultipleValue3`, `effectChainTarget1`, `effectChainTarget2`, `effectChainTarget3`, `effectItemType1`, `effectItemType2`, `effectItemType3`, `effectMiscValue1`, `effectMiscValue2`, `effectMiscValue3`, `effectTriggerSpell1`, `effectTriggerSpell2`, `effectTriggerSpell3`, `effectPointsPerComboPoint1`, `effectPointsPerComboPoint2`, `effectPointsPerComboPoint3`, `spellVisual1`, `spellVisual2`, `spellIconId`, `activeIconId`, `spellPriority`, `name`, `nameFlags`, `nameSubtext`, `nameSubtextFlags`, `description`, `descriptionFlags`, `auraDescription`, `auraDescriptionFlags`, `manaCostPercentage`, `startRecoveryCategory`, `startRecoveryTime`, `minTargetLevel`, `maxTargetLevel`, `spellFamilyName`, `spellFamilyFlags`, `maxAffectedTargets`, `dmgClass`, `preventionType`, `stanceBarOrder`, `dmgMultiplier1`, `dmgMultiplier2`, `dmgMultiplier3`, `minFactionId`, `minReputation`, `requiredAuraVision`, `customFlags`) VALUES (46434, 2, 0, 0, 0, 0, 2684354944, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 101, 0, 0, 20, 20, 8, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 6, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4047, 0, 31, 0, 0, 'Burning Blood Visual', 4128894, '', 4128892, '', 4128892, '', 4128894, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 0);
 
+-- 46437: Target Has Aura 46437 Index 0
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (46437, 1, 46437, 0, 0, 0, 0);
+-- 46438: Source's Guid Is 114982
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (46438, 52, 114982, 0, 0, 0, 0);
+-- 46439: (46437: Target Has Aura 46437 Index 0) And (46438: Source's Guid Is 114982)
+INSERT INTO `conditions` (`condition_entry`, `type`, `value1`, `value2`, `value3`, `value4`, `flags`) VALUES (46439, -1, 46437, 46438, 0, 0, 0);
+
+-- Events list for Wildpaw Mystic
+DELETE FROM `creature_ai_events` WHERE `creature_id`=11838;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1183801, 11838, 46437, 10, 0, 100, 1, 0, 20, 10000, 10000, 1183801, 0, 0, 'Wildpaw Mystic - Run on Player with Korrak Aura Approaching');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1183801;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(1183801, 0, 0, 20, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 'Wildpaw Mystic - Move Away from Player'),
+(1183801, 0, 0, 22, 35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Mystic - Set Faction to Friendly'),
+(1183801, 0, 0, 39, 1183901, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Mystic - Start Script to Restore Faction');
+UPDATE `creature_template` SET `ai_name`='EventAI' WHERE `entry`=11838;
+
+-- Events list for Wildpaw Brute
+DELETE FROM `creature_ai_events` WHERE `creature_id`=11839;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1183901, 11839, 46437, 10, 0, 100, 1, 0, 20, 10000, 10000, 1183901, 0, 0, 'Wildpaw Brute - Run on Player with Korrak Aura Approaching');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1183901;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(1183901, 0, 0, 20, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 'Wildpaw Brute - Move Away from Player'),
+(1183901, 0, 0, 22, 35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Brute - Set Faction to Friendly'),
+(1183901, 0, 0, 39, 1183901, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Brute - Start Script to Return Home');
+DELETE FROM `generic_scripts` WHERE `id`=1183901;
+INSERT INTO `generic_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(1183901, 60, 0, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Brute - Restore Faction');
+UPDATE `creature_template` SET `ai_name`='EventAI' WHERE `entry`=11839;
+
+-- Gossip for Wildpaw Alpha.
+INSERT INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (41084, 'The Wildpaw Alpha notices the blood of the mighty and feared Korrak dripping off of you and cowers in submission.\r\n\r\nIt appears you have become the new alpha of this camp.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (41084, 41084, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (41085, '<growl>\r\n\r\nThis gnoll does not appear intelligent enough to understand you.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`) VALUES (41085, 41085, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `gossip_menu` (`entry`, `text_id`, `condition_id`) VALUES (50025, 41084, 46439);
+INSERT INTO `gossip_menu` (`entry`, `text_id`, `condition_id`) VALUES (50025, 41085, 0);
+INSERT INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (50025, 0, 0, 'Command the gnolls to move into the Field of Strife.', 0, 1, 1, 0, 0, 50025, 0, 0, NULL, 0, 46439);
+DELETE FROM `gossip_scripts` WHERE `id`=50025;
+INSERT INTO `gossip_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(50025, 0, 0, 4, 147, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Remove Gossip Flag'),
+(50025, 0, 0, 25, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Set Run'),
+(50025, 0, 1, 20, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Start Waypoints');
+UPDATE `creature_template` SET `gossip_menu_id`=50025, `npc_flags`=1, `ai_name`='EventAI' WHERE `entry`=11840;
+
+-- Events list for Wildpaw Alpha
+DELETE FROM `creature_ai_events` WHERE `creature_id`=11840;
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1184001, 11840, 0, 10, 2, 100, 0, 0, 20, 0, 0, 1184001, 0, 0, 'Wildpaw Alpha - Become Friendly on Player with Korrak Aura Approaching');
+INSERT INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES (1184002, 11840, 0, 2, 0, 100, 0, 30, 0, 120000, 120000, 1184002, 0, 0, 'Wildpaw Alpha - Cast Enrage at 30% HP');
+DELETE FROM `creature_ai_scripts` WHERE `id`=1184001;
+INSERT INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(1184001, 0, 0, 44, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Set Phase to 1'),
+(1184001, 0, 0, 22, 35, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Set Faction to Friendly'),
+(1184001, 0, 0, 39, 1183901, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Start Script to Restore Faction');
+
+-- Waypoints for Wildpaw Alpha.
+DELETE FROM `creature_movement_scripts` WHERE `id`=114982;
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(114982, 0, 0, 68, 114982, 2, 11838, 30, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Start Script on All Wildpaw Mystic'),
+(114982, 0, 0, 68, 114982, 2, 11839, 30, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Start Script on All Wildpaw Brute');
+DELETE FROM `generic_scripts` WHERE `id`=114982;
+INSERT INTO `generic_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(114982, 0, 0, 20, 14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 'Wildpaw Brute or Mystic - Follow Wildpaw Alpha');
+DELETE FROM `creature_movement_scripts` WHERE `id`=114983;
+INSERT INTO `creature_movement_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(114983, 0, 0, 68, 114983, 2, 11838, 30, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Start Script on All Wildpaw Mystic'),
+(114983, 0, 0, 68, 114983, 2, 11839, 30, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Start Script on All Wildpaw Brute'),
+(114983, 0, 0, 20, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 'Wildpaw Alpha - Move Random'),
+(114983, 0, 0, 34, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Set Home Position'),
+(114983, 0, 0, 4, 147, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Remove Gossip Flag'),
+(114983, 0, 1, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Alpha - Restore Faction');
+DELETE FROM `generic_scripts` WHERE `id`=114983;
+INSERT INTO `generic_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(114983, 0, 0, 34, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Brute or Mystic - Set Home Position'),
+(114983, 0, 0, 20, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 'Wildpaw Brute or Mystic - Move Random'),
+(114983, 0, 1, 22, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'Wildpaw Brute or Mystic - Restore Faction');
+INSERT INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES 
+(114982, 1, -381.455, -501.899, 86.5941, 100, 0, 0, 0),
+(114982, 2, -384.705, -509.977, 84.3135, 100, 0, 0, 0),
+(114982, 3, -387.409, -519.396, 84.0771, 100, 0, 0, 0),
+(114982, 4, -386.183, -530.3, 84.0771, 100, 0, 0, 114982),
+(114982, 5, -374.423, -537.658, 84.0771, 100, 0, 0, 0),
+(114982, 6, -361.28, -540.663, 84.0771, 100, 0, 0, 0),
+(114982, 7, -347.315, -546.269, 83.9819, 100, 0, 0, 0),
+(114982, 8, -333.522, -552.494, 82.754, 100, 0, 0, 114982),
+(114982, 9, -321.241, -554.976, 80.8232, 100, 0, 0, 0),
+(114982, 10, -301.596, -559.498, 77.0212, 100, 0, 0, 0),
+(114982, 11, -286.563, -562.316, 74.9444, 100, 0, 0, 0),
+(114982, 12, -272.923, -562.029, 71.6997, 100, 0, 0, 0),
+(114982, 13, -257.649, -552.859, 68.202, 100, 0, 0, 114982),
+(114982, 14, -243.424, -544.939, 67.3834, 100, 0, 0, 0),
+(114982, 15, -229.057, -536.059, 63.2284, 100, 0, 0, 0),
+(114982, 16, -218.817, -519.997, 56.8979, 100, 0, 0, 0),
+(114982, 17, -224.153, -508.11, 51.7026, 100, 0, 0, 0),
+(114982, 18, -231.622, -495.408, 46.5566, 100, 0, 0, 0),
+(114982, 19, -241.998, -483.489, 40.7757, 100, 0, 0, 0),
+(114982, 20, -251.597, -473.784, 36.0436, 100, 0, 0, 0),
+(114982, 21, -251.752, -462.912, 30.7877, 100, 0, 0, 0),
+(114982, 22, -248.318, -449.707, 24.9044, 100, 0, 0, 0),
+(114982, 23, -244.938, -439.657, 21.4139, 100, 0, 0, 0),
+(114982, 24, -241.514, -421.391, 18.392, 100, 0, 0, 0),
+(114982, 25, -238.769, -407.53, 14.7924, 100, 0, 0, 0),
+(114982, 26, -239.597, -392.988, 12.0097, 100, 0, 0, 0),
+(114982, 27, -243.457, -379.895, 10.8607, 100, 0, 0, 0),
+(114982, 28, -247.159, -367.339, 10.111, 100, 0, 0, 0),
+(114982, 29, -251.485, -352.669, 7.05021, 100, 0, 0, 0),
+(114982, 30, -256.128, -336.924, 6.67165, 100, 0, 0, 0),
+(114982, 31, -258.194, -325.672, 6.66762, 100, 0, 0, 0),
+(114982, 32, -260.333, -316.613, 6.84248, 100, 0, 0, 0),
+(114982, 33, -259.363, -308.263, 6.82355, 100, 1000, 0, 114983),
+(114982, 34, -259.363, -308.263, 6.82355, 100, 1000, 0, 0);
