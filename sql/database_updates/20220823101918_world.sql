@@ -1562,7 +1562,7 @@ replace into creature_involvedrelation	(id, quest) values (60970, 40646);
 
 -- Knowledge on Withering
 delete from quest_template where entry = 40647;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40647,2,406,25,20,0,0,'Knowledge on Withering','Shadow welcomes you, $N. My name is Artemus and I\'ve traveled long and far from Hillsbrad Foothills to do business with the Goblins of Powder Town. They are very unique to call them so. Madmen that would do anything for their goals and even for someone of my condition, this is very exciting!\n\nI used to study herbology in Dalaran when I was younger, regretfully I was nowhere near my home when the plague struck and there we have it. I won\'t bore you with a soapy story of how I came to be undead and how much I hate myself or whatever others say. I\'m quite happy with my condition, I finally have the time to experience and learn everything I want to.\n\nI have traveled all this way to continue my studies, more specifically in decay. The local ancients in the Charred Vale have become withered, and tortured.\n\nBring me one of their Decaying Roots, it shall prove useful.','Gather the  Decaying Roots for Artemus Halloway at Powder Town in Stonetalon Mountains.','Have you found their twisted forms?','These will do perfectly!\n\nYou have my appreciation, this will surely be very useful.',60878,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2100,1001,100,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40647,2,406,25,20,0,0,'Knowledge on Withering','Shadow welcomes you, $N. My name is Artemus and I\'ve traveled long and far from Hillsbrad Foothills to do business with the Goblins of Powder Town. They are very unique to call them so. Madmen that would do anything for their goals and even for someone of my condition, this is very exciting!\n\nI used to study herbology in Dalaran when I was younger, regretfully I was nowhere near my home when the plague struck and there we have it. I won\'t bore you with a soapy story of how I came to be undead and how much I hate myself or whatever others say. I\'m quite happy with my condition, I finally have the time to experience and learn everything I want to.\n\nI have traveled all this way to continue my studies, more specifically in decay. The local ancients in the Charred Vale have become withered, and tortured.\n\nBring me one of their Decaying Roots, it shall prove useful.','Gather the Decaying Roots for Artemus Halloway at Powder Town in Stonetalon Mountains.','Have you found their twisted forms?','These will do perfectly!\n\nYou have my appreciation, this will surely be very useful.',60878,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2100,1001,100,68,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into creature_questrelation		(id, quest) values (60964, 40647);
 replace into creature_involvedrelation	(id, quest) values (60964, 40647);
@@ -1604,9 +1604,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO npc_vendor VALUES (80942, 60879, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (80942, 60880, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (80942, 60881, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60879, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60881, 0, 0, 0, 0);
 
 update item_template set required_reputation_rank = 5 where entry in (60879,60880,60881);
 -- Add the following items to Deathcaller Aisha's sell list for 'REVERED' reputation requirement
@@ -1640,9 +1640,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '46', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO npc_vendor VALUES (80942, 60882, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (80942, 60883, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (80942, 60884, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60882, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60883, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60884, 0, 0, 0, 0);
 
 update item_template set required_reputation_rank = 6 where entry in (60882,60883,60884);
 -- Add the following items to Deathcaller Aisha's sell list for 'EXALTED' reputation requirement
@@ -1656,6 +1656,125 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '120', '0', '0', '0', '0', '46', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO npc_vendor VALUES (80942, 60885, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60885, 0, 0, 0, 0);
 
 update item_template set required_reputation_rank = 7 where entry in (60885);
+
+-- Roses are Red, Dragons are Blue...
+delete from quest_template where entry = 40648;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40648,2,3,44,37,512,0,'Roses are Red, Dragons are Blue...','<The small whelpling flutters his wings and tries to escape as you approach.>\n\nNo! No hurt!\n\n<It pauses and looks up with wide eyes.>\n\nNo ogre. No dark dwarf. You good? You help? Yes? Please! Up ramp. Family, brood family. Mind control! Tyrant. Cave. Teleport, crystal, cave! Jewel control. Jewel mind control, jewel mind control!\n\n<It hops up and down in a panic.>\n\nKill! Get jewel! Asza reward. Asza reward!','Follow the whelpling\'s instructions as best you understand them, and bring him the jewel!','<It lets out a distressed mewling.>','<The whelpling flaps its wings excitedly and bounces around.>\n\nHero! Hero $c! You not kill many brood family? No? Only tyrant?',60886,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60887,1,60888,1,60889,1,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60945, 40648);
+replace into creature_involvedrelation	(id, quest) values (60945, 40648);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60886,13496,'Jewel of Draconic Guile',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(60911, 60886, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60887', '4', '2', 'Inlaid Wristwraps', '', '24190', '2', '0', '1', '10240', '2560', '9', '-1', '-1', '40',
+ '0', '0', '-1', '0', '0', '0', '0', '0', '0', '1', '0', '4', '2', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '50', '0', '0', '0',
+ '0', '0', '0', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '30', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60888', '4', '3', 'Whelpling Tiara', '', '26307', '2', '0', '1', '28040', '7015', '1', '-1', '-1', '40',
+ '0', '0', '-1', '0', '0', '0', '0', '0', '0', '1', '0', '3', '8', '5', '6',
+ '7', '14', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '202', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '60', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60889', '4', '1', 'Speckled Sapphire Sash', '', '26270', '2', '0', '1', '8728', '2182', '6', '-1', '-1', '40',
+ '0', '0', '-1', '0', '0', '0', '0', '0', '0', '1', '0', '6', '5', '7', '5',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '36', '0', '0', '0',
+ '0', '0', '0', '9396', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Shadowforge Menace
+delete from quest_template where entry = 40649;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40649,2,3,39,35,0,0,'The Shadowforge Menace','Well met, $r. I have a mission to test your skills, and prove your mettle to the Kargath Expeditionary Force. Make no mistake, your performance will make itself known to not just us, but our brothers in Orgrimmar as well.\n\nSo. Assuming you won\'t flee with your tail between your legs, head to the dwarven fortress to the north east. You will notice it jutting out of the land like a boil, ready to be lanced. Decimate the denizens there. Return when you have slain the bulk of their forces.','Slay 12 Shadowforge Warriors and 8 Shadowforge Chanters for Warlord Goretooth at Kargath in the Badlands.','Have you made any progress, $r?','Well done, I have not expected you back so soon, or back at all in fact.',0,0,0,0,0,0,0,0,2743,10,2742,8,0,0,0,0,0,0,3650,2800,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (9077, 40649);
+replace into creature_involvedrelation	(id, quest) values (9077, 40649);
+
+-- The Shadowforge Captain
+delete from quest_template where entry = 40650;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40650,2,3,40,35,0,0,'The Shadowforge Captain','Have you seen a chicken with its head cut off, $r? It runs around, aimless, panicking, before finally dropping dead. When you head to Angor Fortress, to the north east, strike deep into it. Go for the one who organises them, and the rest who survive will be just as aimless as the beheaded bird.\n\nBarlgruf is his name. He will not be alone, nor will he be accommodating, so strike first and strike hard. Return to me when he lies in a puddle of his own blood.','Slay Captain Barlgruf in Angor Fortress for Warlord Goretooth at Kargath in the Badlands.','Is it done? Is he dead? Or must I find someone more competent to carry out the task?','Yes, I heard from my scouts the commotion over there. Well done indeed, the Dark Iron Dwarves shall not recover from this wound quickly.',0,0,0,0,0,0,0,0,91766,1,0,0,0,0,0,0,0,0,6650,2800,76,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (9077, 40650);
+replace into creature_involvedrelation	(id, quest) values (9077, 40650);
+
+update quest_template set requiredraces = 434 where entry = 40650;
+
+-- A Heart of Stone
+delete from quest_template where entry = 40651;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40651,2,3,39,33,0,0,'A Heart of Stone','I get really tired sometimes of working on rocks, you know? And then, something comes along that really blows your socks off! Quite literally sometimes when it comes to engineering, but...\n\n<He coughs awkwardly and wipes the sweat from his brow.>\n\nListen! The dwarves in Angor Fortress? They have begun automating their golem protectors recently. I don\'t know exactly how they do it! I witnessed one zapping the chest of the big statue and it came to life right there and then! Can you believe it?\n\nI need that zap-o-matic thermojigger, or whatever it is! Find it, please, and bring me a few of their hearts to play with while you\'re at it, yes?','Acquire the Golem Heart Starter and three Life-Forged Hearts from Angor Fortress for Lucien.','Have you had any success? I can\'t wait to tinker with those hearts!','Oh my word they are heavy! How did you carry them all this way? Well done, well done indeed!',60890,1,60891,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5500,2800,76,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (2920, 40651);
+replace into creature_involvedrelation	(id, quest) values (2920, 40651);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60890,24730,'Golem Heart Starter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(60891,7841,'Life-Forged Heart',12,1,2048,1,-1,-1,1,3,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010935, 3, 23790, 'Secured Angor Chest', 0, 4, 1, 43, 2010935, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010935,60890,-100,0,1,1,0);
+
+replace into creature_loot_template values
+(2723, 60891, -100, 0, 1, 1, 0);
+
+-- Eyes on the Prize
+delete from quest_template where entry = 40652;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40652,2,3,37,28,0,0,'Eyes on the Prize','Ah, a moment of your time please, $n?\n\nYes, yes, I know who you are. I was planning on discussing this issue with Senator Redstone, since he appears to have a passing interest in the goings on in the Badlands. But since you have fortuitously come to me, perhaps you will listen to my request.\n\nMy brother is part of an expeditionary party down there, you see. A prospector, but he has his mind set on ridiculous fairy tales and is chasing legends. He has lost sight of what is important! There is much wealth and knowledge to be gained from scratching the surface of the earth, never mind delving into its depths.\n\nSeek out the digsites in the northern part of the Badlands. Beware, I think the Dark Iron Dwarves are excavating there and are unlikely to enjoy onlookers. Come back when you have a nice collection of artefacts.\n\nOh, and $n? If you can\'t pick them up from the ground, feel free to take them directly from their hands.','Gather 8 dusty relics from the Angor Digsite in the Badlands for Senator Ryedol in Ironforge.','How goes the search, $n?','What beautifully dull looking objects. This is all you found...? Hmm... very well.',60892,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3000,47,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61051, 40652);
+replace into creature_involvedrelation	(id, quest) values (61051, 40652);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60892,9110,'Dusty Relic',12,1,2048,1,-1,-1,1,8,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(60907, 60892, -45, 0, 1, 1, 0);
+
+-- Digging a Little Deeper
+delete from quest_template where entry = 40653;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40652,40653,2,3,41,32,0,0,'Digging a Little Deeper','<He massages his temples and looks awfully exasperated.>\n\nFrankly, I was not sure I had to spell it out so clearly. I want the best of the relics here. The real findings from the digsites. Not old pieces of pottery and... whatever these are. Go back to that digsite. Find their leader, for he will surely preside over the more prestigious treasures. Take, steal, whatever you have to do, to bring back something actually worthwhile to me.\n\nJust do be careful, I hear the lead archaeologist there is a rather powerful spellcaster. I am sure that is no trouble for one of your stature though, correct $n?','Recover a more valuable artefact from the leader of the Angor Digsite in the Badlands for Senator Ryedol in Ironforge.','<He barely looks at you as you approach.>','Ah, now that is more like it! Did you have to kill... actually, no, let us not discuss that here. Perhaps over an ale later on? Hmm? Or do you prefer rum?',60893,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3400,47,200,0,0,0,0,0,0,0,0,0,21151,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61051, 40653);
+replace into creature_involvedrelation	(id, quest) values (61051, 40653);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60893,7572,'Pristine Relic',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(60908, 60893, -100, 0, 1, 1, 0);
+
+-- Glittering like Gold
+delete from quest_template where entry = 40654;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40654,2,3,41,32,0,0,'Glittering like Gold','The coin is much larger than any coin you have seen before, and quite a bit heavier. It appears to have someone\'s head engraved in the surface, but is too covered in muck and dust to be made out clearly.\n\nRubbing some dust off the surface, the material seems to get shinier and shinier. Is this gold?','Show the coin to someone in Ironforge who knows about these types of relics.','Hmm? What are you coming to me with this time, $n?','<His eyes widen and he quickly fishes into his pockets, extending out a handful of golden coins.>\n\nTake them. A good find, a good find indeed.\n\n<He begins to beckon to the surrounding guards. This seems to be an offer you can\'t refuse...>',60894,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,20000,1800,47,100,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_involvedrelation	(id, quest) values (61051, 40654);
+
+update quest_template set requiredraces = 589 where entry = 40654;
+
+REPLACE INTO item_template VALUES
+(60894, 12, 0, 'Dusty Coin', '', 2624, 1, 2048, 1, 0, 0, 0, 32767, 589, 10, 10, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 40654, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into creature_loot_template values
+(60907, 60894, 5, 0, 1, 1, 0);

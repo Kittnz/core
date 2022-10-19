@@ -510,11 +510,11 @@ REPLACE INTO creature_template VALUES
 (60904, 18954, 0, 0, 0, 0, 'Shadowforge Trapper', '', 0, 41, 42, 1981, 2059, 0, 0, 2397, 54, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 76, 91, 0, 182, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 60.984, 83.853, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 103, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60905, 18955, 0, 0, 0, 0, 'Shadowforge Wyrm Hunter', '', 0, 44, 44, 2059, 2117, 0, 0, 2625, 54, 0, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60906, 18952, 0, 0, 0, 0, 'Kegdesh Foulmantle', '', 0, 44, 44, 4278, 4278, 0, 0, 2082, 54, 0, 1, 1.14286, 0, 18, 5, 0, 1, 1, 269, 346, 0, 194, 1, 1400, 1400, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 259, 343, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60907, 18843, 0, 0, 0, 0, 'Shadowforge Excavator', '', 0, 36, 37, 1468, 1536, 0, 0, 1480, 54, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60908, 18945, 0, 0, 0, 0, 'Borrin Gloombeard', '', 0, 41, 41, 1981, 1981, 2000, 2000, 2397, 54, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60909, 10584, 0, 0, 0, 0, 'Azurescale Whelp', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 103, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60907, 18843, 0, 0, 0, 0, 'Shadowforge Excavator', '', 0, 36, 37, 1468, 1536, 0, 0, 1480, 54, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60907, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60908, 18945, 0, 0, 0, 0, 'Borrin Gloombeard', '', 0, 41, 41, 1981, 1981, 2000, 2000, 2397, 54, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 60908, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60909, 10584, 0, 0, 0, 0, 'Azurescale Whelp', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 103, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60910, 6761, 0, 0, 0, 0, 'Azurescale Manaweaver', '', 0, 39, 41, 1828, 1902, 3000, 3000, 2033, 103, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 72, 93, 0, 162, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 59.0304, 81.1668, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 71, 98, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60911, 6762, 0, 0, 0, 0, 'Drathos Runebreaker', '', 0, 44, 44, 2117, 2117, 0, 0, 2625, 103, 0, 1, 1.14714, 1.2, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(60911, 6762, 0, 0, 0, 0, 'Drathos Runebreaker', '', 0, 44, 44, 2117, 2117, 0, 0, 2625, 103, 0, 1, 1.14714, 1.2, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 2, 0, 60911, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 REPLACE INTO creature_display_info_addon VALUES (18843, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18945, 0, 0, 0, 0);
@@ -1725,7 +1725,7 @@ REPLACE INTO creature_template VALUES
 (60942, 18930, 18931, 0, 0, 0, 'Blackhorn Mystic', '', 0, 36, 37, 1468, 1536, 1631, 1631, 1480, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60943, 18932, 18933, 0, 0, 0, 'Blackhorn Warrior', '', 0, 37, 38, 1536, 1604, 0, 0, 1664, 16, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 92, 109, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 145, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60944, 18938, 0, 0, 0, 0, 'Targos Hatewind', '', 0, 41, 41, 1981, 1981, 0, 0, 2397, 16, 0, 1, 1.14286, 1.45, 18, 5, 0, 0, 1, 85, 109, 0, 162, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 66, 91, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60945, 10584, 0, 0, 0, 0, 'Asza', '', 0, 32, 32, 1743, 1743, 0, 0, 1304, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 50, 70, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60945, 10584, 0, 0, 0, 0, 'Asza', '', 0, 32, 32, 1743, 1743, 0, 0, 1304, 35, 3, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 50, 70, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60946, 15984, 0, 0, 0, 0, 'Murloc Tadpole', '', 0, 10, 10, 198, 198, 0, 0, 455, 35, 3, 1, 1.14286, 0.5, 20, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60947, 1963, 0, 0, 0, 0, 'Kraul Lookout', '', 0, 37, 38, 1536, 1604, 0, 0, 1651, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 52, 65, 0, 148, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 60947, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 62, 86, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60948, 6108, 0, 0, 0, 0, 'Chieftain Razortusk', '', 0, 40, 40, 1752, 1752, 0, 0, 1890, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 60948, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -2361,83 +2361,83 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 REPLACE INTO broadcast_text VALUES (91243, 'Yes yes? What does $R want with Gowlfang?\n\nGowlfang returns to Wetlands, Gowlfang be big-big leader here, and will reunite Mosshide yes yes!\n\nGowlfang make strong tribe of gnoll-gnoll and you help-help!\n\nWe do good yes yes!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 -- Rekk
-REPLACE INTO npc_vendor VALUES (60975, 6308, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60975, 0, 6308, 0, 0, 0, 0);
 -- Ikk-ikk Fenfur
-REPLACE INTO npc_vendor VALUES (60974, 2320, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 2321, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 2325, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 2604, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 2605, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 4289, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 4291, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 4340, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 4341, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 4342, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 6260, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 6261, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 7005, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 8343, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 10290, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 14341, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60974, 50231, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 2325, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 2604, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 2605, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 4291, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 4340, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 4341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 4342, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 6260, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 6261, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 7005, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 8343, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 10290, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 14341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60974, 0, 50231, 0, 0, 0, 0);
 -- Neekik Wazfinger 
-REPLACE INTO npc_vendor VALUES (60969, 159, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 414, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 422, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 1179, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 1205, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 1645, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 1707, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 1708, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 2070, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 3927, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 8766, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 8932, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60969, 19222, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 414, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 422, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 1707, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 2070, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 3927, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 8766, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 8932, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60969, 0, 19222, 0, 0, 0, 0);
 -- Tanzig Wexlight
-REPLACE INTO npc_vendor VALUES (60966, 159, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 1179, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 1205, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 2515, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 2519, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 2946, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 3030, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 3033, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 3107, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 3108, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 3131, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 3135, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 3137, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 4470, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 4471, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 4497, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 4498, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60966, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 2515, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 2519, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 2946, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 3030, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 3033, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 3107, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 3108, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 3131, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 3135, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 3137, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 4470, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 4471, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 4497, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 4498, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60966, 0, 6183, 0, 0, 0, 0);
 -- Gelweg Darkbrow
-REPLACE INTO npc_vendor VALUES (60955, 3927, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60955, 0, 3927, 0, 0, 0, 0);
 -- Shali Nosewrench
-REPLACE INTO npc_vendor VALUES (60965, 2320, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 2321, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 2324, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 2678, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 2692, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 2880, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 2901, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 3371, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 3372, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 3466, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 3713, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 3857, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 4289, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 4291, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 4399, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 4400, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 5956, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 6183, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 6217, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 6530, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 6532, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60965, 50231, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 2324, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 2678, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 2692, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 3371, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 3372, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 3466, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 3713, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 3857, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 4291, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 4399, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 4400, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 6217, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 6530, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 6532, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60965, 0, 50231, 0, 0, 0, 0);
 -- Remove the following quests from the game: Kill-Kill Sagepaw!, Kill-Kill Mosshides!
 delete from quest_template where entry in (55033,55034);
 -- Carver Molsen
@@ -4301,102 +4301,102 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There is 
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Begwynn Blackmallet
-REPLACE INTO npc_vendor VALUES (61005, 2320, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 2321, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 2325, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 2604, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 2605, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 4289, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 4291, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 4340, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 4341, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 4342, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 6260, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 6261, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 7005, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 7289, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 8343, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 10290, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 14341, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61005, 50231, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 2325, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 2604, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 2605, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 4291, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 4340, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 4341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 4342, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 6260, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 6261, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 7005, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 7289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 8343, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 10290, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 14341, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61005, 0, 50231, 0, 0, 0, 0);
 -- Dugin Coalborn
-REPLACE INTO npc_vendor VALUES (61003, 285, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 286, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 287, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 718, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 847, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 848, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 849, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 850, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 1202, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 1845, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 1846, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 1852, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 1853, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 2445, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 17187, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61003, 17188, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 285, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 286, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 287, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 718, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 847, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 848, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 849, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 850, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 1202, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 1845, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 1846, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 1852, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 1853, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 2445, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 17187, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61003, 0, 17188, 0, 0, 0, 0);
 -- Orman Granitemantle
-REPLACE INTO npc_vendor VALUES (61002, 2320, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 2321, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 2324, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 2678, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 2692, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 2880, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 2901, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 2928, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 3371, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 3372, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 4289, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 5640, 1, 7200, 3, 0);
-REPLACE INTO npc_vendor VALUES (61002, 5956, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 6183, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 6217, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 6256, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 6272, 1, 7200, 3, 0);
-REPLACE INTO npc_vendor VALUES (61002, 6529, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 6530, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 7005, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61002, 50231, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2320, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2321, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2324, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2678, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2692, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 2928, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 3371, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 3372, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 4289, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 5640, 1, 7200, 3, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 6217, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 6256, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 6272, 1, 7200, 3, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 6529, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 6530, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 7005, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61002, 0, 50231, 0, 0, 0, 0);
 -- Throki Cliffbrow
-REPLACE INTO npc_vendor VALUES (60992, 2593, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60992, 2594, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60992, 2595, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60992, 2596, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60992, 2723, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60992, 4600, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 0, 2593, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 0, 2594, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 0, 2595, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 0, 2596, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 0, 2723, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60992, 0, 4600, 0, 0, 0, 0);
 -- Brundah Cliffbrow
-REPLACE INTO npc_vendor VALUES (60991, 159, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 414, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 422, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 1179, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 1205, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 1645, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 1707, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 1708, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 2070, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 3927, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 8766, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60991, 8932, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 159, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 414, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 422, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 1645, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 1707, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 1708, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 2070, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 3927, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 8766, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60991, 0, 8932, 0, 0, 0, 0);
 -- Borrin Dustshoulder
-REPLACE INTO npc_vendor VALUES (60989, 159 , 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 1179, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 1205, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 2515, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 2519, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 2946, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 3030, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 3033, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 3107, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 3108, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 3131, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 3135, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 3137, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 4470, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 4471, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 4497, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 4498, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (60989, 6183, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 159 , 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 1179, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 1205, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 2515, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 2519, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 2946, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 3030, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 3033, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 3107, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 3108, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 3131, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 3135, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 3137, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 4470, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 4471, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 4497, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 4498, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (60989, 0, 6183, 0, 0, 0, 0);
 -- Private Glenndel , display ID 18969, level 36, faction 35, undead , greeting/quest flags, greeting text : "I drift in and out of reality , and I fear I will not remain long, you must assist me before I depart for good." (Has ghost visual)
 -- Bar'thog the Wicked, display ID 517, level 42, faction 16, humanoid, weapon1 :23124, (Has 2304 mana,  casts 8853 at the start of,  combat, casts 11671 every 10 seconds)
 -- Risen Marine, display ID 200 level 37-38, faction 21, undead, weapon1 : 3783
@@ -5246,13 +5246,15 @@ REPLACE INTO creature_display_info_addon VALUES (18993, 0, 0, 0, 0);
 -- Tiny Gelkis Rumbler, display ID 1068, faction 35, level 1, scale 0.3
 -- Bonepaw Pup, display ID 2716, faction 35, level 1, scale 0.3 
 -- Daron Truthkeeper <Renowned Scarlet Blacksmith>, display ID 1731, faction 35, level 50, scale 1, humanoid, weapon 5956, quest/greeting flags, greeting text : "<Daron looks somewhat confused by your presence.>\n\n Not often that we get outsiders, not in many years truthfully.\n\n Welcome either way, you need something?" ((Sells basic blacksmithing supplies, also can repair armor))
+-- Senator Ryedol, display ID 3460, level 30, faction 55, humanoid, greeting text : "What can I do for you $R?"
 REPLACE INTO creature_template VALUES
 (61044, 9419, 0, 0, 0, 0, 'Yesu\'gei', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 132, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61045, 9444, 0, 0, 0, 0, 'Warleader Temukar', NULL, 0, 42, 42, 4953, 4953, 0, 0, 2246, 132, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 269, 346, 0, 172, 1, 1258, 1384, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 7, 0, 13741, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
 (61046, 5561, 0, 0, 0, 0, 'Fontenus', NULL, 0, 41, 41, 5584, 5584, 4201, 4201, 1619, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 336, 432, 4, 172, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 4, 0, 61046, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 298, 394, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 16384, 0, 0, 0, ''),
 (61048, 1068, 0, 0, 0, 0, 'Tiny Gelkis Rumbler', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61049, 2716, 0, 0, 0, 0, 'Bonepaw Pup', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61050, 1731, 0, 0, 0, 0, 'Daron Truthkeeper', 'Renowned Scarlet Blacksmith', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61050, 1731, 0, 0, 0, 0, 'Daron Truthkeeper', 'Renowned Scarlet Blacksmith', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61051, 3460, 0, 0, 0, 0, 'Senator Ryedol', NULL, 0, 30, 30, 1002, 1002, 0, 0, 1188, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 43, 61, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 20247; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61050;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -5265,6 +5267,12 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20245; set @weapon_1 = 60112; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61044;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41263; set @magic_number = 61051;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What can I do for you $R?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41261; set @magic_number = 61050;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
@@ -5393,10 +5401,24 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
-REPLACE INTO npc_vendor VALUES (61050, 2880, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61050, 2901, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61050, 3466, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61050, 3857, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61050, 5956, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61050, 7995, 0, 0, 0, 0);
-REPLACE INTO npc_vendor VALUES (61050, 18567, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 0, 2880, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 0, 2901, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 0, 3466, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 0, 3857, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 0, 5956, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 0, 7995, 0, 0, 0, 0);
+REPLACE INTO npc_vendor VALUES (61050, 0, 18567, 0, 0, 0, 0);
+-- Need the following Object created with the name 'Crystalline Resonation Crystal' (Looks like G_jewelblue.mdx) which has the following gossip text : "<The Crystal hums ominously.>" with the following clickable box : "Touch the Crystal." , Upon clicking this button the player is teleported to the following coordinates : map 0, X:-6598.6328, Y:-3910.7919, Z:354.9179, Orientation: 4.6873
+-- 
+-- Need the following Object created with the name 'Crystalline Harmonization Crystal' (Looks like G_jewelblue.mdx) which has the following gossip text: "<The Crystal remains silent.>" with the following clickable box : "Touch the Crystal.", Upon clicking this button the player is teleported to the following coordinates: map 0, X:-6881.5537, Y:-3767.8178, Z:316.7491, Orientation:3.3884
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2010933, 2, 25866, 'Crystalline Resonation Crystal', 0, 32, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_resonation_crystal'),
+(2010934, 2, 25866, 'Crystalline Harmonization Crystal', 0, 32, 1.4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_harmonization_crystal');
+
+set @magic_number = 2010934;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<The Crystal remains silent.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+
+set @magic_number = 2010933;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<The Crystal hums ominously.>');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
