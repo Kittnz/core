@@ -1330,7 +1330,7 @@ replace into creature_questrelation		(id, quest) values (60960, 40634);
 replace into creature_involvedrelation	(id, quest) values (60960, 40634);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
-(60861,11449,'Box of Spare Parts',12,1,2048,1,-1,-1,1,30,-1,-1,-1,-1,4,'',0);
+(60861,24106,'Box of Spare Parts',12,1,2048,1,-1,-1,1,30,-1,-1,-1,-1,4,'',0);
 
 REPLACE INTO gameobject_template VALUES
 (2010931, 3, 22933, 'Box of Spare Parts', 0, 4, 1, 43, 2010931, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
@@ -1778,3 +1778,59 @@ REPLACE INTO item_template VALUES
 
 replace into creature_loot_template values
 (60907, 60894, 5, 0, 1, 1, 0);
+
+-- Scaling the Ridge
+delete from quest_template where entry = 40655;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40655,2,3,43,36,0,0,'Scaling the Ridge','I am sure it goes without saying, I have no great love for little young creatures. I have nothing but contempt for humans, for example, and their little pets.\n\n\<He sneers beneath his mask.>\n\nBut I have recently been made aware of an encampment in Lethlor Ravine, and the skinned corpses of countless whelplings thrown into the sun to rot. The Dark Iron Dwarves once again. Now, why would anyone set up a guarded camp to slaughter whelplings and drakes, if not to harvest something important? I do not particularly care what they hope to achieve, but if we strike now before they are more fortified, we will cut off this venture at the knees.\n\nFind this base of operations, and slay the dwarves you find within.','Slay the Shadowforge Dwarves in Scalebane Ridge, hidden within Lethlor Ravine in the Badlands, once complete, return to Lexlort in Kargath.','Has the camp been torn apart yet?','Hmm, this encampment sounds like it is being built more quickly than I anticipated. Perhaps this is urgent indeed.',0,0,0,0,0,0,0,0,60905,6,60904,6,60903,6,0,0,0,0,0,3600,76,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (9080, 40655);
+replace into creature_involvedrelation	(id, quest) values (9080, 40655);
+
+-- Bane of Scalebane
+delete from quest_template where entry = 40656;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40655,40656,2,3,44,38,0,0,'Bane of Scalebane','Perhaps I should apologise for not being as informed as I would have liked. Had I known how established this camp already was, I would have tasked an assassination of their leader.\n\nActually, perhaps you are ardent for blood and glory. Head back into that camp, find their leader, and kill him. Not a complicated task, but one that may be more dangerous than before. He will surely be prepared for this, given your previous efforts.','Slay Kegdesh Foulmantle in Scalebane Ridge for Lexlort at Kargath in the Badlands.','Yes?','Excellent work indeed, $n. I will ensure your name is glorified for your grisly work, here.',0,0,0,0,0,0,0,0,60906,1,0,0,0,0,0,0,0,0,12000,4400,76,350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (9080, 40656);
+replace into creature_involvedrelation	(id, quest) values (9080, 40656);
+
+update quest_template set type = 1 where entry = 40656;
+
+-- Scalebane Ridge
+delete from quest_template where entry = 40657;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40657,2,3,43,38,0,0,'Scalebane Ridge','<He throws up his hand to halt your approach.>\n\nThat is close enough. And speak quietly, lest you irk us with your prattle of adventure and questing...\n\nActually, I do have a request. Scalebane Ridge, heard of it? No? Lethlor Ravine, then? No? The Badlands? You are a truly a dense one...\n\nI need you to find the encampment known as Scalebane Ridge. It is a new base of operations for the Dark Iron Dwarves in that area, and their hunting of the whelplings in the area gives me a very bad feeling about what they could be used for. In any case, better safe than sorry. Head over there, and slaughter their hunters.','Slay the Shadowforge Dwarves in Scalebane Ridge, hidden within Lethlor Ravine in the Badlands for Senator Barin Redstone in Ironforge.','Make it quick.','Ah, yes, a suitable conclusion to a necessary task.',0,0,0,0,0,0,0,0,60903,6,60904,6,60905,6,0,0,0,0,0,3600,47,200,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (1274, 40657);
+replace into creature_involvedrelation	(id, quest) values (1274, 40657);
+
+-- The Head of the Hunters
+delete from quest_template where entry = 40658;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40658,2,3,44,38,0,0,'The Head of the Hunters','Before you run off like a fool, I have one more task to add. This Scalebane Ridge, it has not cropped up out of nowhere. I would bet my large fortunes that there is a lieutenant of some sort leading the operations.\n\nI want him dead. Certainly taking him out of the picture will impede all the work that goes on there, hopefully indefinitely. I trust you have a few friends that may help you with such a task? Good, go. I will compensate you appropriately.','Slay Kegdesh Foulmantle in Scalebane Ridge for Senator Barin Redstone in Ironforge.','This had better be good news, or I\'m calling the guards.','Somewhat impressive, though I suppose it speaks of your general demeanor that I was rather expecting failure. Here. Take these coins.',0,0,0,0,0,0,0,0,60906,1,0,0,0,0,0,0,0,0,12000,4400,47,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (1274, 40658);
+replace into creature_involvedrelation	(id, quest) values (1274, 40658);
+
+update quest_template set type = 1 where entry = 40658;
+
+-- A Razor's Edge
+delete from quest_template where entry = 40659;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40659,2,3,40,30,512,0,'A Razor\'s Edge','The knife embeds itself into the palm at the slightest press. Truly this could cut through almost any living tissue, but the handle is awkward and heavy. Holding it up, the sun glints across the pristine surface. Perhaps someone interested in survival techniques could make use of this beauty.','Find someone interested in the knife, perhaps one keen on survival.','Hail, adventurer! I see you are a capable... hmm? What do you want?','Oh my, oh my! No, this isn\'t a survival knife, this is a skinning knife. It\'s obvious, see, hold it like this and… there you go. Perfectly crafted that is, not sure I\'ve seen anything like it before. Hold onto it, I suspect it will serve you well.',60895,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1800,0,0,0,0,0,0,0,0,0,0,0,60896,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_involvedrelation	(id, quest) values (718, 40659);
+
+update quest_template set requiredraces = 589 where entry = 40659;
+
+REPLACE INTO item_template VALUES
+(60895, 12, 0, 'Razor-Sharp Knife', '', 1845, 1, 2048, 1, 0, 0, 0, 32767, 589, 10, 10, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, -1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 40659, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, NULL);
+
+replace into creature_loot_template values
+(60903, 60895, 0.5, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60896', '2', '15', 'Shadowforge Skinner', '', '20430', '3', '0', '1', '67528', '16882', '13', '-1', '-1', '44',
+ '0', '0', '-1', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '1500', '0',
+ '0', '30', '56', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '24591', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
