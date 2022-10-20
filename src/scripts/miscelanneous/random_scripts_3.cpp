@@ -4035,9 +4035,149 @@ bool QuestRewarded_npc_nazz_firecracker(Player* pPlayer, Creature* pQuestGiver, 
     return false;
 }
 
+bool GossipHello_npc_q_controlling_sailors(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40660) == QUEST_STATUS_INCOMPLETE) // Controlling Sailors
+    {
+        Creature* sailor_hylreth = pPlayer->FindNearestCreature(61013, 10.0F);
+        Creature* sailor_brewen = pPlayer->FindNearestCreature(61015, 10.0F);
+        if (sailor_hylreth)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Petty Officer Milldough has asked me to check in on you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(61013, pCreature->GetGUID());
+        }
+        if (sailor_brewen)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Petty Officer Milldough has asked me to check in on you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->SEND_GOSSIP_MENU(61015, pCreature->GetGUID());
+        }
+    }
+
+    return true;
+}
+
+bool GossipSelect_npc_q_controlling_sailors(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("All is well, enjoying some ale, the views of southern lasses, and enjoying the weather on dry land. He should know me not to cause trouble in foreign lands.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60395))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->MonsterSay("Check in on me? Haha! I aint causing no trouble, that goody-two-shoes Milldough should learn to have some fun, all I am doing is exploring, this place is much different then Boralus after all.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60396))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_sailor_pardol(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40660) == QUEST_STATUS_INCOMPLETE) // Controlling Sailors
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Petty Officer Milldough has asked me to check in on you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61016, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_sailor_pardol(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("Check in on me? What does he think he can control me here, and who are you, some worthless constable?");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->SetFactionTemporary(14, TEMPFACTION_RESTORE_COMBAT_STOP);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            npc->HandleEmote(EMOTE_ONESHOT_ATTACK1H);
+            });
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+struct npc_sailor_pardolAI : public ScriptedAI
+{
+    npc_sailor_pardolAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    bool speech = false;
+
+    void Reset() { }
+    void UpdateAI(const uint32 diff)
+    {
+        if (m_creature->GetHealthPercent() < 50)
+        {
+            if (!speech)
+            {
+                speech = true;
+                m_creature->MonsterSay("I yield, fine! Tell him I'll keep out of trouble then, I got the lesson.");
+            }
+            m_creature->CombatStop(true);
+            m_creature->ClearInCombat();
+            m_creature->SetFactionTemplateId(1693);
+        }
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
+        DoMeleeAttackIfReady();
+    }
+    void JustDied(Unit*) override { }
+    void EnterCombat() { }
+
+    void OnCombatStop()
+    {
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+
+        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+        {
+            Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+            if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
+            {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60397))
+                    pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+            }
+        }
+    }
+
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_sailor_pardol(Creature* _Creature) { return new npc_sailor_pardolAI(_Creature); }
+
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_sailor_pardol";
+    newscript->pGossipHello = &GossipHello_npc_sailor_pardol;
+    newscript->pGossipSelect = &GossipSelect_npc_sailor_pardol;
+    newscript->GetAI = &GetAI_npc_sailor_pardol;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_q_controlling_sailors";
+    newscript->pGossipHello = &GossipHello_npc_q_controlling_sailors;
+    newscript->pGossipSelect = &GossipSelect_npc_q_controlling_sailors;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_nazz_firecracker";
