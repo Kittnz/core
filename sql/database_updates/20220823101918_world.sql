@@ -660,12 +660,16 @@ replace into creature_involvedrelation	(id, quest) values (4972, 40582);
 
 -- A Curious Leaf
 delete from quest_template where entry = 40583;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40582,40583,2,215,5,1,0,0,'A Curious Leaf','You have found what appears to be a rich lively leaf on the ground. Touching the leaf gives you an odd sensation, there is also no sign of the leaf dessecating. Perhaps the Druid trainer in Bloodhoof Village would know more?','Take the Mysterious Leaf to Gennia Runetotem at Bloodhoof Village in Mulgore.','Greetings young $c, what can I do for you?','By the Spirits?! That is no ordinary leaf. I have only seen a leaf like this during my time as an apprentice in Moonglade. This may be very urgent $c, and I will need your help.',60830,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60830,1,112,175,81,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40583,2,215,5,1,0,0,'A Curious Leaf','You have found what appears to be a rich lively leaf on the ground. Touching the leaf gives you an odd sensation, there is also no sign of the leaf dessecating. Perhaps the Druid trainer in Bloodhoof Village would know more?','Take the Mysterious Leaf to Gennia Runetotem at Bloodhoof Village in Mulgore.','Greetings young $c, what can I do for you?','By the Spirits?! That is no ordinary leaf. I have only seen a leaf like this during my time as an apprentice in Moonglade. This may be very urgent $c, and I will need your help.',60830,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60830,1,112,175,81,150,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
 
 replace into gameobject_questrelation		(id, quest) values (2010924, 40583);
 replace into creature_involvedrelation		(id, quest) values (3064   , 40583);
 
-replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010924, 2, 22932, 1, 'A Curious Leaf', 32, '');
+replace into gameobject_template (entry, type, displayid, size, name, flags, script_name) values (2010924, 2, 22932, 1, 'A Curious Leaf', 32, 'go_curious_leaf');
+
+set @magic_number = 2010924;
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Plant holds mysterious leafs that look to have grown out of place in Mulgore.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
 (60830,1646,'Mysterious Leaf',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
@@ -1785,6 +1789,8 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '2', '0', '0', '0', '0', '0', '8', '0', '0', '0', '100', '0', '0', '0', '0', '48', '0', '0', '0',
  '0', '1', NULL);
+
+update item_template set inventory_type = 26 where entry = 60624;
 
 -- Roses are Red, Dragons are Blue...
 delete from quest_template where entry = 40648;

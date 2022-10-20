@@ -2518,6 +2518,9 @@ REPLACE INTO creature_loot_template VALUES (60878, 30023, 0.025, 0, -30023, 1, 0
 REPLACE INTO creature_loot_template VALUES (60878, 30024, 1, 0, -30024, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60878, 30037, 5, 0, -30037, 1, 0);
 REPLACE INTO creature_loot_template VALUES (60878, 30038, 1, 0, -30038, 1, 0);
+-- NPC Technician Steelbolt needs to be doing the 'work/craft' emote
+REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipment_id`, `stand_state`, `sheath_state`, `emote_state`, `auras`) VALUES
+(2572351, 0, 0, 0, 0, 0, 173, NULL);
 -- Bramblethorn Quilboar, display ID 6093, level 15-16, faction 16, humanoid, scale 1.1, weapon1 : 13820
 -- Bramblethorn Boar, display ID 3027, level 15-16, faction 16, beast, scale 1, casts 7371 at start of fight
 -- Bramblethorn Thornweaver, display ID 6077, level 16-17, humanoid, scale 1.1 , waepon1 14706 (Has 623 mana, casts 782 on self at start of fight, casts 5178 every 3 seconds)
