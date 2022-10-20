@@ -483,6 +483,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "status",            SEC_ADMINISTRATOR,           false, &ChatHandler::HandleBGStatusCommand,         "", nullptr},
         { "start",             SEC_ADMINISTRATOR,           false, &ChatHandler::HandleBGStartCommand,          "", nullptr},
         { "stop",              SEC_ADMINISTRATOR,           false, &ChatHandler::HandleBGStopCommand,           "", nullptr},
+        { "",                  SEC_ADMINISTRATOR,           false, &ChatHandler::HandleBGCustomCommand,         "", nullptr },
         { nullptr,             0,                        false, nullptr,                                     "", nullptr}
     };
 

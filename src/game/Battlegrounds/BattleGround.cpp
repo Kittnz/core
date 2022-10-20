@@ -182,6 +182,7 @@ BattleGround::BattleGround()
     m_LevelMin          = 0;
     m_LevelMax          = 0;
     m_InBGFreeSlotQueue = false;
+    m_playerSkinReflootId = 0;
 
     m_MaxPlayersPerTeam = 0;
     m_MaxPlayers        = 0;
@@ -1795,4 +1796,35 @@ void BattleGround::StopBattleGround()
 {
     m_PrematureCountDown      = true;
     m_PrematureCountDownTimer = 100;
+}
+
+void BattleGround::HandleCommand(Player* player, ChatHandler* handler, char* args)
+{
+    std::stringstream in(args);
+    std::string commandType;
+    in >> commandType;
+    if (commandType == "event")
+    {
+        in >> commandType;
+        bool spawn = false;
+        bool force = true;
+        int event1, event2;
+        if (commandType == "spawn")
+            spawn = true;
+        in >> event1 >> event2;
+        in >> commandType;
+        if (commandType == "respawn")
+            force = false;
+        SpawnEvent(event1, event2, spawn, force);
+        handler->PSendSysMessage("Event (%u, %u) %s", event1, event2, spawn ? "spawned" : "despawned");
+    }
+    else if (commandType == "eventi")
+    {
+        int eventIdx;
+        in >> eventIdx;
+        handler->PSendSysMessage("Event %u current status: %u", eventIdx, m_ActiveEvents[eventIdx]);
+        for (int j = 0; j < 0xFF; ++j)
+            if (!m_EventObjects[MAKE_PAIR32(eventIdx, j)].gameobjects.empty() || !m_EventObjects[MAKE_PAIR32(eventIdx, j)].creatures.empty())
+                handler->PSendSysMessage("Event (%u, %u): %u gobj / %u creatures", eventIdx, j, m_EventObjects[MAKE_PAIR32(eventIdx, j)].gameobjects.size(), m_EventObjects[MAKE_PAIR32(eventIdx, j)].creatures.size());
+    }
 }

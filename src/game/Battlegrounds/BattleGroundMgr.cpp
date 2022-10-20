@@ -1244,7 +1244,7 @@ BattleGround * BattleGroundMgr::CreateNewBattleGround(BattleGroundTypeId bgTypeI
 }
 
 // used to create the BG templates
-uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 MinPlayersPerTeam, uint32 MaxPlayersPerTeam, uint32 LevelMin, uint32 LevelMax, uint32 AllianceWinSpell, uint32 AllianceLoseSpell, uint32 HordeWinSpell, uint32 HordeLoseSpell, char const* BattleGroundName, uint32 MapID, float Team1StartLocX, float Team1StartLocY, float Team1StartLocZ, float Team1StartLocO, float Team2StartLocX, float Team2StartLocY, float Team2StartLocZ, float Team2StartLocO)
+uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 minPlayersPerTeam, uint32 maxPlayersPerTeam, uint32 levelMin, uint32 levelMax, uint32 allianceWinSpell, uint32 allianceLoseSpell, uint32 hordeWinSpell, uint32 hordeLoseSpell, char const* battleGroundName, uint32 mapID, float team1StartLocX, float team1StartLocY, float team1StartLocZ, float team1StartLocO, float team2StartLocX, float team2StartLocY, float team2StartLocZ, float team2StartLocO, uint32 playerSkinReflootId)
 {
     // Create the BG
     BattleGround *bg = nullptr;
@@ -1270,20 +1270,21 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 M
             break;                           // placeholder for non implemented BG
     }
 
-    bg->SetMapId(MapID);
+    bg->SetMapId(mapID);
     bg->SetTypeID(bgTypeId);
-    bg->SetMinPlayersPerTeam(MinPlayersPerTeam);
-    bg->SetMaxPlayersPerTeam(MaxPlayersPerTeam);
-    bg->SetMinPlayers(MinPlayersPerTeam * 2);
-    bg->SetMaxPlayers(MaxPlayersPerTeam * 2);
-    bg->SetAllianceWinSpell(AllianceWinSpell);
-    bg->SetAllianceLoseSpell(AllianceLoseSpell);
-    bg->SetHordeWinSpell(HordeWinSpell);
-    bg->SetHordeLoseSpell(HordeLoseSpell);
-    bg->SetName(BattleGroundName);
-    bg->SetTeamStartLoc(ALLIANCE, Team1StartLocX, Team1StartLocY, Team1StartLocZ, Team1StartLocO);
-    bg->SetTeamStartLoc(HORDE,    Team2StartLocX, Team2StartLocY, Team2StartLocZ, Team2StartLocO);
-    bg->SetLevelRange(LevelMin, LevelMax);
+    bg->SetMinPlayersPerTeam(minPlayersPerTeam);
+    bg->SetMaxPlayersPerTeam(maxPlayersPerTeam);
+    bg->SetMinPlayers(minPlayersPerTeam * 2);
+    bg->SetMaxPlayers(maxPlayersPerTeam * 2);
+    bg->SetAllianceWinSpell(allianceWinSpell);
+    bg->SetAllianceLoseSpell(allianceLoseSpell);
+    bg->SetHordeWinSpell(hordeWinSpell);
+    bg->SetHordeLoseSpell(hordeLoseSpell);
+    bg->SetName(battleGroundName);
+    bg->SetTeamStartLoc(ALLIANCE, team1StartLocX, team1StartLocY, team1StartLocZ, team1StartLocO);
+    bg->SetTeamStartLoc(HORDE,    team2StartLocX, team2StartLocY, team2StartLocZ, team2StartLocO);
+    bg->SetLevelRange(levelMin, levelMax);
+    bg->SetPlayerSkinRefLootId(playerSkinReflootId);
 
     // add bg to update list
     AddBattleGround(bg->GetInstanceID(), bg->GetTypeID(), bg);
@@ -1324,7 +1325,7 @@ void BattleGroundMgr::ReloadBGPlayerCounts()
 void BattleGroundMgr::CreateInitialBattleGrounds()
 {
     //                                                                0     1                       2                       3            4            5                     6                      7                  8                   9                          10
-    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `id`, `min_players_per_team`, `max_players_per_team`, `min_level`, `max_level`, `alliance_win_spell`, `alliance_lose_spell`, `horde_win_spell`, `horde_lose_spell`, `alliance_start_location`, `horde_start_location` FROM `battleground_template`"));
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `id`, `min_players_per_team`, `max_players_per_team`, `min_level`, `max_level`, `alliance_win_spell`, `alliance_lose_spell`, `horde_win_spell`, `horde_lose_spell`, `alliance_start_location`, `horde_start_location`, `player_loot_id` FROM `battleground_template`"));
 
     if (!result)
     {
@@ -1414,6 +1415,16 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
             continue;
         }
 
+        uint32 playerSkinReflootId = fields[11].GetUInt32();
+        if (playerSkinReflootId && !ExistsRefLootTemplate(playerSkinReflootId))
+        {
+            playerSkinReflootId = 0;
+            sLog.outErrorDb("Table `battleground_template` for id %u associated with nonexistent refloot id %u. Setting to 0.", bgTypeID, playerSkinReflootId);
+        }
+
+        if (playerSkinReflootId)
+            m_usedRefloot.insert(playerSkinReflootId);
+
         uint32 mapId = GetBattleGrounMapIdByTypeId(bgTypeID);
         char const* name;
 
@@ -1433,7 +1444,7 @@ void BattleGroundMgr::CreateInitialBattleGrounds()
         }
 
         //DETAIL_LOG("Creating battleground %s, %u-%u", bl->name[sWorld.GetDBClang()], MinLvl, MaxLvl);
-        if (!CreateBattleGround(bgTypeID, MinPlayersPerTeam, MaxPlayersPerTeam, MinLvl, MaxLvl, AllianceWinSpell, AllianceLoseSpell, HordeWinSpell, HordeLoseSpell, name, mapId, AStartLoc[0], AStartLoc[1], AStartLoc[2], AStartLoc[3], HStartLoc[0], HStartLoc[1], HStartLoc[2], HStartLoc[3]))
+        if (!CreateBattleGround(bgTypeID, MinPlayersPerTeam, MaxPlayersPerTeam, MinLvl, MaxLvl, AllianceWinSpell, AllianceLoseSpell, HordeWinSpell, HordeLoseSpell, name, mapId, AStartLoc[0], AStartLoc[1], AStartLoc[2], AStartLoc[3], HStartLoc[0], HStartLoc[1], HStartLoc[2], HStartLoc[3], playerSkinReflootId))
             continue;
     }
     while (result->NextRow());

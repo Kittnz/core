@@ -2030,7 +2030,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     target->RemoveAurasDueToSpell(29660);
                 break;
             }
-
             case 45568: // Proclaim Champion (Custom)
             {
                 auto caster = GetCaster();
@@ -2043,8 +2042,14 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 target->RemoveAurasDueToSpell(45569);
                 auto playerCaster = caster->ToPlayer();
                 playerCaster->SetChampion(ObjectGuid{});
-
-            }break;
+                break;
+            }
+            case 46434: // Burning Blood Visual (Custom)
+            {
+                if (target->IsAlive())
+                    target->m_Events.AddLambdaEventAtOffset([target]() { target->CastSpell(target, 3240, true); }, 500);
+                break;
+            }
         }
 
         if (m_removeMode == AURA_REMOVE_BY_DEATH) // redundant, AM is cancelled in aura holder removal
@@ -4124,20 +4129,27 @@ void Aura::HandleAuraModEffectImmunity(bool apply, bool /*Real*/)
 {
     Unit *target = GetTarget();
 
-    // when removing flag aura, handle flag drop
-    if (target->IsPlayer() && !target->HasAuraType(SPELL_AURA_MOD_POSSESS) && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION))
+    
+    if (target->IsPlayer())
     {
         Player* player = static_cast<Player*>(target);
 
-        if (apply)
-            player->pvpInfo.isPvPFlagCarrier = true;
-        else
+        // when removing flag aura, handle flag drop
+        if (!target->HasAuraType(SPELL_AURA_MOD_POSSESS) && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION))
         {
-            player->pvpInfo.isPvPFlagCarrier = false;
+            if (apply)
+                player->pvpInfo.isPvPFlagCarrier = true;
+            else
+            {
+                player->pvpInfo.isPvPFlagCarrier = false;
 
-            if (BattleGround* bg = player->GetBattleGround())
-                bg->EventPlayerDroppedFlag(player);
+                if (BattleGround* bg = player->GetBattleGround())
+                    bg->EventPlayerDroppedFlag(player);
+            }
         }
+        // Ryson's All Seeing Eye - drop the eye
+        if (!apply && GetId() == 21546 && player->GetMapId() == 30 && !player->FindNearestCreature(13151, 10.0f))
+            player->CastSpell(player, 21545, true);
     }
 
     target->ApplySpellImmune(GetId(), IMMUNITY_EFFECT, m_modifier.m_miscvalue, apply);

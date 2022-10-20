@@ -219,6 +219,7 @@ class ChatHandler
         bool HandleBGStatusCommand(char *args);
         bool HandleBGStartCommand(char *args);
         bool HandleBGStopCommand(char *args);
+        bool HandleBGCustomCommand(char* args);
         // Other
         bool HandleFreezeCommand(char *args);
         bool HandleUnfreezeCommand(char *args);
