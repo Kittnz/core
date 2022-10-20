@@ -7,43 +7,46 @@ struct custom_dungeon_portal : public GameObjectAI
         m_uiUpdateTimer = 300;
     }
 
-    uint32 m_uiUpdateTimer;
+    std::uint32_t m_uiUpdateTimer{};
 
     void UpdateAI(uint32 const uiDiff) override
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            using namespace std;
-            using namespace MaNGOS;
+            std::list<Player*> lPlayers;
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 4.f, true, false);
+            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(lPlayers, check);
+            Cell::VisitWorldObjects(me, searcher, 4.f);
 
-            list<Player*> players;
-            AnyPlayerInObjectRangeCheck check(me, 4.0f, true, false);
-            PlayerListSearcher<AnyPlayerInObjectRangeCheck> searcher(players, check);
-            Cell::VisitWorldObjects(me, searcher, 4.0f);
-
-            for (Player* player : players)
+            for (Player* pPlayer : lPlayers)
             {
-                bool available = true;
+                bool available{ true };
 
                 switch (me->GetEntry())
                 {
-                case 112920: // Scarlet Citadel
-                    player->GetSession()->SendNotification("This raid is currently not available.");
-                    available = false;
-                    break;
-                case 112923: // Caverns of Time Placeholder Portal I  (Entrance)
-                case 112924: // Caverns of Time Placeholder Portal II (Entrance)
-                case 112915: // Black Morass
-                    player->GetSession()->SendNotification("This dungeon is currently not available.");
-                    available = false;
-                    break;
+                    case 112920: // Scarlet Citadel
+                    {
+                        pPlayer->GetSession()->SendNotification("This raid is currently not available.");
+                        available = false;
+                        break;
+                    }
+                    case 112923: // Caverns of Time Placeholder Portal I  (Entrance)
+                    case 112924: // Caverns of Time Placeholder Portal II (Entrance)
+                    case 112915: // Black Morass
+                    {
+                        pPlayer->GetSession()->SendNotification("This dungeon is currently not available.");
+                        available = false;
+                        break;
+                    }
                 }
-                if (!player->IsAlive())
+
+                if (!pPlayer->IsAlive())
                 {
-                    player->ResurrectPlayer(0.5f);
-                    player->SpawnCorpseBones();
+                    pPlayer->ResurrectPlayer(.5f);
+                    pPlayer->SpawnCorpseBones();
                 }
-                array<tuple<uint32, WorldLocation, int32>, 10> portals_and_locations =
+
+                std::array<std::tuple<std::uint32_t, WorldLocation, std::uint32_t>, 10> portals_and_locations =
                 { {
                     { 181580, WorldLocation{800, -11068.1F, -1806.4F, 52.7F, 1.5F}, 55 },  // Karazhan Crypt (Entrance)
                     { 181581, WorldLocation{0, -11068.9F, -1828.6F, 60.26F, 3.1F},  1 },   // Karazhan Crypt (Exit)
@@ -56,26 +59,34 @@ struct custom_dungeon_portal : public GameObjectAI
                     { 112940, WorldLocation{808, -8173.9F, -3120.6F, 199.8F, 4.7F}, 48 },  // Hateforge Quarry (Entrance)
                     { 112941, WorldLocation{0, -8169.2F, -3106.71F, 200.4F, 1.1F},  1 },   // Hateforge Quarry (Exit)   
                 } };
+
                 for (auto const& teleport : portals_and_locations)
                 {
                     const auto& [portal_id, destination, min_level] = teleport;
                     if (me->GetEntry() == portal_id)
                     {
 
-                        if (player->GetLevel() >= min_level)
+                        if (pPlayer->GetLevel() >= min_level)
                         {
-                            if (available)
-                                player->TeleportTo(destination);
+                            if (available || pPlayer->IsGameMaster())
+                            {
+                                pPlayer->TeleportTo(destination);
+                            }
                         }
                         else
-                            player->GetSession()->SendNotification("Your level is too low.");
+                        {
+                            pPlayer->GetSession()->SendNotification("Your level is too low.");
+                        }
                     }
                 }
             }
-            m_uiUpdateTimer = 300;
+
+            m_uiUpdateTimer = 500;
         }
         else
+        {
             m_uiUpdateTimer -= uiDiff;
+        }
     }
 };
 

@@ -10,6 +10,16 @@ scriptPCH.h
 battlegrounds/battleground.cpp
 battlegrounds/battleground_alterac.cpp
 battlegrounds/battleground_sunnyglade.cpp
+dungeons/black_morass/black_morass.h
+dungeons/black_morass/black_morass_trash.cpp
+dungeons/black_morass/black_morass_trash.hpp
+dungeons/black_morass/boss_chromie.cpp
+dungeons/black_morass/boss_chromie.hpp
+dungeons/black_morass/boss_chronormu.cpp
+dungeons/black_morass/boss_chronormu.hpp
+dungeons/black_morass/boss_gerastrasz.cpp
+dungeons/black_morass/boss_gerastrasz.hpp
+dungeons/black_morass/instance_black_morass.cpp
 dungeons/blackfathom_deeps/blackfathom_deeps.h
 dungeons/blackfathom_deeps/instance_blackfathom_deeps.cpp
 dungeons/blackrock_depths/arena_challenge_ai.cpp
@@ -50,10 +60,6 @@ dungeons/blackwing_lair/boss_razorgore.cpp
 dungeons/blackwing_lair/boss_vaelastrasz.cpp
 dungeons/blackwing_lair/boss_victor_nefarius.cpp
 dungeons/blackwing_lair/instance_blackwing_lair.cpp
-dungeons/caverns_of_time/black_morass/black_morass_trash.cpp
-dungeons/caverns_of_time/black_morass/black_morass_trash.hpp
-dungeons/caverns_of_time/black_morass/instance_black_morass.cpp
-dungeons/caverns_of_time/black_morass/instance_black_morass.h
 dungeons/deadmines/boss_mr_smite.cpp
 dungeons/deadmines/deadmines.cpp
 dungeons/deadmines/deadmines.h
@@ -193,6 +199,7 @@ dungeons/stratholme/boss_nerubenkan.cpp
 dungeons/stratholme/boss_order_of_silver_hand.cpp
 dungeons/stratholme/boss_postmaster_malown.cpp
 dungeons/stratholme/boss_ramstein_the_gorger.cpp
+dungeons/stratholme/boss_sc_attunement.cpp
 dungeons/stratholme/boss_timmy_the_cruel.cpp
 dungeons/stratholme/instance_stratholme.cpp
 dungeons/stratholme/stratholme.cpp

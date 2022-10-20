@@ -637,6 +637,8 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (Creature* pRanshalla = ToCreature(unitTarget))
                         pRanshalla->ForcedDespawn();
+
+                    return;
                 }
                 case 23383: // Alliance Flag Click
                 case 23384: // Horde Flag Click
@@ -1959,13 +1961,17 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        float dis{ 2.0F };
-                        float x, y, z;
-                        m_caster->GetSafePosition(x, y, z);
-                        x += dis * cos(m_caster->GetOrientation());
-                        y += dis * sin(m_caster->GetOrientation());
-                        m_caster->SummonGameObject(1000333, x, y, z, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120, true);
+                        const float fDist{ 2.f };
+
+                        float fX{}, fY{}, fZ{};
+                        m_caster->GetSafePosition(fX, fY, fZ);
+
+                        fX += (fDist * cos(m_caster->GetOrientation()));
+                        fY += (fDist * sin(m_caster->GetOrientation()));
+
+                        m_caster->SummonGameObject(1000333, fX, fY, fZ, 0.f, 0.f, 0.f, 0.f, 0.f, 120, true);
                     }
+
                     return;
                 }
                 case 46001: // Portable Mailbox
@@ -2489,11 +2495,16 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             m_casterUnit->CastCustomSpell(m_casterUnit, 45709, &healthModSpellBasePoints0, nullptr, nullptr, true, nullptr);
                         }
                     }
-                }break;
-
+                    break;
+                }
                 case 5229:                                  // Enrage
                 {
+                    if (!unitTarget)
+                        return;
+
                     // Reduce base armor by 27% in Bear Form and 16% in Dire Bear Form
+                    int32 reductionMod = unitTarget->HasAura(9634) ? -16 : -27;
+                    unitTarget->CastCustomSpell(unitTarget, 25503, &reductionMod, nullptr, nullptr, true);
                     break;
                 }
                 case 29201: // Loatheb Corrupted Mind triggered sub spells

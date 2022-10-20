@@ -3642,9 +3642,461 @@ struct npc_carver_molsenAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_carver_molsen(Creature* _Creature) { return new npc_carver_molsenAI(_Creature); }
 
+struct npc_sellick_vossAI : public ScriptedAI
+{
+    npc_sellick_vossAI(Creature* c) : ScriptedAI(c) { Reset(); }
+
+    void Reset() {}
+    void UpdateAI(const uint32 diff)
+    {
+        DoMeleeAttackIfReady();
+    }
+    void Aggro(Unit* who)
+    {
+        m_creature->MonsterSay("Theramore was weak, to side with the Horde is betrayal after all who died! We will not be stopped so easily, the Vengeful Mariner will not forget!");
+    }
+    void JustRespawned() { Reset(); }
+};
+
+CreatureAI* GetAI_npc_sellick_voss(Creature* _Creature) { return new npc_sellick_vossAI(_Creature); }
+
+bool GOHello_go_abandoned_murloc(Player* pPlayer, GameObject* pGo)
+{
+    if (pPlayer->GetQuestStatus(40541) == QUEST_STATUS_INCOMPLETE)
+    {
+        if (pGo->GetEntry() == 2010918)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Check the Murloc Hut.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30033, pGo->GetGUID());
+        }
+
+        if (pGo->GetEntry() == 2010919)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Check the Murloc Nest.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->SEND_GOSSIP_MENU(30034, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_abandoned_murloc(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60383))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (action == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60384))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GossipHello_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40554) == QUEST_STATUS_INCOMPLETE) // The Shield's Owner
+    {
+        Creature* talmand = pPlayer->FindNearestCreature(60949, 10.0F);
+        Creature* sleightor = pPlayer->FindNearestCreature(60950, 10.0F);
+        Creature* valnor = pPlayer->FindNearestCreature(60951, 10.0F);
+        if (talmand)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
+        }
+        if (sleightor)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+            pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
+        }
+        if (valnor)
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Ask him about Tauren presence in Dustwallow Marsh.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+            pPlayer->SEND_GOSSIP_MENU(60821, pCreature->GetGUID());
+        }
+    }
+
+    return true;
+}
+
+bool GossipSelect_npc_private_q_shields_owner(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->MonsterSay("Oh yes, a sizable force moved here recently... Very recently. They are the Grimtotem Tauren, though. At odds with the horde, as far as I am concerned. Good. Let them fight among themselves.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60385))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pCreature->MonsterSay("A Tauren? Well, I haven't seen any in a long time here. I heard something about Grimtotem in the north? You could have greater success asking closer to the Brackenwall Village. Maybe they know of some Tauren newcomers.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60386))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pCreature->MonsterSay("Let me think... No, I haven't seen any come here recently. Brackenwall Village is a remote outpost, and they barely have anything to trade. On the other hand, I remember one tauren fellow living in Brackenwall. We fought side by side during… the siege... Haven\'t seen him in ages. He probably drowned in the swamp.");
+        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60387))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool GossipHello_npc_bert_mano(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40567) == QUEST_STATUS_INCOMPLETE) // Sleepwalking at Day
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, your wife seems to think she has evidence of you with another woman.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    if (pPlayer->GetQuestStatus(40571) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(10, 40.0F) && !pPlayer->FindNearestCreature(60954, 40.0F)) // Strange Bedfellows
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "<Present the Felbound Pendant.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(52017, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_bert_mano(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30035, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60391))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (pPlayer->FindNearestCreature(52017, 40.0F))
+        {
+            pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 0.06 * MINUTE * IN_MILLISECONDS);
+
+            pCreature->MonsterSay("Oh, you will regret doing that, Dear.");
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->SummonCreature(60954, pCreature->GetPositionX() + 2, pCreature->GetPositionY() + 2, pCreature->GetPositionZ() + 2, pCreature->GetOrientation() + 3.14, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0.1 * MINUTE * IN_MILLISECONDS);
+                }, 3000);
+
+        }
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
+bool GossipHello_npc_broter_neals(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40597) == QUEST_STATUS_INCOMPLETE) // The Old Church of Westfall V
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, what exactly happened in Westfall?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(952, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_broter_neals(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("Well, where to begin? I traveled to Westfall and helped establish a church there. The locals were extremely friendly, religious folk themselves, and assisted in whatever manner they could. Me and them both brought the community together, created strong bonds and helped eachother when we were able.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("There was trouble though, between two families, the Molsen and Easton, a land dispute of sorts that dated back a generation, marriage problems between them, who owned what, and which property belonged to who. The Molsens got it in their head that they would inherit the Easton estate, especially a young one, went by the name Carver, a ruffian of a lad, who got himself into all sorts of trouble.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("It was around this time that the thugs began to show up, the boy Carver was quick to join them. The Defias threatened families to leave their land with acts of violence and murder. Soon after the Easton family was murdered in cold blood, and many other families simply left, not wanting to face similar fates.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            npc->MonsterSay("Less, and less showed up to my church, I had a small following, but the Defias made their presence known, threatened me to leave, and even beat me near death for refusing. I was stubborn, but not stubborn enough to die. So I left for Stormwind, where my tale continues now.");
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60392))
+                player->KilledMonster(cInfo, ObjectGuid());
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            });
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestRewarded_npc_broter_neals(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40603) // The Old Church of Westfall XI
+    {
+        pQuestGiver->MonsterSay("Thanks for what you've done. The memories I hold in that church will not be forgotten, and perhaps, in time, there can be more made there when the land heals and the crops are sown. If the light is so gracious, we may have such a future, farewell, may your travels be safe now, ya hear?");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool QuestAccept_npc_gryan_stoutmantle(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40603) // The Old Church of Westfall XI
+    {
+        if (!pPlayer->HasItemCount(60842, 1))
+        {
+            if (pPlayer->AddItem(60842))
+                first_item_added = true;
+        }
+        else
+            first_item_added = true;
+
+        if (!pPlayer->HasItemCount(60846, 1))
+        {
+            if (pPlayer->AddItem(60846))
+                second_item_added = true;
+        }
+        else
+            second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            pPlayer->RemoveQuest(40603);
+            pPlayer->SetQuestStatus(40603, QUEST_STATUS_NONE);
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_segwar_ironback(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40608) // Salvaging the Crops
+    {
+        pQuestGiver->MonsterSay("Without your effort we would have had to start fresh all over again, those blasted buzzards ruin everything!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_khan_jehn(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40616) == QUEST_STATUS_INCOMPLETE) // One of Us
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Jochi sent me to you, Great Khan.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(560101, pCreature->GetGUID());
+        return true;
+    }
+
+    else
+    {
+        pPlayer->SEND_GOSSIP_MENU(5601, pCreature->GetGUID());
+        return true;
+    }
+}
+
+bool GossipSelect_npc_khan_jehn(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "No.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " <Drink the blood.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(560102, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60393))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_khan_jehn(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40616) // One of Us
+    {
+        pQuestGiver->MonsterYell("You are one of us now, the Magram has a champion! You shall bring us to victory!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_SHOUT);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_khan_shaka(Player* pPlayer, Creature* pCreature)
+{
+    if (pPlayer->GetQuestStatus(40629) == QUEST_STATUS_INCOMPLETE) // An Honorary Gelkis
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Yesu'gei said I have been summoned by you.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    pPlayer->SEND_GOSSIP_MENU(5602, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_khan_shaka(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "No.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, " <Inhale deeply.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(560201, pCreature->GetGUID());
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60394))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+
+        pPlayer->CLOSE_GOSSIP_MENU();
+    }
+
+    return true;
+}
+
+bool QuestRewarded_npc_khan_shaka(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40629) // An Honorary Gelkis
+    {
+        pQuestGiver->MonsterSay("You are now blessed, you are the Earthstrider of our kin, the first to walk amongst us as an outsider, we honor you and your aid to the Gelkis cause.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_nazz_firecracker(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40642) // Lighting the Oilmaster
+    {
+        pQuestGiver->MonsterSay("You make this old man proud, kid... Not only did you take over those oilfields like it was your own backyard, but you've proudly delivered it into the Union's hands, with employees at that. That's right, some of the survivors even agreed to join us! You've made our little town just a bit safer, well as safe as it could be!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_WAVE);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_nazz_firecracker";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_nazz_firecracker;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_khan_shaka";
+    newscript->pGossipHello = &GossipHello_npc_khan_shaka;
+    newscript->pGossipSelect = &GossipSelect_npc_khan_shaka;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_khan_shaka;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_khan_jehn";
+    newscript->pGossipHello = &GossipHello_npc_khan_jehn;
+    newscript->pGossipSelect = &GossipSelect_npc_khan_jehn;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_khan_jehn;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_segwar_ironback";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_segwar_ironback;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_gryan_stoutmantle";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_gryan_stoutmantle;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_broter_neals";
+    newscript->pGossipHello = &GossipHello_npc_broter_neals;
+    newscript->pGossipSelect = &GossipSelect_npc_broter_neals;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_broter_neals;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_bert_mano";
+    newscript->pGossipHello = &GossipHello_npc_bert_mano;
+    newscript->pGossipSelect = &GossipSelect_npc_bert_mano;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_private_q_shields_owner";
+    newscript->pGossipHello = &GossipHello_npc_private_q_shields_owner;
+    newscript->pGossipSelect = &GossipSelect_npc_private_q_shields_owner;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_abandoned_murloc";
+    newscript->pGOHello = &GOHello_go_abandoned_murloc;
+    newscript->pGOGossipSelect = &GOSelect_go_abandoned_murloc;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_sellick_voss";
+    newscript->GetAI = &GetAI_npc_sellick_voss;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_carver_molsen";

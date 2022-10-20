@@ -578,6 +578,12 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                                 }
                             }
                         }
+
+                        if (appendValue & UNIT_NPC_FLAG_ITEMRESTORE)
+                        {
+                            appendValue &= ~UNIT_NPC_FLAG_ITEMRESTORE;
+                            appendValue |= UNIT_NPC_FLAG_VENDOR;
+                        }
                     }
 
                     *data << uint32(appendValue);
@@ -3875,6 +3881,10 @@ float WorldObject::GetSpellResistChance(Unit const* victim, uint32 schoolMask, b
         resistModHitChance = (float(resistModHitChance) / skill) * 100;
         return (resistModHitChance * 0.01f);
     }
+
+    // Turtle: no resist chance for holy school
+    if (schoolMask & SPELL_SCHOOL_MASK_HOLY)
+        return 0.0f;
 
     uint32 const uiLevel = GetLevel();
 
