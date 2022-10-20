@@ -1706,6 +1706,15 @@ bool Map::SendToPlayersInZone(WorldPacket const* data, uint32 zoneId) const
     return foundPlayer;
 }
 
+void Map::SendToAllGMsNotInGroup(WorldPacket const* data, Group* pGroup) const
+{
+    for (const auto& itr : m_mapRefManager)
+    {
+        if (itr.getSource()->IsGameMaster() && itr.getSource()->GetGroup() != pGroup)
+            itr.getSource()->GetSession()->SendPacket(data);
+    }
+}
+
 bool Map::ActiveObjectsNearGrid(uint32 x, uint32 y) const
 {
     MANGOS_ASSERT(x < MAX_NUMBER_OF_GRIDS);
