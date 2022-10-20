@@ -1604,9 +1604,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60879, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60880, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60881, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60879, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60881, 0, 0, 0, 0);
 
 update item_template set required_reputation_rank = 5 where entry in (60879,60880,60881);
 -- Add the following items to Deathcaller Aisha's sell list for 'REVERED' reputation requirement
@@ -1640,9 +1640,9 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '46', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60882, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60883, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60884, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60882, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60883, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60884, 0, 0, 0, 0);
 
 update item_template set required_reputation_rank = 6 where entry in (60882,60883,60884);
 -- Add the following items to Deathcaller Aisha's sell list for 'EXALTED' reputation requirement
@@ -1656,7 +1656,7 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '120', '0', '0', '0', '0', '46', '0', '0', '0',
  '0', '1', NULL);
 
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 0, 60885, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60885, 0, 0, 0, 0);
 
 update item_template set required_reputation_rank = 7 where entry in (60885);
 
