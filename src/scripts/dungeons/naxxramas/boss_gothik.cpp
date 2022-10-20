@@ -158,7 +158,12 @@ struct boss_gothikAI : public ScriptedAI
     void KilledUnit(Unit* pVictim) override
     {
         if (pVictim->GetTypeId() == TYPEID_PLAYER)
-            DoScriptText(SAY_KILL, m_creature);
+        {
+            if (urand(0, 1))
+            {
+                DoScriptText(SAY_KILL, m_creature);
+            }
+        }
     }
 
     void JustDied(Unit* pKiller) override

@@ -140,6 +140,7 @@ void AddSC_boss_nerubenkan();
 void AddSC_boss_cannon_master_willey();
 void AddSC_boss_baroness_anastari();
 void AddSC_boss_ramstein_the_gorger();
+void AddSC_boss_sc_attunement();
 void AddSC_boss_timmy_the_cruel();
 void AddSC_boss_postmaster_malown();
 void AddSC_boss_dathrohan_balnazzar();
@@ -307,6 +308,9 @@ void AddSC_instance_stormwind_vaults();
 // Black Morass
 void AddSC_black_morass_trash();
 void AddSC_instance_black_morass();
+void AddSC_boss_gerastrasz();
+void AddSC_boss_chronormu();
+void AddSC_boss_chromie();
 
 // Misc
 void AddSC_npc_ptr();
@@ -449,6 +453,7 @@ void AddScripts()
     AddSC_boss_cannon_master_willey();
     AddSC_boss_baroness_anastari();
     AddSC_boss_ramstein_the_gorger();
+    AddSC_boss_sc_attunement();
     AddSC_boss_timmy_the_cruel();
     AddSC_boss_postmaster_malown();
     AddSC_boss_dathrohan_balnazzar();
@@ -615,6 +620,9 @@ void AddScripts()
     // Black Morass
     AddSC_black_morass_trash();
     AddSC_instance_black_morass();
+    AddSC_boss_gerastrasz();
+    AddSC_boss_chronormu();
+    AddSC_boss_chromie();
 
     // Misc
     AddSC_npc_ptr();
