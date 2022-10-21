@@ -38,3 +38,11 @@ UPDATE `item_template` SET `display_id` = 28911 WHERE `entry` = 60624;
 DELETE FROM `creature_loot_template` WHERE `entry` = 92147 AND `item` = 60208;
 UPDATE `creature_template` SET `npc_flags` = 16390 WHERE `entry` = 92172;
 UPDATE `creature_template` SET `subname` = 'Blacksmithing Supplies' WHERE `entry` = 92172;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2324
+
+update item_template set disenchant_id = 8 where entry = 10039;
+update item_template set disenchant_id = 8 where entry = 10011;
+update item_template set disenchant_id = 8 where entry = 10010;
+update item_template set disenchant_id = 8 where entry = 10038;
+update item_template set disenchant_id = 8 where entry = 10020;
