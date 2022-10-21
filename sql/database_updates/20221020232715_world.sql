@@ -67,3 +67,5 @@ REPLACE INTO `gameobject` VALUES ( 5010975, 2010934, 0, -6880.58, -3766.48, 316.
 DELETE FROM gameobject WHERE guid = '5010975';
 DELETE FROM game_event_gameobject WHERE guid = '5010975';
 DELETE FROM gameobject_battleground WHERE guid = '5010975';
+UPDATE creature SET position_x = '-3121.910156', position_y = '-3241.796143', position_z = '64.350868', orientation = '2.303059' WHERE guid = '9981';
+REPLACE INTO `creature` VALUES (9981,1018,0,0,0,0,-3121.91,-3241.8,64.3509,2.30306,300,300,5,100,0,1,0,0);
