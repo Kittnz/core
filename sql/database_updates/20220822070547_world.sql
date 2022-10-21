@@ -8,7 +8,7 @@
 -- Aquamancer Shaleborn <Kul Tiras>, display ID 18956, level 17, faction 1693, humanoid, weapon 9452, has 500 mana, casts 837 every 6 seconds, (has 1.3x extra hp), quest/greeting flags. "What brings you to Anchor's Edge of all places?"
 -- Deckmaster Darkhollow <Kul Tiras>, display ID 18958, level 19, faction 1693, humanoid, weapon 1296 (Has 1.3x extra hp) (Deals 1.25x damage), quest/greeting flags : "The Deep Tide has been a loyal vessel to Kul Tiras for many years."
 -- Paladin Danuvis <Kul Tiras>, display ID 18957, level 18 elite, faction 1693, humanoid, weapon 7730, has 750 mana, (casts 5588 every 30 seconds, casts 1866 every 15 seconds) quest/greeting flags, greeting text : "Keep your faith in the light, and all shall reveal itself."
--- Lieutenant Alverold <Kul Tiras>, display ID 18971 , level 20 elite, faction 1693, humanoid, weapon 4560, (casts 28131 at 50% hp, casts 15652 every 20 seconds) , quest/greeting flags, greeting text : "Our journey has taken much longer then expected, it is about time we bring our efforts against the Horde."
+-- Lieutenant Alverold <Kul Tiras>, display ID 18971 , level 20 elite, faction 1693, humanoid, weapon 4560, (casts 28131 at 50% hp, casts 15652 every 20 seconds) , quest/greeting flags, greeting text : "Our journey has taken much longer then expected, it is about time we bring our efforts against the Horde." add /say line when he is pulled into combat: "Wretched Horde scum! You shall be unended from this earth, for all of the treachery and misery you have brought to the world! The fallen of the Alliance shall never be forgotten." add /say line when he is killed: "Kul Tiras will never forget the suffering you have brought to Azeroth... You shall never know peace.. as long as the anchor stands..."
 REPLACE INTO creature_template VALUES
 (60893, 18961, 18962, 0, 0, 0, 'Expedition Commando', 'Kul Tiras', 0, 9, 11, 198, 198, 0, 0, 455, 1693, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60894, 18959, 18960, 0, 0, 0, 'Expedition Cleric', 'Kul Tiras', 0, 15, 17, 331, 341, 300, 300, 660, 1693, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 8, 0, 0, 0, 2, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 15, 20, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -20,6 +20,22 @@ REPLACE INTO creature_template VALUES
 (60900, 18958, 0, 0, 0, 0, 'Deckmaster Darkhollow', 'Kul Tiras', 0, 19, 19, 510, 510, 0, 0, 765, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 36, 44, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 21, 32, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60901, 18971, 0, 0, 0, 0, 'Lieutenant Alverold', 'Kul Tiras', 0, 20, 20, 2904, 2904, 0, 0, 852, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 85, 110, 0, 90, 1, 2000, 2000, 1, 32832, 0, 0, 0, 0, 0, 0, 26.24, 36.08, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 102, 130, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60902, 18957, 0, 0, 0, 0, 'Paladin Danuvis', 'Kul Tiras', 0, 18, 18, 1212, 1212, 750, 750, 683, 1693, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 89, 115, 0, 90, 1, 2000, 2000, 2, 64, 0, 0, 0, 0, 0, 0, 27.4008, 37.6761, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 85, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(30046, 'Wretched Horde scum! You shall be unended from this earth, for all of the treachery and misery you have brought to the world! The fallen of the Alliance shall never be forgotten.', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30047, 'Kul Tiras will never forget the suffering you have brought to Azeroth... You shall never know peace.. as long as the anchor stands...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+delete from creature_ai_scripts where id = 2200023;
+delete from creature_ai_scripts where id = 2200024;
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(2200023, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30046, 0, 0, 0, 0, 0, 0, 0, 0, 'Lieutenant Alverold - Say on Aggro'),
+(2200024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30047, 0, 0, 0, 0, 0, 0, 0, 0, 'Lieutenant Alverold - Say upon Death');
+
+delete from creature_ai_events where id = 2200023;
+delete from creature_ai_events where id = 2200024;
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES
+(2200023, 60901, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200023, 0, 0, 'Lieutenant Alverold - Say on Aggro'),
+(2200024, 60901, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200024, 0, 0, 'Lieutenant Alverold - Say upon Death');
 
 REPLACE INTO creature_display_info_addon VALUES (18956, 0, 0, 0, 0);
 REPLACE INTO creature_display_info_addon VALUES (18957, 0, 0, 0, 0);
@@ -215,7 +231,7 @@ set @delayrepeatmin_1 = 20;
 set @delayrepeatmax_1 = 20;
 
 set @spellid_2 = 0;
-set @probability_2 = 0; 
+set @probability_2 = 0;
 set @casttarget_2 = 0; 
 set @castflags_2 = 0;
 set @delayinitialmin_2 = 0; 
@@ -278,7 +294,7 @@ set @delayrepeatmin_8 = 0;
 set @delayrepeatmax_8 = 0;
 
 -- Do not touch this part:
-update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
 where entry = @creature_entry;
 replace into creature_spells (entry, name, 
 spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
@@ -4433,7 +4449,7 @@ REPLACE INTO creature_template VALUES
 (61023, 7555, 0, 0, 0, 0, 'Westhaven Skeleton', '', 0, 35, 37, 1468, 1536, 800, 800, 1480, 21, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 51, 62, 0, 140, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 6, 0, 61023, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 59, 83, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61024, 18993, 0, 0, 0, 0, 'Senior Foreman Nazz Firecracker', 'Retired Ace', 0, 56, 56, 8397, 8397, 0, 0, 3271, 1682, 3, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_nazz_firecracker'),
 (61025, 18991, 0, 0, 0, 0, 'Mister Wick', NULL, 0, 63, 63, 22108, 22108, 0, 0, 4452, 1682, 0, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61026, 4548, 0, 0, 0, 0, 'War Crier Dar\'nakk', NULL, 0, 20, 20, 2904, 2904, 0, 0, 852, 85, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 85, 110, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 26.24, 36.08, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61026, 4548, 0, 0, 0, 0, 'War Crier Dar\'nakk', NULL, 0, 20, 20, 2904, 2904, 0, 0, 852, 85, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 85, 110, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 26.24, 36.08, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_war_crier_darnakk'),
 (61027, 6967, 6933, 0, 0, 0, 'Leprous Worker', 'Venture Co.', 0, 23, 24, 617, 664, 0, 0, 976, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 34, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 61027, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61028, 2153, 0, 0, 0, 0, 'Overseer Vermintooth', 'Venture Co.', 0, 26, 26, 787, 787, 0, 0, 1061, 47, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 61028, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61029, 7197, 0, 0, 0, 0, 'Blacksand Engineer', 'Venture Co.', 0, 23, 24, 617, 664, 0, 0, 976, 47, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 34, 43, 0, 104, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 61029, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 31, 45, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -4545,10 +4561,14 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 -- War Crier Dar\'nakk - Say every 10 min
 REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES (30038, 'The enemy draws near brothers and sisters of the Horde! Answer the call for war, and fight off the enemies that dare challenge us!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES
-(2200022, 61026, 0, 1, 0, 100, 0, 1, 1, 600, 600, 2200022, 0, 0, 'War Crier Dar\'nakk - Say every 10 min');
+
+delete from creature_ai_scripts where id = 2200022;
 REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
 (2200022, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30038, 0, 0, 0, 0, 0, 0, 0, 0, 'War Crier Dar\'nakk - Say every 10 min');
+
+delete from creature_ai_events where id = 2200022;
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES
+(2200022, 61026, 0, 1, 0, 100, 0, 1, 1, 600, 600, 2200022, 0, 0, 'War Crier Dar\'nakk - Say every 10 min');
 
 -- Almaudrak
 set @creature_entry = 61042;
@@ -5250,6 +5270,7 @@ REPLACE INTO creature_display_info_addon VALUES (18993, 0, 0, 0, 0);
 -- Bonepaw Pup, display ID 2716, faction 35, level 1, scale 0.3 
 -- Daron Truthkeeper <Renowned Scarlet Blacksmith>, display ID 1731, faction 35, level 50, scale 1, humanoid, weapon 5956, quest/greeting flags, greeting text : "<Daron looks somewhat confused by your presence.>\n\n Not often that we get outsiders, not in many years truthfully.\n\n Welcome either way, you need something?" ((Sells basic blacksmithing supplies, also can repair armor))
 -- Senator Ryedol, display ID 3460, level 30, faction 55, humanoid, greeting text : "What can I do for you $R?"
+-- Mally O'Flor, display ID 1505, level 45, faction 35, humanoid, quest/greeting flags, greeting text : "Watch yourself buddy.\n\n What do you want?"
 REPLACE INTO creature_template VALUES
 (61044, 9419, 0, 0, 0, 0, 'Yesu\'gei', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 132, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61045, 9444, 0, 0, 0, 0, 'Warleader Temukar', NULL, 0, 42, 42, 4953, 4953, 0, 0, 2246, 132, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 269, 346, 0, 172, 1, 1258, 1384, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 7, 0, 13741, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
@@ -5257,7 +5278,8 @@ REPLACE INTO creature_template VALUES
 (61048, 1068, 0, 0, 0, 0, 'Tiny Gelkis Rumbler', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61049, 2716, 0, 0, 0, 0, 'Bonepaw Pup', NULL, 0, 1, 1, 42, 42, 0, 0, 20, 35, 0, 1, 1.14286, 0.3, 18, 5, 0, 0, 1, 2, 2, 0, 44, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 1.76, 2.42, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61050, 1731, 0, 0, 0, 0, 'Daron Truthkeeper', 'Renowned Scarlet Blacksmith', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61051, 3460, 0, 0, 0, 0, 'Senator Ryedol', NULL, 0, 30, 30, 1002, 1002, 0, 0, 1188, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 43, 61, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61051, 3460, 0, 0, 0, 0, 'Senator Ryedol', NULL, 0, 30, 30, 1002, 1002, 0, 0, 1188, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 42, 53, 0, 122, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 43, 61, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61052, 1505, 0, 0, 0, 0, 'Mally O\'Flor', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 35, 3, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_mally_o_flor');
 
 set @equip_template = 20247; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61050;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -5270,6 +5292,12 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20245; set @weapon_1 = 60112; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61044;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41264; set @magic_number = 61052;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Watch yourself buddy.\n\nWhat do you want?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41263; set @magic_number = 61051;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
