@@ -1612,6 +1612,7 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60880, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60881, 0, 0, 0, 0);
 
+update item_template set required_reputation_faction = 93 where entry in (60879,60880,60881);
 update item_template set required_reputation_rank = 5 where entry in (60879,60880,60881);
 -- Add the following items to Deathcaller Aisha's sell list for 'REVERED' reputation requirement
 replace into item_template values
@@ -1648,6 +1649,7 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60883, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60884, 0, 0, 0, 0);
 
+update item_template set required_reputation_faction = 93 where entry in (60882,60883,60884);
 update item_template set required_reputation_rank = 6 where entry in (60882,60883,60884);
 -- Add the following items to Deathcaller Aisha's sell list for 'EXALTED' reputation requirement
 replace into item_template values
@@ -1662,6 +1664,7 @@ replace into item_template values
 
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60885, 0, 0, 0, 0);
 
+update item_template set required_reputation_faction = 93 where entry in (60885);
 update item_template set required_reputation_rank = 7 where entry in (60885);
 -- Add the following items to Earthcaller Jalyssa's sell list for 'HONORED' reputation requirement
 replace into item_template values
@@ -1698,6 +1701,7 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80941, 60900, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80941, 60901, 0, 0, 0, 0);
 
+update item_template set required_reputation_faction = 92 where entry in (60899,60900,60901);
 update item_template set required_reputation_rank = 5 where entry in (60899,60900,60901);
 -- Add the following items to Earthcaller Jalyssa's sell list for 'REVERED' reputation requirement
 replace into item_template values
@@ -1734,6 +1738,7 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80941, 60903, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80941, 60904, 0, 0, 0, 0);
 
+update item_template set required_reputation_faction = 92 where entry in (60902,60903,60904);
 update item_template set required_reputation_rank = 6 where entry in (60902,60903,60904);
 -- Add the following items to Earthcaller Jalyssa's sell list for 'EXALTED' reputation requirement 
 replace into item_template values
@@ -1748,7 +1753,8 @@ replace into item_template values
 
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80941, 60905, 0, 0, 0, 0);
 
-update item_template set required_reputation_rank = 6 where entry in (60905);
+update item_template set required_reputation_faction = 92 where entry in (60905);
+update item_template set required_reputation_rank = 7 where entry in (60905);
 -- ADD THE FOLLOWING ITEMS INTO PTR
 replace into item_template values
  ('60907', '4', '1', 'Windbinder Gloves', '', '19017', '3', '0', '1', '55476', '13869', '10', '-1', '-1', '65',
