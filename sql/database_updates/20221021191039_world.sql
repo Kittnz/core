@@ -22,3 +22,14 @@ UPDATE `gameobject` SET `spawntimesecsmin` = 20, `spawntimesecsmax` = 35 WHERE `
 
 UPDATE `quest_template` SET `RewOrReqMoney` = 1550 WHERE `entry` = 40368;
 UPDATE `item_template` SET `spellid_1` = 19690, `spellcharges_1` = -5 WHERE `entry` = 53003;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2245
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2062
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2243
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2242
+
+UPDATE `creature` SET `orientation` = 5.372 WHERE `guid` = 4210;
+UPDATE `creature_onkill_reputation` SET `MaxStanding1` = 6 WHERE `creature_id` = 12262;
+UPDATE `creature_onkill_reputation` SET `MaxStanding1` = 6 WHERE `creature_id` = 12263;
+UPDATE `item_template` SET `display_id` = 28911 WHERE `entry` = 60624;
+														 
