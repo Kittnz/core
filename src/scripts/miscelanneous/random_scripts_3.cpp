@@ -4161,10 +4161,102 @@ struct npc_sailor_pardolAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_sailor_pardol(Creature* _Creature) { return new npc_sailor_pardolAI(_Creature); }
 
+bool GossipHello_npc_mally_o_flor(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40670) == QUEST_STATUS_INCOMPLETE) // Information for Thrall
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your information Mally.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61052, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_mally_o_flor(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 48 * IN_MILLISECONDS);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("A few weeks ago Kul Tiras was allowed embassy within the city of Stormwind, given by Bolvar Fordragon in an attempt to improve diplomacy between the two nations.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("While things seem to be going fairly well, it is quite obvious to many that Kul Tiras is still very stubborn on their ideals and traditions, their sanctity of honor, and respect for the fallen is on par with many of the most noble paladin.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 10000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("As of current, there has been no consensus, Stormwind is not looking to be dragged into a war without good reason, I am under good authority and good information to inform of no cooperation between Kul Tiras, and the Alliance in this matter. This 'invasion' you are facing is, by our eyes, up to Thrall to handle, and deal with as he seeks fit.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 24000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("The SI:7 has given me clear authority to pass along this information for the better interest of both parties. Bring this to your leader, and let him know.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 40000);
+
+            DoAfterTime(pPlayer, 48 * IN_MILLISECONDS, [player = pPlayer]() {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60398))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestRewarded_npc_war_crier_darnakk(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40673) // Cutting Ranks
+    {
+        pQuestGiver->MonsterSay("Baha! A true soldier of the Horde! One of grit, and steel, no match for those Kul Tirans!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    if (pQuest->GetQuestId() == 40674) // Lieutenant Alverold
+    {
+        pQuestGiver->MonsterSay("Durotar stands strong, no human shall break the might of the Horde!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->MonsterSay("You have destroyed our foe $N, and showed them true might. I bow in witness of such glory, Lok'tar");
+            npc->HandleEmote(EMOTE_ONESHOT_BOW);
+            });
+    }
+
+    return false;
+}
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_war_crier_darnakk";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_war_crier_darnakk;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_mally_o_flor";
+    newscript->pGossipHello = &GossipHello_npc_mally_o_flor;
+    newscript->pGossipSelect = &GossipSelect_npc_mally_o_flor;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_sailor_pardol";
