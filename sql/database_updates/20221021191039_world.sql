@@ -31,5 +31,10 @@ UPDATE `item_template` SET `spellid_1` = 19690, `spellcharges_1` = -5 WHERE `ent
 UPDATE `creature` SET `orientation` = 5.372 WHERE `guid` = 4210;
 UPDATE `creature_onkill_reputation` SET `MaxStanding1` = 6 WHERE `creature_id` = 12262;
 UPDATE `creature_onkill_reputation` SET `MaxStanding1` = 6 WHERE `creature_id` = 12263;
-UPDATE `item_template` SET `display_id` = 28911 WHERE `entry` = 60624;
+UPDATE `item_template` SET `display_id` = 28911 WHERE `entry` = 60624;														 
 														 
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/1865
+
+DELETE FROM `creature_loot_template` WHERE `entry` = 92147 AND `item` = 60208;
+UPDATE `creature_template` SET `npc_flags` = 16390 WHERE `entry` = 92172;
+UPDATE `creature_template` SET `subname` = 'Blacksmithing Supplies' WHERE `entry` = 92172;
