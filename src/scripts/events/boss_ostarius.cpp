@@ -662,7 +662,7 @@ struct mob_uldum_constructAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff) override
     {
-        if (!me->GetVictim())
+        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
         if (channelStarted)
