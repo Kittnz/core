@@ -15,3 +15,10 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 UPDATE `gameobject` SET `spawntimesecsmin` = 20, `spawntimesecsmax` = 35 WHERE `guid` = 5000421;
 UPDATE `gameobject` SET `spawntimesecsmin` = 20, `spawntimesecsmax` = 35 WHERE `guid` = 4013831;
 UPDATE `gameobject` SET `spawntimesecsmin` = 20, `spawntimesecsmax` = 35 WHERE `guid` = 4013832;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2312	
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2250
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2041
+
+UPDATE `quest_template` SET `RewOrReqMoney` = 1550 WHERE `entry` = 40368;
+UPDATE `item_template` SET `spellid_1` = 19690, `spellcharges_1` = -5 WHERE `entry` = 53003;
