@@ -3614,7 +3614,10 @@ struct npc_sunchaserAI : public ScriptedAI
             if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
             {
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60382))
+                {
                     pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                    pUnit->ToPlayer()->CombatStop(true);
+                }
             }
         }
     }
