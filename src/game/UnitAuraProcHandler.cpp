@@ -531,16 +531,6 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     }
                     break;
                 }
-                // Retaliation
-                case 20230:
-                {
-                    // check attack comes not from behind
-                    if (!HasInArc(pVictim))
-                        return SPELL_AURA_PROC_FAILED;
-
-                    triggered_spell_id = 22858;
-                    break;
-                }
                 // Twisted Reflection (boss spell)
                 case 21063:
                     triggered_spell_id = 21064;
@@ -840,7 +830,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 triggered_spell_id = 26654;
             }
             // Retaliation
-            if (dummySpell->IsFitToFamilyMask<CF_WARRIOR_RETALIATION>())
+            if (dummySpell->Id == 20230)
             {
                 // check attack comes not from behind
                 if (!HasInArc(pVictim))
