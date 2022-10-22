@@ -34,6 +34,7 @@ replace into creature_questrelation		(id, quest) values (61053, 40686);
 replace into creature_involvedrelation	(id, quest) values (61053, 40686);
 
 update quest_template set exclusivegroup = 40684 where entry in (40684,40685);
+update quest_template set nextquestid = 40686 where entry in (40684,40685);
 
 replace into item_template values
  ('60925', '0', '0', 'Stormstout Surprise Stein', '', '50195', '3', '0', '1', '0', '0', '0', '-1', '-1', '0',
