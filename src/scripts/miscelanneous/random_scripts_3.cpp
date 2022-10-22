@@ -4243,9 +4243,61 @@ bool QuestRewarded_npc_war_crier_darnakk(Player* pPlayer, Creature* pQuestGiver,
     return false;
 }
 
+bool QuestRewarded_npc_gowlfang(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40681) // Cursed Sagepaw!
+    {
+        pQuestGiver->MonsterSay("Gowlfang strongest, no one dare challenge Gowlfang!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        Creature* NPC_cheer1 = pPlayer->FindNearestCreature(60972, 40.0F);
+        Creature* NPC_cheer2 = pPlayer->FindNearestCreature(60973, 70.0F);
+        Creature* NPC_cheer3 = pPlayer->FindNearestCreature(60974, 40.0F);
+        Creature* NPC_cheer4 = pPlayer->FindNearestCreature(60975, 70.0F);
+
+        if (NPC_cheer1)
+        {
+            DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
+                npc->MonsterSayToPlayer("Bogpaw Truthsay knows that no gnoll is stronger then Gowlfang! Gowlfang will rule-rule!", player);
+                });
+            DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
+                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                });
+        }
+        if (NPC_cheer2)
+        {
+            DoAfterTime(pPlayer, 14.2 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
+                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                });
+        }
+        if (NPC_cheer3)
+        {
+            DoAfterTime(pPlayer, 14.4 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer3]() {
+                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                });
+        }
+        if (NPC_cheer4)
+        {
+            DoAfterTime(pPlayer, 14.6 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer4]() {
+                npc->MonsterSayToPlayer("Gowlfang, leader of Mosshide!", player);
+                });
+        }
+        return true;
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_gowlfang";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_gowlfang;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_war_crier_darnakk";
