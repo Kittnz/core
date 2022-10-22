@@ -4290,9 +4290,69 @@ bool QuestRewarded_npc_gowlfang(Player* pPlayer, Creature* pQuestGiver, Quest co
     return false;
 }
 
+bool GOHello_go_resonation_crystal(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010933)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Touch the Crystal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(2010933, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_resonation_crystal(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010933)
+        {
+            static const WorldLocation resonation_crystal_tele(0, -6598.6328F, -3910.7919F, 354.9179f, 4.6873f);
+            pPlayer->TeleportTo(resonation_crystal_tele);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GOHello_go_harmonization_crystal(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010934)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Touch the Crystal.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->SEND_GOSSIP_MENU(2010934, pGo->GetGUID());
+    }
+    return true;
+}
+
+bool GOSelect_go_harmonization_crystal(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010934)
+        {
+            static const WorldLocation harmonization_crystal_tele(0, -6881.5537F, -3767.8178F, 316.7491f, 3.3884f);
+            pPlayer->TeleportTo(harmonization_crystal_tele);
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "go_harmonization_crystal";
+    newscript->pGOHello = &GOHello_go_harmonization_crystal;
+    newscript->pGOGossipSelect = &GOSelect_go_harmonization_crystal;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_resonation_crystal";
+    newscript->pGOHello = &GOHello_go_resonation_crystal;
+    newscript->pGOGossipSelect = &GOSelect_go_resonation_crystal;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_gowlfang";
