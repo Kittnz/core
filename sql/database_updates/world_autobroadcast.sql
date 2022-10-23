@@ -5,10 +5,10 @@ replace into mangos_string (entry, content_default) values
 
 ('50000', 'Delete your WDB folder regularly. This is your game cache, and deleting it can often fix minor game glitches. Always try this before submitting a ticket.'),
 
-('50001', 'If you want to help the server grow, check our shop for these donation rewards: exotic mounts, large bags, mysterious engineering devices, and much more: turtle-wow.org/donate'),
+('50001', 'All shop items are half the price till November 5! Visit the donation page on our website for more info.'),
 
 ('50002', '/join world to connect with the community around you!'),
 
-('50003', 'Keep up to date with the news and join our Discord channel: discord.turtle-wow.org');
+('50003', 'Keep up to date with the news and join our Discord server!');
 
 replace into autobroadcast (string_Id) values ('50000'),('50001'),('50002'),('50003');
