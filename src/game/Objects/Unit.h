@@ -666,7 +666,6 @@ class Unit : public WorldObject
         void SendPlaySpellVisual(uint32 id) const;
 
         void SendAttackStateUpdate(CalcDamageInfo *damageInfo) const;
-        void SendSpellMiss(Unit *target, uint32 spellID, SpellMissInfo missInfo);
 
         void NearTeleportTo(WorldLocation location, uint32_t teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_UNSUMMON_PET);
         void NearTeleportTo(float x, float y, float z, float orientation, uint32 teleportOptions = TELE_TO_NOT_LEAVE_TRANSPORT | TELE_TO_NOT_LEAVE_COMBAT | TELE_TO_NOT_UNSUMMON_PET);

@@ -1641,6 +1641,13 @@ SpellAuraProcResult Unit::HandleProcTriggerDamageAuraProc(Unit *pVictim, uint32 
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "ProcDamageAndSpell: doing %u damage from spell id %u (triggered by auratype %u of spell %u)",
                      triggeredByAura->GetModifier()->m_amount, spellInfo->Id, triggeredByAura->GetModifier()->m_auraname, triggeredByAura->GetId());
     
+    // Trigger damage can be resisted...
+    if (SpellMissInfo missInfo = SpellHitResult(pVictim, spellInfo, triggeredByAura->GetEffIndex(), false))
+    {
+        SendSpellDamageResist(pVictim, spellInfo->Id);
+        return SPELL_AURA_PROC_OK;
+    }
+
     SpellNonMeleeDamage damageInfo(this, pVictim, spellInfo->Id, SpellSchools(spellInfo->School));
     damageInfo.damage = CalculateSpellDamage(pVictim, spellInfo, triggeredByAura->GetEffIndex());
     damageInfo.damage = SpellDamageBonusDone(pVictim, spellInfo, triggeredByAura->GetEffIndex(), damageInfo.damage, SPELL_DIRECT_DAMAGE);
