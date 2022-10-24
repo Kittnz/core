@@ -80,7 +80,7 @@ struct go_urok_challengeAI: public GameObjectAI
     {
         if (GameObject* go = me->GetMap()->GetGameObject(_runes[rune]))
         {
-            if (Creature* invoc = me->SummonCreature(entry, go->GetPositionX(), go->GetPositionY(), go->GetPositionZ(), 0, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 400000, false))
+            if (Creature* invoc = me->SummonCreature(entry, go->GetPositionX(), go->GetPositionY(), go->GetPositionZ(), 0, (entry == NPC_UROK_DOOMHOWL ? TEMPSUMMON_DEAD_DESPAWN : TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT), 600000, false))
             {
                 invoc->SetRespawnDelay(600000);
                 // Visuel d'apparition

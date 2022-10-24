@@ -531,16 +531,6 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                     }
                     break;
                 }
-                // Retaliation
-                case 20230:
-                {
-                    // check attack comes not from behind
-                    if (!HasInArc(pVictim))
-                        return SPELL_AURA_PROC_FAILED;
-
-                    triggered_spell_id = 22858;
-                    break;
-                }
                 // Twisted Reflection (boss spell)
                 case 21063:
                     triggered_spell_id = 21064;
@@ -809,6 +799,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 // Combustion
                 case 11129:
                 {
+                    // does not proc if no target is affected (aoe like flamestrike)
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+
                     // combustion counter was dispelled or clicked off
                     if (!HasAura(28682))
                     {
@@ -840,7 +834,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 triggered_spell_id = 26654;
             }
             // Retaliation
-            if (dummySpell->IsFitToFamilyMask<CF_WARRIOR_RETALIATION>())
+            if (dummySpell->Id == 20230)
             {
                 // check attack comes not from behind
                 if (!HasInArc(pVictim))
@@ -1647,6 +1641,13 @@ SpellAuraProcResult Unit::HandleProcTriggerDamageAuraProc(Unit *pVictim, uint32 
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "ProcDamageAndSpell: doing %u damage from spell id %u (triggered by auratype %u of spell %u)",
                      triggeredByAura->GetModifier()->m_amount, spellInfo->Id, triggeredByAura->GetModifier()->m_auraname, triggeredByAura->GetId());
     
+    // Trigger damage can be resisted...
+    if (SpellMissInfo missInfo = SpellHitResult(pVictim, spellInfo, triggeredByAura->GetEffIndex(), false))
+    {
+        SendSpellDamageResist(pVictim, spellInfo->Id);
+        return SPELL_AURA_PROC_OK;
+    }
+
     SpellNonMeleeDamage damageInfo(this, pVictim, spellInfo->Id, SpellSchools(spellInfo->School));
     damageInfo.damage = CalculateSpellDamage(pVictim, spellInfo, triggeredByAura->GetEffIndex());
     damageInfo.damage = SpellDamageBonusDone(pVictim, spellInfo, triggeredByAura->GetEffIndex(), damageInfo.damage, SPELL_DIRECT_DAMAGE);

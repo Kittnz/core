@@ -1627,13 +1627,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 switch (GetId())
                 {
-                    case 20230: // retaliation for die by the sword
-                    {
-                        auto caster = GetCaster();
-                        if (caster && caster->HasSpell(45584))
-                            caster->CastSpell(caster, 45589u, true);
-                    }break;
-
                     case 45568: // Proclaim Champion (Custom)
                     {
                         auto caster = GetCaster();
@@ -1770,6 +1763,20 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     {
                         m_isPeriodic = true;
                         m_modifier.periodictime = 3000;
+                        break;
+                    }
+                }
+                break;
+            }
+            case SPELLFAMILY_WARRIOR:
+            {
+                switch (GetId())
+                {
+                    case 20230: // retaliation for die by the sword
+                    {
+                        auto caster = GetCaster();
+                        if (caster && caster->HasSpell(45584))
+                            caster->CastSpell(caster, 45589u, true);
                         break;
                     }
                 }

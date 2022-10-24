@@ -4606,21 +4606,6 @@ void Unit::HandleTriggers(Unit* pVictim, uint32 procExtra, uint32 amount, SpellE
     }
 }
 
-void Unit::SendSpellMiss(Unit *target, uint32 spellID, SpellMissInfo missInfo)
-{
-    WorldPacket data(SMSG_SPELLLOGMISS, (4 + 8 + 1 + 4 + 8 + 1));
-    data << uint32(spellID);
-    data << GetObjectGuid();
-    data << uint8(0);                                       // unk8
-    data << uint32(1);                                      // target count
-    // for(i = 0; i < target count; ++i)
-    data << target->GetObjectGuid();                        // target GUID
-    data << uint8(missInfo);
-    // Nostalrius: + 2 * float if unk8=1
-    // end loop
-    SendObjectMessageToSet(&data, true);
-}
-
 /**
  * \brief Teleports the unit to the given WorldLocation.
  * \param location The location to teleport to.
