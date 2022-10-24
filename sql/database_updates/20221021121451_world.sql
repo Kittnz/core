@@ -269,3 +269,5 @@ replace into creature_questrelation		(id, quest) values (60972, 40683);
 replace into creature_involvedrelation	(id, quest) values (60972, 40683);
 
 update quest_template set prevquestid = 40681 where entry = 55035;
+
+
