@@ -236,6 +236,7 @@ class ChatHandler
 
         bool HandleAccountCommand(char* args);
         bool HandleAccountCharactersCommand(char* args);
+        bool HandleAccountClearDataCommand(char* args);
         bool HandleAccountCreateCommand(char* args);
         bool HandleAccountDeleteCommand(char* args);
         bool HandleAccountPasswordCommand(char* args);
