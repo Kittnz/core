@@ -5464,9 +5464,9 @@ bool GossipHello_npc_ansirem(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(40561) == QUEST_STATUS_INCOMPLETE) // Preparation for Divination
     {
         Creature* ansirem = pPlayer->FindNearestCreature(2543, 10.0F);
-        if (ansirem)
+        if (ansirem && !pPlayer->HasItemCount(60815, 1))
         {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Greetings. I am in need of Arcane Resonator for Magus Halister. Do you have it?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Greetings. I am in need of an Arcane Resonator for Magus Halister in Theramore, do you have one?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
         }
     }
 
@@ -5479,7 +5479,10 @@ bool GossipSelect_npc_ansirem(Player* pPlayer, Creature* pCreature, uint32 uiSen
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->AddItem(60815);
+        if (!pPlayer->HasItemCount(60815, 1))
+        {
+            pPlayer->AddItem(60815);
+        }
         if (pPlayer->HasItemCount(60815, 1, false))
         {
             pCreature->MonsterSay("Halister? I haven't heard from him in ages. We need to meet, as there is much to discuss. As for the Arcane Resonator, I can lend you one. But tell Halister that he needs to bring it back to me in person!");

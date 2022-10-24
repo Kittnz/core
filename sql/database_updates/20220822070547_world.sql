@@ -5293,6 +5293,12 @@ set @equip_template = 20245; set @weapon_1 = 60112; set @weapon_2 = 0; set @weap
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
+set @gossip_menu_id = 41266;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41266, 4791, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30048, 'What is it that you want pup?');
+replace into npc_text (ID, BroadcastTextID0) values (4791, 30048);
+update creature_template set gossip_menu_id = 41266, npc_flags = 3 where entry = 4791;
+
 set @gossip_menu_id = 41264; set @magic_number = 61052;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Watch yourself buddy.\n\nWhat do you want?');
