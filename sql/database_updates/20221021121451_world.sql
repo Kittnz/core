@@ -270,4 +270,69 @@ replace into creature_involvedrelation	(id, quest) values (60972, 40683);
 
 update quest_template set prevquestid = 40681 where entry = 55035;
 
+-- Daelin's Brigade
+delete from quest_template where entry = 40687;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40687,2,15,42,34,0,0,'Daelin\'s Brigade','Theramore was founded by many from the nation of Kul Tiras, our leader Jaina also hails from the kingdom. Our stance of cautious neutrality with the Horde has caused problems for many of the veterans of past wars. These veterans once saw brothers and sisters in arms die in combat, or had families killed, but their loyalties and passions need to be directed in the correct place.\n\nMore and more of our kin stray from Theramore, either deserting outright or being exiled for overly aggresive and divisive actions attempting to lead us to war.\n\nWhile I hold respect for those that served under me in the past, I do not tolerate disloyalty. The Deserter\'s have begun to cause too many problems, and are looking to bring war to Theramore, they wear our tabards and uniforms and lurk within the swamp on their own. They must be dealt with, and you must put a stop to them. The Deserter\'s Hideout is located directly to the west of Theramore within the Quagmire, head there, and remove their presence for the sake of Theramore itself.','Find the Deserter\'s Hideout and slay 9 Deserter Turncoat\'s and 9 Deserter Exile\'s for Colonel Breen at Theramore Isle in Dustwallow Marsh.','Have you find the hideout, and dispatched the turncoats?','You have done well, their actions could have cause chaos for us should their plots and ploys come to fruition. Take these coins, as thanks for us here in Theramore.',0,0,0,0,0,0,0,0,60940,9,60939,9,0,0,0,0,0,0,2500,3450,108,350,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60727, 40687);
+replace into creature_involvedrelation	(id, quest) values (60727, 40687);
+
+update creature_template set script_name = 'npc_colonel_breen' where entry = 60727;
+
+-- The Blackhorn Conflict
+delete from quest_template where entry = 40688;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40688,2,15,42,34,512,0,'The Blackhorn Conflict','Weeks ago a patrol of our sentries were attacked by Tauren of the Blackhorn Tribe nearby, it was unwarranted and somewhat unexpected. Of those attacked two were killed and others severely injured, the threat of the Blackhorn have only made us be ever more wary in our actions in Dustwallow.\n\nThe leader of the Blackhorn is named Targos Hatewind, a vile a cruel warrior who does not even seek affilation with the Horde.\n\nIt is him that must be stopped, you can find him at Blackhorn Village to the north west at the northern edge of Dustwallow Marsh.\n\nGo there, kill his kin, and collect his head.','Slay 6 Blackhorn Warrior\'s, 6 Blackhorn Mystic\'s and collect Targos Hatewind\'s Head for Colonel Breen at Theramore Isle in Dustwallow Marsh.','Each day the Blackhorn are left to their devices is another day more of our patrols may be ambushed.','You have done well, their actions could have cause chaos for us should their plots and ploys come to fruition. Take these coins, as thanks for us here in Theramore.',60926,1,0,0,0,0,0,0,60943,6,60942,6,0,0,0,0,0,0,0,2950,108,250,0,0,0,0,0,0,0,0,0, 60927,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60727, 40688);
+replace into creature_involvedrelation	(id, quest) values (60727, 40688);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60926,2744,'Targos Hatewind\'s Head',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(60944, 60926, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60927', '4', '3', 'Breen\'s Girdle', '', '7687', '2', '0', '1', '16788', '4197', '6', '-1', '-1', '46',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '138', '0', '0', '0',
+ '0', '0', '0', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '35', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Theramore Deserter's
+delete from quest_template where entry = 40689;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40689,2,15,42,34,0,0,'Theramore Deserter\'s','We have received reports of Alliance beginning to have larger and larger numbers of deserters in the region, this pleases me greatly.\n\nTheir command structure may not be as strong as we once believed, but do not think this is all good news, for these deserter\'s are only leaving to persue even more conflict with us here at Brackenwall.\n\nAlready a few of their rabble have probed our area and our defenses, and it won\'t be long until they unravel whatever plans they are drawing up. Let us bloody their nose, and strike first.\n\nThe Deserter\'s Hideout can be found to the south east of here, find it, and destroy them.','Find the Deserter\'s Hideout and slay 9 Deserter Turncoat\'s, and 9 Deserter Exile\'s for Nazeer Bloodpike at Brackenwall Village in Dustwallow Marsh.','Have the wretches been weakened $r?','You do well in the fight $c, with you, perhaps we could fight Theramore itself.\n\n<Nazeer smirks>\n\nOne day perhaps.',0,0,0,0,0,0,0,0,60940,9,60939,9,0,0,0,0,0,0,2500,3450,76,350,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4791, 40689);
+replace into creature_involvedrelation	(id, quest) values (4791, 40689);
+
+-- Blackhorn Village
+delete from quest_template where entry = 40690;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40690,2,15,41,34,512,0,'Blackhorn Village','The Grimtotem in the region are a spineless, and traitorous bunch. They once spoke with us in talks of unity, and now ambushed and killed a friend of mine in combat within the Quagmire.\n\nThey must pay for their insolence, and disrespect. They are led by a craven named Targos Hatewind, it is he that I want dead.\n\nHead northeast to Blackhorn Village, and bring ruin to them, they are enemies of the Horde.','Travel to Blackhorn Village and slay 8 Blackhorn Warrior\'s and kill Targos Hatewind for Nazeer Bloodpike at Brackenwall Village in Dustwallow Marsh.','The Grimtotem must be checked, and trampled.','You ease the blood that boils in my veins, it is good to know such a craven has been removed from the world.\n\nYou have my gratitude $r.',0,0,0,0,0,0,0,0,60943,8,60944,1,0,0,0,0,0,0,0,2950,76,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60928,1,60929,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4791, 40690);
+replace into creature_involvedrelation	(id, quest) values (4791, 40690);
+
+replace into item_template values
+ ('60928', '4', '4', 'Bogplate Shackles', '', '26685', '2', '0', '1', '18728', '4682', '9', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '11', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '212', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '40', '0', '0', '0', '0', '7', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60929', '4', '0', 'Quagmire Shawl', '', '23002', '2', '0', '1', '18764', '4691', '16', '-1', '-1', '44',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '4', '6', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '0', '0', '23795', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
+ '0', '1', NULL);
 

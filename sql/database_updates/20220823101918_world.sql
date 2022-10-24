@@ -190,64 +190,7 @@ replace into creature_involvedrelation	(id, quest) values (4944, 40558);
 REPLACE INTO creature_template VALUES
 (60388, 328, 0, 0, 0, 0, 'quest_40558_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
--- Upon quest start, spawn NPC Kagoro (4972) at the following : Map1, X-3810.79, Y:-2763.20, Z: 34.60, Orientation: 2.394
--- Have NPC Falgran Hastil walk towards the following coordinates. : Map1, X:-3809.80, Y:-2759.96, Z:35.37, Orientation : 5.29
--- As Falgran is walking down, have him say the following line 2 seconds after he starts to move. 
--- F: Remain calm...
--- (Wait 8 seconds, and begin dialogue in /say.
--- K: Hail, human. I am Kagoro, scout of the Horde 
--- (Wait 5 seconds)
--- F: I am Falgran Hastil, scout of Theramore. And this is $N. Why did you call for this meeting?
--- (Wait 7 seconds)
--- K: We saw you investigate the inn. We wanted to assure you it is not the Horde's doing.
--- (Wait 7 seconds)
--- F: We found this shield strapped to the wall of the inn. Do you have any recollection of this object?
--- (Wait 8 seconds)
--- K: Let me see.
--- (EMOTE) <Kagoro investigates the shield thoroughly>
--- (Wait 8 seconds)
--- K: By the ancestors. Yes, I know this shield. It belonged to Wattapo, a tauren warrior who once lived in the Brackenwall Village. He died a long time ago.
--- (Wait 10 seconds)
--- F: Do you know how it could've ended up in the inn? We found his grave. It was recently disturbed.
--- (Wait 6 seconds)
--- K: To disturb the grave of a fallen warrior... I assure you, I know nothing of this.
--- (Wait 5 seconds)
--- F: It seems like someone wanted to make us blame you for the burning of the inn.
--- (Wait 7 seconds)
--- K: Indeed. Have you found anything else in the investigation?
--- (Wait 6 seconds)
--- F: Yes, quillboar footprints...
--- (Wait 4 seconds)
--- K: False lead.
--- (Wait 3 seconds)
--- F: I see you did some work too.
--- (Wait 2 seconds)
--- (EMOTE)<Kagoro nods>
--- (Wait 3 seconds)
--- F: And the badge of one of the deserters. Paval Reethe. We couldn't find Reethe, though. Have you seen him, by any chance?
--- (Wait 8 seconds)
--- K: This is... a delicate matter, and the actual reason I called for the meeting. Paval Reethe is dead.
--- (Wait 7 seconds)
--- F: He was a deserter. While I still would've preferred to arrest him and allow for a just trial, I understand that you killed him. We do not blame you.
--- (Wait 9 seconds)
--- K: If it only was that simple. We knew he was connected to the burning of the inn, and we wanted to investigate him. Before he could talk... we were attacked. By Theramore soldiers. One of them bore the name Caldwell.
--- (Wait 10 seconds)
--- F: Attacked? Unprovoked, by Theramore soldiers? I swear to the Light, orc. If you are lying...
--- (Wait 6 seconds)
--- K: I swear upon my ancestors and my warchief. They killed him in cold blood. Quick arrow pierced his heart. We also barely made it out alive.
--- (Wait 8 seconds)
--- F: Theramore soldiers would never... We shall investigate this. But if we find out that your words aren't true...
--- (Wait 5 seconds)
--- K: I am sorry for the loss of your comrades. While you investigate this, we shall follow another lead we have. Black dragonflight.
--- (Wait 8 seconds)
--- F: And we will investigate in Theramore. But be warned, orc. Your story doesn't add up.
--- (Wait 6 seconds)
--- K: Let's meet here once we know more. I hope you will find truth in your city of stones. Farewell.
--- (Wait 6 seconds)
--- F: Farewell, orc.
--- Kagoro despawns 
--- F: We are in deep trouble, $N. Report to Garran Vimes at once!
--- (Wait 10 seconds, and reset Falgran Hastil to his original position)
+update creature_template set script_name = 'npc_falgran_hastil' where entry = 5088;
 
 -- The Betrayal from Within
 delete from quest_template where entry = 40559;
