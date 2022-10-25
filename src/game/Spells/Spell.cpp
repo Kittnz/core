@@ -5354,7 +5354,7 @@ SpellCastResult Spell::CheckCast(bool strict)
         }
     }
 
-if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
+    if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
         && !m_IsTriggeredSpell && (m_casterUnit->HasSpellCooldown(m_spellInfo->Id) || m_casterUnit->HasSpellCategoryCooldown(spellCat)))
     {
         if (m_triggeredByAuraSpell || m_spellInfo->Attributes & SPELL_ATTR_DISABLED_WHILE_ACTIVE)
@@ -5504,8 +5504,28 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                         }
                     }
                 }
+                break;
+            }
+            case 46433: // Tied Up (Horde) (Custom AV Quest)
+            case 46432: // Tied Up (Alliance) (Custom AV Quest)
+            {
+                Unit* target = m_targets.getUnitTarget();
+                if (!target || !target->IsPlayer())
+                    return SPELL_FAILED_BAD_TARGETS;
 
-            }break;
+                if (m_spellInfo->Id == 46433 && target->GetRace() != RACE_GNOME ||
+                    m_spellInfo->Id == 46432 && target->GetRace() != RACE_TAUREN)
+                    return SPELL_FAILED_BAD_TARGETS;
+
+                if (target->GetHealthPercent() > 50.0f)
+                {
+                    if (Player* pPlayer = m_caster->ToPlayer())
+                        pPlayer->GetSession()->SendNotification("Target must be below 50%% health.");
+                    return SPELL_FAILED_DONT_REPORT;
+                }
+
+                break;
+            }
         }
 
         // Loatheb Corrupted Mind spell failed

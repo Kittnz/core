@@ -1627,29 +1627,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 switch (GetId())
                 {
-                    case 45568: // Proclaim Champion (Custom)
-                    {
-                        auto caster = GetCaster();
-                        if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
-                        {
-                            //remove buff and their counterparts if something's wrong.
-                            if (target)
-                            {
-                                target->RemoveAurasDueToSpell(45563);
-                                target->RemoveAurasDueToSpell(45564);
-                                target->RemoveAurasDueToSpell(45565);
-                                target->RemoveAurasDueToSpell(45569);
-                                target->RemoveAurasDueToSpell(45568);
-                            }
-                            return;
-                        }
-
-                        auto playerCaster = caster->ToPlayer();
-                        playerCaster->SetChampion(target->GetGUID());
-
-                    }break;
-                    
-
                     case 1:
                     {
                         if (Unit* caster = GetCaster()) {
@@ -1765,6 +1742,36 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 3000;
                         break;
                     }
+                    case 46433: // Tied Up (Horde) (Custom AV Quest)
+                    case 46432: // Tied Up (Alliance) (Custom AV Quest)
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1000;
+                        target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                        target->MonsterYell("Help! I'm being kidnapped!");
+                        break;
+                    }
+                    case 45568: // Proclaim Champion (Custom)
+                    {
+                        auto caster = GetCaster();
+                        if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
+                        {
+                            //remove buff and their counterparts if something's wrong.
+                            if (target)
+                            {
+                                target->RemoveAurasDueToSpell(45563);
+                                target->RemoveAurasDueToSpell(45564);
+                                target->RemoveAurasDueToSpell(45565);
+                                target->RemoveAurasDueToSpell(45569);
+                                target->RemoveAurasDueToSpell(45568);
+                            }
+                            return;
+                        }
+
+                        auto playerCaster = caster->ToPlayer();
+                        playerCaster->SetChampion(target->GetGUID());
+                        break;
+                    }
                 }
                 break;
             }
@@ -1783,14 +1790,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 break;
             }
             case SPELLFAMILY_PALADIN:
-            {
                 break;
-            }
             case SPELLFAMILY_SHAMAN:
                 break;
-
-
-
             case SPELLFAMILY_PRIEST:
             {
                 switch (GetId())
@@ -1804,9 +1806,11 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         auto playerCaster = caster->ToPlayer();
                         playerCaster->SetChampion(target->GetGUID());
 
-                    }break;
+                        break;
+                    }
                 }
-            }break;
+                break;
+            }
         }
     }
     // AT REMOVE
@@ -2055,6 +2059,12 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 if (target->IsAlive())
                     target->m_Events.AddLambdaEventAtOffset([target]() { target->CastSpell(target, 3240, true); }, 500);
+                break;
+            }
+            case 46433: // Tied Up (Horde) (Custom AV Quest)
+            case 46432: // Tied Up (Alliance) (Custom AV Quest)
+            {
+                target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                 break;
             }
         }
@@ -6579,6 +6589,82 @@ void Aura::PeriodicDummyTick()
 
                     if (ribbonCount > 1)
                         target->CastSpell(GetCaster(), 29175, true); // Midsummer Pole Buff
+
+                    return;
+                }
+                case 46433: // Tied Up (Horde) (Custom AV Quest)
+                case 46432: // Tied Up (Alliance) (Custom AV Quest)
+                {
+                    if (Player* pCaster = ToPlayer(GetCaster()))
+                    {
+                        if (Creature* pCook = target->FindNearestCreature(39998, 10.0f))
+                        {
+                            target->StopMoving(true);
+
+                            float x, y, z;
+                            target->GetNearPoint(pCook, x, y, z, 0, 5.0f, target->GetAngle(pCook));
+                            pCook->MonsterMove(x, y, z);
+
+                            if (pCook->IsFriendlyTo(target))
+                            {
+                                pCook->m_Events.AddLambdaEventAtOffset([pCook, target]
+                                {
+                                    pCook->SetFacingToObject(target);
+                                    pCook->MonsterSay("Why have you brought me one of our own? Imbecile!");
+                                }, 1000);
+
+                                char const* text1 = (GetId() == 46433) ?
+                                    "Find me a gnome or we'll be eating idiot stew instead." :
+                                    "Big fat tauren! Don't come back until you've caught one.";
+
+                                pCook->m_Events.AddLambdaEventAtOffset([pCook, text1]
+                                {
+                                    pCook->MonsterSay(text1);
+                                    pCook->GetMotionMaster()->MoveTargetedHome();
+                                }, 3000);
+                            }
+                            else
+                            {
+                                char const* text2 = (GetId() == 46433) ?
+                                    "What a succulent piece of meat! In the pot you go!" :
+                                    "The beast is humongous! Quickly, put it down before it breaks free!";
+
+                                pCaster->AreaExploredOrEventHappens((GetId() == 46433) ? 40005 : 40006);
+
+                                pCook->m_Events.AddLambdaEventAtOffset([pCook, target, text2]
+                                {
+                                    pCook->SetFacingToObject(target);
+                                    pCook->MonsterSay(text2);
+                                    target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                                    pCook->CastSpell(target, 13608, true);
+                                }, 1000);
+
+                                target->m_Events.AddLambdaEventAtOffset([target]
+                                {
+                                    if (target->IsDead())
+                                    {
+                                        if (Creature* pTroll = target->FindNearestCreature(10983, 30.0f))
+                                            pTroll->HandleEmote(EMOTE_ONESHOT_CHEER);
+
+                                        if (Creature* pMystic = target->FindNearestCreature(13956, 30.0f))
+                                            pMystic->HandleEmote(EMOTE_ONESHOT_CHEER);
+
+                                        if (Creature* pCook = target->FindNearestCreature(39998, 30.0f))
+                                            pCook->HandleEmote(EMOTE_ONESHOT_CHEER);
+                                    }
+                                }, 3000);
+                            }
+
+                            pCaster->InterruptSpell(CURRENT_CHANNELED_SPELL);
+                            return;
+                        }
+
+                        if (!pCaster->HasUnitMovementFlag(MOVEFLAG_JUMPING) && pCaster->GetDistance(target) > 8.0f)
+                        {
+                            target->MonsterMove(pCaster->GetPositionX(), pCaster->GetPositionY(), pCaster->GetPositionZ());
+                            return;
+                        }
+                    }
 
                     return;
                 }
