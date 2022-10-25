@@ -1243,7 +1243,7 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60861,24106,'Box of Spare Parts',12,1,2048,1,-1,-1,1,30,-1,-1,-1,-1,4,'',0);
 
 REPLACE INTO gameobject_template VALUES
-(2010931, 3, 22933, 'Box of Spare Parts', 0, 4, 1, 43, 2010931, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2010931, 3, 24106, 'Box of Spare Parts', 0, 4, 1, 43, 2010931, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into gameobject_loot_template values
 (2010931,60861,-100,0,1,1,0);
