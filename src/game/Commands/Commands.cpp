@@ -8259,7 +8259,7 @@ bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
     {
         // by DB guid
         if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
-            obj = GetGameObjectWithGuid(lowguid, go_data->id);
+            obj = GetGameObjectWithGuidGlobal(lowguid, go_data);
     }
     else
         obj = GetGameObjectWithGuid(lowguid, entry);
@@ -11908,6 +11908,67 @@ bool ChatHandler::HandleCharacterFillFlysCommand(char* args)
         return true;
     }
     return false;
+}
+
+bool ChatHandler::HandleMmapsPathCommand(char* args)
+{
+    if (!MMAP::MMapFactory::createOrGetMMapManager()->GetNavMesh(GetSession()->GetPlayer()->GetMapId()))
+    {
+        PSendSysMessage("NavMesh not loaded for current map.");
+        return true;
+    }
+
+    SendSysMessage("mmap path:");
+
+    // units
+    Player* player = GetSession()->GetPlayer();
+    Unit* target = GetSelectedUnit();
+    if (!player || !target)
+    {
+        PSendSysMessage("Invalid target/source selection.");
+        return true;
+    }
+
+    char* para = strtok((char*)args, " ");
+
+    bool useStraightPath = false;
+    if (para && strcmp(para, "true") == 0)
+        useStraightPath = true;
+
+    bool useRaycast = false;
+    if (para && (strcmp(para, "line") == 0 || strcmp(para, "ray") == 0 || strcmp(para, "raycast") == 0))
+        useRaycast = true;
+
+    // unit locations
+    float x, y, z;
+    player->GetPosition(x, y, z);
+
+
+    // path
+    PathFinder path(target);
+    path.setUseStrightPath(useStraightPath);
+    bool result = path.calculate(x, y, z, false);
+
+    Movement::PointsArray const& pointPath = path.getPath();
+    PSendSysMessage("%s's path to %s:", target->GetName(), player->GetName());
+    PSendSysMessage("Building: %s", useStraightPath ? "StraightPath" : useRaycast ? "Raycast" : "SmoothPath");
+    PSendSysMessage("Result: %s - Length: %zu - Type: %u", (result ? "true" : "false"), pointPath.size(), path.getPathType());
+
+    G3D::Vector3 const& start = path.getStartPosition();
+    G3D::Vector3 const& end = path.getEndPosition();
+    G3D::Vector3 const& actualEnd = path.getActualEndPosition();
+
+    PSendSysMessage("StartPosition     (%.3f, %.3f, %.3f)", start.x, start.y, start.z);
+    PSendSysMessage("EndPosition       (%.3f, %.3f, %.3f)", end.x, end.y, end.z);
+    PSendSysMessage("ActualEndPosition (%.3f, %.3f, %.3f)", actualEnd.x, actualEnd.y, actualEnd.z);
+
+    if (!player->IsGameMaster())
+        PSendSysMessage("Enable GM mode to see the path points.");
+
+    for (uint32 i = 0; i < pointPath.size(); ++i)
+        player->SummonCreature(VISUAL_WAYPOINT, pointPath[i].x, pointPath[i].y, pointPath[i].z, 0, TEMPSUMMON_TIMED_DESPAWN, 9000);
+
+    return true;
 }
 
 bool ChatHandler::HandleNpcGroupAddCommand(char* args)
