@@ -308,6 +308,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand mmapsCommandTable[] =
+    {
+        { "path",            SEC_DEVELOPER,     false, &ChatHandler::HandleMmapsPathCommand,         "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand creatureGroupsCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcGroupAddCommand,         "", nullptr },
@@ -670,6 +676,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hcmessages",     SEC_PLAYER,          false, &ChatHandler::HandleHCMessagesCommand,          "", nullptr },
         { "minchatlevel",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleMinChatLevelCommand,             "", nullptr },
         { "pvp",            SEC_DEVELOPER,       false, &ChatHandler::HandlePvPCommand,                  "", nullptr},
+        { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                         "", mmapsCommandTable },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -2486,6 +2493,21 @@ GameObject* ChatHandler::GetGameObjectWithGuid(uint32 lowguid, uint32 entry)
     Player* pl = m_session->GetPlayer();
 
     return pl->GetMap()->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, entry, lowguid));
+}
+
+GameObject* ChatHandler::GetGameObjectWithGuidGlobal(uint32 lowguid, const GameObjectData* data) const
+{
+    if (!m_session)
+        return nullptr;
+
+    const auto player = m_session->GetPlayer();
+    const auto playerMap = player->GetMap();
+
+    const auto goMap = sMapMgr.FindMap(data->position.mapId);
+
+    const auto usedMap = goMap ? goMap : playerMap;
+
+    return usedMap->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, data->id, lowguid));
 }
 
 enum SpellLinkType
