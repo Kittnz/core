@@ -112,6 +112,10 @@ class ChatHandler
         std::string GetItemLink(ItemPrototype const* pItem) const;
 
         GameObject* GetGameObjectWithGuid(uint32 lowguid,uint32 entry);
+
+        //same as above but uses GOData to narrow down the correct map.
+        GameObject* GetGameObjectWithGuidGlobal(uint32 lowguid, const GameObjectData* data) const;
+
         WorldSession* GetSession() { return m_session; }
 
         void SendBanResult(BanMode mode, BanReturn result, std::string& banTarget, uint32 duration_secs, std::string& reason);
@@ -205,6 +209,10 @@ class ChatHandler
         // Clean characters
         bool HandleCleanCharactersToDeleteCommand(char *args);
         bool HandleCleanCharactersItemsCommand(char *args);
+
+        //Mmaps
+        bool HandleMmapsPathCommand(char* args);
+
         // Formations
         bool HandleNpcGroupAddCommand(char *args);
         bool HandleNpcGroupAddRelCommand(char *args);
