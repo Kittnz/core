@@ -625,6 +625,11 @@ public:
     bool HasAttribute(SpellAttributesEx2 attribute) const { return AttributesEx2 & attribute; }
     bool HasAttribute(SpellAttributesEx3 attribute) const { return AttributesEx3 & attribute; }
     bool HasAttribute(SpellAttributesEx4 attribute) const { return AttributesEx4 & attribute; }
+
+    bool HasSpellInterruptFlag(SpellInterruptFlags flag) const { return InterruptFlags & flag; }
+    bool HasAuraInterruptFlag(SpellAuraInterruptFlags flag) const { return AuraInterruptFlags & flag; }
+    bool HasChannelInterruptFlag(SpellAuraInterruptFlags flag) const { return ChannelInterruptFlags & flag; }
+
     inline bool HasEffect(SpellEffects effect) const
     {
         for (uint32 i : Effect)
