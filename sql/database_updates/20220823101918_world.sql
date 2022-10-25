@@ -313,44 +313,6 @@ replace into creature_involvedrelation	(id, quest) values (4944, 40564);
 REPLACE INTO creature_template VALUES
 (60390, 328, 0, 0, 0, 0, 'quest_40564_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
--- Additional notes:
--- (SAME AS THE FIRST MEETING QUEST)
--- Upon quest start, spawn NPC Kagoro at the following : Map1, X-3810.79, Y:-2763.20, Z: 34.60, Orientation: 2.394
--- Have NPC Falgran Hastil walk towards the following coordinates. : Map1, X:-3809.80, Y:-2759.96, Z:35.37, Orientation : 5.29
--- 
--- (Wait 11 seconds)
--- F: Kagoro! We are ready.
--- (Wait 3 seconds)
--- K: Falgran. 
--- (Wait 2 seconds)
--- F: Kagoro, on the behalf of the Alliance and the City of Theramore, I would like to apologize for not believing you and my false accusations. We are now certain that the deserters burned the inn.
--- (Wait 10 seconds)
--- K: I am relieved to hear it. Our investigation of Black Dragons yielded no results. But how did you learn of the truth?
--- (Wait 7 seconds)
--- F: Through the power of magic, of course. Arts of Divination. We communed with the spirit of Paval Reethe.
--- (Wait 8 seconds)
--- K: Extraordinary. Incredible sorcery, as always. But... why? Why did they burn the inn? 
--- (Wait 6 seconds)
--- F: Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed... something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.
--- (Wait 13 seconds)
--- K: The shield... Yes, it makes sense.
--- (Wait 3 seconds)
--- F: Paval Reethe wanted to stop them. He may have been a deserter, but he had some of his honor still left in his heart.
--- (Wait 8 seconds)
--- K: That\'s why they left him in the swamp. But, what was the information that was so precious to the deserters?
--- (Wait 7 seconds)
--- F: About this, we are not sure. Something about the Vengeful Mariner, their rumored true leader. Have you heard about him?
--- (Wait 8 seconds)
--- K: Vengeful Mariner... The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it\'s connected.
--- (Wait 8 seconds)
--- F: We will soon bring justice to the deserters for their crimes, thank you for your information Kagoro, the horde has helped plenty in these lands.
--- (wait 10 seconds)
--- K: We believe in justice the same way you alliance do, go with honor friend.
--- (Wait 6 seconds, and have Kagoro dissapear)
--- F:We should report to Captain Garran Vimes and let him know our discoveries.
--- (Wait 10 seconds, and have Falgrin Hastil respawn in his original position)
--- (QUEST IS COMPLETED) 
-
 -- And Justice for All
 delete from quest_template where entry = 40565;
 replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40564,40565,2,15,35,30,0,0,'And Justice for All','It does appear that the Deserter\'s are behind the burning of the inn. If there is ever to be justice, we must stop them from continually dragging more and more of our most loyal into their ranks.\n\nThere shall be no quarter, they are wanted and we shall dole out justice, for all of the lives lost. For the deceit caused.\n\nDirectly to the west of Theramore, to the north eastern edge of the Quagmire is the Deserter\'s Hideout, it is there that they gain their strength. Find Sellick Voss, the new leader of the camp, slay him, and bring his medallion to me as proof of the deed.','Find Sellick Voss, slay him, and bring his medallion to Captain Garran Vimes at Theramore Isle in Dustwallow Marsh.','You fought well. I wish you could stay with me in Theramore as my personal assistant, but I know that adventure calls.','Without you, we would still be in the dark. Who knows, maybe you stopped another war between the Horde and the Alliance? You are a hero of Theramore, for all of the work you have done to ease the tensions, and solve this mystery.\n\nFor this, I would like you to take one of these weapons from my personal armory.\n\nConcerning the Vengeful Mariner. Sailors coming to Theramore have reported seeing a shadowy figure stalking the coast. Some of our fishermen have gone missing in recent months, too. It may be connected. But, a question remains. Why was he so important to the deserters, that they killed innocents to keep this a secret for just a while longer? We need to get to the bottom of this.',60817,1,0,0,0,0,0,0,60941,1,0,0,0,0,0,0,0,0,10000,3950,1011,1500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,60818,1,60819,1,60820,1,60821,1,0,0,'');

@@ -4509,8 +4509,110 @@ bool QuestAccept_npc_falgran_hastil(Player* pPlayer, Creature* pQuestGiver, Ques
         }
     }
 
+    if (pQuest->GetQuestId() == 40564) // The Second Meeting
+    {
+        pQuestGiver->SummonCreature(61056, -3810.79f, -2763.20f, 34.60f, 2.394F, TEMPSUMMON_TIMED_DESPAWN, 1.85 * MINUTE * IN_MILLISECONDS);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+
+        auto pGuid = pPlayer->GetObjectGuid();
+
+        DoAfterTime(pQuestGiver, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->SetWalk(true);
+            npc->GetMotionMaster()->MovePoint(1, -3825.07F, -2727.80F, 48.81F, 0, 5.29F);
+            });
+        DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->SetWalk(true);
+            npc->GetMotionMaster()->MovePoint(1, -3825.17F, -2738.99F, 39.32F, 0, 5.29F);
+            npc->HandleEmote(EMOTE_ONESHOT_TALK);
+            });
+        DoAfterTime(pQuestGiver, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+            npc->SetWalk(true);
+            npc->GetMotionMaster()->MovePoint(1, -3809.80F, -2759.96F, 35.37F, 0, 5.29F);
+            });
+
+        Creature* NPC_KAGORO = pQuestGiver->FindNearestCreature(61056, 100.0F);
+        if (NPC_KAGORO)
+        {
+            DoAfterTime(pQuestGiver, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSayToPlayer("Kagoro! We are ready.", player);
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
+                npc->MonsterSay("Falgran.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSay("Kagoro, on the behalf of the Alliance and the City of Theramore, I would like to apologize for not believing you and my false accusations. We are now certain that the deserters burned the inn.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
+                npc->MonsterSay("I am relieved to hear it. Our investigation of Black Dragons yielded no results. But how did you learn of the truth?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pQuestGiver, 37 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSay("Through the power of magic, of course. Arts of Divination. We communed with the spirit of Paval Reethe.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
+                npc->MonsterSay("Extraordinary. Incredible sorcery, as always. But... why? Why did they burn the inn?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pQuestGiver, 51 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSay("Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed... something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 64 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
+                npc->MonsterSay("The shield... Yes, it makes sense.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pQuestGiver, 67 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSay("Paval Reethe wanted to stop them. He may have been a deserter, but he had some of his honor still left in his heart.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 75 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
+                npc->MonsterSay("That's why they left him in the swamp. But, what was the information that was so precious to the deserters?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pQuestGiver, 82 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSay("About this, we are not sure. Something about the Vengeful Mariner, their rumored true leader. Have you heard about him?");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 90 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
+                npc->MonsterSay("Vengeful Mariner... The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it's connected.");
+                });
+            DoAfterTime(pQuestGiver, 98 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSay("We will soon bring justice to the deserters for their crimes, thank you for your information Kagoro, the horde has helped plenty in these lands.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pPlayer, 108 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
+                npc->MonsterSay("We believe in justice the same way you alliance do, go with honor friend.");
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pQuestGiver, 114 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->MonsterSay("We should report to Captain Garran Vimes and let him know our discoveries.");
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60390))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                npc->HandleEmote(EMOTE_ONESHOT_TALK);
+                });
+            DoAfterTime(pQuestGiver, 124 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->SetWalk(true);
+                npc->GetMotionMaster()->MovePoint(1, -3825.17F, -2738.99F, 39.32F, 0, 5.29F);
+                });
+            DoAfterTime(pQuestGiver, 129 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->SetWalk(true);
+                npc->GetMotionMaster()->MovePoint(1, -3825.07F, -2727.80F, 48.81F, 0, 5.29F);
+                });
+            DoAfterTime(pQuestGiver, 132 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
+                npc->SetWalk(true);
+                npc->GetMotionMaster()->MovePoint(1, -3831.51F, -2725.29F, 53.72F, 0, 1.71F);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                });
+        }
+    }
+
     return false;
 }
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
