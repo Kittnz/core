@@ -347,7 +347,7 @@ void SpellMgr::OverrideProcEvents()
 {
     using FuncType = std::function<void(SpellProcEventEntry*)>;
 
-    static std::unordered_map<uint32, std::variant<uint32, FuncType>> procEventModifiers =
+    static std::unordered_map<uint32, std::variant<uint32, FuncType>> procEventModifiers
     {
         {15268, [this](SpellProcEventEntry* entry) { // blackout rank 1
 
