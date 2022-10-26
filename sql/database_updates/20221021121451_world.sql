@@ -336,3 +336,179 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '26', '0', '0', '0',
  '0', '1', NULL);
 
+-- A Journey for Vengeance
+delete from quest_template where entry = 40691;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40691,2,406,20,14,0,0,'A Journey for Vengeance','Stonetalon.\n\nThe name brings anger to my core, this is the place my brother died in his fight during the Third War.\n\nWhile I served in Ironforge he sought glory in these lands, but he did not find what he sought. His tale deserves to be heard, when you are ready, speak with me, and I will recount it.','Listen to the story of Grumnir Battlebeard\'s brother.','There is a reason for me being here, beyond all else.','Now you see why it is I traveled so far?\n\nI will reclaim my families glory.',0,0,0,0,0,0,0,0,60399,1,0,0,0,0,0,0,0,0,0,450,47,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Listen to the story of Grumnir Battlebeard\'s brother.');
+
+replace into creature_questrelation		(id, quest) values (60993, 40691);
+replace into creature_involvedrelation	(id, quest) values (60993, 40691);
+
+REPLACE INTO creature_template VALUES (60399, 328, 0, 0, 0, 0, 'quest_40691_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- The Battlebeard Legacy
+delete from quest_template where entry = 40692;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40691,40692,2,406,20,14,512,0,'The Battlebeard Legacy','My family\'s history is stained, our heirlooms lost in time, and our axe in the hands of an orc who slayed my kin.\n\nThere is no greater fall for a dwarf, and I must right the wrongs.\n\nI have had some luck in tracking this \'Scartusk\', for he is one of the Warsong, lingering in the forest of Ashenvale just beyond the Talondeep Path to the north. Just past Talondeep Path, head westward, to the Ruins of Stardust, it is there he resides, scouting for the enemy.\n\n Bring my family\'s axe to me, and honor my brother.','Find and slay the orc Scartusk, and recover the Battlebeard Axe for Grumnir Battlebeard at Bael Hardul in Stonetalon Mountains.','Each second that orc breaths is longer that my family remains dishonored.','<The sight of the axe nearly brings a tear to Grumnir\'s eyes.>\n\nI cannot believe it, after all of these years, and finally before me again.\n\nYou have honored our family beyond belief, and given me justice, and relief.\n\nI will not forget this moment $N.',60930,1,0,0,0,0,0,0, 61062,1,0,0,0,0,0,0,0, 0,0,1850,47,250,0,0,0,0,0,0,0,0,0, 60931,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60993, 40692);
+replace into creature_involvedrelation	(id, quest) values (60993, 40692);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60930,8460,'Battlebeard Axe',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61062, 60930, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60931', '4', '3', 'Grumnir\'s Hauberk', '', '1727', '2', '0', '1', '7292', '1823', '5', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '5', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '181', '0', '0', '0',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '90', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Ornate Windshear Gemstone
+delete from quest_template where entry = 40693;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40693,2,406,20,12,512,0,'The Ornate Windshear Gemstone','Have you heard the tale of the Ornate Windshear Gemstone?!\n\nIt really is a wonder of prospectin\' I tell you what! It is told by rumor that those Venture Co. hooligans up and dug some rare crystal deep beneath Stonetalon, one that glimmered a deep, and shiny red.\n\nYou see, I aint out here to see the sights, no, BAH! This place be more ugly than Westfall, and trust me, I been there.\n\nIf I want a chance to get out of this hell hole, it lies in that Windshear Gemstone, and I want my hands on it.\n\n What say you make your way down to the Windshear Mine down in the Crag and do ol\' Flinthammer a favor huh?\n\nI\'ll give ye somethin in return, how about that to spice up a deal?','Steal the Ornate Windshear Gemstone for Prospector Flinthammer at Bael Hardul in Stonetalon Mountains.','Windshear Gemstone....Oh, what a beauty that\'d be aye?','<Flinthammer\'s goggles begin to fog up.>\n\nOh by sweet Ironforge!\n\nThat is it, it really is it! I can\'t believe you went and recovered the thing, good and honest work you did for me.\n\n Here, take these, and some coin on top. Maybe I can find a new place to look for rare crystals now.\n\n All thanks to you of course.',60932,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0, 0,750,2000,47,200,0,0,0,0,0,0,0,0,0, 60933,1,60934,1,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60996, 40693);
+replace into creature_involvedrelation	(id, quest) values (60996, 40693);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60932,35916,'Ornate Windshear Gemstone',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010943, 3, 23431, 'Windshear Chest', 0, 4, 1, 43, 2010943, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010943,60932,-100,0,1,1,0);
+
+replace into item_template values
+ ('60933', '4', '2', 'Prospect Leggings', '', '6774', '2', '0', '1', '4832', '1208', '7', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '7', '4', '2',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '73', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '55', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60934', '4', '3', 'Prospector Battle Boots', '', '22680', '2', '0', '1', '4512', '1128', '8', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '5', '4', '3',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '126', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '5', '0', '0', '0', '45', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Sputtervalve Conductor
+delete from quest_template where entry = 40694;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40694,2,406,18,13,0,0,'The Sputtervalve Conductor','My beauty, trapped in a sea of vultures.\n\nI am a brave dwarf, but if I ever want to fly again, I can\'t go risking my life now, can I?\n\nYou look like someone who knows a thing or two about slaying vultures, and Sputtervalve Conductors. The eyes of Harlek can spot talent when he see\'s it!\n\nMy flying machine is down below, I was doing some repairs before me and farmer Segwar were attacked you see? Sadly I left behind the Sputtervalve Conductor, a rather valuable part that I was trying to get fixed to do some scouting in the perimeter.\n\nI need you to go down to the flight pad, and go get the part for me, do that, and I\'ll give you a nice drink of ale, good?','Collect the Sputtervalve Conductor for Harlek Vaultshield at Bael Hardul in Stonetalon Mountains.','Grounded, unable to soar the sky! I lament at such dark times.','Ahh, now lets see...\n\n<Harlek takes his time, inspecting the part over.>\n\nBlasted, it would appear the part took even more damage during my retreat from the assaulting birds... I will need some specialized equipment if I am to have a chance at getting my turbo-charge beauty back in the sky.\n\nOh, about that ale, I had one, sorry about that, a troubled mind is a thirsty mind, as they say.',60935,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0,0, 0,0,1350,47,100,0,0,0,0,0,0,0,0,0, 2594,2,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61006, 40694);
+replace into creature_involvedrelation	(id, quest) values (61006, 40694);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60935,35916,'Sputtervalve Conductor',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010944, 3, 23882, 'Sputtervalve Conductor', 0, 4, 1, 43, 2010944, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010944,60935,-100,0,1,1,0);
+
+-- The Sputtervalve Fix
+delete from quest_template where entry = 40695;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40694,40695,2,406,18,13,0,0,'The Sputtervalve Fix','Bah, dangnabbit!\n\nI don\'t have anything to fix this, I suppose I need to find someone who know\'s a thing or two about marveled engineering on such a delicate part...\n\n<Harlek Vaultshield lets out a chuckle.>\n\nOh, that\'s right, I do know! Tansi Sparkfuse is in town... Somewhere, no doubt working on something, find her and see if she can fix the Sputtervalve, would ye?','Speak with Engineer Tansi Sparkfuse at Bael Hardul in Stonetalon Mountains.','Yes?','Harlek sent you?\n\n<Tansi lets out a sigh.>\n\nThis is the fourth time in the past few weeks he has asked for my assistance with parts, that flying machine of his keeps breaking down.',60935,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60935,1,0,250,47,25,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61006, 40695);
+replace into creature_involvedrelation	(id, quest) values (61000, 40695);
+
+-- The Fixed Sputtervalve Conductor
+delete from quest_template where entry = 40696;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40695,40696,2,406,18,13,0,0,'The Fixed Sputtervalve Conductor','<Tansi Sparkfuse blinks at the Sputtervalve Conductor.>\n\nWell, that wasn\'t too hard, all it required was a few wires and some tubing.\n\nHarlek is going to have to owe me for all of these favors I am doing for him.\n\nTake it to him, he should be pleased.','Return the fixed Sputtervalve Conductor to Harlek Vaultshield at Bael Hardul in Stonetalon Mountains.','Yes?','<Harlek Vaultshield visibly lights up.>\n\nHaha! I am free to fly again, a savant of the skies to soar once more!\n\nThanks to you and Tansi I am no longer land locked.\n\nGood work $c.',60935,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60935,1,0,275,47,25,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61000, 40696);
+replace into creature_involvedrelation	(id, quest) values (61006, 40696);
+
+-- Pursuing Harmony
+delete from quest_template where entry = 40697;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40697,2,406,20,12,0,0,'Pursuing Harmony','Our new neighbors certainly are quite an interesting bunch. The dwarves here at Bael Hardul have been quite gracious in their hosting.\n\nI am Maloran, a delegate on behalf of Stonetalon Peak, sent to make sure that the natural order is not disturbed. I will admit I held caution when I first arrived, but thus far, Whitepeak has been fairly respectable.\n\nThis has left me to pursue my real purposes. Beneath us to the west the Venture Co. has laid unmarked terror to the fabric of nature, and I wish to see if the local Deepmoss have been affected.\n\nTravel to the west, and gather me a Pristine Deepmoss Brain, I will use it for study.','Gather at Pristine Deepmoss Brain from the local Deepmoss spiders for Maloran Oakbranch at Bael Hardul in Stonetalon Mountains.','There is no doubt in my mind that nature is being disturbed.','Why, I must say, you have certainly gone above and beyond what I have asked, this is quite a perfect specimen, and will help me with my work.',60936,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,1650,69,150,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60998, 40697);
+replace into creature_involvedrelation	(id, quest) values (60998, 40697);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60936,10923,'Pristine Deepmoss Brain',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(4006, 60936, -30, 0, 1, 1, 0);
+
+-- Conflicting Questions
+delete from quest_template where entry = 40698;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40697,40698,2,406,20,12,0,0,'Conflicting Questions','<A look of displeasure marks Maloran\'s features>\n\nIt would appear my research has proven me correct, whilst the Deepmoss population is in a state of increased aggressiveness, there is something more, lingering just beneath it all.\n\nI sense corruption of a magical sort, and this finding has left me with more questions than answers.\n\nA friend of mine named Faldan Moonshatter has taken it of himself to study the corruption of furbolg in Ashenvale, perhaps he may have some answers as to how such a thing could have happened.\n\nYou can find Faldan within Astranaar, at the heart of Ashenvale itself.','Inquire with Faldan Moonshatter at Astranaar in Ashenvale to see why the Deepmoss Spider population may have traces of corruption.','Have you heard news?','I am once again left with more questions...\n\n<Maloran clutches his jaw, musing to himself in thought.>\n\nMore work will be needed to uncover a solution to the problem.',0,0,0,0,0,0,0,0, 60008,1,0,0,0,0,0,0, 0,0,0,1450,69,200,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Bring information about Deepmoss Spider to Maloran Oakbranch');
+
+replace into creature_questrelation		(id, quest) values (60998, 40698);
+replace into creature_involvedrelation	(id, quest) values (60998, 40698);
+
+update creature_template set script_name = 'npc_faldan_moonshatter' where entry = 60471;
+
+REPLACE INTO creature_template VALUES (60008, 328, 0, 0, 0, 0, 'quest_40698_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- The Ornate Windshear Gemstone
+delete from quest_template where entry = 40699;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40699,2,406,24,17,0,0,'The Ornate Windshear Gemstone','Why hello there!\n\nWhat, shocked to see a gnome so far west? Well, you should be, there isn\'t many of my kind so far from home.\n\nOr well, what used to be home.\n\nEither way, I\'m looking to conduct experiments now that I have some time and space to myself, the first of which requires some flammable, and quite dangerous materials!\n\nFar to the west is a place called The Charred Vale, it is there that roving flame elementals can be found, from them I\'d like to acquire something called a \'Flickering Flame\'. Get it for me, and I\'ll make sure you\'re compensated.','Acquire a Flickering Flame from the fire elementals in The Charred Vale for Spigol Kneebolt at Bael Hardul in Stonetalon Mountains.','My hands are eager for some practice, have you had any luck?','Oh, my word, this certainly is quite exotic!\n\nI must thank you for going through all the trouble, now if you would please, my mind is racing with ideas!',60937,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,1850,54,150,0,0,0,0,0,0,0,0,0, 60938,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60999, 40699);
+replace into creature_involvedrelation	(id, quest) values (60999, 40699);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60937,28258,'Flickering Flame',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(4036, 60937, -40, 0, 1, 1, 0),
+(4038, 60937, -100, 0, 1, 1, 0);
+
+replace into item_template values
+ ('60938', '4', '0', 'Drape of Flickering Flame', '', '26016', '2', '0', '1', '3228', '807', '16', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '19', '0', '0', '0',
+ '0', '0', '0', '7686', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '0', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Cursed Bramblethorn Pass
+delete from quest_template where entry = 40700;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40700,2,406,17,12,0,0,'The Cursed Bramblethorn Pass','Perched above Bael Hardul is the dreaded Bramblethorn Pass, occupied by Quilboar and their haunted kin.\n\nThe wayward spirits have cause us all sorts of trouble, and have had us on high alert since we arrived. We could use someone to disperse the spirits to let our limited Mountaineers a chance to rest.\n\nYou can find them just to the south west, up the slope, head up there, and deal with them for us.','Slay 6 Bramblethorn Spirit\'s and 8 Bramblethorn Haunted for Mountaineer Truthforge at Bael Hardul in Stonetalon Mountains.','Have you dealt with the dead $r?','It eases my mind to know that we may just be a little more safe in our, somewhat isolated position, I thank ye for that.',0,0,0,0,0,0,0,0, 60984,6,60985,8,0,0,0,0, 0,0,2500,1350,47,150,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60994,40700);
+replace into creature_involvedrelation	(id, quest) values (60994,40700);
+
+-- Gorras Thorncrusher
+delete from quest_template where entry = 40701;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40700,40701,2,406,20,12,512,0,'Gorras Thorncrusher','When the dwarves first arrived in Stonetalon and had built Bael Hardul a mighty Quilboar ruled over Bramblethorn Pass, he was named Gorras Thorncrusher and was quite a formidible enemy.\n\nAfter many battles with the Quilboar, Gorras was slain, though his indomitable spirit remains, perched overtop of Bramblethorn Pass, still occupying his throne. His hatred for our kind is unmatched, and it is only a matter of time until his soul comes for vengeance, we must put an end to such evil.\n\nTravel again to Bramblethorn Pass, and find Gorras Thorncrusher, destroy him once and for all.','Travel to Bramblethorn Pass and defeat Gorass Thorncrusher for Mountaineer Truthforge at Bael Hardul in Stonetalon Mountains.','Gorras Thorncrusher will not cease, and must be dealt with.','You certainly have eased a troubled mind. Many a stronger dwarf then me fell at the hands of Gorras and I hoped not to be another.\n\nI thank you for everything you\'ve done for us, take this, as a token of my thanks.',0,0,0,0,0,0,0,0, 60986,1,0,0,0,0,0,0, 0,0,0,1850,47,250,0,0,0,0,0,0,0,0,0, 60938,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60994,40701);
+replace into creature_involvedrelation	(id, quest) values (60994,40701);
+
+replace into item_template values
+ ('60939', '2', '0', 'Truthforge Handaxe', '', '9118', '2', '0', '1', '11220', '2805', '21', '-1', '-1', '25',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2500', '0',
+ '0', '23', '42', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '3', '0', '0', '65', '0', '0', '0', '0', '22', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Exploring in Peace
+delete from quest_template where entry = 40702;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40702,2,406,20,14,512,0,'Exploring in Peace','My name is Whitepeak, I lead this group of would-be explorers here to Bael Hardul after hearing stories that it still stood. To my surprise it was, workable. There was a lot of clean up, but now that the work is done, it will be a good base of operations.\n\nThere is, however a hitch.\n\nThe last thing I expected was to have the Venture Co. at our doorstep, that was one detail we did not hear, and now that we are set up they keep moving more, and more people into Windshear Crag. If we ever want to have a chance to explore, do so without constant protection we will need to remove this threat.\n\nDown the hill is Windshear Crag, it is there that the Venture Co. operate, head down, and remove their threat, on my behalf.','Slay 8 Venture Co. Operators, 14 Venture Co. Loggers, 8 Venture Co. Deforesters at Bael Hardul in Stonetalon Mountains.','Have the Venture Company been removed as a threat?','By my beard, I must say, this is astounding work.\n\nHopefully they will get the memo and leave Windshear Crag for good.',0,0,0,0,0,0,0,0, 3988,8,3989,14,3991,8,0,0, 0,0,0,1450,47,150,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (60997,40702);
+replace into creature_involvedrelation	(id, quest) values (60997,40702);

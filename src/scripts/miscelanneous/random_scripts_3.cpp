@@ -4613,9 +4613,160 @@ bool QuestAccept_npc_falgran_hastil(Player* pPlayer, Creature* pQuestGiver, Ques
     return false;
 }
 
+bool GossipHello_npc_grumnir_battlebeard(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40691) == QUEST_STATUS_INCOMPLETE) // A Journey for Vengeance
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear the story.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60993, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_grumnir_battlebeard(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 48 * IN_MILLISECONDS);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("My brother Darnir was a powerful warrior, and well respected amongst those he served with. He traveled to these far lands with our family axe, and made a name for himself in the battles with the Horde during the Third War.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("A truce was established between Horde and Alliance as both factions set to head toward Hyjal. My brother would be one of the last few casualties in this conflict, as a foul orc named 'Scartusk' ambushed him, and took our family axe as his own...");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 13000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("This orc breathes today, pardoned by the Horde, and still wielding the axe my brother carried, an heirloom to our family. I desire revenge, above all else.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 25000);
+            DoAfterTime(pPlayer, 33 * IN_MILLISECONDS, [player = pPlayer]() {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60399))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestRewarded_npc_harlek_vaultshield(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40696) // The Fixed Sputtervalve Conductor
+    {
+        pQuestGiver->MonsterSay("UP UP AND AWAY!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_faldan_moonshatter(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40698) == QUEST_STATUS_INCOMPLETE) // Conflicting Questions
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Maloran Oakbranch has sent me, he is currently looking into the corruption of the Deepmoss in Stonetalon, and heard you may have some insight.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60471, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_faldan_moonshatter(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 48 * IN_MILLISECONDS);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Corruption within Stonetalon? It does not surprise me, even here in tranquil Ashenvale, many of the native species have begun to show signs of aggression. The furbolg are the most obvious of this.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Once our ally, the furbolg have become an enemy, attacking at sight and not hesitating to start conflict. Many druids say that nature itself is adapting to the conflict, becoming more hostile and secluded as a means to protect themselves. This could be the case in Stonetalon.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 13000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Though here in Ashenvale, there is something else rooted deep, clawing at the foundations of all we hold sacred. I do not know what, but I can sense it...");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 27000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("That is all I know, I hope it may be of use to Maloran, we defenders of nature must keep vigilant.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 35000);
+            DoAfterTime(pPlayer, 39 * IN_MILLISECONDS, [player = pPlayer]() {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60008))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestRewarded_npc_maloran_oakbranch(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40698) // Conflicting Questions
+    {
+        pQuestGiver->MonsterSay("I thank you for traveling as you have. The information you have brought will prove valueable. It is up to me to find the root of the troubles now.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_maloran_oakbranch";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_maloran_oakbranch;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_faldan_moonshatter";
+    newscript->pGossipHello = &GossipHello_npc_faldan_moonshatter;
+    newscript->pGossipSelect = &GossipSelect_npc_faldan_moonshatter;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_harlek_vaultshield";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_harlek_vaultshield;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_grumnir_battlebeard";
+    newscript->pGossipHello = &GossipHello_npc_grumnir_battlebeard;
+    newscript->pGossipSelect = &GossipSelect_npc_grumnir_battlebeard;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_falgran_hastil";
