@@ -46,6 +46,7 @@ class Pet;
 class Unit;
 class GmTicket;
 struct ItemPrototype;
+struct GameObjectData;
 
 enum CommandFlags
 {
