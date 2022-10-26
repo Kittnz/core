@@ -316,7 +316,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     m_Session->SetGameBuild(BuiltNumberClient);
     m_Session->SetAccountFlags(accFlags);
     m_Session->SetOS(clientOs);
-    m_Session->LoadGlobalAccountData();
     m_Session->LoadTutorialsData();
     m_Session->InitAntiCheatSession(&K);
 
