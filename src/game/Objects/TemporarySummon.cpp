@@ -211,6 +211,9 @@ void TemporarySummon::Summon(TempSummonType type, uint32 lifetime, CreatureAiSet
     m_timer = lifetime;
     m_lifetime = lifetime;
 
+    if (lifetime && IsRespawnableTempSummonType(type))
+        m_respawnDelay = lifetime / IN_MILLISECONDS;
+
     if (pFuncAiSetter)
         pFuncAiSetter(this);
     else
