@@ -8,3 +8,9 @@ UPDATE `quest_template` SET `OfferRewardText` = 'An eye-opener, isn\'t it, $N?\n
 UPDATE `quest_template` SET `ZoneOrSort` = 4 WHERE `entry` = 40421;
 UPDATE `quest_template` SET `ZoneOrSort` = 4 WHERE `entry` = 40423;
 UPDATE `creature_template` SET `loot_id` = 5465 WHERE `entry` = 60544;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2364
+
+UPDATE `creature_template` SET `skinning_loot_id` = 5272 WHERE `entry` = 60545;
+UPDATE `creature_template` SET `loot_id` = 5272 WHERE `entry` = 60545;
+UPDATE `creature_template` SET `gold_min` = 0, `gold_max` = 0 WHERE `entry` = 60545;
