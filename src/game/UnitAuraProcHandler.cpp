@@ -1555,7 +1555,7 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
             {
                 // prevent stacks going up to 4
                 if (HasAura(trigger_spell_id))
-                    return SPELL_AURA_PROC_FAILED;
+                    RemoveAurasDueToSpellByCancel(trigger_spell_id);
             }
             break;
         }

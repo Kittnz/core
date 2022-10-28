@@ -88,6 +88,18 @@ enum TempSummonType
 
 };
 
+inline bool IsRespawnableTempSummonType(TempSummonType type)
+{
+    switch (type)
+    {
+        case TEMPSUMMON_TIMED_DESPAWN:
+        case TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT:
+        case TEMPSUMMON_MANUAL_DESPAWN:
+            return true;
+    }
+    return false;
+}
+
 class WorldPacket;
 class UpdateData;
 class WorldSession;
