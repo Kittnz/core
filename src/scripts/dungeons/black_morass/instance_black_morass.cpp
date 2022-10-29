@@ -66,7 +66,31 @@ void instance_black_morass::OnCreatureCreate(Creature* pCreature)
     }
 }
 
-void instance_black_morass::SetData(const std::uint32_t uiType, const std::uint32_t uiData)
+void instance_black_morass::OnPlayerEnter(Player* pPlayer)
+{
+    if (pPlayer)
+    {
+        pPlayer->PlayDirectMusic(30274, pPlayer);
+
+        if (!pPlayer->HasItemCount(80008, 1))
+        {
+            pPlayer->AddItem(80008, 1);
+        }
+    }
+}
+
+void instance_black_morass::OnPlayerLeave(Player* pPlayer, const bool bJustDestroy)
+{
+    if (pPlayer)
+    {
+        if (!pPlayer->IsDead() && pPlayer->HasItemCount(80008, 1))
+        {
+            pPlayer->DestroyItemCount(80008, 1, true);
+        }
+    }
+}
+
+void instance_black_morass::SetData(uint32 uiType, uint32 uiData)
 {
     switch (uiType)
     {
