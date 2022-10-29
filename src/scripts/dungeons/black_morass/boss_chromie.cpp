@@ -77,25 +77,7 @@ public:
             return;
 
         m_creature->AddAura(SPELL_PURPLE_PARTICLES_VISUAL);
-
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_CHROMIE, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
-    }
-
-    void JustReachedHome() override
-    {
-        if (!m_pInstance)
-            return;
-
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_CHROMIE, FAIL);
-    }
-
-    void JustDied(Unit* /*pKiller*/) override
-    {
-        if (!m_pInstance)
-            return;
-
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_CHROMIE, DONE);
     }
 
     void JustSummoned(Creature* pSummoned) override

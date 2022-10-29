@@ -7,6 +7,7 @@
 
 #include "scriptPCH.h"
 #include "black_morass.h"
+#include <algorithm>
 
 
 instance_black_morass::instance_black_morass(Map* pMap) : ScriptedInstance(pMap)
@@ -16,53 +17,9 @@ instance_black_morass::instance_black_morass(Map* pMap) : ScriptedInstance(pMap)
 
 void instance_black_morass::Initialize()
 {
-    memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
-    memset(&m_auiData, 0, sizeof(m_auiData));
-}
-
-bool instance_black_morass::IsEncounterInProgress() const
-{
-    for (const auto& encounter : m_auiEncounter)
+    if (Creature* entityCreature{ instance->SummonCreature(66003, -1591.57f, 7106.07f, 23.73f, 0, TEMPSUMMON_CORPSE_DESPAWN) })
     {
-        if (encounter == IN_PROGRESS)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-void instance_black_morass::OnObjectCreate(GameObject* pGo)
-{
-    switch (pGo->GetEntry())
-    {
-
-    }
-}
-
-void instance_black_morass::OnCreatureCreate(Creature* pCreature)
-{
-    switch (pCreature->GetEntry())
-    {
-        case BlackMorassUnit::NPC_CHROMIE:
-        {
-            m_auiData[BlackMorassData::DATA_CHROMIE_GUID] = pCreature->GetObjectGuid();
-            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
-            break;
-        }
-        case BlackMorassUnit::NPC_CHRONORMU:
-        {
-            m_auiData[BlackMorassData::DATA_CHRONORMU_GUID] = pCreature->GetObjectGuid();
-            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
-            break;
-        }
-        case BlackMorassUnit::NPC_GERASTRASZ:
-        {
-            m_auiData[BlackMorassData::DATA_GERASTRASZ_GUID] = pCreature->GetObjectGuid();
-            m_mNpcEntryGuidStore[pCreature->GetEntry()] = pCreature->GetObjectGuid();
-            break;
-        }
+        unknownEntity = entityCreature->GetObjectGuid();
     }
 }
 
@@ -71,118 +28,31 @@ void instance_black_morass::OnPlayerEnter(Player* pPlayer)
     if (pPlayer)
     {
         pPlayer->PlayDirectMusic(30274, pPlayer);
-
-        if (!pPlayer->HasItemCount(80008, 1))
-        {
-            pPlayer->AddItem(80008, 1);
-        }
     }
 }
 
-void instance_black_morass::OnPlayerLeave(Player* pPlayer, const bool bJustDestroy)
+void instance_black_morass::Update(std::uint32_t uiDiff)
 {
-    if (pPlayer)
-    {
-        if (!pPlayer->IsDead() && pPlayer->HasItemCount(80008, 1))
-        {
-            pPlayer->DestroyItemCount(80008, 1, true);
-        }
-    }
-}
+    bool bDoOnce{ false };
 
-void instance_black_morass::SetData(uint32 uiType, uint32 uiData)
-{
-    switch (uiType)
+    if (!bDoOnce)
     {
-        case BlackMorassEncounter::TYPE_CHROMIE:
-        {
-            m_auiEncounter[BlackMorassEncounter::TYPE_CHROMIE] = uiData;
+        bDoOnce = true;
 
-            if (uiData == DONE)
+        if (Creature* pPortal{ instance->SummonCreature(81048, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000) })
+        {
+            DoAfterTime(pPortal, 2 * IN_MILLISECONDS, [Instance = instance]()
             {
-                // 
-            }
-
-            break;
-        }
-        case BlackMorassEncounter::TYPE_CHRONORMU:
-        {
-            m_auiEncounter[BlackMorassEncounter::TYPE_CHRONORMU] = uiData;
-
-            if (uiData == DONE)
-            {
-                // 
-            }
-
-            break;
-        }
-        case BlackMorassEncounter::TYPE_GERASTRASZ:
-        {
-            m_auiEncounter[BlackMorassEncounter::TYPE_GERASTRASZ] = uiData;
-
-            if (uiData == DONE)
-            {
-                // 
-            }
-
-            break;
+                if (Creature* pChromie{ Instance->SummonCreature(91003, -1593.85f, 7111.85f, 23.72f, 0, TEMPSUMMON_DEAD_DESPAWN) })
+                {
+                    pChromie->CastSpell(pChromie, 26638, false); // Teleport
+                    pChromie->SetFacingTo(6.18f);
+                    pChromie->HandleEmote(EMOTE_ONESHOT_WAVE);
+                    pChromie->PMonsterSay("You did it!");
+                }
+            });
         }
     }
-
-    if (uiData == DONE)
-    {
-        OUT_SAVE_INST_DATA;
-
-        std::ostringstream saveStream{};
-        saveStream
-            << m_auiEncounter[TYPE_CHROMIE] << " "
-            << m_auiEncounter[TYPE_CHRONORMU] << " "
-            << m_auiEncounter[TYPE_GERASTRASZ];
-
-        str_InstData = saveStream.str();
-
-        SaveToDB();
-
-        OUT_SAVE_INST_DATA_COMPLETE;
-    }
-}
-
-std::uint32_t instance_black_morass::GetData(const std::uint32_t uiType)
-{
-    if (uiType < BlackMorassEncounter::MAX_ENCOUNTER)
-    {
-        return (m_auiEncounter[uiType]);
-    }
-
-    return 0;
-}
-
-void instance_black_morass::Load(char const* chrIn)
-{
-    if (!chrIn)
-    {
-        OUT_LOAD_INST_DATA_FAIL;
-        return;
-    }
-
-    OUT_LOAD_INST_DATA(chrIn);
-
-    std::istringstream loadStream(chrIn);
-
-    loadStream >>
-        m_auiEncounter[TYPE_CHROMIE] >>
-        m_auiEncounter[TYPE_CHRONORMU] >>
-        m_auiEncounter[TYPE_GERASTRASZ];
-
-    for (std::uint8_t i{}; i < MAX_ENCOUNTER; ++i)
-    {
-        if (m_auiEncounter[i] == IN_PROGRESS)
-        {
-            m_auiEncounter[i] = NOT_STARTED;
-        }
-    }
-
-    OUT_LOAD_INST_DATA_COMPLETE;
 }
 
 InstanceData* GetInstanceData_instance_black_morass(Map* pMap)

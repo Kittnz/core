@@ -7,33 +7,6 @@
 
 #pragma once
 
-
-enum BlackMorassUnit : std::uint32_t
-{
-    NPC_CHROMIE = 0000,
-    NPC_CHRONORMU = 50117,
-    NPC_GERASTRASZ = 0002,
-    NPC_ANTNORMI = 65125
-};
-
-enum BlackMorassEncounter : std::uint32_t
-{
-    TYPE_CHROMIE = 0,
-    TYPE_CHRONORMU,
-    TYPE_GERASTRASZ,
-
-    MAX_ENCOUNTER
-};
-
-enum BlackMorassData : std::uint32_t
-{
-    DATA_CHROMIE_GUID = 0,
-    DATA_CHRONORMU_GUID,
-    DATA_GERASTRASZ_GUID,
-
-    MAX_DATA
-};
-
 struct LocationXYZO
 {
     float m_fX{}, m_fY{}, m_fZ{}, m_fO{};
@@ -59,28 +32,10 @@ public:
 
     void Initialize() override;
 
-    bool IsEncounterInProgress() const override;
-
-    void OnObjectCreate(GameObject* pGo) override;
-    void OnCreatureCreate(Creature* pCreature) override;
-
     void OnPlayerEnter(Player* pPlayer) override;
-    void OnPlayerLeave(Player* pPlayer, const bool bJustDestroy) override;
 
-    void SetData(uint32 uiType, uint32 uiData) override;
-    uint32 GetData(const std::uint32_t uiType) override;
-
-    char const* Save() override { return str_InstData.c_str(); }
-    void Load(char const* chrIn) override;
-
-    void CloseRift(const std::uint8_t count) { m_uiRiftsClosed += count; }
+    void Update(std::uint32_t uiDiff) override;
 
 private:
-    std::uint8_t m_uiRiftsClosed;
-
-    std::uint32_t m_auiEncounter[BlackMorassEncounter::MAX_ENCOUNTER]{};
-
-    std::uint64_t m_auiData[BlackMorassData::MAX_DATA]{};
-
-    std::string str_InstData{};
+    ObjectGuid unknownEntity{};
 };

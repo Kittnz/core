@@ -19,3 +19,5 @@ static constexpr std::uint32_t SPELL_PARTICLES_GREEN{ 18951 };
 static constexpr std::uint32_t SOUND_BODY_OF_KATHUNE{ 8674 };
 
 static constexpr std::uint32_t FACTION_FRIENDLY{ 35 };
+
+static constexpr std::uint32_t NPC_CHRONORMU{ 50117 };
