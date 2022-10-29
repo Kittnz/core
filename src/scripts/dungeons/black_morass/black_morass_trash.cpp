@@ -1807,12 +1807,12 @@ CreatureAI* GetAI_npc_shade(Creature* pCreature)
 }
 
 
-class boss_chromieAI: public ScriptedAI
+class boss_infinite_chromieAI : public ScriptedAI
 {
 public:
-    explicit boss_chromieAI(Creature* pCreature) : ScriptedAI(pCreature)
+    explicit boss_infinite_chromieAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        boss_chromieAI::Reset();
+        boss_infinite_chromieAI::Reset();
     }
 
 private:
@@ -2099,9 +2099,9 @@ public:
     }
 };
 
-CreatureAI* GetAI_boss_chromie_duplicate(Creature* pCreature)
+CreatureAI* GetAI_boss_infinite_chromie(Creature* pCreature)
 {
-    return new boss_chromieAI(pCreature);
+    return new boss_infinite_chromieAI(pCreature);
 }
 
 
@@ -2170,7 +2170,7 @@ private:
 
                     if (Player* pPlayer{ pTarget->GetCharmerOrOwnerPlayerOrPlayerItself() })
                     {
-                        pPlayer->GetSession()->SendNotification("You are being consumed!");
+                        // pPlayer->GetSession()->SendNotification("You are being consumed!");
 
                         DoAfterTime(m_creature, 15.5 * IN_MILLISECONDS, [creature = m_creature, player = pPlayer, originalscale = fOriginalscale, this]()
                             {
@@ -2765,11 +2765,15 @@ public:
 
         m_uiSummonCreatureEntry = 0;
 
-        pPortalLeft = m_Map->GetGameObject(nsLogisticalOfficer::GOB_PORTAL_GROUND_LEFT);
-        pPortalRight = m_Map->GetGameObject(nsLogisticalOfficer::GOB_PORTAL_GROUND_RIGHT);
-        pPortal = nullptr;
-
         m_Map = m_creature->GetMap();
+
+        if (m_Map)
+        {
+            pPortalLeft = m_Map->GetGameObject(nsLogisticalOfficer::GOB_PORTAL_GROUND_LEFT);
+            pPortalRight = m_Map->GetGameObject(nsLogisticalOfficer::GOB_PORTAL_GROUND_RIGHT);
+        }
+
+        pPortal = nullptr;
 
         phase = nsLogisticalOfficer::Phase::ONE;
     }
@@ -3122,8 +3126,9 @@ public:
                                             m_creature->MonsterSay("Kings can be... difficult.");
 
                                             m_bDoOnce = true;
-                                            break;
                                         }
+
+                                        break;
                                     }
                                     default:
                                     {
@@ -3331,34 +3336,37 @@ bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const 
             {
                 pChromie->CastSpell(pChromie, nsTemporalBronzeDisc::SPELL_TELEPORT, false);
                 pChromie->ForcedDespawn(500);
-            }
 
-            pPlayer->CastSpell(pPlayer, nsTemporalBronzeDisc::SPELL_ARCANE_CHANNELING, true);
-            pPlayer->SetRooted(true);
+                pPlayer->CastSpell(pPlayer, nsTemporalBronzeDisc::SPELL_ARCANE_CHANNELING, true);
+                pPlayer->SetRooted(true);
 
-            if (GameObject* pRiftspell{ pPlayer->SummonGameObject(7000035, pRrift->GetPositionX(), pRrift->GetPositionY(), pRrift->GetPositionZ(), 0.f) })
-            {
-                DoAfterTime(pRrift, 5 * IN_MILLISECONDS, [rift = pRrift, player = pPlayer, riftSpell = pRiftspell, spawnChromie = false]()
+                if (GameObject* pRiftspell{ pPlayer->SummonGameObject(7000035, pRrift->GetPositionX(), pRrift->GetPositionY(), pRrift->GetPositionZ(), 0.f) })
+                {
+                    if (instance_black_morass* m_pInstance{ static_cast<instance_black_morass*>(pChromie->GetInstanceData()) })
                     {
-                        player->CastStop();
-                        player->CastSpell(player, nsTemporalBronzeDisc::SPELL_ARCANE_EXPLOSION, true);
+                        DoAfterTime(pRrift, 5 * IN_MILLISECONDS, [rift = pRrift, player = pPlayer, riftSpell = pRiftspell, spawnChromie = false]()
+                            {
+                                player->CastStop();
+                                player->CastSpell(player, nsTemporalBronzeDisc::SPELL_ARCANE_EXPLOSION, true);
 
-                        player->SetRooted(false);
+                                player->SetRooted(false);
 
-                        player->SummonGameObject(7000032, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0.f);
+                                player->SummonGameObject(7000032, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0.f);
 
-                        riftSpell->Despawn();
+                                riftSpell->Despawn();
 
-                        riftSpell->Delete();
+                                riftSpell->Delete();
 
-                        rift->SetNativeScale(.05f);
+                                rift->SetNativeScale(.05f);
 
-                        rift->ForcedDespawn(1500);
+                                rift->ForcedDespawn(1500);
 
-                        // ++riftsClosed; // TODO: ??
-                        return true;
-                    });
+                                return true;
+                            });
 
+                        m_pInstance->CloseRift(1);
+                    }
+                }
             }
         }
     }
@@ -3436,8 +3444,8 @@ void AddSC_black_morass_trash()
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
-    pNewscript->Name = "boss_chromie";
-    pNewscript->GetAI = &GetAI_boss_chromie_duplicate;
+    pNewscript->Name = "boss_infinite_chromie";
+    pNewscript->GetAI = &GetAI_boss_infinite_chromie;
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
@@ -3451,7 +3459,7 @@ void AddSC_black_morass_trash()
     pNewscript->RegisterSelf();
 
     pNewscript = new Script;
-    pNewscript->Name = "npc_mossheart";
+    pNewscript->Name = "npc_antnormi";
     pNewscript->GetAI = &GetAI_npc_antnormi;
     pNewscript->RegisterSelf();
 

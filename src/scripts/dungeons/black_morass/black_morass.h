@@ -64,14 +64,23 @@ public:
     void OnObjectCreate(GameObject* pGo) override;
     void OnCreatureCreate(Creature* pCreature) override;
 
-    void SetData(const std::uint32_t uiType, const std::uint32_t uiData) override;
+    void OnPlayerEnter(Player* pPlayer) override;
+    void OnPlayerLeave(Player* pPlayer, const bool bJustDestroy) override;
+
+    void SetData(uint32 uiType, uint32 uiData) override;
     uint32 GetData(const std::uint32_t uiType) override;
 
     char const* Save() override { return str_InstData.c_str(); }
     void Load(char const* chrIn) override;
 
+    void CloseRift(const std::uint8_t count) { m_uiRiftsClosed += count; }
+
 private:
+    std::uint8_t m_uiRiftsClosed;
+
     std::uint32_t m_auiEncounter[BlackMorassEncounter::MAX_ENCOUNTER]{};
+
     std::uint64_t m_auiData[BlackMorassData::MAX_DATA]{};
+
     std::string str_InstData{};
 };
