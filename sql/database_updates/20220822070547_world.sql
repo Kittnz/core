@@ -5277,6 +5277,7 @@ REPLACE INTO creature_display_info_addon VALUES (18993, 0, 0, 0, 0);
 -- Frenz Lodefire, display ID 7168, level 19, faction 35 , humanoid, scale 1 , quest/greeting flags, greeting text : "Gizzin doesn't have the best sense of directions..."
 -- Disturbed Earth Elemental, display ID 1108, level 14-16, faction 16, elemental, scale 0.8, immune to nature damage
 -- Scartusk, display ID 10695 , level 20, faction , weapon 1: 3201, humanoid, scale 1
+-- Silmaron , display id 5440 , level 26 faction 80, humanoid, scale 1, quest/greeting flags, greeting text : "There is always to be a battle had in the good of nature, It is up to all of us to champion for it."
 REPLACE INTO creature_template VALUES
 (61044, 9419, 0, 0, 0, 0, 'Yesu\'gei', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 132, 3, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61045, 9444, 0, 0, 0, 0, 'Warleader Temukar', NULL, 0, 42, 42, 4953, 4953, 0, 0, 2246, 132, 3, 1, 1.14286, 1.3, 20, 5, 0, 1, 1, 269, 346, 0, 172, 1, 1258, 1384, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 7, 0, 13741, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 107, 534, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 8388624, 0, 0, 0, ''),
@@ -5291,8 +5292,9 @@ REPLACE INTO creature_template VALUES
 (61058, 7180, 0, 0, 0, 0, 'Tazo Wirelight', 'General Goods', 0, 19, 19, 510, 510, 0, 0, 765, 35, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 36, 44, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 21, 32, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61059, 10704, 0, 0, 0, 0, 'Hork', 'Bodyguard', 0, 35, 35, 1342, 1342, 0, 0, 1373, 35, 0, 1, 1.14286, 1.35, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61060, 7168, 0, 0, 0, 0, 'Frenz Lodefire', NULL, 0, 19, 19, 510, 510, 0, 0, 765, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 36, 44, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 21, 32, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61061, 1108, 0, 0, 0, 0, 'Disturbed Earth Elemental', NULL, 0, 14, 16, 328, 335, 0, 0, 660, 1693, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 2, 0, 0, 0, 21.2784, 29.2578, 100, 4, 0, 61061, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61062, 10695, 0, 0, 0, 0, 'Scartusk', NULL, 0, 20, 20, 580, 580, 2000, 2000, 852, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 45, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 32.8944, 45.2298, 100, 7, 0, 61062, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 27, 40, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61061, 1108, 0, 0, 0, 0, 'Disturbed Earth Elemental', NULL, 0, 14, 16, 328, 335, 0, 0, 660, 16, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 2, 0, 0, 0, 21.2784, 29.2578, 100, 4, 0, 61061, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61062, 10695, 0, 0, 0, 0, 'Scartusk', NULL, 0, 20, 20, 580, 580, 2000, 2000, 852, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 45, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 32.8944, 45.2298, 100, 7, 0, 61062, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 27, 40, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61063, 5440, 0, 0, 0, 0, 'Gizzin Wildbucket', NULL, 0, 26, 26, 787, 787, 0, 0, 1061, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 20249; set @weapon_1 = 3201; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61062;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -5313,6 +5315,12 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20245; set @weapon_1 = 60112; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61044;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41269; set @magic_number = 61063;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There is always to be a battle had in the good of nature, It is up to all of us to champion for it.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41268; set @magic_number = 61060;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
