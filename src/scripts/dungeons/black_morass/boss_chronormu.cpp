@@ -44,26 +44,7 @@ public:
         if (!m_pInstance)
             return;
 
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_CHRONORMU, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
-    }
-
-    void JustReachedHome() override
-    {
-        if (!m_pInstance)
-            return;
-
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_CHRONORMU, FAIL);
-    }
-
-    void JustDied(Unit* /*pKiller*/) override
-    {
-        if (!m_pInstance)
-            return;
-
-        m_creature->SetRespawnDelay(604800);
-
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_CHRONORMU, DONE);
     }
 
     void EnterEvadeMode() override

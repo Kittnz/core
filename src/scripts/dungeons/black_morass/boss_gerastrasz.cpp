@@ -54,7 +54,6 @@ public:
 
         m_creature->MonsterYell("Who dares disrupt our majestic plan? The master won't like this.");
 
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_GERASTRASZ, IN_PROGRESS);
         m_creature->SetInCombatWithZone();
     }
 
@@ -69,16 +68,6 @@ public:
         }
 
         m_creature->MonsterSay("Already? So soon...");
-
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_GERASTRASZ, FAIL);
-    }
-
-    void JustDied(Unit* /*pKiller*/) override
-    {
-        if (!m_pInstance)
-            return;
-
-        m_pInstance->SetData(BlackMorassEncounter::TYPE_GERASTRASZ, DONE);
     }
 
     void IgniteEcho()

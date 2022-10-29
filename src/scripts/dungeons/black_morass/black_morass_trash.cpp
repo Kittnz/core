@@ -125,12 +125,12 @@ public:
         {
             case 1:
             {
-                m_creature->PMonsterSay("Our numbers are endless!");
+                m_creature->MonsterSay("Our numbers are endless!");
                 break;
             }
             case 2:
             {
-                m_creature->PMonsterSay("Our mission cannot be compromised!");
+                m_creature->MonsterSay("Our mission cannot be compromised!");
                 break;
             }
             default:
@@ -1107,7 +1107,7 @@ public:
 
         DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [this]()
             {
-                if (Creature* pChromie{ me->SummonCreature(NPC_CHROMIE, -1426.82f, 6988.00f, -230.20f, 0, TEMPSUMMON_DEAD_DESPAWN) })
+                if (Creature* pChromie{ me->SummonCreature(81048, -1426.82f, 6988.00f, -230.20f, 0, TEMPSUMMON_DEAD_DESPAWN) })
                 {
                     pChromie->CastSpell(pChromie, nsBossChronar::SPELL_TELEPORT, false);
                     pChromie->SetFacingTo(3.94f);
@@ -1981,14 +1981,14 @@ public:
                 m_lTimeRifts.push_back(largeRift->GetObjectGuid());
             }
 
-            DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [m_creature = m_creature, this]()
+            DoAfterTime(m_creature, 5 * IN_MILLISECONDS, [creature = m_creature, this]()
                 {
                     m_bBeginFight = true;
 
-                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
-                    m_creature->RestoreFaction();
+                    creature->RestoreFaction();
                 });
         }
 
@@ -2170,8 +2170,6 @@ private:
 
                     if (Player* pPlayer{ pTarget->GetCharmerOrOwnerPlayerOrPlayerItself() })
                     {
-                        // pPlayer->GetSession()->SendNotification("You are being consumed!");
-
                         DoAfterTime(m_creature, 15.5 * IN_MILLISECONDS, [creature = m_creature, player = pPlayer, originalscale = fOriginalscale, this]()
                             {
                                 DoCastSpellIfCan(player, nsRotmaw::SPELL_KNOCKBACK);
@@ -2685,10 +2683,6 @@ public:
                 }
                 case nsInjuredDefender::Phase::FOUR:
                 {
-                    //dragonSpawn1->SaveHomePosition();
-                    //dragonSpawn2->SaveHomePosition();
-                    //dragonSpawn3->SaveHomePosition();
-
                     m_creature->MonsterMove(-1872.45f, 6693.27f, -177.26f);
 
                     if (m_creature->FindNearestCreature(nsInjuredDefender::CHROMIE_PORTAL, 3))
@@ -3209,12 +3203,10 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
         pPlayer->DestroyItemCount(80008, 1, true);
     }
 
-    bool chromieBossSummoned{}; // TODO: ??
+    bool chromieBossSummoned{};
 
     if (!chromieBossSummoned)
     {
-        chromieBossSummoned = true;
-
         DoAfterTime(pCreature, 2 * IN_MILLISECONDS, [creature = pCreature]()
             {
                 creature->GetMotionMaster()->MovePoint(0, -1597.75f, 7105.72f, 23.76f, true, 1.25f, 6.25f);
@@ -3236,143 +3228,11 @@ void ChromieBossAnim(Creature* pCreature, Player* pPlayer)
                     pBossChromie->AddAura(nsChromieBossAnim::SHADOW_AURA);
                 }
             });
+
+        chromieBossSummoned = true;
     }
 }
 
-bool GossipHello_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature)
-{
-    bool finalDialogue{}; // TODO: ??
-
-    if (!finalDialogue)
-    {
-        if (!pPlayer->HasItemCount(80008, 1, true))
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Take the Temporal Bronze Disc.", GOSSIP_SENDER_MAIN, 1);
-        }
-        else
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I've already got one! Somehow ... ", GOSSIP_SENDER_MAIN, 1);
-        }
-
-        pPlayer->SEND_GOSSIP_MENU(91974, pCreature->GetGUID());
-    }
-    else
-    {
-        if (pPlayer->HasItemCount(80008, 1, true))
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "Hand Chromie the Temporal Bronze Disc", GOSSIP_SENDER_MAIN, 2);
-            pPlayer->SEND_GOSSIP_MENU(91975, pCreature->GetGUID());
-        }
-        else
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yeah ... I lost it.", GOSSIP_SENDER_MAIN, 3);
-            pPlayer->SEND_GOSSIP_MENU(91975, pCreature->GetGUID());
-        }
-    }
-
-    return true;
-}
-
-bool GossipSelect_npc_chromie_dialogue(Player* pPlayer, Creature* pCreature, const uint32 uiSender, const uint32 uiAction)
-{
-    pPlayer->CLOSE_GOSSIP_MENU();
-
-    switch (uiAction)
-    {
-        case 1:
-        {
-            pPlayer->AddItem(80008);
-
-            DoAfterTime(pCreature, 5 * IN_MILLISECONDS, [creature = pCreature]()
-                {
-                    if (creature)
-                    {
-                        creature->ForcedDespawn(30000);
-                    }
-                });
-
-            break;
-        }
-        case 2:
-        {
-            pPlayer->DestroyItemCount(80008, 1, true);
-
-            pCreature->MonsterTextEmote("Chromie breathes a sigh of relief.");
-            pCreature->MonsterSay("Thank you. You've made this so much easier.");
-
-            ChromieBossAnim(pCreature, pPlayer);
-
-            break;
-        }
-        case 3:
-        {
-            pCreature->MonsterTextEmote("Chromie pulls your Temporal Bronze Disc from her pouch.");
-            pCreature->MonsterSay("I found this in the sand behind you. Thank you. You've made this so much easier.");
-
-            ChromieBossAnim(pCreature, pPlayer);
-
-            break;
-        }
-        default:
-        {
-            break;
-        }
-    }
-
-    return true;
-}
-
-bool ItemUseSpell_item_temporal_bronze_disc(Player* pPlayer, Item* pItem, const SpellCastTargets&)
-{
-    const time_t now{ time(nullptr) };
-
-    if (nsTemporalBronzeDisc::cotData.m_itemTimer < now)
-    {
-        if (Creature* pRrift{ pPlayer->FindNearestCreature(nsTemporalBronzeDisc::NPC_LARGE_TIME_RIFT, 10.f, true) })
-        {
-            nsTemporalBronzeDisc::cotData.m_itemTimer = (now + 30);
-
-            if (Creature* pChromie{ pPlayer->FindNearestCreature(nsTemporalBronzeDisc::NPC_CHROMIE, 50.f, true) })
-            {
-                pChromie->CastSpell(pChromie, nsTemporalBronzeDisc::SPELL_TELEPORT, false);
-                pChromie->ForcedDespawn(500);
-
-                pPlayer->CastSpell(pPlayer, nsTemporalBronzeDisc::SPELL_ARCANE_CHANNELING, true);
-                pPlayer->SetRooted(true);
-
-                if (GameObject* pRiftspell{ pPlayer->SummonGameObject(7000035, pRrift->GetPositionX(), pRrift->GetPositionY(), pRrift->GetPositionZ(), 0.f) })
-                {
-                    if (instance_black_morass* m_pInstance{ static_cast<instance_black_morass*>(pChromie->GetInstanceData()) })
-                    {
-                        DoAfterTime(pRrift, 5 * IN_MILLISECONDS, [rift = pRrift, player = pPlayer, riftSpell = pRiftspell, spawnChromie = false]()
-                            {
-                                player->CastStop();
-                                player->CastSpell(player, nsTemporalBronzeDisc::SPELL_ARCANE_EXPLOSION, true);
-
-                                player->SetRooted(false);
-
-                                player->SummonGameObject(7000032, rift->GetPositionX(), rift->GetPositionY(), rift->GetPositionZ(), 0.f);
-
-                                riftSpell->Despawn();
-
-                                riftSpell->Delete();
-
-                                rift->SetNativeScale(.05f);
-
-                                rift->ForcedDespawn(1500);
-
-                                return true;
-                            });
-
-                        m_pInstance->CloseRift(1);
-                    }
-                }
-            }
-        }
-    }
-
-    return false;
-}
 
 void AddSC_black_morass_trash()
 {
@@ -3478,16 +3338,5 @@ void AddSC_black_morass_trash()
     pNewscript->GetAI = &GetAI_npc_logistical_officer;
     pNewscript->pGossipHello = &GossipHello_npc_logistics_dialogue;
     pNewscript->pGossipSelect = &GossipSelect_npc_logistics_dialogue;
-    pNewscript->RegisterSelf();
-
-    pNewscript = new Script;
-    pNewscript->Name = "npc_chromie_dialogue";
-    pNewscript->pGossipHello = &GossipHello_npc_chromie_dialogue;
-    pNewscript->pGossipSelect = &GossipSelect_npc_chromie_dialogue;
-    pNewscript->RegisterSelf();
-
-    pNewscript = new Script;
-    pNewscript->Name = "item_temporal_bronze_disc";
-    pNewscript->pItemUseSpell = &ItemUseSpell_item_temporal_bronze_disc;
     pNewscript->RegisterSelf();
 }
