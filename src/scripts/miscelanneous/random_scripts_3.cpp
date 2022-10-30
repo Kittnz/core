@@ -4742,9 +4742,157 @@ bool QuestRewarded_npc_maloran_oakbranch(Player* pPlayer, Creature* pQuestGiver,
     return false;
 }
 
+bool GOHello_go_gong_of_corthan(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010946)
+    {
+        if (pPlayer->GetQuestStatus(40713) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(20, 40.0F))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Strike the gong with the Mallet of Zeth", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            pPlayer->SEND_GOSSIP_MENU(30051, pGo->GetGUID());
+        }
+    }
+    return true;
+}
+
+bool GOSelect_go_gong_of_corthan(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+{
+    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (pGo->GetEntry() == 2010946 && !pPlayer->HasItemCount(60944, 1, false))
+        {
+            pPlayer->GetSession()->SendNotification("Need to Mallet of Zeth.");
+        }
+
+        if (pGo->GetEntry() == 2010946 && pPlayer->HasItemCount(60944, 1, false))
+        {
+            pGo->SummonCreature(20, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 0.4 * MINUTE * IN_MILLISECONDS);
+
+            Creature* echo_of_corthan = pGo->SummonCreature(61066, -6381.10F, -3024.88F, 403.54F, 1.60F, TEMPSUMMON_TIMED_DESPAWN, 22 * IN_MILLISECONDS);
+            Creature* echo_of_forgotten_warlord = pGo->SummonCreature(61068, -6379.24F, -3021.03F, 403.46F, 4.36F, TEMPSUMMON_TIMED_DESPAWN, 22 * IN_MILLISECONDS);
+            Creature* echo_of_forgotten_chieftain = pGo->SummonCreature(61067, -6383.77F, -3020.89F, 403.37F, 5.03F, TEMPSUMMON_TIMED_DESPAWN, 22 * IN_MILLISECONDS);
+
+            pGo->m_Events.AddLambdaEventAtOffset([echo_of_forgotten_warlord, echo_of_forgotten_chieftain]()
+                {
+                    if (echo_of_forgotten_warlord && echo_of_forgotten_chieftain)
+                    {
+                        echo_of_forgotten_warlord->HandleEmote(EMOTE_STATE_KNEEL);
+                        echo_of_forgotten_chieftain->HandleEmote(EMOTE_STATE_KNEEL);
+                    }
+                }, 1000);
+            pGo->m_Events.AddLambdaEventAtOffset([echo_of_corthan]()
+                {
+                    if (echo_of_corthan)
+                    {
+                        echo_of_corthan->MonsterSay("Your armies have been defeated, and now you stand before the King of Corthan, if you desire to save the lives of the survivors, and yourself, you must swear loyalty to me, as King.");
+                        echo_of_corthan->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                }, 4000);
+            pGo->m_Events.AddLambdaEventAtOffset([echo_of_forgotten_warlord, echo_of_forgotten_chieftain]()
+                {
+                    if (echo_of_forgotten_warlord)
+                    {
+                        echo_of_forgotten_warlord->MonsterSay("I swear my fealty to you, King of Corthan.");
+                        echo_of_forgotten_warlord->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                }, 11000);
+            pGo->m_Events.AddLambdaEventAtOffset([echo_of_forgotten_warlord, echo_of_forgotten_chieftain]()
+                {
+                    if (echo_of_forgotten_chieftain)
+                    {
+                        echo_of_forgotten_chieftain->MonsterSay("I will remain loyal.");
+                        echo_of_forgotten_chieftain->HandleEmote(EMOTE_ONESHOT_TALK);
+                    }
+                }, 12000);
+            DoAfterTime(pPlayer, 22 * IN_MILLISECONDS, [player = pPlayer, gob = pGo]() {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60009))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return false;
+}
+
+bool GossipHello_npc_forgotten_keeper(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40714) == QUEST_STATUS_INCOMPLETE) // The Curse of Zetharia
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60916, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_forgotten_keeper(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 89 * IN_MILLISECONDS);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("The land you see today used to be called the Kingdom of Corthan. For generations, every man that deserved the title of Marauder King was named Corthan, as the name of the land that he was to rule and serve for the rest of his life.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 2000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("For many generations we had exactly what we wanted, we were a kingdom of war and of battle! Our thirst for combat was like no other. We were men of conquest and yet we never expanded our territory. Every defeated enemy knew its place.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 30000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("As Keeper of the Living Flame for generations our sons and daughters were named either Zeth or Zetharia and they were meant to be the very image of our religion. You've probably noticed that when we first spoke I said the curse of Zetharia. Indeed, it was my daughter that cursed us all into an eternity of undeath.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 44000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("It is quite a long story. Zetharia had always loved Corthan, she knew nothing better on this world of ours, as our ancestors, the Azotha had left us on it, for better or worse. Her love of Corthan made her go mad. I had convinced the King that a union between him and the daughter of the Keeper would greatly help the kingdom and yet on the day of their marriage, Corthan showed up with his commoner mistress.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 58000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("I truthfully bear no ill mind to our king, friend. We do not choose those we love. But Zetharia, she had not taken well to this betrayal, as she called it.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 72000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("A dreadful pact Zetharia had committed, with the Lord of the Everlasting Death, and so she had cursed Corthan, his wife, and his kingdom to eternal undeath for the rest of time... Now, here we remain, lost to drift through time.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 81000);
+            DoAfterTime(pPlayer, 89 * IN_MILLISECONDS, [player = pPlayer]() {
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60010))
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_forgotten_keeper";
+    newscript->pGossipHello = &GossipHello_npc_forgotten_keeper;
+    newscript->pGossipSelect = &GossipSelect_npc_forgotten_keeper;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_gong_of_corthan";
+    newscript->pGOHello = &GOHello_go_gong_of_corthan;
+    newscript->pGOGossipSelect = &GOSelect_go_gong_of_corthan;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_maloran_oakbranch";
