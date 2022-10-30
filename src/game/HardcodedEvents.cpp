@@ -54,7 +54,7 @@ void ElementalInvasion::Update()
         StartLocalBoss(EVENT_IND_AIR, stageAir, delayAir);
         StartLocalBoss(EVENT_IND_WATER, stageWater, delayWater);
         StartLocalBoss(EVENT_IND_EARTH, stageEarth, delayEarth);
-
+        
         // check for boss death
         // stop rifts immediately, stop bosses' events with a delay to allow looting
         StopLocalInvasion(EVENT_IND_FIRE, stageFire, delayFire);
@@ -63,7 +63,9 @@ void ElementalInvasion::Update()
         StopLocalInvasion(EVENT_IND_EARTH, stageEarth, delayEarth);
 
         // all bosses are dead, all delays are gone
-        if (!delayFire && !delayAir && !delayWater && !delayEarth)
+        if (!delayFire && !delayAir && !delayWater && !delayEarth &&
+            stageFire == STAGE_BOSS_DESPAWN && stageAir == STAGE_BOSS_DESPAWN &&
+            stageWater == STAGE_BOSS_DESPAWN && stageEarth == STAGE_BOSS_DESPAWN)
         {
             sGameEventMgr.StopEvent(EVENT_INVASION, true);
 
@@ -105,18 +107,18 @@ void ElementalInvasion::StartLocalInvasion(uint8 index, uint32 stage)
         sGameEventMgr.StartEvent(InvasionData[index].eventRift, true);
 }
 
-void ElementalInvasion::StartLocalBoss(uint8 index, uint32 stage, uint8 delay)
+void ElementalInvasion::StartLocalBoss(uint8 index, uint32 stage, uint32 delay)
 {
     // If we're in boss stage and the event is not started, start it.
     // Similarly, if the boss is dead but we're delaying the despawn, start the
     // event. Must do this or the next time the event is triggered the boss will
     // be spawned dead
-    if (((stage == STAGE_BOSS_DOWN && delay > 0) || stage == STAGE_BOSS) && 
+    if (((stage >= STAGE_BOSS_DOWN && delay > 0) || stage == STAGE_BOSS) && 
             !sGameEventMgr.IsActiveEvent(InvasionData[index].eventBoss))
         sGameEventMgr.StartEvent(InvasionData[index].eventBoss, true);
 }
 
-void ElementalInvasion::StopLocalInvasion(uint8 index, uint32 stage, uint8 delay)
+void ElementalInvasion::StopLocalInvasion(uint8 index, uint32 stage, uint32 delay)
 {
     // Process regardless of event activeness, otherwise the main event can
     // become perpetually stuck waiting for the delay to end
@@ -125,13 +127,19 @@ void ElementalInvasion::StopLocalInvasion(uint8 index, uint32 stage, uint8 delay
         if (sGameEventMgr.IsActiveEvent(InvasionData[index].eventRift))
             sGameEventMgr.StopEvent(InvasionData[index].eventRift, true);
 
-        if (delay)
+        sObjectMgr.SetSavedVariable(InvasionData[index].varStage, STAGE_BOSS_DESPAWN, true);
+        sObjectMgr.SetSavedVariable(InvasionData[index].varDelay, sWorld.GetGameTime() + 5 * MINUTE, true);
+    }
+    else if (stage == STAGE_BOSS_DESPAWN)
+    {
+        if (delay < sWorld.GetGameTime())
         {
-            --delay;
-            sObjectMgr.SetSavedVariable(InvasionData[index].varDelay, delay, true);
+            if (sGameEventMgr.IsActiveEvent(InvasionData[index].eventBoss))
+                sGameEventMgr.StopEvent(InvasionData[index].eventBoss, true);
+
+            if (delay)
+                sObjectMgr.SetSavedVariable(InvasionData[index].varDelay, 0, true);
         }
-        else if (sGameEventMgr.IsActiveEvent(InvasionData[index].eventBoss))
-            sGameEventMgr.StopEvent(InvasionData[index].eventBoss, true);
     }
 }
 
@@ -140,7 +148,7 @@ void ElementalInvasion::ResetThings()
     for (const auto& i : InvasionData)
     {
         // reset delays for each sub
-        sObjectMgr.SetSavedVariable(i.varDelay, 3, true);
+        sObjectMgr.SetSavedVariable(i.varDelay, 0, true);
 
         // reset kills for each sub
         sObjectMgr.SetSavedVariable(i.varKills, 0, true);
