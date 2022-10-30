@@ -244,7 +244,9 @@ ChatCommand * ChatHandler::getCommandTable()
         { "auras",          SEC_DEVELOPER,  false, &ChatHandler::HandleListAurasCommand,           "", nullptr },
         { "creature",       SEC_DEVELOPER,  true,  &ChatHandler::HandleListCreatureCommand,        "", nullptr },
         { "object",         SEC_DEVELOPER,  true,  &ChatHandler::HandleListObjectCommand,          "", nullptr },
-        { nullptr,       0,                  false, nullptr,                                           "", nullptr }
+        { "buybackitems",   SEC_OBSERVER,   true,  &ChatHandler::HandleListBuybackItemsCommand,    "", nullptr },
+        { "destroyeditems", SEC_OBSERVER,   true,  &ChatHandler::HandleListDestroyedItemsCommand,  "", nullptr },
+        { nullptr,       0,                  false, nullptr,                                       "", nullptr }
     };
 
 
