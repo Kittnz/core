@@ -736,7 +736,7 @@ bool QuestAccept_npc_feero_ironhand(Player* pPlayer, Creature* pCreature, const 
     return true;
 }
 
-//Alita King Of The Foulweed
+// Alita King Of The Foulweed
 enum FoulwealdTotemMoundData
 {
     NPC_ENRAGED_FOULWEALD = 12921,
@@ -767,40 +767,42 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
 {
     go_foulweald_totem_moundAI(GameObject* pGo) : GameObjectAI(pGo)
     {
-        reset();
+        go_foulweald_totem_moundAI::Reset();
     }
 
-    void reset()
+    std::uint8_t m_uiEventPhase; // 0 nothing, 1 repoping enraged foulwealds, 2 wait, 3 chief_murgut, 4 done
+    std::uint32_t m_uiPhaseTimer{};
+    std::list<ObjectGuid> m_lGuidCurrentEnragedFoulweald;
+
+    void Reset()
     {
-        eventPhase = 0;
-        phaseTimer = 170000;
+        m_uiEventPhase = 0;
+        m_uiPhaseTimer = 170000;
     }
 
-    uint64 guidCurrentEnragedFoulweald[2];
-    uint8 eventPhase; //0 nothing, 1 repoping enraged foulwealds, 2 wait, 3 chief_murgut, 4 done
-    uint32 phaseTimer;
-
-    bool EventStart(uint64 playerGuid)
+    bool EventStart(ObjectGuid playerGuid)
     {
-        if (eventPhase != 0)
+        if (m_uiEventPhase != 0)
             return false;
 
-        eventPhase = 1;
-        Creature* foulweald = nullptr;
-        for (int i = 0; i < 2; i++)
-        {
-            if (foulweald = me->SummonCreature(NPC_ENRAGED_FOULWEALD, foulwealdSpawnCoords[i][0], foulwealdSpawnCoords[i][1], foulwealdSpawnCoords[i][2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 420000))
-            {
-                guidCurrentEnragedFoulweald[i] = foulweald->GetGUID();
-                float x, y, z;
-                me->GetPosition(x, y, z);
-                foulweald->GetMotionMaster()->MovePoint(1, x, y, z, true);
-                foulweald->SetHomePosition(x, y, z, 0);
-                foulweald->SetRespawnDelay(425000);
-                DefineFoulwealdMound(foulweald, me->GetGUID());
-            }
+        m_uiEventPhase = 1;
 
-            foulweald = nullptr;
+        for (std::uint8_t i{} ; i < 2; ++i)
+        {
+            if (Creature* pFoulweald{ me->SummonCreature(NPC_ENRAGED_FOULWEALD, foulwealdSpawnCoords[i][0], foulwealdSpawnCoords[i][1], foulwealdSpawnCoords[i][2], 0.f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 900) })
+            {
+                m_lGuidCurrentEnragedFoulweald.push_back(pFoulweald->GetGUIDLow());
+
+                float fX{}, fY{}, fZ{};
+                me->GetPosition(fX, fY, fZ);
+
+                pFoulweald->GetMotionMaster()->MovePoint(1, fX, fY, fZ, true);
+                pFoulweald->SetHomePosition(fX, fY, fZ, 0.f);
+
+                pFoulweald->SetRespawnDelay(900);
+
+                DefineFoulwealdMound(pFoulweald, me->GetGUID());
+            }
         }
 
         return true;
@@ -808,33 +810,39 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
 
     void EventEnded()
     {
-        if (GameObject* pGo = me->FindNearestGameObject(GO_KARANG_S_BANNER, 10))
+        if (GameObject* pGo{ me->FindNearestGameObject(GO_KARANG_S_BANNER, 100.f) })
+        {
             pGo->AddObjectToRemoveList();
+        }
 
-        reset();
+        go_foulweald_totem_moundAI::Reset();
     }
 
     void EnragedFoulwealdJustDied(uint64 creatureGUID)
     {
-        if (eventPhase != 1)
+        if (m_uiEventPhase != 1)
             return;
 
-        Creature* foulweald;
-        int pos = 0;
-        for (uint64 & guid : guidCurrentEnragedFoulweald)
+        for (auto& guid : m_lGuidCurrentEnragedFoulweald)
         {
             if (creatureGUID == guid)
             {
-                pos = urand(0, 3);
-                if (foulweald = me->SummonCreature(NPC_ENRAGED_FOULWEALD, foulwealdSpawnCoords[pos][0], foulwealdSpawnCoords[pos][1], foulwealdSpawnCoords[pos][2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 420000))
+                const std::uint32_t uiPos{ urand(0, 3) };
+
+                if (Creature* pFoulweald{ me->SummonCreature(NPC_ENRAGED_FOULWEALD,
+                    foulwealdSpawnCoords[uiPos][0],
+                    foulwealdSpawnCoords[uiPos][1],
+                    foulwealdSpawnCoords[uiPos][2], 0.f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 900) })
                 {
-                    guid = foulweald->GetGUID();
-                    float x, y, z;
-                    me->GetPosition(x, y, z);
-                    foulweald->GetMotionMaster()->MovePoint(1, x, y, z, true);
-                    foulweald->SetHomePosition(x, y, z, 0);
-                    foulweald->SetRespawnDelay(425000);
-                    DefineFoulwealdMound(foulweald, me->GetGUID());
+                    float fX{}, fY{}, fZ{};
+                    me->GetPosition(fX, fY, fZ);
+
+                    pFoulweald->GetMotionMaster()->MovePoint(1, fX, fY, fZ, true);
+                    pFoulweald->SetHomePosition(fX, fY, fZ, 0.f);
+
+                    pFoulweald->SetRespawnDelay(900);
+                    
+                    DefineFoulwealdMound(pFoulweald, me->GetGUID());
                 }
             }
         }
@@ -842,36 +850,40 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (eventPhase == 0 || eventPhase > 4)
+        if (m_uiEventPhase == 0 || m_uiEventPhase > 4)
             return;
 
-        if (phaseTimer < uiDiff)
+        if (m_uiPhaseTimer < uiDiff)
         {
-            eventPhase++;
-            switch (eventPhase)
+            ++m_uiEventPhase;
+
+            switch (m_uiEventPhase)
             {
                 case 2:
                 {
-                    phaseTimer = 10000;
+                    m_uiPhaseTimer = 10000;
                     break;
                 }
                 case 3:
                 {
-                    if (Creature* murgut = me->SummonCreature(NPC_CHIEF_MURGUT, foulwealdSpawnCoords[3][0], foulwealdSpawnCoords[3][1], foulwealdSpawnCoords[3][2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000))
+                    if (Creature* pMurgut{ me->SummonCreature(NPC_CHIEF_MURGUT, foulwealdSpawnCoords[3][0], foulwealdSpawnCoords[3][1], foulwealdSpawnCoords[3][2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000) })
                     {
-                        float x, y, z;
-                        me->GetPosition(x, y, z);
-                        murgut->GetMotionMaster()->MovePoint(1, x, y, z, true);
-                        murgut->SetHomePosition(x, y, z, 0);
-                        murgut->SetRespawnDelay(125000);
-                        if (GameObject* pGo = me->FindNearestGameObject(GO_KARANG_S_BANNER, 10))
+                        float fX{}, fY{}, fZ{};
+                        me->GetPosition(fX, fY, fZ);
+
+                        pMurgut->GetMotionMaster()->MovePoint(1, fX, fY, fZ, true);
+                        pMurgut->SetHomePosition(fX, fY, fZ, 0);
+
+                        pMurgut->SetRespawnDelay(125000);
+
+                        if (GameObject* pGo{ me->FindNearestGameObject(GO_KARANG_S_BANNER, 100.f) })
                         {
-                            pGo->GetPosition(x, y, z);
-                            me->SummonGameObject(178207, x, y, z, 0, 0, 0, 0, 0, 120);
+                            pGo->GetPosition(fX, fY, fZ);
+                            me->SummonGameObject(178207, fX, fY, fZ, 0, 0, 0, 0, 0, 120);
                         }
                     }
 
-                    phaseTimer = 120000;
+                    m_uiPhaseTimer = 120000;
                     break;
                 }
                 case 4:
@@ -882,7 +894,9 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
             }
         }
         else
-            phaseTimer -= uiDiff;
+        {
+            m_uiPhaseTimer -= uiDiff;
+        }
     }
 };
 
@@ -891,28 +905,32 @@ GameObjectAI* GetAIgo_foulweald_totem_mound(GameObject *pGo)
     return new go_foulweald_totem_moundAI(pGo);
 }
 
+
 struct npc_enraged_foulwealdAI : public ScriptedAI
 {
     npc_enraged_foulwealdAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
-        Reset();
+        npc_enraged_foulwealdAI::Reset();
     }
 
     void Reset() override
     {
+        m_uiTimer = 0;
+    
         m_creature->AddAura(SPELL_CORRUPTED_STRENGTH);
-        timer = 0;
     }
 
-    uint32 timer;
-    uint64 guidMound;
+    uint32 m_uiTimer{};
+    ObjectGuid m_GUIDMound{};
 
     void JustDied(Unit* pKiller) override
     {
-        if (GameObject* gobj = m_creature->GetMap()->GetGameObject(guidMound))
+        if (GameObject* pGO{ m_creature->GetMap()->GetGameObject(m_GUIDMound) })
         {
-            if (go_foulweald_totem_moundAI* pMoundAI = dynamic_cast<go_foulweald_totem_moundAI*>(gobj->AI()))
+            if (go_foulweald_totem_moundAI* pMoundAI{ dynamic_cast<go_foulweald_totem_moundAI*>(pGO->AI()) })
+            {
                 pMoundAI->EnragedFoulwealdJustDied(m_creature->GetGUID());
+            }
         }
     }
 
@@ -924,23 +942,27 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
         HitBanner();
     }
 
-    void AttackStart(Unit * unit) override
+    void AttackStart(Unit* pUnit) override
     {
         if (m_creature->GetCurrentSpell(CURRENT_CHANNELED_SPELL))
             return;
 
-        ScriptedAI::AttackStart(unit);
+        ScriptedAI::AttackStart(pUnit);
     }
 
     bool HitBanner()
     {
-        if (GameObject* pGo = m_creature->FindNearestGameObject(GO_KARANG_S_BANNER, CONTACT_DISTANCE + 1))
+        if (GameObject* pGo{ m_creature->FindNearestGameObject(GO_KARANG_S_BANNER, (CONTACT_DISTANCE + 1)) })
         {
-            float x, y, z;
-            pGo->GetPosition(x, y, z);
-            m_creature->CastSpell(x, y, z, SPELL_DESTROY_KARANG_S_BANNER_1, false);
+            float fX{}, fY{}, fZ{};
+            pGo->GetPosition(fX, fY, fZ);
+
+            m_creature->CastSpell(fX, fY, fZ, SPELL_DESTROY_KARANG_S_BANNER_1, false);
+
             DoScriptText(SAY_ATTACK_BANNER, m_creature);
-            timer = 10000;
+
+            m_uiTimer = 10000;
+
             return true;
         }
 
@@ -954,21 +976,23 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
         {
-            if (timer < uiDiff)
+            if (m_uiTimer < uiDiff)
             {
                 if (!HitBanner())
                 {
-                    if (GameObject* pGo = m_creature->FindNearestGameObject(GO_KARANG_S_BANNER, 30))
+                    if (GameObject * pGo{ m_creature->FindNearestGameObject(GO_KARANG_S_BANNER, 100.f) })
                     {
-                        float fX, fY, fZ;
+                        float fX{}, fY{}, fZ{};
                         pGo->GetContactPoint(m_creature, fX, fY, fZ, CONTACT_DISTANCE);
                         m_creature->GetMotionMaster()->MovePoint(2, fX, fY, fZ, MOVE_PATHFINDING);
-                        timer = 10000;
+                        m_uiTimer = 10000;
                     }
                 }
             }
             else
-                timer -= uiDiff;
+            {
+                m_uiTimer -= uiDiff;
+            }
 
             return;
         }
@@ -980,17 +1004,19 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
     {
         if (pSpell->Id == SPELL_DESTROY_KARANG_S_BANNER_2)
         {
-            if (GameObject* pGo = m_creature->FindNearestGameObject(GO_MOUND, 3))
+            if (GameObject* pGo{ m_creature->FindNearestGameObject(GO_MOUND, 3) })
             {
-                if (go_foulweald_totem_moundAI* pMoundAI = dynamic_cast<go_foulweald_totem_moundAI*>(pGo->AI()))
+                if (go_foulweald_totem_moundAI* pMoundAI{ dynamic_cast<go_foulweald_totem_moundAI*>(pGo->AI()) })
+                {
                     pMoundAI->EventEnded();
+                }
             }
         }
     }
 
-    void SetMoundGuid(uint64 moundGuid)
+    void SetMoundGuid(ObjectGuid GUIDMound)
     {
-        guidMound = moundGuid;
+        m_GUIDMound = GUIDMound;
     }
 };
 
