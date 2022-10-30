@@ -319,6 +319,7 @@ void AccountMgr::LoadIPBanList(bool silent)
         return;
     }
 
+    std::lock_guard<std::mutex> lock(m_ipBannedMutex);
     m_ipBanned.clear();
     do
     {
@@ -357,6 +358,7 @@ void AccountMgr::LoadAccountBanList(bool silent)
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const
 {
+    std::lock_guard<std::mutex> lock(m_ipBannedMutex);
     std::map<std::string, uint32>::const_iterator it = m_ipBanned.find(ip);
     return !(it == m_ipBanned.end() || it->second < time(nullptr));
 }
