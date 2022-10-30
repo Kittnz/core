@@ -55,8 +55,8 @@ struct ElementalInvasion : WorldEvent
 
 private:
     void StartLocalInvasion(uint8 index, uint32 stage);
-    void StartLocalBoss(uint8 index, uint32 stage, uint8 delay);
-    void StopLocalInvasion(uint8 index, uint32 stage, uint8 delay);
+    void StartLocalBoss(uint8 index, uint32 stage, uint32 delay);
+    void StopLocalInvasion(uint8 index, uint32 stage, uint32 delay);
     void ResetThings();
 };
 
