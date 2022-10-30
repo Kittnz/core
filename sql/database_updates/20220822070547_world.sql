@@ -4086,7 +4086,7 @@ REPLACE INTO creature_template VALUES
 (60993, 18986, 0, 0, 0, 0, 'Grumnir Battlebeard', 'Explorer\'s League', 0, 46, 46, 2398, 2398, 0, 0, 2780, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_grumnir_battlebeard'),
 (60994, 18992, 0, 0, 0, 0, 'Mountaineer Truthforge', 'Explorer\'s League', 0, 58, 58, 3875, 3875, 0, 0, 3408, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 106, 136, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 113, 153, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60995, 3063, 0, 0, 0, 0, 'Unilda Thunderstone', 'Explorer\'s League', 0, 26, 26, 787, 787, 0, 0, 1061, 55, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(60996, 4595, 0, 0, 0, 0, 'Prospector Flinthammer', 'Explorer\'s League', 0, 37, 37, 2192, 2192, 0, 0, 1340, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(60996, 4595, 0, 0, 0, 0, 'Prospector Flinthammer', 'Explorer\'s League', 0, 37, 37, 1536, 1536, 0, 0, 1340, 55, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60997, 18989, 0, 0, 0, 0, 'Lead Explorer Whitepeak', 'Explorer\'s League', 0, 50, 50, 2990, 2990, 0, 0, 2958, 55, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (60998, 4180, 0, 0, 0, 0, 'Maloran Oakbranch', NULL, 0, 23, 23, 543, 543, 0, 0, 800, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 31, 38, 0, 100, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 28, 42, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_maloran_oakbranch'),
 (60999, 3607, 0, 0, 0, 0, 'Spigol Kneebolt', NULL, 0, 24, 24, 664, 664, 0, 0, 1026, 64, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 36, 46, 0, 106, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 35.6224, 48.9808, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 33, 48, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -5290,11 +5290,11 @@ REPLACE INTO creature_template VALUES
 (61056, 2971, 0, 0, 0, 0, 'Kagoro', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1964, 83, 2, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 109, 0, 156, 1, 2000, 2000, 1, 2, 0, 0, 0, 0, 0, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 29, 147, '', 2, 3, 0, 0, 3, 4972, 0, 0, 0, 0, 2, 0, ''),
 (61057, 7212, 0, 0, 0, 0, 'Gizzin Wildbucket', NULL, 0, 26, 26, 787, 787, 0, 0, 1061, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61058, 7180, 0, 0, 0, 0, 'Tazo Wirelight', 'General Goods', 0, 19, 19, 510, 510, 0, 0, 765, 35, 4, 1, 1.14286, 0, 20, 5, 0, 0, 1, 36, 44, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 21, 32, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61059, 10704, 0, 0, 0, 0, 'Hork', 'Bodyguard', 0, 35, 35, 1342, 1342, 0, 0, 1373, 35, 0, 1, 1.14286, 1.35, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61059, 10704, 0, 0, 0, 0, 'Hork', 'Bodyguard', 0, 35, 35, 1342, 1342, 0, 0, 1373, 35, 0, 1, 1.14286, 1.35, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61060, 7168, 0, 0, 0, 0, 'Frenz Lodefire', NULL, 0, 19, 19, 510, 510, 0, 0, 765, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 36, 44, 0, 88, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 28.6704, 39.4218, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 21, 32, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61061, 1108, 0, 0, 0, 0, 'Disturbed Earth Elemental', NULL, 0, 14, 16, 328, 335, 0, 0, 660, 16, 0, 1, 1.14286, 0.8, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 2, 0, 0, 0, 21.2784, 29.2578, 100, 4, 0, 61061, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61062, 10695, 0, 0, 0, 0, 'Scartusk', NULL, 0, 20, 20, 580, 580, 2000, 2000, 852, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 37, 45, 0, 90, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 32.8944, 45.2298, 100, 7, 0, 61062, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 27, 40, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61063, 5440, 0, 0, 0, 0, 'Gizzin Wildbucket', NULL, 0, 26, 26, 787, 787, 0, 0, 1061, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61063, 5440, 0, 0, 0, 0, 'Silmaron', NULL, 0, 26, 26, 787, 787, 0, 0, 1061, 80, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 64, 75, 0, 110, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 42.1344, 57.9348, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 13, 63, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 set @equip_template = 20249; set @weapon_1 = 3201; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61062;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -5548,3 +5548,146 @@ REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `facti
 (2010940, 5, 33100, 'Communitypainting2', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (2010941, 5, 33101, 'Communitypainting3', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
 (2010942, 5, 33102, 'Communitypainting4', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+-- Archmage Talyvanah - Displayid: 3292,  Level 60, Faction: 76, scale 1, humanoid, quest/greeting flags, greeting text : "Greetings, the Kirin Tor welcomes all who wish to grow our knowledge on the arcane.\n\n Is there anything I can do for you?"
+-- Magus Palon , display ID 16389, level 44, faction 76, humanoid, scale 1, quest flags/greeting flags, greeting text : "There is always work to be done, we hope for a day when Dalaran is fully restored." 
+-- Echo of Corthan, display ID 18943, level 48 elite, faction 35 undead, scale 1, ghost visual
+-- Echo of a Forgotten Chieftain, display ID 18941, level 37, faction 35 , undead, scale 1, ghost visual 
+-- Echo of a Forgotten Warlord, display ID 18940, level 38, faction 35, undead, scale 1, ghost visual
+-- Zetharia, display ID 1571, level 44 elite, faction 16, undead, scale 1, weapon 18353 (Has 1.5x hp, has 3102 mana, immune to shadow, casts 27383 every 12 seconds, casts  6789 every 20 seconds, casts 11659 every 6 seconds) On aggro, says the following line : "You shall be cursed, for all eternity!" on death, says the following line : "If only h-he , had loved me back.."
+REPLACE INTO creature_template VALUES
+(61064, 3292, 0, 0, 0, 0, 'Archmage Talyvanah', NULL, 0, 60, 60, 4120, 4120, 1200, 1200, 8401, 76, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61065, 16389, 0, 0, 0, 0, 'Magus Palon', NULL, 0, 44, 44, 2059, 2117, 0, 0, 2625, 76, 0, 1, 1.14714, 0, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61066, 18943, 0, 0, 0, 0, 'Echo of Corthan', NULL, 0, 48, 48, 4179, 4179, 0, 0, 2432, 35, 0, 1, 1.14286, 0, 18, 5, 0, 1, 1, 273, 338, 0, 226, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 54.6056, 75.0827, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61067, 18941, 0, 0, 0, 0, 'Forgotten Chieftain', NULL, 0, 37, 37, 1536, 1536, 0, 0, 1340, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 55, 70, 0, 144, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.3984, 73.4228, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61068, 18940, 0, 0, 0, 0, 'Forgotten Warlord', NULL, 0, 38, 38, 1599, 1599, 0, 0, 1780, 35, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 56, 69, 0, 152, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9617, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61069, 1571, 0, 0, 0, 0, 'Zetharia', NULL, 0, 44, 44, 4278, 4278, 0, 0, 2082, 16, 0, 1, 1.14286, 0, 18, 5, 0, 1, 1, 269, 346, 0, 194, 1, 1400, 1400, 1, 0, 0, 0, 0, 0, 0, 0, 53.1456, 73.0752, 100, 6, 0, 61069,0,0, 0,0,0,0,0,200,0, 0, 0, 0, 0, 0, NULL, 259, 343, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20250; set @weapon_1 = 18353; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61069;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41271; set @magic_number = 61065;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'There is always work to be done, we hope for a day when Dalaran is fully restored.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41270; set @magic_number = 61064;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings, the Kirin Tor welcomes all who wish to grow our knowledge on the arcane.\n\nIs there anything I can do for you?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Zetharia, display ID 1571, level 44 elite, faction 16, undead, scale 1, weapon 18353 (Has 1.5x hp, has 3102 mana, immune to shadow, casts 27383 every 12 seconds, casts  6789 every 20 seconds, casts 11659 every 6 seconds) On aggro, says the following line : "You shall be cursed, for all eternity!" on death, says the following line : "If only h-he , had loved me back.."
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(30049, 'You shall be cursed, for all eternity!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(30050, 'If only h-he , had loved me back...', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+delete from creature_ai_scripts where id = 2200025;
+delete from creature_ai_scripts where id = 2200026;
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(2200025, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30049, 0, 0, 0, 0, 0, 0, 0, 0, 'Zetharia - Say on Aggro'),
+(2200026, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30050, 0, 0, 0, 0, 0, 0, 0, 0, 'Zetharia - Say upon Death');
+
+delete from creature_ai_events where id = 2200025;
+delete from creature_ai_events where id = 2200026;
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES
+(2200025, 61069, 0, 4, 0, 100, 0, 0, 0, 0, 0, 2200025, 0, 0, 'Zetharia - Say on Aggro'),
+(2200026, 61069, 0, 6, 0, 100, 0, 0, 0, 0, 0, 2200026, 0, 0, 'Zetharia - Say upon Death');
+-- Zetharia
+set @creature_entry = 61069;
+set @description = ': Zetharia';
+set @spell_list_id = 180072;
+
+set @spellid_1 = 27383; -- Shadow Bolt Volley
+set @probability_1 = 100; 
+set @casttarget_1 = 1; 
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 5; 
+set @delayinitialmax_1 = 5; 
+set @delayrepeatmin_1 = 12; 
+set @delayrepeatmax_1 = 12;
+
+set @spellid_2 = 6789; -- Death Coil
+set @probability_2 = 100; 
+set @casttarget_2 = 1; 
+set @castflags_2 = 4;
+set @delayinitialmin_2 = 4; 
+set @delayinitialmax_2 = 4; 
+set @delayrepeatmin_2 = 20; 
+set @delayrepeatmax_2 = 20;
+
+set @spellid_3 = 11659; -- Shadow Bolt
+set @probability_3 = 100; 
+set @casttarget_3 = 1; 
+set @castflags_3 = 4;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 6; 
+set @delayrepeatmax_3 = 6;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
