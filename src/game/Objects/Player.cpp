@@ -18559,6 +18559,20 @@ bool Player::IsStandingUpForProc() const
     return Unit::IsStandingUpForProc();
 }
 
+float Player::GetNativeScale() const
+{
+    uint8 race = GetRace();
+    uint8 gender = GetGender();
+
+    if (race == RACE_TAUREN)
+        return (gender == GENDER_FEMALE ? DEFAULT_TAUREN_FEMALE_SCALE : DEFAULT_TAUREN_MALE_SCALE);
+
+    if (race == RACE_GNOME)
+        return DEFAULT_GNOME_SCALE;
+
+    return DEFAULT_OBJECT_SCALE;
+}
+
 void Player::ScheduleStandStateChange(uint8 state)
 {
     if (!m_standStateTimer)

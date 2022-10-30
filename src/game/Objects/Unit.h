@@ -578,7 +578,7 @@ class Unit : public WorldObject
         uint32 GetTransForm() const { return m_transform; }
         void SetTransformScale(float scale);
         void ResetTransformScale();
-        float GetNativeScale() const;
+        virtual float GetNativeScale() const;
         void SetNativeScale(float scale);
         float GetCollisionHeight() const { return m_modelCollisionHeight * m_nativeScaleOverride; }
         void UpdateModelData(); // at any changes to scale and/or displayId

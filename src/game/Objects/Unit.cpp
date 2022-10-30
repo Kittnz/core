@@ -11003,17 +11003,6 @@ void Unit::WritePetSpellsCooldown(WorldPacket& data) const
     }
 }
 
-inline float GetDefaultPlayerScale(uint8 race, uint8 gender)
-{
-    if (race == RACE_TAUREN)
-        return (gender == GENDER_FEMALE ? DEFAULT_TAUREN_FEMALE_SCALE : DEFAULT_TAUREN_MALE_SCALE);
-
-    if (race == RACE_GNOME)
-        return DEFAULT_GNOME_SCALE;
-
-    return DEFAULT_OBJECT_SCALE;
-}
-
 void Unit::InitPlayerDisplayIds()
 {
     PlayerInfo const *info = sObjectMgr.GetPlayerInfo(GetRace(), GetClass());
@@ -11022,7 +11011,7 @@ void Unit::InitPlayerDisplayIds()
 
     uint8 gender = GetGender();
 
-    SetObjectScale(GetDefaultPlayerScale(GetRace(), gender));
+    SetObjectScale(GetNativeScale());
     switch (gender)
     {
         case GENDER_FEMALE:
