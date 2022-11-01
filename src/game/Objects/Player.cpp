@@ -8494,10 +8494,13 @@ void Player::SendNotifyLootItemRemoved(uint8 lootSlot) const
 
 void Player::SendUpdateWorldState(uint32 Field, uint32 Value) const
 {
-    WorldPacket data(SMSG_UPDATE_WORLD_STATE, 8);
-    data << Field;
-    data << Value;
-    GetSession()->SendPacket(&data);
+    if (WorldSession* pSession = GetSession())
+    {
+        WorldPacket data(SMSG_UPDATE_WORLD_STATE, 8);
+        data << Field;
+        data << Value;
+        pSession->SendPacket(&data);
+    }
 }
 
 // TODO: Determine what these values mean, if anything.
