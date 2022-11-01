@@ -8433,10 +8433,13 @@ void Player::SendNotifyLootItemRemoved(uint8 lootSlot) const
 
 void Player::SendUpdateWorldState(uint32 Field, uint32 Value) const
 {
-    WorldPacket data(SMSG_UPDATE_WORLD_STATE, 8);
-    data << Field;
-    data << Value;
-    GetSession()->SendPacket(&data);
+    if (WorldSession* pSession = GetSession())
+    {
+        WorldPacket data(SMSG_UPDATE_WORLD_STATE, 8);
+        data << Field;
+        data << Value;
+        pSession->SendPacket(&data);
+    }
 }
 
 // TODO: Determine what these values mean, if anything.
@@ -18498,6 +18501,20 @@ bool Player::IsStandingUpForProc() const
     return Unit::IsStandingUpForProc();
 }
 
+float Player::GetNativeScale() const
+{
+    uint8 race = GetRace();
+    uint8 gender = GetGender();
+
+    if (race == RACE_TAUREN)
+        return (gender == GENDER_FEMALE ? DEFAULT_TAUREN_FEMALE_SCALE : DEFAULT_TAUREN_MALE_SCALE);
+
+    if (race == RACE_GNOME)
+        return DEFAULT_GNOME_SCALE;
+
+    return DEFAULT_OBJECT_SCALE;
+}
+
 void Player::ScheduleStandStateChange(uint8 state)
 {
     if (!m_standStateTimer)
@@ -22913,6 +22930,25 @@ bool Player::SetupHardcoreMode()
     // destroy buyback
     for (int i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
         RemoveItemFromBuyBackSlot(i, true);
+
+
+
+    //all modifications to auction containers are done in World::Update or its derivatives.
+    //SetupHardcoreMode() being called only from RewardQuest, a Map-opcode means that we should only protect ourselves here.
+    //Technically it's not needed either because map erasures only invalidate iterators to the currently erased element but for future-sake.
+
+    static std::mutex auctionLock;
+    {
+        std::unique_lock l{ auctionLock };
+        auto auctionHouseEntry = AuctionHouseMgr::GetAuctionHouseEntry(this);
+
+        if (auctionHouseEntry)
+        {
+            auto auctionHouse = sAuctionMgr.GetAuctionsMap(auctionHouseEntry);
+            if (auctionHouse)
+                auctionHouse->RemoveAllAuctions(this);
+        }
+    }
 
     if (!m_hardcoreSaveItemsTimer)
         m_hardcoreSaveItemsTimer = 1 * IN_MILLISECONDS;

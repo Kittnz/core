@@ -567,13 +567,14 @@ enum PermVariables
     VAR_EARTH_KILLS = 30014,
     VAR_AIR_KILLS   = 30015,
     VAR_INVAS_TIMER = 30016,    // next invasion time
-    VAR_DELAY_FIRE  = 30017,    // event update cycles to delay before event stop
+    VAR_DELAY_FIRE  = 30017,    // time at which boss event should be stopped
     VAR_DELAY_WATER = 30018,
     VAR_DELAY_EARTH = 30019,
     VAR_DELAY_AIR   = 30020,
 
-    STAGE_BOSS      = 5,
-    STAGE_BOSS_DOWN = 6,
+    STAGE_BOSS         = 5,     // boss is spawned
+    STAGE_BOSS_DOWN    = 6,     // boss is dead, event stop time not yet set by core
+    STAGE_BOSS_DESPAWN = 7,     // boss is dead, waiting to stop event
 
     EVENT_IND_FIRE  = 0,
     EVENT_IND_AIR   = 1,

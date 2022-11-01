@@ -726,6 +726,104 @@ bool ChatHandler::HandleListObjectCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleListDestroyedItemsCommand(char* args)
+{
+    std::string name = args;
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name);
+    if (guid.IsEmpty())
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `item_entry`, `stack_count`, `time` FROM `character_destroyed_items` WHERE `player_guid`=%u ORDER BY `time` LIMIT 128", guid.GetCounter()));
+    if (!result)
+    {
+        SendSysMessage(LANG_COMMAND_NOITEMFOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Destroyed items for %s:\n", args);
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 itemId = fields[0].GetUInt32();
+        uint32 stackCount = fields[1].GetUInt32();
+        time_t destroyedTime = fields[2].GetUInt64();
+
+        std::string stacksStr = stackCount > 1 ? " x " + std::to_string(stackCount) : "";
+        std::string timeStr = secsToTimeString(sWorld.GetGameTime() - destroyedTime, true);
+
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
+        if (!pProto)
+        {
+            PSendSysMessage("%u - [UNKNOWN]%s (%s ago)", itemId, stacksStr.c_str(), timeStr.c_str());
+            continue;
+        }
+
+        if (m_session)
+        {
+            uint32 color = ItemQualityColors[pProto->Quality];
+            std::ostringstream itemStr;
+            itemStr << "|c" << std::hex << color << "|Hitem:" << std::to_string(pProto->ItemId) << ":0:0:0:0:0:0:0|h[" << pProto->Name1 << "]|h|r";
+            PSendSysMessage("%u - %s%s (%s ago)", itemId, itemStr.str().c_str(), stacksStr.c_str(), timeStr.c_str());
+        }
+        else
+            PSendSysMessage("%u - %s%s (%s ago)", itemId, pProto->Name1, stacksStr.c_str(), timeStr.c_str());
+
+    } while (result->NextRow());
+
+    return true;
+}
+
+bool ChatHandler::HandleListBuybackItemsCommand(char* args)
+{
+    std::string name = args;
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name);
+    if (guid.IsEmpty())
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `item_template` FROM `character_inventory` WHERE `guid`=%u && `slot` BETWEEN %u and %u", guid.GetCounter(), BUYBACK_SLOT_START, BUYBACK_SLOT_END - 1));
+    if (!result)
+    {
+        SendSysMessage(LANG_COMMAND_NOITEMFOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Buyback items for %s:\n", args);
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 itemId = fields[0].GetUInt32();
+
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
+        if (!pProto)
+        {
+            PSendSysMessage("%u - [UNKNOWN]", itemId);
+            continue;
+        }
+
+        if (m_session)
+        {
+            uint32 color = ItemQualityColors[pProto->Quality];
+            std::ostringstream itemStr;
+            itemStr << "|c" << std::hex << color << "|Hitem:" << std::to_string(pProto->ItemId) << ":0:0:0:0:0:0:0|h[" << pProto->Name1 << "]|h|r";
+            PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itemId, itemStr.str().c_str(), "");
+        }
+        else
+            PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itemId, pProto->Name1, "");
+
+    } while (result->NextRow());
+
+    return true;
+}
 
 bool ChatHandler::HandleAddItemCommand(char* args)
 {

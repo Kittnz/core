@@ -180,16 +180,8 @@ void WorldSession::SendPacket(WorldPacket const* packet)
     }
 #endif
 
-    if (Player* player = GetPlayer())
-    {
-        DEBUG_UNIT_IF(packet->GetOpcode() != SMSG_MESSAGECHAT && packet->GetOpcode() != SMSG_WARDEN_DATA, player,
-            DEBUG_PACKETS_SEND, "[%s] Send packet : %u/0x%x (%s)", player->GetName(), packet->GetOpcode(), packet->GetOpcode(), LookupOpcodeName(packet->GetOpcode()));
-    }
-
 	if (m_Socket == nullptr)
-	{
-		return;
-	}
+        return;
 
     if (m_Socket->SendPacket(*packet) == -1)
         m_Socket->CloseSocket();
