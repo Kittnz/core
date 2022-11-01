@@ -5866,6 +5866,7 @@ constexpr auto QUEST_SEEING_WHAT_HAPPENS_A = 2946;
 constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
 constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
 constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
+constexpr auto OSTARIUS_ENTRY = 80935;
 
 bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
 {
@@ -5892,11 +5893,14 @@ bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
         player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
     }
 
+
     // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
     // way to control when the boss is eligible to be spawned again.
+
+    auto ostarius = pGo->FindNearestCreature(OSTARIUS_ENTRY, 150.f, true);
     if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
     {
-        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true))
+        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true) && !ostarius)
             player->PrepareQuestMenu(pGo->GetObjectGuid());
         else
             player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
