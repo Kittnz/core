@@ -25,6 +25,7 @@ enum
     NPC_PEDESTAL_BUNNY = 80969,
     MOB_ULDUM_CONSTRUCT = 80938,
     MOB_DEFENSE_SENTRY = 80939,
+    MOB_OSTARIUS       = 80935,
 
     GOB_PEDESTAL = 142343,
     GOB_DEFENSE_PORTAL = 3000270,
@@ -1002,7 +1003,7 @@ struct npc_uldum_pedestalAI : public ScriptedAI
                     break;
                 case PEDESTAL_EVENT_BOSS_SPAWN:
                 {
-                    if (Creature* ostarius = me->SummonCreature(80935, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
+                    if (Creature* ostarius = me->SummonCreature(MOB_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
                     {
                         ostarius->AI()->JustRespawned();
                         ostarius->SetInCombatWith(me->GetVictim());
