@@ -22981,6 +22981,25 @@ bool Player::SetupHardcoreMode()
     for (int i = BUYBACK_SLOT_START; i < BUYBACK_SLOT_END; ++i)
         RemoveItemFromBuyBackSlot(i, true);
 
+
+
+    //all modifications to auction containers are done in World::Update or its derivatives.
+    //SetupHardcoreMode() being called only from RewardQuest, a Map-opcode means that we should only protect ourselves here.
+    //Technically it's not needed either because map erasures only invalidate iterators to the currently erased element but for future-sake.
+
+    static std::mutex auctionLock;
+    {
+        std::unique_lock l{ auctionLock };
+        auto auctionHouseEntry = AuctionHouseMgr::GetAuctionHouseEntry(this);
+
+        if (auctionHouseEntry)
+        {
+            auto auctionHouse = sAuctionMgr.GetAuctionsMap(auctionHouseEntry);
+            if (auctionHouse)
+                auctionHouse->RemoveAllAuctions(this);
+        }
+    }
+
     if (!m_hardcoreSaveItemsTimer)
         m_hardcoreSaveItemsTimer = 1 * IN_MILLISECONDS;
 

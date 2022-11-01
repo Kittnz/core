@@ -81,6 +81,26 @@ bool AuctionHouseObject::RemoveAuction(AuctionEntry* entry)
     return false;
 }
 
+void AuctionHouseObject::RemoveAllAuctions(Player* player)
+{
+    std::vector<AuctionEntry*> deletableEntries;
+    auto bounds = AccountAuctionMap.equal_range(player->GetSession()->GetAccountId());
+    for (auto itr = bounds.first; itr != bounds.second; ++itr)
+    {
+        AuctionEntry* auctionEntry = itr->second;
+        if (auctionEntry && auctionEntry->owner == player->GetGUIDLow())
+        {
+            deletableEntries.push_back(auctionEntry);
+        }
+    }
+
+    for (auto& entry : deletableEntries)
+    {
+        RemoveAuction(entry);
+    }
+}
+
+
 void AuctionHouseObject::AddAuction(AuctionEntry *ah)
 {
     MANGOS_ASSERT(ah);
