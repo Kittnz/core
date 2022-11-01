@@ -65,7 +65,8 @@ bool ItemUseSpell_character_rename(Player* pPlayer, Item* pItem, const SpellCast
 #define ALICE_GROW_RBOUNDARY 1.15f
 #define ALICE_BELITTLE_LBOUNDARY 0.85f
 #define ALICE_BELITTLE_RBOUNDARY 0.95f
-bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
+{
     float scale;
     float taurenVariance = pPlayer->GetRace() == RACE_TAUREN ? (pPlayer->GetGender() == GENDER_MALE ? 0.35f : 0.25f) : 0;
     float currentNormalizedScale = pPlayer->GetObjectScale() - taurenVariance;
@@ -74,7 +75,7 @@ bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const Spe
     {
         if (currentNormalizedScale == ALICE_BELITTLE_LBOUNDARY)
         {
-            ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't be smaller!|r");
+            ChatHandler(pPlayer).SendSysMessage("|cffff8040You can't be smaller!|r");
             return true;
         }
 
@@ -84,7 +85,7 @@ bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const Spe
     {
         if (currentNormalizedScale == ALICE_GROW_RBOUNDARY)
         {
-            ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't grow more!|r");
+            ChatHandler(pPlayer).SendSysMessage("|cffff8040You can't grow more!|r");
             return true;
         }
 
@@ -229,7 +230,9 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (!pPlayer) return false;
+    if (!pPlayer) 
+        return false;
+
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
     x += 2.0F * cos(pPlayer->GetOrientation());
@@ -625,7 +628,8 @@ bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 ui
 
 bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-	if (!pPlayer) return false;	
+	if (!pPlayer) 
+        return false;	
 
 	if (!pPlayer->RestoreSuspendedWorldBuffs())
 	{ 
@@ -634,8 +638,7 @@ bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* 
 			DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 			{
 				player->RemoveSpellCooldown(spellId, true);
-			}
-			);
+			});
 		}
 	}
 	
@@ -644,7 +647,8 @@ bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* 
 
 bool ItemUseSpell_item_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-	if (!pPlayer) return false;
+	if (!pPlayer) 
+        return false;
 
 	if (!pPlayer->SuspendWorldBuffs())
 	{
@@ -708,8 +712,7 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 		DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 		{
 			player->RemoveSpellCooldown(spellId, true);
-		}
-		);
+		});
 	}
 	return true;
 }
