@@ -890,8 +890,7 @@ bool GOSelect_go_keg_of_rum(Player* pPlayer, GameObject* pGo, uint32 sender, uin
         {
             pPlayer->DestroyItemCount(60252, 1, true);
             pPlayer->SaveInventoryAndGoldToDB();
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60329))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
+            pPlayer->CastedCreatureOrGO(pGo->GetEntry(), pGo->GetObjectGuid(), 0);
         }
     }
     pPlayer->CLOSE_GOSSIP_MENU();
