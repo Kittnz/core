@@ -75,7 +75,7 @@ void GuardAI::MoveInLineOfSight(Unit *pWho)
             attackRadius /= 2.0f;
     }
 
-    if (!m_creature->IsWithinDistInMap(pWho, attackRadius, true, false))
+    if (!m_creature->IsWithinDistInMap(pWho, attackRadius, true, SizeFactor::None))
         return;
 
     if (m_creature->CanInitiateAttack() && m_creature->IsValidAttackTarget(pWho) &&
