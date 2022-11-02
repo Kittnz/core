@@ -6580,7 +6580,7 @@ bool Player::HasAllZonesExplored()
 
     for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
     {
-        bool explored_chunk = ((GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) == real_full_mask[i]));
+        bool explored_chunk = ((GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) >= real_full_mask[i]));
         if (!explored_chunk)
         {
             eligible_for_title = false;
