@@ -8280,7 +8280,7 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
             Creature *creature = GetMap()->GetCreature(guid);
 
             // must be in range and creature must be alive for pickpocket and must be dead for another loot
-            if (!creature || creature->IsAlive() != (loot_type == LOOT_PICKPOCKETING) || !creature->IsWithinDistInMap(this, INTERACTION_DISTANCE + creature->GetCombatReach()))
+            if (!creature || creature->IsAlive() != (loot_type == LOOT_PICKPOCKETING) || !creature->IsWithinDistInMap(this, GetMaxLootDistance(creature), true, SizeFactor::None))
             {
                 SendLootRelease(guid);
                 return;
@@ -15749,6 +15749,12 @@ bool Player::IsAllowedToLoot(Creature const* creature)
             return loot->hasItemFor(this);
     }
     return false;
+}
+
+float Player::GetMaxLootDistance(Unit const* pUnit) const
+{
+    float distance = GetCombatReach() + 1.333333373069763f + pUnit->GetCombatReach();
+    return std::max(INTERACTION_DISTANCE, distance);
 }
 
 void Player::_LoadAuras(QueryResult *result, uint32 timediff)
