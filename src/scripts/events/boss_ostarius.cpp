@@ -1,161 +1,10 @@
 // Ostarius
 // Author: Henhouse
 #include "scriptPCH.h"
+#include "boss_ostarius.h"
 
 // Enable for development logs to help debug some things.
 //#define DEBUG_ON
-
-enum
-{
-    SPELL_SCAN_OF_OSTARIUS = 57000,
-    SPELL_MORTALITY_SCAN = 57005,
-    SPELL_CONFLAG = 16805,
-    SPELL_SANDSTORM = 57002,
-    SPELL_TARGET_CHANNEL = 57004,
-
-    SPELL_STOMP = 27993,
-    SPELL_EARTHQUAKE = 19798,
-
-    SPELL_SONIC_BURST = 23918,
-    SPELL_CHAIN_LIGHTNING = 28293,
-
-    SPELL_ROOT_FOREVER = 31366,
-    SPELL_TELEPORT_VISUAL = 26638,
-
-    NPC_PEDESTAL_BUNNY = 80969,
-    MOB_ULDUM_CONSTRUCT = 80938,
-    MOB_DEFENSE_SENTRY = 80939,
-    MOB_OSTARIUS       = 80935,
-
-    GOB_PEDESTAL = 142343,
-    GOB_DEFENSE_PORTAL = 3000270,
-    GOB_DEBILITATING_DEVICE = 3000271,
-};
-
-enum PhaseStates
-{
-    STATE_PHASE_1 = 1,
-    STATE_PHASE_2 = 2,
-    STATE_PHASE_3 = 4,
-    STATE_PHASE_4 = 8,
-    STATE_ENRAGED = 16,
-};
-
-enum Events
-{
-    EVENT_INTRO_RP_1 = 1,
-    EVENT_INTRO_RP_2,
-    EVENT_INTRO_RP_3,
-    EVENT_INTRO_RP_4,
-    EVENT_INTRO_RP_5,
-    EVENT_INTRO_RP_6,
-    EVENT_INTRO_RP_7,
-    EVENT_INTRO_RP_8,
-    EVENT_PHASE_1_DELAY,
-    EVENT_PHASE_3_DELAY,
-};
-
-enum PhaseStates : std::uint8_t
-{
-    STATE_PHASE_1 = 1,
-    STATE_PHASE_2 = 2,
-    STATE_PHASE_3 = 4,
-    STATE_PHASE_4 = 8,
-    STATE_ENRAGED = 16,
-};
-
-constexpr std::uint32_t SPELL_SCAN_OF_OSTARIUS = 57000;
-constexpr std::uint32_t SPELL_MORTALITY_SCAN = 57005;
-constexpr std::uint32_t SPELL_CONFLAG = 16805;
-constexpr std::uint32_t SPELL_SANDSTORM = 57002;
-constexpr std::uint32_t SPELL_TARGET_CHANNEL = 57004;
-
-constexpr std::uint32_t SPELL_STOMP = 27993;
-constexpr std::uint32_t SPELL_EARTHQUAKE = 19798;
-
-constexpr std::uint32_t SPELL_SONIC_BURST = 23918;
-constexpr std::uint32_t SPELL_CHAIN_LIGHTNING = 28293;
-
-constexpr std::uint32_t SPELL_ROOT_FOREVER = 31366;
-constexpr std::uint32_t SPELL_TELEPORT_VISUAL = 26638;
-
-constexpr std::uint32_t BOSS_OSTARIUS = 80935;
-constexpr std::uint32_t NPC_PEDESTAL_BUNNY = 80969;
-constexpr std::uint32_t MOB_ULDUM_CONSTRUCT = 80938;
-constexpr std::uint32_t MOB_DEFENSE_SENTRY = 80939;
-
-constexpr std::uint32_t GOB_PEDESTAL = 142343;
-constexpr std::uint32_t GOB_DEFENSE_PORTAL = 3000270;
-constexpr std::uint32_t GOB_DEBILITATING_DEVICE = 3000271;
-
-constexpr auto PED_TEXT_1 = "Initiating unlock sequence...";
-constexpr auto PED_TEXT_2 = "Plates present, scanning for item validation...";
-constexpr auto PED_TEXT_3 = "Plates authentication complete. Unlocking the gates...";
-constexpr auto PED_TEXT_4 = "Activating Gate Keeper to greet the guests...";
-
-constexpr auto INTRO_TEXT_1 = "Welcome, honored guests, to the research facility.";
-constexpr auto INTRO_TEXT_2 = "Please wait for the initial scanning...";
-constexpr auto INTRO_TEXT_3 = "WARNING! Curse of the flesh detected!";
-constexpr auto INTRO_TEXT_4 = "Initiating manual gate override... Gate locked successfully.";
-constexpr auto INTRO_TEXT_5 = "Activating defensive system for threat elimination.";
-
-constexpr auto PHASE_1_TEXT = "Guardians, awaken and smite these intruders!";
-constexpr auto PHASE_2_TEXT = "Fire will burn your corruption!";
-constexpr auto PHASE_3_TEXT = "Elusive... Then face the might of the frost!";
-constexpr auto PHASE_4_TEXT = "Still you persist, servants of the old ones? Very well.";
-constexpr auto ENRAGE_TEXT  = "NO! I will not fail again!";
-constexpr auto DEATH_TEXT   = "You will bring your own, undoing... it has already begun...";
-
-constexpr auto PLAYER_DEATH_1 = "So fragile.";
-constexpr auto PLAYER_DEATH_2 = "You have failed!";
-constexpr auto PLAYER_DEATH_3 = "None shall pass!";
-constexpr auto PLAYER_DEATH_4 = "It had to be done.";
-
-// Don't TOUCH these
-constexpr float squareX = -9606.21484f;
-constexpr float squareY = -2806.25635f;
-constexpr float squareZ = 7.838724f;
-constexpr float squareDiameter = 4.191733f;
-
-
-constexpr std::uint32_t SOUND_PED_TEXT_1 = 30279;
-constexpr std::uint32_t SOUND_PED_TEXT_2 = 30280;
-constexpr std::uint32_t SOUND_PED_TEXT_3 = 30281;
-constexpr std::uint32_t SOUND_PED_TEXT_4 = 30282;
-
-constexpr std::uint32_t SOUND_INTRO_TEXT_1 = 30285;
-constexpr std::uint32_t SOUND_INTRO_TEXT_2 = 30286;
-constexpr std::uint32_t SOUND_INTRO_TEXT_3 = 30291;
-constexpr std::uint32_t SOUND_INTRO_TEXT_4 = 30287;
-constexpr std::uint32_t SOUND_INTRO_TEXT_5 = 30288;
-
-constexpr std::uint32_t SOUND_PHASE_1 = 30278;
-constexpr std::uint32_t SOUND_PHASE_2 = 30277;
-constexpr std::uint32_t SOUND_PHASE_3 = 30276;
-constexpr std::uint32_t SOUND_PHASE_4 = 30283;
-constexpr std::uint32_t SOUND_ENRAGE = 30289;
-constexpr std::uint32_t SOUND_DEATH = 30290;
-
-constexpr std::uint32_t SOUND_PLAYER_DEATH = 80284;
-
-// Maximum amount of portals or debilitating devices that will open/active at the same time.
-constexpr std::uint8_t MAX_OPEN_PORTALS = 20;
-constexpr std::uint8_t MAX_SPAWNED_CONSTRUCTS = 50;
-constexpr std::uint8_t MAX_ACTIVE_DEVICES = 30;
-
-constexpr float sentryLocs[4][4] =
-{
-    {-9613.08f, -2828.02f, 10.7f, 1.145f},
-    {-9617.7f, -2743.983f, 14.8f, 5.265f},
-    {-9572.8427f, -2840.13f, 10.0f, 1.41f},
-    {-9581.63f, -2728.22f, 12.5f, 4.91f},
-};
-
-// BroadcastText system is obviously broken. Reads in sound IDs from DB as 0, so we do our own.
-void PlaySound(Unit* source, uint32 soundId, bool playToZone = false)
-{
-    source->PlayDirectSound(soundId); // PlayDirectSound already uses SendMessageToSet (and thus plays sounds for everyone in visibility distance..)
-}
 
 Player* GetNearbyEnemyPlayer(Unit* self, const float& dist)
 {
@@ -1003,15 +852,7 @@ struct go_uldum_suppressionAI : public GameObjectAI
     }
 };
 
-// Pedestal of Uldum NPC (RP intro)
-enum PedestalEvents
-{
-    PEDESTAL_EVENT_INTRO_1 = 1,
-    PEDESTAL_EVENT_INTRO_2,
-    PEDESTAL_EVENT_INTRO_3,
-    PEDESTAL_EVENT_INTRO_4,
-    PEDESTAL_EVENT_BOSS_SPAWN
-};
+
 
 struct npc_uldum_pedestalAI : public ScriptedAI
 {
@@ -1023,11 +864,24 @@ struct npc_uldum_pedestalAI : public ScriptedAI
     uint32 InitialDelay_Timer{};
     EventMap m_events;
     uint8 failedSearches{};
+    bool m_started = false;
+
 
     void SetDefaults()
     {
         m_events.Reset();
         failedSearches = 0;
+        m_started = false;
+    }
+
+    bool IsStarted() const
+    {
+        return m_started;
+    }
+
+    void Start()
+    {
+        m_started = true;
     }
 
     void Reset()
@@ -1070,54 +924,55 @@ struct npc_uldum_pedestalAI : public ScriptedAI
         {
             switch (eventId)
             {
-            // "Initiating unlock sequence...";
-            // "Plates present, scanning for item validation...";
-            // "Plates authentication complete. Unlocking the gates...";
-            // "Activating Gate Keeper to greet the guests...";
-                case PEDESTAL_EVENT_INTRO_1:
+                // "Initiating unlock sequence...";
+                // "Plates present, scanning for item validation...";
+                // "Plates authentication complete. Unlocking the gates...";
+                // "Activating Gate Keeper to greet the guests...";
+            case PEDESTAL_EVENT_INTRO_1:
+            {
+                me->MonsterSay(PED_TEXT_1);
+                PlaySound(me, SOUND_PED_TEXT_1);
+                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
+                break;
+            }
+            case PEDESTAL_EVENT_INTRO_2:
+            {
+                me->MonsterSay(PED_TEXT_2);
+                PlaySound(me, SOUND_PED_TEXT_2);
+                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
+                DoCast(nullptr, 25425, true);
+                break;
+            }
+            case PEDESTAL_EVENT_INTRO_3:
+            {
+                me->MonsterSay(PED_TEXT_3);
+                PlaySound(me, SOUND_PED_TEXT_3);
+                m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
+                break;
+            }
+            case PEDESTAL_EVENT_INTRO_4:
+            {
+                me->MonsterSay(PED_TEXT_4);
+                PlaySound(me, SOUND_PED_TEXT_4);
+                m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
+                break;
+            }
+            case PEDESTAL_EVENT_BOSS_SPAWN:
+            {
+                if (Creature* ostarius = me->SummonCreature(BOSS_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
                 {
-                    me->MonsterSay(PED_TEXT_1);
-                    PlaySound(me, SOUND_PED_TEXT_1);
-                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_2, Seconds(4));
-                    break;
+                    ostarius->AI()->JustRespawned();
+                    ostarius->SetInCombatWith(me->GetVictim());
                 }
-                case PEDESTAL_EVENT_INTRO_2:
-                {
-                    me->MonsterSay(PED_TEXT_2);
-                    PlaySound(me, SOUND_PED_TEXT_2);
-                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_3, Seconds(6));
-                    DoCast(nullptr, 25425, true);
-                    break;
-                }
-                case PEDESTAL_EVENT_INTRO_3:
-                {
-                    me->MonsterSay(PED_TEXT_3);
-                    PlaySound(me, SOUND_PED_TEXT_3);
-                    m_events.ScheduleEvent(PEDESTAL_EVENT_INTRO_4, Seconds(7));
-                    break;
-                }
-                case PEDESTAL_EVENT_INTRO_4:
-                {
-                    me->MonsterSay(PED_TEXT_4);
-                    PlaySound(me, SOUND_PED_TEXT_4);
-                    m_events.ScheduleEvent(PEDESTAL_EVENT_BOSS_SPAWN, Seconds(4));
-                    break;
-                }
-                case PEDESTAL_EVENT_BOSS_SPAWN:
-                {
-                    if (Creature* ostarius = me->SummonCreature(MOB_OSTARIUS, -9637.72f, -2787.4f, 7.838f, 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000))
-                    {
-                        ostarius->AI()->JustRespawned();
-                        ostarius->SetInCombatWith(me->GetVictim());
-                    }
 
-                    me->DeleteLater();
-                    break;
-                }
+                me->DeleteLater();
+                break;
+            }
             }
         }
     }
 };
+
 
 CreatureAI* GetAI_boss_ostarius(Creature *creature)
 {
@@ -1148,6 +1003,131 @@ CreatureAI* GetAI_npc_uldum_pedestal(Creature* creature)
 {
     return new npc_uldum_pedestalAI(creature);
 }
+
+
+enum UldumQuestItems
+{
+    ITEM_ULDUM_FIRST_PLATE = 60102,
+    ITEM_ULDUM_SECOND_PLATE = 60103,
+};
+
+constexpr auto STONE_WATCHER_OF_NORGANNON = 7918;
+constexpr auto PEDESTAL_BUNNY = 80969;
+constexpr auto QUEST_SEEING_WHAT_HAPPENS_A = 2946;
+constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
+constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
+constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
+constexpr auto OSTARIUS_ENTRY = 80935;
+
+bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
+{
+    bool showQuestMenu = false;
+    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_A))
+        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
+            showQuestMenu = true;
+
+    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_H))
+        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
+            showQuestMenu = true;
+
+    // Support vanilla quest chain for lower levels.
+    if (showQuestMenu)
+    {
+        player->PrepareQuestMenu(pGo->GetObjectGuid());
+        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
+        return true;
+    }
+
+    if (player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_A) || player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_H) && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f) && !pGo->FindNearestCreature(80970, 10.f))
+    {
+        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
+        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
+    }
+
+
+    // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
+    // way to control when the boss is eligible to be spawned again.
+
+    auto ostarius = pGo->FindNearestCreature(OSTARIUS_ENTRY, 150.f, true);
+    auto pedestalNpc = pGo->FindNearestCreature(80970, 150.f, true);
+
+    bool isInProgress = ostarius || (pedestalNpc && dynamic_cast<npc_uldum_pedestalAI*>(pedestalNpc->AI())
+        && dynamic_cast<npc_uldum_pedestalAI*>(pedestalNpc->AI())->IsStarted());
+
+    //check if we already have an active event..
+    if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
+    {
+        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true) && !isInProgress)
+            player->PrepareQuestMenu(pGo->GetObjectGuid());
+        else
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+    player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
+
+    return true;
+}
+
+bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+        pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
+
+    player->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Quest* pQuest)
+{
+    if (!player)
+        return false;
+
+    bool first_item_added = false;
+    bool second_item_added = false;
+
+    if (pQuest->GetQuestId() == 40107 || pQuest->GetQuestId() == 40115) //Gate Keeper  //Guardian of the Gate
+    {
+        if (!player->HasItemCount(ITEM_ULDUM_FIRST_PLATE, 1))
+        {
+            if (player->AddItem(ITEM_ULDUM_FIRST_PLATE))
+                first_item_added = true;
+        }
+        else
+            first_item_added = true;
+
+        if (!player->HasItemCount(ITEM_ULDUM_SECOND_PLATE, 1))
+        {
+            if (player->AddItem(ITEM_ULDUM_SECOND_PLATE))
+                second_item_added = true;
+        }
+        else
+            second_item_added = true;
+
+        if (!first_item_added || !second_item_added)
+        {
+            player->RemoveQuest(40107);
+            player->RemoveQuest(40115);
+            player->SetQuestStatus(40107, QUEST_STATUS_NONE);
+            player->SetQuestStatus(40115, QUEST_STATUS_NONE);
+            player->GetSession()->SendNotification("Your bags are full!");
+            return false;
+        }
+
+        // Summon pedestal NPC to start encounter RP phase.
+        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
+        {
+            if (auto pedestalAI = dynamic_cast<npc_uldum_pedestalAI*>(c->AI()))
+                pedestalAI->Start();
+            // If vanilla quest line NPC is on-top of the pedestal, despawn him.
+            if (auto stoneWatcher = pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f, true))
+                stoneWatcher->DeleteLater();
+
+            c->SetInCombatWith(player); // Used to pass along event invoker.
+            pGo->UseDoorOrButton();
+        }
+    }
+    return false;
+}
+
 
 void AddSC_boss_ostarius()
 {
@@ -1182,4 +1162,12 @@ void AddSC_boss_ostarius()
     newscript->Name = "npc_uldum_pedestal";
     newscript->GetAI = &GetAI_npc_uldum_pedestal;
     newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "GO_pedestal_of_uldum";
+    newscript->pGOGossipHello = &GossipHelloGO_pedestal_of_uldum;
+    newscript->pGOGossipSelect = &GossipSelectGO_pedestal_of_uldum;
+    newscript->pGOQuestAccept = &QuestAcceptGO_pedestal_of_uldum;
+    newscript->RegisterSelf();
+
 }
