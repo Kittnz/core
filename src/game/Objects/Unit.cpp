@@ -9154,7 +9154,7 @@ void Unit::UpdateModelData()
         float nativeScale = displayEntry->scale;
         if (IsPlayer())
         {
-            switch (GetDisplayId())
+           /* switch (GetDisplayId())
             {
             case 59: // Tauren Male
                 nativeScale = DEFAULT_TAUREN_MALE_SCALE;
@@ -9166,7 +9166,7 @@ void Unit::UpdateModelData()
             case 1564: // Gnome Female
                 nativeScale = DEFAULT_GNOME_SCALE;
                 break;
-            }
+            }*/
         }
 
         // we expect values in database to be relative to scale = 1.0

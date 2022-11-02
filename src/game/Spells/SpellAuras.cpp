@@ -2731,12 +2731,12 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                             if (gender == GENDER_MALE)
                             {
                                 display_id = 10148;
-                                mod_x = DEFAULT_TAUREN_MALE_SCALE;
+                                //mod_x = DEFAULT_TAUREN_MALE_SCALE;
                             }
                             else
                             {
                                 display_id = 10149;
-                                mod_x = DEFAULT_TAUREN_FEMALE_SCALE;
+                                //mod_x = DEFAULT_TAUREN_FEMALE_SCALE;
                             }
                             break;
                         case RACE_HIGH_ELF:
