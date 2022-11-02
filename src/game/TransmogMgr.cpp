@@ -379,7 +379,7 @@ bool TransmogMgr::HasTransmog(uint32 newItemId)
         ItemPrototype const* collectedItemProto = ObjectMgr::GetItemPrototype(collectedItemId);
         if (!collectedItemProto)
             continue;
-        if (newItemProto->DisplayInfoID == collectedItemProto->DisplayInfoID)
+        if (newItemProto->DisplayInfoID == collectedItemProto->DisplayInfoID && (newItemProto->Class == collectedItemProto->Class && newItemProto->SubClass == newItemProto->SubClass))
             return true;
     }
 
