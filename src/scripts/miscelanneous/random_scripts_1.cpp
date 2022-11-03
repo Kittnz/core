@@ -4595,6 +4595,32 @@ bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const Spe
 
 }
 
+
+bool ItemUseSpell_item_tauren_shrink(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->GetRace() == RACE_TAUREN)
+    {
+        //taurens by default do not have 1.0 as scale so this shrinks them.
+        if (pPlayer->GetObjectScale() < DEFAULT_TAUREN_FEMALE_SCALE)
+        {
+            pPlayer->GetSession()->SendNotification("You can't shrink more!");
+            return false;
+        }
+        pPlayer->SetObjectScale(pPlayer->GetGender() == GENDER_MALE ? 1.0f : 0.9f);
+        return true;
+    }
+    else
+    {
+        if (pPlayer->GetHealth() >= pPlayer->GetMaxHealth() / 10)
+        {
+            pPlayer->DealDamage(pPlayer, pPlayer->GetMaxHealth() / 10, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_SHADOW, nullptr, false);
+            pPlayer->Say("Ouch..", LANG_UNIVERSAL);
+        }
+        return true;
+    }
+
+}
+
 bool GOHello_go_shagu_shisha(Player* pPlayer, GameObject* pGo)
 {
     if (pPlayer->GetQuestStatus(40003) == QUEST_STATUS_INCOMPLETE) // Puffing Peace
@@ -6691,6 +6717,11 @@ void AddSC_random_scripts_1()
     newscript->pItemUseSpell = &ItemUseSpell_item_gnome_enlargement;
     newscript->RegisterSelf();
 
+    newscript = new Script;
+    newscript->Name = "item_tauren_shrink";
+    newscript->pItemUseSpell = &ItemUseSpell_item_tauren_shrink;
+    newscript->RegisterSelf();
+    
     newscript = new Script;
     newscript->Name = "npc_norvok";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_norvok;
