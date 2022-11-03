@@ -2241,8 +2241,6 @@ class Player final: public Unit
 		// For chronoboon item
 		uint32 m_worldBuffCheckTimer;
     public:
-        float GetNativeScale() const override;
-
 
         void SetHCIniviteGuildTimer(uint32 timer) { m_hardcoreInvGuildTimer = timer; }
         void ScheduleStandStateChange(uint8 state);
