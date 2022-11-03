@@ -2185,7 +2185,7 @@ bool ChatHandler::HandleAoEDamageCommand(char* args)
 
     Player* pPlayer = m_session->GetPlayer();
 
-    std::list<Unit*> targetsList;
+    std::vector<Unit*> targetsList;
     MaNGOS::AnyAoETargetUnitInObjectRangeCheck u_check(pPlayer, pPlayer, max_range);
     MaNGOS::UnitListSearcher<MaNGOS::AnyAoETargetUnitInObjectRangeCheck> searcher(targetsList, u_check);
     Cell::VisitAllObjects(pPlayer, searcher, max_range);
@@ -8787,7 +8787,7 @@ bool ChatHandler::HandleGameObjectNearCommand(char* args)
     }*/
 
     MaNGOS::AllGameObjectsInRange check(pl, distance);
-    std::list<GameObject*> gameObjects;
+    std::vector<GameObject*> gameObjects;
     MaNGOS::GameObjectListSearcher<MaNGOS::AllGameObjectsInRange> searcher(gameObjects, check);
 
     Cell::VisitGridObjects(pl, searcher, distance);

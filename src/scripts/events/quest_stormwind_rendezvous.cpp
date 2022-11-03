@@ -336,7 +336,7 @@ void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
 
     if (Timer < uiDiff)
     {
-        std::list<Creature*> DragListe;
+        std::vector<Creature*> DragListe;
         float X = 0.0f;
         float Y = 0.0f;
         uint32 eventGardId = 6;

@@ -13,7 +13,7 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI {
         me->SetMaxPower(POWER_MANA, 50000);
         me->SetPower(POWER_MANA, 50000);
 
-        list<Creature *> risenLackeys;
+        vector<Creature *> risenLackeys;
         me->GetCreatureListWithEntryInGrid(risenLackeys, 10482, 500.f);
         for (auto lackey: risenLackeys) {
             lackey->RemoveFromWorld();
@@ -274,7 +274,7 @@ private:
             return false;
         }
 
-        list<Creature *> risenLackeys;
+        vector<Creature *> risenLackeys;
         me->GetCreatureListWithEntryInGrid(risenLackeys, 10482, 500.f);
         for (auto lackey: risenLackeys) {
             if (lackey->IsAlive()) {
