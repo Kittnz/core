@@ -981,7 +981,7 @@ struct rat_des_profondeursAI : public ScriptedAI
             pPlayer->GroupEventHappens(QUEST_CHASSE_AU_RAT, m_creature);        // Complete la quete
             pMonty->CastSpell(m_creature, SPELL_MONTY_FRAPPE_RATS, true);       // Monty frappe le rat
             // Et on ".die" les autres rats.
-            std::list<Creature*> pCreaList;
+            std::vector<Creature*> pCreaList;
             m_creature->GetCreatureListWithEntryInGrid(pCreaList, NPC_RAT_ENSORCELE, 100.0f);
             for (const auto& pCreature : pCreaList)
             {

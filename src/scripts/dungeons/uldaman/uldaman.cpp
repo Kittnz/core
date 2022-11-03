@@ -303,7 +303,7 @@ struct AnnoraAI : public ScriptedAI
     {
         if (!isSpawned)
         {
-            std::list<Creature*> m_EscortList;
+            std::vector<Creature*> m_EscortList;
             m_uiNbScorpion = 0;
 
             GetCreatureListWithEntryInGrid(m_EscortList, m_creature, 7078, 30.0f);

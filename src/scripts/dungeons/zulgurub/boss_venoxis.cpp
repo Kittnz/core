@@ -126,7 +126,7 @@ struct boss_venoxisAI : public ScriptedAI
     void EnterEvadeMode() override
     {
         // Despawn snakes immediately when we're running home.
-        std::list<Creature*> cobras;
+        std::vector<Creature*> cobras;
         GetCreatureListWithEntryInGrid(cobras, m_creature, NPC_RAZZASHI_COBRA, DEFAULT_VISIBILITY_INSTANCE);
         for (const auto cobra : cobras)
             cobra->ForcedDespawn();
@@ -137,7 +137,7 @@ struct boss_venoxisAI : public ScriptedAI
     void JustReachedHome() override
     {
         // Respawn snakes
-        std::list<Creature*> cobras;
+        std::vector<Creature*> cobras;
         GetCreatureListWithEntryInGrid(cobras, m_creature, NPC_RAZZASHI_COBRA, DEFAULT_VISIBILITY_INSTANCE);
 
         if (!cobras.empty())

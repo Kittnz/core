@@ -200,7 +200,7 @@ struct boss_thermapluggAI : public ScriptedAI
                 {
                     if (m_asBombFaces[i].m_uiBombTimer < uiDiff)
                     {
-                        std::list<Creature*> m_BombList;
+                        std::vector<Creature*> m_BombList;
                         GetCreatureListWithEntryInGrid(m_BombList, m_creature, NPC_WALKING_BOMB, 250.0f);
                         if (m_BombList.size() < MAX_GNOME_FACES)
                         {

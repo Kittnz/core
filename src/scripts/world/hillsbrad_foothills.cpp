@@ -78,7 +78,7 @@ struct go_dusty_rugAI: public GameObjectAI
                         float fX, fY, fZ;
                         if (GameObject* pKeg = me->FindNearestGameObject(GO_TAINTED_KEG, 10.000000))
                         {
-                            std::list<Creature*> lCrea;
+                            std::vector<Creature*> lCrea;
                             me->GetCreatureListWithEntryInGrid(lCrea, NPC_CAPTURED_FARMER, 30.0f);
                             for (const auto& it : lCrea)
                             {

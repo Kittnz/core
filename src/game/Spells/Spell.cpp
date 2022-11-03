@@ -2147,7 +2147,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
             if (tempTargetUnitMap.empty())
                 break;
 
-            tempTargetUnitMap.sort(TargetDistanceOrderNear(m_caster));
+            std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(m_caster));
 
             //Now to get us a random target that's in the initial range of the spell
             uint32 t = 0;
@@ -2165,7 +2165,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
 
             tempTargetUnitMap.erase(itr);
 
-            tempTargetUnitMap.sort(TargetDistanceOrderNear(pUnitTarget));
+            std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(pUnitTarget));
 
             t = unMaxTargets - 1;
             Unit *prev = pUnitTarget;
@@ -2185,7 +2185,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 prev = *next;
                 targetUnitMap.push_back(prev);
                 tempTargetUnitMap.erase(next);
-                tempTargetUnitMap.sort(TargetDistanceOrderNear(prev));
+                std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(prev));
                 next = tempTargetUnitMap.begin();
 
                 --t;
@@ -2207,7 +2207,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
             if (tempTargetUnitMap.empty())
                 break;
 
-            tempTargetUnitMap.sort(TargetDistanceOrderNear(m_caster));
+            std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(m_caster));
 
             //Now to get us a random target that's in the initial range of the spell
             uint32 t = 0;
@@ -2225,7 +2225,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
 
             tempTargetUnitMap.erase(itr);
 
-            tempTargetUnitMap.sort(TargetDistanceOrderNear(pUnitTarget));
+            std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(pUnitTarget));
 
             t = unMaxTargets - 1;
             Unit *prev = pUnitTarget;
@@ -2244,7 +2244,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 prev = *next;
                 targetUnitMap.push_back(prev);
                 tempTargetUnitMap.erase(next);
-                tempTargetUnitMap.sort(TargetDistanceOrderNear(prev));
+                std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(prev));
                 next = tempTargetUnitMap.begin();
                 --t;
             }
@@ -2311,7 +2311,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
 
                 Cell::VisitAllObjects(m_caster, searcher, max_range);
 
-                tempTargetUnitMap.sort(TargetDistanceOrderNear(pUnitTarget));
+                std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(pUnitTarget));
 
                 if (tempTargetUnitMap.empty())
                     break;
@@ -2344,7 +2344,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                     prev = *next;
                     targetUnitMap.push_back(prev);
                     tempTargetUnitMap.erase(next);
-                    tempTargetUnitMap.sort(TargetDistanceOrderNear(prev));
+                    std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(prev));
                     next = tempTargetUnitMap.begin();
 
                     --t;
@@ -2381,7 +2381,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
             }
             if (SelectClosestTargets && unMaxTargets && targetUnitMap.size() > unMaxTargets)
             {
-                targetUnitMap.sort(TargetDistanceOrderNear(m_caster));
+                std::sort(targetUnitMap.begin(), targetUnitMap.end(), TargetDistanceOrderNear(m_caster));
                 UnitList::iterator itr = targetUnitMap.begin();
                 advance(itr, unMaxTargets);
                 targetUnitMap.erase(itr, targetUnitMap.end());
@@ -2433,7 +2433,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
 
             // exclude caster
             if (m_casterUnit)
-                targetUnitMap.remove(m_casterUnit);
+                targetUnitMap.erase(std::remove(targetUnitMap.begin(), targetUnitMap.end(), m_casterUnit), targetUnitMap.end());
             break;
         }
         case TARGET_ENUM_UNITS_SCRIPT_AOE_AT_DEST_LOC:
@@ -2513,7 +2513,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
 
             SpellScriptTargetBounds bounds = sSpellMgr.GetSpellScriptTargetBounds(m_spellInfo->Id);
 
-            std::list<GameObject*> tempTargetGOList;
+            std::vector<GameObject*> tempTargetGOList;
 
             for (SpellScriptTarget::const_iterator i_spellST = bounds.first; i_spellST != bounds.second; ++i_spellST)
             {
@@ -2914,9 +2914,10 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                 FillAreaTargets(tempTargetUnitMap, max_range, PUSH_SELF_CENTER, SPELL_TARGETS_FRIENDLY);
 
                 if (m_casterUnit && m_casterUnit != pUnitTarget && std::find(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), m_casterUnit) == tempTargetUnitMap.end())
-                    tempTargetUnitMap.push_front(m_casterUnit);
+                    tempTargetUnitMap.insert(tempTargetUnitMap.begin(), m_casterUnit);
 
-                tempTargetUnitMap.sort(TargetDistanceOrderNear(pUnitTarget));
+                std::reverse(tempTargetUnitMap.begin(), tempTargetUnitMap.end());
+                std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(pUnitTarget));
 
                 if (tempTargetUnitMap.empty())
                     break;
@@ -2949,7 +2950,7 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
                     prev = *next;
                     targetUnitMap.push_back(prev);
                     tempTargetUnitMap.erase(next);
-                    tempTargetUnitMap.sort(TargetDistanceOrderNear(prev));
+                    std::sort(tempTargetUnitMap.begin(), tempTargetUnitMap.end(), TargetDistanceOrderNear(pUnitTarget));
                     next = tempTargetUnitMap.begin();
 
                     --t;

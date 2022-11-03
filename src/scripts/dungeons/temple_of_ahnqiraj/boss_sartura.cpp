@@ -511,7 +511,7 @@ struct mob_vekniss_guardianAI : public ScriptedAI
         {
             m_bCalledForHelp = true;
             m_bIsAlone = true;
-            std::list<Creature*> lAssistList;
+            std::vector<Creature*> lAssistList;
             GetCreatureListWithEntryInGrid(lAssistList, m_creature, 15233, 45.0f);
 
             for (const auto& itr : lAssistList)

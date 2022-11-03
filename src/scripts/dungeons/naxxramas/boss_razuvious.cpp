@@ -297,7 +297,7 @@ struct boss_razuviousAI : public ScriptedAI
             case EVENT_ADD_TURN_BACK:
                 if (Creature* b = getRPBuddy())
                 {
-                    std::list<Creature*> lst;
+                    std::vector<Creature*> lst;
                     GetCreatureListWithEntryInGrid(lst, b, 16211, 5.0f);
                     if (!lst.empty())
                         b->SetFacingToObject((*lst.begin()));

@@ -500,11 +500,11 @@ struct instance_blackrock_depths : ScriptedInstance
             // Only by patrons near the broken barrel react to Rocknot's rampage
             if (GameObject* pGo = instance->GetGameObject(m_uiGoBarKegTrapGUID))
             {
-<<<<<<< HEAD:src/scripts/dungeons/blackrock_depths/instance_blackrock_depths.cpp
                 for (const auto& guid : m_sBarPatronNpcGuids)
-=======
-                for (auto itr = m_sBarPatronNpcGuids.begin(); itr != m_sBarPatronNpcGuids.end(); itr++)
                 {
+                    if (Creature* pPatron = instance->GetCreature(guid))
+                    {
+                        if (pPatron->GetPositionZ() > pGo->GetPositionZ() - 1 && pPatron->IsWithinDist2d(pGo->GetPositionX(), pGo->GetPositionY(), 18.0f))
                         {
                             uint32 uiTextId = 0;
                             switch (urand(0, 4))
@@ -594,11 +594,7 @@ struct instance_blackrock_depths : ScriptedInstance
                     break;
                 }
             case 1:
-<<<<<<< HEAD:src/scripts/dungeons/blackrock_depths/instance_blackrock_depths.cpp
                 for (const auto& guid : m_sBarPatrolGuids)
-=======
-                for (auto itr = m_sBarPatrolGuids.begin(); itr != m_sBarPatrolGuids.end(); itr++)
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/eastern_kingdoms/burning_steppes/blackrock_depths/instance_blackrock_depths.cpp
                 {
                     if (Creature* pCreature = instance->GetCreature(guid))
                     {
@@ -613,11 +609,7 @@ struct instance_blackrock_depths : ScriptedInstance
                 }
                 break;
             case 2:
-<<<<<<< HEAD:src/scripts/dungeons/blackrock_depths/instance_blackrock_depths.cpp
                 for (const auto& guid : m_sBarPatrolGuids)
-=======
-                for (auto itr = m_sBarPatrolGuids.begin(); itr != m_sBarPatrolGuids.end(); itr++)
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/eastern_kingdoms/burning_steppes/blackrock_depths/instance_blackrock_depths.cpp
                 {
                     if (Creature* pCreature = instance->GetCreature(guid))
                     {
@@ -731,11 +723,7 @@ struct instance_blackrock_depths : ScriptedInstance
             case TYPE_RING_OF_LAW:
                 if (uiData == DONE)
                 {
-<<<<<<< HEAD:src/scripts/dungeons/blackrock_depths/instance_blackrock_depths.cpp
                     for (const auto& guid : m_lArenaSpectatorMobGUIDList)
-=======
-                    for (auto itr = m_lArenaSpectatorMobGUIDList.begin(); itr != m_lArenaSpectatorMobGUIDList.end(); itr++)
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/eastern_kingdoms/burning_steppes/blackrock_depths/instance_blackrock_depths.cpp
                     {
                         if (Creature* pCreature = instance->GetCreature(guid))
                         {
@@ -790,13 +778,8 @@ struct instance_blackrock_depths : ScriptedInstance
                         std::vector<Creature*> AnvilrageList;
                         GetCreatureListWithEntryInGrid(AnvilrageList, magnus, 8901, 400.0f);
 
-<<<<<<< HEAD:src/scripts/dungeons/blackrock_depths/instance_blackrock_depths.cpp
                         for (const auto& it : AnvilrageList)
                             it->SetRespawnDelay(345600);
-=======
-                        for (std::vector<Creature*>::iterator it = AnvilrageList.begin(); it != AnvilrageList.end(); ++it)
-                            (*it)->SetRespawnDelay(345600);
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/eastern_kingdoms/burning_steppes/blackrock_depths/instance_blackrock_depths.cpp
                     }
                 }
                 m_auiEncounter[TYPE_LYCEUM] = uiData;
@@ -845,11 +828,7 @@ struct instance_blackrock_depths : ScriptedInstance
             case TYPE_RIBBLY:
                 if (uiData == DONE)
                 {
-<<<<<<< HEAD:src/scripts/dungeons/blackrock_depths/instance_blackrock_depths.cpp
                     for (const auto& guid : m_lRibblySCronyMobGUIDList)
-=======
-                    for (auto itr = m_lRibblySCronyMobGUIDList.begin(); itr != m_lRibblySCronyMobGUIDList.end(); itr++)
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/eastern_kingdoms/burning_steppes/blackrock_depths/instance_blackrock_depths.cpp
                     {
                         if (Creature* pCreature = instance->GetCreature(guid))
                         {
@@ -869,17 +848,10 @@ struct instance_blackrock_depths : ScriptedInstance
                 if (uiData == IN_PROGRESS)
                 {
                     if (Creature* argelmach = instance->GetCreature(m_uiGolemLordArgelmachGUID))
-<<<<<<< HEAD:src/scripts/dungeons/blackrock_depths/instance_blackrock_depths.cpp
                         if (Unit* pVictim = argelmach->GetVictim())
                             for (const auto& guid : m_lArgelmachProtectorsMobGUIDList)
                                 if (Creature* protector = instance->GetCreature(guid))
                                     if (protector->IsAlive() && protector->AI() && protector->IsWithinDist(argelmach, 80.0f))
-=======
-                        if (Unit* pVictim = argelmach->getVictim())
-                            for (auto itr = m_lArgelmachProtectorsMobGUIDList.begin(); itr != m_lArgelmachProtectorsMobGUIDList.end(); itr++)
-                                if (Creature* protector = instance->GetCreature(*itr))
-                                    if (protector->isAlive() && protector->AI() && protector->IsWithinDist(argelmach, 80.0f))
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/eastern_kingdoms/burning_steppes/blackrock_depths/instance_blackrock_depths.cpp
                                         protector->AI()->AttackStart(pVictim);
                 }
                 m_auiEncounter[DATA_ARGELMACH_AGGRO] = uiData;
