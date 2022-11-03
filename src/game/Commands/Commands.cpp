@@ -10168,7 +10168,7 @@ inline Creature* Helper_CreateWaypointFor(Creature* wpOwner, WaypointPathOrigin 
 }
 inline void UnsummonVisualWaypoints(Player const* player, ObjectGuid ownerGuid)
 {
-    std::list<Creature*> waypoints;
+    std::vector<Creature*> waypoints;
     MaNGOS::AllCreaturesOfEntryInRange checkerForWaypoint(player, VISUAL_WAYPOINT, SIZE_OF_GRIDS);
     MaNGOS::CreatureListSearcher<MaNGOS::AllCreaturesOfEntryInRange> searcher(waypoints, checkerForWaypoint);
     Cell::VisitGridObjects(player, searcher, SIZE_OF_GRIDS);

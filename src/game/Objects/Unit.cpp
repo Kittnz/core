@@ -9273,7 +9273,7 @@ Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radiu
 
     // remove current target
     if (except)
-        std::remove(targets.begin(), targets.end(), except);
+        targets.erase(std::remove(targets.begin(), targets.end(), except), targets.end());
 
     // remove not LoS targets
     for (auto tIter = targets.begin(); tIter != targets.end();)
@@ -9314,7 +9314,7 @@ Unit* Unit::SelectRandomFriendlyTarget(Unit* except /*= nullptr*/, float radius 
 
     // remove current target
     if (except)
-        std::remove(targets.begin(), targets.end(), except);
+        targets.erase(std::remove(targets.begin(), targets.end(), except), targets.end());
 
     // remove not LoS targets
     for (auto tIter = targets.begin(); tIter != targets.end();)

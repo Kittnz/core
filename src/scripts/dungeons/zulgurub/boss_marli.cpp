@@ -99,7 +99,7 @@ struct boss_marliAI : public ScriptedAI
             if (m_pInstance->GetData(TYPE_MARLI) != DONE)
                 m_pInstance->SetData(TYPE_MARLI, NOT_STARTED);
 
-        std::list<GameObject*> lSpiderEggs;
+        std::vector<GameObject*> lSpiderEggs;
         GetGameObjectListWithEntryInGrid(lSpiderEggs, m_creature, GO_EGG, DEFAULT_VISIBILITY_INSTANCE);
         if (lSpiderEggs.empty())
             sLog.outDebug("boss_marli, no Eggs with the entry %u were found", GO_EGG);
@@ -153,7 +153,7 @@ struct boss_marliAI : public ScriptedAI
 
     GameObject* SelectNextEgg()
     {
-        std::list<GameObject*> lEggs;
+        std::vector<GameObject*> lEggs;
         GetGameObjectListWithEntryInGrid(lEggs, m_creature, GO_EGG, DEFAULT_VISIBILITY_INSTANCE);
         if (lEggs.empty())
             sLog.outDebug("boss_marli, no Eggs with the entry %i were found", GO_EGG);

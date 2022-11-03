@@ -405,9 +405,9 @@ struct npc_brazierAI: public ScriptedAI
         int var = 0;
         while (var < Nombre)
         {
-            std::list<GameObject*> GOListe;
+            std::vector<GameObject*> GOListe;
             GetGameObjectListWithEntryInGrid(GOListe, m_creature, 180252, 100.0f);
-            std::list<GameObject*>::iterator itr = GOListe.begin();
+            std::vector<GameObject*>::iterator itr = GOListe.begin();
             if (itr == GOListe.end())
                 return;
 

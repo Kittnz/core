@@ -1036,7 +1036,7 @@ struct mob_guardian_icecrownAI : public ScriptedAI
         case 9485:
         case 9484:
         {
-            std::list<Creature*> guardians;
+            std::vector<Creature*> guardians;
             GetCreatureListWithEntryInGrid(guardians, m_creature, NPC_GUARDIAN, 130.0f);
             uint32 numShackled = 0;
             for (Creature* pC : guardians)

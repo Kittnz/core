@@ -876,7 +876,7 @@ struct instance_blackwing_lair : public ScriptedInstance
 
         if (pCreature)
         {
-            std::list<GameObject *> lGameObjects;
+            std::vector<GameObject *> lGameObjects;
             pCreature->GetGameObjectListWithEntryInGrid(lGameObjects, GO_OEUF_RAZ, 250.0f);
             for (const auto pGo : lGameObjects)
                 pGo->DeleteLater();

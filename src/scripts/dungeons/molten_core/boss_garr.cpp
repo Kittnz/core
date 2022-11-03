@@ -39,7 +39,7 @@ struct boss_garrAI : ScriptedAI
     uint32 m_uiAntiMagicPulseTimer;
     uint32 m_uiMagmaShacklesTimer;
     uint32 m_uiExplodeTimer;
-    std::vector<ObjectGuid> m_lFiresworn;
+    std::list<ObjectGuid> m_lFiresworn;
 
     ScriptedInstance* m_pInstance;
 

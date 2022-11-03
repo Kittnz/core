@@ -755,7 +755,7 @@ struct go_survival_tent : public GameObjectAI
         {
             if (m_uiUpdateTimer < uiDiff)
             {
-                std::list<Player*> players;
+                std::vector<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -808,7 +808,7 @@ struct go_campfire_rested : public GameObjectAI
         {
             if (m_uiUpdateTimer < uiDiff)
             {
-                std::list<Player*> players;
+                std::vector<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -1243,7 +1243,7 @@ struct refreshment_portal_clicks : public GameObjectAI
 
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> players;
+            std::vector<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -1414,7 +1414,7 @@ struct soulwell_portal_clicks : public GameObjectAI
 
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> players;
+            std::vector<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -4109,7 +4109,7 @@ struct go_teslinah_search : public GameObjectAI
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> players;
+            std::vector<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -5277,7 +5277,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        std::list<Player*> players;
+        std::vector<Player*> players;
         GetPlayersWithinRange(players, 20);
 
         if (m_creature->GetHealthPercent() < 80 && m_creature->GetHealthPercent() > 70)
@@ -6236,7 +6236,7 @@ struct npc_zuljinAI : public ScriptedAI
             {
                 eventInProgress = true;
 
-                std::list<Player*> players;
+                std::vector<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
                 Cell::VisitWorldObjects(me, searcher, 2.0f);

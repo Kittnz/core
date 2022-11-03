@@ -445,20 +445,13 @@ struct npc_torekAI : public npc_escortAI
 
     void JustDied(Unit* pKiller) override
     {
-<<<<<<< HEAD:src/scripts/world/ashenvale.cpp
-        std::list<Creature*> lCrea;
+        std::vector<Creature*> lCrea;
 
         m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
 
         for (const auto& it : lCrea)
             it->DisappearAndDie();
 
-=======
-        std::vector<Creature*> lCrea;
-        m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
-        for (std::vector<Creature*>::iterator it = lCrea.begin(); it != lCrea.end(); ++it)
-            (*it)->DisappearAndDie();
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/kalimdor/ashenvale/ashenvale.cpp
         npc_escortAI::JustDied(pKiller);
     }
 
@@ -493,13 +486,8 @@ struct npc_torekAI : public npc_escortAI
             case 22:
                 std::vector<Creature*> lCrea;
                 m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
-<<<<<<< HEAD:src/scripts/world/ashenvale.cpp
                 for (const auto& it : lCrea)
                     it->DisappearAndDie();
-=======
-                for (std::vector<Creature*>::iterator it = lCrea.begin(); it != lCrea.end(); ++it)
-                    (*it)->DisappearAndDie();
->>>>>>> ca360934f (First batch of removing std::list for trivial tasks.):src/scripts/kalimdor/ashenvale/ashenvale.cpp
                 break;
         }
     }
@@ -543,7 +531,7 @@ bool QuestAccept_npc_torek(Player* pPlayer, Creature* pCreature, const Quest* pQ
 
         // Faction changes during escort.
         pCreature->SetFactionTemporary(FACTION_ORGRIMMAR, TEMPFACTION_RESTORE_RESPAWN);
-        std::list<Creature*> lCrea;
+        std::vector<Creature*> lCrea;
         pCreature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
         for (const auto& it : lCrea)
             it->SetFactionTemporary(FACTION_ORGRIMMAR, TEMPFACTION_RESTORE_RESPAWN);

@@ -1,4 +1,3 @@
-/*
  * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
  * Copyright (C) 2010-2011 ScriptDev0 <http://github.com/mangos-zero/scriptdev0>
  *
