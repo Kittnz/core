@@ -68,7 +68,7 @@ struct boss_golemaggAI : public ScriptedAI
             m_pInstance->SetData(TYPE_GOLEMAGG, NOT_STARTED);
 
 
-        std::list<Creature*> ChiensListe;
+        std::vector<Creature*> ChiensListe;
         GetCreatureListWithEntryInGrid(ChiensListe, m_creature, 11672, 150.0f);
         if (!ChiensListe.empty())
         {

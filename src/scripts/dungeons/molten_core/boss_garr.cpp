@@ -39,7 +39,7 @@ struct boss_garrAI : ScriptedAI
     uint32 m_uiAntiMagicPulseTimer;
     uint32 m_uiMagmaShacklesTimer;
     uint32 m_uiExplodeTimer;
-    std::list<ObjectGuid> m_lFiresworn;
+    std::vector<ObjectGuid> m_lFiresworn;
 
     ScriptedInstance* m_pInstance;
 
@@ -69,7 +69,7 @@ struct boss_garrAI : ScriptedAI
             m_creature->SetInCombatWithZone();
 
             // count chickens
-            std::list<Creature*> firesworn;
+            std::vector<Creature*> firesworn;
             GetCreatureListWithEntryInGrid(firesworn, m_creature, NPC_FIRESWORN, 150.0f);
             m_lFiresworn.clear();
 

@@ -9,6 +9,7 @@
 #include "ObjectMgr.h"
 #include "ScriptedAI.h"
 #include "GridSearchers.h"
+#include <algorithm>
 
 ScriptedAI::ScriptedAI(Creature* pCreature) : CreatureAI(pCreature),
     me(pCreature),
@@ -198,21 +199,20 @@ void ScriptedAI::DoTeleportPlayer(Unit* pUnit, float fX, float fY, float fZ, flo
     ((Player*)pUnit)->TeleportTo(pUnit->GetMapId(), fX, fY, fZ, fO, TELE_TO_NOT_LEAVE_COMBAT);
 }
 
-std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float fRange)
+std::vector<Creature*> ScriptedAI::DoFindFriendlyCC(float fRange)
 {
-    std::list<Creature*> pList;
+    std::vector<Creature*> pList;
 
     MaNGOS::FriendlyCCedInRangeCheck u_check(m_creature, fRange);
     MaNGOS::CreatureListSearcher<MaNGOS::FriendlyCCedInRangeCheck> searcher(pList, u_check);
 
     Cell::VisitGridObjects(m_creature, searcher, fRange);
-
     return pList;
 }
 
-std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float fRange, uint32 uiSpellId)
+std::vector<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float fRange, uint32 uiSpellId)
 {
-    std::list<Creature*> pList;
+    std::vector<Creature*> pList;
 
     MaNGOS::FriendlyMissingBuffInRangeCheck u_check(m_creature, fRange, uiSpellId);
     MaNGOS::CreatureListSearcher<MaNGOS::FriendlyMissingBuffInRangeCheck> searcher(pList, u_check);

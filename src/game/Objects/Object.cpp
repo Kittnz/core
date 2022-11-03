@@ -2588,7 +2588,7 @@ void WorldObject::DestroyForNearbyPlayers()
     if (!IsInWorld())
         return;
 
-    std::list<Player*> targets;
+    std::vector<Player*> targets;
     // Use visibility modifier for long range players
     MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(targets, check);
@@ -2692,7 +2692,7 @@ Player* WorldObject::FindNearestPlayer(float range) const
     return target;
 }
 
-void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const
+void WorldObject::GetGameObjectListWithEntryInGrid(std::vector<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange)
 {
     CellPair pair(MaNGOS::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(pair);
@@ -2705,7 +2705,7 @@ void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList
     cell.Visit(pair, visitor, *(GetMap()), *this, fMaxSearchRange);
 }
 
-void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const
+void WorldObject::GetCreatureListWithEntryInGrid(std::vector<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange)
 {
     CellPair pair(MaNGOS::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(pair);

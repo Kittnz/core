@@ -203,7 +203,7 @@ struct instance_deadmines : public ScriptedInstance
     {
         if (isRhahkDead)
         {
-            std::list<Creature*> m_EscortList;
+            std::vector<Creature*> m_EscortList;
 
             if (Creature* pRhahk = instance->GetCreature(m_uiRhahkGUID))
             {
@@ -235,7 +235,7 @@ struct instance_deadmines : public ScriptedInstance
 
         if (isGilnidDead)
         {
-            std::list<Creature*> m_EscortList;
+            std::vector<Creature*> m_EscortList;
 
             if (Creature* pGilnid = instance->GetCreature(m_uiGilnidGUID))
             {
@@ -271,7 +271,7 @@ struct instance_deadmines : public ScriptedInstance
             {
                 if (Creature* pMrSmite = instance->GetCreature(m_uiSmiteGUID))
                 {
-                    std::list<Creature*> m_EscortList;
+                    std::vector<Creature*> m_EscortList;
 
                     switch (m_uiDoor_Step)
                     {

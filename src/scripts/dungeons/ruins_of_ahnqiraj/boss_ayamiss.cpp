@@ -122,7 +122,7 @@ struct boss_ayamissAI : public ScriptedAI
             SetCombatMovement(false);
 
         /** Force despawn of invocated Hornet and Larva from Hive'Zara */
-        std::list<Creature*> GardiensListe;
+        std::vector<Creature*> GardiensListe;
         GetCreatureListWithEntryInGrid(GardiensListe, m_creature, NPC_HIVEZARA_HORNET, 300.0f);
         for (const auto& itr : GardiensListe)
         {
@@ -245,7 +245,7 @@ struct boss_ayamissAI : public ScriptedAI
                                            TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT,
                                            15000);
             }
-            std::list<Creature*> SwarmerList;
+            std::vector<Creature*> SwarmerList;
             GetCreatureListWithEntryInGrid(SwarmerList, m_creature, NPC_HIVEZARA_SWARMER, 300.0f);
             for (const auto& itr : SwarmerList)
                 itr->AddUnitState(UNIT_STAT_IGNORE_PATHFINDING);
