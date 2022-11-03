@@ -3291,6 +3291,35 @@ void Player::GiveLevel(uint32 level)
     if (level >= 2)
         RemoveQuest(80388);
 
+    // leave lower level bg queue on levelup
+    for (int queueSlot = 0; queueSlot < PLAYER_MAX_BATTLEGROUND_QUEUES; ++queueSlot)
+    {
+        BattleGroundQueueTypeId bgQueueTypeId = m_bgBattleGroundQueueID[queueSlot].bgQueueTypeId;
+        if (bgQueueTypeId != BATTLEGROUND_QUEUE_NONE)
+        {
+            BattleGroundTypeId bgTypeId = BattleGroundMgr::BGTemplateId(bgQueueTypeId);
+            if (GetBattleGroundBracketIdFromLevel(bgTypeId, level) != GetBattleGroundBracketIdFromLevel(bgTypeId, GetLevel()))
+            {
+                BattleGroundQueue& bgQueue = sBattleGroundMgr.m_BattleGroundQueues[bgQueueTypeId];
+                GroupQueueInfo ginfo;
+                if (!bgQueue.GetPlayerGroupInfoData(GetObjectGuid(), &ginfo))
+                    continue;
+
+                BattleGround* bg = sBattleGroundMgr.GetBattleGround(ginfo.IsInvitedToBGInstanceGUID, bgTypeId);
+                if (!bg)
+                    bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
+
+                WorldPacket data;
+                RemoveBattleGroundQueueId(bgQueueTypeId);  // must be called this way, because if you move this call to queue->removeplayer, it causes bugs
+                sBattleGroundMgr.BuildBattleGroundStatusPacket(&data, bg, queueSlot, STATUS_NONE, 0, 0);
+                bgQueue.RemovePlayer(GetObjectGuid(), true);
+                // player left queue, we should update it
+                sBattleGroundMgr.ScheduleQueueUpdate(bgQueueTypeId, bgTypeId, GetBattleGroundBracketIdFromLevel(bgTypeId, GetLevel()));
+                GetSession()->SendPacket(&data);
+            }
+        }
+    }
+
     PlayerLevelInfo info;
     sObjectMgr.GetPlayerLevelInfo(GetRace(), GetClass(), level, &info);
 
@@ -3321,8 +3350,7 @@ void Player::GiveLevel(uint32 level)
     SetUInt32Value(PLAYER_NEXT_LEVEL_XP, sObjectMgr.GetXPForLevel(level));
 
     //update level, max level of skills
-    if (GetLevel() != level)
-        m_Played_time[PLAYED_TIME_LEVEL] = 0;               // Level Played Time reset
+    m_Played_time[PLAYED_TIME_LEVEL] = 0;               // Level Played Time reset
     SetLevel(level);
     UpdateSkillsForLevel();
 
@@ -19749,9 +19777,13 @@ uint32 Player::GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket
 
 BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId) const
 {
+    return Player::GetBattleGroundBracketIdFromLevel(bgTypeId, GetLevel());
+}
+
+BattleGroundBracketId Player::GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId, uint32 playerLvl)
+{
     BattleGround *bg = sBattleGroundMgr.GetBattleGroundTemplate(bgTypeId);
     ASSERT(bg);
-	uint32 playerLvl = GetLevel();
 
     if (playerLvl < bg->GetMinLevel())
         return BG_BRACKET_ID_NONE;
