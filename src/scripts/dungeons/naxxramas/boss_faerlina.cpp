@@ -250,7 +250,7 @@ struct boss_faerlinaAI : public ScriptedAI
         
         if (!m_pInstance->HandleEvadeOutOfHome(m_creature))
         {
-            std::list<Creature*> creatures;
+            std::vector<Creature*> creatures;
             GetCreatureListWithEntryInGrid(creatures, m_creature, { NPC_NaxxramasFollower, NPC_NaxxramasWorshipper}, 150.0f);
             for (Creature* pCreature : creatures)
             {
@@ -334,9 +334,9 @@ struct mob_faerlina_rp : public ScriptedAI
         events.ScheduleEvent(EVENT_KNEEL, Seconds(urand(5, 10)));
     }
     
-    std::list<Creature*> getGroup()
+    std::vector<Creature*> getGroup()
     {
-        std::list<Creature*> creatures;
+        std::vector<Creature*> creatures;
         GetCreatureListWithEntryInGrid(creatures, m_creature, { NPC_NaxxramasAcolyte, NPC_NaxxramasCultist }, 11.0f);
         return creatures;
     }
@@ -346,7 +346,7 @@ struct mob_faerlina_rp : public ScriptedAI
         events.Update(diff);
         while (uint32 eventId = events.ExecuteEvent())
         {
-            std::list<Creature*> creatures = getGroup();
+            std::vector<Creature*> creatures = getGroup();
             if (creatures.empty())
             {
                 Reset();

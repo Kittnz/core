@@ -1445,7 +1445,7 @@ struct npc_watchman_doomgripAI : public ScriptedAI
 
     void Aggro(Unit* pWho) override
     {
-        std::list<Creature*> lGolems;
+        std::vector<Creature*> lGolems;
         GetCreatureListWithEntryInGrid(lGolems, m_creature, NPC_WARBRINGER_CONSTRUCT, 20.0f);
         if (!lGolems.empty())
         {

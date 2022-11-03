@@ -63,7 +63,7 @@ class npc_alterac_bossHelper
         }
         void AggroLinkedMobsIfNeeded()
         {
-            std::list<Creature*> creaturesLinked;
+            std::vector<Creature*> creaturesLinked;
             for (uint32 entry : m_linkedEntries)
                 GetCreatureListWithEntryInGrid(creaturesLinked, me, entry, 100.0f);
             for (const auto& it : creaturesLinked)
@@ -360,7 +360,7 @@ struct npc_DrekTharAI : public ScriptedAI, public npc_alterac_bossHelper
         m_bCombat5 = true;
         m_creature->RemoveAurasDueToSpell(SPELL_FRENZY);
 
-        std::list<Creature*> m_Wolf;
+        std::vector<Creature*> m_Wolf;
         GetCreatureListWithEntryInGrid(m_Wolf, m_creature, 12121, 100.0f);
         for (const auto& it : m_Wolf)
             if (!it->IsAlive())
@@ -1495,7 +1495,7 @@ struct AV_NpcEventTroopsAI : public npc_escortAI
 
         if (!isLeaderDead && commander_id != 0)
         {
-            std::list<Creature*> m_RamRiderList;
+            std::vector<Creature*> m_RamRiderList;
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, commander_id, 200.0f);
             for (const auto& it : m_RamRiderList)
                 if (it->IsDead())
@@ -1923,7 +1923,7 @@ struct AV_NpcEventAI : public npc_escortAI
         /** Respawn Primalist at her original place with the adds */
         if (m_creature->GetEntry() == AV_NPC_PRIMALIST_THURLOGA)
         {
-            std::list<Creature*> m_RamRiderList;
+            std::vector<Creature*> m_RamRiderList;
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_FROSTWOLF_SHAMAN, 1000.0f);
             for (const auto& it : m_RamRiderList)
             {
@@ -1935,7 +1935,7 @@ struct AV_NpcEventAI : public npc_escortAI
         /** Respawn Archdruid at her original place with the adds */
         else if (m_creature->GetEntry() == AV_NPC_ARCHDRUID_RENFERAL)
         {
-            std::list<Creature*> m_RamRiderList;
+            std::vector<Creature*> m_RamRiderList;
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_DRUID_OF_THE_GROVE, 1000.0f);
             for (const auto& it : m_RamRiderList)
             {
@@ -1948,7 +1948,7 @@ struct AV_NpcEventAI : public npc_escortAI
         {
             Stop();
             b_isCavalrySpawned = false;
-            std::list<Creature*> m_RamRiderList;
+            std::vector<Creature*> m_RamRiderList;
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_WOLFRIDER, 1000.0f);
             for (const auto& it : m_RamRiderList)
             {
@@ -1959,13 +1959,13 @@ struct AV_NpcEventAI : public npc_escortAI
         if (m_creature->GetEntry() == AV_NPC_RAMRIDER_CMD)
         {
             Stop();
-            std::list<Creature*> m_RamRiderList;
+            std::vector<Creature*> m_RamRiderList;
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_WOLFRIDER, 1000.0f);
+<<<<<<< HEAD
             for (const auto& it : m_RamRiderList)
+=======
+            for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
             {
-                it->SetRespawnDelay(432000);
-                it->SetDeathState(JUST_DIED);
-                it->RemoveCorpse();
             }
             m_RamRiderList.clear();
         }
@@ -2064,10 +2064,15 @@ struct AV_NpcEventAI : public npc_escortAI
                     m_creature->SetWalk(false);
                     m_creature->Mount(6080);
 
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_DRUID_OF_THE_GROVE, 40.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
                         it->Mount(9695); //2786
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+                        (*it)->Mount(9695); //2786
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     m_RamRiderList.clear();
                 }
                 break;
@@ -2087,10 +2092,15 @@ struct AV_NpcEventAI : public npc_escortAI
                     m_creature->Mount(12245);
                     m_creature->SetWalk(false);
 
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_FROSTWOLF_SHAMAN, 40.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
                         it->Mount(10278);
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+                        (*it)->Mount(10278);
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     m_RamRiderList.clear();
                 }
                 break;
@@ -2102,10 +2112,15 @@ struct AV_NpcEventAI : public npc_escortAI
                     m_creature->Unmount();
                     m_creature->SetWalk(true);
 
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_FROSTWOLF_SHAMAN, 40.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
                         it->Unmount();
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+                        (*it)->Unmount();
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     m_RamRiderList.clear();
                 }
                 break;
@@ -2115,10 +2130,15 @@ struct AV_NpcEventAI : public npc_escortAI
                     DoScriptText(SAY_PRIMALIST_THURLOGA, m_creature);
                     m_creature->CastSpell(m_creature, AV_INVOCATION_SPELL, false);
 
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_FROSTWOLF_SHAMAN, 30.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
                         it->CastSpell(m_creature, AV_INVOCATION_SPELL, false);
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+                        (*it)->CastSpell(m_creature, AV_INVOCATION_SPELL, false);
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     m_RamRiderList.clear();
 
                     m_creature->SummonGameObject(OBJECT_WB_H_INVOCATION, -360.006989f, -130.33f, 26.4321f, 5.6635f, 0, 0, 0, 0, -1, false);
@@ -2135,10 +2155,15 @@ struct AV_NpcEventAI : public npc_escortAI
                     m_creature->Unmount();
                     m_creature->SetWalk(true);
 
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_DRUID_OF_THE_GROVE, 40.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
                         it->Unmount();
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+                        (*it)->Unmount();
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     m_RamRiderList.clear();
                 }
                 break;
@@ -2148,10 +2173,15 @@ struct AV_NpcEventAI : public npc_escortAI
                     DoScriptText(SAY_ARCHDRUID_RENFERAL, m_creature);
                     m_creature->CastSpell(m_creature, AV_INVOCATION_SPELL, false);
 
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_DRUID_OF_THE_GROVE, 30.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
                         it->CastSpell(m_creature, AV_INVOCATION_SPELL, false);
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+                        (*it)->CastSpell(m_creature, AV_INVOCATION_SPELL, false);
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     m_RamRiderList.clear();
 
                     m_creature->SummonGameObject(OBJECT_WB_A_INVOCATION, -199.7f, -342.698f, 6.809f, 1.69646f, 0, 0, 0, 0, -1, false);
@@ -2296,9 +2326,13 @@ struct AV_NpcEventAI : public npc_escortAI
                 }
             }
 
-            std::list<Creature*> m_RamRiderList;
+            std::vector<Creature*> m_RamRiderList;
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, m_followers, 100.0f);
+<<<<<<< HEAD
             for (const auto& it : m_RamRiderList)
+=======
+            for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
             {
                 if (AV_NpcEventTroopsAI* pEscortAI = dynamic_cast<AV_NpcEventTroopsAI*>(it->AI()))
                 {
@@ -2449,9 +2483,13 @@ struct AV_NpcEventAI : public npc_escortAI
                         {
                             b_isSpeechDone = true;
 
-                            std::list<Creature*> m_RamRiderList;
+                            std::vector<Creature*> m_RamRiderList;
                             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_WOLFRIDER, 50.0f);
+<<<<<<< HEAD
                             for (const auto& it : m_RamRiderList)
+=======
+                            for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                             {
                                 DoScriptText(SAY_WARCRY_HORDE, it);
                                 it->SetWalk(false);
@@ -2473,9 +2511,13 @@ struct AV_NpcEventAI : public npc_escortAI
                         {
                             b_isSpeechDone = true;
 
-                            std::list<Creature*> m_RamRiderList;
+                            std::vector<Creature*> m_RamRiderList;
                             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_RAMRIDER, 20.0f);
+<<<<<<< HEAD
                             for (const auto& it : m_RamRiderList)
+=======
+                            for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                             {
                                 DoScriptText(SAY_WARCRY_ALIANCE, it);
                                 it->SetWalk(false);
@@ -2514,9 +2556,13 @@ struct AV_NpcEventAI : public npc_escortAI
             {
                 if (m_bThurlogaBoss)
                 {
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_FROSTWOLF_SHAMAN, 100.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     {
                         it->Unmount();
                         it->DisappearAndDie();
@@ -2545,9 +2591,13 @@ struct AV_NpcEventAI : public npc_escortAI
             {
                 if (m_bRenferalBoss)
                 {
-                    std::list<Creature*> m_RamRiderList;
+                    std::vector<Creature*> m_RamRiderList;
                     GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_DRUID_OF_THE_GROVE, 100.0f);
+<<<<<<< HEAD
                     for (const auto& it : m_RamRiderList)
+=======
+                    for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                     {
                         it->Unmount();
                         it->DisappearAndDie();
@@ -3324,9 +3374,13 @@ struct AV_npc_troops_chief_EventAI : public npc_escortAI
          * This method is used since every possible kind got an idea incremented one by one */
         for (int i = 0; i < 4; i++)
         {
-            std::list<Creature*> m_RamRiderList;
+            std::vector<Creature*> m_RamRiderList;
             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, m_uiTroopsType + i, 100.0f);
+<<<<<<< HEAD
             for (const auto& it : m_RamRiderList)
+=======
+            for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
             {
                 /** Start escort for troops since leader is dead */
                 if (AV_npc_troops_chief_EventAI* pEscortAI = dynamic_cast<AV_npc_troops_chief_EventAI*>(it->AI()))
@@ -3368,9 +3422,13 @@ struct AV_npc_troops_chief_EventAI : public npc_escortAI
                          * This method is used since every possible kind got an idea incremented one by one */
                         for (int i = 0; i < 4; i++)
                         {
-                            std::list<Creature*> m_RamRiderList;
+                            std::vector<Creature*> m_RamRiderList;
                             GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, m_uiTroopsType + i, 40.0f);
+<<<<<<< HEAD
                             for (const auto& it : m_RamRiderList)
+=======
+                            for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
                             {
                                 DoScriptText(m_uiWarcryBC, it);
                                 it->SetWalk(false);
@@ -4110,22 +4168,37 @@ struct AV_NpcEventWorldBoss_H_AI : public av_world_boss_baseai
         m_uiEngageTimer = 1000; //600000
 
         /** Once WB is invocated, suppress invocation rune to disable further invocation (only one per Battleground) */
-        std::list<GameObject*> invocationObjectList;
+        std::vector<GameObject*> invocationObjectList;
         GetGameObjectListWithEntryInGrid(invocationObjectList, m_creature, OBJECT_WB_H_INVOCATION, 200.0f);
+<<<<<<< HEAD
         for (const auto& it : invocationObjectList)
             it->Delete();
+=======
+        for (std::vector<GameObject*>::iterator it = invocationObjectList.begin(); it != invocationObjectList.end(); ++it)
+            (*it)->Delete();
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
 
         /** Stop invocation from Frostwolf Shaman */
-        std::list<Creature*> ramRidersList;
+        std::vector<Creature*> ramRidersList;
         GetCreatureListWithEntryInGrid(ramRidersList, m_creature, AV_NPC_FROSTWOLF_SHAMAN, 200.0f);
+<<<<<<< HEAD
         for (const auto& it : ramRidersList)
             it->InterruptNonMeleeSpells(true);
+=======
+        for (std::vector<Creature*>::iterator it = ramRidersList.begin(); it != ramRidersList.end(); ++it)
+            (*it)->InterruptNonMeleeSpells(true);
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
 
         /** Stop invocation from Thurloga */
-        std::list<Creature*> thurlogaList;
+        std::vector<Creature*> thurlogaList;
         GetCreatureListWithEntryInGrid(thurlogaList, m_creature, AV_NPC_PRIMALIST_THURLOGA, 200.0f);
+<<<<<<< HEAD
         for (const auto& it : thurlogaList)
             it->InterruptNonMeleeSpells(true);
+=======
+        for (std::vector<Creature*>::iterator it = thurlogaList.begin(); it != thurlogaList.end(); ++it)
+            (*it)->InterruptNonMeleeSpells(true);
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
 
         isYelling = false;
         Reset();
@@ -4317,24 +4390,39 @@ struct AV_NpcEventWorldBoss_A_AI : public av_world_boss_baseai
         }
 
         /** Once WB is invocated, suppress invocation rune to disable further invocation (only one per Battleground) */
-        std::list<GameObject*> m_invocationObjectList;
+        std::vector<GameObject*> m_invocationObjectList;
         GetGameObjectListWithEntryInGrid(m_invocationObjectList, m_creature, OBJECT_WB_A_INVOCATION, 200.0f);
+<<<<<<< HEAD
         for (const auto& it : m_invocationObjectList)
             it->Delete();
+=======
+        for (std::vector<GameObject*>::iterator it = m_invocationObjectList.begin(); it != m_invocationObjectList.end(); ++it)
+            (*it)->Delete();
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
         m_invocationObjectList.clear();
 
         /** Stop invocation from Druid of the Grove */
-        std::list<Creature*> m_RamRiderList;
+        std::vector<Creature*> m_RamRiderList;
         GetCreatureListWithEntryInGrid(m_RamRiderList, m_creature, AV_NPC_DRUID_OF_THE_GROVE, 200.0f);
+<<<<<<< HEAD
         for (const auto& it : m_RamRiderList)
             it->InterruptNonMeleeSpells(true);
+=======
+        for (std::vector<Creature*>::iterator it = m_RamRiderList.begin(); it != m_RamRiderList.end(); ++it)
+            (*it)->InterruptNonMeleeSpells(true);
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
         m_RamRiderList.clear();
 
         /** Stop invocation from Renferal */
-        std::list<Creature*> m_RenferalList;
+        std::vector<Creature*> m_RenferalList;
         GetCreatureListWithEntryInGrid(m_RenferalList, m_creature, AV_NPC_ARCHDRUID_RENFERAL, 200.0f);
+<<<<<<< HEAD
         for (const auto& it : m_RenferalList)
             it->InterruptNonMeleeSpells(true);
+=======
+        for (std::vector<Creature*>::iterator it = m_RenferalList.begin(); it != m_RenferalList.end(); ++it)
+            (*it)->InterruptNonMeleeSpells(true);
+>>>>>>> ca360934f (First batch of removing std::list for trivial tasks.)
         m_RenferalList.clear();
 
         Reset();

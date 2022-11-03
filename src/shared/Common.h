@@ -86,6 +86,7 @@
 #include <sstream>
 #include <algorithm>
 #include <array>
+#include <vector> // sin to add std::list but not vector to this list
 
 #include "Errors.h"
 #include "LockedQueue.h"

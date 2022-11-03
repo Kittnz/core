@@ -125,8 +125,9 @@ struct boss_broodlordAI : public ScriptedAI
 
         for (entriesIt = mobsEntries.begin(); entriesIt != mobsEntries.end(); ++entriesIt)
         {
-            std::list<Creature*> tmpMobsList;
+            std::vector<Creature*> tmpMobsList;
             GetCreatureListWithEntryInGrid(tmpMobsList, m_creature, (*entriesIt), 300.0f);
+            std::reverse(tmpMobsList.begin(), tmpMobsList.end());
             while (!tmpMobsList.empty())
             {
                 Creature* curr = tmpMobsList.front();
