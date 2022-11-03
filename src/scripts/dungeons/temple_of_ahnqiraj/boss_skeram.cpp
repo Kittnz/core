@@ -204,7 +204,7 @@ struct boss_skeramAI : public ScriptedAI
         if (ArcaneExplosion_Timer < diff)
         {
             // Only cast arcane explosion if there are more than m_maxMeleeAllowed units within melee reach
-            std::list<Player*> players;
+            std::vector<Player*> players;
             GetPlayersWithinRange(players, m_creature->GetMeleeReach());
 
             if (players.size() > m_maxMeleeAllowed)

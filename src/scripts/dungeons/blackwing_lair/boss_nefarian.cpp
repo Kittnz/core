@@ -415,7 +415,7 @@ struct boss_nefarianAI : ScriptedAI
 
             DoScriptText(SAY_RAISE_SKELETONS, m_creature);
 
-            std::list<GameObject*> l_GObject;
+            std::vector<GameObject*> l_GObject;
             static constexpr uint32 GO_DRAKINOID_BONES = 179804;
             GetGameObjectListWithEntryInGrid(l_GObject, m_creature, GO_DRAKINOID_BONES, 200.0f);
 
@@ -532,12 +532,13 @@ struct npc_corrupted_totemAI : ScriptedAI
 
         for (vui_EntriesIt = vui_MobEntries.begin(); vui_EntriesIt != vui_MobEntries.end(); ++vui_EntriesIt)
         {
-            std::list<Creature*> l_tmpMobsList;
+            std::vector<Creature*> l_tmpMobsList;
             GetCreatureListWithEntryInGrid(l_tmpMobsList, m_creature, *vui_EntriesIt, 55.0f);
+            std::reverse(l_tmpMobsList.begin(), l_tmpMobsList.end());
             while (!l_tmpMobsList.empty())
             {
-                Creature* p_CurrentCreature = l_tmpMobsList.front();
-                l_tmpMobsList.pop_front();
+                Creature* p_CurrentCreature = l_tmpMobsList.back();
+                l_tmpMobsList.pop_back();
 
                 if (!p_CurrentCreature->IsAlive())
                     continue;

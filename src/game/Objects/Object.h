@@ -35,6 +35,7 @@
 
 #include <set>
 #include <string>
+#include <vector>
 #include <array>
 
 #define CONTACT_DISTANCE 0.5f

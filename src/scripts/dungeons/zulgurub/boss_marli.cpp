@@ -113,7 +113,7 @@ struct boss_marliAI : public ScriptedAI
         }
 
         // High Priestess Mar'li will now despawn her summoned spiders when she returns from combat.
-        std::list<Creature*> lSummonedSpiders;
+        std::vector<Creature*> lSummonedSpiders;
         GetCreatureListWithEntryInGrid(lSummonedSpiders, m_creature, NPC_SPAWN_OF_MARLI, DEFAULT_VISIBILITY_INSTANCE);
         for (const auto& pSpider : lSummonedSpiders)
         {
@@ -159,7 +159,7 @@ struct boss_marliAI : public ScriptedAI
             sLog.outDebug("boss_marli, no Eggs with the entry %i were found", GO_EGG);
         else
         {
-            lEggs.sort(ObjectDistanceOrder(m_creature));
+            std::sort(lEggs.begin(), lEggs.end(), (ObjectDistanceOrder(m_creature)));
             for (const auto& pEgg : lEggs)
             {
                 if (pEgg->GetGoState() == (GO_STATE_READY))

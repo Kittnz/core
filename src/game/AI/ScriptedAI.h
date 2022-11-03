@@ -131,7 +131,7 @@ struct ScriptedAI : CreatureAI
     Player* GetRandomPlayerInRange(float radius, bool mustBeAlive = true, const std::list<Player*>* excludedPlayers = nullptr) const;
 
     // Get a list of all players within range of m_creature
-    void GetPlayersWithinRange(std::vector<Player*>& players, float range);
+    void GetPlayersWithinRange(std::vector<Player*>& players, float range) const;
 
     // Spawns a creature relative to m_creature
     Creature* DoSpawnCreature(uint32 uiId, float fX, float fY, float fZ, float fAngle, uint32 uiType, uint32 uiDespawntime);
