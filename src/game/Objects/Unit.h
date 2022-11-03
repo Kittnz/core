@@ -583,6 +583,7 @@ class Unit : public WorldObject
         float GetCollisionHeight() const { return m_modelCollisionHeight * m_nativeScaleOverride; }
         void UpdateModelData(); // at any changes to scale and/or displayId
         void InitPlayerDisplayIds();
+        static float GetScaleForDisplayId(uint32 displayId);
         void DeMorph();
 
         bool IsVendor()       const { return HasFlag( UNIT_NPC_FLAGS, UNIT_NPC_FLAG_VENDOR ); }
