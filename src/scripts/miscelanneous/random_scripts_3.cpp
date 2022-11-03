@@ -1205,6 +1205,7 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             npc->CastSpell(npc, 5906, false);
             });
         DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             auto player = sObjectAccessor.FindPlayer(playerGuid);
             if (player)
             {
@@ -1213,7 +1214,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 {
                     npc->MonsterSayToPlayer("There, it is done, the key is attuned, do with it what you must. I hope whatever purpose you are using this for, serves you well.", player);
                     npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     return true;
                 }
@@ -1222,8 +1222,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 player->SetQuestStatus(40171, QUEST_STATUS_NONE);
                 player->GetSession()->SendNotification("Your bags are full!");
             }
-
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             return false;
             });
     }
@@ -1238,8 +1236,8 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
             npc->CastSpell(npc, 5906, false);
             });
         DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             auto player = sObjectAccessor.FindPlayer(playerGuid);
-
             if (player)
             {
                 player->AddItem(60345);
@@ -1247,7 +1245,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 {
                     npc->MonsterSayToPlayer("I must confess something to you mortal, for I am not one to withhold information, nor am I one to outwardly lie without purpose. I had many reasonings for the death of the Prophet Jammal'an within the depths of the Sunken Temple.", player);
                     npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                    npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     return true;
                 }
                 else
@@ -1255,7 +1252,6 @@ bool QuestAccept_npc_insomni(Player* pPlayer, Creature* pQuestGiver, Quest const
                 player->SetQuestStatus(40271, QUEST_STATUS_NONE);
                 player->GetSession()->SendNotification("Your bags are full!");
             }
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             return false;
             });
     }
@@ -1325,7 +1321,7 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
         });
 
     DoAfterTime(pQuestGiver, 92 * IN_MILLISECONDS, [pGuid, npc = pQuestGiver]() {
-       
+        npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
         WorldObject* obj = nullptr;
         Player* pPlayer = ObjectAccessor::FindPlayer(pGuid);
         if (!pPlayer)
@@ -1335,12 +1331,7 @@ void insomniDialogue(Player* pPlayer, Creature* pQuestGiver)
 
         if (GameObject* riftSpell = obj->FindNearestGameObject(7000035, 50.0f))
             riftSpell->AddObjectToRemoveList();
-        });
-
-    DoAfterTime(pQuestGiver, 92 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-        {
-            npc->SummonCreature(60499, -12853.94f, 2915.04f, 10.81f, 3.83F, TEMPSUMMON_CORPSE_DESPAWN);
-        }
+        npc->SummonCreature(60499, -12853.94f, 2915.04f, 10.81f, 3.83F, TEMPSUMMON_CORPSE_DESPAWN);
         });
 }
 
