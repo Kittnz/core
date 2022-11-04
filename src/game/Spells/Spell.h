@@ -230,7 +230,8 @@ class Spell
 {
     friend struct MaNGOS::SpellNotifierPlayer;
     friend struct MaNGOS::SpellNotifierCreatureAndPlayer;
-    friend void WorldObject::SetCurrentCastedSpell( Spell * pSpell );
+    friend void WorldObject::SetCurrentCastedSpell(Spell* pSpell );
+    friend void WorldObject::MoveChannelledSpellWithCastTime(Spell* pSpell);
     public:
 
         void EffectEmpty(SpellEffectIndex eff_idx);
