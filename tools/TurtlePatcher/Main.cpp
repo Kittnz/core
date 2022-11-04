@@ -495,17 +495,20 @@ void DeleteDeprecatedMPQ()
 		{
 			WriteLog("Searching for patch-%i...", i);
 			std::stringstream ss;
+			std::stringstream ss_r;
 			ss << "patch-" << std::to_string(i) << ".mpq";
+			ss_r << "patch-" << std::to_string(i) << ".mpq.off";
 			std::string patch_name = ss.str();
+			std::string patch_rename = ss_r.str();
 
 			fs::path patch_path = currentPath / "Data" / patch_name;
 
 			if (fs::exists(patch_path))
 			{
-				WriteLog("Renaming deprecated patch-%i...", i);
-				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / "patch.off");
+				WriteLog("Renaming deprecated patch-%i to %s...", i, patch_rename.c_str());
+				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
 
-				fs::path patch_disabled = currentPath / "Data" / "patch.off";
+				fs::path patch_disabled = currentPath / "Data" / patch_rename;
 				if (fs::exists(patch_disabled))
 				{
 					WriteLog("Deleting deprecated patch-%i...", i);
@@ -537,14 +540,18 @@ void DeleteDeprecatedMPQ()
 		{
 			WriteLog("Searching for %s...", i.c_str());
 
+			std::stringstream ss_r;
+			ss_r << i << ".off";
+			std::string patch_rename = ss_r.str();
+
 			fs::path patch_path = currentPath / "Data" / i.c_str();
 
 			if (fs::exists(patch_path))
 			{
-				WriteLog("Renaming deprecated %s...", i.c_str());
-				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / "patch.off");
+				WriteLog("Renaming deprecated %s to %s...", i.c_str(), patch_rename.c_str());
+				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
 
-				fs::path patch_disabled = currentPath / "Data" / "patch.off";
+				fs::path patch_disabled = currentPath / "Data" / patch_rename;
 				if (fs::exists(patch_disabled))
 				{
 					WriteLog("Deleting deprecated %s...", i.c_str());
