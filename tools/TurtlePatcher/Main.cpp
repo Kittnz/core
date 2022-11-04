@@ -536,7 +536,7 @@ void DeleteDeprecatedMPQ()
 							        	    "patch-Y.mpq",
 							        	    "patch-Z.mpq" };
 
-		for (auto i : alphabet_patches)
+		for (std::string i : alphabet_patches)
 		{
 			WriteLog("Searching for %s...", i.c_str());
 
