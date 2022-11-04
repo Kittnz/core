@@ -329,11 +329,8 @@ private:
             return false;
         }
 
-<<<<<<< HEAD
-        list<Creature*> risenLackeys;
-=======
         vector<Creature *> risenLackeys;
->>>>>>> origin/patch_1161
+
         me->GetCreatureListWithEntryInGrid(risenLackeys, 10482, 500.f);
         for (auto lackey: risenLackeys)
         {
