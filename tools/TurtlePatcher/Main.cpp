@@ -568,6 +568,34 @@ int GuardedMain(HINSTANCE hInstance)
 	// Then sleep for 5 sec. because there is a strange error if we working too fast
 	Sleep(5000);
 
+	// Delete numerical patches:
+
+	int numerical_patches[6] = { 4, 5, 6, 7, 8, 9 };
+
+	for (int i : numerical_patches)
+	{
+		WriteLog("Searching for numerical patches...", i);
+		auto s = std::to_string(i);
+		fs::path patch_path = currentPath / "Data" / ("patch-%s.mpq", s);
+		WriteLog("Debug: %s", patch_path);
+		if (fs::exists(patch_path))
+		{
+			WriteLog("Renaming deprecated patch-%i...", i);
+			fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / "patch.off");
+
+			fs::path patch_disabled = currentPath / "Data" / "patch.off";
+			if (fs::exists(patch_disabled))
+			{
+				WriteLog("Deleting deprecated patch...");
+				fs::remove(patch_disabled);
+			}
+			else
+			{
+				WriteLog("Deprecated patch-%i not found.", i);
+			}
+		}
+	}
+
 	// Delete previously distributed patches:
 
 	fs::path patch_a_path = currentPath / "Data" / DEPRECATED_PATCH_A;
