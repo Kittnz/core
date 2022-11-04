@@ -7,6 +7,7 @@
 #include "resource.h"
 #include <Commctrl.h>
 #include <iostream>
+#include <string> 
 
 #define fs std::filesystem
 
@@ -45,13 +46,14 @@ bool fov_build = false;
 #define NEW_BUILD_DATE "November 12 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-A.mpq"
+#define PATCH_FILE "Data\\patch-3.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
 #define ADDITIONAL_GAME_BINARY "WoWFoV.mpq"
 
 // To be deleted...
+#define DEPRECATED_PATCH_A "patch-A.mpq"
 #define DEPRECATED_PATCH_T "patch-T.mpq"
 #define DEPRECATED_PATCH_U "patch-U.mpq"
 #define DEPRECATED_PATCH_V "patch-V.mpq"
@@ -59,6 +61,17 @@ bool fov_build = false;
 #define DEPRECATED_PATCH_X "patch-X.mpq"
 #define DEPRECATED_PATCH_Y "patch-Y.mpq"
 #define DEPRECATED_PATCH_Z "patch-Z.mpq"
+
+// To be renamed...
+#define DEPRECATED_PATCH_A_DISABLED "patch-A.off"
+#define DEPRECATED_PATCH_T_DISABLED "patch-T.off"
+#define DEPRECATED_PATCH_U_DISABLED "patch-U.off"
+#define DEPRECATED_PATCH_V_DISABLED "patch-V.off"
+#define DEPRECATED_PATCH_W_DISABLED "patch-W.off"
+#define DEPRECATED_PATCH_X_DISABLED "patch-X.off"
+#define DEPRECATED_PATCH_Y_DISABLED "patch-Y.off"
+#define DEPRECATED_PATCH_Z_DISABLED "patch-Z.off"
+
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -228,7 +241,6 @@ void PatchBinary(FILE* hWoW)
 		fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
 		fwrite(patch_10, sizeof(patch_10), 1, hWoW);
 	}
-
 }
 
 constexpr int max_path = 260;
@@ -558,11 +570,44 @@ int GuardedMain(HINSTANCE hInstance)
 
 	// Delete previously distributed patches:
 
+	fs::path patch_a_path = currentPath / "Data" / DEPRECATED_PATCH_A;
+	if (fs::exists(patch_a_path))
+	{
+		WriteLog("Renaming deprecated Patch-A...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_A, currentPath / "Data" / DEPRECATED_PATCH_A_DISABLED);
+
+		fs::path patch_a_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_A_DISABLED;
+		if (fs::exists(patch_a_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-A...");
+			fs::remove(patch_a_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-A not found.");
+		}
+	}
+	else
+	{
+		WriteLog("Patch-T not found.");
+	}
+
 	fs::path patch_t_path = currentPath / "Data" / DEPRECATED_PATCH_T;
 	if (fs::exists(patch_t_path))
 	{
-		WriteLog("Deleting deprecated Patch-T...");
-		fs::remove(patch_t_path);
+		WriteLog("Renaming deprecated Patch-T...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_T, currentPath / "Data" / DEPRECATED_PATCH_T_DISABLED);
+
+		fs::path patch_t_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_T_DISABLED;
+		if (fs::exists(patch_t_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-T...");
+			fs::remove(patch_t_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-T not found.");
+		}
 	}
 	else
 	{
@@ -572,8 +617,19 @@ int GuardedMain(HINSTANCE hInstance)
 	fs::path patch_u_path = currentPath / "Data" / DEPRECATED_PATCH_U;
 	if (fs::exists(patch_u_path))
 	{
-		WriteLog("Deleting deprecated Patch-U...");
-		fs::remove(patch_u_path);
+		WriteLog("Renaming deprecated Patch-U...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_U, currentPath / "Data" / DEPRECATED_PATCH_U_DISABLED);
+
+		fs::path patch_u_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_U_DISABLED;
+		if (fs::exists(patch_u_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-U...");
+			fs::remove(patch_u_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-U not found.");
+		}
 	}
 	else
 	{
@@ -583,8 +639,19 @@ int GuardedMain(HINSTANCE hInstance)
 	fs::path patch_v_path = currentPath / "Data" / DEPRECATED_PATCH_V;
 	if (fs::exists(patch_v_path))
 	{
-		WriteLog("Deleting deprecated Patch-V...");
-		fs::remove(patch_v_path);
+		WriteLog("Renaming deprecated Patch-V...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_V, currentPath / "Data" / DEPRECATED_PATCH_V_DISABLED);
+
+		fs::path patch_v_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_V_DISABLED;
+		if (fs::exists(patch_v_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-V...");
+			fs::remove(patch_v_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-V not found.");
+		}
 	}
 	else
 	{
@@ -594,8 +661,19 @@ int GuardedMain(HINSTANCE hInstance)
 	fs::path patch_w_path = currentPath / "Data" / DEPRECATED_PATCH_W;
 	if (fs::exists(patch_w_path))
 	{
-		WriteLog("Deleting deprecated Patch-W...");
-		fs::remove(patch_w_path);
+		WriteLog("Renaming deprecated Patch-W...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_W, currentPath / "Data" / DEPRECATED_PATCH_W_DISABLED);
+
+		fs::path patch_w_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_W_DISABLED;
+		if (fs::exists(patch_w_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-W...");
+			fs::remove(patch_w_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-W not found.");
+		}
 	}
 	else
 	{
@@ -605,8 +683,19 @@ int GuardedMain(HINSTANCE hInstance)
 	fs::path patch_x_path = currentPath / "Data" / DEPRECATED_PATCH_X;
 	if (fs::exists(patch_x_path))
 	{
-		WriteLog("Deleting deprecated Patch-X...");
-		fs::remove(patch_x_path);
+		WriteLog("Renaming deprecated Patch-X...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_X, currentPath / "Data" / DEPRECATED_PATCH_X_DISABLED);
+
+		fs::path patch_x_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_X_DISABLED;
+		if (fs::exists(patch_x_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-X...");
+			fs::remove(patch_x_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-X not found.");
+		}
 	}
 	else
 	{
@@ -616,8 +705,19 @@ int GuardedMain(HINSTANCE hInstance)
 	fs::path patch_y_path = currentPath / "Data" / DEPRECATED_PATCH_Y;
 	if (fs::exists(patch_y_path))
 	{
-		WriteLog("Deleting deprecated Patch-Y...");
-		fs::remove(patch_y_path);
+		WriteLog("Renaming deprecated Patch-Y...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_Y, currentPath / "Data" / DEPRECATED_PATCH_Y_DISABLED);
+
+		fs::path patch_y_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_Y_DISABLED;
+		if (fs::exists(patch_y_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-Y...");
+			fs::remove(patch_y_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-Y not found.");
+		}
 	}
 	else
 	{
@@ -627,8 +727,19 @@ int GuardedMain(HINSTANCE hInstance)
 	fs::path patch_z_path = currentPath / "Data" / DEPRECATED_PATCH_Z;
 	if (fs::exists(patch_z_path))
 	{
-		WriteLog("Deleting deprecated Patch-Z...");
-		fs::remove(patch_z_path);
+		WriteLog("Renaming deprecated Patch-Z...");
+		fs::rename(currentPath / "Data" / DEPRECATED_PATCH_Z, currentPath / "Data" / DEPRECATED_PATCH_Z_DISABLED);
+
+		fs::path patch_z_path_disabled = currentPath / "Data" / DEPRECATED_PATCH_Z_DISABLED;
+		if (fs::exists(patch_z_path_disabled))
+		{
+			WriteLog("Deleting deprecated Patch-Z...");
+			fs::remove(patch_z_path_disabled);
+		}
+		else
+		{
+			WriteLog("Deprecated Patch-Z not found.");
+		}
 	}
 	else
 	{
