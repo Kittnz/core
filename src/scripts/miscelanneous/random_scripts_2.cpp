@@ -11,7 +11,7 @@ struct zebrian_the_madAI : public ScriptedAI
 
     void Aggro(Unit *who)
     {
-        m_creature->MonsterYell("Don't touch my Zebra! I won it to a drunken goblin!");
+        m_creature->MonsterYell("Don't touch my Zebra! I found it, ME! You will never get your hands on it.");
     }
 
     void Reset()

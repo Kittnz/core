@@ -232,7 +232,7 @@ struct boss_concaviusAI : public ScriptedAI
         //ManaBurn_Timer
         if ((ManaBurn_Timer - 10000) <= diff && !mana_burn_warning_said)
         {
-            std::list<Player*> players;
+            std::vector<Player*> players;
             GetPlayersWithinRange(players, 75);
             m_creature->InterruptNonMeleeSpells(false);
             DoCast(m_creature, SPELL_TWIN_TELEPORT_VISUAL);

@@ -755,7 +755,7 @@ struct go_survival_tent : public GameObjectAI
         {
             if (m_uiUpdateTimer < uiDiff)
             {
-                std::list<Player*> players;
+                std::vector<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -808,7 +808,7 @@ struct go_campfire_rested : public GameObjectAI
         {
             if (m_uiUpdateTimer < uiDiff)
             {
-                std::list<Player*> players;
+                std::vector<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -1257,7 +1257,7 @@ struct refreshment_portal_clicks : public GameObjectAI
 
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> players;
+            std::vector<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -1428,7 +1428,7 @@ struct soulwell_portal_clicks : public GameObjectAI
 
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> players;
+            std::vector<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -4123,7 +4123,7 @@ struct go_teslinah_search : public GameObjectAI
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> players;
+            std::vector<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -4604,6 +4604,32 @@ bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const Spe
         pPlayer->GetSession()->SendNotification("GREAT NEWS!!! YOU ARE JELLY NOW!");
         pPlayer->SetObjectScale(0.6F);
         pPlayer->SetDisplayId(12349);
+        return true;
+    }
+
+}
+
+
+bool ItemUseSpell_item_tauren_shrink(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->GetRace() == RACE_TAUREN)
+    {
+        //taurens by default do not have 1.0 as scale so this shrinks them.
+        if (pPlayer->GetObjectScale() < DEFAULT_TAUREN_FEMALE_SCALE)
+        {
+            pPlayer->GetSession()->SendNotification("You can't shrink more!");
+            return false;
+        }
+        pPlayer->SetObjectScale(pPlayer->GetGender() == GENDER_MALE ? 1.0f : 0.9f);
+        return true;
+    }
+    else
+    {
+        if (pPlayer->GetHealth() >= pPlayer->GetMaxHealth() / 10)
+        {
+            pPlayer->DealDamage(pPlayer, pPlayer->GetMaxHealth() / 10, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_SHADOW, nullptr, false);
+            pPlayer->Say("Ouch..", LANG_UNIVERSAL);
+        }
         return true;
     }
 
@@ -5291,7 +5317,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        std::list<Player*> players;
+        std::vector<Player*> players;
         GetPlayersWithinRange(players, 20);
 
         if (m_creature->GetHealthPercent() < 80 && m_creature->GetHealthPercent() > 70)
@@ -5908,117 +5934,6 @@ bool QuestAccept_npc_truthseeker_magellas(Player* pPlayer, Creature* pQuestGiver
 }
 
 
-enum UldumQuestItems
-{
-    ITEM_ULDUM_FIRST_PLATE  = 60102,
-    ITEM_ULDUM_SECOND_PLATE = 60103,
-};
-
-constexpr auto STONE_WATCHER_OF_NORGANNON = 7918;
-constexpr auto PEDESTAL_BUNNY = 80969;
-constexpr auto QUEST_SEEING_WHAT_HAPPENS_A = 2946;
-constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
-constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
-constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
-
-bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
-{
-    bool showQuestMenu = false;
-    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_A))
-        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
-            showQuestMenu = true;
-
-    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_H))
-        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
-            showQuestMenu = true;
-
-    // Support vanilla quest chain for lower levels.
-    if (showQuestMenu)
-    {
-        player->PrepareQuestMenu(pGo->GetObjectGuid());
-        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-        return true;
-    }
-
-    if (player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_A) || player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_H) && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f) && !pGo->FindNearestCreature(80970, 10.f))
-    {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
-        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-    }
-
-    // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
-    // way to control when the boss is eligible to be spawned again.
-    if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
-    {
-        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true))
-            player->PrepareQuestMenu(pGo->GetObjectGuid());
-        else
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-    player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-    
-    return true;
-}
-
-bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-        pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
-
-    player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Quest* pQuest)
-{
-    if (!player)
-        return false;
-
-    bool first_item_added = false;
-    bool second_item_added = false;
-
-    if (pQuest->GetQuestId() == 40107 || pQuest->GetQuestId() == 40115) //Gate Keeper  //Guardian of the Gate
-    {
-        if (!player->HasItemCount(ITEM_ULDUM_FIRST_PLATE, 1))
-        {
-            if (player->AddItem(ITEM_ULDUM_FIRST_PLATE))
-                first_item_added = true;
-        }
-        else
-            first_item_added = true;
-
-        if (!player->HasItemCount(ITEM_ULDUM_SECOND_PLATE, 1))
-        {
-            if (player->AddItem(ITEM_ULDUM_SECOND_PLATE))
-                second_item_added = true;
-        }
-        else
-            second_item_added = true;
-
-        if (!first_item_added || !second_item_added)
-        {
-            player->RemoveQuest(40107);
-            player->RemoveQuest(40115);
-            player->SetQuestStatus(40107, QUEST_STATUS_NONE);
-            player->SetQuestStatus(40115, QUEST_STATUS_NONE);
-            player->GetSession()->SendNotification("Your bags are full!");
-            return false;
-        }
-
-        // Summon pedestal NPC to start encounter RP phase.
-        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
-        {
-            // If vanilla quest line NPC is on-top of the pedestal, despawn him.
-            if (auto stoneWatcher = pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f, true))
-                stoneWatcher->DeleteLater();
-
-            c->SetInCombatWith(player); // Used to pass along event invoker.
-            pGo->UseDoorOrButton();
-        }
-    }
-    return false;
-}
-
 bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -6401,7 +6316,7 @@ struct npc_zuljinAI : public ScriptedAI
             {
                 eventInProgress = true;
 
-                std::list<Player*> players;
+                std::vector<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
                 Cell::VisitWorldObjects(me, searcher, 2.0f);
@@ -6680,13 +6595,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "GO_pedestal_of_uldum";
-    newscript->pGOGossipHello = &GossipHelloGO_pedestal_of_uldum;
-    newscript->pGOGossipSelect = &GossipSelectGO_pedestal_of_uldum;
-    newscript->pGOQuestAccept = &QuestAcceptGO_pedestal_of_uldum;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_truthseeker_magellas";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_truthseeker_magellas;
     newscript->RegisterSelf();
@@ -6865,6 +6773,11 @@ void AddSC_random_scripts_1()
     newscript->pItemUseSpell = &ItemUseSpell_item_gnome_enlargement;
     newscript->RegisterSelf();
 
+    newscript = new Script;
+    newscript->Name = "item_tauren_shrink";
+    newscript->pItemUseSpell = &ItemUseSpell_item_tauren_shrink;
+    newscript->RegisterSelf();
+    
     newscript = new Script;
     newscript->Name = "npc_norvok";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_norvok;

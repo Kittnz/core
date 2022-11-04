@@ -91,10 +91,10 @@ struct boss_sulfuronAI : public ScriptedAI
         if (Inspire_Timer < diff)
         {
             Creature* target = nullptr;
-            std::list<Creature*> pList = DoFindFriendlyMissingBuff(45.0f, SPELL_INSPIRE);
+            std::vector<Creature*> pList = DoFindFriendlyMissingBuff(45.0f, SPELL_INSPIRE);
             if (!pList.empty())
             {
-                std::list<Creature*>::iterator i = pList.begin();
+                auto i = pList.begin();
                 advance(i, (rand() % pList.size()));
                 target = (*i);
             }

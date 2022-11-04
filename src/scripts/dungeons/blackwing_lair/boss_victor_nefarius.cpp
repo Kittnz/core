@@ -265,7 +265,7 @@ struct boss_victor_nefariusAI : ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(TYPE_NEFARIAN, FAIL);
 
-        std::list<GameObject*> lGameObjects;
+        std::vector<GameObject*> lGameObjects;
         m_creature->GetGameObjectListWithEntryInGrid(lGameObjects, GO_DRAKONID_BONES, 250.0f);
         for (const auto& pGo : lGameObjects)
             pGo->DeleteLater();

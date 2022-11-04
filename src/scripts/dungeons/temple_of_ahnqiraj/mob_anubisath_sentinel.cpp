@@ -186,7 +186,7 @@ struct aqsentinelAI : public ScriptedAI
 
     void AddSentinelsNear(Unit* source)
     {
-        std::list<Creature*> assistList;
+        std::vector<Creature*> assistList;
         GetCreatureListWithEntryInGrid(assistList, source, NPC_SENTINEL, 90.0f);
 
         if (assistList.empty())

@@ -550,7 +550,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
                         creaChallenger->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);
                 }
             }
-            std::list<Creature*> lCrea;
+            std::vector<Creature*> lCrea;
             m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_AFFRAY_SPECTATOR, 30.0f);
             for (const auto& it : lCrea)
             {
@@ -1042,7 +1042,7 @@ struct npc_regthar_deathgateAI : public ScriptedAI
         // after the quest has been completed a few times
         if (pCreature->GetEntry() == NPC_KROMZAR)
         {
-            std::list<GameObject*> banners;
+            std::vector<GameObject*> banners;
 
             GetGameObjectListWithEntryInGrid(banners, pCreature, GO_KOLKAR_BANNER, 15.0f);
 

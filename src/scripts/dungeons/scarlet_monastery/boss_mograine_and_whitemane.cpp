@@ -101,7 +101,7 @@ struct boss_scarlet_commander_mograineAI : public ScriptedAI
         DoScriptText(SAY_MO_AGGRO, m_creature);
         DoCastSpellIfCan(m_creature, SPELL_RETRIBUTIONAURA);
 
-        std::list<Creature*> mograinesAssist;
+        std::vector<Creature*> mograinesAssist;
         GetCreatureListWithEntryInGrid(mograinesAssist, m_creature, ENTRY_SCARLET_CHAPLAIN, 82.0f);
         GetCreatureListWithEntryInGrid(mograinesAssist, m_creature, ENTRY_SCARLET_WIZARD, 82.0f);
         GetCreatureListWithEntryInGrid(mograinesAssist, m_creature, ENTRY_SCARLET_CENTURION, 82.0f);

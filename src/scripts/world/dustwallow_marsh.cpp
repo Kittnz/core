@@ -757,7 +757,7 @@ struct npc_archmage_tervoshAI : public ScriptedAI
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
                     // find all guards nearby
-                    std::list<Creature*> guards;
+                    std::vector<Creature*> guards;
                     // All guards salute withing 10 yards.
                     GetCreatureListWithEntryInGrid(guards, m_creature, NPC_SENTRY_POINT_GUARD, 10);
 
@@ -1281,7 +1281,7 @@ struct npc_tabethaAI : ScriptedAI
 
     void DespawnManaSurges() const
     {
-        std::list<Creature*> manaSurges;
+        std::vector<Creature*> manaSurges;
         GetCreatureListWithEntryInGrid(manaSurges, m_creature, NPC_MANA_SURGE, 75.0f);
 
         if (manaSurges.empty()) return;

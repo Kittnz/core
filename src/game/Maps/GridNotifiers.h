@@ -222,10 +222,10 @@ namespace MaNGOS
     template<class Check>
         struct WorldObjectListSearcher
     {
-        std::list<WorldObject*> &i_objects;
+        std::vector<WorldObject*> &i_objects;
         Check& i_check;
 
-        WorldObjectListSearcher(std::list<WorldObject*> &objects, Check & check) : i_objects(objects),i_check(check) {}
+        WorldObjectListSearcher(std::vector<WorldObject*> &objects, Check & check) : i_objects(objects),i_check(check) {}
 
         void Visit(PlayerMapType &m);
         void Visit(CreatureMapType &m);
@@ -307,10 +307,10 @@ namespace MaNGOS
     template<class Check>
         struct GameObjectListSearcher
     {
-        std::list<GameObject*> &i_objects;
+        std::vector<GameObject*> &i_objects;
         Check& i_check;
 
-        GameObjectListSearcher(std::list<GameObject*> &objects, Check & check) : i_objects(objects),i_check(check) {}
+        GameObjectListSearcher(std::vector<GameObject*> &objects, Check & check) : i_objects(objects),i_check(check) {}
 
         void Visit(GameObjectMapType &m);
 
@@ -375,10 +375,10 @@ namespace MaNGOS
     template<class Check>
         struct UnitListSearcher
     {
-        std::list<Unit*> &i_objects;
+        std::vector<Unit*> &i_objects;
         Check& i_check;
 
-        UnitListSearcher(std::list<Unit*> &objects, Check & check) : i_objects(objects),i_check(check) {}
+        UnitListSearcher(std::vector<Unit*> &objects, Check & check) : i_objects(objects),i_check(check) {}
 
         void Visit(PlayerMapType &m);
         void Visit(CreatureMapType &m);
@@ -418,10 +418,10 @@ namespace MaNGOS
     template<class Check>
         struct CreatureListSearcher
     {
-        std::list<Creature*> &i_objects;
+        std::vector<Creature*> &i_objects;
         Check& i_check;
 
-        CreatureListSearcher(std::list<Creature*> &objects, Check & check) : i_objects(objects),i_check(check) {}
+        CreatureListSearcher(std::vector<Creature*> &objects, Check & check) : i_objects(objects),i_check(check) {}
 
         void Visit(CreatureMapType &m);
 
@@ -475,10 +475,10 @@ namespace MaNGOS
     template<class Check>
     struct PlayerListSearcher
     {
-        std::list<Player*> &i_objects;
+        std::vector<Player*> &i_objects;
         Check& i_check;
 
-        PlayerListSearcher(std::list<Player*> &objects, Check & check)
+        PlayerListSearcher(std::vector<Player*> &objects, Check & check)
             : i_objects(objects),i_check(check) {}
 
         void Visit(PlayerMapType &m);
@@ -1049,7 +1049,7 @@ namespace MaNGOS
                 if (!u->CanSeeInWorld(i_funit))
                     return false;
 
-                return u->IsAlive() && u->IsHostileTo(i_funit) && i_funit->IsWithinDistInMap(u, u->GetAttackDistance(i_funit), true, false);
+                return u->IsAlive() && u->IsHostileTo(i_funit) && i_funit->IsWithinDistInMap(u, u->GetAttackDistance(i_funit), true, SizeFactor::None);
             }
         private:
             Unit* const i_funit;
@@ -1486,7 +1486,7 @@ namespace MaNGOS
                 if (!u->IsVisibleForOrDetect(m_me, m_me, false))
                     return false;
 
-                if (!u->IsWithinDistInMap(m_me, std::min(m_me->GetAttackDistance(u), m_dist), true, false))
+                if (!u->IsWithinDistInMap(m_me, std::min(m_me->GetAttackDistance(u), m_dist), true, SizeFactor::None))
                     return false;
 
                 if (!u->IsTargetable(true, m_me->IsCharmerOrOwnerPlayerOrPlayerItself()))

@@ -108,7 +108,7 @@ struct boss_anubrekhanAI : public ScriptedAI
         m_firstBlood = false;
         m_uiRestoreTargetTimer = 0;
 
-        std::list<Creature*> scarabs;
+        std::vector<Creature*> scarabs;
         GetCreatureListWithEntryInGrid(scarabs, m_creature, MOB_CORPSE_SCARAB, 300.0f);
         for (auto it = scarabs.begin(); it != scarabs.end();)
         {

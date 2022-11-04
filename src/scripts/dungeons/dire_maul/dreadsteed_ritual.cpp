@@ -190,7 +190,7 @@ struct go_pedestal_of_immol_tharAI: public GameObjectAI
     
         eventPhase++;
 
-        std::list<Creature*> lCrea;
+        std::vector<Creature*> lCrea;
         me->GetCreatureListWithEntryInGrid(lCrea, NPC_XOROTHIAN_IMP, 30.0f);
         for (const auto& it : lCrea)
         {
@@ -240,7 +240,7 @@ struct go_pedestal_of_immol_tharAI: public GameObjectAI
             }
         }
 
-        std::list<Creature*> lCrea;
+        std::vector<Creature*> lCrea;
         me->GetCreatureListWithEntryInGrid(lCrea, NPC_XOROTHIAN_IMP, 30.0f);
         for (const auto& it : lCrea)
         {

@@ -16,7 +16,7 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI
         me->SetMaxPower(POWER_MANA, 50000);
         me->SetPower(POWER_MANA, 50000);
 
-        list<Creature*> risenLackeys;
+        vector<Creature *> risenLackeys;
         me->GetCreatureListWithEntryInGrid(risenLackeys, 10482, 500.f);
         for (auto lackey : risenLackeys)
         {
@@ -329,7 +329,11 @@ private:
             return false;
         }
 
+<<<<<<< HEAD
         list<Creature*> risenLackeys;
+=======
+        vector<Creature *> risenLackeys;
+>>>>>>> origin/patch_1161
         me->GetCreatureListWithEntryInGrid(risenLackeys, 10482, 500.f);
         for (auto lackey: risenLackeys)
         {

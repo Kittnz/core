@@ -82,8 +82,9 @@ struct boss_pyroguard_emberseerAI : public ScriptedAI
 
     bool Initialize()
     {
-        std::list<Creature*> tmpFoundCrea;
-        GetCreatureListWithEntryInGrid(tmpFoundCrea, m_creature, CANALISEURS_ENTRY, 35.0f);
+        std::vector<Creature*> tmpFoundCreaVec;
+        GetCreatureListWithEntryInGrid(tmpFoundCreaVec, m_creature, CANALISEURS_ENTRY, 35.0f);
+        std::list<Creature*> tmpFoundCrea{ tmpFoundCreaVec.begin(), tmpFoundCreaVec.end() };
         while (!tmpFoundCrea.empty())
         {
             canaliseurs.push_back(tmpFoundCrea.front()->GetObjectGuid());

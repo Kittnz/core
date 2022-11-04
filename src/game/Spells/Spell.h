@@ -230,7 +230,8 @@ class Spell
 {
     friend struct MaNGOS::SpellNotifierPlayer;
     friend struct MaNGOS::SpellNotifierCreatureAndPlayer;
-    friend void WorldObject::SetCurrentCastedSpell( Spell * pSpell );
+    friend void WorldObject::SetCurrentCastedSpell(Spell* pSpell );
+    friend void WorldObject::MoveChannelledSpellWithCastTime(Spell* pSpell);
     public:
 
         void EffectEmpty(SpellEffectIndex eff_idx);
@@ -380,7 +381,7 @@ class Spell
         void WriteSpellGoTargets(WorldPacket* data);
         void WriteAmmoToPacket(WorldPacket* data);
 
-        typedef std::list<Unit*> UnitList;
+        typedef std::vector<Unit*> UnitList;
         void FillTargetMap();
         void SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList &targetUnitMap);
 
@@ -480,6 +481,7 @@ class Spell
         void SetClientStarted(bool isClientStarted);
         bool IsTriggered() const { return m_IsTriggeredSpell; }
         bool IsTriggeredByAura() const { return m_triggeredByAuraSpell; }
+        bool IsTriggeredByProc() const;
         bool IsCastByItem() const { return m_CastItem; }
         void SetCastItem(Item* item)
         {

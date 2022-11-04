@@ -1283,78 +1283,65 @@ InstanceData* WorldObject::GetInstanceData() const
     return GetMap()->GetInstanceData();
 }
 
-float WorldObject::GetCombatDistance(WorldObject const* target) const
+float WorldObject::GetSizeFactorForDistance(WorldObject const* obj, SizeFactor distcalc) const
 {
-    float radius = target->GetCombatReach() + GetCombatReach();
-    float dx = GetPositionX() - target->GetPositionX();
-    float dy = GetPositionY() - target->GetPositionY();
-    float dz = GetPositionZ() - target->GetPositionZ();
-    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz)) - radius;
-    return (dist > 0 ? dist : 0);
+    float sizefactor;
+    switch (distcalc)
+    {
+        case SizeFactor::BoundingRadius:
+        {
+            sizefactor = GetObjectBoundingRadius();
+            if (obj)
+                sizefactor += obj->GetObjectBoundingRadius();
+            break;
+        }
+        case SizeFactor::CombatReach:
+        {
+            sizefactor = GetCombatReach();
+            if (obj)
+                sizefactor += obj->GetCombatReach();
+            break;
+        }
+        case SizeFactor::CombatReachWithMelee:
+        {
+            sizefactor = std::max(1.5f, GetCombatReach());
+            if (obj)
+                sizefactor += std::max(1.5f, obj->GetCombatReach());
+            break;
+        }
+        default:
+        {
+            sizefactor = 0.0f;
+            break;
+        }
+    }
+    return sizefactor;
 }
 
-float WorldObject::GetDistance2dToCenter(WorldObject const* target) const
-{
-    float dx = GetPositionX() - target->GetPositionX();
-    float dy = GetPositionY() - target->GetPositionY();
-    float dist = sqrt((dx * dx) + (dy * dy));
-    return (dist > 0 ? dist : 0);
-}
-//slow
-
-float WorldObject::GetDistance2dToCenter(float x, float y) const
-{
-    float dx = GetPositionX() - x;
-    float dy = GetPositionY() - y;
-    float dist = sqrt((dx * dx) + (dy * dy));
-    return (dist > 0 ? dist : 0);
-}
-
-float WorldObject::GetDistance3dToCenter(WorldObject const* target) const
-{
-    float dx = GetPositionX() - target->GetPositionX();
-    float dy = GetPositionY() - target->GetPositionY();
-    float dz = GetPositionZ() - target->GetPositionZ();
-    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
-    return (dist > 0 ? dist : 0);
-}
-
-float WorldObject::GetDistance3dToCenter(float x, float y, float z) const
-{
-    float dx = GetPositionX() - x;
-    float dy = GetPositionY() - y;
-    float dz = GetPositionZ() - z;
-    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz));
-    return (dist > 0 ? dist : 0);
-}
-
-float WorldObject::GetDistance(const WorldObject* obj) const
+float WorldObject::GetDistance(const WorldObject* obj, SizeFactor distcalc) const
 {
     ASSERT(obj);
     float dx = GetPositionX() - obj->GetPositionX();
     float dy = GetPositionY() - obj->GetPositionY();
     float dz = GetPositionZ() - obj->GetPositionZ();
-    float sizefactor = GetObjectBoundingRadius() + obj->GetObjectBoundingRadius();
-    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz)) - sizefactor;
+    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz)) - GetSizeFactorForDistance(obj, distcalc);
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetDistance2d(float x, float y) const
+float WorldObject::GetDistance2d(float x, float y, SizeFactor distcalc) const
 {
     float dx = GetPositionX() - x;
     float dy = GetPositionY() - y;
-    float sizefactor = GetObjectBoundingRadius();
-    float dist = sqrt((dx * dx) + (dy * dy)) - sizefactor;
+    float dist = sqrt((dx * dx) + (dy * dy)) - GetSizeFactorForDistance(nullptr, distcalc);
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetDistance(float x, float y, float z) const
+float WorldObject::GetDistance(float x, float y, float z, SizeFactor distcalc) const
 {
     float dx = GetPositionX() - x;
     float dy = GetPositionY() - y;
     float dz = GetPositionZ() - z;
-    float sizefactor = GetObjectBoundingRadius();
-    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz)) - sizefactor;
+    float dist = sqrt((dx * dx) + (dy * dy) + (dz * dz)) - GetSizeFactorForDistance(nullptr, distcalc);
     return (dist > 0 ? dist : 0);
 }
 
@@ -1368,47 +1355,41 @@ float WorldObject::GetDistanceSqr(float x, float y, float z) const
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetDistance2d(WorldObject const* obj) const
+float WorldObject::GetDistance2d(WorldObject const* obj, SizeFactor distcalc) const
 {
     ASSERT(obj);
     float dx = GetPositionX() - obj->GetPositionX();
     float dy = GetPositionY() - obj->GetPositionY();
-    float sizefactor = GetObjectBoundingRadius() + obj->GetObjectBoundingRadius();
-    float dist = sqrt((dx * dx) + (dy * dy)) - sizefactor;
+    float dist = sqrt((dx * dx) + (dy * dy)) - GetSizeFactorForDistance(obj, distcalc);
     return (dist > 0 ? dist : 0);
 }
 
-float WorldObject::GetDistanceZ(WorldObject const* obj) const
+float WorldObject::GetDistanceZ(WorldObject const* obj, SizeFactor distcalc) const
 {
     ASSERT(obj);
     float dz = fabs(GetPositionZ() - obj->GetPositionZ());
-    float sizefactor = GetObjectBoundingRadius() + obj->GetObjectBoundingRadius();
-    float dist = dz - sizefactor;
+    float dist = dz - GetSizeFactorForDistance(obj, distcalc);
     return (dist > 0 ? dist : 0);
 }
 
-bool WorldObject::IsWithinDist3d(float x, float y, float z, float dist2compare) const
+bool WorldObject::IsWithinDist3d(float x, float y, float z, float dist2compare, SizeFactor distcalc) const
 {
     float dx = GetPositionX() - x;
     float dy = GetPositionY() - y;
     float dz = GetPositionZ() - z;
     float distsq = dx * dx + dy * dy + dz * dz;
 
-    float sizefactor = GetObjectBoundingRadius();
-    float maxdist = dist2compare + sizefactor;
-
+    float maxdist = dist2compare + GetSizeFactorForDistance(nullptr, distcalc);
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::IsWithinDist2d(float x, float y, float dist2compare) const
+bool WorldObject::IsWithinDist2d(float x, float y, float dist2compare, SizeFactor distcalc) const
 {
     float dx = GetPositionX() - x;
     float dy = GetPositionY() - y;
     float distsq = dx * dx + dy * dy;
 
-    float sizefactor = GetObjectBoundingRadius();
-    float maxdist = dist2compare + sizefactor;
-
+    float maxdist = dist2compare + GetSizeFactorForDistance(nullptr, distcalc);
     return distsq < maxdist * maxdist;
 }
 
@@ -1417,21 +1398,19 @@ bool WorldObject::IsInMap(WorldObject const* obj) const
     return IsInWorld() && obj->IsInWorld() && (GetMap() == obj->GetMap());
 }
 
-bool WorldObject::_IsWithinDist(WorldObject const* obj, const float dist2compare, const bool is3D, const bool useBoundingRadius) const
+bool WorldObject::_IsWithinDist(WorldObject const* obj, float const dist2compare, const bool is3D, SizeFactor distcalc) const
 {
     ASSERT(obj);
-    const float dx = GetPositionX() - obj->GetPositionX();
-    const float dy = GetPositionY() - obj->GetPositionY();
+    float const dx = GetPositionX() - obj->GetPositionX();
+    float const dy = GetPositionY() - obj->GetPositionY();
     float distsq = dx * dx + dy * dy;
     if (is3D)
     {
-        const float dz = GetPositionZ() - obj->GetPositionZ();
+        float const dz = GetPositionZ() - obj->GetPositionZ();
         distsq += dz * dz;
     }
 
-    const float sizefactor = useBoundingRadius ? GetObjectBoundingRadius() + obj->GetObjectBoundingRadius() : 0.0f;
-    const float maxdist = dist2compare + sizefactor;
-
+    float const maxdist = dist2compare + GetSizeFactorForDistance(obj, distcalc);
     return distsq < maxdist * maxdist;
 }
 
@@ -1483,7 +1462,7 @@ bool WorldObject::GetDistanceOrder(WorldObject const* obj1, WorldObject const* o
     return distsq1 < distsq2;
 }
 
-bool WorldObject::IsInRange(WorldObject const* obj, float minRange, float maxRange, bool is3D /* = true */) const
+bool WorldObject::IsInRange(WorldObject const* obj, float minRange, float maxRange, bool is3D /* = true */, SizeFactor distcalc) const
 {
     ASSERT(obj);
     float dx = GetPositionX() - obj->GetPositionX();
@@ -1495,7 +1474,7 @@ bool WorldObject::IsInRange(WorldObject const* obj, float minRange, float maxRan
         distsq += dz * dz;
     }
 
-    float sizefactor = GetObjectBoundingRadius() + obj->GetObjectBoundingRadius();
+    float sizefactor = GetSizeFactorForDistance(obj, distcalc);
 
     // check only for real range
     if (minRange > 0.0f)
@@ -1509,13 +1488,13 @@ bool WorldObject::IsInRange(WorldObject const* obj, float minRange, float maxRan
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::IsInRange2d(float x, float y, float minRange, float maxRange) const
+bool WorldObject::IsInRange2d(float x, float y, float minRange, float maxRange, SizeFactor distcalc) const
 {
     float dx = GetPositionX() - x;
     float dy = GetPositionY() - y;
     float distsq = dx * dx + dy * dy;
 
-    float sizefactor = GetObjectBoundingRadius();
+    float sizefactor = GetSizeFactorForDistance(nullptr, distcalc);
 
     // check only for real range
     if (minRange > 0.0f)
@@ -1529,14 +1508,14 @@ bool WorldObject::IsInRange2d(float x, float y, float minRange, float maxRange) 
     return distsq < maxdist * maxdist;
 }
 
-bool WorldObject::IsInRange3d(float x, float y, float z, float minRange, float maxRange) const
+bool WorldObject::IsInRange3d(float x, float y, float z, float minRange, float maxRange, SizeFactor distcalc) const
 {
     float dx = GetPositionX() - x;
     float dy = GetPositionY() - y;
     float dz = GetPositionZ() - z;
     float distsq = dx * dx + dy * dy + dz * dz;
 
-    float sizefactor = GetObjectBoundingRadius();
+    float sizefactor = GetSizeFactorForDistance(nullptr, distcalc);
 
     // check only for real range
     if (minRange > 0.0f)
@@ -2609,7 +2588,7 @@ void WorldObject::DestroyForNearbyPlayers()
     if (!IsInWorld())
         return;
 
-    std::list<Player*> targets;
+    std::vector<Player*> targets;
     // Use visibility modifier for long range players
     MaNGOS::AnyPlayerInObjectRangeCheck check(this, std::max(GetMap()->GetVisibilityDistance(), GetVisibilityModifier()));
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(targets, check);
@@ -2653,20 +2632,18 @@ Creature* WorldObject::FindNearestCreature(uint32 uiEntry, float range, bool ali
 
 Creature* WorldObject::FindRandomCreature(uint32 uiEntry, float range, bool alive, Creature const* except) const
 {
-    std::list<Creature*> targets;
+    std::vector<Creature*> targets;
     GetCreatureListWithEntryInGrid(targets, uiEntry, range);
 
     // remove current target
     if (except)
-        targets.remove((Creature*)except);
+        targets.erase(std::remove(targets.begin(), targets.end(), (Creature*)except), targets.end());
 
-    for (std::list<Creature*>::iterator tIter = targets.begin(); tIter != targets.end();)
+    for (std::vector<Creature*>::iterator tIter = targets.begin(); tIter != targets.end();)
     {
         if ((alive && !(*tIter)->IsAlive()) || (!alive && (*tIter)->IsAlive()))
         {
-            std::list<Creature*>::iterator tIter2 = tIter;
-            ++tIter;
-            targets.erase(tIter2);
+            tIter = targets.erase(tIter);
         }
         else
             ++tIter;
@@ -2678,7 +2655,7 @@ Creature* WorldObject::FindRandomCreature(uint32 uiEntry, float range, bool aliv
 
     // select random
     uint32 rIdx = urand(0, targets.size() - 1);
-    std::list<Creature*>::const_iterator tcIter = targets.begin();
+    std::vector<Creature*>::const_iterator tcIter = targets.begin();
     for (uint32 i = 0; i < rIdx; ++i)
         ++tcIter;
 
@@ -2713,7 +2690,7 @@ Player* WorldObject::FindNearestPlayer(float range) const
     return target;
 }
 
-void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const
+void WorldObject::GetGameObjectListWithEntryInGrid(std::vector<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const
 {
     CellPair pair(MaNGOS::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(pair);
@@ -2726,7 +2703,7 @@ void WorldObject::GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList
     cell.Visit(pair, visitor, *(GetMap()), *this, fMaxSearchRange);
 }
 
-void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const
+void WorldObject::GetCreatureListWithEntryInGrid(std::vector<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const
 {
     CellPair pair(MaNGOS::ComputeCellPair(GetPositionX(), GetPositionY()));
     Cell cell(pair);
@@ -2739,7 +2716,7 @@ void WorldObject::GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, ui
     cell.Visit(pair, visitor, *(GetMap()), *this, fMaxSearchRange);
 }
 
-void WorldObject::GetAlivePlayerListInRange(WorldObject const* pSource, std::list<Player*>& lList, float fMaxSearchRange) const
+void WorldObject::GetAlivePlayerListInRange(WorldObject const* pSource, std::vector<Player*>& lList, float fMaxSearchRange) const
 {
     MaNGOS::AnyPlayerInObjectRangeCheck check(pSource, fMaxSearchRange);
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(lList, check);
@@ -4866,6 +4843,23 @@ bool WorldObject::CheckAndIncreaseCastCounter()
     return true;
 }
 
+void WorldObject::MoveChannelledSpellWithCastTime(Spell* pSpell)
+{
+    MANGOS_ASSERT(pSpell);
+    MANGOS_ASSERT(pSpell->m_spellInfo->IsChanneledSpell() && pSpell->m_casttime && !pSpell->m_IsTriggeredSpell && pSpell->getState() == SPELL_STATE_CASTING);
+    MANGOS_ASSERT(m_currentSpells[CURRENT_GENERIC_SPELL] == pSpell);
+
+    if (Spell* pChannelled = m_currentSpells[CURRENT_CHANNELED_SPELL])
+    {
+        MANGOS_ASSERT(pChannelled->m_spellInfo->Id == pSpell->m_spellInfo->Id);
+        InterruptSpell(CURRENT_CHANNELED_SPELL, true);
+    }
+
+    m_currentSpells[CURRENT_GENERIC_SPELL] = nullptr;
+    m_currentSpells[CURRENT_CHANNELED_SPELL] = pSpell;
+    pSpell->m_selfContainer = &(m_currentSpells[CURRENT_CHANNELED_SPELL]);
+}
+
 void WorldObject::SetCurrentCastedSpell(Spell * pSpell)
 {
     MANGOS_ASSERT(pSpell);                                  // nullptr may be never passed here, use InterruptSpell or InterruptNonMeleeSpells
@@ -4881,8 +4875,10 @@ void WorldObject::SetCurrentCastedSpell(Spell * pSpell)
     {
         case CURRENT_GENERIC_SPELL:
         {
-            // generic spells always break channeled not delayed spells
-            InterruptSpell(CURRENT_CHANNELED_SPELL, false);
+            // a channelled spell with a cast time is considered generic before channeling starts,
+            // but it does not break itself if you start to recast it, only once channeling starts
+            if (!pSpell->m_spellInfo->IsChanneledSpell() || (m_currentSpells[CURRENT_CHANNELED_SPELL] && m_currentSpells[CURRENT_CHANNELED_SPELL]->m_spellInfo->Id != pSpell->m_spellInfo->Id))
+                InterruptSpell(CURRENT_CHANNELED_SPELL, false);
 
             // autorepeat breaking
             if (m_currentSpells[CURRENT_AUTOREPEAT_SPELL])
