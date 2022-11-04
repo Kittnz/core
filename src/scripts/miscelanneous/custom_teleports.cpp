@@ -13,14 +13,14 @@ struct custom_dungeon_portal : public GameObjectAI
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::list<Player*> lPlayers;
+            std::vector<Player*> lPlayers;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 4.f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(lPlayers, check);
             Cell::VisitWorldObjects(me, searcher, 4.f);
 
-            vector<Player*> players;
-            AnyPlayerInObjectRangeCheck check(me, 4.0f, true, false);
-            PlayerListSearcher<AnyPlayerInObjectRangeCheck> searcher(players, check);
+            std::vector<Player*> players;
+            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 4.0f, true, false);
+            MaNGOS::PlayerListSearcher<AnyPlayerInObjectRangeCheck> searcher(players, check);
             Cell::VisitWorldObjects(me, searcher, 4.0f);
 
             for (Player* player : players)
