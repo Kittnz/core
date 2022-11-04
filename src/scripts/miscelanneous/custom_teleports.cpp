@@ -13,14 +13,9 @@ struct custom_dungeon_portal : public GameObjectAI
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::vector<Player*> lPlayers;
-            MaNGOS::AnyPlayerInObjectRangeCheck check(me, 4.f, true, false);
-            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(lPlayers, check);
-            Cell::VisitWorldObjects(me, searcher, 4.f);
-
             std::vector<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 4.0f, true, false);
-            MaNGOS::PlayerListSearcher<AnyPlayerInObjectRangeCheck> searcher(players, check);
+            MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
             Cell::VisitWorldObjects(me, searcher, 4.0f);
 
             for (Player* player : players)
@@ -31,7 +26,7 @@ struct custom_dungeon_portal : public GameObjectAI
                 {
                     case 112920: // Scarlet Citadel
                     {
-                        pPlayer->GetSession()->SendNotification("This raid is currently not available.");
+                        player->GetSession()->SendNotification("This raid is currently not available.");
                         available = false;
                         break;
                     }
@@ -39,19 +34,19 @@ struct custom_dungeon_portal : public GameObjectAI
                     case 112924: // Caverns of Time Placeholder Portal II (Entrance)
                     case 112915: // Black Morass
                     {
-                        pPlayer->GetSession()->SendNotification("This dungeon is currently not available.");
+                        player->GetSession()->SendNotification("This dungeon is currently not available.");
                         available = false;
                         break;
                     }
                 }
 
-                if (!pPlayer->IsAlive())
+                if (!player->IsAlive())
                 {
-                    pPlayer->ResurrectPlayer(.5f);
-                    pPlayer->SpawnCorpseBones();
+                    player->ResurrectPlayer(.5f);
+                    player->SpawnCorpseBones();
                 }
 
-                std::array<std::tuple<std::uint32_t, WorldLocation, std::uint32_t>, 10> portals_and_locations =
+                static std::array<std::tuple<std::uint32_t, WorldLocation, std::uint32_t>, 10> portals_and_locations =
                 { {
                     { 181580, WorldLocation{800, -11068.1F, -1806.4F, 52.7F, 1.5F}, 55 },  // Karazhan Crypt (Entrance)
                     { 181581, WorldLocation{0, -11068.9F, -1828.6F, 60.26F, 3.1F},  1 },   // Karazhan Crypt (Exit)
@@ -71,16 +66,16 @@ struct custom_dungeon_portal : public GameObjectAI
                     if (me->GetEntry() == portal_id)
                     {
 
-                        if (pPlayer->GetLevel() >= min_level)
+                        if (player->GetLevel() >= min_level)
                         {
-                            if (available || pPlayer->IsGameMaster())
+                            if (available || player->IsGameMaster())
                             {
-                                pPlayer->TeleportTo(destination);
+                                player->TeleportTo(destination);
                             }
                         }
                         else
                         {
-                            pPlayer->GetSession()->SendNotification("Your level is too low.");
+                            player->GetSession()->SendNotification("Your level is too low.");
                         }
                     }
                 }
