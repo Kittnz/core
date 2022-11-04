@@ -44,7 +44,7 @@ bool fov_build = false;
 #define NEW_BUILD 7040u
 #define NEW_VISUAL_BUILD "7040"
 #define NEW_VISUAL_VERSION "1.16.4"
-#define NEW_BUILD_DATE "November 12 2022"
+#define NEW_BUILD_DATE "Nov 12 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-3.mpq"
