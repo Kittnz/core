@@ -2620,7 +2620,7 @@ public:
             {
                 case nsInjuredDefender::Phase::ONE:
                 {
-                    std::list<Player*> players;
+                    std::vector<Player*> players;
                     MaNGOS::AnyPlayerInObjectRangeCheck check(m_creature, 40.0f, true, false);
                     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
