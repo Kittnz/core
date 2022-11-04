@@ -9280,9 +9280,7 @@ Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radiu
     {
         if ((!IsWithinLOSInMap(*tIter)) || (inFront && !this->HasInArc(*tIter, M_PI_F / 2)) || (isValidAttackTarget && !IsValidAttackTarget(*tIter)))
         {
-            auto tIter2 = tIter;
-            ++tIter;
-            targets.erase(tIter2);
+            tIter = targets.erase(tIter);
         }
         else
             ++tIter;
@@ -9321,9 +9319,7 @@ Unit* Unit::SelectRandomFriendlyTarget(Unit* except /*= nullptr*/, float radius 
     {
         if (!IsWithinLOSInMap(*tIter) || (inCombat && !(*tIter)->IsInCombat()))
         {
-            auto tIter2 = tIter;
-            ++tIter;
-            targets.erase(tIter2);
+            tIter = targets.erase(tIter);
         }
         else
             ++tIter;

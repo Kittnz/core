@@ -2643,9 +2643,7 @@ Creature* WorldObject::FindRandomCreature(uint32 uiEntry, float range, bool aliv
     {
         if ((alive && !(*tIter)->IsAlive()) || (!alive && (*tIter)->IsAlive()))
         {
-            std::vector<Creature*>::iterator tIter2 = tIter;
-            ++tIter;
-            targets.erase(tIter2);
+            tIter = targets.erase(tIter);
         }
         else
             ++tIter;
