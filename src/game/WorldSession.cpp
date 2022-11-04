@@ -190,7 +190,6 @@ void WorldSession::SendPacket(WorldPacket const* packet)
 /// Add an incoming packet to the queue
 void WorldSession::QueuePacket(WorldPacket* newPacket)
 {
-    printf("recv %s\n", LookupOpcodeName(newPacket->GetOpcode()));
     OpcodeHandler const& opHandle = opcodeTable[newPacket->GetOpcode()];
     if (opHandle.packetProcessing >= PACKET_PROCESS_MAX_TYPE)
     {
