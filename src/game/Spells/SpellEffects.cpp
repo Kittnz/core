@@ -586,7 +586,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
 
                     // Buff friends.
                     bool buffed = false;
-                    std::list<Player*> players;
+                    std::vector<Player*> players;
                     pPlayer->GetAlivePlayerListInRange(pPlayer, players, 10.0f);
                     for (Player* pFriend : players)
                     {
