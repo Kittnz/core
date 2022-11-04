@@ -8,6 +8,7 @@
 #include <Commctrl.h>
 #include <iostream>
 #include <string> 
+#include <sstream>
 
 #define fs std::filesystem
 
@@ -574,10 +575,13 @@ int GuardedMain(HINSTANCE hInstance)
 
 	for (int i : numerical_patches)
 	{
-		WriteLog("Searching for numerical patches...", i);
-		auto s = std::to_string(i);
-		fs::path patch_path = currentPath / "Data" / ("patch-%s.mpq", s);
-		WriteLog("Debug: %s", patch_path);
+		WriteLog("Searching for patch-%i...", i);
+		std::stringstream ss;
+		ss << "patch-" << std::to_string(i) << ".mpq";
+		std::string patch_name = ss.str();
+
+		fs::path patch_path = currentPath / "Data" / patch_name;
+
 		if (fs::exists(patch_path))
 		{
 			WriteLog("Renaming deprecated patch-%i...", i);
@@ -586,13 +590,17 @@ int GuardedMain(HINSTANCE hInstance)
 			fs::path patch_disabled = currentPath / "Data" / "patch.off";
 			if (fs::exists(patch_disabled))
 			{
-				WriteLog("Deleting deprecated patch...");
+				WriteLog("Deleting deprecated patch-%i...", i);
 				fs::remove(patch_disabled);
 			}
 			else
 			{
 				WriteLog("Deprecated patch-%i not found.", i);
 			}
+		}
+		else
+		{
+			WriteLog("Patch-%i not found.", i);
 		}
 	}
 
