@@ -176,7 +176,7 @@ public:
 
         if (true)
         {
-            std::list<Creature*> lClouds; // Shouldn't be more then 1 spawned at the same time, but do a list just in case
+            std::vector<Creature*> lClouds; // Shouldn't be more then 1 spawned at the same time, but do a list just in case
             GetCreatureListWithEntryInGrid(lClouds, m_creature, nsDaelus::NPC_POISON_CLOUD, 80.0f);
             for (const auto& cloud : lClouds)
             {

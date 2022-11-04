@@ -199,7 +199,7 @@ struct npc_snufflenose_gopherAI : public FollowerAI
     bool m_bIsMovementActive;
 
     ObjectGuid m_targetTuberGuid;
-    GuidList m_foundTubers;
+    std::vector<ObjectGuid> m_foundTubers;
     uint32 m_followPausedTimer;
 
     void Reset() override
@@ -234,13 +234,13 @@ struct npc_snufflenose_gopherAI : public FollowerAI
     // Function to search for new tuber in range
     void DoFindNewTuber()
     {   
-        std::list<GameObject*> lTubersInRange;
+        std::vector<GameObject*> lTubersInRange;
         GetGameObjectListWithEntryInGrid(lTubersInRange, m_creature, GO_BLUELEAF_TUBER, 60.0f);
 
         if (lTubersInRange.empty())
             return;
 
-        lTubersInRange.sort(ObjectDistanceOrder(m_creature));
+        std::sort(lTubersInRange.begin(), lTubersInRange.end(), ObjectDistanceOrder(m_creature));
         GameObject* pNearestTuber = nullptr;
 
         // Always need to find new ones

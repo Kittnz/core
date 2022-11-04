@@ -496,12 +496,13 @@ struct instance_sunken_temple : public ScriptedInstance
 
                     for (entriesIt = mobsEntries.begin(); entriesIt != mobsEntries.end(); ++entriesIt)
                     {
-                        std::list<Creature*> tmpMobsList;
+                        std::vector<Creature*> tmpMobsList;
                         GetCreatureListWithEntryInGrid(tmpMobsList, pJam, (*entriesIt), 150.0f);
+                        std::reverse(tmpMobsList.begin(), tmpMobsList.end());
                         while (!tmpMobsList.empty())
                         {
-                            Creature* curr = tmpMobsList.front();
-                            tmpMobsList.pop_front();
+                            Creature* curr = tmpMobsList.back();
+                            tmpMobsList.pop_back();
                             // Creature invoquee
                             if (!curr->GetDBTableGUIDLow())
                                 continue;
@@ -592,12 +593,13 @@ struct instance_sunken_temple : public ScriptedInstance
 
                     for (entriesIt = mobsEntries.begin(); entriesIt != mobsEntries.end(); ++entriesIt)
                     {
-                        std::list<Creature*> tmpMobsList;
+                        std::vector<Creature*> tmpMobsList;
                         GetCreatureListWithEntryInGrid(tmpMobsList, pEranikus, (*entriesIt), 300.0f);
+                        std::reverse(tmpMobsList.begin(), tmpMobsList.end());
                         while (!tmpMobsList.empty())
                         {
-                            Creature* curr = tmpMobsList.front();
-                            tmpMobsList.pop_front();
+                            Creature* curr = tmpMobsList.back();
+                            tmpMobsList.pop_back();
                             // Creature invoquee
                             if (!curr->GetDBTableGUIDLow())
                                 continue;

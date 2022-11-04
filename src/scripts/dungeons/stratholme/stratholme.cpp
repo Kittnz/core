@@ -43,7 +43,7 @@ bool GOHello_go_entree_de_service(Player* pPlayer, GameObject* pGo)
     if (pInstance->GetData(TYPE_BARON_RUN) != NOT_STARTED)
         return false;
 
-    std::list<Creature*> listBarthilas;
+    std::vector<Creature*> listBarthilas;
     GetCreatureListWithEntryInGrid(listBarthilas, pGo, 10435, 1000);
     for (const auto pCreature : listBarthilas)
     {
@@ -334,7 +334,7 @@ struct mobs_cristal_zugguratAI : public ScriptedAI
 
     ScriptedInstance* m_pInstance;
     uint32 uiUpdateTimer;
-    std::list<uint64> acolyte;
+    std::vector<uint64> acolyte;
 
     void Reset() override {}
 
@@ -367,8 +367,8 @@ struct mobs_cristal_zugguratAI : public ScriptedAI
 
         if (acolyte.empty())
         {
-            std::list<Creature*> creatures;
-            std::list<Creature*>::iterator itr;
+            std::vector<Creature*> creatures;
+            std::vector<Creature*>::iterator itr;
             GetCreatureListWithEntryInGrid(creatures, m_creature, 10399, 50.0f);
             for (itr = creatures.begin(); itr != creatures.end(); ++itr)
                 acolyte.push_back((*itr)->GetGUID());

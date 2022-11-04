@@ -751,13 +751,16 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
 
         duel_hasEnded = true;
     }
-    //Get in CombatState
+
+    // Enter combat or extend leash timer.
     if ((pVictim != this) && (damagetype != DOT || (spellProto && spellProto->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))) &&
-       (!spellProto || (!spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD) && !spellProto->HasAttribute(SPELL_ATTR_EX_NO_THREAT))))
+       (!spellProto || (!spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD) && !spellProto->HasAttribute(SPELL_ATTR_EX_NO_THREAT))) &&
+       (!spell || !spell->IsTriggeredByProc()))
     {
         SetInCombatWithVictim(pVictim);
         pVictim->SetInCombatWithAggressor(this);
     }
+
     if (pVictim->IsCreature())
         pVictim->ToCreature()->CountDamageTaken(damage, GetCharmerOrOwnerOrOwnGuid().IsPlayer() || pVictim == this);
     else if (pVictim != this)
@@ -9144,30 +9147,25 @@ void Unit::SetDisplayId(uint32 displayId)
                     pOwner->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_PET_MODEL_ID);
 }
 
+inline float CheckValidScale(float scale)
+{
+    if (scale <= 0.0f)
+        return DEFAULT_OBJECT_SCALE;
+
+    return scale;
+}
+
+
 void Unit::UpdateModelData()
 {
     CreatureDisplayInfoEntry const* displayEntry = sCreatureDisplayInfoStore.LookupEntry(GetDisplayId());
     CreatureDisplayInfoAddon const* displayAddon = sObjectMgr.GetCreatureDisplayInfoAddon(GetDisplayId());
     if (displayAddon && displayEntry && displayAddon->bounding_radius && displayEntry->scale)
     {
+        CreatureModelDataEntry const* modelEntry = sCreatureModelDataStore.LookupEntry(displayEntry->ModelId);
+
         // Tauren and gnome players have scale != 1.0
-        float nativeScale = displayEntry->scale;
-        if (IsPlayer())
-        {
-            switch (GetDisplayId())
-            {
-            case 59: // Tauren Male
-                nativeScale = DEFAULT_TAUREN_MALE_SCALE;
-                break;
-            case 60: // Tauren Female
-                nativeScale = DEFAULT_TAUREN_FEMALE_SCALE;
-                break;
-            case 1563: // Gnome Male
-            case 1564: // Gnome Female
-                nativeScale = DEFAULT_GNOME_SCALE;
-                break;
-            }
-        }
+        float const nativeScale = CheckValidScale(modelEntry ? (modelEntry->modelScale * displayEntry->scale) : displayEntry->scale);
 
         // we expect values in database to be relative to scale = 1.0
         SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, (GetObjectScale() / nativeScale) * displayAddon->bounding_radius);
@@ -9258,7 +9256,7 @@ void Unit::UpdateReactives(uint32 p_time)
 
 uint8 Unit::GetEnemyCountInRadiusAround(Unit* pTarget, float radius) const
 {
-    std::list<Unit*> targets;
+    std::vector<Unit*> targets;
     MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(pTarget, this, radius);
     MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(targets, u_check);
     Cell::VisitAllObjects(pTarget, searcher, radius);
@@ -9267,7 +9265,7 @@ uint8 Unit::GetEnemyCountInRadiusAround(Unit* pTarget, float radius) const
 
 Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radius /*= ATTACK_DISTANCE*/, bool inFront /*= false*/, bool isValidAttackTarget /*= false*/) const
 {
-    std::list<Unit*> targets;
+    std::vector<Unit *> targets;
 
     MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, radius);
     MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(targets, u_check);
@@ -9275,16 +9273,14 @@ Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radiu
 
     // remove current target
     if (except)
-        targets.remove(except);
+        targets.erase(std::remove(targets.begin(), targets.end(), except), targets.end());
 
     // remove not LoS targets
-    for (std::list<Unit*>::iterator tIter = targets.begin(); tIter != targets.end();)
+    for (auto tIter = targets.begin(); tIter != targets.end();)
     {
         if ((!IsWithinLOSInMap(*tIter)) || (inFront && !this->HasInArc(*tIter, M_PI_F / 2)) || (isValidAttackTarget && !IsValidAttackTarget(*tIter)))
         {
-            std::list<Unit*>::iterator tIter2 = tIter;
-            ++tIter;
-            targets.erase(tIter2);
+            tIter = targets.erase(tIter);
         }
         else
             ++tIter;
@@ -9296,7 +9292,8 @@ Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radiu
 
     // select random
     uint32 rIdx = urand(0, targets.size() - 1);
-    std::list<Unit*>::const_iterator tcIter = targets.begin();
+
+    auto tcIter = targets.begin();
     for (uint32 i = 0; i < rIdx; ++i)
         ++tcIter;
 
@@ -9305,7 +9302,8 @@ Unit* Unit::SelectRandomUnfriendlyTarget(Unit* except /*= nullptr*/, float radiu
 
 Unit* Unit::SelectRandomFriendlyTarget(Unit* except /*= nullptr*/, float radius /*= ATTACK_DISTANCE*/, bool inCombat) const
 {
-    std::list<Unit*> targets;
+
+    std::vector<Unit *> targets;
 
     MaNGOS::AnyFriendlyUnitInObjectRangeCheck u_check(this, radius);
     MaNGOS::UnitListSearcher<MaNGOS::AnyFriendlyUnitInObjectRangeCheck> searcher(targets, u_check);
@@ -9314,16 +9312,14 @@ Unit* Unit::SelectRandomFriendlyTarget(Unit* except /*= nullptr*/, float radius 
 
     // remove current target
     if (except)
-        targets.remove(except);
+        targets.erase(std::remove(targets.begin(), targets.end(), except), targets.end());
 
     // remove not LoS targets
-    for (std::list<Unit*>::iterator tIter = targets.begin(); tIter != targets.end();)
+    for (auto tIter = targets.begin(); tIter != targets.end();)
     {
         if (!IsWithinLOSInMap(*tIter) || (inCombat && !(*tIter)->IsInCombat()))
         {
-            std::list<Unit *>::iterator tIter2 = tIter;
-            ++tIter;
-            targets.erase(tIter2);
+            tIter = targets.erase(tIter);
         }
         else
             ++tIter;
@@ -9335,7 +9331,7 @@ Unit* Unit::SelectRandomFriendlyTarget(Unit* except /*= nullptr*/, float radius 
 
     // select random
     uint32 rIdx = urand(0, targets.size() - 1);
-    std::list<Unit *>::const_iterator tcIter = targets.begin();
+    auto tcIter = targets.begin();
     for (uint32 i = 0; i < rIdx; ++i)
         ++tcIter;
 
@@ -9345,7 +9341,7 @@ Unit* Unit::SelectRandomFriendlyTarget(Unit* except /*= nullptr*/, float radius 
 // Returns friendly unit with the most amount of hp missing from max hp
 Unit* Unit::FindLowestHpFriendlyUnit(const float fRange, const uint32 uiMinHPDiff, const bool bPercent, Unit* except) const
 {
-    std::list<Unit*> targets;
+    std::vector<Unit *> targets;
 
     if (Unit* pVictim{ GetVictim() })
     {
@@ -9377,7 +9373,7 @@ Unit* Unit::FindLowestHpFriendlyUnit(const float fRange, const uint32 uiMinHPDif
     // Remove current target
     if (except)
     {
-        targets.remove(except);
+        targets.erase(std::remove(targets.begin(), targets.end(), except), targets.end());
     }
 
     // No appropriate targets
@@ -9425,7 +9421,7 @@ Unit* Unit::FindLowestHpHostileUnit(const float fRange, const uint32 uiMinHPDiff
 // Returns friendly unit that does not have an aura from the provided spellid
 Unit* Unit::FindFriendlyUnitMissingBuff(float range, uint32 spellid, Unit* except) const
 {
-    std::list<Unit*> targets;
+    std::vector<Unit *> targets;
 
     MaNGOS::FriendlyMissingBuffInRangeCheck u_check(this, range, spellid);
     MaNGOS::UnitListSearcher<MaNGOS::FriendlyMissingBuffInRangeCheck> searcher(targets, u_check);
@@ -9434,7 +9430,7 @@ Unit* Unit::FindFriendlyUnitMissingBuff(float range, uint32 spellid, Unit* excep
 
     // remove current target
     if (except)
-        targets.remove(except);
+        targets.erase(std::remove(targets.begin(), targets.end(), except), targets.end());
 
     // no appropriate targets
     if (targets.empty())
@@ -9967,7 +9963,7 @@ void Unit::ProcessRelocationVisibilityUpdates()
 // BEGIN Nostalrius specific functions
 void Unit::InterruptSpellsCastedOnMe(bool killDelayed, bool interruptPositiveSpells)
 {
-    std::list<Unit*> targets;
+    std::vector<Unit*> targets;
     // Maximum spell range=100m ?
     MaNGOS::AnyUnitInObjectRangeCheck u_check(this, 100.0f);
     MaNGOS::UnitListSearcher<MaNGOS::AnyUnitInObjectRangeCheck> searcher(targets, u_check);
@@ -10002,7 +9998,7 @@ void Unit::InterruptAttacksOnMe(float dist, bool guard_check)
     // Must use modifier, otherwise long range auto attacks will not toggle
     dist = std::max(dist, GetVisibilityModifier());
 
-    std::list<Unit*> targets;
+    std::vector<Unit*> targets;
     MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
     MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(targets, u_check);
     Cell::VisitAllObjects(this, searcher, dist);
@@ -10026,7 +10022,7 @@ void Unit::CombatStopInRange(float dist)
     // must check with modifier, otherwise we could combat bug
     dist = std::max(dist, GetVisibilityModifier());
 
-    std::list<Unit*> targets;
+    std::vector<Unit*> targets;
     MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck u_check(this, this, dist);
     MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(targets, u_check);
     Cell::VisitAllObjects(this, searcher, dist);
@@ -10036,7 +10032,7 @@ void Unit::CombatStopInRange(float dist)
 
 uint32 Unit::DespawnNearCreaturesByEntry(uint32 entry, float range)
 {
-    std::list<Creature*> creatures;
+    std::vector<Creature*> creatures;
     GetCreatureListWithEntryInGrid(creatures, entry, range);
     uint32 count = 0;
     for (const auto& it : creatures)
@@ -10057,7 +10053,7 @@ uint32 Unit::RespawnNearCreaturesByEntry(uint32 entry, float range)
         range = GetMap()->GetVisibilityDistance();
 
     uint32 count = 0;
-    std::list<Creature*> lList;
+    std::vector<Creature*> lList;
     GetCreatureListWithEntryInGrid(lList, entry, range);
     for (const auto& it : lList)
     {
@@ -10067,7 +10063,6 @@ uint32 Unit::RespawnNearCreaturesByEntry(uint32 entry, float range)
             ++count;
         }
     }
-
     return count;
 }
 
@@ -11011,16 +11006,22 @@ void Unit::InitPlayerDisplayIds()
 
     uint8 gender = GetGender();
 
-    SetObjectScale(GetNativeScale());
-    switch (gender)
+    uint32 const displayId = GetGender() == GENDER_FEMALE ? info->displayId_f : info->displayId_m;
+
+    SetObjectScale(GetScaleForDisplayId(displayId));
+    SetNativeDisplayId(displayId);
+    SetDisplayId(displayId);
+}
+
+float Unit::GetScaleForDisplayId(uint32 displayId)
+{
+    if (CreatureDisplayInfoEntry const* displayEntry = sCreatureDisplayInfoStore.LookupEntry(displayId))
     {
-        case GENDER_FEMALE:
-            SetNativeDisplayId(info->displayId_f);
-            SetDisplayId(info->displayId_f);
-            break;
-        case GENDER_MALE:
-            SetNativeDisplayId(info->displayId_m);
-            SetDisplayId(info->displayId_m);
-            break;
+        if (CreatureModelDataEntry const* modelEntry = sCreatureModelDataStore.LookupEntry(displayEntry->ModelId))
+            return CheckValidScale(modelEntry->modelScale * displayEntry->scale);
+
+        return CheckValidScale(displayEntry->scale);
     }
+
+    return DEFAULT_OBJECT_SCALE;
 }

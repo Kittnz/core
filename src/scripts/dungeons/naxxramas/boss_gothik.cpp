@@ -112,7 +112,7 @@ struct boss_gothikAI : public ScriptedAI
         m_bRightSide = false;
         m_bJustTeleported = false;
 
-        std::list<Creature*> creaturesToDespawn;
+        std::vector<Creature*> creaturesToDespawn;
         GetCreatureListWithEntryInGrid(creaturesToDespawn, m_creature, 
         { NPC_UNREL_TRAINEE, NPC_UNREL_DEATH_KNIGHT, NPC_UNREL_RIDER, NPC_SPECT_TRAINEE, NPC_SPECT_DEATH_KNIGTH, NPC_SPECT_RIDER, NPC_SPECT_HORSE }, 1000.0f);
 
@@ -342,7 +342,7 @@ struct boss_gothikAI : public ScriptedAI
         if (GameObject* pGO = m_pInstance->GetSingleGameObjectFromStorage(GO_MILI_GOTH_COMBAT_GATE))
             pGO->SetGoState(GO_STATE_ACTIVE);
         
-        std::list<Creature*> allAdds;
+        std::vector<Creature*> allAdds;
         GetCreatureListWithEntryInGrid(allAdds, m_creature,
         { NPC_UNREL_TRAINEE, NPC_UNREL_DEATH_KNIGHT, NPC_UNREL_RIDER, NPC_SPECT_TRAINEE, NPC_SPECT_DEATH_KNIGTH, NPC_SPECT_RIDER, NPC_SPECT_HORSE }, 300.0f);
 

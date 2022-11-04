@@ -85,7 +85,7 @@ struct boss_gluthAI : public ScriptedAI
 
     void DespawnAllZombiess()
     {
-        std::list<Creature*> zombies;
+        std::vector<Creature*> zombies;
         GetCreatureListWithEntryInGrid(zombies, m_creature, NPC_ZOMBIE_CHOW, 200.0f);
 
         for (Creature* c : zombies)
@@ -263,7 +263,7 @@ struct boss_gluthAI : public ScriptedAI
     // Spell 28236 could be used instead, but frankly this is more reliable and simple the way the core is
     void DoSearchZombieChow()
     {
-        std::list<Creature*> chowableZombies;
+        std::vector<Creature*> chowableZombies;
         GetCreatureListWithEntryInGrid(chowableZombies, m_creature, NPC_ZOMBIE_CHOW, 10.0f);
         if (chowableZombies.empty())
             return;

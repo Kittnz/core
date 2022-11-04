@@ -358,7 +358,7 @@ struct instance_scarlet_monastery : ScriptedInstance
                 {
                     anyAshbringerEquipped = true;
                     m_ashbringerActive = true;
-                    std::list<Creature*> ScarletList;
+                    std::vector<Creature*> ScarletList;
                     GetCreatureListWithEntryInGrid(ScarletList, pPlayer,
                     { 
                         NPC_SCARLET_MYRIDON,

@@ -235,7 +235,7 @@ inline bool SpellCanTrigger(const SpellEntry* spellProto, const SpellEntry* proc
     return (procSpell && procSpell->SpellFamilyName == spellProto->SpellFamilyName && procSpell->SpellFamilyFlags & spellProto->EffectItemType[eff_idx]);
 }
 
-SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent, bool dontTriggerSpecial) const
+SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent, bool isSpellTriggeredByAura) const
 {
     SpellEntry const* spellProto = holder->GetSpellProto();
 
@@ -408,17 +408,24 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
         }
     }
 
+    if (isSpellTriggeredByAura && procSpell &&
+        !procSpell->HasAttribute(SPELL_ATTR_EX3_NOT_A_PROC) &&
+        !spellProto->HasAttribute(SPELL_ATTR_EX3_CAN_PROC_FROM_PROCS))
+        return SPELL_PROC_TRIGGER_FAILED;
+
     // Get chance from spell
     float chance = (float)spellProto->procChance;
     // If in spellProcEvent exist custom chance, chance = spellProcEvent->customChance;
     if (spellProcEvent && spellProcEvent->customChance)
         chance = spellProcEvent->customChance;
+
     // If PPM exist calculate chance from PPM
     if (!isVictim && spellProcEvent && spellProcEvent->ppmRate != 0)
     {
         uint32 WeaponSpeed = GetAttackTime(attType);
         chance = GetPPMProcChance(WeaponSpeed, spellProcEvent->ppmRate);
     }
+
     // Apply chance modifier aura
     if (Player* modOwner = GetSpellModOwner())
     {
@@ -1460,10 +1467,10 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                         return SPELL_AURA_PROC_FAILED;
                 }
 
-                // Intentionally do not pass triggeredByAura here.
+                // Need to pass victim guid so its not overwritten with aura caster.
                 // Seal of Light healing is done by the person who attacks,
                 // and does not increase threat of the original caster.
-                pVictim->CastSpell(pVictim, trigger_spell_id, true, castItem);
+                pVictim->CastSpell(pVictim, trigger_spell_id, true, castItem, triggeredByAura, pVictim->GetObjectGuid());
                 return SPELL_AURA_PROC_OK;                        // no hidden cooldown
             }
             // Illumination
@@ -1582,7 +1589,6 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
     {
         // Cast positive spell on enemy target
         case 7099:  // Curse of Mending
-        case 29494: // Temptation
         case 20233: // Improved Lay on Hands (cast on target)
         {
             target = pVictim;

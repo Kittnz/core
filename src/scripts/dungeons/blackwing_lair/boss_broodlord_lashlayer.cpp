@@ -125,12 +125,13 @@ struct boss_broodlordAI : public ScriptedAI
 
         for (entriesIt = mobsEntries.begin(); entriesIt != mobsEntries.end(); ++entriesIt)
         {
-            std::list<Creature*> tmpMobsList;
+            std::vector<Creature*> tmpMobsList;
             GetCreatureListWithEntryInGrid(tmpMobsList, m_creature, (*entriesIt), 300.0f);
+            std::reverse(tmpMobsList.begin(), tmpMobsList.end());
             while (!tmpMobsList.empty())
             {
-                Creature* curr = tmpMobsList.front();
-                tmpMobsList.pop_front();
+                Creature* curr = tmpMobsList.back();
+                tmpMobsList.pop_back();
 
                 if (on)
                     curr->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);

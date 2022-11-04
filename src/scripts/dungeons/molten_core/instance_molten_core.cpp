@@ -207,7 +207,7 @@ struct instance_molten_core : ScriptedInstance
         Unit* victim = pCreature->GetVictim();
         if (!victim)
             return;
-        std::list<Creature*> DomoListe;
+        std::vector<Creature*> DomoListe;
         switch (pCreature->GetEntry())
         {
             case NPC_DOMO:
@@ -311,7 +311,7 @@ struct instance_molten_core : ScriptedInstance
                 break;
             case NPC_LAVA_SPAWN:
                 // prevent exponential lava spawn creation in case of evade bug
-                std::list<Creature*> LavaSpawnList;
+                std::vector<Creature*> LavaSpawnList;
                 GetCreatureListWithEntryInGrid(LavaSpawnList, pCreature, NPC_LAVA_SPAWN, 100.0f);
                 if (LavaSpawnList.size() > MAX_LAVA_SPAWNS)
                     pCreature->ForcedDespawn();

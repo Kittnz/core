@@ -151,7 +151,7 @@ struct boss_onyxiaAI : public ScriptedAI
     uint32 m_uiSummonCheckTimer;
 
     ScriptedInstance* m_pInstance;
-    std::list<GameObject*> GOListe;
+    std::vector<GameObject*> GOListe;
     
     void Reset() override
     {
@@ -295,7 +295,7 @@ struct boss_onyxiaAI : public ScriptedAI
         if (m_pInstance)
             m_pInstance->SetData(DATA_ONYXIA_EVENT, IN_PROGRESS);
 
-        std::list<Creature*> WarderList;
+        std::vector<Creature*> WarderList;
         GetCreatureListWithEntryInGrid(WarderList, m_creature, NPC_ONYXIAN_WARDER, 200.0f);
         for (const auto& itr : WarderList)
             if (!itr->IsAlive())
@@ -310,7 +310,7 @@ struct boss_onyxiaAI : public ScriptedAI
 
     void EnterEvadeMode() override
     {
-        std::list<Creature*> WhelpList;
+        std::vector<Creature*> WhelpList;
         GetCreatureListWithEntryInGrid(WhelpList, m_creature, NPC_ONYXIAN_WHELP, 200.0f);
         for (const auto& itr : WhelpList)
             itr->ForcedDespawn();

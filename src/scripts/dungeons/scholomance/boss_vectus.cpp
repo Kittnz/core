@@ -129,7 +129,7 @@ struct boss_vectusAI : public ScriptedAI
                         Marduck->AIM_Initialize();
                     }
 
-                    std::list<Creature*> creatures;
+                    std::vector<Creature*> creatures;
                     m_creature->GetCreatureListWithEntryInGrid(creatures, NPC_STUDENT, 100.0f);
                     for (const auto& creature : creatures)
                     {
@@ -164,7 +164,7 @@ struct boss_vectusAI : public ScriptedAI
         // NOSTALRIUS: Aggro toute la salle lorsqu'il est pull.
         if (!_fullAggroDone)
         {
-            std::list<Creature*> creatures;
+            std::vector<Creature*> creatures;
             m_creature->GetCreatureListWithEntryInGrid(creatures, NPC_STUDENT, 100.0f);
             for (const auto& creature : creatures)
             {
@@ -235,7 +235,7 @@ struct npc_scholomance_studentAI : public ScriptedAI
     void Aggro(Unit* /*pWho*/) override
     {
         // set the viewing room and Marduk and Vectus to hostile on aggro
-        std::list<Creature*> creatures;
+        std::vector<Creature*> creatures;
         m_creature->GetCreatureListWithEntryInGrid(creatures, NPC_STUDENT, 100.0f);
         for (const auto& creature : creatures)
             creature->SetFactionTemplateId(FACTION_MONSTER);

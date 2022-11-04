@@ -300,11 +300,12 @@ void GenericSpellMob::UpdateAI(const uint32 uiDiff)
 			}
 			case GENERIC_TARGET_FRIEND_DISPELL_CC:
 			{
-				std::list<Creature*> creaList = DoFindFriendlyCC(it->maxRange);
+				std::vector<Creature*> creaList = DoFindFriendlyCC(it->maxRange);
+				std::reverse(creaList.begin(), creaList.end());
 				while (!creaList.empty())
 				{
-					Creature* crea = creaList.front();
-					creaList.pop_front();
+					Creature* crea = creaList.back();
+					creaList.pop_back();
 					// TODO : Chercher la creature qui correspond au dispell.
 					target = crea;
 				}

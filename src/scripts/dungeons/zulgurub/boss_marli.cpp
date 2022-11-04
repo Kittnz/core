@@ -99,7 +99,7 @@ struct boss_marliAI : public ScriptedAI
             if (m_pInstance->GetData(TYPE_MARLI) != DONE)
                 m_pInstance->SetData(TYPE_MARLI, NOT_STARTED);
 
-        std::list<GameObject*> lSpiderEggs;
+        std::vector<GameObject*> lSpiderEggs;
         GetGameObjectListWithEntryInGrid(lSpiderEggs, m_creature, GO_EGG, DEFAULT_VISIBILITY_INSTANCE);
         if (lSpiderEggs.empty())
             sLog.outDebug("boss_marli, no Eggs with the entry %u were found", GO_EGG);
@@ -113,7 +113,7 @@ struct boss_marliAI : public ScriptedAI
         }
 
         // High Priestess Mar'li will now despawn her summoned spiders when she returns from combat.
-        std::list<Creature*> lSummonedSpiders;
+        std::vector<Creature*> lSummonedSpiders;
         GetCreatureListWithEntryInGrid(lSummonedSpiders, m_creature, NPC_SPAWN_OF_MARLI, DEFAULT_VISIBILITY_INSTANCE);
         for (const auto& pSpider : lSummonedSpiders)
         {
@@ -153,13 +153,13 @@ struct boss_marliAI : public ScriptedAI
 
     GameObject* SelectNextEgg()
     {
-        std::list<GameObject*> lEggs;
+        std::vector<GameObject*> lEggs;
         GetGameObjectListWithEntryInGrid(lEggs, m_creature, GO_EGG, DEFAULT_VISIBILITY_INSTANCE);
         if (lEggs.empty())
             sLog.outDebug("boss_marli, no Eggs with the entry %i were found", GO_EGG);
         else
         {
-            lEggs.sort(ObjectDistanceOrder(m_creature));
+            std::sort(lEggs.begin(), lEggs.end(), (ObjectDistanceOrder(m_creature)));
             for (const auto& pEgg : lEggs)
             {
                 if (pEgg->GetGoState() == (GO_STATE_READY))
