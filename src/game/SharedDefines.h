@@ -1646,7 +1646,7 @@ enum BanReturn
 };
 
 // Indexes of BattlemasterList.dbc
-enum BattleGroundTypeId
+enum BattleGroundTypeId : uint32
 {
     BATTLEGROUND_TYPE_NONE     = 0,
     BATTLEGROUND_AV            = 1,
