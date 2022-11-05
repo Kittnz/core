@@ -1613,6 +1613,12 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
             }
             return SPELL_AURA_PROC_FAILED;
         }
+
+        case 18371: //Soul Siphon for Improved Drain Soul
+        {
+            if (!pVictim || !pVictim->HasAuraTypeByCaster(SPELL_AURA_CHANNEL_DEATH_ITEM, pCaster->GetObjectGuid()))
+                return SPELL_AURA_PROC_FAILED;
+        }
     }
 
     if (cooldown && HasSpellCooldown(trigger_spell_id))
