@@ -31,7 +31,7 @@ enum DaphneStilwellData
     SPELL_SHOOT         = 6660,
     QUEST_TOME_VALOR    = 1651,
     NPC_DEFIAS_RAIDER   = 6180,
-    EQUIP_ID_RIFLE      = 2511,
+    EQUIP_ID_RIFLE      = 20728,
     DAPHNE_SHOOT_CD     = 2000
 };
 
