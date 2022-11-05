@@ -31,6 +31,17 @@ BattleGroundSV::~BattleGroundSV()
 {
 }
 
+Team BattleGroundSV::GetWinningTeam() const
+{
+    uint32 hordeSparks = GetTeamSparks(TEAM_HORDE);
+    uint32 allianceSparks = GetTeamSparks(TEAM_ALLIANCE);
+
+    if (hordeSparks == allianceSparks)
+        return TEAM_NONE;
+    
+    return hordeSparks > allianceSparks ? HORDE : ALLIANCE;
+}
+
 void BattleGroundSV::Update(uint32 diff)
 {
     if (GetStatus() == STATUS_IN_PROGRESS)
