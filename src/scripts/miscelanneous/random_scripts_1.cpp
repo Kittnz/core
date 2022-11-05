@@ -4499,10 +4499,10 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
                 return true;
         if (pPlayer->GetQuestStatus(80409) == QUEST_STATUS_COMPLETE)
         {
-            if (pPlayer->FindNearestCreature(10667, 15.0F))
+            if (pPlayer->FindNearestCreature(65019, 15.0F))
                 return true;
 
-            Creature* chromie = pGo->SummonCreature(10667, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+            Creature* chromie = pGo->SummonCreature(65019, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
 
             DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
                 [CreatureGuid = chromie->GetObjectGuid(), player = pPlayer]()
