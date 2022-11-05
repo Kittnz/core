@@ -1266,9 +1266,12 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 M
             bg = new BattleGroundSV;
             break;
         default:
-            bg = new BattleGround;
+            sLog.outError("Could not find BG Template for bgTypeID %u.", static_cast<uint32>(bgTypeId));
             break;                           // placeholder for non implemented BG
     }
+
+    if (!bg)
+        return 0;
 
     bg->SetMapId(MapID);
     bg->SetTypeID(bgTypeId);

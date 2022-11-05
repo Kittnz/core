@@ -343,9 +343,11 @@ class BattleGroundSV : public BattleGround
         void UpdatePlayerScore(Player *Source, uint32 type, uint32 value);
         virtual void FillInitialWorldStates(WorldPacket& data, uint32& count);
 
+        Team GetWinningTeam() const override;
+
         uint32 GetTowerNameId(uint8 node);
         Team GetHeraldControlledTeam();
-        uint32 GetTeamSparks(TeamId team) { return m_resources[team]; }
+        uint32 GetTeamSparks(TeamId team) const { return m_resources[team]; }
         void UpdateTeamSparks(TeamId team);
         void AddTeamSparks(TeamId team, uint32 count) { m_resources[team] += count; UpdateTeamSparks(team); }
         void SetGeneralsActive(bool set) { generalsActive = set; }
