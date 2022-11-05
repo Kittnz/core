@@ -34,6 +34,13 @@ void BattleGroundBR::Update(uint32 diff)
     BattleGround::Update(diff);
 }
 
+Team BattleGroundBR::GetWinningTeam() const
+{
+    if (m_AllianceDeaths == m_HordeDeaths)
+        return TEAM_NONE;
+    return m_AllianceDeaths < m_HordeDeaths ? ALLIANCE : HORDE;
+}
+
 void BattleGroundBR::StartingEventCloseDoors()
 {
     if (GetStatus() != STATUS_WAIT_JOIN)

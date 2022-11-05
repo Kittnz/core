@@ -418,6 +418,8 @@ class BattleGround
         virtual void EndBattleGround(Team winner);
         static void BlockMovement(Player* plr, bool apply = true);
 
+        virtual Team GetWinningTeam() const = 0;
+
         void SendMessageToAll(int32 entry, ChatMsg type, Player const* source = nullptr);
         void SendYellToAll(int32 entry, uint32 language, ObjectGuid guid);
         void PSendMessageToAll(int32 entry, ChatMsg type, Player const* source, ...  );

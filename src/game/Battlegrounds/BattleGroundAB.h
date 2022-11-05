@@ -205,6 +205,8 @@ class BattleGroundAB : public BattleGround
         void EndBattleGround(Team winner);
         virtual WorldSafeLocsEntry const* GetClosestGraveYard(Player* player);
 
+        Team GetWinningTeam() const override;
+
         /* Scorekeeping */
         virtual void UpdatePlayerScore(Player *Source, uint32 type, uint32 value);
 
