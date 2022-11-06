@@ -1274,7 +1274,7 @@ uint32 BattleGroundMgr::CreateBattleGround(BattleGroundTypeId bgTypeId, uint32 m
     if (!bg)
         return 0;
 
-    bg->SetMapId(MapID);
+    bg->SetMapId(mapID);
     bg->SetTypeID(bgTypeId);
     bg->SetMinPlayersPerTeam(minPlayersPerTeam);
     bg->SetMaxPlayersPerTeam(maxPlayersPerTeam);
