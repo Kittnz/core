@@ -4716,11 +4716,28 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
 }
 
 // Scarlet Monastery raid attunement quest scripts:
+#define QUEST_YOUNG_AND_FOOLISH 80702
 
 bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (pPlayer->GetQuestStatus(QUEST_YOUNG_AND_FOOLISH) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 341: 
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[0] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case 956:
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[1] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case 344:
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[2] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        }
+    }
 
     if (pPlayer->GetQuestStatus(80721) == QUEST_STATUS_INCOMPLETE) // Grim News
         switch (pCreature->GetEntry())
