@@ -1744,7 +1744,7 @@ RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& In
 
 	for (const RacePlayerSetup& racer : InRaces)
 	{
-		racers.emplace_back(RacePlayer(racer, this));
+		racers.emplace_back(RacePlayer(racer, this, mapId));
 	}
 }
 
