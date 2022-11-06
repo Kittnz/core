@@ -1655,7 +1655,7 @@ void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer, MiracleRaceSi
 				queueSystem().RemoveFromQueue(racer);
 				std::list<RacePlayerSetup> racers;
 				racers.emplace_back(RacePlayerSetup{ racer, side, startedQuest });
-				std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
+				std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this, m_mapId.value_or(1));
 				races.push_back(raceSubEvent);
 				raceSubEvent->Start();
 			}
@@ -1732,7 +1732,7 @@ void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid gobli
 	racers.emplace_back(RacePlayerSetup{ gnomePlayerP, MiracleRaceSide::Gnome });
 	racers.emplace_back(RacePlayerSetup{ goblinPlayerP, MiracleRaceSide::Goblin });
 	InitializeRace(1);
-	races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this, m_mapId.value()));
+	races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this, m_mapId.value_or(1)));
 	std::shared_ptr<RaceSubEvent> SubEvent = races.back();
 	SubEvent->Start();
 }
