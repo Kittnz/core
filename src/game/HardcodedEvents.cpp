@@ -1732,12 +1732,12 @@ void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid gobli
 	racers.emplace_back(RacePlayerSetup{ gnomePlayerP, MiracleRaceSide::Gnome });
 	racers.emplace_back(RacePlayerSetup{ goblinPlayerP, MiracleRaceSide::Goblin });
 	InitializeRace(1);
-	races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this));
+	races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this, m_mapId.value()));
 	std::shared_ptr<RaceSubEvent> SubEvent = races.back();
 	SubEvent->Start();
 }
 
-RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent)
+RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent, uint32 mapId)
 	: raceId(InRaceId), pEvent(InEvent)
 {
 	racers.reserve(InRaces.size());
@@ -1993,8 +1993,8 @@ void RaceSubEvent::RewardPlayer(Player* pl, uint32 startedQuest)
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::TimeQuest)) return;
 }
 
-RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent)
-	: guid(racer.player->GetObjectGuid()), map(racer.player->FindMap()), raceEvent(InEvent), side(racer.side),
+RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent, uint32 mapId)
+	: guid(racer.player->GetObjectGuid()), map(sMapMgr.FindMap(mapId)), raceEvent(InEvent), side(racer.side),
 	startedQuest(racer.startedByQuest)
 {}
 
