@@ -18955,7 +18955,7 @@ void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queued
     if (!leader || !leader->IsInWorld() || leader->IsTaxiFlying() || leader->GetMap()->IsDungeon() || leader->GetMap()->IsBattleGround())
         leader = this;
 
-    if (leader->IsInWorld() && !leader->IsTaxiFlying())
+    if (leader->IsInWorld())
     {
         // If leader queued at a BG portal, use that portal's exit coordinates as the entry point
         // coords were already defined in HandleAreaTriggerOpcode, so just re-use them
@@ -18965,6 +18965,15 @@ void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queued
             m_bgData.m_needSave = true;
             return;
         }
+
+        // If flying at the time we enter, return to flight destination afterwards.
+        if (leader->IsTaxiFlying())
+        {
+            m_bgData.joinPos = WorldLocation(leader->GetMapId(), leader->movespline->FinalDestination().x, leader->movespline->FinalDestination().y, movespline->FinalDestination().z, leader->GetOrientation());
+            m_bgData.m_needSave = true;
+            return;
+        }
+        
         // If map is dungeon find linked graveyard
         if (leader->GetMap()->IsDungeon())
         {
