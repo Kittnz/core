@@ -85,3 +85,5 @@ DELETE FROM creature_battleground WHERE guid=74393;
 
 -- Changes by COUN
 REPLACE INTO `creature` VALUES (2572948,61070,0,0,0,0,529.613,-1484.1,46.8101,1.761,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2572949,61071,0,0,0,0,521.076,-1443.88,50.4735,4.94973,120,120,0,100,100,0,0,0);
+UPDATE creature SET position_x = '540.159912', position_y = '-1499.017944', position_z = '47.977745', orientation = '0.125017' WHERE guid = '2572949';
