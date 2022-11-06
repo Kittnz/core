@@ -1921,7 +1921,7 @@ bool GossipHello_title_masker(Player* pPlayer, Creature* pCreature)
     if (pPlayer->IsIgnoringTitles())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to show my rank again!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     else if (pPlayer->GetMoney() >= 50000)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.\n\nWARNING: THIS WILL COST YOU 5 GOLD!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     pPlayer->SEND_GOSSIP_MENU(90003, pCreature->GetGUID());
     return true;
 }
