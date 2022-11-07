@@ -2185,7 +2185,7 @@ bool ChatHandler::HandleAoEDamageCommand(char* args)
 
     Player* pPlayer = m_session->GetPlayer();
 
-    std::vector<Unit*> targetsList;
+    std::list<Unit*> targetsList;
     MaNGOS::AnyAoETargetUnitInObjectRangeCheck u_check(pPlayer, pPlayer, max_range);
     MaNGOS::UnitListSearcher<MaNGOS::AnyAoETargetUnitInObjectRangeCheck> searcher(targetsList, u_check);
     Cell::VisitAllObjects(pPlayer, searcher, max_range);
@@ -8787,7 +8787,7 @@ bool ChatHandler::HandleGameObjectNearCommand(char* args)
     }*/
 
     MaNGOS::AllGameObjectsInRange check(pl, distance);
-    std::vector<GameObject*> gameObjects;
+    std::list<GameObject*> gameObjects;
     MaNGOS::GameObjectListSearcher<MaNGOS::AllGameObjectsInRange> searcher(gameObjects, check);
 
     Cell::VisitGridObjects(pl, searcher, distance);
@@ -10168,7 +10168,7 @@ inline Creature* Helper_CreateWaypointFor(Creature* wpOwner, WaypointPathOrigin 
 }
 inline void UnsummonVisualWaypoints(Player const* player, ObjectGuid ownerGuid)
 {
-    std::vector<Creature*> waypoints;
+    std::list<Creature*> waypoints;
     MaNGOS::AllCreaturesOfEntryInRange checkerForWaypoint(player, VISUAL_WAYPOINT, SIZE_OF_GRIDS);
     MaNGOS::CreatureListSearcher<MaNGOS::AllCreaturesOfEntryInRange> searcher(waypoints, checkerForWaypoint);
     Cell::VisitGridObjects(player, searcher, SIZE_OF_GRIDS);

@@ -59,7 +59,7 @@ void UpdateData::AddUpdateBlock(const ByteBuffer &block)
 {
     if (m_datas.empty())
         m_datas.push_back(UpdatePacket());
-    auto it = m_datas.end();
+    std::list<UpdatePacket>::iterator it = m_datas.end();
     --it;
     if (it->data.wpos() > MAX_UNCOMPRESSED_PACKET_SIZE)
     {

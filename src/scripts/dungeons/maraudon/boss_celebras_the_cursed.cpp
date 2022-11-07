@@ -144,7 +144,7 @@ struct celebrasSpiritAI : public npc_escortAI
 
     void WaypointReached(uint32 i) override
     {
-        std::vector<GameObject*> scepterList;
+        std::list<GameObject*> scepterList;
         switch (i)
         {
             case 0:
@@ -296,7 +296,7 @@ bool GOHello_go_book_celebras(Player* pPlayer, GameObject* pGo)
         pPlayer->Say("Shal myrinan ishnu daldorah...", 0);
         pGo->Delete();
 
-        std::vector<Creature*> celebrasList;
+        std::list<Creature*> celebrasList;
         GetCreatureListWithEntryInGrid(celebrasList, pPlayer, NPC_CELEBRAS_REDEEMED, 40.0f);
         for (const auto& it : celebrasList)
         {

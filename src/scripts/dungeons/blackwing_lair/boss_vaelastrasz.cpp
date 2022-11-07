@@ -583,7 +583,7 @@ struct npc_death_talon_CaptainAI : public ScriptedAI
 
     void SetAuraFlames(bool on)
     {
-        std::vector<Creature *> lCreature;
+        std::list<Creature *> lCreature;
         GetCreatureListWithEntryInGrid(lCreature, m_creature, MOB_FLAMMECAILLE_GRIFFEMORT, 50.0f);
         GetCreatureListWithEntryInGrid(lCreature, m_creature, MOB_WYRMIDE_GRIFFEMORT, 50.0f);
         GetCreatureListWithEntryInGrid(lCreature, m_creature, MOB_RONGE_GRIFFEMORT, 50.0f);

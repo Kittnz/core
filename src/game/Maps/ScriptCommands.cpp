@@ -409,7 +409,7 @@ bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* so
     if (script.summonCreature.flags & (SF_SUMMONCREATURE_UNIQUE | SF_SUMMONCREATURE_UNIQUE_TEMP))
     {
         float dist = script.summonCreature.uniqueDistance ? script.summonCreature.uniqueDistance : (pSummoner->GetDistance(x, y, z) + 50.0f) * 2;
-        std::vector<Creature*> foundCreatures;
+        std::list<Creature*> foundCreatures;
 
         GetCreatureListWithEntryInGrid(foundCreatures, pSummoner, script.summonCreature.creatureEntry, dist);
 
@@ -1931,7 +1931,7 @@ bool Map::ScriptCommand_StartScriptForAll(const ScriptInfo& script, WorldObject*
         return ShouldAbortScript(script);
     }
 
-    std::vector<WorldObject *> targets;
+    std::list<WorldObject *> targets;
 
     MaNGOS::AllWorldObjectsInRange u_check(source, script.startScriptForAll.searchRadius);
     MaNGOS::WorldObjectListSearcher<MaNGOS::AllWorldObjectsInRange> searcher(targets, u_check);

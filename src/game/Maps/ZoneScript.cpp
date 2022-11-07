@@ -282,7 +282,7 @@ bool OPvPCapturePoint::Update(uint32 diff)
         }
     }
 
-    std::vector<Player*> players;
+    std::list<Player*> players;
     MaNGOS::AnyPlayerInObjectRangeCheck checker(m_capturePoint, radius, true);
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, checker);
     Cell::VisitWorldObjects(m_capturePoint, searcher, radius);

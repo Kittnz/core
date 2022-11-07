@@ -445,7 +445,7 @@ struct npc_torekAI : public npc_escortAI
 
     void JustDied(Unit* pKiller) override
     {
-        std::vector<Creature*> lCrea;
+        std::list<Creature*> lCrea;
 
         m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
 
@@ -484,7 +484,7 @@ struct npc_torekAI : public npc_escortAI
                 DoScriptText(SAY_END, m_creature, pPlayer);
                 break;
             case 22:
-                std::vector<Creature*> lCrea;
+                std::list<Creature*> lCrea;
                 m_creature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
                 for (const auto& it : lCrea)
                     it->DisappearAndDie();
@@ -531,7 +531,7 @@ bool QuestAccept_npc_torek(Player* pPlayer, Creature* pCreature, const Quest* pQ
 
         // Faction changes during escort.
         pCreature->SetFactionTemporary(FACTION_ORGRIMMAR, TEMPFACTION_RESTORE_RESPAWN);
-        std::vector<Creature*> lCrea;
+        std::list<Creature*> lCrea;
         pCreature->GetCreatureListWithEntryInGrid(lCrea, NPC_SPLINTERTREE_RAIDER, 40.0f);
         for (const auto& it : lCrea)
             it->SetFactionTemporary(FACTION_ORGRIMMAR, TEMPFACTION_RESTORE_RESPAWN);

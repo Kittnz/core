@@ -363,7 +363,7 @@ void npc_shade_hakkarAI::SummonTheAvatar()
         //Avatar->SetInCombatWithZone();
     }
 
-    std::vector<GameObject*> circles;
+    std::list<GameObject*> circles;
     m_creature->GetGameObjectListWithEntryInGrid(circles, GO_EVIL_CIRCLE, 20);
 
     for (const auto go : circles)
