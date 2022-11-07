@@ -8812,6 +8812,12 @@ void Spell::OnSpellLaunch()
     }
     
     bool triggerAutoAttack = unitTarget != m_casterUnit && !m_spellInfo->IsPositiveSpell() && !(m_spellInfo->Attributes & SPELL_ATTR_STOP_ATTACK_TARGET);
+    if (triggerAutoAttack)
+    {
+        m_casterUnit->SetInCombatWithVictim(unitTarget);
+        unitTarget->SetInCombatWithAggressor(m_casterUnit);
+    }
+
     m_casterUnit->GetMotionMaster()->MoveCharge(unitTarget, sWorld.getConfig(CONFIG_UINT32_SPELLS_CCDELAY), triggerAutoAttack);
 }
 
