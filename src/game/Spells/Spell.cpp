@@ -8815,7 +8815,7 @@ void Spell::OnSpellLaunch()
     if (triggerAutoAttack)
     {
         m_casterUnit->SetInCombatWithVictim(unitTarget);
-        unitTarget->SetInCombatWithAggressor(m_casterUnit);
+        //unitTarget->SetInCombatWithAggressor(m_casterUnit);
     }
 
     m_casterUnit->GetMotionMaster()->MoveCharge(unitTarget, sWorld.getConfig(CONFIG_UINT32_SPELLS_CCDELAY), triggerAutoAttack);
