@@ -790,10 +790,11 @@ void PersistentAreaAura::Update(uint32 diff)
     // Note: Unit may have been removed from the world (mid-teleport) during this
     // update (since the caster updates area auras). We shouldn't be ticking it
     // when the target is out of range anyway.
+    if (GetRealCaster())
+        Aura::Update(diff);
+
     if (remove)
         GetTarget()->RemoveAura(GetId(), GetEffIndex());
-    else
-        Aura::Update(diff);
 }
 
 void Aura::ApplyModifier(bool apply, bool Real, bool skipCheckExclusive)
