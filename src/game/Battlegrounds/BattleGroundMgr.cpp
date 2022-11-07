@@ -1517,6 +1517,10 @@ BattleGroundTypeId BattleGroundMgr::BGTemplateId(BattleGroundQueueTypeId bgQueue
             return BATTLEGROUND_AB;
         case BATTLEGROUND_QUEUE_AV:
             return BATTLEGROUND_AV;
+        case ARENA_QUEUE_BR:
+            return BATTLEGROUND_BR;
+        case BATTLEGROUND_QUEUE_SV:
+            return BATTLEGROUND_SV;
         default:
             return BattleGroundTypeId(0);                   // used for unknown template (it exist and do nothing)
     }
