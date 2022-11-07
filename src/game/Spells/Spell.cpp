@@ -6485,6 +6485,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                     if (!go->IsUseRequirementMet())
                         return SPELL_FAILED_TRY_AGAIN;
 
+                    if (go->GetGoType() == GAMEOBJECT_TYPE_CHEST && go->GetGOInfo()->chest.level > m_caster->GetLevel())
+                        return SPELL_FAILED_LEVEL_REQUIREMENT;
+
                     // check if its in use only when cast is finished (called from spell::cast() with strict = false)
                     if (auto player = m_caster->ToPlayer())
                     {
