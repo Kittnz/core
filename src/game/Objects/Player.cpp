@@ -22342,7 +22342,7 @@ void Player::HandleStealthedUnitsDetection()
     if (!FindMap())
         return;
 
-    std::vector<Unit*> stealthedUnits;
+    std::list<Unit*> stealthedUnits;
 
     MaNGOS::AnyStealthedCheck u_check(this);
     MaNGOS::UnitListSearcher<MaNGOS::AnyStealthedCheck > searcher(stealthedUnits, u_check);

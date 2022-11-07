@@ -69,7 +69,7 @@ struct boss_garrAI : ScriptedAI
             m_creature->SetInCombatWithZone();
 
             // count chickens
-            std::vector<Creature*> firesworn;
+            std::list<Creature*> firesworn;
             GetCreatureListWithEntryInGrid(firesworn, m_creature, NPC_FIRESWORN, 150.0f);
             m_lFiresworn.clear();
 

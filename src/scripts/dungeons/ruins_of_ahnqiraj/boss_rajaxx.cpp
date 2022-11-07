@@ -284,7 +284,7 @@ struct boss_rajaxxAI : public ScriptedAI
             sLog.outError("Rajaxx justDied, unable to find Cenarion Circle faction");
             return;
         }
-        std::vector<Creature*> helpers;
+        std::list<Creature*> helpers;
         GetCreatureListWithEntryInGrid(helpers, m_creature, { 15473, 15478, 15471, 987001 }, 400.0f);
         
         if (helpers.empty())

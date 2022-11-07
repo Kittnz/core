@@ -16,7 +16,7 @@ struct custom_dungeon_portal : public GameObjectAI
             using namespace std;
             using namespace MaNGOS;
 
-            vector<Player*> players;
+            list<Player*> players;
             AnyPlayerInObjectRangeCheck check(me, 4.0f, true, false);
             PlayerListSearcher<AnyPlayerInObjectRangeCheck> searcher(players, check);
             Cell::VisitWorldObjects(me, searcher, 4.0f);

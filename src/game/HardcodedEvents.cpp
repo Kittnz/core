@@ -807,18 +807,18 @@ void ScourgeInvasionEvent::Disable()
             Creature* pRelay = pMap->GetCreature(necro.relayGuid);
             if (!pRelay)
                 continue;
-            std::vector<Creature*> shardList;
+            std::list<Creature*> shardList;
             GetCreatureListWithEntryInGrid(shardList, pRelay, { NPC_NECROTIC_SHARD, NPC_DAMAGED_NECROTIC_SHARD }, 400.0f);
             for (Creature* pShard : shardList)
                 pShard->DeleteLater();
-            std::vector<GameObject*> necropolisList;
+            std::list<GameObject*> necropolisList;
             GetGameObjectListWithEntryInGrid(necropolisList, pRelay, GOBJ_NECROPOLIS, 100.0f);
             for (GameObject* pNecro : necropolisList)
                 pNecro->DeleteLater();
             
             // Getting list of relays as well, in case there's been some double enable/disabling going on 
             // and we have more than one relay alive
-            std::vector<Creature*> relayList;
+            std::list<Creature*> relayList;
             GetCreatureListWithEntryInGrid(relayList, pRelay, NPC_NECROPOLIS_RELAY, 100.0f);
             for (Creature* p2Relay : relayList)
                 p2Relay->DeleteLater();

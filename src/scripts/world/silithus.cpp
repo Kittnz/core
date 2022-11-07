@@ -3061,7 +3061,7 @@ struct npc_Krug_SkullSplitAI : public ScriptedAI
         {
             if (m_uiGruntSpeachTimer < uiDiff)
             {
-                std::vector<Creature*> gruntList;
+                std::list<Creature*> gruntList;
                 m_creature->GetCreatureListWithEntryInGrid(gruntList, NPC_ORGRIMMAR_LEGION_GRUNT, 100.0f);
 
                 if (!gruntList.empty())

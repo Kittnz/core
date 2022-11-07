@@ -461,10 +461,10 @@ struct boss_twinemperorsAI : public ScriptedAI
             // Wait with doing stuff until after idle
             if (justTeleported) return;
 
-            std::vector<Creature*> lUnitList;
+            std::list<Creature*> lUnitList;
             GetCreatureListWithEntryInGrid(lUnitList, m_creature, { BUG_TYPE_1 , BUG_TYPE_2 }, BUG_SPELL_MAX_DIST);
 
-            std::vector<Creature*>::iterator iter;
+            std::list<Creature*>::iterator iter;
             for (iter = lUnitList.begin(); iter != lUnitList.end();) {
                 if ((*iter)->IsDead()) {
                     iter = lUnitList.erase(iter);

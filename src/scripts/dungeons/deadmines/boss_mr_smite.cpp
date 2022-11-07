@@ -24,8 +24,6 @@ EndScriptData */
 #include "scriptPCH.h"
 #include "deadmines.h"
 
-#include <iomanip>
-
 enum
 {
     SAY_PHASE_2                     = 1344,
@@ -321,7 +319,6 @@ CreatureAI* GetAI_boss_mr_smite(Creature* pCreature)
 
 void AddSC_boss_mr_smite()
 {
-    
     Script* pNewScript;
 
     pNewScript = new Script;

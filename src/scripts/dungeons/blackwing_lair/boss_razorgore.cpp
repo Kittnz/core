@@ -187,7 +187,7 @@ struct boss_razorgoreAI : public ScriptedAI
             return;
         if (m_pInstance->GetData(TYPE_RAZORGORE) != IN_PROGRESS)
         {
-            std::vector<Creature *> lCreature;
+            std::list<Creature *> lCreature;
             m_creature->GetCreatureListWithEntryInGrid(lCreature, BLACKWING_LEGGIONAIRE, 250.0f);
             m_creature->GetCreatureListWithEntryInGrid(lCreature, BLACKWING_MAGE, 250.0f);
             m_creature->GetCreatureListWithEntryInGrid(lCreature, DEATH_TALON_DRAGONSPAWN, 250.0f);
@@ -214,7 +214,7 @@ struct boss_razorgoreAI : public ScriptedAI
                 }
             }
 
-            std::vector<Creature*> GardesListe;
+            std::list<Creature*> GardesListe;
             GetCreatureListWithEntryInGrid(GardesListe, m_creature, MOB_GARDE_AILE_NOIRE, 150.0f);
             GetCreatureListWithEntryInGrid(GardesListe, m_creature, MOB_GRETHOK, 150.0f);
 
@@ -239,7 +239,7 @@ struct boss_razorgoreAI : public ScriptedAI
 
     void EvadeTroops()
     {
-        std::vector<Creature*> lCreatureNear;
+        std::list<Creature*> lCreatureNear;
         GetCreatureListWithEntryInGrid(lCreatureNear, m_creature, BLACKWING_LEGGIONAIRE, 250.0f);
         GetCreatureListWithEntryInGrid(lCreatureNear, m_creature, BLACKWING_MAGE, 250.0f);
         GetCreatureListWithEntryInGrid(lCreatureNear, m_creature, DEATH_TALON_DRAGONSPAWN, 250.0f);
@@ -383,7 +383,7 @@ struct trigger_orb_of_commandAI : public ScriptedAI
         DEBUG_RAZOR("Passage en P2");
         DoScriptText(EMOTE_FLEE, m_creature);
 
-        std::vector<Creature*> lCreatureNear;
+        std::list<Creature*> lCreatureNear;
         GetCreatureListWithEntryInGrid(lCreatureNear, m_creature, BLACKWING_LEGGIONAIRE, 250.0f);
         GetCreatureListWithEntryInGrid(lCreatureNear, m_creature, BLACKWING_MAGE, 250.0f);
         GetCreatureListWithEntryInGrid(lCreatureNear, m_creature, DEATH_TALON_DRAGONSPAWN, 250.0f);
@@ -438,8 +438,8 @@ struct trigger_orb_of_commandAI : public ScriptedAI
         bool bSpawnTwo = false;
 
         // Counting spawned mobs
-        std::vector<Creature*> lDrake;
-        std::vector<Creature*> lOrc;
+        std::list<Creature*> lDrake;
+        std::list<Creature*> lOrc;
         uint32 uiType = 0;
 
         GetCreatureListWithEntryInGrid(lDrake, m_creature, DEATH_TALON_DRAGONSPAWN, 250.0f);
@@ -568,7 +568,7 @@ struct trigger_orb_of_commandAI : public ScriptedAI
                 m_creature->SetInCombatWithZone();
                 pRazorgore->SetInCombatWithZone();
 
-                std::vector<Creature*> lGuards;
+                std::list<Creature*> lGuards;
                 GetCreatureListWithEntryInGrid(lGuards, m_creature, MOB_GARDE_AILE_NOIRE, 150.0f);
                 GetCreatureListWithEntryInGrid(lGuards, m_creature, MOB_GRETHOK, 150.0f);
 
@@ -617,14 +617,18 @@ struct trigger_orb_of_commandAI : public ScriptedAI
                                 pRazorgore->AI()->EnterEvadeMode();
                         }
 
-                        std::vector<Creature*> lCreature;
+                        std::list<Creature*> lCreature;
                         GetCreatureListWithEntryInGrid(lCreature, m_creature, DEATH_TALON_DRAGONSPAWN, 150.0f);
                         GetCreatureListWithEntryInGrid(lCreature, m_creature, BLACKWING_LEGGIONAIRE, 150.0f);
                         GetCreatureListWithEntryInGrid(lCreature, m_creature, BLACKWING_MAGE, 150.0f);
 
                         for (const auto& itr : lCreature)
                         {
-                            itr->AddThreat(pChanneler, itr->GetThreatManager().getThreat(pRazorgore));
+                            if (itr->GetThreatManager().getThreat(pRazorgore))
+                            {
+                                itr->GetThreatManager().modifyThreatPercent(pChanneler, -100);
+                                itr->AddThreat(pChanneler, itr->GetThreatManager().getThreat(pRazorgore));
+                            }
                         }
                     }
                 }
@@ -638,7 +642,7 @@ struct trigger_orb_of_commandAI : public ScriptedAI
                     m_creature->SetUInt32Value(UNIT_CHANNEL_SPELL, 0);
                     if (Unit* pPossesser = m_creature->GetMap()->GetUnit(m_uiPossesseurGuid))
                     {
-                        std::vector<Creature*> lCreature;
+                        std::list<Creature*> lCreature;
                         GetCreatureListWithEntryInGrid(lCreature, m_creature, DEATH_TALON_DRAGONSPAWN, 150.0f);
                         GetCreatureListWithEntryInGrid(lCreature, m_creature, BLACKWING_LEGGIONAIRE, 150.0f);
                         GetCreatureListWithEntryInGrid(lCreature, m_creature, BLACKWING_MAGE, 150.0f);

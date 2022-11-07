@@ -9,7 +9,6 @@
 #include "ObjectMgr.h"
 #include "ScriptedAI.h"
 #include "GridSearchers.h"
-#include <algorithm>
 
 ScriptedAI::ScriptedAI(Creature* pCreature) : CreatureAI(pCreature),
     me(pCreature),
@@ -199,20 +198,21 @@ void ScriptedAI::DoTeleportPlayer(Unit* pUnit, float fX, float fY, float fZ, flo
     ((Player*)pUnit)->TeleportTo(pUnit->GetMapId(), fX, fY, fZ, fO, TELE_TO_NOT_LEAVE_COMBAT);
 }
 
-std::vector<Creature*> ScriptedAI::DoFindFriendlyCC(float fRange)
+std::list<Creature*> ScriptedAI::DoFindFriendlyCC(float fRange)
 {
-    std::vector<Creature*> pList;
+    std::list<Creature*> pList;
 
     MaNGOS::FriendlyCCedInRangeCheck u_check(m_creature, fRange);
     MaNGOS::CreatureListSearcher<MaNGOS::FriendlyCCedInRangeCheck> searcher(pList, u_check);
 
     Cell::VisitGridObjects(m_creature, searcher, fRange);
+
     return pList;
 }
 
-std::vector<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float fRange, uint32 uiSpellId)
+std::list<Creature*> ScriptedAI::DoFindFriendlyMissingBuff(float fRange, uint32 uiSpellId)
 {
-    std::vector<Creature*> pList;
+    std::list<Creature*> pList;
 
     MaNGOS::FriendlyMissingBuffInRangeCheck u_check(m_creature, fRange, uiSpellId);
     MaNGOS::CreatureListSearcher<MaNGOS::FriendlyMissingBuffInRangeCheck> searcher(pList, u_check);
@@ -243,19 +243,19 @@ Player* ScriptedAI::GetPlayerAtMinimumRange(float fMinimumRange)
  */
 Player* ScriptedAI::GetRandomPlayerInRange(const float radius, const bool mustBeAlive, const std::list<Player*>* excludedPlayers) const
 {
-    std::vector<Player*> players;
+    std::list<Player*> players;
     GetPlayersWithinRange(players, radius);
     if (excludedPlayers != nullptr)
     {
-        players.erase(std::remove_if(players.begin(), players.end(), [excludedPlayers, mustBeAlive](Player* player)
+        players.remove_if([excludedPlayers, mustBeAlive](Player* player)
+        {
+            if (mustBeAlive && player->IsDead())
             {
-                if (mustBeAlive && player->IsDead())
-                {
-                    return true;
-                }
+                return true;
+            }
 
-                return std::find(excludedPlayers->begin(), excludedPlayers->end(), player) != excludedPlayers->end();
-            }), players.end());
+            return std::find(excludedPlayers->begin(), excludedPlayers->end(), player) != excludedPlayers->end();
+        });
     }
 
     if (players.empty())
@@ -268,7 +268,7 @@ Player* ScriptedAI::GetRandomPlayerInRange(const float radius, const bool mustBe
     return *iterator;
 }
 
-void ScriptedAI::GetPlayersWithinRange(std::vector<Player*>& players, float range) const
+void ScriptedAI::GetPlayersWithinRange(std::list<Player*>& players, float range) const
 {
     MaNGOS::AnyPlayerInObjectRangeCheck check(m_creature, range);
     MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
