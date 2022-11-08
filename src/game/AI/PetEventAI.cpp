@@ -36,7 +36,7 @@ void PetEventAI::MoveInLineOfSight(Unit *pWho)
     if (!pWho)
         return;
 
-    if (m_creature->GetVictim())
+    if (m_creature->GetVictim() || pWho->HasHCImmunity())
         return;
 
     //Check for OOC LOS Event

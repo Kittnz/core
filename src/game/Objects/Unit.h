@@ -847,6 +847,8 @@ class Unit : public WorldObject
         // group updates
         void UpdateAuraForGroup(uint8 slot);
 
+        virtual bool HasHCImmunity() const { return false; }
+
         // Managing objects spawned by:
         // SPELL_EFFECT_DUEL
         // SPELL_EFFECT_SUMMON_OBJECT_SLOT

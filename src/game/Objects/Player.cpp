@@ -1409,6 +1409,14 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             m_weaponChangeTimer -= update_diff;
     }
 
+    if (noAggroTimer > 0)
+    {
+        if (noAggroTimer >= update_diff)
+            noAggroTimer -= update_diff;
+        else
+            noAggroTimer = 0;
+    }
+
     if (m_zoneUpdateTimer > 0)
     {
         if (update_diff >= m_zoneUpdateTimer)
