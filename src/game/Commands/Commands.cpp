@@ -9189,6 +9189,22 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcSummonCommand(char* args)
+{
+    //.npc add but temp
+    if (!*args)
+        return false;
+
+    uint32 id;
+    if (!ExtractUint32KeyFromLink(&args, "Hcreature_entry", id))
+        return false;
+
+    auto position = GetSession()->GetPlayer()->GetPosition();
+
+    GetSession()->GetPlayer()->SummonCreature(id, position.x, position.y, position.z, position.o);
+    return true;
+}
+
 //add item in vendorlist
 bool ChatHandler::HandleNpcAddVendorItemCommand(char* args)
 {
