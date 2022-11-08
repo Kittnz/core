@@ -636,6 +636,15 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
     if (!pCurrChar->IsAlive())
         pCurrChar->SendCorpseReclaimDelay(true);
 
+    if (pCurrChar->IsHardcore())
+    {
+        uint32 secondsUptime = sWorld.GetUptime();
+        if (secondsUptime < 15 * MINUTE)
+        {
+            pCurrChar->noAggroTimer = 20 * IN_MILLISECONDS;
+        }
+    }
+
     pCurrChar->SendInitialPacketsBeforeAddToMap();
     GetMasterPlayer()->SendInitialActionButtons();
 

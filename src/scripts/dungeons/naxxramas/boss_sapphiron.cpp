@@ -179,7 +179,7 @@ struct boss_sapphironAI : public ScriptedAI
     
     void DeleteAndDispellIceBlocks()
     {
-        std::vector<GameObject*> iceblocks;
+        std::list<GameObject*> iceblocks;
         GetGameObjectListWithEntryInGrid(iceblocks, m_creature, GO_ICEBLOCK, 300.0f);
         for(GameObject* ib : iceblocks)
         {

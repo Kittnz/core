@@ -198,7 +198,7 @@ void instance_naxxramas::OnCreatureEnterCombat(Creature * creature)
 {
     if (creature->GetEntry() == NPC_SewageSlime)
     {
-        std::vector<Creature*> sewageSlimes;
+        std::list<Creature*> sewageSlimes;
         GetCreatureListWithEntryInGrid(sewageSlimes, creature, NPC_SewageSlime, 100.0f);
         for (Creature* pC : sewageSlimes)
         {
@@ -400,7 +400,7 @@ void instance_naxxramas::OnCreatureCreate(Creature* pCreature)
         case NPC_BileSludge:
         {
             // hack to prevent the endless amounts of adds to spawn in case something bugs out
-            std::vector<Creature*> clist;
+            std::list<Creature*> clist;
             GetCreatureListWithEntryInGrid(clist, pCreature, NPC_BileSludge, 50.0f);
             if (clist.size() > 20)
             {
@@ -878,7 +878,7 @@ void instance_naxxramas::SetData(uint32 uiType, uint32 uiData)
             {
                 // spawns it for 30 minutes?
                 DoRespawnGameObject(m_uiHorsemenChestGUID);
-                std::vector<Creature*> spirits;
+                std::list<Creature*> spirits;
                 GetCreatureListWithEntryInGrid(spirits, GetSingleCreatureFromStorage(NPC_ZELIEK), { 16775, 16776, 16777, 16778}, 300.0f);
                 for (Creature* pC : spirits)
                     pC->DeleteLater();
@@ -1193,7 +1193,7 @@ void instance_naxxramas::OnPlayerDeath(Player* p)
         if (Creature* pAnub = GetSingleCreatureFromStorage(NPC_ANUB_REKHAN))
         {
             // No need to spawn more than 100 scarabs...
-            std::vector<Creature*> scarabs;
+            std::list<Creature*> scarabs;
             GetCreatureListWithEntryInGrid(scarabs, pAnub, 16698, 300.0f);
             if (scarabs.size() > 100)
                 return;

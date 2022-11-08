@@ -511,13 +511,13 @@ void ThreatManager::UnitDetailedThreatSituation(Creature* creature, Player* requ
 		std::list<std::string> pSecondMessage;   // players that are 2nd on threat
 		pSecondMessage.clear();
 
-		std::vector<Creature*> hCreatureNear;
+		std::list<Creature*> hCreatureNear;
 		GetHostileCreaturesListInRange(hCreatureNear, requester, 5.0f);
 
 		int creatureIndex = 0;
 
 		if (hCreatureNear.size() >= 2)
-			for (auto iter = hCreatureNear.begin(); iter != hCreatureNear.end(); ++iter)
+			for (std::list<Creature*>::iterator iter = hCreatureNear.begin(); iter != hCreatureNear.end(); ++iter)
 			{
 				if (creatureIndex > 4)
 					break;

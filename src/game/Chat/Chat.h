@@ -380,6 +380,7 @@ class ChatHandler
         //-----------------------Npc Commands-----------------------
         bool HandleNpcAddCommand(char* args);
         bool HandleNpcAddWeaponCommand(char* args);
+        bool HandleNpcSummonCommand(char* args);
         bool HandleNpcAddVendorItemCommand(char* args);
         bool HandleNpcScaleCommand(char* args);
         bool HandleNpcAIInfoCommand(char* args);

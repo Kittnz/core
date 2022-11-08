@@ -1299,7 +1299,7 @@ struct cthunAI : public ScriptedAI
     void DespawnTentacles()
     {
         // Force despawn any tentacles or portals alive.
-        std::vector<Creature*> creaturesToDespawn;
+        std::list<Creature*> creaturesToDespawn;
         GetCreatureListWithEntryInGrid(creaturesToDespawn, m_creature, allTentacleTypes, 2000.0f);
         for (const auto it : creaturesToDespawn) {
             if (cthunPortalTentacle* cpt = dynamic_cast<cthunPortalTentacle*>(it->AI())) {

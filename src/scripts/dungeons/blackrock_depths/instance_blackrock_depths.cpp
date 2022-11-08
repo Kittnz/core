@@ -93,11 +93,11 @@ struct instance_blackrock_depths : ScriptedInstance
     uint32 m_uiThunderbrewCount;
     uint32 m_uiRelicCofferDoorCount;
 
-    std::vector<uint64> m_lRibblySCronyMobGUIDList;
-    std::vector<uint64> m_lArenaSpectatorMobGUIDList;
-    std::vector<uint64> m_lArgelmachProtectorsMobGUIDList;
-    std::vector<uint64> m_sBarPatronNpcGuids;
-    std::vector<uint64> m_sBarPatrolGuids;
+    std::list<uint64> m_lRibblySCronyMobGUIDList;
+    std::list<uint64> m_lArenaSpectatorMobGUIDList;
+    std::list<uint64> m_lArgelmachProtectorsMobGUIDList;
+    std::list<uint64> m_sBarPatronNpcGuids;
+    std::list<uint64> m_sBarPatrolGuids;
 
     bool m_bDoorDughalOpened;
     bool m_bDoorTobiasOpened;
@@ -460,11 +460,6 @@ struct instance_blackrock_depths : ScriptedInstance
                     m_uiDagranTimer = 45000;    // set a timer of 45 sec to avoid Emperor Thaurissan to spam yells in case many senators are killed in a short amount of time
                 }
                 break;
-            case NPC_GRIM_PATRON:
-            case NPC_HAMMERED_PATRON:
-            case NPC_GUZZLING_PATRON:
-               HandleBarPatrons(PATRON_HOSTILE);
-               break;
             /*case NPC_THELDREN:
                 SetData(DATA_THELDREN, DONE);
                 break;*/
@@ -775,7 +770,7 @@ struct instance_blackrock_depths : ScriptedInstance
                     if (Creature* magnus = instance->GetCreature(m_uiMagmusGUID))
                     {
                         DoScriptText(YELL_MAGMUS, magnus);
-                        std::vector<Creature*> AnvilrageList;
+                        std::list<Creature*> AnvilrageList;
                         GetCreatureListWithEntryInGrid(AnvilrageList, magnus, 8901, 400.0f);
 
                         for (const auto& it : AnvilrageList)

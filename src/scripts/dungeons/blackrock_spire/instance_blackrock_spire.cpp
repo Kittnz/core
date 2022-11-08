@@ -1002,9 +1002,9 @@ struct npc_solakar_triggerAI : public ScriptedAI
             {
                 instance->SetData(TYPE_SOLAKAR, SPECIAL);
 
-                std::vector<Creature*> listHatcher;
+                std::list<Creature*> listHatcher;
                 GetCreatureListWithEntryInGrid(listHatcher, m_creature, 10683, 10.0f);
-                for (auto itr = listHatcher.begin(); itr != listHatcher.end(); ++itr)
+                for (std::list<Creature*>::const_iterator itr = listHatcher.begin(); itr != listHatcher.end(); ++itr)
                 {
                     if (listHatcher.empty())
                         break;
@@ -1077,9 +1077,9 @@ struct npc_rookery_hatcherAI : public ScriptedAI
     {
         uint8 uiHatchedEgg = 0;
         uint8 uiMaxHatchedEgg = 4;
-        std::vector<GameObject*> listRookeryEgg;
+        std::list<GameObject*> listRookeryEgg;
         GetGameObjectListWithEntryInGrid(listRookeryEgg, m_creature, 175124, 50.0f);
-        for (auto itr = listRookeryEgg.begin(); itr != listRookeryEgg.end(); ++itr)
+        for (std::list<GameObject*>::const_iterator itr = listRookeryEgg.begin(); itr != listRookeryEgg.end(); ++itr)
         {
             if (listRookeryEgg.empty())
                 break;

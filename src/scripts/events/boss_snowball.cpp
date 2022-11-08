@@ -249,7 +249,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
         {
             DoCastAOE(SPELL_FROST_NOVA_DMG);
 
-            std::vector<Player*> players;
+            std::list<Player*> players;
             GetPlayersWithinRange(players, 50);
 
             Block_Event_Timer = urand(24000, 42000);

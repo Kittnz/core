@@ -148,7 +148,7 @@ struct boss_cannon_master_willeyAI : public ScriptedAI
 
     void EnterEvadeMode() override
     {
-        std::vector<Creature*> RiflemanList;
+        std::list<Creature*> RiflemanList;
         GetCreatureListWithEntryInGrid(RiflemanList, m_creature, NPC_CRIMSON_RIFLEMAN, 200.0f);
         for (const auto& itr : RiflemanList)
             itr->ForcedDespawn();

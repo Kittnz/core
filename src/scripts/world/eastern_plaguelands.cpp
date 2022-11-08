@@ -307,13 +307,12 @@ struct npc_eris_havenfireAI : public ScriptedAI
 
         for (entriesIt = mobsEntries.begin(); entriesIt != mobsEntries.end(); ++entriesIt)
         {
-            std::vector<Creature*> tmpMobsList;
+            std::list<Creature*> tmpMobsList;
             GetCreatureListWithEntryInGrid(tmpMobsList, m_creature, (*entriesIt), 100.0f);
-            std::reverse(tmpMobsList.begin(), tmpMobsList.end());
             while (!tmpMobsList.empty())
             {
-                Creature* curr = tmpMobsList.back();
-                tmpMobsList.pop_back();
+                Creature* curr = tmpMobsList.front();
+                tmpMobsList.pop_front();
 
                 if (curr->IsAlive())
                     summoned->AddThreat(curr, float(urand(100, 200)));
@@ -350,13 +349,12 @@ struct npc_eris_havenfireAI : public ScriptedAI
 
         for (entriesIt = mobsEntries.begin(); entriesIt != mobsEntries.end(); ++entriesIt)
         {
-            std::vector<Creature*> tmpMobsList;
+            std::list<Creature*> tmpMobsList;
             GetCreatureListWithEntryInGrid(tmpMobsList, m_creature, (*entriesIt), 150.0f);
-            std::reverse(tmpMobsList.begin(), tmpMobsList.end());
             while (!tmpMobsList.empty())
             {
-                Creature* curr = tmpMobsList.back();
-                tmpMobsList.pop_back();
+                Creature* curr = tmpMobsList.front();
+                tmpMobsList.pop_front();
 
                 if (curr->IsAlive())
                     curr->ForcedDespawn();
@@ -1035,7 +1033,7 @@ struct npc_demetriaAI : public ScriptedAI
 
         if (DispelMagic_Timer < diff)
         {
-            std::vector<Creature*> pList;
+            std::list<Creature*> pList;
             MaNGOS::FriendlyCCedInRangeCheck u_check(m_creature, 15);
             MaNGOS::CreatureListSearcher<MaNGOS::FriendlyCCedInRangeCheck> searcher(pList, u_check);
             Cell::VisitGridObjects(m_creature, searcher, 15);
@@ -1407,7 +1405,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
         if (!_initialized)
         {
             // Already summoned ? Do not launch the event twice.
-            std::vector<Creature*> otherTriggers;
+            std::list<Creature*> otherTriggers;
             m_creature->GetCreatureListWithEntryInGrid(otherTriggers, NPC_DARROWSHIRE_TRIGGER, 100.0f);
             if (otherTriggers.size() > 1)
             {

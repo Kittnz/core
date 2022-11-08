@@ -458,8 +458,7 @@ int PatchWoWExe()
 	}
 	else
 	{
-		auto error = GetLastError();
-		WriteLog("ERROR: Can't patch WoW.exe %d", error);
+		WriteLog("ERROR: Can't patch WoW.exe");
 //		ErrorBox("Can't patch WoW.exe");
 		return 1;
 	}

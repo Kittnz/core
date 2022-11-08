@@ -85,7 +85,7 @@ class UpdateData
 
     protected:
         ObjectGuidSet m_outOfRangeGUIDs;
-        std::vector<UpdatePacket> m_datas;
+        std::list<UpdatePacket> m_datas;
 };
 
 class MovementData

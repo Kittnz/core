@@ -334,7 +334,7 @@ struct mob_core_houndAI : public ScriptedAI
             {
                 m_bResurrectionOkay = false;
 
-                std::vector<Creature*> m_CoreHoundList;
+                std::list<Creature*> m_CoreHoundList;
                 GetCreatureListWithEntryInGrid(m_CoreHoundList, m_creature, NPC_CORE_HOUND, 100.0f);
                 for (const auto itr : m_CoreHoundList)
                 {
