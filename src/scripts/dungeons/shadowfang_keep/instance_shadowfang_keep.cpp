@@ -232,7 +232,7 @@ struct instance_shadowfang_keep : public ScriptedInstance
     {
         if (m_bIsBaronDead)
         {
-            std::vector<Creature*> m_EscortList;
+            std::list<Creature*> m_EscortList;
 
             if (Creature* pBaron{ instance->GetCreature(m_uiBaronSilverlaineGUID) })
             {
@@ -260,7 +260,7 @@ struct instance_shadowfang_keep : public ScriptedInstance
 
         if (m_bIsCmdDead)
         {
-            std::vector<Creature*> m_EscortList;
+            std::list<Creature*> m_EscortList;
 
             if (Creature* pCmd{ instance->GetCreature(m_uiCmdSpringvaleGUID) })
             {

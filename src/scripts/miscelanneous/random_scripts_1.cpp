@@ -755,7 +755,7 @@ struct go_survival_tent : public GameObjectAI
         {
             if (m_uiUpdateTimer < uiDiff)
             {
-                std::vector<Player*> players;
+                std::list<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -808,7 +808,7 @@ struct go_campfire_rested : public GameObjectAI
         {
             if (m_uiUpdateTimer < uiDiff)
             {
-                std::vector<Player*> players;
+                std::list<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -1257,7 +1257,7 @@ struct refreshment_portal_clicks : public GameObjectAI
 
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::vector<Player*> players;
+            std::list<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -1428,7 +1428,7 @@ struct soulwell_portal_clicks : public GameObjectAI
 
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::vector<Player*> players;
+            std::list<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 5.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -1935,7 +1935,7 @@ bool GossipHello_title_masker(Player* pPlayer, Creature* pCreature)
     if (pPlayer->IsIgnoringTitles())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to show my rank again!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     else if (pPlayer->GetMoney() >= 50000)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.\n\nWARNING: THIS WILL COST YOU 5 GOLD!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     pPlayer->SEND_GOSSIP_MENU(90003, pCreature->GetGUID());
     return true;
 }
@@ -4123,7 +4123,7 @@ struct go_teslinah_search : public GameObjectAI
     {
         if (m_uiUpdateTimer < uiDiff)
         {
-            std::vector<Player*> players;
+            std::list<Player*> players;
             MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f, true, false);
             MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -4730,11 +4730,28 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
 }
 
 // Scarlet Monastery raid attunement quest scripts:
+#define QUEST_YOUNG_AND_FOOLISH 80702
 
 bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (pPlayer->GetQuestStatus(QUEST_YOUNG_AND_FOOLISH) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 341: 
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[0] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case 956:
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[1] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case 344:
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[2] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        }
+    }
 
     if (pPlayer->GetQuestStatus(80721) == QUEST_STATUS_INCOMPLETE) // Grim News
         switch (pCreature->GetEntry())
@@ -5317,7 +5334,7 @@ struct npc_alphus_wordwillAI : public ScriptedAI
 
     void UpdateAI(const uint32 diff)
     {
-        std::vector<Player*> players;
+        std::list<Player*> players;
         GetPlayersWithinRange(players, 20);
 
         if (m_creature->GetHealthPercent() < 80 && m_creature->GetHealthPercent() > 70)
@@ -6316,7 +6333,7 @@ struct npc_zuljinAI : public ScriptedAI
             {
                 eventInProgress = true;
 
-                std::vector<Player*> players;
+                std::list<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 2.0f, true, false);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
                 Cell::VisitWorldObjects(me, searcher, 2.0f);

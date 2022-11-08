@@ -807,18 +807,18 @@ void ScourgeInvasionEvent::Disable()
             Creature* pRelay = pMap->GetCreature(necro.relayGuid);
             if (!pRelay)
                 continue;
-            std::vector<Creature*> shardList;
+            std::list<Creature*> shardList;
             GetCreatureListWithEntryInGrid(shardList, pRelay, { NPC_NECROTIC_SHARD, NPC_DAMAGED_NECROTIC_SHARD }, 400.0f);
             for (Creature* pShard : shardList)
                 pShard->DeleteLater();
-            std::vector<GameObject*> necropolisList;
+            std::list<GameObject*> necropolisList;
             GetGameObjectListWithEntryInGrid(necropolisList, pRelay, GOBJ_NECROPOLIS, 100.0f);
             for (GameObject* pNecro : necropolisList)
                 pNecro->DeleteLater();
             
             // Getting list of relays as well, in case there's been some double enable/disabling going on 
             // and we have more than one relay alive
-            std::vector<Creature*> relayList;
+            std::list<Creature*> relayList;
             GetCreatureListWithEntryInGrid(relayList, pRelay, NPC_NECROPOLIS_RELAY, 100.0f);
             for (Creature* p2Relay : relayList)
                 p2Relay->DeleteLater();
@@ -1655,7 +1655,7 @@ void MiracleRaceEvent::StartTestRace(uint32 raceId, Player* racer, MiracleRaceSi
 				queueSystem().RemoveFromQueue(racer);
 				std::list<RacePlayerSetup> racers;
 				racers.emplace_back(RacePlayerSetup{ racer, side, startedQuest });
-				std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this);
+				std::shared_ptr<RaceSubEvent> raceSubEvent = std::make_shared<RaceSubEvent>(raceId, racers, this, m_mapId.value_or(1));
 				races.push_back(raceSubEvent);
 				raceSubEvent->Start();
 			}
@@ -1732,19 +1732,19 @@ void MiracleRaceEvent::onInviteAccepted(ObjectGuid gnomePlayer, ObjectGuid gobli
 	racers.emplace_back(RacePlayerSetup{ gnomePlayerP, MiracleRaceSide::Gnome });
 	racers.emplace_back(RacePlayerSetup{ goblinPlayerP, MiracleRaceSide::Goblin });
 	InitializeRace(1);
-	races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this));
+	races.emplace_back(std::make_shared<RaceSubEvent>(1, racers, this, m_mapId.value_or(1)));
 	std::shared_ptr<RaceSubEvent> SubEvent = races.back();
 	SubEvent->Start();
 }
 
-RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent)
+RaceSubEvent::RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent, uint32 mapId)
 	: raceId(InRaceId), pEvent(InEvent)
 {
 	racers.reserve(InRaces.size());
 
 	for (const RacePlayerSetup& racer : InRaces)
 	{
-		racers.emplace_back(RacePlayer(racer, this));
+		racers.emplace_back(RacePlayer(racer, this, mapId));
 	}
 }
 
@@ -1993,8 +1993,8 @@ void RaceSubEvent::RewardPlayer(Player* pl, uint32 startedQuest)
 	if (CheckForQuestAndMarkCompleteLambda(MiracleRaceQuests::TimeQuest)) return;
 }
 
-RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent)
-	: guid(racer.player->GetObjectGuid()), map(racer.player->FindMap()), raceEvent(InEvent), side(racer.side),
+RacePlayer::RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent, uint32 mapId)
+	: guid(racer.player->GetObjectGuid()), map(sMapMgr.FindMap(mapId)), raceEvent(InEvent), side(racer.side),
 	startedQuest(racer.startedByQuest)
 {}
 

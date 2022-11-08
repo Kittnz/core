@@ -661,6 +661,9 @@ void CreatureEventAI::MoveInLineOfSight(Unit *pWho)
     if (!pWho)
         return;
 
+    if (pWho->HasHCImmunity())
+        return;
+
     //Check for OOC LOS Event
     if (!m_creature->GetVictim())
     {

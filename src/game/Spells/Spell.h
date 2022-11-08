@@ -381,7 +381,7 @@ class Spell
         void WriteSpellGoTargets(WorldPacket* data);
         void WriteAmmoToPacket(WorldPacket* data);
 
-        typedef std::vector<Unit*> UnitList;
+        typedef std::list<Unit*> UnitList;
         void FillTargetMap();
         void SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList &targetUnitMap);
 

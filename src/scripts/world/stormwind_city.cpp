@@ -1004,7 +1004,7 @@ struct npc_tyrion_spybotAI : public npc_escortAI
         // Stormwind Royal Guards (Garden)
         if (!m_guidGuard1 || !m_guidGuard2)
         {
-            std::vector<Creature*> lGardenStormwindRoyalGuards;
+            std::list<Creature*> lGardenStormwindRoyalGuards;
             GetCreatureListWithEntryInGrid(lGardenStormwindRoyalGuards, m_creature, NPC_STORMWIND_ROYAL_GUARD, fMaxSearchRange);
 
             if (lGardenStormwindRoyalGuards.empty())

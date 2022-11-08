@@ -12,7 +12,7 @@ struct custom_exploration_trigger : public GameObjectAI
             using namespace std;
             using namespace MaNGOS;
 
-            vector<Player*> players;
+            list<Player*> players;
             AnyPlayerInObjectRangeCheck check(me, 30.0f);
             PlayerListSearcher<AnyPlayerInObjectRangeCheck> searcher(players, check);
             Cell::VisitWorldObjects(me, searcher, 30.0f);

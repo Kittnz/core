@@ -359,7 +359,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         // on classic the tap does minimal damage
         // https://vanilla.warcraftlogs.com/reports/cJ8XpmBW4MzxK6Aj#fight=52&type=damage&hostility=1&target=208.2&view=events
         // replacing cast spell with add aura, so they still get the 15% increase in damage and size
-        std::vector<Creature*> guardians;
+        std::list<Creature*> guardians;
         GetCreatureListWithEntryInGrid(guardians, m_creature, NPC_GUARDIAN, 130.0f);
         for (Creature* pC : guardians)
             pC->AddAura(SPELL_BLOOD_TAP);
@@ -1036,7 +1036,7 @@ struct mob_guardian_icecrownAI : public ScriptedAI
         case 9485:
         case 9484:
         {
-            std::vector<Creature*> guardians;
+            std::list<Creature*> guardians;
             GetCreatureListWithEntryInGrid(guardians, m_creature, NPC_GUARDIAN, 130.0f);
             uint32 numShackled = 0;
             for (Creature* pC : guardians)
@@ -1069,7 +1069,7 @@ struct mob_guardian_icecrownAI : public ScriptedAI
         // on classic the tap does minimal damage
         // https://vanilla.warcraftlogs.com/reports/cJ8XpmBW4MzxK6Aj#fight=52&type=damage&hostility=1&target=208.2&view=events
         // replacing cast spell with add aura, so they still get the 15% increase in damage and size
-        std::vector<Creature*> guardians;
+        std::list<Creature*> guardians;
         GetCreatureListWithEntryInGrid(guardians, m_creature, NPC_GUARDIAN, 130.0f);
         for (Creature* pC : guardians)
             pC->AddAura(SPELL_BLOOD_TAP);

@@ -392,7 +392,7 @@ struct go_pile_dechetsAI: public GameObjectAI
                     // SelectRandomFriendlyTarget
                     // les amis de faction 28 (troll dans ZG) sont... faction 14 (monster) ???
                     // en attendant...
-                    std::vector<Creature*> MobList;
+                    std::list<Creature*> MobList;
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11361, 45.0f);          // Tigre Zulien
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11831, 45.0f);          // Sorcier Docteur
                     GetCreatureListWithEntryInGrid(MobList, Guru, 11350, 45.0f);          // Lanceur de Haches

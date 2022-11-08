@@ -152,7 +152,7 @@ struct tomb_bat_event_trigger : public GameObjectAI
 
             if (!bat_event_activated)
             {
-                std::vector<Player*> players;
+                std::list<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 20.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 
@@ -302,7 +302,7 @@ struct skeletal_remains_trigger : public GameObjectAI
 
             if (!remains_activated)
             {
-                std::vector<Player*> players;
+                std::list<Player*> players;
                 MaNGOS::AnyPlayerInObjectRangeCheck check(me, 15.0f);
                 MaNGOS::PlayerListSearcher<MaNGOS::AnyPlayerInObjectRangeCheck> searcher(players, check);
 

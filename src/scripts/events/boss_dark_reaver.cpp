@@ -90,10 +90,10 @@ struct boss_dark_reaverAI : public ScriptedAI
     void DespawnAdds()
     {
         // Despawn Lurking Shadow and Forlorn Spirit NPCs
-        std::vector<Creature *> lCreature;
+        std::list<Creature *> lCreature;
         m_creature->GetCreatureListWithEntryInGrid(lCreature, MOB_LURKING_SHADOW, 200.0f);
         m_creature->GetCreatureListWithEntryInGrid(lCreature, MOB_FORLORN_SPIRIT, 200.0f);
-        for (std::vector<Creature *>::iterator itr = lCreature.begin(); itr != lCreature.end(); ++itr)
+        for (std::list<Creature *>::iterator itr = lCreature.begin(); itr != lCreature.end(); ++itr)
             (*itr)->ForcedDespawn();
     }
 

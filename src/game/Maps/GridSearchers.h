@@ -40,11 +40,11 @@ struct ObjectDistanceOrderReversed
 GameObject* GetClosestGameObjectWithEntry(WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
 Creature* GetClosestCreatureWithEntry(WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
 
-void GetGameObjectListWithEntryInGrid(std::vector<GameObject*>& lList , WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
-void GetCreatureListWithEntryInGrid(std::vector<Creature*>& lList, WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
-void GetCreatureListWithEntryInGrid(std::vector<Creature*>& lList, WorldObject* pSource, const std::vector<uint32>& entries, float fMaxSearchRange);
+void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList , WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
+void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, uint32 uiEntry, float fMaxSearchRange);
+void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, WorldObject* pSource, const std::vector<uint32>& entries, float fMaxSearchRange);
 
-void GetHostileCreaturesListInRange(std::vector<Creature*>& lList, WorldObject* pSource, float fMaxSearchRange);
+void GetHostileCreaturesListInRange(std::list<Creature*>& lList, WorldObject* pSource, float fMaxSearchRange);
 
 /*
 //Used in:

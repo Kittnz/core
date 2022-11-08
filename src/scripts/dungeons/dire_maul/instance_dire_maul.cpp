@@ -761,7 +761,7 @@ struct npc_residual_montruosityAI : public ScriptedAI
             float closestbefore = 45.0f;
             float closestbehind = 45.0f;
 
-            std::vector<Creature*> montruosityList;
+            std::list<Creature*> montruosityList;
             GetCreatureListWithEntryInGrid(montruosityList, m_creature, 11484, 45.0f);
             if (!montruosityList.empty())
             {
@@ -1933,7 +1933,7 @@ struct boss_alzzin_the_wildshaperAI : ScriptedAI
 
     void RemoveAdds() const
     {
-        std::vector<Creature*> m_lHelpers;
+        std::list<Creature*> m_lHelpers;
         GetCreatureListWithEntryInGrid(m_lHelpers, m_creature, NPC_ALZZINS_MINION, 80.0f);
         if (!m_lHelpers.empty())
         {

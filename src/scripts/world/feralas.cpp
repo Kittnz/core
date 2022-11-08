@@ -309,7 +309,7 @@ struct MushgogAI : public ScriptedAI
         m_creature->SetInCombatWithZone();
         if (!m_bAggro)
         {
-            std::vector<Creature*> m_AggroList;
+            std::list<Creature*> m_AggroList;
             GetCreatureListWithEntryInGrid(m_AggroList, m_creature, 14395, 1800.0f);
             for (const auto& it : m_AggroList)
             {
@@ -427,7 +427,7 @@ struct TheRazzaAI : public ScriptedAI
         m_creature->SetInCombatWithZone();
         if (!m_bAggro)
         {
-            std::vector<Creature*> m_AggroList;
+            std::list<Creature*> m_AggroList;
             GetCreatureListWithEntryInGrid(m_AggroList, m_creature, 14395, 1800.0f);
             for (const auto& it : m_AggroList)
             {
@@ -519,7 +519,7 @@ struct SkarrTheUnbreakableAI : public ScriptedAI
         m_creature->SetInCombatWithZone();
         if (!m_bAggro)
         {
-            std::vector<Creature*> m_AggroList;
+            std::list<Creature*> m_AggroList;
             GetCreatureListWithEntryInGrid(m_AggroList, m_creature, 14395, 1800.0f);
         for (const auto& it : m_AggroList)
         {
@@ -856,7 +856,7 @@ void npc_kindal_moonweaverAI::BeginEvent()
 
     pGoGate->SetGoState(GO_STATE_READY);
 
-    std::vector<Creature*> lSprites;
+    std::list<Creature*> lSprites;
     GetCreatureListWithEntryInGrid(lSprites, pGoGate, NPC_CAPTURED_SPRITE_DARTER, 40.0f);
 
     for (const auto& pSprite : lSprites)

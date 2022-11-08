@@ -120,10 +120,10 @@ struct ScriptedAI : CreatureAI
     void DoTeleportPlayer(Unit* pUnit, float fX, float fY, float fZ, float fO);
 
     // Returns a list of friendly CC'd units within range
-    std::vector<Creature*> DoFindFriendlyCC(float fRange);
+    std::list<Creature*> DoFindFriendlyCC(float fRange);
 
     // Returns a list of all friendly units missing a specific buff within range
-    std::vector<Creature*> DoFindFriendlyMissingBuff(float fRange, uint32 uiSpellId);
+    std::list<Creature*> DoFindFriendlyMissingBuff(float fRange, uint32 uiSpellId);
 
     // Return a player with at least minimumRange from m_creature
     Player* GetPlayerAtMinimumRange(float fMinimumRange);
@@ -131,7 +131,7 @@ struct ScriptedAI : CreatureAI
     Player* GetRandomPlayerInRange(float radius, bool mustBeAlive = true, const std::list<Player*>* excludedPlayers = nullptr) const;
 
     // Get a list of all players within range of m_creature
-    void GetPlayersWithinRange(std::vector<Player*>& players, float range) const;
+    void GetPlayersWithinRange(std::list<Player*>& players, float range) const;
 
     // Spawns a creature relative to m_creature
     Creature* DoSpawnCreature(uint32 uiId, float fX, float fY, float fZ, float fAngle, uint32 uiType, uint32 uiDespawntime);

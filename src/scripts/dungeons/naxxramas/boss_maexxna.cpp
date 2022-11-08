@@ -232,7 +232,7 @@ struct boss_maexxnaAI : public ScriptedAI
     {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_MAEXXNA, FAIL);
-        std::vector<Creature*> spiderlings;
+        std::list<Creature*> spiderlings;
         GetCreatureListWithEntryInGrid(spiderlings, m_creature, NPC_SPIDERLING, 100.0f);
         for (Creature* pSpider : spiderlings)
             pSpider->DeleteLater();

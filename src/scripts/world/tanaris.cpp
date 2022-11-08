@@ -308,7 +308,7 @@ bool GossipSelect_npc_stone_watcher_of_norgannon(Player* pPlayer, Creature* pCre
 // Spawned by database. Allow only one at the same time :)
 CreatureAI* GetAI_npc_stone_watcher_of_norgannon(Creature* creature)
 {
-    std::vector<Creature*> creatures;
+    std::list<Creature*> creatures;
     creature->GetCreatureListWithEntryInGrid(creatures, creature->GetEntry(), 20.0f);
     if (!creatures.empty())
         creature->DeleteLater();

@@ -35,7 +35,6 @@
 
 #include <set>
 #include <string>
-#include <vector>
 #include <array>
 
 #define CONTACT_DISTANCE 0.5f
@@ -1021,9 +1020,9 @@ class WorldObject : public Object
         Creature* FindRandomCreature(uint32 entry, float range, bool alive = true, Creature const* except = nullptr) const;
         GameObject* FindNearestGameObject(uint32 entry, float range) const;
         Player* FindNearestPlayer(float range) const;
-        void GetGameObjectListWithEntryInGrid(std::vector<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
-        void GetCreatureListWithEntryInGrid(std::vector<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
-        void GetAlivePlayerListInRange(WorldObject const* pSource, std::vector<Player*>& lList, float fMaxSearchRange) const;
+        void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
+        void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
+        void GetAlivePlayerListInRange(WorldObject const* pSource, std::list<Player*>& lList, float fMaxSearchRange) const;
 
         bool isActiveObject() const { return m_isActiveObject || m_viewPoint.hasViewers(); }
         void SetActiveObjectState(bool on);

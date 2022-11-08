@@ -535,7 +535,7 @@ struct go_ghost_magnetAI: public GameObjectAI
         nbToSpawn = 8;
 
         state = 1;
-        std::vector<GameObject*> lGobj;
+        std::list<GameObject*> lGobj;
         me->GetGameObjectListWithEntryInGrid(lGobj, GO_GHOST_MAGNET_AURA, 30.0f);
         for (const auto& it : lGobj)
         {

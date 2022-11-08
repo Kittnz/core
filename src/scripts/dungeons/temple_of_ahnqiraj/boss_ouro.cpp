@@ -1,4 +1,5 @@
- /* Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
+/*
+ * Copyright (C) 2006-2011 ScriptDev2 <http://www.scriptdev2.com/>
  * Copyright (C) 2010-2011 ScriptDev0 <http://github.com/mangos-zero/scriptdev0>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -128,7 +129,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
 
     void DespawnCreatures(bool ShouldDespawnScarabs)
     {
-        std::vector<Creature *> lCreature;
+        std::list<Creature *> lCreature;
         m_creature->GetCreatureListWithEntryInGrid(lCreature, NPC_DIRT_MOUND, 250.0f);
         if (ShouldDespawnScarabs)
             m_creature->GetCreatureListWithEntryInGrid(lCreature, NPC_OURO_SCARAB, 250.0f);

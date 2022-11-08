@@ -327,6 +327,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand npcCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
+        { "summon",         SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSummonCommand,           "", nullptr},
         { "additem",        SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddVendorItemCommand,    "", nullptr },
         { "scale",          SEC_DEVELOPER,     false, &ChatHandler::HandleNpcScaleCommand,    "", nullptr },
         { "addweapon",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddWeaponCommand,        "", nullptr },
