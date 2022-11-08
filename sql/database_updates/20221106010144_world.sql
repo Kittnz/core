@@ -819,3 +819,4 @@ DELETE FROM creature_movement WHERE id=2572963;
 DELETE FROM game_event_creature WHERE guid=2572963;
 DELETE FROM game_event_creature_data WHERE guid=2572963;
 DELETE FROM creature_battleground WHERE guid=2572963;
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (860,-8878.963867,-6536.868652,13.483558,1.527933,1,'telabim');
