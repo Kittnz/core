@@ -5424,6 +5424,11 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Server diff: %u ms", sWorld.GetLastDiff());
     }
 
+    std::tm* ptm = std::localtime(&sWorld.GetGameTime());
+    char timeStr[32];
+    std::strftime(timeStr, 32, "%a, %d.%m.%Y %H:%M:%S", ptm);
+    PSendSysMessage("Server Time: %s", timeStr);
+
     return true;
 }
 
