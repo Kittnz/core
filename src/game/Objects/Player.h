@@ -1240,6 +1240,7 @@ class Player final: public Unit
         void SendNotifyLootItemRemoved(uint8 lootSlot) const;
         void SendNotifyLootMoneyRemoved() const;
         bool IsAllowedToLoot(Creature const* creature);
+        float GetMaxLootDistance(Unit const* pUnit) const;
 
         void ApplyEnchantment(Item* item,EnchantmentSlot slot,bool apply, bool apply_dur = true, bool ignore_condition = false);
         void ApplyEnchantment(Item* item,bool apply);
@@ -1895,6 +1896,7 @@ class Player final: public Unit
         }
         void HandleFall(MovementInfo const& movementInfo);
         bool IsFalling() const { return GetPositionZ() < m_lastFallZ; }
+        uint32 m_lastTransportTime; // Turtle: used to prevent fall damage from stepping off transport
 
         bool IsControlledByOwnClient() const { return m_session->HasClientMovementControl(); }
 
@@ -2186,7 +2188,8 @@ class Player final: public Unit
             LevelLimitExceeded
         };
 
-        void SetHardcoreStatus(uint8 status) { m_hardcoreStatus = status; };
+        void SetHardcoreStatus(uint8 status);
+        uint8 GetHardcoreStatus() { return m_hardcoreStatus; };
         bool IsHardcore() const{ return GetLevel() < 60 && (m_hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || m_hardcoreStatus == HARDCORE_MODE_STATUS_DEAD); }
         bool isImmortal() const { return m_hardcoreStatus == HARDCORE_MODE_STATUS_IMMORTAL; }
         HardcoreInteractionResult HandleHardcoreInteraction(Player* target, bool checkLevelDiff);
@@ -2238,6 +2241,10 @@ class Player final: public Unit
 		// For chronoboon item
 		uint32 m_worldBuffCheckTimer;
     public:
+
+        //Little safeguard for HC characters after a server start.
+        uint32 noAggroTimer = 0;
+        bool HasHCImmunity() const override { return noAggroTimer != 0; }
 
         void SetHCIniviteGuildTimer(uint32 timer) { m_hardcoreInvGuildTimer = timer; }
         void ScheduleStandStateChange(uint8 state);
@@ -2474,6 +2481,7 @@ public:
 
         static uint32 GetMinLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId);
         static uint32 GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId);
+        static BattleGroundBracketId GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId, uint32 level);
         BattleGroundBracketId GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId) const;
 
         bool InBattleGroundQueue() const

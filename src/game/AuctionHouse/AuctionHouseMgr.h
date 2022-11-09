@@ -133,6 +133,8 @@ class AuctionHouseObject
 
         bool RemoveAuction(AuctionEntry* entry);
 
+        void RemoveAllAuctions(Player* player);
+
         void Update();
 
         void BuildListBidderItems(WorldPacket& data, Player* player, uint32 listfrom, uint32& count, uint32& totalcount);

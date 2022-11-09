@@ -155,6 +155,8 @@ class BattleGroundWS : public BattleGround
         void EndBattleGround(Team winner);
         virtual WorldSafeLocsEntry const* GetClosestGraveYard(Player* player);
 
+
+        Team GetWinningTeam() const override;
         void UpdateFlagState(Team team, uint32 value);
         void UpdateTeamScore(Team team);
         void UpdatePlayerScore(Player *Source, uint32 type, uint32 value);

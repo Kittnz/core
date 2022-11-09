@@ -7,6 +7,8 @@
 #include "resource.h"
 #include <Commctrl.h>
 #include <iostream>
+#include <string> 
+#include <sstream>
 
 #define fs std::filesystem
 
@@ -37,16 +39,19 @@ OFFSET_TEXTEMOTE_SOUND_RACE_ID_CHECK          = 0x00059289, // Allows the game t
 OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game to play emote sounds for High Elves.
 };
 
-#define NEW_BUILD 7030u
-#define NEW_VISUAL_BUILD "7030"
-#define NEW_VISUAL_VERSION "1.16.3"
-#define NEW_BUILD_DATE "Aug 10 2022"
+bool fov_build = false;
+
+#define NEW_BUILD 7040u
+#define NEW_VISUAL_BUILD "7040"
+#define NEW_VISUAL_VERSION "1.16.4"
+#define NEW_BUILD_DATE "November 12 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
-#define PATCH_FILE "Data\\patch-Z.mpq"
+#define PATCH_FILE "Data\\patch-3.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
+#define ADDITIONAL_GAME_BINARY "WoWFoV.mpq"
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -159,42 +164,6 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK, SEEK_SET);
 	fwrite(patch_15, sizeof(patch_15), 1, hWoW);
 
-	// Optional changes, to be considered:
-
-    //  Optional for https://github.com/slowtorta/turtlewow-improved-fov
-    //	char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
-    //	fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
-    //	fwrite(patch_6, sizeof(patch_6), 1, hWoW);
-
-
-    char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
-    fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
-    fwrite(patch_8, sizeof(patch_8), 1, hWoW);
-    
-    char patch_9[] = { 0x9C, 0x5C, 0x83, 0x00 };
-    fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
-    fwrite(patch_9, sizeof(patch_9), 1, hWoW);
-    
-    char patch_10[] = { 0x9C, 0x5C, 0x83, 0x00 };
-    fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
-    fwrite(patch_10, sizeof(patch_10), 1, hWoW);
-
-	// Sound channel count original:
-
-	// char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
-	// fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
-	// fwrite(patch_8, sizeof(patch_8), 1, hWoW);
-	// 
-	// char patch_9[] = { 0x38, 0x5D, 0x83, 0x0 };
-	// fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
-	// fwrite(patch_9, sizeof(patch_9), 1, hWoW);
-	// 
-	// char patch_10[] = { 0x6C, 0x5C, 0x83, 0x00 };
-	// fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
-	// fwrite(patch_10, sizeof(patch_10), 1, hWoW);
-
-	// Sound channel count original, end.
-
 	char patch_11[] = { 0x00, 0x00, 0x24, 0x42 };
 	fseek(hWoW, OFFSET_NAMEPLATE_DISTANCE, SEEK_SET);
 	fwrite(patch_11, sizeof(patch_11), 1, hWoW);
@@ -203,19 +172,55 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
 	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
-	// Sound in background
+	// Sound channel count original values:
 
-	// char patch_13[] = { 0x27 };
-	// fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
-	// fwrite(patch_13, sizeof(patch_13), 1, hWoW);
+	char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
+	fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
+	fwrite(patch_8, sizeof(patch_8), 1, hWoW);
 
-	// Sound in background original
+	char patch_9[] = { 0x38, 0x5D, 0x83, 0x0 };
+	fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
+	fwrite(patch_9, sizeof(patch_9), 1, hWoW);
+
+	char patch_10[] = { 0x6C, 0x5C, 0x83, 0x00 };
+	fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
+	fwrite(patch_10, sizeof(patch_10), 1, hWoW);
+
+	// Sound in background, original value:
 
 	char patch_13[] = { 0x14 };
 	fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 	fwrite(patch_13, sizeof(patch_13), 1, hWoW);
 
-	// Sound in background original, end
+	// *****************************************************
+	// Optional changes for the additionally distributed binary:
+	// *****************************************************
+
+	if (fov_build)
+	{
+		// Improved FoV value:
+		char patch_6[] = { 0x66, 0x66, 0xF6, 0x3F };
+		fseek(hWoW, OFFSET_ORIGINAL_FOV_VALUE, SEEK_SET);
+		fwrite(patch_6, sizeof(patch_6), 1, hWoW);
+
+		// Sound while alt-tabbed:
+		char patch_13[] = { 0x27 };
+		fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
+		fwrite(patch_13, sizeof(patch_13), 1, hWoW);
+
+		// Increased sound channel count
+		char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
+		fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
+		fwrite(patch_8, sizeof(patch_8), 1, hWoW);
+
+		char patch_9[] = { 0x9C, 0x5C, 0x83, 0x00 };
+		fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
+		fwrite(patch_9, sizeof(patch_9), 1, hWoW);
+
+		char patch_10[] = { 0x9C, 0x5C, 0x83, 0x00 };
+		fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
+		fwrite(patch_10, sizeof(patch_10), 1, hWoW);
+	}
 }
 
 constexpr int max_path = 260;
@@ -461,6 +466,110 @@ int PatchWoWExe()
 	return 0;
 }
 
+void PrintInstructions()
+{
+	WriteLog(" ");
+	WriteLog("Hello! It seems that something went wrong with your installation process. Here's a list of possible solutions:");
+	WriteLog(" ");
+	WriteLog("Please ensure that your Antivirus, Backup Software or Windows Defender is not blocking TWPatcher.exe, DiscordOverlay.dll or WoW.exe. Open Window Security in your right bottom taskbar, go to Virus and Scan protection > Allowed Threats > Protected Threats and select the files and click the Restore option.");
+	WriteLog(" ");
+	WriteLog("Move the game out of read-only folders such as Program Files, User Folder, Downloads, Desktop, etc.");
+	WriteLog(" ");
+	WriteLog("Try to run WoW as Administrator!");
+	WriteLog(" ");
+	WriteLog("If everything is done right, your Data folder should have %s installed an your binary file should have revision %s", PATCH_FILE, NEW_VISUAL_VERSION);
+	WriteLog(" ");
+	WriteLog("If it still doesn't work please use a direct download from our website: https://www.turtle-archives.online/downloads/turtle_client_116.zip");
+	WriteLog(" ");
+	WriteLog("If you need help, join our Discord: https://discord.com/invite/mBGxmHy or contact us via e-mail help.turtlewow@gmail.com");
+}
+
+void DeleteDeprecatedMPQ()
+{
+	fs::path currentPath = fs::current_path();
+
+	{
+		int numerical_patches[6] = { 4, 5, 6, 7, 8, 9 };
+		for (int i : numerical_patches)
+		{
+			WriteLog("Searching for patch-%i...", i);
+			std::stringstream ss;
+			std::stringstream ss_r;
+			ss << "patch-" << std::to_string(i) << ".mpq";
+			ss_r << "patch-" << std::to_string(i) << ".mpq.off";
+			std::string patch_name = ss.str();
+			std::string patch_rename = ss_r.str();
+
+			fs::path patch_path = currentPath / "Data" / patch_name;
+
+			if (fs::exists(patch_path))
+			{
+				WriteLog("Renaming deprecated patch-%i to %s...", i, patch_rename.c_str());
+				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
+
+				fs::path patch_disabled = currentPath / "Data" / patch_rename;
+				if (fs::exists(patch_disabled))
+				{
+					WriteLog("Deleting deprecated patch-%i...", i);
+					fs::remove(patch_disabled);
+				}
+				else
+				{
+					WriteLog("Deprecated patch-%i not found.", i);
+				}
+			}
+			else
+			{
+				WriteLog("Patch-%i not found.", i);
+			}
+		}
+	}
+
+	{
+		std::string alphabet_patches[8] = { "patch-A.mpq",
+							        	    "patch-T.mpq",
+							        	    "patch-U.mpq",
+							        	    "patch-V.mpq",
+							        	    "patch-W.mpq",
+							        	    "patch-X.mpq",
+							        	    "patch-Y.mpq",
+							        	    "patch-Z.mpq" };
+
+		for (std::string i : alphabet_patches)
+		{
+			WriteLog("Searching for %s...", i.c_str());
+
+			std::stringstream ss_r;
+			ss_r << i << ".off";
+			std::string patch_rename = ss_r.str();
+
+			fs::path patch_path = currentPath / "Data" / i.c_str();
+
+			if (fs::exists(patch_path))
+			{
+				WriteLog("Renaming deprecated %s to %s...", i.c_str(), patch_rename.c_str());
+				fs::rename(currentPath / "Data" / patch_path, currentPath / "Data" / patch_rename);
+
+				fs::path patch_disabled = currentPath / "Data" / patch_rename;
+				if (fs::exists(patch_disabled))
+				{
+					WriteLog("Deleting deprecated %s...", i.c_str());
+					fs::remove(patch_disabled);
+				}
+				else
+				{
+					WriteLog("Deprecated %s not found.", i.c_str());
+				}
+			}
+			else
+			{
+				WriteLog("%s not found.", i.c_str());
+			}
+		}
+
+	}
+}
+
 int GuardedMain(HINSTANCE hInstance)
 {
 	gHInstance = hInstance;
@@ -472,7 +581,7 @@ int GuardedMain(HINSTANCE hInstance)
 	// But if that not possible - create in temp dir
 
 	fs::path currentPath = fs::current_path();
-	const char* LogFilename = "TurtlePatcher.log";
+	const char* LogFilename = "tw_update.log";
 
 	fs::path LogFilePlace1 = currentPath / LogFilename;
 	std::wstring LogFilePlace1str = LogFilePlace1.wstring();
@@ -502,7 +611,7 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 	} closer;
 
-	WriteLog("Log file created!");
+	WriteLog("Log file created.");
 
 	fs::path PatchDir = currentPath / "wow-patch.mpq";
 
@@ -524,6 +633,10 @@ int GuardedMain(HINSTANCE hInstance)
 	// Then sleep for 5 sec. because there is a strange error if we working too fast
 	Sleep(5000);
 
+	// Delete deprecated MPQ files:
+	DeleteDeprecatedMPQ();
+
+
 	// unpack patch files
 	{
 		std::string strPathDir = PatchDir.u8string();
@@ -533,6 +646,7 @@ int GuardedMain(HINSTANCE hInstance)
 		if (!PatchFile.IsValid())
 		{
 			WriteLog("ERROR: Can't open patch \"%S\"", PatchDir.c_str());
+			PrintInstructions();
 		}
 		else
 		{
@@ -604,6 +718,27 @@ int GuardedMain(HINSTANCE hInstance)
 
 				CopyFromMPQToFileLambda(pFile, hTargetFile);
 				fclose(hTargetFile);
+			}
+
+			// Unpack additionally distributed binary:
+
+			if (StormFile* pFile = PatchFile.OpenFile(ADDITIONAL_GAME_BINARY))
+			{
+				OnOpenFileLambda(ADDITIONAL_GAME_BINARY);
+				std::unique_ptr<StormFile> patchData(pFile);
+
+				FILE* hTargetFile = OpenFileWithLogLambda(ADDITIONAL_GAME_BINARY);
+				if (hTargetFile == nullptr)
+				{
+					return 1;
+				}
+
+				CopyFromMPQToFileLambda(pFile, hTargetFile);
+				fclose(hTargetFile);
+			}
+			else
+			{
+				WriteLog("File WoWFoV.exe not found.");
 			}
 		}
 		
@@ -789,7 +924,9 @@ int GuardedMain(HINSTANCE hInstance)
 
 int UnhandledExceptionFilter(unsigned int code, struct _EXCEPTION_POINTERS *ep)
 {
-	MessageBox(NULL, "Can't patch WoW.", "Critical Error", MB_OK | MB_ICONERROR);
+	MessageBox(NULL, "Couldn't patch Turtle WoW. See tw_update.log for details.", "Critical Error", MB_OK | MB_ICONERROR);
+	PrintInstructions();
+
 	if (code == EXCEPTION_ACCESS_VIOLATION)
 	{
 		return EXCEPTION_EXECUTE_HANDLER;

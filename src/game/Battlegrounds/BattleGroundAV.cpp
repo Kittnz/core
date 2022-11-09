@@ -426,6 +426,12 @@ void BattleGroundAV::HandleKillUnit(Creature *creature, Player *killer)
     }
 }
 
+Team BattleGroundAV::GetWinningTeam() const
+{
+    //unclear who's the winning team without killing leaders.
+    return TEAM_NONE;
+}
+
 uint32 BattleGroundAV::GetActualArmorRessources(uint32 teamIdx)
 {
     ASSERT(teamIdx < BG_TEAMS_COUNT);

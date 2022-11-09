@@ -689,7 +689,7 @@ void Spell::prepareDataForTriggerSystem()
         m_canTrigger = true;          // Normal cast - can trigger
     else if (!m_triggeredByAuraSpell)
         m_canTrigger = true;          // Triggered from SPELL_EFFECT_TRIGGER_SPELL - can trigger
-    else if (m_spellInfo->HasAttribute(SPELL_ATTR_EX2_TRIGGERED_CAN_TRIGGER_PROC) || m_spellInfo->HasAttribute(SPELL_ATTR_EX3_TRIGGERED_CAN_TRIGGER_SPECIAL))
+    else if (m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NOT_A_PROC))
         m_canTrigger = true;          // Spells with these special attributes can trigger even if triggeredByAuraSpell
 
     if (!m_canTrigger)                // Exceptions (some periodic triggers)
@@ -1389,7 +1389,7 @@ void Spell::DoAllEffectOnTarget(TargetInfo *target)
         pCaster->DealSpellDamage(&damageInfo, true);
 
         // Courroux Naturel a 20% de chance de faire proc WF.
-        if (m_spellInfo->Id == 17364 && pCaster->IsPlayer())
+        if ((m_spellInfo->Id == 17364 || m_spellInfo->Id == 45521) && pCaster->IsPlayer())
         {
             Player* pPlayer = pCaster->ToPlayer();
             Item *item = pPlayer->GetWeaponForAttack(BASE_ATTACK, true, true);
@@ -1625,7 +1625,9 @@ void Spell::DoSpellHitOnUnit(Unit *unit, uint32 effectMask)
                     pRealUnitCaster->SetOutOfCombatWithVictim(unit);
                 }
             }
-            else if (pRealUnitCaster)
+            else if (pRealUnitCaster &&
+                   !(m_spellInfo->HasAttribute(SPELL_ATTR_CANT_USED_IN_COMBAT) &&
+                     m_spellInfo->HasAttribute(SPELL_ATTR_EX_NOT_IN_COMBAT_TARGET)))
             {
                 // make sure caster is flagged in pvp case
                 pRealUnitCaster->SetOutOfCombatWithVictim(unit);
@@ -2250,7 +2252,13 @@ void Spell::SetTargetMap(SpellEffectIndex effIndex, uint32 targetMode, UnitList&
         }
         case TARGET_UNIT_CASTER_PET:
         {
-            Pet* tmpUnit = m_casterUnit ? m_casterUnit->GetPet() : nullptr;
+            Unit* tmpUnit = nullptr;
+            if (m_casterUnit)
+            {
+                tmpUnit = m_casterUnit->GetPet();
+                if (!tmpUnit)
+                    tmpUnit = ToCreature(m_casterUnit->GetCharm());
+            }
             if (!tmpUnit)
                 break;
 
@@ -3936,6 +3944,8 @@ void Spell::handle_immediate()
     if (m_spellInfo->IsChanneledSpell() && m_duration)
     {
         m_spellState = SPELL_STATE_CASTING;
+        if (!m_IsTriggeredSpell && m_casttime)
+            m_caster->MoveChannelledSpellWithCastTime(this);
         SendChannelStart(m_duration);
         if (m_caster->IsPlayer())
             m_caster->ToPlayer()->RemoveSpellMods(this);
@@ -4863,8 +4873,8 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
     if (!time)
     {
         // Reset farsight for some possessing auras of possessed summoned (as they might work with different aura types)
-        if (m_spellInfo->Attributes & SPELL_ATTR_EX_FARSIGHT && m_caster->IsPlayer() && m_casterUnit->GetCharmGuid()
-            && !m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS) && !m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS_PET))
+        if (m_spellInfo->Attributes & SPELL_ATTR_EX_FARSIGHT && m_caster->IsPlayer() && m_casterUnit->GetCharmGuid() &&
+           !m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS) && !m_spellInfo->HasAura(SPELL_AURA_MOD_POSSESS_PET))
         {
             Player* player = (Player*)m_caster;
             // These Auras are applied to self, so get the possessed first
@@ -5646,7 +5656,13 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
         {
             if (j == TARGET_UNIT_CASTER_PET)
             {
-                Pet* pet = m_casterUnit ? m_casterUnit->GetPet() : nullptr;
+                Unit* pet = nullptr;
+                if (m_casterUnit)
+                {
+                    pet = m_casterUnit->GetPet();
+                    if (!pet)
+                        pet = ToCreature(m_casterUnit->GetCharm());
+                }
                 if (!pet)
                 {
                     if (m_triggeredByAuraSpell)              // not report pet not existence for triggered spells
@@ -6468,6 +6484,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                     if (!go->IsUseRequirementMet())
                         return SPELL_FAILED_TRY_AGAIN;
 
+                    if (go->GetGoType() == GAMEOBJECT_TYPE_CHEST && go->GetGOInfo()->chest.level > m_caster->GetLevel())
+                        return SPELL_FAILED_LEVEL_REQUIREMENT;
+
                     // check if its in use only when cast is finished (called from spell::cast() with strict = false)
                     if (auto player = m_caster->ToPlayer())
                     {
@@ -6570,6 +6589,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 if (pet->IsAlive())
                     return SPELL_FAILED_ALREADY_HAVE_SUMMON;
 
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
+
                 break;
             }
             // Don't make this check for SPELL_EFFECT_SUMMON_CRITTER, SPELL_EFFECT_SUMMON_WILD or SPELL_EFFECT_SUMMON_GUARDIAN.
@@ -6583,6 +6605,9 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
             case SPELL_EFFECT_SUMMON_POSSESSED:
                 if (m_casterUnit && m_casterUnit->GetCharmGuid())
                     return SPELL_FAILED_ALREADY_HAVE_CHARM;
+
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
                 break;
             case SPELL_EFFECT_SUMMON_PET:
             {
@@ -6592,6 +6617,16 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
 
                 if (m_casterUnit && m_casterUnit->GetCharmGuid())
                     return SPELL_FAILED_ALREADY_HAVE_CHARM;
+
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
+
+                break;
+            }
+            case SPELL_EFFECT_SUMMON_CRITTER:
+            {
+                if (m_casterUnit && m_casterUnit->GetTransport())
+                    return SPELL_FAILED_NOT_ON_TRANSPORT;
 
                 break;
             }
@@ -6859,18 +6894,17 @@ if (m_caster->IsPlayer() && !(m_spellInfo->Attributes & SPELL_ATTR_PASSIVE)
                 if (!m_caster->IsPlayer())
                     return SPELL_FAILED_BAD_TARGETS;
 
-                if (m_casterUnit->GetCharmGuid())
-                    return SPELL_FAILED_ALREADY_HAVE_CHARM;
-
                 if (m_casterUnit->GetCharmerGuid())
                     return SPELL_FAILED_CHARMED;
-
 
                 Pet* pet = m_casterUnit->GetPet();
                 if (!pet)
                     return SPELL_FAILED_NO_PET;
 
-                if (pet->GetCharmerGuid())
+                if (m_casterUnit->GetCharmGuid() && m_casterUnit->GetCharmGuid() != pet->GetObjectGuid())
+                    return SPELL_FAILED_ALREADY_HAVE_CHARM;
+
+                if (pet->GetCharmerGuid() && pet->GetCharmerGuid() != m_caster->GetObjectGuid())
                     return SPELL_FAILED_CHARMED;
 
                 break;
@@ -8035,7 +8069,7 @@ CurrentSpellTypes Spell::GetCurrentContainer() const
         return (CURRENT_MELEE_SPELL);
     else if (IsAutoRepeat())
         return (CURRENT_AUTOREPEAT_SPELL);
-    else if (m_spellInfo->IsChanneledSpell())
+    else if (m_spellInfo->IsChanneledSpell() && (!m_casttime || m_IsTriggeredSpell || m_spellState == SPELL_STATE_CASTING))
         return (CURRENT_CHANNELED_SPELL);
     else
         return (CURRENT_GENERIC_SPELL);
@@ -8778,6 +8812,12 @@ void Spell::OnSpellLaunch()
     }
     
     bool triggerAutoAttack = unitTarget != m_casterUnit && !m_spellInfo->IsPositiveSpell() && !(m_spellInfo->Attributes & SPELL_ATTR_STOP_ATTACK_TARGET);
+    if (triggerAutoAttack)
+    {
+        m_casterUnit->SetInCombatWithVictim(unitTarget);
+        //unitTarget->SetInCombatWithAggressor(m_casterUnit);
+    }
+
     m_casterUnit->GetMotionMaster()->MoveCharge(unitTarget, sWorld.getConfig(CONFIG_UINT32_SPELLS_CCDELAY), triggerAutoAttack);
 }
 
@@ -8786,6 +8826,17 @@ bool Spell::HasModifierApplied(SpellModifier* mod)
     for (const auto itr : m_appliedMods)
         if (itr == mod)
             return true;
+
+    return false;
+}
+
+bool Spell::IsTriggeredByProc() const
+{
+    if (m_spellInfo->HasAttribute(SPELL_ATTR_EX3_NOT_A_PROC))
+        return false;
+
+    if (m_triggeredByAuraSpell)
+        return m_triggeredByAuraSpell->procFlags != 0;
 
     return false;
 }

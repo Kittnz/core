@@ -111,7 +111,7 @@ bool LoginQueryHolder::Initialize()
     res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADGUILD,           "SELECT guildid,`rank` FROM guild_member WHERE guid = '%u'", m_guid.GetCounter());
     res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADBGDATA,          "SELECT instance_id, team, join_x, join_y, join_z, join_o, join_map FROM character_battleground_data WHERE guid = '%u'", m_guid.GetCounter());
     res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADSKILLS,          "SELECT skill, value, max FROM character_skills WHERE guid = '%u'", m_guid.GetCounter());
-    res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADMAILS,           "SELECT id,messageType,sender,receiver,subject,itemTextId,expire_time,deliver_time,money,cod,checked,stationery,mailTemplateId,has_items FROM mail WHERE receiver = '%u' AND isDeleted = 0 ORDER BY id DESC", m_guid.GetCounter());
+    res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADMAILS,           "SELECT id,messageType,sender,receiver,subject,itemTextId,expire_time,deliver_time,money,cod,checked,stationery,mailTemplateId,has_items,isDeleted FROM mail WHERE receiver = '%u' ORDER BY id DESC", m_guid.GetCounter());
     res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADMAILEDITEMS,     "SELECT creatorGuid, giftCreatorGuid, count, duration, charges, flags, enchantments, randomPropertyId, transmogrifyId, durability, text, mail_id, item_guid, itemEntry, generated_loot FROM mail_items JOIN item_instance ON item_guid = guid WHERE receiver = '%u'", m_guid.GetCounter());
     res &= SetPQuery(PLAYER_LOGIN_QUERY_FORGOTTEN_SKILLS,    "SELECT skill, value FROM character_forgotten_skills WHERE guid = '%u'", m_guid.GetCounter());
     res &= SetPQuery(PLAYER_LOGIN_QUERY_LOADVARIABLES,       "SELECT variableType, value FROM character_variables WHERE lowGuid = '%u'", m_guid.GetCounter());
@@ -504,13 +504,15 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
         }
         pCurrChar->GetSession()->SetPlayer(nullptr);
         pCurrChar->SetSession(this);
+
         // Need to attach packet bcaster to the new socket
         pCurrChar->m_broadcaster->ChangeSocket(GetSocket());
         alreadyOnline = true;
+
         // If the character had a logout request, then he is articifially stunned (cf CMSG_LOGOUT_REQUEST handler). Fix it here.
         if (pCurrChar->CanFreeMove())
         {
-            pCurrChar->SetRooted(false);
+            pCurrChar->SetRootedReal(false);
             pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
             pCurrChar->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
         }
@@ -633,6 +635,15 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (!pCurrChar->IsAlive())
         pCurrChar->SendCorpseReclaimDelay(true);
+
+    if (pCurrChar->IsHardcore())
+    {
+        uint32 secondsUptime = sWorld.GetUptime();
+        if (secondsUptime < 15 * MINUTE)
+        {
+            pCurrChar->noAggroTimer = 20 * IN_MILLISECONDS;
+        }
+    }
 
     pCurrChar->SendInitialPacketsBeforeAddToMap();
     GetMasterPlayer()->SendInitialActionButtons();
@@ -794,6 +805,12 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder *holder)
 
     if (pCurrChar->GetTotalQuestCount() >= LoreKeeperQuestRequirement && !pCurrChar->HasTitle(TITLE_LOREKEEPER))
         pCurrChar->AwardTitle(TITLE_LOREKEEPER);
+
+    if (sWorld.getConfig(CONFIG_BOOL_ANNIVERSARY))
+    {
+        if (pCurrChar->GetLevel() > 5 && !pCurrChar->HasItemCount(67000) && !pCurrChar->HasSpell(49517) && !pCurrChar->HasItemCount(67001))
+            pCurrChar->AddItem(67001, 1);
+    }
 
     // show time before shutdown if shutdown planned.
     if (sWorld.IsShutdowning())

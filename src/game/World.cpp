@@ -977,8 +977,6 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_ITEM_RARELOOT_QUALITY, "Item.RareLoot.Quality", ITEM_QUALITY_EPIC);
     setConfig(CONFIG_BOOL_PREVENT_ITEM_DATAMINING, "Item.PreventDataMining", true);
 
-
-
     setConfig(CONFIG_UINT32_MAILSPAM_EXPIRE_SECS, "MailSpam.ExpireSecs", 0);
     setConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS, "MailSpam.MaxMails", 2);
 	setConfig(CONFIG_UINT32_MAILSPAM_LEVEL, "MailSpam.Level", 1);
@@ -986,6 +984,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_MAILSPAM_MONEY, "MailSpam.Money", 0);
     setConfig(CONFIG_BOOL_MAILSPAM_ITEM, "MailSpam.Item", false);
     setConfig(CONFIG_UINT32_COD_FORCE_TAG_MAX_LEVEL, "Mails.COD.ForceTag.MaxLevel", 0);
+
+    // Presents:
+    setConfig(CONFIG_BOOL_ANNIVERSARY, "Anniversary", true);
 
     setConfigMinMax(CONFIG_UINT32_ASYNC_TASKS_THREADS_COUNT,       "AsyncTasks.Threads", 1, 1, 20);
     setConfig(CONFIG_BOOL_KICK_PLAYER_ON_BAD_PACKET,               "Network.KickOnBadPacket", false);
@@ -1167,7 +1168,7 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE, "Transmog.ReqMoneyRate", 0.0);
     setConfig(CONFIG_BOOL_STATIC_OBJECT_LOS, "StaticObjectLOS", true);
     setConfig(CONFIG_BOOL_DUAL_SPEC, "DualSpec", false);
-
+    
     setConfig(CONFIG_BOOL_HARDCORE_DISABLE_DUEL, "Hardcore.Disable.Duel", false);
 
     setConfig(CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT, "BattlegroundSV.MaxSparks", 100);
@@ -1177,6 +1178,8 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 0);
 
     setConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS, "ItemRestoreLog.QuestItems", false);
+
+    setConfigMinMax(CONFIG_INT32_KALIMDOR_TIME_OFFSET, "KalimdorTimeOffset", 0, 0, 23);
 
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
@@ -1684,6 +1687,9 @@ void World::SetInitialWorldSettings()
 
     LoginDatabase.PExecute("INSERT INTO uptime (realmid, starttime, startstring, uptime) VALUES('%u', " UI64FMTD ", '%s', 0)",
                            realmID, uint64(m_startTime), isoDate);
+
+    // Only store destroyed items for 30 days.
+    CharacterDatabase.PExecute("DELETE FROM `character_destroyed_items` WHERE (`time` + %u) < " UI64FMTD, 30 * DAY, m_startTime);
 
     m_timers[WUPDATE_AUCTIONS].SetInterval(MINUTE * IN_MILLISECONDS);
     m_timers[WUPDATE_UPTIME].SetInterval(getConfig(CONFIG_UINT32_UPTIME_UPDATE)*MINUTE * IN_MILLISECONDS);
@@ -3595,13 +3601,13 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
     }
 
     if (target)
-        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", stringType.c_str(), plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
-        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", type, chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", stringType.c_str(), chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanStr)
-        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", type, chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
-        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", type, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", stringType.c_str(), plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
 }
 
 void MigrationFile::SetAuthor(std::string const& author)

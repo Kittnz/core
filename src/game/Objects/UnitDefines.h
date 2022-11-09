@@ -415,6 +415,7 @@ enum NPCFlags
     UNIT_NPC_FLAG_STABLEMASTER          = 0x00002000,       // 100%
     UNIT_NPC_FLAG_REPAIR                = 0x00004000,       // 100%
     UNIT_NPC_FLAG_OUTDOORPVP            = 0x20000000,       // custom flag for outdoor pvp creatures || Custom flag
+    UNIT_NPC_FLAG_ITEMRESTORE           = 0x40000000,       // custom flag for vendor that restores deleted items
 };
 
 enum AutoAttackCheckResult

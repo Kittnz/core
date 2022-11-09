@@ -97,6 +97,17 @@ void BattleGroundWS::StartingEventCloseDoors()
 {
 }
 
+Team BattleGroundWS::GetWinningTeam() const
+{
+    uint32 allianceScore = GetTeamScore(ALLIANCE);
+    uint32 hordeScore = GetTeamScore(HORDE);
+
+    if (allianceScore == hordeScore)
+        return TEAM_NONE;
+
+    return allianceScore > hordeScore ? ALLIANCE : HORDE;
+}
+
 void BattleGroundWS::StartingEventOpenDoors()
 {
     OpenDoorEvent(BG_EVENT_DOOR);

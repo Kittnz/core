@@ -36,7 +36,7 @@ void PetEventAI::MoveInLineOfSight(Unit *pWho)
     if (!pWho)
         return;
 
-    if (m_creature->GetVictim())
+    if (m_creature->GetVictim() || pWho->HasHCImmunity())
         return;
 
     //Check for OOC LOS Event
@@ -55,10 +55,10 @@ void PetEventAI::MoveInLineOfSight(Unit *pWho)
     if (m_creature->IsPet() && pWho->IsCreature() && static_cast<Creature*>(pWho)->IsCivilian())
         return;
 
-    if (m_creature->CanInitiateAttack() && pWho->IsTargetable(true, m_creature->IsCharmerOrOwnerPlayerOrPlayerItself()))
+    if (m_creature->CanInitiateAttack() && m_creature->IsValidAttackTarget(pWho))
     {
         float const attackRadius = m_creature->GetAttackDistance(pWho);
-        if (m_creature->IsWithinDistInMap(pWho, attackRadius, true, false) && m_creature->IsHostileTo(pWho) &&
+        if (m_creature->IsWithinDistInMap(pWho, attackRadius, true, SizeFactor::None) && m_creature->IsHostileTo(pWho) &&
             pWho->IsInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
             AttackStart(pWho);
     }

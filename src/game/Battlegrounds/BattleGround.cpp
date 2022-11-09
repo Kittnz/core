@@ -293,13 +293,7 @@ void BattleGround::Update(uint32 diff)
         else if (m_PrematureCountDownTimer < diff)
         {
             // time's up!
-            Team winner = TEAM_NONE;
-            if (GetPlayersCountByTeam(ALLIANCE) >= GetMinPlayersPerTeam())
-                winner = ALLIANCE;
-            else if (GetPlayersCountByTeam(HORDE) >= GetMinPlayersPerTeam())
-                winner = HORDE;
-
-            EndBattleGround(winner);
+            EndBattleGround(GetWinningTeam());
             m_PrematureCountDown = false;
         }
         else if (!sBattleGroundMgr.isTesting())
@@ -376,7 +370,7 @@ void BattleGround::Update(uint32 diff)
                         if (Player* player = it->getSource())
                             ChatHandler(player).SendSysMessage("Not all players accepted queue. Match ended.");
 
-                    EndBattleGround(TEAM_NONE);
+                    EndNow();
                     return;
                 }
 
@@ -685,7 +679,8 @@ void BattleGround::EndBattleGround(Team winner)
         // World of Warcraft Client Patch 1.8.4 (2005-12-06)
         // - Battles must now last at least ten minutes after the start of the 
         //   battle in order for the losing team to receive a Mark of Honor.
-        else if (GetStartTime() > 10 * MINUTE * IN_MILLISECONDS)
+        //   This was reverted and will stay reverted for now.
+        else
             RewardMark(pPlayer, false);
 
         pPlayer->CombatStopWithPets(true);

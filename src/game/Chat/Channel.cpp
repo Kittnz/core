@@ -62,7 +62,7 @@ Channel::Channel(std::string const& name)
             m_announce = false;
         }
 
-        if (m_name == u8"World" || m_name == u8"Alliance" || m_name == u8"Horde")
+        if (m_name == u8"World" || m_name == u8"Ru" || m_name == u8"Toogle" || m_name == u8"Roleplay")
         {
             m_flags |= CHANNEL_FLAG_GENERAL;
             m_announce = false;

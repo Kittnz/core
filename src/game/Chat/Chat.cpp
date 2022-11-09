@@ -243,7 +243,9 @@ ChatCommand * ChatHandler::getCommandTable()
         { "auras",          SEC_DEVELOPER,  false, &ChatHandler::HandleListAurasCommand,           "", nullptr },
         { "creature",       SEC_DEVELOPER,  true,  &ChatHandler::HandleListCreatureCommand,        "", nullptr },
         { "object",         SEC_DEVELOPER,  true,  &ChatHandler::HandleListObjectCommand,          "", nullptr },
-        { nullptr,       0,                  false, nullptr,                                           "", nullptr }
+        { "buybackitems",   SEC_OBSERVER,   true,  &ChatHandler::HandleListBuybackItemsCommand,    "", nullptr },
+        { "destroyeditems", SEC_OBSERVER,   true,  &ChatHandler::HandleListDestroyedItemsCommand,  "", nullptr },
+        { nullptr,       0,                  false, nullptr,                                       "", nullptr }
     };
 
 
@@ -307,6 +309,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand mmapsCommandTable[] =
+    {
+        { "path",            SEC_DEVELOPER,     false, &ChatHandler::HandleMmapsPathCommand,         "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand creatureGroupsCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcGroupAddCommand,         "", nullptr },
@@ -319,6 +327,7 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand npcCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
+        { "summon",         SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSummonCommand,           "", nullptr},
         { "additem",        SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddVendorItemCommand,    "", nullptr },
         { "scale",          SEC_DEVELOPER,     false, &ChatHandler::HandleNpcScaleCommand,    "", nullptr },
         { "addweapon",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddWeaponCommand,        "", nullptr },
@@ -595,6 +604,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "itemmove",       SEC_DEVELOPER,       false, &ChatHandler::HandleItemMoveCommand,            "", nullptr },
         { "cooldown",       SEC_DEVELOPER,       false, &ChatHandler::HandleCooldownCommand,            "", nullptr },
         { "unlearn",        SEC_DEVELOPER,       false, &ChatHandler::HandleUnLearnCommand,             "", nullptr },
+        { "unlearnoffline", SEC_DEVELOPER,       false, &ChatHandler::HandleUnLearnOfflineCommand,      "", nullptr },
         { "distance",       SEC_DEVELOPER,       false, &ChatHandler::HandleGetDistanceCommand,         "", nullptr },
         { "recall",         SEC_DEVELOPER,        false, &ChatHandler::HandleRecallCommand,              "", nullptr },
         { "save",           SEC_DEVELOPER,       false, &ChatHandler::HandleSaveCommand,                "", nullptr },
@@ -668,6 +678,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "hcmessages",     SEC_PLAYER,          false, &ChatHandler::HandleHCMessagesCommand,          "", nullptr },
         { "minchatlevel",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleMinChatLevelCommand,             "", nullptr },
         { "pvp",            SEC_DEVELOPER,       false, &ChatHandler::HandlePvPCommand,                  "", nullptr},
+        { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                         "", mmapsCommandTable },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
@@ -2484,6 +2495,21 @@ GameObject* ChatHandler::GetGameObjectWithGuid(uint32 lowguid, uint32 entry)
     Player* pl = m_session->GetPlayer();
 
     return pl->GetMap()->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, entry, lowguid));
+}
+
+GameObject* ChatHandler::GetGameObjectWithGuidGlobal(uint32 lowguid, const GameObjectData* data) const
+{
+    if (!m_session)
+        return nullptr;
+
+    const auto player = m_session->GetPlayer();
+    const auto playerMap = player->GetMap();
+
+    const auto goMap = sMapMgr.FindMap(data->position.mapId);
+
+    const auto usedMap = goMap ? goMap : playerMap;
+
+    return usedMap->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, data->id, lowguid));
 }
 
 enum SpellLinkType

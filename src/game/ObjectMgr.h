@@ -448,7 +448,7 @@ enum SkillRangeType
     SKILL_RANGE_NONE,                                       // 0..0 always
 };
 
-SkillRangeType GetSkillRangeType(SkillLineEntry const *pSkill, bool racial);
+SkillRangeType GetSkillRangeType(SkillLineEntry const* skill, SkillRaceClassInfoEntry const* rcEntry);
 
 #define MAX_PLAYER_NAME          12                         // max allowed by client name length
 #define MAX_INTERNAL_PLAYER_NAME 15                         // max server internal player name length ( > MAX_PLAYER_NAME for support declined names )
@@ -511,6 +511,7 @@ struct PlayerCacheData
     float fPosZ;
     float fOrientation;
     bool bInFlight;
+    uint8 uiHardcoreStatus;
 };
 typedef std::map<uint32 /*guid*/, PlayerCacheData*> PlayerCacheDataMap;
 
@@ -566,13 +567,14 @@ enum PermVariables
     VAR_EARTH_KILLS = 30014,
     VAR_AIR_KILLS   = 30015,
     VAR_INVAS_TIMER = 30016,    // next invasion time
-    VAR_DELAY_FIRE  = 30017,    // event update cycles to delay before event stop
+    VAR_DELAY_FIRE  = 30017,    // time at which boss event should be stopped
     VAR_DELAY_WATER = 30018,
     VAR_DELAY_EARTH = 30019,
     VAR_DELAY_AIR   = 30020,
 
-    STAGE_BOSS      = 5,
-    STAGE_BOSS_DOWN = 6,
+    STAGE_BOSS         = 5,     // boss is spawned
+    STAGE_BOSS_DOWN    = 6,     // boss is dead, event stop time not yet set by core
+    STAGE_BOSS_DESPAWN = 7,     // boss is dead, waiting to stop event
 
     EVENT_IND_FIRE  = 0,
     EVENT_IND_AIR   = 1,
@@ -1401,14 +1403,14 @@ class ObjectMgr
         PlayerCacheData* GetPlayerDataByName(std::string const& name) const;
         void GetPlayerDataForAccount(uint32 accountId, std::list<PlayerCacheData*>& data) const;
         PlayerCacheData* InsertPlayerInCache(Player *pPlayer);
-        PlayerCacheData* InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 uiGender, uint32 account, std::string const& name, uint32 level, uint32 zoneId);
+        PlayerCacheData* InsertPlayerInCache(uint32 lowGuid, uint32 race, uint32 _class, uint32 uiGender, uint32 account, std::string const& name, uint32 level, uint32 zoneId, uint8 hardcoreStatus);
         void DeletePlayerFromCache(uint32 lowGuid);
         void ChangePlayerNameInCache(uint32 lowGuid, std::string const& oldName, std::string const& newName);
         void UpdatePlayerCachedPosition(Player *pPlayer);
         void UpdatePlayerCachedPosition(uint32 lowGuid, uint32 mapId, float posX, float posY, float posZ, float o, bool inFlight);
         void UpdatePlayerCachedPosition(PlayerCacheData* data, uint32 mapId, float posX, float posY, float posZ, float o, bool inFlight);
         void UpdatePlayerCache(Player* pPlayer);
-        void UpdatePlayerCache(PlayerCacheData* data, uint32 race, uint32 _class, uint32 gender, uint32 accountId, std::string const& name, uint32 level, uint32 zoneId);
+        void UpdatePlayerCache(PlayerCacheData* data, uint32 race, uint32 _class, uint32 gender, uint32 accountId, std::string const& name, uint32 level, uint32 zoneId, uint8 hardcoreStatus);
 
         PlayerCacheDataMap m_playerCacheData;
 

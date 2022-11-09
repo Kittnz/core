@@ -78,7 +78,7 @@ enum ClassFlag
     CF_WARRIOR_DEMORALIZING_SHOUT           = 17,   // CM0 00020000
     CF_WARRIOR_INTIMIDATING_SHOUT           = 18,   // CM0 00040000
     CF_WARRIOR_CHALLENGING_SHOUT            = 19,   // CM0 00080000
-    CF_WARRIOR_INNER_RAGE                   = 20,   // CM0 00100000
+    CF_WARRIOR_INNER_RAGE                   = 20,   // CM0 00100000 Reused for Improved Disciplines to reduce Retaliation cooldown.
     CF_WARRIOR_SLAM                         = 21,   // CM0 00200000
     CF_WARRIOR_CLEAVE                       = 22,   // CM0 00400000
     CF_WARRIOR_STANCES                      = 23,   // CM0 00800000
@@ -155,7 +155,7 @@ enum ClassFlag
     CF_PRIEST_HOLY_FIRE                     = 20,   // CM0 00100000
     CF_PRIEST_STARSHARDS                    = 21,   // CM0 00200000
     CF_PRIEST_HOLY_NOVA1                    = 22,   // CM0 00400000
-    CF_PRIEST_MIND_FLAY                     = 23,   // CM0 00800000
+    CF_PRIEST_MIND_FLAY                     = 23,   // CM0 00800000 Also used for Pain Spike (Custom)
     CF_PRIEST_DESPERATE_PRAYER              = 24,   // CM0 01000000
     CF_PRIEST_DEVOURING_PLAGUE              = 25,   // CM0 02000000
     CF_PRIEST_MIND_VISION                   = 26,   // CM0 04000000

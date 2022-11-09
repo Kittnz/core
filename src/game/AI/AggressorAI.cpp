@@ -37,7 +37,7 @@ void AggressorAI::MoveInLineOfSight(Unit *u)
     if (m_creature->GetVictim() && !m_creature->GetMap()->IsDungeon())
         return;
 
-    if (!m_creature->IsWithinDistInMap(u, m_creature->GetAttackDistance(u), true, false))
+    if (!m_creature->IsWithinDistInMap(u, m_creature->GetAttackDistance(u), true, SizeFactor::None) || u->HasHCImmunity())
         return;
 
     if (m_creature->CanInitiateAttack() && u->IsTargetable(true, false) && m_creature->IsHostileTo(u) &&

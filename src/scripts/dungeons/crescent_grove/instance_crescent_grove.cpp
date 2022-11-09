@@ -29,19 +29,19 @@ struct instance_crescent_grove : public ScriptedInstance
         switch (pCreature->GetEntry())
         {
         case grovetender_engryss:
-            pCreature->PlayDirectMusic(30268);
+            pCreature->PlayDirectSound(30268);
             pCreature->MonsterYell("I am the leader of the tribes, me! The Groveweald shall destroy everyone that gets in the way!");
             break;
         case keeper_ranatos:
-            pCreature->PlayDirectMusic(30256);
+            pCreature->PlayDirectSound(30256);
             pCreature->MonsterYell("What? Who..Who are you? They wouldn't send you! Ancients, to my side!");
             break;
         case fenektis_the_deceiver:
-            pCreature->PlayDirectMusic(30252);
+            pCreature->PlayDirectSound(30252);
             pCreature->MonsterYell("We will serve at the Master's will!");
             break;
         case master_raxxieth:
-            pCreature->PlayDirectMusic(30271);
+            pCreature->PlayDirectSound(30271);
             pCreature->MonsterYell("Do you think you can withstand the might of the Burning Legion?");
             break;
         }
@@ -52,19 +52,19 @@ struct instance_crescent_grove : public ScriptedInstance
         switch (pCreature->GetEntry())
         {
         case grovetender_engryss:
-            pCreature->PlayDirectMusic(30270);
+            pCreature->PlayDirectSound(30270);
             pCreature->MonsterYell("I.. I can see clearly now.. The madness... It's... Over...");
             break;
         case keeper_ranatos:
-            pCreature->PlayDirectMusic(30258);
+            pCreature->PlayDirectSound(30258);
             pCreature->MonsterYell("We must.. Stop.. The shadow...");
             break;
         case fenektis_the_deceiver:
-            pCreature->PlayDirectMusic(30253);
+            pCreature->PlayDirectSound(30253);
             pCreature->MonsterYell("You think.. This.... Is the end?");
             break;
         case master_raxxieth:
-            pCreature->PlayDirectMusic(30273);
+            pCreature->PlayDirectSound(30273);
             pCreature->MonsterYell("My death.. Means little in the grand scheme, mortals... Drink down your victory... It will mean nothing... In the end...");
             break;
         }
