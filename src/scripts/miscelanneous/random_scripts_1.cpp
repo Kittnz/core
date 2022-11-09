@@ -65,7 +65,8 @@ bool ItemUseSpell_character_rename(Player* pPlayer, Item* pItem, const SpellCast
 #define ALICE_GROW_RBOUNDARY 1.15f
 #define ALICE_BELITTLE_LBOUNDARY 0.85f
 #define ALICE_BELITTLE_RBOUNDARY 0.95f
-bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) {
+bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const SpellCastTargets&) 
+{
     float scale;
     float taurenVariance = pPlayer->GetRace() == RACE_TAUREN ? (pPlayer->GetGender() == GENDER_MALE ? 0.35f : 0.25f) : 0;
     float currentNormalizedScale = pPlayer->GetObjectScale() - taurenVariance;
@@ -74,7 +75,7 @@ bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const Spe
     {
         if (currentNormalizedScale == ALICE_BELITTLE_LBOUNDARY)
         {
-            ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't be smaller!|r");
+            ChatHandler(pPlayer).SendSysMessage("|cffff8040You can't be smaller!|r");
             return true;
         }
 
@@ -84,7 +85,7 @@ bool ItemUseSpell_alice_wonderland_scale(Player* pPlayer, Item* pItem, const Spe
     {
         if (currentNormalizedScale == ALICE_GROW_RBOUNDARY)
         {
-            ChatHandler(pPlayer).PSendSysMessage("|cffff8040You can't grow more!|r");
+            ChatHandler(pPlayer).SendSysMessage("|cffff8040You can't grow more!|r");
             return true;
         }
 
@@ -229,7 +230,9 @@ bool ItemUseSpell_hairdye(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 
 bool ItemUseSpell_item_radio(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-    if (!pPlayer) return false;
+    if (!pPlayer) 
+        return false;
+
     float x, y, z;
     pPlayer->GetSafePosition(x, y, z);
     x += 2.0F * cos(pPlayer->GetOrientation());
@@ -625,7 +628,8 @@ bool GossipSelect_npc_surgeon_go(Player* pPlayer, Creature* pCreature, uint32 ui
 
 bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-	if (!pPlayer) return false;	
+	if (!pPlayer) 
+        return false;	
 
 	if (!pPlayer->RestoreSuspendedWorldBuffs())
 	{ 
@@ -634,8 +638,7 @@ bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* 
 			DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 			{
 				player->RemoveSpellCooldown(spellId, true);
-			}
-			);
+			});
 		}
 	}
 	
@@ -644,7 +647,8 @@ bool ItemUseSpell_item_supercharged_chronoboon_displacer(Player* pPlayer, Item* 
 
 bool ItemUseSpell_item_chronoboon_displacer(Player* pPlayer, Item* pItem, const SpellCastTargets&)
 {
-	if (!pPlayer) return false;
+	if (!pPlayer) 
+        return false;
 
 	if (!pPlayer->SuspendWorldBuffs())
 	{
@@ -708,8 +712,7 @@ bool ItemUseSpell_item_warlock_soulwell_ritual(Player* pPlayer, Item* pItem, con
 		DoAfterTime(pPlayer, 1500, [player = pPlayer, spellId = spellInfo->Id]()
 		{
 			player->RemoveSpellCooldown(spellId, true);
-		}
-		);
+		});
 	}
 	return true;
 }
@@ -1918,7 +1921,7 @@ bool GossipHello_title_masker(Player* pPlayer, Creature* pCreature)
     if (pPlayer->IsIgnoringTitles())
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "I'm ready to show my rank again!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
     else if (pPlayer->GetMoney() >= 50000)
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Yes... I want some privacy, can you hide my rank? I'll give you the gold.\n\nWARNING: THIS WILL COST YOU 5 GOLD!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
     pPlayer->SEND_GOSSIP_MENU(90003, pCreature->GetGUID());
     return true;
 }
@@ -4496,10 +4499,10 @@ bool GOHello_go_kheyna_wormhole(Player* pPlayer, GameObject* pGo)
                 return true;
         if (pPlayer->GetQuestStatus(80409) == QUEST_STATUS_COMPLETE)
         {
-            if (pPlayer->FindNearestCreature(10667, 15.0F))
+            if (pPlayer->FindNearestCreature(65019, 15.0F))
                 return true;
 
-            Creature* chromie = pGo->SummonCreature(10667, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
+            Creature* chromie = pGo->SummonCreature(65019, pGo->GetPositionX() + 1.0F, pGo->GetPositionY() + 1.0F, pGo->GetPositionZ(), pGo->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 60 * 1000);
 
             DoAfterTime(pPlayer, 2 * IN_MILLISECONDS,
                 [CreatureGuid = chromie->GetObjectGuid(), player = pPlayer]()
@@ -4587,6 +4590,32 @@ bool ItemUseSpell_item_gnome_enlargement(Player* pPlayer, Item* pItem, const Spe
         pPlayer->GetSession()->SendNotification("GREAT NEWS!!! YOU ARE JELLY NOW!");
         pPlayer->SetObjectScale(0.6F);
         pPlayer->SetDisplayId(12349);
+        return true;
+    }
+
+}
+
+
+bool ItemUseSpell_item_tauren_shrink(Player* pPlayer, Item* pItem, const SpellCastTargets&)
+{
+    if (pPlayer->GetRace() == RACE_TAUREN)
+    {
+        //taurens by default do not have 1.0 as scale so this shrinks them.
+        if (pPlayer->GetObjectScale() < DEFAULT_TAUREN_FEMALE_SCALE)
+        {
+            pPlayer->GetSession()->SendNotification("You can't shrink more!");
+            return false;
+        }
+        pPlayer->SetObjectScale(pPlayer->GetGender() == GENDER_MALE ? 1.0f : 0.9f);
+        return true;
+    }
+    else
+    {
+        if (pPlayer->GetHealth() >= pPlayer->GetMaxHealth() / 10)
+        {
+            pPlayer->DealDamage(pPlayer, pPlayer->GetMaxHealth() / 10, nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_SHADOW, nullptr, false);
+            pPlayer->Say("Ouch..", LANG_UNIVERSAL);
+        }
         return true;
     }
 
@@ -4687,11 +4716,28 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
 }
 
 // Scarlet Monastery raid attunement quest scripts:
+#define QUEST_YOUNG_AND_FOOLISH 80702
 
 bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(80702) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    if (pPlayer->GetQuestStatus(QUEST_YOUNG_AND_FOOLISH) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
+    {
+        switch (pCreature->GetEntry())
+        {
+        case 341: 
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[0] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case 956:
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[1] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        case 344:
+            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[2] == 0)
+                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+            break;
+        }
+    }
 
     if (pPlayer->GetQuestStatus(80721) == QUEST_STATUS_INCOMPLETE) // Grim News
         switch (pCreature->GetEntry())
@@ -5851,117 +5897,6 @@ bool QuestAccept_npc_truthseeker_magellas(Player* pPlayer, Creature* pQuestGiver
 }
 
 
-enum UldumQuestItems
-{
-    ITEM_ULDUM_FIRST_PLATE  = 60102,
-    ITEM_ULDUM_SECOND_PLATE = 60103,
-};
-
-constexpr auto STONE_WATCHER_OF_NORGANNON = 7918;
-constexpr auto PEDESTAL_BUNNY = 80969;
-constexpr auto QUEST_SEEING_WHAT_HAPPENS_A = 2946;
-constexpr auto QUEST_SEEING_WHAT_HAPPENS_H = 2966;
-constexpr auto QUEST_GATES_OF_ULDUM_A = 40106;
-constexpr auto QUEST_ULDUM_AWAITS_H = 40114;
-
-bool GossipHelloGO_pedestal_of_uldum(Player* player, GameObject* pGo)
-{
-    bool showQuestMenu = false;
-    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_A))
-        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
-            showQuestMenu = true;
-
-    if (auto vQuestStatus = player->GetQuestStatusData(QUEST_SEEING_WHAT_HAPPENS_H))
-        if (vQuestStatus->m_status == QUEST_STATUS_COMPLETE && !vQuestStatus->m_rewarded)
-            showQuestMenu = true;
-
-    // Support vanilla quest chain for lower levels.
-    if (showQuestMenu)
-    {
-        player->PrepareQuestMenu(pGo->GetObjectGuid());
-        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-        return true;
-    }
-
-    if (player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_A) || player->GetQuestRewardStatus(QUEST_SEEING_WHAT_HAPPENS_H) && !pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f) && !pGo->FindNearestCreature(80970, 10.f))
-    {
-        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Summon Stone Watcher", GOSSIP_SENDER_MAIN, (GOSSIP_ACTION_INFO_DEF + 2));
-        player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-    }
-
-    // Pedestal bunny is killed when Ostarius dies and has a 7-day respawn timer. Acts as an easy
-    // way to control when the boss is eligible to be spawned again.
-    if ((player->GetQuestStatus(QUEST_GATES_OF_ULDUM_A) == QUEST_STATUS_COMPLETE || player->GetQuestStatus(QUEST_ULDUM_AWAITS_H) == QUEST_STATUS_COMPLETE))
-    {
-        if (pGo->FindNearestCreature(PEDESTAL_BUNNY, 10.f, true))
-            player->PrepareQuestMenu(pGo->GetObjectGuid());
-        else
-            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, "<Pedestal is regaining energy...>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-    player->SEND_GOSSIP_MENU(90630, pGo->GetGUID());
-    
-    return true;
-}
-
-bool GossipSelectGO_pedestal_of_uldum(Player* player, GameObject* pGo, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-        pGo->SummonCreature(STONE_WATCHER_OF_NORGANNON, -9619.19f, -2815.02f, 10.8949f, 0.f, TEMPSUMMON_TIMED_DESPAWN, (60 * IN_MILLISECONDS));
-
-    player->CLOSE_GOSSIP_MENU();
-    return true;
-}
-
-bool QuestAcceptGO_pedestal_of_uldum(Player* player, GameObject* pGo, const Quest* pQuest)
-{
-    if (!player)
-        return false;
-
-    bool first_item_added = false;
-    bool second_item_added = false;
-
-    if (pQuest->GetQuestId() == 40107 || pQuest->GetQuestId() == 40115) //Gate Keeper  //Guardian of the Gate
-    {
-        if (!player->HasItemCount(ITEM_ULDUM_FIRST_PLATE, 1))
-        {
-            if (player->AddItem(ITEM_ULDUM_FIRST_PLATE))
-                first_item_added = true;
-        }
-        else
-            first_item_added = true;
-
-        if (!player->HasItemCount(ITEM_ULDUM_SECOND_PLATE, 1))
-        {
-            if (player->AddItem(ITEM_ULDUM_SECOND_PLATE))
-                second_item_added = true;
-        }
-        else
-            second_item_added = true;
-
-        if (!first_item_added || !second_item_added)
-        {
-            player->RemoveQuest(40107);
-            player->RemoveQuest(40115);
-            player->SetQuestStatus(40107, QUEST_STATUS_NONE);
-            player->SetQuestStatus(40115, QUEST_STATUS_NONE);
-            player->GetSession()->SendNotification("Your bags are full!");
-            return false;
-        }
-
-        // Summon pedestal NPC to start encounter RP phase.
-        if (Creature* c = pGo->SummonCreature(80970, -9619.19f, -2815.02f, 10.8949f, 2.23f, TEMPSUMMON_MANUAL_DESPAWN))
-        {
-            // If vanilla quest line NPC is on-top of the pedestal, despawn him.
-            if (auto stoneWatcher = pGo->FindNearestCreature(STONE_WATCHER_OF_NORGANNON, 10.f, true))
-                stoneWatcher->DeleteLater();
-
-            c->SetInCombatWith(player); // Used to pass along event invoker.
-            pGo->UseDoorOrButton();
-        }
-    }
-    return false;
-}
-
 bool QuestRewarded_npc_magus_bromley(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -6623,13 +6558,6 @@ void AddSC_random_scripts_1()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "GO_pedestal_of_uldum";
-    newscript->pGOGossipHello = &GossipHelloGO_pedestal_of_uldum;
-    newscript->pGOGossipSelect = &GossipSelectGO_pedestal_of_uldum;
-    newscript->pGOQuestAccept = &QuestAcceptGO_pedestal_of_uldum;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "npc_truthseeker_magellas";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_truthseeker_magellas;
     newscript->RegisterSelf();
@@ -6806,6 +6734,11 @@ void AddSC_random_scripts_1()
     newscript->pItemUseSpell = &ItemUseSpell_item_gnome_enlargement;
     newscript->RegisterSelf();
 
+    newscript = new Script;
+    newscript->Name = "item_tauren_shrink";
+    newscript->pItemUseSpell = &ItemUseSpell_item_tauren_shrink;
+    newscript->RegisterSelf();
+    
     newscript = new Script;
     newscript->Name = "npc_norvok";
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_norvok;

@@ -330,7 +330,8 @@ enum AuraType
     // Custom
     SPELL_AURA_AURA_SPELL = 192, // Adds the auras of a spell while this aura is active.
     SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT = 193, // Needed for Spirit Link.
-    TOTAL_AURAS=194
+    SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN = 194, // Needed for Pet Avoidance.
+    TOTAL_AURAS=195
 };
 
 enum AreaAuraType

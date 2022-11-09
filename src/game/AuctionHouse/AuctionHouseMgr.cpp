@@ -42,18 +42,13 @@ INSTANTIATE_SINGLETON_1(AuctionHouseMgr);
 
 bool IsPlayerHardcore(uint32 lowGuid)
 {
-    QueryResult* result = CharacterDatabase.PQuery("SELECT mortality_status FROM characters WHERE guid='%u'", lowGuid);
-    uint32 hardcoreStatus = 0;
-    if (result)
-    {
-        Field* fields = result->Fetch();
-        hardcoreStatus = fields[0].GetUInt32();
-        delete result;
-        return false;
-    }
+    uint8 hardcoreStatus = 0;
+    if (PlayerCacheData* pCache = sObjectMgr.GetPlayerDataByGUID(lowGuid))
+        hardcoreStatus = pCache->uiHardcoreStatus;
 
     if (hardcoreStatus == HARDCORE_MODE_STATUS_ALIVE || hardcoreStatus == HARDCORE_MODE_STATUS_DEAD)
         return true;
+
     return false;
 }
 
@@ -85,6 +80,26 @@ bool AuctionHouseObject::RemoveAuction(AuctionEntry* entry)
     }
     return false;
 }
+
+void AuctionHouseObject::RemoveAllAuctions(Player* player)
+{
+    std::vector<AuctionEntry*> deletableEntries;
+    auto bounds = AccountAuctionMap.equal_range(player->GetSession()->GetAccountId());
+    for (auto itr = bounds.first; itr != bounds.second; ++itr)
+    {
+        AuctionEntry* auctionEntry = itr->second;
+        if (auctionEntry && auctionEntry->owner == player->GetGUIDLow())
+        {
+            deletableEntries.push_back(auctionEntry);
+        }
+    }
+
+    for (auto& entry : deletableEntries)
+    {
+        RemoveAuction(entry);
+    }
+}
+
 
 void AuctionHouseObject::AddAuction(AuctionEntry *ah)
 {

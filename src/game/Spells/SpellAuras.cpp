@@ -257,7 +257,8 @@ pAuraHandler AuraHandler[TOTAL_AURAS] =
     &Aura::HandleAuraModUseNormalSpeed,                     //191 SPELL_AURA_USE_NORMAL_MOVEMENT_SPEED
     // Nostalrius - custom
     &Aura::HandleAuraAuraSpell,
-    &Aura::HandleNoImmediateEffect,                         //193 SPELL_AURA_SPLIT_DAMAGE_PCT       implemented in Unit::CalculateAbsorbAndResist
+    &Aura::HandleNoImmediateEffect,                         //193 SPELL_AURA_SPLIT_DAMAGE_GROUP_PCT       implemented in Unit::CalculateAbsorbAndResist
+    &Aura::HandleNoImmediateEffect,                         //194 SPELL_AURA_MOD_AOE_DAMAGE_PERCENT_TAKEN implemented in Unit::MeleeDamageBonusTaken and Unit::SpellDamageBonusTaken
 };
 
 static AuraType const frozenAuraTypes[] = { SPELL_AURA_MOD_ROOT, SPELL_AURA_MOD_STUN, SPELL_AURA_NONE };
@@ -498,13 +499,18 @@ void Aura::Update(uint32 diff)
 {
     if (m_isPeriodic)
     {
-        m_periodicTimer -= diff;
+        m_periodicTimer -= (int32)(diff & 0x7FFFFFFF);
 
         if (m_periodicTimer <= 0) // tick also at m_periodicTimer==0 to prevent lost last tick in case max m_duration == (max m_periodicTimer)*N
         {
             // update before applying (aura can be removed in TriggerSpell or PeriodicTick calls)
-            m_periodicTimer += m_modifier.periodictime;
-            ++m_periodicTick;                               // for some infinity auras in some cases can overflow and reset
+            // dont allow timer to drift off to huge negative value over time for permanent periodic auras on mobs
+            if (m_periodicTimer < -m_modifier.periodictime)
+                m_periodicTimer = 0;
+            else
+                m_periodicTimer += m_modifier.periodictime;
+
+            ++m_periodicTick; // for some infinity auras in some cases can overflow and reset
             PeriodicTick();
         }
     }
@@ -784,10 +790,11 @@ void PersistentAreaAura::Update(uint32 diff)
     // Note: Unit may have been removed from the world (mid-teleport) during this
     // update (since the caster updates area auras). We shouldn't be ticking it
     // when the target is out of range anyway.
+    if (GetRealCaster())
+        Aura::Update(diff);
+
     if (remove)
         GetTarget()->RemoveAura(GetId(), GetEffIndex());
-    else
-        Aura::Update(diff);
 }
 
 void Aura::ApplyModifier(bool apply, bool Real, bool skipCheckExclusive)
@@ -854,7 +861,8 @@ bool Aura::CanProcFrom(SpellEntry const *spell, uint32 EventProcEx, uint32 procE
             else // Passive spells hits here only if resist/reflect/immune/evade
             {
                 // Passive spells can`t trigger if need hit (exclude cases when procExtra include non-active flags)
-                if ((EventProcEx & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT) & procEx) && !active)
+                if ((EventProcEx & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT) & procEx) && !active &&
+                   !(EventProcEx & (PROX_EX_NO_DAMAGE_MASK) & procEx))
                     return false;
             }
         }
@@ -1299,7 +1307,7 @@ void Aura::TriggerSpell()
                         int32 FRTriggerBasePoints = int32(lRage * LifePerRage / 10);
 
                         //CUSTOM 10% stamina bonus.
-                        FRTriggerBasePoints += target->GetStat(STAT_STAMINA) / 10;
+                        FRTriggerBasePoints += int32((lRage / 10.0f) * (target->GetStat(STAT_STAMINA) / 10.0f));
 
                         target->CastCustomSpell(target, 22845, &FRTriggerBasePoints, nullptr, nullptr, true, nullptr, this);
                         return;
@@ -1620,13 +1628,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 switch (GetId())
                 {
-                    case 20230: // retaliation for die by the sword
-                    {
-                        auto caster = GetCaster();
-                        if (caster && caster->HasSpell(45584))
-                            caster->CastSpell(caster, 45589u, true);
-                    }break;
-
                     case 45568: // Proclaim Champion (Custom)
                     {
                         auto caster = GetCaster();
@@ -1763,6 +1764,20 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     {
                         m_isPeriodic = true;
                         m_modifier.periodictime = 3000;
+                        break;
+                    }
+                }
+                break;
+            }
+            case SPELLFAMILY_WARRIOR:
+            {
+                switch (GetId())
+                {
+                    case 20230: // retaliation for die by the sword
+                    {
+                        auto caster = GetCaster();
+                        if (caster && caster->HasSpell(45584))
+                            caster->CastSpell(caster, 45589u, true);
                         break;
                     }
                 }
@@ -2167,12 +2182,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             if (target->GetTypeId() == TYPEID_PLAYER && GetSpellProto()->SpellIconID == 1563)
             {
                 ((Player*)target)->UpdateAttackPowerAndDamage();
-                return;
-            }
-            // Enrage
-            if ((target->GetTypeId() == TYPEID_PLAYER) && (GetId() == 5229))
-            {
-                ((Player*)target)->UpdateArmor(); // Spell managed in UpdateArmor()
                 return;
             }
             break;
@@ -2693,6 +2702,7 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                             display_id = gender == GENDER_MALE ?
                                         10136 :
                                         10147 ;
+                            mod_x = DEFAULT_GNOME_SCALE / target->GetScaleForDisplayId(target->GetNativeDisplayId());
                             break;
                         case RACE_HUMAN:
                             display_id = gender == GENDER_MALE ?
@@ -2723,12 +2733,12 @@ void Aura::HandleAuraTransform(bool apply, bool Real)
                             if (gender == GENDER_MALE)
                             {
                                 display_id = 10148;
-                                mod_x = DEFAULT_TAUREN_MALE_SCALE;
+                                mod_x = DEFAULT_TAUREN_MALE_SCALE / target->GetScaleForDisplayId(target->GetNativeDisplayId());
                             }
                             else
                             {
                                 display_id = 10149;
-                                mod_x = DEFAULT_TAUREN_FEMALE_SCALE;
+                                mod_x = DEFAULT_TAUREN_FEMALE_SCALE / target->GetScaleForDisplayId(target->GetNativeDisplayId());
                             }
                             break;
                         case RACE_HIGH_ELF:
@@ -4017,6 +4027,7 @@ void Aura::HandleAuraModIncreaseMountedSpeed(bool /*apply*/, bool Real)
         {
             switch (GetId())
             {
+
                 // PvP mounts should always have 100% speed.
                 case 22717:
                 case 22718:
@@ -4061,6 +4072,22 @@ void Aura::HandleAuraModIncreaseSwimSpeed(bool /*apply*/, bool Real)
     // all applied/removed only at real aura add/remove
     if (!Real)
         return;
+
+    if (Player* player = GetTarget()->ToPlayer(); GetId() == 30174 && player) // turtle mount swimming speed. Half of normal speed
+    {
+        uint32 skillValue = player->GetSkillValue(762);
+
+        switch (skillValue)
+        {
+            case 0: m_modifier.m_amount = static_cast<int32>(ceil(player->GetLevel() / 4)); break;
+            case 75: m_modifier.m_amount = 30; break;
+            case 150: m_modifier.m_amount = 50; break;
+            default:
+                player->Unmount();
+                player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
+                return;
+        }
+    }
 
     GetTarget()->UpdateSpeed(MOVE_SWIM, false, GetTarget()->GetSpeedRatePersistance(MOVE_SWIM));
 }
@@ -7872,7 +7899,8 @@ void SpellAuraHolder::CalculateForDebuffLimit()
     case 15326: // Blackout (Rank 5)
     case 15407: // Mind Flay
     case 16922: // Starfire Stun
-    case 17364: // Stormstrike
+    case 17364: // Stormstrike (Rank 1)
+    case 45521: // Stormstrike (Rank 2)
     case 16914: // Hurricane
     case 17794: // Shadow Vulnerability (Rank 1)
     case 17798: // Shadow Vulnerability (Rank 2)

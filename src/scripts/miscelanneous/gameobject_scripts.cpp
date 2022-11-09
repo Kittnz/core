@@ -368,57 +368,6 @@ bool GOHello_go_restes_sha_ni(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
-/*######
-## go_Hive_Regal_Glyphed_Crystal
-## go_Hive_Ashi_Glyphed_Crystal
-## go_Hive_Zora_Glyphed_Crystal
-######*/
-
-enum
-{
-    QUEST_GLYPH_CHASING = 8309,
-    ITEM_GEOLOGIST_TRANSCRIPTION_KIT = 20453,
-    ITEM_HIVE_ZORA_RUBBING = 20454,
-    ITEM_HIVE_ASHI_RUBBING = 20455,
-    ITEM_HIVE_REGAL_RUBBING = 20456
-};
-
-template <int REWARD_ITEM>
-bool GOHello_go_Hive_Glyphed_Crystal(Player* pPlayer, GameObject* pGo)
-{
-    if (!pPlayer || pGo)
-        return true;
-
-    pPlayer->PlayerTalkClass->CloseGossip();
-    pPlayer->PlayerTalkClass->ClearMenus();
-
-    if (pPlayer->GetQuestStatus(QUEST_GLYPH_CHASING) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(ITEM_GEOLOGIST_TRANSCRIPTION_KIT, 1) && !pPlayer->HasItemCount(REWARD_ITEM, 1))
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "<Use the transcription device to gather a rubbing.>", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-    }
-
-    pPlayer->SEND_GOSSIP_MENU(7770, pGo->GetGUID());
-
-    return true;
-}
-
-template <int REWARD_ITEM>
-bool GOSelect_go_Hive_Glyphed_Crystal(Player* pPlayer, GameObject* /*pGo*/, uint32 sender, uint32 action)
-{
-    if (!pPlayer)
-        return true;
-
-    pPlayer->PlayerTalkClass->CloseGossip();
-    pPlayer->PlayerTalkClass->ClearMenus();
-
-    if (pPlayer->GetQuestStatus(QUEST_GLYPH_CHASING) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(ITEM_GEOLOGIST_TRANSCRIPTION_KIT, 1) && !pPlayer->HasItemCount(REWARD_ITEM, 1))
-    {
-        pPlayer->AddItem(REWARD_ITEM, 1);
-    }
-
-    return true;
-}
-
 /*####
 ## go_bells
 ####*/
@@ -622,6 +571,45 @@ GameObjectAI* GetAI_go_darkmoon_faire_music(GameObject* gameobject)
     return new go_darkmoon_faire_music(gameobject);
 }
 
+/*####
+## go_roleplay_event
+####*/
+
+struct go_roleplay_event : public GameObjectAI
+{
+    go_roleplay_event(GameObject* go) : GameObjectAI(go), m_warnTimer(0)
+    {
+    }
+
+    uint32 m_warnTimer;
+    static std::set<uint32> m_warnedPlayers;
+
+    void UpdateAI(uint32 const diff)
+    {
+        if (diff >= m_warnTimer)
+        {
+            if (Player* pPlayer = me->FindNearestPlayer(10.0f))
+            {
+                uint32 guid = pPlayer->GetGUIDLow();
+                if (m_warnedPlayers.find(guid) == m_warnedPlayers.end())
+                {
+                    pPlayer->GetSession()->SendNotification("You are entering an active roleplay event area!");
+                    m_warnedPlayers.insert(guid);
+                }
+            }
+            m_warnTimer = 5000;
+        }
+        else
+            m_warnTimer -= diff;
+    }
+};
+
+std::set<uint32> go_roleplay_event::m_warnedPlayers;
+
+GameObjectAI* GetAI_go_roleplay_event(GameObject* gameobject)
+{
+    return new go_roleplay_event(gameobject);
+}
 
 void AddSC_go_scripts()
 {
@@ -689,24 +677,6 @@ void AddSC_go_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_Hive_Regal_Glyphed_Crystal";
-    newscript->pGOHello = &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_REGAL_RUBBING>);
-    newscript->pGOGossipSelect = &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_REGAL_RUBBING>);
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_Hive_Ashi_Glyphed_Crystal";
-    newscript->pGOHello = &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_ASHI_RUBBING>);
-    newscript->pGOGossipSelect = &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_ASHI_RUBBING>);
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_Hive_Zora_Glyphed_Crystal";
-    newscript->pGOHello = &(GOHello_go_Hive_Glyphed_Crystal<ITEM_HIVE_ZORA_RUBBING>);
-    newscript->pGOGossipSelect = &(GOSelect_go_Hive_Glyphed_Crystal<ITEM_HIVE_ZORA_RUBBING>);
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "go_bells";
     newscript->GOGetAI = &GetAI_go_bells;
     newscript->RegisterSelf();
@@ -714,6 +684,11 @@ void AddSC_go_scripts()
     newscript = new Script;
     newscript->Name = "go_darkmoon_faire_music";
     newscript->GOGetAI = &GetAI_go_darkmoon_faire_music;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_roleplay_event";
+    newscript->GOGetAI = &GetAI_go_roleplay_event;
     newscript->RegisterSelf();
 }
 

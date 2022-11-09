@@ -235,7 +235,7 @@ inline bool SpellCanTrigger(const SpellEntry* spellProto, const SpellEntry* proc
     return (procSpell && procSpell->SpellFamilyName == spellProto->SpellFamilyName && procSpell->SpellFamilyFlags & spellProto->EffectItemType[eff_idx]);
 }
 
-SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent, bool dontTriggerSpecial) const
+SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent, bool isSpellTriggeredByAura) const
 {
     SpellEntry const* spellProto = holder->GetSpellProto();
 
@@ -408,17 +408,24 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
         }
     }
 
+    if (isSpellTriggeredByAura && procSpell &&
+        !procSpell->HasAttribute(SPELL_ATTR_EX3_NOT_A_PROC) &&
+        !spellProto->HasAttribute(SPELL_ATTR_EX3_CAN_PROC_FROM_PROCS))
+        return SPELL_PROC_TRIGGER_FAILED;
+
     // Get chance from spell
     float chance = (float)spellProto->procChance;
     // If in spellProcEvent exist custom chance, chance = spellProcEvent->customChance;
     if (spellProcEvent && spellProcEvent->customChance)
         chance = spellProcEvent->customChance;
+
     // If PPM exist calculate chance from PPM
     if (!isVictim && spellProcEvent && spellProcEvent->ppmRate != 0)
     {
         uint32 WeaponSpeed = GetAttackTime(attType);
         chance = GetPPMProcChance(WeaponSpeed, spellProcEvent->ppmRate);
     }
+
     // Apply chance modifier aura
     if (Player* modOwner = GetSpellModOwner())
     {
@@ -529,16 +536,6 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
 						basepoints[0] = initialDamage * CalcArmorReducedDamage(target, 100) / 100;
                         triggered_spell_id = 12723;    //Note this SS id deals 1 damage by itself (Cannot crit)
                     }
-                    break;
-                }
-                // Retaliation
-                case 20230:
-                {
-                    // check attack comes not from behind
-                    if (!HasInArc(pVictim))
-                        return SPELL_AURA_PROC_FAILED;
-
-                    triggered_spell_id = 22858;
                     break;
                 }
                 // Twisted Reflection (boss spell)
@@ -809,6 +806,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 // Combustion
                 case 11129:
                 {
+                    // does not proc if no target is affected (aoe like flamestrike)
+                    if (!pVictim)
+                        return SPELL_AURA_PROC_FAILED;
+
                     // combustion counter was dispelled or clicked off
                     if (!HasAura(28682))
                     {
@@ -840,7 +841,7 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 triggered_spell_id = 26654;
             }
             // Retaliation
-            if (dummySpell->IsFitToFamilyMask<CF_WARRIOR_RETALIATION>())
+            if (dummySpell->Id == 20230)
             {
                 // check attack comes not from behind
                 if (!HasInArc(pVictim))
@@ -1430,14 +1431,6 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
         case SPELLFAMILY_DRUID:
             break;
         case SPELLFAMILY_HUNTER:
-            switch (auraSpellInfo->Id)
-            {
-                // Patch 1.9: Aspect of the Pack and Aspect of the Cheetah - Periodic damage will no longer trigger the Dazed effect.
-                case 5118:  // Aspect of the Cheetah
-                case 13159: // Aspect of the Pack
-                    if (procFlags & (PROC_FLAG_DEAL_HARMFUL_PERIODIC | PROC_FLAG_TAKE_HARMFUL_PERIODIC))
-                        return SPELL_AURA_PROC_FAILED;
-            }
             break;
         case SPELLFAMILY_PALADIN:
         {
@@ -1474,10 +1467,10 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                         return SPELL_AURA_PROC_FAILED;
                 }
 
-                // Intentionally do not pass triggeredByAura here.
+                // Need to pass victim guid so its not overwritten with aura caster.
                 // Seal of Light healing is done by the person who attacks,
                 // and does not increase threat of the original caster.
-                pVictim->CastSpell(pVictim, trigger_spell_id, true, castItem);
+                pVictim->CastSpell(pVictim, trigger_spell_id, true, castItem, triggeredByAura, pVictim->GetObjectGuid());
                 return SPELL_AURA_PROC_OK;                        // no hidden cooldown
             }
             // Illumination
@@ -1564,6 +1557,13 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 trigger_spell_id = 23571;
                 target = this;
             }
+            // Elemental Focus
+            else if (auraSpellInfo->Id == 45541)
+            {
+                // prevent stacks going up to 4
+                if (HasAura(trigger_spell_id))
+                    RemoveAurasDueToSpellByCancel(trigger_spell_id);
+            }
             break;
         }
         default:
@@ -1589,7 +1589,6 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
     {
         // Cast positive spell on enemy target
         case 7099:  // Curse of Mending
-        case 29494: // Temptation
         case 20233: // Improved Lay on Hands (cast on target)
         {
             target = pVictim;
@@ -1613,6 +1612,12 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 return SPELL_AURA_PROC_OK;
             }
             return SPELL_AURA_PROC_FAILED;
+        }
+
+        case 18371: //Soul Siphon for Improved Drain Soul
+        {
+            if (!pVictim || !pVictim->HasAuraTypeByCaster(SPELL_AURA_CHANNEL_DEATH_ITEM, pCaster->GetObjectGuid()))
+                return SPELL_AURA_PROC_FAILED;
         }
     }
 
@@ -1648,6 +1653,13 @@ SpellAuraProcResult Unit::HandleProcTriggerDamageAuraProc(Unit *pVictim, uint32 
     DEBUG_FILTER_LOG(LOG_FILTER_SPELL_CAST, "ProcDamageAndSpell: doing %u damage from spell id %u (triggered by auratype %u of spell %u)",
                      triggeredByAura->GetModifier()->m_amount, spellInfo->Id, triggeredByAura->GetModifier()->m_auraname, triggeredByAura->GetId());
     
+    // Trigger damage can be resisted...
+    if (SpellMissInfo missInfo = SpellHitResult(pVictim, spellInfo, triggeredByAura->GetEffIndex(), false))
+    {
+        SendSpellDamageResist(pVictim, spellInfo->Id);
+        return SPELL_AURA_PROC_OK;
+    }
+
     SpellNonMeleeDamage damageInfo(this, pVictim, spellInfo->Id, SpellSchools(spellInfo->School));
     damageInfo.damage = CalculateSpellDamage(pVictim, spellInfo, triggeredByAura->GetEffIndex());
     damageInfo.damage = SpellDamageBonusDone(pVictim, spellInfo, triggeredByAura->GetEffIndex(), damageInfo.damage, SPELL_DIRECT_DAMAGE);

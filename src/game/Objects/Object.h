@@ -88,6 +88,27 @@ enum TempSummonType
 
 };
 
+inline bool IsRespawnableTempSummonType(TempSummonType type)
+{
+    switch (type)
+    {
+        case TEMPSUMMON_TIMED_DESPAWN:
+        case TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT:
+        case TEMPSUMMON_MANUAL_DESPAWN:
+            return true;
+    }
+    return false;
+}
+
+// for distance calculations
+enum class SizeFactor
+{
+    None,
+    BoundingRadius,
+    CombatReach,
+    CombatReachWithMelee,
+};
+
 class WorldPacket;
 class UpdateData;
 class WorldSession;
@@ -811,44 +832,45 @@ class WorldObject : public Object
 
         virtual uint32 GetDefaultGossipMenuId() const { return 0; }
 
-        float GetCombatDistance(WorldObject const* target) const;
-        float GetDistance2dToCenter(WorldObject const* target) const;
-        float GetDistance2dToCenter(float x, float y) const;
-        float GetDistance2dToCenter(WorldLocation const& position) const { return GetDistance2dToCenter(position.x, position.y); }
-        float GetDistance2dToCenter(Position const& position) const { return GetDistance2dToCenter(position.x, position.y); }
-        float GetDistance3dToCenter(WorldObject const* target) const;
-        float GetDistance3dToCenter(WorldLocation const& position) const { return GetDistance3dToCenter(position.x, position.y, position.z); }
-        float GetDistance3dToCenter(Position const& position) const { return GetDistance3dToCenter(position.x, position.y, position.z); }
-        float GetDistance3dToCenter(float x, float y, float z) const;
-        float GetDistance(WorldObject const* obj) const;
-        float GetDistance(float x, float y, float z) const;
-        float GetDistance(WorldLocation const& position) const { return GetDistance(position.x, position.y, position.z); }
-        float GetDistance(Position const& position) const { return GetDistance(position.x, position.y, position.z); }
-        float GetDistance2d(WorldObject const* obj) const;
-        float GetDistance2d(float x, float y) const;
-        float GetDistance2d(WorldLocation const& position) const { return GetDistance2d(position.x, position.y); }
-        float GetDistance2d(Position const& position) const { return GetDistance2d(position.x, position.y); }
-        float GetDistanceZ(WorldObject const* obj) const;
+        float GetSizeFactorForDistance(WorldObject const* obj, SizeFactor distcalc) const;
+        float GetCombatDistance(WorldObject const* target) const { return GetDistance(target, SizeFactor::CombatReach); }
+        float GetDistance2dToCenter(WorldObject const* target) const { return GetDistance2d(target, SizeFactor::None); }
+        float GetDistance2dToCenter(float x, float y) const { return GetDistance2d(x, y, SizeFactor::None); }
+        float GetDistance2dToCenter(WorldLocation const& position) const { return GetDistance2d(position.x, position.y, SizeFactor::None); }
+        float GetDistance2dToCenter(Position const& position) const { return GetDistance2d(position.x, position.y, SizeFactor::None); }
+        float GetDistance3dToCenter(WorldObject const* target) const { return GetDistance(target, SizeFactor::None); }
+        float GetDistance3dToCenter(float x, float y, float z) const { return GetDistance(x, y, z, SizeFactor::None); }
+        float GetDistance3dToCenter(WorldLocation const& position) const { return GetDistance(position.x, position.y, position.z, SizeFactor::None); }
+        float GetDistance3dToCenter(Position const& position) const { return GetDistance(position.x, position.y, position.z, SizeFactor::None); }
+        float GetDistance(WorldObject const* obj, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
+        float GetDistance(float x, float y, float z, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
+        float GetDistance(WorldLocation const& position, SizeFactor distcalc = SizeFactor::BoundingRadius) const { return GetDistance(position.x, position.y, position.z, distcalc); }
+        float GetDistance(Position const& position, SizeFactor distcalc = SizeFactor::BoundingRadius) const { return GetDistance(position.x, position.y, position.z, distcalc); }
+        float GetDistance2d(WorldObject const* obj, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
+        float GetDistance2d(float x, float y, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
+        float GetDistance2d(WorldLocation const& position, SizeFactor distcalc = SizeFactor::BoundingRadius) const { return GetDistance2d(position.x, position.y, distcalc); }
+        float GetDistance2d(Position const& position, SizeFactor distcalc = SizeFactor::BoundingRadius) const { return GetDistance2d(position.x, position.y, distcalc); }
+        float GetDistanceZ(WorldObject const* obj, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
         float GetDistanceSqr(float x, float y, float z) const;
         bool IsInMap(WorldObject const* obj) const;
         template <class T>
-        bool IsWithinDist3d(T const& position, float dist2compare) const { return IsWithinDist3d(position.x, position.y, position.z, dist2compare); }
-        bool IsWithinDist3d(float x, float y, float z, float dist2compare) const;
+        bool IsWithinDist3d(T const& position, float dist2compare, SizeFactor distcalc = SizeFactor::BoundingRadius) const { return IsWithinDist3d(position.x, position.y, position.z, dist2compare, distcalc); }
+        bool IsWithinDist3d(float x, float y, float z, float dist2compare, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
         template <class T >
-        bool IsWithinDist2d(T const& position, float dist2compare) const { return IsWithinDist2d(position.x, position.y, dist2compare); }
-        bool IsWithinDist2d(float x, float y, float dist2compare) const;
-        bool _IsWithinDist(WorldObject const* obj, const float dist2compare, const bool is3D, const bool useBoundingRadius = true) const;
+        bool IsWithinDist2d(T const& position, float dist2compare, SizeFactor distcalc = SizeFactor::BoundingRadius) const { return IsWithinDist2d(position.x, position.y, dist2compare, distcalc); }
+        bool IsWithinDist2d(float x, float y, float dist2compare, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
+        bool _IsWithinDist(WorldObject const* obj, float const dist2compare, const bool is3D, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
 
         // use only if you will sure about placing both object at same map
-        bool IsWithinDist(WorldObject const* obj, const float& dist2compare, const bool is3D = true, const bool useBoundingRadius = true) const
+        bool IsWithinDist(WorldObject const* obj, float const& dist2compare, const bool is3D = true, SizeFactor distcalc = SizeFactor::BoundingRadius) const
         {
-            return obj && _IsWithinDist(obj, dist2compare, is3D, useBoundingRadius);
+            return obj && _IsWithinDist(obj, dist2compare, is3D, distcalc);
         }
-        bool IsWithinDistInMap(WorldObject const* obj, const float& dist2compare, const bool is3D = true, const bool useBoundingRadius = true) const
+        bool IsWithinDistInMap(WorldObject const* obj, float const& dist2compare, const bool is3D = true, SizeFactor distcalc = SizeFactor::BoundingRadius) const
         {
-            return obj && IsInMap(obj) && _IsWithinDist(obj, dist2compare, is3D, useBoundingRadius);
+            return obj && IsInMap(obj) && _IsWithinDist(obj, dist2compare, is3D, distcalc);
         }
-        bool IsWithinCombatDistInMap(WorldObject const* obj, const float& dist2compare) const
+        bool IsWithinCombatDistInMap(WorldObject const* obj, float const& dist2compare) const
         {
             return obj && IsInMap(obj) && (GetCombatDistance(obj) <= dist2compare);
         }
@@ -859,13 +881,13 @@ class WorldObject : public Object
         bool IsWithinLOSAtPosition(float ownX, float ownY, float ownZ, float targetX, float targetY, float targetZ, bool checkDynLos = true, float targetHeight = 2.f) const;
         bool IsWithinLOSInMap(WorldObject const* obj, bool checkDynLos = true) const;
         bool GetDistanceOrder(WorldObject const* obj1, WorldObject const* obj2, bool is3D = true) const;
-        bool IsInRange(WorldObject const* obj, float minRange, float maxRange, bool is3D = true) const;
-        bool IsInRange2d(float x, float y, float minRange, float maxRange) const;
-        bool IsInRange3d(float x, float y, float z, float minRange, float maxRange) const;
+        bool IsInRange(WorldObject const* obj, float minRange, float maxRange, bool is3D = true, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
+        bool IsInRange2d(float x, float y, float minRange, float maxRange, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
+        bool IsInRange3d(float x, float y, float z, float minRange, float maxRange, SizeFactor distcalc = SizeFactor::BoundingRadius) const;
 
         float GetAngle(WorldObject const* obj) const;
         float GetAngle(const float x, const float y) const;
-        bool HasInArc(WorldObject const* target, float const arcangle = M_PI, float offset = 0.0f) const;
+        bool HasInArc(WorldObject const* target, float const arcangle = M_PI_F, float offset = 0.0f) const;
         bool HasInArc(const float arcangle, const float x, const float y) const;
         bool IsFacingTarget(WorldObject const* target) const;
 
@@ -1058,6 +1080,7 @@ virtual uint32 GetLevel() const = 0;
         SpellCastResult CastSpell(float x, float y, float z, SpellEntry const *spellInfo, bool triggered, Item *castItem = nullptr, Aura* triggeredByAura = nullptr, ObjectGuid originalCaster = ObjectGuid(), SpellEntry const* triggeredBy = nullptr);
 
         void SetCurrentCastedSpell(Spell * pSpell);
+        void MoveChannelledSpellWithCastTime(Spell* pSpell);
         Spell* GetCurrentSpell(CurrentSpellTypes spellType) const { return m_currentSpells[spellType]; }
         Spell* FindCurrentSpellBySpellId(uint32 spell_id) const;
         bool CheckAndIncreaseCastCounter();
@@ -1103,9 +1126,10 @@ virtual uint32 GetLevel() const = 0;
         virtual uint32 DealDamage(Unit *pVictim, uint32 damage, CleanDamage const* cleanDamage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask, SpellEntry const *spellProto, bool durabilityLoss, Spell* spell = nullptr, bool addThreat = true);
         void DealDamageMods(Unit *pVictim, uint32 &damage, uint32* absorb);
         void DealSpellDamage(SpellNonMeleeDamage *damageInfo, bool durabilityLoss);
-        void SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log);
+        void SendSpellNonMeleeDamageLog(SpellNonMeleeDamage *log) const;
         void SendSpellNonMeleeDamageLog(Unit *target, uint32 spellID, uint32 damage, SpellSchoolMask damageSchoolMask, uint32 absorbedDamage, int32 resist, bool isPeriodic, uint32 blocked, bool criticalHit = false, bool split = false);
-        void SendSpellMiss(Unit *target, uint32 spellID, SpellMissInfo missInfo);
+        void SendSpellMiss(Unit *target, uint32 spellID, SpellMissInfo missInfo) const;
+        void SendSpellDamageResist(Unit* target, uint32 spellId) const;
         void SendSpellOrDamageImmune(Unit* target, uint32 spellID) const;
         int32 DealHeal(Unit *pVictim, uint32 addhealth, SpellEntry const *spellProto, bool critical = false);
         void SendHealSpellLog(Unit const* pVictim, uint32 SpellID, uint32 Damage, bool critical = false) const;

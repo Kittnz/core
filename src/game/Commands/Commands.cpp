@@ -322,6 +322,39 @@ bool ChatHandler::HandleUnLearnCommand(char* args)
     if (!*args)
         return false;
 
+    // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r
+    uint32 spell_id = ExtractSpellIdFromLink(&args);
+    if (!spell_id)
+        return false;
+
+    bool allRanks = ExtractLiteralArg(&args, "all") != nullptr;
+    if (!allRanks && *args)                                 // can be fail also at syntax error
+        return false;
+
+    Player* target = GetSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (allRanks)
+        spell_id = sSpellMgr.GetFirstSpellInChain(spell_id);
+
+    if (target->HasSpell(spell_id))
+        target->RemoveSpell(spell_id, false, !allRanks);
+    else
+        SendSysMessage(LANG_FORGET_SPELL);
+
+    return true;
+}
+
+bool ChatHandler::HandleUnLearnOfflineCommand(char* args)
+{
+    if (!*args)
+        return false;
+
     Player* target;
     ObjectGuid target_guid;
     std::string target_name;
@@ -534,7 +567,7 @@ bool ChatHandler::HandleListAurasCommand(char* /*args*/)
                 ss_name << "|cffffffff|Hspell:" << itr->second->GetId() << "|h[" << name << "]|h|r";
 
                 PSendSysMessage(LANG_COMMAND_TARGET_AURADETAIL, holder->GetId(), aur->GetEffIndex(),
-                    aur->GetModifier()->m_auraname, aur->GetAuraDuration(), aur->GetAuraMaxDuration(),
+                    aur->GetModifier()->m_auraname, aur->GetAuraDuration(), aur->GetAuraMaxDuration(), aur->GetAuraPeriodicTimer(), aur->GetStackAmount(),
                     ss_name.str().c_str(),
                     (holder->IsPassive() ? passiveStr : ""), (talent ? talentStr : ""),
                     holder->GetCasterGuid().GetString().c_str());
@@ -542,7 +575,7 @@ bool ChatHandler::HandleListAurasCommand(char* /*args*/)
             else
             {
                 PSendSysMessage(LANG_COMMAND_TARGET_AURADETAIL, holder->GetId(), aur->GetEffIndex(),
-                    aur->GetModifier()->m_auraname, aur->GetAuraDuration(), aur->GetAuraMaxDuration(),
+                    aur->GetModifier()->m_auraname, aur->GetAuraDuration(), aur->GetAuraMaxDuration(), aur->GetAuraPeriodicTimer(), aur->GetStackAmount(),
                     name,
                     (holder->IsPassive() ? passiveStr : ""), (talent ? talentStr : ""),
                     holder->GetCasterGuid().GetString().c_str());
@@ -693,6 +726,104 @@ bool ChatHandler::HandleListObjectCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleListDestroyedItemsCommand(char* args)
+{
+    std::string name = args;
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name);
+    if (guid.IsEmpty())
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `item_entry`, `stack_count`, `time` FROM `character_destroyed_items` WHERE `player_guid`=%u ORDER BY `time` LIMIT 128", guid.GetCounter()));
+    if (!result)
+    {
+        SendSysMessage(LANG_COMMAND_NOITEMFOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Destroyed items for %s:\n", args);
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 itemId = fields[0].GetUInt32();
+        uint32 stackCount = fields[1].GetUInt32();
+        time_t destroyedTime = fields[2].GetUInt64();
+
+        std::string stacksStr = stackCount > 1 ? " x " + std::to_string(stackCount) : "";
+        std::string timeStr = secsToTimeString(sWorld.GetGameTime() - destroyedTime, true);
+
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
+        if (!pProto)
+        {
+            PSendSysMessage("%u - [UNKNOWN]%s (%s ago)", itemId, stacksStr.c_str(), timeStr.c_str());
+            continue;
+        }
+
+        if (m_session)
+        {
+            uint32 color = ItemQualityColors[pProto->Quality];
+            std::ostringstream itemStr;
+            itemStr << "|c" << std::hex << color << "|Hitem:" << std::to_string(pProto->ItemId) << ":0:0:0:0:0:0:0|h[" << pProto->Name1 << "]|h|r";
+            PSendSysMessage("%u - %s%s (%s ago)", itemId, itemStr.str().c_str(), stacksStr.c_str(), timeStr.c_str());
+        }
+        else
+            PSendSysMessage("%u - %s%s (%s ago)", itemId, pProto->Name1, stacksStr.c_str(), timeStr.c_str());
+
+    } while (result->NextRow());
+
+    return true;
+}
+
+bool ChatHandler::HandleListBuybackItemsCommand(char* args)
+{
+    std::string name = args;
+    ObjectGuid guid = sObjectMgr.GetPlayerGuidByName(name);
+    if (guid.IsEmpty())
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `item_template` FROM `character_inventory` WHERE `guid`=%u && `slot` BETWEEN %u and %u", guid.GetCounter(), BUYBACK_SLOT_START, BUYBACK_SLOT_END - 1));
+    if (!result)
+    {
+        SendSysMessage(LANG_COMMAND_NOITEMFOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Buyback items for %s:\n", args);
+    do
+    {
+        Field* fields = result->Fetch();
+        uint32 itemId = fields[0].GetUInt32();
+
+        ItemPrototype const* pProto = sObjectMgr.GetItemPrototype(itemId);
+        if (!pProto)
+        {
+            PSendSysMessage("%u - [UNKNOWN]", itemId);
+            continue;
+        }
+
+        if (m_session)
+        {
+            uint32 color = ItemQualityColors[pProto->Quality];
+            std::ostringstream itemStr;
+            itemStr << "|c" << std::hex << color << "|Hitem:" << std::to_string(pProto->ItemId) << ":0:0:0:0:0:0:0|h[" << pProto->Name1 << "]|h|r";
+            PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itemId, itemStr.str().c_str(), "");
+        }
+        else
+            PSendSysMessage(LANG_ITEM_LIST_CONSOLE, itemId, pProto->Name1, "");
+
+    } while (result->NextRow());
+
+    return true;
+}
 
 bool ChatHandler::HandleAddItemCommand(char* args)
 {
@@ -5293,6 +5424,11 @@ bool ChatHandler::HandleServerInfoCommand(char* /*args*/)
         PSendSysMessage("Server diff: %u ms", sWorld.GetLastDiff());
     }
 
+    std::tm* ptm = std::localtime(&sWorld.GetGameTime());
+    char timeStr[32];
+    std::strftime(timeStr, 32, "%a, %d.%m.%Y %H:%M:%S", ptm);
+    PSendSysMessage("Server Time: %s", timeStr);
+
     return true;
 }
 
@@ -8218,7 +8354,7 @@ bool ChatHandler::HandleGameObjectDeleteCommand(char* args)
     {
         // by DB guid
         if (GameObjectData const* go_data = sObjectMgr.GetGOData(lowguid))
-            obj = GetGameObjectWithGuid(lowguid, go_data->id);
+            obj = GetGameObjectWithGuidGlobal(lowguid, go_data);
     }
     else
         obj = GetGameObjectWithGuid(lowguid, entry);
@@ -9055,6 +9191,22 @@ bool ChatHandler::HandleNpcAddCommand(char* args)
     map->Add(pCreature);
     sObjectMgr.AddCreatureToGrid(db_guid, sObjectMgr.GetCreatureData(db_guid));
     pCreature->SetRespawnDelay(300);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSummonCommand(char* args)
+{
+    //.npc add but temp
+    if (!*args)
+        return false;
+
+    uint32 id;
+    if (!ExtractUint32KeyFromLink(&args, "Hcreature_entry", id))
+        return false;
+
+    auto position = GetSession()->GetPlayer()->GetPosition();
+
+    GetSession()->GetPlayer()->SummonCreature(id, position.x, position.y, position.z, position.o);
     return true;
 }
 
@@ -11867,6 +12019,67 @@ bool ChatHandler::HandleCharacterFillFlysCommand(char* args)
         return true;
     }
     return false;
+}
+
+bool ChatHandler::HandleMmapsPathCommand(char* args)
+{
+    if (!MMAP::MMapFactory::createOrGetMMapManager()->GetNavMesh(GetSession()->GetPlayer()->GetMapId()))
+    {
+        PSendSysMessage("NavMesh not loaded for current map.");
+        return true;
+    }
+
+    SendSysMessage("mmap path:");
+
+    // units
+    Player* player = GetSession()->GetPlayer();
+    Unit* target = GetSelectedUnit();
+    if (!player || !target)
+    {
+        PSendSysMessage("Invalid target/source selection.");
+        return true;
+    }
+
+    char* para = strtok((char*)args, " ");
+
+    bool useStraightPath = false;
+    if (para && strcmp(para, "true") == 0)
+        useStraightPath = true;
+
+    bool useRaycast = false;
+    if (para && (strcmp(para, "line") == 0 || strcmp(para, "ray") == 0 || strcmp(para, "raycast") == 0))
+        useRaycast = true;
+
+    // unit locations
+    float x, y, z;
+    player->GetPosition(x, y, z);
+
+
+    // path
+    PathFinder path(target);
+    path.setUseStrightPath(useStraightPath);
+    bool result = path.calculate(x, y, z, false);
+
+    Movement::PointsArray const& pointPath = path.getPath();
+    PSendSysMessage("%s's path to %s:", target->GetName(), player->GetName());
+    PSendSysMessage("Building: %s", useStraightPath ? "StraightPath" : useRaycast ? "Raycast" : "SmoothPath");
+    PSendSysMessage("Result: %s - Length: %zu - Type: %u", (result ? "true" : "false"), pointPath.size(), path.getPathType());
+
+    G3D::Vector3 const& start = path.getStartPosition();
+    G3D::Vector3 const& end = path.getEndPosition();
+    G3D::Vector3 const& actualEnd = path.getActualEndPosition();
+
+    PSendSysMessage("StartPosition     (%.3f, %.3f, %.3f)", start.x, start.y, start.z);
+    PSendSysMessage("EndPosition       (%.3f, %.3f, %.3f)", end.x, end.y, end.z);
+    PSendSysMessage("ActualEndPosition (%.3f, %.3f, %.3f)", actualEnd.x, actualEnd.y, actualEnd.z);
+
+    if (!player->IsGameMaster())
+        PSendSysMessage("Enable GM mode to see the path points.");
+
+    for (uint32 i = 0; i < pointPath.size(); ++i)
+        player->SummonCreature(VISUAL_WAYPOINT, pointPath[i].x, pointPath[i].y, pointPath[i].z, 0, TEMPSUMMON_TIMED_DESPAWN, 9000);
+
+    return true;
 }
 
 bool ChatHandler::HandleNpcGroupAddCommand(char* args)

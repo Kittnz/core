@@ -141,8 +141,8 @@ struct stormwind_vault_rat_trap : public GameObjectAI
                             if (Creature* pMob = pPlayer->SummonCreature(NPC_VAULT_RAT, pPlayer->GetPositionX() + urand(1, 4), pPlayer->GetPositionY() + urand(1, 4), pPlayer->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 350 * IN_MILLISECONDS))
                                 pMob->AI()->AttackStart(pPlayer);
                         }
-                        m_uiStep = 2;
                     }
+                    m_uiStep = 2;
                     m_uiUpdateTimer = 1000;
                     break;
                 }

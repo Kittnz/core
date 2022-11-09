@@ -661,6 +661,9 @@ void CreatureEventAI::MoveInLineOfSight(Unit *pWho)
     if (!pWho)
         return;
 
+    if (pWho->HasHCImmunity())
+        return;
+
     //Check for OOC LOS Event
     if (!m_creature->GetVictim())
     {
@@ -687,7 +690,7 @@ void CreatureEventAI::MoveInLineOfSight(Unit *pWho)
     if (m_creature->CanInitiateAttack() && pWho->IsTargetable(true, false))
     {
         float attackRadius = m_creature->GetAttackDistance(pWho);
-        if (m_creature->IsWithinDistInMap(pWho, attackRadius, true, false) && m_creature->IsHostileTo(pWho))
+        if (m_creature->IsWithinDistInMap(pWho, attackRadius, true, SizeFactor::None) && m_creature->IsHostileTo(pWho))
         {
             if (!m_creature->GetVictim())
             {

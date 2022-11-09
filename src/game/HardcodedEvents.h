@@ -4,6 +4,7 @@
 #include "GameEventMgr.h"
 #include "ObjectMgr.h"
 #include <queue>
+#include <optional>
 
 /*
  * Elemental Invasion
@@ -55,8 +56,8 @@ struct ElementalInvasion : WorldEvent
 
 private:
     void StartLocalInvasion(uint8 index, uint32 stage);
-    void StartLocalBoss(uint8 index, uint32 stage, uint8 delay);
-    void StopLocalInvasion(uint8 index, uint32 stage, uint8 delay);
+    void StartLocalBoss(uint8 index, uint32 stage, uint32 delay);
+    void StopLocalInvasion(uint8 index, uint32 stage, uint32 delay);
     void ResetThings();
 };
 
@@ -354,7 +355,7 @@ struct RacePlayerSetup
 
 struct RacePlayer
 {
-	RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent);
+	RacePlayer(const RacePlayerSetup& racer, RaceSubEvent* InEvent, uint32 mapId);
 	~RacePlayer();
 
 	ObjectGuid guid;
@@ -379,7 +380,7 @@ private:
 
 struct RaceSubEvent
 {
-	RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent);
+	RaceSubEvent(uint32 InRaceId, const std::list<RacePlayerSetup>& InRaces, MiracleRaceEvent* InEvent, uint32 mapId);
 
 	uint32 raceId;
 	std::vector<RacePlayer> racers;
@@ -474,6 +475,8 @@ struct MiracleRaceEvent : WorldEvent
 
 	bool InitializeRace(uint32 raceId);
 
+    void SetRaceMap(uint32 mapId) { m_mapId = mapId; }
+
 	void StartTestRace(uint32 raceId, Player* racer, MiracleRaceSide side, uint32 startedQuest = 0);
 
 	virtual void Update() override;
@@ -497,4 +500,5 @@ private:
 
 	MiracleRaceQueueSystem _queueSystem;
 	uint32 lastTime = 0;
+    std::optional<uint32> m_mapId;
 };

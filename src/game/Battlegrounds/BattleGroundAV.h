@@ -537,6 +537,8 @@ class BattleGroundAV : public BattleGround
 
         void EndBattleGround(Team winner) override;
 
+        Team GetWinningTeam() const override;
+
         WorldSafeLocsEntry const* GetClosestGraveYard(Player *plr) override;
 
         static BattleGroundAVTeamIndex GetAVTeamIndexByTeamId(Team team) { return BattleGroundAVTeamIndex(GetTeamIndexByTeamId(team)); }

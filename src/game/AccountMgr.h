@@ -25,6 +25,7 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include <string>
+#include <mutex>
 
 enum AccountOpResult
 {
@@ -126,6 +127,7 @@ class AccountMgr
         typedef std::map<uint32 /* accountId */, InstanceEnterTimesMap> AccountInstanceEnterTimesMap;
         AccountInstanceEnterTimesMap m_instanceEnterTimes;
         std::map<uint32, AccountPersistentData> m_accountPersistentData;
+        mutable std::mutex m_ipBannedMutex;
 };
 
 #define sAccountMgr MaNGOS::Singleton<AccountMgr>::Instance()

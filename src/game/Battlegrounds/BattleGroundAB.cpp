@@ -155,6 +155,17 @@ void BattleGroundAB::StartingEventCloseDoors()
         SpawnObject(m_BgObjects[BG_AB_OBJECT_SPEEDBUFF_STABLES + i], RESPAWN_ONE_DAY);
 }
 
+Team BattleGroundAB::GetWinningTeam() const
+{
+    if (m_TeamScores[BG_TEAM_ALLIANCE] > m_TeamScores[BG_TEAM_HORDE])
+        return ALLIANCE;
+
+    if (m_TeamScores[BG_TEAM_ALLIANCE] < m_TeamScores[BG_TEAM_HORDE])
+        return HORDE;
+    return TEAM_NONE;
+}
+
+
 void BattleGroundAB::StartingEventOpenDoors()
 {
     for (int i = 0; i < BG_AB_NODES_MAX; ++i)

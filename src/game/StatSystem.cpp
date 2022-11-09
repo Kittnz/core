@@ -139,28 +139,6 @@ void Player::UpdateArmor()
         }
     }
 
-    // Add dummy effects from spells (check class and other conditions first for optimization)
-    if (GetClass() == CLASS_DRUID)
-    {
-        ShapeshiftForm form = GetShapeshiftForm();
-        if ((form == FORM_DIREBEAR) || (form == FORM_BEAR))
-        {
-            Unit::AuraList const& mDummy = GetAurasByType(SPELL_AURA_DUMMY);
-            for (const auto itr : mDummy)
-            {
-                // Enrage
-                if (itr->GetId() == 5229)
-                {
-                    float enrageModifier = 0.0f;
-                    enrageModifier = GetModifierValue(UNIT_MOD_ARMOR, BASE_VALUE);
-                    enrageModifier *= itr->GetModifier()->m_amount / 100.0f;
-                    dynamic += enrageModifier;
-                    break;
-                }
-            }
-        }
-    }
-
     //CUSTOM spirit armor
     if (GetClass() == CLASS_SHAMAN)
     {
