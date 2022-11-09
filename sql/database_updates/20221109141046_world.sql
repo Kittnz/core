@@ -31,6 +31,7 @@ UPDATE `creature_template` SET `skinning_loot_id` = 7848 WHERE `entry` = 7848;
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2413
 
 UPDATE `creature_template` SET `skinning_loot_id` = 9683 WHERE `entry` = 9683;
+UPDATE `creature_template` SET `skinning_loot_id` = 9683 WHERE `entry` = 9684;
 
 REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES 
 (9683, 4304, 77.2672, 1, 1, 1, 0),
