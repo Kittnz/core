@@ -4090,18 +4090,7 @@ void Aura::HandleAuraModIncreaseSwimSpeed(bool /*apply*/, bool Real)
 
     if (Player* player = GetTarget()->ToPlayer(); GetId() == 30174 && player) // turtle mount swimming speed. Half of normal speed
     {
-        uint32 skillValue = player->GetSkillValue(762);
-
-        switch (skillValue)
-        {
-            case 0: m_modifier.m_amount = static_cast<int32>(ceil(player->GetLevel() / 4)); break;
-            case 75: m_modifier.m_amount = 30; break;
-            case 150: m_modifier.m_amount = 50; break;
-            default:
-                player->Unmount();
-                player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-                return;
-        }
+        m_modifier.m_amount = static_cast<int32>(ceil(player->GetLevel() / 4));
     }
 
     GetTarget()->UpdateSpeed(MOVE_SWIM, false, GetTarget()->GetSpeedRatePersistance(MOVE_SWIM));
