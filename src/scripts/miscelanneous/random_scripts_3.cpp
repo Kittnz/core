@@ -4344,260 +4344,265 @@ bool QuestRewarded_npc_colonel_breen(Player* pPlayer, Creature* pQuestGiver, Que
     return false;
 }
 
-bool QuestAccept_npc_falgran_hastil(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+bool GossipHello_npc_falgran_hastil(Player* pPlayer, Creature* pCreature)
 {
-    if (!pQuestGiver)
-        return false;
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
 
-    if (!pPlayer)
-        return false;
-
-    if (pQuest->GetQuestId() == 40558) // The Meeting with the Enemy
+    if (pPlayer->GetQuestStatus(40558) == QUEST_STATUS_INCOMPLETE) // The Meeting with the Enemy.
     {
-        pQuestGiver->SummonCreature(61056, -3810.79f, -2763.20f, 34.60f, 2.394F, TEMPSUMMON_TIMED_DESPAWN, 2.8 * MINUTE * IN_MILLISECONDS);
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready for the meeting.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
 
-        auto pGuid = pPlayer->GetObjectGuid();
+    if (pPlayer->GetQuestStatus(40564) == QUEST_STATUS_INCOMPLETE) // The Second Meeting
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready for the meeting.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
 
-        DoAfterTime(pQuestGiver, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(1, -3825.07F, -2727.80F, 48.81F, 0, 5.29F);
-            });
-        DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->SetWalk(true);
-            npc->GetMotionMaster()->MovePoint(1, -3825.17F, -2738.99F, 39.32F, 0, 5.29F);
-            npc->MonsterSay("Remain calm...");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pQuestGiver, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->SetWalk(true);
-            npc->GetMotionMaster()->MovePoint(1, -3809.80F, -2759.96F, 35.37F, 0, 5.29F);
-            });
+    pPlayer->SEND_GOSSIP_MENU(50880, pCreature->GetGUID());
 
-        Creature* NPC_KAGORO = pQuestGiver->FindNearestCreature(61056, 100.0F);
-        if (NPC_KAGORO)
+    return true;
+}
+
+bool GossipSelect_npc_falgran_hastil(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
         {
-            DoAfterTime(pPlayer, 14 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("Hail, human. I am Kagoro, scout of the Horde.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 19 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSayToPlayer("I am Falgran Hastil, scout of Theramore. And this is $N. Why did you call for this meeting?", player);
-                    npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 26 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("We saw you investigate the inn. We wanted to assure you it is not the Horde's doing.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 31 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("We found this shield strapped to the wall of the inn. Do you have any recollection of this object?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 39 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("Let me see.");
-                npc->PMonsterEmote("Kagoro investigates the shield thoroughly.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 47 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("By the ancestors. Yes, I know this shield. It belonged to Wattapo, a tauren warrior who once lived in the Brackenwall Village. He died a long time ago.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 57 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Do you know how it could've ended up in the inn? We found his grave. It was recently disturbed.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 63 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("To disturb the grave of a fallen warrior... I assure you, I know nothing of this.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 68 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("It seems like someone wanted to make us blame you for the burning of the inn.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 75 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("Indeed. Have you found anything else in the investigation?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 81 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Yes, quillboar footprints...");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 85 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("False lead.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 88 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("I see you did some work too.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 90 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->PMonsterEmote("Kagoro nods.");
-                });
-            DoAfterTime(pQuestGiver, 93 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("And the badge of one of the deserters. Paval Reethe. We couldn't find Reethe, though. Have you seen him, by any chance?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 101 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("This is... a delicate matter, and the actual reason I called for the meeting. Paval Reethe is dead.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 108 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("He was a deserter. While I still would've preferred to arrest him and allow for a just trial, I understand that you killed him. We do not blame you.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 117 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("If it only was that simple. We knew he was connected to the burning of the inn, and we wanted to investigate him. Before he could talk... we were attacked. By Theramore soldiers. One of them bore the name Caldwell.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 127 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Attacked? Unprovoked, by Theramore soldiers? I swear to the Light, orc. If you are lying...");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 133 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("I swear upon my ancestors and my warchief. They killed him in cold blood. Quick arrow pierced his heart. We also barely made it out alive.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 141 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Theramore soldiers would never... We shall investigate this. But if we find out that your words aren't true...");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 146 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("I am sorry for the loss of your comrades. While you investigate this, we shall follow another lead we have. Black dragonflight.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 154 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("And we will investigate in Theramore. But be warned, orc. Your story doesn't add up.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 160 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("Let's meet here once we know more. I hope you will find truth in your city of stones. Farewell.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 166 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Farewell, orc.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 170 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSayToPlayer("We are in deep trouble, $N. Report to Garran Vimes at once!", player);
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60388))
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 187 * IN_MILLISECONDS);
+            Creature* NPC_KAGORO = pCreature->FindNearestCreature(61056, 30.0F);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("I am Falgran Hastil, scout of Theramore. Why did you call for this meeting?");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 5000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("We saw you investigate the inn. We wanted to assure you it is not the Horde's doing.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 13000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("We found this shield strapped to the wall of the inn. Do you have any recollection of this object?");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 21000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("Let me see.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 29000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->PMonsterEmote("Kagoro investigates the shield thoroughly.");
+                }, 32000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("By the ancestors. Yes, I know this shield. It belonged to Wattapo, a Tauren warrior who once lived in the Brackenwall Village. He died a long time ago.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 37000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Do you know how it could've ended up in the inn? We found his grave. It was recently disturbed.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 47000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("To disturb the grave of a fallen warrior… I assure you, I know nothing of this.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 55000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("It seems like someone wanted to make us blame you for the burning of the inn.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 63000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("Indeed. Have you found anything else in the investigation?");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 68000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Yes, quillboar footprints...");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 73000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("False lead.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 78000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("I see you did some work too.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 81000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->PMonsterEmote("Kagoro nods.");
+                }, 85000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("And the badge of one of the deserters. Paval Reethe. We couldn't find Reethe, though. Have you seen him, by any chance?");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 88000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("This is... a delicate matter, and the actual reason I called for the meeting. Paval Reethe is dead.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 100000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("He was a deserter. While I still would've preferred to arrest him and allow for a just trial, I understand that you killed him. We do not blame you.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 110000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("If it only was that simple. We knew he was connected to the burning of the inn, and we wanted to investigate him. Before he could talk... we were attacked. By Theramore soldiers. One of them bore the name Caldwell.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 122000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Attacked? Unprovoked, by Theramore soldiers? I swear to the Light, orc. If you are lying...");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 136000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("I swear upon my ancestors and my Warchief. They killed him in cold blood. Quick arrow pierced his heart. We also barely made it out alive.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 144000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Theramore soldiers would never... We shall investigate this. But if we find out that your words aren't true...");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 156000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("I am sorry for the loss of your comrades. While you investigate this, we shall follow another lead we have. Black Dragonflight.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 164000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("And we will investigate in Theramore. But be warned, orc. Your story doesn't add up.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 174000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("Let's meet here once we know more. I hope you will find truth in your city of stones.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 182000);
+            DoAfterTime(pCreature, 187 * IN_MILLISECONDS, [playerGuid, npc = pCreature]() {
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60388); cInfo && player)
                     player->KilledMonster(cInfo, ObjectGuid());
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 178 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(1, -3825.17F, -2738.99F, 39.32F, 0, 5.29F);
-                });
-            DoAfterTime(pQuestGiver, 183 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(1, -3825.07F, -2727.80F, 48.81F, 0, 5.29F);
-                });
-            DoAfterTime(pQuestGiver, 186 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(1, -3831.51F, -2725.29F, 53.72F, 0, 1.71F);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                 });
         }
     }
 
-    if (pQuest->GetQuestId() == 40564) // The Second Meeting
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
-        pQuestGiver->SummonCreature(61056, -3810.79f, -2763.20f, 34.60f, 2.394F, TEMPSUMMON_TIMED_DESPAWN, 1.85 * MINUTE * IN_MILLISECONDS);
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
-
-        auto pGuid = pPlayer->GetObjectGuid();
-
-        DoAfterTime(pQuestGiver, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->SetWalk(true);
-            npc->GetMotionMaster()->MovePoint(1, -3825.07F, -2727.80F, 48.81F, 0, 5.29F);
-            });
-        DoAfterTime(pQuestGiver, 3 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->SetWalk(true);
-            npc->GetMotionMaster()->MovePoint(1, -3825.17F, -2738.99F, 39.32F, 0, 5.29F);
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pQuestGiver, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-            npc->SetWalk(true);
-            npc->GetMotionMaster()->MovePoint(1, -3809.80F, -2759.96F, 35.37F, 0, 5.29F);
-            });
-
-        Creature* NPC_KAGORO = pQuestGiver->FindNearestCreature(61056, 100.0F);
-        if (NPC_KAGORO)
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
         {
-            DoAfterTime(pQuestGiver, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSayToPlayer("Kagoro! We are ready.", player);
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("Falgran.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 20 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Kagoro, on the behalf of the Alliance and the City of Theramore, I would like to apologize for not believing you and my false accusations. We are now certain that the deserters burned the inn.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("I am relieved to hear it. Our investigation of Black Dragons yielded no results. But how did you learn of the truth?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 37 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Through the power of magic, of course. Arts of Divination. We communed with the spirit of Paval Reethe.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("Extraordinary. Incredible sorcery, as always. But... why? Why did they burn the inn?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 51 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed... something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 64 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("The shield... Yes, it makes sense.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 67 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("Paval Reethe wanted to stop them. He may have been a deserter, but he had some of his honor still left in his heart.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 75 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("That's why they left him in the swamp. But, what was the information that was so precious to the deserters?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 82 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("About this, we are not sure. Something about the Vengeful Mariner, their rumored true leader. Have you heard about him?");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 90 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("Vengeful Mariner... The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it's connected.");
-                });
-            DoAfterTime(pQuestGiver, 98 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("We will soon bring justice to the deserters for their crimes, thank you for your information Kagoro, the horde has helped plenty in these lands.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pPlayer, 108 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_KAGORO]() {
-                npc->MonsterSay("We believe in justice the same way you alliance do, go with honor friend.");
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 114 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->MonsterSay("We should report to Captain Garran Vimes and let him know our discoveries.");
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60390))
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 105 * IN_MILLISECONDS);
+            Creature* NPC_KAGORO = pCreature->FindNearestCreature(61056, 30.0F);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Kagoro! We are ready.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 5000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("Falgran.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 8000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Kagoro, on the behalf of the Alliance and the City of Theramore, I would like to apologize for not believing you and my false accusations. We are now certain that the deserters burned the inn.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 10000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("I am relieved to hear it. Our investigation of Black Dragons yielded no results. But how did you learn of the truth?");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 20000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Through the power of magic, of course. Arts of Divination. We communed with the spirit of Paval Reethe.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 27000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("Extraordinary. Incredible sorcery, as always. But... why? Why did they burn the inn?");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 35000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed... something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 41000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("The shield... Yes, it makes sense.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 54000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("Paval Reethe wanted to stop them. He may have been a deserter, but he had some of his honor still left in his heart.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 57000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("That's why they left him in the swamp. But, what was the information that was so precious to the deserters?");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 65000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("About this, we are not sure. Something about the Vengeful Mariner, their rumored true leader. Have you heard about him?");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 72000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("Vengeful Mariner... The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it's connected.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 80000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("We will soon bring justice to the deserters for their crimes, thank you for your information Kagoro, the horde has helped plenty in these lands.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 88000);
+            pCreature->m_Events.AddLambdaEventAtOffset([NPC_KAGORO]()
+                {
+                    NPC_KAGORO->MonsterSay("We believe in justice the same way you alliance do, go with honor friend.");
+                    NPC_KAGORO->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 98000);
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("We should report to Captain Garran Vimes and let him know our discoveries.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 104000);
+            DoAfterTime(pCreature, 105 * IN_MILLISECONDS, [playerGuid, npc = pCreature]() {
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60390); cInfo && player)
                     player->KilledMonster(cInfo, ObjectGuid());
-                npc->HandleEmote(EMOTE_ONESHOT_TALK);
-                });
-            DoAfterTime(pQuestGiver, 124 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(1, -3825.17F, -2738.99F, 39.32F, 0, 5.29F);
-                });
-            DoAfterTime(pQuestGiver, 129 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(1, -3825.07F, -2727.80F, 48.81F, 0, 5.29F);
-                });
-            DoAfterTime(pQuestGiver, 132 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
-                npc->SetWalk(true);
-                npc->GetMotionMaster()->MovePoint(1, -3831.51F, -2725.29F, 53.72F, 0, 1.71F);
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                 });
         }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
+bool QuestRewarded_npc_falgran_hastil(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40723) // Honoring Treaties
+    {
+        pQuestGiver->MonsterSay("You have brought peace to these lands, on behalf of all living souls in Theramore, we thank you, for putting your own lives at risk, to put an end to this crime.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
     }
 
     return false;
@@ -4868,9 +4873,268 @@ bool GossipSelect_npc_forgotten_keeper(Player* pPlayer, Creature* pCreature, uin
     return true;
 }
 
+bool QuestAccept_npc_kagoro(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (pQuest->GetQuestId() == 40718) // Next Course of Action
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 175 * IN_MILLISECONDS);
+            Creature* NPC_FALGRAN = pQuestGiver->FindNearestCreature(5088, 30.0F);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("I am Kagoro. We saw you investigate the inn. We wanted to assure you it is not the Horde's doing.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("We found this shield strapped to the wall of the inn. Do you have any recollection of this object?");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 10000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Let me see.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 18000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->PMonsterEmote("Kagoro investigates the shield thoroughly.");
+                }, 21000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("By the ancestors. Yes, I know this shield. It belonged to Wattapo, a Tauren warrior who once lived in the Brackenwall Village. He died a long time ago.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 26000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Do you know how it could've ended up in the inn? We found his grave. It was recently disturbed.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 36000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("To disturb the grave of a fallen warrior... I assure you, I know nothing of this.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 44000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("It seems like someone wanted to make us blame you for the burning of the inn.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 52000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Indeed. Have you found anything else in the investigation?");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 60000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Yes, quillboar footprints...");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 65000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("False lead.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 70000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("I see you did some work too.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 73000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->PMonsterEmote("Kagoro nods.");
+                }, 77000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("And the badge of one of the deserters. Paval Reethe. We couldn't find Reethe, though. Have you seen him, by any chance?");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 80000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("This is... a delicate matter, and the actual reason I called for the meeting. Paval Reethe is dead.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 92000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("He was a deserter. While I still would've preferred to arrest him and allow for a just trial, I understand that you killed him. We do not blame you.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 102000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("If it only was that simple. We knew he was connected to the burning of the inn, and we wanted to investigate him. Before he could talk... we were attacked. By Theramore soldiers. One of them bore the name Caldwell.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 114000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Attacked? Unprovoked, by Theramore soldiers? I swear to the Light, orc. If you are lying...");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 128000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("I swear upon my ancestors and my Warchief. They killed him in cold blood. Quick arrow pierced his heart. We also barely made it out alive.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 136000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Theramore soldiers would never... We shall investigate this. But if we find out that your words aren't true...");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 144000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("I am sorry for the loss of your comrades. While you investigate this, we shall follow another lead we have. Black Dragonflight.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 152000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("And we will investigate in Theramore. But be warned, orc. Your story doesn't add up.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 162000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, playerGuid]()
+                {
+                    auto player = sObjectAccessor.FindPlayer(playerGuid);
+                    pQuestGiver->MonsterSayToPlayer("Let's meet here once we know more. I hope you will find truth in your city of stones. $N, report to Mudsprocket, we will investigate our leads.", player);
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 170000);
+
+            DoAfterTime(pQuestGiver, 175 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60011); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    if (pQuest->GetQuestId() == 40721) // Conclusive Evidence
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 130 * IN_MILLISECONDS);
+            Creature* NPC_FALGRAN = pQuestGiver->FindNearestCreature(5088, 30.0F);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Kagoro, on the behalf of the Alliance and the City of Theramore, I would like to apologize for not believing you and my false accusations. We are now certain that the deserters burned the inn.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 1000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("I am relieved to hear it. Our investigation of Black Dragons yielded no results. But how did you learn of the truth?");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 14000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Through the power of magic, of course. Arts of Divination. We communed with the spirit of Paval Reethe.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 24000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Extraordinary. Incredible sorcery, as always. But... why? Why did they burn the inn? ");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 34000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Well. This is where it gets a bit complicated. The deserters were regular patrons of the inn. In their drunken state, they confessed... something to the innkeeper. In fear of the information reaching Theramore, they preferred to kill him and leave false evidence.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 42000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("The shield... Yes, it makes sense.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 57000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Paval Reethe wanted to stop them. He may have been a deserter, but he had some of his honor still left in his heart.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 62000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("That’s why they left him in the swamp. But, what was the information that was so precious to the deserters?");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 72000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("About this, we are not sure. Something about the Vengeful Mariner, their rumored true leader. Have you heard about him?");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 82000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Vengeful Mariner… The Ogres speak of a haunted sailor terrorizing the shores, but I doubt it’s connected. ");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 92000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Hmm... Right now we are looking to bring the Deserter's to justice. They have a hideout located within the Quagmire, and are led by one named Sellick Voss.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 100000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Sellick Voss?");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 113000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_FALGRAN]()
+                {
+                    NPC_FALGRAN->MonsterSay("Sellick Voss was a Captain for Theramore. He is looking to bring hostility between the Alliance and Horde, it is his actions that have led to the death of many.");
+                    NPC_FALGRAN->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 116000);
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("The Horde will help bring peace to Dustwallow, should we get an opportunity to find this 'Sellick Voss.'");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 128000);
+
+            DoAfterTime(pQuestGiver, 130 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60012); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_gizzix_grimegurgle(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40719) // Exquisite Goblin Engineering
+    {
+        pQuestGiver->MonsterSay("Now then, let us see if this ash is truly dragon made...");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->PMonsterEmote("Gizzik studies the ash carefully with the scope.");
+            }, 4000);
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Well, it would appear I am mistaken after all, this isn't dragonfire at all!");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 7000);
+    }
+
+    return false;
+}
+
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_gizzix_grimegurgle";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_gizzix_grimegurgle;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_kagoro";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_kagoro;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_forgotten_keeper";
@@ -4908,7 +5172,9 @@ void AddSC_random_scripts_3()
 
     newscript = new Script;
     newscript->Name = "npc_falgran_hastil";
-    newscript->pQuestAcceptNPC = &QuestAccept_npc_falgran_hastil;
+    newscript->pGossipHello = &GossipHello_npc_falgran_hastil;
+    newscript->pGossipSelect = &GossipSelect_npc_falgran_hastil;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_falgran_hastil;
     newscript->RegisterSelf();
 
     newscript = new Script;

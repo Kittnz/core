@@ -745,3 +745,126 @@ replace into creature_questrelation	   (id, quest) values (61056, 40577);
 -- Quest 'Tedious Diplomacy' change finish npc to Kagoro (61056) 40582
 delete from creature_involvedrelation				where quest = 40582;
 replace into creature_involvedrelation (id, quest) values (61056, 40582);
+-- Quest 'And Justice for All' change reputation reward to Theramore, instead of Kul Tiras.
+update quest_template set rewrepfaction1 = 108 where entry = 40565;
+-- Next Course of Action
+delete from quest_template where entry = 40718;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40582,40718,2,17,35,30,0,0,'Next Course of Action','I\'ll do the talking since you don\'t really seem to feel like it. Listen $N, we don\'t want a conflict with Theramore, that would mean we spit on our Warchief\'s honor.\n\nWhile we\'re talking, remind yourself of one thing, it is not friendship, but respect we hold for them.','Assist Kagoro with the meeting, once completed, meet with Gizzix Grimegurgle at Mudsprocket in Dustwallow Marsh.','Yes?','Kagoro? What does he want now? I\'m not making him another of those super spyglasses again, just so you know!',0,0,0,0,0,0,0,0, 60011,1,0,0,0,0,0,0, 0,0,0,750,76,200,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Assist Kagoro with the meeting');
+
+replace into creature_questrelation		(id, quest) values (61056,40718);
+replace into creature_involvedrelation	(id, quest) values (80933,40718);
+
+update creature_template set script_name = 'npc_kagoro' where entry = 61056;
+
+REPLACE INTO creature_template VALUES
+(60011, 328, 0, 0, 0, 0, 'quest_40718_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Exquisite Goblin Engineering
+delete from quest_template where entry = 40719;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40718,40719,2,17,42,30,0,0,'Exquisite Goblin Engineering','Well, we great goblins here at Mudsprocket have managed to do a little digging. We gathered some of the ash from nearby the burned down inn, and are looking to study it to see if the fire was truly cause by dragons.\n\nTo do so, we need some materials, we will need to construct a Gizz-matic Scope, a personal creation of mine to look deep into the ashes properties.\n\nI would also like to gather a Pristine Flame Sac, from the nearby whelps in the region, it will give us good insight into what exactly we are dealing with!','Bring 5 Whirring Bronze Gizmo, 1 Standard Scope, and 1 Pristine Flamesac to Gizzix at Mudsprocket in Dustwallow Marsh.','You got the goods?','Perfect bub, let\'s do some investigatin\'.',4375,5,4406,1,60949,1,0,0, 0,0,0,0,0,0,0,0, 0,0,0,3150,1001,350,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (80933,40719);
+replace into creature_involvedrelation	(id, quest) values (80933,40719);
+
+update creature_template set script_name = 'npc_gizzix_grimegurgle' where entry = 80933;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60949,1438,'Pristine Flame Sac',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(4323, 60949, -40, 0, 1, 1, 0),
+(4324, 60949, -40, 0, 1, 1, 0);
+
+-- Conclusive Evidence
+delete from quest_template where entry = 40720;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40719,40720,2,17,35,30,0,0,'Conclusive Evidence','So.. It would appear our sound reasoning was proven incorrect.\n\nThis is sometimes quite common for goblin engineering, as much as we hate to admit it. Either way, maybe this helped clear up some things for the investigation.\n\nIf I was a gambling goblin, I surely would have placed a wager on those dang dragons. It is a good thing I am not foolish enough to gamble!\n\nBring this information to Kagoro, surely he has use for it!','Bring the information to Kagoro near Shady Rest Inn at Dustwallow Marsh.','You got what you need?','So, is that true?\n\nIt clears up one more lead for us, we should bring our evidence forward to the Alliance.',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,300,76,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (80933,40720);
+replace into creature_involvedrelation	(id, quest) values (61056,40720);
+
+-- Tedious Diplomacy Once More
+delete from quest_template where entry = 40721;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40720,40721,2,17,35,30,0,0,'Tedious Diplomacy Once More','Theramore, and Falgran have once again requested a meeting. He has returned with new evidence, where we have met a dead end.\n\nHopefully Falgran found out more than we did, because truthfully we still got nothing.','Assist Kagoro with the meeting.','Yes?','It seems we know our next course of action.',0,0,0,0,0,0,0,0, 60012,1,0,0,0,0,0,0, 0,0,0,500,76,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Assist Kagoro with the meeting');
+
+replace into creature_questrelation		(id, quest) values (61056,40721);
+replace into creature_involvedrelation	(id, quest) values (61056,40721);
+
+REPLACE INTO creature_template VALUES
+(60012, 328, 0, 0, 0, 0, 'quest_40721_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 18, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+-- Justice for Dustwallow
+delete from quest_template where entry = 40722;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40721,40722,2,15,43,30,512,0,'Justice for Dustwallow','Sellick Voss.\n\nI have not heard of the human, but his actions reek of dishonor, and cowardice. He hides deep within an encampment, hidden in the swamp.\n\n<Kagoro grunts his disapproval.>\n\nWe must make ourselves useful, to show our might within Dustwallow Marsh. If we have an opportunity to kill Sellick Voss, and bring peace between Horde, and Alliance, we shall.\n\nGather what friends, or mercenaries are available, and scour the swamp, find Sellick Voss, and bring his Medallion to Krog at Brackenwall Village.','Find, and slay Sellick Voss, bring the Medallion of Voss to Krog at Brackenwall Village as proof.','Have you had any luck $N?','I wish I could have joined you on the battlefield. It must\'ve been a glorious sight.\n\nI am proud of you, and of Kagoro. You really proved yourselves for the Horde this day. The justice was served, deserters will no longer steal our supplies and war with the Alliance was avoided. It feels like there are only winners.\n\nWell, maybe except the Hyals. Poor family.\n\nAs a reward, please, take any one of these weapons. They are sacred to Brackenwall, and deserving of one such as yourself.',60817,1,0,0,0,0,0,0, 60941,1,0,0,0,0,0,0, 0,0,0,3950,76,1250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60950,1,60951,1,60952,1,60953,1, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61056,40722);
+replace into creature_involvedrelation	(id, quest) values (4926 ,40722);
+
+update quest_template set type = 1 where entry = 40722;
+
+replace into item_template values
+ ('60950', '4', '0', 'Wattapo\'s Bulwark', '', '20974', '3', '0', '1', '30420', '7605', '14', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '20', '1108', '0', '0', '5',
+ '0', '0', '0', '13665', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '4', '0', '0', '100', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60951', '2', '6', 'Krog\'s Pike', '', '25630', '3', '0', '1', '66820', '16705', '17', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '12', '7', '8',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3200', '0',
+ '0', '98', '133', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '2', '0', '0', '100', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60952', '2', '4', 'Stonemaul Seer Club', '', '5218', '3', '0', '1', '51464', '12866', '21', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '9', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2600', '0',
+ '0', '45', '92', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '90', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60953', '2', '2', 'Brackenwall Longbow', '', '8104', '3', '0', '1', '35076', '8769', '15', '-1', '-1', '40',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '4', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '0',
+ '0', '46', '69', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '0', '0', '0', '75', '0', '0', '0', '0', '45', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Honoring Treaties
+delete from quest_template where entry = 40723;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40722,40723,2,17,42,30,512,0,'Honoring Treaties','','Bring the Medallion of Voss to Falgran Hastil on the road between the Shady Rest Inn, and Brackenwall Village.','Yes?','This is..\n\nI...\n\n<Falgran Hastil clears his throat, and nods his head.>\n\nThe Alliance thanks you for this action, friend.',60817,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60817,1,0,750,76,50,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (4926,40723);
+replace into creature_involvedrelation	(id, quest) values (5088,40723);
+
+replace into item_template values
+ ('60954', '0', '0', 'Ripe Tel\'abim Banana', '', '3288', '1', '1024', '1', '260', '65', '0', '-1', '-1', '55',
+ '45', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '1131', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '6', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60955', '0', '0', 'Gargantuan Tel\'abim Banana', '', '17881', '1', '1024', '1', '520', '130', '0', '-1', '-1', '65',
+ '55', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '29073', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '6', '0', '0',
+ '0', '1', NULL);
+
