@@ -70,5 +70,18 @@ UPDATE `creature_template` SET `loot_id` = 2742 WHERE `entry` = 91766;
 
 UPDATE `creature_template` SET `skinning_loot_id` = 8302 WHERE `entry` = 8302;
 
+DELETE FROM `skinning_loot_template` WHERE `entry` = 8302;
 REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (8302, 4304, 85, 1, 1, 1, 0);
 REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (8302, 8170, 15, 1, 1, 1, 0);
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2409
+
+UPDATE `creature_template` SET `skinning_loot_id` = 10077 WHERE `entry` = 10077;
+
+DELETE FROM `skinning_loot_template` WHERE `entry` = 10077;
+
+REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
+('10077', '8170', '50', '1', '1', '2', '0'),
+('10077', '4304', '45', '1', '1', '2', '0'),
+('10077', '8171', '3', '1', '1', '1', '0'),
+('10077', '8169', '2', '1', '1', '1', '0');
