@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) 2005-2011 MaNGOS <http://getmangos.com/>
  * Copyright (C) 2009-2011 MaNGOSZero <https://github.com/mangos/zero>
  * Copyright (C) 2011-2016 Nostalrius <https://nostalrius.org>
@@ -1833,7 +1833,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        std::array<std::pair<uint32, uint32>, 7> items_and_sounds =
+                        std::array<std::pair<uint32, uint32>, 15> items_and_sounds =
                         { {
                             { 70043, 30218 }, // Winds of Kamio
                             { 70080, 30220 }, // Emerald Dream
@@ -1842,6 +1842,14 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             { 70083, 15000 }, // Hyjal Summit
                             { 70084, 30243 }, // Jaguero Isle
                             { 70085, 30226 }, // Stratholme's Best Days
+                            { 70086, 30299 }, // Titanic Mystery
+                            { 70087, 30298 }, // Aerie Peak
+                            { 70088, 30296 }, // Hateforge Quarry
+                            { 70090, 30295 }, // Bastion
+                            { 70091, 30294 }, // Ιntraworld Ιmmortality
+                            { 70092, 30292 }, // Sparkwater Port
+                            { 70093, 30275 }, // Stormwind Vault
+                            { 70094, 30241 }  // Dun Argath        
                         } };
 
                         for (auto const& data : items_and_sounds)
