@@ -65,3 +65,10 @@ REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskill
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2429
 
 UPDATE `creature_template` SET `loot_id` = 2742 WHERE `entry` = 91766;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2410
+
+UPDATE `creature_template` SET `skinning_loot_id` = 8302 WHERE `entry` = 8302;
+
+REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (8302, 4304, 85, 1, 1, 1, 0);
+REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (8302, 8170, 15, 1, 1, 1, 0);
