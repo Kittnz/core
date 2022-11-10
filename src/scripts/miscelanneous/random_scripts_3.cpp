@@ -576,6 +576,61 @@ bool GossipSelect_npc_torble_and_kex(Player* pPlayer, Creature* pCreature, uint3
     return true;
 }
 
+enum
+{
+    ITEM_SHELL_COIN = 81118,
+};
+
+bool GossipHello_npc_carlos_manos(Player* pPlayer, Creature* pCreature)
+{
+    if (!pPlayer->IsHardcore())
+    {
+        std::string buyStr = "Buy for " + std::to_string(sObjectMgr.GetShellCoinBuyPrice());
+        std::string sellStr = "Sell for " + std::to_string(sObjectMgr.GetShellCoinSellPrice());
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, buyStr.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, sellStr.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60903, pCreature->GetGUID());
+    return true;
+}
+
+bool GossipSelect_npc_carlos_manos(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        int32 price = sObjectMgr.GetShellCoinBuyPrice();
+        if (pPlayer->GetMoney() >= price)
+        {
+            if (pPlayer->AddItem(ITEM_SHELL_COIN))
+            {
+                sObjectMgr.IncreaseShellCoinCount();
+                pPlayer->ModifyMoney(-price);
+            }
+            else
+                pPlayer->GetSession()->SendNotification("You are overburdened.");
+        }
+        else
+            pPlayer->GetSession()->SendNotification("You can't afford that.");
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        if (pPlayer->HasItemCount(ITEM_SHELL_COIN, 1, false))
+        {
+            pPlayer->DestroyItemCount(ITEM_SHELL_COIN, 1, true);
+            
+            int32 price = sObjectMgr.GetShellCoinSellPrice();
+            sObjectMgr.DecreaseShellCoinCount();
+            pPlayer->ModifyMoney(price);
+        }
+        else
+            pPlayer->GetSession()->SendNotification("You don't have any shell coins.");
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
+}
+
 bool QuestAccept_npc_arnold_boran(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver)
@@ -5754,5 +5809,11 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "runed_thalassian_tablet";
     newscript->pGOHello = &GOHello_runed_thalassian_tablet;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_carlos_manos";
+    newscript->pGossipHello = &GossipHello_npc_carlos_manos;
+    newscript->pGossipSelect = &GossipSelect_npc_carlos_manos;
     newscript->RegisterSelf();
 }

@@ -2103,6 +2103,8 @@ void RacePlayer::LeaveRaceMode()
 	if (bIsRaceMode)
 	{
 		Player* pl = map->GetPlayer(guid);
+        if (!pl)
+            pl = sObjectAccessor.FindPlayer(guid);
 		if (pl != nullptr)
 		{
 			pl->SetFly(false);
