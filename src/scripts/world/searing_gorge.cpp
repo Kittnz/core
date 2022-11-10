@@ -56,6 +56,9 @@ struct npc_dorius_stonetenderAI : public npc_escortAI
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+
+        m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD | UNIT_DYNFLAG_TAPPED);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
     }
 
     void JustStartedEscort() override
@@ -87,7 +90,10 @@ struct npc_dorius_stonetenderAI : public npc_escortAI
                 // ToDo: research if there is any event and text here!
                 if (Player* pPlayer = GetPlayerForEscort())
                     pPlayer->GroupEventHappens(QUEST_ID_SUNTARA_STONES, m_creature);
+                m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD | UNIT_DYNFLAG_TAPPED);
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
+                m_creature->SummonGameObject(175704, -6386.89, -1984.05, 246.73, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120000, true);
                 break;
         }
     }
