@@ -85,3 +85,8 @@ REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 ('10077', '4304', '45', '1', '1', '2', '0'),
 ('10077', '8171', '3', '1', '1', '1', '0'),
 ('10077', '8169', '2', '1', '1', '1', '0');
+
+-- Related to https://github.com/slowtorta/turtlewow-bug-tracker/issues/2421
+
+UPDATE `gameobject_template` SET `name` = 'Signed Letter' WHERE `entry` = 175704;
+DELETE FROM `gameobject` where `id` = 175704;
