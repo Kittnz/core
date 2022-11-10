@@ -621,6 +621,8 @@ public:
 
 class PvPMaintenanceMaker;
 
+#define SHELL_COIN_BASE_PRICE 20
+
 class ObjectMgr
 {
     friend class PlayerDumpReader;
@@ -1516,6 +1518,12 @@ class ObjectMgr
         void ResetOldMailCounter() { m_OldMailCounter = 0; }
         void IncrementOldMailCounter(uint32 count) { m_OldMailCounter += count; }
 
+        int32 GetShellCoinCount() const { return m_shellCoinCount; }
+        int32 GetShellCoinSellPrice() const { return m_shellCoinCount * SHELL_COIN_BASE_PRICE; }
+        int32 GetShellCoinBuyPrice() const { return (m_shellCoinCount + 1) * SHELL_COIN_BASE_PRICE; }
+        void IncreaseShellCoinCount() { if (m_shellCoinCount < ((INT_MAX / SHELL_COIN_BASE_PRICE) - 1)) m_shellCoinCount++; }
+        void DecreaseShellCoinCount() { if (m_shellCoinCount > 0) m_shellCoinCount--; }
+
     protected:
 
         // first free id for selected id type
@@ -1607,6 +1615,7 @@ class ObjectMgr
         int DBCLocaleIndex;
 
         uint32 m_OldMailCounter;
+        int32 m_shellCoinCount = 0;
 
     private:
         void LoadCreatureAddons(SQLStorage& creatureaddons, char const* entryName, char const* comment);
