@@ -61,3 +61,7 @@ UPDATE `creature_template` SET `npc_flags` = 19, `trainer_type` = 2 WHERE `entry
 
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (60447, 7733, 100, 0, 0, 5);
 REPLACE INTO `npc_trainer` (`entry`, `spell`, `spellcost`, `reqskill`, `reqskillvalue`, `reqlevel`) VALUES (60447, 7734, 500, 356, 50, 0);
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2429
+
+UPDATE `creature_template` SET `loot_id` = 2742 WHERE `entry` = 91766;
