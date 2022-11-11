@@ -189,7 +189,7 @@ INSERT INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`,
 INSERT INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (2, 0, -10178.6, 1191.22, 37.9074, 4.93503, 0, 0, 0.624176, -0.781284, 300, 300, 100, 1, 0, 0);
 INSERT INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES (2, 0, -11661.2, -621.623, 30.0422, 2.59848, 0, 0, 0.963355, 0.268231, 300, 300, 100, 1, 0, 0);
 
-
+UPDATE `gameobject` SET `spawntimesecsmin` = 1800, `spawntimesecsmax` = 3600, where id = 2;
 
 
 
