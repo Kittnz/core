@@ -15,3 +15,5 @@ UPDATE `item_template` SET `name` = 'Pillager\'s Robe' WHERE `entry` = 83294;
 UPDATE `item_template` SET `name` = 'Schematic: Portable Wormhole Generator: Stormwind' WHERE `entry` = 83510;
 UPDATE `item_template` SET `name` = 'Schematic: Portable Wormhole Generator: Orgrimmar' WHERE `entry` = 83511;
 UPDATE `item_template` SET `name` = 'Plans: Imperial Plate Gauntlets' WHERE `entry` = 83518;
+
+UPDATE `item_template` SET `sell_price` = 1000, `buy_price` = 1000 WHERE `entry` = 23578;
