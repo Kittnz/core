@@ -1518,6 +1518,7 @@ class ObjectMgr
         void ResetOldMailCounter() { m_OldMailCounter = 0; }
         void IncrementOldMailCounter(uint32 count) { m_OldMailCounter += count; }
 
+        void LoadShellCoinCount();
         int32 GetShellCoinCount() const { return m_shellCoinCount; }
         int32 GetShellCoinSellPrice() const { return m_shellCoinCount * SHELL_COIN_BASE_PRICE; }
         int32 GetShellCoinBuyPrice() const { return (m_shellCoinCount + 1) * SHELL_COIN_BASE_PRICE; }
