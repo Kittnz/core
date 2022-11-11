@@ -278,3 +278,25 @@ REPLACE INTO `gameobject` VALUES ( 5011408, 2, 0, 116.887, -4373.62, 120.201, 1.
 
 -- Changes by TORTA
 REPLACE INTO `gameobject` VALUES ( 5011409, 2, 0, -8728.84, 1167.63, 104.722, 6.04477, 0, 0, 0.118926, -0.992903, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5011409';
+DELETE FROM game_event_gameobject WHERE guid = '5011409';
+DELETE FROM gameobject_battleground WHERE guid = '5011409';
+REPLACE INTO `gameobject` VALUES ( 5011410, 2, 0, -8730.49, 1167.71, 104.722, 3.29588, 0, 0, 0.997026, -0.0770659, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5011411, 2, 1, 1824.49, -4470.17, 56.4591, 0.549728, 0, 0, 0.271416, 0.962462, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5011411';
+DELETE FROM game_event_gameobject WHERE guid = '5011411';
+DELETE FROM gameobject_battleground WHERE guid = '5011411';
+REPLACE INTO `gameobject` VALUES ( 5011412, 2, 1, 1824.81, -4472.49, 56.5873, 0.329029, 0, 0, 0.163773, 0.986498, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5011412';
+DELETE FROM game_event_gameobject WHERE guid = '5011412';
+DELETE FROM gameobject_battleground WHERE guid = '5011412';
+REPLACE INTO `gameobject` VALUES ( 5011413, 2, 1, 1825.06, -4472.04, 56.5969, 3.76593, 0, 0, 0.95167, -0.307123, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5011414, 2, 0, -14347.6, 429.584, 6.62762, 2.77597, 0, 0, 0.983337, 0.181793, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5011414';
+DELETE FROM game_event_gameobject WHERE guid = '5011414';
+DELETE FROM gameobject_battleground WHERE guid = '5011414';
+REPLACE INTO `gameobject` VALUES ( 5011415, 2, 0, -14349.6, 427.803, 6.62626, 0.403284, 0, 0, 0.200278, 0.979739, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5011415';
+DELETE FROM game_event_gameobject WHERE guid = '5011415';
+DELETE FROM gameobject_battleground WHERE guid = '5011415';
+REPLACE INTO `gameobject` VALUES ( 5011416, 2, 0, -14349.6, 427.803, 6.62626, 3.49775, 0, 0, 0.984186, -0.17714, 300, 300, 100, 1, 0, 0);
