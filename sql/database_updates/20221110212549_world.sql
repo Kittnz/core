@@ -450,3 +450,6 @@ DELETE FROM creature_movement WHERE id=2572972;
 DELETE FROM game_event_creature WHERE guid=2572972;
 DELETE FROM game_event_creature_data WHERE guid=2572972;
 DELETE FROM creature_battleground WHERE guid=2572972;
+
+-- Changes by TORTA
+REPLACE INTO `gameobject` VALUES ( 5011428, 2, 0, -10178.6, 1191.22, 37.9074, 4.93503, 0, 0, 0.624176, -0.781284, 300, 300, 100, 1, 0, 0);
