@@ -65,11 +65,11 @@ enum GuildBankAction
 
 enum GuildBankCosts
 {
-	GUILD_BANK_COST = 5000 * GOLD,
-	TAB_2_COST      = 1000 * GOLD,
+	GUILD_BANK_COST = 2000 * GOLD,
+	TAB_2_COST      = 500 * GOLD,
 	TAB_3_COST      = 1000 * GOLD,
-	TAB_4_COST      = 1000 * GOLD,
-	TAB_5_COST      = 1000 * GOLD,
+	TAB_4_COST      = 1500 * GOLD,
+	TAB_5_COST      = 2000 * GOLD,
 };
 
 enum BankDetails
