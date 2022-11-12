@@ -86,8 +86,7 @@ enum WorldTimers
     WUPDATE_SAVE_VAR    = 4,
     WUPDATE_GROUPS      = 5,
     WUPDATE_CENSUS      = 6,
-    WUPDATE_SHELLCOIN   = 7,
-    WUPDATE_COUNT       = 8
+    WUPDATE_COUNT       = 7
 };
 
 /// Configuration elements
@@ -1076,7 +1075,6 @@ class World
         uint32 m_gameDay;
         int32  m_timeZoneOffset;
         IntervalTimer m_timers[WUPDATE_COUNT];
-        int32 m_lastShellCoinPrice = 0;
 
 
         uint32 m_lastDiff = 0;
