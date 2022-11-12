@@ -209,9 +209,13 @@ void TransmogMgr::ApplyTransmog(std::string msg)
 uint8 TransmogMgr::ApplyTransmog(uint8 slot, uint32 sourceItemID, uint32 slotId)
 {
 	Item* destItem = _owner->GetItemByPos(INVENTORY_SLOT_BAG_0, slot);
+
+	if (!destItem)
+		return 1;
+
 	ItemPrototype const* destItemProto = destItem->GetProto();
 
-	if (!destItem || !destItem->GetProto() || !destItemProto)
+	if (!destItem->GetProto() || !destItemProto)
 		return 1; // no dest item
 
 	uint32 newItemId = 0;
