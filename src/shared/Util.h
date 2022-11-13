@@ -478,10 +478,10 @@ void HexStrToByteArray(std::string const& str, uint8* out, bool reverse = false)
 
 uint32 dither(float v);
 
-inline uint32 BatchifyTimer(uint32 timer)
+inline uint32 BatchifyTimer(uint32 timer, uint32 interval)
 {
-    uint32 value = timer / BATCHING_INTERVAL;
-    if (timer % BATCHING_INTERVAL)
+    uint32 value = timer / interval;
+    if (timer % interval)
         value++;
-    return value * BATCHING_INTERVAL;
+    return value * interval;
 }
