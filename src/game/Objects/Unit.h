@@ -221,7 +221,7 @@ struct SpellCooldown
 typedef std::map<uint32, SpellCooldown> SpellCooldowns;
 
 // According to data from sniffs, combat is checked every 3 batches of 400 ms.
-#define UNIT_COMBAT_CHECK_TIMER_MAX 1200
+#define UNIT_COMBAT_CHECK_TIMER_MAX 1200u
 
 struct SpellImmune
 {
