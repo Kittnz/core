@@ -404,7 +404,6 @@ class Unit : public WorldObject
         void SetCreateHealth(uint32 val) { SetUInt32Value(UNIT_FIELD_BASE_HEALTH, val); }
         void SetCreateMana(uint32 val) { SetUInt32Value(UNIT_FIELD_BASE_MANA, val); }
         void SetCreateResistance(SpellSchools school, int32 val) { m_createResistances[school] = val; }
-        void SetStat(Stats stat, int32 val) { SetStatInt32Value(UNIT_FIELD_STAT0 + stat, val); }
         void SetResistance(SpellSchools school, int32 val) { SetInt32Value(UNIT_FIELD_RESISTANCES + school, val); }
         float GetRegenHPPerSpirit() const;
         float GetRegenMPPerSpirit() const;
@@ -424,6 +423,7 @@ class Unit : public WorldObject
         uint32 GetCreatePowers(Powers power) const;
         int32 GetCreateResistance(SpellSchools school) const { return m_createResistances[school]; }
         float GetStat(Stats stat) const { return float(GetUInt32Value(UNIT_FIELD_STAT0+stat)); }
+        void SetStat(Stats stat, int32 val) { SetStatInt32Value(UNIT_FIELD_STAT0 + stat, val); }
         int32 GetArmor() const { return GetResistance(SPELL_SCHOOL_NORMAL); }
         void SetArmor(int32 val) { SetStatInt32Value(UNIT_FIELD_RESISTANCES, val); }
         int32 GetResistance(SpellSchools school) const { return GetInt32Value(UNIT_FIELD_RESISTANCES + school); }

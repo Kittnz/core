@@ -7407,6 +7407,10 @@ void Spell::EffectSummonDemon(SpellEffectIndex eff_idx)
 
         // Short root spell
         pSummon->CastSpell(pSummon, 22707, true);
+
+        // Add mana regen
+        pSummon->SetStat(STAT_SPIRIT, pSummon->GetLevel() * 3);
+        pSummon->UpdateManaRegen();
     }
 
     if (m_caster->GetTypeId() == TYPEID_PLAYER && m_spellInfo->Id == 1122)
