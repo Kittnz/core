@@ -2838,7 +2838,7 @@ AHBot.itemcount = 50
 #                 2 (premade gear template)
 #
 ###################################################################################################################
-RandomBot.Enable = 0
+RandomBot.Enable = 1
 RandomBot.MinBots = 0
 RandomBot.MaxBots = 0
 RandomBot.Refresh = 60000
@@ -2846,7 +2846,7 @@ RandomBot.Refresh = 60000
 PlayerBot.AllowSaving = 0
 PlayerBot.Debug = 0
 PlayerBot.UpdateMs = 1000
-PlayerBot.ShowInWhoList = 0
+PlayerBot.ShowInWhoList = 1
 
 PartyBot.MaxBots = 0
 PartyBot.SkipChecks = 0
@@ -2854,6 +2854,13 @@ PartyBot.AutoEquip = 1
 PartyBot.RandomGearLevelDifference = 10
 
 BattleBot.AutoEquip = 1
+
+
+WorldBot.Enable = 1
+WorldBot.UseLoader = 1
+WorldBot.UseChat = 1
+WorldBot.MaxHordeBots = 20
+WorldBot.MaxAllianceBots = 20
 
 ###################################################################################################################
 #    Database-based chat

@@ -13,11 +13,16 @@
 #include "PartyBotAI.h"
 #include "BattleBotAI.h"
 #include "BattleBotWaypoints.h"
+#include "WorldBotAI.h"
+#include "WorldBotWaypoints.h"
 #include "Language.h"
 #include "Spell.h"
 
 INSTANTIATE_SINGLETON_1(PlayerBotMgr);
-
+std::vector<WorldBotsCollection> myBots;
+std::vector<WorldBotsCollection> myHordeBots;
+std::vector<WorldBotsCollection> myAllianceBots;
+std::vector<WorldBotsAreaPOI> myAreaPOI;
 
 PlayerBotMgr::PlayerBotMgr()
 {
@@ -45,11 +50,11 @@ PlayerBotMgr::~PlayerBotMgr()
 
 void PlayerBotMgr::LoadConfig()
 {
-    m_confEnableRandomBots = sConfig.GetBoolDefault("RandomBot.Enable", false);
+    m_confEnableRandomBots = sConfig.GetBoolDefault("RandomBot.Enable", true);
     m_confMinRandomBots = sConfig.GetIntDefault("RandomBot.MinBots", 3);
     m_confMaxRandomBots = sConfig.GetIntDefault("RandomBot.MaxBots", 10);
     m_confRandomBotsRefresh = sConfig.GetIntDefault("RandomBot.Refresh", 60000);
-    m_confAllowSaving = sConfig.GetBoolDefault("PlayerBot.AllowSaving", false);
+    m_confAllowSaving = sConfig.GetBoolDefault("PlayerBot.AllowSaving", true);
     m_confDebug = sConfig.GetBoolDefault("PlayerBot.Debug", false);
     m_confUpdateDiff = sConfig.GetIntDefault("PlayerBot.UpdateMs", 10000);
 
@@ -138,6 +143,30 @@ void PlayerBotMgr::Load()
     {
         sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "[PlayerBotMgr] Between %u and %u bots online", m_confMinRandomBots, m_confMaxRandomBots);
         sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "[PlayerBotMgr] %u now loading", m_stats.loadingCount);
+    }
+
+    // World Bots
+    bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
+    if (worldBotEnabled)
+    {
+        WorldBotAI* ai = nullptr;
+
+        // Load paths
+        ai->LoadDBWaypoints();
+
+        // Load db characters
+        m_useWorldBotLoader = sWorld.getConfig(CONFIG_BOOL_WORLDBOT_LOADER);
+        if (m_useWorldBotLoader)
+        {
+            WorldBotLoader();
+            WorldBotCreator();
+        }
+
+        // Load Area POI's
+        WorldBotLoadAreaPOI();
+
+        // Load chat
+        ai->LoadBotChat();
     }
 }
 
@@ -304,12 +333,12 @@ void PlayerBotMgr::Update(uint32 diff)
     if (!m_confEnableRandomBots)
         return;
 
-    uint32 updatesCount = (m_elapsedTime - m_lastBotsRefresh) / m_confRandomBotsRefresh;
+    /*uint32 updatesCount = (m_elapsedTime - m_lastBotsRefresh) / m_confRandomBotsRefresh;
     for (uint32 i = 0; i < updatesCount; ++i)
     {
         AddOrRemoveBot();
         m_lastBotsRefresh += m_confRandomBotsRefresh;
-    }
+    }*/
 }
 
 /*
@@ -1813,4 +1842,458 @@ bool ChatHandler::HandleBattleBotShowAllPathsCommand(char* args)
 
     PSendSysMessage("Showing %u paths for battleground.", id);
     return true;
+}
+
+
+bool ChatHandler::HandleWorldBotAddAlteracCommand(char* args)
+{
+    return HandleWorldBotAddCommand(args, MAP_AV, true);
+}
+
+bool ChatHandler::HandleWorldBotAddArathiCommand(char* args)
+{
+    return HandleWorldBotAddCommand(args, MAP_AB, true);
+}
+
+bool ChatHandler::HandleWorldBotAddWarsongCommand(char* args)
+{
+    return HandleWorldBotAddCommand(args, MAP_WS, true);
+}
+
+bool ChatHandler::HandleWorldBotAddEasternKingdomsCommand(char* args)
+{
+    return HandleWorldBotAddCommand(args, MAP_EASTERN_KINGDOMS, false);
+}
+
+bool ChatHandler::HandleWorldBotAddKalimdorCommand(char* args)
+{
+    return HandleWorldBotAddCommand(args, MAP_KALIMDOR, false);
+}
+
+bool ChatHandler::HandleWorldBotAddCommand(char* args, uint32 map, bool isBattleBot)
+{
+    bool worldBotEnabled = sWorld.getConfig(CONFIG_BOOL_WORLDBOT);
+    if (!worldBotEnabled)
+    {
+        SendSysMessage("World bots are disabled.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool worldBotLoader = sPlayerBotMgr.m_useWorldBotLoader;
+    if (worldBotLoader)
+    {
+        SendSysMessage("World bots:  Adding bots is not allowed, use config to add bots from character db.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Player* pPlayer = m_session->GetPlayer();
+    if (!pPlayer)
+        return false;
+
+    if (!args)
+    {
+        SendSysMessage("Incorrect syntax. Expected faction");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Team botTeam = HORDE;
+
+    std::string option = args;
+    if (option == "horde")
+        botTeam = HORDE;
+    else if (option == "alliance")
+        botTeam = ALLIANCE;
+    else
+    {
+        SendSysMessage("Incorrect syntax. Expected faction");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    std::vector<uint32> dpsClasses = { CLASS_WARRIOR, CLASS_HUNTER, CLASS_ROGUE, CLASS_MAGE, CLASS_WARLOCK, CLASS_PRIEST, CLASS_DRUID };
+    if (botTeam == HORDE)
+        dpsClasses.push_back(CLASS_SHAMAN);
+    else
+        dpsClasses.push_back(CLASS_PALADIN);
+    uint8 botClass = SelectRandomContainerElement(dpsClasses);
+    uint8 botRace = SelectRandomRaceForClass(botClass, botTeam);
+
+    // Spawn bot
+    WorldBotAI* ai;
+    switch (map)
+    {
+    case MAP_EASTERN_KINGDOMS:
+        ai = new WorldBotAI(botRace, botClass, 0, 0, -8833.379f, 628.627f, 94.006f, 4.195f, isBattleBot, 0);
+        PSendSysMessage("Added %s world bot", args);
+        break;
+    case MAP_KALIMDOR:
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 1655.873f, -4413.851f, 16.623f, 2.967f, isBattleBot, 0);
+        PSendSysMessage("Added %s world bot", args);
+        break;
+    case MAP_WS:
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_WS);
+        PSendSysMessage("Added %s world bot and queuing for WS", args);
+        break;
+    case MAP_AB:
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AB);
+        PSendSysMessage("Added %s world bot and queuing for AB", args);
+        break;
+    case MAP_AV:
+        ai = new WorldBotAI(botRace, botClass, 1, 0, 16224.356f, 16284.763f, 13.175f, 4.56f, isBattleBot, BATTLEGROUND_QUEUE_AV);
+        PSendSysMessage("Added %s world bot and queuing for AV", args);
+        break;
+    default:
+        break;
+    }
+
+    if (sPlayerBotMgr.AddBot(ai))
+        SendSysMessage("New world bot added.");
+    else
+    {
+        SendSysMessage("Error spawning bot.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    return true;
+}
+
+bool ChatHandler::HandleWorldBotRemoveCommand(char* args)
+{
+    Player* pTarget = GetSelectedPlayer();
+    if (!pTarget)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (pTarget->AI())
+    {
+        if (WorldBotAI* pAI = dynamic_cast<WorldBotAI*>(pTarget->AI()))
+        {
+            pAI->botEntry->requestRemoval = true;
+            return true;
+        }
+    }
+
+    SendSysMessage("Target is not a map bot.");
+    SetSentErrorMessage(true);
+    return false;
+}
+
+void ShowWorldBotPathHelper(Map* pMap, WorldBotPath* pPath, uint32 id)
+{
+    for (const auto& point : *pPath)
+    {
+        if (Creature* pWaypoint = pMap->SummonCreature(VISUAL_WAYPOINT, point.x, point.y, point.z, 0.0f, TEMPSUMMON_TIMED_DESPAWN, 120000, true))
+        {
+            // Show path id as level to distinguish individual paths.
+            pWaypoint->SetUInt32Value(UNIT_FIELD_LEVEL, id);
+
+            // Mark points that have script attached.
+            if (point.pFunc)
+                pWaypoint->CastSpell(pWaypoint, SPELL_RED_GLOW, true);
+        }
+    }
+}
+
+bool ChatHandler::HandleWorldBotShowPathCommand(char* args)
+{
+    Player* pTarget = GetSelectedPlayer();
+    if (!pTarget)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    if (pTarget->AI())
+    {
+        if (WorldBotAI* pAI = dynamic_cast<WorldBotAI*>(pTarget->AI()))
+        {
+            if (pAI->m_currentPath)
+                ShowWorldBotPathHelper(pTarget->GetMap(), pAI->m_currentPath, 1);
+            else
+                SendSysMessage("Target is not following a path.");
+
+            return true;
+        }
+    }
+
+    SendSysMessage("Target is not a map bot.");
+    SetSentErrorMessage(true);
+    return false;
+}
+
+bool ChatHandler::HandleWorldBotShowAllPathsCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+    std::vector<WorldBotPath*> const* pPaths;
+
+    switch (pPlayer->GetMapId())
+    {
+    case MAP_EASTERN_KINGDOMS:
+    {
+        pPaths = &vPaths_Map_Eastern_Kingdoms;
+        break;
+    }
+    case MAP_KALIMDOR:
+    {
+        pPaths = &vPaths_Map_Kalimdor;
+        break;
+    }
+    case MAP_AB:
+    {
+        pPaths = &vPaths_Map_Arathi_Basin;
+        break;
+    }
+    case MAP_AV:
+    {
+        pPaths = &vPaths_Map_Alterac_Valley;
+        break;
+    }
+    case MAP_WS:
+    {
+        pPaths = &vPaths_Map_Warsong_Gulch;
+        break;
+    }
+    default:
+        break;
+    }
+
+    uint32 id = 1;
+    for (const auto& path : *pPaths)
+    {
+        ShowWorldBotPathHelper(pPlayer->GetMap(), path, id++);
+    }
+
+    PSendSysMessage("Showing %u paths.", id);
+    return true;
+}
+
+bool ChatHandler::HandleWorldBotPathPointAddCommand(char* args)
+{
+    uint32 guid, id, reverse = 0;
+    char comment[100];
+
+    sscanf(args, "%u %u %u %s", &guid, &id, &reverse, comment);
+
+    Player* me = m_session->GetPlayer();
+    WorldDatabase.PExecute(
+        "INSERT INTO `worldbot_waypoints` (`guid`, `id`, `x`, `y`, `z`, `area`, `zone`, `map`, `reverse`, `comments`) VALUES "
+        "(%u, %u, %f, %f, %f, %u, %u, %u, %u, '%s')",
+        guid, id, me->GetPositionX(), me->GetPositionY(), me->GetPositionZ(), me->GetAreaId(), me->GetZoneId(), me->GetMapId(), reverse, comment);
+
+    PSendSysMessage("Added new waypoint with guid: %u and id: %u", guid, id);
+    PSendSysMessage("XYZ: %f %f %f", me->GetPositionX(), me->GetPositionY(), me->GetPositionZ());
+    PSendSysMessage("AreaID: %u  ZoneID: %u  Map: %u", me->GetAreaId(), me->GetZoneId(), me->GetMapId());
+    PSendSysMessage("Reverse: %u and comment: %s", reverse, comment);
+
+    return true;
+}
+
+void PlayerBotMgr::WorldBotLoader()
+{
+    sLog.outString("[WorldBotLoader] Loading Bots from character db...");
+    QueryResult* result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE is_worldbot = 1 and virtual_player_realm = 721682444");
+    if (!result)
+    {
+        sLog.outString("Table `character` is empty.");
+    }
+    else
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 guid = fields[0].GetUInt32();
+            uint32 account = fields[1].GetUInt32();
+            std::string name = fields[2].GetString();
+            uint32 race = fields[3].GetUInt32();
+            uint32 class_ = fields[4].GetUInt32();
+            float pos_x = fields[5].GetFloat();
+            float pos_y = fields[6].GetFloat();
+            float pos_z = fields[7].GetFloat();
+            uint32 map = fields[8].GetUInt32();
+            float orientation = fields[9].GetFloat();
+
+            ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(race);
+
+            if (!rEntry)
+                break;
+
+            if (rEntry->TeamID == 1) // horde
+            {
+                WorldBotsCollection bot;
+                bot.guid = guid;
+                bot.account = account;
+                bot.name = name;
+                bot.race = race;
+                bot.class_ = class_;
+                bot.pos_x = pos_x;
+                bot.pos_y = pos_y;
+                bot.pos_z = pos_z;
+                bot.map = map;
+                bot.orientation = orientation;
+                myHordeBots.push_back(bot);
+            }
+
+            if (rEntry->TeamID == 7) // alliance
+            {
+                WorldBotsCollection bot;
+                bot.guid = guid;
+                bot.account = account;
+                bot.name = name;
+                bot.race = race;
+                bot.class_ = class_;
+                bot.pos_x = pos_x;
+                bot.pos_y = pos_y;
+                bot.pos_z = pos_z;
+                bot.map = map;
+                bot.orientation = orientation;
+                myAllianceBots.push_back(bot);
+            }
+
+        } while (result->NextRow());
+
+        delete result;
+    }
+}
+
+void PlayerBotMgr::WorldBotCreator()
+{
+    uint32 worldBotHordeCount = 0;
+    uint32 worldBotAllianceCount = 0;
+    uint32 worldBotHordeMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX);
+    uint32 worldBotAllianceMax = sWorld.getConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX);
+
+    std::random_shuffle(myHordeBots.begin(), myHordeBots.end());
+    for (auto b : myHordeBots)
+    {
+        if (worldBotHordeCount >= worldBotHordeMax)
+            break;
+
+        WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
+        sLog.outString("WorldBot:  Add horde bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        worldBotHordeCount++;
+    }
+
+    std::random_shuffle(myAllianceBots.begin(), myAllianceBots.end());
+    for (auto b : myAllianceBots)
+    {
+        if (worldBotAllianceCount >= worldBotAllianceMax)
+            break;
+
+        WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
+        sLog.outString("WorldBot:  Add alliance bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        worldBotAllianceCount++;
+    }
+
+    sLog.outString("WorldBot:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
+}
+
+bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
+{
+    uint32 accountId = 0;
+    auto iter = m_bots.find(guid);
+    if (iter == m_bots.end())
+        accountId = account;
+    else
+        accountId = iter->second->accountId;
+
+    if (!accountId)
+    {
+        sLog.outString("Player account %u not found ...", guid);
+        return false;
+    }
+
+    WorldBotAI* ai = new WorldBotAI(race, class_, map, 0, pos_x, pos_y, pos_z, orientation, false, 0);
+
+    std::shared_ptr<PlayerBotEntry> e;
+    if (iter != m_bots.end())
+    {
+        if (ai) // new AI
+            e->ai.reset(ai);
+
+        e = iter->second;
+    }
+    else
+    {
+        e = std::make_shared<PlayerBotEntry>();
+        e->state = PB_STATE_LOADING;
+        e->playerGUID = guid;
+        e->chance = 100;
+        e->accountId = accountId;
+        e->isChatBot = false;
+        ai->botEntry = e.get();
+        
+        if (ai)
+        {
+            e->ai.reset(ai);
+        }
+        else
+        {
+            e->ai.reset(new PlayerBotAI(nullptr));
+        }
+
+        m_bots.insert({ guid , e });
+    }
+
+    e->ai->botEntry = e.get();
+    e->state = PB_STATE_LOADING;
+    WorldSession* session = new WorldSession(accountId, nullptr, sAccountMgr.GetSecurity(accountId), 0, LOCALE_enUS);
+    session->SetBot(e);
+    sWorld.AddSession(session);
+    m_stats.loadingCount++;
+
+    return true;
+}
+
+void PlayerBotMgr::WorldBotBalancer()
+{
+
+}
+
+void PlayerBotMgr::WorldBotLoadAreaPOI()
+{
+    sLog.outString("[WorldBot POI] Loading poi's from db...");
+    QueryResult* result = WorldDatabase.PQuery("SELECT ID, Importance, X, Y, Z, ContinentID, Flags, AreaID, Name_enUS FROM `worldbot_areapoi`");
+    if (!result)
+    {
+        sLog.outString("Table `worldbot_areapoi` is empty.");
+    }
+    else
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            uint32 importance = fields[1].GetUInt32();
+            float pos_x = fields[2].GetFloat();
+            float pos_y = fields[3].GetFloat();
+            float pos_z = fields[4].GetFloat();
+            uint32 map = fields[5].GetUInt32();
+            uint32 flags = fields[6].GetUInt32();
+            uint32 areaid = fields[7].GetUInt32();
+            std::string name = fields[8].GetString();
+
+            WorldBotsAreaPOI poi;
+            poi.id = id;
+            poi.importance = importance;
+            poi.pos_x = pos_x;
+            poi.pos_y = pos_y;
+            poi.pos_z = pos_z;
+            poi.map = map;
+            poi.flags = flags;
+            poi.areaid = areaid;
+            poi.name = name;
+            myAreaPOI.push_back(poi);
+
+        } while (result->NextRow());
+
+        delete result;
+    }
 }

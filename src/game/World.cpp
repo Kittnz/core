@@ -757,6 +757,12 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_LFG_MATCHMAKING, "LFG.Matchmaking", false);
     setConfig(CONFIG_UINT32_LFG_MATCHMAKING_TIMER, "LFG.MatchmakingTimer", 600);
 
+    setConfig(CONFIG_BOOL_WORLDBOT,                   "WorldBot.Enable", true);
+    setConfig(CONFIG_BOOL_WORLDBOT_LOADER,            "WorldBot.UseLoader", false);
+    setConfig(CONFIG_BOOL_WORLDBOT_USECHAT,           "WorldBot.UseChat", true);
+    setConfig(CONFIG_UINT32_WORLDBOT_HORDE_MAX,       "WorldBot.MaxHordeBots", 100);
+    setConfig(CONFIG_UINT32_WORLDBOT_ALLIANCE_MAX,    "WorldBot.MaxAllianceBots", 100);
+
     setConfig(CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS, "Visibility.ForceActiveObjects", true);
     m_relocation_ai_notify_delay = sConfig.GetIntDefault("Visibility.AIRelocationNotifyDelay", 1000u);
     m_relocation_lower_limit_sq  = pow(sConfig.GetFloatDefault("Visibility.RelocationLowerLimit", 10), 2);
@@ -919,7 +925,7 @@ void World::LoadConfigSettings(bool reload)
     setConfigMinMax(CONFIG_UINT32_RELOCATION_VMAP_CHECK_TIMER, "Movement.RelocationVmapsCheckDelay", 0, 0, 2000);
 
     sPlayerBotMgr.LoadConfig();
-    setConfig(CONFIG_BOOL_PLAYER_BOT_SHOW_IN_WHO_LIST, "PlayerBot.ShowInWhoList", false);
+    setConfig(CONFIG_BOOL_PLAYER_BOT_SHOW_IN_WHO_LIST, "PlayerBot.ShowInWhoList", true);
     setConfig(CONFIG_UINT32_PARTY_BOT_MAX_BOTS, "PartyBot.MaxBots", 0);
     setConfig(CONFIG_BOOL_PARTY_BOT_SKIP_CHECKS, "PartyBot.SkipChecks", false);
     setConfigMinMax(CONFIG_UINT32_PARTY_BOT_AUTO_EQUIP, "PartyBot.AutoEquip", PLAYER_BOT_AUTO_EQUIP_RANDOM_GEAR, PLAYER_BOT_AUTO_EQUIP_STARTING_GEAR, PLAYER_BOT_AUTO_EQUIP_PREMADE_GEAR);

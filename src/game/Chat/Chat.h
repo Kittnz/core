@@ -86,11 +86,13 @@ enum PlayerChatTag
 
 class PartyBotAI;
 class BattleBotAI;
+class WorldBotAI;
 
 class ChatHandler
 {
     friend class PartyBotAI;
     friend class BattleBotAI;
+    friend class WorldBotAI;
     public:
         explicit ChatHandler(WorldSession* session);
         explicit ChatHandler(Player* player);
@@ -278,6 +280,16 @@ class ChatHandler
         bool HandleBattleBotRemoveCommand(char* args);
         bool HandleBattleBotShowPathCommand(char* args);
         bool HandleBattleBotShowAllPathsCommand(char* args);
+        bool HandleWorldBotAddCommand(char* args, uint32 map, bool isBattleBot);
+        bool HandleWorldBotAddAlteracCommand(char* args);
+        bool HandleWorldBotAddArathiCommand(char* args);
+        bool HandleWorldBotAddWarsongCommand(char* args);
+        bool HandleWorldBotAddEasternKingdomsCommand(char* args);
+        bool HandleWorldBotAddKalimdorCommand(char* args);
+        bool HandleWorldBotRemoveCommand(char* args);
+        bool HandleWorldBotShowPathCommand(char* args);
+        bool HandleWorldBotShowAllPathsCommand(char* args);
+        bool HandleWorldBotPathPointAddCommand(char* args);
 
         // spell_disabled
         bool HandleReloadSpellDisabledCommand(char *args);
