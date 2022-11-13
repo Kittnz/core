@@ -220,6 +220,9 @@ struct SpellCooldown
 
 typedef std::map<uint32, SpellCooldown> SpellCooldowns;
 
+// According to data from sniffs, combat is checked every 3 batches of 400 ms.
+#define UNIT_COMBAT_CHECK_TIMER_MAX 1200
+
 struct SpellImmune
 {
     uint32 type;
@@ -1010,7 +1013,8 @@ class Unit : public WorldObject
         /*********************************************************/
 
     private:
-        uint32 m_CombatTimer;
+        uint32 m_combatTimer;
+        ObjectGuid m_combatTimerTarget;
         uint32 m_extraAttacks;
         bool m_extraMute;
         bool m_doExtraAttacks;
@@ -1253,16 +1257,16 @@ class Unit : public WorldObject
         void PetOwnerKilledUnit(Unit* pVictim);
         
         bool IsInCombat() const { return HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IN_COMBAT); }
-        void SetInCombatState(bool bPvP, Unit* pEnemy = nullptr);
+        void SetInCombatState(uint32 combatTimer = 0, Unit* pEnemy = nullptr);
         void SetInCombatWith(Unit* pEnemy);
         void SetInCombatWithAssisted(Unit* pAssisted);
         void SetInCombatWithAggressor(Unit* pAggressor, bool touchOnly = false);
         inline void SetOutOfCombatWithAggressor(Unit* pAggressor) { SetInCombatWithAggressor(pAggressor, true); }
-        void SetInCombatWithVictim(Unit* pVictim, bool touchOnly = false);
+        void SetInCombatWithVictim(Unit* pVictim, bool touchOnly = false, uint32 combatTimer = 0);
         inline void SetOutOfCombatWithVictim(Unit* pVictim) { SetInCombatWithVictim(pVictim, true); }
         void TogglePlayerPvPFlagOnAttackVictim(Unit const* pVictim, bool touchOnly = false);
-        uint32 GetCombatTimer() const { return m_CombatTimer; }
-        void SetCombatTimer(uint32 t) { m_CombatTimer = t; }
+        uint32 GetCombatTimer() const { return m_combatTimer; }
+        void SetCombatTimer(uint32 t) { m_combatTimer = t; }
         virtual void OnEnterCombat(Unit* /*pAttacker*/, bool /*notInCombat*/) {} // (pAttacker must be valid)
 
         // Stop this unit from combat, if includingCast==true, also interrupt casting

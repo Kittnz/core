@@ -477,3 +477,11 @@ std::string ByteArrayToHexStr(uint8 const* bytes, uint32 length, bool reverse = 
 void HexStrToByteArray(std::string const& str, uint8* out, bool reverse = false);
 
 uint32 dither(float v);
+
+inline uint32 BatchifyTimer(uint32 timer)
+{
+    uint32 value = timer / BATCHING_INTERVAL;
+    if (timer % BATCHING_INTERVAL)
+        value++;
+    return value * BATCHING_INTERVAL;
+}
