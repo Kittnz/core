@@ -2232,8 +2232,7 @@ class Player final: public Unit
         bool m_xpGain = true;
         uint32 m_hardcoreKickTimer;
         uint32 m_hardcoreInvGuildTimer;
-        uint32 m_hardcoreSaveItemsTimer;
-
+        
         void SendMountResult(UnitMountResult result) const;
         void SendDismountResult(UnitDismountResult result) const;
         void UpdateCorpseReclaimDelay();
@@ -2241,6 +2240,9 @@ class Player final: public Unit
 		// For chronoboon item
 		uint32 m_worldBuffCheckTimer;
     public:
+
+        uint32 m_hardcoreSaveItemsTimer;
+
 
         //Little safeguard for HC characters after a server start.
         uint32 noAggroTimer = 0;
