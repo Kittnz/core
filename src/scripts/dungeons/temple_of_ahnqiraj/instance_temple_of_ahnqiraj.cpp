@@ -272,6 +272,21 @@ void instance_temple_of_ahnqiraj::OnCreatureRespawn(Creature* pCreature)
     }
 }
 
+void instance_temple_of_ahnqiraj::OnCreatureDeath(Creature* creature)
+{
+    switch (creature->GetEntry())
+    {
+        case NPC_ANUBISATH_DEFENDER:
+        case NPC_ANUBISATH_SENTINEL:
+        case NPC_ANUBISATH_WARDER:
+        case NPC_OBSIDIAN_ERADICATOR:
+        case NPC_OBSIDIAN_NULLIFIER:
+        {
+            creature->SummonGameObject(urand(0, 10) == 1 ? 181069 : 181068, creature->GetPositionX(), creature->GetPositionY(), creature->GetPositionZ(), 0, 0, 0, 0, 0, -1, false);
+        }break;
+    }
+}
+
 void instance_temple_of_ahnqiraj::OnCreatureCreate(Creature* pCreature)
 {
     switch (pCreature->GetEntry())
