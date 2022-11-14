@@ -6278,7 +6278,11 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
     {
         if (pVictim->IsCharmerOrOwnerPlayerOrPlayerItself() && (combatTimer < UNIT_PVP_COMBAT_TIMER))
             combatTimer = UNIT_PVP_COMBAT_TIMER;
+
         SetInCombatState(combatTimer, pVictim);
+
+        if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
+            pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER);
     }
 }
 
@@ -9066,6 +9070,18 @@ void Unit::SetFeignDeath(bool apply, ObjectGuid casterGuid, bool success)
             RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
 
             GetHostileRefManager().deleteReferences();
+
+            // you should remain in combat with pet's victim
+            if (Pet* pPet = GetPet())
+            {
+                if (pPet->IsInCombat())
+                {
+                    if (Unit* pVictim = pPet->GetVictim())
+                    {
+                        SetInCombatWithVictim(pVictim, false, 6000);
+                    }
+                }
+            }
         }
 
         SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
