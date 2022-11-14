@@ -2175,34 +2175,244 @@ values (@spell_list_id, @description,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- Tazzo Gearfire <The Outsider>, display 3469, level 55, faction 35, humanoid, scale 1, humanoid, scale 1, gossip/quest flags, gossip text: "Hmm, just a bit more residue to mix with the roots could potentially... Perhaps altering the growth of the tree itself-\n\n Can't you see that I am a bit busy, I am nearly on the cusp of a breakthrough to something magnificent can't you see?\n\n The secret of the Gargantuan Banana is at my finger tips, now unless you're here to help move along.
--- 
 -- Bixxle Screwfuse <Supply Master>, display ID 7031, level 48, faction 35, humanoid, scale 1, gossip/quest flags, gossip text : "You're sure far out, sorry if you were sent here and welcome if you came on your own accord!\n\n My name is Bixxle, been managing this Storehouse for quite a while now. This used to be one of the primary locations of Banana collecting a while ago, but now its sort of all gone to hell.\n\n Apes, monkeys, and snakes have been causing all sorts of issues, but I don't need to tell you that, you've seen em by now!\n\n Perhaps you can help us out with some things around here, we could certainly use it.
--- 
 -- Baron Telraz , display ID 7209, level 58 elite, faction 35, humanoid, scale 1, gossip/quest flags, gossip text: "Why hello there kid, I take it you're one of those adventuring types, one to help those in need.\n\n If so you're just what I'm lookin' for. We've had all sorts of problems, and everything has collapsed, I got more dead employees than I do banana's, you UNDERSTAND?!\n\n <Baron Telraz takes a moment, clearing his throat.>\n\n Apologies about that, a goblin gets quite upset about the loss of so much capital and gold, time is money but on Tel'abim, time is losing money.\n\n Such a calamity must be reversed before all of the investments here turn to nothing, I am telling you, a goblin is worth his gold, and I am not returning to Kezan with a few bananas in my pocket. ((Baron Telraz needs a small clickable box that says the following 'What happened on Tel'abim?' when clicked, the following gossip text is shown > "Everything! Ambushes, attacks, the wildlife itself rose up in rebellion, the damn MONKEYS came from the trees, and attacked all my workers.\n\n We had bases all along the island, with sustainable, and PROFITABLE harvesting, now its all gone bananas because of some apes and their King named Morgo... Or something.\n\n\ We're short staffed, undermanned, and sorely in need of help, so quit asking questions."
--- 
 -- Tel Co. Enforcer, display ID 7059, 7060, 7061, level 55 elite, faction 35, humanoid, scale 1, weapon : 13821, is a guard
--- 
 -- Tel Co. Worker, display ID 7100, 7132, 7137, level 50, faction 35, humanoid, scale 1, weapon : 1938
--- 
 -- Zalwiz Hardlug, display ID 7097, level 56, faction 35, humanoid, scale 1, weapon 13820, weapon2: 10204, quest/gossip flags gossip text : "Don't cause any trouble around here, I got enough problem with all the apes running around lately."
--- 
 -- Razin Brasslight <Blacksmithing Supplies>, display ID 7093, level 53, faction 35, humanoid, scale 1, weapon 5956, quest/gossip/vendor flags, gossip text : "Well you sure are far out from the Basecamp bub, not everyone comes all the way out to the Storehouse these days.\n\n I hope you weren't assigned to this heaping dung pile. ((SELLS BLACKSMITHING SUPPLIES, also repairs))
--- 
+-- Klazz <General Goods>, display ID 7212, level 40, faction 35, humanoid, scale 1, vendor flags, ((SELLS GENERAL GOODS))
 -- Wazlon Headiron <Engineering Supplies> , display ID 7050, level 50, faction 35, humanoid, scale 1, weapon: 1911, quest/gossip/vendor flags, gossip text: "Goblin Machinery, intricate parts and haphazard design. It certainly leads to spectacular breakdowns, which is what keeps engineers like myself in business.\n\n So, what'll it be?\n\n You better not be here for Shredder repairs. ((Sells Engineering Supplies, also repairs))
--- 
--- Klazz <General Goods>, display ID 7212, level 40, faction 35, humanoid, scale 1, vendor flags, ((SELLS GENERAL GOODS)) 
 -- Nokrot Felwaz <Refreshments>, display ID 7096, level 40, faction 35, humanoid, scale 1, weapon: 2717, gossip/vendor flags, gossip text : "The sun sure is hot huh? I am in charge of the water and the refreshments around here, so you should be on your best behavior, understood?\n\n Otherwise, you can drink the ocean water! ((SELLS WATER FOR ALL LEVELS))
--- 
 -- Wrex Ozzlelight <Innkeeper>, display ID 7180, level 46, faction 35, humanoid, scale 1, weapon 3335, gossip/vendor flags, gossip text : "Welcome to the Inn here at the Tel Co. Basecamp, we are monkey free and very affordable, please do make yourself comfortable.\n\n Also, I just want to dispell floating rumors that have been going around. There were no monkey attacks at this establishment, NONE AT ALL. A roving band of monkeys did NOT break in at the late hours of the night and cause a ruckus and attack innocent patrons.\n\n If it does happen though we do offer a free nights stay. ((Sells food and ale))
--- 
 -- Pumpworker Zalwan, display ID 7170, level 51, faction 35, humanoid, scale 1, weapon 1938, gossip flags, gossip text : "Nokrot thinks hes all special, but I am the one that provides him with the water that he loves to wave around."
--- 
 -- Chef Danonzo Laxjolt <Culinary Expert>, display ID 7272, level 59, faction 35, humanoid, scale 1, weapon 12742, quest/gossip flags, gossip text : "Listen here pal, sometimes you need to think outside of the box. I spent many of my days working with boring strider meat in Ratchet, and if I ever wanna make it big with a bigshot name back in Kezan, I need to use some innovation.\n\n A goblins best trait is cunning, and thinking, you see? A big brain needs big ideas and what better way to think out of the box then Tel'abim? Bananas are the secret kid, I'm tellin' ya, just the right spice, the right ingredients, and it'll hit big."
--- 
 -- Sneel Fizzwack <Head of Enforcement> , display ID 7191, level 60, faction 35, humanoid, scale 1, weapon 4777, quest/gossip flags, gossip text : "These apes need a lesson in discipline, its about time we hit them back, and hit hard. It isn't all bashing though, sometimes you need strategy, and O'ggon certainly helps when strategy doesn't work."
--- 
--- O'ggon, display ID 10704, level 58 elite, faction 35, humanoid, scale 1, weapon 1826
--- 
+-- O'ggon, display ID 10704, level 58 elite, faction 35, humanoid, scale 1, weapon 1826.
 -- Wezzy Coppersaw <Ammunition> , display ID 9132, level 50, faction 35, humanoid, scale 1, vendor flags ((SELLS AMMUNITION))
--- 
 -- Leezza Fraxtoggle , display ID 10746, level 49, faction 35, humanoid, scale 1, gossip/quest flags, gossip text : "What do you want? I wouldn't be sticking my nose where it didn't belong if I was you."
+REPLACE INTO creature_template VALUES
+(61100, 3469, 0, 0, 0, 0, 'Tazzo Gearfire', 'The Outsider', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61101, 7031, 0, 0, 0, 0, 'Bixxle Screwfuse', 'Supply Master', 0, 48, 48, 2800, 2800, 0, 0, 2386, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61102, 7209, 0, 0, 0, 0, 'Baron Telraz', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 35, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61103, 7059, 7060, 7061, 0, 0, 'Tel Co. Enforcer', NULL, 0, 55, 55, 7842, 7842, 0, 0, 3500, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 474, 564, 0, 250, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524296, 0, ''),
+(61104, 7100, 7132, 7137, 0, 0, 'Tel Co. Worker', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61105, 7097, 0, 0, 0, 0, 'Zalwiz Hardlug', NULL, 0, 56, 56, 3643, 3643, 0, 0, 2699, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 146, 174, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.456, 98.252, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61106, 7093, 0, 0, 0, 0, 'Razin Brasslight', 'Blacksmithing Supplies', 0, 53, 53, 3188, 3188, 0, 0, 2654, 35, 16391, 1, 1.14286, 0, 18, 5, 0, 0, 1, 92, 119, 0, 238, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 69.0272, 94.9124, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61107, 7212, 0, 0, 0, 0, 'Klazz', 'General Goods', 0, 40, 40, 1752, 1752, 0, 0, 1890, 35, 4, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61108, 7050, 0, 0, 0, 0, 'Wazlon Headiron', 'Engineering Supplies', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61109, 7096, 0, 0, 0, 0, 'Nokrot Felwaz', 'Refreshments', 0, 40, 40, 1752, 1752, 0, 0, 1890, 35, 5, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61110, 7180, 0, 0, 0, 0, 'Wrex Ozzlelight', 'Innkeeper', 0, 46, 46, 2398, 2398, 0, 0, 2780, 35, 133, 1, 1.14286, 0, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '0'),
+(61111, 7170, 0, 0, 0, 0, 'Pumpworker Zalwan', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61112, 5025, 0, 0, 0, 0, 'Chef Danonzo Laxjolt', 'Culinary Expert', 0, 59, 59, 3997, 3997, 0, 0, 3454, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61113, 7191, 0, 0, 0, 0, 'Sneel Fizzwack', 'Head of Enforcement', 0, 60, 60, 4120, 4120, 0, 0, 3500, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61114, 10704, 0, 0, 0, 0, 'O\'ggon', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61115, 9132, 0, 0, 0, 0, 'Wezzy Coppersaw', 'Ammunition', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 4, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61116, 10746, 0, 0, 0, 0, 'Leezza Fraxtoggle', NULL, 0, 49, 49, 2672, 2672, 0, 0, 2944, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 98, 133, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+
+set @equip_template = 20268; set @weapon_1 = 1826; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61114;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20267; set @weapon_1 = 4777; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61113;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20266; set @weapon_1 = 12742; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61112;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20265; set @weapon_1 = 1938; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61111;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20264; set @weapon_1 = 3335; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61110;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20263; set @weapon_1 = 2717; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61109;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20262; set @weapon_1 = 1911; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61108;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20261; set @weapon_1 = 5956; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61106;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20260; set @weapon_1 = 13820; set @weapon_2 = 10204; set @weapon_3 = 0; set @creature = 61105;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20259; set @weapon_1 = 1938; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61104;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20258; set @weapon_1 = 13821; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61103;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41284; set @magic_number = 61116;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What do you want? I wouldn\'t be sticking my nose where it didn\'t belong if I was you.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41283; set @magic_number = 61113;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'These apes need a lesson in discipline, its about time we hit them back, and hit hard. It isn\'t all bashing though, sometimes you need strategy, and O\'ggon certainly helps when strategy doesn\'t work.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41282; set @magic_number = 61112;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Listen here pal, sometimes you need to think outside of the box. I spent many of my days working with boring strider meat in Ratchet, and if I ever wanna make it big with a bigshot name back in Kezan, I need to use some innovation.\n\nA goblins best trait is cunning, and thinking, you see? A big brain needs big ideas and what better way to think out of the box then Tel\'abim? Bananas are the secret kid, I\'m tellin\' ya, just the right spice, the right ingredients, and it\'ll hit big.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41281; set @magic_number = 61111;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Nokrot thinks hes all special, but I am the one that provides him with the water that he loves to wave around.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41280; set @magic_number = 61110;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to the Inn here at the Tel Co. Basecamp, we are monkey free and very affordable, please do make yourself comfortable.\n\nAlso, I just want to dispell floating rumors that have been going around. There were no monkey attacks at this establishment, NONE AT ALL. A roving band of monkeys did NOT break in at the late hours of the night and cause a ruckus and attack innocent patrons.\n\nIf it does happen though we do offer a free nights stay.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41279; set @magic_number = 61109;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The sun sure is hot huh? I am in charge of the water and the refreshments around here, so you should be on your best behavior, understood?\n\nOtherwise, you can drink the ocean water!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41278; set @magic_number = 61108;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Goblin Machinery, intricate parts and haphazard design. It certainly leads to spectacular breakdowns, which is what keeps engineers like myself in business.\n\nSo, what\'ll it be?\n\nYou better not be here for Shredder repairs.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41277; set @magic_number = 61105;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Don\'t cause any trouble around here, I got enough problem with all the apes running around lately.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41277; set @magic_number = 61106;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well you sure are far out from the Basecamp bub, not everyone comes all the way out to the Storehouse these days.\n\nI hope you weren\'t assigned to this heaping dung pile.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41276; set @magic_number = 61102;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why hello there kid, I take it you\'re one of those adventuring types, one to help those in need.\n\nIf so you\'re just what I\'m lookin\' for. We\'ve had all sorts of problems, and everything has collapsed, I got more dead employees than I do banana\'s, you UNDERSTAND?!\n\n<Baron Telraz takes a moment, clearing his throat.>\n\nApologies about that, a goblin gets quite upset about the loss of so much capital and gold, time is money but on Tel\'abim, time is losing money.\n\nSuch a calamity must be reversed before all of the investments here turn to nothing, I am telling you, a goblin is worth his gold, and I am not returning to Kezan with a few bananas in my pocket.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+replace into gossip_menu (entry, text_id, condition_id) VALUES (41275, 611020, '0'); 
+replace into broadcast_text (entry, Male_Text) values (30052, 'Everything! Ambushes, attacks, the wildlife itself rose up in rebellion, the damn MONKEYS came from the trees, and attacked all my workers.\n\nWe had bases all along the island, with sustainable, and PROFITABLE harvesting, now its all gone bananas because of some apes and their King named Morgo... Or something.\n\n\We\'re short staffed, undermanned, and sorely in need of help, so quit asking questions.');
+replace into npc_text (ID, BroadcastTextID0) values (611020, 30052);
+
+REPLACE INTO `gossip_menu_option` (`menu_id`, `id`, `option_icon`, `option_text`, `OptionBroadcastTextID`, `option_id`, `npc_option_npcflag`, `action_menu_id`, `action_poi_id`, `action_script_id`, `box_coded`, `box_money`, `box_text`, `BoxBroadcastTextID`, `condition_id`) VALUES (41276, 4, 0, 'What happened on Tel\'abim?', 0, 1, 3, 41275, 0, 0, 0, 0, '', 0, 0);
+
+set @gossip_menu_id = 41274; set @magic_number = 61101;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You\'re sure far out, sorry if you were sent here and welcome if you came on your own accord!\n\nMy name is Bixxle, been managing this Storehouse for quite a while now. This used to be one of the primary locations of Banana collecting a while ago, but now its sort of all gone to hell.\n\nApes, monkeys, and snakes have been causing all sorts of issues, but I don\'t need to tell you that, you\'ve seen em by now!\n\nPerhaps you can help us out with some things around here, we could certainly use it.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41273; set @magic_number = 61100;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hmm, just a bit more residue to mix with the roots could potentially... Perhaps altering the growth of the tree itself-\n\nCan\'t you see that I am a bit busy, I am nearly on the cusp of a breakthrough to something magnificent can\'t you see?\n\nThe secret of the Gargantuan Banana is at my finger tips, now unless you\'re here to help move along.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Wezzy Coppersaw
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 3, 2512, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 4, 2515, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 5, 3030, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 1, 5439, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 0, 11285, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 2, 11362, 0, 0, 0, 0);
+-- Wrex Ozzlelight
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 4953, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 2686, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 17402, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 8, 1179, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 9, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 11, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 10, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 1, 4540, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 2, 4541, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 3, 4542, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 4, 4544, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 5, 4601, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 12, 8766, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 6, 8950, 0, 0, 0, 0);
+-- Nokrot Felwaz
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 9, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 10, 1179, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 11, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 13, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 12, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 14, 8766, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 1, 16166, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 2, 16167, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 5, 16168, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 4, 16169, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 3, 16170, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 0, 16171, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 6, 21030, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 8, 21031, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 7, 21033, 0, 0, 0, 0);
+-- Wazlon Headiron
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2896, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2893, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2897, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2902, 4357, 4, 10800, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2901, 4363, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2903, 4364, 3, 10800, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2900, 4382, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 0, 4389, 1, 7200, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2894, 4399, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2895, 4400, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2892, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2905, 10609, 1, 7200, 3, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2899, 10647, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61108, 2898, 10648, 0, 0, 0, 0);
+-- Klazz
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 159, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 1205, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 1645, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 1708, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 2515, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 2519, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 2946, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3030, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3033, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3107, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3108, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3131, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3135, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3137, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4470, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4471, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4497, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4498, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 6183, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 11284, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 11285, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 15326, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 15327, 0, 0, 0, 0);
+-- Razin Brasslight
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 3, 2880, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 1, 2901, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 4, 3466, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 5, 3857, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 2, 5956, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 6, 18567, 0, 0, 0, 0);
