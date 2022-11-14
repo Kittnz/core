@@ -279,4 +279,6 @@ constexpr auto make_array(T&&... t)
 #define countof(array) (sizeof(array) / sizeof((array)[0]))
 #endif
 
+#define BATCHING_INTERVAL 400
+
 #endif

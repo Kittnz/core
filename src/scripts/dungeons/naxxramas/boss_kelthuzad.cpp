@@ -532,7 +532,7 @@ struct boss_kelthuzadAI : public ScriptedAI
                 }
                 break;
             case EVENT_PUT_IN_COMBAT:
-                m_creature->SetInCombatState(false);
+                m_creature->SetInCombatState();
                 m_creature->SetInCombatWithZone();
                 hasPutInCombat = true;
                 break;
