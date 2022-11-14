@@ -130,22 +130,17 @@ void PetAI::UpdateAI(const uint32 diff)
         if (hasMelee)
         {
             // Check before attacking to prevent pets from leaving stay position
-            bool attacked = false;
             if (m_creature->GetCharmInfo()->HasCommandState(COMMAND_STAY))
             {
                 if (m_creature->GetCharmInfo()->IsCommandAttack() || (m_creature->GetCharmInfo()->IsAtStay() && m_creature->CanReachWithMeleeAutoAttack(m_creature->GetVictim())))
                 {
                     if (!m_creature->HasInArc(m_creature->GetVictim()))
                         m_creature->SetInFront(m_creature->GetVictim());
-                    attacked = DoMeleeAttackIfReady();
+                    DoMeleeAttackIfReady();
                 }
             }
             else
-                attacked = DoMeleeAttackIfReady();
-
-            if (attacked && owner)
-                if (Unit* v = m_creature->GetVictim()) // Victim may have died between
-                    owner->SetInCombatWith(v);
+                DoMeleeAttackIfReady();
         }
     }
     else if (!playerControlled)

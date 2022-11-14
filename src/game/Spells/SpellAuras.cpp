@@ -1713,6 +1713,7 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         if (Unit* caster = GetCaster())
                             caster->CastSpell(caster, 13138, true, nullptr, this);
                         GetHolder()->SetAuraDuration(0); // Remove aura (else stays for ever, and casts at login)
+                        GetHolder()->SetPermanent(false);
                         return;
                     }
                     case 16336: // Haunting Phantoms
@@ -3426,7 +3427,7 @@ void Aura::HandleModCharm(bool apply, bool Real)
             caster->SetInCombatWith(target);
             target->SetInCombatWith(caster);
 
-            target->SetInCombatState(false, caster);
+            target->SetInCombatState(0, caster);
         }
         else
         {
@@ -8134,7 +8135,7 @@ void Aura::HandleInterruptRegen(bool apply, bool real)
         return;
     if (!apply)
         return;
-    GetTarget()->SetInCombatState(false);
+    GetTarget()->SetInCombatState();
 }
 
 // Un nouvel aura ...
