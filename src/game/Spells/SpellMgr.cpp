@@ -349,14 +349,14 @@ void SpellMgr::OverrideProcEvents()
 
     static std::unordered_map<uint32, std::variant<uint32, FuncType>> procEventModifiers =
     {
-        {15268, [this](SpellProcEventEntry* entry) { // blackout rank 1
+        {15268u, [this](SpellProcEventEntry* entry) { // blackout rank 1
 
             entry->procEx = PROC_EX_NORMAL_HIT; // dont proc on heal.
         }},
-        {15323, 15268}, // blackout rank 2
-        {15324, 15268}, // blackout rank 3
-        {15325, 15268}, // blackout rank 4
-        {15326, 15268}  // blackout rank 5
+        {15323u, 15268u}, // blackout rank 2
+        {15324u, 15268u}, // blackout rank 3
+        {15325u, 15268u}, // blackout rank 4
+        {15326u, 15268u}  // blackout rank 5
     };
 
     for (auto itr = procEventModifiers.begin(); itr != procEventModifiers.end(); ++itr)
