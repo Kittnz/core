@@ -2411,6 +2411,7 @@ REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipm
 (2573075, 0, 0, 0, 0, 0, 13, NULL);
 -- NPC GUID 2573046, 2573047, 2573050 set to emote state craft.
 REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipment_id`, `stand_state`, `sheath_state`, `emote_state`, `auras`) VALUES 
+(2573034, 0, 0, 0, 0, 0, 173, NULL),
 (2573046, 0, 0, 0, 0, 0, 173, NULL),
 (2573047, 0, 0, 0, 0, 0, 173, NULL),
 (2573050, 0, 0, 0, 0, 0, 173, NULL);
