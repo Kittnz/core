@@ -1,6 +1,7 @@
 -- item 'Ripe Tel'abim Banana' and 'Gargantuan Tel'abim Banana' change material to default, change spell cooldown to 0.
 update item_template set spellcooldown_1 = 0, spellcategory_1 = 11, spellcategorycooldown_1 = 1000, material = 0 where entry in (60954,60955);
 -- New objects created for PTR: 'Ripe Tel'abim Banana' , lootable gobject which looks like Fruit_Banana.mdx , contains 'Ripe Tel'abim Banana' item inside, has a 8 minute respawn timer.
+delete from gameobject_loot_template where item in (60954,60955);
 REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
 (2010948, 3, 25061, 'Ripe Tel\'abim Banana', 0, 0, 1, 43, 2010948, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
@@ -9,7 +10,7 @@ REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
 (2010949, 3, 25062, 'Ripe Tel\'abim Bundle', 0, 0, 1, 43, 2010949, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES
-(2010949, 60955, 100, 0, 2, 3, 0);
+(2010949, 60954, 100, 0, 2, 3, 0);
 -- Coastal Ripper, display ID 705, level 56-57, faction 16, beast, scale 1.1, casts 9080 every 15 seconds
 -- Makrura Siltshell, display ID 11371, level 56-57, faction 16, beast, scale 1.2, casts 10220 at the start of combat
 -- Highvale Gorilla, display ID 838, level 56-57, faction 72, beast ,scale 1.1, casts 25515 every 20 seconds, casts 27579 every 15 seconds
@@ -40,22 +41,22 @@ REPLACE INTO `gameobject_loot_template` (`entry`, `item`, `ChanceOrQuestChance`,
 -- Jima <The Lucky Snake> , display ID 7409, level 5, faction 35, beast, scale 0.8 
 REPLACE INTO creature_template VALUES
 (61072, 705, 0, 0, 0, 0, 'Coastal Ripper', NULL, 0, 56, 57, 3643, 3758, 0, 0, 3354, 16, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 99, 122, 0, 258, 1, 2000, 2000, 1, 0, 0, 20, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 1, 61072, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 1, 2, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61073, 11371, 0, 0, 0, 0, 'Makrura Siltshell', NULL, 0, 56, 57, 3643, 3758, 0, 0, 3354, 16, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 99, 122, 0, 258, 1, 2000, 2000, 1, 0, 0, 20, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 1, 61073, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61073, 11371, 0, 0, 0, 0, 'Makrura Siltshell', NULL, 0, 56, 57, 3643, 3758, 0, 0, 3354, 16, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 99, 122, 0, 258, 1, 2000, 2000, 1, 0, 0, 20, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 61073, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61074, 838, 0, 0, 0, 0, 'Highvale Gorilla', NULL, 0, 56, 57, 3643, 3758, 0, 0, 3354, 72, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 99, 122, 0, 258, 1, 2000, 2000, 1, 0, 0, 20, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 1, 61074, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61075, 981, 0, 0, 0, 0, 'Rockshell Crawler', NULL, 0, 55, 57, 3643, 3758, 0, 0, 3354, 7, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 99, 122, 0, 258, 1, 2000, 2000, 1, 0, 0, 20, 0, 0, 0, 0, 69.696, 95.832, 100, 1, 1, 61075, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61076, 981, 0, 0, 0, 0, 'Sandshell Crawler', NULL, 0, 53, 54, 3188, 3292, 0, 0, 3216, 7, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 104, 130, 0, 244, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 66.4224, 91.3308, 100, 1, 1, 61076, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61077, 18099, 0, 0, 0, 0, 'Highvale Chimpanzee', NULL, 0, 53, 54, 3188, 3292, 0, 0, 3216, 72, 0, 1, 1.14286, 0.5, 18, 5, 0, 0, 1, 104, 130, 0, 244, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 66.4224, 91.3308, 100, 1, 1, 61077, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61078, 18097, 0, 0, 0, 0, 'Highvale Monkey', NULL, 0, 53, 54, 3188, 3292, 0, 0, 3216, 72, 0, 1, 1.14286, 0.5, 18, 5, 0, 0, 1, 104, 130, 0, 244, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 66.4224, 91.3308, 100, 1, 1, 61078, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61079, 1818, 0, 0, 0, 0, 'Makrura Deepclaw', NULL, 0, 54, 55, 3292, 3398, 0, 0, 3244, 16, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 95, 118, 0, 248, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 71.9664, 98.9538, 100, 1, 1, 61079, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61079, 1818, 0, 0, 0, 0, 'Makrura Deepclaw', NULL, 0, 54, 55, 3292, 3398, 0, 0, 3244, 16, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 95, 118, 0, 248, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 61079, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61080, 838, 0, 0, 0, 0, 'Elder Highvale Gorilla', NULL, 0, 57, 59, 3875, 3997, 0, 0, 3462, 72, 0, 1, 1.42857, 1.4, 18, 5, 0, 0, 1, 77, 95, 0, 268, 1, 1500, 2000, 1, 0, 0, 2, 0, 0, 0, 0, 72.9872, 100.357, 100, 1, 1, 61080, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI',0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61081, 11371, 0, 0, 0, 0, 'Grimeclaw', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 1, 1, 61081, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61082, 841, 0, 0, 0, 0, 'Highvale Thunderer', NULL, 0, 56, 58, 3758, 3875, 0, 0, 3435, 72, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 168, 209, 0, 262, 1, 2800, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 1, 1, 61082, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 126, 170, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61081, 11371, 0, 0, 0, 0, 'Grimeclaw', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 61081, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61082, 841, 0, 0, 0, 0, 'Highvale Thunderer', NULL, 0, 56, 58, 3758, 3875, 0, 0, 3435, 72, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 102, 131, 0, 262, 1, 2800, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 1, 1, 61082, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 126, 170, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61083, 3619, 0, 0, 0, 0, 'Spitefin Murloc', NULL, 0, 53, 54, 3188, 3292, 0, 0, 3216, 18, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 104, 130, 0, 244, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 66.4224, 91.3308, 100, 7, 0, 61083, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61084, 3619, 0, 0, 0, 0, 'Spitefin Netter', NULL, 0, 55, 56, 3528, 3643, 0, 0, 3327, 18, 0, 1, 1.14286, 1.3, 18, 5, 0, 0, 1, 97, 120, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 61084, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 122, 165, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61085, 5025, 0, 0, 0, 0, 'Spitefin Tidecaller', NULL, 0, 54, 55, 3292, 3398, 3910, 3910, 3244, 18, 0, 1, 1.14286, 1.1, 18, 5, 0, 0, 1, 95, 118, 0, 248, 1, 2000, 2000, 2, 0, 0, 3, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 61085, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61086, 3619, 0, 0, 0, 0, 'Spitefin Tidehunter', NULL, 0, 57, 58, 3758, 3875, 930, 930, 3435, 18, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 168, 209, 0, 262, 1, 2800, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 7, 0, 61086, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 126, 170, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61086, 3619, 0, 0, 0, 0, 'Spitefin Tidehunter', NULL, 0, 57, 58, 3758, 3875, 930, 930, 3435, 18, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 102, 131, 0, 262, 1, 2800, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 7, 0, 61086, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 126, 170, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61087, 5025, 0, 0, 0, 0, 'Spitefin Wavecreeper', NULL, 0, 56, 57, 3643, 3758, 0, 0, 3354, 18, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 99, 122, 0, 258, 1, 2000, 2000, 1, 0, 0, 20, 0, 0, 0, 0, 69.696, 95.832, 100, 7, 0, 61087, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61088, 386, 0, 0, 0, 0, 'Spitefin Oracle', NULL, 0, 56, 58, 3758, 3875, 4309, 4309, 3435, 18, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 168, 209, 0, 262, 1, 2800, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 7, 0, 61088, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 126, 170, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61088, 386, 0, 0, 0, 0, 'Spitefin Oracle', NULL, 0, 56, 58, 3758, 3875, 4309, 4309, 3435, 18, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 102, 131, 0, 262, 1, 2800, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 7, 0, 61088, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 126, 170, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61089, 5025, 0, 0, 0, 0, 'Glrgbl', NULL, 0, 59, 59, 3997, 3997, 0, 0, 3454, 18, 0, 1, 1.14286, 2.2, 18, 5, 40, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 61089, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61090, 15150, 0, 0, 0, 0, 'Brushtail Cobra', NULL, 0, 55, 56, 3528, 3643, 0, 0, 3327, 14, 0, 1, 1.14286, 0.85, 18, 5, 0, 0, 1, 97, 120, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 1, 1, 61090, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61091, 4305, 0, 0, 0, 0, 'Brushtail Adder', NULL, 0, 53, 54, 3188, 3292, 0, 0, 3216, 14, 0, 1, 1.14286, 0.7, 18, 5, 0, 0, 1, 104, 130, 0, 244, 1, 2000, 2000, 1, 0, 0, 1, 0, 0, 0, 0, 66.4224, 91.3308, 100, 1, 1, 61091, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -63,8 +64,8 @@ REPLACE INTO creature_template VALUES
 (61093, 14328, 0, 0, 0, 0, 'Agitated Rock Elemental', NULL, 0, 56, 57, 3643, 3758, 0, 0, 3354, 91, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 99, 122, 0, 258, 1, 2000, 2000, 1, 0, 0, 20, 0, 0, 0, 0, 69.696, 95.832, 100, 4, 0, 61093, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61094, 11468, 0, 0, 0, 0, 'Spiritual Wanderer', NULL, 0, 55, 56, 3528, 3643, 306, 306, 3327, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 97, 120, 0, 254, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 6, 0, 61094, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '9617', 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61095, 2705, 0, 0, 0, 0, 'Venomflayer Screecher', NULL, 0, 53, 55, 3292, 3398, 3910, 3910, 3244, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 95, 118, 0, 248, 1, 2000, 2000, 2, 0, 0, 3, 0, 0, 0, 0, 71.9664, 98.9538, 100, 1, 1, 61095, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61096, 10991, 0, 0, 0, 0, 'Venomflayer Serpent', NULL, 0, 57, 58, 3758, 3875, 0, 0, 3435, 14, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 168, 209, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 1, 1, 61096, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61097, 12197, 0, 0, 0, 0, 'Deepwater Hammerhead', NULL, 0, 56, 58, 3758, 3875, 0, 0, 3435, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 168, 209, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 1, 1, 61097, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61096, 10991, 0, 0, 0, 0, 'Venomflayer Serpent', NULL, 0, 57, 58, 3758, 3875, 0, 0, 3435, 14, 0, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 102, 131, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 1, 1, 61096, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61097, 12197, 0, 0, 0, 0, 'Deepwater Hammerhead', NULL, 0, 56, 58, 3758, 3875, 0, 0, 3435, 14, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 168, 209, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 1, 1, 61097, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 1, 2, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61098, 3186, 0, 0, 0, 0, 'King Morogo Thunderfoot', NULL, 0, 60, 60, 26403, 26403, 4200, 4200, 3044, 72, 0, 1, 1.14286, 3, 20, 5, 0, 1, 1, 390, 450, 0, 278, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 61.732, 84.8815, 100, 1, 1, 61098, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 2064, 0, 0, 0, ''),
 (61099, 7409, 0, 0, 0, 0, 'Jima', 'The Lucky Snake', 0, 5, 5, 102, 102, 0, 0, 145, 35, 0, 1, 1.14286, 0.8, 18, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 61099, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
@@ -800,8 +801,8 @@ set @casttarget_1 = 1;
 set @castflags_1 = 4;
 set @delayinitialmin_1 = 0;
 set @delayinitialmax_1 = 0;
-set @delayrepeatmin_1 = 10; 
-set @delayrepeatmax_1 = 10;
+set @delayrepeatmin_1 = 35; 
+set @delayrepeatmax_1 = 35;
 
 set @spellid_2 = 0;
 set @probability_2 = 0; 
@@ -1196,8 +1197,8 @@ set @casttarget_1 = 1;
 set @castflags_1 = 4;
 set @delayinitialmin_1 = 0;
 set @delayinitialmax_1 = 0;
-set @delayrepeatmin_1 = 6; 
-set @delayrepeatmax_1 = 6;
+set @delayrepeatmin_1 = 9; 
+set @delayrepeatmax_1 = 9;
 
 set @spellid_2 = 0;
 set @probability_2 = 0; 
@@ -2204,11 +2205,15 @@ REPLACE INTO creature_template VALUES
 (61109, 7096, 0, 0, 0, 0, 'Nokrot Felwaz', 'Refreshments', 0, 40, 40, 1752, 1752, 0, 0, 1890, 35, 5, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61110, 7180, 0, 0, 0, 0, 'Wrex Ozzlelight', 'Innkeeper', 0, 46, 46, 2398, 2398, 0, 0, 2780, 35, 133, 1, 1.14286, 0, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '0'),
 (61111, 7170, 0, 0, 0, 0, 'Pumpworker Zalwan', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61112, 5025, 0, 0, 0, 0, 'Chef Danonzo Laxjolt', 'Culinary Expert', 0, 59, 59, 3997, 3997, 0, 0, 3454, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61112, 7164, 0, 0, 0, 0, 'Chef Danonzo Laxjolt', 'Culinary Expert', 0, 59, 59, 3997, 3997, 0, 0, 3454, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61113, 7191, 0, 0, 0, 0, 'Sneel Fizzwack', 'Head of Enforcement', 0, 60, 60, 4120, 4120, 0, 0, 3500, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61114, 10704, 0, 0, 0, 0, 'O\'ggon', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61115, 9132, 0, 0, 0, 0, 'Wezzy Coppersaw', 'Ammunition', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 4, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61116, 10746, 0, 0, 0, 0, 'Leezza Fraxtoggle', NULL, 0, 49, 49, 2672, 2672, 0, 0, 2944, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 85, 104, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 98, 133, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20269; set @weapon_1 = 35; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61085;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 20268; set @weapon_1 = 1826; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61114;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
@@ -2254,6 +2259,12 @@ set @equip_template = 20258; set @weapon_1 = 13821; set @weapon_2 = 0; set @weap
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
+set @gossip_menu_id = 41285; set @magic_number = 61105;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Don\'t cause any trouble around here, I got enough problem with all the apes running around lately.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 set @gossip_menu_id = 41284; set @magic_number = 61116;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What do you want? I wouldn\'t be sticking my nose where it didn\'t belong if I was you.');
@@ -2296,12 +2307,6 @@ replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Goblin Ma
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
-set @gossip_menu_id = 41277; set @magic_number = 61105;
-replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Don\'t cause any trouble around here, I got enough problem with all the apes running around lately.');
-replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
-update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
-
 set @gossip_menu_id = 41277; set @magic_number = 61106;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Well you sure are far out from the Basecamp bub, not everyone comes all the way out to the Storehouse these days.\n\nI hope you weren\'t assigned to this heaping dung pile.');
@@ -2310,7 +2315,7 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 set @gossip_menu_id = 41276; set @magic_number = 61102;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
-replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Why hello there kid, I take it you\'re one of those adventuring types, one to help those in need.\n\nIf so you\'re just what I\'m lookin\' for. We\'ve had all sorts of problems, and everything has collapsed, I got more dead employees than I do banana\'s, you UNDERSTAND?!\n\n<Baron Telraz takes a moment, clearing his throat.>\n\nApologies about that, a goblin gets quite upset about the loss of so much capital and gold, time is money but on Tel\'abim, time is losing money.\n\nSuch a calamity must be reversed before all of the investments here turn to nothing, I am telling you, a goblin is worth his gold, and I am not returning to Kezan with a few bananas in my pocket.');
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You one of those adventurers? If so, you\'re just what I\'m lookin\' for. We\'ve had so many problems, and everything has collapsed. I got more dead employees than I do banana\'s, you UNDERSTAND?!\n\n<Baron Telraz takes a moment, clearing his throat.>\n\nApologies about that, a goblin gets quite upset about the loss of so much capital and gold, time is money but on Tel\'abim, time is losing money.\n\nSuch a calamity must be reversed before all of the investments here turn to nothing, I am telling you, a goblin is worth his gold, and I am not returning to Kezan with a few bananas in my pocket.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
@@ -2338,21 +2343,20 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 1, 5439, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 0, 11285, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61115, 2, 11362, 0, 0, 0, 0);
+
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (3322, 4, 2516, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (3322, 5, 2519, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (3322, 8, 3033, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (3322, 9, 11284, 0, 0, 0, 0);
 -- Wrex Ozzlelight
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 4953, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 2686, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 17402, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 7, 159, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 8, 1179, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 9, 1205, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 11, 1645, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 10, 1708, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 1, 4540, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 2, 4541, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 3, 4542, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 4, 4544, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 5, 4601, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 12, 8766, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61110, 6, 8950, 0, 0, 0, 0);
 -- Nokrot Felwaz
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61109, 9, 159, 0, 0, 0, 0);
@@ -2390,25 +2394,11 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 1205, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 1645, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 1708, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 2515, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 2519, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 2946, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3030, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3033, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3107, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3108, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3131, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3135, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 3137, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4470, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4471, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4497, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 4498, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 6183, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 11284, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 11285, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 15326, 0, 0, 0, 0);
-REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61107, 0, 15327, 0, 0, 0, 0);
 -- Razin Brasslight
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 3, 2880, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 1, 2901, 0, 0, 0, 0);
@@ -2416,3 +2406,18 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 5, 3857, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 2, 5956, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (61106, 6, 18567, 0, 0, 0, 0);
+-- NPC GUID 2573075 set to emote state sit.
+REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipment_id`, `stand_state`, `sheath_state`, `emote_state`, `auras`) VALUES 
+(2573075, 0, 0, 0, 0, 0, 13, NULL);
+-- NPC GUID 2573046, 2573047, 2573050 set to emote state craft.
+REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipment_id`, `stand_state`, `sheath_state`, `emote_state`, `auras`) VALUES 
+(2573046, 0, 0, 0, 0, 0, 173, NULL),
+(2573047, 0, 0, 0, 0, 0, 173, NULL),
+(2573050, 0, 0, 0, 0, 0, 173, NULL);
+-- NPC GUID 2573052, 2573055, 2573054, 2573053, 2573056 set to emote stare work (Mine?)
+REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipment_id`, `stand_state`, `sheath_state`, `emote_state`, `auras`) VALUES 
+(2573052, 0, 0, 0, 0, 0, 233, NULL),
+(2573053, 0, 0, 0, 0, 0, 233, NULL),
+(2573054, 0, 0, 0, 0, 0, 233, NULL),
+(2573055, 0, 0, 0, 0, 0, 233, NULL),
+(2573056, 0, 0, 0, 0, 0, 233, NULL);
