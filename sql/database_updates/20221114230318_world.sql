@@ -492,3 +492,4 @@ INSERT INTO creature_movement (id,point,position_x,position_y,position_z,orienta
 REPLACE INTO `creature` VALUES (2573074,61103,0,0,0,1,-8841.29,-6534.1,14.2766,2.97004,300,300,0,100,100,2,0,0);
 UPDATE creature SET position_x = '-8847.755859', position_y = '-6552.512695', position_z = '16.204262', orientation = '2.376184' WHERE guid = '2573051';
 REPLACE INTO `creature` VALUES (2573075,61104,0,0,0,1,-8850.09,-6557.63,16.3272,4.69468,120,120,0,100,100,0,0,0);
+REPLACE INTO `gameobject` VALUES ( 5011432, 2010948, 1, -9030.76, -6871.44, 17.4126, 1.69651, 0, 0, 0.750127, 0.661294, 300, 300, 100, 1, 0, 0);
