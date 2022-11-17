@@ -5176,10 +5176,27 @@ bool QuestRewarded_npc_gizzix_grimegurgle(Player* pPlayer, Creature* pQuestGiver
     return false;
 }
 
+bool QuestRewarded_npc_pumpworker_zalwan(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40726) // The Backup Seal-Valve
+    {
+        pQuestGiver->MonsterSay("There, fixed up, and in good timing too! Now I just need to make sure everything is stabilized...");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_pumpworker_zalwan";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_pumpworker_zalwan;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_gizzix_grimegurgle";
