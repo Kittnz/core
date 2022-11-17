@@ -1673,6 +1673,9 @@ void Player::OnDisconnected()
 
         if (ObjectGuid lootGuid = GetLootGuid())
             GetSession()->DoLootRelease(lootGuid);
+
+        if (watching_cinematic_entry != 0)
+            CinematicEnd();
     }
 
      // If in active arena, immediately leave battleground.
