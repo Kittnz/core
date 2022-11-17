@@ -2204,7 +2204,7 @@ REPLACE INTO creature_template VALUES
 (61108, 7050, 0, 0, 0, 0, 'Wazlon Headiron', 'Engineering Supplies', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61109, 7096, 0, 0, 0, 0, 'Nokrot Felwaz', 'Refreshments', 0, 40, 40, 1752, 1752, 0, 0, 1890, 35, 5, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61110, 7180, 0, 0, 0, 0, 'Wrex Ozzlelight', 'Innkeeper', 0, 46, 46, 2398, 2398, 0, 0, 2780, 35, 133, 1, 1.14286, 0, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '0'),
-(61111, 7170, 0, 0, 0, 0, 'Pumpworker Zalwan', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61111, 7170, 0, 0, 0, 0, 'Pumpworker Zalwan', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_pumpworker_zalwan'),
 (61112, 7164, 0, 0, 0, 0, 'Chef Danonzo Laxjolt', 'Culinary Expert', 0, 59, 59, 3997, 3997, 0, 0, 3454, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61113, 7191, 0, 0, 0, 0, 'Sneel Fizzwack', 'Head of Enforcement', 0, 60, 60, 4120, 4120, 0, 0, 3500, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61114, 10704, 0, 0, 0, 0, 'O\'ggon', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -2639,3 +2639,10 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- Add drop 'Ripe Tel'abim Banana' to the loot table of 'Highvale Gorilla, Elder Highvale Gorilla, and Highvale Thunderer' with a drop chance of 14%
+REPLACE INTO creature_loot_template VALUES (61074, 60954, 14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (61080, 60954, 14, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (61082, 60954, 14, 0, 1, 1, 0);
+-- Add drop 'Ripe Tel'abim Banana' to the loot table of 'Highvale Monkey, and Highvale Chimpanzee' with a drop chance of 10%
+REPLACE INTO creature_loot_template VALUES (61077, 60954, 10, 0, 1, 1, 0);
+REPLACE INTO creature_loot_template VALUES (61078, 60954, 10, 0, 1, 1, 0);
