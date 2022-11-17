@@ -1103,3 +1103,4 @@ DELETE FROM gameobject_battleground WHERE guid = '5011683';
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (863,2289.886475,-5281.524902,82.131462,4.551516,0,'lightshopechapel');
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (864,1399.867676,-1284.891846,60.475033,6.229969,0,'chromieandorhal');
 REPLACE INTO `gameobject` VALUES ( 5011684, 3000208, 42, 10357.5, -6381.97, 38.5281, 5.04034, 0, 0, 0.582192, -0.813051, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5011685, 179895, 42, 8624.57, -8188.36, 229.015, 1.71889, 0, 0, 0.75748, 0.652858, 300, 300, 100, 1, 0, 0);
