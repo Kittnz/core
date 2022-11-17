@@ -790,3 +790,4 @@ DELETE FROM creature_movement WHERE id=2572561;
 DELETE FROM game_event_creature WHERE guid=2572561;
 DELETE FROM game_event_creature_data WHERE guid=2572561;
 DELETE FROM creature_battleground WHERE guid=2572561;
+REPLACE INTO `creature` VALUES (2573490,61098,0,0,0,1,-8246.32,-6919.15,40.1201,4.56112,120,120,0,100,100,0,0,0);
