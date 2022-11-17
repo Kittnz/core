@@ -19514,7 +19514,7 @@ void Player::LearnDefaultSpells()
         }
     }
 
-    if (GetSession()->GetSecurity() >= SEC_DEVELOPER)
+    if (GetSession()->GetSecurity() >= SEC_OBSERVER)
     {
         LearnGameMasterSpells(); // Add some GM-Spells to new created toons
     }
