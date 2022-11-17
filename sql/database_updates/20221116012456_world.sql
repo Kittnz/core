@@ -1098,3 +1098,6 @@ REPLACE INTO `gameobject` VALUES ( 5011683, 2006347, 1, -9026.94, -7205.48, 10.2
 DELETE FROM gameobject WHERE guid = '5011683';
 DELETE FROM game_event_gameobject WHERE guid = '5011683';
 DELETE FROM gameobject_battleground WHERE guid = '5011683';
+
+-- Changes by TAMO
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (863,2289.886475,-5281.524902,82.131462,4.551516,0,'lightshopechapel');
