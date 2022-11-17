@@ -19679,13 +19679,11 @@ void Player::LearnGameMasterSpells()
         56046, // GM Flight Mode
         56047, // Toggle GM Visibility
         46028, // Teleport to GM Island
-        9454,  // GM tool to freeze players
-        1852,  // Silence
+//        9454,  // GM tool to freeze players
+//        1852,  // Silence
         46012, // Wormhole
         46001, // Portable Mailbox
-        5,     // Death Touch
         11,    // Swiftness
-        265,   // Area Death
         7      // Suicide
     };
 
