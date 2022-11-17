@@ -99,7 +99,7 @@ namespace MaNGOS
             return (ownerLevel * 5 + nBaseExp) * BaseGainLevelFactor(unitLevel, mob_level);
         }
 
-        inline uint32 Gain(Unit* pUnit, Creature* pCreature)
+        inline uint32 Gain(Unit* pUnit, Creature* pCreature, bool withChallenges = true)
         {
             if (pCreature->GetUInt32Value(UNIT_CREATED_BY_SPELL) &&
                ((pCreature->GetCreatureInfo()->type == CREATURE_TYPE_CRITTER) ||
@@ -141,11 +141,14 @@ namespace MaNGOS
             xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
             xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
-            if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
-			    xp_gain *= 0.5f;
+            if (withChallenges)
+            {
+                if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_SLOW_AND_STEADY))
+                    xp_gain *= 0.5f;
 
-            if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_WAR_MODE))
-                xp_gain *= 1.3f;
+                if (pUnit->IsPlayer() && pUnit->ToPlayer()->HasChallenge(CHALLENGE_WAR_MODE))
+                    xp_gain *= 1.3f;
+            }
 
             xp_gain *= sWorld.getConfig(CONFIG_FLOAT_RATE_XP_KILL);
 

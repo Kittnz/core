@@ -75,6 +75,13 @@ enum ClientOSType
     CLIENT_OS_MAC
 };
 
+enum ClientPlatformType
+{
+    CLIENT_PLATFORM_UNKNOWN,
+    CLIENT_PLATFORM_X86,
+    CLIENT_PLATFORM_PPC
+};
+
 enum PartyOperation
 {
     PARTY_OP_INVITE = 0,
@@ -468,6 +475,8 @@ class WorldSession
         void SetGameBuild(uint32 v) { _gameBuild = v; }
         ClientOSType GetOS() const { return m_clientOS; }
         void SetOS(ClientOSType os) { m_clientOS = os; }
+        ClientPlatformType GetPlatform() const { return m_clientPlatform; }
+        void SetPlatform(ClientPlatformType platform) { m_clientPlatform = platform; }
         uint32 getDialogStatus(Player *pPlayer, Object* questgiver, uint32 defstatus);
         uint32 GetAccountMaxLevel() const { return _characterMaxLevel; }
         void SetAccountMaxLevel(uint32 l) { _characterMaxLevel = l; }
@@ -941,6 +950,7 @@ class WorldSession
         ClientIdentifiersMap _clientIdentifiers;
         std::string     _clientHash;
         ClientOSType    m_clientOS;
+        ClientPlatformType m_clientPlatform;
         uint32          _gameBuild;
         uint32          _charactersCount;
         uint32          _characterMaxLevel;

@@ -3901,6 +3901,27 @@ void Spell::cast(bool skipCheck)
         m_immediateHandled = false;
         m_spellState = SPELL_STATE_DELAYED;
         SetDelayStart(0);
+
+        // start combat at cast for delayed spells, only for explicit target
+        if (m_casterUnit && m_casterUnit->IsCharmerOrOwnerPlayerOrPlayerItself() && // only player casters
+            GetDelayMoment() > 0 && m_spellInfo->speed > 0.0f && // delayed but not because of "batching"
+            !m_spellInfo->HasAttribute(SPELL_ATTR_EX_NO_THREAT) &&
+            !m_spellInfo->HasAttribute(SPELL_ATTR_EX_THREAT_ONLY_ON_MISS) &&
+            !m_spellInfo->HasAttribute(SPELL_ATTR_EX2_NO_INITIAL_THREAT)) // attribute checks
+        {
+            if (Unit* target = m_targets.getUnitTarget())
+            {
+                for (auto const& ihit : m_UniqueTargetInfo)
+                {
+                    if (target->GetObjectGuid() == ihit.targetGUID)                 // Found in list
+                    {
+                        if (!m_spellInfo->IsPositiveEffectMask(ihit.effectMask, m_casterUnit, target))
+                            m_casterUnit->SetInCombatWithVictim(target, false, uint32(ihit.timeDelay + 500));
+                        break;
+                    }
+                }
+            }
+        }
     }
     else
     {
@@ -8791,7 +8812,7 @@ void Spell::SetClientStarted(bool bisClientStarted)
 
 void Spell::OnSpellLaunch()
 {
-    if (!m_caster || !m_caster->IsInWorld())
+    if (!m_casterUnit || !m_caster->IsInWorld())
         return;
 
     // Make sure the player is sending a valid GO target and lock ID. SPELL_EFFECT_OPEN_LOCK
@@ -8803,7 +8824,7 @@ void Spell::OnSpellLaunch()
             LockEntry const *lockInfo = sLockStore.LookupEntry(go->GetGOInfo()->GetLockId());
             if (lockInfo && lockInfo->Index[1] == LOCKTYPE_SLOW_OPEN)
             {
-                Spell *visual = m_casterUnit ? new Spell(m_casterUnit, sSpellMgr.GetSpellEntry(24390), true) : new Spell(m_casterGo, sSpellMgr.GetSpellEntry(24390), true);
+                Spell *visual = new Spell(m_casterUnit, sSpellMgr.GetSpellEntry(24390), true);
                 visual->prepare();
             }
         }
@@ -8814,6 +8835,11 @@ void Spell::OnSpellLaunch()
     // Gestion de la charge
     if (!unitTarget || !unitTarget->IsInWorld())
         return;
+
+    // Start the PvP combat timer, but clear it if target dies prematurely.
+    if (m_spellInfo->HasAttribute(SPELL_ATTR_EX2_ACTIVE_THREAT))
+        m_casterUnit->SetInCombatWithVictim(unitTarget, false, UNIT_PVP_COMBAT_TIMER);
+
     bool isCharge = false;
     for (uint32 i : m_spellInfo->Effect)
         if (i == SPELL_EFFECT_CHARGE)
@@ -8822,8 +8848,6 @@ void Spell::OnSpellLaunch()
     if (!isCharge)
         return;
 
-    if (!m_casterUnit)
-        return;
     // Delay attack, otherwise player makes instant attack after cast
     if (m_casterUnit->IsPlayer())
     {
@@ -8832,12 +8856,6 @@ void Spell::OnSpellLaunch()
     }
     
     bool triggerAutoAttack = unitTarget != m_casterUnit && !m_spellInfo->IsPositiveSpell() && !(m_spellInfo->Attributes & SPELL_ATTR_STOP_ATTACK_TARGET);
-    if (triggerAutoAttack)
-    {
-        m_casterUnit->SetInCombatWithVictim(unitTarget);
-        //unitTarget->SetInCombatWithAggressor(m_casterUnit);
-    }
-
     m_casterUnit->GetMotionMaster()->MoveCharge(unitTarget, sWorld.getConfig(CONFIG_UINT32_SPELLS_CCDELAY), triggerAutoAttack);
 }
 

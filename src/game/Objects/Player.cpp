@@ -1673,6 +1673,9 @@ void Player::OnDisconnected()
 
         if (ObjectGuid lootGuid = GetLootGuid())
             GetSession()->DoLootRelease(lootGuid);
+
+        if (watching_cinematic_entry != 0)
+            CinematicEnd();
     }
 
      // If in active arena, immediately leave battleground.
@@ -10378,6 +10381,9 @@ InventoryResult Player::CanBankItem(uint8 bag, uint8 slot, ItemPosCountVec &dest
 
     if (pItem->IsBindedNotWith(this))
         return EQUIP_ERR_DONT_OWN_THAT_ITEM;
+
+    if (pItem->GetProto()->Area || pItem->GetProto()->Map)
+        return EQUIP_ERR_ITEM_DOESNT_GO_INTO_BAG;
 
     // check count of items (skip for auto move for same player from bank)
     InventoryResult res = CanTakeMoreSimilarItems(pItem);
@@ -19612,13 +19618,11 @@ void Player::LearnGameMasterSpells()
         56046, // GM Flight Mode
         56047, // Toggle GM Visibility
         46028, // Teleport to GM Island
-        9454,  // GM tool to freeze players
-        1852,  // Silence
+//        9454,  // GM tool to freeze players
+//        1852,  // Silence
         46012, // Wormhole
         46001, // Portable Mailbox
-        5,     // Death Touch
         11,    // Swiftness
-        265,   // Area Death
         7      // Suicide
     };
 
@@ -22810,6 +22814,38 @@ std::string Player::HardcoreResultToString(Player::HardcoreInteractionResult res
     }
 }
 
+void HandleHardcoreMailQuery(QueryResult* result, ObjectGuid guid)
+{
+    auto player = sObjectAccessor.FindPlayer(guid);
+
+    if (!player)
+    {
+        delete result;
+        return;
+    }
+
+    // Delete mails TO and FROM
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 mail_id = fields[0].GetUInt32();
+            CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
+            CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
+            if (MasterPlayer* pl = player->GetSession()->GetMasterPlayer())
+                pl->RemoveMail(mail_id);
+        } while (result->NextRow());
+
+        delete result;
+    }
+
+    if (!player->m_hardcoreSaveItemsTimer)
+        player->m_hardcoreSaveItemsTimer = 1 * IN_MILLISECONDS;
+}
+
+
 bool Player::SetupHardcoreMode()
 {
     if (IsHardcore())
@@ -22838,25 +22874,7 @@ bool Player::SetupHardcoreMode()
         TradeCancel(true);
 
 
-    
-    // Delete mails TO and FROM
-    QueryResult* resultMail = CharacterDatabase.PQuery("SELECT id FROM mail WHERE (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
-    if (resultMail)
-    {
-        do
-        {
-            Field* fields = resultMail->Fetch();
-
-            uint32 mail_id = fields[0].GetUInt32();
-            CharacterDatabase.PExecute("DELETE FROM mail WHERE id = '%u'", mail_id);
-            CharacterDatabase.PExecute("DELETE FROM mail_items WHERE mail_id = '%u'", mail_id);
-            if (MasterPlayer* pl = GetSession()->GetMasterPlayer())
-                pl->RemoveMail(mail_id);
-        } while (resultMail->NextRow());
-
-        delete resultMail;
-    }
-
+   
     SetMoney(0);
 
     std::unordered_set<uint32> shopItems;
@@ -22991,8 +23009,7 @@ bool Player::SetupHardcoreMode()
         }
     }
 
-    if (!m_hardcoreSaveItemsTimer)
-        m_hardcoreSaveItemsTimer = 1 * IN_MILLISECONDS;
+    CharacterDatabase.AsyncPQueryUnsafe(&HandleHardcoreMailQuery, GetObjectGuid(), "SELECT id FROM mail WHERE (receiver='%u' OR sender='%u')", GetGUIDLow(), GetGUIDLow());
 
     return true;
 }
