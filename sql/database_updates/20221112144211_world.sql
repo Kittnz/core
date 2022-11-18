@@ -2204,7 +2204,7 @@ REPLACE INTO creature_template VALUES
 (61108, 7050, 0, 0, 0, 0, 'Wazlon Headiron', 'Engineering Supplies', 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 16391, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61109, 7096, 0, 0, 0, 0, 'Nokrot Felwaz', 'Refreshments', 0, 40, 40, 1752, 1752, 0, 0, 1890, 35, 5, 1, 1.14286, 0, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61110, 7180, 0, 0, 0, 0, 'Wrex Ozzlelight', 'Innkeeper', 0, 46, 46, 2398, 2398, 0, 0, 2780, 35, 133, 1, 1.14286, 0, 18, 5, 0, 0, 1, 78, 95, 0, 208, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 87, 119, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '0'),
-(61111, 7170, 0, 0, 0, 0, 'Pumpworker Zalwan', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 1, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_pumpworker_zalwan'),
+(61111, 7170, 0, 0, 0, 0, 'Pumpworker Zalwan', NULL, 0, 51, 51, 2979, 2979, 0, 0, 3052, 35, 3, 1, 1.14286, 0, 20, 5, 40, 0, 1, 87, 107, 0, 230, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 67.32, 92.565, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 101, 137, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_pumpworker_zalwan'),
 (61112, 7164, 0, 0, 0, 0, 'Chef Danonzo Laxjolt', 'Culinary Expert', 0, 59, 59, 3997, 3997, 0, 0, 3454, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 101, 126, 0, 268, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 72.688, 99.946, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 133, 179, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61113, 7191, 0, 0, 0, 0, 'Sneel Fizzwack', 'Head of Enforcement', 0, 60, 60, 4120, 4120, 0, 0, 3500, 35, 3, 1, 1.14286, 0, 18, 5, 40, 0, 1, 110, 142, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 3, 0, 74.448, 102.366, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61114, 10704, 0, 0, 0, 0, 'O\'ggon', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -2426,21 +2426,480 @@ REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipm
 -- Vengeful Spirit, displayid 19108, level 57, faction 16, undead, scale 1, weapon : 17743, has 2312 mana, casts 10148 every 15 seconds
 -- Shade of the Temptress, displayid 19105, level 56, faction 16,  elemental, scale 1, has 3000 mana, casts 22417 at the start of combat, casts 10207 every 12 seconds ((Requires a shadow sort of effect))
 -- Shade of the Senshi, displayid 19109, level 50, faction 35, undead, scale 1
+-- Chieftain Icepaw, display ID 18740 , level 45, faction 35, humanoid, scale 1.5, quest/gossip flags, gossip text : "Welcome to Icepaw Village, the others will treat you with kindness in these lands. Let us join together to enjoy this Winter Veil, and perhaps spread some of the foreign food around yes?"
+-- Seer Coldsnout, display ID 6829 , level 30, faction 35, humanoid, scale 1.2, weapon 13338, quest/gossip flags, gossip text : "The snow is fresh, and the air is cool. For us Icepaw, the time begins to start our festivities, and to celebrate an end to another year."
+-- Icepaw Reveler, display ID 6829, level 15, faction 35, humanoid, scale 1
+-- Icepaw Celebrator, display ID 6829, level 15, faction 35, humanoid, scale 1
+-- Bitterhide, display ID 6829, level 5, faction 35, humanoid, scale 0.6, quest/gossip flags, gossip text : "I hope the others like my presents!"
+-- Winter Grell Trickster, display ID 18364, level 10, faction 16, demon, scale 0.6 has 300 mana, casts 205 every 9 seconds
+-- Winter Grell Schemer, display ID 18361, level 10, faction 16, demon, scale 0.6
+-- Winter Grell Trickster, display ID 18364, level 10, faction 16, demon, scale 0.6 has 300 mana, casts 205 every 9 seconds
+-- Winter Grell Schemer, display ID 18361, level 10, faction 16, demon, scale 0.6
+-- Wavecrest Explorer, display ID 9135, level 54-55, faction 74, humanoid, scale 1.4, weapon : 2023, casts 14516 every 20 seconds
+-- Wavecrest Siren, display ID 5029, level 57-58, faction 74,  humanoid, scale 1, weapon 60522, has 1806 mana, casts 10179 every 10 seconds
+-- Wavecrest Tidefinder, display ID 9135, , level 58-59, faction 74, humanoid, scale 1.6, weapon 6680, has 1403 mana, casts 10472 every 12 seconds
 REPLACE INTO creature_template VALUES
 (61117, 18551, 0, 0, 0, 0, 'Archaeologist Trixia Goldspark', NULL, 0, 48, 48, 2800, 2800, 0, 0, 2386, 69, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61118, 19108, 0, 0, 0, 0, 'Vengeful Spirit', NULL, 0, 57, 57, 3758, 3758, 2312, 2312, 3334, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 2, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 1, 0, 0, 3, 2084, 0, 0, 0, 0, 524298, 0, ''),
 (61119, 19105, 0, 0, 0, 0, 'Shade of the Temptress', NULL, 0, 56, 56, 3643, 3643, 3000, 3000, 2699, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 112, 145, 0, 254, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.456, 98.252, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61120, 19109, 0, 0, 0, 0, 'Shade of the Senshi', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61120, 19109, 0, 0, 0, 0, 'Shade of the Senshi', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61121, 18740, 0, 0, 0, 0, 'Chieftain Icepaw', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 35, 3, 1, 1.14714, 1.5, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61122, 6829, 0, 0, 0, 0, 'Seer Coldsnout', NULL, 0, 30, 30, 1179, 1179, 0, 0, 1240, 35, 3, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 47, 60, 0, 134, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 53, 74, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61123, 6829, 0, 0, 0, 0, 'Icepaw Reveler', NULL, 0, 15, 15, 328, 328, 0, 0, 660, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61124, 6829, 0, 0, 0, 0, 'Icepaw Reveler', NULL, 0, 15, 15, 328, 328, 0, 0, 660, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 21, 27, 0, 74, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 21.2784, 29.2578, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61125, 6829, 0, 0, 0, 0, 'Bitterhide', NULL, 0, 5, 5, 102, 102, 0, 0, 145, 35, 3, 1, 1.14286, 0.6, 18, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61126, 18100, 0, 0, 0, 0, 'Ebu', NULL, 0, 56, 56, 3643, 3643, 0, 0, 2699, 35, 3, 1, 1.14286, 0.6, 18, 5, 0, 0, 1, 102, 131, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.456, 98.252, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61127, 18364, 0, 0, 0, 0, 'Winter Grell Trickster', NULL, 0, 10, 10, 198, 198, 300, 300, 455, 16, 0, 1, 1.14286, 0.6, 20, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 3, 0, 61127, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61128, 18361, 0, 0, 0, 0, 'Winter Grell Schemer', NULL, 0, 10, 10, 198, 198, 0, 0, 455, 16, 0, 1, 1.14286, 0.6, 20, 5, 0, 0, 1, 13, 17, 0, 62, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 15.048, 20.691, 100, 3, 0, 61128, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 9, 17, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61129, 9135, 0, 0, 0, 0, 'Wavecrest Explorer', NULL, 0, 54, 55, 3292, 3398, 0, 0, 3244, 74, 0, 1, 1.14286, 1.4, 18, 5, 0, 0, 1, 95, 118, 0, 248, 1, 2000, 2000, 1, 0, 0, 3, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 61129, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61130, 5029, 0, 0, 0, 0, 'Wavecrest Siren', NULL, 0, 57, 58, 3758, 3875, 1806, 1806, 3435, 74, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 102, 131, 0, 262, 1, 2800, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 73.392, 100.914, 100, 7, 0, 61130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 126, 170, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61131, 9135, 0, 0, 0, 0, 'Wavecrest Tidefinder', NULL, 0, 58, 59, 3875, 3997, 1403, 1403, 3462, 74, 0, 1, 1.42857, 1.6, 18, 5, 0, 0, 1, 77, 95, 0, 268, 1, 1500, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 72.9872, 100.357, 100, 7, 0, 61131, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI',0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @equip_template = 20274; set @weapon_1 = 6680; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61131;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20273; set @weapon_1 = 60522; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61130;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20272; set @weapon_1 = 2023; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61129;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @equip_template = 20271; set @weapon_1 = 13338; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61122;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 set @equip_template = 20270; set @weapon_1 = 17743; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61118;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+
+set @gossip_menu_id = 41291; set @magic_number = 61126;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You friend with monkey, you friend with Ebu? Ebu like friend, you help, yes?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41290; set @magic_number = 61125;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I hope the others like my presents!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41289; set @magic_number = 61122;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The snow is fresh, and the air is cool. For us Icepaw, the time begins to start our festivities, and to celebrate an end to another year.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41288; set @magic_number = 61121;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Welcome to Icepaw Village, the others will treat you with kindness in these lands. Let us join together to enjoy this Winter Veil, and perhaps spread some of the foreign food around yes?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 
 set @gossip_menu_id = 41287; set @magic_number = 61117;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Yo $r, ever wondering what\'s hiding beneath your feet? What bounty we can claim from lost cultures? Perhaps we could find out together.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- Wavecrest Tidefinder
+set @creature_entry = 61131;
+set @description = ': Wavecrest Tidefinder';
+set @spell_list_id = 180099;
+
+set @spellid_1 = 10472; -- Frost Shock
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 12;
+set @delayrepeatmax_1 = 12;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Wavecrest Siren
+set @creature_entry = 61130;
+set @description = ': Wavecrest Siren';
+set @spell_list_id = 180098;
+
+set @spellid_1 = 10179; -- Frostbolt
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 10;
+set @delayrepeatmax_1 = 10;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Wavecrest Explorer
+set @creature_entry = 61129;
+set @description = ': Wavecrest Explorer';
+set @spell_list_id = 180097;
+
+set @spellid_1 = 14516; -- Strike
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 20; 
+set @delayrepeatmax_1 = 20;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+
+-- Winter Grell Trickster
+set @creature_entry = 61127;
+set @description = ': Winter Grell Trickster';
+set @spell_list_id = 180096;
+
+set @spellid_1 = 205; -- Frostbolt
+set @probability_1 = 100;
+set @casttarget_1 = 1;
+set @castflags_1 = 4;
+set @delayinitialmin_1 = 0;
+set @delayinitialmax_1 = 0;
+set @delayrepeatmin_1 = 9; 
+set @delayrepeatmax_1 = 9;
+
+set @spellid_2 = 0;
+set @probability_2 = 0; 
+set @casttarget_2 = 0; 
+set @castflags_2 = 0;
+set @delayinitialmin_2 = 0; 
+set @delayinitialmax_2 = 0; 
+set @delayrepeatmin_2 = 0; 
+set @delayrepeatmax_2 = 0;
+
+set @spellid_3 = 0;
+set @probability_3 = 0; 
+set @casttarget_3 = 0; 
+set @castflags_3 = 0;
+set @delayinitialmin_3 = 0; 
+set @delayinitialmax_3 = 0; 
+set @delayrepeatmin_3 = 0; 
+set @delayrepeatmax_3 = 0;
+
+set @spellid_4 = 0;
+set @probability_4 = 0; 
+set @casttarget_4 = 0; 
+set @castflags_4 = 0;
+set @delayinitialmin_4 = 0; 
+set @delayinitialmax_4 = 0; 
+set @delayrepeatmin_4 = 0; 
+set @delayrepeatmax_4 = 0;
+
+set @spellid_5 = 0; 
+set @probability_5 = 0; 
+set @casttarget_5 = 0; 
+set @castflags_5 = 0;
+set @delayinitialmin_5 = 0; 
+set @delayinitialmax_5 = 0; 
+set @delayrepeatmin_5 = 0; 
+set @delayrepeatmax_5 = 0;
+
+set @spellid_6 = 0; 
+set @probability_6 = 0; 
+set @casttarget_6 = 0; 
+set @castflags_6 = 0;
+set @delayinitialmin_6 = 0; 
+set @delayinitialmax_6 = 0; 
+set @delayrepeatmin_6 = 0; 
+set @delayrepeatmax_6 = 0;
+
+set @spellid_7 = 0; 
+set @probability_7 = 0; 
+set @casttarget_7 = 0; 
+set @castflags_7 = 0;
+set @delayinitialmin_7 = 0; 
+set @delayinitialmax_7 = 0; 
+set @delayrepeatmin_7 = 0; 
+set @delayrepeatmax_7 = 0;
+
+set @spellid_8 = 0; 
+set @probability_8 = 0; 
+set @casttarget_8 = 0; 
+set @castflags_8 = 0;
+set @delayinitialmin_8 = 0; 
+set @delayinitialmax_8 = 0; 
+set @delayrepeatmin_8 = 0; 
+set @delayrepeatmax_8 = 0;
+
+-- Do not touch this part:
+update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+where entry = @creature_entry;
+replace into creature_spells (entry, name, 
+spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
+spellid_2, probability_2, casttarget_2, castflags_2, delayinitialmin_2, delayinitialmax_2, delayrepeatmin_2, delayrepeatmax_2, 
+spellid_3, probability_3, casttarget_3, castflags_3, delayinitialmin_3, delayinitialmax_3, delayrepeatmin_3, delayrepeatmax_3, 
+spellid_4, probability_4, casttarget_4, castflags_4, delayinitialmin_4, delayinitialmax_4, delayrepeatmin_4, delayrepeatmax_4, 
+spellid_5, probability_5, casttarget_5, castflags_5, delayinitialmin_5, delayinitialmax_5, delayrepeatmin_5, delayrepeatmax_5, 
+spellid_6, probability_6, casttarget_6, castflags_6, delayinitialmin_6, delayinitialmax_6, delayrepeatmin_6, delayrepeatmax_6, 
+spellid_7, probability_7, casttarget_7, castflags_7, delayinitialmin_7, delayinitialmax_7, delayrepeatmin_7, delayrepeatmax_7, 
+spellid_8, probability_8, casttarget_8, castflags_8, delayinitialmin_8, delayinitialmax_8, delayrepeatmin_8, delayrepeatmax_8) 
+values (@spell_list_id, @description,
+@spellid_1, @probability_1, @casttarget_1, @castflags_1, @delayinitialmin_1, @delayinitialmax_1, @delayrepeatmin_1, @delayrepeatmax_1,
+@spellid_2, @probability_2, @casttarget_2, @castflags_2, @delayinitialmin_2, @delayinitialmax_2, @delayrepeatmin_2, @delayrepeatmax_2,
+@spellid_3, @probability_3, @casttarget_3, @castflags_3, @delayinitialmin_3, @delayinitialmax_3, @delayrepeatmin_3, @delayrepeatmax_3,
+@spellid_4, @probability_4, @casttarget_4, @castflags_4, @delayinitialmin_4, @delayinitialmax_4, @delayrepeatmin_4, @delayrepeatmax_4,
+@spellid_5, @probability_5, @casttarget_5, @castflags_5, @delayinitialmin_5, @delayinitialmax_5, @delayrepeatmin_5, @delayrepeatmax_5,
+@spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
+@spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
+@spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 
 -- Shade of the Temptress
 set @creature_entry = 61119;
@@ -2646,3 +3105,9 @@ REPLACE INTO creature_loot_template VALUES (61082, 60954, 14, 0, 1, 1, 0);
 -- Add drop 'Ripe Tel'abim Banana' to the loot table of 'Highvale Monkey, and Highvale Chimpanzee' with a drop chance of 10%
 REPLACE INTO creature_loot_template VALUES (61077, 60954, 10, 0, 1, 1, 0);
 REPLACE INTO creature_loot_template VALUES (61078, 60954, 10, 0, 1, 1, 0);
+-- NPC 'Icepaw' rename to Snowpelt.
+update creature_template set name = 'Snowpelt' where entry = 51253;
+-- NPC 'shivering moonkin hatchling' change to level 20, remove elite.
+delete from creature_template where entry = 50637;
+REPLACE INTO creature_template VALUES
+(50637, 15374, 15375, 15374, 15375, 0, 'Shivering Moonkin Hatchling', NULL, 6460, 20, 20, 629, 629, 1026, 1026, 852, 35, 1, 1, 1.14286, 0.4, 20, 5, 40, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 4672, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 50637, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, '26000', 0, 0, '', 1, 3, 0, 0, 3, 14981, 0, 0, 0, 0, 524296, 0, 'npc_shivering_moonkin');
