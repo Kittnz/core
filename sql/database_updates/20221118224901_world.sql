@@ -403,3 +403,24 @@ REPLACE INTO `creature` VALUES (2573702,61072,0,0,0,1,-8967.04,-6356.34,-8.47467
 REPLACE INTO `creature` VALUES (2573702,61072,0,0,0,1,-8967.04,-6356.34,-8.47467,5.85902,300,300,8,100,100,1,0,0);
 REPLACE INTO `creature` VALUES (2573703,61095,0,0,0,1,-8813.35,-6733.77,22.007,5.17102,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2573703,61095,0,0,0,1,-8813.35,-6733.77,22.007,5.17102,300,300,5,100,100,1,0,0);
+
+-- Changes by TAMMO
+UPDATE creature SET position_x = '4684.354980', position_y = '-51.969807', position_z = '268.932343', orientation = '5.162122' WHERE guid = '2573608';
+UPDATE creature SET position_x = '4688.598633', position_y = '-51.216763', position_z = '268.960297', orientation = '5.636501' WHERE guid = '2573608';
+UPDATE creature SET position_x = '4715.108398', position_y = '-76.496361', position_z = '270.881348', orientation = '2.233369' WHERE guid = '2573608';
+REPLACE INTO `gameobject` VALUES ( 5011986, 2000388, 451, 4708.71, -63.2003, 270.306, 0.11044, 0, 0, 0.0551919, 0.998476, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5011986';
+DELETE FROM game_event_gameobject WHERE guid = '5011986';
+DELETE FROM gameobject_battleground WHERE guid = '5011986';
+REPLACE INTO `gameobject` VALUES ( 5011987, 2000388, 451, 4682.06, -50.802, 268.911, 5.64828, 0, 0, 0.312147, -0.950034, 300, 300, 100, 1, 0, 0);
+UPDATE creature SET position_x = '4686.928711', position_y = '-53.182571', position_z = '268.984314', orientation = '2.850692' WHERE guid = '2573608';
+UPDATE creature SET position_x = '4684.319336', position_y = '-47.571720', position_z = '268.910248', orientation = '4.010727' WHERE guid = '2573610';
+UPDATE creature SET position_x = '4682.348633', position_y = '-46.330688', position_z = '268.959503', orientation = '4.632784' WHERE guid = '2573610';
+REPLACE INTO `creature` VALUES (2573704,3468,0,0,0,451,4687.58,-49.1201,268.937,3.21356,120,120,0,100,100,0,0,0);
+UPDATE creature SET position_x = '4687.595215', position_y = '-50.201878', position_z = '268.936615', orientation = '3.008568' WHERE guid = '2573704';
+DELETE FROM creature WHERE guid=2573704;
+DELETE FROM creature_addon WHERE guid=2573704;
+DELETE FROM creature_movement WHERE id=2573704;
+DELETE FROM game_event_creature WHERE guid=2573704;
+DELETE FROM game_event_creature_data WHERE guid=2573704;
+DELETE FROM creature_battleground WHERE guid=2573704;
