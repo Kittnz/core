@@ -289,8 +289,24 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
 
     _player->LogItem(pItem, LogItemAction::Deleted, count);
 
+    bool hasSpellCharges = false;
+    for (const auto& spell : pProto->Spells)
+    {
+        if (spell.SpellId && spell.SpellCharges > 0)
+        {
+            hasSpellCharges = true;
+            break;
+        }
+    }
+
+    bool save = true;
+
+    if (pProto->Duration || hasSpellCharges || pProto->IsQuestItem) // don't recover these.
+        save = false;
+
+
     // Turtle: save destroyed items so they can be restored
-    if ((count <= pItem->GetCount()) &&
+    if (save && (count <= pItem->GetCount()) &&
         (pProto->Quality >= ITEM_QUALITY_RARE || pProto->StartQuest))
         CharacterDatabase.PExecute("INSERT INTO `character_destroyed_items` (`player_guid`, `item_entry`, `stack_count`, `time`) VALUES (%u, %u, %u, %u)", _player->GetGUIDLow(), pProto->ItemId, count ? count : pItem->GetCount(), uint64(sWorld.GetGameTime()));
 
@@ -800,6 +816,19 @@ void WorldSession::HandleListRestoreItemsCallBack(QueryResult* result, uint32 ac
         if (!pProto)
             continue;
 
+        bool hasSpellCharges = false;
+        for (const auto& spell : pProto->Spells)
+        {
+            if (spell.SpellId && spell.SpellCharges > 0)
+            {
+                hasSpellCharges = true;
+                break;
+            }
+        }
+
+        if (pProto->Duration || hasSpellCharges || pProto->IsQuestItem) // don't recover these.
+            continue;
+        
         count++;
         data << uint32(count);
         data << uint32(itemId);

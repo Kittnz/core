@@ -4921,34 +4921,6 @@ void Spell::EffectWeaponDmg(SpellEffectIndex eff_idx)
     if (!unitTarget->IsAlive())
         return;
 
-    if (m_spellInfo->Id == 17364 || m_spellInfo->Id == 45521) // Stormstrike
-    {
-        if (!m_casterUnit->IsAlive()) // CalculateMeleeDamage does not work in that case.
-            return;
-        m_casterUnit->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_MELEE_ATTACK);
-        if (Spell* spell = m_casterUnit->GetCurrentSpell(CURRENT_MELEE_SPELL))
-            spell->cast();
-        CalcDamageInfo damageInfo;
-        m_casterUnit->CalculateMeleeDamage(unitTarget, 0, &damageInfo, BASE_ATTACK);
-
-        // Send log damage message to client
-        for (uint8 i = 0; i < m_casterUnit->GetWeaponDamageCount(BASE_ATTACK); i++)
-        {
-            damageInfo.totalDamage -= damageInfo.subDamage[i].damage;
-            m_casterUnit->DealDamageMods(unitTarget, damageInfo.subDamage[i].damage, &damageInfo.subDamage[i].absorb);
-            damageInfo.totalDamage += damageInfo.subDamage[i].damage;
-        }
-
-        m_casterUnit->SendAttackStateUpdate(&damageInfo);
-        m_casterUnit->ProcDamageAndSpell(damageInfo.target, damageInfo.procAttacker, damageInfo.procVictim, damageInfo.procEx, damageInfo.totalDamage, damageInfo.attackType);
-        m_casterUnit->DealMeleeDamage(&damageInfo, true);
-
-        // if damage unitTarget call AI reaction
-        unitTarget->AttackedBy(m_casterUnit);
-        m_damage = 0;
-        return;
-    }
-
     // multiple weapon dmg effect workaround
     // execute only the last weapon damage
     // and handle all effects at once

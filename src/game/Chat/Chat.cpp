@@ -217,7 +217,8 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand honorCommandTable[] =
     {
         { "show",           SEC_DEVELOPER, false, &ChatHandler::HandleHonorShow,                  "", nullptr },
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "setrp",          SEC_DEVELOPER, false, &ChatHandler::HandleHonorSetRPCommand,          "", nullptr },
+        { nullptr,          0,             false, nullptr,                                        "", nullptr }
     };
 
     static ChatCommand instanceCommandTable[] =
@@ -349,6 +350,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { "group",          SEC_ADMINISTRATOR,     false, nullptr,                                        "", creatureGroupsCommandTable },
 
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
+    static ChatCommand unitCommandTable[] =
+    {
+        { "speedinfo",      SEC_DEVELOPER,     false, &ChatHandler::HandleUnitSpeedInfoCommand,       "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
     static ChatCommand questCommandTable[] =
@@ -570,6 +577,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "lookup",         SEC_DEVELOPER,       true,  nullptr,                                        "", lookupCommandTable   },
         { "modify",         SEC_DEVELOPER,       false, nullptr,                                        "", modifyCommandTable   },
         { "npc",            SEC_DEVELOPER,       false, nullptr,                                        "", npcCommandTable      },
+        { "unit",           SEC_DEVELOPER,       false, nullptr,                                        "", unitCommandTable      },
         { "quest",          SEC_DEVELOPER,       false, nullptr,                                        "", questCommandTable    },
         { "reload",         SEC_ADMINISTRATOR,   true,  nullptr,                                        "", reloadCommandTable   },
         { "reset",          SEC_DEVELOPER,       true,  nullptr,                                        "", resetCommandTable    },

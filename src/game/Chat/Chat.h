@@ -324,6 +324,7 @@ class ChatHandler
         bool HandleGuildListenCommand(char* args);
 
         bool HandleHonorShow(char* args);
+        bool HandleHonorSetRPCommand(char* args);
 
         bool HandleInstanceListBindsCommand(char* args);
         bool HandleInstanceUnbindCommand(char* args);
@@ -398,6 +399,8 @@ class ChatHandler
         bool HandleNpcSpawnTimeCommand(char* args);
         bool HandleNpcTextEmoteCommand(char* args);
         bool HandleNpcYellCommand(char* args);
+
+        bool HandleUnitSpeedInfoCommand(char* args);
 
         bool HandleQuestAddCommand(char* args);
         bool HandleQuestRemoveCommand(char* args);
