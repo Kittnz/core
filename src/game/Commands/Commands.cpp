@@ -11133,6 +11133,26 @@ bool ChatHandler::HandleCharacterHasItemCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleHonorSetRPCommand(char* args)
+{
+    Player* target = GetSelectedPlayer();
+    if (!target)
+    {
+        SendSysMessage(LANG_PLAYER_NOT_FOUND);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float value;
+    if (!ExtractFloat(&args, value))
+        return false;
+
+    target->GetHonorMgr().SetRankPoints(value);
+    target->GetHonorMgr().Update();
+    PSendSysMessage("You have changed rank points of %s to %g.", target->GetName(), value);
+    return true;
+}
+
 bool ChatHandler::HandleHonorShow(char* /*args*/)
 {
     Player* target = GetSelectedPlayer();

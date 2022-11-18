@@ -323,6 +323,7 @@ class ChatHandler
         bool HandleGuildListenCommand(char* args);
 
         bool HandleHonorShow(char* args);
+        bool HandleHonorSetRPCommand(char* args);
 
         bool HandleInstanceListBindsCommand(char* args);
         bool HandleInstanceUnbindCommand(char* args);
