@@ -351,6 +351,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand unitCommandTable[] =
+    {
+        { "speedinfo",      SEC_DEVELOPER,     false, &ChatHandler::HandleUnitSpeedInfoCommand,       "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand questCommandTable[] =
     {
         { "add",            SEC_DEVELOPER, false, &ChatHandler::HandleQuestAddCommand,            "", nullptr },
@@ -569,6 +575,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "lookup",         SEC_DEVELOPER,       true,  nullptr,                                        "", lookupCommandTable   },
         { "modify",         SEC_DEVELOPER,       false, nullptr,                                        "", modifyCommandTable   },
         { "npc",            SEC_DEVELOPER,       false, nullptr,                                        "", npcCommandTable      },
+        { "unit",           SEC_DEVELOPER,       false, nullptr,                                        "", unitCommandTable      },
         { "quest",          SEC_DEVELOPER,       false, nullptr,                                        "", questCommandTable    },
         { "reload",         SEC_ADMINISTRATOR,   true,  nullptr,                                        "", reloadCommandTable   },
         { "reset",          SEC_DEVELOPER,       true,  nullptr,                                        "", resetCommandTable    },
