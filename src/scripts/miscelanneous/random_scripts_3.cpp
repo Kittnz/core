@@ -5189,9 +5189,61 @@ bool QuestRewarded_npc_pumpworker_zalwan(Player* pPlayer, Creature* pQuestGiver,
     return false;
 }
 
+bool QuestRewarded_npc_wazlon_headiron(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40727) // Derelict Supplies
+    {
+        pQuestGiver->MonsterSay("Ahh, my trusty Arclight Spanner, welcome home to Papa.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40729) // Collecting Specimens
+    {
+        pQuestGiver->MonsterSay("Such a weird specimen.. Stunted in growth, and lacking the essential nutrition, this certainly won't do.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    if (pQuest->GetQuestId() == 40730) // Early Testing
+    {
+        pQuestGiver->PMonsterEmote("Tazzo Gearfire pours the Elixir of Giant Growth over top of the banana.");
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->PMonsterEmote("The banana begins to bloat, bits of skin tear to the excessive bloating, all before it slumps, and collapses in on itself.");
+            }, 5000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("Well that was anti-climactic...");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+            }, 9000);
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_tazzo_gearfire";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_tazzo_gearfire;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_wazlon_headiron";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_wazlon_headiron;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_pumpworker_zalwan";
