@@ -37,10 +37,12 @@ replace into creature_questrelation		(id, quest) values (61111, 40726);
 replace into creature_involvedrelation	(id, quest) values (61111, 40726);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
-(60958,918,'Backup Seal-Valve',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+(60958,7839,'Backup Seal-Valve',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 REPLACE INTO gameobject_template VALUES
 (2010950, 3, 24106, 'Tel Co. Backup Seal-Valve', 0, 4, 1, 43, 2010950, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into gameobject_loot_template values
 (2010950,60958,-100,0,1,1,0);
+-- Change quest requirement of 'In Your Own Defense' to 3 Ancient Dust instead of 7.
+update quest_tmplate set reqitemcount1 = 3 where entry = 40712;
