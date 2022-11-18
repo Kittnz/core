@@ -22,3 +22,4 @@ if (USE_EXTRACTORS)
 endif()
 
 add_subdirectory(re2)
+add_subdirectory(dpp)
