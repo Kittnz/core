@@ -217,7 +217,8 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand honorCommandTable[] =
     {
         { "show",           SEC_DEVELOPER, false, &ChatHandler::HandleHonorShow,                  "", nullptr },
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "setrp",          SEC_DEVELOPER, false, &ChatHandler::HandleHonorSetRPCommand,          "", nullptr },
+        { nullptr,          0,             false, nullptr,                                        "", nullptr }
     };
 
     static ChatCommand instanceCommandTable[] =
