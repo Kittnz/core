@@ -5575,6 +5575,29 @@ bool ChatHandler::HandleNpcYellCommand(char* args)
     return true;
 }
 
+
+bool ChatHandler::HandleUnitSpeedInfoCommand(char* args)
+{
+    Unit* pTarget = GetSelectedUnit();
+
+    if (!pTarget)
+    {
+        SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Speed info for %s", pTarget->GetObjectGuid().GetString().c_str());
+    PSendSysMessage("Walk: %g", pTarget->GetSpeed(MOVE_WALK));
+    PSendSysMessage("Run: %g", pTarget->GetSpeed(MOVE_RUN));
+    PSendSysMessage("Run Back: %g", pTarget->GetSpeed(MOVE_RUN_BACK));
+    PSendSysMessage("Swim: %g", pTarget->GetSpeed(MOVE_SWIM));
+    PSendSysMessage("Swim Back: %g", pTarget->GetSpeed(MOVE_SWIM_BACK));
+    PSendSysMessage("Turn: %g", pTarget->GetSpeed(MOVE_TURN_RATE));
+
+    return true;
+}
+
 //show text emote by creature in chat
 bool ChatHandler::HandleNpcTextEmoteCommand(char* args)
 {

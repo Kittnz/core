@@ -398,6 +398,8 @@ class ChatHandler
         bool HandleNpcTextEmoteCommand(char* args);
         bool HandleNpcYellCommand(char* args);
 
+        bool HandleUnitSpeedInfoCommand(char* args);
+
         bool HandleQuestAddCommand(char* args);
         bool HandleQuestRemoveCommand(char* args);
         bool HandleQuestCompleteCommand(char* args);
