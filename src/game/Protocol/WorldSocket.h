@@ -27,7 +27,7 @@
 
 #ifndef _WORLDSOCKET_H
 #define _WORLDSOCKET_H
-#include "Socket.h"
+#include "MangosSocket.h"
 #include "Auth/AuthCrypt.h"
 
 template <typename T>
@@ -35,8 +35,9 @@ class ReactorRunnable;
 template <typename T>
 class MangosSocketMgr;
 
-class WorldSocket : public Socket<WorldSocket>
+class WorldSocket : public MangosSocket<WorldSession, WorldSocket, AuthCrypt>
 {
+    friend class MangosSocket<WorldSession, WorldSocket, AuthCrypt>;
     friend class MangosSocketMgr<WorldSocket>;
     friend class WorldSocketMgr;
     friend class ReactorRunnable< WorldSocket >;

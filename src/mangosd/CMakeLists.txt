@@ -98,6 +98,7 @@ if(USE_SCRIPTS)
     shared
     framework
     g3dlite
+    dpp
     ${ACE_LIBRARIES}
   )
 else()
@@ -107,6 +108,7 @@ else()
     shared
     framework
     g3dlite
+    dpp  
     ${ACE_LIBRARIES}
   )
 endif()
