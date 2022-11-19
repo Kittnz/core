@@ -5202,6 +5202,57 @@ bool QuestRewarded_npc_wazlon_headiron(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
+bool QuestAccept_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver)
+        return false;
+
+    if (!pPlayer)
+        return false;
+
+    if (pQuest->GetQuestId() == 40737) //  The Final Test
+    {
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+        pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("With the Dream Dust, I can funnel my energy into the banana to produce results of growth...");
+            }, 3000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->PMonsterEmote("The Tel'abim Banana begins to grow from the arcane energy.");
+            }, 10000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("I'm doing it! Just a little more!");
+            }, 13000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->PMonsterEmote("With the added Dream Dust, the growth accelerates, soon becoming a Gargantuan Tel'abim Banana.");
+            }, 18000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->CastSpell(pQuestGiver, 1449, false);
+            }, 21000);
+
+        pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            {
+                pQuestGiver->MonsterSay("We have done it, the secrets of the Gargantuan Banana are unlocked and at our finger tips! Can you believe what we have done today?! For your help, I'll make them for you any time, just bring me the required materials, and they are yours.");
+                pQuestGiver->HandleEmote(EMOTE_ONESHOT_CHEER);
+                pQuestGiver->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            }, 23000);
+
+        return true;
+    }
+
+    return false;
+}
+
 bool QuestRewarded_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
     if (!pQuestGiver || !pPlayer) return false;
@@ -5228,7 +5279,65 @@ bool QuestRewarded_npc_tazzo_gearfire(Player* pPlayer, Creature* pQuestGiver, Qu
             }, 9000);
     }
 
+    if (pQuest->GetQuestId() == 40734) // A Must Have Discovery
+    {
+        pQuestGiver->MonsterSay("Such a magnificent sample, after all this time, right under my nose on the very island! I can't thank you enough for getting it.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
     return false;
+}
+
+bool GossipHello_npc_leeza_fraxtoggle(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40733) == QUEST_STATUS_INCOMPLETE) // Gargantuan Information!
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I am ready to hear your tale.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61116, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_leeza_fraxtoggle(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pCreature->SummonCreature(10, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 33 * IN_MILLISECONDS);
+
+            pCreature->MonsterSay("This was a few weeks ago, we used to do operations far in the north, around Bixxle's Storehouse, we got a bit ambitious, and set our attentions on the Jagged Isles at the very northern tip of the island.");
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("It was on the biggest island there I found this banana, bigger than me! Nestled within a bunch of roots and bushes, I could barely move the thing, and left shortly after I heard the chaos of apes attacking the Storehouse.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 13000);
+
+            pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
+                {
+                    pCreature->MonsterSay("I wouldn't bother looking for it, the Jagged Isles are infested with murlocs, naga, and all other sorts of creatures, it isn't worth your time.");
+                    pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 28000);
+
+            DoAfterTime(pCreature, 33 * IN_MILLISECONDS, [playerGuid, npc = pCreature]() {
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60013); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    pPlayer->CLOSE_GOSSIP_MENU();
+    return true;
 }
 
 void AddSC_random_scripts_3()
@@ -5236,7 +5345,14 @@ void AddSC_random_scripts_3()
     Script* newscript;
 
     newscript = new Script;
+    newscript->Name = "npc_leeza_fraxtoggle";
+    newscript->pGossipHello = &GossipHello_npc_leeza_fraxtoggle;
+    newscript->pGossipSelect = &GossipSelect_npc_leeza_fraxtoggle;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
     newscript->Name = "npc_tazzo_gearfire";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_tazzo_gearfire;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_tazzo_gearfire;
     newscript->RegisterSelf();
 
