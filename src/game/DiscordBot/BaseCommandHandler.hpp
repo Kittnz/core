@@ -4,6 +4,7 @@
 #include "Bot.hpp"
 
 #include <memory>
+#include <any>
 #include <vector>
 
 namespace DiscordBot
