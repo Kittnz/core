@@ -14,3 +14,10 @@ DELETE FROM `custom_graveyards` WHERE `id` IN (39, 40);
 
 REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`) VALUES (928, 5130);
 REPLACE INTO `world_safe_locs_facing` (`id`, `orientation`) VALUES (928, 2.7);
+
+-- Alah'Thalas:
+
+DELETE FROM `custom_graveyards` WHERE `id` = 9;
+
+REPLACE INTO `game_graveyard_zone` (`id`, `ghost_zone`, `faction`) VALUES (934, 2037, 469);
+REPLACE INTO `world_safe_locs_facing` (`id`, `orientation`) VALUES (934, 5.6);
