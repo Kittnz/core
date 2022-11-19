@@ -452,3 +452,31 @@ DELETE FROM creature_battleground WHERE guid=2572987;
 
 -- Changes by TAMMO
 UPDATE creature SET position_x = '-2613.553711', position_y = '1093.199585', position_z = '62.172546', orientation = '1.463391' WHERE guid = '2573550';
+UPDATE creature SET position_x = '-2628.088379', position_y = '1104.354370', position_z = '59.072380', orientation = '3.437881' WHERE guid = '2573524';
+UPDATE creature SET position_x = '-2629.708008', position_y = '1102.714844', position_z = '59.368004', orientation = '0.989006' WHERE guid = '2573522';
+UPDATE creature SET position_x = '-2628.301025', position_y = '1104.514160', position_z = '59.025997', orientation = '4.104695' WHERE guid = '2573524';
+UPDATE creature SET position_x = '-2594.598145', position_y = '1094.733032', position_z = '62.341290', orientation = '2.006119' WHERE guid = '2573548';
+UPDATE creature SET position_x = '-2628.232422', position_y = '1104.543091', position_z = '58.960236', orientation = '4.090566' WHERE guid = '2573524';
+UPDATE creature SET position_x = '-2626.558350', position_y = '1147.190796', position_z = '56.187855', orientation = '3.688428' WHERE guid = '2573547';
+UPDATE creature SET position_x = '-2651.673096', position_y = '1166.377075', position_z = '53.488445', orientation = '3.970392' WHERE guid = '2573568';
+UPDATE creature SET position_x = '-2654.264893', position_y = '1163.371704', position_z = '52.869740', orientation = '0.934827' WHERE guid = '2573567';
+UPDATE creature SET position_x = '-2681.511719', position_y = '1120.875854', position_z = '52.430103', orientation = '0.914406' WHERE guid = '2573530';
+UPDATE creature SET position_x = '-2680.642578', position_y = '1119.347900', position_z = '52.648899', orientation = '0.800523' WHERE guid = '2573529';
+UPDATE creature SET position_x = '-2695.868652', position_y = '1107.763184', position_z = '55.289539', orientation = '1.263911' WHERE guid = '2573543';
+UPDATE creature SET position_x = '-2695.912598', position_y = '1107.659546', position_z = '55.339493', orientation = '1.939352' WHERE guid = '2573543';
+UPDATE creature SET position_x = '-2695.912598', position_y = '1107.659546', position_z = '55.309494', orientation = '1.939352' WHERE guid = '2573543';
+UPDATE creature SET position_x = '-2661.228271', position_y = '1088.406128', position_z = '59.622822', orientation = '1.432776' WHERE guid = '2573538';
+UPDATE creature SET position_x = '-2661.285400', position_y = '1088.212769', position_z = '59.640293', orientation = '1.503455' WHERE guid = '2573538';
+UPDATE creature SET position_x = '-2610.532715', position_y = '1185.522339', position_z = '61.135494', orientation = '0.932469' WHERE guid = '2573535';
+
+-- Changes by SHANG
+UPDATE creature SET position_x = '-2696.127197', position_y = '1107.736084', position_z = '55.297375', orientation = '1.088591' WHERE guid = '2573543';
+
+-- Changes by TAMMO
+UPDATE creature SET position_x = '-2608.114014', position_y = '1186.640137', position_z = '61.702248', orientation = '3.624047' WHERE guid = '2573546';
+UPDATE creature SET position_x = '-2608.114014', position_y = '1186.640137', position_z = '61.672249', orientation = '3.624047' WHERE guid = '2573546';
+UPDATE creature SET position_x = '-2610.562744', position_y = '1185.461548', position_z = '61.157692', orientation = '0.533504' WHERE guid = '2573535';
+UPDATE creature SET position_x = '-2611.147461', position_y = '1187.303833', position_z = '61.039600', orientation = '6.090199' WHERE guid = '2573535';
+UPDATE creature SET position_x = '-2611.147461', position_y = '1187.303833', position_z = '61.009602', orientation = '6.090199' WHERE guid = '2573535';
+UPDATE creature SET position_x = '-2608.959961', position_y = '1187.472290', position_z = '61.552307', orientation = '3.278475' WHERE guid = '2573546';
+UPDATE creature SET position_x = '-2608.959961', position_y = '1187.472290', position_z = '61.522308', orientation = '3.278475' WHERE guid = '2573546';
