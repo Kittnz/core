@@ -34,8 +34,6 @@ else()
   endif()
 endif()
 
-target_link_libraries(dpp
-  PRIVATE
-    zlib)
+target_link_libraries(dpp zlib)
 
 SET_TARGET_PROPERTIES(dpp PROPERTIES FOLDER "3rd Party")
