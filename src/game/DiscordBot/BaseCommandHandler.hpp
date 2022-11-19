@@ -2,6 +2,7 @@
 #include "dpp/dpp.h"
 
 #include "Bot.hpp"
+#include "Common.h"
 
 #include <memory>
 #include <any>

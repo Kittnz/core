@@ -37,13 +37,13 @@ namespace DiscordBot
 
     void GMCommandHandler::CommandPrint(std::any callbackArg, const char* output)
     {
-        auto& [handler, source] = std::any_cast<std::pair<GMCommandHandler*, dpp::command_source>>(callbackArg);
+        auto [handler, source] = std::any_cast<std::pair<GMCommandHandler*, dpp::command_source>>(callbackArg);
         handler->_commandOutput[source.issuer.id].output += output;
     }
 
     void GMCommandHandler::CommandFinished(std::any callbackArg, bool sucess)
     {
-        auto& [handler, source] = std::any_cast<std::pair<GMCommandHandler*, dpp::command_source>>(callbackArg);     
+        auto [handler, source] = std::any_cast<std::pair<GMCommandHandler*, dpp::command_source>>(callbackArg);     
 
         std::string output = handler->_commandOutput[source.issuer.id].output;
 
