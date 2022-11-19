@@ -84,6 +84,10 @@
 #include "Anticheat/libanticheat.hpp"
 #include "Anticheat/Config.hpp"
 
+#ifdef USING_DISCORD_BOT
+#include "DiscordBot/Bot.hpp"
+#endif
+
 #include <filesystem>
 #include <fstream>
 #include <regex>
@@ -193,6 +197,12 @@ void World::InternalShutdown()
 
     if (m_autoCommitThread.joinable())
         m_autoCommitThread.join();
+
+
+#ifdef USING_DISCORD_BOT
+    if (m_bot)
+        delete m_bot;
+#endif
 }
 
 /// Find a session by its id
@@ -1779,6 +1789,12 @@ void World::SetInitialWorldSettings()
 	uint32 uTransmogFillDuration = WorldTimer::getMSTimeDiff(uTransmogFillStartTime, WorldTimer::getMSTime());
 	sLog.outString("Loading possible transmogs: %i minutes %i seconds", uTransmogFillDuration / 60000, (uTransmogFillDuration % 60000) / 1000);
 
+#ifdef USING_DISCORD_BOT
+    sLog.outString("Loading Discord Bot...");
+    m_bot = new DiscordBot::Bot();
+    m_bot->Setup("");
+#endif
+
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
     sLog.outString("World server is up and running! Loading time: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000);
 }
@@ -2627,7 +2643,7 @@ void World::ProcessCliCommands()
     {
         DEBUG_LOG("CLI command under processing...");
         CliCommandHolder::Print* zprint = command->m_print;
-        void* callbackArg = command->m_callbackArg;
+        std::any callbackArg = command->m_callbackArg;
         CliHandler handler(command->m_cliAccountId, command->m_cliAccessLevel, callbackArg, zprint);
         handler.ParseCommands(command->m_command);
 

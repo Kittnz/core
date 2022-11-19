@@ -4,6 +4,7 @@
 
 namespace DiscordBot
 {
+
     void GMCommandHandler::RegisterCommands(dpp::commandhandler& registrar)
     {
         registrar.add_command("gm", 
@@ -43,12 +44,26 @@ namespace DiscordBot
     void GMCommandHandler::CommandFinished(std::any callbackArg, bool sucess)
     {
         auto& [handler, source] = std::any_cast<std::pair<GMCommandHandler*, dpp::command_source>>(callbackArg);     
-        dpp::message msg(handler->_commandOutput[source.issuer.id].output);
-        if (handler->_commandOutput[source.issuer.id].selfOnly)
-            msg.set_flags(dpp::m_ephemeral);
 
-        handler->_commHandler->reply(msg, source);
+        std::string output = handler->_commandOutput[source.issuer.id].output;
 
+        uint32 offset = 0;
+        do
+        {
+            //str.substr with count greater than size from offset is fine to overflow.
+            //wish DPP had string view constructors
+            std::string message = output.substr(offset, MaxMessageLength);
+
+            dpp::message msg(message);
+            if (handler->_commandOutput[source.issuer.id].selfOnly)
+                msg.set_flags(dpp::m_ephemeral);
+
+
+
+           // handler->_commHandler->reply(msg, source);
+            offset += MaxMessageLength;
+
+        } while (offset < output.size() - 1);
     }
 
 }
