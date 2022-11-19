@@ -1,0 +1,1 @@
+UPDATE `spell_template` SET `description` = 'Merge the Abyssal Flame with the Primordial Flame.' WHERE `entry` = 56530;
