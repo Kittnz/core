@@ -679,8 +679,8 @@ class ChatHandler
 class CliHandler : public ChatHandler
 {
     public:
-        typedef void Print(void*, char const*);
-        explicit CliHandler(uint32 accountId, AccountTypes accessLevel, void* callbackArg, Print* zprint)
+        typedef void Print(std::any, char const*);
+        explicit CliHandler(uint32 accountId, AccountTypes accessLevel, std::any callbackArg, Print* zprint)
             : m_accountId(accountId), m_loginAccessLevel(accessLevel), m_callbackArg(callbackArg), m_print(zprint) {}
 
         // overwrite functions
@@ -697,7 +697,7 @@ class CliHandler : public ChatHandler
     private:
         uint32 m_accountId;
         AccountTypes m_loginAccessLevel;
-        void* m_callbackArg;
+        std::any m_callbackArg;
         Print* m_print;
 };
 

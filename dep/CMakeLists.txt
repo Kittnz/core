@@ -22,4 +22,6 @@ if (USE_EXTRACTORS)
 endif()
 
 add_subdirectory(re2)
-add_subdirectory(dpp)
+if(USE_DISCORD_BOT)
+  add_subdirectory(dpp)
+endif()
