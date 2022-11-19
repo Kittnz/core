@@ -34,6 +34,7 @@ set(SUPPORTED_CLIENT_BUILD "CLIENT_BUILD_1_12_1" CACHE STRING "Client version th
 option(USE_STD_MALLOC "Use standard malloc instead of TBB" ON)
 option(TBB_DEBUG "Use TBB debug librairies" OFF)
 option(USE_ANTICHEAT "Use anticheat" ON)
+option(USE_DISCORD_BOT "Use Discord Bot" OFF)
 option(USE_SCRIPTS "Compile scripts" ON)
 option(USE_EXTRACTORS "Compile extractors" OFF)
 option(USE_LIBCURL "Compile with libcurl for email support" OFF)
@@ -336,6 +337,14 @@ if(USE_SCRIPTS)
 else()
   message(STATUS "Build scripts         : No")
 endif()
+
+if(USE_DISCORD_BOT)
+  message(STATUS "Build Discord Bot    : Yes")
+  add_compile_definitions(USING_DISCORD_BOT)
+else()
+  message(STATUS "Build Discord Bot    : No (default)")
+endif()
+
 
 if(UNIX)
   if(DEBUG_SYMBOLS)

@@ -203,7 +203,6 @@ set (game_SRCS
     vmap/WorldModel.cpp
     Shop/ShopMgr.cpp
     GuildBank/GuildBank.cpp
-
     AccountMgr.h
     AuraRemovalMgr.h
     AutoBroadCastMgr.h
@@ -430,6 +429,16 @@ else()
   )
 endif()
 
+if(USE_DISCORD_BOT)
+    list(APPEND game_SRCS
+      DiscordBot/Bot.cpp
+      DiscordBot/Bot.hpp
+      DiscordBot/BaseCommandHandler.hpp
+      DiscordBot/GMCommandHandler.cpp
+      DiscordBot/GMCommandHandler.hpp
+    )
+endif()
+
 if(USE_ANTICHEAT)
   list(APPEND game_SRCS
       Anticheat/Antispam/Antispam.cpp
@@ -523,6 +532,7 @@ if(WIN32)
   )
 endif()
 
+
 source_group("Object"
   REGULAR_EXPRESSION .*
 )
@@ -553,16 +563,29 @@ source_group("Anticheat"
   REGULAR_EXPRESSION Anticheat
 )
 
+source_group("DiscordBot"
+  REGULAR_EXPRESSION DiscordBot
+)
+
+
 add_library(game STATIC
   ${game_SRCS}
 )
 
-SET_TARGET_PROPERTIES (game PROPERTIES FOLDER "Game Libs")
+
+SET_TARGET_PROPERTIES(game PROPERTIES FOLDER "Game Libs")
 
 target_link_libraries(game
   shared
   Detour
 )
+
+if(USE_DISCORD_BOT)
+    target_link_libraries(game 
+	dpp
+  )
+  target_compile_definitions(game PUBLIC USING_DISCORD_BOT)
+endif()
 
 #add_dependencies(game revision.h)
 
