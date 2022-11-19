@@ -436,6 +436,7 @@ if(USE_DISCORD_BOT)
       DiscordBot/BaseCommandHandler.hpp
       DiscordBot/GMCommandHandler.cpp
       DiscordBot/GMCommandHandler.hpp
+	  DiscordBot/CommandRegistrar.cpp
     )
 endif()
 
