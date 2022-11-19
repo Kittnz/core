@@ -5866,9 +5866,8 @@ bool ChatHandler::HandleGPSCommand(char* args)
         obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), obj->GetOrientation(),
         cell.GridX(), cell.GridY(), cell.CellX(), cell.CellY(), obj->GetInstanceId(),
         zone_x, zone_y, ground_z, floor_z, have_map, have_vmap);
-
-    // Need this temporary.
-    // sLog.outString("XYZ: %f %f %f", obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ());
+   
+     sLog.outString("XYZ: %f %f %f", obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ());
 
     GridMapLiquidData liquid_status;
     GridMapLiquidStatus res = terrain->getLiquidStatus(obj->GetPositionX(), obj->GetPositionY(), obj->GetPositionZ(), MAP_ALL_LIQUIDS, &liquid_status);

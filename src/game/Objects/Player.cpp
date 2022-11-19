@@ -197,6 +197,8 @@ void PlayerTaxi::LoadTaxiMask(const char* data)
     if (IsTaximaskNodeKnown(19) && !IsTaximaskNodeKnown(182)) SetTaximaskNode(182); // Lapidis
     if (IsTaximaskNodeKnown(7)  && !IsTaximaskNodeKnown(175)) SetTaximaskNode(175); // Hawk's Vigil
     if (IsTaximaskNodeKnown(6)  && !IsTaximaskNodeKnown(176)) SetTaximaskNode(176); // Ironforge Airfields
+    if (IsTaximaskNodeKnown(39) && !IsTaximaskNodeKnown(185)) SetTaximaskNode(185); // Tel'Abim, Alliance
+    if (IsTaximaskNodeKnown(40) && !IsTaximaskNodeKnown(185)) SetTaximaskNode(185); // Tel'Abim, Horde
 }
 
 void PlayerTaxi::AppendTaximaskTo(ByteBuffer& data, bool all)
