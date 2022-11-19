@@ -480,3 +480,6 @@ UPDATE creature SET position_x = '-2611.147461', position_y = '1187.303833', pos
 UPDATE creature SET position_x = '-2611.147461', position_y = '1187.303833', position_z = '61.009602', orientation = '6.090199' WHERE guid = '2573535';
 UPDATE creature SET position_x = '-2608.959961', position_y = '1187.472290', position_z = '61.552307', orientation = '3.278475' WHERE guid = '2573546';
 UPDATE creature SET position_x = '-2608.959961', position_y = '1187.472290', position_z = '61.522308', orientation = '3.278475' WHERE guid = '2573546';
+
+-- Changes by SHANG
+REPLACE INTO `gameobject` VALUES ( 5011990, 2003330, 1, -8884.89, -6453.37, 7.8064, 4.18886, 0, 0, 0.866009, -0.500028, 300, 300, 100, 1, 0, 0);
