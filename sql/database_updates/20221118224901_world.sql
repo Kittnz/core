@@ -449,3 +449,6 @@ DELETE FROM creature_movement WHERE id=2572987;
 DELETE FROM game_event_creature WHERE guid=2572987;
 DELETE FROM game_event_creature_data WHERE guid=2572987;
 DELETE FROM creature_battleground WHERE guid=2572987;
+
+-- Changes by TAMMO
+UPDATE creature SET position_x = '-2613.553711', position_y = '1093.199585', position_z = '62.172546', orientation = '1.463391' WHERE guid = '2573550';
