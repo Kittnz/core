@@ -2,6 +2,8 @@
 #include "dpp/dpp.h"
 #include "GMCommandHandler.hpp"
 #include "BaseCommandHandler.hpp"
+#include "Common.h"
+#include "Platform/Define.h"
 
 #include <string>
 #include <optional>

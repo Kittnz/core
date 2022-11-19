@@ -3,6 +3,7 @@
 
 #include "Bot.hpp"
 #include "Common.h"
+#include "Platform/Define.h"
 
 #include <memory>
 #include <any>
