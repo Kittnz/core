@@ -484,6 +484,21 @@ void PrintInstructions()
 	WriteLog("If you need help, join our Discord: https://discord.com/invite/mBGxmHy or contact us via e-mail help.turtlewow@gmail.com");
 }
 
+void ClearWDBCache()
+{
+	fs::path current_path = fs::current_path();
+
+	{
+		fs::path wdb = current_path / "WDB";
+
+		if (fs::exists(wdb))
+		{
+			WriteLog("Deleting client cache...");
+			fs::remove_all(wdb);
+		}	
+	}
+}
+
 void DeleteDeprecatedMPQ()
 {
 	fs::path currentPath = fs::current_path();
@@ -635,6 +650,9 @@ int GuardedMain(HINSTANCE hInstance)
 
 	// Delete deprecated MPQ files:
 	DeleteDeprecatedMPQ();
+
+	// Delete WDB:
+	ClearWDBCache();
 
 
 	// unpack patch files
