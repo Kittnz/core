@@ -26,6 +26,8 @@
 #include "SharedDefines.h"
 #include "ObjectGuid.h"
 
+#include <any>
+
 struct AreaTriggerTeleport;
 struct AreaTriggerEntry;
 struct FactionEntry;
