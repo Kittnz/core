@@ -12,6 +12,7 @@ namespace DiscordBot
     using namespace std::literals::string_literals;
     using namespace dpp;
 
+
     void RegisterHandlers();
 
     cluster* Bot::GetCore() const

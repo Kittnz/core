@@ -1,6 +1,8 @@
 #pragma once
 #include "dpp/dpp.h"
 
+#include "Bot.hpp"
+
 #include <memory>
 #include <vector>
 

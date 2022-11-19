@@ -10,12 +10,7 @@
 
 namespace DiscordBot
 {
-    struct MessageData
-    {
-        std::string userId;
-        std::string text;
-    };
-
+    constexpr uint32 MaxMessageLength = 2000;
 
     class Bot
     {
