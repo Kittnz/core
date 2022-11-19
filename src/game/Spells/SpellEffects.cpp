@@ -2025,6 +2025,12 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                 displayid = models[urand(0, 3)];
                                 break;
                             }
+                            case 51215: // Satyr
+                            {
+                                const std::uint32_t models[] = { 2012, 2010, 11331, 1013 };
+                                displayid = models[urand(0, 3)];
+                                break;
+                            }
                             case 51207: // Serpent Lord
                             {
                                 const std::uint32_t m_male[5] = { 4232, 4214, 4215, 4212, 4213 };
