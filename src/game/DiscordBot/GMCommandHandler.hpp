@@ -1,7 +1,6 @@
 #pragma once
 #include "BaseCommandHandler.hpp"
 
-
 #include <unordered_map>
 
 
@@ -17,7 +16,7 @@ namespace DiscordBot
 
         void RegisterCommands(dpp::commandhandler&) override;
 
-        void HandleCommandCommand();
+        bool IsAuthorized(const dpp::user*) const override;
 
         static void CommandPrint(std::any callbackArg, const char* output);
         static void CommandFinished(std::any callbackArg, bool sucess);

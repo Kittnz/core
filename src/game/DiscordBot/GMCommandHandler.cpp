@@ -1,13 +1,19 @@
 #include "GMCommandHandler.hpp"
-
+#include "Bot.hpp"
 #include "World.h"
+#include "AuthManager.hpp"
 
 namespace DiscordBot
 {
+    bool GMCommandHandler::IsAuthorized(const dpp::user* user) const
+    {
+        return AuthManager::Instance()->IsAuthenticated(user);
+    }
+
 
     void GMCommandHandler::RegisterCommands(dpp::commandhandler& registrar)
     {
-        registrar.add_command("gm", 
+        Register("gm", 
             { 
                 {"command", dpp::param_info(dpp::pt_string, false, "Command to be executed on the server.")},
                 {"selfonly", dpp::param_info(dpp::pt_boolean, true, "If set to true then only you can see the output.")} 
@@ -48,6 +54,7 @@ namespace DiscordBot
         std::string output = handler->_commandOutput[source.issuer.id].output;
 
         uint32 offset = 0;
+        bool first = true;
         do
         {
             //str.substr with count greater than size from offset is fine to overflow.
@@ -59,8 +66,16 @@ namespace DiscordBot
                 msg.set_flags(dpp::m_ephemeral);
 
 
+            if (first)
+            {
+                handler->_commHandler->reply(msg, source);
+                first = false;
+                continue;
+            }
 
-           // handler->_commHandler->reply(msg, source);
+            msg.channel_id = source.channel_id;
+
+            handler->_commHandler->owner->message_create(msg);
             offset += MaxMessageLength;
 
         } while (offset < output.size() - 1);
