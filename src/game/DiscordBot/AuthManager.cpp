@@ -42,7 +42,7 @@ namespace DiscordBot
         return nullptr;
     }
 
-    AuthResult AuthManager::Authenticate(std::string username, std::string password, dpp::user* user)
+    AuthResult AuthManager::Authenticate(std::string username, std::string password, const dpp::user* user)
     {
         uint32_t accountId = sAccountMgr.GetId(username);
 
@@ -66,12 +66,12 @@ namespace DiscordBot
         return AuthResult::Successful;
     }
 
-    AuthResult AuthManager::Login(std::string username, std::string password, dpp::user* user)
+    AuthResult AuthManager::Login(std::string username, std::string password, const dpp::user* user)
     {
         return Authenticate(username, password, user);
     }
 
-    void AuthManager::Logout(dpp::user* user)
+    void AuthManager::Logout(const dpp::user* user)
     {
         auto itr = _authData.find(user->id);
 

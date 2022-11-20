@@ -60,6 +60,7 @@ namespace DiscordBot
             //str.substr with count greater than size from offset is fine to overflow.
             //wish DPP had string view constructors
             std::string message = output.substr(offset, MaxMessageLength);
+            offset += MaxMessageLength;
 
             dpp::message msg(message);
             if (handler->_commandOutput[source.issuer.id].selfOnly)
@@ -76,7 +77,6 @@ namespace DiscordBot
             msg.channel_id = source.channel_id;
 
             handler->_commHandler->owner->message_create(msg);
-            offset += MaxMessageLength;
 
         } while (offset < output.size() - 1);
     }
