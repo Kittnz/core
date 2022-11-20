@@ -3,10 +3,9 @@
 
 #include <thread>
 
-#include "AccountMgr.h"
 #include "World.h"
 #include "BaseCommandHandler.hpp"
-
+#include "AuthManager.hpp"
 
 namespace DiscordBot
 {
@@ -55,8 +54,8 @@ namespace DiscordBot
                 std::string v = std::get<std::string>(event.components[0].components[0].value);
                 std::string v2 = std::get<std::string>(event.components[1].components[0].value);
                 dpp::message m;
-                bool res = sAccountMgr.CheckPassword(sAccountMgr.GetId(v), v2, v);
-                m.set_content("You logged in " + (res ? "succesfully"s : "unsucessfully"s)).set_flags(m_ephemeral);
+                AuthManager::Instance()->Login(v, v2, &event.command.usr);
+                m.set_content("You logged in ").set_flags(m_ephemeral);
 
 
                 event.reply(m);
