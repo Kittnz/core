@@ -89,3 +89,6 @@ DELETE FROM game_event_creature_data WHERE guid=2573718;
 DELETE FROM creature_battleground WHERE guid=2573718;
 REPLACE INTO `creature` VALUES (2573719,14444,0,0,0,813,-2646.67,1117.7,54.9209,4.48746,120,120,5,100,100,1,0,0);
 UPDATE creature_template SET faction = '35' WHERE entry = '14444';
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2573720,61123,0,0,0,813,-2930.44,889.773,62.9806,2.062,120,120,0,100,100,0,0,0);
