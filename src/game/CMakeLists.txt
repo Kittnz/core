@@ -434,9 +434,16 @@ if(USE_DISCORD_BOT)
       DiscordBot/Bot.cpp
       DiscordBot/Bot.hpp
       DiscordBot/BaseCommandHandler.hpp
+	  DiscordBot/BaseCommandHandler.cpp
       DiscordBot/GMCommandHandler.cpp
       DiscordBot/GMCommandHandler.hpp
 	  DiscordBot/CommandRegistrar.cpp
+	  DiscordBot/AuthManager.cpp
+	  DiscordBot/AuthManager.hpp
+	  DiscordBot/LoginCommandHandler.cpp
+	  DiscordBot/LoginCommandHandler.hpp
+	  DiscordBot/PlayerCommandHandler.cpp
+	  DiscordBot/PlayerCommandHandler.hpp
     )
 endif()
 
