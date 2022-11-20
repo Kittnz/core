@@ -8,9 +8,23 @@
 #include <any>
 #include <vector>
 #include <stdint.h>
+#include <type_traits>
 
 namespace DiscordBot
 {
+
+    namespace detail
+    {
+        template< typename T >
+        struct get_member_function_type_helper { using type = void; };
+
+        template< typename T, typename  U>
+        struct get_member_function_type_helper<T U::*> { using type = U; };
+
+        template< typename T >
+        struct get_member_function_type
+            : get_member_function_type_helper< typename std::remove_cv<T>::type > {};
+    }
 
     class BaseCommandHandler
     {
@@ -23,6 +37,12 @@ namespace DiscordBot
         static void RegisterAll(Bot& bot);
 
         virtual void RegisterCommands(dpp::commandhandler&) = 0;
+
+        template <typename T>
+        dpp::command_handler MakeCommandHandler(T t)
+        {
+            return std::bind(t, static_cast<detail::get_member_function_type<T>::type*>(this), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+        }
 
 
         //override to allow/disallow all commands of said handler.
