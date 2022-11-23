@@ -213,3 +213,59 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 
 replace into creature_questrelation		(id, quest) values (61100, 40740);
 replace into creature_involvedrelation	(id, quest) values (61100, 40740);
+
+-- Shipments on Time
+delete from quest_template where entry = 40741;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40741,2,5121,56,48,0,0,'Shipments on Time','If you\'re wanting to help kid, then buckle up. First things first though, I need bananas! Wheelbarrows full of them, buckets full of them, barrels full of them!\n\nWe have a shipment due to Kezan in a months time, and all my workers are unable to venture into the jungle. Without those bananas, there will be no more Tel Co.\n\nWithout Tel Co. there will be more more bananas seen around the world, do you see how serious this is?!\n\nNow, I know you\'re much more brave than the others, so why don\'t you go out, and get me 18 ripe bananas. That way we can at least fulfill our next shipment on time.','Gather 18 Ripe Tel\'abim Bananas on Tel\'abim for Baron Telraz at Tel Co. Basecamp to help him make his schedule.','So, you get those bananas?\n\n<Baron Telraz appears to be on edge.>','<A massive sigh of relief escapes from Baron Telraz>\n\nOh, my, you just saved my day, and my company at that, I was seriously -FREAKING OUT- here, and you went and got this all done for me.\n\nHere, I pay those that help, and for saving my hide. You can take this gold coin from me, as a gesture of good will.',60954,18,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 10000,5000,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61102, 40741);
+replace into creature_involvedrelation	(id, quest) values (61102, 40741);
+
+-- The Work Must Continue
+delete from quest_template where entry = 40742;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40741,40742,2,5121,56,48,512,0,'The Work Must Continue','If we ever want to get back to work, we need to make sure things are safe again. The apes are not my workers biggest concern, it is those snakes, do you believe that?\n\nAll of my workers are more terrified from those Brushtails, rather then the massive gorillas.\n\nGoblins right?\n\n.They slither in the brush and attack at dark, they need to be dealt with.\n\nOnce this monkey threat is dealt with, there will still be snakes, and I hate snakes, why don\'t you deal with them for me? The Brushtail Adders and Cobras are aggresive, attacking anything in sight. Remove them, and maybe my workers will have more courage to pick bananas.','Slay 8 Brushtail Adders, and 8 Brushtail Cobras for Baron Telraz at Tel Co. Basecamp on Tel\'abim.','Those snakes been dealt with?','Heh, those pesky Brushtails never bothered me any, maybe the workers will be able to finally get back to work with less danger out there.\n\nThanks for the work, here, as a reward, we have a bunch of extra stuff laying around these days.',0,0,0,0,0,0,0,0, 61090,8,61091,8,0,0,0,0, 0,0, 0,5000,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60972,1,60973,1,60974,1,60975,1, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61102, 40742);
+replace into creature_involvedrelation	(id, quest) values (61102, 40742);
+
+replace into item_template values
+ ('60972', '4', '2', 'Tel Co. Jungle Pants', '', '15020', '2', '0', '1', '69552', '17388', '7', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '11', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '130', '0', '0', '7',
+ '0', '0', '0', '15464', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '65', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60973', '4', '1', 'Tel Co. Vest', '', '18471', '2', '0', '1', '61612', '15403', '5', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '22', '7', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '81', '0', '0', '7',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60974', '4', '4', 'Tel Co. Protective Helmet', '', '27423', '2', '0', '1', '47752', '11938', '1', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '8', '3', '6',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '461', '0', '0', '7',
+ '0', '0', '0', '7517', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60975', '4', '3', 'Tel Co. Huntsman Pauldrons', '', '33812', '2', '0', '1', '63928', '15982', '3', '-1', '-1', '58',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '3', '14', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '236', '0', '0', '7',
+ '0', '0', '0', '21432', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '60', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+
