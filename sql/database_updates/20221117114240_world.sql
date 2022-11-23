@@ -267,5 +267,7 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '8', '0', '0', '0', '60', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
-
+-- Quest With us or Against us change name to With Us or Against Us.
+-- Quest With Us or Against Us, remove all previous quests, remove all required reputation.
+update quest_template set title = 'With Us or Against Us', requiredminrepfaction = 0, requiredminrepvalue = 0, prevquestid = 0 where entry = 40609;
 
