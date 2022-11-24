@@ -261,3 +261,4 @@ replace into item_template values
 -- Quest With Us or Against Us, remove all previous quests, remove all required reputation.
 update quest_template set title = 'With Us or Against Us', requiredminrepfaction = 0, requiredminrepvalue = 0, prevquestid = 0 where entry = 40609;
 
+update quest_template set ObjectiveText1 = 'Information from Paval Reethe', Objectives = 'Assist Magus Halister during the ritual and report the findings to Garran Vimes at Theramore Isle in Dustwallow Marsh.', details = 'I shall need your help during the ritual. Perhaps we may learn more from the spirit realm.\n\nLet\'s begin.' where entry = 40562;

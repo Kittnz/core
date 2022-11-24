@@ -5340,9 +5340,121 @@ bool GossipSelect_npc_leeza_fraxtoggle(Player* pPlayer, Creature* pCreature, uin
     return true;
 }
 
+bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    auto playerGuid = pPlayer->GetObjectGuid();
+
+    if (pQuest->GetQuestId() == 40562) // Ritual of Divination
+    {
+        if (!pPlayer->FindNearestCreature(10, 30.0F))
+        {
+            Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 79 * IN_MILLISECONDS);
+            Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
+
+            pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+            pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->PMonsterEmote("Magus Halister begins to call upon the arcane, his channeling draws forth the energy of the spiritual realm.");
+                }, 3000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->SummonCreature(60953, -3750.76f, -4438.47f, 30.57f, 3.08F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 61 * IN_MILLISECONDS);
+
+                    pQuestGiver->CastSpell(pQuestGiver, 1449, false);
+                }, 8000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_PAVAL_REETHE]()
+                {
+                    NPC_PAVAL_REETHE->MonsterSay("Who disturbs my rest? Do I owe my service to the Alliance even in death? Let me pass to the Spirit Realm in peace.");
+                    NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 11000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Paval Reethe. In life, you failed to uphold honor. You deserted your friends, your family. Now you have a chance to redeem yourself.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 19000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+                {
+                    NPC_PAVAL_REETHE->MonsterSay("Isn't it obvious? The deserters did it. Not me, though. In my last days, I did what was right. I tried to stop them. That's why they left me in the swamp.");
+                    NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 29000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Why? Why did they burn it?");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 39000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+                {
+                    NPC_PAVAL_REETHE->MonsterSay("Shady Rest Inn was open to everyone. Even us. We have spent many evenings there, laughing and drinking. But one time, some of our people got too drunk. They started meddling with the innkeeper. Until they said too much. Something about the Vengeful Mariner. They couldn't allow this to reach Theramore, so they burned the inn. No witnesses.");
+                    NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 45000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Vengeful Mariner?");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 61000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+                {
+                    NPC_PAVAL_REETHE->PMonsterEmote("Paval Reethe laughs openly.");
+                    NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_LAUGH);
+                }, 66000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+                {
+                    NPC_PAVAL_REETHE->MonsterSay("You would not understand.");
+                    NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
+                    NPC_PAVAL_REETHE->PMonsterEmote("The Spirit of Paval Reethe vanishes.");
+
+                }, 68000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterYell("Paval! I curse you, come back! Reethe!");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 70000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->PMonsterEmote("Magus Halister sighs.");
+                }, 76000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+                {
+                    pQuestGiver->MonsterSay("Well, looks like he left us for good. At least we got some answers out of him. Now, go back to Captain Garran Vimes. He will know what to do next.");
+                    pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+                }, 78000);
+
+            DoAfterTime(pQuestGiver, 79 * IN_MILLISECONDS, [playerGuid, npc = pQuestGiver]() {
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
+                auto player = sObjectAccessor.FindPlayer(playerGuid);
+                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60389); cInfo && player)
+                    player->KilledMonster(cInfo, ObjectGuid());
+                });
+        }
+    }
+
+    return false;
+}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    newscript = new Script;
+    newscript->Name = "npc_magus_halister";
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_magus_halister;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_leeza_fraxtoggle";
