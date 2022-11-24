@@ -64,6 +64,12 @@ namespace DiscordBot
 
         std::string output = handler->_commandOutput[source.issuer.id].output;
 
+        if (output.empty())
+        {
+            handler->_commHandler->owner->message_create(dpp::message(source.channel_id, "Command executed. No output was generated."));
+            return;
+        }
+
         uint32 offset = 0;
         bool first = true;
         do
