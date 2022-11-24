@@ -9,9 +9,11 @@ namespace DiscordBot
 {
     struct AuthenticationInfo
     {
+        std::string gameAccountName = "";
         uint32_t gameAccountId = 0;
         bool authenticated = false;
         dpp::snowflake discordId = 0;
+        uint32 securityLevel = 0;
     };
 
     enum class AuthResult : uint8_t
@@ -29,6 +31,8 @@ namespace DiscordBot
             static AuthManager i;
             return &i;
         }
+
+        static std::string AuthResultToString(AuthResult res);
 
         AuthManager(const AuthManager&) = delete;
 

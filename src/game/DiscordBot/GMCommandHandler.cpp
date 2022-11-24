@@ -7,7 +7,8 @@ namespace DiscordBot
 {
     bool GMCommandHandler::IsAuthorized(const dpp::user* user) const
     {
-        return AuthManager::Instance()->IsAuthenticated(user);
+        auto authInfo = AuthManager::Instance()->GetAuthInfo(user);
+        return authInfo && authInfo->authenticated && authInfo->securityLevel > SEC_PLAYER;
     }
 
 
@@ -18,28 +19,38 @@ namespace DiscordBot
                 {"command", dpp::param_info(dpp::pt_string, false, "Command to be executed on the server.")},
                 {"selfonly", dpp::param_info(dpp::pt_boolean, true, "If set to true then only you can see the output.")} 
             },
-
-			[&registrar, this](const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src) 
-			{
-				std::string commandParam;
-                bool selfOnly = false;
-				if (!parameters.empty()) 
-				{
-					commandParam = std::get<std::string>(parameters[0].second);
-                    if (parameters.size() > 1)
-                        selfOnly = std::get<bool>(parameters[1].second);
-				}
-
-                _commandOutput[src.issuer.id].output = "";
-                _commandOutput[src.issuer.id].selfOnly = selfOnly;
-
-				CliCommandHolder* cmd = new CliCommandHolder(1, SEC_CONSOLE, std::make_pair(this, src), commandParam.c_str(), &CommandPrint, &CommandFinished);
-				sWorld.QueueCliCommand(cmd);
-			},
+			MakeCommandHandler(&GMCommandHandler::ExecuteGMCommand),
 			"Executes a server command");
+
+
 
         _commHandler = &registrar;
     }
+
+    void GMCommandHandler::ExecuteGMCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src)
+    {
+        auto authinfo = AuthManager::Instance()->GetAuthInfo(&src.issuer);
+        if (!authinfo)
+            return;
+
+        std::string commandParam;
+        bool selfOnly = false;
+        if (!parameters.empty())
+        {
+            commandParam = std::get<std::string>(parameters[0].second);
+            if (parameters.size() > 1)
+                selfOnly = std::get<bool>(parameters[1].second);
+        }
+
+        _commandOutput[src.issuer.id].output = "";
+        _commandOutput[src.issuer.id].selfOnly = selfOnly;
+
+
+
+        CliCommandHolder* cmd = new CliCommandHolder(authinfo->gameAccountId, (AccountTypes)authinfo->securityLevel, std::make_pair(this, src), commandParam.c_str(), &CommandPrint, &CommandFinished);
+        sWorld.QueueCliCommand(cmd);
+    }
+
 
     void GMCommandHandler::CommandPrint(std::any callbackArg, const char* output)
     {

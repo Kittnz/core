@@ -12,6 +12,8 @@ namespace DiscordBot
 
         void HandleLoginComand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src);
 
+        void RegisterFormSubmits(FormHandlerContainer& container) override;
+
     private:
         dpp::commandhandler* _commHandler;
     };

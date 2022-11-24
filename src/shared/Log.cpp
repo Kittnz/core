@@ -296,6 +296,7 @@ void Log::Initialize()
     honorLogfile = openLogFile("HonorLogFile", "HonorLogTimestamp", "a");
     wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a");
     anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a");
+    discordLogFile = openLogFile("DiscordLogFile", "DiscordLogTimestamp", "a");
     logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a");
     logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a");
     logFiles[LOG_CHAR] = openLogFile("CharLogFile", "CharLogTimestamp", "a");
@@ -893,6 +894,33 @@ void Log::outAnticheat(const char* detector, const char* player, const char* rea
     }
 
     fflush(stdout);
+}
+
+void Log::outDiscord(char const* str, ...)
+{
+    if (!str)
+        return;
+
+    if (m_includeTime)
+        outTime(stdout);
+
+    va_list ap;
+    va_start(ap, str);
+    vutf8printf(stdout, str, &ap);
+    va_end(ap);
+
+    printf("\n");
+
+    if (discordLogFile)
+    {
+        va_list ap;
+        outTimestamp(logfile);
+        va_start(ap, str);
+        vfprintf(logfile, str, ap);
+        fprintf(logfile, "\n");
+        va_end(ap);
+        fflush(logfile);
+    }
 }
 
 void Log::outCommand( uint32 account, const char * str, ... )

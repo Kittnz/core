@@ -3540,6 +3540,14 @@ void World::AddAsyncTask(std::function<void()> task)
     _asyncTasks.push_back(task);
 }
 
+void World::StopDiscordBot()
+{
+    if (!m_bot)
+        return;
+
+    m_bot->GetCore()->shutdown();
+}
+
 bool World::CanSkipQueue(WorldSession const* sess)
 {
     if (sess->GetSecurity() > SEC_PLAYER)

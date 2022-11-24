@@ -9,7 +9,7 @@ namespace DiscordBot
     void RegisterHandlers()
     {
         new GMCommandHandler{};
-       // new PlayerCommandHandler{};
+        new PlayerCommandHandler{};
         new LoginCommandHandler{};
     }
 }

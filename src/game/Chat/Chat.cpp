@@ -551,6 +551,13 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,             0,                     false, nullptr,                                       "", nullptr }
     };
 
+    static ChatCommand discBotCommandTable[] =
+    {
+        { "stop",             SEC_ADMINISTRATOR,       true, &ChatHandler::HandleDiscBotStopCommand,         "", nullptr},
+        { nullptr,             0,                     false, nullptr,                                       "", nullptr }
+    };
+
+
     static ChatCommand commandTable[] =
     {
         { "account",        SEC_PLAYER,          true,  nullptr,                                        "", accountCommandTable  },
@@ -679,6 +686,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "minchatlevel",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleMinChatLevelCommand,             "", nullptr },
         { "pvp",            SEC_DEVELOPER,       false, &ChatHandler::HandlePvPCommand,                  "", nullptr},
         { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                         "", mmapsCommandTable },
+        { "discbot",        SEC_ADMINISTRATOR,   true,  nullptr,                                        "", discBotCommandTable},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

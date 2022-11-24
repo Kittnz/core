@@ -444,6 +444,11 @@ if(USE_DISCORD_BOT)
 	  DiscordBot/LoginCommandHandler.hpp
 	  DiscordBot/PlayerCommandHandler.cpp
 	  DiscordBot/PlayerCommandHandler.hpp
+	  DiscordBot/MiscUtil.hpp
+	  DiscordBot/toojpeg.hpp
+	  DiscordBot/toojpeg.cpp
+	  DiscordBot/QrCodeGen.hpp
+	  DiscordBot/QrCodeGen.cpp	 
     )
 endif()
 
