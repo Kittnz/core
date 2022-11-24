@@ -3,11 +3,33 @@
 #include "AuthManager.hpp"
 
 #include "AccountMgr.h"
+#include "Database/DatabaseEnv.h"
 
 namespace DiscordBot
 {
+    std::string AuthManager::AuthResultToString(AuthResult res)
+    {
+        switch (res)
+        {
+        case AuthResult::AlreadyAuthed:
+            return "You are already logged in.";
+
+        case AuthResult::Successful:
+            return "Successfully logged in.";
+
+        case AuthResult::WrongCredentials:
+            return "Wrong Credentials.";
+
+        default:
+            return "Unkown Error.";
+        }
+    }
+
     bool AuthManager::IsAuthenticated(const dpp::user* user) const
     {
+        if (!user)
+            return nullptr;
+
         auto pairItr = _authData.find(user->id);
 
         if (pairItr == _authData.end() || !pairItr->second.authenticated)
@@ -26,6 +48,9 @@ namespace DiscordBot
 
     const AuthenticationInfo* AuthManager::GetAuthInfo(const dpp::user* user) const
     {
+        if (!user)
+            return nullptr;
+
         const auto pairItr = _authData.find(user->id);
 
         if (pairItr != _authData.end())
@@ -44,22 +69,46 @@ namespace DiscordBot
 
     AuthResult AuthManager::Authenticate(std::string username, std::string password, const dpp::user* user)
     {
-        uint32_t accountId = sAccountMgr.GetId(username);
+        if (!user)
+            return AuthResult::WrongCredentials;
+
+        std::string safeUsername = username;
+        LoginDatabase.escape_string(safeUsername);
+
+        if (!sAccountMgr.normalizeString(username) || !sAccountMgr.normalizeString(password))
+            return AuthResult::WrongCredentials;
+
+        std::unique_ptr<QueryResult> result = 
+            std::unique_ptr<QueryResult>(LoginDatabase.PQuery("SELECT id, sha_pass_hash, rank, username FROM account WHERE username = '%s'", safeUsername.c_str()));
+
+
+        if (!result)
+            return AuthResult::WrongCredentials;
+
+        auto fields = result->Fetch();
+
+
+        uint32_t accountId = fields[0].GetUInt32();
 
         if (!accountId)
             return AuthResult::WrongCredentials;
 
-        bool result = sAccountMgr.CheckPassword(accountId, password, username);
+        auto userHash = sAccountMgr.CalculateShaPassHash(username, password);
 
-        if (!result)
+
+        if (userHash != fields[1].GetCppString())
             return AuthResult::WrongCredentials;
 
         if (IsAuthenticated(user))
             return AuthResult::AlreadyAuthed;
 
-        _authData[user->id].authenticated = true;
-        _authData[user->id].discordId = user->id;
-        _authData[user->id].gameAccountId = accountId;
+        auto& authData = _authData[user->id];
+
+        authData.authenticated = true;
+        authData.discordId = user->id;
+        authData.gameAccountId = accountId;
+        authData.securityLevel = fields[2].GetUInt8();
+        authData.gameAccountName = fields[3].GetCppString();
 
         auto info = _authData[user->id];
         _authDataLookup.insert({ accountId, std::ref(info) });

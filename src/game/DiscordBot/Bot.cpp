@@ -46,19 +46,20 @@ namespace DiscordBot
 
 
         _core = std::make_unique<cluster>(token, dpp::intents::i_all_intents);
-        _core->on_log(dpp::utility::cout_logger());
-
-
-        _core->on_form_submit([&](const form_submit_t& event) 
+        _core->on_log([](const dpp::log_t& event) 
+        {
+            if (event.severity > dpp::ll_trace) 
             {
-                std::string v = std::get<std::string>(event.components[0].components[0].value);
-                std::string v2 = std::get<std::string>(event.components[1].components[0].value);
-                dpp::message m;
-                AuthManager::Instance()->Login(v, v2, &event.command.usr);
-                m.set_content("You logged in ").set_flags(m_ephemeral);
+                std::ostringstream ss;
+                ss << "[" << dpp::utility::current_date_time() << "] " << dpp::utility::loglevel(event.severity) << ": " << event.message;
+                sLog.outDiscord(ss.str().c_str());
+            }
+        });
 
 
-                event.reply(m);
+        _core->on_form_submit([this](const form_submit_t& event) 
+            {
+                BaseCommandHandler::HandleFormSubmit(event);
             });
 
         _core->on_ready([this](const ready_t& event) {

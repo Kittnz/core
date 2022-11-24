@@ -2,8 +2,17 @@
 
 #include "AuthManager.hpp"
 #include "Bot.hpp"
+#include "Log.h"
+#include "Chat.h"
 
 #include <sstream>
+
+
+bool ChatHandler::HandleDiscBotStopCommand(char* args)
+{
+    sWorld.StopDiscordBot();
+    return true;
+}
 
 namespace DiscordBot
 {
@@ -12,6 +21,8 @@ namespace DiscordBot
     std::vector<BaseCommandHandler*> BaseCommandHandler::_handlers;
     std::unique_ptr<dpp::commandhandler> BaseCommandHandler::_commandHandler;
     std::unordered_map<std::string, BaseCommandHandler*> BaseCommandHandler::_commandLinks;
+    BaseCommandHandler::FormHandlerContainer BaseCommandHandler::_formSubmits;
+
 
     void BaseCommandHandler::Register(const std::string& command, const parameter_registration_t& parameters,
         command_handler handler, const std::string& description, snowflake guild_id)
@@ -22,7 +33,7 @@ namespace DiscordBot
 
         if (itr != _commandLinks.end())
         {
-            //ERROR.
+            sLog.outDiscord("ERROR: Command link for command %s already added.", command.c_str());
             return;
         }
         _commandLinks[command] = this;
@@ -30,11 +41,15 @@ namespace DiscordBot
 
     bool BaseCommandHandler::CheckAllowedAccess(const dpp::user* user, std::string command)
     {
+#ifdef DISCORD_DEBUG
+        return true;
+#endif
+
         auto itr = _commandLinks.find(command);
 
         if (itr == _commandLinks.end())
         {
-            //Log command is not found in links..
+            sLog.outDiscord("ERROR: Can't find command link for %s", command.c_str());
             return false;
         }
 
@@ -49,6 +64,7 @@ namespace DiscordBot
         for (const auto& handler : _handlers)
         {
             handler->RegisterCommands(*_commandHandler);
+            handler->RegisterFormSubmits(_formSubmits);
             bot.AddHandler(handler);
 
         }
@@ -83,6 +99,16 @@ namespace DiscordBot
                 else
                     event.reply(message(event.command.channel_id, "Not enough rights.").set_flags(m_ephemeral));
             });
+    }
+
+    void BaseCommandHandler::HandleFormSubmit(const dpp::form_submit_t& event)
+    {
+        auto itr = _formSubmits.find(event.custom_id);
+
+        if (itr == _formSubmits.end())
+            return;
+
+        itr->second(event);
     }
 
 }

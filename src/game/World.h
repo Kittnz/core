@@ -761,6 +761,8 @@ class World
 		// basically a destructor
 		void InternalShutdown();
 
+        void StopDiscordBot();
+
         typedef std::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
         SessionMap GetAllSessions() { return m_sessions; }

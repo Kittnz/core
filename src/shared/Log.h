@@ -109,6 +109,7 @@ enum LogFile
     LOG_AUTOUPDATER,
     LOG_ANTICHEAT_BASIC,
     LOG_ANTICHEAT_DEBUG,
+    LOG_DISCORD,
     LOG_MAX_FILES
 };
 
@@ -155,6 +156,9 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
             fclose(honorLogfile);
         honorLogfile = nullptr;
 
+        if (discordLogFile)
+            fclose(discordLogFile);
+
         for (auto& logFile : logFiles)
         {
             if (logFile != nullptr)
@@ -184,6 +188,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void outWarden(char const* wrd, ...) ATTR_PRINTF(2,3);
         void outWardenDebug(const char * wrd, ...) ATTR_PRINTF(2,3);
         void outAnticheat(const char* detector, const char* player, const char* reason, const char* penalty);
+        void outDiscord(char const* str, ...) ATTR_PRINTF(2, 3);
         void outErrorDb(); // any log level
         void outErrorDb(char const* str, ...) ATTR_PRINTF(2,3); // any log level
         void outWorldPacketDump(ACE_HANDLE socketHandle, uint32 opcode, char const* opcodeName, ByteBuffer const* packet, bool incoming); // any log level
@@ -215,6 +220,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* dberLogfile;
         FILE* wardenLogfile;
         FILE* anticheatLogfile;
+        FILE* discordLogFile;
         FILE* worldLogfile;
         FILE* nostalriusLogFile;
         FILE* honorLogfile;
