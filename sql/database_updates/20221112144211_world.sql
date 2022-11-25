@@ -2484,6 +2484,13 @@ set @equip_template = 20270; set @weapon_1 = 17743; set @weapon_2 = 0; set @weap
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
 
+-- NPC Warcaller Dekshar change gossip text to the following : <Dekshar stares with wild eyes.>
+set @gossip_menu_id = 41292; set @magic_number = 61041;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, '<Dekshar stares with wild eyes.>');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
 set @gossip_menu_id = 41291; set @magic_number = 61126;
 replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You friend with monkey, you friend with Ebu? Ebu like friend, you help, yes?');
@@ -3188,4 +3195,12 @@ replace into item_template values
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60967, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60968, 0, 0, 0, 0);
 REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80942, 60969, 0, 0, 0, 0);
-
+-- Create gobject with the following name 'Communitypainting5' using the model Painting16.mdx
+-- Create gobject with the following name 'Communitypainting6' using the model Painting17.mdx
+-- Create gobject with the following name 'Communitypainting7' using the model Painting18.mdx
+-- Create gobject with the following name 'Communitypainting8' using the model Painting19.mdx
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2010942, 5, 33102, 'Communitypainting5', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010942, 5, 33102, 'Communitypainting6', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010942, 5, 33102, 'Communitypainting7', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010942, 5, 33102, 'Communitypainting8', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
