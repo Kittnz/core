@@ -5351,7 +5351,6 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
         if (!pPlayer->FindNearestCreature(10, 30.0F))
         {
             Creature* controller = pQuestGiver->SummonCreature(10, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 79 * IN_MILLISECONDS);
-            Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
 
             pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
@@ -5368,8 +5367,27 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
                     pQuestGiver->CastSpell(pQuestGiver, 1449, false);
                 }, 8000);
 
-            pQuestGiver->m_Events.AddLambdaEventAtOffset([NPC_PAVAL_REETHE]()
+            //pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
+            //    {
+            //        Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
+            //        ObjectGuid PavalReetheGuid = NPC_PAVAL_REETHE->GetObjectGuid();
+
+            //        Creature* PavalReethe = pQuestGiver->GetMap()->GetCreature(PavalReetheGuid);
+
+            //        if (!PavalReethe)
+            //            return;
+
+            //        PavalReethe->MonsterSay("Who disturbs my rest? Do I owe my service to the Alliance even in death? Let me pass to the Spirit Realm in peace.");
+            //        PavalReethe->HandleEmote(EMOTE_ONESHOT_TALK);
+            //    }, 11000);
+
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
+                    Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
+
+                    if (!NPC_PAVAL_REETHE)
+                        return;
+
                     NPC_PAVAL_REETHE->MonsterSay("Who disturbs my rest? Do I owe my service to the Alliance even in death? Let me pass to the Spirit Realm in peace.");
                     NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 11000);
@@ -5380,8 +5398,13 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 19000);
 
-            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
+                    Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
+
+                    if (!NPC_PAVAL_REETHE)
+                        return;
+
                     NPC_PAVAL_REETHE->MonsterSay("Isn't it obvious? The deserters did it. Not me, though. In my last days, I did what was right. I tried to stop them. That's why they left me in the swamp.");
                     NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 29000);
@@ -5392,8 +5415,13 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 39000);
 
-            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
+                    Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
+
+                    if (!NPC_PAVAL_REETHE)
+                        return;
+
                     NPC_PAVAL_REETHE->MonsterSay("Shady Rest Inn was open to everyone. Even us. We have spent many evenings there, laughing and drinking. But one time, some of our people got too drunk. They started meddling with the innkeeper. Until they said too much. Something about the Vengeful Mariner. They couldn't allow this to reach Theramore, so they burned the inn. No witnesses.");
                     NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 45000);
@@ -5404,14 +5432,24 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
                     pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
                 }, 61000);
 
-            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
+                    Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
+
+                    if (!NPC_PAVAL_REETHE)
+                        return;
+
                     NPC_PAVAL_REETHE->PMonsterEmote("Paval Reethe laughs openly.");
                     NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_LAUGH);
                 }, 66000);
 
-            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver, NPC_PAVAL_REETHE]()
+            pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
+                    Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
+
+                    if (!NPC_PAVAL_REETHE)
+                        return;
+
                     NPC_PAVAL_REETHE->MonsterSay("You would not understand.");
                     NPC_PAVAL_REETHE->HandleEmote(EMOTE_ONESHOT_TALK);
                     NPC_PAVAL_REETHE->PMonsterEmote("The Spirit of Paval Reethe vanishes.");
