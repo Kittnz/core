@@ -306,14 +306,13 @@ enum ClassFlag
     CF_PALADIN_AURAS                        = 26,   // CM0 04000000 Shadow/Fire/Frost Resistance Auras & Sanctity Aura
     CF_PALADIN_SEALS                        = 27,   // CM0 08000000
     CF_PALADIN_BLESSINGS                    = 28,   // CM0 10000000 Most of them aren't used anymore by players
-    CF_PALADIN_JUDGEMENT_OF_THE_CRUSADER    = 29,   // CM0 20000000
+    CF_PALADIN_CRUSADER_STRIKE_DEBUFF       = 29,   // CM0 20000000
     CF_PALADIN_FLASH_OF_LIGHT2              = 30,   // CM0 40000000
     CF_PALADIN_HOLY_LIGHT2                  = 31,   // CM0 80000000
 
     CF_PALADIN_UNK32                        = 32,   // CM1 00000001
     CF_PALADIN_PURIFY_CLEANSE               = 33,   // CM1 00000002 Purify & Cleanse
     CF_PALADIN_JUDGEMENT_OF_COMMAND         = 34,   // CM1 00000004
-    CF_PALADIN_CRUSADER_STRIKE              = 35,   // CM1 00000008
 
     // -- Shaman (11)
     CF_SHAMAN_LIGHTNING_BOLT                = 0,    // CM0 00000001
