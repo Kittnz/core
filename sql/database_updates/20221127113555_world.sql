@@ -13,3 +13,4 @@ UPDATE creature SET spawntimesecsmin=5 WHERE guid=2573766;
 UPDATE creature SET spawntimesecsmin=5 WHERE guid=2573767;
 REPLACE INTO `creature` VALUES (2573769,61096,0,0,0,1,-7623.22,-6715.6,6.44536,4.36918,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2573770,61096,0,0,0,1,-7583.09,-6773.91,24.7895,2.42924,120,120,0,100,100,0,0,0);
+UPDATE creature SET position_x = '-8898.800781', position_y = '-6498.705078', position_z = '10.656863', orientation = '0.000325' WHERE guid = '2573765';
