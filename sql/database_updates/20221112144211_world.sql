@@ -3218,6 +3218,16 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '5', '0', '0', '0', '0', '0', '0', '0', '0',
  '0', '1', NULL);
+
+replace into item_template values
+ ('60983', '0', '0', 'Winter Veil  Brew', '', '18115', '2', '0', '1', '2400', '600', '0', '-1', '-1', '55',
+ '45', '0', '0', '0', '0', '0', '0', '0', '0', '5', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '11009', '0', '-1', '0', '0', '0', '-1', '1137', '0', '-1', '-1', '0', '0', '-1', '8068', '0',
+ '-1', '0', '0', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
 -- Abominable Snow Yeti , display ID 950, level 58-60, faction 24, scale 0.9, humanoid, SKINNABLE, casts 16340 every 9 seconds ((Immune to frost damage))
 -- Coldhowl, display ID 950, level 40, faction 35, scale 0.7, has gossip and quest flags, gossip text : "I am not that scary, don't be afraid to say hello. The other yetis give us all a bad name."
 -- Dolvan Bracewind, display ID 3553, level 35, faction 35, scale 1, has gossip and quest flags, gossip text : "I must admit, I was not expecting company. I decided to live here for such a reason infact, I enjoy being alone these days, for I have seen a lot. It has been quite a while since someone has bothered to pay me a visit, what brings you to my lonely estate tucked away within the mountain?\n\n If you come here asking for coin, I must apologize ahead of time, I have none."
