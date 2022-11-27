@@ -3126,7 +3126,7 @@ update creature_template set name = 'Snowpelt' where entry = 51253;
 -- NPC 'shivering moonkin hatchling' change to level 20, remove elite.
 delete from creature_template where entry = 50637;
 REPLACE INTO creature_template VALUES
-(50637, 15374, 15375, 15374, 15375, 0, 'Shivering Moonkin Hatchling', NULL, 6460, 20, 20, 629, 629, 1026, 1026, 852, 35, 1, 1, 1.14286, 0.4, 20, 5, 40, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 4672, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 50637, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, '26000', 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524296, 0, 'npc_shivering_moonkin');
+(50637, 18926, 0, 0, 0, 0, 'Shivering Moonkin Hatchling', NULL, 6460, 20, 20, 629, 629, 1026, 1026, 852, 35, 1, 1, 1.14286, 0.4, 20, 5, 40, 0, 1, 26, 22, 0, 90, 1, 2000, 2000, 1, 4672, 0, 0, 0, 0, 0, 0, 30.096, 41.382, 100, 7, 0, 50637, 0, 0, 0, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, '26000', 0, 0, '', 1, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524296, 0, 'npc_shivering_moonkin');
 -- Add the following 3 items to the sell list of Earthcaller Jalyssa.
 replace into item_template values
  ('60964', '0', '0', 'Plans: Mantle of Centaur Authority', '', '634', '3', '0', '1', '40000', '10000', '0', '-1', '-1', '65',
@@ -3200,7 +3200,9 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 -- Create gobject with the following name 'Communitypainting7' using the model Painting18.mdx
 -- Create gobject with the following name 'Communitypainting8' using the model Painting19.mdx
 REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
-(2010964, 5, 33102, 'Communitypainting5', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(2010965, 5, 33102, 'Communitypainting6', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(2010966, 5, 33102, 'Communitypainting7', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
-(2010967, 5, 33102, 'Communitypainting8', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2010964, 5, 33103, 'Communitypainting5', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010965, 5, 33104, 'Communitypainting6', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010966, 5, 33105, 'Communitypainting7', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010967, 5, 33106, 'Communitypainting8', 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+-- NPC Solnius change display ID to 19033.
+update creature_template set display_id1 = 19033 where entry = 60748;
