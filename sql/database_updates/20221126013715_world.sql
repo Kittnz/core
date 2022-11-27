@@ -95,3 +95,6 @@ REPLACE INTO `gameobject` VALUES ( 5012026, 2010964, 1, -6966.27, -4777.57, 9.09
 DELETE FROM gameobject WHERE guid = '5012026';
 DELETE FROM game_event_gameobject WHERE guid = '5012026';
 DELETE FROM gameobject_battleground WHERE guid = '5012026';
+
+-- Changes by TAMMO
+UPDATE creature SET position_x = '-2646.467773', position_y = '1117.770752', position_z = '54.922409', orientation = '3.731853' WHERE guid = '2573719';
