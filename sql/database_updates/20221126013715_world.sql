@@ -98,3 +98,11 @@ DELETE FROM gameobject_battleground WHERE guid = '5012026';
 
 -- Changes by TAMMO
 UPDATE creature SET position_x = '-2646.467773', position_y = '1117.770752', position_z = '54.922409', orientation = '3.731853' WHERE guid = '2573719';
+REPLACE INTO `creature` VALUES (2573764,61117,0,0,0,1,-8874.7,-6493.4,12.0405,4.23991,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2573764;
+DELETE FROM creature_addon WHERE guid=2573764;
+DELETE FROM creature_movement WHERE id=2573764;
+DELETE FROM game_event_creature WHERE guid=2573764;
+DELETE FROM game_event_creature_data WHERE guid=2573764;
+DELETE FROM creature_battleground WHERE guid=2573764;
+REPLACE INTO `creature` VALUES (2573765,61117,0,0,0,1,-8898.45,-6498.83,10.7165,5.8327,120,120,0,100,100,0,0,0);
