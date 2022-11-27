@@ -1537,7 +1537,7 @@ class Player final: public Unit
         void LearnSpellHighRank(uint32 spellid);
         uint32 GetSpellRank(SpellEntry const* spellInfo) final;
 
-        void CastItemCombatSpell(Unit* Target, WeaponAttackType attType);
+        void CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float chanceMultiplier = 1.0f);
         void CastItemUseSpell(Item* item, SpellCastTargets const& targets);
 
         PlayerSpellMap const& GetSpellMap() const { return m_spells; }
