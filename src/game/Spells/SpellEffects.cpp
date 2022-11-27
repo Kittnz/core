@@ -2620,6 +2620,27 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     m_caster->CastSpell(unitTarget, spell_proto, true, nullptr);
                     return;
                 }
+                case 237: // Judgement of the Crusader (Custom)
+                {
+                    if (!unitTarget)
+                        return;
+
+                    switch (m_spellInfo->Id)
+                    {
+                        case 21183: // Rank 1
+                        case 20188: // Rank 2
+                        case 20300: // Rank 3
+                        case 20301: // Rank 4
+                        case 20302: // Rank 5
+                        case 20303: // Rank 6
+                        {
+                            if (Player* pPlayer = m_caster->ToPlayer())
+                                pPlayer->CastItemCombatSpell(unitTarget, BASE_ATTACK, m_currentBasePoints[eff_idx]);
+                            return;
+                        }
+                    }
+                    return;
+                }
             }
             break;
         }
