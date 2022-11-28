@@ -324,3 +324,67 @@ replace into item_template values
  '0', '1', NULL);
 -- Set respawn timer of Turbo-Scan Filtronomitor to 5 seconds.
 update gameobject set spawntimesecsmin = 5, spawntimesecsmax = 15 where id = 2010926;
+
+-- Exchanging Foreign Food
+delete from quest_template where entry = 40743;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40743,2,5130,15,5,512,0,'Exchanging Foreign Food','Winter, a time to eat, and eat well! I always love to try new foods, and exchange cultural foods of my people with others. Perhaps we can make a trade yes? I would like to sample some of the foods of other races, you find some and I will offer you a special dish in return.\n\nGather me a variety for me and my people to enjoy in feasting, and I will make sure you are well rewarded for your seasonal spirit!','Gather 5 Soft Banana Bread, 5 Cured Ham Steak, and 5 Moon Harvest Pumpkin for Chieftain Icepaw at Icepaw Village in Winter Veil Vale!','I sure am hungry, you find an assortment of food?','<Chieftain Icepaw looks on with astonishment.>\n\nYou really are a festive individual, I prepared some things for you upon the fire, a tray of our famous cookies here in Icepaw Village, I hope you enjoy them, they are fresh and right off the pan!\n\nI will share these goods with the others in the village!',4601,5,4599,5,4602,5,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,1250,0,0,0,0,0,0,0,0,0,0,0, 60984,10,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61121, 40743);
+replace into creature_involvedrelation	(id, quest) values (61121, 40743);
+
+replace into item_template values
+ ('60984', '0', '0', 'Icepaw Cookie', 'Chocolate Chip!', '66190', '1', '0', '1', '100', '25', '0', '-1', '-1', '45',
+ '35', '0', '0', '0', '0', '0', '0', '0', '0', '20', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '18230', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+-- Additional Notes:At the end of the quest have nearby Icepaw Reveler and Icepaw Celebrator say some of the following lines at random:
+-- "Wow, delicious!"
+-- "This tastes amazing."
+-- "This is exotic food!"
+-- "I cannot believe my tongue, a fine feast!" 
+
+-- Gifts to Wrap
+delete from quest_template where entry = 40744;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40744,2,5130,10,5,512,0,'Gifts to Wrap','The year has come to an end, and with it, our celebrations. Our celebrations are met with exchanging gifts, for there is no better way to rejoice and share in one anothers company.\n\nThis year we are a bit light on wrapping paper, a very cheerful gnome delivered the last batch. It did last a few years, but we will need more before long, lest our holidays be ruined!\n\nMaybe you know a place to retrieve wrapping paper?','Gather 10 Red Ribboned Wrapping Paper, and 10 Blue Ribboned Wrapping Paper for Seer Coldsnout at Icepaw Village in Winter Veil Vale!','So, have you got any wrapping paper for us?','Oh, the young ones will be pleased. I may be old, but celebrating the holiday is always the highlight of my year, and to wrap gifts for others is always a favorite past time.\n\nHere, take this, as a thanks from myself.',5042,10,5048,10,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,750,0,0,0,0,0,0,0,0,0,0,0, 60985,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61122, 40744);
+replace into creature_involvedrelation	(id, quest) values (61122, 40744);
+
+replace into item_template values
+ ('60985', '4', '0', 'Icepaw Talisman', '', '9466', '2', '0', '1', '1000', '250', '12', '-1', '-1', '10',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '10', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+-- Change the following quests to Quest Zone ID 5130: 'Bracing The Inevitable', 'Grizzlore Wants Thunder', 'Jolly Holly Dances Prolly', , 'Snowball Wars: Episode I', Snowball Wars: Episode II', 'The Icy Menace'.
+update quest_template set zoneorsort = 5130 where entry in (50318,50319,50320,50321,50326,50328,50330);
+
+-- Thieving Little Grell!
+delete from quest_template where entry = 40745;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40745,2,5130,10,5,0,0,'Thieving Little Grell!','Those little, thieving, coniving Grell, they pulled the snow over my eyes this year when I was least expecting it.\n\nThey stole my gift right out from beneath my nose. Though I will admit, I was a bit drunk, and awoke to find it missing, but that is here nor there.\n\nI have good suspicion that it is the Grell to the south west who are responsible. Trust me, this gift means a lot for me, and I really want to give it to someone special, do you think you could recover it from their camp for me?','Gather Carus\' Gift from the Winter Grell Camp to the south west and return it to him in Winter Veil Vale.','Have you found it yet?','I cannot thank you enough for recovering this, those Winter Grell surely got the best of me this year, but thanks to you, all is better now, here, as a token of my thanks, have some ale on me.',60986,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,850,0,0,0,0,0,0,0,0,0,0,0, 17402,2,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (50652, 40745);
+replace into creature_involvedrelation	(id, quest) values (50652, 40745);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60986,5666,'Carus\' Gift',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010968, 3, 24995, 'Carus\' Gift', 0, 4, 2, 43, 2010968, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010968,60986,-100,0,1,1,0);
+
+-- The Evil Winter Grell
+delete from quest_template where entry = 40746;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40746,2,5130,10,5,0,0,'The Evil Winter Grell','The Winter Grell arrive at the start of every season, their minds filled with ideas of trickery and theft to disrupt the festive seasons here in Winter Veil Vale. They are sent by their lord Krampus, an evil spirit who despises the holiday season.\n\nIt is up to brave souls like us to prevent the Winter Grell from doing their biding and stealing presents from beneath the tree at will.\n\nYou can find them to the south west, near the edge of the mountain and the frozen lake, slay them, and remove their presence. Do not worry about causing too much harm, they will simply be sent back to the realm in which they came, only to return another season.','Have the Winter Grell been foiled?','It is a never ending conflict with these Winter Grell..','Excellent work out there, another season of celebrations will go with less tomfoolery.',0,0,0,0,0,0,0,0, 61127,7,61128,7,0,0,0,0, 0,0, 0,800,0,0,0,0,0,0,0,0,0,0,0, 51060,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (50652, 40746);
+replace into creature_involvedrelation	(id, quest) values (50652, 40746);

@@ -5367,20 +5367,6 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
                     pQuestGiver->CastSpell(pQuestGiver, 1449, false);
                 }, 8000);
 
-            //pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
-            //    {
-            //        Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
-            //        ObjectGuid PavalReetheGuid = NPC_PAVAL_REETHE->GetObjectGuid();
-
-            //        Creature* PavalReethe = pQuestGiver->GetMap()->GetCreature(PavalReetheGuid);
-
-            //        if (!PavalReethe)
-            //            return;
-
-            //        PavalReethe->MonsterSay("Who disturbs my rest? Do I owe my service to the Alliance even in death? Let me pass to the Spirit Realm in peace.");
-            //        PavalReethe->HandleEmote(EMOTE_ONESHOT_TALK);
-            //    }, 11000);
-
             pQuestGiver->m_Events.AddLambdaEventAtOffset([pQuestGiver]()
                 {
                     Creature* NPC_PAVAL_REETHE = pQuestGiver->FindNearestCreature(60953, 40.0F);
@@ -5485,9 +5471,27 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
     return false;
 }
 
+//bool QuestRewarded_npc_chieftain_icepaw(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+//{
+//    if (!pQuestGiver || !pPlayer) return false;
+//
+//    if (pQuest->GetQuestId() == 40743) // Exchanging Foreign Food
+//    {
+//        pQuestGiver->MonsterSay("");
+//        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+//    }
+//
+//    return false;
+//}
+
 void AddSC_random_scripts_3()
 {
     Script* newscript;
+
+    //newscript = new Script;
+    //newscript->Name = "npc_chieftain_icepaw";
+    //newscript->pQuestRewardedNPC = &QuestRewarded_npc_chieftain_icepaw;
+    //newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_magus_halister";
