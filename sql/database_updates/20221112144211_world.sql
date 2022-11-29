@@ -3233,10 +3233,12 @@ replace into item_template values
 -- Dolvan Bracewind, display ID 3553, level 35, faction 35, scale 1, has gossip and quest flags, gossip text : "I must admit, I was not expecting company. I decided to live here for such a reason infact, I enjoy being alone these days, for I have seen a lot. It has been quite a while since someone has bothered to pay me a visit, what brings you to my lonely estate tucked away within the mountain?\n\n If you come here asking for coin, I must apologize ahead of time, I have none."
 -- NPC Bomarn Fireaxe, add quest/gossip flags, with the following gossip text : "Looking for quality brew during this wonderous season? You're talkin' to the right dwarf friend."
 -- NPC Carus Silversnow add quest/gossip flags, gossip text : "I hope you're enjoying this Winter Veil season."
+-- Jamey, display ID 3552, level 62 elite, faction 35, humanoid, scale 1, quest flags
 REPLACE INTO creature_template VALUES
 (61135, 950, 0, 0, 0, 0, 'Abominable Snow Yeti', NULL, 0, 58, 60, 3198, 3296, 0, 0, 2954, 24, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 97, 120, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 61135, 0, 7458, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 119, 161, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61136, 950, 0, 0, 0, 0, 'Coldhowl', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 35, 3, 1, 1.14286, 0.7, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61137, 3553, 0, 0, 0, 0, 'Dolvan Bracewind', NULL, 0, 35, 35, 1342, 1342, 0, 0, 1373, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61137, 3553, 0, 0, 0, 0, 'Dolvan Bracewind', NULL, 0, 35, 35, 1342, 1342, 0, 0, 1373, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61138, 3552, 0, 0, 0, 0, 'Jamey', NULL, 0, 62, 62, 44000, 44000, 0, 0, 4391, 35, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
 
 update creature_template set npc_flags = 3 where entry = 50652;
 set @gossip_menu_id = 41296; set @magic_number = 50652;
