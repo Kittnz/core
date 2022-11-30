@@ -1426,6 +1426,13 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 basepoints[0] = damage * triggerAmount / 100 / 3;
                 target = this;
             }
+            // Elune's Grace (custom mana gain on dodge)
+            else if (auraSpellInfo->SpellIconID == 1714)
+            {
+                int32 const manaAmount = GetStat(STAT_AGILITY);
+                CastCustomSpell(this, trigger_spell_id, &manaAmount, nullptr, nullptr, true);
+                return SPELL_AURA_PROC_OK;
+            }
             break;
         }
         case SPELLFAMILY_DRUID:
