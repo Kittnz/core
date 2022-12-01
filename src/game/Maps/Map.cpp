@@ -2420,6 +2420,7 @@ bool Map::FindScriptFinalTargets(WorldObject*& source, WorldObject*& target, con
                 case TARGET_T_CREATURE_WITH_GUID:
                 case TARGET_T_CREATURE_FROM_INSTANCE_DATA:
                 case TARGET_T_NEAREST_GAMEOBJECT_WITH_ENTRY:
+                case TARGET_T_RANDOM_GAMEOBJECT_WITH_ENTRY:
                 case TARGET_T_GAMEOBJECT_WITH_GUID:
                 case TARGET_T_GAMEOBJECT_FROM_INSTANCE_DATA:
                 {
