@@ -6,3 +6,6 @@ REPLACE INTO `game_weather` (`zone`, `copy_weather_from`, `spring_rain_chance`, 
 
 -- Figure out why Winter Veil Vale doesn't return zone ID:
 UPDATE `map_template` SET `linked_zone` = 5130 WHERE `entry` = 813;
+
+-- WVV GY:
+REPLACE INTO `custom_graveyards` VALUES (50, 'Winter Veil Vale', 813, 5130, 5130, 60, 813, -2629.27, 1041.82, 74.256, 2.7, 813, -2629.27, 1041.82, 74.256, 2.7);
