@@ -7759,6 +7759,13 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float c
         if (GetExtraAttacks() && spellInfo->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
             return;
 
+        if (HasSpellCooldown(spellData.SpellId))
+        {
+            if (chanceMultiplier > 1.0f)
+                Spell::SendCastResult(this, spellInfo, SPELL_FAILED_NOT_READY);
+            continue;
+        }
+
         float chance = (float)spellInfo->procChance;
 
         if (spellData.SpellPPMRate)
@@ -7770,6 +7777,8 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float c
 
         if (roll_chance_f(chance * chanceMultiplier))
             CastSpell(Target, spellInfo->Id, true, item);
+        else if (chanceMultiplier > 1.0f)
+            Spell::SendCastResult(this, spellInfo, SPELL_FAILED_TRY_AGAIN);
     }
 
     // item combat enchantments
