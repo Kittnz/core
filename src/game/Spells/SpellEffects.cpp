@@ -2568,7 +2568,6 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                     if (chanceMultiplier < 2.0f)
                                         chanceMultiplier = 2.0f;
                                     pPlayer->CastItemCombatSpell(unitTarget, BASE_ATTACK, chanceMultiplier);
-                                    pPlayer->ResetAttackTimer(BASE_ATTACK);
                                 }
                             }
                             return;
