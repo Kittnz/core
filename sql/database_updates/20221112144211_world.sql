@@ -2447,7 +2447,7 @@ REPLACE INTO `creature_addon` (`guid`, `display_id`, `mount_display_id`, `equipm
 REPLACE INTO creature_template VALUES
 (61117, 18551, 0, 0, 0, 0, 'Archaeologist Trixia Goldspark', NULL, 0, 48, 48, 2800, 2800, 0, 0, 2386, 69, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61118, 19108, 0, 0, 0, 0, 'Vengeful Spirit', NULL, 0, 57, 57, 3758, 3758, 2312, 2312, 3334, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 102, 131, 0, 258, 1, 1500, 2000, 2, 4608, 0, 0, 0, 0, 0, 0, 72.2304, 99.3168, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 1, 0, 0, 3, 2084, 0, 0, 0, 0, 524298, 0, ''),
-(61119, 19105, 0, 0, 0, 0, 'Shade of the Temptress', NULL, 0, 56, 56, 3643, 3643, 3000, 3000, 2699, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 112, 145, 0, 254, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.456, 98.252, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61119, 19105, 0, 0, 0, 0, 'Shade of the Temptress', NULL, 0, 56, 56, 3643, 3643, 3000, 3000, 2699, 16, 0, 1, 1.14286, 0, 18, 5, 0, 0, 1, 112, 145, 0, 254, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 71.456, 98.252, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_shade_of_temptress'),
 (61120, 19109, 0, 0, 0, 0, 'Shade of the Senshi', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61121, 18740, 0, 0, 0, 0, 'Chieftain Icepaw', NULL, 0, 45, 45, 2217, 2217, 0, 0, 2725, 35, 3, 1, 1.14714, 1.5, 18, 5, 0, 0, 1, 78, 95, 0, 204, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 63.7824, 87.7008, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 84, 115, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_chieftain_icepaw'),
 (61122, 6829, 0, 0, 0, 0, 'Seer Coldsnout', NULL, 0, 30, 30, 1179, 1179, 0, 0, 1240, 35, 3, 1, 1.14286, 1.2, 18, 5, 0, 0, 1, 47, 60, 0, 134, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 53.8384, 74.0278, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 53, 74, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -2995,7 +2995,7 @@ set @delayrepeatmin_8 = 0;
 set @delayrepeatmax_8 = 0;
 
 -- Do not touch this part:
-update creature_template set spell_list_id = @spell_list_id, ai_name = '', script_name = '', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
+update creature_template set spell_list_id = @spell_list_id, ai_name = 'EventAI', script_name = 'npc_shade_of_temptress', spell_id1 = 0, spell_id2 = 0, spell_id3 = 0 
 where entry = @creature_entry;
 replace into creature_spells (entry, name, 
 spellid_1, probability_1, casttarget_1, castflags_1, delayinitialmin_1, delayinitialmax_1, delayrepeatmin_1, delayrepeatmax_1, 
@@ -3364,3 +3364,9 @@ values (@spell_list_id, @description,
 @spellid_6, @probability_6, @casttarget_6, @castflags_6, @delayinitialmin_6, @delayinitialmax_6, @delayrepeatmin_6, @delayrepeatmax_6,
 @spellid_7, @probability_7, @casttarget_7, @castflags_7, @delayinitialmin_7, @delayinitialmax_7, @delayrepeatmin_7, @delayrepeatmax_7,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
+-- Add object 'Tel Co. Bounty Board' which has gossip and quest flags, it contains the following gossip/page text : "Tel'Abim is looking for anyone to take up the following bounties, payment will be given upon proof of completion!" (This object uses the model 'NewWantedPoster02.mdx'
+REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
+(2010972, 2, 25431, 'Tel Co. Bounty Board', 0, 32, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_bounty_board');
+
+replace into broadcast_text (entry, Male_Text) values (30053, 'Tel\'Abim is looking for anyone to take up the following bounties, payment will be given upon proof of completion!');
+replace into npc_text (ID, BroadcastTextID0) values (30053, 30053);
