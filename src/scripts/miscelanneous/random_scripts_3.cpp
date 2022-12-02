@@ -5471,27 +5471,123 @@ bool QuestAccept_npc_magus_halister(Player* pPlayer, Creature* pQuestGiver, Ques
     return false;
 }
 
-//bool QuestRewarded_npc_chieftain_icepaw(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+bool GOHello_go_bounty_board(Player* pPlayer, GameObject* pGo)
+{
+    if (pGo->GetEntry() == 2010972)
+    {
+        pPlayer->PrepareQuestMenu(pGo->GetObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30053, pGo->GetGUID());
+    }
+    return true;
+}
+
+//bool GOHello_go_incense_brazier(Player* pPlayer, GameObject* pGo)
 //{
-//    if (!pQuestGiver || !pPlayer) return false;
-//
-//    if (pQuest->GetQuestId() == 40743) // Exchanging Foreign Food
+//    if (pGo->GetEntry() == 2010970)
 //    {
-//        pQuestGiver->MonsterSay("");
-//        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+//        if (pPlayer->GetQuestStatus(40751) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(20, 40.0F))
+//        {
+//            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Place the bones within the fire", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+//            pPlayer->SEND_GOSSIP_MENU(30051, pGo->GetGUID());
+//        }
 //    }
+//    return true;
+//}
+
+//bool GOSelect_go_incense_brazier(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+//{
+//    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+//    {
+//        if (pGo->GetEntry() == 2010970 && !pPlayer->HasItemCount(60990, 1, false))
+//        {
+//            pPlayer->GetSession()->SendNotification("Need to Senshi Bones");
+//        }
 //
+//        if (pGo->GetEntry() == 2010970 && pPlayer->HasItemCount(60990, 1, false))
+//        {
+//            pGo->SummonCreature(20, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
+//
+//            Creature* shade_of_temptress = pGo->FindNearestCreature(61119, 40.0F);
+//
+//            pGo->m_Events.AddLambdaEventAtOffset([pGo, shade_of_temptress]()
+//                {
+//                    Creature* shade_of_temptress = pGo->FindNearestCreature(61119, 40.0F);
+//                    if (!shade_of_temptress)
+//                    {
+//                        pGo->SummonCreature(61119, -9039.67F, -7196.95F, 9.05F, 3.21F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 10 * IN_MILLISECONDS);
+//                    }
+//                }, 3000);
+//
+//            pGo->m_Events.AddLambdaEventAtOffset([pGo, pPlayer, shade_of_temptress]()
+//                {
+//                    Creature* shade_of_temptress = pGo->FindNearestCreature(61119, 40.0F);
+//                    if (shade_of_temptress)
+//                    {
+//                        shade_of_temptress->MonsterSay("Well, looks like he left us for good. At least we got some answers out of him. Now, go back to Captain Garran Vimes. He will know what to do next.");
+//                        shade_of_temptress->HandleEmote(EMOTE_ONESHOT_TALK);
+//                    }
+//                }, 5000);
+//        }
+//    }
+//    pPlayer->CLOSE_GOSSIP_MENU();
 //    return false;
 //}
+//
+//struct npc_shade_of_temptressAI : public ScriptedAI
+//{
+//    npc_shade_of_temptressAI(Creature* c) : ScriptedAI(c) { Reset(); }
+//
+//    bool transformed;
+//    bool fightBegun;
+//
+//    void Reset()
+//    {
+//        transformed = false;
+//        fightBegun = false;
+//    }
+//
+//    void UpdateAI(const uint32 diff)
+//    {
+//        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
+//            return;
+//
+//        if (!fightBegun)
+//        {
+//
+//        }
+//
+//        DoMeleeAttackIfReady();
+//    }
+//    void JustDied(Unit*) override
+//    {
+//        m_creature->SummonCreature(61120, -9039.67F, -7196.95F, 9.05F, 3.21F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 10 * IN_MILLISECONDS);
+//        m_creature->MonsterSay("This isn't over! I will find you one day…And your soul will be the price for the one you stole today.");
+//    }
+//    void EnterCombat() {}
+//    void JustRespawned() { Reset(); }
+//};
+//
+//CreatureAI* GetAI_npc_shade_of_temptress(Creature* _Creature) { return new npc_shade_of_temptressAI(_Creature); }
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
     //newscript = new Script;
-    //newscript->Name = "npc_chieftain_icepaw";
-    //newscript->pQuestRewardedNPC = &QuestRewarded_npc_chieftain_icepaw;
+    //newscript->Name = "npc_shade_of_temptress";
+    //newscript->GetAI = &GetAI_npc_shade_of_temptress;
     //newscript->RegisterSelf();
+
+    //newscript = new Script;
+    //newscript->Name = "go_incense_brazier";
+    //newscript->pGOHello = &GOHello_go_incense_brazier;
+    //newscript->pGOGossipSelect = &GOSelect_go_incense_brazier;
+    //newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "go_bounty_board";
+    newscript->pGOHello = &GOHello_go_bounty_board;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_magus_halister";
