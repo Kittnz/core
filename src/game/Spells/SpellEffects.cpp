@@ -2548,6 +2548,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         {
                             if (Player* pPlayer = m_caster->ToPlayer())
                             {
+                                bool hasProc = false;
                                 if (Item* item = pPlayer->GetWeaponForAttack(BASE_ATTACK, true, true))
                                 {
                                     float chanceMultiplier = m_currentBasePoints[eff_idx];
@@ -2555,6 +2556,8 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                     {
                                         if (!spellData.SpellId || spellData.SpellTrigger != ITEM_SPELLTRIGGER_CHANCE_ON_HIT)
                                             continue;
+
+                                        hasProc = true;
 
                                         if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(spellData.SpellId))
                                         {
@@ -2568,6 +2571,16 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                                     if (chanceMultiplier < 2.0f)
                                         chanceMultiplier = 2.0f;
                                     pPlayer->CastItemCombatSpell(unitTarget, BASE_ATTACK, chanceMultiplier);
+                                }
+
+                                // refund judgement mana if weapon has no proc
+                                if (!hasProc)
+                                {
+                                    if (SpellEntry const* pJudge = sSpellMgr.GetSpellEntry(20271))
+                                    {
+                                        uint32 manaCost = Spell::CalculatePowerCost(pJudge, pPlayer);
+                                        pPlayer->ModifyPower(POWER_MANA, manaCost);
+                                    }
                                 }
                             }
                             return;
