@@ -138,7 +138,7 @@ struct boss_ossirianAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pUnit, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pUnit, const SpellEntry* pSpell) override
     {
         for (uint32 i : SpellWeakness)
         {

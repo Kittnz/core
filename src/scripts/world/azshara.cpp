@@ -50,7 +50,7 @@ struct mobs_spitelashesAI : public ScriptedAI
         spellhit = false;
     }
 
-    void SpellHit(Unit *Hitter, const SpellEntry *Spellkind) override
+    void SpellHit(WorldObject* Hitter, const SpellEntry *Spellkind) override
     {
         if (!spellhit && Hitter->GetTypeId() == TYPEID_PLAYER)
         {

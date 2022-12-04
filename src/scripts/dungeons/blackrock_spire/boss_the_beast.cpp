@@ -58,10 +58,14 @@ struct boss_thebeastAI : public ScriptedAI
         m_bPulledByPet = false;
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
+        Unit* pUnitCaster = ToUnit(pCaster);
+        if (!pUnitCaster)
+            return;
+
         if (pSpell->Effect[0] == SPELL_EFFECT_SKINNING)
-            pCaster->CastSpell(pCaster, SPELL_SUMMON_FINKLE, true);
+            pUnitCaster->CastSpell(pUnitCaster, SPELL_SUMMON_FINKLE, true);
     }
 
     void UpdateAI(const uint32 uiDiff) override

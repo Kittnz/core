@@ -48,7 +48,7 @@ struct mob_yennikuAI : public ScriptedAI
         m_creature->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *spell) override
+    void SpellHit(WorldObject* caster, const SpellEntry *spell) override
     {
         if (caster->GetTypeId() == TYPEID_PLAYER)
         {

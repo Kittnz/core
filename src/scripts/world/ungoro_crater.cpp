@@ -202,7 +202,7 @@ struct npc_ringoAI : public FollowerAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (HasFollowState(STATE_FOLLOW_INPROGRESS | STATE_FOLLOW_PAUSED) && pSpell->Id == SPELL_REVIVE_RINGO)
             ClearFaint();
@@ -721,7 +721,7 @@ struct npc_simone_seductressAI : public ScriptedAI
         }
     }
     
-    void SpellHit(Unit* /*pCaster*/, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* /*pCaster*/, const SpellEntry* pSpell) override
     {
         if (pSpell && pSpell->Id == 14280)   // Viper Sting (Rank 3)
         {
