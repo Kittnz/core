@@ -101,7 +101,7 @@ struct boss_xmas_wolfAI : public ScriptedAI
         isFrozen = false;
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (isFrozen && pSpell->School == SPELL_SCHOOL_FIRE)
         {

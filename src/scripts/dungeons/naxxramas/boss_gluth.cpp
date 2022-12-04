@@ -130,7 +130,7 @@ struct boss_gluthAI : public ScriptedAI
             m_pInstance->SetData(TYPE_GLUTH, FAIL);
     }
 
-    void SpellHit(Unit*, SpellEntry const* pSpell) override
+    void SpellHit(WorldObject*, SpellEntry const* pSpell) override
     {
         // Only want to do these calculations inside naxx
         if (m_pInstance->GetMap()->GetId() != 533)
@@ -351,7 +351,7 @@ struct mob_zombieChow : public ScriptedAI
         return false;
     }
 
-    void SpellHit(Unit* pWho, SpellEntry const* pSpell) override
+    void SpellHit(WorldObject* pWho, SpellEntry const* pSpell) override
     {
         ScriptedAI::SpellHit(pWho, pSpell);
         if (pWho->GetEntry() == NPC_GLUTH && pSpell->Id == SPELL_DECIMATE)

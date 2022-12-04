@@ -61,7 +61,7 @@ struct boss_atiesh : public ScriptedAI
         events.ScheduleEvent(EVENT_SHADOW_BOLT, Seconds(1));
     }
 
-    void SpellHit(Unit*, const SpellEntry* spell) override
+    void SpellHit(WorldObject*, const SpellEntry* spell) override
     {
         // look for disarm, drop a weapon
         if (!hasBeenDisarmed && spell->IsAuraAddedBySpell(SPELL_AURA_MOD_DISARM))

@@ -66,7 +66,7 @@ struct ScriptedAI : CreatureAI
     void SummonedCreatureDespawn(Creature*) override {}
 
     // Called when hit by a spell
-    void SpellHit(Unit*, const SpellEntry*) override {}
+    void SpellHit(WorldObject*, const SpellEntry*) override {}
 
     // Called when spell hits creature's target
     void SpellHitTarget(Unit*, const SpellEntry*) override {}

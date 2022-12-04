@@ -816,14 +816,14 @@ struct npc_eris_havenfire_peasantAI : public ScriptedAI
             damage = urand(80, 105);
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_TIR_FLECHE)
         {
             if (!urand(0, 10))
                 m_creature->CastSpell(m_creature, SPELL_PORTE_MORT, true);
         }
-        else if (pCaster && pCaster->GetTypeId() == TYPEID_PLAYER)
+        else if (Player* pPlayer = ToPlayer(pCaster))
         {
             Creature* eris = m_creature->FindNearestCreature(14494, 100.0f, true);
             if (!eris)
@@ -831,11 +831,11 @@ struct npc_eris_havenfire_peasantAI : public ScriptedAI
 
             if (npc_eris_havenfireAI* pErisEventAI = dynamic_cast<npc_eris_havenfireAI*>(eris->AI()))
             {
-                if (pCaster->GetGUID() != pErisEventAI->PlayerGUID && pErisEventAI->BeginQuete && !pErisEventAI->CleanerSpawn)
+                if (pPlayer->GetGUID() != pErisEventAI->PlayerGUID && pErisEventAI->BeginQuete && !pErisEventAI->CleanerSpawn)
                 {
                     if (Creature* Crea = m_creature->SummonCreature(NPC_CLEANER, 3358.1096f, -3049.8063f, 166.226f, 1.87f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
                     {
-                        Crea->AI()->AttackStart(pCaster);
+                        Crea->AI()->AttackStart(pPlayer);
                         pErisEventAI->BeginQuete = false;
                         pErisEventAI->CleanerSpawn = true;
                         pErisEventAI->EchecEvent(pErisEventAI->GetPlayer(), false);

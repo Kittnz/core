@@ -221,7 +221,7 @@ void npc_reginald_windsorAI::MoveInLineOfSight(Unit* Victim)
     }
 }
 
-void npc_reginald_windsorAI::SpellHit(Unit* /*pCaster*/, SpellEntry const* pSpellEntry)
+void npc_reginald_windsorAI::SpellHit(WorldObject* /*pCaster*/, SpellEntry const* pSpellEntry)
 {
     if (pSpellEntry->Id == SPELL_WINDSOR_DEATH)
         m_creature->SetFeignDeath(true);
