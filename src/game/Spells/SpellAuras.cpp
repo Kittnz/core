@@ -3319,6 +3319,8 @@ void Aura::HandleModCharm(bool apply, bool Real)
 
         if (Creature* pCreatureTarget = target->ToCreature())
         {
+            pCreatureTarget->SetReactState(charmInfo->GetReactState());
+
             if (pCreatureTarget->AI() && pCreatureTarget->AI()->SwitchAiAtControl())
                 pCreatureTarget->AIM_Initialize();
 
@@ -3381,16 +3383,17 @@ void Aura::HandleModCharm(bool apply, bool Real)
             CreatureInfo const *cinfo = pCreatureTarget->GetCreatureInfo();
 
             // restore faction
-            if (target->IsPet())
+            if (pCreatureTarget->IsPet())
             {
-                if (Unit* owner = target->GetOwner())
-                    target->SetFactionTemplateId(owner->GetFactionTemplateId());
+                if (Unit* owner = pCreatureTarget->GetOwner())
+                    pCreatureTarget->SetFactionTemplateId(owner->GetFactionTemplateId());
                 else if (cinfo)
-                    target->SetFactionTemplateId(cinfo->faction);
+                    pCreatureTarget->SetFactionTemplateId(cinfo->faction);
             }
             else if (cinfo)                             // normal creature
             {
-                target->SetFactionTemplateId(cinfo->faction);
+                pCreatureTarget->InitializeReactState();
+                pCreatureTarget->SetFactionTemplateId(cinfo->faction);
 
                 // remove pvp flag on charm end if creature is not pvp flagged by default
                 if (pCreatureTarget->IsPvP() && !pCreatureTarget->HasExtraFlag(CREATURE_FLAG_EXTRA_PVP))
@@ -3402,12 +3405,12 @@ void Aura::HandleModCharm(bool apply, bool Real)
             if (cinfo && caster && caster->IsPlayer() && caster->GetClass() == CLASS_WARLOCK && cinfo->type == CREATURE_TYPE_DEMON)
             {
                 // DB must have proper class set in field at loading, not req. restore, including workaround case at apply
-                // target->SetByteValue(UNIT_FIELD_BYTES_0, 1, cinfo->unit_class);
+                // pCreatureTarget->SetByteValue(UNIT_FIELD_BYTES_0, 1, cinfo->unit_class);
 
-                if (target->GetCharmInfo())
-                    target->GetCharmInfo()->SetPetNumber(0, true);
+                if (pCreatureTarget->GetCharmInfo())
+                    pCreatureTarget->GetCharmInfo()->SetPetNumber(0, true);
                 else
-                    sLog.outError("Aura::HandleModCharm: target (GUID: %u TypeId: %u) has a charm aura but no charm info!", target->GetGUIDLow(), target->GetTypeId());
+                    sLog.outError("Aura::HandleModCharm: target (GUID: %u TypeId: %u) has a charm aura but no charm info!", pCreatureTarget->GetGUIDLow(), pCreatureTarget->GetTypeId());
             }
         }
 
