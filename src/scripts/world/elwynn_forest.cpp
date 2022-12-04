@@ -67,7 +67,7 @@ struct npc_henze_faulkAI : public ScriptedAI
     void SpellHit(WorldObject* pCaster, const SpellEntry *Spellkind) override
     {
         Unit* pUnitCaster = ToUnit(pCaster);
-        if (!pCaster)
+        if (!pUnitCaster)
             return;
 
         if (Spellkind->Id == 8593 && !spellHit)
