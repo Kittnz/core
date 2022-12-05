@@ -339,7 +339,7 @@ class Guild
         void   LoadGuildEventLogFromDB();
         void   DisplayGuildEventLog(WorldSession *session);
         void   LogGuildEvent(uint8 EventType, ObjectGuid playerGuid1, ObjectGuid playerGuid2 = ObjectGuid(), uint8 newRank = 0);
-
+        ObjectGuid GetGuildInviter(ObjectGuid playerGuid) const;
 
     protected:
         void AddRank(std::string const& name,uint32 rights);
