@@ -5481,6 +5481,66 @@ bool GOHello_go_bounty_board(Player* pPlayer, GameObject* pGo)
     return true;
 }
 
+bool QuestRewarded_npc_bixxle_screwfuse(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40760) // Operation Final Repairs
+    {
+        pQuestGiver->MonsterSay("Thanks for everything you've done, this machine has cost me a fortune, and I don't have another fortune laying around.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    if (pQuest->GetQuestId() == 40761) // Secrets of the Dark Iron Desecrator
+    {
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_LAUGH);
+    }
+
+    if (pQuest->GetQuestId() == 40762) // The Dark Iron Desecrator
+    {
+        pQuestGiver->MonsterSay("Such a magnificent weapon, capable of pure destruction, now rested at your hands. I do hope you use it responsibly, and if you don't, it's all on you, and has nothing to do with me!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool GossipHello_npc_gelweg_darkbrow(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40761) == QUEST_STATUS_INCOMPLETE && !pPlayer->HasItemCount(60998, 1, false)) // Secrets of the Dark Iron Desecrator
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "I have been sent by Bixxle Screwfuse, he is asking for you to repay your favors by giving him the plans to the Dark Iron Desecrator.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(60955, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_gelweg_darkbrow(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->AddItem(60998);
+        if (pPlayer->HasItemCount(60998, 1, false))
+        {
+            pCreature->MonsterSay("The Dark Iron Desecrator Plans? I- why... Bah, fine, he is asking a lot here, tell him that all of the favors I owe him are cleared.");
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
+    }
+    return true;
+}
+
+
 //bool GOHello_go_incense_brazier(Player* pPlayer, GameObject* pGo)
 //{
 //    if (pGo->GetEntry() == 2010970)
@@ -5583,6 +5643,17 @@ void AddSC_random_scripts_3()
     //newscript->pGOHello = &GOHello_go_incense_brazier;
     //newscript->pGOGossipSelect = &GOSelect_go_incense_brazier;
     //newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_gelweg_darkbrow";
+    newscript->pGossipHello = &GossipHello_npc_gelweg_darkbrow;
+    newscript->pGossipSelect = &GossipSelect_npc_gelweg_darkbrow;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_bixxle_screwfuse";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_bixxle_screwfuse;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "go_bounty_board";

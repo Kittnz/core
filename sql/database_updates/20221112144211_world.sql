@@ -2194,7 +2194,7 @@ values (@spell_list_id, @description,
 -- Leezza Fraxtoggle , display ID 10746, level 49, faction 35, humanoid, scale 1, gossip/quest flags, gossip text : "What do you want? I wouldn't be sticking my nose where it didn't belong if I was you."
 REPLACE INTO creature_template VALUES
 (61100, 3469, 0, 0, 0, 0, 'Tazzo Gearfire', 'The Outsider', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_tazzo_gearfire'),
-(61101, 7031, 0, 0, 0, 0, 'Bixxle Screwfuse', 'Supply Master', 0, 48, 48, 2800, 2800, 0, 0, 2386, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61101, 7031, 0, 0, 0, 0, 'Bixxle Screwfuse', 'Supply Master', 0, 48, 48, 2800, 2800, 0, 0, 2386, 35, 3, 1, 1.14286, 0, 18, 5, 0, 0, 1, 77, 96, 0, 220, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 62.8672, 86.4424, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 'npc_bixxle_screwfuse'),
 (61102, 7209, 0, 0, 0, 0, 'Baron Telraz', NULL, 0, 58, 58, 14355, 14355, 0, 0, 3379, 35, 3, 1, 1.14286, 0, 20, 5, 0, 1, 1, 455, 599, 0, 262, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61103, 7059, 7060, 7061, 0, 0, 'Tel Co. Enforcer', NULL, 0, 55, 55, 7842, 7842, 0, 0, 3500, 35, 0, 1, 1.14286, 0, 20, 5, 0, 1, 1, 474, 564, 0, 250, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 58.872, 80.949, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 524296, 0, ''),
 (61104, 7100, 7132, 7137, 0, 0, 'Tel Co. Worker', NULL, 0, 50, 50, 2990, 2990, 0, 0, 2958, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
@@ -3234,11 +3234,30 @@ replace into item_template values
 -- NPC Bomarn Fireaxe, add quest/gossip flags, with the following gossip text : "Looking for quality brew during this wonderous season? You're talkin' to the right dwarf friend."
 -- NPC Carus Silversnow add quest/gossip flags, gossip text : "I hope you're enjoying this Winter Veil season."
 -- Jamey, display ID 3552, level 62 elite, faction 35, humanoid, scale 1, quest flags
+-- Darneg Darkbeard, display ID 18842, level 56 elite, faction 54, weapon : 80823, says the following line on aggro : "It's mine, I aint givin' it back!", respawn time 2hrs
 REPLACE INTO creature_template VALUES
 (61135, 950, 0, 0, 0, 0, 'Abominable Snow Yeti', NULL, 0, 58, 60, 3198, 3296, 0, 0, 2954, 24, 0, 1, 1.14286, 0.9, 18, 5, 0, 0, 1, 97, 120, 0, 272, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.9664, 98.9538, 100, 7, 0, 61135, 0, 7458, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 119, 161, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61136, 950, 0, 0, 0, 0, 'Coldhowl', NULL, 0, 40, 40, 1752, 1752, 0, 0, 1890, 35, 3, 1, 1.14286, 0.7, 18, 5, 0, 0, 1, 61, 78, 0, 156, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 8, 0, 56.672, 77.924, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 75, 97, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
 (61137, 3553, 0, 0, 0, 0, 'Dolvan Bracewind', NULL, 0, 35, 35, 1342, 1342, 0, 0, 1373, 35, 0, 1, 1.14286, 0, 20, 5, 40, 0, 1, 51, 65, 0, 138, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 51.128, 70.301, 100, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
-(61138, 3552, 0, 0, 0, 0, 'Jamey', NULL, 0, 62, 62, 44000, 44000, 0, 0, 4391, 35, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+(61138, 3552, 0, 0, 0, 0, 'Jamey', NULL, 0, 62, 62, 44000, 44000, 0, 0, 4391, 35, 2, 1, 1.14286, 0, 20, 5, 0, 1, 1, 1510, 2004, 0, 284, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61139, 18842, 0, 0, 0, 0, 'Darneg Darkbeard', NULL, 0, 56, 56, 8397, 8397, 0, 0, 3271, 54, 0, 1, 1.14286, 0, 20, 5, 40, 1, 1, 367, 469, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 61.152, 84.084, 100, 7, 0, 61139, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 439, 578, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+update creature set spawntimesecsmin = 7200, spawntimesecsmax = 7200 where id = 61139;
+
+REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
+(30054, 'It\'s mine, I aint givin\' it back!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+delete from creature_ai_scripts where id = 2200027;
+REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
+(2200027, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30054, 0, 0, 0, 0, 0, 0, 0, 0, 'Darneg Darkbeard - Say on Aggro');
+
+delete from creature_ai_events where id = 2200027;
+REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES
+(2200027, 61139, 0, 4, 0, 100, 1, 0, 0, 0, 0, 2200027, 0, 0, 'Darneg Darkbeard - Say on Aggro');
+
+set @equip_template = 20275; set @weapon_1 = 80823; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61139;
+replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
+update creature_template set equipment_id = @equip_template where entry = @creature;
 
 update creature_template set npc_flags = 3 where entry = 50652;
 set @gossip_menu_id = 41296; set @magic_number = 50652;

@@ -474,9 +474,152 @@ replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel,
 replace into creature_questrelation		(id, quest) values (61112, 40754);
 replace into creature_involvedrelation	(id, quest) values (61112, 40754);
 
+-- Operation Screwfuse 1000
+delete from quest_template where entry = 40755;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40755,2,5121,58,50,0,0,'Operation Screwfuse 1000','Look, I have a favor I need to ask, and one that is really important to me. Do you know the meaning of sunk cost fallacy? Well, in my world it\'s completely true. I have spent years, and buckets of gold working on a machine that can sort bananas on being worthy to collect or not. It is able to judge ripeness, age, and all sorts of factors to determine if it is worth our time to collect.\n\nLet\'s just say, the buffoons that I sent it out with, got lost, and left it at the camp to the east of here.\n\nI don\'t have a bunch of people to waste getting ripped apart by Venomflayers to go get it themselves, so why don\'t you do it? Recover the Screwfuse 1000 and be sure to bring it back gently, it should be down the road to the east, at a small abandoned camp.','Find and recover the Screwfuse 1000 for Bixxle Screwfuse at Bixxle\'s Storehouse on Tel\'Abim.','So, you have any luck yet $c?','By my ears, this is it! Well done, this has saved me an extraordinary amount of time, and as you know, time is money, especially in this case.',60991,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,3500,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61101, 40755);
+replace into creature_involvedrelation	(id, quest) values (61101, 40755);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60991,17881,'Screwfuse 1000',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010973, 3, 25847, 'Screwfuse 1000', 0, 4, 1, 43, 2010973, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010973,60991,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 15, spawntimesecsmax = 15 where id = 2010973;
+
+-- Operation FIX Screwfuse 1000
+delete from quest_template where entry = 40756;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40755,40756,2,5121,58,50,0,0,'Operation FIX Screwfuse 1000','Those, absolute idiots!\n\nThe entire mechanism is broken, my backup Arcane Regulator, and my Spingadge Flange are both broken. Do you know how long it took to acquire such rare parts, special ordered from Kezan!\n\nIf only they were still alive, I\'d be the one to send them to whatever misbegotten afterlife they are rotting in. I have only one source for rare goods from Kezan, and I need you to speak with him. He goes by the name \'Jabbey\' an alias of sorts, he is an undercover operative from Kezan and works through various back channels, go speak with him, and let him know -Bixxle- sent you, bring him this list of items.','Speak with Jabbey at Steamwheedle Port in Tanaris.','Yes?','Huh, what is it you want, you here for something special?\n\nOh, Bixxle sent you huh, that idiot? He spent a good five years making some banana sorter, what does he need?',60992,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60992,1, 0,300,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61101, 40756);
+replace into creature_involvedrelation	(id, quest) values (8139 , 40756);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60992,7694,'Bixxle\'s Item List',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Operation Help Jabbey
+delete from quest_template where entry = 40757;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40756,40757,2,1584,58,50,0,0,'Operation Help Jabbey','<Jabbey looks at the list with an expression of disbelief, and laughs.>\n\nHaha! He thinks I am going to give out such valuable items that easy? Look kid, these things are rare, and extremely valuable, but if he needs them, and wants them, I have a favor I need completed before I even consider forking over something like that. Easy yeah?\n\nI did some business with one of those Dark Iron types, he went by the name \'Darneg Darkbeard\' lets just say I leant him a considerable amount of potent goods to sell. I haven\'t heard back at all from him, and I have confirmation that I was swindled. I need you to travel to Blackrock Depths, and into Shadowforge to recover the \'Extremely Potent Snuff\' from him. He should be somewhere in the Domicile there.','Venture into Blackrock Depths, and recover the \'Extremely Potent Snuff\' from Darneg Darkbeard near the Domicile, for Jabbey at Steamwheedle Port in Tanaris.','You find that good for nothing thief, and give him justice yet?\n\nBetter yet, you recover my stuff?','<Jabbey looks on the small pile of snuff with displeasure.>\n\nWell this certainly is a disappointment.',60993,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,5300,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (8139, 40757);
+replace into creature_involvedrelation	(id, quest) values (8139, 40757);
+
+update quest_template set type = 81 where entry = 40757;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60993,2480,'\'Extremely Potent Snuff\'',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61139, 60993, -100, 0, 1, 1, 0);
+
+-- Operation Help Jabbey 2
+delete from quest_template where entry = 40758;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40757,40758,2,5121,58,50,0,0,'Operation Help Jabbey 2','Well, I hate to do this to you kid, but that dwarf went and... \'used\' most of the snuff, looks like you\'re a bit out of luck. This certainly isn\'t enough to recover even a fraction of the cost for the parts you\'re looking for, but I do have another favor, that will pay for the rest of it.\n\nLet\'s just say I have some clients that are looking to \'research\' toxic materials for, scientific, purposes. They are looking to get their hands on a \'Blighted Essence\' which can be acquired from the Blighted Horrors in Eastern Plaguelands. So, get me the Blighted Essence, and that will pay off the rest of the parts, easy yeah?','Venture to Eastern Plaguelands and gather a \'Blighted Essence\' from Blighted Horrors for Jabbey at Steamwheedle Port in Tanaris.','Careful holding that Blighted Essence when you bring it around here, last thing I want is some super disease in Steamwheedle.','Well, I didn\'t expect you to actually return, that\'s a bummer. Oh well, a goblins word means something in this world, to some people anyway.',60994,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,5450,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (8139, 40758);
+replace into creature_involvedrelation	(id, quest) values (8139, 40758);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60994,13709,'Blighted Essence',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(8521, 60994, -20, 0, 1, 1, 0);
+
+-- Operation Return to Screwfuse
+delete from quest_template where entry = 40759;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40758,40759,2,5121,58,50,0,0,'Operation Return to Screwfuse','Nice job in getting all that stuff for me, didn\'t take all too long as well, Kezan could use some individuals like you.\n\nNow, I boxed that fool Bixxle\'s goods, take them to him, and be quick about it, I\'ve had you linger around here too long, last thing I want is people to catch on about my business, got it?','Bring Bixxle\'s Expensive Parts to Bixxle Screwfuse at Bixxle\'s Storehouse in Tel\'Abim.','So, what did Jabbey say?','Oh, they were that hard to get huh, hope it wasn\'t too much of a fuss getting this for me, here, take some coin for all the trouble.',60995,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60995,1, 500,450,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (8139 , 40759);
+replace into creature_involvedrelation	(id, quest) values (61101, 40759);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60995,7913,'Bixxle\'s Expensive Parts',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Operation Final Repairs
+delete from quest_template where entry = 40760;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40759,40760,2,5121,58,50,512,0,'Operation Final Repairs','Now that I have all the materials, I just need to put in the last bits of repairing, and for that, well I\'m going to need more materials.\n\nI hope I am not being too much of a bother, but do you mind getting me some engineering supplies? I need the following, six Thorium Bars, a Gold Power Core, some Fused Wiring, and a Thorium Widget, with all of that I should be able to fix the Screwfuse 1000.','Gather 6 Thorium Bars, 1 Gold Power Core, 1 Fused Wiring, and 1 Thorium Widget for Bixxle Screwfuse at Bixxle\'s Storehouse in Tel\'Abim.','You get all those things yet?','<Bixxle let\'s out a sigh of relief, smirking from ear to ear.>\n\nYou\'ve really helped me out here, working from Tel\'Abim complicates everything, especially with how remote the location is.\n\n You came in clutch friend, and for that I should reward you with something, and I know just the thing.\n\nLook, if you ever need anything else, let me know, you\'ve saved me more gold than I would\'ve made in years, and almost as much time even!',12359,6,10558,1,7191,1,15994,1, 0,0,0,0,0,0,0,0, 0,0, 0,1250,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 60996,1,60997,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61101, 40760);
+replace into creature_involvedrelation	(id, quest) values (61101, 40760);
+
+replace into item_template values
+ ('60996', '4', '0', 'Bixxle\'s Necklace of Control', '', '66253', '3', '0', '1', '53056', '13264', '2', '-1', '-1', '62',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('60997', '4', '0', 'Bixxle\'s Necklace of Mastery', '', '66253', '3', '0', '1', '53056', '13264', '2', '-1', '-1', '62',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '13679', '1', '0', '0', '-1', '0', '-1', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '48', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Secrets of the Dark Iron Desecrator
+delete from quest_template where entry = 40761;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40760,40761,2,5121,60,55,0,0,'Secrets of the Dark Iron Desecrator','Hey look, you did me a real solid, and I still owe you for everything you\'ve done. You wouldn\'t be happen to be in the market for a gun would you? I don\'t just mean any gun, I mean a Dark Iron Desecrator. I have someone that owes me quite a lot of favors for help I offered to bring them to Steamwheedle for rare goods.\n\nIf this is something you\'re interested in, just know it will take some work to acquire. If this has your interest, then speak with Gelweg Darkbrow, let him know I sent you, and that I am asking for the plans.','Collect the Plans for the Dark Iron Desecrator from Gelweg Darkbrow at Steamwheedle Port, once they are acquired, return to Bixxle Screwfuse.','So, you speak with him yet?','I assume he complained huh?\n\n<Bixxle laughs.>\n\nYeah, this is quite secretive and a prototype build of Dark Iron Engineers, that\'s why we\'re going to master it.\n\nYou wouldn\'t imagine it but I am quite a reknowned Engineer, and have had many run ins with these \'Dark Irons\', heck I was even contracted for some stuff in their vaunted city.',60998,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,650,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61101, 40761);
+replace into creature_involvedrelation	(id, quest) values (61101, 40761);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60998,7601,'Plans: Dark Iron Desecrator',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+update creature_template set script_name = 'npc_gelweg_darkbrow' where entry = 60955;
+
+-- The Dark Iron Desecrator
+delete from quest_template where entry = 40762;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40761,40762,2,5121,60,55,512,0,'The Dark Iron Desecrator','Well, these plans are much more complicated than I first estimated, so many rare materials, most of which are not so easily available...\n\nFirst off, we will need to get a stock Dark Iron Rifle, they can be crafted by engineers with the know how to make one. Secondly, I need a Magma Condensor from within Blackrock Depths, you can find it near the Golem Laboratory. Thirdly, I require a Intricate Arcanite Barrel which can handle extreme heat. This can be found deep within Lower Blackrock Spire, near the Quartermaster there.\n\nLastly, and most difficult to find, I need a Molten Fragment. This item can be acquired from Molten Destroyers in the depths of the Molten Core.\n\nTo finish the construction, I will also need three Fiery Core found in Molten Core, and ten Enchanted Thorium Bars.\n\nOnce your collect these goods, come to me, and I can get started.','Collect a Dark Iron Rifle, a Magma Condensor, a Intricate Arcanite Barrel, a Molten Fragment, 3 Fiery Cores, and 10 Enchanted Thorium Bars for Bixxle Screwfuse at Bixxle\'s Storehouse in Tel\'Abim.','Have any luck recovering the materials yes $N?','Behold, a creation of great magnitude, the ideas of wicked dwarven design, crafted by yours truly.\n\nI hope this serves you well, and does what damage you need to deal on those that may be your enemy.\n\nWe are even now, this surely is worth quite a bit of gold after all, maybe not as much as my Screwfuse 1000, but close enough.\n\nBest of luck out there $N, I hope we cross paths again.',60999,1,61066,1,61067,1,16004,1, 0,0,0,0,0,0,0,0, 0,0, 0,500,0,0,0,0,0,0,0,0,0,0,0, 61068,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61101, 40762);
+replace into creature_involvedrelation	(id, quest) values (61101, 40762);
+
+update quest_template set type = 62 where entry = 40762;
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(60999,1136,'Magma Condensor',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(61066,4665,'Intricate Arcanite Barrel',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0),
+(61067,28258,'Molten Fragment',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(11659, 61067, -100, 0, 1, 1, 0);
+
+REPLACE INTO gameobject_template VALUES
+(2010974, 3, 24109, 'Magma Condensor Crate', 0, 4, 1, 43, 2010974, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ''),
+(2010975, 3, 24106, 'Intricate Arcanite Barrels', 0, 4, 1, 43, 2010975, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010974,60999,-100,0,1,1,0),
+(2010975,61066,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where id = 2010974;
+update gameobject set spawntimesecsmin = 25, spawntimesecsmax = 25 where id = 2010975;
+
+replace into item_template values
+ ('61068', '2', '3', 'Dark Iron Desecrator', 'The true embodiment of Dark Iron  construction.', '31225', '4', '0', '1', '272828', '68207', '26', '-1', '-1', '65',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2900', '100',
+ '3', '72', '142', '0', '5', '10', '2', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10', '0',
+ '0', '10', '0', '18187', '0', '0', '0', '60000', '0', '-1', '7597', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '90', '0', '0', '0', '0', '65', '0', '0', '0',
+ '0', '1', NULL);
+
 -- To heal a Soul
 delete from quest_template where entry = 40751;
-replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40750,40751,2,5121,52,48,0,0,'To heal a Soul','<A female voice seems to penetrate through your mind.>\n\nThe beast seeks to end... everything that I am. As I prepared the ritual site after years of work, one of the naga slew me, and my bones were taken. Reclaim my bones, from the slithering foe. Burn my bones in the incense bowl by the totem. A shade of the dark temptress will reveal itself, destroy it and set me free!','Gather the Senshi Bones from the Wave Crest Explorers, once collected, burn the bones at the incense brazier near the Inconspicous Totem to summon forth the Shade of the Temptress, once the Shade of the Temptress is slain, bring news to Aneka Konko at Ratchet.','You have returned...','You have helped one of my kin, redeemed her in the eyes of the kami, cast aside her dishonor, and saved her soul. Her spirit is free to be reborn once more. Take this as a symbol of my gratitude.',60990,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,5875,1010,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40750,40751,2,5121,52,48,0,0,'To heal a Soul','<A female voice seems to penetrate through your mind.>\n\nThe beast seeks to end... everything that I am. As I prepared the ritual site after years of work, one of the naga slew me, and my bones were taken. Reclaim my bones, from the slithering foe. Burn my bones in the incense bowl by the totem. A shade of the dark temptress will reveal itself, destroy it and set me free!','Gather the Senshi Bones from the Wave Crest Explorers, once collected, burn the bones at the incense brazier near the Inconspicous Totem to summon forth the Shade of the Temptress, once the Shade of the Temptress is slain, bring news to Aneka Konko at Ratchet.','You have returned...','You have helped one of my kin, redeemed her in the eyes of the kami, cast aside her dishonor, and saved her soul. Her spirit is free to be reborn once more. Take this as a symbol of my gratitude.',60990,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,5875,1010,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61069,1,61070,1,0,0,0,0, 0,0,'');
 
 replace into gameobject_questrelation (id, quest) values (2010969, 40751);
 replace into creature_involvedrelation (id, quest) values (90983, 40751);
@@ -489,6 +632,26 @@ replace into creature_loot_template values
 
 REPLACE INTO `gameobject_template` (`entry`, `type`, `displayId`, `name`, `faction`, `flags`, `size`, `data0`, `data1`, `data2`, `data3`, `data4`, `data5`, `data6`, `data7`, `data8`, `data9`, `data10`, `data11`, `data12`, `data13`, `data14`, `data15`, `data16`, `data17`, `data18`, `data19`, `data20`, `data21`, `data22`, `data23`, `mingold`, `maxgold`, `phase_quest_id`, `script_name`) VALUES
 (2010970, 2, 7289, 'Incense Brazier', 0, 32, 0.5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'go_incense_brazier');
+
+replace into item_template values
+ ('61069', '4', '3', 'Kabuto of the Senshi', '', '66309', '2', '0', '1', '67928', '16982', '1', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '17', '3', '12',
+ '7', '8', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '259', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '1', '0', '0', '0', '60', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61070', '4', '4', 'Kabuto of the Protector', '', '66309', '2', '0', '1', '55928', '13982', '1', '-1', '-1', '59',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '21', '3', '7',
+ '4', '3', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '461', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
 
 -- REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
 -- (30053, 'Shade of the Senshi: I am… free. The dark Kami\'s vile hold over me is gone. I can ill repay this debt stranger, I thank you from the deepest recess of my soul. You may use my house as you see fit. I shan\'t be needing it any longer. Go to the one who sent you hither and report what has transpired, goodbye and thank you!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
