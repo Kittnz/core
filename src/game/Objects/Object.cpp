@@ -3283,6 +3283,22 @@ FactionTemplateEntry const* WorldObject::GetFactionTemplateEntry() const
     return entry;
 }
 
+FactionEntry const* WorldObject::GetFactionEntry() const
+{
+    if (FactionTemplateEntry const* pTemplate = GetFactionTemplateEntry())
+        return sObjectMgr.GetFactionEntry(pTemplate->faction);
+
+    return nullptr;
+}
+
+uint32 WorldObject::GetFactionId() const
+{
+    if (FactionTemplateEntry const* pTemplate = GetFactionTemplateEntry())
+        return pTemplate->faction;
+
+    return 0;
+}
+
 // function based on function Unit::UnitReaction from 13850 client
 ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
 {
