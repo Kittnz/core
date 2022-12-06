@@ -282,9 +282,6 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     if (getPetType() == SUMMON_PET)
         petlevel = owner->GetLevel();
 
-    if (owner->IsPvP())
-        SetPvP(true);
-
     SetCanModifyStats(true);
     InitStatsForLevel(petlevel);
     SetUInt32Value(UNIT_FIELD_PET_NAME_TIMESTAMP, uint32(time(nullptr)));
@@ -419,6 +416,9 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         else
             RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
     }
+
+    if (owner->IsPvP())
+        SetPvP(true);
 
     // Save pet for resurrection by spirit healer.
     if (IsPermanentPetFor(owner))
