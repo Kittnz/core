@@ -19,3 +19,6 @@ DELETE FROM creature_battleground WHERE guid=2573807;
 
 -- Changes by TAMMO
 UPDATE creature SET position_x = '-8889.406250', position_y = '-6451.041992', position_z = '7.606648', orientation = '4.698856' WHERE guid = '2573745';
+
+-- Changes by SHANG
+REPLACE INTO `gameobject` VALUES ( 5012036, 2010973, 1, -7931.5, -6517.04, 14.9322, 4.50537, 0, 0, 0.776384, -0.63026, 300, 300, 100, 1, 0, 0);
