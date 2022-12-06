@@ -128,6 +128,7 @@ class Spell;
 
 typedef std::unordered_map<Player *, UpdateData> UpdateDataMapType;
 struct FactionTemplateEntry;
+struct FactionEntry;
 
 //use this class to measure time between world update ticks
 //essential for units updating their spells after cells become active
@@ -973,6 +974,8 @@ class WorldObject : public Object
         virtual bool IsFriendlyTo(WorldObject const* target) const =0;
         virtual uint32 GetFactionTemplateId() const = 0;
         FactionTemplateEntry const* GetFactionTemplateEntry() const;
+        FactionEntry const* GetFactionEntry() const;
+        uint32 GetFactionId() const;
         virtual ReputationRank GetReactionTo(WorldObject const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target);
         bool IsValidAttackTarget(Unit const* target, bool checkAlive = true) const;
