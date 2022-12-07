@@ -2105,20 +2105,28 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
 
 void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 removeEntry = 0, uint32 count = 0)
 {
-    if(player->IsMounted())
-        player->Unmount();
-
-    player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
-    player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
-    player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
-    player->SetFlying(true);
-    if (removeEntry)
+    player->SetClientControl(player, 0);
+    if (player->IsMounted())
     {
-        player->DestroyItemCount(removeEntry, count ? count : 1, true);
-        player->SaveInventoryAndGoldToDB();
+        player->Unmount();
+        player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
     }
-    player->InterruptNonMeleeSpells(true);
-    player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+
+    player->m_Events.AddLambdaEventAtOffset([player, removeEntry, mountDisplay, count, duration]()
+        {
+            player->SetClientControl(player, 1);
+            player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
+            player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
+            player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
+            player->SetFlying(true);
+            if (removeEntry)
+            {
+                player->DestroyItemCount(removeEntry, count ? count : 1, true);
+                player->SaveInventoryAndGoldToDB();
+            }
+            player->InterruptNonMeleeSpells(true);
+            player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+        }, 1500);
 }
 
 bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
