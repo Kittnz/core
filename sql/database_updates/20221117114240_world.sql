@@ -482,10 +482,10 @@ replace into creature_questrelation		(id, quest) values (61101, 40755);
 replace into creature_involvedrelation	(id, quest) values (61101, 40755);
 
 replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
-(60991,17881,'Screwfuse 1000',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+(60991,7840,'Screwfuse 1000',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 REPLACE INTO gameobject_template VALUES
-(2010973, 3, 25847, 'Screwfuse 1000', 0, 4, 1, 43, 2010973, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+(2010973, 3, 25847, 'Screwfuse 1000', 0, 4, 0.6, 43, 2010973, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
 
 replace into gameobject_loot_template values
 (2010973,60991,-100,0,1,1,0);
@@ -528,7 +528,7 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (60994,13709,'Blighted Essence',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 replace into creature_loot_template values
-(8521, 60994, -20, 0, 1, 1, 0);
+(8521, 60994, -50, 0, 1, 1, 0);
 
 -- Operation Return to Screwfuse
 delete from quest_template where entry = 40759;
@@ -653,26 +653,3 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
 
--- REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`, `sound_id`, `language_id`, `emote_id1`, `emote_id2`, `emote_id3`, `emote_delay1`, `emote_delay2`, `emote_delay3`) VALUES
--- (30053, 'Shade of the Senshi: I am… free. The dark Kami\'s vile hold over me is gone. I can ill repay this debt stranger, I thank you from the deepest recess of my soul. You may use my house as you see fit. I shan\'t be needing it any longer. Go to the one who sent you hither and report what has transpired, goodbye and thank you!', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0);
--- 
--- delete from creature_ai_scripts where id = 2200027;
--- REPLACE INTO `creature_ai_scripts` (`id`, `delay`, `priority`, `command`, `datalong`, `datalong2`, `datalong3`, `datalong4`, `target_param1`, `target_param2`, `target_type`, `data_flags`, `dataint`, `dataint2`, `dataint3`, `dataint4`, `x`, `y`, `z`, `o`, `condition_id`, `comments`) VALUES
--- (2200027, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30053, 0, 0, 0, 0, 0, 0, 0, 0, 'Shade of the Senshi - Say On Spawn');
--- 
--- delete from creature_ai_events where id = 2200027;
--- REPLACE INTO `creature_ai_events` (`id`, `creature_id`, `condition_id`, `event_type`, `event_inverse_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action1_script`, `action2_script`, `action3_script`, `comment`) VALUES
--- (2200027, 61120, 0, 11, 0, 100, 1, 0, 0, 0, 0, 2200027, 0, 0, 'Shade of the Senshi - Say On Spawn');
-
--- When the brazier is used, it should burn for a few seconds, afterwards spawn npc 'Shade of the Temptress' at the coordinates (Map 1, X:-9039.6689, Y:-7196.9521, Z:9.0471, Orientation: 3.2133)
-
--- Have npc 'Shade of the Temptress' say the following line 2 seconds after spawning
--- Shade of the Temptress: You dare interfere with my prey? She is mine! After I am done with her, you’re next!
--- Upon her death she will say:
--- Shade of the Temptress: This isn't over! I will find you one day…And your soul will be the price for the one you stole today.
-
--- After the shade is killed, spawn the npc Shade of the Senshi at the same coordinates as above, wait 3 seconds, and have shade of senshi say the following line.
--- Shade of the Senshi: I am… free. The dark Kami’s vile hold over me is gone. I can ill repay this debt stranger, I thank you from the deepest recess of my soul. You may use my house as you see fit. I shan't be needing it any longer. Go to the one who sent you hither and report what has transpired, goodbye and thank you!
--- She will despawn after 10 seconds.
-
--- ((If Shade of the Temptress is not engaged in combat for 10 seconds, despawn the npc))
