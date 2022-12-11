@@ -161,3 +161,6 @@ REPLACE INTO `creature` VALUES (2573894,721,0,0,0,813,-2722.99,932.566,82.3034,1
 
 -- Changes by DRAGUNOVI
 REPLACE INTO `gameobject` VALUES ( 5012170, 324, 0, -8030.59, -2110.65, 123.05, 6.15235, 0, 0, 0.0653689, -0.997861, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012170';
+DELETE FROM game_event_gameobject WHERE guid = '5012170';
+DELETE FROM gameobject_battleground WHERE guid = '5012170';
