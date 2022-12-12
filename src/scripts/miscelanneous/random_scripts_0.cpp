@@ -2584,6 +2584,7 @@ namespace ExileRegret
 {
     constexpr uint32 SenshiBonesEntry = 0;
     constexpr uint32 ShadeOfTemptressEntry = 61119;
+    constexpr uint32 ShadeOfSenshiEntry = 61120;
 
     struct gameobject_brazier_exile_regret_questAI : public GameObjectAI
     {
@@ -2592,7 +2593,7 @@ namespace ExileRegret
         bool OnUse(Unit* user) override
         {
             me->m_Events.AddLambdaEventAtOffset([this]() {
-                me->SummonCreature(ShadeOfTemptressEntry, -9039.f, -7196.f, 9.05f, 3.21f);
+                me->SummonCreature(ShadeOfTemptressEntry, -9039.f, -7196.f, 9.05f, 3.21f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 10000);
                 }, 3000);
             return true;
         }
@@ -2603,7 +2604,6 @@ namespace ExileRegret
         npc_shade_of_temptress_exile_regretAI(Creature* creature) : ScriptedAI(creature) { Reset(); }
 
         bool firstSummon = true;
-        uint32 DespawnTimer = 10 * IN_MILLISECONDS;
 
         //cant use JustSummoned cause thats only for Creatures for some reason. Scripting system is ass.
         void Reset() override
@@ -2621,25 +2621,10 @@ namespace ExileRegret
         {
             me->MonsterSay("This isn’t over! I will find you one day…And your soul will be the price for the one you stole today.");
             me->m_Events.AddLambdaEventAtOffset([this]() {
-
+                me->SummonCreature(ShadeOfSenshiEntry, -9039.f, -7196.f, 9.05f, 3.21f);
                 }, 3000);
         }
 
-        void UpdateAI(const uint32 diff) override
-        {
-            if (!me->SelectHostileTarget() || !me->GetVictim())
-            {
-                if (DespawnTimer <= diff)
-                {
-                    me->ForcedDespawn();
-                    return;
-                }
-                else
-                    DespawnTimer -= diff;
-            }
-
-            DespawnTimer = 10 * IN_MILLISECONDS;
-        }
     };
 
     struct npc_shade_of_senshi_exile_regretAI : public ScriptedAI
