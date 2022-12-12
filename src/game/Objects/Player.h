@@ -1555,7 +1555,6 @@ class Player final: public Unit
         void DropModCharge(SpellModifier* mod, Spell* spell);
 
         std::vector<ItemSetEffect*> m_ItemSetEff;
-        uint32 m_castingSpell; // Last spell cast by client, or combo points if player is rogue
 
         /*********************************************************/
         /***                   TALENT SYSTEM                   ***/

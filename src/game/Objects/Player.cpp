@@ -469,7 +469,7 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
-    m_currentTicketCounter(0), m_castingSpell(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
+    m_currentTicketCounter(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _transmogMgr(new TransmogMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
