@@ -611,7 +611,7 @@ class ChatHandler
         char* ExtractKeyFromLink(char** text, char const* const* linkTypes, int* found_idx = nullptr, char** something1 = nullptr);
         bool  ExtractUint32KeyFromLink(char** text, char const* linkType, uint32& value);
 
-        uint32 ExtractAccountId(char** args, std::string* accountName = nullptr, Player** targetIfNullArg = nullptr);
+        uint32 ExtractAccountId(char** args, std::string* accountName = nullptr, Player** targetIfNullArg = nullptr, bool checkAccountId = true);
         uint32 ExtractSpellIdFromLink(char** text);
         ObjectGuid ExtractGuidFromLink(char** text);
         GameTele const* ExtractGameTeleFromLink(char** text);

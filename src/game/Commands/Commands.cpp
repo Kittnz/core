@@ -13133,7 +13133,7 @@ bool ChatHandler::HandleBalanceCommand(char* args)
     }
 
     uint32 account_id;
-    account_id = ExtractAccountId(&c_account_name, &account_name);
+    account_id = ExtractAccountId(&c_account_name, &account_name, nullptr, false);
     int32 coins = (int32)atoi(args);
 
     if (!coins || !account_id)
