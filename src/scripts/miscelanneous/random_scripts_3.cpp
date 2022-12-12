@@ -5540,6 +5540,31 @@ bool GossipSelect_npc_gelweg_darkbrow(Player* pPlayer, Creature* pCreature, uint
     return true;
 }
 
+bool GossipHello_npc_nibu(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40771) == QUEST_STATUS_INCOMPLETE) // The Missing Friend!
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Nibu, you are free, return to Ebu!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(61157, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_nibu(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60014); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    return true;
+}
 
 //bool GOHello_go_incense_brazier(Player* pPlayer, GameObject* pGo)
 //{
@@ -5643,6 +5668,12 @@ void AddSC_random_scripts_3()
     //newscript->pGOHello = &GOHello_go_incense_brazier;
     //newscript->pGOGossipSelect = &GOSelect_go_incense_brazier;
     //newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_nibu";
+    newscript->pGossipHello = &GossipHello_npc_nibu;
+    newscript->pGossipSelect = &GossipSelect_npc_nibu;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_gelweg_darkbrow";
