@@ -2995,7 +2995,7 @@ bool ChatHandler::ExtractPlayerTarget(char** args, Player** player /*= nullptr*/
     return true;
 }
 
-uint32 ChatHandler::ExtractAccountId(char** args, std::string* accountName /*= nullptr*/, Player** targetIfNullArg /*= nullptr*/)
+uint32 ChatHandler::ExtractAccountId(char** args, std::string* accountName /*= nullptr*/, Player** targetIfNullArg /*= nullptr*/, bool checkAccountId)
 {
     uint32 account_id = 0;
 
@@ -3025,7 +3025,7 @@ uint32 ChatHandler::ExtractAccountId(char** args, std::string* accountName /*= n
 
     std::string account_name;
 
-    if (ExtractUInt32(&account_str, account_id))
+    if (checkAccountId && ExtractUInt32(&account_str, account_id))
     {
         if (!sAccountMgr.GetName(account_id, account_name))
         {
