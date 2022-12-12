@@ -3941,3 +3941,50 @@ values (@spell_list_id, @description,
 @spellid_8, @probability_8, @casttarget_8, @castflags_8, @delayinitialmin_8, @delayinitialmax_8, @delayrepeatmin_8, @delayrepeatmax_8);
 -- NPC 'Mini Krampus' change display ID to 19112.
 update creature_template set display_id1 = 19112 where entry = 50037;
+-- Incorrect syntax error for npcs Krampus (61137) and Mini Krampus (50037).
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(19112, 0, 0, 0, 0);
+-- Change subname of Soalara Dawnstar to <Silvermoon Remnant Quartermaster>.
+update creature_template set subname = 'Silvermoon Remnant Quartermaster' where entry = 80266;
+-- Change subname of Tan'Pogo to <Revantusk Trolls Quartermaster>.
+update creature_template set subname = 'Revantusk Trolls Quartermaster' where entry = 80915;
+-- Change subname of Alinerenah Sunsparrow to <Alliance Cloth Quartermaster>, Remove Vendor Flags from Reolis Riptusk, Alinerenah Sunsparrow. Change subname of Reolis Riptusk to <Horde Cloth Quartermaster>.
+update creature_template set subname = 'Horde Cloth Quartermaster', npc_flags = 3 where entry = 80807;
+update creature_template set subname = 'Alliance Cloth Quartermaster', npc_flags = 3 where entry = 80459;
+-- REMOVE ALL ITEMS from Soalara Dawnstar, Alinerenah, Tan'Pogo, and Reolis Riptusk vendor tables.
+delete from npc_vendor where entry in (80266,80915,80807,80459);
+-- Add items to Soalara Dawnstar Vendor Table.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80524, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80523, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80525, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80522, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80526, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80317, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80537, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80546, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80502, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80504, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80501, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80500, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80503, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80266, 80536, 0, 0, 0, 0);
+-- Add items to Tan'Pogo Vendor Table.
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80612, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80616, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80615, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80613, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80614, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80605, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80606, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 81098, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80646, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80638, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80602, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80600, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80603, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80604, 0, 0, 0, 0);
+REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`, `condition_id`) VALUES (80915, 80636, 0, 0, 0, 0);
+-- Set the following guid respawn times to 2700 seconds.
+update gameobject set spawntimesecsmin = 2700, spawntimesecsmax = 2700 where guid in (5012171,5012172,5012173,5012175,5012176,5012177,5012178,5012179,5012180,5012181,5012182,5012183,5012184,5012185,5012186,5012187,5012188,5012189,5012191,5012192,5012193,5012194,5012195,5012196,5012197,5012198,5012199,5012200,5012201,5012202,5012203,5012204,5012205,5012207,5012208,5012209,5012210,5012211,5012212,5012213,5012214,5012215,5012216,5012217,5012218,5012219);
+-- Weapon Techrifle X-TREME 5200 change to ranged (right).
+update item_template set inventory_type = 26 where entry = 60545;
