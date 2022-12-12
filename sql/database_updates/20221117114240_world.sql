@@ -653,3 +653,186 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '70', '0', '0', '0', '0', '29', '0', '0', '0',
  '0', '1', NULL);
 
+-- An Opportunity to Dig Deep
+delete from quest_template where entry = 40763;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40763,2,5121,57,54,0,0,'An Opportunity to Dig Deep','Yo $r, fancy seeing a capable adventurer out here! Interested in some work? You see, when Tel co. came here, this place was deserted. Just monkeys and bananas.\n\nBut that wasn\'t the case before, you know? Thousands of years ago, this island was a mountain range on the border of nations, and there\'s sure to be riches hidden here. To begin with, my surveyors have discovered some ancient Zandalari ruins on the northern coast dating back over ten thousand years.\n\nThe ruins are infested with the restless ghosts, as a muscle, go there and slay those ghosts, and bring any tablets and writing you find. I\'ll make it worth your time, promise, yeah?','Slay 8 Spiritual Wanderers, and collect 4 Ancient Troll Tablets for Archaeologist Trixia Goldspark at Tel Co. Bacecamp in Tel\'Abim.','Well, how did it go?','This is a nice haul and the ghosts are gone, yeah? I will order the crew to start diggin\' once we make sure there\'s no further complications. Now let\'s see about these texts... Hmm, very fascinating! $r I may need your assistance again.',61071,4,0,0,0,0,0,0, 61094,8,0,0,0,0,0,0, 0,0, 0,4875,470,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61117, 40763);
+replace into creature_involvedrelation	(id, quest) values (61117, 40763);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61071,23149,'Ancient Troll Tablet',12,1,2048,1,-1,-1,1,4,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010976, 3, 5, 'Ancient Troll Tablet', 0, 4, 1, 43, 2010976, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010976,61071,-100,0,1,1,0);
+
+update gameobject set spawntimesecsmin = 60, spawntimesecsmax = 60 where id = 2010976;
+
+-- Azotha Gold
+delete from quest_template where entry = 40764;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40763,40764,2,5121,57,54,0,0,'Azotha Gold','Ten thousand years ago, the Zandalari were competing against a civilization known as the Azotha. Their struggle was put at an end when the world was shattered, and oceans swallowed a large chunk of the ancestral landmass. Tel\'Abim just happens to be a region where the two clashed.\n\nThe Trolls seem to have lost the skirmish referenced on this tablet, and it mentions Trolls being sacrificed to the gods at the ritual site, their riches buried. This means there could be GOLD buried under this ritual site! And we may even have found it.\n\nHead to the western-most isle of the Jagged isles and search for an obvious ritual site, when you find it, start digging!','Dig around the ritual site and find the Azotha Ritual Cache for Archaeologist Trixia Goldspark at Tel Co. Basecamp in Tel\'Abim.','Well? Don\'t keep me in suspense, did ya do it?','Hoo mama! This is what I\'m talkin\' about! This haul will earn us lots of prestige and accolades. This is both Azotha, Troll, and  gold from other civilizations they must have buried here! You deserve your share for sure! We may work again in the future, you\'ve certainly been useful!',61072,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 50000,4500,470,250,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61117, 40764);
+replace into creature_involvedrelation	(id, quest) values (61117, 40764);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61072,7914,'Azotha Ritual Cache',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+REPLACE INTO gameobject_template VALUES
+(2010977, 3, 49, 'Ancient Dirt Mound', 0, 4, 1, 43, 2010977, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, '');
+
+replace into gameobject_loot_template values
+(2010977,61072,-20,0,1,1,0);
+
+-- Finding Bixxle!
+delete from quest_template where entry = 40765;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40765,2,5121,56,48,0,0,'Finding Bixxle!','We lost our communication with the Derelict Camp and Bixxle\'s Storehouse a few weeks ago. Bixxle\'s Storehouse was the key to profit for our northern harvesting. If we are ever to start up again, I need to know that the place isn\'t a wreck and covered in monkeys.\n\nMore importantly, Bixxle was a logistical mastermind, as much as his focus tends to drift towards engineering useless contraptions.\n\nHead far to the north, to Bixxle\'s Storehouse, follow the road, it should take you right to it, see if Bixxle is alive.','Head to Bixxle\'s Storehouse in Northern Tel\'Abim and report to Bixxle if he is still alive.','Yes?','Huh, Telraz sent you? I was wondering when he would check in, I guess everything has gotten quite crazy around here after all!',0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,650,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61102, 40765);
+replace into creature_involvedrelation	(id, quest) values (61101, 40765);
+
+-- A Report From Bixxle
+delete from quest_template where entry = 40766;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (40765,40766,2,5121,56,48,0,0,'A Report From Bixxle','Well, here we are, still very much alive and kicking. We did have our fair share of encounters with the local wildlife.\n\nI prepared a report to Baron Telraz, bring it back to Tel Co. Basecamp, it\'ll let him know we\'re still kicking up here, whenever he brings in the big guns to clean things up.','Bring Bixxle\'s Report to Baron Telraz at the Tel Co. Basecamp in Tel\'Abim.','So, have you heard news from Bixxle\'s Storehouse?','A report from Bixxle himself? Give me that!/n/n<Baron Telraz frantically reads the letter with utmost curiosity, letting out a sigh of relief.>\n\nMy, that certainly is a relief, without Bixxle I would have no idea how to manage things up there.\n\nThanks for the work kid, here, take some coins for the hassle of running around.',61073,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61073,1, 1500,1400,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61101, 40766);
+replace into creature_involvedrelation	(id, quest) values (61102, 40766);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61073,8927,'Bixxle\'s Report',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
+
+-- Final Flight of the Venomflayer
+delete from quest_template where entry = 40767;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40767,2,5121,58,50,512,0,'Final Flight of the Venomflayer','Hey there pal, you mind lending a hand?\n\nWe got all sorts of trouble with these Venomflayers lurking in the area, hell they are already responsible for a few of our casualties. If you could do me a favor and rid the local jungle of a few of \'em, that\'d make our lives a whole lot easier.\n\n\You can find them pretty much all over to the west, and south west, remove twelve of them, and return to me when you\'re done.','Slay 12 Venomflayer Serpents for Zalwiz Hardlug at Bixxle\'s Storehouse in Tel\'Abim.','You got rid of those critters yet?','My my, you sure are resourceful, I didn\'t expect you to get it done so quick.\n\nHere, take this, we have a bunch of spare ones laying around now that the enforcers took off and left south.',0,0,0,0,0,0,0,0, 61096,12,0,0,0,0,0,0, 0,0, 0,5200,0,0,0,0,0,0,0,0,0,0,0, 61074,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61105, 40767);
+replace into creature_involvedrelation	(id, quest) values (61105, 40767);
+
+replace into item_template values
+ ('61074', '2', '5', 'Enforcer\'s Maul', '', '28691', '2', '0', '1', '203448', '50862', '17', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '26', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '3000', '0',
+ '0', '92', '183', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '1', '0', '0', '85', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Intercepting Wavecrest
+delete from quest_template where entry = 40768;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40768,2,5121,58,50,512,0,'Intercepting Wavecrest','Each day more and more Naga take to the shores of the surrounding islands, they are gathering and for what purpose I do not know.\n\nI would rather have them dealt with now, than in a week when there are hundreds of them. I have heard tales of just how quick they can infest an area with their presence.\n\nYou can find them all around the surrounding Jagged Isles to the north, find them, and kill them, bring me twenty of their scales as proof.','','','',61075,20,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,5400,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 61076,1,61077,1,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61105, 40768);
+replace into creature_involvedrelation	(id, quest) values (61105, 40768);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61075,21835,'Hatecrest Scale',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(61130, 61075, -70, 0, 1, 1, 0),
+(61131, 61075, -70, 0, 1, 1, 0);
+
+replace into item_template values
+ ('61076', '4', '1', 'Sash of Goblin Luck', '', '27614', '2', '0', '1', '30776', '7694', '6', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '5', '6', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '41', '0', '0', '0',
+ '0', '0', '0', '18384', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '25', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61077', '4', '1', 'Island Dungarees', '', '18911', '2', '0', '1', '61820', '15455', '7', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '3', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '66', '0', '0', '0',
+ '0', '0', '0', '21637', '1', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '7', '0', '0', '0', '55', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Chillwind Armor
+delete from quest_template where entry = 40769;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40769,2,5121,56,48,512,0,'Chillwind Armor','It has been a long time since I worked on anything worthwhile, and let me tell you, I am desperate for some real work. I have been stranded here on Tel\'Abim to be nothing more than a glorified repairman now for a while.\n\nMy inner blacksmith calls to me, and I want to work on something unique before I go insane. Long ago when I worked at Everlook I was fascinated with the Chillwind Chimaera, extremely powerful creatures that roamed the snowy tundras.\n\nThere were rumors floating around about rare Frostwoven horns that have been growing on a few of the creatures, I\'d like to get my hands on one, and harness it into armor, think you can do that for me? You can find Chillwind Chimaera out in Winterspring, far to the north of here.','Slay Chillwind Chimaera and collect a Frostwoven Chillwind Horn for Razin Brasslight at Bixxle\'s Storehouse in Tel\'Abim.','You had any luck yet, or you here looking for a coat to brave the cold weather?','Well, this certainly is a rarity, while you were gone I thought of a few ideas that could work to incorporate the horn into armor, and I believe I have come up with the perfect idea.\n\nTake this, as a thanks for the assistance!',61078,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0, 0,5250,0,0,0,0,0,0,0,0,0,0,0, 61079,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61106, 40769);
+replace into creature_involvedrelation	(id, quest) values (61106, 40769);
+
+replace into item_template (entry, display_id, name, class, quality, flags, buy_count, allowable_class, allowable_race, item_level, stackable, spellcooldown_1, spellcategorycooldown_1, spellcooldown_2, spellcategorycooldown_2, bonding, description, page_text) values
+(61078,3737,'Frostwoven Chillwind Horn',12,1,2048,1,-1,-1,1,20,-1,-1,-1,-1,4,'',0);
+
+replace into creature_loot_template values
+(7447, 61078, -15, 0, 1, 1, 0),
+(7448, 61078, -25, 0, 1, 1, 0),
+(7449, 61078, -33, 0, 1, 1, 0);
+
+replace into item_template values
+ ('61079', '4', '4', 'Chillwind Armor', '', '25676', '2', '0', '1', '62656', '15664', '5', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '12', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '520', '0', '0', '0',
+ '5', '0', '0', '3132', '2', '0', '2', '30000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '6', '0', '0', '0', '115', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+-- Murloc-Monkey Wars
+delete from quest_template where entry = 40770;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40770,2,5121,58,50,0,0,'Murloc-Monkey Wars','Ebu helps protect tribe, tribe in danger! Long time monkey fight murloc, murloc always near monkey, always attack monkey. I keep us safe, and I fight murloc.\n\nMaybe you fight murloc too? Kill big murloc too, for Ebu, and friends, we thank you for help!','Slay 8 Spitefin Tidehunters, 6 Spitefin Wavecreepers, 4 Spitefin Oracles, and Glrgbl for Ebu at The Jagged Isles in Tel\'Abim.','You hurt murloc, beat murloc?','You help Ebu!\n\nMonkeys thank you, we thank you yes yes!',0,0,0,0,0,0,0,0, 61086,8,61087,6,61088,4,61089,1, 0,0, 0,5850,0,0,0,0,0,0,0,0,0,0,0, 60954,5,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61126, 40770);
+replace into creature_involvedrelation	(id, quest) values (61126, 40770);
+
+-- The Missing Friend!
+delete from quest_template where entry = 40771;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40771,2,5121,58,50,512,0,'The Missing Friend!','Friend stolen from tribe, murlocs stole friend, you help us, yes?\n\nFriend near murloc camp, recover friend, save friend from murlocs, before too late! You do yes, you help yes? Nibu strong monkey, save Nibu, help tribe!','Save Nibu from the murloc camps on The Jagged Isles for Ebu in Tel\'Abim.','You find Nibu, you save Nibu?','Ebu thank you, ebu give you biggest gift of all.\n\nFrom us here, we thank you for everything!',0,0,0,0,0,0,0,0, 60014,1,0,0,0,0,0,0, 0,0, 0,5850,0,0,0,0,0,0,0,0,0,0,0, 61080,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'Save Nibu');
+
+replace into creature_questrelation		(id, quest) values (61126, 40771);
+replace into creature_involvedrelation	(id, quest) values (61126, 40771);
+
+REPLACE INTO creature_template VALUES (60014, 328, 0, 0, 0, 0, 'quest_40771_dummy_triger', NULL, 0, 1, 1, 0, 0, 0, 0, 0, 35, 0, 1, 1.14286, 1, 20, 5, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, '', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+
+replace into item_template values
+ ('61080', '4', '0', 'Ebu\'s Lucky Banana', '', '6420', '2', '0', '1', '10000', '2500', '12', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '10',
+ '0', '0', '0', '21596', '1', '0', '0', '-1', '0', '-1', '13669', '1', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+replace into item_template values
+ ('61081', '0', '0', 'Gift of Ferocity', 'Blessed by Cenarius, this gift beholds the sheer ferocity of nature itself.', '20220', '3', '0', '1', '40000', '10000', '0', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '1', '1', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '45739', '0', '-1', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '1', NULL);
+
+-- The Abominable Yeti
+delete from quest_template where entry = 40772;
+replace into quest_template (prevquestid, entry, method, zoneorsort, questlevel, minlevel, questflags, specialflags, title, details, objectives, requestitemstext, offerrewardtext, reqitemid1, reqitemcount1, reqitemid2, reqitemcount2, reqitemid3, reqitemcount3, reqitemid4, reqitemcount4, reqcreatureorgoid1, reqcreatureorgocount1, reqcreatureorgoid2, reqcreatureorgocount2, reqcreatureorgoid3, reqcreatureorgocount3, reqcreatureorgoid4, reqcreatureorgocount4, srcitemid, srcitemcount, reworreqmoney, rewxp, rewrepfaction1, rewrepvalue1,  rewrepfaction2, rewrepvalue2, rewrepfaction3, rewrepvalue3, rewrepfaction4, rewrepvalue4, rewspell, rewspellcast, completeemote, rewitemid1, rewitemcount1, rewitemid2, rewitemcount2, rewitemid3, rewitemcount3, rewitemid4, rewitemcount4, rewchoiceitemid1, rewchoiceitemcount1, rewchoiceitemid2, rewchoiceitemcount2, rewchoiceitemid3, rewchoiceitemcount3, rewchoiceitemid4, rewchoiceitemcount4,requiredminrepfaction,requiredminrepvalue,objectivetext1) values (0,40772,2,5130,60,50,0,0,'The Abominable Yeti','Not all of us yetis are evil, there was a time when my kind stood along side the great tree and offered presents to the denizens of Azeroth. Such a time has passed, and many of the yeti now walk a darker path.\n\nTo the south is their den, to which they house the evil Snowball, uttering such a name chills even me. I desire you to lessen their ranks, and to let those that celebrate do so in peace without the worry of evil undoing good.','Slay 8 Abominable Snow Yeti for Coldhowl in Winter Veil Vale.','I warn you friend, to bring help, they are strong, and tough opponants.','Excellent work! You might have saved the holiday season! Now many of us can sleep easy knowing that there is less evil lurking about, and for that, I want to thank you, personally.\n\nTake this, may it help you in the coldest of places.',0,0,0,0,0,0,0,0, 61135,8,0,0,0,0,0,0, 0,0, 0,5000,0,0,0,0,0,0,0,0,0,0,0, 61082,1,0,0,0,0,0,0, 0,0,0,0,0,0,0,0, 0,0,'');
+
+replace into creature_questrelation		(id, quest) values (61136, 40772);
+replace into creature_involvedrelation	(id, quest) values (61136, 40772);
+
+replace into item_template values
+ ('61082', '4', '0', 'Coldhowl\'s Necklace', 'A memento of the Snow Yeti.', '9852', '2', '0', '1', '35864', '8966', '2', '-1', '-1', '60',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '7', '15', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '5', '0', '0', '28766', '0', '0', '0', '180000', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '4', '0', '0', '0', '0', '0', '0', '0', '0', '29', '0', '0', '0',
+ '0', '1', NULL);
+
+
+
