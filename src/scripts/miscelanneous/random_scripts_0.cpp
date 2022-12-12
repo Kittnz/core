@@ -2594,6 +2594,7 @@ namespace ExileRegret
             me->m_Events.AddLambdaEventAtOffset([this]() {
                 me->SummonCreature(ShadeOfTemptressEntry, -9039.f, -7196.f, 9.05f, 3.21f);
                 }, 3000);
+            return true;
         }
     };
 
