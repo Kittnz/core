@@ -2580,6 +2580,108 @@ CreatureAI* GetAI_npc_training_dummy(Creature* pCreature)
     return new npc_training_dummyAI(pCreature);
 }
 
+namespace ExileRegret
+{
+    constexpr uint32 SenshiBonesEntry = 0;
+    constexpr uint32 ShadeOfTemptressEntry = 61119;
+
+    struct gameobject_brazier_exile_regret_questAI : public GameObjectAI
+    {
+        explicit gameobject_brazier_exile_regret_questAI(GameObject* go) : GameObjectAI(go) {}
+
+        bool OnUse(Unit* user) override
+        {
+            me->m_Events.AddLambdaEventAtOffset([this]() {
+                me->SummonCreature(ShadeOfTemptressEntry, -9039.f, -7196.f, 9.05f, 3.21f);
+                }, 3000);
+        }
+    };
+
+    struct npc_shade_of_temptress_exile_regretAI : public ScriptedAI
+    {
+        npc_shade_of_temptress_exile_regretAI(Creature* creature) : ScriptedAI(creature) { Reset(); }
+
+        bool firstSummon = true;
+        uint32 DespawnTimer = 10 * IN_MILLISECONDS;
+
+        //cant use JustSummoned cause thats only for Creatures for some reason. Scripting system is ass.
+        void Reset() override
+        {
+            if (!firstSummon)
+                return;
+
+            firstSummon = false;
+            me->m_Events.AddLambdaEventAtOffset([this]() {
+                me->MonsterYell("You dare interfere with my prey? She is mine! After I am done with her, you’re next!");
+                }, 2000);
+        }
+
+        void JustDied(Unit*) override
+        {
+            me->MonsterSay("This isn’t over! I will find you one day…And your soul will be the price for the one you stole today.");
+            me->m_Events.AddLambdaEventAtOffset([this]() {
+
+                }, 3000);
+        }
+
+        void UpdateAI(const uint32 diff) override
+        {
+            if (!me->SelectHostileTarget() || !me->GetVictim())
+            {
+                if (DespawnTimer <= diff)
+                {
+                    me->ForcedDespawn();
+                    return;
+                }
+                else
+                    DespawnTimer -= diff;
+            }
+
+            DespawnTimer = 10 * IN_MILLISECONDS;
+        }
+    };
+
+    struct npc_shade_of_senshi_exile_regretAI : public ScriptedAI
+    {
+        npc_shade_of_senshi_exile_regretAI(Creature* creature) : ScriptedAI(creature) {}
+
+        void Reset() override
+        {
+        }
+
+        void JustSummoned(Creature*) override
+        {
+            me->m_Events.AddLambdaEventAtOffset([this]() {
+                me->MonsterSay("I am… free. The dark Kami’s vile hold over me is gone. I can ill repay this debt stranger, I thank you from "
+                    "the deepest recess of my soul. You may use my house as you see fit. I shan't be needing it any longer. "
+                    "Go to the one who sent you hither and report what has transpired, goodbye and thank you!");
+                }, 3000);
+
+            me->m_Events.AddLambdaEventAtOffset([this]() {
+                me->ForcedDespawn();
+                }, 13000);
+        }
+    };
+
+}
+
+GameObjectAI* GetAI_gameobject_brazier_exile_regret(GameObject* gameobject)
+{
+    return new ExileRegret::gameobject_brazier_exile_regret_questAI(gameobject);
+}
+
+CreatureAI* GetAI_npc_shade_of_temptress_exile_regret(Creature* creature)
+{
+    return new ExileRegret::npc_shade_of_temptress_exile_regretAI(creature);
+}
+
+CreatureAI* GetAI_npc_shade_of_senshi_exile_regret(Creature* creature)
+{
+    return new ExileRegret::npc_shade_of_senshi_exile_regretAI(creature);
+}
+
+
+
 void AddSC_random_scripts_0()
 {
     Script *newscript;
@@ -2588,6 +2690,22 @@ void AddSC_random_scripts_0()
     newscript->Name = "custom_npc_training_dummy";
     newscript->GetAI = &GetAI_npc_training_dummy;
     newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "brazier_exile_regret";
+    newscript->GOGetAI = &GetAI_gameobject_brazier_exile_regret;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_shade_of_temptress";
+    newscript->GetAI = &GetAI_npc_shade_of_temptress_exile_regret;
+    newscript->RegisterSelf(false);
+
+    newscript = new Script;
+    newscript->Name = "npc_shade_of_senshi";
+    newscript->GetAI = &GetAI_npc_shade_of_senshi_exile_regret;
+    newscript->RegisterSelf(false);
+
 
     newscript = new Script;
     newscript->Name = "npc_chicken_cluck";
