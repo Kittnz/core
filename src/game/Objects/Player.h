@@ -68,6 +68,7 @@ class MapReference;
 static constexpr uint8 PLAYER_MAX_SKILLS = 127;
 constexpr uint8 PLAYER_EXPLORED_ZONES_SIZE = 64;
 constexpr uint32 CORPSE_REPOP_TIME = (6 * MINUTE * IN_MILLISECONDS);
+constexpr uint32 CAMERA_UPDATE_DELAY = 200;
 
 // Note: SPELLMOD_* values is aura types in fact
 enum SpellModType
@@ -1816,6 +1817,8 @@ class Player final: public Unit
         float  m_summon_z;
 
         Camera m_camera;
+        ObjectGuid m_pendingCameraUpdate;
+        uint32 m_cameraUpdateTimer;
         float m_longSightRange;
         uint32 m_longSightSpell;
 
@@ -1939,6 +1942,7 @@ class Player final: public Unit
         void UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateData& data, std::set<WorldObject*>& visibleNow);
 
         Camera& GetCamera() { return m_camera; }
+        void ScheduleCameraUpdate(ObjectGuid guid);
 
         uint32 GetLongSight() const { return m_longSightSpell; }
         void SetLongSight(const Aura* aura = nullptr);
