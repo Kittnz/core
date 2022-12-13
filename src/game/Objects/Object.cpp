@@ -3226,7 +3226,7 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
         {
             if (Unit* magnet = magnetAura->GetCaster())
             {
-                if (magnet->IsAlive() && magnet->IsWithinLOSInMap(this) && spell->CheckTarget(magnet, eff))
+                if (magnet->IsAlive() && magnet->IsInMap(this) && spell->CheckTarget(magnet, eff))
                 {
                     if (SpellAuraHolder* holder = magnetAura->GetHolder())
                         if (holder->DropAuraCharge())
@@ -3281,6 +3281,22 @@ FactionTemplateEntry const* WorldObject::GetFactionTemplateEntry() const
         }
     }
     return entry;
+}
+
+FactionEntry const* WorldObject::GetFactionEntry() const
+{
+    if (FactionTemplateEntry const* pTemplate = GetFactionTemplateEntry())
+        return sObjectMgr.GetFactionEntry(pTemplate->faction);
+
+    return nullptr;
+}
+
+uint32 WorldObject::GetFactionId() const
+{
+    if (FactionTemplateEntry const* pTemplate = GetFactionTemplateEntry())
+        return pTemplate->faction;
+
+    return 0;
 }
 
 // function based on function Unit::UnitReaction from 13850 client

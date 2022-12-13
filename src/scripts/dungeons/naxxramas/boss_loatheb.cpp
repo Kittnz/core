@@ -401,7 +401,7 @@ struct boss_loathebAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit*, const SpellEntry* pSpell) override 
+    void SpellHit(WorldObject*, const SpellEntry* pSpell) override 
     {
         /* Loatheb does not automatically remove Vampiric Embrace before TBC, source: https://wowpedia.fandom.com/wiki/Loatheb_(Classic)
            Shadow priests are excellent for healing groups with current talents (as of 4 January 2007) as shown by Death and Taxes,

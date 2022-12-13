@@ -471,7 +471,7 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
-    m_currentTicketCounter(0), m_castingSpell(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
+    m_currentTicketCounter(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _transmogMgr(new TransmogMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
@@ -7774,6 +7774,13 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float c
         if (GetExtraAttacks() && spellInfo->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
             return;
 
+        if (HasSpellCooldown(spellData.SpellId))
+        {
+            if (chanceMultiplier > 1.0f)
+                Spell::SendCastResult(this, spellInfo, SPELL_FAILED_NOT_READY);
+            continue;
+        }
+
         float chance = (float)spellInfo->procChance;
 
         if (spellData.SpellPPMRate)
@@ -7785,6 +7792,8 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float c
 
         if (roll_chance_f(chance * chanceMultiplier))
             CastSpell(Target, spellInfo->Id, true, item);
+        else if (chanceMultiplier > 1.0f)
+            Spell::SendCastResult(this, spellInfo, SPELL_FAILED_TRY_AGAIN);
     }
 
     // item combat enchantments
@@ -21203,6 +21212,17 @@ void Player::ResummonPetTemporaryUnSummonedIfAny()
     m_temporaryUnsummonedPetNumber = 0;
 }
 
+bool Player::IsPetNeedBeTemporaryUnsummoned() const
+{
+    if (!IsInWorld() || !IsAlive() || IsTaxiFlying())
+        return true;
+
+    if (IsMounted() && sWorld.getConfig(CONFIG_BOOL_PET_UNSUMMON_AT_MOUNT))
+        return true;
+
+    return false;
+}
+
 void Player::_SaveBGData()
 {
     // nothing save
@@ -23583,4 +23603,19 @@ uint32 Player::GetTotalQuestCount()
     return std::count_if(mQuestStatus.begin(), mQuestStatus.end(), [](decltype(mQuestStatus)::value_type value) -> bool {
         return value.second.uState != QUEST_DELETED && value.second.m_rewarded;
     });
+}
+
+void Player::ClearTemporaryWarWithFactions()
+{
+    if (!m_temporaryAtWarFactions.empty())
+    {
+        for (auto const& factionId : m_temporaryAtWarFactions)
+        {
+            if (FactionEntry const* pFactionEntry = sObjectMgr.GetFactionEntry(factionId))
+                if (GetReputationMgr().GetRank(pFactionEntry) > REP_HOSTILE)
+                    if (GetReputationMgr().SetAtWar(pFactionEntry->reputationListID, false))
+                        SendFactionAtWar(pFactionEntry->reputationListID, false);
+        }
+        m_temporaryAtWarFactions.clear();
+    }
 }

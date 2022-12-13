@@ -796,7 +796,7 @@ enum SpellAttributesEx2
     SPELL_ATTR_EX2_HEALTH_FUNNEL              = 0x00000800,            // 11
     SPELL_ATTR_EX2_UNK12                      = 0x00001000,            // 12
     SPELL_ATTR_EX2_PRESERVE_ENCHANT_IN_ARENA  = 0x00002000,            // 13 Items enchanted by spells with this flag preserve the enchant to arenas
-    SPELL_ATTR_EX2_UNK14                      = 0x00004000,            // 14
+    SPELL_ATTR_EX2_ALLOW_WHILE_INVISIBLE      = 0x00004000,            // 14
     SPELL_ATTR_EX2_UNK15                      = 0x00008000,            // 15 not set in 2.4.2
     SPELL_ATTR_EX2_TAME_BEAST                 = 0x00010000,            // 16
     SPELL_ATTR_EX2_NOT_RESET_AUTO_ACTIONS     = 0x00020000,            // 17 don't reset timers for melee autoattacks (swings) or ranged autoattacks (autoshoots)
@@ -808,7 +808,7 @@ enum SpellAttributesEx2
     SPELL_ATTR_EX2_PROC_COOLDOWN_ON_FAILURE   = 0x00800000,            // 23
     SPELL_ATTR_EX2_UNK24                      = 0x01000000,            // 24
     SPELL_ATTR_EX2_UNK25                      = 0x02000000,            // 25
-    SPELL_ATTR_EX2_UNK26                      = 0x04000000,            // 26 unaffected by school immunity
+    SPELL_ATTR_EX2_NO_SCHOOL_IMMUNITIES       = 0x04000000,            // 26
     SPELL_ATTR_EX2_UNK27                      = 0x08000000,            // 27
     SPELL_ATTR_EX2_NOT_AN_ACTION              = 0x10000000,            // 28 no breaks stealth if it fails??
     SPELL_ATTR_EX2_CANT_CRIT                  = 0x20000000,            // 29 Spell can't crit

@@ -2635,7 +2635,42 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         case 20303: // Rank 6
                         {
                             if (Player* pPlayer = m_caster->ToPlayer())
-                                pPlayer->CastItemCombatSpell(unitTarget, BASE_ATTACK, m_currentBasePoints[eff_idx]);
+                            {
+                                bool hasProc = false;
+                                if (Item* item = pPlayer->GetWeaponForAttack(BASE_ATTACK, true, true))
+                                {
+                                    float chanceMultiplier = m_currentBasePoints[eff_idx];
+                                    for (auto const& spellData : item->GetProto()->Spells)
+                                    {
+                                        if (!spellData.SpellId || spellData.SpellTrigger != ITEM_SPELLTRIGGER_CHANCE_ON_HIT)
+                                            continue;
+
+                                        hasProc = true;
+
+                                        if (SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(spellData.SpellId))
+                                        {
+                                            // nerf chance for overpowered effects
+                                            if (pSpellEntry->IsCCSpell() || pSpellEntry->HasAura(SPELL_AURA_MOD_CONFUSE) || pSpellEntry->HasAura(SPELL_AURA_MOD_CASTING_SPEED_NOT_STACK))
+                                                chanceMultiplier *= 0.2f;
+                                            else if (pSpellEntry->IsAreaOfEffectSpell())
+                                                chanceMultiplier *= 0.5f;
+                                        }
+                                    }
+                                    if (chanceMultiplier < 2.0f)
+                                        chanceMultiplier = 2.0f;
+                                    pPlayer->CastItemCombatSpell(unitTarget, BASE_ATTACK, chanceMultiplier);
+                                }
+
+                                // refund judgement mana if weapon has no proc
+                                if (!hasProc)
+                                {
+                                    if (SpellEntry const* pJudge = sSpellMgr.GetSpellEntry(20271))
+                                    {
+                                        uint32 manaCost = Spell::CalculatePowerCost(pJudge, pPlayer);
+                                        pPlayer->ModifyPower(POWER_MANA, manaCost);
+                                    }
+                                }
+                            }
                             return;
                         }
                     }
