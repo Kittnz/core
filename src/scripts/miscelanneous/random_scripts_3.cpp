@@ -5566,6 +5566,152 @@ bool GossipSelect_npc_nibu(Player* pPlayer, Creature* pCreature, uint32 uiSender
     return true;
 }
 
+bool GossipHello_npc_winter_veil_storytailer(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    switch (pCreature->GetEntry())
+    {
+    case 61182: // Tylekinah Lunalumina
+        if (pPlayer->GetQuestStatus(40780) == QUEST_STATUS_INCOMPLETE)  // Inquiring About Legend
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "So I can find this Ancient in Winterspring?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+        pPlayer->SEND_GOSSIP_MENU(61182, pCreature->GetGUID());
+        break;
+    case 61184: // Bulor Wheathoof
+        if (pPlayer->GetQuestStatus(40780) == QUEST_STATUS_INCOMPLETE)  // Inquiring About Legend
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where could I find this Patriarch?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        }
+        pPlayer->SEND_GOSSIP_MENU(61184, pCreature->GetGUID());
+        break;
+    case 61187: // Brum Bamse
+        if (pPlayer->GetQuestStatus(40780) == QUEST_STATUS_INCOMPLETE)  // Inquiring About Legend
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where could I find him?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        }
+        pPlayer->SEND_GOSSIP_MENU(61187, pCreature->GetGUID());
+        break;
+    case 61177: // Raz'umdaj Frostnose
+        if (pPlayer->GetQuestStatus(40781) == QUEST_STATUS_INCOMPLETE)  // Further Inquiries About Legend
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "So where can I find this Great Spirit of Winter?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        }
+        pPlayer->SEND_GOSSIP_MENU(61177, pCreature->GetGUID());
+        break;
+    case 61179: // Henning Silverbeard
+        if (pPlayer->GetQuestStatus(40781) == QUEST_STATUS_INCOMPLETE)  // Further Inquiries About Legend
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where could I find him?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        }
+        pPlayer->SEND_GOSSIP_MENU(61179, pCreature->GetGUID());
+        break;
+    case 61186: // Tikor Goldspin
+        if (pPlayer->GetQuestStatus(40781) == QUEST_STATUS_INCOMPLETE)  // Further Inquiries About Legend
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where can I find him?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        }
+        pPlayer->SEND_GOSSIP_MENU(61186, pCreature->GetGUID());
+        break;
+
+    case 61172: // Winter Patriarch
+        if (pPlayer->GetQuestStatus(40782) == QUEST_STATUS_INCOMPLETE)  // The Legend Comes To Life!
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60021); cInfo && pPlayer)
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+        pPlayer->SEND_GOSSIP_MENU(61172, pCreature->GetGUID());
+        break;
+    case 61169: // Winter Patriarch
+        if (pPlayer->GetQuestStatus(40782) == QUEST_STATUS_INCOMPLETE)  // The Legend Comes To Life!
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60022); cInfo && pPlayer)
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+        pPlayer->SEND_GOSSIP_MENU(61169, pCreature->GetGUID());
+        break;
+    case 61170: // Winter Patriarch
+        if (pPlayer->GetQuestStatus(40782) == QUEST_STATUS_INCOMPLETE)  // The Legend Comes To Life!
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60023); cInfo && pPlayer)
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+        pPlayer->SEND_GOSSIP_MENU(61170, pCreature->GetGUID());
+        break;
+
+    case 61168: // Great Spirit of Winter
+        if (pPlayer->GetQuestStatus(40783) == QUEST_STATUS_INCOMPLETE)  // Life Comes To The Legend!
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60024); cInfo && pPlayer)
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+        pPlayer->SEND_GOSSIP_MENU(61168, pCreature->GetGUID());
+        break;
+    case 61171: // Greatfather Winter
+        if (pPlayer->GetQuestStatus(40783) == QUEST_STATUS_INCOMPLETE)  // Life Comes To The Legend!
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60025); cInfo && pPlayer)
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+        pPlayer->SEND_GOSSIP_MENU(61171, pCreature->GetGUID());
+        break;
+    case 61173: // Great-father Winter
+        if (pPlayer->GetQuestStatus(40783) == QUEST_STATUS_INCOMPLETE)  // Life Comes To The Legend!
+        {
+            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60026); cInfo && pPlayer)
+                pPlayer->KilledMonster(cInfo, ObjectGuid());
+        }
+        pPlayer->SEND_GOSSIP_MENU(61173, pCreature->GetGUID());
+        break;
+    }
+
+    return true;
+}
+
+bool GossipSelect_npc_winter_veil_storytailer(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30056, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60015); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30057, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60016); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30058, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60017); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30059, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60018); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30060, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60019); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
+    {
+        pPlayer->SEND_GOSSIP_MENU(30061, pCreature->GetGUID());
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60020); cInfo && pPlayer)
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+    }
+
+    return true;
+}
+
 //bool GOHello_go_incense_brazier(Player* pPlayer, GameObject* pGo)
 //{
 //    if (pGo->GetEntry() == 2010970)
@@ -5668,6 +5814,12 @@ void AddSC_random_scripts_3()
     //newscript->pGOHello = &GOHello_go_incense_brazier;
     //newscript->pGOGossipSelect = &GOSelect_go_incense_brazier;
     //newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_winter_veil_storytailer";
+    newscript->pGossipHello = &GossipHello_npc_winter_veil_storytailer;
+    newscript->pGossipSelect = &GossipSelect_npc_winter_veil_storytailer;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_nibu";
