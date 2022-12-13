@@ -3988,3 +3988,180 @@ REPLACE INTO `npc_vendor` (`entry`, `item`, `maxcount`, `incrtime`, `itemflags`,
 update gameobject set spawntimesecsmin = 2700, spawntimesecsmax = 2700 where guid in (5012171,5012172,5012173,5012175,5012176,5012177,5012178,5012179,5012180,5012181,5012182,5012183,5012184,5012185,5012186,5012187,5012188,5012189,5012191,5012192,5012193,5012194,5012195,5012196,5012197,5012198,5012199,5012200,5012201,5012202,5012203,5012204,5012205,5012207,5012208,5012209,5012210,5012211,5012212,5012213,5012214,5012215,5012216,5012217,5012218,5012219);
 -- Weapon Techrifle X-TREME 5200 change to ranged (right).
 update item_template set inventory_type = 26 where entry = 60545;
+-- Sapling of Ethwyr, display ID 1455, level 5, faction 35, elemental, scale 0.15 ((This npc should be phased and unseeable by players)
+-- Torgen Blackscar, display ID 1375, level 56, faction 29, humanoid, scale 1, quest flags
+-- Apothecary Clarkson <Royal Apothecary Society>, display ID 1565, level 50, faction 68, humanoid, scale 1, quest flags 
+-- Great Spirit of Winter, display ID 18641, faction 35, elemental, scale 2, gossip text : <The Spirit gazes long into your soul, it is cold, and unwavering.>
+-- Ancient of Winter, display ID 19111, faction 35, elemental, scale 1, gossip text : <The hulking Ancient creaks as it looks upon you. You sense a caring soul being housed within the wooden mass. It urges you to move on as it seems to have a duty.>
+-- Father Bear, display ID 19113, faction 35, beast, scale 2, gossip text :<Father Bear turns to look at you for a moment before opening his mouth and speaking.>\n\n Young one, these are dire times but remember that in the darkness there is always hope. I have brought succor to many of the bears, and yet so many have fallen to corruption. Watch yourself in these lands.
+-- Greatfather Winter, display ID 19114, faction 35, humanoid, scale 2, gossip text : <Greatfather Winter stares at you with an appreciative gaze, but his mind is clearly focused on something else. He urges you to move on with a kind fatherly gaze.>
+-- The Winter Patriarch display ID 19119, faction 35, beast, scale 1, gossip text : <The massive Kodo stares at you for a moment before speaking in a kind fatherly tone>\n\n Winter is coming young one, you\'d best seek a warm place. I have guided tribes for generations and must continue to do so. I must depart now, I hope you will find succor in the darkness, may the Earthmother guide you to greener pastures.
+-- Great-Father Winter, display ID 13370, faction 35, humanoid, scale 1, gossip text : Lok\'tar! Merry Winter Veil to you little boy/girl!\n\nThere is free food and lots of merriment courtesy of Smokywood Pastures!\n\n Make sure you have a splendid time…And no you may not sit on my lap.
+-- Kuz Kusstusk <Winterveil Reveler> , display ID 19115, faction 35, humanoid, scale 1, gossip text : Do not be alarmed mon. Not all Frostmane are on da warpath, we be here to celebrate.\n\n Some of us seek peace. Our tribe has suffered much, we\'re just here to celebrate the Great Spirit of Winter\'s bounty.
+-- Alika Ripfrost <Winterveil Reveler>, display ID 19116, faction 35, humanoid, scale 1, gossip text : Do not be alarmed mon. Not all Frostmane are on da warpath, we be here to celebrate.\n\n Some of us seek peace. Our tribe has suffered much, we\'re just here to celebrate the Great Spirit of Winter\'s bounty.
+-- Melaniah Belore\'Danil <Winterveil Reveler>, display ID 19118, faction 35, humanoid, scale 1
+-- Raz'umdaj Frostnose <Storyteller>, display ID 19117, faction 35, humanoid, scale 1, gossip text : "Greetings Mon, ya wish to hear about the Great Spirit of Winter? It is he that ushers in the season, and brings it time for our season. The time for hunting, the time for gathering. Once the season arrives we hold a celebration. Sacrifices, dances, rituals, and a great feast. We celebrate our survival, the changing of the season, and the end of another year on this world mon."
+-- Alaya Dawnrose <Storyteller>, display ID 16718, faction 35, humanoid, scale 1, gossip text : “You wish to know about Greatfather Winter? Ah I apologize, perhaps you should speak to Storyteller Tylekinah. These are legends my people moved past, and what little I know of our ancestral beliefs tied to this tradition comes from her. I am merely here for the merriment and to share stories.” 
+-- Henning Silverbeard <Storyteller>, displayid 312, faction 35, humanoid, scale 1, gossip text : "The term "Winter Veil" is said to stem from an ancestral figure known as Greatfather Winter. As he would walk the land late in the seasons, winter itself would be his billowing cloak. In his wake was the blanketing of the land in snow, and thus it is said that Greatfather Winter would cast his wintry veil over the land.\n\n As Greatfather Winter walked the land, it is said he would provide a bounty for those who welcomed his presence. Though parts of Azeroth may lie in snow, it gives the land time for rebirth and renewal. As such, the idea of feasting during the winter veil would bring together communities as they shared whatever they had. Typically, a single day of merriment and feasting welcomed the change, all in anticipation of the land's renewal."
+-- Brandon Sawyer <Storyteller>, display ID 19, faction 35, humanoid, scale 1, gossip : “You wish to learn about our interpretation of the legend of Greatfather Winter eh?\n\n Well there\'s not much to say, we believe he is a kind old gentleman who delivers presents. It\'s never been a cultural legend as it has been for the other races, but we do share in the reveling. Plus I got some good tales from my days in the army.”
+-- Urghor the Talker <Storyteller>, display ID 19019, faction 35, humanoid, scale 1, gossip :  “Hm you wish to know about Great-father Winter? Well, n our culture… There is none. As you may know we Orcs come from another world, we do not have our own analogous story to this.\n\n All we know is the Great-father Winter that entertains children. Greklor has quite taken to the role. Ah but never use his name before him, all the children believe he is Great-father Winter, and that\'s how it should be. I do have some good stories from Draenor to trade though.”
+-- Tylekinah Lunalumina <Storyteller>, display ID 18515, faction 35, humanoid, scale 1, gossip : "Ah, you wish to hear about the Ancient of Winter? I come from Starfall Village located in Winterspring. It is exceptionally cold, and we are isolated from others. It is our duty to tend to the sleeping druids who must commune with the spirits of the land, even in such a cold place. During the winter the land becomes unbearably cold and harsh, even for us.\n\n That is when we are visited by the great Ancient. The Ancient speaks to the druids in their dreams, helping them find what we need to survive. In turn we honor the Ancient with a celebration and a feast. It is thanks to the Ancient that the druids are kept safe, and a time of great renewal follows the cold winter months."
+-- Lukza Herbspreader <Storyteller>, display ID 6064, faction 35, humanoid, scale 1, gossip : “You wanna know about da ice Loa?  da, the reason for Trolls to partake? Then ya ask da Frostmane. We come from warm lands, with different Loa, each tribe be having its own traditions.\n\n We respect all Loa, so I be here to pay my respect and enjoy the feasting and tales.”
+-- Bulor Wheathoof <Storyteller>, display ID 11359, faction 35, humanoid, scale 1, gossip "One of our oldest stories speak of the Earthmother's oldest son, the Winter Patriarch. As the leaves fall and the days become short, he will arrive. He brings with him great herds of game, but in turn also brings the cold and long nights.\n\n Our tribes spend these times huddled together around a fire, telling our ancestral stories while feasting. Game is difficult to hunt in these times, so we always pray to the Patriarch for a blessing that we may survive. Once the cold and gloom gives way to spring, the Patriarch departs, returning to his slumber as the land can provide for us. Only awakening once more when he is needed"
+-- Bradley Chillbone <Storyteller>, display ID 11402, faction 35, humanoid, scale 1, gossip: “I do not have any stories that will interest you. Ask Brandon.”
+-- Tikor Goldspin <Storyteller>, display ID 11379, faction 35, humanoid, scale 1, gossip : "When it gets cold, it kinda sucks to be alone and empty stomached, yeah? How about spendin' time with friends!\n\n Great-father Winter has the solution. In collaboration with Smokywood Pastures, for a negligible fee he will bring wonderful presents and foodstuff, yeah? So it is a merry time of the year. Indulge and surprise each other with exotic toys, presents, and delicious food after playin' in the snow!"
+-- Brum Bamse <Storyteller>, display ID 18742, faction 35, humanoid, scale 1, gossip : "Humm...When the cold sets over the land, it is said Father Bear will arrive and usher in the great sleep. Food becomes scarce, the nights long, and the cold reigns.\n\n Father Bear's arrival culminates in a huge feast after which many of us will enter a deep slumber, only awakening at the end of winter, when it is said that Father Bear departs. The forest and land blooms with life, food is abundant and a new renewal is upon us. Thus we celebrate this season and feast before we slumber."
+-- Dali Spinflux <Storyteller>, display ID 11596, faction 35, humanoid, scale 1, gossip : “Wanna know about Greatfather Winter? Heh, well our stories are similar to the Dwarven one except he rides in a Sled pulled by a huge Gyrocopter armed with missiles! You\'d probably better ask Henning if you want the details, but remember! The real one rides a sled pulled by a Gyrocopter with missiles!.”
+-- Mulin Snowbeard <Legend Expert>, display ID 18152, faction 35, humanoid, scale 1, gossip/quest flags, gossip text : " "Hello to you $r! I am a scholar tasked with studying the legends surrounding these festivities. Don't you find it peculiar how so many separate cultures have a similar figure?"
+REPLACE INTO creature_template VALUES
+(61165, 1455, 0, 0, 0, 0, 'Sapling of Ethwyr', NULL, 0, 5, 5, 102, 102, 0, 0, 145, 35, 0, 1, 1.14286, 0.15, 18, 5, 0, 0, 1, 7, 10, 0, 54, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 61165, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61166, 1375, 0, 0, 0, 0, 'Torgen Blackscar', NULL, 0, 56, 56, 3643, 3643, 0, 0, 2699, 29, 2, 1, 1.14286, 0, 18, 5, 0, 0, 1, 102, 131, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.456, 98.252, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61167, 1565, 0, 0, 0, 0, 'Apothecary Clarkson', 'Royal Apothecary Society', 0, 50, 50, 2990, 2990, 0, 0, 2958, 68, 2, 1, 1.14286, 0, 20, 5, 40, 0, 1, 96, 125, 0, 248, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 70.664, 97.163, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61168, 18641, 0, 0, 0, 0, 'Great Spirit of Winter', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 2, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61169, 19111, 0, 0, 0, 0, 'Ancient of Winter', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61170, 19113, 0, 0, 0, 0, 'Father Bear', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 2, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61171, 19114, 0, 0, 0, 0, 'Greatfather Winter', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 2, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61172, 19119, 0, 0, 0, 0, 'The Winter Patriarch', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61173, 13370, 0, 0, 0, 0, 'Great-Father Winter', NULL, 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61174, 19115, 0, 0, 0, 0, 'Kuz Kusstusk', 'Winterveil Reveler', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61175, 19116, 0, 0, 0, 0, 'Alika Ripfrost', 'Winterveil Reveler', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61176, 19118, 0, 0, 0, 0, 'Melaniah Belore\'Danil', 'Winterveil Reveler', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 0, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61177, 19117, 0, 0, 0, 0, 'Raz\'umdaj Frostnose', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61178, 16718, 0, 0, 0, 0, 'Alaya Dawnrose', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61179, 312, 0, 0, 0, 0, 'Henning Silverbeard', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61180, 19, 0, 0, 0, 0, 'Brandon Sawyer', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61181, 19019, 0, 0, 0, 0, 'Urghor the Talker', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61182, 18515, 0, 0, 0, 0, 'Tylekinah Lunalumina', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61183, 6064, 0, 0, 0, 0, 'Lukza Herbspreader', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61184, 11359, 0, 0, 0, 0, 'Bulor Wheathoof', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61185, 11402, 0, 0, 0, 0, 'Bradley Chillbone', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61186, 11379, 0, 0, 0, 0, 'Tikor Goldspin', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61187, 18742, 0, 0, 0, 0, 'Brum Bamse', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61188, 11596, 0, 0, 0, 0, 'Dali Spinflux', 'Storyteller', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61189, 18152, 0, 0, 0, 0, 'Mulin Snowbeard', 'Legend Expert', 0, 55, 55, 3643, 3643, 0, 0, 3272, 35, 3, 1, 1.14286, 0, 20, 5, 0, 0, 1, 94, 118, 0, 254, 1, 2000, 2000, 1, 0, 0, 0, 0, 0, 0, 0, 71.2272, 97.9374, 100, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 104, 141, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+
+set @gossip_menu_id = 41331; set @magic_number = 61189;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hello to you $r! I am a scholar tasked with studying the legends surrounding these festivities. Don\'t you find it peculiar how so many separate cultures have a similar figure?');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41330; set @magic_number = 61188;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Wanna know about Greatfather Winter? Heh, well our stories are similar to the Dwarven one except he rides in a Sled pulled by a huge Gyrocopter armed with missiles! You\'d probably better ask Henning if you want the details, but remember! The real one rides a sled pulled by a Gyrocopter with missiles!.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41329; set @magic_number = 61187;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Humm... When the cold sets over the land, it is said Father Bear will arrive and usher in the great sleep. Food becomes scarce, the nights long, and the cold reigns.\n\nFather Bear\'s arrival culminates in a huge feast after which many of us will enter a deep slumber, only awakening at the end of winter, when it is said that Father Bear departs. The forest and land blooms with life, food is abundant and a new renewal is upon us. Thus we celebrate this season and feast before we slumber.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41328; set @magic_number = 61186;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'When it gets cold, it kinda sucks to be alone and empty stomached, yeah? How about spendin\' time with friends!\n\nGreat-father Winter has the solution. In collaboration with Smokywood Pastures, for a negligible fee he will bring wonderful presents and foodstuff, yeah? So it is a merry time of the year. Indulge and surprise each other with exotic toys, presents, and delicious food after playin\' in the snow!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41327; set @magic_number = 61185;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I do not have any stories that will interest you. Ask Brandon.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41326; set @magic_number = 61184;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'One of our oldest stories speak of the Earthmother\'s oldest son, the Winter Patriarch. As the leaves fall and the days become short, he will arrive. He brings with him great herds of game, but in turn also brings the cold and long nights.\n\nOur tribes spend these times huddled together around a fire, telling our ancestral stories while feasting. Game is difficult to hunt in these times, so we always pray to the Patriarch for a blessing that we may survive. Once the cold and gloom gives way to spring, the Patriarch departs, returning to his slumber as the land can provide for us. Only awakening once more when he is needed.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41325; set @magic_number = 61183;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You wanna know about da ice Loa?  da, the reason for Trolls to partake? Then ya ask da Frostmane. We come from warm lands, with different Loa, each tribe be having its own traditions.\n\nWe respect all Loa, so I be here to pay my respect and enjoy the feasting and tales.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41324; set @magic_number = 61182;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Ah, you wish to hear about the Ancient of Winter? I come from Starfall Village located in Winterspring. It is exceptionally cold, and we are isolated from others. It is our duty to tend to the sleeping druids who must commune with the spirits of the land, even in such a cold place. During the winter the land becomes unbearably cold and harsh, even for us.\n\nThat is when we are visited by the great Ancient. The Ancient speaks to the druids in their dreams, helping them find what we need to survive. In turn we honor the Ancient with a celebration and a feast. It is thanks to the Ancient that the druids are kept safe, and a time of great renewal follows the cold winter months.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41323; set @magic_number = 61181;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Hm you wish to know about Great-father Winter? Well, n our culture... There is none. As you may know we Orcs come from another world, we do not have our own analogous story to this.\n\nAll we know is the Great-father Winter that entertains children. Greklor has quite taken to the role. Ah but never use his name before him, all the children believe he is Great-father Winter, and that\'s how it should be. I do have some good stories from Draenor to trade though.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41322; set @magic_number = 61180;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You wish to learn about our interpretation of the legend of Greatfather Winter eh?\n\nWell there\'s not much to say, we believe he is a kind old gentleman who delivers presents. It\'s never been a cultural legend as it has been for the other races, but we do share in the reveling. Plus I got some good tales from my days in the army.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41321; set @magic_number = 61179;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The term "Winter Veil" is said to stem from an ancestral figure known as Greatfather Winter. As he would walk the land late in the seasons, winter itself would be his billowing cloak. In his wake was the blanketing of the land in snow, and thus it is said that Greatfather Winter would cast his wintry veil over the land.\n\nAs Greatfather Winter walked the land, it is said he would provide a bounty for those who welcomed his presence. Though parts of Azeroth may lie in snow, it gives the land time for rebirth and renewal. As such, the idea of feasting during the winter veil would bring together communities as they shared whatever they had. Typically, a single day of merriment and feasting welcomed the change, all in anticipation of the land\'s renewal.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41320; set @magic_number = 61178;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You wish to know about Greatfather Winter? Ah I apologize, perhaps you should speak to Storyteller Tylekinah. These are legends my people moved past, and what little I know of our ancestral beliefs tied to this tradition comes from her. I am merely here for the merriment and to share stories.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41319; set @magic_number = 61177;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greetings Mon, ya wish to hear about the Great Spirit of Winter? It is he that ushers in the season, and brings it time for our season. The time for hunting, the time for gathering.\n\nOnce the season arrives we hold a celebration. Sacrifices, dances, rituals, and a great feast. We celebrate our survival, the changing of the season, and the end of another year on this world mon.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41318; set @magic_number = 61175;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Do not be alarmed mon. Not all Frostmane are on da warpath, we be here to celebrate.\n\nSome of us seek peace. Our tribe has suffered much, we\'re just here to celebrate the Great Spirit of Winter\'s bounty.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41317; set @magic_number = 61174;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Do not be alarmed mon. Not all Frostmane are on da warpath, we be here to celebrate.\n\nSome of us seek peace. Our tribe has suffered much, we\'re just here to celebrate the Great Spirit of Winter\'s bounty.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41316; set @magic_number = 61173;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Lok\'tar! Merry Winter Veil to you little boy/girl!\n\nThere is free food and lots of merriment courtesy of Smokywood Pastures!\n\nMake sure you have a splendid time... And no you may not sit on my lap.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41315; set @magic_number = 61172;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The massive Kodo stares at you for a moment before speaking in a kind fatherly tone>\n\nWinter is coming young one, you\'d best seek a warm place. I have guided tribes for generations and must continue to do so. I must depart now, I hope you will find succor in the darkness, may the Earthmother guide you to greener pastures.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41314; set @magic_number = 61171;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Greatfather Winter stares at you with an appreciative gaze, but his mind is clearly focused on something else. He urges you to move on with a kind fatherly gaze.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41313; set @magic_number = 61170;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Father Bear turns to look at you for a moment before opening his mouth and speaking.>\n\nYoung one, these are dire times but remember that in the darkness there is always hope. I have brought succor to many of the bears, and yet so many have fallen to corruption. Watch yourself in these lands.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41312; set @magic_number = 61169;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The hulking Ancient creaks as it looks upon you. You sense a caring soul being housed within the wooden mass. It urges you to move on as it seems to have a duty.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 41311; set @magic_number = 61168;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'The Spirit gazes long into your soul, it is cold, and unwavering.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
