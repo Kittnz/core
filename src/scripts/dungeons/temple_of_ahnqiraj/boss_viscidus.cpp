@@ -363,7 +363,7 @@ struct boss_viscidusAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_VISCIDUS_EXPLODE && m_uiPhase != PHASE_EXPLODED)
         {

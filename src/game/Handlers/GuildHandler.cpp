@@ -224,10 +224,23 @@ void WorldSession::HandleGuildAcceptOpcode(WorldPacket& /*recvPacket*/)
 
 void WorldSession::HandleGuildDeclineOpcode(WorldPacket& /*recvPacket*/)
 {
-    DEBUG_LOG("WORLD: Received CMSG_GUILD_DECLINE");
+    if (_player->GetGuildId() || !_player->GetGuildIdInvited())
+        return;
 
-    GetPlayer()->SetGuildIdInvited(0);
-    GetPlayer()->SetInGuild(0);
+    if (Guild* guild = sGuildMgr.GetGuildById(_player->GetGuildIdInvited()))
+    {
+        if (ObjectGuid inviterGuid = guild->GetGuildInviter(_player->GetObjectGuid()))
+        {
+            if (Player const* pInviter = ObjectAccessor::FindPlayer(inviterGuid))
+            {
+                WorldPacket data(SMSG_GUILD_DECLINE);
+                data << _player->GetName();
+                pInviter->GetSession()->SendPacket(&data);
+            }
+        }
+    }
+
+    _player->SetGuildIdInvited(0);
 }
 
 void WorldSession::HandleGuildInfoOpcode(WorldPacket& /*recvPacket*/)

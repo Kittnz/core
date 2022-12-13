@@ -304,7 +304,7 @@ struct npc_taskmaster_fizzuleAI : public ScriptedAI
         m_creature->HandleEmoteCommand(EMOTE_ONESHOT_SALUTE);
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *spell) override
+    void SpellHit(WorldObject* caster, const SpellEntry *spell) override
     {
         if (spell->Id == SPELL_FLARE || spell->Id == SPELL_FOLLY)
         {
@@ -1385,7 +1385,7 @@ struct npc_mission_possible_but_not_probableAI : ScriptedAI
 
     }
 
-    void SpellHit(Unit* /*caster*/, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* /*caster*/, const SpellEntry* pSpell) override
     {
         uint32 spellId = 0;
 
