@@ -6734,6 +6734,9 @@ void Player::CheckAreaExploreAndOutdoor()
                 else
                     XP = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
 
+                if (HasChallenge(CHALLENGE_WAR_MODE))
+                    XP = XP + (XP * 0.3f);
+
                 GiveXP(XP, nullptr);
                 SendExplorationExperience(area, XP);
             }
