@@ -12063,6 +12063,50 @@ bool ChatHandler::HandleCharacterFillFlysCommand(char* args)
     return false;
 }
 
+bool ChatHandler::HandleMmapsNearCommand(char* args)
+{
+    if (!MMAP::MMapFactory::createOrGetMMapManager()->GetNavMesh(GetSession()->GetPlayer()->GetMapId()))
+    {
+        PSendSysMessage("NavMesh not loaded for current map.");
+        return true;
+    }
+
+    float dist = 0.0f;
+
+    if (!ExtractFloat(&args, dist))
+        return false;
+
+    auto playerpos = GetSession()->GetPlayer()->GetPosition();
+    float extents[3] = { dist, 15.f, dist };
+    float point[3] = { playerpos.y, playerpos.z, playerpos.x};
+    dtPolyRef polyRef;
+
+
+    dtQueryFilter filter;
+    filter.setExcludeFlags(NAV_STEEP_SLOPES);
+    std::vector<dtPolyRef> refs;
+    refs.resize(4000);
+    auto query = MMAP::MMapFactory::createOrGetMMapManager()->GetNavMeshQuery(GetSession()->GetPlayer()->GetMapId());
+    int polyCount = 0;
+    if (dtStatusFailed(query->queryPolygons(point, extents, &filter, refs.data(), &polyCount, refs.size())))
+        SendSysMessage("Error querying polygons.");
+
+    refs.resize(polyCount);
+
+    for (const auto& poly : refs)
+    {
+        float pointRes[3] = {};
+        bool res = false;
+        if (dtStatusFailed(query->closestPointOnPoly(poly, point, pointRes, &res)))
+            continue;
+        else
+            GetSession()->GetPlayer()->SummonCreature(VISUAL_WAYPOINT, pointRes[2], pointRes[0], pointRes[1], 0, TEMPSUMMON_TIMED_DESPAWN, 30000, false, 0, nullptr, false);
+    }
+
+    return true;
+}
+
+
 bool ChatHandler::HandleMmapsPathCommand(char* args)
 {
     if (!MMAP::MMapFactory::createOrGetMMapManager()->GetNavMesh(GetSession()->GetPlayer()->GetMapId()))

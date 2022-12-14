@@ -2081,7 +2081,7 @@ Creature *Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
     return pCreature;
 }
 
-Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter)
+Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter, bool attach)
 {
     CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(id);
     if (!cinfo)
@@ -2091,7 +2091,7 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
     }
 
     uint32 const currentSummonCount = GetCreatureSummonCount();
-    if (currentSummonCount >= GetCreatureSummonLimit())
+    if (currentSummonCount >= GetCreatureSummonLimit() && attach)
     {
         sLog.outInfo("WorldObject::SummonCreature: %s in (map %u, instance %u) attempted to summon Creature (Entry: %u), but already has %u active summons",
             GetGuidStr().c_str(), GetMapId(), GetInstanceId(), id, currentSummonCount);
@@ -2148,7 +2148,8 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
         }
     }
 
-    IncrementSummonCounter();
+    if (attach)
+        IncrementSummonCounter();
     return pCreature;
 }
 
