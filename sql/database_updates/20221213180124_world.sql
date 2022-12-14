@@ -28,3 +28,5 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 
 -- The quest https://database.turtle-wow.org/?quest=80604 needs https://database.turtle-wow.org/?quest=80411 as it's prerequisite.
 UPDATE `quest_template` SET `PrevQuestId` = '80411 ' WHERE `entry` = 80604;
+
+UPDATE `quest_template` SET `Objectives` = 'Slay 6 Tirisclaw Ravagers and 6 Tirislcaw Shadowcasters at Crumblepoint Tower before returning to Volgrin.' WHERE `entry` = 40087;
