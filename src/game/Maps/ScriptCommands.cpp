@@ -2299,7 +2299,7 @@ bool Map::ScriptCommand_LoadGameObject(ScriptInfo const& script, WorldObject* so
         return ShouldAbortScript(script); // already spawned
 
     GameObject* pGameobject = new GameObject;
-    if (!pGameobject->LoadFromDB(script.loadGo.goGuid, this))
+    if (!pGameobject->LoadFromDB(script.loadGo.goGuid, this, true))
         delete pGameobject;
     else
         Add(pGameobject);
@@ -2411,5 +2411,20 @@ bool Map::ScriptCommand_SetCommandState(ScriptInfo const& script, WorldObject* s
 
     pSource->HandlePetCommand((CommandStates)script.setCommandState.commandState, ToUnit(target));
 
+    return false;
+}
+
+// SCRIPT_COMMAND_PLAY_CUSTOM_ANIM (89)
+bool Map::ScriptCommand_PlayCustomAnim(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    GameObject* pGo = nullptr;
+
+    if (!((pGo = ToGameObject(target)) || (pGo = ToGameObject(source))))
+    {
+        sLog.outError("SCRIPT_COMMAND_PLAY_CUSTOM_ANIM (script id %u) call for a nullptr gameobject, skipping.", script.id);
+        return ShouldAbortScript(script);
+    }
+
+    pGo->SendGameObjectCustomAnim(script.playCustomAnim.animId);
     return false;
 }

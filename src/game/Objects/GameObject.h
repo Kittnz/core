@@ -692,7 +692,7 @@ class GameObject : public WorldObject
 
         void SaveToDB();
         void SaveToDB(uint32 mapid);
-        bool LoadFromDB(uint32 guid, Map *map);
+        bool LoadFromDB(uint32 guid, Map *map, bool force = false);
         void DeleteFromDB() const;
 
         void SetOwnerGuid(ObjectGuid ownerGuid)

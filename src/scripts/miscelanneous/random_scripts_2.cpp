@@ -195,7 +195,7 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
         Razor_Phase_2 = 300000;
         Razor_Remove_Auras = 300000;
 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
     }
 
     void Aggro(Unit* pWho) override
@@ -219,7 +219,7 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
 
         if (Razor_Phase_1 == 1)
         {
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             m_creature->GetMap()->CreatureRelocation(m_creature, -7595, -1053, 408, 0.0f);
             DoCastSpellIfCan(m_creature, 31366);
             Razor_Phase_1 = 0;
@@ -233,7 +233,7 @@ struct Zero_boss_razorgoreAI : public ScriptedAI
             m_creature->AI()->AttackStart(target);
 
             m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 
             m_creature->RemoveAurasDueToSpell(31366);
 
@@ -494,14 +494,14 @@ struct npc_escort_genericAI : public npc_escortAI
         {
             if (pPlayer->GetQuestStatus(m_pEscortData->uiQuestEntry) == QUEST_STATUS_INCOMPLETE)
             {
-                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
             }
             else if (pPlayer->GetQuestStatus(m_pEscortData->uiQuestEntry) == QUEST_STATUS_FAILED)
             {
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
-                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
             }
         }
@@ -563,7 +563,7 @@ struct npc_escort_genericAI : public npc_escortAI
         if (!m_pEscortData)
             return;
 
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
         m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP);
         m_creature->SetFactionTemplateId(m_pEscortData->uiEscortFaction);

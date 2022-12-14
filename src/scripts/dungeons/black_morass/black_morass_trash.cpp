@@ -1972,7 +1972,7 @@ public:
                 }
             }
 
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 
             m_creature->SetFactionTemporary(35);
 
@@ -1985,7 +1985,7 @@ public:
                 {
                     m_bBeginFight = true;
 
-                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                     creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
 
                     creature->RestoreFaction();
@@ -2865,7 +2865,7 @@ public:
 
                         if (Creature* pSummon{ m_creature->SummonCreature(m_uiSummonCreatureEntry, -8473.43f, -4226.01f, -214.74f, 0) })
                         {
-                            pSummon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                            pSummon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                             pSummon->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_CONFUSED);
 
                             pSummon->SetFacingToObject(m_creature);

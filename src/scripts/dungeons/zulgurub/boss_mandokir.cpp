@@ -59,7 +59,7 @@ static SpawnLocations aSpirits[] =
 
 struct boss_mandokirAI : public ScriptedAI
 {
-    const static std::uint32_t START_FLAGS{ UNIT_FLAG_PACIFIED | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PLAYER };
+    const static std::uint32_t START_FLAGS{ UNIT_FLAG_PACIFIED | UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PLAYER };
 
     explicit boss_mandokirAI(Creature* pCreature) : ScriptedAI(pCreature)
     {

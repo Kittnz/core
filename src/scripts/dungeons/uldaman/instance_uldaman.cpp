@@ -181,7 +181,7 @@ struct instance_uldaman : public ScriptedInstance
     {
         creature->SetFactionTemplateId(FACTION_STONED);
         creature->RemoveAllAuras();
-        creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         if (!creature->HasAura(SPELL_STONED))
         {
             creature->CastSpell(creature, SPELL_STONED, false);
@@ -194,7 +194,7 @@ struct instance_uldaman : public ScriptedInstance
         if (creature->HasAura(SPELL_STONED))
             creature->RemoveAurasDueToSpell(SPELL_STONED);
 
-        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
     }
 
     void RespawnMinion(uint64 guid)
