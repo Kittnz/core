@@ -154,6 +154,7 @@ struct CreatureInfo
     uint32  spells[CREATURE_MAX_SPELLS];
     uint32  spell_list_id;
     uint32  pet_spell_list_id;
+    uint32  spawn_spell_id;
     uint32 const* auras;
     uint32  gold_min;
     uint32  gold_max;
@@ -698,7 +699,7 @@ class Creature : public Unit
         void SetDeathState(DeathState s) override;                   // overwrite virtual Unit::SetDeathState
         bool FallGround();
 
-        bool LoadFromDB(uint32 guid, Map *map);
+        bool LoadFromDB(uint32 guid, Map *map, bool force = false);
         void SaveToDB();
                                                             // overwrited in Pet
         virtual void SaveToDB(uint32 mapid);
@@ -783,6 +784,7 @@ class Creature : public Unit
         void Respawn();
         void SaveRespawnTime() override;
         void ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data);
+        void CastSpawnSpell();
 
         uint32 GetRespawnDelay() const { return m_respawnDelay; }
         void SetRespawnDelay(uint32 delay) { m_respawnDelay = delay; }

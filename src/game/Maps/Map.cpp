@@ -459,6 +459,9 @@ Map::Add(T *obj)
 
     obj->GetViewPoint().Event_AddedToWorld(&(*grid)(cell.CellX(), cell.CellY()));
     UpdateObjectVisibility(obj, cell, p);
+
+    if (Creature* pCreature = obj->ToCreature())
+        pCreature->CastSpawnSpell();
 }
 
 template<>

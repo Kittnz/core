@@ -1575,7 +1575,7 @@ bool Creature::CreateFromProto(uint32 guidlow, CreatureInfo const* cinfo, uint32
     return UpdateEntry(cinfo->entry, data, eventData, false);
 }
 
-bool Creature::LoadFromDB(uint32 guidlow, Map *map)
+bool Creature::LoadFromDB(uint32 guidlow, Map *map, bool force)
 {
     CreatureData const* data = sObjectMgr.GetCreatureData(guidlow);
 
@@ -1585,7 +1585,7 @@ bool Creature::LoadFromDB(uint32 guidlow, Map *map)
         return false;
     }
 
-    if (data->spawn_flags & SPAWN_FLAG_DISABLED)
+    if (!force && (data->spawn_flags & SPAWN_FLAG_DISABLED))
         return false;
 
     uint32 const creatureId = data->ChooseCreatureId();
@@ -1935,6 +1935,20 @@ bool Creature::FallGround()
     return true;
 }
 
+void Creature::CastSpawnSpell()
+{
+    if (GetCreatureInfo()->spawn_spell_id)
+    {
+        SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+        SpellCastResult result = CastSpell(this, GetCreatureInfo()->spawn_spell_id, false);
+        if (result != SPELL_CAST_OK)
+        {
+            RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
+            sLog.outError("%s failed to cast spawn spell %u due to reason %u.", GetGuidStr().c_str(), GetCreatureInfo()->spawn_spell_id, result);
+        }
+    }
+}
+
 void Creature::Respawn()
 {
     RemoveCorpse();
@@ -2165,7 +2179,7 @@ bool Creature::CanAssistTo(const Unit* u, const Unit* enemy, bool checkfaction /
     if (HasExtraFlag(CREATURE_FLAG_EXTRA_NO_AGGRO))
         return false;
 
-    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC))
+    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC))
         return false;
 
     // skip fighting creature
@@ -2207,7 +2221,7 @@ bool Creature::CanInitiateAttack()
     if (HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_DIED))
         return false;
 
-    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE))
+    if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_SELECTABLE))
         return false;
 
     if (IsPassiveToHostile())

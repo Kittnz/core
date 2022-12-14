@@ -73,13 +73,13 @@ struct boss_magistrate_barthilasAI : public ScriptedAI
             return;
 
         if (pWho->GetTypeId() == TYPEID_PLAYER
-            && m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE)
+            && m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING)
             && m_creature->IsWithinDistInMap(pWho, 10.0f)
             && m_creature->IsWithinLOSInMap(pWho)
             && !pWho->HasAuraType(SPELL_AURA_FEIGN_DEATH)
             && !pWho->HasAuraType(SPELL_AURA_MOD_UNATTACKABLE))
         {
-            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         }
         ScriptedAI::MoveInLineOfSight(pWho);
     }

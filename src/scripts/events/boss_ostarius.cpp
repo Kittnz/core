@@ -116,7 +116,7 @@ struct boss_ostariusAI : public ScriptedAI
 
         // Reset to neutral for RP intro.
         me->SetFactionTemplateId(7); // Neutral (Creature)
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2);
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NON_ATTACKABLE_2);
     }
 
     void Reset()
@@ -329,7 +329,7 @@ struct boss_ostariusAI : public ScriptedAI
             DoCast(me, SPELL_SANDSTORM, true);
 
             // Make attackable now once shield is up.
-            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NON_ATTACKABLE_2);
             me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
             PlaySound(me, SOUND_PHASE_1, true);
@@ -637,7 +637,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
 
     void SetDefaults()
     {
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_STUNNED | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_DISABLE_MOVE);
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_STUNNED | UNIT_FLAG_SPAWNING | UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_DISABLE_MOVE);
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
         // Needed so our channeled spells have no issues casting.

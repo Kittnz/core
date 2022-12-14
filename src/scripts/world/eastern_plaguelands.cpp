@@ -382,7 +382,7 @@ struct npc_eris_havenfireAI : public ScriptedAI
                     ++Var;
 
                 ArchersGUIDs[Var] = summoned->GetGUID();
-                summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 summoned->AddUnitState(UNIT_STAT_ROOT);
                 break;
@@ -1296,7 +1296,7 @@ struct npc_darrowshire_triggerAI : public ScriptedAI
                 summoned->GetMotionMaster()->MovePoint(2, DarrowshireEvent[4].X, DarrowshireEvent[4].Y, DarrowshireEvent[4].Z, MOVE_PATHFINDING, 5.0f);
                 break;
             case NPC_MARDUK_THE_BLACK:
-                summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE);
+                summoned->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_SPAWNING);
                 summoned->ForcedDespawn(12000);
                 break;
             default:

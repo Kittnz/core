@@ -243,7 +243,7 @@ enum ConditionType
                                                             // Requirement: Unit Target
                                                             // Value1: 0, 1, or 2 (0: any, 1: hostile, 2: friendly)
                                                             // Value2: search_radius
-   CONDITION_BG_EVENT_ACTIVE        = 57,                   // Checks if a bg event is active.
+    CONDITION_BG_EVENT_ACTIVE       = 57,                   // Checks if a bg event is active.
                                                             // Requirement: Map
                                                             // Value1: event1
                                                             // Value2: event2

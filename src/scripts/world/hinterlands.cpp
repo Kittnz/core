@@ -589,7 +589,7 @@ struct go_corrupted_crystal : public GameObjectAI
                         }
                         Creature* antnormiPortalptr = me->GetMap()->GetCreature(antnormiPortal);
                         antnormi->MonsterMove(antnormiPortalptr->GetPositionX(), antnormiPortalptr->GetPositionY(), 100);
-                        antnormi->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        antnormi->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                         antnormi->DeleteThreatList();
 
                         if (Creature* kheyna = me->FindNearestCreature(NPC_KHEYNA, 1000, true))

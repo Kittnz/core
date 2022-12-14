@@ -98,7 +98,7 @@ public:
         m_bEnrage = false;
 
         // Trigger fight on gossip
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_STUNNED);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetFactionTemplateId(nsMariella::FACTION_NEUTRAL);
 
@@ -603,7 +603,7 @@ public:
         // Void Zone shouldn't move
         m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->SetRooted(true);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
     }
 
     void DamageTimer(const uint32& uiDiff)
@@ -681,7 +681,7 @@ public:
         // Void Zone shouldn't move
         m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->SetRooted(true);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
     }
 
     void DamageTimer(const uint32& uiDiff)
@@ -839,7 +839,7 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
                 DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
-                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                         creature->SetFactionTemplateId(nsMariella::FACTION_SCARLET);
                         creature->SetInCombatWithZone();
                     });

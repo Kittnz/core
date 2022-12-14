@@ -604,7 +604,7 @@ public:
     {
         m_uiCheckPulse = nsAntiExploit::PULSE_TIMER;
 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetVisibility(VISIBILITY_OFF);
     }
 

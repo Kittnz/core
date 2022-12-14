@@ -2204,7 +2204,7 @@ struct palkeoteAI : public ScriptedAI
     void Reset()
     {
         m_events.Reset();
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
         calfActive = false;
     }
@@ -2232,7 +2232,7 @@ struct palkeoteAI : public ScriptedAI
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
 
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
@@ -4932,7 +4932,7 @@ struct npc_vladeus_springriverAI : public ScriptedAI
 
     void Reset()
     {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
     }
     void UpdateAI(const uint32 diff)
@@ -4953,7 +4953,7 @@ struct npc_vladeus_springriverAI : public ScriptedAI
     void OnCombatStop()
     {
         m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 
         ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
         for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
@@ -5190,7 +5190,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
 
         maverick->SetWalk(true);
         maverick->GetMotionMaster()->MovePoint(0, 2545.8F, -651.11F, 78.8F);
-        maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
@@ -5218,7 +5218,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
             Map* map = sMapMgr.FindMap(0);
             summoner->SummonCreature(50681, 2546.42F, -643.44F, 80.20F, 4.6F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
@@ -5470,7 +5470,7 @@ bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const
 
     if (pQuest->GetQuestId() == 40166) // The Tower of Lapidis IV
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -5483,7 +5483,7 @@ bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60327))
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
 
         return true;
@@ -5582,7 +5582,7 @@ struct npc_baxxilAI : public ScriptedAI
 
     void Reset()
     {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
         m_dialogueOver = false;
         m_followCheckTimer = 1000;
@@ -5596,7 +5596,7 @@ struct npc_baxxilAI : public ScriptedAI
             m_creature->ClearInCombat();
             m_creature->DeleteThreatList();
             m_creature->SetFactionTemplateId(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
 
@@ -5675,7 +5675,7 @@ bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
         escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         escortNPC->UpdateSpeed(MOVE_RUN, false, escortNPC->GetSpeedRate(MOVE_RUN) * 1.5);
         baxxil_following.insert(pPlayer->GetObjectGuid());
-        escortNPC->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        escortNPC->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         escortNPC->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
     }
 
@@ -5728,7 +5728,7 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
     {
         pQuestGiver->HandleEmote(69);
         pQuestGiver->MonsterSayToPlayer("First, we put this here, and then this... here...", pPlayer);
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->MonsterSayToPlayer("Then all it takes is, Ah! Damn thing!", player);
@@ -5736,7 +5736,7 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
         DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->MonsterSayToPlayer("There it is, I've done it, here you are, my work is complete!", player);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
                 player->KilledMonster(cInfo, ObjectGuid());
             });
@@ -5770,7 +5770,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn't back down and me people and I paid da price.", pPlayer);
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("Dey cornered me close to dat lake and been captured by a bashful elf named Brightwing.", player);
@@ -5810,7 +5810,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91320))
                 player->KilledMonster(cInfo, ObjectGuid());
             c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             }); 
     }
 
@@ -6040,7 +6040,7 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
         if (lord_rog)
         {
-            lord_rog->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+            lord_rog->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
             lord_rog->CastSpell(pQuestGiver, 13236, false);
 
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
@@ -6054,7 +6054,7 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60313))
                     player->KilledMonster(cInfo, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                 });
@@ -6212,7 +6212,7 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
         pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
         pQuestGiver->PMonsterSay("I am ready for the audience.");
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
         Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
         GameObject* portal{ nullptr };

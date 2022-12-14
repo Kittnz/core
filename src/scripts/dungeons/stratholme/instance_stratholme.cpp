@@ -226,7 +226,7 @@ struct instance_stratholme : public ScriptedInstance
             case NPC_BARON:
                 m_uiBaronGUID = pCreature->GetGUID();
                 if (GetData(TYPE_RAMSTEIN) != DONE)
-                    pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                    pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
                 break;
             case NPC_YSIDA_TRIGGER:
                 m_uiYsidaTriggerGUID = pCreature->GetGUID();
@@ -255,7 +255,7 @@ struct instance_stratholme : public ScriptedInstance
                 m_uiDathrohanGUID = pCreature->GetGUID();
                 break;
             case NPC_MAGISTRATE:
-                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 break;
         }
 
@@ -993,7 +993,7 @@ struct instance_stratholme : public ScriptedInstance
                         }
                         UpdateGoState(m_uiZiggurat4GUID, GO_STATE_ACTIVE, false);
                         UpdateGoState(m_uiZiggurat5GUID, GO_STATE_ACTIVE, false);
-                        pBaron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                        pBaron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 
                         sLog.outDebug("Instance Stratholme: Black guard sentries spawned. Opening gates to baron.");
                     }

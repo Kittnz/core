@@ -73,7 +73,7 @@ public:
         m_bAchievementKillFailed = false;
 
         // Misc
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_STUNNED);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->AddUnitState(UNIT_STAT_ROOT);
 
@@ -532,7 +532,7 @@ bool GossipSelect_boss_daelus(Player* pPlayer, Creature* pCreature, uint32 /*uiS
 
                 DoAfterTime(pCreature, (9 * IN_MILLISECONDS), [creature = pCreature]()
                 {
-                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                     creature->SetFactionTemplateId(nsDaelus::FACTION_SCARLET);
                     creature->SetInCombatWithZone();
                 });

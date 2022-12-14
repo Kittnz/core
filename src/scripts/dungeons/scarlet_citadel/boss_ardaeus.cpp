@@ -58,7 +58,7 @@ public:
         m_bAchievementKillFailed = false;
 
         // Trigger fight on gossip
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetFactionTemplateId(nsArdaeus::FACTION_NEUTRAL);
     }
