@@ -30,3 +30,10 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 UPDATE `quest_template` SET `PrevQuestId` = '80411 ' WHERE `entry` = 80604;
 
 UPDATE `quest_template` SET `Objectives` = 'Slay 6 Tirisclaw Ravagers and 6 Tirislcaw Shadowcasters at Crumblepoint Tower before returning to Volgrin.' WHERE `entry` = 40087;
+
+DELETE FROM `creature_loot_template` WHERE `item` = 12707;
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (1836, 12707, 10.02, 0, 1, 1, 4);
+
+-- Make Pendant of the Faceless unique and change description to "Holds an otherworldly essence."
+
+UPDATE `item_template` SET `description` = 'Holds an otherworldly essence.', `max_count` = 1 WHERE `entry` = 60551;
