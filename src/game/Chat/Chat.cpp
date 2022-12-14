@@ -312,7 +312,8 @@ ChatCommand * ChatHandler::getCommandTable()
 
     static ChatCommand mmapsCommandTable[] =
     {
-        { "path",            SEC_DEVELOPER,     false, &ChatHandler::HandleMmapsPathCommand,         "", nullptr },
+        { "path",            SEC_DEVELOPER,     false, &ChatHandler::HandleMmapsPathCommand,         "", nullptr },//HandleMmapsNearCommand
+        { "near",            SEC_DEVELOPER,     false, &ChatHandler::HandleMmapsNearCommand,         "", nullptr },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 

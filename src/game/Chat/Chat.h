@@ -213,6 +213,7 @@ class ChatHandler
 
         //Mmaps
         bool HandleMmapsPathCommand(char* args);
+        bool HandleMmapsNearCommand(char* args);
 
         // Formations
         bool HandleNpcGroupAddCommand(char *args);
