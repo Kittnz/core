@@ -59,3 +59,4 @@ UPDATE creature SET position_x = '-2688.694824', position_y = '1146.610107', pos
 UPDATE creature SET position_x = '-2688.902588', position_y = '1146.803223', position_z = '52.115025', orientation = '5.303053' WHERE guid = '2573901';
 REPLACE INTO `creature` VALUES (2573912,61188,0,0,0,813,-2687.22,1145.38,52.1622,2.80942,120,120,0,100,100,0,0,0);
 UPDATE creature SET position_x = '-2687.311768', position_y = '1146.618530', position_z = '52.102905', orientation = '3.932538' WHERE guid = '2573909';
+REPLACE INTO `gameobject` VALUES ( 5012234, 2000001, 813, -2679.69, 1146.27, 53.0634, 2.70756, 0, 0, 0.976545, 0.215315, 300, 300, 100, 1, 0, 0);
