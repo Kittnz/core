@@ -87,3 +87,6 @@ REPLACE INTO `gameobject` VALUES ( 5012235, 2010445, 813, -2679.77, 1146.8, 53.0
 
 -- Changes by JOE
 UPDATE creature SET position_x = '-4315.030762', position_y = '-4320.056641', position_z = '-1.266435', orientation = '3.484372' WHERE guid = '74532';
+UPDATE creature SET position_x = '-4320.511230', position_y = '-4322.395020', position_z = '-11.332396', orientation = '3.612392' WHERE guid = '74532';
+UPDATE creature SET position_x = '-4269.042969', position_y = '-4361.571777', position_z = '-6.636335', orientation = '3.179639' WHERE guid = '74531';
+UPDATE creature SET position_x = '-4366.259277', position_y = '-4453.036621', position_z = '6.240515', orientation = '3.659527' WHERE guid = '2572566';
