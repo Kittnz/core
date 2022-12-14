@@ -84,3 +84,6 @@ DELETE FROM creature_battleground WHERE guid=2573913;
 REPLACE INTO `gameobject` VALUES ( 5012235, 2010445, 813, -2679.77, 1146.8, 53.0725, 0.561238, 0, 0, 0.276951, 0.960884, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5012235, 2010445, 813, -2679.77, 1146.8, 53.0725, 0.561238, 0, 0, 0.276951, 0.960884, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5012235, 2010445, 813, -2679.77, 1146.8, 53.0725, 0.561238, 0, 0, 0.276951, 0.960884, 300, 300, 100, 1, 0, 0);
+
+-- Changes by JOE
+UPDATE creature SET position_x = '-4315.030762', position_y = '-4320.056641', position_z = '-1.266435', orientation = '3.484372' WHERE guid = '74532';
