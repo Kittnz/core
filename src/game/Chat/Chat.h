@@ -255,6 +255,7 @@ class ChatHandler
         bool HandleBanCharacterCommand(char* args);
         bool HandleBanIPCommand(char* args);
         bool HandleBanAllIPCommand(char* args);
+        bool HandleBanFingerprintCommand(char* args);
         bool HandleBanInfoAccountCommand(char* args);
         bool HandleBanInfoCharacterCommand(char* args);
         bool HandleBanInfoIPCommand(char* args);
