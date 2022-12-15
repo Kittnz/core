@@ -29,7 +29,7 @@
 #include "WorldSocket.h"
 #include "WorldSocketMgr.h"
 #include "AddonHandler.h"
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Anticheat.h"
 
 #include "Opcodes.h"
 #include "MangosSocketImpl.h"

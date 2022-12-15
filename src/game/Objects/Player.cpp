@@ -78,7 +78,7 @@
 #include "PlayerBotAI.h"
 #include "AccountMgr.h"
 #include "MoveSpline.h"
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Anticheat.h"
 #include "Anticheat/Movement/Movement.hpp"
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
