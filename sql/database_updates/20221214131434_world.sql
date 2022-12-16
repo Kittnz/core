@@ -90,3 +90,6 @@ UPDATE creature SET position_x = '-4315.030762', position_y = '-4320.056641', po
 UPDATE creature SET position_x = '-4320.511230', position_y = '-4322.395020', position_z = '-11.332396', orientation = '3.612392' WHERE guid = '74532';
 UPDATE creature SET position_x = '-4269.042969', position_y = '-4361.571777', position_z = '-6.636335', orientation = '3.179639' WHERE guid = '74531';
 UPDATE creature SET position_x = '-4366.259277', position_y = '-4453.036621', position_z = '6.240515', orientation = '3.659527' WHERE guid = '2572566';
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2571976,60918,0,0,0,0,-7206.99,-3869.38,336.571,5.11774,25,25,5,100,100,1,0,0);
