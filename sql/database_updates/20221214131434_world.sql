@@ -944,3 +944,16 @@ REPLACE INTO `gameobject` VALUES ( 5012292, 2003572, 1, -5061.1, 1909.94, 162.81
 DELETE FROM gameobject WHERE guid = '5012292';
 DELETE FROM game_event_gameobject WHERE guid = '5012292';
 DELETE FROM gameobject_battleground WHERE guid = '5012292';
+REPLACE INTO `gameobject` VALUES ( 5012293, 2003825, 1, -7561.41, -2385.26, -179.644, 2.34891, 0, 0, 0.92248, 0.386045, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012293';
+DELETE FROM game_event_gameobject WHERE guid = '5012293';
+DELETE FROM gameobject_battleground WHERE guid = '5012293';
+REPLACE INTO `gameobject` VALUES ( 5012294, 2002208, 1, -7561.41, -2385.26, -178.079, 2.34891, 0, 0, 0.92248, 0.386045, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012294';
+DELETE FROM game_event_gameobject WHERE guid = '5012294';
+DELETE FROM gameobject_battleground WHERE guid = '5012294';
+REPLACE INTO `gameobject` VALUES ( 5012295, 2002208, 1, -7561.41, -2385.26, -179.645, 2.34891, 0, 0, 0.92248, 0.386045, 300, 300, 100, 1, 0, 0);
+
+-- Changes by JOE
+UPDATE creature SET position_x = '1797.604248', position_y = '1398.868652', position_z = '23.512922', orientation = '4.685681' WHERE guid = '39944';
+UPDATE creature SET position_x = '1829.453979', position_y = '1399.278320', position_z = '20.701063', orientation = '3.011204' WHERE guid = '39933';
