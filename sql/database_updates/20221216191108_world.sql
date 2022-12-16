@@ -223,3 +223,53 @@ replace into item_template (entry, display_id, name, class, quality, flags, buy_
 (61103,3048,'Sealed Kul Tiran Letter',12,1,2048,1,-1,-1,1,1,-1,-1,-1,-1,4,'',0);
 
 update quest_template set requiredminrepfaction = 1693, requiredminrepvalue = 3000 where entry = 40794;
+-- A lot of the new NPCs such as Alika Ripfrost (61175) do not work. Currently Displayids go up to 19119 in the client, the server needs to have them implemented.
+REPLACE INTO `creature_display_info_addon` (`display_id`, `bounding_radius`, `combat_reach`, `gender`, `display_id_other_gender`) VALUES
+(19019, 0, 0, 0, 0),
+(19117, 0, 0, 0, 0),
+(19118, 0, 0, 0, 0),
+(19116, 0, 0, 0, 0),
+(19115, 0, 0, 0, 0),
+(19119, 0, 0, 0, 0),
+(19114, 0, 0, 0, 0),
+(19113, 0, 0, 0, 0),
+(19111, 0, 0, 0, 0),
+(19112, 0, 0, 0, 0),
+(19109, 0, 0, 0, 0),
+(19105, 0, 0, 0, 0),
+(19108, 0, 0, 0, 0),
+(19033, 0, 0, 0, 0);
+-- Change the scale of Urghor the Talker (61181) to 0.6 
+update creature_template set scale = 0.6 where entry = 61181;
+-- Mulin's first two quests are meant to be sequential. You need to complete "Inquiring about Legends" to unlock "Further Inquiries about Legends". It's the following two quests that are meant to be done at the same time.
+update quest_template set prevquestid = 40780 where entry = 40781;
+-- Typo in "Urghor the Talker" 's gossip text. Instead of saying "Well, in our culture" he says "Well, n our culture" 
+update broadcast_text set Male_Text = 'Hm you wish to know about Great-father Winter? Well, in our culture... There is none. As you may know we Orcs come from another world, we do not have our own analogous story to this.\n\nAll we know is the Great-father Winter that entertains children. Greklor has quite taken to the role. Ah but never use his name before him, all the children believe he is Great-father Winter, and that\'s how it should be. I do have some good stories from Draenor to trade though.' where entry = 61181;
+-- Change Winter Grell Trickster's displayid to 6810, Change Winter Grell Schemer's displayid to 7554.
+update creature_template set display_id1 = 6810 where entry = 61127;
+update creature_template set display_id1 = 7554 where entry = 61128;
+-- Quest 'No Questions Asked' change short description text of 'Oooze' to 'Ooze'.
+update quest_template set objectives = 'Collect 15 Tainted Ooze Sludge from the oozes near Bloodvenom Falls for Vana Gracefall at Talonbranch Glade in Felwood.' where entry = 40775;
+-- NPC Innkeeper Vizzie and NPC Golhine the Hooded add quest flags.
+update creature_template set npc_flags = 135 where entry = 11118;
+update creature_template set npc_flags = 19 where entry = 9465;
+-- NPC Razzit change faction to 1682.
+update creature_template set faction = 1682 where entry = 61133;
+-- Gobject 'Ancient Troll Tablet' (2010976) change scale to 0.4.
+update gameobject_template set size = 0.4 where entry = 2010976;
+-- Gobject 'Ancient Dirt Mound' (2010977) change scale to 0.6.
+update gameobject_template set size = 0.6 where entry = 2010977;
+-- Item Music: Sparkwater Port, rename to Music: Hateforge Quarry Exterior.
+update item_template set name = 'Music: Hateforge Quarry Exterior' where entry = 70091;
+-- Item Music: Hateforge Quarry rename to Music: Hateforge Quarry Interior.
+update item_template set name = 'Music: Hateforge Quarry Interior' where entry = 70088;
+-- Add short description for quest 'Big Green Bully' : Confront Zoki about allegations of stealing!
+update quest_template set objectives = 'Confront Zoki about allegations of stealing!' where entry = 40777;
+-- Add short description for quest 'Zoki is No Thief!' : "Speak with Mr. Mistletoe about the stolen gifts missing in Winter Veil Vale!"
+update quest_template set objectives = 'Speak with Mr. Mistletoe about the stolen gifts missing in Winter Veil Vale!' where entry = 40778;
+-- Add short description for quest 'The Terrible Krampus' "Slay the evil Krampus, and recover the Sack of Stolen Gifts for Mr. Mistle Toe in Winter Veil Vale!"
+-- quest 'The Terrible Krampus', make quest rewards hidden, make it choosable between 3, 'reveler's hat, 'Winter Veil Branch' 'Greatfather Winter's Belt'
+-- and have 'Bag of Krampus' just be an additional reward.
+update quest_template set objectives = 'Slay the evil Krampus, and recover the Sack of Stolen Gifts for Mr. Mistle Toe in Winter Veil Vale!', specialflags = 512, rewchoiceitemid4 = 0, rewchoiceitemcount4 = 0, rewitemid1 = 61089, rewitemcount1 = 1 where entry = 40779;
+-- Item 'Greatfather Winter's Belt' change spell 2 to 15464.
+update item_template set spellid_2 = 15464 where entry = 61088;
