@@ -917,3 +917,6 @@ DELETE FROM gameobject_battleground WHERE guid = '5012286';
 DELETE FROM gameobject WHERE guid = '5012285';
 DELETE FROM game_event_gameobject WHERE guid = '5012285';
 DELETE FROM gameobject_battleground WHERE guid = '5012285';
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `gameobject` VALUES ( 5012287, 153453, 1, -8234.45, -6892.38, 40.1739, 3.60665, 0, 0, 0.973087, -0.230437, 300, 300, 100, 1, 0, 0);
