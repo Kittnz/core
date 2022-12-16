@@ -5712,108 +5712,70 @@ bool GossipSelect_npc_winter_veil_storytailer(Player* pPlayer, Creature* pCreatu
     return true;
 }
 
-//bool GOHello_go_incense_brazier(Player* pPlayer, GameObject* pGo)
-//{
-//    if (pGo->GetEntry() == 2010970)
-//    {
-//        if (pPlayer->GetQuestStatus(40751) == QUEST_STATUS_INCOMPLETE && !pPlayer->FindNearestCreature(20, 40.0F))
-//        {
-//            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_DOT, "Place the bones within the fire", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-//            pPlayer->SEND_GOSSIP_MENU(30051, pGo->GetGUID());
-//        }
-//    }
-//    return true;
-//}
+bool QuestRewarded_npc_baron_telraz(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
 
-//bool GOSelect_go_incense_brazier(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-//{
-//    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-//    {
-//        if (pGo->GetEntry() == 2010970 && !pPlayer->HasItemCount(60990, 1, false))
-//        {
-//            pPlayer->GetSession()->SendNotification("Need to Senshi Bones");
-//        }
-//
-//        if (pGo->GetEntry() == 2010970 && pPlayer->HasItemCount(60990, 1, false))
-//        {
-//            pGo->SummonCreature(20, pGo->GetPositionX(), pGo->GetPositionY(), pGo->GetPositionZ(), pPlayer->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 5 * MINUTE * IN_MILLISECONDS);
-//
-//            Creature* shade_of_temptress = pGo->FindNearestCreature(61119, 40.0F);
-//
-//            pGo->m_Events.AddLambdaEventAtOffset([pGo, shade_of_temptress]()
-//                {
-//                    Creature* shade_of_temptress = pGo->FindNearestCreature(61119, 40.0F);
-//                    if (!shade_of_temptress)
-//                    {
-//                        pGo->SummonCreature(61119, -9039.67F, -7196.95F, 9.05F, 3.21F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 10 * IN_MILLISECONDS);
-//                    }
-//                }, 3000);
-//
-//            pGo->m_Events.AddLambdaEventAtOffset([pGo, pPlayer, shade_of_temptress]()
-//                {
-//                    Creature* shade_of_temptress = pGo->FindNearestCreature(61119, 40.0F);
-//                    if (shade_of_temptress)
-//                    {
-//                        shade_of_temptress->MonsterSay("Well, looks like he left us for good. At least we got some answers out of him. Now, go back to Captain Garran Vimes. He will know what to do next.");
-//                        shade_of_temptress->HandleEmote(EMOTE_ONESHOT_TALK);
-//                    }
-//                }, 5000);
-//        }
-//    }
-//    pPlayer->CLOSE_GOSSIP_MENU();
-//    return false;
-//}
-//
-//struct npc_shade_of_temptressAI : public ScriptedAI
-//{
-//    npc_shade_of_temptressAI(Creature* c) : ScriptedAI(c) { Reset(); }
-//
-//    bool transformed;
-//    bool fightBegun;
-//
-//    void Reset()
-//    {
-//        transformed = false;
-//        fightBegun = false;
-//    }
-//
-//    void UpdateAI(const uint32 diff)
-//    {
-//        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-//            return;
-//
-//        if (!fightBegun)
-//        {
-//
-//        }
-//
-//        DoMeleeAttackIfReady();
-//    }
-//    void JustDied(Unit*) override
-//    {
-//        m_creature->SummonCreature(61120, -9039.67F, -7196.95F, 9.05F, 3.21F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 10 * IN_MILLISECONDS);
-//        m_creature->MonsterSay("This isn't over! I will find you one day…And your soul will be the price for the one you stole today.");
-//    }
-//    void EnterCombat() {}
-//    void JustRespawned() { Reset(); }
-//};
-//
-//CreatureAI* GetAI_npc_shade_of_temptress(Creature* _Creature) { return new npc_shade_of_temptressAI(_Creature); }
+    if (pQuest->GetQuestId() == 40785) // King Morogo Thunderfoot!
+    {
+        pQuestGiver->MonsterSay("Look kid, I may have doubted you at first, and well the entire time you were here, but you got results, and actually dealt with that blasted Morogo for us. It's nice to have someone around here that can get there feet down and work for a change! Nice work.");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_TALK);
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_aneka_konko(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    Creature* quest_controller = pQuestGiver->FindNearestCreature(20, 40.0F);
+    if (!pQuestGiver || !pPlayer || quest_controller) return false;
+
+    if (pQuest->GetQuestId() == 40751 && !quest_controller) // To Heal a Soul
+    {
+        pQuestGiver->SummonCreature(20, pQuestGiver->GetPositionX(), pQuestGiver->GetPositionY(), pQuestGiver->GetPositionZ(), pQuestGiver->GetOrientation(), TEMPSUMMON_TIMED_DESPAWN, 0.35 * MINUTE * IN_MILLISECONDS);
+        pQuestGiver->SummonCreature(61120, -924.16F, -3710.23F, 8.89F, 4.05F, TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN, 20 * IN_MILLISECONDS);
+        Creature* shade_of_senshi = pQuestGiver->FindNearestCreature(61120, 40.0F);
+        if (shade_of_senshi)
+        {
+            shade_of_senshi->MonsterSay("I am... free. The dark Kami's vile hold over me is gone. I can ill repay this debt stranger, I thank you from the deepest recess of my soul. You may use my house as you see fit. I shan't be needing it any longer. Goodbye, and farewell!.");
+            shade_of_senshi->HandleEmote(EMOTE_ONESHOT_TALK);
+        }
+    }
+
+    return false;
+}
+
+bool QuestRewarded_npc_deckmaster_darkhollow(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
+{
+    if (!pQuestGiver || !pPlayer) return false;
+
+    if (pQuest->GetQuestId() == 40791) // Kul Tiran Provisions: Special Goods
+    {
+        pQuestGiver->MonsterSay("Well done on your missions recruit, you make Kul Tiras proud!");
+        pQuestGiver->HandleEmote(EMOTE_ONESHOT_SALUTE);
+    }
+
+    return false;
+}
 
 void AddSC_random_scripts_3()
 {
     Script* newscript;
 
-    //newscript = new Script;
-    //newscript->Name = "npc_shade_of_temptress";
-    //newscript->GetAI = &GetAI_npc_shade_of_temptress;
-    //newscript->RegisterSelf();
+    newscript = new Script;
+    newscript->Name = "npc_deckmaster_darkhollow";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_baron_telraz;
+    newscript->RegisterSelf();
 
-    //newscript = new Script;
-    //newscript->Name = "go_incense_brazier";
-    //newscript->pGOHello = &GOHello_go_incense_brazier;
-    //newscript->pGOGossipSelect = &GOSelect_go_incense_brazier;
-    //newscript->RegisterSelf();
+    newscript = new Script;
+    newscript->Name = "npc_aneka_konko";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_aneka_konko;
+    newscript->RegisterSelf();
+
+    newscript = new Script;
+    newscript->Name = "npc_baron_telraz";
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_baron_telraz;
+    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npc_winter_veil_storytailer";
