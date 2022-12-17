@@ -1007,7 +1007,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     // in creature kill case group/player tap stored for pCreatureVictim
     if (pCreatureVictim)
     {
-        if (pCreatureVictim->IsLootAllowedDueToDamageOrigin())
+        if (pCreatureVictim->IsLootAllowedDueToDamageOrigin() || pCreatureVictim->GetMap()->IsDungeon())
         {
             pGroupTap = pCreatureVictim->GetGroupLootRecipient();
 

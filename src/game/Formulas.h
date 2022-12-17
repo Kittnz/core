@@ -139,7 +139,8 @@ namespace MaNGOS
                 xp_gain *= 0.75f;
 
             xp_gain *= pCreature->GetCreatureInfo()->xp_multiplier;
-            xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
+            if (!pCreature->GetMap()->IsDungeon())
+                xp_gain *= pCreature->GetXPModifierDueToDamageOrigin();
 
             if (withChallenges)
             {
