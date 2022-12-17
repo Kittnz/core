@@ -125,3 +125,44 @@ DELETE FROM gameobject_battleground WHERE guid = '5012303';
 DELETE FROM gameobject WHERE guid = '5012302';
 DELETE FROM game_event_gameobject WHERE guid = '5012302';
 DELETE FROM gameobject_battleground WHERE guid = '5012302';
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2573936,61168,0,0,0,0,-5751.46,378.674,461.009,0.210795,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+REPLACE INTO `creature` VALUES (2573937,80601,0,0,0,1,2030.29,-4639.12,29.5545,5.79153,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2573937;
+DELETE FROM creature_addon WHERE guid=2573937;
+DELETE FROM creature_movement WHERE id=2573937;
+DELETE FROM game_event_creature WHERE guid=2573937;
+DELETE FROM game_event_creature_data WHERE guid=2573937;
+DELETE FROM creature_battleground WHERE guid=2573937;
+
+-- Changes by TAMMO
+UPDATE creature SET position_x = '-5838.621094', position_y = '309.109467', position_z = '422.781982', orientation = '5.732143' WHERE guid = '2573936';
+
+-- Changes by SHANG
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61181;
+
+-- Changes by TAMMO
+REPLACE INTO `gameobject` VALUES ( 5012304, 2000456, 0, -3931.47, -1821.51, 143.618, 5.39993, 0, 0, 0.427413, -0.904057, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012304';
+DELETE FROM game_event_gameobject WHERE guid = '5012304';
+DELETE FROM gameobject_battleground WHERE guid = '5012304';
+REPLACE INTO `gameobject` VALUES ( 5012305, 2000457, 0, -3931.43, -1821.56, 143.618, 5.4227, 0, 0, 0.417089, -0.908865, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5012306, 2000456, 0, -3931.69, -1821.32, 143.618, 5.1054, 0, 0, 0.55544, -0.831557, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012306';
+DELETE FROM game_event_gameobject WHERE guid = '5012306';
+DELETE FROM gameobject_battleground WHERE guid = '5012306';
+REPLACE INTO `gameobject` VALUES ( 5012307, 2009756, 0, -3873.6, -1635.24, 132.788, 1.41089, 0, 0, 0.648372, 0.761324, 300, 300, 100, 1, 0, 0);
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5012308, 2006578, 0, 1804.09, 332.008, 70.3976, 4.67635, 0, 0, 0.719732, -0.694252, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012308';
+DELETE FROM game_event_gameobject WHERE guid = '5012308';
+DELETE FROM gameobject_battleground WHERE guid = '5012308';
+
+-- Changes by TAMMO
+DELETE FROM gameobject WHERE guid = '5012307';
+DELETE FROM game_event_gameobject WHERE guid = '5012307';
+DELETE FROM gameobject_battleground WHERE guid = '5012307';
