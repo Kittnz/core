@@ -428,7 +428,7 @@ public:
                 m_creature->SetPowerPercent(POWER_MANA, 0.f);
                 m_creature->DealDamage(m_creature, (m_creature->GetHealth() / 2), nullptr, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, nullptr, false);
 
-                phase == nsInfiniteWhelp::Phase::ONE;
+                phase = nsInfiniteWhelp::Phase::ONE;
             }
         }
 

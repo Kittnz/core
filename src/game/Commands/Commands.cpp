@@ -12125,8 +12125,6 @@ bool ChatHandler::HandleMmapsNearCommand(char* args)
     auto playerpos = GetSession()->GetPlayer()->GetPosition();
     float extents[3] = { dist, 15.f, dist };
     float point[3] = { playerpos.y, playerpos.z, playerpos.x};
-    dtPolyRef polyRef;
-
 
     dtQueryFilter filter;
     filter.setExcludeFlags(NAV_STEEP_SLOPES);
