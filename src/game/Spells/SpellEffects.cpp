@@ -1937,7 +1937,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                 {
                     if (m_caster && m_caster->IsPlayer())
                     {
-                        std::array<std::pair<uint32, uint32>, 15> items_and_sounds =
+                        std::array<std::pair<uint32, uint32>, 16> items_and_sounds =
                         { {
                             { 70043, 30218 }, // Winds of Kamio
                             { 70080, 30220 }, // Emerald Dream
@@ -1953,7 +1953,8 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                             { 70091, 30294 }, // Ιntraworld Ιmmortality
                             { 70092, 30292 }, // Sparkwater Port
                             { 70093, 30275 }, // Stormwind Vault
-                            { 70094, 30241 }  // Dun Argath        
+                            { 70094, 30241 }, // Dun Argath        
+                            { 70095, 30311 }  // Snowing in the Vale 
                         } };
 
                         for (auto const& data : items_and_sounds)
