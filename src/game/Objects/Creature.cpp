@@ -54,7 +54,7 @@
 #include "ZoneScript.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
-#include "Anticheat/Anticheat.h"
+#include "Anticheat/Anticheat.hpp"
 #include "Anticheat/Movement/Movement.hpp"
 #include "CreatureLinkingMgr.h"
 #include "TemporarySummon.h"

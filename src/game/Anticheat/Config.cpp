@@ -1,5 +1,5 @@
 #include "Config.hpp"
-#include "Anticheat.h"
+#include "Anticheat.hpp"
 
 #include "Policies/SingletonImp.h"
 

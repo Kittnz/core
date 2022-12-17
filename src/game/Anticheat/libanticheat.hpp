@@ -8,7 +8,7 @@
 #ifndef __LIBANTICHEAT_HPP_
 #define __LIBANTICHEAT_HPP_
 
-#include "Anticheat.h"
+#include "Anticheat.hpp"
 #include "priority.hpp"
 
 #include "Policies/Singleton.h"
@@ -181,7 +181,7 @@ class SessionAnticheat final : public SessionAnticheatInterface
         // appropriate action(s), and call the RecordCheat() above for their execution.
         void RecordCheatInternal(CheatType type, const char *format = nullptr, ...);
 
-        uint32 GetFingerprint() const override { return _fingerprint; }
+        uint32 GetFingerprint() const { return _fingerprint; }
 
         bool IsKickTimerActive() const { return !!_kickTimer; }
         bool IsBanTimerActive() const { return !!_banTimer; }

@@ -1,4 +1,4 @@
-//This file included in Anticheat.h. This private table information
+//This file included in Anticheat.hpp. This private table information
 
 static ChatCommand anticheatFingerprintCommandTable[] =
 {

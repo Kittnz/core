@@ -59,7 +59,7 @@
 #include "MoveSpline.h"
 #include "packet_builder.h"
 #include "Chat.h"
-#include "Anticheat.h"
+#include "Anticheat.hpp"
 #include "Anticheat/Movement/Movement.hpp"
 #include "CreatureLinkingMgr.h"
 #include "MovementPacketSender.h"
