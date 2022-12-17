@@ -20,3 +20,11 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 UPDATE `quest_template` SET `ReqItemId1` = 91762 WHERE `entry` = 40768;
 UPDATE `creature_loot_template` SET `item` = 91762 WHERE `entry` = 61131 AND `item` = 61075;
 UPDATE `creature_loot_template` SET `item` = 91762 WHERE `entry` = 61130 AND `item` = 61075;
+
+-- Snowball targets 2022:
+
+UPDATE `turtle_world`.`quest_template` SET 
+`ObjectiveText1` = 'Throw snowball at Geoffroy', 
+`ObjectiveText2` = 'Throw snowball at Lexie', 
+`ObjectiveText3` = 'Throw snowball at Sarenrae', 
+`ObjectiveText4` = 'Throw snowball at Zaas' WHERE `entry` = 50321;
