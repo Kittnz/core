@@ -34,7 +34,7 @@
 #include "GameObjectAI.h"
 #include "World.h"
 #include "Util.h"
-#include "Anticheat.hpp"
+#include "Anticheat.h"
 
 void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
 {

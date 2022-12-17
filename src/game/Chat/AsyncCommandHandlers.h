@@ -52,6 +52,7 @@ struct PInfoData
     LocaleConstant loc = LOCALE_enUS;
     ObjectGuid target_guid;
     uint32 m_accountId;
+    uint32 fingerprint = 0;
     bool online = false;
     bool isHardcore = false;
 
