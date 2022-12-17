@@ -173,3 +173,21 @@ DELETE FROM gameobject_battleground WHERE guid = '5012309';
 REPLACE INTO `gameobject` VALUES ( 5012310, 2009757, 0, -3874.7, -1636.57, 132.909, 1.18391, 0, 0, 0.557984, 0.829852, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5012311, 2009757, 0, -3893.88, -1532.43, 145.281, 1.48315, 0, 0, 0.675449, 0.737406, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `creature` VALUES (2573938,61171,0,0,0,0,-4333.81,-1452.69,404.67,0.43153,120,120,0,100,100,0,0,0);
+REPLACE INTO `creature` VALUES (2573939,61172,0,0,0,1,-3035.73,316.723,152.701,5.28556,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2573939;
+DELETE FROM creature_addon WHERE guid=2573939;
+DELETE FROM creature_movement WHERE id=2573939;
+DELETE FROM game_event_creature WHERE guid=2573939;
+DELETE FROM game_event_creature_data WHERE guid=2573939;
+DELETE FROM creature_battleground WHERE guid=2573939;
+REPLACE INTO `creature` VALUES (2573940,61172,0,0,0,1,-3479.94,-921.759,100.889,5.921,120,120,0,100,100,0,0,0);
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5012312, 101770, 1, -7603.02, -2373.97, -188.601, 4.37623, 0, 0, 0.815433, -0.578851, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012312';
+DELETE FROM game_event_gameobject WHERE guid = '5012312';
+DELETE FROM gameobject_battleground WHERE guid = '5012312';
+
+-- Changes by TAMMO
+UPDATE creature SET position_x = '-3480.576660', position_y = '-921.088989', position_z = '100.888725', orientation = '5.869170' WHERE guid = '2573940';
+UPDATE creature SET position_x = '-3481.691162', position_y = '-918.449951', position_z = '100.888626', orientation = '5.645335' WHERE guid = '2573940';
