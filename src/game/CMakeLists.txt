@@ -263,7 +263,7 @@ set (game_SRCS
     AI/ScriptedPetAI.h
     AI/TotemAI.h
     Anticheat/libanticheat.hpp
-    Anticheat/Anticheat.h
+    Anticheat/Anticheat.hpp
     AuctionHouse/AuctionHouseMgr.h
     Battlegrounds/BattleGround.h
     Battlegrounds/BattleGroundAB.h

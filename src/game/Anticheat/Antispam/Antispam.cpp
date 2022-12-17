@@ -8,7 +8,7 @@
 #include "Antispam.hpp"
 #include "AntispamMgr.hpp"
 #include "../libanticheat.hpp"
-#include "Anticheat.h"
+#include "Anticheat.hpp"
 #include "../Config.hpp"
 #include "../dldist.hpp"
 
