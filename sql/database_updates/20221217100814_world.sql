@@ -113,3 +113,12 @@ update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where guid > 
 update creature set spawntimesecsmin = 280, spawntimesecsmax = 300 where guid > 2569245 and spawntimesecsmin = 120;
 
 UPDATE `creature` SET `spawntimesecsmin` = 172800, `spawntimesecsmax` = 259200 WHERE `id` = 50112;
+
+UPDATE `creature_template` SET `skinning_loot_id` = 9164 WHERE `name` in ('Abominable Snow Yeti', 'Venomflayer Serpent', 'Venomflayer Screecher', 'Highvale Gorilla', 'Highvale Chimpanzee', 'Highvale Monkey', 'Elder Highvale Gorilla', 'Highvale Thunderer', 'Brushtail Cobra', 'Brushtail Adder', 'Gravelhide Basilisk', 'King Morogo Thunderfoot');
+
+REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60909, 4234, 76.6857, 1, 1, 1, 0);
+REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60909, 4235, 3.047, 1, 1, 1, 0);
+REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60909, 4304, 20.2673, 1, 1, 1, 0);
+REPLACE INTO `skinning_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (60909, 15415, 1.567, 2, 1, 1, 0);
+
+UPDATE `creature_template` SET `skinning_loot_id` = 60909 WHERE `name` in ('Azurescale Whelp', 'Azurescale Manaweaver', 'Drathos Runebreaker');
