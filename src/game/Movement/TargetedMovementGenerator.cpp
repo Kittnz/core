@@ -25,7 +25,7 @@
 #include "World.h"
 #include "MoveSplineInit.h"
 #include "MoveSpline.h"
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Anticheat.h"
 #include "Anticheat/Movement/Movement.hpp"
 #include "Transport.h"
 #include "TemporarySummon.h"
