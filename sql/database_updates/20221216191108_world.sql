@@ -270,6 +270,6 @@ update quest_template set objectives = 'Speak with Mr. Mistletoe about the stole
 -- Add short description for quest 'The Terrible Krampus' "Slay the evil Krampus, and recover the Sack of Stolen Gifts for Mr. Mistle Toe in Winter Veil Vale!"
 -- quest 'The Terrible Krampus', make quest rewards hidden, make it choosable between 3, 'reveler's hat, 'Winter Veil Branch' 'Greatfather Winter's Belt'
 -- and have 'Bag of Krampus' just be an additional reward.
-update quest_template set objectives = 'Slay the evil Krampus, and recover the Sack of Stolen Gifts for Mr. Mistle Toe in Winter Veil Vale!', specialflags = 512, rewchoiceitemid4 = 0, rewchoiceitemcount4 = 0, rewitemid1 = 61089, rewitemcount1 = 1 where entry = 40779;
+update quest_template set objectives = 'Slay the evil Krampus, and recover the Sack of Stolen Gifts for Mr. Mistle Toe in Winter Veil Vale!', questflags = 512, rewchoiceitemid4 = 0, rewchoiceitemcount4 = 0, rewitemid1 = 61089, rewitemcount1 = 1 where entry = 40779;
 -- Item 'Greatfather Winter's Belt' change spell 2 to 15464.
 update item_template set spellid_2 = 15464 where entry = 61088;
