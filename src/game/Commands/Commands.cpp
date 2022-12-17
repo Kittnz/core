@@ -82,7 +82,7 @@
 #include <iomanip>
 #include <sstream>
 #include <ctime>
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Anticheat.h"
 
 bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
 {
@@ -3645,6 +3645,52 @@ bool ChatHandler::HandleBanHelper(BanMode mode, char* args)
     }
 
     sWorld.BanAccount(mode, nameOrIP, duration_secs, reason, m_session ? m_session->GetPlayerName() : "");
+
+    return true;
+}
+
+bool ChatHandler::HandleBanFingerprintCommand(char* args)
+{
+    if (!*args)
+        return false;
+
+    uint32 fingerprint;
+    if (!ExtractUInt32(&args, fingerprint))
+        return false;
+
+    char* duration = ExtractArg(&args);                     // time string
+    if (!duration)
+        return false;
+
+    uint32 duration_secs = TimeStringToSecs(duration);
+
+    char* cReason = ExtractArg(&args);
+    if (!cReason)
+        return false;
+
+    std::string reason(cReason);
+
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `username` FROM `account` WHERE `id` IN (SELECT `account` FROM `system_fingerprint_usage` WHERE `fingerprint`=%u)", fingerprint));
+
+    if (!result)
+    {
+        SendSysMessage("No accounts with that fingerprint found.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        std::string username = fields[0].GetCppString();
+        if (!AccountMgr::normalizeString(username))
+            continue;
+
+        PSendSysMessage("Banning account %s...", username.c_str());
+        sWorld.BanAccount(BAN_ACCOUNT, username, duration_secs, reason, m_session ? m_session->GetPlayerName() : "");
+
+    } while (result->NextRow());
 
     return true;
 }

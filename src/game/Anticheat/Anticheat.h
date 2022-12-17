@@ -76,6 +76,7 @@ class SessionAnticheatInterface
 
         // addon checksum verification
         virtual bool ReadAddonInfo(WorldPacket *, WorldPacket &) = 0;
+        virtual uint32 GetFingerprint() const { return 0; }
 
         // chat
         virtual void SendPlayerInfo(ChatHandler *) const = 0;

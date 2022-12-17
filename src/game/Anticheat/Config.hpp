@@ -1,7 +1,7 @@
 #ifndef __CONFIG_HPP_
 #define __CONFIG_HPP_
 
-#include "Anticheat.hpp"
+#include "Anticheat.h"
 #include "libanticheat.hpp"
 #include "Config/Config.h"
 #include "Platform/Define.h"
