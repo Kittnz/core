@@ -1877,6 +1877,26 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                     }
                     return;
                 }
+                case 45840: // Toy Train Set
+                {
+                    if (m_caster && m_caster->IsPlayer())
+                    {
+                        float dis{ 0.1F };
+                        float x, y, z;
+                        m_caster->GetSafePosition(x, y, z);
+                        x += dis * cos(m_caster->GetOrientation());
+                        y += dis * sin(m_caster->GetOrientation());
+
+                        float  p_r, o_r;
+                        p_r = m_caster->GetOrientation();
+                        o_r = remainderf(p_r + M_PI_F, M_PI_F * 2.0f);
+                        float rot2 = sin(o_r / 2);
+                        float rot3 = cos(o_r / 2);
+
+                        m_caster->SummonGameObject(2000388, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 10 * MINUTE * IN_MILLISECONDS, true);
+                    }
+                    return;
+                }
                 case 46062: // Simple Wooden Planter
                 {
                     if (m_caster && m_caster->IsPlayer())

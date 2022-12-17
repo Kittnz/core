@@ -6216,7 +6216,7 @@ SpellCastResult Spell::CheckCast(bool strict)
                     }
                 }
                 else if (m_spellInfo->Id == 46002 || m_spellInfo->Id == 46010 || m_spellInfo->Id == 46035 || m_spellInfo->Id == 46001 ||
-                         m_spellInfo->Id == 56067 || m_spellInfo->Id == 45407 || m_spellInfo->Id == 45920 || m_spellInfo->Id == 56053)
+                         m_spellInfo->Id == 56067 || m_spellInfo->Id == 45407 || m_spellInfo->Id == 45920 || m_spellInfo->Id == 56053 || m_spellInfo->Id == 45840)
                 {
                     if (m_caster->ToPlayer()->IsInCombat() || m_caster->ToPlayer()->IsBeingTeleported() || (m_caster->ToPlayer()->GetDeathState() == CORPSE) || m_caster->ToPlayer()->IsMoving())
                     {
