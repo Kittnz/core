@@ -5548,6 +5548,7 @@ bool GossipSelect_npc_ansirem(Player* pPlayer, Creature* pCreature, uint32 uiSen
             pPlayer->GetSession()->SendNotification("Your bags are full!");
         return false;
     }
+    return true;
 }
 
 bool QuestRewarded_npc_pazzle_brightwrench(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)

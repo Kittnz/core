@@ -178,5 +178,6 @@ namespace nsArdaeus
                 return "Admiral! I have saved you some rum, tell me of Northern coasts again.";
             }
         }
+        return std::string();
     }
 }

@@ -93,7 +93,7 @@ struct npc_dorius_stonetenderAI : public npc_escortAI
                 m_creature->SetFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD | UNIT_DYNFLAG_TAPPED);
                 m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
-                m_creature->SummonGameObject(175704, -6386.89, -1984.05, 246.73, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120000, true);
+                m_creature->SummonGameObject(175704, -6386.89f, -1984.05f, 246.73f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 120000, true);
                 break;
         }
     }

@@ -27,7 +27,7 @@
 #include "WorldPacket.h"
 #include "WorldSession.h"
 #include "UpdateMask.h"
-#include "Anticheat.hpp"
+#include "Anticheat.h"
 
 void WorldSession::HandleLearnTalentOpcode(WorldPacket & recv_data)
 {
