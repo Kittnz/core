@@ -191,3 +191,31 @@ DELETE FROM gameobject_battleground WHERE guid = '5012312';
 -- Changes by TAMMO
 UPDATE creature SET position_x = '-3480.576660', position_y = '-921.088989', position_z = '100.888725', orientation = '5.869170' WHERE guid = '2573940';
 UPDATE creature SET position_x = '-3481.691162', position_y = '-918.449951', position_z = '100.888626', orientation = '5.645335' WHERE guid = '2573940';
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5012313, 2002266, 451, 16898.8, 15650, 67.6684, 5.15363, 0, 0, 0.535227, -0.844708, 300, 300, 100, 1, 0, 0);
+
+-- Changes by TAMMO
+REPLACE INTO `creature` VALUES (2573941,61169,0,0,0,1,8004.64,-4145.39,689.787,3.59045,120,120,0,100,100,0,0,0);
+UPDATE creature SET position_x = '8004.774414', position_y = '-4144.276855', position_z = '689.776855', orientation = '3.233099' WHERE guid = '2573941';
+
+-- Changes by GHEOR
+DELETE FROM gameobject WHERE guid = '5012313';
+DELETE FROM game_event_gameobject WHERE guid = '5012313';
+DELETE FROM gameobject_battleground WHERE guid = '5012313';
+REPLACE INTO `gameobject` VALUES ( 5012314, 2003294, 451, 16900.6, 15649.2, 67.7448, 5.92646, 0, 0, 0.177416, -0.984136, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012314';
+DELETE FROM game_event_gameobject WHERE guid = '5012314';
+DELETE FROM gameobject_battleground WHERE guid = '5012314';
+
+-- Changes by SHANG
+REPLACE INTO `gameobject` VALUES ( 5012315, 2000388, 1, -606.401, 2212.95, 92.9109, 1.65719, 0, 0, 0.736983, 0.675911, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012315';
+DELETE FROM game_event_gameobject WHERE guid = '5012315';
+DELETE FROM gameobject_battleground WHERE guid = '5012315';
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5012316, 2003305, 451, 16901.4, 15651.5, 67.6749, 5.46544, 0, 0, 0.397576, -0.917569, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012316';
+DELETE FROM game_event_gameobject WHERE guid = '5012316';
+DELETE FROM gameobject_battleground WHERE guid = '5012316';
