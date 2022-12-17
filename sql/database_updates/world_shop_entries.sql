@@ -169,6 +169,7 @@ replace into shop_items values
 (257, 6, 69004, 'Pengu', 200),
 (258, 6, 69006, 'Glitterwing', 200),
 (259, 6, 83300, 'Lil\' K.T', 300),
+(260, 6, 83301, 'Core Hound Pet', 300),
 -- Tabards
 (271, 7, 81088, 'Tabard of Summer Skies', 180),
 (272, 7, 81087, 'Tabard of Summer Flames', 180),
