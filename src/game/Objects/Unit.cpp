@@ -59,7 +59,7 @@
 #include "MoveSpline.h"
 #include "packet_builder.h"
 #include "Chat.h"
-#include "Anticheat.hpp"
+#include "Anticheat.h"
 #include "Anticheat/Movement/Movement.hpp"
 #include "CreatureLinkingMgr.h"
 #include "MovementPacketSender.h"
@@ -1007,7 +1007,7 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
     // in creature kill case group/player tap stored for pCreatureVictim
     if (pCreatureVictim)
     {
-        if (pCreatureVictim->IsLootAllowedDueToDamageOrigin())
+        if (pCreatureVictim->IsLootAllowedDueToDamageOrigin() || pCreatureVictim->GetMap()->IsDungeon())
         {
             pGroupTap = pCreatureVictim->GetGroupLootRecipient();
 

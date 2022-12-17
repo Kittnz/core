@@ -42,7 +42,7 @@
 #include "SocialMgr.h"
 
 #include "PlayerBotMgr.h"
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Anticheat.h"
 #include "Anticheat/Movement/Movement.hpp"
 #include "Language.h"
 #include "Auth/Sha1.h"

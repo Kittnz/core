@@ -78,7 +78,7 @@
 #include "PlayerBotAI.h"
 #include "AccountMgr.h"
 #include "MoveSpline.h"
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Anticheat.h"
 #include "Anticheat/Movement/Movement.hpp"
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
@@ -650,6 +650,7 @@ Player::Player(WorldSession *session) : Unit(),
 
     m_justBoarded = false;
 
+    m_cameraUpdateTimer = CAMERA_UPDATE_DELAY;
     m_longSightSpell = 0;
     m_longSightRange = 0.0f;
 
@@ -1358,6 +1359,18 @@ void Player::Update(uint32 update_diff, uint32 p_time)
         }
         else
             GetSession()->m_muteTime -= update_diff;
+    }
+
+    if (!m_pendingCameraUpdate.IsEmpty())
+    {
+        if (m_cameraUpdateTimer <= update_diff)
+        {
+            SetGuidValue(PLAYER_FARSIGHT, m_pendingCameraUpdate);
+            m_pendingCameraUpdate.Clear();
+            m_cameraUpdateTimer = CAMERA_UPDATE_DELAY;
+        }
+        else
+            m_cameraUpdateTimer -= update_diff;
     }
 
     if (!m_timedquests.empty())
@@ -6748,6 +6761,9 @@ void Player::CheckAreaExploreAndOutdoor()
                 }
                 else
                     XP = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
+
+                if (HasChallenge(CHALLENGE_WAR_MODE))
+                    XP = XP + (XP * 0.3f);
 
                 GiveXP(XP, nullptr);
                 SendExplorationExperience(area, XP);
@@ -19246,6 +19262,14 @@ void Player::UpdateLongSight()
         dynObj->Relocate(GetPositionX() + m_longSightRange * cos(GetOrientation()),
                          GetPositionY() + m_longSightRange * sin(GetOrientation()),
                          GetPositionZ());
+}
+
+void Player::ScheduleCameraUpdate(ObjectGuid guid)
+{
+    if (guid.IsEmpty() && m_pendingCameraUpdate.IsEmpty())
+        SetGuidValue(PLAYER_FARSIGHT, guid);
+    else
+        m_pendingCameraUpdate = guid;
 }
 
 void Player::InitPrimaryProfessions()
