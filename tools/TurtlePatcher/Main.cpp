@@ -51,7 +51,7 @@ bool fov_build = false;
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
-#define ADDITIONAL_GAME_BINARY "WoWFoV.mpq"
+#define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
 
 const unsigned char LoadDLLShellcode[] =
 {
