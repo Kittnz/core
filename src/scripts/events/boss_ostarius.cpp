@@ -494,7 +494,12 @@ struct boss_ostariusAI : public ScriptedAI
                 spawnX,
                 spawnY,
                 squareZ,
-                0.0f
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                30 * MINUTE
             );
             portals.push_back(portal->GetObjectGuid());
 
@@ -511,7 +516,9 @@ struct boss_ostariusAI : public ScriptedAI
                 sentryLocs[i][0],
                 sentryLocs[i][1],
                 sentryLocs[i][2],
-                sentryLocs[i][3]
+                sentryLocs[i][3],
+                TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN,
+                30 * MINUTE * IN_MILLISECONDS
             );
 
             sentrySpawns.push_back(sentry->GetObjectGuid());
@@ -535,7 +542,12 @@ struct boss_ostariusAI : public ScriptedAI
                 spawnX,
                 spawnY,
                 squareZ,
-                0.0f
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                30 * MINUTE
             );
 
             devices.push_back(device->GetObjectGuid());
