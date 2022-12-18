@@ -689,6 +689,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "minchatlevel",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleMinChatLevelCommand,             "", nullptr },
         { "pvp",            SEC_DEVELOPER,       false, &ChatHandler::HandlePvPCommand,                  "", nullptr},
         { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                         "", mmapsCommandTable },
+        { "crash",          SEC_CONSOLE,         true, &ChatHandler::CrashCommand,  "", nullptr},
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
