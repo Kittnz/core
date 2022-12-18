@@ -485,7 +485,7 @@ void PrintInstructions()
 	WriteLog(" ");
 	WriteLog("If everything is done right, your Data folder should have %s installed an your binary file should have revision %s", PATCH_FILE, NEW_VISUAL_VERSION);
 	WriteLog(" ");
-	WriteLog("If it still doesn't work please use a direct download from our website: https://www.turtle-archives.online/downloads/turtle_client_116.zip");
+	WriteLog("If it still doesn't work please use a direct download from our website.");
 	WriteLog(" ");
 	WriteLog("If you need help, join our Discord: https://discord.com/invite/mBGxmHy or contact us via e-mail help.turtlewow@gmail.com");
 }
@@ -883,7 +883,7 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 		else
 		{
-			WriteLog("ERROR: Coudln't extract MPQ.");
+			WriteLog("ERROR: Couldn't extract MPQ.");
 			ErrorBox("Your client is already updated.");
 			return 1;
 		}
