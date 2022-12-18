@@ -1619,7 +1619,7 @@ bool WorldObject::IsFacingTarget(WorldObject const* target) const
     return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(target, M_PI_F);
 }
 
-bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const
+bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z, bool allowStraightPath) const
 {
     if (distance < 0.1f)
     {
@@ -1657,7 +1657,7 @@ bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, floa
         rand_x = x;
         rand_y = y;
         rand_z = z;
-        if (map->GetWalkRandomPosition(GetTransport(), rand_x, rand_y, rand_z, distance, moveAllowed))
+        if (map->GetWalkRandomPosition(GetTransport(), rand_x, rand_y, rand_z, distance, allowStraightPath, moveAllowed))
         {
             // Giant type creatures walk underwater
             if ((isType(TYPEMASK_UNIT) && !ToUnit()->CanSwim()) || (IsCreature() && ToCreature()->GetCreatureInfo()->type == CREATURE_TYPE_GIANT))
