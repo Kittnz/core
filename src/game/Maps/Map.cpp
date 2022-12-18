@@ -3119,7 +3119,7 @@ bool Map::GetWalkHitPosition(Transport* transport, float srcX, float srcY, float
 }
 
 
-bool Map::GetWalkRandomPosition(Transport* transport, float& x, float& y, float& z, float maxRadius, uint32 moveAllowedFlags) const
+bool Map::GetWalkRandomPosition(Transport* transport, float& x, float& y, float& z, float maxRadius, bool allowStraightPath, uint32 moveAllowedFlags) const
 {
     ASSERT(MaNGOS::IsValidMapCoord(x, y, z));
 
@@ -3134,41 +3134,60 @@ bool Map::GetWalkRandomPosition(Transport* transport, float& x, float& y, float&
     if (transport)
         transport->CalculatePassengerOffset(point[2], point[0], point[1]);
 
+    bool mmapsCorrect = false;
+
     if (m_navMeshQuery)
     {
-        // ATTENTION : Positions are Y,Z,X
-        float closestPoint[3] = { 0.0f, 0.0f, 0.0f };
-        dtQueryFilter filter;
-        filter.setIncludeFlags(moveAllowedFlags);
-        filter.setExcludeFlags(NAV_STEEP_SLOPES);
-        dtPolyRef startRef = PathInfo::FindWalkPoly(m_navMeshQuery, point, filter, closestPoint);
-        if (!startRef)
-            return false;
+        do 
+        {
+            mmapsCorrect = true;
+            // ATTENTION : Positions are Y,Z,X
+            float closestPoint[3] = { 0.0f, 0.0f, 0.0f };
+            dtQueryFilter filter;
+            filter.setIncludeFlags(moveAllowedFlags);
+            filter.setExcludeFlags(NAV_STEEP_SLOPES);
+            dtPolyRef startRef = PathInfo::FindWalkPoly(m_navMeshQuery, point, filter, closestPoint);
+            if (!startRef)
+            {
+                mmapsCorrect = false;
+                continue;
+            }
 
-        dtPolyRef randomPosRef = 0;
-        dtStatus result = m_navMeshQuery->findRandomPointAroundCircle(startRef, closestPoint, maxRadius, &filter, rand_norm_f, &randomPosRef, point);
-        if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(point[2], point[0], point[1]))
-            return false;
+            dtPolyRef randomPosRef = 0;
+            dtStatus result = m_navMeshQuery->findRandomPointAroundCircle(startRef, closestPoint, maxRadius, &filter, rand_norm_f, &randomPosRef, point);
+            if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(point[2], point[0], point[1]))
+            {
+                mmapsCorrect = false;
+                continue;
+            }
 
-        // Random point may be at a bigger distance than allowed
-        float d = sqrt(pow(x - point[2], 2) + pow(y - point[0], 2));
-        endPosition[0] = y + radius * (y - point[0]) / d;
-        endPosition[1] = z;
-        endPosition[2] = x + radius * (x - point[2]) / d;
-        float t = 0.0f;
-        dtPolyRef visited[10] = { 0 };
-        int visitedCount = 0;
-        float hitNormal[3] = { 0 }; // Normal of wall hit.
-        result = m_navMeshQuery->raycast(startRef, closestPoint, endPosition, &filter, &t, hitNormal, visited, &visitedCount, 10);
-        if (dtStatusFailed(result) || !visitedCount)
-            return false;
-        for (int i = 0; i < 3; ++i)
-            endPosition[i] += hitNormal[i] * 0.5f;
-        result = m_navMeshQuery->closestPointOnPoly(visited[visitedCount - 1], endPosition, endPosition, nullptr);
-        if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(endPosition[2], endPosition[0], endPosition[1]))
-            return false;
+            // Random point may be at a bigger distance than allowed
+            float d = sqrt(pow(x - point[2], 2) + pow(y - point[0], 2));
+            endPosition[0] = y + radius * (y - point[0]) / d;
+            endPosition[1] = z;
+            endPosition[2] = x + radius * (x - point[2]) / d;
+            float t = 0.0f;
+            dtPolyRef visited[10] = { 0 };
+            int visitedCount = 0;
+            float hitNormal[3] = { 0 }; // Normal of wall hit.
+            result = m_navMeshQuery->raycast(startRef, closestPoint, endPosition, &filter, &t, hitNormal, visited, &visitedCount, 10);
+            if (dtStatusFailed(result) || !visitedCount)
+            {
+                mmapsCorrect = false;
+                continue;
+            }
+            for (int i = 0; i < 3; ++i)
+                endPosition[i] += hitNormal[i] * 0.5f;
+            result = m_navMeshQuery->closestPointOnPoly(visited[visitedCount - 1], endPosition, endPosition, nullptr);
+            if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(endPosition[2], endPosition[0], endPosition[1]))
+            {
+                mmapsCorrect = false;
+                continue;
+            }
+        } while (false);
     }
-    else
+
+    if (!mmapsCorrect)
     {
         Geometry::GetNearPoint2DAroundPosition(point[2], point[0], endPosition[2], endPosition[0], radius, frand(0, M_PI_F * 2));
         endPosition[1] = point[1];

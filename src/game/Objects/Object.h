@@ -812,7 +812,7 @@ class WorldObject : public Object
         void UpdateAllowedPositionZ(float x, float y, float &z) const;
 
         // Valeur de retour : false si aucun point correct trouve.
-        bool GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const;
+        bool GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z, bool allowStraightPath = false) const;
     void GetPointBehindObject(WorldLocation& location, float distance) const;
 
     uint32 GetMapId() const { return m_mapId; }
