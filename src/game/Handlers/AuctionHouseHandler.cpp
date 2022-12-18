@@ -32,7 +32,7 @@
 #include "Mail.h"
 #include "Util.h"
 #include "Chat.h"
-#include "Anticheat.hpp"
+#include "Anticheat.h"
 
 extern bool IsPlayerHardcore(uint32 lowGuid);
 // please DO NOT use iterator++, because it is slower than ++iterator!!!
