@@ -24,7 +24,7 @@ UPDATE `creature_loot_template` SET `item` = 91762 WHERE `entry` = 61130 AND `it
 -- Snowball targets 2022:
 
 UPDATE `quest_template` SET 
-`ObjectiveText1` = 'Throw snowball at Geoffroy', 
+`ObjectiveText1` = 'Throw snowball at Ashstache', 
 `ObjectiveText2` = 'Throw snowball at Lexie', 
 `ObjectiveText3` = 'Throw snowball at Sarenrae', 
 `ObjectiveText4` = 'Throw snowball at Zaas' WHERE `entry` = 50321;
