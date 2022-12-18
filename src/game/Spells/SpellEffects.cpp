@@ -1893,7 +1893,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         float rot2 = sin(o_r / 2);
                         float rot3 = cos(o_r / 2);
 
-                        m_caster->SummonGameObject(2000388, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 10 * MINUTE * IN_MILLISECONDS, true);
+                        m_caster->SummonGameObject(2000388, x, y, z, o_r, 0.0f, 0.0f, rot2, rot3, 600, true);
                     }
                     return;
                 }
