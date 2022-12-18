@@ -44,7 +44,7 @@ bool fov_build = false;
 #define NEW_BUILD 7040u
 #define NEW_VISUAL_BUILD "7040"
 #define NEW_VISUAL_VERSION "1.16.4"
-#define NEW_BUILD_DATE "Nov 12 2022"
+#define NEW_BUILD_DATE "Dec 20 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-3.mpq"
@@ -208,18 +208,20 @@ void PatchBinary(FILE* hWoW)
 		fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 		fwrite(patch_13, sizeof(patch_13), 1, hWoW);
 
-		// Increased sound channel count
-		char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
+		// Sound channel count original values, safe to remove after 1.16.4
+
+		char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
 		fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
 		fwrite(patch_8, sizeof(patch_8), 1, hWoW);
 
-		char patch_9[] = { 0x9C, 0x5C, 0x83, 0x00 };
+		char patch_9[] = { 0x38, 0x5D, 0x83, 0x0 };
 		fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
 		fwrite(patch_9, sizeof(patch_9), 1, hWoW);
 
-		char patch_10[] = { 0x9C, 0x5C, 0x83, 0x00 };
+		char patch_10[] = { 0x6C, 0x5C, 0x83, 0x00 };
 		fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
 		fwrite(patch_10, sizeof(patch_10), 1, hWoW);
+
 	}
 }
 
