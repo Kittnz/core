@@ -168,12 +168,17 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_NAMEPLATE_DISTANCE, SEEK_SET);
 	fwrite(patch_11, sizeof(patch_11), 1, hWoW);
 
-	char patch_12[] = { 0x2F, 0x01 };
+	// Increased value:
+	//char patch_12[] = { 0x2F, 0x01 };
+	//fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
+	//fwrite(patch_12, sizeof(patch_12), 1, hWoW);
+
+	// Original 1.12.1 value:
+	char patch_12[] = { 0x0F, 0x01 };
 	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
 	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
 	// Sound channel count original values:
-
 	char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
 	fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
 	fwrite(patch_8, sizeof(patch_8), 1, hWoW);
@@ -187,7 +192,6 @@ void PatchBinary(FILE* hWoW)
 	fwrite(patch_10, sizeof(patch_10), 1, hWoW);
 
 	// Sound in background, original value:
-
 	char patch_13[] = { 0x14 };
 	fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 	fwrite(patch_13, sizeof(patch_13), 1, hWoW);
