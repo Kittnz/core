@@ -9864,6 +9864,13 @@ bool ChatHandler::HandleMinChatLevelCommand(char* args)
     return true;
 }
 
+bool ChatHandler::CrashCommand(char* args)
+{
+    int* torta = (int*)0x42;
+    *torta = 1337;
+    return true;
+}
+
 
 bool ChatHandler::HandlePvPCommand(char* args)
 {
