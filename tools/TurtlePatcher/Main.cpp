@@ -547,17 +547,12 @@ void DeleteDeprecatedMPQ()
 	}
 
 	{
-		std::string alphabet_patches[8] = { "patch-A.mpq",
-							        	    "patch-T.mpq",
-							        	    "patch-U.mpq",
-							        	    "patch-V.mpq",
-							        	    "patch-W.mpq",
-							        	    "patch-X.mpq",
-							        	    "patch-Y.mpq",
-							        	    "patch-Z.mpq" };
-
-		for (std::string i : alphabet_patches)
+		for (char let = 'A'; let <= 'Z'; ++let)
 		{
+			std::stringstream ss_n;
+			ss_n << "patch-" << let << ".mpq";
+			std::string i = ss_n.str();
+
 			WriteLog("Searching for %s...", i.c_str());
 
 			std::stringstream ss_r;
@@ -587,7 +582,6 @@ void DeleteDeprecatedMPQ()
 				WriteLog("%s not found.", i.c_str());
 			}
 		}
-
 	}
 }
 
