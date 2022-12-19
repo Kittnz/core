@@ -950,7 +950,7 @@ struct npc_cork_gizeltonAI : npc_escortAI
 
         for (uint8 i = 0; i < 5; ++i)
         {
-            if (m_creature->GetMap()->GetWalkRandomPosition(nullptr, x, y, z, 20.0f, NAV_GROUND))
+            if (m_creature->GetMap()->GetWalkRandomPosition(nullptr, x, y, z, 20.0f, false, NAV_GROUND))
                 break;
         }
 
