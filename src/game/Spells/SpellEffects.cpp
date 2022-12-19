@@ -1693,6 +1693,15 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         {
                             unitTarget->CastSpell(unitTarget, 21167, true);
                         }
+                        if ((m_caster->ToPlayer()->GetQuestStatus(80606) == QUEST_STATUS_INCOMPLETE))
+                        {
+                            if (unitTarget->ToPlayer()->IsGameMaster())
+                            {
+                                CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(128);
+                                if (cInfo != nullptr)
+                                    m_caster->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                            }
+                        }
                         // Turtle WoW Winter Veil quests:  
                         if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
                         {
