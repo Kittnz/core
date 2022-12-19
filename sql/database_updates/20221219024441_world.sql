@@ -17,4 +17,10 @@ UPDATE `creature` SET `spawntimesecsmin` = 54000, `spawntimesecsmax` = 108000 WH
 
 UPDATE `gameobject` SET `spawntimesecsmin` = 129600, `spawntimesecsmax` = 518400 WHERE `guid` in (5012287, 5012288, 5012289, 5012290);
 
+-- Snowball targets 2022:
 
+UPDATE `quest_template` SET 
+`ObjectiveText1` = 'Throw snowball at Cinnabon', 
+`ObjectiveText2` = 'Throw snowball at Lexie', 
+`ObjectiveText3` = 'Throw snowball at Sarenrae', 
+`ObjectiveText4` = 'Throw snowball at Zaas' WHERE `entry` = 50321;
