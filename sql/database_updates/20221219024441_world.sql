@@ -24,3 +24,5 @@ UPDATE `quest_template` SET
 `ObjectiveText2` = 'Throw snowball at Lexie', 
 `ObjectiveText3` = 'Throw snowball at Sarenrae', 
 `ObjectiveText4` = 'Throw snowball at Zaas' WHERE `entry` = 50321;
+
+UPDATE `quest_template` SET `RewItemId2` = 84038, `RewItemCount2` = 1 WHERE `entry` = 40779;
