@@ -5,3 +5,16 @@ REPLACE INTO `item_template` (`entry`, `class`, `subclass`, `name`, `description
 
 
 REPLACE INTO `companion_spells` (`itemId`, `spellId`) VALUES (84038, 46458);
+
+-- Misc. other fixes:
+
+-- FIX DEFAULT NPC SPAWNTIMERS:
+
+update creature set spawntimesecsmin = 300, spawntimesecsmax = 300 where guid > 2569245 and spawntimesecsmin = 25;
+update creature set spawntimesecsmin = 280, spawntimesecsmax = 300 where guid > 2569245 and spawntimesecsmin = 120;
+
+UPDATE `creature` SET `spawntimesecsmin` = 54000, `spawntimesecsmax` = 108000 WHERE `id` = 50112;
+
+UPDATE `gameobject` SET `spawntimesecsmin` = 129600, `spawntimesecsmax` = 518400 WHERE `guid` in (5012287, 5012288, 5012289, 5012290);
+
+
