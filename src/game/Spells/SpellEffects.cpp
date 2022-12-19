@@ -1697,7 +1697,7 @@ void Spell::EffectDummy(SpellEffectIndex eff_idx)
                         if ((m_caster->ToPlayer()->GetQuestStatus(50319) == QUEST_STATUS_INCOMPLETE) || (m_caster->ToPlayer()->GetQuestStatus(50320) == QUEST_STATUS_INCOMPLETE)) // Snowball Wars: Episode I & Episode II
                         {
                             // Change this part: 
-                            #define SNOWBALL_TARGET_1 987152
+                            #define SNOWBALL_TARGET_1 379777
                             #define SNOWBALL_TARGET_2 369620
                             #define SNOWBALL_TARGET_3 542109
                             #define SNOWBALL_TARGET_4 118064
