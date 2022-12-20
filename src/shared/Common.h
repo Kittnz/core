@@ -251,11 +251,16 @@ inline char * mangos_strdup(const char * source)
     return dest;
 }
 
-template <typename V, typename... T>
-constexpr auto make_array(T&&... t)
-->std::array < V, sizeof...(T) >
-{
-    return { { std::forward<T>(t)... } };
+template <typename... T>
+constexpr auto make_array(T&&... values) ->
+std::array<
+    typename std::decay<
+    typename std::common_type<T...>::type>::type,
+    sizeof...(T)> {
+    return std::array<
+        typename std::decay<
+        typename std::common_type<T...>::type>::type,
+        sizeof...(T)>{std::forward<T>(values)...};
 }
 
 // we always use stdlibc++ std::max/std::min, undefine some not C++ standard defines (Win API and some pother platforms)

@@ -24,12 +24,23 @@
 #include "Map.h"
 #include "Transport.h"
 
+#include <array>
+#include <tuple>
+
 #include "Detour/Include/DetourCommon.h"
 
 // Distance to target
 #define SMOOTH_PATH_SLOP 0.4f
 // Distance between path steps
 #define SMOOTH_PATH_STEP_SIZE 2.0f
+
+
+using restricted_movement_t = std::tuple<uint32, uint32, uint32>; // map id, area id, zone id
+
+auto NoMovementAreas = make_array<restricted_movement_t>(
+    std::make_tuple(1u, 5122u, 5121u), // The Shallow Strand, Tel'Abim
+    std::make_tuple(1u, 5129u, 5121u) // The Washing Shore, Tel'Abim
+);
 
 ////////////////// PathInfo //////////////////
 PathInfo::PathInfo(const Unit* owner) :
@@ -87,11 +98,25 @@ bool PathInfo::calculate(Vector3 const& start, Vector3 dest, bool forceDest, boo
     m_forceDestination = forceDest;
     m_type = PATHFIND_BLANK;
 
+    const Unit* owner = m_sourceUnit; // to pull into lambda without pulling in the full member.
+
+    bool ignoreMmaps = std::find_if(std::begin(NoMovementAreas), std::end(NoMovementAreas), [owner](const restricted_movement_t& t)
+        {
+            const auto& [mapId, areaId, zoneId] = t;
+
+            uint32 ownerZoneId = 0, ownerAreaId = 0;
+            owner->GetZoneAndAreaId(ownerZoneId, ownerAreaId);
+
+            if (owner->GetMapId() == mapId && ownerZoneId == zoneId  && ownerAreaId == areaId)
+                return true;
+
+        }) != std::end(NoMovementAreas);
+
     //DEBUG_FILTER_LOG(LOG_FILTER_PATHFINDING, "++ PathFinder::calculate() for %u \n", m_sourceUnit->GetGUIDLow());
 
     // make sure navMesh works - we can run on map w/o mmap
     // check if the start and end point have a .mmtile loaded (can we pass via not loaded tile on the way?)
-    if (!m_navMesh || !m_navMeshQuery || m_sourceUnit->HasUnitState(UNIT_STAT_IGNORE_PATHFINDING) ||
+    if (ignoreMmaps || !m_navMesh || !m_navMeshQuery || m_sourceUnit->HasUnitState(UNIT_STAT_IGNORE_PATHFINDING) ||
             !HaveTiles(start) || !HaveTiles(dest))
     {
         BuildShortcut();
