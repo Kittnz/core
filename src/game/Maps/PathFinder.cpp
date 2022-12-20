@@ -110,6 +110,7 @@ bool PathInfo::calculate(Vector3 const& start, Vector3 dest, bool forceDest, boo
             if (owner->GetMapId() == mapId && ownerZoneId == zoneId  && ownerAreaId == areaId)
                 return true;
 
+            return false;
         }) != std::end(NoMovementAreas);
 
     //DEBUG_FILTER_LOG(LOG_FILTER_PATHFINDING, "++ PathFinder::calculate() for %u \n", m_sourceUnit->GetGUIDLow());
