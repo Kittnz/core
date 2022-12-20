@@ -44,11 +44,10 @@ bool fov_build = false;
 #define NEW_BUILD 7050u
 #define NEW_VISUAL_BUILD "7050"
 #define NEW_VISUAL_VERSION "1.16.5"
-#define NEW_BUILD_DATE "Dec 21 2022"
+#define NEW_BUILD_DATE "Dec 20 2022"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-3.mpq"
-#define PATCH_FILE_2 "Data\\patch-4.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
@@ -170,14 +169,14 @@ void PatchBinary(FILE* hWoW)
 	fwrite(patch_11, sizeof(patch_11), 1, hWoW);
 
 	// Increased value:
-	char patch_12[] = { 0x2F, 0x01 };
-	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
-	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
-
-	// Original 1.12.1 value:
-	//char patch_12[] = { 0x0F, 0x01 };
+	//char patch_12[] = { 0x2F, 0x01 };
 	//fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
 	//fwrite(patch_12, sizeof(patch_12), 1, hWoW);
+
+	// Original 1.12.1 value:
+	char patch_12[] = { 0x0F, 0x01 };
+	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
+	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
 	// Sound channel count original values:
 	char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
@@ -878,70 +877,8 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 		else
 		{
-			ErrorBox("The file you're looking for is probably already installed!");
-			return 1;
-		}
-
-		// Unpack hotfix MPQ Patch-4:
-		if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE_2))
-		{
-			OnOpenFileLambda(PATCH_FILE_2);
-			std::unique_ptr<StormFile> patchData(pFile);
-			FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE_2);
-			if (hTargetFile == nullptr)
-			{
-				return 1;
-			}
-
-			// split to chunks
-			const DWORD chunkSize = 4096;
-			DWORD chunks = patchData->Size.QuadPart / chunkSize;
-			chunks += (patchData->Size.QuadPart % chunkSize) != 0;
-			char ReadingBuffer[4096];
-
-			PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
-
-			DWORD ExtractProgress = 0;
-
-			for (DWORD i = 0; i < chunks; i++)
-			{
-				if (hDialog == NULL)
-				{
-					break;
-				}
-
-				DWORD ReadingQuota = std::min<DWORD>(patchData->Size.QuadPart - ((i + 1) * chunkSize), chunkSize);
-
-				patchData->ReadToBuffer(&ReadingBuffer[0], ReadingQuota);
-
-				fwrite(ReadingBuffer, ReadingQuota, 1, hTargetFile);
-
-				// update progress
-				float progress = float(i) / float(chunks);
-				progress *= 100.0f;
-
-				DWORD NewExtractProgress = DWORD(progress);
-
-				for (; ExtractProgress < NewExtractProgress; ExtractProgress++)
-				{
-					SendMessage(hDialog, WM_SETPROGRESS, 0, 0);
-				}
-
-				while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
-				{
-					if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
-					{
-						TranslateMessage(&msg);
-						DispatchMessage(&msg);
-					}
-				}
-			}
-
-			fclose(hTargetFile);
-		}
-		else
-		{
-			ErrorBox("The file you're looking for is probably already installed!");
+			WriteLog("ERROR: Couldn't extract MPQ.");
+			ErrorBox("Your client is already updated.");
 			return 1;
 		}
 	}
