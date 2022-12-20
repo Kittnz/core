@@ -436,15 +436,9 @@ bool Map::ScriptCommand_SummonCreature(ScriptInfo const& script, WorldObject* so
         }
     }
 
-    // the issue is something deeper
-    if (script.summonCreature.flags & SF_SUMMONCREATURE_NULL_AI)
-    {
-        sLog.outError("Prevented summon of %u by %s.", script.summonCreature.creatureEntry, pSummoner->GetGuidStr().c_str());
-        return ShouldAbortScript(script);
-    }
-
     Creature* pCreature = pSummoner->SummonCreature(script.summonCreature.creatureEntry, x, y, z, o,
-        TempSummonType(script.summonCreature.despawnType), script.summonCreature.despawnDelay, script.summonCreature.flags & SF_SUMMONCREATURE_ACTIVE, 0, nullptr);
+        TempSummonType(script.summonCreature.despawnType), script.summonCreature.despawnDelay, script.summonCreature.flags & SF_SUMMONCREATURE_ACTIVE, 0,
+        (script.summonCreature.flags & SF_SUMMONCREATURE_NULL_AI) ? (CreatureAiSetter)([](Creature* pCreature) { pCreature->GetMotionMaster()->Initialize(); pCreature->SetAI(new NullCreatureAI(pCreature));}) : nullptr);
 
     if (!pCreature)
     {
