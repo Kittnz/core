@@ -66,48 +66,49 @@ class SessionAnticheat final : public SessionAnticheatInterface
     public:
         SessionAnticheat(WorldSession *session, const BigNumber &K);
 
-        virtual void Update(uint32 diff);
+        void Update(uint32 diff) override;
 
-        virtual bool IsSilenced() const;
+        bool IsSilenced() const override;
 
         // character enum packet has been built and is ready to send
-        virtual void SendCharEnum(WorldPacket &&packet);
+        void SendCharEnum(WorldPacket &&packet) override;
 
-        virtual void NewPlayer();
-        virtual void LeaveWorld();
-        virtual void Disconnect();
+        void NewPlayer() override;
+        void LeaveWorld() override;
+        void Disconnect() override;
 
         // addon checksum verification (and fingerprinting ;))))
-        virtual bool ReadAddonInfo(WorldPacket *, WorldPacket &);
+        bool ReadAddonInfo(WorldPacket *, WorldPacket &) override;
+        uint32 GetFingerprint() const override { return _fingerprint; }
 
-        virtual void SendPlayerInfo(ChatHandler *) const;
+        void SendPlayerInfo(ChatHandler *) const override;
 
         // miscellaneous/generic anticheat detection from the core.  also from within the module, once an action has been determined
-        virtual void RecordCheat(uint32 actionMask, const char *detector, const char *format, ...);
+        void RecordCheat(uint32 actionMask, const char *detector, const char *format, ...) override;
 
         // movement cheats
         // TODO: Mark these as const where possible
-        virtual bool Movement(MovementInfo &mi, const WorldPacket &packet);
-        virtual void TimeSkipped(const ObjectGuid &mover, uint32 ms);
-        virtual bool ExtrapolateMovement(MovementInfo const& mi, uint32 diffMs, Position &pos);
-        virtual bool SpeedChangeAck(MovementInfo &mi, const WorldPacket &packet, float newSpeed);
-        virtual bool IsInKnockBack() const;
-        virtual void KnockBack(float speedxy, float speedz, float cos, float sin);
-        virtual void OnExplore(const AreaEntry *p);
-        virtual void Teleport(const Position &pos);
+        bool Movement(MovementInfo &mi, const WorldPacket &packet) override;
+        void TimeSkipped(const ObjectGuid &mover, uint32 ms) override;
+        bool ExtrapolateMovement(MovementInfo const& mi, uint32 diffMs, Position &pos) override;
+        bool SpeedChangeAck(MovementInfo &mi, const WorldPacket &packet, float newSpeed) override;
+        bool IsInKnockBack() const override;
+        void KnockBack(float speedxy, float speedz, float cos, float sin) override;
+        void OnExplore(const AreaEntry *p) override;
+        void Teleport(const Position &pos) override;
 
-        virtual void OrderSent(uint16 opcode, uint32 counter);
-        virtual void OrderAck(uint16 opcode, uint32 counter);
+        void OrderSent(uint16 opcode, uint32 counter) override;
+        void OrderAck(uint16 opcode, uint32 counter) override;
 
         // warden
-        virtual void WardenPacket(WorldPacket &packet);
+        void WardenPacket(WorldPacket &packet) override;
 
         // antispam
-        virtual void Whisper(const std::string &msg, const ObjectGuid &to);
-        virtual void Say(const std::string &msg);
-        virtual void Yell(const std::string &msg);
-        virtual void Channel(const std::string &msg);
-        virtual void Mail(const std::string &subject, const std::string &body, const ObjectGuid &to);
+        void Whisper(const std::string &msg, const ObjectGuid &to) override;
+        void Say(const std::string &msg) override;
+        void Yell(const std::string &msg) override;
+        void Channel(const std::string &msg) override;
+        void Mail(const std::string &subject, const std::string &body, const ObjectGuid &to);
 
     /*** END PUBLIC INTERFACE PORTION ***/
 
@@ -180,8 +181,6 @@ class SessionAnticheat final : public SessionAnticheatInterface
         // called when the module detects a cheat.  this will apply the configuration to determine
         // appropriate action(s), and call the RecordCheat() above for their execution.
         void RecordCheatInternal(CheatType type, const char *format = nullptr, ...);
-
-        uint32 GetFingerprint() const override { return _fingerprint; }
 
         bool IsKickTimerActive() const { return !!_kickTimer; }
         bool IsBanTimerActive() const { return !!_banTimer; }
