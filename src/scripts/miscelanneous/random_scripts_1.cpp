@@ -1657,8 +1657,7 @@ bool GossipSelect_npc_frosty(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        static const WorldLocation m_WinterVeilVale(813, -2568.90F, -1193.84F, 62.63F, 3.6F);
-        pPlayer->TeleportTo(m_WinterVeilVale);
+        pPlayer->TeleportTo(813, -2568.90F, 1193.84F, 62.63F, 3.6F);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
