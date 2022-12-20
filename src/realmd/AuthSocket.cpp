@@ -54,6 +54,8 @@ enum AccountFlags
     ACCOUNT_FLAG_PROPASS    = 0x00800000,
 };
 
+constexpr uint32 HotfixEligibleBuild = 7040;
+
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some paltform
 #if defined( __GNUC__ )
 #pragma pack(1)
@@ -617,7 +619,11 @@ bool AuthSocket::_HandleLogonProof()
         char tmp[256];
 
         //snprintf(tmp, 256, "%s/%d%s.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str(), _build, _localizationName.c_str());
-        snprintf(tmp, 256, "%s/twpatch.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
+
+        if (_build == HotfixEligibleBuild)
+            snprintf(tmp, 256, "%s/hotfix.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
+        else
+            snprintf(tmp, 256, "%s/twpatch.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
 
         char filename[PATH_MAX];
         if (ACE_OS::realpath(tmp, filename) != nullptr)
