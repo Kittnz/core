@@ -63,7 +63,7 @@ bool stopEvent = false;                                     ///< Setting it to t
 
 DatabaseType LoginDatabase;                                 ///< Accessor to the realm server database
 
-int32 PatchHandlerKBytesDownloadLimit = 1024 * 896; // 1024 Mb/second
+int32 PatchHandlerKBytesDownloadLimit = 1024 * 1024; // 1024 Mb/second
 
 uint64_t MaxDataPerSecond = 1024 * 1024 * 1024; // ^
 
