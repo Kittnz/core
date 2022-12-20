@@ -877,7 +877,7 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 		else
 		{
-			WriteLog("ERROR: Couldn't extract MPQ.");
+			WriteLog("The file you're looking for is probably already installed!");
 			ErrorBox("Your client is already updated.");
 			return 1;
 		}
