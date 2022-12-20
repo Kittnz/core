@@ -6549,31 +6549,45 @@ bool QuestRewarded_npc_zul_jin(Player* pPlayer, Creature* pQuestGiver, Quest con
 
     switch (pQuest->GetQuestId())
     {
-    case 65008: // Da Banshees Favour in Undercity
-    {
+        case 65008: // Da Banshees Favour in Undercity
+        {
 
 
-            Quest const* pQuest = sObjectMgr.GetQuestTemplate(65013);
-            pPlayer->AddQuest(pQuest, pQuestGiver);
+                Quest const* pQuest = sObjectMgr.GetQuestTemplate(65013);
+                pPlayer->AddQuest(pQuest, pQuestGiver);
 
-            Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
-            Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
+                Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
+                Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
 
-            if (pPlayer)
-            {
-                DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [pPlayer, zuljin = pQuestGiver, guard1, guard2]() {
-                    zuljin->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
-                    guard1->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
-                    guard2->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+                if (!guard1 || !guard2)
+                    return false;
+
+                ObjectGuid guardGuid1 = guard1->GetObjectGuid();
+                ObjectGuid guardGuid2 = guard2->GetObjectGuid();
+                ObjectGuid zuljinGuid = pQuestGiver->GetObjectGuid();
+
+                if (pPlayer)
+                {
+                    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [pPlayer, zuljinGuid, guardGuid1, guardGuid2]()
+                    {
+                        if (!pPlayer->IsInWorld())
+                            return;
+
+                        if (Creature* zuljin = pPlayer->GetMap()->GetCreature(zuljinGuid))
+                            zuljin->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+                        if (Creature* guard1 = pPlayer->GetMap()->GetCreature(guardGuid1))
+                            guard1->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+                        if (Creature* guard2 = pPlayer->GetMap()->GetCreature(guardGuid2))
+                            guard2->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
                     });
-            }
-        break;
-    }
-    case 65010: // The Horde's Council
-    {
+                }
+            break;
+        }
+        case 65010: // The Horde's Council
+        {
 
-        break;
-    }
+            break;
+        }
     }
 
     return false;
