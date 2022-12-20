@@ -10,6 +10,7 @@
 #include "Opcodes.h"
 #include "Chat.h"
 #include "Util.h"
+#include "AddonHandler.h"
 
 #include <memory>
 #include <string>
@@ -153,7 +154,11 @@ class NullSessionAnticheat : public SessionAnticheatInterface
         virtual void Disconnect() {};
 
         // addon checksum verification
-        virtual bool ReadAddonInfo(WorldPacket *, WorldPacket &) { return true; }
+        virtual bool ReadAddonInfo(WorldPacket* source, WorldPacket& target)
+        {
+            sAddOnHandler.BuildAddonPacket(source, &target);
+            return true;
+        }
 
         // chat
         virtual void SendPlayerInfo(ChatHandler *) const {}
