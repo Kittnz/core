@@ -130,7 +130,7 @@ enum ChallengeSpells
     SPELL_HARDCORE = 50001
 };
 
-constexpr uint32 LoreKeeperQuestRequirement = 1700;
+constexpr uint32 LoreKeeperQuestRequirement = 2000;
 
 typedef std::unordered_map<uint32, PlayerSpell> PlayerSpellMap;
 

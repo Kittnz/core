@@ -8899,6 +8899,12 @@ void ObjectMgr::LoadShop()
 		shopentry.Price = price;
 		shopentry.DescriptionLong = descriptionLong;
 
+        if (!price)
+        {
+            sLog.outErrorDb("ERROR for item Id %u, price is 0, skipping.", id);
+            continue;
+        }
+
 		m_ShopEntriesMap[id] = shopentry;
 
 	} while (result->NextRow());
