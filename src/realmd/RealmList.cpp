@@ -36,7 +36,7 @@ INSTANTIATE_SINGLETON_1(RealmList);
 // list sorted from high to low build and first build used as low bound for accepted by default range (any > it will accepted by realmd at least)
 static RealmBuildInfo ExpectedRealmdClientBuilds[] =
 {
-	{7040,  1, 16, 4, ' ', {{}}, {{}}}, 
+	{7050,  1, 16, 5, ' ', {{}}, {{}}}, 
     {0,     0, 0, 0,  ' ', {{}}, {{}}} // terminator
 };
 
