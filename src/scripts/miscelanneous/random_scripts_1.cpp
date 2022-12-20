@@ -6318,13 +6318,13 @@ struct npc_zuljinAI : public ScriptedAI
             }
         }
 
-            switch (phase)
-            {
+        switch (phase)
+        {
 
             case 0: // Still in Tirisfall
             {
                 if (eventInProgress)
-                 m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                    m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                 else 
                     m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
@@ -6533,8 +6533,10 @@ struct npc_zuljinAI : public ScriptedAI
                 complete = true;
                 break;
             }
-            }
         }
+
+        ScriptedAI::UpdateAI(uiDiff);
+    }
 };
 
 bool QuestRewarded_npc_zul_jin(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
