@@ -156,7 +156,7 @@ class ChatHandler
         virtual AccountTypes GetAccessLevel() const;
         virtual bool isAvailable(ChatCommand const& cmd) const;
         virtual std::string GetNameLink() const;
-        virtual bool needReportToTarget(Player* chr) const;
+        virtual bool needReportToTarget(Player* chr, bool forTeleport = false) const;
         virtual LocaleConstant GetSessionDbcLocale() const;
         virtual int GetSessionDbLocaleIndex() const;
 
@@ -697,7 +697,7 @@ class CliHandler : public ChatHandler
         bool isAvailable(ChatCommand const& cmd) const override;
         void SendSysMessage(const char *str) override;
         std::string GetNameLink() const override;
-        bool needReportToTarget(Player* chr) const override;
+        bool needReportToTarget(Player* chr, bool forTeleport = false) const override;
         LocaleConstant GetSessionDbcLocale() const override;
         int GetSessionDbLocaleIndex() const override;
 

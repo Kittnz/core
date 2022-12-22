@@ -5963,7 +5963,7 @@ bool ChatHandler::HandleSummonCommand(char* args)
                 pTarget->SetBattleGroundEntryPoint();
         }
         PSendSysMessage(LANG_SUMMONING, nameLink.c_str(), "");
-        if (needReportToTarget(pTarget))
+        if (needReportToTarget(pTarget, true))
             ChatHandler(pTarget).PSendSysMessage(LANG_SUMMONED_BY, playerLink(pPlayer->GetName()).c_str());
 
         // stop flight if need
@@ -6099,7 +6099,7 @@ bool ChatHandler::HandleGonameCommand(char* args)
         }
 
         PSendSysMessage(LANG_APPEARING_AT_ONLINE, chrNameLink.c_str());
-        if (needReportToTarget(pTarget))
+        if (needReportToTarget(pTarget, true))
             ChatHandler(pTarget).PSendSysMessage(LANG_APPEARING_TO, GetNameLink().c_str());
 
         // stop flight if need
@@ -6990,7 +6990,7 @@ bool ChatHandler::HandleTeleNameCommand(char* args)
         }
 
         PSendSysMessage(LANG_TELEPORTING_TO, chrNameLink.c_str(), "", tele->name.c_str());
-        if (needReportToTarget(target))
+        if (needReportToTarget(target, true))
             ChatHandler(target).PSendSysMessage(LANG_TELEPORTED_TO_BY, GetNameLink().c_str());
 
         return HandleGoHelper(target, tele->mapId, tele->x, tele->y, &tele->z, &tele->o);
@@ -7067,7 +7067,7 @@ bool ChatHandler::HandleTeleGroupCommand(char* args)
         }
 
         PSendSysMessage(LANG_TELEPORTING_TO, plNameLink.c_str(), "", tele->name.c_str());
-        if (needReportToTarget(pl))
+        if (needReportToTarget(pl, true))
             ChatHandler(pl).PSendSysMessage(LANG_TELEPORTED_TO_BY, nameLink.c_str());
 
         // stop flight if need
@@ -7157,7 +7157,7 @@ bool ChatHandler::HandleGroupgoCommand(char* args)
         }
 
         PSendSysMessage(LANG_SUMMONING, plNameLink.c_str(), "");
-        if (needReportToTarget(pl))
+        if (needReportToTarget(pl, true))
             ChatHandler(pl).PSendSysMessage(LANG_SUMMONED_BY, nameLink.c_str());
 
         // stop flight if need
