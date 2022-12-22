@@ -11,3 +11,5 @@ REPLACE INTO `creature_loot_template` VALUES
 (2924, 60898, -72, 4, 1, 1, 0),
 (2925, 60898, -72, 4, 1, 1, 0),
 (2926, 60898, -72, 4, 1, 1, 0);
+-- Remove Dark Ranger skin temporary fix:
+UPDATE `custom_character_skins` SET `skin_male` = 16 WHERE `token_id` = 81206;
