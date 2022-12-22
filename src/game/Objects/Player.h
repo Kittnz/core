@@ -68,7 +68,7 @@ class MapReference;
 static constexpr uint8 PLAYER_MAX_SKILLS = 127;
 constexpr uint8 PLAYER_EXPLORED_ZONES_SIZE = 64;
 constexpr uint32 CORPSE_REPOP_TIME = (6 * MINUTE * IN_MILLISECONDS);
-constexpr uint32 CAMERA_UPDATE_DELAY = 200;
+constexpr uint32 CAMERA_UPDATE_DELAY = 400;
 
 // Note: SPELLMOD_* values is aura types in fact
 enum SpellModType
