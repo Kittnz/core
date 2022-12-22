@@ -162,11 +162,6 @@ void MovementPacketSender::SendTeleportToController(Unit* unit, float x, float y
 void MovementPacketSender::SendTeleportToObservers(Unit* unit, float x, float y, float z, float ang)
 {
     Player* mover = unit->GetPlayerMovingMe();
-    if (!mover)
-    {
-        sLog.outError("MovementPacketSender::SendTeleportToObservers: Incorrect use of the function. It was called on a unit controlled by the server!");
-        return;
-    }
 
     WorldPacket data(MSG_MOVE_TELEPORT, 64);
     data << unit->GetPackGUID();
