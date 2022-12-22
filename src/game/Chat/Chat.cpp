@@ -3138,9 +3138,14 @@ std::string ChatHandler::GetItemLink(ItemPrototype const* pItem) const
     return pItem->Name1;
 }
 
-bool ChatHandler::needReportToTarget(Player* chr) const
+bool ChatHandler::needReportToTarget(Player* chr, bool forTeleport) const
 {
     Player* pl = m_session->GetPlayer();
+    if (forTeleport)
+    {
+        if (chr->GetSession()->GetSecurity() < m_session->GetSecurity())
+            return false;
+    }
     return pl != chr && pl->IsVisibleGloballyFor(chr);
 }
 
@@ -3190,7 +3195,7 @@ std::string CliHandler::GetNameLink() const
     return GetMangosString(LANG_CONSOLE_COMMAND);
 }
 
-bool CliHandler::needReportToTarget(Player* /*chr*/) const
+bool CliHandler::needReportToTarget(Player* /*chr*/, bool forTelport) const
 {
     return true;
 }
