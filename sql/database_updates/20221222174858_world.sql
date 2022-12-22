@@ -25,3 +25,5 @@ UPDATE `quest_template` SET `Details` = 'There, it\'s all packaged up and good t
 UPDATE `quest_template` SET `RequestItemsText` = 'Welcome back to Sparkwater. Did you deal with Tarlo yet?' WHERE `entry` = 55038;
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2573
 UPDATE `item_template` SET `spellid_2` = 21335 WHERE `entry` = 83224;
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2572
+UPDATE `item_template` SET `description` = 'Though battered and scarred the totem still brims with energy' WHERE `entry` = 60104;
