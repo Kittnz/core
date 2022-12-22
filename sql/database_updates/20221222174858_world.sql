@@ -13,3 +13,5 @@ REPLACE INTO `creature_loot_template` VALUES
 (2926, 60898, -72, 4, 1, 1, 0);
 -- Remove Dark Ranger skin temporary fix:
 UPDATE `custom_character_skins` SET `skin_male` = 16 WHERE `token_id` = 81206;
+-- Removed corrupted reward for Earth Rumble quest:
+UPDATE `quest_template` SET `RewChoiceItemId1` = 0, `RewChoiceItemId2` = 0, `RewChoiceItemCount1` = 0, `RewChoiceItemCount2` = 0, `RewItemId1` = 60865, `RewItemCount1` = 1 WHERE `entry` = 40637;
