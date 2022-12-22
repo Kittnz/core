@@ -15,3 +15,5 @@ REPLACE INTO `creature_loot_template` VALUES
 UPDATE `custom_character_skins` SET `skin_male` = 16 WHERE `token_id` = 81206;
 -- Removed corrupted reward for Earth Rumble quest:
 UPDATE `quest_template` SET `RewChoiceItemId1` = 0, `RewChoiceItemId2` = 0, `RewChoiceItemCount1` = 0, `RewChoiceItemCount2` = 0, `RewItemId1` = 60865, `RewItemCount1` = 1 WHERE `entry` = 40637;
+-- Fixes for Grizzlore Wants Thunder quest:
+UPDATE `quest_template` SET `Details` = 'Grizzlore - me! I want more booze! <hick!>\n\nThunder… <hick!> …brew! Lager… <hick!>\n\nGrimbooze brews it well. You go there. Westfall! <hick!>\r\n', `Objectives` = 'Acquire Thunderbrew Lager from Grimbooze Thunderbrew in Westfall or Innkeeper Karakul in Swamp of Sorrows for Grizzlore.' WHERE `entry` = 50326;
