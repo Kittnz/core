@@ -77,8 +77,12 @@ struct boss_ArctirasAI : public GenericSpellMob
 			{
 				me->MonsterTextEmote("Arc'tiras vocalizes a chilling chime.", nullptr, true);
 
-				DoSpawnCreature(CREATURE_FRIGID_GUARDIAN, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000);
-				DoSpawnCreature(CREATURE_FRIGID_GUARDIAN, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000);
+				if (auto creature = DoSpawnCreature(CREATURE_FRIGID_GUARDIAN, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000))
+					creature->SetInCombatWithZone();
+
+
+				if (auto creature = DoSpawnCreature(CREATURE_FRIGID_GUARDIAN, 5.0f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 2000))
+					creature->SetInCombatWithZone();
 
 				Stage = eArctirasStages::Stage2_WaitFor35;
 			}
