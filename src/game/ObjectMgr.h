@@ -86,7 +86,7 @@ struct ShopCategory
 	std::string Icon;
 };
 
-typedef std::map<uint32, ShopEntry> ShopEntriesMap;
+typedef std::unordered_map<uint32, ShopEntry> ShopEntriesMap;
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
 
 struct BattlegroundEntranceTrigger
