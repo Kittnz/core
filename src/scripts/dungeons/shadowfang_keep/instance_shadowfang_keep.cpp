@@ -13,21 +13,21 @@ enum ShadowFangKeepType
     MAX_ENCOUNTER                      
 };
 
-static constexpr std::uint32_t NPC_VOIDWALKER{ 4627 };
-static constexpr std::uint32_t NPC_BARON_SILVERLAINE{ 3887 };
-static constexpr std::uint32_t NPC_CMD_SPRINGVALE{ 4278 };
-static constexpr std::uint32_t NPC_ASH{ 3850 };
-static constexpr std::uint32_t NPC_ADA{ 3849 };
-static constexpr std::uint32_t NPC_ARUGAL{ 10000 };         // "Arugal" says intro text
-static constexpr std::uint32_t NPC_ARCHMAGE_ARUGAL{ 4275 }; // "Archmage Arugal" does Fenrus event
-static constexpr std::uint32_t NPC_FENRUS{ 4274 };          // Used to summon Arugal in Fenrus event
-static constexpr std::uint32_t NPC_VINCENT{ 4444 };         // Vincent should be "dead" is Arugal is done the intro already
-static constexpr std::uint32_t NPC_NANDOS{ 3927 };
+static constexpr uint32 NPC_VOIDWALKER{ 4627 };
+static constexpr uint32 NPC_BARON_SILVERLAINE{ 3887 };
+static constexpr uint32 NPC_CMD_SPRINGVALE{ 4278 };
+static constexpr uint32 NPC_ASH{ 3850 };
+static constexpr uint32 NPC_ADA{ 3849 };
+static constexpr uint32 NPC_ARUGAL{ 10000 };         // "Arugal" says intro text
+static constexpr uint32 NPC_ARCHMAGE_ARUGAL{ 4275 }; // "Archmage Arugal" does Fenrus event
+static constexpr uint32 NPC_FENRUS{ 4274 };          // Used to summon Arugal in Fenrus event
+static constexpr uint32 NPC_VINCENT{ 4444 };         // Vincent should be "dead" is Arugal is done the intro already
+static constexpr uint32 NPC_NANDOS{ 3927 };
 
-static constexpr std::uint32_t GO_COURTYARD_DOOR{ 18895 }; // Door to open when talking to NPC's
-static constexpr std::uint32_t GO_SORCERER_DOOR{ 18972 };  // Door to open when Fenrus the Devourer dies
-static constexpr std::uint32_t GO_ARUGAL_DOOR{ 18971 };    // Door to open when Wolf Master Nandos dies
-static constexpr std::uint32_t GO_ARUGAL_FOCUS{ 18973 };   // This generates the lightning visual in the Fenrus event
+static constexpr uint32 GO_COURTYARD_DOOR{ 18895 }; // Door to open when talking to NPC's
+static constexpr uint32 GO_SORCERER_DOOR{ 18972 };  // Door to open when Fenrus the Devourer dies
+static constexpr uint32 GO_ARUGAL_DOOR{ 18971 };    // Door to open when Wolf Master Nandos dies
+static constexpr uint32 GO_ARUGAL_FOCUS{ 18973 };   // This generates the lightning visual in the Fenrus event
 
 
 struct instance_shadowfang_keep : public ScriptedInstance
@@ -40,11 +40,11 @@ struct instance_shadowfang_keep : public ScriptedInstance
     bool m_bIsBaronDead{};
     bool m_bIsCmdDead{};
 
-    std::uint32_t m_uiVoidWalkerKillCount{};
-    std::uint32_t m_uiSpawnPatrolOnBaronDeath{};
-    std::uint32_t m_uiSpawnPatrolOnCmdDeath{};
+    uint32 m_uiVoidWalkerKillCount{};
+    uint32 m_uiSpawnPatrolOnBaronDeath{};
+    uint32 m_uiSpawnPatrolOnCmdDeath{};
 
-    std::uint32_t m_auiEncounter[MAX_ENCOUNTER];
+    uint32 m_auiEncounter[MAX_ENCOUNTER];
 
     ObjectGuid m_uiAshGUID{};
     ObjectGuid m_uiAdaGUID{};

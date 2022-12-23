@@ -86,7 +86,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -111,7 +111,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiAbility_Timer{};
+    uint32 m_uiAbility_Timer{};
 
 public:
     void Reset() override
@@ -148,7 +148,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -197,8 +197,8 @@ public:
 
 private:
 
-    std::uint32_t m_uiRoar_Timer{};
-    std::uint32_t m_uiCheckForCaster_Timer{};
+    uint32 m_uiRoar_Timer{};
+    uint32 m_uiCheckForCaster_Timer{};
 
 public:
     void Reset() override
@@ -236,7 +236,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -293,9 +293,9 @@ public:
 
 private:
 
-    std::uint32_t m_timeStopTimer;
-    std::uint32_t m_shadowShockTimer;
-    std::uint32_t m_darkenVisionTimer;
+    uint32 m_timeStopTimer;
+    uint32 m_shadowShockTimer;
+    uint32 m_darkenVisionTimer;
 
 public:
     void Reset() override
@@ -334,7 +334,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -395,7 +395,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiManaBurn_Timer{};
+    uint32 m_uiManaBurn_Timer{};
 
     nsInfiniteWhelp::Phase phase{};
 
@@ -409,7 +409,7 @@ public:
         m_creature->SetPowerPercent(POWER_MANA, 1.f); // Start with 1% mana
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -543,7 +543,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->HasAura(nsInfiniteTimeripper::AURA_SHADOWGUARD))
         {
@@ -704,9 +704,9 @@ public:
 
 private:
 
-    std::uint32_t m_uiWhirlwindTimer{};
-    std::uint32_t m_uiDemoShoutTimer{};
-    std::uint32_t m_uiThunderTimer{};
+    uint32 m_uiWhirlwindTimer{};
+    uint32 m_uiDemoShoutTimer{};
+    uint32 m_uiThunderTimer{};
 
 public:
     void Reset() override
@@ -735,7 +735,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -797,13 +797,13 @@ public:
 
 private:
 
-    std::uint32_t m_uiMindBlast_Timer{};
-    std::uint32_t m_uiShield_Timer{};
-    std::uint32_t m_uiHeal_Timer{};
-    std::uint32_t m_uiShadowStrike_Timer{};
-    std::uint32_t m_uiPiercingShadow_Timer{};
-    std::uint32_t m_uiPoisonVolley_Timer{};
-    std::uint32_t m_uiPlagueCloud_Timer{};
+    uint32 m_uiMindBlast_Timer{};
+    uint32 m_uiShield_Timer{};
+    uint32 m_uiHeal_Timer{};
+    uint32 m_uiShadowStrike_Timer{};
+    uint32 m_uiPiercingShadow_Timer{};
+    uint32 m_uiPoisonVolley_Timer{};
+    uint32 m_uiPlagueCloud_Timer{};
 
 public:
     void Reset() override
@@ -817,7 +817,7 @@ public:
         m_uiPlagueCloud_Timer = 2000;
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -975,9 +975,9 @@ public:
 
 private:
 
-    std::uint32_t m_uiPoison_Timer{};
-    std::uint32_t m_uiWound_Timer{};
-    std::uint32_t m_uiParalyze_Timer{};
+    uint32 m_uiPoison_Timer{};
+    uint32 m_uiWound_Timer{};
+    uint32 m_uiParalyze_Timer{};
 
 public:
     void Reset() override
@@ -987,7 +987,7 @@ public:
         m_uiParalyze_Timer = 35000;
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
@@ -1070,9 +1070,9 @@ private:
 
     bool m_bEnrageActive{};
 
-    std::uint32_t m_uiShout_Timer{};
-    std::uint32_t m_uiMortalStrike_Timer{};
-    std::uint32_t m_uiSweepingSlam_Timer{};
+    uint32 m_uiShout_Timer{};
+    uint32 m_uiMortalStrike_Timer{};
+    uint32 m_uiSweepingSlam_Timer{};
 
     ObjectGuid m_chromieGuid{};
 
@@ -1243,8 +1243,8 @@ private:
 
     float m_fOldHP{};
 
-    std::uint32_t m_uiVeil_Timer{};
-    std::uint32_t m_uiInstanity_Timer{};
+    uint32 m_uiVeil_Timer{};
+    uint32 m_uiInstanity_Timer{};
 
 public:
     void Reset() override
@@ -1321,7 +1321,7 @@ public:
 
         if (!m_bAddsSpawned && fCurrentHP < 50.f) // Spawn adds at 50% hp
         {
-            for (std::uint8_t i{}; i < 5; ++i)
+            for (uint8 i{}; i < 5; ++i)
             {
                 if (Creature* pLarvae{ m_creature->SummonCreature(nsBossHarbringer::NPC_LARVAE,
                     m_creature->GetVictim()->GetPositionX() + frand(-8.f, 8.f),
@@ -1401,12 +1401,12 @@ private:
     bool m_bShadeSummoned{};
     bool m_bEnrageActive{};
 
-    std::uint32_t m_uiSandBreath_Timer{};
-    std::uint32_t m_uiSwoop_Timer{};
-    std::uint32_t m_uiArcaneBlast_Timer{};
-    std::uint32_t m_uiBanish_Timer{};
+    uint32 m_uiSandBreath_Timer{};
+    uint32 m_uiSwoop_Timer{};
+    uint32 m_uiArcaneBlast_Timer{};
+    uint32 m_uiBanish_Timer{};
 
-    std::uint32_t m_uiSummonEntry{};
+    uint32 m_uiSummonEntry{};
 
     ObjectGuid chromieGuid{};
 
@@ -1570,17 +1570,17 @@ public:
 
 private:
 
-    std::uint32_t m_uiScream_Timer{};
-    std::uint32_t m_uiPlague_Timer{};
-    std::uint32_t m_uiDeathDecay_Timer{};
-    std::uint32_t m_uiDeathCoil_Timer{};
-    std::uint32_t m_uiDarkStrike_Timer{};
-    std::uint32_t m_uiConeOfFire_Timer{};
-    std::uint32_t m_uiAmplifyFire_Timer{};
-    std::uint32_t m_uiPyro_Timer{};
-    std::uint32_t m_uiChainLightning_Timer{};
-    std::uint32_t m_uiLightningCloud_Timer{};
-    std::uint32_t m_uiLightningBolt_Timer{};
+    uint32 m_uiScream_Timer{};
+    uint32 m_uiPlague_Timer{};
+    uint32 m_uiDeathDecay_Timer{};
+    uint32 m_uiDeathCoil_Timer{};
+    uint32 m_uiDarkStrike_Timer{};
+    uint32 m_uiConeOfFire_Timer{};
+    uint32 m_uiAmplifyFire_Timer{};
+    uint32 m_uiPyro_Timer{};
+    uint32 m_uiChainLightning_Timer{};
+    uint32 m_uiLightningCloud_Timer{};
+    uint32 m_uiLightningBolt_Timer{};
 
 public:
     void Reset() override
@@ -1627,7 +1627,7 @@ public:
             {
                 if (m_uiPlague_Timer < uiDiff)
                 {
-                    std::uint8_t uiPlagueCount{};
+                    uint8 uiPlagueCount{};
 
                     Map::PlayerList const& playerList{ m_creature->GetMap()->GetPlayers() };
                     for (const auto& itr : playerList)
@@ -1819,10 +1819,10 @@ private:
 
     bool m_bBeginFight{};
 
-    std::uint32_t m_uiManaBurnTimer{};
-    std::uint32_t m_uiFearTimer{};
-    std::uint32_t m_uiFumbleTimer{};
-    std::uint32_t m_uiRiftTimer{};
+    uint32 m_uiManaBurnTimer{};
+    uint32 m_uiFearTimer{};
+    uint32 m_uiFumbleTimer{};
+    uint32 m_uiRiftTimer{};
 
     ObjectGuid m_UnknownEntityGUID{};
 
@@ -1959,7 +1959,7 @@ public:
                 m_lGOs.push_back(pSandwall->GetObjectGuid());
             }
 
-            for (std::uint8_t i{}; i < 8; ++i)
+            for (uint8 i{}; i < 8; ++i)
             {
                 if (Creature* pTimeRift{ m_creature->SummonCreature(nsBossChromie::NPC_TIME_RIFT_SMALL,
                     m_creature->GetPositionX(),
@@ -2117,10 +2117,10 @@ private:
 
     bool m_bIsConsuming{};
 
-    std::uint32_t m_uiRot_Timer{};
-    std::uint32_t m_uiConsume_Timer{};
-    std::uint32_t m_uiMortalWound_Timer{};
-    std::uint32_t m_uiSunderArmor_Timer{};
+    uint32 m_uiRot_Timer{};
+    uint32 m_uiConsume_Timer{};
+    uint32 m_uiMortalWound_Timer{};
+    uint32 m_uiSunderArmor_Timer{};
 
 private:
     void Reset() override
@@ -2241,9 +2241,9 @@ private:
 
     bool m_bEngaged{};
 
-    std::uint32_t m_uiRejuv_Timer{};
-    std::uint32_t m_uiTangle_Timer{};
-    std::uint32_t m_uiMoss_Timer{};
+    uint32 m_uiRejuv_Timer{};
+    uint32 m_uiTangle_Timer{};
+    uint32 m_uiMoss_Timer{};
 
     nsMosshear::Phase phase{};
 
@@ -2400,10 +2400,10 @@ private:
 
     bool m_bEnraged{};
 
-    std::uint32_t m_uiThrash_Timer{};
-    std::uint32_t m_uiCoweringRoar_Timer{};
-    std::uint32_t m_uiShadowShock_Timer{};
-    std::uint32_t m_uiEnrage_Timer{};
+    uint32 m_uiThrash_Timer{};
+    uint32 m_uiCoweringRoar_Timer{};
+    uint32 m_uiShadowShock_Timer{};
+    uint32 m_uiEnrage_Timer{};
 
 public:
     void Reset() override
@@ -2523,7 +2523,7 @@ private:
     bool m_bDoOnce{};
     bool m_bBeginSpawning{};
 
-    std::uint32_t m_uiSpawnTimer{};
+    uint32 m_uiSpawnTimer{};
 
 public:
     void Reset() override
@@ -2596,7 +2596,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiUpdateTimer{};
+    uint32 m_uiUpdateTimer{};
 
     nsInjuredDefender::Phase phase{};
 
@@ -2734,9 +2734,9 @@ private:
     int summonChoice{};
     int currentSummonChoice{};
 
-    std::uint32_t m_uiUpdate_Timer{};
+    uint32 m_uiUpdate_Timer{};
 
-    std::uint32_t m_uiSummonCreatureEntry{};
+    uint32 m_uiSummonCreatureEntry{};
 
     GameObject* pPortalLeft{};
     GameObject* pPortalRight{};

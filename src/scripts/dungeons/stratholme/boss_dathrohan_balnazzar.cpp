@@ -169,9 +169,9 @@ struct boss_dathrohan_balnazzarAI : public ScriptedAI
             Map::PlayerList const& PlayerList{ m_creature->GetMap()->GetPlayers() };
             if (!PlayerList.isEmpty())
             {
-                constexpr std::uint32_t QUEST_SEEK_HELP_ELSEWHERE{ 20001 };
-                constexpr std::uint32_t QUEST_TO_WAKE_THE_ASHBRINGER{ 20002 };
-                constexpr std::uint32_t ITEM_ORB_OF_PURE_LIGHT{ 82000 };
+                constexpr uint32 QUEST_SEEK_HELP_ELSEWHERE{ 20001 };
+                constexpr uint32 QUEST_TO_WAKE_THE_ASHBRINGER{ 20002 };
+                constexpr uint32 ITEM_ORB_OF_PURE_LIGHT{ 82000 };
 
                 for (const auto& itr : PlayerList)
                 {

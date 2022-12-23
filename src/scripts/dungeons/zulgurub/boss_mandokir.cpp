@@ -2,32 +2,32 @@
 #include "zulgurub.h"
 
 
-static constexpr std::uint32_t NPC_OHGAN{ 14988 };
-static constexpr std::uint32_t NPC_CHAINED_SPIRIT{ 15117 };
-static constexpr std::uint32_t NPC_MANDOKIR{ 11382 };
+static constexpr uint32 NPC_OHGAN{ 14988 };
+static constexpr uint32 NPC_CHAINED_SPIRIT{ 15117 };
+static constexpr uint32 NPC_MANDOKIR{ 11382 };
 
-static constexpr std::int32_t SAY_AGGRO{ -1309015 };
-static constexpr std::int32_t SAY_DING_KILL{ -1309016 };
-static constexpr std::int32_t SAY_GRATS_JINDO{ -1309017 };
-static constexpr std::int32_t SAY_WATCH{ -1309018 };
-static constexpr std::int32_t SAY_WATCH_WHISPER{ -1309019 };
-static constexpr std::int32_t EMOTE_RAGE{ -1309024 };
+static constexpr int32 SAY_AGGRO{ -1309015 };
+static constexpr int32 SAY_DING_KILL{ -1309016 };
+static constexpr int32 SAY_GRATS_JINDO{ -1309017 };
+static constexpr int32 SAY_WATCH{ -1309018 };
+static constexpr int32 SAY_WATCH_WHISPER{ -1309019 };
+static constexpr int32 EMOTE_RAGE{ -1309024 };
 // Mandokir's spells
-static constexpr std::uint32_t SPELL_CHARGE{ 24408 };
-static constexpr std::uint32_t SPELL_FEAR{ 19134 };
-static constexpr std::uint32_t SPELL_WHIRLWIND{ 13736 };
-static constexpr std::uint32_t SPELL_MORTAL_STRIKE{ 16856 };
-static constexpr std::uint32_t SPELL_ENRAGE{ 24318 };
-static constexpr std::uint32_t SPELL_WATCH{ 24314 };
-static constexpr std::uint32_t SPELL_DECAPITATE{ 24315 };
-static constexpr std::uint32_t SPELL_LEVEL_UP{ 24312 };
-static constexpr std::uint32_t SPELL_MOUNT{ 23243 };
+static constexpr uint32 SPELL_CHARGE{ 24408 };
+static constexpr uint32 SPELL_FEAR{ 19134 };
+static constexpr uint32 SPELL_WHIRLWIND{ 13736 };
+static constexpr uint32 SPELL_MORTAL_STRIKE{ 16856 };
+static constexpr uint32 SPELL_ENRAGE{ 24318 };
+static constexpr uint32 SPELL_WATCH{ 24314 };
+static constexpr uint32 SPELL_DECAPITATE{ 24315 };
+static constexpr uint32 SPELL_LEVEL_UP{ 24312 };
+static constexpr uint32 SPELL_MOUNT{ 23243 };
 // Ohgans's spells
-static constexpr std::uint32_t SPELL_SUNDERARMOR{ 24317 };
-static constexpr std::uint32_t SPELL_THRASH{ 3391 };
-static constexpr std::uint32_t SPELL_EXECUTE{ 7160 };
+static constexpr uint32 SPELL_SUNDERARMOR{ 24317 };
+static constexpr uint32 SPELL_THRASH{ 3391 };
+static constexpr uint32 SPELL_EXECUTE{ 7160 };
 // Chained Spirit's spells
-static constexpr std::uint32_t SPELL_REVIVE{ 24341 };
+static constexpr uint32 SPELL_REVIVE{ 24341 };
 
 struct SpawnLocations
 {
@@ -59,7 +59,7 @@ static SpawnLocations aSpirits[] =
 
 struct boss_mandokirAI : public ScriptedAI
 {
-    const static std::uint32_t START_FLAGS{ UNIT_FLAG_PACIFIED | UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PLAYER };
+    const static uint32 START_FLAGS{ UNIT_FLAG_PACIFIED | UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_IMMUNE_TO_PLAYER };
 
     explicit boss_mandokirAI(Creature* pCreature) : ScriptedAI(pCreature)
     {
@@ -68,7 +68,7 @@ struct boss_mandokirAI : public ScriptedAI
     }
 
     bool m_bRaptorDead{};
-    bool m_VilebranchDead{};
+    bool m_VilebranchDead = false;
     bool m_bTargetMoved{};
     bool m_bTargetActed{};
     bool m_bFearAfterCharge{};
@@ -78,13 +78,13 @@ struct boss_mandokirAI : public ScriptedAI
     float m_fWatchedTargetAllowedMoveRange{};
     float m_fTargetThreat{};
 
-    std::uint32_t m_uiGlobalCooldown{};
-    std::uint32_t m_uiWatch_Timer{};
-    std::uint32_t m_uiCharge_Timer{};
-    std::uint32_t m_uiWhirlwind_Timer{};
-    std::uint32_t m_uiFear_Timer{};
-    std::uint32_t m_uiMortalStrike_Timer{};
-    std::uint32_t m_uiChargeCasted_Timer{};
+    uint32 m_uiGlobalCooldown{};
+    uint32 m_uiWatch_Timer{};
+    uint32 m_uiCharge_Timer{};
+    uint32 m_uiWhirlwind_Timer{};
+    uint32 m_uiFear_Timer{};
+    uint32 m_uiMortalStrike_Timer{};
+    uint32 m_uiChargeCasted_Timer{};
 
     ObjectGuid m_uiRaptorGUID{};
     ObjectGuid m_uiChargedPlayerGUID{};
@@ -117,7 +117,6 @@ struct boss_mandokirAI : public ScriptedAI
         m_uiMortalStrike_Timer = 1000;
         m_uiChargeCasted_Timer = 0;
         
-        m_uiRaptorGUID = 0;
         m_uiChargedPlayerGUID = 0;
         m_uiWatchTarget = 0;
         m_uiTargetToKill = 0;
@@ -182,7 +181,7 @@ struct boss_mandokirAI : public ScriptedAI
     {
         m_creature->RemoveAurasDueToSpell(SPELL_MOUNT);
 
-        if (!m_bRaptorDead)
+        if (!m_bRaptorDead && m_uiRaptorGUID.IsEmpty())
         {
             SpawnRaptor();
         }
@@ -198,31 +197,27 @@ struct boss_mandokirAI : public ScriptedAI
         }
     }
 
-    void CheckVilebranchState(const bool bReset = false)
+    void CheckVilebranchState(const bool reset = false)
     {
         // If Vilebranch dies and group wipes, boss should start at the bottom of the stairs
         // Video: https://www.youtube.com/watch?v=joaWY0wjOXI
-
-        if (Creature* vileBranch{ m_creature->FindNearestCreature(11391, 100.f, true) })
+        Creature* vileBranch = m_creature->FindNearestCreature(11391, 100.0f, true);
+        bool isVilebranchDead = !vileBranch || !vileBranch->IsAlive();
+        if (reset || m_VilebranchDead != isVilebranchDead)
         {
-            const bool isVilebranchDead = !vileBranch || !vileBranch->IsAlive();
-
-            if (bReset || m_VilebranchDead != isVilebranchDead)
+            if (isVilebranchDead)
             {
-                if (isVilebranchDead)
-                {
-                    m_creature->RemoveFlag(UNIT_FIELD_FLAGS, START_FLAGS);
-                    m_creature->SetHomePosition(-12195.0f, -1948.0f, 130.0f, 3.14f);
-                }
-                else
-                {
-                    m_creature->SetFlag(UNIT_FIELD_FLAGS, START_FLAGS);
-                    m_creature->ResetHomePosition();
-                }
-
-                m_creature->GetMotionMaster()->MoveTargetedHome();
-                m_VilebranchDead = isVilebranchDead;
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, START_FLAGS);
+                m_creature->SetHomePosition(-12195.0f, -1948.0f, 130.0f, 3.14f);
             }
+            else
+            {
+                m_creature->SetFlag(UNIT_FIELD_FLAGS, START_FLAGS);
+                m_creature->ResetHomePosition();
+            }
+            m_creature->GetMotionMaster()->MoveTargetedHome();
+
+            m_VilebranchDead = isVilebranchDead;
         }
     }
 
@@ -300,11 +295,11 @@ struct boss_mandokirAI : public ScriptedAI
 
     void SpawnSpirits()
     {
-        const std::uint32_t uiCount{ sizeof(aSpirits) / sizeof(SpawnLocations) };
+        const uint32 uiCount{ sizeof(aSpirits) / sizeof(SpawnLocations) };
 
         if (m_lSpirits.empty())
         {
-            for (std::uint8_t i{}; i < uiCount; ++i)
+            for (uint8 i{}; i < uiCount; ++i)
             {
                 if (Creature* pSpirit{ m_creature->SummonCreature(NPC_CHAINED_SPIRIT, aSpirits[i].fX, aSpirits[i].fY, aSpirits[i].fZ, aSpirits[i].fAng, TEMPSUMMON_CORPSE_DESPAWN, 0) })
                 {
@@ -318,7 +313,7 @@ struct boss_mandokirAI : public ScriptedAI
     {
         if (!m_uiRaptorGUID.IsEmpty())
         {
-            if (Creature* pRaptor{ m_creature->GetMap()->GetCreature(m_uiRaptorGUID) })
+            if (Creature* pRaptor = m_creature->GetMap()->GetCreature(m_uiRaptorGUID))
             {
                 if (pRaptor->IsAlive())
                 {
@@ -335,7 +330,7 @@ struct boss_mandokirAI : public ScriptedAI
         // And summon his raptor
         if (m_uiRaptorGUID.IsEmpty())
         {
-            if (Creature* pRaptor{ m_creature->SummonCreature(NPC_OHGAN, 0.f, 0.f, 0.f, 0.f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 35000) })
+            if (Creature* pRaptor = m_creature->SummonCreature(NPC_OHGAN, 0.f, 0.f, 0.f, 0.f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 35000))
             {
                 m_uiRaptorGUID = pRaptor->GetObjectGuid();
             }
@@ -664,9 +659,9 @@ struct mob_ohganAI : public ScriptedAI
         mob_ohganAI::Reset();
     }
 
-    std::uint32_t m_uiSunderArmor_Timer{};
-    std::uint32_t m_uiThrash_Timer{};
-    std::uint32_t m_uiExecute_Timer{};
+    uint32 m_uiSunderArmor_Timer{};
+    uint32 m_uiThrash_Timer{};
+    uint32 m_uiExecute_Timer{};
 
     ScriptedInstance* m_pInstance{};
 
@@ -781,7 +776,7 @@ struct mob_chainedSpiritsAI : public ScriptedAI
         mob_chainedSpiritsAI::Reset();
     }
 
-    std::uint32_t m_uiRezTimer{};
+    uint32 m_uiRezTimer{};
 
     ObjectGuid m_uiTargetRezGUID{};
 
@@ -823,7 +818,7 @@ struct mob_chainedSpiritsAI : public ScriptedAI
         }
     }
 
-    void MovementInform(const std::uint32_t uiMvtType, const std::uint32_t uiMoveId) override
+    void MovementInform(const uint32 uiMvtType, const uint32 uiMoveId) override
     {
         if (uiMvtType == POINT_MOTION_TYPE && uiMoveId == 1)
         {

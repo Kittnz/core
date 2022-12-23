@@ -2,9 +2,9 @@
 #include "scriptPCH.h"
 
 
-static constexpr std::int32_t VOICE_SCRIPT_AGGRO{ -1999955 };
-static constexpr std::int32_t VOICE_SCRIPT_DEAD{ -1999956 };
-static constexpr std::uint32_t SPELL_CORROSIVE_POISON{ 24111 };
+static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999955 };
+static constexpr int32 VOICE_SCRIPT_DEAD{ -1999956 };
+static constexpr uint32 SPELL_CORROSIVE_POISON{ 24111 };
 
 class boss_engineer_figglesAI : public ScriptedAI
 {
@@ -15,7 +15,7 @@ public:
     }
 
     bool m_bCorrosivePoisonCastedOnce{};
-    std::uint32_t m_uiCorrosivePoison_Timer{};
+    uint32 m_uiCorrosivePoison_Timer{};
 
     void Reset() override
     {

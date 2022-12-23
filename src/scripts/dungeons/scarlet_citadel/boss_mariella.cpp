@@ -29,13 +29,13 @@ private:
     bool m_bAchievementKillFailed{};
     bool m_bWasInFight{};
 
-    std::uint8_t m_uiSacrificePhase{};
+    uint8 m_uiSacrificePhase{};
 
-    std::uint32_t m_uiVoidZoneSpawn_Timer{};
-    std::uint32_t m_uiIncreaseHealth_Timer{};
-    std::uint32_t m_uiFelhoundSpawn_Timer{};
-    std::uint32_t m_uiEnrage_Timer{};
-    std::uint32_t m_uiShadowVolley_Timer{};
+    uint32 m_uiVoidZoneSpawn_Timer{};
+    uint32 m_uiIncreaseHealth_Timer{};
+    uint32 m_uiFelhoundSpawn_Timer{};
+    uint32 m_uiEnrage_Timer{};
+    uint32 m_uiShadowVolley_Timer{};
 
     ObjectGuid m_uiKillZoneGuid{};
 
@@ -410,7 +410,7 @@ public:
                     {
                         if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster() && (pPlayer->GetPowerType() == POWER_MANA))
                         {
-                            const std::uint32_t uiRnd{ urand(0, 3) }; // Choose a random spawn point
+                            const uint32 uiRnd{ urand(0, 3) }; // Choose a random spawn point
                             if (Creature* pFelhound{ m_creature->SummonCreature(nsMariella::NPC_FELHOUND,
                                 nsMariella::vfSpawnPoints[uiRnd].m_fX,
                                 nsMariella::vfSpawnPoints[uiRnd].m_fY,
@@ -590,7 +590,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiDamage_Timer{};
+    uint32 m_uiDamage_Timer{};
 
     instance_scarlet_citadel* m_pInstance;
 
@@ -668,7 +668,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiKill_Timer{};
+    uint32 m_uiKill_Timer{};
 
     instance_scarlet_citadel* m_pInstance;
 
@@ -733,7 +733,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiManaDrain_Timer{};
+    uint32 m_uiManaDrain_Timer{};
 
 public:
     void Reset() override

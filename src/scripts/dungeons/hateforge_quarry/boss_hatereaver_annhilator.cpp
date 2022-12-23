@@ -2,12 +2,12 @@
 #include "scriptPCH.h"
 
 
-static constexpr std::int32_t VOICE_SCRIPT_AGGRO{ -1999957 };
-static constexpr std::int32_t VOICE_SCRIPT_DEAD{ -1999958 };
+static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999957 };
+static constexpr int32 VOICE_SCRIPT_DEAD{ -1999958 };
 
-static constexpr std::uint32_t SPELL_KNOCKBACK{ 28438 };
-static constexpr std::uint32_t SPELL_CLEAVE{ 19983 };
-static constexpr std::uint32_t SPELL_WAR_STOMP{ 11876 };
+static constexpr uint32 SPELL_KNOCKBACK{ 28438 };
+static constexpr uint32 SPELL_CLEAVE{ 19983 };
+static constexpr uint32 SPELL_WAR_STOMP{ 11876 };
 
 class boss_hatereaver_annhilatorAI : public ScriptedAI
 {
@@ -17,9 +17,9 @@ public:
         boss_hatereaver_annhilatorAI::Reset();
     }
 
-    std::uint32_t m_uiKnockback_Timer{};
-    std::uint32_t m_uiCleave_Timer{};
-    std::uint32_t m_uiWarStomp{};
+    uint32 m_uiKnockback_Timer{};
+    uint32 m_uiCleave_Timer{};
+    uint32 m_uiWarStomp{};
 
     void Reset() override
     {

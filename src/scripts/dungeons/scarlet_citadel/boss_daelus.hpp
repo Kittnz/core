@@ -14,7 +14,7 @@ namespace nsDaelus
         float m_fX{}, m_fY{}, m_fZ{}, m_fO{}, m_fR0{}, m_fR1{}, m_fR2{}, m_fR3{};
     };
 
-    static constexpr std::uint8_t NUMBER_OF_ADDS{ 6 };
+    static constexpr uint8 NUMBER_OF_ADDS{ 6 };
     static const Location vfSpawnPoints[NUMBER_OF_ADDS] =
     {
         { 36.207348f, -17.218674f, 16.87f, 1.570526f }, // R1
@@ -26,50 +26,50 @@ namespace nsDaelus
     };
 
     // Phase 1
-    static constexpr std::uint32_t SPELL_RED_COLOR{ 26235 };
-    static constexpr std::uint32_t SPELL_VULNERABILITY{ 26156 };
-    static constexpr std::uint32_t SPELL_LIFE_DRAIN_VISUAL{ 21157 };
-    static constexpr std::uint32_t CHECK_FOR_TANK_TIMER{ 1000 };
+    static constexpr uint32 SPELL_RED_COLOR{ 26235 };
+    static constexpr uint32 SPELL_VULNERABILITY{ 26156 };
+    static constexpr uint32 SPELL_LIFE_DRAIN_VISUAL{ 21157 };
+    static constexpr uint32 CHECK_FOR_TANK_TIMER{ 1000 };
 
     // Phase 2
-    static constexpr std::uint32_t VULNERABLE_TIMER{ 30000 };
+    static constexpr uint32 VULNERABLE_TIMER{ 30000 };
 
     // Phase 3
-    static constexpr std::uint32_t NPC_SPOTLIGHT{ 15631 };
+    static constexpr uint32 NPC_SPOTLIGHT{ 15631 };
 
     // Fallen Spirit
     static constexpr float REGENERATE_HEALTH_PERCENTAGE{ 5.f }; // How many percent should Boss Daelus regenerate on each consume
-    static constexpr std::uint32_t NPC_FALLEN_SPIRIT{ 2000013 };
-    static constexpr std::uint32_t SPELL_SONICBURST{ 23918 };
-    static constexpr std::uint32_t CHOSEN_ONE_MIN_TIMER{ 120000 };
-    static constexpr std::uint32_t CHOSEN_ONE_MAX_TIMER{ 180000 };
-    static constexpr std::uint32_t CALL_SPIRITS_FIRST_TIMER{ 5000 };
-    static constexpr std::uint32_t CALL_SPIRITS_REPEAT_TIMER{ 30000 };
-    static constexpr std::uint32_t INITIAL_SPAWN_CHOSEN_ONE_TIMER{ 90000 };
-    static constexpr std::uint32_t CHECK_SPIRITS_REPEAT_TIMER{ 500 };
+    static constexpr uint32 NPC_FALLEN_SPIRIT{ 2000013 };
+    static constexpr uint32 SPELL_SONICBURST{ 23918 };
+    static constexpr uint32 CHOSEN_ONE_MIN_TIMER{ 120000 };
+    static constexpr uint32 CHOSEN_ONE_MAX_TIMER{ 180000 };
+    static constexpr uint32 CALL_SPIRITS_FIRST_TIMER{ 5000 };
+    static constexpr uint32 CALL_SPIRITS_REPEAT_TIMER{ 30000 };
+    static constexpr uint32 INITIAL_SPAWN_CHOSEN_ONE_TIMER{ 90000 };
+    static constexpr uint32 CHECK_SPIRITS_REPEAT_TIMER{ 500 };
 
     // Sunder Armor
-    static constexpr std::uint32_t SPELL_SUNDER_ARMOR{ 25051 };
-    static constexpr std::uint32_t SUNDER_ARMOR_TIMER{ 10000 };
+    static constexpr uint32 SPELL_SUNDER_ARMOR{ 25051 };
+    static constexpr uint32 SUNDER_ARMOR_TIMER{ 10000 };
 
     // Poison Cloud
-    static constexpr std::uint32_t NPC_POISON_CLOUD{ 16363 };
-    static constexpr std::uint32_t SPELL_POISON_CLOUD{ 28240 }; // 60 Second duration of ticking 1100-1300 damage / sec
-    static constexpr std::uint32_t SPELL_GREEN_GLOW_VISUAL{ 22577 };
-    static constexpr std::uint32_t INITIAL_POISON_CLOUD_TIMER{ 10000 };
-    static constexpr std::uint32_t POISON_CLOUD_TIMER{ 60000 };
+    static constexpr uint32 NPC_POISON_CLOUD{ 16363 };
+    static constexpr uint32 SPELL_POISON_CLOUD{ 28240 }; // 60 Second duration of ticking 1100-1300 damage / sec
+    static constexpr uint32 SPELL_GREEN_GLOW_VISUAL{ 22577 };
+    static constexpr uint32 INITIAL_POISON_CLOUD_TIMER{ 10000 };
+    static constexpr uint32 POISON_CLOUD_TIMER{ 60000 };
 
     // Achievement
-    static constexpr std::uint32_t GO_ACHIEVEMENT_CHEST{ 0000 };                 // Chest to loot the achievement reward
-    static constexpr std::uint32_t GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
+    static constexpr uint32 GO_ACHIEVEMENT_CHEST{ 0000 };                 // Chest to loot the achievement reward
+    static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes 
     static const Location vfAchievementChestSpawnPoint[] =                // Chest spawn location
     {
         { 0.f } // TODO: Check rotation
     };
 
     // Misc
-    static constexpr std::uint32_t FACTION_SCARLET{ 67 };  // Scarlet Citadel Faction
-    static constexpr std::uint32_t FACTION_NEUTRAL{ 189 }; // Neutral Faction
+    static constexpr uint32 FACTION_SCARLET{ 67 };  // Scarlet Citadel Faction
+    static constexpr uint32 FACTION_NEUTRAL{ 189 }; // Neutral Faction
 
     static constexpr auto START_BUTTON{ "This will be your resting place, old-timer." };
 
@@ -130,7 +130,7 @@ namespace nsDaelus
             }
             case CombatNotifications::POISONCLOUD:
             {
-                const std::uint32_t i{ urand(0, 2) };
+                const uint32 i{ urand(0, 2) };
                 if (i == 0)
                 {
                     return "The Light curses you, with every second your own flesh and blood burn your very being.";

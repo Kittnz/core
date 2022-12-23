@@ -21,10 +21,10 @@ public:
 
 private:
 
-    std::uint32_t m_uiCleave_Timer{};
-    std::uint32_t m_uiSandBreath_Timer{};
-    std::uint32_t m_uiTimeStop_Timer{};
-    std::uint32_t m_uiFrenzy_Timer{};
+    uint32 m_uiCleave_Timer{};
+    uint32 m_uiSandBreath_Timer{};
+    uint32 m_uiTimeStop_Timer{};
+    uint32 m_uiFrenzy_Timer{};
 
     instance_black_morass* m_pInstance{};
 
@@ -58,7 +58,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;

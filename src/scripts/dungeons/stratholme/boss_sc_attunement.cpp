@@ -18,7 +18,7 @@ struct Location
     float m_fX{}, m_fY{}, m_fZ{}, m_fO{};
 };
 
-static constexpr std::uint8_t NUMBER_OF_ADDS{ 8 };
+static constexpr uint8 NUMBER_OF_ADDS{ 8 };
 static const Location vfSpawnPoints[NUMBER_OF_ADDS] =
 {
     { 3413.55f, -3041.98f, 136.53f, 5.33f },
@@ -31,13 +31,13 @@ static const Location vfSpawnPoints[NUMBER_OF_ADDS] =
     { 3403.84f, -3052.83f, 136.54f, 6.11f }
 };
 
-static constexpr std::uint32_t SPELL_HOLY_LIGHT{ 25292 };
-static constexpr std::uint32_t SPELL_HOLY_SHOCK{ 25902 };
-static constexpr std::uint32_t SPELL_HOLY_STRIKE{ 17284 };
-static constexpr std::uint32_t SPELL_DIVINE_SHIELD{ 1020 };
-static constexpr std::uint32_t SPELL_BLADE_STORM{ 9632 };
+static constexpr uint32 SPELL_HOLY_LIGHT{ 25292 };
+static constexpr uint32 SPELL_HOLY_SHOCK{ 25902 };
+static constexpr uint32 SPELL_HOLY_STRIKE{ 17284 };
+static constexpr uint32 SPELL_DIVINE_SHIELD{ 1020 };
+static constexpr uint32 SPELL_BLADE_STORM{ 9632 };
 
-static constexpr std::uint32_t NPC_FALLEN_SPIRIT{ 2000013 };
+static constexpr uint32 NPC_FALLEN_SPIRIT{ 2000013 };
 
 class boss_sc_attunementAI : public ScriptedAI
 {
@@ -48,13 +48,13 @@ public:
     }
 
 private:
-    std::uint32_t m_uiHolyLight_Timer{};
-    std::uint32_t m_uiHolyShock_Timer{};
-    std::uint32_t m_uiHolyStrike_Timer{};
+    uint32 m_uiHolyLight_Timer{};
+    uint32 m_uiHolyShock_Timer{};
+    uint32 m_uiHolyStrike_Timer{};
 
-    std::list<std::uint32_t> m_lFallenSpirits;
+    std::list<uint32> m_lFallenSpirits;
 
-    enum class Phase : std::uint8_t
+    enum class Phase : uint8
     {
         ONE,
         TWO,
@@ -98,11 +98,11 @@ public:
         return m_Phase;
     }
 
-    void CastHolyLight(const uint32& uiDiff, const std::uint32_t& uiMinTimer, const std::uint32_t& uiMaxTimer) // TODO: Doesn't cast, it's instant atm
+    void CastHolyLight(const uint32& uiDiff, const uint32& uiMinTimer, const uint32& uiMaxTimer) // TODO: Doesn't cast, it's instant atm
     {
         if (m_uiHolyLight_Timer < uiDiff)
         {
-            const std::int32_t iMaxHealth{ int32(m_creature->GetMaxHealth()) };
+            const int32 iMaxHealth{ int32(m_creature->GetMaxHealth()) };
             m_creature->CastCustomSpell(m_creature, SPELL_HOLY_LIGHT, &iMaxHealth, nullptr, nullptr, true);
 
             m_uiHolyLight_Timer = urand(uiMinTimer, uiMaxTimer);
@@ -113,13 +113,13 @@ public:
         }
     }
 
-    void DoHolyShock(const uint32& uiDiff, const std::uint32_t& uiTimer)
+    void DoHolyShock(const uint32& uiDiff, const uint32& uiTimer)
     {
         if (m_uiHolyShock_Timer < uiDiff)
         {
             if (Unit* pVictim{ m_creature->SelectAttackingTarget(ATTACKING_TARGET_BOTTOMAGGRO, 0) })
             {
-                const std::int32_t iDamage{ irand(3000, 3500) };
+                const int32 iDamage{ irand(3000, 3500) };
                 m_creature->CastCustomSpell(pVictim, SPELL_HOLY_SHOCK, &iDamage, nullptr, nullptr, true);
 
                 m_uiHolyShock_Timer = uiTimer;
@@ -131,7 +131,7 @@ public:
         }
     }
 
-    void DoHolyStrike(const uint32& uiDiff, const std::uint32_t& uiTimer) // TODO: Doesn't work at all
+    void DoHolyStrike(const uint32& uiDiff, const uint32& uiTimer) // TODO: Doesn't work at all
     {
         if (m_uiHolyStrike_Timer < uiDiff)
         {
@@ -148,7 +148,7 @@ public:
 
     void SummonAdds() // TODO: Crashes the server
     {
-        for (std::uint8_t i{ 0 }; i < NUMBER_OF_ADDS; ++i)
+        for (uint8 i{ 0 }; i < NUMBER_OF_ADDS; ++i)
         {
             if (Creature* pFallenSpirit{ m_creature->SummonCreature(NPC_FALLEN_SPIRIT,
                 vfSpawnPoints[i].m_fX,
@@ -343,9 +343,9 @@ CreatureAI* GetAI_boss_sc_attunement(Creature* pCreature)
 }
 
 
-static constexpr std::uint32_t NPC_GRAND_CRUSADER_DATHROHAN{ 2000092 };
+static constexpr uint32 NPC_GRAND_CRUSADER_DATHROHAN{ 2000092 };
 
-static constexpr std::uint32_t SPELL_ARCANE_EXPLOSION{ 19712 };
+static constexpr uint32 SPELL_ARCANE_EXPLOSION{ 19712 };
 
 struct npc_scarlet_spiritAI : public ScriptedAI
 {
@@ -354,7 +354,7 @@ struct npc_scarlet_spiritAI : public ScriptedAI
         npc_scarlet_spiritAI::Reset();
     }
 
-    std::uint32_t m_uiRangeCheck_Timer{};
+    uint32 m_uiRangeCheck_Timer{};
 
     void Reset() override
     {
@@ -408,12 +408,12 @@ CreatureAI* GetAI_npc_scarlet_spirit(Creature* pCreature)
 }
 
 
-static constexpr std::uint32_t NPC_HIGHLORD_MOGRAINE{ 2000093 };
-static constexpr std::uint32_t NPC_SIR_ZELIEK{ 2000094 };
-static constexpr std::uint32_t NPC_THANE_KORTHAZZ{ 2000095 };
-static constexpr std::uint32_t NPC_LADY_BLAUMEUX{ 2000096 };
+static constexpr uint32 NPC_HIGHLORD_MOGRAINE{ 2000093 };
+static constexpr uint32 NPC_SIR_ZELIEK{ 2000094 };
+static constexpr uint32 NPC_THANE_KORTHAZZ{ 2000095 };
+static constexpr uint32 NPC_LADY_BLAUMEUX{ 2000096 };
 
-static constexpr std::uint32_t SPELL_KNOCKBACK{ 28438 };
+static constexpr uint32 SPELL_KNOCKBACK{ 28438 };
 
 struct npc_horsemen_spiritAI : public ScriptedAI
 {
@@ -422,7 +422,7 @@ struct npc_horsemen_spiritAI : public ScriptedAI
         npc_horsemen_spiritAI::Reset();
     }
 
-    std::uint32_t m_uiKnockback_Timer{};
+    uint32 m_uiKnockback_Timer{};
 
     void Reset() override
     {

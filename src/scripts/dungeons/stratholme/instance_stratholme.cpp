@@ -361,9 +361,9 @@ struct instance_stratholme : public ScriptedInstance
                         Map::PlayerList const& PlayerList{ pBaron->GetMap()->GetPlayers() };
                         if (!PlayerList.isEmpty())
                         {
-                            constexpr std::uint32_t QUEST_SEEK_HELP_ELSEWHERE{ 20001 };
-                            constexpr std::uint32_t QUEST_TO_WAKE_THE_ASHBRINGER{ 20002 };
-                            constexpr std::uint32_t CHEST_TO_WAKE_THE_ASHBRINGER{ 5000050 };
+                            constexpr uint32 QUEST_SEEK_HELP_ELSEWHERE{ 20001 };
+                            constexpr uint32 QUEST_TO_WAKE_THE_ASHBRINGER{ 20002 };
+                            constexpr uint32 CHEST_TO_WAKE_THE_ASHBRINGER{ 5000050 };
 
                             for (const auto& itr : PlayerList)
                             {

@@ -13,13 +13,13 @@ struct LocationXYZO
 };
 
 template <typename Functor>
-void DoAfterTime(Creature* pCreature, const std::uint32_t& uiTime, Functor&& function)
+void DoAfterTime(Creature* pCreature, const uint32& uiTime, Functor&& function)
 {
     pCreature->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pCreature->m_Events.CalculateTime(uiTime));
 }
 
 template <typename Functor>
-void DoAfterTime(Player* pPlayer, const std::uint32_t& uiTime, Functor&& function)
+void DoAfterTime(Player* pPlayer, const uint32& uiTime, Functor&& function)
 {
     pPlayer->m_Events.AddEvent(new LambdaBasicEvent<Functor>(std::move(function)), pPlayer->m_Events.CalculateTime(uiTime));
 }
@@ -34,7 +34,7 @@ public:
 
     void OnPlayerEnter(Player* pPlayer) override;
 
-    void Update(std::uint32_t uiDiff) override;
+    void Update(uint32 uiDiff) override;
 
 private:
     ObjectGuid unknownEntity{};

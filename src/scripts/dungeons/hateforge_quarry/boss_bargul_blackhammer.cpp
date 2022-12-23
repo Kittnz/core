@@ -2,15 +2,15 @@
 #include "scriptPCH.h"
 
 
-static constexpr std::int32_t VOICE_SCRIPT_OOC_0{ -1999950 };
-static constexpr std::int32_t VOICE_SCRIPT_OOC_1{ -1999951 };
-static constexpr std::int32_t VOICE_SCRIPT_OOC_2{ -1999952 };
-static constexpr std::int32_t VOICE_SCRIPT_AGGRO{ -1999953 };
-static constexpr std::int32_t VOICE_SCRIPT_DEAD{ -1999954 };
+static constexpr int32 VOICE_SCRIPT_OOC_0{ -1999950 };
+static constexpr int32 VOICE_SCRIPT_OOC_1{ -1999951 };
+static constexpr int32 VOICE_SCRIPT_OOC_2{ -1999952 };
+static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999953 };
+static constexpr int32 VOICE_SCRIPT_DEAD{ -1999954 };
 
-static constexpr std::uint32_t SPELL_STUNNING_STRIKE{ 5703 };
-static constexpr std::uint32_t SPELL_MORTAL_STRIKE{ 27580 };
-static constexpr std::uint32_t SPELL_DEMORALIZING_SHOUT{ 27579 };
+static constexpr uint32 SPELL_STUNNING_STRIKE{ 5703 };
+static constexpr uint32 SPELL_MORTAL_STRIKE{ 27580 };
+static constexpr uint32 SPELL_DEMORALIZING_SHOUT{ 27579 };
 
 class boss_bargul_blackhammerAI : public ScriptedAI
 {
@@ -20,12 +20,12 @@ public:
         boss_bargul_blackhammerAI::Reset();
     }
 
-    std::uint32_t m_uiStunningStrike_Timer{};
-    std::uint32_t m_uiMortalStrike_Timer{};
-    std::uint32_t m_uiDemoralizingShout_Timer{};
-    std::uint32_t m_uiVoiceScriptOOC_Timer{};
+    uint32 m_uiStunningStrike_Timer{};
+    uint32 m_uiMortalStrike_Timer{};
+    uint32 m_uiDemoralizingShout_Timer{};
+    uint32 m_uiVoiceScriptOOC_Timer{};
 
-    const std::vector<std::int32_t> m_vVoiceScriptsOOC{ VOICE_SCRIPT_OOC_0, VOICE_SCRIPT_OOC_1, VOICE_SCRIPT_OOC_2 };
+    const std::vector<int32> m_vVoiceScriptsOOC{ VOICE_SCRIPT_OOC_0, VOICE_SCRIPT_OOC_1, VOICE_SCRIPT_OOC_2 };
 
     void Reset() override
     {

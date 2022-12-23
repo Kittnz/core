@@ -39,7 +39,7 @@ private:
 
     bool m_bAchievementKillFailed{};
 
-    std::uint32_t m_uiCallForHelp_Timer{};
+    uint32 m_uiCallForHelp_Timer{};
 
     ObjectGuid m_uiSunGuid{};
 
@@ -301,9 +301,9 @@ private:
     float m_fDownwardSpeed{};
     float m_fNewPositionZ{};
 
-    std::uint32_t m_uiDamageDone{};
-    std::uint32_t m_uiIncreaseSpeed_Timer{};
-    std::uint32_t m_uiAchievement_Timer{};
+    uint32 m_uiDamageDone{};
+    uint32 m_uiIncreaseSpeed_Timer{};
+    uint32 m_uiAchievement_Timer{};
 
     instance_scarlet_citadel* m_pInstance{};
 

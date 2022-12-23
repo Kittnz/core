@@ -770,8 +770,8 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
         go_foulweald_totem_moundAI::Reset();
     }
 
-    std::uint8_t m_uiEventPhase; // 0 nothing, 1 repoping enraged foulwealds, 2 wait, 3 chief_murgut, 4 done
-    std::uint32_t m_uiPhaseTimer{};
+    uint8 m_uiEventPhase; // 0 nothing, 1 repoping enraged foulwealds, 2 wait, 3 chief_murgut, 4 done
+    uint32 m_uiPhaseTimer{};
     std::list<ObjectGuid> m_lGuidCurrentEnragedFoulweald;
 
     void Reset()
@@ -787,7 +787,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
 
         m_uiEventPhase = 1;
 
-        for (std::uint8_t i{} ; i < 2; ++i)
+        for (uint8 i{} ; i < 2; ++i)
         {
             if (Creature* pFoulweald{ me->SummonCreature(NPC_ENRAGED_FOULWEALD, foulwealdSpawnCoords[i][0], foulwealdSpawnCoords[i][1], foulwealdSpawnCoords[i][2], 0.f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 900) })
             {
@@ -827,7 +827,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
         {
             if (creatureGUID == guid)
             {
-                const std::uint32_t uiPos{ urand(0, 3) };
+                const uint32 uiPos{ urand(0, 3) };
 
                 if (Creature* pFoulweald{ me->SummonCreature(NPC_ENRAGED_FOULWEALD,
                     foulwealdSpawnCoords[uiPos][0],
