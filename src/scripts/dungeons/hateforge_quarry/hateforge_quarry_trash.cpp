@@ -4,9 +4,9 @@
 
 namespace nsCleric
 {
-    static constexpr std::uint32_t SPELL_SHADOW_WORD_PAIN{ 10894 };
-    static constexpr std::uint32_t SPELL_GREATER_HEAL{ 10965 };
-    static constexpr std::uint32_t SPELL_IMMOLATE{ 11668 };
+    static constexpr uint32 SPELL_SHADOW_WORD_PAIN{ 10894 };
+    static constexpr uint32 SPELL_GREATER_HEAL{ 10965 };
+    static constexpr uint32 SPELL_IMMOLATE{ 11668 };
 };
 
 class mob_hateforge_clericAI : public ScriptedAI
@@ -20,7 +20,7 @@ public:
 private:
 
     bool m_bShadowWordPainAlreadyCastedOnce{};
-    std::uint32_t m_uiHealNearbyAllies_Timer{};
+    uint32 m_uiHealNearbyAllies_Timer{};
 
 public:
     void Reset() override
@@ -74,8 +74,8 @@ CreatureAI* GetAI_mob_hateforge_clericAI(Creature* pCreature)
 
 namespace nsTaskMaster
 {
-    static constexpr std::uint32_t SPELL1{ 56522 };
-    static constexpr std::uint32_t SPELL2{ 13608 };
+    static constexpr uint32 SPELL1{ 56522 };
+    static constexpr uint32 SPELL2{ 13608 };
 };
 
 class mob_hateforge_taskmasterAI : public ScriptedAI
@@ -89,8 +89,8 @@ public:
 private:
 
     bool m_bSpell1_AlreadyCasted{};
-    std::uint32_t m_uiSpell1_Timer{};
-    std::uint32_t m_uiSpell2_Timer{};
+    uint32 m_uiSpell1_Timer{};
+    uint32 m_uiSpell2_Timer{};
 
 public:
     void Reset() override
@@ -157,7 +157,7 @@ CreatureAI* GetAI_mob_hateforge_taskmasterAI(Creature* pCreature)
 
 namespace nsFireblade
 {
-    static constexpr std::uint32_t SPELL{ 56524 };
+    static constexpr uint32 SPELL{ 56524 };
 };
 
 class mob_twilight_firebladeAI : public ScriptedAI
@@ -171,7 +171,7 @@ public:
 private:
 
     bool m_bSpellAlreadyCastedOnce{};
-    std::uint32_t m_uiSpell_Timer{};
+    uint32 m_uiSpell_Timer{};
 
 public:
     void Reset() override

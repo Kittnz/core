@@ -30,16 +30,16 @@ private:
 
     float m_fX{}, m_fY{}, m_fZ{};
 
-    std::uint32_t m_uiTeleport_Timer{};
-    std::uint32_t m_uiAoeSleep_Timer{};
-    std::uint32_t m_uiLightningCloud_Timer{};
+    uint32 m_uiTeleport_Timer{};
+    uint32 m_uiAoeSleep_Timer{};
+    uint32 m_uiLightningCloud_Timer{};
 
-    std::uint32_t m_uiChronormu_Timer{};
-    std::uint32_t m_uiChronormuCombatStart_Timer{};
+    uint32 m_uiChronormu_Timer{};
+    uint32 m_uiChronormuCombatStart_Timer{};
 
-    std::uint32_t m_uiDialog0_Timer{};
-    std::uint32_t m_uiDialog1_Timer{};
-    std::uint32_t m_uiDialog2_Timer{};
+    uint32 m_uiDialog0_Timer{};
+    uint32 m_uiDialog1_Timer{};
+    uint32 m_uiDialog2_Timer{};
 
     ObjectGuid m_guidChronormu{};
 
@@ -112,7 +112,7 @@ public:
         m_creature->UpdateCombatWithZoneState(false);
     }
 
-    void DoDialogue(const std::uint32_t& uiDiff)
+    void DoDialogue(const uint32& uiDiff)
     {
         if (m_creature->SelectHostileTarget() || m_creature->GetVictim())
         {
@@ -195,7 +195,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!IsFriendly())
         {
@@ -297,7 +297,7 @@ bool GossipHello_chromie(Player* pPlayer, Creature* pCreature)
     return false;
 }
 
-bool GossipSelect_chromie(Player* pPlayer, Creature* pCreature, const std::uint32_t uiSender, const std::uint32_t uiAction)
+bool GossipSelect_chromie(Player* pPlayer, Creature* pCreature, const uint32 uiSender, const uint32 uiAction)
 {
     pPlayer->CLOSE_GOSSIP_MENU();
 

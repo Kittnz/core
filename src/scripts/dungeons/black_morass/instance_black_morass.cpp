@@ -31,7 +31,7 @@ void instance_black_morass::OnPlayerEnter(Player* pPlayer)
     }
 }
 
-void instance_black_morass::Update(std::uint32_t uiDiff)
+void instance_black_morass::Update(uint32 uiDiff)
 {
     bool bDoOnce{ false };
 

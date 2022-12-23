@@ -4305,7 +4305,7 @@ bool Player::ResetTalents(bool no_cost)
         return false;
     }
 
-    std::uint32_t uiCost{};
+    uint32 uiCost{};
 
     if (!no_cost)
     {
@@ -4334,12 +4334,12 @@ bool Player::ResetTalents(bool no_cost)
         if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
             continue;
 
-        for (const std::uint32_t& j : talentInfo->RankID)
+        for (const uint32& j : talentInfo->RankID)
         {
             SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(j) };
             if (pInfos)
             {
-                for (const std::uint32_t& eff : pInfos->EffectTriggerSpell)
+                for (const uint32& eff : pInfos->EffectTriggerSpell)
                 {
                     if (eff)
                     {
@@ -19648,7 +19648,7 @@ void Player::LearnQuestRewardedSpells()
 
 void Player::LearnGameMasterSpells()
 {
-    const std::list<std::uint32_t> aGameMasterSpellList =
+    const std::list<uint32> aGameMasterSpellList =
     {
         56043, // Debug: Next DisplayID
         56044, // Debug: Previous DisplayID
@@ -23361,14 +23361,14 @@ std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 	if (!savedTalents)
 		return "";
 
-    std::vector<std::uint32_t> vTreeTalents = { 0, 0, 0 };
+    std::vector<uint32> vTreeTalents = { 0, 0, 0 };
 
 	do
 	{
         Field* fields{ savedTalents->Fetch() };
-        const std::uint32_t uiSavedTalentID{ fields[0].GetUInt32() };
+        const uint32 uiSavedTalentID{ fields[0].GetUInt32() };
 
-        for (std::uint32_t i{}; i < sTalentStore.GetNumRows(); ++i)
+        for (uint32 i{}; i < sTalentStore.GetNumRows(); ++i)
 		{
             TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
 			if (!talentInfo)
@@ -23474,7 +23474,7 @@ bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 	do
 	{
         Field* fields{ talents->Fetch() };
-        const std::uint32_t uiTalentSpellId{ fields[0].GetUInt32() };
+        const uint32 uiTalentSpellId{ fields[0].GetUInt32() };
 
 		LearnSpell(uiTalentSpellId, false, true);
 

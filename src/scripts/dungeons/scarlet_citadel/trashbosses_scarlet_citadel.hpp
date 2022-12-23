@@ -48,27 +48,27 @@ namespace nsERIC_VESPER
     static constexpr auto TEXT_RANDOM2{ "Vile Scourge." };
     static constexpr auto TEXT_RANDOM3{ "Even the afterlife abandons mongrels like you!" };
 
-    static constexpr std::uint32_t SPELL_LIGHTNING_CLOUD{ 25033 };
-    static constexpr std::uint32_t SPELL_LIGHTNING_WAVE{ 24819 };
-    static constexpr std::uint32_t SPELL_ENERGIZE{ 25685 };
-    static constexpr std::uint32_t SPELL_DRAIN_MANA{ 25676 };
+    static constexpr uint32 SPELL_LIGHTNING_CLOUD{ 25033 };
+    static constexpr uint32 SPELL_LIGHTNING_WAVE{ 24819 };
+    static constexpr uint32 SPELL_ENERGIZE{ 25685 };
+    static constexpr uint32 SPELL_DRAIN_MANA{ 25676 };
 
-    static constexpr std::uint32_t INITIAL_TIMER_LIGHTNING_CLOUD{ 5000 };
-    static constexpr std::uint32_t TIMER_LIGHTNING_CLOUD{ 15000 };
-    static constexpr std::uint32_t INITIAL_TIMER_LIGHTNING_WAVE{ 1000 };
-    static constexpr std::uint32_t TIMER_MIN_LIGHTNING_WAVE{ 4000 };
-    static constexpr std::uint32_t TIMER_MAX_LIGHTNING_WAVE{ 5000 };
-    static constexpr std::uint32_t INITIAL_TIMER_DRAIN_MANA{ 5000 };
-    static constexpr std::uint32_t TIMER_DRAIN_MANA{ 5000 };
-    static constexpr std::uint32_t TIMER_ENERGIZE{ 300000 };
-    static constexpr std::uint32_t TIMER_RANDOM_TEXT{ 30000 };
-    static constexpr std::uint32_t TIMER_CHECK_PULSE{ 1000 };
+    static constexpr uint32 INITIAL_TIMER_LIGHTNING_CLOUD{ 5000 };
+    static constexpr uint32 TIMER_LIGHTNING_CLOUD{ 15000 };
+    static constexpr uint32 INITIAL_TIMER_LIGHTNING_WAVE{ 1000 };
+    static constexpr uint32 TIMER_MIN_LIGHTNING_WAVE{ 4000 };
+    static constexpr uint32 TIMER_MAX_LIGHTNING_WAVE{ 5000 };
+    static constexpr uint32 INITIAL_TIMER_DRAIN_MANA{ 5000 };
+    static constexpr uint32 TIMER_DRAIN_MANA{ 5000 };
+    static constexpr uint32 TIMER_ENERGIZE{ 300000 };
+    static constexpr uint32 TIMER_RANDOM_TEXT{ 30000 };
+    static constexpr uint32 TIMER_CHECK_PULSE{ 1000 };
 
-    static constexpr std::uint32_t FACTION_HOSTILE{ 67 };
-    static constexpr std::uint32_t TWO_HOURS{ 7200 };
+    static constexpr uint32 FACTION_HOSTILE{ 67 };
+    static constexpr uint32 TWO_HOURS{ 7200 };
 
-    static const std::vector<std::uint32_t> vTrashEntryList{ NPC_CITADEL_INQUISITOR, NPC_CITADEL_VALIANT, NPC_CITADEL_FOOTMAN };
-    static const std::vector<std::pair<LocationXYZO, std::uint32_t>>pairlol
+    static const std::vector<uint32> vTrashEntryList{ NPC_CITADEL_INQUISITOR, NPC_CITADEL_VALIANT, NPC_CITADEL_FOOTMAN };
+    static const std::vector<std::pair<LocationXYZO, uint32>>pairlol
     {
         std::make_pair(nsERIC_VESPER::vfMoveTo[0], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[1], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[2], vTrashEntryList[2]),
         std::make_pair(nsERIC_VESPER::vfMoveTo[3], vTrashEntryList[0]), std::make_pair(nsERIC_VESPER::vfMoveTo[4], vTrashEntryList[1]), std::make_pair(nsERIC_VESPER::vfMoveTo[5], vTrashEntryList[2]),
@@ -81,26 +81,26 @@ namespace nsERIC_VESPER
 
 namespace nsRayn
 {
-    static constexpr std::uint32_t SPELL_SHADOWFORM{ 15473 };
+    static constexpr uint32 SPELL_SHADOWFORM{ 15473 };
 
-    static constexpr std::uint32_t SPELL_MIND_CONTROL{ 785 };
-    static constexpr std::uint32_t SPELL_SHADOW_VOLLEY{ 21341 };
-    static constexpr std::uint32_t SPELL_MIND_FLAY{ 26143 };
-    static constexpr std::uint32_t SPELL_IMPENDING_DOOM{ 19702 };
+    static constexpr uint32 SPELL_MIND_CONTROL{ 785 };
+    static constexpr uint32 SPELL_SHADOW_VOLLEY{ 21341 };
+    static constexpr uint32 SPELL_MIND_FLAY{ 26143 };
+    static constexpr uint32 SPELL_IMPENDING_DOOM{ 19702 };
 
-    static constexpr std::uint32_t TIMER_SHADOWFORM_CHECK{ 500 };
+    static constexpr uint32 TIMER_SHADOWFORM_CHECK{ 500 };
 
-    static constexpr std::uint32_t INITIAL_TIMER_MIND_CONTROL{ 15000 };
-    static constexpr std::uint32_t TIMER_MIN_MIND_CONTROL{ 15000 };
-    static constexpr std::uint32_t TIMER_MAX_MIND_CONTROL{ 25000 };
-    static constexpr std::uint32_t INITIAL_TIMER_SHADOW_VOLLEY{ 5000 };
-    static constexpr std::uint32_t TIMER_MIN_SHADOW_VOLLEY{ 6000 };
-    static constexpr std::uint32_t TIMER_MAX_SHADOW_VOLLEY{ 8000 };
-    static constexpr std::uint32_t INITIAL_TIMER_MIND_FLAY{ 8000 };
-    static constexpr std::uint32_t TIMER_MIN_MIND_FLAY{ 18000 };
-    static constexpr std::uint32_t TIMER_MAX_MIND_FLAY{ 22000 };
-    static constexpr std::uint32_t INITIAL_TIMER_IMPENDING_DOOM{ 6000 };
-    static constexpr std::uint32_t TIMER_IMPENDING_DOOM{ 5500 };
+    static constexpr uint32 INITIAL_TIMER_MIND_CONTROL{ 15000 };
+    static constexpr uint32 TIMER_MIN_MIND_CONTROL{ 15000 };
+    static constexpr uint32 TIMER_MAX_MIND_CONTROL{ 25000 };
+    static constexpr uint32 INITIAL_TIMER_SHADOW_VOLLEY{ 5000 };
+    static constexpr uint32 TIMER_MIN_SHADOW_VOLLEY{ 6000 };
+    static constexpr uint32 TIMER_MAX_SHADOW_VOLLEY{ 8000 };
+    static constexpr uint32 INITIAL_TIMER_MIND_FLAY{ 8000 };
+    static constexpr uint32 TIMER_MIN_MIND_FLAY{ 18000 };
+    static constexpr uint32 TIMER_MAX_MIND_FLAY{ 22000 };
+    static constexpr uint32 INITIAL_TIMER_IMPENDING_DOOM{ 6000 };
+    static constexpr uint32 TIMER_IMPENDING_DOOM{ 5500 };
 
-    static constexpr std::uint32_t SEVEN_DAYS{ 604800 };
+    static constexpr uint32 SEVEN_DAYS{ 604800 };
 }

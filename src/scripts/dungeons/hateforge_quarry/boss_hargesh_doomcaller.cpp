@@ -13,18 +13,18 @@ static const Location vfSpawnPoint[] =
     { -8283.150391f, -3740.716309f, 137.77f, 2.820284f }
 };
 
-static constexpr std::uint32_t NPC_HARGESH_DOOMCALLER{ 60737 };
-static constexpr std::uint32_t NPC_FACELESS_TERROR{ 60738 };
+static constexpr uint32 NPC_HARGESH_DOOMCALLER{ 60737 };
+static constexpr uint32 NPC_FACELESS_TERROR{ 60738 };
 
-static constexpr std::uint32_t SPELL_IMMOLATE{ 11668 };
-static constexpr std::uint32_t SPELL_SHADOW_BOLT_VOLLEY{ 27646 };
-static constexpr std::uint32_t SPELL_SHADOW_BOLT{ 12739 };
-static constexpr std::uint32_t SPELL_IMMUNE_ALL{ 29230 };
-static constexpr std::uint32_t SPELL_SHADOW_CHANNELING{ 12380 };
+static constexpr uint32 SPELL_IMMOLATE{ 11668 };
+static constexpr uint32 SPELL_SHADOW_BOLT_VOLLEY{ 27646 };
+static constexpr uint32 SPELL_SHADOW_BOLT{ 12739 };
+static constexpr uint32 SPELL_IMMUNE_ALL{ 29230 };
+static constexpr uint32 SPELL_SHADOW_CHANNELING{ 12380 };
 
-static constexpr std::int32_t VOICE_SCRIPT_AGGRO{ -1999959 };
-static constexpr std::int32_t VOICE_SCRIPT_PHASE2{ -1999960 };
-static constexpr std::int32_t VOICE_SCRIPT_DIED{ -1999961 };
+static constexpr int32 VOICE_SCRIPT_AGGRO{ -1999959 };
+static constexpr int32 VOICE_SCRIPT_PHASE2{ -1999960 };
+static constexpr int32 VOICE_SCRIPT_DIED{ -1999961 };
 
 
 class boss_hargesh_doomcallerAI : public ScriptedAI
@@ -40,12 +40,12 @@ private:
     bool m_bPhaseTwo{};
     bool m_bAddsAreDead{};
 
-    std::uint8_t m_uiDeadCounter{};
+    uint8 m_uiDeadCounter{};
 
-    std::uint32_t m_uiImmolate_Timer{};
-    std::uint32_t m_uiShadowBoltVolley_Timer{};
-    std::uint32_t m_uiShadowBolt_Timer{};
-    std::uint32_t m_uiCheckIfAddsAreDead_Timer{};
+    uint32 m_uiImmolate_Timer{};
+    uint32 m_uiShadowBoltVolley_Timer{};
+    uint32 m_uiShadowBolt_Timer{};
+    uint32 m_uiCheckIfAddsAreDead_Timer{};
 
     std::vector<ObjectGuid> m_vFacelessTerror;
 
@@ -284,7 +284,7 @@ public:
 
 private:
     bool m_bCalledEvade{};
-    std::uint32_t m_uiRaidWipeCheck_Timer{};
+    uint32 m_uiRaidWipeCheck_Timer{};
 
 public:
     void Reset() override

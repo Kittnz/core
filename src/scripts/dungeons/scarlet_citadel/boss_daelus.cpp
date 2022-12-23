@@ -24,25 +24,25 @@ private:
     // Phase 1
     bool m_bHasAlreadyShoutedLifeDrain{};
 
-    std::uint8_t m_uiChosenOne{};
+    uint8 m_uiChosenOne{};
 
-    std::uint32_t m_uiCallSpirits_Timer{};
-    std::uint32_t m_uiSpawnChosenOne_Timer{};
-    std::uint32_t m_uiCheckAndConsumeSpirits{};
-    std::uint32_t m_uiCheckForTank_Timer{};
-    std::uint32_t m_uiPoisonCloud_Timer{};
-    std::uint32_t m_uiSunderArmor_Timer{};
+    uint32 m_uiCallSpirits_Timer{};
+    uint32 m_uiSpawnChosenOne_Timer{};
+    uint32 m_uiCheckAndConsumeSpirits{};
+    uint32 m_uiCheckForTank_Timer{};
+    uint32 m_uiPoisonCloud_Timer{};
+    uint32 m_uiSunderArmor_Timer{};
 
     std::vector<ObjectGuid> m_vSpawnedAdds;
 
     // Phase 2
-    std::uint32_t m_uiVulnerability_Timer{};
+    uint32 m_uiVulnerability_Timer{};
 
     // Misc
     bool m_bAchievementKillFailed{};
     bool m_bWasInFight{};
 
-    std::uint8_t m_uiPhase{};
+    uint8 m_uiPhase{};
 
     instance_scarlet_citadel* m_pInstance{};
 
@@ -133,7 +133,7 @@ public:
 
     void SummonAdds()
     {
-        for (std::uint8_t i{ 0 }; i < nsDaelus::NUMBER_OF_ADDS; ++i)
+        for (uint8 i{ 0 }; i < nsDaelus::NUMBER_OF_ADDS; ++i)
         {
             if (Creature* pMonk{ m_creature->SummonCreature(nsDaelus::NPC_FALLEN_SPIRIT,
                 nsDaelus::vfSpawnPoints[i].m_fX,

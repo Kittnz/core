@@ -7,7 +7,7 @@ struct custom_dungeon_portal : public GameObjectAI
         m_uiUpdateTimer = 300;
     }
 
-    std::uint32_t m_uiUpdateTimer{};
+    uint32 m_uiUpdateTimer{};
 
     void UpdateAI(uint32 const uiDiff) override
     {
@@ -49,7 +49,7 @@ struct custom_dungeon_portal : public GameObjectAI
                     player->SpawnCorpseBones();
                 }
 
-                static std::array<std::tuple<std::uint32_t, WorldLocation, std::uint32_t>, 10> portals_and_locations =
+                static std::array<std::tuple<uint32, WorldLocation, uint32>, 10> portals_and_locations =
                 { {
                     { 181580, WorldLocation{800, -11068.1F, -1806.4F, 52.7F, 1.5F}, 55 },  // Karazhan Crypt (Entrance)
                     { 181581, WorldLocation{0, -11068.9F, -1828.6F, 60.26F, 3.1F},  1 },   // Karazhan Crypt (Exit)

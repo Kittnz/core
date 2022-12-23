@@ -25,9 +25,9 @@ private:
     bool m_bSecondEchoSummoned{};
     bool m_bThirdEchoSummoned{};
 
-    std::uint32_t m_uiRainOfFire_Timer{};
-    std::uint32_t m_uiCleave_Timer{};
-    std::uint32_t m_uiBloodFunnel_Timer{};
+    uint32 m_uiRainOfFire_Timer{};
+    uint32 m_uiCleave_Timer{};
+    uint32 m_uiBloodFunnel_Timer{};
 
     ObjectGuid m_guidCurrentEcho{};
 
@@ -108,7 +108,7 @@ public:
         }
     }
 
-    void UpdateAI(const std::uint32_t uiDiff) override
+    void UpdateAI(const uint32 uiDiff) override
     {
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;

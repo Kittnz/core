@@ -631,9 +631,9 @@ struct mob_uldum_constructAI : public ScriptedAI
 };
 
 
-constexpr std::uint32_t SPELL_BLIZZARD = 21367;
-constexpr std::uint32_t SPELL_RAIN_OF_FIRE = 24669;
-constexpr std::uint32_t SPELL_FROST_BREATH = 22479;
+constexpr uint32 SPELL_BLIZZARD = 21367;
+constexpr uint32 SPELL_RAIN_OF_FIRE = 24669;
+constexpr uint32 SPELL_FROST_BREATH = 22479;
 
 
 struct mob_uldum_sentryAI : public ScriptedAI
@@ -687,7 +687,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
                 {
                     if (boss_ostariusAI* boss_ostarius{ dynamic_cast<boss_ostariusAI*>(pOstarius->AI()) })
                     {
-                        const std::uint32_t spellToCast{ boss_ostarius->IsFrostPhase() ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE };
+                        const uint32 spellToCast{ boss_ostarius->IsFrostPhase() ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE };
                         DoCast(randomTarget, spellToCast, true);
                         if (spellToCast == SPELL_BLIZZARD)
                         {
