@@ -1396,10 +1396,10 @@ void Player::Update(uint32 update_diff, uint32 p_time)
 
     if (HasUnitState(UNIT_STAT_MELEE_ATTACKING))
     {
-        UpdateMeleeAttackingState();
+        bool attacked = UpdateMeleeAttackingState();
 
         Unit const* pVictim = GetVictim();
-        if (pVictim && !IsNonMeleeSpellCasted(false) && CanReachWithMeleeAutoAttack(pVictim))
+        if (pVictim && attacked && !IsNonMeleeSpellCasted(false) && CanReachWithMeleeAutoAttack(pVictim))
             TogglePlayerPvPFlagOnAttackVictim(pVictim);
     }
 
