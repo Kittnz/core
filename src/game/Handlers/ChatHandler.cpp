@@ -427,6 +427,16 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 			return;
 
 		}
+
+
+
+        const std::string LFTPrefix = "LFT";
+        if (msg.find(LFTPrefix) != std::string::npos)
+        {
+            //check if a HC sent this message, if so, just don't broadcast. HCs can block the normal groups looking for dungeons.
+            if (GetPlayer() && GetPlayer()->IsHardcore())
+                return;
+        }
 	}
 
 	
@@ -454,7 +464,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 	{
 		if (strstr(msg.c_str(), "TW_SHOP"))
 		{
-			std::string prefix = "TW_SHOP";
+			const std::string prefix = "TW_SHOP";
 
 			if (strstr(msg.c_str(), "Balance"))
 			{
