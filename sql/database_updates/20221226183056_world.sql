@@ -140,8 +140,11 @@ UPDATE `item_template` SET `name` = 'Danonzo\'s Tel\'Abim Medley' WHERE `entry` 
 UPDATE `item_template` SET `name` = 'Gargantuan Tel\'Abim Banana' WHERE `entry` = 60955;
 UPDATE `item_template` SET `name` = 'Ripe Tel\'Abim Banana' WHERE `entry` = 60954;
 
-UPDATE ``quest_template` SET `Details` = 'Look, I have a favor I need to ask, and one that is really important to me. Do you know the meaning of sunk cost fallacy? Well, in my world it\'s completely true. I have spent years, and buckets of gold working on a machine that can sort bananas on being worthy to collect or not. It is able to judge ripeness, age, and all sorts of factors to determine if it is worth our time to collect.\n\nLet\'s just say, the buffoons that I sent it out with, got lost, and left it at the camp to the east of here.\n\nI don\'t have a bunch of people to waste getting ripped apart by Venomflayers to go get it themselves, so why don\'t you do it? Recover the Screwfuse 1000 and be sure to bring it back gently, it should be down the road to the west, at a small abandoned camp.' WHERE `entry` = 40755;
+UPDATE `quest_template` SET `Details` = 'Look, I have a favor I need to ask, and one that is really important to me. Do you know the meaning of sunk cost fallacy? Well, in my world it\'s completely true. I have spent years, and buckets of gold working on a machine that can sort bananas on being worthy to collect or not. It is able to judge ripeness, age, and all sorts of factors to determine if it is worth our time to collect.\n\nLet\'s just say, the buffoons that I sent it out with, got lost, and left it at the camp to the east of here.\n\nI don\'t have a bunch of people to waste getting ripped apart by Venomflayers to go get it themselves, so why don\'t you do it? Recover the Screwfuse 1000 and be sure to bring it back gently, it should be down the road to the west, at a small abandoned camp.' WHERE `entry` = 40755;
 
 -- Carus' Gift object should have fast respawn timer:
 
 UPDATE `gameobject` SET `spawntimesecsmin` = 25, `spawntimesecsmax` = 30 WHERE `id` = 2010971;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2602
+UPDATE `item_template` SET `range_mod` = 100 WHERE `entry` = 60953;
