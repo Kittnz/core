@@ -130,5 +130,14 @@ REPLACE INTO `npc_vendor` (`entry`, `slot`, `item`, `maxcount`, `incrtime`, `ite
 (80915, 0, 80627, 0, 0, 0, 0),
 (80915, 0, 81098, 0, 0, 0, 0);
 
+-- item Danonzo's Tel'abim Delight rename to 'Danonzo's Tel'Abim Delight'
+-- item Danonzo's Tel'abim Medley rename to 'Danonzo's Tel'Abim Medley'
+-- Item Gargantuan Tel'abim Banana rename to 'Gargantuan Tel'Abim Banana'
+-- Item Ripe Tel'abim Banana, rename to 'Ripe Tel'Abim Banana'
 
+UPDATE `item_template` SET `name` = 'Danonzo\'s Tel\'Abim Delight' WHERE `entry` = 60977;
+UPDATE `item_template` SET `name` = 'Danonzo\'s Tel\'Abim Medley' WHERE `entry` = 60978;
+UPDATE `item_template` SET `name` = 'Gargantuan Tel\'Abim Banana' WHERE `entry` = 60955;
+UPDATE `item_template` SET `name` = 'Ripe Tel\'Abim Banana' WHERE `entry` = 60954;
 
+UPDATE ``quest_template` SET `Details` = 'Look, I have a favor I need to ask, and one that is really important to me. Do you know the meaning of sunk cost fallacy? Well, in my world it\'s completely true. I have spent years, and buckets of gold working on a machine that can sort bananas on being worthy to collect or not. It is able to judge ripeness, age, and all sorts of factors to determine if it is worth our time to collect.\n\nLet\'s just say, the buffoons that I sent it out with, got lost, and left it at the camp to the east of here.\n\nI don\'t have a bunch of people to waste getting ripped apart by Venomflayers to go get it themselves, so why don\'t you do it? Recover the Screwfuse 1000 and be sure to bring it back gently, it should be down the road to the west, at a small abandoned camp.' WHERE `entry` = 40755;
