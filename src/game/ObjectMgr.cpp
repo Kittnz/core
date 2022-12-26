@@ -8842,6 +8842,34 @@ void ObjectMgr::GetAreaLocaleString(uint32 entry, int32 loc_idx, std::string* na
     }
 }
 
+AreaEntry const* ObjectMgr::GetAreaEntryByName(std::string const& name) const
+{
+    // explicit name case
+    std::wstring wname;
+    if (!Utf8toWStr(name, wname))
+        return 0;
+
+    // converting string that we try to find to lower case
+    wstrToLower(wname);
+
+    AreaEntry const* pAlt = nullptr;
+    // Alternative first area Id that contains wnameLow as substring in case no exact name found
+    for (auto itr = sAreaStorage.begin<AreaEntry>(); itr != sAreaStorage.end<AreaEntry>(); ++itr)
+    {
+        std::wstring areaName;
+        if (!Utf8toWStr(itr->Name, areaName))
+            continue;
+        wstrToLower(areaName);
+
+        if (areaName == wname)
+            return *itr;
+        else if (!pAlt && areaName.find(wname) != std::wstring::npos)
+            pAlt = *itr;
+    }
+
+    return pAlt;
+}
+
 void ObjectMgr::LoadShop()
 {
 	m_ShopCategoriesMap.clear();
