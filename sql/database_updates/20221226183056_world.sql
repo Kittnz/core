@@ -151,3 +151,6 @@ UPDATE `item_template` SET `range_mod` = 100 WHERE `entry` = 60953;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2601
 UPDATE `quest_template` SET `RewRepFaction1` = 369 WHERE `entry` = 40592;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2600
+UPDATE `quest_template` SET `ZoneOrSort` = 5121 WHERE `entry` = 40785;
