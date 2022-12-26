@@ -148,3 +148,6 @@ UPDATE `gameobject` SET `spawntimesecsmin` = 25, `spawntimesecsmax` = 30 WHERE `
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2602
 UPDATE `item_template` SET `range_mod` = 100 WHERE `entry` = 60953;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2601
+UPDATE `quest_template` SET `RewRepFaction1` = 369 WHERE `entry` = 40592;
