@@ -9864,13 +9864,73 @@ bool ChatHandler::HandleMinChatLevelCommand(char* args)
     return true;
 }
 
-bool ChatHandler::CrashCommand(char* args)
+bool ChatHandler::HandleCrashCommand(char* args)
 {
     int* torta = (int*)0x42;
     *torta = 1337;
     return true;
 }
 
+bool ChatHandler::HandleWhoCommand(char* args)
+{
+    uint32 areaId;
+    AreaEntry const* pAreaEntry = nullptr;
+    std::string areaName = args;
+
+    if (!areaName.empty())
+    {
+        if (!(pAreaEntry = sObjectMgr.GetAreaEntryByName(areaName)))
+        {
+            SendSysMessage("Area not found.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+
+        areaId = pAreaEntry->Id;
+        PSendSysMessage("Players in %s:", pAreaEntry->Name);
+    }
+    else
+    {
+        areaId = 0;
+        SendSysMessage("Top 100 longest online players:");
+    }
+        
+    time_t now = sWorld.GetGameTime();
+    std::multimap<time_t, Player*> playersByOnlineTime;
+    HashMapHolder<Player>::MapType& m = sObjectAccessor.GetPlayers();
+    for (const auto& itr : m)
+    {
+        if (!itr.second->IsInWorld())
+            continue;
+
+        if (areaId && areaId != itr.second->GetCachedAreaId() && areaId != itr.second->GetCachedZoneId())
+            continue;
+
+        if (itr.second->GetSession()->GetSecurity() > SEC_PLAYER)
+            continue;
+
+        playersByOnlineTime.insert({ itr.second->GetLoginTime(), itr.second });
+
+        if (playersByOnlineTime.size() >= 100)
+            break;
+    }
+
+    if (playersByOnlineTime.empty())
+        SendSysMessage("- No players found.");
+    else
+    {
+        for (auto const& itr : playersByOnlineTime)
+        {
+            PSendSysMessage("- %s - lvl %u - ip %s - Online for %s",
+                GetNameLink(itr.second).c_str(),
+                itr.second->GetLevel(),
+                itr.second->GetSession()->GetRemoteAddress().c_str(),
+                secsToTimeString(now - itr.first, true).c_str());
+        }
+    }
+
+    return true;
+}
 
 bool ChatHandler::HandlePvPCommand(char* args)
 {

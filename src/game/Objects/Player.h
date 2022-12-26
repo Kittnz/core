@@ -2179,6 +2179,7 @@ class Player final: public Unit
 
         uint32 GetTotalPlayedTime() const { return m_Played_time[PLAYED_TIME_TOTAL]; }
         uint32 GetLevelPlayedTime() const { return m_Played_time[PLAYED_TIME_LEVEL]; }
+        time_t GetLoginTime() const { return m_logintime; }
 
         void AddSkippedUpdateTime(uint32 t) { m_skippedUpdateTime += t; }
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }

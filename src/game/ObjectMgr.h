@@ -1140,6 +1140,7 @@ class ObjectMgr
             if (itr == m_AreaLocaleMap.end()) return nullptr;
             return &itr->second;
         }
+        AreaEntry const* GetAreaEntryByName(std::string const& name) const;
 
         GameObjectDataPair const* GetGODataPair(uint32 guid) const
         {

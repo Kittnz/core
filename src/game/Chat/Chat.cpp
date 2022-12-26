@@ -686,11 +686,12 @@ ChatCommand * ChatHandler::getCommandTable()
         { "getskillvalue",  SEC_DEVELOPER,       false, &ChatHandler::HandleGetSkillValueCommand,       "", nullptr},
         { "anonymous",      SEC_DEVELOPER,       false, nullptr,                                        "", anonymousCommandTable},
         { "hcmessages",     SEC_PLAYER,          false, &ChatHandler::HandleHCMessagesCommand,          "", nullptr },
-        { "minchatlevel",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleMinChatLevelCommand,             "", nullptr },
-        { "pvp",            SEC_DEVELOPER,       false, &ChatHandler::HandlePvPCommand,                  "", nullptr},
-        { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                         "", mmapsCommandTable },
-        { "crash",          SEC_CONSOLE,         true, &ChatHandler::CrashCommand,  "", nullptr},
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "minchatlevel",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleMinChatLevelCommand,        "", nullptr },
+        { "pvp",            SEC_DEVELOPER,       false, &ChatHandler::HandlePvPCommand,                 "", nullptr},
+        { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                        "", mmapsCommandTable },
+        { "crash",          SEC_CONSOLE,         true, &ChatHandler::HandleCrashCommand,                "", nullptr},
+        { "who",            SEC_OBSERVER,        true, &ChatHandler::HandleWhoCommand,                  "", nullptr },
+        { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 
     static bool loaded = false;
