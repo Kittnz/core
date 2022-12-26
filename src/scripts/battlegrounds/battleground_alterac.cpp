@@ -143,7 +143,7 @@ struct npc_VanndarAI : public ScriptedAI, public npc_alterac_bossHelper
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 23.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 23.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
@@ -400,7 +400,7 @@ struct npc_DrekTharAI : public ScriptedAI, public npc_alterac_bossHelper
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 22.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 22.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
@@ -601,7 +601,7 @@ struct npc_BalindaAI : public ScriptedAI
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 28.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 28.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
@@ -850,7 +850,7 @@ struct npc_GalvangarAI : public ScriptedAI
         if (m_creature->GetVictim())
             return;
 
-        if ((pWho->GetDistance(m_creature) < 28.0f) && (m_creature->IsHostileTo(pWho)))
+        if ((pWho->GetDistance(m_creature) < 28.0f) && m_creature->IsHostileTo(pWho) && m_creature->IsValidAttackTarget(pWho))
             AttackStart(pWho);
     }
 
