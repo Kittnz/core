@@ -2230,6 +2230,9 @@ bool Creature::CanInitiateAttack()
     if (IsTempPacified())
         return false;
 
+    if (HasExtraFlag(CREATURE_FLAG_EXTRA_NO_AGGRO))
+        return false;
+
     return true;
 }
 
