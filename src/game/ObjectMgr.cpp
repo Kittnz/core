@@ -8933,7 +8933,13 @@ void ObjectMgr::LoadShop()
             continue;
         }
 
-		m_ShopEntriesMap[id] = shopentry;
+        if (m_ShopEntriesMap.find(item) != m_ShopEntriesMap.end())
+        {
+            sLog.outErrorDb("ERROR for item Id %u, already has an entry in the shop for entry %u.", id, item);
+            continue;
+        }
+
+		m_ShopEntriesMap[item] = shopentry;
 
 	} while (result->NextRow());
 
