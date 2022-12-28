@@ -728,6 +728,9 @@ void World::LoadConfigSettings(bool reload)
     setConfigMinMax(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT,           "BattleGround.QueuesCount", 0, 0, 3);
     setConfig(CONFIG_BOOL_ENABLE_CROSSFACTION_BATTLEGROUNDS,           "BattleGround.Crossfaction", false);
     setConfig(CONFIG_BOOL_ENABLE_GEAR_RATING_QUEUE,                    "BattleGround.GearQueue", false);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AV,            "BattleGround.Rate.Reputation.AV", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_WS,            "BattleGround.Rate.Reputation.WS", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB,            "BattleGround.Rate.Reputation.AB", 1);
 
         // If max bg queues is at 0, decide based on patch.
     if (getConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT) == 0)

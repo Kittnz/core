@@ -538,12 +538,37 @@ void BattleGround::RewardHonorToTeam(uint32 Honor, Team teamId)
     }
 }
 
-void BattleGround::RewardReputationToTeam(uint32 faction_id, uint32 Reputation, Team teamId)
+void BattleGround::RewardReputationToTeam(uint32 factionId, uint32 reputation, Team teamId)
 {
-    FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(faction_id);
-
+    FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(factionId);
     if (!factionEntry)
         return;
+
+    float rate;
+    switch (GetTypeID())
+    {
+        case BATTLEGROUND_AV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AV);
+            break;
+        }
+        case BATTLEGROUND_WS:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_WS);
+            break;
+        }
+        case BATTLEGROUND_AB:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB);
+            break;
+        }
+        default:
+        {
+            rate = 1.0f;
+            break;
+        }
+    }
+    reputation = std::max(1u, uint32(reputation * rate));
 
     for (const auto& itr : m_Players)
     {
@@ -560,9 +585,8 @@ void BattleGround::RewardReputationToTeam(uint32 faction_id, uint32 Reputation, 
 
         if (team == teamId)
         {
-            int32 rep_change;
-            rep_change = pPlayer->CalculateReputationGain(REPUTATION_SOURCE_SPELL, Reputation, faction_id);
-            pPlayer->GetReputationMgr().ModifyReputation(factionEntry, rep_change);
+            int32 repChange = pPlayer->CalculateReputationGain(REPUTATION_SOURCE_SPELL, reputation, factionId);
+            pPlayer->GetReputationMgr().ModifyReputation(factionEntry, repChange);
         }
     }
 }
