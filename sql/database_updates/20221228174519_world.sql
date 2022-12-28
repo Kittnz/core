@@ -75,3 +75,11 @@ DELETE FROM `creature_questrelation` WHERE `quest` = 20003 AND `id` = 0;
 -- Creature (Entry: 61137) has wrong spell 0 defined in `auras` field in `creature_template`.
 
 UPDATE `creature_template` SET `auras` = NULL WHERE `entry` = 61137;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2605
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2614
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2598
+
+UPDATE `quest_template` SET `RewRepFaction1` = 369 WHERE `entry` = 40589;
+UPDATE `quest_template` SET `Objectives` = 'Investigate the quillboar camp north of Bael Modan for any evidence.', `Details` = 'So, $N, the footprints were definitely quillboar hooves. I followed them well into the Barrens, thinking they would lead me to the Bael Modan. I was wrong. The raiding party actually stopped just outside of it, which makes your job easier.\n\nVenturing into the Kraul... The mere thought makes me shudder.\n\nBack to the topic. The camp is north of the Kraul, close to the road. You should have no trouble finding it. Try to sneak in, or kill them all. Doesn\'t matter to me. What is important - find some evidence, maybe some items that could\'ve been taken from the inn.' WHERE `entry` = 40549;
+UPDATE `quest_template` SET `Objectives` = 'Find the Steamwheedle Crew and return the Turbo-Scan Filtronomitor back to Baggle Hackrust at Steamwheedle Port in Tanaris.', `Details` = 'We sent out a crew weeks ago to begin doing some studies over the ruins down east and they haven\'t showed up yet, not even a peep.\n\nThe desert is a dangerous place so now rumor is going around they may have met some terrible fate. It is possible I suppose!\n\nWhat is really important is what we sent out with them, you see, when we trust someone, we usually give them some valueable gear, something worth a lot of coin, you dig?\n\nI need you to go out there and find that crew, or more importantly, get the Turbo-Scan Filtronomitor from whatever is left!\n\nThey should have been down near Southmoon Ruins, check around there.' WHERE `entry` = 40589;
