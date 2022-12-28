@@ -85,7 +85,7 @@ enum TempSummonType
   TEMPSUMMON_MANUAL_DESPAWN = 8,                  // despawns when UnSummon() is called
   TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN = 9,    // despawns after a specified time (in or out of combat) OR when the creature disappears
   TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN = 10, // despawns after a specified time (in or out of combat) OR when the creature dies
-
+  TEMPSUMMON_TIMED_DEATH_AND_DEAD_DESPAWN = 11,   // dies after a specified time (in or out of combat) and despawns when creature disappears
 };
 
 inline bool IsRespawnableTempSummonType(TempSummonType type)
