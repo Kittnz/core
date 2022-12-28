@@ -1842,6 +1842,11 @@ BattleGround.RandomizeQueues = 0
 
 BattleGround.GroupQueueLimit = 40
 
+# Reputation reward rates for battlegrounds
+BattleGround.Rate.Reputation.AV = 0.85
+BattleGround.Rate.Reputation.WS = 1.15
+BattleGround.Rate.Reputation.AB = 1.15
+
 # Alterac.MinPlayersInQueue. Minimum players in queue per faction before starting a match.
 
 Alterac.MinPlayersInQueue = 0
