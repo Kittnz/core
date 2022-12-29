@@ -12,3 +12,7 @@ UPDATE `quest_template` SET `RewRepFaction1` = 108 WHERE `entry` IN (40554, 4055
 UPDATE `item_template` SET `stackable` = 60 WHERE `entry` = 81301;
 
 UPDATE `quest_template` SET `Details` = 'I feel pride. The fire that had settled before has once again been fueled. It\'s time for my last order.\n\n$N, I command you to find Zetharia and end this nightmare. As a last gift to my people, the Lord of the Living Flame has granted me the way to find her.\n\nFar to the south west in these lands and atop the rocks, she lingers, forever searching for new souls to torture. Make sure you succeed, if not she will probably torment your soul for generations, as she did to me and my people.' WHERE `entry` = 40717;
+
+UPDATE `quest_template` SET `Details` = 'Trust is something you can\'t buy, $R.\n\nHere\'s the deal, lad. You earn the trust of this gryphon over here and you\'ll get your ride to the camp. Fail and he\'ll have you as his breakfast.\n\nHah! Of course I\'m pulling your leg here, lad. This winged beast won\'t even budge unless it trust you completely.\n\nHow, you ask? Food, of course. And a toy. Go figure.' WHERE `entry` = 60070;
+
+UPDATE `quest_template` SET `OfferRewardText` = 'The gryphon sniffs the air about you excitedly, sensing the treats you\'ve brought.\n\nHis pupils grow wide and he chirps with joy at the sight of his favorite Chew Toy in your hand.\n\nHe looks happy!' WHERE `entry` = 60070;
