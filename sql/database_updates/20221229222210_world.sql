@@ -4,3 +4,5 @@ UPDATE `quest_template` SET `Details` = 'Already we have established contact wit
 
 UPDATE `creature_onkill_reputation` SET `RewOnKillRepValue2` = -100 WHERE `creature_id` = 4662;
 UPDATE `creature_onkill_reputation` SET `RewOnKillRepValue1` = 20 WHERE `creature_id` = 4640;
+
+UPDATE `quest_template` SET `MinLevel` = 32 WHERE `ZoneOrSort` = 5077;
