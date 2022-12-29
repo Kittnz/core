@@ -33,3 +33,5 @@ UPDATE `quest_template` SET `OfferRewardText` = 'Well, that took long enough. La
 
 UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHERE `id` = 324;
 UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHERE `id` = 2002626;
+
+UPDATE `quest_template` SET `QuestLevel` = 56 WHERE `entry` = 40286;
