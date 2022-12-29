@@ -8,3 +8,5 @@ UPDATE `creature_onkill_reputation` SET `RewOnKillRepValue1` = 20 WHERE `creatur
 UPDATE `quest_template` SET `MinLevel` = 32 WHERE `ZoneOrSort` = 5077;
 
 UPDATE `quest_template` SET `RewRepFaction1` = 108 WHERE `entry` IN (40554, 40555, 40556, 40557, 40558);
+
+UPDATE `item_template` SET `stackable` = 60 WHERE `entry` = 81301;
