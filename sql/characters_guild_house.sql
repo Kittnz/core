@@ -37,4 +37,5 @@ REPLACE INTO `guild_house` VALUES
 (403, 1, -7600.9, -2337.65, -190.2, 5.08), -- Get Rich Or Die Grinding
 (504, 0, -3850.1, -2403.2, 172.2, 5.49),   -- Hawks Talon
 (283, 0, -734.2, -318.9, 18.2, 1.29),      -- The Silver Crusade
-(672, 0, 2103.8, -875.3, 109.36, 1.8);     -- The Scourge
+(672, 0, 2103.8, -875.3, 109.36, 1.8),     -- The Scourge
+(500, 0, 537.04, -1458.07, 48.72, 0.4);    -- Templarios
