@@ -5089,6 +5089,15 @@ Player* Unit::GetCharmerOrOwnerPlayerOrPlayerItself() const
     return IsPlayer() ? (Player*)this : nullptr;
 }
 
+Player* Unit::GetCharmerOrOwnerPlayer() const
+{
+    ObjectGuid guid = GetCharmerOrOwnerGuid();
+    if (guid.IsPlayer())
+        return ObjectAccessor::FindPlayer(guid);
+
+    return nullptr;
+}
+
 Player* Unit::GetAffectingPlayer() const
 {
     if (!GetCharmerOrOwnerGuid())
