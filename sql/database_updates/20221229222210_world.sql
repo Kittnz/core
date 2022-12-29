@@ -30,3 +30,6 @@ UPDATE `broadcast_text` SET `male_text` = 'Welcome to Icepaw Village. The others
 UPDATE `broadcast_text` SET `male_text` = 'I am not that scary. Don\'t be afraid to say hello. The other yetis give us all a bad name.', `female_text` = NULL, `chat_type` = 0, `sound_id` = 0, `language_id` = 0, `emote_id1` = 0, `emote_id2` = 0, `emote_id3` = 0, `emote_delay1` = 0, `emote_delay2` = 0, `emote_delay3` = 0 WHERE `entry` = 61136;
 
 UPDATE `quest_template` SET `OfferRewardText` = 'Well, that took long enough. Last time I deal with him. He\'s a horrible contractor.\n\nA goblin should know never to be late, especially not with me. Here, take the extra coin he gave me for actually getting me this fur.\n\nNo doubt you\'re responsible for it getting here at all. Without you, I\'d be out of a shipment of fancy cloaks.' WHERE `entry` = 55038;
+
+UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHERE `id` = 324;
+UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHERE `id` = 2002626;
