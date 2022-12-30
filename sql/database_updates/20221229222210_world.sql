@@ -35,3 +35,5 @@ UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHE
 UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHERE `id` = 2002626;
 
 UPDATE `quest_template` SET `QuestLevel` = 56 WHERE `entry` = 40286;
+
+UPDATE `creature_template` SET `dmg_min` = 130, `dmg_max` = 186 WHERE `entry` = 5295;
