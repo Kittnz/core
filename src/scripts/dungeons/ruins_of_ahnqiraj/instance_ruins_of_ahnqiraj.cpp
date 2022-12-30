@@ -50,13 +50,13 @@ void instance_ruins_of_ahnqiraj::Initialize()
     for (uint32 & waveIndex : m_uiWaveMembersCount)
         waveIndex = WAVE_MEMBERS_INIT_COUNT;
     m_uiBuruGUID = 0;
+    m_uiAyamissGUID = 0;
+    m_uiMoamGUID = 0;
     m_uiOssirianGUID = 0;
     m_uiAndorovGUID = 0;
     m_lKaldoreiElites.clear();
     m_lOssirianPylons.clear();
-
-    m_bIsAQDoorOn = false;
-    p_doorGuid.Clear();
+    m_doorGuid.Clear();
 
     m_uiGladiatorDeath = 0;
 
@@ -95,6 +95,10 @@ uint64 instance_ruins_of_ahnqiraj::GetData64(uint32 uiData)
             return m_uiOssirianGUID;
         case DATA_BURU:
             return m_uiBuruGUID;
+        case DATA_AYAMISS:
+            return m_uiAyamissGUID;
+        case DATA_MOAM:
+            return m_uiMoamGUID;
         case DATA_ANDOROV:
             return m_uiAndorovGUID;
         case DATA_KURINNAXX:
@@ -156,24 +160,6 @@ void instance_ruins_of_ahnqiraj::OnCreatureEnterCombat(Creature * pCreature)
             if (m_auiEncounter[TYPE_RAJAXX] == NOT_STARTED)
                 SetData(TYPE_RAJAXX, IN_PROGRESS);
             m_bRajaxxEventIsToReset = false;
-        // no break
-        case NPC_KURINNAXX:
-        case NPC_RAJAXX:
-        case NPC_BURU:
-        case NPC_MOAM:
-        case NPC_AYAMISS:
-        case NPC_OSSIRIAN:
-            if (!m_bIsAQDoorOn)
-            {
-                GameObject *pAQDoor = pCreature->SummonGameObject(176149,
-                                        -8526,
-                                        1507.4f,
-                                        49,
-                                        4.20662f, 0, 0, 0.861534f, -0.5077f, -1, false);
-
-                p_doorGuid = pAQDoor->GetObjectGuid();
-                m_bIsAQDoorOn = true;
-            }
             break;
         default:
             break;
@@ -196,20 +182,6 @@ void instance_ruins_of_ahnqiraj::OnCreatureEvade(Creature* pCreature)
             // If any creature from Rajaxx's wave is on evade mode, reset Rajaxx.
             m_uiRajaxxEventResetTimer = 2000;
             m_bRajaxxEventIsToReset = true;
-        // no break
-        case NPC_KURINNAXX:
-        case NPC_RAJAXX:
-        case NPC_BURU:
-        case NPC_MOAM:
-        case NPC_AYAMISS:
-        case NPC_OSSIRIAN:
-            if (m_bIsAQDoorOn)
-            {
-                if (GameObject* door = pCreature->GetMap()->GetGameObject(p_doorGuid))
-                    door->AddObjectToRemoveList();
-                p_doorGuid.Clear();
-                m_bIsAQDoorOn = false;
-            }
             break;
         case NPC_KALDOREI_ELITE:
             if (Creature* pAndorov = instance->GetCreature(m_uiAndorovGUID))
@@ -231,16 +203,16 @@ void instance_ruins_of_ahnqiraj::OnCreatureCreate(Creature* pCreature)
     switch (pCreature->GetEntry())
     {
         case NPC_KURINNAXX:
-            m_uiKurinnaxxGUID   = pCreature->GetGUID();
+            m_uiKurinnaxxGUID = pCreature->GetGUID();
             break;
         case NPC_CAPTAIN_QEEZ:
-            m_uiQeezGUID     = pCreature->GetGUID();
+            m_uiQeezGUID = pCreature->GetGUID();
             break;
         case NPC_CAPTAIN_TUUBID:
             m_uiTuubidGUID = pCreature->GetGUID();
             break;
         case NPC_CAPTAIN_DRENN:
-            m_uiDrennGUID   = pCreature->GetGUID();
+            m_uiDrennGUID = pCreature->GetGUID();
             break;
         case NPC_CAPTAIN_XURREM:
             m_uiXurremGUID = pCreature->GetGUID();
@@ -249,19 +221,25 @@ void instance_ruins_of_ahnqiraj::OnCreatureCreate(Creature* pCreature)
             m_uiYeggethGUID = pCreature->GetGUID();
             break;
         case NPC_MAJOR_PAKKON:
-            m_uiPakkonGUID   = pCreature->GetGUID();
+            m_uiPakkonGUID = pCreature->GetGUID();
             break;
         case NPC_COLONEL_ZERRAN:
             m_uiZerranGUID = pCreature->GetGUID();
             break;
         case NPC_RAJAXX:
-            m_uiRajaxxGUID         = pCreature->GetGUID();
+            m_uiRajaxxGUID = pCreature->GetGUID();
             break;
         case NPC_BURU:
-            m_uiBuruGUID             = pCreature->GetGUID();
+            m_uiBuruGUID = pCreature->GetGUID();
+            break;
+        case NPC_AYAMISS:
+            m_uiAyamissGUID = pCreature->GetGUID();
+            break;
+        case NPC_MOAM:
+            m_uiMoamGUID = pCreature->GetGUID();
             break;
         case NPC_OSSIRIAN:
-            m_uiOssirianGUID     = pCreature->GetGUID();
+            m_uiOssirianGUID = pCreature->GetGUID();
             break;
         case NPC_GENERAL_ANDOROV:
             // Andorov is spawn only if Kurinnaxx is dead and Rajaxx alive.
@@ -315,20 +293,6 @@ void instance_ruins_of_ahnqiraj::OnCreatureDeath(Creature* pCreature)
 {
     switch (pCreature->GetEntry())
     {
-        case NPC_KURINNAXX:
-        case NPC_RAJAXX:
-        case NPC_BURU:
-        case NPC_MOAM:
-        case NPC_AYAMISS:
-        case NPC_OSSIRIAN:
-            if (m_bIsAQDoorOn)
-            {
-                if (GameObject* door = pCreature->GetMap()->GetGameObject(p_doorGuid))
-                    door->AddObjectToRemoveList();
-                p_doorGuid.Clear();
-                m_bIsAQDoorOn = false;
-            }
-            break;
         case NPC_CAPTAIN_QEEZ:
         case NPC_CAPTAIN_TUUBID:
         case NPC_CAPTAIN_DRENN:
@@ -530,6 +494,28 @@ void instance_ruins_of_ahnqiraj::Load(const char* chrIn)
 
 void instance_ruins_of_ahnqiraj::Update(uint32 uiDiff)
 {
+    if (IsAnyBossInCombat())
+    {
+        if (m_doorGuid.IsEmpty())
+        {
+            if (GameObject* pAQDoor = GetMap()->SummonGameObject(176149,
+                -8526,
+                1507.4f,
+                49,
+                4.20662f, 0, 0, 0.861534f, -0.5077f, -1, 0))
+                m_doorGuid = pAQDoor->GetObjectGuid();
+        }
+    }
+    else
+    {
+        if (!m_doorGuid.IsEmpty())
+        {
+            if (GameObject* pAQDoor = GetMap()->GetGameObject(m_doorGuid))
+                pAQDoor->AddObjectToRemoveList();
+            m_doorGuid.Clear();
+        }
+    }
+
     if (m_bRajaxxEventIsToReset)
     {
         if (m_uiRajaxxEventResetTimer < uiDiff)
@@ -555,6 +541,20 @@ void instance_ruins_of_ahnqiraj::Update(uint32 uiDiff)
 }
 
 /* Private methods */
+
+bool instance_ruins_of_ahnqiraj::IsAnyBossInCombat()
+{
+    for (int i = DATA_KURINNAXX; i <= DATA_ZERRAN; i++)
+    {
+        if (uint64 guid = GetData64(i))
+        {
+            if (Creature* pCreature = GetMap()->GetCreature(guid))
+                if (pCreature->IsAlive() && pCreature->GetVictim())
+                    return true;
+        }
+    }
+    return false;
+}
 
 uint8 instance_ruins_of_ahnqiraj::GetWaveFromCreature(Creature* creature)
 {

@@ -50,7 +50,7 @@ enum
     DATA_KURINNAXX      = 0,
     DATA_RAJAXX         = 1,
     DATA_BURU           = 2,
-    DATA_AYAMIS         = 3,
+    DATA_AYAMISS        = 3,
     DATA_MOAM           = 4,
     DATA_OSSIRIAN       = 5,
     DATA_ANDOROV        = 6,
@@ -146,12 +146,15 @@ private:
     void SetAndorovSquadRespawnTime(uint32 nextRespawnDelay);
     void SetAndorovSquadFaction(uint32 faction);
     void ForceAndorovSquadDespawn(uint32 timeToDespawn);
+    bool IsAnyBossInCombat();
 
     uint32 m_auiEncounter[INSTANCE_RUINS_AQ_MAX_ENCOUNTER];
     uint32 m_uiWaveMembersCount[WAVE_MAX];
 
     uint64 m_uiKurinnaxxGUID;
     uint64 m_uiBuruGUID;
+    uint64 m_uiAyamissGUID;
+    uint64 m_uiMoamGUID;
     uint64 m_uiOssirianGUID;
     uint64 m_uiAndorovGUID;
     std::list<uint64> m_lKaldoreiElites;
@@ -176,9 +179,7 @@ private:
 
     uint32 m_uiRajaxxEventResetTimer;
     bool m_bRajaxxEventIsToReset;
-
-    bool m_bIsAQDoorOn;
-    ObjectGuid p_doorGuid;
+    ObjectGuid m_doorGuid;
 };
 
 #ifdef DEBUG_MODE
