@@ -40,3 +40,5 @@ UPDATE `creature_template` SET `dmg_min` = 130, `dmg_max` = 186 WHERE `entry` = 
 
 UPDATE `quest_template` SET `RewItemId1` = 0, `RewItemCount1` = 0 WHERE `entry` = 40549;
 UPDATE `quest_template` SET `RewItemId1` = 0, `RewItemCount1` = 0 WHERE `entry` = 40573;
+
+UPDATE `quest_template` SET `RewRepFaction1` = 54 WHERE `entry` = 40651;
