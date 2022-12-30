@@ -37,3 +37,6 @@ UPDATE `gameobject` SET `spawntimesecsmin` = 2700, `spawntimesecsmax` = 2700 WHE
 UPDATE `quest_template` SET `QuestLevel` = 56 WHERE `entry` = 40286;
 
 UPDATE `creature_template` SET `dmg_min` = 130, `dmg_max` = 186 WHERE `entry` = 5295;
+
+UPDATE `quest_template` SET `RewItemId1` = 0, `RewItemCount1` = 0 WHERE `entry` = 40549;
+UPDATE `quest_template` SET `RewItemId1` = 0, `RewItemCount1` = 0 WHERE `entry` = 40573;
