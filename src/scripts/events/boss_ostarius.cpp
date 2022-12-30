@@ -126,6 +126,11 @@ struct boss_ostariusAI : public ScriptedAI
         DespawnSummons();
     }
 
+    void OnRemoveFromWorld() override
+    {
+        DespawnSummons();
+    }
+
     void JustRespawned() override
     {
         JustReachedHome();
@@ -151,19 +156,23 @@ struct boss_ostariusAI : public ScriptedAI
     {
         for (const auto& guid : sentrySpawns)
             if (auto c = me->GetMap()->GetCreature(guid))
-                DeleteObject(c, sentrySpawns);
+                c->DespawnOrUnsummon();
+        sentrySpawns.clear();
 
         for (const auto& guid : constructSpawns)
             if (auto c = me->GetMap()->GetCreature(guid))
-                DeleteObject(c, constructSpawns);
+                c->DespawnOrUnsummon();
+        constructSpawns.clear();
 
         for (const auto& guid : portals)
             if (auto g = me->GetMap()->GetGameObject(guid))
-                DeleteObject(g, portals);
+                g->AddObjectToRemoveList();
+        portals.clear();
 
         for (const auto& guid : devices)
             if (auto g = me->GetMap()->GetGameObject(guid))
-                DeleteObject(g, devices);
+                g->AddObjectToRemoveList();
+        devices.clear();
     }
 
     void KilledUnit(Unit* victim) override
@@ -499,7 +508,7 @@ struct boss_ostariusAI : public ScriptedAI
                 0.0f,
                 0.0f,
                 0.0f,
-                30 * MINUTE
+                5 * MINUTE
             );
             portals.push_back(portal->GetObjectGuid());
 
@@ -547,7 +556,7 @@ struct boss_ostariusAI : public ScriptedAI
                 0.0f,
                 0.0f,
                 0.0f,
-                30 * MINUTE
+                5 * MINUTE
             );
 
             devices.push_back(device->GetObjectGuid());
