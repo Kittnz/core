@@ -15,4 +15,12 @@ replace into item_template values
  '-1', '1', '0', '0', '0', '0', '0', '2', '4', '0', '0', '0', '0', '0', '0', '0', '7', '0', '0', '0',
  '0', '1', NULL);
  
- UPDATE `quest_template` SET `RewChoiceItemId3` = 91765 WHERE `entry` = 40677;
+UPDATE `quest_template` SET `RewChoiceItemId3` = 91765 WHERE `entry` = 40677;
+ 
+UPDATE `quest_template` SET `Details` = '"<As you place the plates on the pedestal, a pillar of light suddenly erupts forth and surrounds the pedestal.>\n\nInitiating unlock sequence.\n\nPlates present, scanning for item validation.\n\nPlates authentication complete, unlocking the gates.\n\nActivating Gate Keeper to greet the guests.' WHERE `entry` = 40107;
+
+UPDATE `quest_template` SET `Objectives` = 'Collect a Dark Iron Rifle, a Magma Condensor, a Intricate Arcanite Barrel and a Molten Fragment for Bixxle Screwfuse at Bixxle\'s Storehouse in Tel\'Abim.' WHERE `entry` = 40762;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2628
+
+UPDATE `gameobject_template` SET `data9` = 47 WHERE `entry` = 153464;
