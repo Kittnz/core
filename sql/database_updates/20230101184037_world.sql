@@ -34,3 +34,8 @@ DELETE FROM `creature_linking` WHERE `master_guid` = 27973;
 
 UPDATE `gameobject_template` SET `flags`=36 WHERE `entry` = 1000082;
 UPDATE `quest_template` SET `ReqCreatureOrGOId1`= -1000082 WHERE `entry` = 60041;
+
+-- GUID 4004852 should not be interactable / have visible doodad to players who are not on quest https://database.turtle-wow.org/?quest=80107
+
+UPDATE `gameobject_template` SET `flags`=36 WHERE `entry` = 3000209;
+UPDATE `quest_template` SET `ReqCreatureOrGOId1`= -3000209 WHERE `entry` = 80107;
