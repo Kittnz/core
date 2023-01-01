@@ -1,0 +1,2 @@
+REPLACE INTO `areatrigger_tavern` (`id`, `name`) VALUES (204, 'Stonetalon Mountains - Bael Hardul Inn');
+REPLACE INTO `areatrigger_template` (`id`, `map_id`, `x`, `y`, `z`, `radius`) VALUES (204, 1, 928.15, -830.01, 166.1, 20);
