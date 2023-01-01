@@ -17,3 +17,4 @@ DELETE FROM game_event_creature_data WHERE guid=1245767;
 DELETE FROM creature_battleground WHERE guid=1245767;
 UPDATE creature SET position_x = '1959.112305', position_y = '1325.264526', position_z = '146.489288', orientation = '1.499259' WHERE guid = '2559944';
 UPDATE creature SET position_x = '1951.568970', position_y = '1411.390869', position_z = '154.705658', orientation = '4.043185' WHERE guid = '2559965';
+UPDATE creature SET position_x = '1864.135742', position_y = '1277.886963', position_z = '156.252380', orientation = '1.294277' WHERE guid = '2559966';
