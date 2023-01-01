@@ -24,3 +24,7 @@ UPDATE `quest_template` SET `Objectives` = 'Collect a Dark Iron Rifle, a Magma C
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2628
 
 UPDATE `gameobject_template` SET `data9` = 47 WHERE `entry` = 153464;
+
+-- Remove weird Desolace cerature link:
+
+DELETE FROM `creature_linking` WHERE `guid` = 27697 AND `master_guid` = 27973;
