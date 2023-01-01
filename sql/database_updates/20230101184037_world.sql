@@ -28,3 +28,5 @@ UPDATE `gameobject_template` SET `data9` = 47 WHERE `entry` = 153464;
 -- Remove weird Desolace cerature link:
 
 DELETE FROM `creature_linking` WHERE `guid` = 27697 AND `master_guid` = 27973;
+DELETE FROM `creature_linking` WHERE `master_guid` = 27973;
+
