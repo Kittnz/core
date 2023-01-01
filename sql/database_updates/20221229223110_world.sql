@@ -23,3 +23,6 @@ UPDATE creature SET position_x = '1864.135742', position_y = '1277.886963', posi
 DELETE FROM gameobject WHERE guid = '3996095';
 DELETE FROM game_event_gameobject WHERE guid = '3996095';
 DELETE FROM gameobject_battleground WHERE guid = '3996095';
+
+-- Changes by JOE
+REPLACE INTO `gameobject` VALUES ( 364882, 180905, 0, -8826.7, 632.808, 94.2572, 0.418879, 0, 0, 0.207912, 0.978148, 120, 120, 255, 1, 0, 0);
