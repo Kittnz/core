@@ -4945,10 +4945,7 @@ void Aura::HandleModPowerRegen(bool apply, bool Real)       // drinking
         {
             if (Player* pCaster = ToPlayer(GetCaster()))
             {
-                if (pCaster != pTarget)
-                    m_modifier.m_amount = pCaster->GetManaRegen() * (m_modifier.m_amount / 100.0f);
-                else
-                    m_modifier.m_amount = 0;
+                m_modifier.m_amount = pCaster->GetManaRegen() * (m_modifier.m_amount / 100.0f) * 5;
             }
         }
         pTarget->UpdateManaRegen();
