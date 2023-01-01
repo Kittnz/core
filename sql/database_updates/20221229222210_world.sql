@@ -129,3 +129,5 @@ UPDATE `creature_template` SET `name` = 'Venomflayer Screecher', `beast_family` 
 UPDATE `creature_template` SET `name` = 'Venomflayer Serpent', `beast_family` = 22 WHERE `entry` = 61096;
 UPDATE `creature_template` SET `name` = 'King Morogo Thunderfoot', `beast_family` = 9 WHERE `entry` = 61098;
 UPDATE `creature_template` SET `name` = 'Venomous Jungle Serpent', `beast_family` = 0 WHERE `entry` = 91966;
+
+UPDATE `quest_template` SET `RewItemId1` = 84038, `RewItemId2` = 0, `RewItemCount1` = 1, `RewItemCount2` = 0 WHERE `entry` = 40779;
