@@ -101,3 +101,31 @@ UPDATE `broadcast_text` SET `male_text` = 'First day on the job, eh kid?\n\nYeah
 UPDATE `broadcast_text` SET `male_text` = 'I\'ve never been this far west! I\'m eager to try some of my long-delayed experiments now that I am free from scrutiny.', `female_text` = NULL, `chat_type` = 0, `sound_id` = 0, `language_id` = 0, `emote_id1` = 0, `emote_id2` = 0, `emote_id3` = 0, `emote_delay1` = 0, `emote_delay2` = 0, `emote_delay3` = 0 WHERE `entry` = 60999;
 
 UPDATE `broadcast_text` SET `male_text` = 'Welcome! Make yourself comfortable. We have plenty of ale and lodging should you need a rest.', `female_text` = NULL, `chat_type` = 0, `sound_id` = 0, `language_id` = 0, `emote_id1` = 0, `emote_id2` = 0, `emote_id3` = 0, `emote_delay1` = 0, `emote_delay2` = 0, `emote_delay3` = 0 WHERE `entry` = 60991;
+
+-- 61072: Coastal Ripper, Fish -- Tames as Scorpid SHOULD NOT BE TAMABLE
+-- 61074: Highvale Gorilla, Gorilla -- Tames as Scorpid
+-- 61075: Rockshell Crawler, Crab -- Tames as Scorpid
+-- 61076: Sandshell Crawler, Crab -- Tames as Wolf
+-- 61077: Highvale Chimpanzee, Gorilla -- Tames as Wolf
+-- 61078: Highvale Monkey, Gorilla -- Tames as Wolf
+-- 61080: Elder Highvale Gorilla, Gorilla -- Tames as Cat
+-- 61082: Highvale Thunderer, Gorilla -- Not tamable? Intended?
+-- 61091: Brushtail Adder, Snake --  Tames as Wolf  SHOULD NOT BE TAMABLE
+-- 61095: Venomflayer Screecher, Wind Serpent -- Tames as Spider
+-- 61096: Venomflayer Serpent, Wind Serpent -- Not tamable? Intended?
+-- 61098: King Morogo Thunderfoot, Gorilla -- Not tamable? Intended?
+-- 91966: Venomous Jungle Serpent, Wind Serpent -- Not tamable? Intended? 
+
+UPDATE `creature_template` SET `name` = 'Coastal Ripper', `beast_family` = 0 WHERE `entry` = 61072;
+UPDATE `creature_template` SET `name` = 'Highvale Gorilla', `beast_family` = 9 WHERE `entry` = 61074;
+UPDATE `creature_template` SET `name` = 'Rockshell Crawler', `beast_family` = 8 WHERE `entry` = 61075;
+UPDATE `creature_template` SET `name` = 'Sandshell Crawler', `beast_family` = 8 WHERE `entry` = 61076;
+UPDATE `creature_template` SET `name` = 'Highvale Chimpanzee', `beast_family` = 9 WHERE `entry` = 61077;
+UPDATE `creature_template` SET `name` = 'Highvale Monkey', `beast_family` = 9 WHERE `entry` = 61078;
+UPDATE `creature_template` SET `name` = 'Elder Highvale Gorilla', `beast_family` = 9 WHERE `entry` = 61080;
+UPDATE `creature_template` SET `name` = 'Highvale Thunderer', `beast_family` = 9 WHERE `entry` = 61082;
+UPDATE `creature_template` SET `name` = 'Brushtail Adder', `beast_family` = 0 WHERE `entry` = 61091;
+UPDATE `creature_template` SET `name` = 'Venomflayer Screecher', `beast_family` = 22 WHERE `entry` = 61095;
+UPDATE `creature_template` SET `name` = 'Venomflayer Serpent', `beast_family` = 22 WHERE `entry` = 61096;
+UPDATE `creature_template` SET `name` = 'King Morogo Thunderfoot', `beast_family` = 9 WHERE `entry` = 61098;
+UPDATE `creature_template` SET `name` = 'Venomous Jungle Serpent', `beast_family` = 0 WHERE `entry` = 91966;
