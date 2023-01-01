@@ -30,3 +30,7 @@ UPDATE `gameobject_template` SET `data9` = 47 WHERE `entry` = 153464;
 DELETE FROM `creature_linking` WHERE `guid` = 27697 AND `master_guid` = 27973;
 DELETE FROM `creature_linking` WHERE `master_guid` = 27973;
 
+-- Make Stolen Elwynn Pumpkin usable only when on quest:
+
+UPDATE `gameobject_template` SET `flags`=36 WHERE `entry` = 1000082;
+UPDATE `quest_template` SET `ReqCreatureOrGOId1`= -1000082 WHERE `entry` = 60041;
