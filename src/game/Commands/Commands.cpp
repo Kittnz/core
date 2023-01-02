@@ -8625,52 +8625,58 @@ bool ChatHandler::HandleGameObjectMoveCommand(char* args)
         return false;
     }
 
-    if (!args)
+    uint32 unsuccessfulExtractions = 0;
+
+    float x;
+    if (!ExtractFloat(&args, x))
+        ++unsuccessfulExtractions;
+
+    float y;
+    if (!ExtractFloat(&args, y))
+        ++unsuccessfulExtractions;
+
+    float z;
+    if (!ExtractFloat(&args, z))
+        ++unsuccessfulExtractions;
+
+
+    Player* chr = m_session->GetPlayer();
+
+    constexpr uint32 ExpectedFailedExtractions = 3; // X Y Z params, if not supplied, use chars pos.
+
+    bool shouldCheckCoords = false;
+
+    // Wrong input, we only continue if all coords are fine or none are fine.
+    if (unsuccessfulExtractions != ExpectedFailedExtractions && unsuccessfulExtractions != 0)
+        return false;
+
+
+    if (unsuccessfulExtractions == ExpectedFailedExtractions) // no params, use chars pos.
     {
-        Player* chr = m_session->GetPlayer();
-
-        Map* map = obj->GetMap();
-        map->Remove(obj, false);
-
-        obj->Relocate(chr->GetPositionX(), chr->GetPositionY(), chr->GetPositionZ(), obj->GetOrientation());
-        obj->SetFloatValue(GAMEOBJECT_POS_X, chr->GetPositionX());
-        obj->SetFloatValue(GAMEOBJECT_POS_Y, chr->GetPositionY());
-        obj->SetFloatValue(GAMEOBJECT_POS_Z, chr->GetPositionZ());
-
-        map->Add(obj);
+        x = chr->GetPositionX();
+        y = chr->GetPositionY();
+        z = chr->GetPositionZ();
     }
-    else
+    else // just filled in coords, check valid coords too.
+        shouldCheckCoords = true;
+
+    if (shouldCheckCoords && !MapManager::IsValidMapCoord(obj->GetMapId(), x, y, z))
     {
-        float x;
-        if (!ExtractFloat(&args, x))
-            return false;
-
-        float y;
-        if (!ExtractFloat(&args, y))
-            return false;
-
-        float z;
-        if (!ExtractFloat(&args, z))
-            return false;
-
-        if (!MapManager::IsValidMapCoord(obj->GetMapId(), x, y, z))
-        {
-            PSendSysMessage(LANG_INVALID_TARGET_COORD, x, y, obj->GetMapId());
-            SetSentErrorMessage(true);
-            return false;
-        }
-
-        Map* map = obj->GetMap();
-        map->Remove(obj, false);
-
-        obj->Relocate(x, y, z, obj->GetOrientation());
-        obj->SetFloatValue(GAMEOBJECT_POS_X, x);
-        obj->SetFloatValue(GAMEOBJECT_POS_Y, y);
-        obj->SetFloatValue(GAMEOBJECT_POS_Z, z);
-        obj->SetFloatValue(GAMEOBJECT_FACING, obj->GetOrientation());
-
-        map->Add(obj);
+        PSendSysMessage(LANG_INVALID_TARGET_COORD, x, y, obj->GetMapId());
+        SetSentErrorMessage(true);
+        return false;
     }
+
+    Map* map = obj->GetMap();
+    map->Remove(obj, false);
+
+    obj->Relocate(x, y, z, obj->GetOrientation());
+    obj->SetFloatValue(GAMEOBJECT_POS_X, x);
+    obj->SetFloatValue(GAMEOBJECT_POS_Y, y);
+    obj->SetFloatValue(GAMEOBJECT_POS_Z, z);
+    obj->SetFloatValue(GAMEOBJECT_FACING, obj->GetOrientation());
+
+    map->Add(obj);
 
     sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     obj->SaveToDB();
