@@ -2060,6 +2060,11 @@ bool Pet::AddSpell(uint32 spell_id, ActiveStates active /*= ACT_DECIDE*/, PetSpe
         }
     }
 
+    //Needs to be before we add to m_petSpells because GetTPForSpell depends on it.
+    if (getPetType() == HUNTER_PET)
+        m_totalUsedTP += GetTPForSpell(spell_id);
+
+
     m_petSpells[spell_id] = newspell;
 
     if (spellInfo->IsPassiveSpell())
@@ -2069,10 +2074,6 @@ bool Pet::AddSpell(uint32 spell_id, ActiveStates active /*= ACT_DECIDE*/, PetSpe
 
     if (newspell.active == ACT_ENABLED)
         ToggleAutocast(spell_id, true);
-
-
-    if (getPetType() == HUNTER_PET)
-        m_totalUsedTP += GetTPForSpell(spell_id);
 
     return true;
 }
