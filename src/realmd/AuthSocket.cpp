@@ -617,7 +617,12 @@ bool AuthSocket::_HandleLogonProof()
         char tmp[256];
 
         //snprintf(tmp, 256, "%s/%d%s.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str(), _build, _localizationName.c_str());
-        snprintf(tmp, 256, "%s/twpatch.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
+        if (_build == 7050)
+        {
+            snprintf(tmp, 256, "%s/hotfix.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
+        }
+        else
+            snprintf(tmp, 256, "%s/twpatch.mpq", sConfig.GetStringDefault("PatchesDir", "./patches").c_str());
 
         char filename[PATH_MAX];
         if (ACE_OS::realpath(tmp, filename) != nullptr)
