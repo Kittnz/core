@@ -7088,6 +7088,14 @@ void Spell::EffectKnockBack(SpellEffectIndex eff_idx)
     if (!unitTarget || unitTarget->IsTaxiFlying())
         return;
 
+    // Temporary (read: permanent) hackfix until we have 2 seperate spells for knockback snowball spell used by players and boss. 
+    // Only boss should knockback, players shouldn't to prevent griefing.
+    if (m_spellInfo->Id == 25677) 
+    {
+        if (GetCaster() && GetCaster()->IsPlayer())
+            return;
+    }
+
     // remove Dream Fog Sleep aura to let target be launched
     // ugly and barely working solution untill proper pending states handling implemented
     unitTarget->RemoveAurasDueToSpell(24778);
