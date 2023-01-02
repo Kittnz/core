@@ -430,6 +430,34 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
         owner->m_petSpell = GetUInt32Value(UNIT_CREATED_BY_SPELL);
     }
 
+    //track overspent points, if too many then reset all.
+    if (getPetType() == HUNTER_PET && m_petSpells.size() > 1 && GetOwnerGuid().IsPlayer())
+    {
+        CharmInfo* charmInfo = GetCharmInfo();
+
+        const uint32 MaxTPForPet = GetLevel() * (LoyaltyLevel::BEST_FRIEND - 1);
+
+        if (charmInfo && GetOwner() && m_totalUsedTP > MaxTPForPet)
+        {
+            for (PetSpellMap::iterator itr = m_petSpells.begin(); itr != m_petSpells.end();)
+            {
+                uint32 spell_id = itr->first;
+                ++itr;
+                unlearnSpell(spell_id, false);
+            }
+
+            SetTP(GetLevel() * (GetLoyaltyLevel() - 1));
+
+            for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
+                if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
+                    if (ab->GetAction() && ab->IsActionBarForSpell())
+                        charmInfo->SetActionBar(i, 0, ACT_DISABLED);
+
+            LearnPetPassives();
+            GetOwner()->ToPlayer()->PetSpellInitialize();
+        }
+    }
+
     m_pTmpCache = nullptr;
     return true;
 }
@@ -2042,6 +2070,10 @@ bool Pet::AddSpell(uint32 spell_id, ActiveStates active /*= ACT_DECIDE*/, PetSpe
     if (newspell.active == ACT_ENABLED)
         ToggleAutocast(spell_id, true);
 
+
+    if (getPetType() == HUNTER_PET)
+        m_totalUsedTP += GetTPForSpell(spell_id);
+
     return true;
 }
 
@@ -2100,6 +2132,9 @@ bool Pet::RemoveSpell(uint32 spell_id, bool learn_prev, bool clear_ab)
                     ((Player*)owner)->PetSpellInitialize();
         }
     }
+
+    if (uint32 tp = GetTPForSpell(spell_id); getPetType() == HUNTER_PET && tp <= m_totalUsedTP)
+        m_totalUsedTP -= tp;
 
     return true;
 }
