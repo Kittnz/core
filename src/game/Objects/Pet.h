@@ -282,6 +282,8 @@ class Pet : public Creature
     private:
         bool m_enabled;
 
+        uint32 m_totalUsedTP = 0;
+
         void SaveToDB(uint32) override { MANGOS_ASSERT(false); }
         void DeleteFromDB() override { MANGOS_ASSERT(false); }
 };
