@@ -802,88 +802,88 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 
 		// unpack mpq
-		if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
-		{
-			OnOpenFileLambda(PATCH_FILE);
-			std::unique_ptr<StormFile> patchData(pFile);
+		//if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
+		//{
+		//	OnOpenFileLambda(PATCH_FILE);
+		//	std::unique_ptr<StormFile> patchData(pFile);
 
-			// copy shit to target path
-			FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE);
-			if (hTargetFile == nullptr)
-			{
-				return 1;
-			}
+		//	// copy shit to target path
+		//	FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE);
+		//	if (hTargetFile == nullptr)
+		//	{
+		//		return 1;
+		//	}
 
-			// split to chunks
-			const DWORD chunkSize = 4096;
-			DWORD chunks = patchData->Size.QuadPart / chunkSize;
-			chunks += (patchData->Size.QuadPart % chunkSize) != 0;
-			char ReadingBuffer[4096];
+		//	// split to chunks
+		//	const DWORD chunkSize = 4096;
+		//	DWORD chunks = patchData->Size.QuadPart / chunkSize;
+		//	chunks += (patchData->Size.QuadPart % chunkSize) != 0;
+		//	char ReadingBuffer[4096];
 
-			PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
+		//	PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
 
-			DWORD ExtractProgress = 0;
+		//	DWORD ExtractProgress = 0;
 
-			for (DWORD i = 0; i < chunks; i++)
-			{
-				if (hDialog == NULL)
-				{
-					break;
-				}
+		//	for (DWORD i = 0; i < chunks; i++)
+		//	{
+		//		if (hDialog == NULL)
+		//		{
+		//			break;
+		//		}
 
-				DWORD ReadingQuota = std::min<DWORD>(patchData->Size.QuadPart - ((i + 1) * chunkSize), chunkSize);
+		//		DWORD ReadingQuota = std::min<DWORD>(patchData->Size.QuadPart - ((i + 1) * chunkSize), chunkSize);
 
-				patchData->ReadToBuffer(&ReadingBuffer[0], ReadingQuota);
+		//		patchData->ReadToBuffer(&ReadingBuffer[0], ReadingQuota);
 
-				fwrite(ReadingBuffer, ReadingQuota, 1, hTargetFile);
+		//		fwrite(ReadingBuffer, ReadingQuota, 1, hTargetFile);
 
-				// update progress
-				float progress = float(i) / float(chunks);
-				progress *= 100.0f;
+		//		// update progress
+		//		float progress = float(i) / float(chunks);
+		//		progress *= 100.0f;
 
-				DWORD NewExtractProgress = DWORD(progress);
+		//		DWORD NewExtractProgress = DWORD(progress);
 
-				for (; ExtractProgress < NewExtractProgress; ExtractProgress++)
-				{
-					SendMessage(hDialog, WM_SETPROGRESS, 0, 0);
-				}
+		//		for (; ExtractProgress < NewExtractProgress; ExtractProgress++)
+		//		{
+		//			SendMessage(hDialog, WM_SETPROGRESS, 0, 0);
+		//		}
 
-				while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
-				{
-					if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
-					{
-						TranslateMessage(&msg);
-						DispatchMessage(&msg);
-					}
-				}
-			}
+		//		while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+		//		{
+		//			if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
+		//			{
+		//				TranslateMessage(&msg);
+		//				DispatchMessage(&msg);
+		//			}
+		//		}
+		//	}
 
-			fclose(hTargetFile);
-		}
-		else
-		{
-			WriteLog("The file you're looking for is probably already installed!");
-			ErrorBox("Your client is already updated.");
-			return 1;
-		}
+		//	fclose(hTargetFile);
+		//}
+		//else
+		//{
+		//	WriteLog("The file you're looking for is probably already installed!");
+		//	ErrorBox("Your client is already updated.");
+		//	return 1;
+		//}
 	}
 
-	if (hDialog == NULL)
-	{
-		WriteLog("INFO: User has cancelled update.");
-		if (fs::exists(PATCH_FILE))
-		{
-			WriteLog("Removing patch files...");
-			fs::remove(PATCH_FILE);
-		}
+	//if (hDialog == NULL)
+	//{
+	//	WriteLog("INFO: User has cancelled update.");
+	//	if (fs::exists(PATCH_FILE))
+	//	{
+	//		WriteLog("Removing patch files...");
+	//		fs::remove(PATCH_FILE);
+	//	}
 
-		return 0;
-	}
-	else
-	{
-		DestroyWindow(hDialog);
-		hDialog = NULL;
-	}
+	//	return 0;
+	//}
+	//else
+	//{
+	//	DestroyWindow(hDialog);
+	//	hDialog = NULL;
+	//}
 
 	WriteLog("Patching WoW.exe...");
 
