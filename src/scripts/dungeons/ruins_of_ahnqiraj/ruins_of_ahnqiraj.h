@@ -29,22 +29,6 @@ enum
     TYPE_QIRAJI_GLADIATOR   = 8,
 };
 
-/* Ce type de data = le compte des mobs vivants dans chaque vague.
-    L'instance fait le d�compte grace a OnCreatureDeath */
-#define WAVE_MAX 7
-#define WAVE_OFFSET 10
-#define WAVE_MEMBERS_INIT_COUNT 7
-enum
-{
-    TYPE_WAVE1              = WAVE_OFFSET,
-    TYPE_WAVE2              = WAVE_OFFSET+1,
-    TYPE_WAVE3              = WAVE_OFFSET+2,
-    TYPE_WAVE4              = WAVE_OFFSET+3,
-    TYPE_WAVE5              = WAVE_OFFSET+4,
-    TYPE_WAVE6              = WAVE_OFFSET+5,
-    TYPE_WAVE7              = WAVE_OFFSET+6
-};
-
 enum
 {
     DATA_KURINNAXX      = 0,
@@ -88,12 +72,23 @@ enum
     NPC_KALDOREI_ELITE  =   15473,
     NPC_GENERAL_ANDOROV =   15471,
 
+    // Gossip menu ids
+    ANDOROV_GOSSIP_NOT_STARTED = 6629,
+    ANDOROV_GOSSIP_IN_PROGRESS = 7048,
+    ANDOROV_GOSSIP_DONE        = 7047,
+
+    // Guids
+    ANDOROV_DB_GUID            = 1242569,
+
+    // Scripts
+    ANDOROV_START_SCRIPT       = 154710,
+
     // Crystal Weaknesses
-    SPELL_FIRE_WEAKNESS         =   25177,
-    SPELL_NATURE_WEAKNESS       =   25180,
-    SPELL_FROST_WEAKNESS        =   25178,
-    SPELL_ARCANE_WEAKNESS       =   25171,
-    SPELL_SHADOW_WEAKNESS       =   25183,
+    SPELL_FIRE_WEAKNESS        =   25177,
+    SPELL_NATURE_WEAKNESS      =   25180,
+    SPELL_FROST_WEAKNESS       =   25178,
+    SPELL_ARCANE_WEAKNESS      =   25171,
+    SPELL_SHADOW_WEAKNESS      =   25183,
 
     GO_OSSIRIAN_CRYSTAL = 180619,
     CRYSTAL_TRIGGER     = 15590
@@ -103,7 +98,7 @@ enum
 #define OSSIRIAN_CRYSTAL_INITIAL_DIST 80.0f
 #define OSSIRIAN_CRYSTAL_NUM_ACTIVE 2
 
-const std::array<SpawnLocations, 11> CrystalSpawn =
+std::array<SpawnLocations, 11> const CrystalSpawn =
 {{
     { -9407.164062f, 1959.240845f, 85.558998f }, // central spawn, not initially spawned since it was a nerfed mechanic added in 1.11
     { -9357.931641f, 1930.596802f, 85.556198f },
@@ -122,7 +117,7 @@ const std::array<SpawnLocations, 11> CrystalSpawn =
 struct instance_ruins_of_ahnqiraj : public ScriptedInstance
 {
 public:
-    explicit instance_ruins_of_ahnqiraj(Map* pMap);
+    instance_ruins_of_ahnqiraj(Map* pMap);
     void Initialize() override;
 
     void SetData(uint32 uiType, uint32 uiData) override;
@@ -136,20 +131,18 @@ public:
     void OnCreatureDeath(Creature* pCreature) override;
     void Update(uint32 uiDiff) override;
 
-    const char* Save() override;
-    void Load(const char* chrIn) override;
+    char const* Save() override;
+    void Load(char const* chrIn) override;
 
     void SpawnNewCrystals(ObjectGuid usedCrystal);
 
 private:
-    uint8 GetWaveFromCreature(Creature* creature);
     void SetAndorovSquadRespawnTime(uint32 nextRespawnDelay);
-    void SetAndorovSquadFaction(uint32 faction);
-    void ForceAndorovSquadDespawn(uint32 timeToDespawn);
+    void SetAndorovSquadImmunity(bool immune);
+    void GiveRepAfterRajaxxDeath(Creature* pRajaxx);
     bool IsAnyBossInCombat();
 
     uint32 m_auiEncounter[INSTANCE_RUINS_AQ_MAX_ENCOUNTER];
-    uint32 m_uiWaveMembersCount[WAVE_MAX];
 
     uint64 m_uiKurinnaxxGUID;
     uint64 m_uiBuruGUID;
@@ -179,6 +172,7 @@ private:
 
     uint32 m_uiRajaxxEventResetTimer;
     bool m_bRajaxxEventIsToReset;
+
     ObjectGuid m_doorGuid;
 };
 
@@ -193,7 +187,6 @@ enum
 #else
 enum
 {
-    AQ_RESPAWN_1_MINUTE     = 60,
     AQ_RESPAWN_3_MINUTES    = 180,
     AQ_RESPAWN_5_MINUTES    = 300,
     AQ_RESPAWN_15_MINUTES   = 900,

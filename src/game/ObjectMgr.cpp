@@ -8021,21 +8021,6 @@ bool ObjectMgr::IsVendorItemValid(bool isTemplate, char const* tableName, uint32
                 sLog.outErrorDb("Table `%s` has data for nonexistent creature (Entry: %u), ignoring", tableName, vendor_entry);
             return false;
         }
-
-        if (!(cInfo->npc_flags & UNIT_NPC_FLAG_VENDOR))
-        {
-            if (!skip_vendors || skip_vendors->count(vendor_entry) == 0)
-            {
-                if (pl)
-                    ChatHandler(pl).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
-                else
-                    sLog.outErrorDb("Table `%s` has data for creature (Entry: %u) without vendor flag, ignoring", tableName, vendor_entry);
-
-                if (skip_vendors)
-                    skip_vendors->insert(vendor_entry);
-            }
-            return false;
-        }
     }
 
     if (ItemPrototype const* pItemProto = GetItemPrototype(item_id))

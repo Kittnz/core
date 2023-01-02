@@ -135,7 +135,6 @@ dungeons/ruins_of_ahnqiraj/boss_buru.cpp
 dungeons/ruins_of_ahnqiraj/boss_kurinnaxx.cpp
 dungeons/ruins_of_ahnqiraj/boss_moam.cpp
 dungeons/ruins_of_ahnqiraj/boss_ossirian.cpp
-dungeons/ruins_of_ahnqiraj/boss_rajaxx.cpp
 dungeons/ruins_of_ahnqiraj/instance_ruins_of_ahnqiraj.cpp
 dungeons/ruins_of_ahnqiraj/npc_sandstalker.cpp
 dungeons/ruins_of_ahnqiraj/ruins_of_ahnqiraj.cpp
