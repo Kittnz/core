@@ -731,6 +731,10 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AV,            "BattleGround.Rate.Reputation.AV", 1);
     setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_WS,            "BattleGround.Rate.Reputation.WS", 1);
     setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB,            "BattleGround.Rate.Reputation.AB", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AV,                 "BattleGround.Rate.Honor.AV", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_WS,                 "BattleGround.Rate.Honor.WS", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB,                 "BattleGround.Rate.Honor.AB", 1);
+    
 
         // If max bg queues is at 0, decide based on patch.
     if (getConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT) == 0)

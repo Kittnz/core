@@ -520,6 +520,33 @@ void BattleGround::CastSpellOnTeam(uint32 SpellID, Team teamId)
 
 void BattleGround::RewardHonorToTeam(uint32 Honor, Team teamId)
 {
+    float rate;
+    switch (GetTypeID())
+    {
+        case BATTLEGROUND_AV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AV);
+            break;
+        }
+        case BATTLEGROUND_WS:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_WS);
+            break;
+        }
+        case BATTLEGROUND_AB:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB);
+            break;
+        }
+        default:
+        {
+            rate = 1.0f;
+            break;
+        }
+    }
+
+    Honor = std::max(1u, uint32(Honor * rate));
+
     for (const auto& itr : m_Players)
     {
         Player* pPlayer = sObjectMgr.GetPlayer(itr.first);
