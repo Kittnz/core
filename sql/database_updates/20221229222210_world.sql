@@ -465,3 +465,16 @@ REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `po
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES (300750, 58, -6879.41, 1656.32, 3.35069, 4.85224, 0, 0, 0);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES (300750, 59, -6883.67, 1637.74, 3.15424, 4.7038, 0, 0, 0);
 REPLACE INTO `creature_movement` (`id`, `point`, `position_x`, `position_y`, `position_z`, `orientation`, `waittime`, `wander_distance`, `script_id`) VALUES (300750, 60, -6892.6, 1631.8, 2.62164, 2.64056, 0, 0, 0);
+
+DELETE FROM `creature_groups` where `member_guid` in (300747, 42945, 42946, 42947, 42948, 42949, 42950, 42951, 42952, 42953, 42954, 42955, 42956, 42957, 42958, 42959, 42960, 42961, 42962, 42963, 42964, 42965, 42966, 42967, 300746, 42970, 42971, 42972, 42973, 42974, 42975, 42976, 42977, 42978, 42979, 42980, 42981, 42982, 300745, 42969, 42985, 42986, 42987, 42988, 42989, 42990, 42991, 42992, 42993, 42994, 42995, 42996, 42997, 42998, 300748, 300749, 42984, 42983, 300750, 43322 ) or `leader_guid` in (300747, 42945, 42946, 42947, 42948, 42949, 42950, 42951, 42952, 42953, 42954, 42955, 42956, 42957, 42958, 42959, 42960, 42961, 42962, 42963, 42964, 42965, 42966, 42967, 300746, 42970, 42971, 42972, 42973, 42974, 42975, 42976, 42977, 42978, 42979, 42980, 42981, 42982, 300745, 42969, 42985, 42986, 42987, 42988, 42989, 42990, 42991, 42992, 42993, 42994, 42995, 42996, 42997, 42998, 300748, 300749, 42984, 42983, 300750, 43322 );
+
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (43322, 42969, 4.33159, 6.0203, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (43322, 43322, 0, 2.12757, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (43322, 300746, 4.14546, 7.27955, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (43322, 300745, 4.76341, 6.6725, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (43322, 300747, 4.41349, 5.43951, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (300750, 300750, 0, 5.02178, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (300750, 300749, 3.50827, 7.5867, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (300750, 300748, 3.42229, 6.90526, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (300750, 42983, 4.47143, 6.29398, 1);
+REPLACE INTO `creature_groups` (`leader_guid`, `member_guid`, `dist`, `angle`, `flags`) VALUES (300750, 42984, 4.38201, 5.73737, 1);
