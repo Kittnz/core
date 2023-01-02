@@ -144,7 +144,7 @@ AssistDelayEvent::AssistDelayEvent(ObjectGuid victim, Unit& owner, std::list<Cre
 
 bool ForcedDespawnDelayEvent::Execute(uint64 /*e_time*/, uint32 /*p_time*/)
 {
-    m_owner.ForcedDespawn();
+    m_owner.ForcedDespawn(0, m_secsTimeToRespawn);
     return true;
 }
 
@@ -247,8 +247,13 @@ void Creature::AddToWorld()
         GetMap()->InsertObject<Creature>(GetObjectGuid(), this);
 
     sCreatureGroupsManager->LoadCreatureGroup(this, m_creatureGroup);
-    if (m_creatureGroup && m_creatureGroup->IsFormation())
-        SetActiveObjectState(true);
+    if (m_creatureGroup)
+    {
+        if (m_creatureGroup->IsFormation())
+            SetActiveObjectState(true);
+        if (GetDeathState() == ALIVE || GetDeathState() == JUST_ALIVED)
+            m_creatureGroup->OnRespawn(this);
+    }
     Unit::AddToWorld();
 
     if (!i_AI)
@@ -657,9 +662,6 @@ void Creature::Update(uint32 update_diff, uint32 diff)
                 }
                 else
                     SetDeathState(JUST_ALIVED);
-
-                if (CreatureGroup* group = GetCreatureGroup())
-                    group->OnRespawn(this);
 
                 // Call AI respawn virtual function
                 if (AI())
@@ -1971,20 +1973,40 @@ void Creature::Respawn()
     }
 }
 
-void Creature::ForcedDespawn(uint32 timeMSToDespawn)
+void Creature::DespawnOrUnsummon(uint32 msTimeToDespawn /*= 0*/, uint32 secsTimeToRespawn /*= 0*/)
+{
+    if (IsTemporarySummon())
+        static_cast<TemporarySummon*>(this)->UnSummon(msTimeToDespawn);
+    else if (IsPet())
+        static_cast<Pet*>(this)->DelayedUnsummon(msTimeToDespawn, PET_SAVE_AS_DELETED);
+    else
+        ForcedDespawn(msTimeToDespawn, secsTimeToRespawn);
+}
+
+void Creature::ForcedDespawn(uint32 msTimeToDespawn /*= 0*/, uint32 secsTimeToRespawn /*= 0*/)
 {
     AddCreatureState(CSTATE_DESPAWNING);
 
-    if (timeMSToDespawn)
+    if (msTimeToDespawn)
     {
-        ForcedDespawnDelayEvent *pEvent = new ForcedDespawnDelayEvent(*this);
+        ForcedDespawnDelayEvent* pEvent = new ForcedDespawnDelayEvent(*this, secsTimeToRespawn);
 
-        m_Events.AddEvent(pEvent, m_Events.CalculateTime(timeMSToDespawn));
+        m_Events.AddEvent(pEvent, m_Events.CalculateTime(msTimeToDespawn));
         return;
+    }
+
+    uint32 oldRespawnDelay;
+    if (secsTimeToRespawn)
+    {
+        oldRespawnDelay = m_respawnDelay;
+        m_respawnDelay = secsTimeToRespawn;
     }
 
     if (IsAlive())
         SetDeathState(JUST_DIED);
+
+    if (secsTimeToRespawn)
+        m_respawnDelay = oldRespawnDelay;
 
     RemoveCorpse();
     SetHealth(0);                                           // just for nice GM-mode view
@@ -3730,17 +3752,6 @@ bool Creature::HasWeapon() const
     uint8 itemClass = GetByteValue(UNIT_VIRTUAL_ITEM_INFO + (0 * 2) + 0, VIRTUAL_ITEM_INFO_0_OFFSET_CLASS);
     return itemClass == ITEM_CLASS_WEAPON;
 }
-
-void Creature::DespawnOrUnsummon(uint32 msTimeToDespawn /*= 0*/)
-{
-    if (IsTemporarySummon())
-        static_cast<TemporarySummon*>(this)->UnSummon(msTimeToDespawn);
-    else if (IsPet())
-        static_cast<Pet*>(this)->DelayedUnsummon(msTimeToDespawn, PET_SAVE_AS_DELETED);
-    else
-        ForcedDespawn(msTimeToDespawn);
-}
-
 
 std::string Creature::GetDebuffs()
 {

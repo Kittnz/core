@@ -136,6 +136,7 @@ enum eScriptCommand
                                                             // datalong2 = amount
     SCRIPT_COMMAND_DESPAWN_CREATURE         = 18,           // source = Creature
                                                             // datalong = despawn_delay
+                                                            // datalong2 = respawn_delay
     SCRIPT_COMMAND_SET_EQUIPMENT            = 19,           // source = Creature
                                                             // datalong = (bool) reset_default
                                                             // dataint = main-hand item_id
@@ -200,7 +201,7 @@ enum eScriptCommand
                                                             // datalong2 = data
                                                             // datalong3 = eSetInstData64Options
     SCRIPT_COMMAND_START_SCRIPT             = 39,           // source = Map
-                                                            // datalong1-4 = event_script id
+                                                            // datalong1-4 = generic_script id
                                                             // dataint1-4 = chance (total cant be above 100)
     SCRIPT_COMMAND_REMOVE_ITEM              = 40,           // source = Player (from provided source or target)
                                                             // datalong = item_id
@@ -352,6 +353,9 @@ enum eScriptCommand
                                                             // datalong = command_state (see enum CommandStates)
     SCRIPT_COMMAND_PLAY_CUSTOM_ANIM         = 89,           // source = GameObject
                                                             // datalong = anim_id
+    SCRIPT_COMMAND_START_SCRIPT_ON_GROUP    = 90,           // source = Unit
+                                                            // datalong1-4 = generic_script id
+                                                            // dataint1-4 = chance (total cant be above 100)
 
     SCRIPT_COMMAND_MAX,
 
@@ -401,7 +405,8 @@ enum eSummonCreatureFlags
 enum ePlaySoundFlags
 {
     SF_PLAYSOUND_ONLY_TO_TARGET     = 0x1,
-    SF_PLAYSOUND_DISTANCE_DEPENDENT = 0x2
+    SF_PLAYSOUND_DISTANCE_DEPENDENT = 0x2,
+    SF_PLAYSOUND_TO_ALL_IN_ZONE     = 0x4
 };
 
 // Possible datalong values for SCRIPT_COMMAND_MODIFY_THREAT
@@ -654,6 +659,7 @@ struct ScriptInfo
         struct                                              // SCRIPT_COMMAND_DESPAWN_CREATURE (18)
         {
             uint32 despawnDelay;                            // datalong
+            uint32 respawnDelay;                            // datalong
         } despawn;
 
         struct                                              // SCRIPT_COMMAND_SET_EQUIPMENT (19)
@@ -774,7 +780,8 @@ struct ScriptInfo
             uint32 type;                                    // datalong3
         } setData64;
 
-        struct                                              // SCRIPT_COMMAND_START_SCRIPT (39)
+                                                            // SCRIPT_COMMAND_START_SCRIPT (39)
+        struct                                              // SCRIPT_COMMAND_START_SCRIPT_ON_GROUP (90)
         {
             uint32 scriptId[4];                             // datalong to datalong4
             uint32 unused;                                  // data_flags

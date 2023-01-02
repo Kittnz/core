@@ -720,6 +720,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 break;
             }
             case SCRIPT_COMMAND_START_SCRIPT:
+            case SCRIPT_COMMAND_START_SCRIPT_ON_GROUP:
             {
                 if (100 < (tmp.startScript.chance[0] + tmp.startScript.chance[1] + tmp.startScript.chance[2] + tmp.startScript.chance[3]))
                 {
@@ -2287,8 +2288,8 @@ void ScriptMgr::CollectPossibleGenericIds(std::set<uint32>& genericIds)
     Field* fields;
     for (const auto& script_table : script_tables)
     {
-        // From SCRIPT_COMMAND_START_SCRIPT.
-        std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `datalong`, `datalong2`, `datalong3`, `datalong4` FROM `%s` WHERE `command`=39", script_table));
+        // From SCRIPT_COMMAND_START_SCRIPT and SCRIPT_COMMAND_START_SCRIPT_ON_GROUP.
+        std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `datalong`, `datalong2`, `datalong3`, `datalong4` FROM `%s` WHERE `command` IN (39, 90)", script_table));
 
         if (result)
         {
@@ -2520,7 +2521,7 @@ void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* pTarget, int32 c
             if(Type == CHAT_TYPE_ZONE_YELL)
             {
                 if(Map* pZone = pSource->GetMap())
-                    pZone->PlayDirectSoundToMap(SoundId);
+                    pZone->PlayDirectSoundToMap(SoundId, pZone->IsContinent() ? pSource->GetZoneId() : 0);
             }
             else
                 pSource->PlayDirectSound(SoundId);
