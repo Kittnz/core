@@ -130,3 +130,8 @@ UPDATE `quest_template` SET
 `requestitemstext` = 'Was I not crystal clear? I need a crystal full of shadow magic for the summoning spell.',
 `offerrewardtext` = 'Beautiful! This will do nicely.\n\nNow watch and learn, kid - You only get to forcibly rip a demon from the void for the first time once in your life.'
 WHERE `entry` = 80121;
+
+UPDATE `item_template` SET `buy_price` = 6040 WHERE `entry` = 84037;
+UPDATE `item_template` SET `sell_price` = 6000 WHERE `entry` = 12860;
+UPDATE `item_template` SET `sell_price` = 2620 WHERE `entry` = 10038;
+UPDATE `item_template` SET `sell_price` = 700 WHERE `entry` = 23578;
