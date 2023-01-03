@@ -120,3 +120,13 @@ WHERE `entry` = 80116;
 UPDATE `quest_template` SET
 `details` = 'Alright, pal, listen up! I know this is your first job for the Venture Company, so I\'ll speak real slow for ya.\n\nWe\'re up here to find a valuable treasure, y\'hear? Supposed to be worth more than half the jewels in Undermine, and Boss can\'t wait to get his hands on it. The last crew he sent up here never sent anything back.\n\nThievin\' jerks think they\'re gonna cut and run from the boss? You better believe he\'ll track them down and have their hides. Boss says don\'t come back empty-handed, so let\'s get to work.\n\nWe busted up a few gizmos on our flyer gettin\' down here, but luckily for us, the last crew seems to have left their bots behind. Run around and grab some whizmagigs from them, would ya?'
 WHERE `entry` = 80100;
+
+UPDATE `quest_template` SET
+`details` = 'Okay, look. A treasure hunter is gonna find some haunted forests from time to time, see? And we can\'t go back to the boss empty-handed. I mean CAN\'T. Like he\'ll have us shipped off to the mines, can\'t.\n\nSo here\'s what we\'re gonna do, yeah? We\'re gonna try and grab the loot and get outta here quick-like. You\'ve done good work so far, kid, so I\'m counting on you for this job.\n\nThere looks to be more of the last crew\'s mechs further in this valley and, uh... some vultures that don\'t look real natural. Clear \'em out, and we\'ll see what\'s in there.'
+WHERE `entry` = 80106;
+
+UPDATE `quest_template` SET
+`details` = 'Nert might be afraid of a little shadow magic, but you and I know what we\'re doing, yeah?\n\nIt\'s time for you to learn how to summon your first demon! Yeah, I know we\'re in the middle of a crisis, but what better time to have a demon\'s aid?\n\nBesides, we\'re warlocks. Crises are what we\'re about! That and I'm contractually obligated to arm you to "enforce".\n\nWhile you\'re out on Nert\'s task, I want you to look for something that radiates darkness. That energy condenses into these purple crystals, see? Try to pinch one of those without getting yourself killed.\n\nBring me back one of those crystals, and I\'ll teach ya how to summon an imp. Fair trade, yeah?',
+`requestitemstext` = 'Was I not crystal clear? I need a crystal full of shadow magic for the summoning spell.',
+`offerrewardtext` = 'Beautiful! This will do nicely.\n\nNow watch and learn, kid - You only get to forcibly rip a demon from the void for the first time once in your life.'
+WHERE `entry` = 80121;
