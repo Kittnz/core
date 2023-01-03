@@ -104,3 +104,19 @@ UPDATE `gameobject_loot_template` SET `ChanceOrQuestChance` = -100 WHERE `entry`
 UPDATE `gameobject_template` SET `flags` = 4 WHERE `entry` = 1000082;
 UPDATE `item_template` SET `class` = 0, `bonding` = 4 WHERE `entry` = 51325;
 UPDATE `gameobject_template` SET `data0` = 43 WHERE `entry` = 1000082;
+
+UPDATE `quest_template` SET
+`details` = 'Hey, $N! Employee of the day! How\'s about an unpaid break?\n\nWhile you were busy doing my... I mean YOUR job, Grizzie the Enforcer came around looking for you. Said something about him owing you a favor?\n\nHere, he mentions it in this letter... which I may or may not have dropped into my buzzard wings.\n\nDon\'t take too long, though. Your break is already half over!'
+WHERE `entry` = 80115;
+
+UPDATE `quest_template` SET
+`details` = 'Well, I guess we figured out why the elves are up here. The whole dang forest up ahead is on fire! And it\'s gotta be goblin-made, too.\n\nNo one else uses the kind of oil that burns that long! That\'s Undermine stuff, kid. There ain\'t no way a gnome could get their hands on it.\n\nI don\'t know what\'s goin\' on in this site, but I don\'t like it. Go out there and bring back some of that oil.\n\nMaybe you\'ll find some clues about what happened before we go here. If not, at least we\'ll have topped off our own oil supplies!'
+WHERE `entry` = 80103;
+
+UPDATE `quest_template` SET
+`offerrewardtext` = 'So peach, you got my money? No? What do you mean no?!\n\nTsk, I guess you\'re still a low grade thief. In that case, I guess I could teach you the ropes.\n\nIt\'s not like I like you or anything... You still gotta pay me back!'
+WHERE `entry` = 80116;
+
+UPDATE `quest_template` SET
+`details` = 'Alright, pal, listen up! I know this is your first job for the Venture Company, so I\'ll speak real slow for ya.\n\nWe\'re up here to find a valuable treasure, y\'hear? Supposed to be worth more than half the jewels in Undermine, and Boss can\'t wait to get his hands on it. The last crew he sent up here never sent anything back.\n\nThievin\' jerks think they\'re gonna cut and run from the boss? You better believe he\'ll track them down and have their hides. Boss says don\'t come back empty-handed, so let\'s get to work.\n\nWe busted up a few gizmos on our flyer gettin\' down here, but luckily for us, the last crew seems to have left their bots behind. Run around and grab some whizmagigs from them, would ya?'
+WHERE `entry` = 80100;
