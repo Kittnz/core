@@ -14270,3 +14270,29 @@ bool ChatHandler::HandleGameObjectSendCustomAnimCommand(char* args)
 
     return true;
 }
+
+bool ChatHandler::HandleCartographerCommand(char* args)
+{
+    Player* pPlayer = m_session->GetPlayer();
+    if (!pPlayer)
+    {
+        SendSysMessage(LANG_NO_CHAR_SELECTED);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 count = 0;
+    uint32 const* fullExploreMask = sObjectMgr.GetCartographerExplorationMask();
+    for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
+    {
+        for (uint32 j = 0; j < 32; ++j)
+        {
+            uint32 flag = 1 << j;
+            if ((fullExploreMask[i] & flag) && !pPlayer->HasFlag(PLAYER_EXPLORED_ZONES_1 + i, flag))
+                count++;
+        }
+    }
+    
+    PSendSysMessage("You have %u areas left to explore.", count);
+    return true;
+}

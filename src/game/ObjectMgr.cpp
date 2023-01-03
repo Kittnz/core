@@ -8817,6 +8817,49 @@ void ObjectMgr::LoadAreaLocales()
     while (result->NextRow());
 }
 
+void ObjectMgr::LoadCartographerAreas()
+{
+    memset(m_cartographerExploreMask, 0, sizeof(m_cartographerExploreMask));
+
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `area_id` FROM `cartographer`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 entry = fields[0].GetUInt32();
+        AreaEntry const* pAreaEntry = AreaEntry::GetById(entry);
+
+        if (!pAreaEntry)
+        {
+            ERROR_DB_STRICT_LOG("Table `cartographer` has data for nonexistent area entry %u, skipped.", entry);
+            continue;
+        }
+
+        if (!pAreaEntry->ExploreFlag || pAreaEntry->ExploreFlag == 0xffff)
+        {
+            ERROR_DB_STRICT_LOG("Table `cartographer` has area %u with no explore flag, skipped.", entry);
+            continue;
+        }
+
+        int offset = pAreaEntry->ExploreFlag / 32;
+        if (offset >= PLAYER_EXPLORED_ZONES_SIZE)
+        {
+            ERROR_DB_STRICT_LOG("Table `cartographer` has area %u with invalid explore flag %u, skipped.", entry, pAreaEntry->ExploreFlag);
+            continue;
+        }
+
+        uint32 val = (uint32)(1 << (pAreaEntry->ExploreFlag % 32));
+        m_cartographerExploreMask[offset] |= val;
+
+    } while (result->NextRow());
+}
+
 void ObjectMgr::GetAreaLocaleString(uint32 entry, int32 loc_idx, std::string* namePtr) const
 {
     if (loc_idx >= 0)

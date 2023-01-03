@@ -590,6 +590,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "service",        SEC_ADMINISTRATOR,   true,  nullptr,                                        "", serviceCommandTable  },
         { "worldstate",     SEC_ADMINISTRATOR,   false, nullptr,                                        "", worldStateCommandTable},
         { "bg",             SEC_ADMINISTRATOR,   false, nullptr,                                        "", bgCommandTable},
+        { "cartographer",   SEC_PLAYER,          false, &ChatHandler::HandleCartographerCommand,        "", nullptr},
         { "variable",       SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleVariableCommand,            "", nullptr},
         { "god",            SEC_DEVELOPER,       false, &ChatHandler::HandleGodCommand,                 "", nullptr },
         { "aura",           SEC_DEVELOPER,       false, &ChatHandler::HandleAuraCommand,                "", nullptr },

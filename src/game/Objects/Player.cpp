@@ -6633,28 +6633,14 @@ void Player::SendCinematicStart(uint32 CinematicSequenceId)
 
 bool Player::HasAllZonesExplored()
 {
-    bool eligible_for_title = true;
-    uint32 real_full_mask[64] = 
-    {  
-     2145078847, 2943346647, 4092590079, 4157079371, 3321885599, 4294459278,
-     4294967295, 3737059326, 4026266751, 2013200879, 4284465151, 4244608767,
-     4294492159, 2138308607, 4291493880, 1019255775, 4292554614, 1970205687,
-     4225757133, 125532146, 4294967286, 26951655, 4290510684, 4018142783,
-     4259315711, 4239229439, 4294956799, 3748241370, 2146680833, 4293680125,
-     3226467263, 1644166143, 4294574071, 1835007, 0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65536, 3670258    
-    };
+    uint32 const* fullExploreMask = sObjectMgr.GetCartographerExplorationMask();
 
     for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
     {
-        bool explored_chunk = ((GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) >= real_full_mask[i]));
-        if (!explored_chunk)
-        {
-            eligible_for_title = false;
-            break;
-        }
+        if ((GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) & fullExploreMask[i]) != fullExploreMask[i])
+            return false;
     }
-    return eligible_for_title;
+    return true;
 }
 
 void Player::CheckAreaExploreAndOutdoor()

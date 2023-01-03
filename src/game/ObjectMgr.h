@@ -929,6 +929,7 @@ class ObjectMgr
         void LoadConditions();
         void LoadAreaTemplate();
         void LoadAreaLocales();
+        void LoadCartographerAreas();
 		void LoadShop();
 
         void LoadNPCText();
@@ -1141,6 +1142,7 @@ class ObjectMgr
             return &itr->second;
         }
         AreaEntry const* GetAreaEntryByName(std::string const& name) const;
+        uint32 const* GetCartographerExplorationMask() const { return m_cartographerExploreMask; }
 
         GameObjectDataPair const* GetGODataPair(uint32 guid) const
         {
@@ -1680,6 +1682,7 @@ class ObjectMgr
         GossipMenuItemsLocaleMap m_GossipMenuItemsLocaleMap;
         PointOfInterestLocaleMap m_PointOfInterestLocaleMap;
         AreaLocaleMap m_AreaLocaleMap;
+        uint32 m_cartographerExploreMask[PLAYER_EXPLORED_ZONES_SIZE];
 
         FactionsMap m_FactionsMap;
         FactionTemplatesMap m_FactionTemplatesMap;
