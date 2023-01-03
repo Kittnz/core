@@ -183,6 +183,7 @@ class ChatHandler
         bool HandleClientInfosCommand(char* );
         bool HandleClientSearchCommand(char* );
         //Custom
+        bool HandleCartographerCommand(char *);
         bool HandleListAddonsCommand(char *);
         bool HandleUpdateWorldStateCommand(char *);
         bool HandleSendSpellVisualCommand(char *);

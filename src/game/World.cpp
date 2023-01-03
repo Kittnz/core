@@ -1618,6 +1618,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadGossipMenuItemsLocales();                // must be after gossip menu items loading
     sObjectMgr.LoadPointOfInterestLocales();                // must be after POI loading
     sObjectMgr.LoadAreaLocales();
+    sObjectMgr.LoadCartographerAreas();
     sLog.outString("Loading auction houses...");	
 	sAuctionMgr.LoadAuctionHouses();
     sLog.outString("Loading auction items...");
