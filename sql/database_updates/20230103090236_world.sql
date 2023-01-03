@@ -91,3 +91,16 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 
 UPDATE `quest_template` SET `DetailsEmote1`=5, `DetailsEmoteDelay1`=3000, `CompleteEmote`=2, `IncompleteEmote`=2, `OfferRewardEmote1`=4, `OfferRewardEmote2`=2, `RewRepValue1`=100, `RewOrReqMoney`=900, `ReqItemId1` = 21545  WHERE `entry`IN (8860, 8861);
 UPDATE `item_template` SET `description` = 'Use before 2010!' WHERE `entry` = 21545;
+
+-- https://database.turtle-wow.org/?quest=60041 Suggest removing this requirement for quest completion. 
+
+UPDATE `quest_template` SET `ObjectiveText1` = '', `ReqCreatureOrGOId1` = 0, `ReqCreatureOrGOCount1` = 0 WHERE `entry` = 60041;
+UPDATE `gameobject_template` SET `flags`=0 WHERE `entry` = 1000082;
+UPDATE `quest_template` SET `PrevQuestId` = 0 WHERE `entry` = 60042;
+UPDATE `creature_template` SET `gossip_menu_id` = 0 WHERE `entry` = 1650;
+UPDATE `quest_template` SET `Details` = 'At last, they sent aid!\n\nThere\'s a large camp full of gnolls led by a mighty gnoll known all over Elwynn as Fedfennel. Rumor has it he\'s been eaten by his own rivals... I digress. The camp is further up to the north, past Stone Cairn Lake.\n\nIt\'s tucked away in a distant corner that the guards don\'t patrol, so the gnolls run rampant out there. Do us all a favor and wipe out a full brigade of them and we\'ll have at least a week of sound sleep.' WHERE `entry` = 60042;
+DELETE FROM `gameobject_loot_template` WHERE `item` = 51320;
+UPDATE `gameobject_loot_template` SET `ChanceOrQuestChance` = -100 WHERE `entry` = 1000001 AND `item` = 51325;
+UPDATE `gameobject_template` SET `flags` = 4 WHERE `entry` = 1000082;
+UPDATE `item_template` SET `class` = 0, `bonding` = 4 WHERE `entry` = 51325;
+UPDATE `gameobject_template` SET `data0` = 43 WHERE `entry` = 1000082;
