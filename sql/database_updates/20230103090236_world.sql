@@ -74,3 +74,15 @@ UPDATE `page_text` SET `text` = 'For $N:\n\nI\'m Mayten Boomrifle, the local big
 UPDATE `page_text` SET `text` = 'Heya, $N! The name\'s Wizette Icewhistle.\n\nI hear you got big brains and a knack for magic just like yours truly. One day you wished so hard you could blow something up, your hands just caught fire! Am I right?\n\nAmazing what you can do if you just think it hard enough. Like this whole operation full of lunk-heads spontaneously bursting into flame. It\'s so miserable in this hole.\n\nCome pay me a visit and let\'s talk magic! Teaching you some new spells might distract me from thinking this place on fire.\n\nOh, don\'t forget to bring some coin!', `next_page` = 0 WHERE `entry` = 80153;
 
 UPDATE `page_text` SET `text` = 'Hail, $N. I am Amri Demondeal, dark arts practitioner extraordinaire.\n\nWhen I first saw you toiling with the other dregs, I felt an aura similar to mine. I think you\'ve got the chops for summoning demons and conjuring felfire!\n\nI am intrigued, and wish to see what you\'re capable of. Meet me in my cave and let\'s see if you\'ve got what it takes.', `next_page` = 0 WHERE `entry` = 80154;
+
+set @gossip_menu_id = 60905; set @magic_number = 80101;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'How ya doin\', kid? Come give ol\' Mama Sprat a hug. Don\'t be shy!\n\nI gots the best cooking skills around here and I can make anything at hand edible.\n\nI\'ll feed ya well, just like your mama used to. Unless she didn\'t... then think of me as your new mama!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+set @gossip_menu_id = 60906; set @magic_number = 80106;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What\'s better than a bag of coins, $N? A bag of coins you pilfered from some sucker\'s pocket. Better than that? One you pried from their cold, dead hands.\n\nI hear you can sell a whole body for some nice coin, too... So don\'t test me.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
