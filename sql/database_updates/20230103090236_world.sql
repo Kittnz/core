@@ -126,7 +126,7 @@ UPDATE `quest_template` SET
 WHERE `entry` = 80106;
 
 UPDATE `quest_template` SET
-`details` = 'Nert might be afraid of a little shadow magic, but you and I know what we\'re doing, yeah?\n\nIt\'s time for you to learn how to summon your first demon! Yeah, I know we\'re in the middle of a crisis, but what better time to have a demon\'s aid?\n\nBesides, we\'re warlocks. Crises are what we\'re about! That and I'm contractually obligated to arm you to "enforce".\n\nWhile you\'re out on Nert\'s task, I want you to look for something that radiates darkness. That energy condenses into these purple crystals, see? Try to pinch one of those without getting yourself killed.\n\nBring me back one of those crystals, and I\'ll teach ya how to summon an imp. Fair trade, yeah?',
+`details` = 'Nert might be afraid of a little shadow magic, but you and I know what we\'re doing, yeah?\n\nIt\'s time for you to learn how to summon your first demon! Yeah, I know we\'re in the middle of a crisis, but what better time to have a demon\'s aid?\n\nBesides, we\'re warlocks. Crises are what we\'re about! That and I\'m contractually obligated to arm you to "enforce".\n\nWhile you\'re out on Nert\'s task, I want you to look for something that radiates darkness. That energy condenses into these purple crystals, see? Try to pinch one of those without getting yourself killed.\n\nBring me back one of those crystals, and I\'ll teach ya how to summon an imp. Fair trade, yeah?',
 `requestitemstext` = 'Was I not crystal clear? I need a crystal full of shadow magic for the summoning spell.',
 `offerrewardtext` = 'Beautiful! This will do nicely.\n\nNow watch and learn, kid - You only get to forcibly rip a demon from the void for the first time once in your life.'
 WHERE `entry` = 80121;
