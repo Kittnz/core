@@ -3610,14 +3610,17 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
         stringType += "|GM";
     }
 
+    std::ostringstream ss;
+    ss << plr->GetName() << ":" << sess->GetAccountId();
+
     if (target)
-        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", stringType.c_str(), plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
-        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", stringType.c_str(), chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", stringType.c_str(), chanId, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanStr)
-        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
-        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", stringType.c_str(), plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
 }
 
 void MigrationFile::SetAuthor(std::string const& author)
