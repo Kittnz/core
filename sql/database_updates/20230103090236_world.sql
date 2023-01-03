@@ -86,3 +86,8 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'What\'s better than a bag of coins, $N? A bag of coins you pilfered from some sucker\'s pocket. Better than that? One you pried from their cold, dead hands.\n\nI hear you can sell a whole body for some nice coin, too... So don\'t test me.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+
+-- New Year Celebrations:
+
+UPDATE `quest_template` SET `DetailsEmote1`=5, `DetailsEmoteDelay1`=3000, `CompleteEmote`=2, `IncompleteEmote`=2, `OfferRewardEmote1`=4, `OfferRewardEmote2`=2, `RewRepValue1`=100, `RewOrReqMoney`=900, `ReqItemId1` = 21545  WHERE `entry`IN (8860, 8861);
+UPDATE `item_template` SET `description` = 'Use before 2010!' WHERE `entry` = 21545;
