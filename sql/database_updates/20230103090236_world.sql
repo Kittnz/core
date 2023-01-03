@@ -5,3 +5,60 @@ UPDATE `gameobject_template` SET `flags`= 0 WHERE `entry` = 3000209;
 
 UPDATE `quest_template` SET `ReqCreatureOrGOId1` = 51299 WHERE `entry` = 60041;
 UPDATE `quest_template` SET `ReqCreatureOrGOId1` = 80120 WHERE `entry` = 80107;
+
+-- Grammar fixes from Joe:
+
+UPDATE `quest_template` SET
+`details` = 'Alright, pal, listen up! I know this is your first job for the Venture Company, so I\'ll speak real slow for ya.\n\nWe\'re up here to find a valuable treasure, y\'hear? Supposed to be worth more than half the jewels in Undermine, and Boss can\'t wait to get his hands on it. The last crew he sent up here never sent anything back. Thievin\' jerks think they\'re gonna cut and run from the boss? You better believe Boss\'ll track them down and have their hides. Boss says don\'t come back empty-handed, so let\'s get to work.\n\nWe busted up a few gizmos on our flyer gettin\' down here, but luckily for us, the last crew seems to have left their bots behind. Run around and grab some whizmagigs from them, would ya?'
+WHERE `entry` = 80100;
+
+UPDATE `quest_template` SET
+`details` = '<Among the remains of the elemental, you find a note soaked in oil and scorched at the edges. Most of the writing is barely legible, but you can decipher one critical excerpt.>\n\n... stupid boss didn\'t tell us anythin\' about this place. Not a norm ... tomb. Somethin\' bad buried ... center of the forest ...\n\n<This seems worth reporting back to the foreman.>',
+`offerrewardtext` = '<Nert looks over the note.>\n\nWell... That probably ain\'t good. But we didn\'t come this far just to quit because something scared off the last crew. Can\'t go back to the boss empty-handed, right?\n\n<Nert looks troubled as he waves you off, perhaps trying to convince himself more than you that all is well.>'
+WHERE `entry` = 80105;
+
+UPDATE `quest_template` SET
+`offerrewardtext` = 'Nice! Just you wait. Mama Sprat\'s gonna make magic out of these here buzzard bits.\n\nYou won\'t even know you\'re eatin\' a bird that feeds on rotting corpses!\n\nUh... Forget I said that.'
+WHERE `entry` = 80101;
+
+UPDATE `quest_template` SET
+`offerrewardtext` = 'Nicely done, recruit! Consider yourself officially on my star employee list. Stick with old Nert and you\'re gonna go far!\n\nOh, uh... I guess if I\'ve got you doing bruiser work, it might be worth arming you with something more than sharp wits. Just don\'t tell anyone I gave you this weapon for free!'
+WHERE `entry` = 80102;
+ 
+UPDATE `quest_template` SET
+`details` = 'Hey, $N! Employee of the day! How\'s about an unpaid break?\n\nWhile you were busy doing my... I mean YOUR job, Grizzie the Enforcer came around looking for you. Said something about him owing you a favor? Here, he mentions it in this letter... which I may or may have not dropped into my buzzard wings.\n\nDon\'t take too long, though.\n\nYour break is already half over!',
+`requestitemstext` = '$N, pal, great to see ya. Let\'s have a quick chat.',
+`offerrewardtext` = 'If it isn\'t my old buddy, $N! Man, we\'ve made some good memories together, yeah?\n\nI ain\'t giving out no discounts, though. You know how it is.'
+WHERE `entry` = 80115;
+
+UPDATE `quest_template` SET
+`details` = 'Well, I guess we figured out why the elves are up here. The whole dang forest up ahead is on fire! And it\'s gotta be goblin-made, too. No one else uses the kind of oil that burns that long!\n\nThat\'s Undermine stuff, kid. There ain\'t no way a gnome could get their hands on it.\n\nI don\'t know what\'s goin\' on, but I don\'t like this. Go out there and bring back some of that oil.\n\nMaybe it\'ll tell us what happened before we got here. If not, at least we\'ll have topped off our own oil supplies!'
+WHERE `entry` = 80103;
+
+UPDATE `quest_template` SET
+`details` = 'Glad you\'re back, $N. You know I love me some gossip, and I bet you do, too. Maybe you\'d care to shed a little light on why your name is on the lips of such bad news?\n\nI hear you owe Leyti Quicktongue some money. Did you gamble all of your savings back home or what?\n\nIs she your loan shark? Do I have to pay for your health insurance? That\'s not gonna happen, pal.\n\nLook, just take this letter she left for you. I don\'t want to hold this thing anymore, especially with that nasty looking green stuff dripping off the corner. Probably acid or poison or something.\n\nShort break, and I mean short!',
+`requestitemstext` = 'If it ain\'t $N. You thieving scoundrel.\n\nWhat do you mean it was your gig?',
+`offerrewardtext` = 'So peach, you got my money?\n\nNo? What do you mean no?!\n\nTsk, I guess you\'re still a low grade thief. In that case, I guess I could teach you the ropes.\n\nIt\'s not like I like you or anything... You still gotta pay me back!'
+WHERE `entry` = 80116;
+
+UPDATE `quest_template` SET
+`details` = 'I don\'t envy you right now, kid.\n\nSee, those weird vultures aren\'t the worst thing in the woods. Some of the other bruisers were havin\' a look around, and they found a tomb that looks like it\'s from Uldaman for how old it is.\n\nTried to get close, but they heard some kind of unholy sound coming from inside. These guys have been around for some of the boss\'s "persuasive" interviews before, and they\'ve never heard sounds like that.\n\nSaid it echoed around the hills all unnatural-like, as if it was bouncin\' off trees that weren\'t there.\n\nI\'ll fight elves. I\'ll fight plant monsters. I\'ll fight our own blasted tanks! But I am not messing with some ancient cursed tomb.\n\nI want you to go down there, find out what\'s behind those doors, and deal with it. Do that for me, and you and me are chums for life. There may even be a promotion in your future.'
+WHERE `entry` = 80107;
+
+UPDATE `quest_template` SET
+`details` = 'Back for more work, $N? I appreciate your dedication to all this scut work, but Mayten Boomrifle is looking for you. Gave me this letter for you and everything, said something about teaching you some proper shootin\'!\n\nHeh, like you need some so-called expert to teach you how to launch metal projectiles or harness explosions. We\'re goblins!\n\nWhatever... Here, take this letter and go pay him a visit. Hurry it up. No stalling, or no meals for you today!',
+`requestitemstext` = 'Shhhh, $N. Not so loud. I\'m trying to take that buzzard out of the sky.',
+`offerrewardtext` = 'You got my letter, $N?\n\nGood, good. Let\'s do something about your shoddy aim. Before you know it, you\'ll be putting holes in gold pieces from a hundred yards away.\n\nWhat? No, no, no! It was a figure of speech! Don\'t go wasting perfectly good coin.'
+WHERE `entry` = 80117;
+
+UPDATE `quest_template` SET
+`details` = 'Great work so far, $N. I knew having a mage in our labor force would come in handy. Speaking of handy, how\'s about conjuring up some water for your poor parched foreman?\n\nWhat? You don\'t know how to conjure water yet? You kidding me?\n\nLucky for you, ol\' Nert\'s got a letter for you from someone who can help. Wizette Icewhistle\'s looking for you, so maybe she can teach you some spells.\n\nGet moving, and don\'t come back without some sparkling water!',
+`requestitemstext` = 'I been looking for you, $N! I got a new spell I\'d like to try out, and I need an assistant.',
+`offerrewardtext` = 'Heya, sweetie! Great to see ya. Ready for Mama Wiz to teach you all these sparklin\' spells?'
+WHERE `entry` = 80118;
+
+UPDATE `quest_template` SET
+`details` = '$N, pal! Back so soon? W-we\'re pals, right? Heh heh...\n\nBeing honest, you kinda give me the creeps, not unlike Amri Demondeal. She came looking for you, and boy I hope I never have to speak to her again.\n\nYou, uh, do all that freaky demon stuff, too? With the green fire and blood circles and such?\n\nLook, I didn\'t see nothin\'! J-just take this letter Amri left and go do your business. Take as long as you want!',
+`requestitemstext` = '$N! Welcome, welcome. The dark arts await, friend.',
+`offerrewardtext` = 'Ooh, just in time! Ready to embrace the shadows?'
+WHERE `entry` = 80119;
