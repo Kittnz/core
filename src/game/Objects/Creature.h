@@ -78,6 +78,7 @@ enum CreatureFlagsExtra
     CREATURE_FLAG_EXTRA_NO_UNREACHABLE_EVADE         = 0x04000000,       // 67108864 Creature will not evade due to target being unreachable
     CREATURE_FLAG_EXTRA_APPEAR_DEAD                  = 0x08000000,       // 134217728 Creature will have UNIT_DYNFLAG_DEAD applied
     CREATURE_FLAG_EXTRA_NO_LEASH_EVADE               = 0x10000000,       // 268435456 Creature will not evade due to target running away
+    CREATURE_FLAG_EXTRA_DESPAWN_INSTANTLY            = 0x20000000,       // 536870912 CREATURE_STATIC_FLAG_DESPAWN_INSTANTLY (despawn on death)
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
