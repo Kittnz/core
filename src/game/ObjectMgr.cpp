@@ -9338,3 +9338,23 @@ uint32 ObjectMgr::GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 it
     return numItems;
 
 }
+
+void ObjectMgr::LoadShellCoinCount()
+{
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `count` FROM `item_instance` WHERE `itemEntry`=%u", ITEM_SHELL_COIN));
+
+    if (!result)
+        return;
+
+    int32 totalCount = 0;
+    do
+    {
+        Field* fields = result->Fetch();
+
+        int32 count = fields[0].GetInt32();
+        totalCount += count;
+
+    } while (result->NextRow());
+
+    m_shellCoinCount = std::min(totalCount, SHELL_COIN_MAX_COUNT);
+}

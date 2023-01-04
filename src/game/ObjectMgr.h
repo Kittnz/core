@@ -622,6 +622,8 @@ public:
 class PvPMaintenanceMaker;
 
 #define SHELL_COIN_BASE_PRICE 20
+#define SHELL_COIN_MAX_COUNT ((INT_MAX / SHELL_COIN_BASE_PRICE) - 1)
+#define ITEM_SHELL_COIN 81118
 
 class ObjectMgr
 {
@@ -1521,10 +1523,11 @@ class ObjectMgr
         void ResetOldMailCounter() { m_OldMailCounter = 0; }
         void IncrementOldMailCounter(uint32 count) { m_OldMailCounter += count; }
 
+        void LoadShellCoinCount();
         int32 GetShellCoinCount() const { return m_shellCoinCount; }
         int32 GetShellCoinSellPrice() const { return m_shellCoinCount * SHELL_COIN_BASE_PRICE; }
         int32 GetShellCoinBuyPrice() const { return (m_shellCoinCount + 1) * SHELL_COIN_BASE_PRICE; }
-        void IncreaseShellCoinCount() { if (m_shellCoinCount < ((INT_MAX / SHELL_COIN_BASE_PRICE) - 1)) m_shellCoinCount++; }
+        void IncreaseShellCoinCount() { if (m_shellCoinCount < SHELL_COIN_MAX_COUNT) m_shellCoinCount++; }
         void DecreaseShellCoinCount() { if (m_shellCoinCount > 0) m_shellCoinCount--; }
 
     protected:
