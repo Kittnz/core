@@ -86,7 +86,8 @@ enum WorldTimers
     WUPDATE_SAVE_VAR    = 4,
     WUPDATE_GROUPS      = 5,
     WUPDATE_CENSUS      = 6,
-    WUPDATE_COUNT       = 7
+    WUPDATE_SHELLCOIN   = 7,
+    WUPDATE_COUNT       = 8
 };
 
 /// Configuration elements
@@ -1022,6 +1023,10 @@ class World
         // Invalidate player name, player guild info/roster and refresh some UI elements
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
 
+        // Shell Coin
+        void AddShellCoinOwner(ObjectGuid guid) { m_shellCoinOwners.insert(guid); }
+        void RemoveShellCoinOwner(ObjectGuid guid) { m_shellCoinOwners.erase(guid); }
+
         // DBCache operations (Deny, Invalidate) - use for clear cache data only(!!!) at loading character before loading UI
         void SendSingleItemInvalidate(uint32 entry, WorldSession* self = nullptr);
         void SendMultipleItemsInvalidate(const std::vector<uint32>& items, WorldSession* self = nullptr);
@@ -1081,7 +1086,8 @@ class World
         uint32 m_gameDay;
         int32  m_timeZoneOffset;
         IntervalTimer m_timers[WUPDATE_COUNT];
-
+        int32 m_lastShellCoinPrice = 0;
+        ObjectGuidSet m_shellCoinOwners;
 
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;

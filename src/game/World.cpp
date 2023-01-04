@@ -1191,6 +1191,7 @@ void World::LoadConfigSettings(bool reload)
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
+    m_timers[WUPDATE_SHELLCOIN].SetInterval(10 * MINUTE * IN_MILLISECONDS);
 
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
@@ -1774,6 +1775,10 @@ void World::SetInitialWorldSettings()
         sLog.outString("Restoring deleted items...");
         sObjectMgr.RestoreDeletedItems();
     }
+
+    sLog.outString("Loading shell coins...");
+    sObjectMgr.LoadShellCoinCount();
+    m_lastShellCoinPrice = sObjectMgr.GetShellCoinBuyPrice();
     
     m_broadcaster =
         std::make_unique<MovementBroadcaster>(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_THREADS),
@@ -1975,6 +1980,40 @@ void World::Update(uint32 diff)
 
         WorldDatabase.PExecute("INSERT INTO `player_census` (`alliance_players`, `horde_players`, `total_players`, `date_time`) VALUES (%u, %u, %u, NOW())", alliancePlayers,
             hordePlayers, hordePlayers + alliancePlayers);
+    }
+
+    if (m_timers[WUPDATE_SHELLCOIN].Passed())
+    {
+        m_timers[WUPDATE_SHELLCOIN].Reset();
+
+        int32 buyPrice = sObjectMgr.GetShellCoinBuyPrice();
+        int32 coinCount = sObjectMgr.GetShellCoinCount();
+
+        if (m_lastShellCoinPrice)
+        {
+            std::string message;
+            if (buyPrice > m_lastShellCoinPrice)
+                message = "Shellcoin price has increased to " + std::to_string(buyPrice) + " copper (up " + std::to_string(int32((float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f - 100.0f)) + "%).";
+            else if (buyPrice < m_lastShellCoinPrice)
+                message = "Shellcoin price has decreased to " + std::to_string(buyPrice) + " copper (down " + std::to_string(int32(100.0f - (float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f)) + "%).";
+
+            if (!message.empty())
+            {
+                for (auto const& guid : m_shellCoinOwners)
+                {
+                    if (Player* pPlayer = sObjectAccessor.FindPlayer(guid))
+                    {
+                        if (pPlayer->IsInWorld())
+                            ChatHandler(pPlayer).SendSysMessage(message.c_str());
+                    }
+                }
+            }
+        }
+
+        CharacterDatabase.PExecute("INSERT INTO `logs_shellcoin` (`time`, `count`, `price`) VALUES (%u, %u, %u)",
+            m_gameTime, coinCount, buyPrice);
+
+        m_lastShellCoinPrice = buyPrice;
     }
 
     /// </ul>

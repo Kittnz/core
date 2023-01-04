@@ -633,3 +633,26 @@ uint32 dither(float v)
 {
     return std::floor(v + frand(0, 1));
 }
+
+std::string MoneyToString(uint32 copper)
+{
+    uint32 gold = copper / GOLD;
+    uint32 silver = (copper % GOLD) / SILVER;
+    copper = (copper % GOLD) % SILVER;
+
+    std::ostringstream ss;
+    if (gold)
+    {
+        ss << gold;
+        ss << "g";
+    }
+    if (silver || gold)
+    {
+        ss << silver;
+        ss << "s";
+    }
+    ss << copper;
+    ss << "c";
+
+    return ss.str();
+}

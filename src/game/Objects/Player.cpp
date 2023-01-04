@@ -2523,6 +2523,9 @@ void Player::AddToWorld()
             m_items[i]->AddToWorld();
     }
 
+    if (HasItemCount(ITEM_SHELL_COIN, 1, true))
+        sWorld.AddShellCoinOwner(GetObjectGuid());
+
     sPlayerBotMgr.OnPlayerInWorld(this);
 }
 
@@ -2562,6 +2565,7 @@ void Player::RemoveFromWorld()
     }
 
     SetEscortingGuid(ObjectGuid());
+    sWorld.RemoveShellCoinOwner(GetObjectGuid());
 
     Unit::RemoveFromWorld();
 }
