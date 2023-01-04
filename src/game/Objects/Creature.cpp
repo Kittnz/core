@@ -1832,7 +1832,7 @@ void Creature::SetDeathState(DeathState s)
         ApplyDynamicRespawnDelay(respawnDelay, data);
 
         // the max/default time for corpse decay (before creature is looted/AllLootRemovedFromCorpse() is called)
-        m_corpseDecayTimer = CREATURE_FLAG_EXTRA_DESPAWN_INSTANTLY) ? 1 : m_corpseDelay * IN_MILLISECONDS;
+        m_corpseDecayTimer = HasExtraFlag(CREATURE_FLAG_EXTRA_DESPAWN_INSTANTLY) ? 1 : m_corpseDelay * IN_MILLISECONDS;
 
         if (data)
         {
