@@ -208,9 +208,14 @@ class ChatHandler
         bool HandleGoUpCommand(char* args);
 
         bool HandleGameObjectTempAddCommand(char *args);
+
         // Clean characters
         bool HandleCleanCharactersToDeleteCommand(char *args);
         bool HandleCleanCharactersItemsCommand(char *args);
+
+        // Character mail
+        bool HandleCharacterMailListCommand(char* args);
+        bool HandleCharacterMailDeleteCommand(char* args);
 
         //Mmaps
         bool HandleMmapsPathCommand(char* args);

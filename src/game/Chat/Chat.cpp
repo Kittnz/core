@@ -121,24 +121,31 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                            "", nullptr }
     };
 
-
     static ChatCommand characterCleanCommandTable[] =
     {
-        { "todelete",       SEC_CONSOLE,  true,  &ChatHandler::HandleCleanCharactersToDeleteCommand,     "", nullptr },
-        { "items",          SEC_CONSOLE,  true,  &ChatHandler::HandleCleanCharactersItemsCommand,        "", nullptr },
-        { nullptr,          0,                  false, nullptr,                                                "", nullptr }
+        { "todelete",       SEC_CONSOLE,  true,  &ChatHandler::HandleCleanCharactersToDeleteCommand,   "", nullptr },
+        { "items",          SEC_CONSOLE,  true,  &ChatHandler::HandleCleanCharactersItemsCommand,      "", nullptr },
+        { nullptr,          0,                   false, nullptr,                                       "", nullptr }
+    };
+
+    static ChatCommand characterMailCommandTable[] =
+    {
+        { "list",           SEC_DEVELOPER,       true,  &ChatHandler::HandleCharacterMailListCommand,     "", nullptr },
+        { "delete",         SEC_DEVELOPER,       true,  &ChatHandler::HandleCharacterMailDeleteCommand,   "", nullptr },
+        { nullptr,          0,                   false, nullptr,                                          "", nullptr }
     };
 
     static ChatCommand characterCommandTable[] =
     {
-        { "deleted",        SEC_DEVELOPER,     true, nullptr,                                          "", characterDeletedCommandTable},
-        { "erase",          SEC_CONSOLE,        true,  &ChatHandler::HandleCharacterEraseCommand,      "", nullptr },
-        { "reputation",     SEC_DEVELOPER,  true,  &ChatHandler::HandleCharacterReputationCommand, "", nullptr },
-        { "hasitem",        SEC_DEVELOPER, true,  &ChatHandler::HandleCharacterHasItemCommand,    "", nullptr },
+        { "deleted",        SEC_DEVELOPER,     true, nullptr,                                         "", characterDeletedCommandTable },
+        { "erase",          SEC_CONSOLE,       true,  &ChatHandler::HandleCharacterEraseCommand,      "", nullptr },
+        { "reputation",     SEC_DEVELOPER,     true,  &ChatHandler::HandleCharacterReputationCommand, "", nullptr },
+        { "hasitem",        SEC_DEVELOPER,     true,  &ChatHandler::HandleCharacterHasItemCommand,    "", nullptr },
         { "fillflys",       SEC_DEVELOPER,     true,  &ChatHandler::HandleCharacterFillFlysCommand,   "", nullptr },
-        { "clean",          SEC_CONSOLE,  true,  nullptr,                                        "", characterCleanCommandTable },
-        { "itemlog",        SEC_DEVELOPER, true,     &ChatHandler::HandleItemLogCommand,          "", nullptr},
-        { nullptr,          0,                   false, nullptr,                                       "", nullptr }
+        { "clean",          SEC_CONSOLE,       true,  nullptr,                                        "", characterCleanCommandTable },
+        { "itemlog",        SEC_DEVELOPER,     true,  &ChatHandler::HandleItemLogCommand,             "", nullptr },
+        { "mail",           SEC_DEVELOPER,     true,  nullptr,                                        "", characterMailCommandTable },
+        { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
 

@@ -14296,3 +14296,77 @@ bool ChatHandler::HandleCartographerCommand(char* args)
     PSendSysMessage("You have %u areas left to explore.", count);
     return true;
 }
+
+bool ChatHandler::HandleCharacterMailListCommand(char* args)
+{
+    Player* target;
+    ObjectGuid target_guid;
+    std::string target_name;
+    if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name, true))
+        return false;
+
+    PSendSysMessage("Listing mail for %s:", target_name.c_str());
+    if (target)
+    {
+        MasterPlayer* pl = target->GetSession()->GetMasterPlayer();
+        for (PlayerMails::iterator itr = pl->GetMailBegin(); itr != pl->GetMailEnd(); ++itr)
+        {
+            if ((*itr)->state == MAIL_STATE_DELETED || sWorld.GetGameTime() > (*itr)->expire_time)
+                continue;
+
+            PSendSysMessage("|cff00ff00%u|r - Sender Guid %u Expires %s Subject: |cff00ff00[%s]|r", (*itr)->messageID, (*itr)->sender, secsToTimeString((*itr)->expire_time - sWorld.GetGameTime(), true).c_str(), (*itr)->subject.c_str());
+        }
+    }
+    else if (!target_guid.IsEmpty())
+    {
+        //                                                                    0     1         2          3
+        std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `id`, `sender`, `subject`, `expire_time` FROM `mail` WHERE `receiver` = %u && `isDeleted` = 0 && `expire_time` > %u", target_guid.GetCounter(), sWorld.GetGameTime()));
+        if (!result)
+            return true;
+
+        do
+        {
+            Field* fields = result->Fetch();
+
+            uint32 mailId = fields[0].GetUInt32();
+            uint32 senderGuid = fields[1].GetUInt32();
+            std::string subject = fields[2].GetCppString();
+            time_t expireTime = fields[3].GetUInt64();
+
+            PSendSysMessage("|cff00ff00%u|r - Sender Guid %u Expires %s Subject: |cff00ff00[%s]|r", mailId, senderGuid, secsToTimeString(expireTime - sWorld.GetGameTime(), true).c_str(), subject.c_str());
+        } while (result->NextRow());
+    }
+    
+    return true;
+}
+
+bool ChatHandler::HandleCharacterMailDeleteCommand(char* args)
+{
+    Player* target;
+    ObjectGuid target_guid;
+    std::string target_name;
+    if (!ExtractPlayerTarget(&args, &target, &target_guid, &target_name, true))
+        return false;
+
+    uint32 mailId;
+    if (!ExtractUInt32(&args, mailId))
+        return false;
+
+    if (target)
+    {
+        MasterPlayer* pl = target->GetSession()->GetMasterPlayer();
+        if (Mail* m = pl->GetMail(mailId))
+        {
+            pl->MarkMailsUpdated();
+            m->state = MAIL_STATE_DELETED;
+        }
+        target->GetSession()->SendMailResult(mailId, MAIL_DELETED, MAIL_OK);
+    }
+    else
+    {
+        CharacterDatabase.PExecute("UPDATE `mail` SET `expire_time`=%u WHERE `id`=%u", sWorld.GetGameTime(), mailId);
+    }
+
+    PSendSysMessage("Mail %u deleted from %s.", mailId, target_name.c_str());
+    return true;
+}
