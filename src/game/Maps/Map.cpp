@@ -1449,6 +1449,8 @@ bool Map::UnloadGrid(const uint32 &x, const uint32 &y, bool pForce)
 
 void Map::UnloadAll(bool pForce)
 {
+    volatile uint32 mapid_debug = GetId();
+
     m_unloading = true;
     RemoveCorpses(true);
 
