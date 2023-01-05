@@ -27,3 +27,7 @@ REPLACE INTO `broadcast_text` (`entry`, `male_text`, `female_text`, `chat_type`,
 
 UPDATE `item_template` SET `display_id` = 66312 WHERE `entry` = 81118;
 UPDATE `item_template` SET `display_id` = 66314 WHERE `entry` = 51255;
+
+-- Colonel's kurzen respawn timer is wrong. It should not be 30 minutes:
+
+UPDATE `creature` SET `spawntimesecsmin` = 300, `spawntimesecsmax` = 300 WHERE `id` = 813;
