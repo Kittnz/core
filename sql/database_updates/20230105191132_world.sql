@@ -1566,3 +1566,41 @@ REPLACE INTO `gameobject` VALUES ( 5012404, 2003727, 1, 3626.03, -3782.26, 195.6
 REPLACE INTO `gameobject` VALUES ( 5012404, 2003727, 1, 3626.23, -3782.26, 195.628, 5.87725, 0, 0, 0.201578, -0.979472, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5012404, 2003727, 1, 3626.23, -3782.26, 195.628, 3.65928, 0, 0, 0.966686, -0.255964, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5012404, 2003727, 1, 3626.23, -3782.26, 195.628, 0.343331, 0, 0, 0.170823, 0.985302, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012395';
+DELETE FROM game_event_gameobject WHERE guid = '5012395';
+DELETE FROM gameobject_battleground WHERE guid = '5012395';
+REPLACE INTO `gameobject` VALUES ( 5012405, 2005069, 1, 3659.53, -3826.24, 191.016, 2.03429, 0, 0, 0.85061, 0.525797, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5012405, 2005069, 1, 3659.53, -3826.24, 191.016, 4.54599, 0, 0, 0.763425, -0.645896, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5012405, 2005069, 1, 3659.53, -3826.24, 191.016, 0.838906, 0, 0, 0.407261, 0.913312, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5012405, 2005069, 1, 3659.53, -3826.24, 191.016, 1.08395, 0, 0, 0.515829, 0.856691, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5012405, 2005069, 1, 3659.53, -3826.24, 191.016, 5.0369, 0, 0, 0.583591, -0.812048, 300, 300, 100, 1, 0, 0);
+REPLACE INTO `gameobject` VALUES ( 5012405, 2005069, 1, 3659.53, -3826.24, 191.016, 1.8953, 0, 0, 0.812047, 0.583592, 300, 300, 100, 1, 0, 0);
+
+-- Changes by JOE
+UPDATE creature SET position_x = '1898.719116', position_y = '1476.394165', position_z = '146.207169', orientation = '3.579815' WHERE guid = '2559988';
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5012406, 2003646, 1, 3585.17, -3879.69, 203.777, 5.47829, 0, 0, 0.39167, -0.920106, 300, 300, 100, 1, 0, 0);
+
+-- Changes by JOE
+UPDATE creature SET position_x = '1891.087769', position_y = '1472.446411', position_z = '144.347580', orientation = '3.151774' WHERE guid = '2560003';
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5012406, 2003646, 1, 3585.17, -3879.69, 203.777, 1.58822, 0, 0, 0.713239, 0.700921, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012406';
+DELETE FROM game_event_gameobject WHERE guid = '5012406';
+DELETE FROM gameobject_battleground WHERE guid = '5012406';
+
+-- Changes by JOE
+UPDATE creature SET position_x = '1834.683594', position_y = '1473.574097', position_z = '145.921021', orientation = '0.006229' WHERE guid = '2559989';
+UPDATE creature SET position_x = '1836.666260', position_y = '1479.990356', position_z = '146.060349', orientation = '5.774979' WHERE guid = '2560005';
+UPDATE creature SET position_x = '1847.865967', position_y = '1468.977905', position_z = '143.231339', orientation = '5.384639' WHERE guid = '2560004';
+UPDATE creature SET position_x = '1907.549072', position_y = '1405.228882', position_z = '146.533600', orientation = '4.030608' WHERE guid = '2560032';
+UPDATE creature SET position_x = '1830.869751', position_y = '1360.468872', position_z = '146.037155', orientation = '0.640813' WHERE guid = '2560026';
+UPDATE creature SET position_x = '1844.903076', position_y = '1325.479126', position_z = '145.156311', orientation = '1.587220' WHERE guid = '2559963';
+UPDATE creature SET position_x = '1862.716919', position_y = '1365.606934', position_z = '143.709167', orientation = '4.677761' WHERE guid = '2560025';
+UPDATE creature SET position_x = '1873.221680', position_y = '1343.234985', position_z = '142.264313', orientation = '1.705024' WHERE guid = '2560024';
+UPDATE creature SET position_x = '1701.012085', position_y = '1523.987671', position_z = '121.763138', orientation = '0.793962' WHERE guid = '2560053';
+UPDATE creature SET position_x = '1718.836914', position_y = '1548.942261', position_z = '129.395767', orientation = '3.179217' WHERE guid = '2560021';
+UPDATE creature SET position_x = '1718.091797', position_y = '1618.552124', position_z = '141.918686', orientation = '2.854846' WHERE guid = '2560009';
+REPLACE INTO `creature` VALUES (2573970,80118,0,0,0,1,1601.9,1723.74,149.943,5.35477,120,120,5,100,100,1,0,0);
