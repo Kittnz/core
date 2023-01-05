@@ -3086,7 +3086,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Mister Gar'thok, may I introduce ya to my crew? We've all got nowhere else to go, and we hear that's as good a reason as any to join the Horde.", player);
+            creature->MonsterSayToPlayer("Gar'Thok, Chief! Allow me to introduce you to my crew. We've got nowhere else to go, and we're willing to lend a hand to the Horde in exchange for food and lodge!", player);
         });
 
         DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
@@ -3099,7 +3099,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Barely any different for me! I hear you orcs like bashin' skulls, I like bashin' skulls, we're gonna get along just fine.", player);
+            creature->MonsterSayToPlayer("Barely any difference to me. You like bashin' skulls, I like bashin' skulls... I was born for the Horde!", player);
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
@@ -3112,7 +3112,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Is what I hear true? You guys use bows? Buddy, buddy. Get with the century! I'll show you some real weapons.", player);
+            creature->MonsterSayToPlayer("Is it true? You guys are using bows out here? Buddy, buddy, get with the century! I'll train your guys in how to use some real weapons!", player);
         });
 
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
@@ -3138,7 +3138,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Do ya even have a mage to help out around here? Well, I guess I can set up shop, conjure up some water. For a price, of course, but also for the Horde!", player);
+            creature->MonsterSayToPlayer("Do ya even have a Mage around here? It's 1000 degrees out here! I guess I can set up shop and conjure up some water. For a price, of course! ... Oh, and uh, for the Horde!", player);
         });
 
         DoAfterTime(pPlayer, 39 * IN_MILLISECONDS,
@@ -3151,7 +3151,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I've made some bad deals with demons, and I know you orcs have too. Thanks for takin' us in.", player);
+            creature->MonsterSayToPlayer("I've made some bad deals with demons, you orcs have made some bad deals with demons. You can sympathize, right? Thanks for takin' us in.", player);
         });
 
         DoAfterTime(pPlayer, 48 * IN_MILLISECONDS,
@@ -3164,7 +3164,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Who cares about honor? Where's the food!?", player);
+            creature->MonsterSayToPlayer("Who cares about honor? Where's the food?!", player);
         });
 
         DoAfterTime(pPlayer, 53 * IN_MILLISECONDS,
@@ -3178,7 +3178,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             creature->MonsterTextEmote("Gar'thok laughs.");
-            creature->MonsterSayToPlayer("Very well, goblins. I am giving you a chance to prove yourself worthy of the Horde. There is work for you here and further up the road in Orgrimmar. Earn the respect of your new allies. Go now all around Durotar and honor the Horde.", player);
+            creature->MonsterSayToPlayer("Very well, recruits. I'll give you the same chance as any orc or troll who arrives from the Valley of Trials. There is plenty of work for you in Razor Hill. Start here, earn the respect of your new allies, and bring honor to the Horde!", player);
         });
     }
     return false;
