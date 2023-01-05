@@ -232,7 +232,7 @@ Unit::~Unit()
     delete movespline;
 
     // those should be already removed at "RemoveFromWorld()" call
-    MANGOS_ASSERT(m_gameObj.empty());
+    MANGOS_ASSERT(m_spellGameObjects.empty());
     MANGOS_ASSERT(m_dynObjGUIDs.empty());
     MANGOS_ASSERT(m_deletedAuras.empty());
     MANGOS_ASSERT(m_deletedHolders.empty());
@@ -2951,19 +2951,20 @@ void Unit::_UpdateSpells(uint32 time)
             ++iter;
     }
 
-    if (!m_gameObj.empty())
+    if (!m_spellGameObjects.empty())
     {
-        GameObjectList::iterator ite1, dnext1;
-        for (ite1 = m_gameObj.begin(); ite1 != m_gameObj.end(); ite1 = dnext1)
+        ObjectGuidSet::iterator ite1, dnext1;
+        for (ite1 = m_spellGameObjects.begin(); ite1 != m_spellGameObjects.end(); ite1 = dnext1)
         {
             dnext1 = ite1;
             //(*i)->Update( difftime );
-            if (!(*ite1)->isSpawned())
+            GameObject* pGo = GetMap()->GetGameObject(*ite1);
+            if (pGo && !pGo->isSpawned())
             {
-                (*ite1)->SetOwnerGuid(ObjectGuid());
-                (*ite1)->SetRespawnTime(0);
-                (*ite1)->Delete();
-                dnext1 = m_gameObj.erase(ite1);
+                pGo->SetOwnerGuid(ObjectGuid());
+                pGo->SetRespawnTime(0);
+                pGo->Delete();
+                dnext1 = m_spellGameObjects.erase(ite1);
             }
             else
                 ++dnext1;
@@ -4343,9 +4344,12 @@ bool Unit::HasAura(uint32 spellId, SpellEffectIndex effIndex) const
 
 GameObject* Unit::GetGameObject(uint32 spellId) const
 {
-    for (const auto& i : m_gameObj)
-        if (i->GetSpellId() == spellId)
-            return i;
+    for (auto const& guid : m_spellGameObjects)
+    {
+        if (GameObject* pGo = GetMap()->GetGameObject(guid))
+            if (pGo->GetSpellId() == spellId)
+                return pGo;
+    }
 
     return nullptr;
 }
@@ -4353,7 +4357,7 @@ GameObject* Unit::GetGameObject(uint32 spellId) const
 void Unit::AddGameObject(GameObject* pGo)
 {
     MANGOS_ASSERT(pGo && !pGo->GetOwnerGuid());
-    m_gameObj.push_back(pGo);
+    m_spellGameObjects.insert(pGo->GetObjectGuid());
     pGo->SetOwnerGuid(GetObjectGuid());
     pGo->SetWorldMask(GetWorldMask());
 
@@ -4394,7 +4398,7 @@ void Unit::RemoveGameObject(GameObject* pGo, bool del)
 
     }
 
-    m_gameObj.remove(pGo);
+    m_spellGameObjects.erase(pGo->GetObjectGuid());
 
     if (del)
     {
@@ -4405,22 +4409,24 @@ void Unit::RemoveGameObject(GameObject* pGo, bool del)
 
 void Unit::RemoveGameObject(uint32 spellid, bool del)
 {
-    if (m_gameObj.empty())
+    if (m_spellGameObjects.empty())
         return;
-    GameObjectList::iterator i, next;
-    for (i = m_gameObj.begin(); i != m_gameObj.end(); i = next)
+
+    ObjectGuidSet::iterator i, next;
+    for (i = m_spellGameObjects.begin(); i != m_spellGameObjects.end(); i = next)
     {
         next = i;
-        if (spellid == 0 || (*i)->GetSpellId() == spellid)
+        GameObject* pGo = GetMap()->GetGameObject(*i);
+        if (pGo && (spellid == 0 || pGo->GetSpellId() == spellid))
         {
-            (*i)->SetOwnerGuid(ObjectGuid());
+            pGo->SetOwnerGuid(ObjectGuid());
             if (del)
             {
-                (*i)->SetRespawnTime(0);
-                (*i)->Delete();
+                pGo->SetRespawnTime(0);
+                pGo->Delete();
             }
 
-            next = m_gameObj.erase(i);
+            next = m_spellGameObjects.erase(i);
         }
         else
             ++next;
@@ -4430,13 +4436,16 @@ void Unit::RemoveGameObject(uint32 spellid, bool del)
 void Unit::RemoveAllGameObjects()
 {
     // remove references to unit
-    for (GameObjectList::iterator i = m_gameObj.begin(); i != m_gameObj.end();)
+    for (auto const& guid : m_spellGameObjects)
     {
-        (*i)->SetOwnerGuid(ObjectGuid());
-        (*i)->SetRespawnTime(0);
-        (*i)->Delete();
-        i = m_gameObj.erase(i);
+        if (GameObject* pGo = GetMap()->GetGameObject(guid))
+        {
+            pGo->SetOwnerGuid(ObjectGuid());
+            pGo->SetRespawnTime(0);
+            pGo->Delete();
+        }
     }
+    m_spellGameObjects.clear();
 }
 
 void Unit::SendPeriodicAuraLog(SpellPeriodicAuraLogInfo *pInfo, AuraType auraTypeOverride) const
