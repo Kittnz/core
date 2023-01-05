@@ -2552,7 +2552,7 @@ void Player::RemoveFromWorld()
     }
 
     // remove duel before calling Unit::RemoveFromWorld
-    // otherwise there will be an existing duel flag pointer but no entry in m_gameObj
+    // otherwise there will be an existing duel flag pointer but no entry in m_spellGameObjects
     DuelComplete(DUEL_INTERRUPTED);
 
     ///- Do not add/remove the player from the object storage
