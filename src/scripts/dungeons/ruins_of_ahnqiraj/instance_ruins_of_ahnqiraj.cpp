@@ -486,7 +486,7 @@ void instance_ruins_of_ahnqiraj::Update(uint32 uiDiff)
         if (!m_doorGuid.IsEmpty())
         {
             if (GameObject* pAQDoor = GetMap()->GetGameObject(m_doorGuid))
-                pAQDoor->AddObjectToRemoveList();
+                pAQDoor->Delete();
             m_doorGuid.Clear();
         }
     }
