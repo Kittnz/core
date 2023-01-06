@@ -3,7 +3,7 @@
 
 enum ShadowFangKeepType
 {
-    TYPE_FREE_NPC = 0,
+    TYPE_FREE_NPC = 1,
     TYPE_RETHILGORE,
     TYPE_FENRUS,
     TYPE_NANDOS,
