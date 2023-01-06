@@ -9735,6 +9735,35 @@ bool ChatHandler::HandleNpcSetDeathStateCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleNpcNearCommand(char* args)
+{
+    float distance;
+    if (!ExtractOptFloat(&args, distance, 10.0f))
+        return false;
+
+    uint32 count = 0;
+
+    Player* pl = m_session->GetPlayer();
+
+    MaNGOS::AllCreaturesInRange check(pl, distance);
+    std::list<Creature*> creatures;
+    MaNGOS::CreatureListSearcher<MaNGOS::AllCreaturesInRange> searcher(creatures, check);
+
+    Cell::VisitGridObjects(pl, searcher, distance);
+
+    for (const auto& creature : creatures)
+    {
+        PSendSysMessage("Creature: GuidLow %u, %s, entry %u, name %u, pos: %f, %f, %f, mapid: %u", creature->GetGUIDLow(), PrepareStringNpcOrGoSpawnInformation<Creature>(creature->GetGUIDLow()).c_str(),
+            creature->GetEntry(), creature->GetName(), creature->GetPositionX(), creature->GetPositionY(), creature->GetPositionZ(), creature->GetMapId());
+        ++count;
+    }
+
+    PSendSysMessage(LANG_COMMAND_NEAROBJMESSAGE, distance, count);
+    return true;
+
+    return true;
+}
+
 bool ChatHandler::HandleGUIDCommand(char* /*args*/)
 {
     ObjectGuid guid = m_session->GetPlayer()->GetSelectionGuid();

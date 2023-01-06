@@ -165,6 +165,16 @@ void World::Shutdown()
         m_charDbWorkerThread->join();
 }
 
+AccountDataWrapper::~AccountDataWrapper()
+{
+    //relink lookuptable with normal table.
+    auto itr = sWorld.m_accountDataLookup.find(m_data->username);
+    if (itr != sWorld.m_accountDataLookup.end())
+        itr->second = std::cref(*m_data);
+    else
+        sWorld.m_accountDataLookup.emplace(m_data->username, std::cref(*m_data));
+}
+
 void World::InternalShutdown()
 {
 	///- Empty the kicked session set
@@ -1184,6 +1194,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 0);
 
+    setConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS, "AccountData.LastLoginDays", 60);
+
     setConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS, "ItemRestoreLog.QuestItems", false);
 
     setConfigMinMax(CONFIG_INT32_KALIMDOR_TIME_OFFSET, "KalimdorTimeOffset", 0, 0, 23);
@@ -1681,6 +1693,9 @@ void World::SetInitialWorldSettings()
     sCompanionMgr->LoadFromDB();
     sLog.outString("Loading mount manager...");
     sMountMgr->LoadFromDB();
+
+    sLog.outString("Loading cached Account data...");
+    LoadAccountData();
 
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);
@@ -2718,6 +2733,33 @@ void World::_UpdateRealmCharCount(QueryResult *resultCharCount, uint32 accountId
         LoginDatabase.PExecute("INSERT INTO realmcharacters (numchars, acctid, realmid) VALUES (%u, %u, %u)", charCount, accountId, realmID);
         LoginDatabase.CommitTransaction();
     }
+}
+
+void World::LoadAccountData()
+{
+    uint32 days = getConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS);
+    if (!days)
+        return;
+
+    std::unique_ptr<QueryResult> result{ LoginDatabase.PQuery("SELECT id, username, email FROM account WHERE last_login >= NOW() - INTERVAL %u DAY", days) };
+
+    uint32 count = 0;
+
+    if (!result)
+        return;
+
+    do {
+        auto fields = result->Fetch();
+
+        uint32 id = fields[0].GetUInt32();
+        auto accountData = GetAccountData(id);
+        accountData->id = id;
+        accountData->username = fields[1].GetCppString();
+        accountData->email = fields[2].GetCppString();
+        ++count;
+    } while (result->NextRow());
+
+    sLog.outString("Loaded %u cached accounts.", count);
 }
 
 void World::SetPlayerLimit(int32 limit, bool needUpdate)

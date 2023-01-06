@@ -356,6 +356,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "textemote",      SEC_DEVELOPER, false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
         { "yell",           SEC_DEVELOPER, false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
         { "setdeathstate",  SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
+        { "near",           SEC_DEVELOPER, false, &ChatHandler::HandleNpcNearCommand,                "", nullptr},
         { "group",          SEC_ADMINISTRATOR,     false, nullptr,                                        "", creatureGroupsCommandTable },
 
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }

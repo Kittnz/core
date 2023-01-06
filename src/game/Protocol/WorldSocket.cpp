@@ -166,7 +166,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     LoginDatabase.escape_string(safe_account);
     // No SQL injection, username escaped.
 
-	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, "
+	QueryResult* result = LoginDatabase.PQuery("SELECT a.id, a.rank, a.sessionkey, a.last_ip, a.locked, a.v, a.s, a.mutetime, a.locale, a.os, a.platform, a.flags, a.email, a.username, "
 		"ab.unbandate > UNIX_TIMESTAMP() OR ab.unbandate = ab.bandate FROM account a "
 		"LEFT JOIN account_banned ab ON a.id = ab.id AND ab.active = 1 WHERE a.username = '%s' LIMIT 1", safe_account.c_str());
 
@@ -239,7 +239,8 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     platform = fields[10].GetCppString();
     uint32 accFlags = fields[11].GetUInt32();
     std::string email = fields[12].GetCppString();
-    bool isBanned = fields[13].GetBool();
+    std::string username = fields[13].GetCppString();
+    bool isBanned = fields[14].GetBool();
     delete result;
 
     
@@ -338,6 +339,12 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     // In case needed sometime the second arg is in microseconds 1 000 000 = 1 sec
     ACE_OS::sleep(ACE_Time_Value(0, 10000));
+
+    // just refresh always..
+    auto accountData = sWorld.GetAccountData(id);
+    accountData->id = id;
+    accountData->email = email;
+    accountData->username = username;
 
     sWorld.AddSession(m_Session);
 

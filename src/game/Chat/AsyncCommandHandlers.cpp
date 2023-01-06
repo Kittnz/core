@@ -89,6 +89,10 @@ void PInfoHandler::HandlePlayerLookupResult(QueryResult *result, PInfoData *data
     data->class_ = fields[5].GetUInt8();
     uint32 mort_status = fields[6].GetUInt32();
     data->isHardcore = mort_status == HARDCORE_MODE_STATUS_ALIVE || mort_status == HARDCORE_MODE_STATUS_DEAD;
+    const auto accData = sWorld.FindAccountData(data->accId);
+    
+    if (accData)
+        data->email = accData->email;
 
     delete result;
 
