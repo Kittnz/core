@@ -407,6 +407,7 @@ class ChatHandler
         bool HandleNpcSayCommand(char* args);
         bool HandleNpcSpeedCommand(char* args);
         bool HandleNpcSetDeathStateCommand(char* args);
+        bool HandleNpcNearCommand(char* args);
         bool HandleNpcSpawnTimeCommand(char* args);
         bool HandleNpcTextEmoteCommand(char* args);
         bool HandleNpcYellCommand(char* args);

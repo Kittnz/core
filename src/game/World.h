@@ -350,6 +350,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY,
     CONFIG_UINT32_CHAT_MIN_LEVEL,
     CONFIG_UINT32_AUTO_COMMIT_MINUTES,
+    CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -751,11 +752,39 @@ struct MigrationFile
     bool HasChanges() const { return hasChanges; }
 };
 
+struct AccountCacheData
+{
+    uint32 id;
+    std::string username;
+    std::string email;
+};
+
+
+class AccountDataWrapper
+{
+public:
+    AccountDataWrapper(AccountCacheData* data) : m_data(data) {}
+    AccountDataWrapper(const AccountDataWrapper&) = delete;
+    AccountDataWrapper(AccountDataWrapper&&) = delete;
+
+    ~AccountDataWrapper();
+
+
+    AccountCacheData* operator->()
+    {
+        return m_data;
+    }
+private:
+    AccountCacheData* m_data;
+};
+
 /// The World
 class World
 {
     public:
         static volatile uint32 m_worldLoopCounter;
+
+        friend class AccountDataWrapper;
 
         World();
         ~World();
@@ -997,6 +1026,9 @@ class World
         uint32 GetMinChatLevel() const { return m_minChatLevel; }
         void SetMinChatLevel(uint32 minLevel) { m_minChatLevel = minLevel; }
 
+        void LoadAccountData();
+
+
         /**
          * Async tasks, allow safe access to sessions (but not players themselves)
          * The tasks will be executed *while* maps are updated. So don't touch the mobs, pets, etc ...
@@ -1026,6 +1058,22 @@ class World
         // Shell Coin
         void AddShellCoinOwner(ObjectGuid guid) { m_shellCoinOwners.insert(guid); }
         void RemoveShellCoinOwner(ObjectGuid guid) { m_shellCoinOwners.erase(guid); }
+
+        //non-modifiable
+        const AccountCacheData* FindAccountData(uint32 accountId) const
+        {
+            auto itr = m_accountData.find(accountId);
+            if (itr != m_accountData.end())
+                return &itr->second;
+
+            return nullptr;
+        }
+
+        //modifiable and wrapped for proper lookup names
+        AccountDataWrapper GetAccountData(uint32 accountId)
+        {
+            return &m_accountData[accountId];
+        }
 
         // DBCache operations (Deny, Invalidate) - use for clear cache data only(!!!) at loading character before loading UI
         void SendSingleItemInvalidate(uint32 entry, WorldSession* self = nullptr);
@@ -1131,6 +1179,9 @@ class World
 
         // CLI command holder to be thread safe
         LockedQueue<CliCommandHolder*,std::mutex> cliCmdQueue;
+
+        std::unordered_map<uint32, AccountCacheData> m_accountData;
+        std::unordered_map<std::string, std::reference_wrapper<const AccountCacheData>> m_accountDataLookup; // lookup of above contained through username.
 
         //Player Queue
         Queue m_QueuedSessions;
