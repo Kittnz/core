@@ -79,13 +79,13 @@ struct boss_xmas_wolfAI : public ScriptedAI
 
     void JustDied(Unit* /*pKiller*/) override
     {
-        uint32 m_respawn_delay_Timer = urand(64*HOUR, 72*HOUR);
+        uint32 m_respawn_delay_Timer = urand(14*HOUR, 20*HOUR);
 
         /** DRRS */
         if (m_creature->GetSpawnFlags() & SPAWN_FLAG_DYNAMIC_RESPAWN_TIME &&
             sWorld.GetActiveSessionCount() > BLIZZLIKE_REALM_POPULATION)
 
-        m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
+        //m_respawn_delay_Timer *= float(BLIZZLIKE_REALM_POPULATION) / float(sWorld.GetActiveSessionCount());
 
         m_creature->SetRespawnDelay(m_respawn_delay_Timer);
         m_creature->SetRespawnTime(m_respawn_delay_Timer);
