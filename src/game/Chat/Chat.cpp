@@ -701,6 +701,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                        "", mmapsCommandTable },
         { "crash",          SEC_CONSOLE,         true, &ChatHandler::HandleCrashCommand,                "", nullptr},
         { "who",            SEC_OBSERVER,        true, &ChatHandler::HandleWhoCommand,                  "", nullptr },
+        { "shellcoin",      SEC_PLAYER,          true, &ChatHandler::HandleShellcoinCommand,            "", nullptr},
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 
