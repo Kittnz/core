@@ -12355,6 +12355,16 @@ bool ChatHandler::HandleMmapsPathCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleShellcoinCommand(char* args)
+{
+    uint32 sellprice = sObjectMgr.GetShellCoinSellPrice();
+    uint32 buyprice = sObjectMgr.GetShellCoinBuyPrice();
+
+    PSendSysMessage("Shellcoin buy price : %uG,%uS,%uC", buyprice / GOLD, (buyprice % GOLD) / SILVER, (buyprice % GOLD) % SILVER);
+    PSendSysMessage("Shellcoin sell price : %uG,%uS,%uC", sellprice / GOLD, (sellprice % GOLD) / SILVER, (sellprice % GOLD) % SILVER);
+    return true;
+}
+
 bool ChatHandler::HandleNpcGroupAddCommand(char* args)
 {
     if (!*args)

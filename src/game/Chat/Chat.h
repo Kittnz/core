@@ -221,6 +221,9 @@ class ChatHandler
         bool HandleMmapsPathCommand(char* args);
         bool HandleMmapsNearCommand(char* args);
 
+        //Shellcoin
+        bool HandleShellcoinCommand(char* args);
+
         // Formations
         bool HandleNpcGroupAddCommand(char *args);
         bool HandleNpcGroupAddRelCommand(char *args);
