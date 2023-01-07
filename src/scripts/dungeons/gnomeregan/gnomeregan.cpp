@@ -124,6 +124,7 @@ struct npc_blastmaster_emi_shortfuseAI : public npc_escortAI
             m_bSouthernCaveInOpened = m_bNorthernCaveInOpened = false;
             m_luiSummonedMobGUIDs.clear();
         }
+        m_creature->EnableMoveInLosEvent();
     }
 
     void DoSummonPack(uint8 uiIndex)

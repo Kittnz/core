@@ -356,8 +356,9 @@ struct npc_toogaAI : public FollowerAI
         m_uiCheckSpeechTimer = 2500;
         m_uiPostEventTimer = 1000;
         m_uiPhasePostEvent = 0;
-
         m_tortaGuid.Clear();
+
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* pWho) override

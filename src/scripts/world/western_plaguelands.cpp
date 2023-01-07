@@ -81,7 +81,10 @@ struct npc_the_scourge_cauldronAI : public ScriptedAI
         Reset();
     }
 
-    void Reset() override {}
+    void Reset() override
+    {
+        m_creature->EnableMoveInLosEvent();
+    }
 
     void DoDie()
     {
@@ -150,11 +153,14 @@ enum eAndorhalTower
 
 struct npc_andorhal_towerAI : public Scripted_NoMovementAI
 {
-    npc_andorhal_towerAI(Creature *c) : Scripted_NoMovementAI(c) {}
+    npc_andorhal_towerAI(Creature *c) : Scripted_NoMovementAI(c)
+    {
+        Reset();
+    }
 
     void Reset() override
     {
-
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* pWho) override

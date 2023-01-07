@@ -1875,7 +1875,7 @@ void Creature::SetDeathState(DeathState s)
 
     if (s == JUST_ALIVED)
     {
-        ClearUnitState(UNIT_STAT_ALL_STATE);
+        ClearUnitState(UNIT_STAT_ALL_DYN_STATES);
 
         CreatureInfo const *cinfo = GetCreatureInfo();
 

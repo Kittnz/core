@@ -5761,7 +5761,7 @@ void AddSC_random_scripts_3()
 
     newscript = new Script;
     newscript->Name = "npc_deckmaster_darkhollow";
-    newscript->pQuestRewardedNPC = &QuestRewarded_npc_baron_telraz;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_deckmaster_darkhollow;
     newscript->RegisterSelf();
 
     newscript = new Script;

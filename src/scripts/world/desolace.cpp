@@ -65,7 +65,7 @@ struct npc_aged_dying_ancient_kodoAI : ScriptedAI
 
     void Reset() override
     {
-
+        m_creature->EnableMoveInLosEvent();
     }
 
     void ResetCreature() override

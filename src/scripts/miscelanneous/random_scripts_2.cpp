@@ -6,30 +6,30 @@ struct zebrian_the_madAI : public ScriptedAI
 {
     zebrian_the_madAI(Creature *c) : ScriptedAI(c)
     {
-        // unused
+        Reset();
     }
 
-    void Aggro(Unit *who)
+    void Aggro(Unit *who) override
     {
         m_creature->MonsterYell("Don't touch my Zebra! I found it, ME! You will never get your hands on it.");
     }
 
-    void Reset()
+    void Reset() override
+    {
+        m_creature->EnableMoveInLosEvent();
+    }
+
+    void JustRespawned() override
     {
         // unused
     }
 
-    void JustRespawned()
-    {
-        // unused
-    }
-
-    void KilledUnit(Unit* victim)
+    void KilledUnit(Unit* victim) override
     {
         m_creature->MonsterYell("Loser!");
     }
 
-    void JustDied(Unit* /*pKiller*/)
+    void JustDied(Unit* /*pKiller*/) override
     {
         m_creature->MonsterSay("I knew this day would come...");
     }
@@ -51,7 +51,7 @@ struct zebrian_the_madAI : public ScriptedAI
         }
     }
 
-    void UpdateAI(const uint32 diff)
+    void UpdateAI(const uint32 diff) override
     {
         //Return since we have no target
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
