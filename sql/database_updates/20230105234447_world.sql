@@ -137,3 +137,7 @@ DELETE FROM gameobject_battleground WHERE guid = '5012454';
 REPLACE INTO `gameobject` VALUES ( 5012455, 2010959, 1, 2215.86, -4779.56, 64.7712, 3.10357, 0, 0, 0.999819, 0.0190078, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5012456, 2010957, 1, 2146.63, -4769.68, 62.2349, 0.485056, 0, 0, 0.240157, 0.970734, 300, 300, 100, 1, 0, 0);
 REPLACE INTO `gameobject` VALUES ( 5012457, 2010959, 1, 2141.36, -4800.72, 56.5949, 1.89899, 0, 0, 0.813121, 0.582095, 300, 300, 100, 1, 0, 0);
+
+-- Changes by JOE
+UPDATE creature SET position_x = '1128.865234', position_y = '-4239.934570', position_z = '22.446529', orientation = '2.157323' WHERE guid = '6459';
+UPDATE creature SET position_x = '1128.504272', position_y = '-4242.211426', position_z = '22.055408', orientation = '2.070932' WHERE guid = '6459';
