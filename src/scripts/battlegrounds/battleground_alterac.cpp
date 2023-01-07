@@ -5095,6 +5095,7 @@ class npc_av_trigger_for_questAI: public ScriptedAI
         }
         void Reset() override
         {
+            m_creature->EnableMoveInLosEvent();
         }
         void MoveInLineOfSight(Unit* who) override
         {

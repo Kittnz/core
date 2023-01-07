@@ -807,6 +807,7 @@ struct npc_couloir_trigger1AI : public ScriptedAI
         CorridorEnded = false;
         ScourgeStarted = false;
         m_uiScourgeTimer = urand(10*MINUTE*IN_MILLISECONDS, 20*MINUTE*IN_MILLISECONDS);
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
@@ -890,6 +891,7 @@ struct npc_couloir_trigger2AI : public ScriptedAI
     void Reset() override
     {
         CorridorEnded = false;
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
@@ -925,6 +927,7 @@ struct npc_couloir_trigger3AI : public ScriptedAI
     void Reset() override
     {
         CorridorEnded = false;
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
@@ -964,6 +967,7 @@ struct npc_Scourge_TriggerAI : public ScriptedAI
     {
         m_uiScourgeTimer = urand(10*MINUTE*IN_MILLISECONDS, 20*MINUTE*IN_MILLISECONDS); // 15 - 30 mn urand(1000000, 1800000);
         ScourgeStarted = false;
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
