@@ -3204,7 +3204,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_NO);
-            creature->MonsterSayToPlayer("Alright, I'll be honest with you. The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
+            creature->MonsterSayToPlayer("Alright, I'll be honest with you guys: The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
         });
 
         DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
@@ -3217,7 +3217,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_QUESTION);
-            creature->MonsterSayToPlayer("We can't go back to the Venture Co, or the boss'll find us. And there's no way the Steamwheedle Cartel will trust us, not after the Venture Co puts out the word that we took off with their loot, right?", player);
+            creature->MonsterSayToPlayer("We can't go back to the Venture Co. or we're all dead meat! There's no way the Steamwheedle Cartel will take us in. Not with all the bad blood between us already.", player);
         });
 
 
@@ -3231,7 +3231,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            creature->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. Who in the world would take us in?", player);
+            creature->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. We've only got one chance left, and that's kissing Thrall's feet.", player);
         });
 
 
@@ -3256,7 +3256,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             if (!creature)
                 return;
 
-            creature->MonsterSayToPlayer("I think I have just the place... Get the team and hop in the plane.", player);
+            creature->MonsterSayToPlayer("Hope you've all been practicing your zug-zugs, because we're going to Durotar. Everybody get in the plane!", player);
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
