@@ -6095,7 +6095,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             uint32 heal = int32(new_damage * multiplier);
 
             int32 gain = pCaster->DealHeal(pCaster, heal, spellProto);
-            pCaster->GetHostileRefManager().threatAssist(pCaster, gain * 0.5f * sSpellMgr.GetSpellThreatMultiplier(spellProto), spellProto);
+            //pCaster->GetHostileRefManager().threatAssist(pCaster, gain * 0.5f * sSpellMgr.GetSpellThreatMultiplier(spellProto), spellProto);
             break;
         }
         case SPELL_AURA_PERIODIC_HEAL:
