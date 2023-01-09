@@ -65,3 +65,7 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 (61061, 30024, 0.5, 0, -30024, 1, 0),
 (61061, 30037, 2.5, 0, -30037, 1, 0),
 (61061, 30038, 0.5, 0, -30038, 1, 0);
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2682
+
+UPDATE `quest_template` SET `RewItemId1` = 0, `RewItemCount1` = 0 WHERE `entry` = 40701;
