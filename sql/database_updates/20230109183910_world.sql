@@ -73,3 +73,20 @@ UPDATE `quest_template` SET `RewItemId1` = 0, `RewItemCount1` = 0 WHERE `entry` 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2676
 
 UPDATE `page_text` SET `text` = 'Solomon,$B$BThe carrier of this decree has been granted official status as an acting deputy of Stormwind. You may use $g him:her; to find proof of the black dragonflight\'s involvement with the Blackrock orcs. Should such proof be found, this deputy shall return said proof to me in Stormwind, at which time I shall release the order to dispense sufficient military force to aid Lakeshire.$B$BRegards,$B$B$B$BHighlord Bolvar Fordragon\n', `next_page` = 0 WHERE `entry` = 1471;
+
+-- Temporary disable Alliance SC attunement quest chain:
+
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80700;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80701;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80702;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80730;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80703;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80704;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80705;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80706;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80707;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80708;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80709;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80710;
+UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80711;
+
