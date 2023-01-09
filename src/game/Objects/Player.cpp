@@ -5155,6 +5155,9 @@ void Player::KillPlayer()
 
 void Player::SpawnHardcoreGravestone()
 {
+    if (GetLevel() < 10) // Some players keep creting level 1 characters with bad names to "leave a message".
+        return;
+
     std::ostringstream ss;
     ss << "Grave of " << m_name << " (level " << GetLevel() << ")";
 
