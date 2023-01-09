@@ -3669,24 +3669,6 @@ struct npc_sunchaserAI : public ScriptedAI
 
 CreatureAI* GetAI_npc_sunchaser(Creature* _Creature) { return new npc_sunchaserAI(_Creature); }
 
-struct npc_carver_molsenAI : public ScriptedAI
-{
-    npc_carver_molsenAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset() {}
-    void UpdateAI(const uint32 diff)
-    {
-        DoMeleeAttackIfReady();
-    }
-    void Aggro(Unit* who)
-    {
-        m_creature->MonsterSay("You were a fool to come here, this is Defias land now.");
-    }
-    void JustRespawned() { Reset(); }
-};
-
-CreatureAI* GetAI_npc_carver_molsen(Creature* _Creature) { return new npc_carver_molsenAI(_Creature); }
-
 struct npc_sellick_vossAI : public ScriptedAI
 {
     npc_sellick_vossAI(Creature* c) : ScriptedAI(c) { Reset(); }
@@ -5983,11 +5965,6 @@ void AddSC_random_scripts_3()
     newscript = new Script;
     newscript->Name = "npc_sellick_voss";
     newscript->GetAI = &GetAI_npc_sellick_voss;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_carver_molsen";
-    newscript->GetAI = &GetAI_npc_carver_molsen;
     newscript->RegisterSelf();
 
     newscript = new Script;
