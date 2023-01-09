@@ -1626,7 +1626,7 @@ bool GossipSelect_npc_iselus(Player* pPlayer, Creature* pCreature, uint32 uiSend
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
         DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSayToPlayer("Hmm, now that you've mentioned it, I recall such a figure, he was a muscular orc, though quite friendly. This was during the demonic invasion a few years back, he seeked battle within the Temple of Arrkoran the last I seen him, hopefully this helps your search.", player);
+            npc->MonsterSayToPlayer("Hmm, now that you've mentioned it, I recall such a figure, he was a muscular orc, though quite friendly. This was during the demonic invasion a few years back, he sought battle within the Temple of Arrkoran the last I seen him, hopefully this helps your search.", player);
             npc->HandleEmote(EMOTE_ONESHOT_TALK);
             if (CreatureInfo const* dummy_bunny = ObjectMgr::GetCreatureTemplate(60340))
                 player->KilledMonster(dummy_bunny, ObjectGuid());
