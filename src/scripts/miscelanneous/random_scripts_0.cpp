@@ -134,6 +134,7 @@ bool QuestAccept_npc_chicken_cluck(Player* pPlayer, Creature* pCreature, const Q
 {
     if (pQuest->GetQuestId() == QUEST_CLUCK)
     {
+        pCreature->PMonsterEmote("Chicken looks up at you expectantly");
         if (npc_chicken_cluckAI* pChickenAI = dynamic_cast<npc_chicken_cluckAI*>(pCreature->AI()))
             pChickenAI->Reset();
     }
@@ -141,10 +142,12 @@ bool QuestAccept_npc_chicken_cluck(Player* pPlayer, Creature* pCreature, const Q
     return true;
 }
 
-bool QuestComplete_npc_chicken_cluck(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
+bool QuestRewarded_npc_chicken_cluck(Player* pPlayer, Creature* pCreature, const Quest* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_CLUCK)
     {
+        pCreature->CastSpell(pCreature, 13563, false);
+        pCreature->PMonsterEmote("Chicken looks up at you quizzically. Maybe you should inspect it?");
         if (npc_chicken_cluckAI* pChickenAI = dynamic_cast<npc_chicken_cluckAI*>(pCreature->AI()))
             pChickenAI->Reset();
     }
@@ -2559,8 +2562,8 @@ void AddSC_random_scripts_0()
     newscript = new Script;
     newscript->Name = "npc_chicken_cluck";
     newscript->GetAI = &GetAI_npc_chicken_cluck;
-    newscript->pQuestAcceptNPC =   &QuestAccept_npc_chicken_cluck;
-    newscript->pQuestComplete = &QuestComplete_npc_chicken_cluck;
+    newscript->pQuestAcceptNPC = &QuestAccept_npc_chicken_cluck;
+    newscript->pQuestRewardedNPC = &QuestRewarded_npc_chicken_cluck;
     newscript->RegisterSelf();
 
     newscript = new Script;
