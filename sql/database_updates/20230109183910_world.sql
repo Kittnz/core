@@ -90,3 +90,8 @@ UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80709;
 UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80710;
 UPDATE `quest_template` SET `Method` = 1 WHERE `entry` = 80711;
 
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2645
+
+UPDATE `quest_template` SET `RewSpell` = 0, `RewSpellCast` = 0 WHERE `entry` = 3861;
+UPDATE `gameobject_template` SET `size` = 0.2 WHERE `entry` = 161513;
+UPDATE `creature_template` SET `script_name` = 'npc_chicken_cluck' WHERE `entry` = 620;
