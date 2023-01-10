@@ -3025,16 +3025,12 @@ bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender,
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->SetDisplayId(8011);
-        pPlayer->TeleportTo(1, 560.20F, -4576.21F, 142.0F, 4.08F);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-        pPlayer->CastSpell(pPlayer, 130, true);
-
         if (pPlayer->HasItemCount(6948, 1, 0))
         {
             pPlayer->DestroyItemCount(6948, 1, true);
             pPlayer->SaveInventoryAndGoldToDB();
         }
+        pPlayer->ActivateTaxiPathTo(1619, 0, true); // Weeeee!
     }
     return true;
 }
@@ -3207,7 +3203,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             creature->MonsterSayToPlayer("Alright, I'll be honest with you guys: The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
         });
 
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -3221,7 +3217,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
         });
 
 
-        DoAfterTime(pPlayer, 17 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -3235,7 +3231,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
         });
 
 
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -3244,10 +3240,12 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             if (!creature)
                 return;
 
+            creature->SetWalk(true);
+            creature->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.7F);
             creature->MonsterTextEmote("Nert Blastentom smiles.");
         });
 
-        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -3259,20 +3257,7 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
             creature->MonsterSayToPlayer("Hope you've all been practicing your zug-zugs, because we're going to Durotar. Everybody get in the plane!", player);
         });
 
-        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
-        {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->SetWalk(true);
-            creature->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.7F);
-        });
-
-        DoAfterTime(pPlayer, 50 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 35 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
