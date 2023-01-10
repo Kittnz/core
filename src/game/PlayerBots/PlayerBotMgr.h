@@ -140,6 +140,8 @@ class PlayerBotMgr
         bool m_useWorldBotLoader = false;
         void WorldBotLoadAreaPOI();
 
+        ShortTimeTracker m_BotBalanceTimer;
+
     protected:
         // How long since last update?
         uint32 m_elapsedTime;

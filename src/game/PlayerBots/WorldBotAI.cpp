@@ -810,7 +810,8 @@ void WorldBotAI::UpdateWaypointMovement()
             return;
 
     // Handle task destination
-    TaskDestination();
+    if (TaskDestination())
+        return;
 
     // normal pathing
     if (StartNewPathFromBeginning())
@@ -2234,10 +2235,11 @@ void WorldBotAI::HandleWorldChat(Player* me, uint32 type, uint32 guid1, uint32 g
 
 bool WorldBotAI::TaskDestination()
 {
+    bool succes = false;
     if (currentTaskID == TASK_EXPLORE)
     {
         if (hasPoiDestination)
-            return false;
+            succes = false;
         else
             SetExploreDestination();
 
@@ -2255,10 +2257,9 @@ bool WorldBotAI::TaskDestination()
         // debug
         sLog.outString("WorldBot: %s moving to poi: %s xyz: %f %f %f", me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
 
-        return true;
+        succes = true;
     }
-
-    return true;
+    return succes;
 }
 
 void WorldBotAI::SetExploreDestination()

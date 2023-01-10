@@ -41,6 +41,9 @@ PlayerBotMgr::PlayerBotMgr()
     m_elapsedTime = 0;
     m_lastBotsRefresh = 0;
     m_lastUpdate = 0;
+
+    // WorldBot Balancer
+    m_BotBalanceTimer.Reset(10000);
 }
 
 PlayerBotMgr::~PlayerBotMgr()
