@@ -30,35 +30,6 @@ bool GOHello_go_gauntlet_gate(Player* pPlayer, GameObject* pGo)
 }
 
 /*######
-## GOHello_go_entree_de_service
-######*/
-
-bool GOHello_go_entree_de_service(Player* pPlayer, GameObject* pGo)
-{
-    ScriptedInstance* pInstance = (ScriptedInstance*)pGo->GetInstanceData();
-
-    if (!pInstance)
-        return false;
-
-    if (pInstance->GetData(TYPE_BARON_RUN) != NOT_STARTED)
-        return false;
-
-    std::list<Creature*> listBarthilas;
-    GetCreatureListWithEntryInGrid(listBarthilas, pGo, 10435, 1000);
-    for (const auto pCreature : listBarthilas)
-    {
-        if (!pCreature->IsAlive())
-            continue;
-
-        pCreature->AI()->ReceiveEmote(pPlayer, 1000);
-        pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-    }
-    pGo->UseDoorOrButton(5);
-
-    return true;
-}
-
-/*######
 ## go_stratholme_postbox
 ######*/
 
@@ -679,6 +650,7 @@ struct npc_couloir_trigger1AI : public ScriptedAI
         CorridorEnded = false;
         ScourgeStarted = false;
         m_uiScourgeTimer = urand(10*MINUTE*IN_MILLISECONDS, 20*MINUTE*IN_MILLISECONDS);
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
@@ -762,6 +734,7 @@ struct npc_couloir_trigger2AI : public ScriptedAI
     void Reset() override
     {
         CorridorEnded = false;
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
@@ -797,6 +770,7 @@ struct npc_couloir_trigger3AI : public ScriptedAI
     void Reset() override
     {
         CorridorEnded = false;
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
@@ -836,6 +810,7 @@ struct npc_Scourge_TriggerAI : public ScriptedAI
     {
         m_uiScourgeTimer = urand(10*MINUTE*IN_MILLISECONDS, 20*MINUTE*IN_MILLISECONDS); // 15 - 30 mn urand(1000000, 1800000);
         ScourgeStarted = false;
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* who) override
@@ -948,11 +923,6 @@ void AddSC_stratholme()
     newscript = new Script;
     newscript->Name = "go_gauntlet_gate";
     newscript->pGOHello = &GOHello_go_gauntlet_gate;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_entree_de_service";
-    newscript->pGOHello = &GOHello_go_entree_de_service;
     newscript->RegisterSelf();
 
     newscript = new Script;

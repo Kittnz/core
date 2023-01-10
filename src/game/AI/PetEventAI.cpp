@@ -56,7 +56,7 @@ void PetEventAI::MoveInLineOfSight(Unit* pWho)
     if (m_creature->CanInitiateAttack() && pWho->IsTargetableBy(m_creature))
     {
         float const attackRadius = m_creature->GetAttackDistance(pWho);
-        if (m_creature->IsWithinDistInMap(pWho, attackRadius, true, false) && m_creature->IsHostileTo(pWho) &&
+        if (m_creature->IsWithinDistInMap(pWho, attackRadius, true, SizeFactor::None) && m_creature->IsHostileTo(pWho) &&
             pWho->IsInAccessablePlaceFor(m_creature) && m_creature->IsWithinLOSInMap(pWho))
             AttackStart(pWho);
     }
@@ -188,7 +188,7 @@ void PetEventAI::UpdateAI(uint32 const uiDiff)
         if (hasAliveOwner && m_creature->GetCharmInfo()->HasCommandState(COMMAND_FOLLOW) && !m_creature->HasUnitState(UNIT_STAT_FOLLOW))
         {
             m_creature->GetMotionMaster()->MoveFollow(m_creature->GetCharmerOrOwner(), PET_FOLLOW_DIST,
-                                                      m_creature->IsPet() && static_cast<Pet*>(m_creature)->getPetType() == MINI_PET ? MINI_PET_FOLLOW_ANGLE : PET_FOLLOW_ANGLE);
+                                                      m_creature->IsPet() ? static_cast<Pet*>(m_creature)->GetFollowAngle() : PET_FOLLOW_ANGLE);
             if (m_creature->GetCharmInfo())
                 m_creature->GetCharmInfo()->SetIsReturning(true);
         }     

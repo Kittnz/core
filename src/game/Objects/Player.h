@@ -704,6 +704,7 @@ enum PlayerLoginQueryIndex
     PLAYER_LOGIN_QUERY_LOADSPELLCOOLDOWNS,
     PLAYER_LOGIN_QUERY_LOADGUILD,
     PLAYER_LOGIN_QUERY_LOADBGDATA,
+    PLAYER_LOGIN_QUERY_LOADACCOUNTDATA,
     PLAYER_LOGIN_QUERY_LOADSKILLS,
     PLAYER_LOGIN_QUERY_LOADMAILS,
     PLAYER_LOGIN_QUERY_LOADMAILEDITEMS,
@@ -1195,7 +1196,7 @@ class Player final: public Unit
         bool BuyItemFromVendor(ObjectGuid vendorGuid, uint32 item, uint8 count, uint8 bag, uint8 slot);
         void OnReceivedItem(Item* item);
 
-        float GetReputationPriceDiscount(Creature const* pCreature) const;
+        float GetReputationPriceDiscount(Creature const* pCreature, bool taxi = false) const;
 
         Player* GetTrader() const { return m_trade ? m_trade->GetTrader() : nullptr; }
         TradeData* GetTradeData() const { return m_trade; }
@@ -1227,6 +1228,7 @@ class Player final: public Unit
         void SendNotifyLootItemRemoved(uint8 lootSlot) const;
         void SendNotifyLootMoneyRemoved() const;
         bool IsAllowedToLoot(Creature const* creature);
+        float GetMaxLootDistance(Unit const* pUnit) const;
 
         void SendEnchantmentLog(ObjectGuid casterGuid, uint32 itemId, uint32 spellId) const;
         void ApplyEnchantment(Item* item,EnchantmentSlot slot,bool apply, bool apply_dur = true, bool ignore_condition = false);
@@ -1468,7 +1470,7 @@ class Player final: public Unit
         void RemovePetActionBar();
 
         // Take possession of a new spawned creature
-        Creature* SummonPossessedMinion(uint32 creatureId, uint32 spellId, float x, float y, float z, float ang);
+        Creature* SummonPossessedMinion(uint32 creatureId, uint32 spellId, float x, float y, float z, float ang, uint32 duration);
         void UnsummonPossessedMinion();
 
         uint32 m_stableSlots;
@@ -1488,7 +1490,7 @@ class Player final: public Unit
         void SetTemporaryUnsummonedPetNumber(uint32 petNumber) { m_temporaryUnsummonedPetNumber = petNumber; }
         void UnsummonPetTemporaryIfAny();
         void ResummonPetTemporaryUnSummonedIfAny();
-        bool IsPetNeedBeTemporaryUnsummoned() const { return !IsInWorld() || !IsAlive() || IsMounted() /*+in flight*/; }
+        bool IsPetNeedBeTemporaryUnsummoned() const;
         
         /*********************************************************/
         /***                   SPELL SYSTEM                    ***/
@@ -1518,6 +1520,7 @@ class Player final: public Unit
         void LearnQuestRewardedSpells();
         void LearnQuestRewardedSpells(Quest const* quest);
         void LearnSpellHighRank(uint32 spellid);
+        uint32 GetSpellRank(SpellEntry const* spellInfo) const final;
 
         void CastItemCombatSpell(Unit* Target, WeaponAttackType attType);
         void CastItemUseSpell(Item* item, SpellCastTargets const& targets);
@@ -1573,8 +1576,6 @@ class Player final: public Unit
                     ++spellCDItr;
             }
         }
-        
-        uint32 m_castingSpell; // Last spell cast by client, or combo points if player is rogue
 
         /*********************************************************/
         /***                   TALENT SYSTEM                   ***/
@@ -1835,6 +1836,8 @@ class Player final: public Unit
         float  m_summon_z;
 
         Camera m_camera;
+        ObjectGuid m_pendingCameraUpdate;
+        uint32 m_cameraUpdateTimer;
         float m_longSightRange;
         uint32 m_longSightSpell;
 
@@ -1856,7 +1859,7 @@ class Player final: public Unit
         void UpdateZoneDependentAuras();
         void UpdateAreaDependentAuras();                    // subzones
         void UpdateTerainEnvironmentFlags();
-        void CheckAreaExploreAndOutdoor(void);
+        void CheckAreaExploreAndOutdoor();
     public:
         void AddToWorld() override;
         void RemoveFromWorld() override;
@@ -1920,6 +1923,7 @@ class Player final: public Unit
         bool IsNextRelocationIgnored() const { return m_bNextRelocationsIgnored ? true : false; }
         void SetNextRelocationsIgnoredCount(uint32 count) { m_bNextRelocationsIgnored = count; }
         void DoIgnoreRelocation() { if (m_bNextRelocationsIgnored) --m_bNextRelocationsIgnored; }
+        bool IsOutdoorOnTransport() const;
 
         ObjectGuid const& GetFarSightGuid() const { return GetGuidValue(PLAYER_FARSIGHT); }
 
@@ -1950,9 +1954,10 @@ class Player final: public Unit
         void UpdateVisibilityOf(WorldObject const* viewPoint, WorldObject* target);
         template<class T>
         void UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateData& data, std::set<WorldObject*>& visibleNow);
-        void BeforeVisibilityDestroy(Creature* creature);
+        void LeaveCombatWithFarAwayCreatures();
 
         Camera& GetCamera() { return m_camera; }
+        void ScheduleCameraUpdate(ObjectGuid guid);
 
         uint32 GetLongSight() const { return m_longSightSpell; }
         void SetLongSight(Aura const* aura = nullptr);
@@ -2032,13 +2037,13 @@ class Player final: public Unit
         void FreezeMirrorTimers(bool state);
         void UpdateMirrorTimers(uint32 diff, bool send = true);
 
-        inline bool CheckMirrorTimerActivation(MirrorTimer::Type timer) const;
-        inline bool CheckMirrorTimerDeactivation(MirrorTimer::Type timer) const;
+        bool CheckMirrorTimerActivation(MirrorTimer::Type timer) const;
+        bool CheckMirrorTimerDeactivation(MirrorTimer::Type timer) const;
 
-        inline void OnMirrorTimerExpirationPulse(MirrorTimer::Type timer);
+        void OnMirrorTimerExpirationPulse(MirrorTimer::Type timer);
 
-        inline uint32 GetMirrorTimerMaxDuration(MirrorTimer::Type timer) const;
-        inline SpellAuraHolder const* GetMirrorTimerBuff(MirrorTimer::Type timer) const;
+        uint32 GetMirrorTimerMaxDuration(MirrorTimer::Type timer) const;
+        SpellAuraHolder const* GetMirrorTimerBuff(MirrorTimer::Type timer) const;
     public:
         bool IsUnderwater() const override { return (m_environmentFlags & ENVIRONMENT_FLAG_UNDERWATER); }
         bool IsInWater() const override { return (m_environmentFlags & ENVIRONMENT_FLAG_IN_WATER); }
@@ -2097,7 +2102,7 @@ class Player final: public Unit
         void InitTaxiNodes() { m_taxi.InitTaxiNodes(GetRace(), GetLevel()); }
         bool ActivateTaxiPathTo(std::vector<uint32> const& nodes, Creature* npc = nullptr, uint32 spellid = 0, bool nocheck = false);
         bool ActivateTaxiPathTo(uint32 taxi_path_id, uint32 spellid = 0, bool nocheck = false);
-        void TaxiStepFinished();
+        void TaxiStepFinished(bool lastPointReached);
         void ContinueTaxiFlight();
 
         /*********************************************************/
@@ -2145,7 +2150,6 @@ class Player final: public Unit
         // Cannot be detected by creature (Should be tested in AI::MoveInLineOfSight)
         void SetCannotBeDetectedTimer(uint32 milliseconds) { m_cannotBeDetectedTimer = milliseconds; };
         bool CanBeDetected() const override { return m_cannotBeDetectedTimer <= 0; }
-        bool IsInCombatWithCreature(Creature const* pCreature);
 
         // PlayerAI management
         PlayerAI* i_AI;
@@ -2333,6 +2337,7 @@ class Player final: public Unit
     private:
         Team m_team;
         ReputationMgr  m_reputationMgr;
+        std::set<uint32> m_temporaryAtWarFactions;
     public:
         static Team TeamForRace(uint8 race);
         Team GetTeam() const final { return m_team; }
@@ -2346,6 +2351,8 @@ class Player final: public Unit
         void RewardReputation(Unit* pVictim, float rate);
         void RewardReputation(Quest const* pQuest);
         int32 CalculateReputationGain(ReputationSource source, int32 rep, int32 faction, uint32 creatureOrQuestLevel = 0, bool noAuraBonus = false);
+        void SetTemporaryAtWarWithFaction(uint32 factionId) { m_temporaryAtWarFactions.insert(factionId); }
+        void ClearTemporaryWarWithFactions();
 
         bool ChangeRace(uint8 newRace);
         bool ChangeItemsForRace(uint8 oldRace, uint8 newRace);
@@ -2422,6 +2429,7 @@ class Player final: public Unit
 
         static uint32 GetMinLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId);
         static uint32 GetMaxLevelForBattleGroundBracketId(BattleGroundBracketId bracket_id, BattleGroundTypeId bgTypeId);
+        static BattleGroundBracketId GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId, uint32 level);
         BattleGroundBracketId GetBattleGroundBracketIdFromLevel(BattleGroundTypeId bgTypeId) const;
 
         bool InBattleGroundQueue() const
@@ -2590,6 +2598,7 @@ class Player final: public Unit
         Group* m_groupInvite;
         uint32 m_groupUpdateMask;
         uint64 m_auraUpdateMask;
+        uint32 m_LFGAreaId;
     public:
         Group* GetGroupInvite() { return m_groupInvite; }
         void SetGroupInvite(Group* group) { m_groupInvite = group; }
@@ -2618,6 +2627,11 @@ class Player final: public Unit
 #if SUPPORTED_CLIENT_BUILD <= CLIENT_BUILD_1_8_4
         uint32 GetWhoListPartyStatus() const;
 #endif
+
+        // LFG
+        void SetLFGAreaId(uint32 areaId) { m_LFGAreaId = areaId; }
+        uint32 GetLFGAreaId() const { return m_LFGAreaId; }
+        bool IsInLFG() const { return m_LFGAreaId > 0; }
 
         // BattleGround Group System
         void SetBattleGroundRaid(Group* group, int8 subgroup = -1);

@@ -580,7 +580,7 @@ void SetByteValue(uint32& variable, uint8 offset, uint8 value)
 {
     if (offset > 4)
     {
-        sLog.outError("Utility::SetByteValue: wrong offset %u", offset);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Utility::SetByteValue: wrong offset %u", offset);
         return;
     }
 
@@ -595,7 +595,7 @@ void SetUInt16Value(uint32& variable, uint8 offset, uint16 value)
 {
     if (offset > 2)
     {
-        sLog.outError("Utility::SetUInt16Value: wrong offset %u", offset);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Utility::SetUInt16Value: wrong offset %u", offset);
         return;
     }
 
@@ -604,4 +604,21 @@ void SetUInt16Value(uint32& variable, uint8 offset, uint16 value)
         variable &= ~uint32(uint32(0xFFFF) << (offset * 16));
         variable |= uint32(uint32(value) << (offset * 16));
     }
+}
+
+std::string FlagsToString(uint32 flags, ValueToStringFunc getNameFunc)
+{
+    std::string names;
+    for (uint32 i = 0; i < 32; i++)
+    {
+        uint32 flag = 1 << i;
+        if (flags & flag)
+        {
+            if (!names.empty())
+                names += ", ";
+
+            names += getNameFunc(flag);
+        }
+    }
+    return names;
 }

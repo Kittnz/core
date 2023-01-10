@@ -162,9 +162,9 @@ class Creature : public Unit
         bool CanSwim() const override { return IsPet() || GetCreatureInfo()->inhabit_type & INHABIT_WATER; }
         bool CanFly()  const override { return !IsPet() && GetCreatureInfo()->inhabit_type & INHABIT_AIR; }
 
-        void SetReactState(ReactStates st) { m_reactState = st; }
-        ReactStates GetReactState() const { return m_reactState; }
-        bool HasReactState(ReactStates state) const { return (m_reactState == state); }
+        void SetCreatureReactState(ReactStates st) { m_reactState = st; }
+        ReactStates GetCreatureReactState() const { return m_reactState; }
+        bool HasCreatureReactState(ReactStates state) const { return (m_reactState == state); }
         void InitializeReactState();
 
         bool IsTrainerOf(Player* player, bool msg) const;
@@ -222,7 +222,7 @@ class Creature : public Unit
 
         void LockOutSpells(SpellSchoolMask schoolMask, uint32 duration) final;
         void AddCooldown(SpellEntry const& spellEntry, ItemPrototype const* itemProto = nullptr, bool permanent = false, uint32 forcedDuration = 0) final;
-
+        void StartCooldownForSummoner();
         bool UpdateEntry(uint32 entry, CreatureData const* data = nullptr, GameEventCreatureData const* eventData = nullptr, bool preserveHPAndPower = true);
 
         void ApplyGameEventSpells(GameEventCreatureData const* eventData, bool activated);
@@ -265,7 +265,7 @@ class Creature : public Unit
         void SetDeathState(DeathState s) override;                   // overwrite virtual Unit::SetDeathState
         bool FallGround();
 
-        bool LoadFromDB(uint32 guid, Map* map);
+        bool LoadFromDB(uint32 guid, Map* map, bool force = false);
         void SaveToDB();
                                                             // overwrited in Pet
         virtual void SaveToDB(uint32 mapid);
@@ -342,8 +342,8 @@ class Creature : public Unit
         void RemoveCorpse();
         bool IsDeadByDefault() const;
 
-        void ForcedDespawn(uint32 timeMSToDespawn = 0);
-        void DespawnOrUnsummon(uint32 msTimeToDespawn = 0);
+        void ForcedDespawn(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
+        void DespawnOrUnsummon(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
 
         time_t const& GetRespawnTime() const { return m_respawnTime; }
         time_t GetRespawnTimeEx() const;
@@ -475,6 +475,13 @@ class Creature : public Unit
         void GetSummonPoint(float &fX, float &fY, float &fZ, float &fOrient) const { fX = m_summonPos.x; fY = m_summonPos.y; fZ = m_summonPos.z; fOrient = m_summonPos.o; }
 
         void SetNoXP() { AddUnitState(UNIT_STAT_NO_KILL_REWARD); }
+        void EnableMoveInLosEvent()
+        {
+            if (HasUnitState(UNIT_STAT_NO_SEARCH_FOR_OTHERS))
+                ClearUnitState(UNIT_STAT_NO_SEARCH_FOR_OTHERS);
+            if (!HasUnitState(UNIT_STAT_AI_USES_MOVE_IN_LOS))
+                AddUnitState(UNIT_STAT_AI_USES_MOVE_IN_LOS);
+        }
 
         void SetFactionTemporary(uint32 factionId, uint32 tempFactionFlags = TEMPFACTION_ALL);
         void ClearTemporaryFaction();
@@ -500,7 +507,7 @@ class Creature : public Unit
         void SetTempPacified(uint32 timer)  { if (m_pacifiedTimer < timer) m_pacifiedTimer = timer; }
         uint32 GetTempPacifiedTimer() const { return m_pacifiedTimer; }
         uint32 m_pacifiedTimer;
-        uint32 m_manaRegen;
+        float m_manaRegen;
 
         void RegenerateHealth();
         void RegenerateMana();
@@ -674,11 +681,12 @@ class AssistDelayEvent : public BasicEvent
 class ForcedDespawnDelayEvent : public BasicEvent
 {
     public:
-        explicit ForcedDespawnDelayEvent(Creature& owner) : BasicEvent(), m_owner(owner) { }
+        explicit ForcedDespawnDelayEvent(Creature& owner, uint32 secsTimeToRespawn = 0) : BasicEvent(), m_owner(owner), m_secsTimeToRespawn(secsTimeToRespawn) { }
         bool Execute(uint64 e_time, uint32 p_time) override;
 
     private:
         Creature& m_owner;
+        uint32 m_secsTimeToRespawn;
 };
 
 class TargetedEmoteEvent : public BasicEvent

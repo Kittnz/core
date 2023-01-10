@@ -62,7 +62,8 @@ enum MovementChangeType
 #define ATTACK_DISPLAY_DELAY 200
 
 // For this time difference is computed regen value
-#define REGEN_TIME_FULL     2000
+#define REGEN_TIME_PLAYER_FULL     2000
+#define REGEN_TIME_CREATURE_FULL   5000
 
 #define UNIT_PVP_COMBAT_TIMER 5500
 
@@ -334,12 +335,15 @@ enum UnitState
     UNIT_STAT_FLYING_ALLOWED        = 0x00400000,               // has gm fly mode enabled
 
     // High-level states
-    UNIT_STAT_NO_COMBAT_MOVEMENT = 0x01000000,
-    UNIT_STAT_RUNNING            = 0x02000000,
-    UNIT_STAT_IGNORE_MOVE_LOS    = 0x04000000,
+    UNIT_STAT_RUNNING            = 0x00800000,
 
-    UNIT_STAT_ALLOW_INCOMPLETE_PATH = 0x08000000, // allow movement with incomplete or partial paths
-    UNIT_STAT_ALLOW_LOS_ATTACK      = 0x10000000, // allow melee attacks without LoS
+    UNIT_STAT_ALLOW_INCOMPLETE_PATH = 0x01000000, // allow movement with incomplete or partial paths
+    UNIT_STAT_ALLOW_LOS_ATTACK      = 0x02000000, // allow melee attacks without LoS
+
+    UNIT_STAT_NO_SEARCH_FOR_OTHERS   = 0x04000000, // MoveInLineOfSight will not be called
+    UNIT_STAT_NO_BROADCAST_TO_OTHERS = 0x08000000, // ScheduleAINotify will not be called
+    UNIT_STAT_AI_USES_MOVE_IN_LOS    = 0x10000000, // AI overrides MoveInLineOfSight so always search for others
+
     // masks (only for check)
 
     // can't move currently
@@ -370,8 +374,72 @@ enum UnitState
     UNIT_STAT_MOVING          = UNIT_STAT_ROAMING_MOVE | UNIT_STAT_CHASE_MOVE | UNIT_STAT_FOLLOW_MOVE | UNIT_STAT_FLEEING_MOVE,
 
     UNIT_STAT_ALL_STATE       = 0xFFFFFFFF,
-    UNIT_STAT_ALL_DYN_STATES  = UNIT_STAT_ALL_STATE & ~(UNIT_STAT_NO_COMBAT_MOVEMENT | UNIT_STAT_RUNNING | UNIT_STAT_IGNORE_PATHFINDING),
+    UNIT_STAT_ALL_DYN_STATES  = UNIT_STAT_ALL_STATE & ~(UNIT_STAT_RUNNING | UNIT_STAT_IGNORE_PATHFINDING | UNIT_STAT_NO_SEARCH_FOR_OTHERS | UNIT_STAT_NO_BROADCAST_TO_OTHERS | UNIT_STAT_AI_USES_MOVE_IN_LOS),
 };
+
+static char const* UnitStateToString(uint32 state)
+{
+    switch (state)
+    {
+        case UNIT_STAT_MELEE_ATTACKING:
+            return "Melee Attacking";
+        case UNIT_STAT_NO_KILL_REWARD:
+            return "No Kill Reward";
+        case UNIT_STAT_FEIGN_DEATH:
+            return "Feign Death";
+        case UNIT_STAT_STUNNED:
+            return "Stunned";
+        case UNIT_STAT_ROOT:
+            return "Root";
+        case UNIT_STAT_ISOLATED:
+            return "Isolated";
+        case UNIT_STAT_POSSESSED:
+            return "Possessed";
+        case UNIT_STAT_TAXI_FLIGHT:
+            return "Taxi Flight";
+        case UNIT_STAT_DISTRACTED:
+            return "Distracted";
+        case UNIT_STAT_CONFUSED:
+            return "Confused";
+        case UNIT_STAT_ROAMING:
+            return "Roaming";
+        case UNIT_STAT_ROAMING_MOVE:
+            return "Roaming Move";
+        case UNIT_STAT_CHASE:
+            return "Chase";
+        case UNIT_STAT_CHASE_MOVE:
+            return "Chase Move";
+        case UNIT_STAT_FOLLOW:
+            return "Follow";
+        case UNIT_STAT_FOLLOW_MOVE:
+            return "Follow Move";
+        case UNIT_STAT_FLEEING:
+            return "Fleeing";
+        case UNIT_STAT_FLEEING_MOVE:
+            return "Fleeing Move";
+        case UNIT_STAT_IGNORE_PATHFINDING:
+            return "Ignore Pathfinding";
+        case UNIT_STAT_PENDING_ROOT:
+            return "Pending Root";
+        case UNIT_STAT_PENDING_STUNNED:
+            return "Pending Stunned";
+        case UNIT_STAT_FLYING_ALLOWED:
+            return "Flying Allowed";
+        case UNIT_STAT_RUNNING:
+            return "Running";
+        case UNIT_STAT_ALLOW_INCOMPLETE_PATH:
+            return "Allow Incomplete Path";
+        case UNIT_STAT_ALLOW_LOS_ATTACK:
+            return "Allow LoS Attack";
+        case UNIT_STAT_NO_SEARCH_FOR_OTHERS:
+            return "No Search for Others";
+        case UNIT_STAT_NO_BROADCAST_TO_OTHERS:
+            return "No Broadcast to Others";
+        case UNIT_STAT_AI_USES_MOVE_IN_LOS:
+            return "AI Uses Move in LoS";
+    }
+    return "UNKNOWN";
+}
 
 enum UnitVisibility
 {
@@ -496,6 +564,22 @@ enum CommandStates
     COMMAND_DISMISS = 3
 };
 
+inline char const* CommandStateToString(uint32 commandState)
+{
+    switch (commandState)
+    {
+        case COMMAND_STAY:
+            return "Stay";
+        case COMMAND_FOLLOW:
+            return "Follow";
+        case COMMAND_ATTACK:
+            return "Attack";
+        case COMMAND_DISMISS:
+            return "Dismiss";
+    }
+    return "UNKNOWN";
+}
+
 enum ActionBarIndex
 {
     ACTION_BAR_INDEX_START = 0,
@@ -550,7 +634,6 @@ enum UnitDebugFlags
     DEBUG_DR                    = 0x10,
     DEBUG_CHEAT                 = 0x20,
     DEBUG_PROCS                 = 0x40,
-    DEBUG_SPELLS_DAMAGE         = 0x80,
 };
 
 
