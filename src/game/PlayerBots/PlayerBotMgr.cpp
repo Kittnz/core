@@ -2101,11 +2101,11 @@ bool ChatHandler::HandleWorldBotPathPointAddCommand(char* args)
 
 void PlayerBotMgr::WorldBotLoader()
 {
-    sLog.outString("[WorldBotLoader] Loading Bots from character db...");
+    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[WorldBotLoader] Loading Bots from character db...");
     QueryResult* result = CharacterDatabase.PQuery("SELECT guid, account, name, race, class, position_x, position_y, position_z, map, orientation FROM characters WHERE is_worldbot = 1 and virtual_player_realm = 721682444");
     if (!result)
     {
-        sLog.outString("Table `character` is empty.");
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `character` is empty.");
     }
     else
     {
@@ -2180,7 +2180,7 @@ void PlayerBotMgr::WorldBotCreator()
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        sLog.outString("WorldBot:  Add horde bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot:  Add horde bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
         worldBotHordeCount++;
     }
 
@@ -2191,11 +2191,11 @@ void PlayerBotMgr::WorldBotCreator()
             break;
 
         WorldBotAdd(b.guid, b.account, b.race, b.class_, b.pos_x, b.pos_y, b.pos_z, b.orientation, b.map);
-        sLog.outString("WorldBot:  Add alliance bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot:  Add alliance bot %s with guid: %u  account: %u", b.name.c_str(), b.guid, b.account);
         worldBotAllianceCount++;
     }
 
-    sLog.outString("WorldBot:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
+    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot:  Loaded %u horde bots and %u alliance bots", worldBotHordeCount, worldBotAllianceCount);
 }
 
 bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 class_, float pos_x, float pos_y, float pos_z, float orientation, uint32 map)
@@ -2209,7 +2209,7 @@ bool PlayerBotMgr::WorldBotAdd(uint32 guid, uint32 account, uint32 race, uint32 
 
     if (!accountId)
     {
-        sLog.outString("Player account %u not found ...", guid);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Player account %u not found ...", guid);
         return false;
     }
 
@@ -2262,11 +2262,11 @@ void PlayerBotMgr::WorldBotBalancer()
 
 void PlayerBotMgr::WorldBotLoadAreaPOI()
 {
-    sLog.outString("[WorldBot POI] Loading poi's from db...");
+    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "[WorldBot POI] Loading poi's from db...");
     QueryResult* result = WorldDatabase.PQuery("SELECT ID, Importance, X, Y, Z, ContinentID, Flags, AreaID, Name_enUS FROM `worldbot_areapoi`");
     if (!result)
     {
-        sLog.outString("Table `worldbot_areapoi` is empty.");
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Table `worldbot_areapoi` is empty.");
     }
     else
     {

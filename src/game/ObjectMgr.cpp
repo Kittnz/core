@@ -11762,13 +11762,13 @@ void ObjectMgr::ApplyPremadeSpecTemplateToPlayerWorldBot(uint32 entry, Player* p
     auto itr = m_playerPremadeSpecMap.find(entry);
     if (itr == m_playerPremadeSpecMap.end())
     {
-        sLog.outError("Attempt to apply non-existent premade template to player (%u)", entry);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to apply non-existent premade template to player (%u)", entry);
         return;
     }
 
     if (pPlayer->GetClass() != itr->second.requiredClass)
     {
-        sLog.outError("Attempt to apply premade template (%u) to a player with wrong class", entry);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "Attempt to apply premade template (%u) to a player with wrong class", entry);
         return;
     }
 

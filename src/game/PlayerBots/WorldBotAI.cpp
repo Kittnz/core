@@ -601,7 +601,7 @@ void WorldBotAI::SendFakePacket(uint16 opcode)
                     data << uint32(529);
                     break;
                 default:
-                    sLog.outError("WorldBot: Invalid BG queue type!");
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: Invalid BG queue type!");
                     botEntry->requestRemoval = true;
                     return;
             }
@@ -1175,7 +1175,7 @@ void WorldBotAI::UpdateAI(uint32 const diff)
                     ChatHandler(me).HandleGoArathiCommand("");
                     break;
                 default:
-                    sLog.outError("WorldBot: Invalid BG queue type!");
+                    sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: Invalid BG queue type!");
                     //botEntry->requestRemoval = true;
                     m_isBattleBot = false;
                     return;
@@ -1571,7 +1571,7 @@ void WorldBotAI::LoadBotChat()
     }
     else
     {
-        sLog.outError("WorldBot: unable to load chat.");
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: unable to load chat.");
         return;
     }
 
@@ -2255,7 +2255,7 @@ bool WorldBotAI::TaskDestination()
         hasPoiDestination = true;
             
         // debug
-        sLog.outString("WorldBot: %s moving to poi: %s xyz: %f %f %f", me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: %s moving to poi: %s xyz: %f %f %f", me->GetName(), DestName.c_str(), DestCoordinatesX, DestCoordinatesY, DestCoordinatesZ);
 
         succes = true;
     }

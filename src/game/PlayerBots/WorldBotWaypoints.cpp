@@ -609,7 +609,7 @@ void WorldBotAI::LoadDBWaypoints()
     }
     else
     {
-        sLog.outError("WorldBot: unable to load worldbot waypoints.");
+        sLog.Out(LOG_BASIC, LOG_LVL_ERROR, "WorldBot: unable to load worldbot waypoints.");
         return;
     }
 
