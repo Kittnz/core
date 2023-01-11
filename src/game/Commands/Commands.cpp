@@ -14321,6 +14321,7 @@ bool ChatHandler::HandleCartographerCommand(char* args)
     }
 
     uint32 count = 0;
+    uint32 lastUnexploredFlag = 0;
     uint32 const* fullExploreMask = sObjectMgr.GetCartographerExplorationMask();
     for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
     {
@@ -14328,11 +14329,22 @@ bool ChatHandler::HandleCartographerCommand(char* args)
         {
             uint32 flag = 1 << j;
             if ((fullExploreMask[i] & flag) && !pPlayer->HasFlag(PLAYER_EXPLORED_ZONES_1 + i, flag))
+            {
                 count++;
+                lastUnexploredFlag = (i * 32) + j;
+            }
         }
     }
     
-    PSendSysMessage("You have %u areas left to explore.", count);
+    if (count)
+    {
+        PSendSysMessage("You have %u areas left to explore.", count);
+        if (AreaEntry const* pAreaEntry = sObjectMgr.GetAreaEntryByExploreFlag(lastUnexploredFlag))
+            PSendSysMessage("Next: %s", pAreaEntry->Name);
+    }
+    else
+        SendSysMessage("You have explored all areas.");
+       
     return true;
 }
 

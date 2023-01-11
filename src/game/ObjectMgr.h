@@ -1144,6 +1144,7 @@ class ObjectMgr
             return &itr->second;
         }
         AreaEntry const* GetAreaEntryByName(std::string const& name) const;
+        AreaEntry const* GetAreaEntryByExploreFlag(uint32 flag) const;
         uint32 const* GetCartographerExplorationMask() const { return m_cartographerExploreMask; }
 
         GameObjectDataPair const* GetGODataPair(uint32 guid) const
