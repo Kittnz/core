@@ -6727,21 +6727,19 @@ void Player::CheckAreaExploreAndOutdoor()
         const auto *p = AreaEntry::GetByAreaFlagAndMap(areaFlag, GetMapId());
         if (!p)
             sLog.outError("PLAYER: Player %u discovered unknown area (x: %f y: %f map: %u", GetGUIDLow(), GetPositionX(), GetPositionY(), GetMapId());
-        else if (p->AreaLevel > 0)
+        else
         {
             GetSession()->GetAntiCheat()->OnExplore(p);
             //GetCheatData()->OnExplore(p);
             uint32 area = p->Id;
-            // if (GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
-            // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
-            if ((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, false)) || !HasXPGainEnabled())
-                SendExplorationExperience(area, 0);
-            else
+            uint32 xp = 0;
+            if ((p->AreaLevel > 0) && !((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled()))
             {
+                // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
                 int32 diff = int32(GetLevel()) - p->AreaLevel;
-                uint32 XP = 0;
+
                 if (diff < -5)
-                    XP = uint32(sObjectMgr.GetBaseXP(GetLevel() + 5) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
+                    xp = uint32(sObjectMgr.GetBaseXP(GetLevel() + 5) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
                 else if (diff > 5)
                 {
                     int32 exploration_percent = (100 - ((diff - 5) * 5));
@@ -6750,17 +6748,19 @@ void Player::CheckAreaExploreAndOutdoor()
                     else if (exploration_percent < 0)
                         exploration_percent = 0;
 
-                    XP = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * exploration_percent / 100 * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
+                    xp = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * exploration_percent / 100 * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
                 }
                 else
-                    XP = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
+                    xp = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
 
                 if (HasChallenge(CHALLENGE_WAR_MODE))
-                    XP = XP + (XP * 0.3f);
+                    xp = xp + (xp * 0.3f);
 
-                GiveXP(XP, nullptr);
-                SendExplorationExperience(area, XP);
+                GiveXP(xp, nullptr);
             }
+
+            // Exploration packet should be sent even if no XP is gained.
+            SendExplorationExperience(area, xp);
             DETAIL_LOG("PLAYER: Player %u discovered a new area: %u", GetGUIDLow(), area);
         }
     }

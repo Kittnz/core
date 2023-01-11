@@ -8913,6 +8913,16 @@ AreaEntry const* ObjectMgr::GetAreaEntryByName(std::string const& name) const
     return pAlt;
 }
 
+AreaEntry const* ObjectMgr::GetAreaEntryByExploreFlag(uint32 flag) const
+{
+    for (auto itr = sAreaStorage.begin<AreaEntry>(); itr < sAreaStorage.end<AreaEntry>(); ++itr)
+    {
+        if (itr->ExploreFlag == flag)
+            return *itr;
+    }
+    return nullptr;
+}
+
 void ObjectMgr::LoadShop()
 {
 	m_ShopCategoriesMap.clear();
