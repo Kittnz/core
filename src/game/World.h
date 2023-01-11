@@ -1056,8 +1056,8 @@ class World
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
 
         // Shell Coin
-        void AddShellCoinOwner(ObjectGuid guid) { m_shellCoinOwners.insert(guid); }
-        void RemoveShellCoinOwner(ObjectGuid guid) { m_shellCoinOwners.erase(guid); }
+        void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
+        void RemoveShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.erase(guid); }
 
         //non-modifiable
         const AccountCacheData* FindAccountData(uint32 accountId) const
@@ -1136,6 +1136,7 @@ class World
         IntervalTimer m_timers[WUPDATE_COUNT];
         int32 m_lastShellCoinPrice = 0;
         ObjectGuidSet m_shellCoinOwners;
+        std::mutex m_shellcoinLock;
 
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;
