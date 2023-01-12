@@ -913,7 +913,7 @@ bool ChatHandler::HandleAddItemCommand(char* args)
         // Is the item actually?
         if (!plTarget->HasItemCount(itemId, -count, true))
         {
-            PSendSysMessage("Le joueur a l'objet %ux%u. Ne peut en retirer %u. Banque inclue.", itemId, plTarget->GetItemCount(itemId, true), -count);
+            PSendSysMessage("Player has %ux%u. Can take away %u. Bank included.", itemId, plTarget->GetItemCount(itemId, true), -count);
             SetSentErrorMessage(true);
             return false;
         }

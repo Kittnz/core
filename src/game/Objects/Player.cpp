@@ -11337,6 +11337,12 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
         {
             if (pItem && pItem->GetEntry() == item && !pItem->IsInTrade())
             {
+                if (pItem->IsBag() && !((Bag*)pItem)->IsEmpty())
+                {
+                    sLog.outError("Skipped attempt to delete non empty bag %u from %s.", item, GetName());
+                    continue;
+                }
+
                 if (pItem->GetCount() + remcount <= count)
                 {
                     if (!unequip_check || CanUnequipItem(INVENTORY_SLOT_BAG_0 << 8 | i, false) == EQUIP_ERR_OK)
