@@ -2346,6 +2346,9 @@ void Aura::HandleAuraFeatherFall(bool apply, bool Real)
         return;
 
     GetTarget()->SetFeatherFall(apply);
+
+    if (!apply && GetTarget()->GetTypeId() == TYPEID_PLAYER)
+        GetTarget()->ToPlayer()->SetFallInformation(0, GetTarget()->GetPositionZ());
 }
 
 void Aura::HandleAuraHover(bool apply, bool Real)
