@@ -7880,7 +7880,7 @@ void ObjectMgr::LoadGossipMenuItems()
         gMenuItem.box_text              = fields[12].GetCppString();
         gMenuItem.BoxBroadcastTextID    = fields[13].GetUInt32();
 
-        gMenuItem.conditionId           = fields[14].GetUInt16();
+        gMenuItem.conditionId           = fields[14].GetUInt32();
 
         if (gMenuItem.menu_id)                              // == 0 id is special and not have menu_id data
         {
