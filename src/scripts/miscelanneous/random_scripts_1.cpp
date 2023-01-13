@@ -4726,25 +4726,6 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
 
 bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(QUEST_YOUNG_AND_FOOLISH) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
-    {
-        switch (pCreature->GetEntry())
-        {
-        case 341: 
-            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[0] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
-        case 956:
-            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[1] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
-        case 344:
-            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[2] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
-        }
-    }
-
     if (pPlayer->GetQuestStatus(80721) == QUEST_STATUS_INCOMPLETE) // Grim News
         switch (pCreature->GetEntry())
         {
@@ -4778,22 +4759,6 @@ bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature
     {
         switch (pCreature->GetEntry())
         {
-        case 341: // Foreman Oslow
-            pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
-            pCreature->MonsterSayToPlayer("Yes. A caravan with men and women dressed in scarlet passed through here. Many of our young ones followed them.", pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            break;
-        case 956: // Dorin Songblade
-            pCreature->MonsterSayToPlayer("Aye, our young ones left with them. Can you blame them? Look at this place.", pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50666))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            break;
-        case 344: // Magistrate Solomon
-            pCreature->MonsterSayToPlayer("It\'s regrettable that our children left with those foolish zealots of the crusade in the middle of the night! Please, don\'t harm them. Send them back home to us.", pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            break;
         case 1515: // Executor Zygand
             pCreature->MonsterSayToPlayer("I don't know how you obtained that information but yes, some Scarlet Remnants attacked one of my Deathguard patrols, some never made it back and the others are in a deep sleep. Before falling into this weird slumber one of the guards said they were heading for the Monastery.", pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
@@ -4818,139 +4783,64 @@ bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature
     return true;
 }
 
-bool GossipHello_search_for_clues(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 0)
-    {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-    }
-    pPlayer->SEND_GOSSIP_MENU(51680, pCreature->GetGUID());
-    return true;
-}
-
-bool GOHello_search_for_clues(Player* pPlayer, GameObject* pGo)
-{
-    if (pGo->GetEntry() == 1000167 && pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 1)
-    {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-        pPlayer->SEND_GOSSIP_MENU(51681, pGo->GetGUID());
-        return true;
-    }
-    if (pGo->GetEntry() == 1000168)
-    {
-        if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] >= 2)
-        {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            if (!pPlayer->HasItemCount(53002, 1, 1))
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Take Scarlet Recruit\'s Insignia Ring.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(51682, pGo->GetGUID());
-            return true;
-        }
-        return false;
-    }
-    return true;
-}
-
-bool GOSelect_search_for_clues(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        if (pPlayer->AddItem(53002))
-        {
-            pPlayer->CLOSE_GOSSIP_MENU();
-            return true;
-        }
-    }
-    return false;
-}
-
-bool GossipHello_npc_kixxle(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[1] == 0 && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 3)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Were you the one to sell an oil canister to to a group of men dressed in scarlet?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-    if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
-
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_kixxle(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->MonsterSayToPlayer("Yea boss, I sure did. I\'m a merchant, you know. If I got it, I sell it.", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where did they go?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pCreature->MonsterSayToPlayer("They went North I guess, following in the footsteps of that dwarven caravan. One of them said they\'d wait by the bridge for an ambush or something. He didn\'t look like the sharpest tool in the shed, you get me?", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why didn\'t you stop them?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        pCreature->HandleEmote(EMOTE_ONESHOT_NO);
-        pCreature->MonsterSayToPlayer("You\'re joking, right, bub? There were like at least five of them!", pPlayer);
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50669))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-        pPlayer->CLOSE_GOSSIP_MENU();
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 10)
-        pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
-    return true;
-}
-
 struct npc_vladeus_springriverAI : public ScriptedAI
 {
-    npc_vladeus_springriverAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset()
+    npc_vladeus_springriverAI(Creature* c) : ScriptedAI(c)
     {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
+        Reset();
     }
-    void UpdateAI(const uint32 diff)
+
+    ShortTimeTracker m_despawnCheckTimer;
+
+    void Reset() override
     {
-        if (m_creature->GetHealthPercent() < 10)
+        m_despawnCheckTimer.Reset(5000);
+    }
+
+    void DamageTaken(Unit* pAttacker, uint32& damage) override
+    {
+        if ((int32(m_creature->GetHealth()) - int32(damage)) < m_creature->GetMaxHealth() * 0.1f)
         {
+            damage = 0;
+
+            m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+            for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+            {
+                Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+                if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
+                {
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+                        pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                }
+            }
+
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
         }
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
-        DoMeleeAttackIfReady();
     }
-    void EnterCombat()
-    {
-        m_creature->MonsterSay("For the Scarlet Crusade!");
-    }
-    void OnCombatStop()
-    {
-        m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
 
-        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    void UpdateAI(uint32 const diff) override
+    {
+        ScriptedAI::UpdateAI(diff);
+
+        m_despawnCheckTimer.Update(diff);
+        if (m_despawnCheckTimer.Passed())
         {
-            Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
-            if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
-            {
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
-                    pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-            }
+            m_despawnCheckTimer.Reset(5000);
+            if (!m_creature->IsInCombat() && !m_creature->FindNearestPlayer(VISIBILITY_DISTANCE_NORMAL))
+                m_creature->DespawnOrUnsummon();
         }
     }
-    void JustRespawned() { Reset(); }
+
+    void EnterCombat(Unit* pVictim) override
+    {
+        if (pVictim && pVictim->IsPlayer())
+            m_creature->MonsterSay("For the Scarlet Crusade!");
+    }
 };
 
 CreatureAI* GetAI_npc_vladeus_springriver(Creature* _Creature) { return new npc_vladeus_springriverAI(_Creature); }
@@ -5003,8 +4893,9 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
         if (Creature* prisoner = pPlayer->FindNearestCreature(50674, 30.0F))
         {
             prisoner->GetMotionMaster()->Clear();
-            prisoner->ForcedDespawn();
+            prisoner->DespawnOrUnsummon();
         }
+
         auto itr = std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid());
         if (itr != followed_units.end())
             followed_units.erase(itr);
@@ -7759,19 +7650,6 @@ void AddSC_random_scripts_1()
     newscript->pGossipHello = &GossipHello_npc_vladeus_springriver;
     newscript->pGossipSelect = &GossipSelect_npc_vladeus_springriver;
     newscript->GetAI = &GetAI_npc_vladeus_springriver;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_kixxle";
-    newscript->pGossipHello = &GossipHello_npc_kixxle;
-    newscript->pGossipSelect = &GossipSelect_npc_kixxle;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "search_for_clues";
-    newscript->pGossipHello = &GossipHello_search_for_clues;
-    newscript->pGOHello = &GOHello_search_for_clues;
-    newscript->pGOGossipSelect = &GOSelect_search_for_clues;
     newscript->RegisterSelf();
 
     newscript = new Script;

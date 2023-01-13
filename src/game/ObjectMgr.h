@@ -357,7 +357,7 @@ struct GossipMenuItems
     bool            box_coded;
     std::string     box_text;
     uint32          BoxBroadcastTextID;
-    uint16          conditionId;
+    uint32          conditionId;
 };
 
 struct GossipMenus
