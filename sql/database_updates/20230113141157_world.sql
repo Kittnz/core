@@ -108,7 +108,6 @@ INSERT INTO `generic_scripts` (`id`, `delay`, `priority`, `command`, `datalong`,
 (9097401, 0, 2, 10, 50673, 60000, 5, 30, 0, 0, 0, 0, 8, 0, 0, 1, -2457.73, -2493.79, 78.508, 4.19, 0, 'Thandol Span Attack Trigger - Summon Creature Scarlet Recruit 2'),
 (9097401, 10, 0, 10, 50673, 60000, 5, 30, 0, 0, 0, 0, 8, 0, 0, 1, -2456.98, -2512.89, 78.508, 2.13, 0, 'Thandol Span Attack Trigger - Summon Creature Scarlet Recruit 3'),
 (9097401, 10, 1, 10, 50673, 60000, 5, 30, 0, 0, 0, 0, 8, 0, 0, 1, -2457.73, -2493.79, 78.508, 4.19, 0, 'Thandol Span Attack Trigger - Summon Creature Scarlet Recruit 4'),
-(9097401, 25, 0, 8, 50670, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 'Thandol Span Attack Trigger - Give Kill Credit if Alive'),
 (9097401, 25, 0, 10, 50674, 3600000, 1, 10, 0, 0, 0, 0, 8, 0, -1, 1, -2457.73, -2493.79, 78.508, 4.19, 116, 'Thandol Span Attack Trigger - Summon Creature Vladeus Springriver');
 DELETE FROM `creature_ai_scripts` WHERE `id` IN (9097402, 9097403);
 DELETE FROM `creature_ai_events` WHERE `creature_id`=90974;
