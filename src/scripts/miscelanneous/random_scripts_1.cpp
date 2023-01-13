@@ -4818,7 +4818,6 @@ struct npc_vladeus_springriverAI : public ScriptedAI
             }
 
             m_creature->CombatStop(true);
-            m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
         }
     }
