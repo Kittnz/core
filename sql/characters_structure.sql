@@ -1335,3 +1335,30 @@ CREATE TABLE `worldstates`  (
 ) ENGINE = MyISAM CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+DROP TABLE IF EXISTS `guild_house`;
+CREATE TABLE `guild_house`  (
+  `guild_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Identifier',
+  `map_id` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
+  `position_x` float NOT NULL DEFAULT 0,
+  `position_y` float NOT NULL DEFAULT 0,
+  `position_z` float NOT NULL DEFAULT 0,
+  `orientation` float NOT NULL DEFAULT 0,
+  PRIMARY KEY (`guild_id`) USING BTREE
+) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Teleportation coordinates for Guild Housing' ROW_FORMAT = FIXED;
+
+CREATE TABLE IF NOT EXISTS `logs_shellcoin` (
+  `time` bigint(20) NOT NULL DEFAULT '0',
+  `count` int(11) NOT NULL DEFAULT '0',
+  `price` int(11) NOT NULL DEFAULT '0',
+  KEY `time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+DROP TABLE IF EXISTS `character_destroyed_items`;
+CREATE TABLE IF NOT EXISTS `character_destroyed_items` (
+  `player_guid` int(10) unsigned NOT NULL,
+  `item_entry` mediumint(8) unsigned NOT NULL,
+  `stack_count` mediumint(8) unsigned NOT NULL,
+  `time` bigint(20) unsigned NOT NULL,
+  KEY `player_guid` (`player_guid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='items that players have thrown away';
