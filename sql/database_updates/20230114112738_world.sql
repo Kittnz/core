@@ -7,3 +7,6 @@ DELETE FROM creature_movement WHERE id=2573974;
 DELETE FROM game_event_creature WHERE guid=2573974;
 DELETE FROM game_event_creature_data WHERE guid=2573974;
 DELETE FROM creature_battleground WHERE guid=2573974;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `gameobject` VALUES ( 5011249, 3000282, 532, -11035.1, -1970.35, 96.3176, 6.19198, 0, 0, 0.0455862, -0.99896, 300, 300, 100, 1, 0, 0);
