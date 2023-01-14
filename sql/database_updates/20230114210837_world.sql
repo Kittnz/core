@@ -183,3 +183,14 @@ DELETE FROM creature_movement WHERE id=2574016;
 DELETE FROM game_event_creature WHERE guid=2574016;
 DELETE FROM game_event_creature_data WHERE guid=2574016;
 DELETE FROM creature_battleground WHERE guid=2574016;
+
+-- Changes by DRAGUNOVI
+REPLACE INTO `creature` VALUES (2574031,3531,0,0,0,532,-10987.4,-1910.41,78.8691,3.05984,120,120,0,100,100,0,0,0);
+
+-- Changes by SHANG
+DELETE FROM creature WHERE guid=2574031;
+DELETE FROM creature_addon WHERE guid=2574031;
+DELETE FROM creature_movement WHERE id=2574031;
+DELETE FROM game_event_creature WHERE guid=2574031;
+DELETE FROM game_event_creature_data WHERE guid=2574031;
+DELETE FROM creature_battleground WHERE guid=2574031;
