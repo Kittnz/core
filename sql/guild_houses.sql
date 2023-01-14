@@ -1,15 +1,3 @@
-DROP TABLE IF EXISTS `guild_house`;
-CREATE TABLE `guild_house`  (
-  `guild_id` mediumint(8) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Identifier',
-  `map_id` smallint(5) UNSIGNED NOT NULL DEFAULT 0,
-  `position_x` float NOT NULL DEFAULT 0,
-  `position_y` float NOT NULL DEFAULT 0,
-  `position_z` float NOT NULL DEFAULT 0,
-  `orientation` float NOT NULL DEFAULT 0,
-  PRIMARY KEY (`guild_id`) USING BTREE
-) ENGINE = MyISAM CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Teleportation coordinates for Guild Housing' ROW_FORMAT = FIXED;
-
-
 REPLACE INTO `guild_house` VALUES 
 (189, 1, 7301.3, -1523.8, 179.8, 1.4),     -- Rush'n Attack                     
 (172, 1, -3134.49, 2415.03, 253.12, 5.5),  -- Traveler
