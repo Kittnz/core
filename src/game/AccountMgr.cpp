@@ -203,6 +203,7 @@ void AccountMgr::Load()
 
     LoadAccountBanList();
     LoadIPBanList();
+    LoadFingerprintBanList();
 }
 
 AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
@@ -353,7 +354,27 @@ void AccountMgr::LoadAccountBanList(bool silent)
             unbandate = 0xFFFFFFFF;
         m_accountBanned[fields[0].GetUInt32()] = unbandate;
     } while (banresult->NextRow());
+}
 
+void AccountMgr::LoadFingerprintBanList(bool silent)
+{
+    std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `fingerprint`, `unbandate`, `bandate` FROM `fingerprint_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
+
+    if (!banresult)
+    {
+        return;
+    }
+
+    m_fingerprintBanned.clear();
+    do
+    {
+        Field* fields = banresult->Fetch();
+        uint32 unbandate = fields[1].GetUInt32();
+        uint32 bandate = fields[2].GetUInt32();
+        if (unbandate == bandate)
+            unbandate = 0xFFFFFFFF;
+        m_fingerprintBanned[fields[0].GetUInt32()] = unbandate;
+    } while (banresult->NextRow());
 }
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const
@@ -367,6 +388,12 @@ bool AccountMgr::IsAccountBanned(uint32 acc) const
 {
     std::map<uint32, uint32>::const_iterator it = m_accountBanned.find(acc);
     return !(it == m_accountBanned.end() || it->second < time(nullptr));
+}
+
+bool AccountMgr::IsFingerprintBanned(uint32 fingerprint) const
+{
+    std::map<uint32, uint32>::const_iterator it = m_fingerprintBanned.find(fingerprint);
+    return !(it == m_fingerprintBanned.end() || it->second < time(nullptr));
 }
 
 bool AccountMgr::CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 maxCount)
