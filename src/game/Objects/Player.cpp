@@ -17596,8 +17596,14 @@ void Player::Say(std::string const& text, const uint32 language) const
 {
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_SAY, text.c_str(), Language(language), GetChatTag(), GetObjectGuid(), GetName());
-    float range = std::min(sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_SAY), GetYellRange());
-    SendMessageToSetInRange(&data, range, true);
+
+    if (GetSession()->IsFingerprintBanned())
+        GetSession()->SendPacket(&data);
+    else
+    {
+        float range = std::min(sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_SAY), GetYellRange());
+        SendMessageToSetInRange(&data, range, true);
+    }
 }
 
 float Player::GetYellRange() const
@@ -17618,14 +17624,22 @@ void Player::Yell(std::string const& text, const uint32 language) const
 {
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_YELL, text.c_str(), Language(language), GetChatTag(), GetObjectGuid(), GetName());
-    SendMessageToSetInRange(&data, GetYellRange(), true);
+
+    if (GetSession()->IsFingerprintBanned())
+        GetSession()->SendPacket(&data);
+    else
+        SendMessageToSetInRange(&data, GetYellRange(), true);
 }
 
 void Player::TextEmote(std::string const& text) const
 {
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_EMOTE, text.c_str(), LANG_UNIVERSAL, GetChatTag(), GetObjectGuid(), GetName());
-    SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true, !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT));
+    
+    if (GetSession()->IsFingerprintBanned())
+        GetSession()->SendPacket(&data);
+    else
+        SendMessageToSetInRange(&data, sWorld.getConfig(CONFIG_FLOAT_LISTEN_RANGE_TEXTEMOTE), true, !sWorld.getConfig(CONFIG_BOOL_ALLOW_TWO_SIDE_INTERACTION_CHAT));
 }
 
 void Player::PetSpellInitialize()
