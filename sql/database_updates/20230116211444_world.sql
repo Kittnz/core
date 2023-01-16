@@ -1,0 +1,4 @@
+UPDATE quest_template SET Details = 'Whoa, whoa, easy there, champ! I can see you\'re chomping at the bit to tame a wild beast, but there\'s a catch. Us goblins don\'t exactly get along with nature, know what I mean?$B$B<Viz grins wryly.>$B$BLet me show you how it\'s done, the goblin way. See this rod? It comes with a special collar that I call the "Friend Request". You put this around any wild animal\'s neck and that beastie becomes your bestie, get me?$B$BProbably oughta start you on something easy. A Dire Mottled Boar should be simple. You\'ll find them wandering around just outside of Razor Hill.$B$BEven a kid like you should be able to do that much. So don\'t waste my time by coming back here without one!' WHERE entry = 80331;
+
+-- UPDATE quest_template SET Title = 'Teslinah\'s Search' WHERE entry BETWEEN 80261 AND 80265;
+-- UPDATE quest_template SET Title = 'The Old Church of Westfall' WHERE entry BETWEEN 40593 AND 40603;
