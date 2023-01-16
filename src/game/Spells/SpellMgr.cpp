@@ -982,6 +982,10 @@ bool SpellMgr::IsNoStackSpellDueToSpell(uint32 spellId_1, uint32 spellId_2) cons
                 if (((spellInfo_1->SpellFamilyFlags & UI64LIT(0x1)) && (spellInfo_2->SpellFamilyFlags & UI64LIT(0x400000))) ||
                         ((spellInfo_2->SpellFamilyFlags & UI64LIT(0x1)) && (spellInfo_1->SpellFamilyFlags & UI64LIT(0x400000))))
                     return false;
+
+                // Arcane Missiles
+                if (spellInfo_1->IsFitToFamilyMask(1 << CF_MAGE_ARCANE_MISSILES_CHANNEL) && spellInfo_2->IsFitToFamilyMask(1 << CF_MAGE_ARCANE_MISSILES_CHANNEL))
+                    return false;
             }
             // Detect Invisibility and Mana Shield (multi-family check)
             if (spellInfo_2->Id == 132 && spellInfo_1->SpellIconID == 209 && spellInfo_1->SpellVisual == 968)
