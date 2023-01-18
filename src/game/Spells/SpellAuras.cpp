@@ -4948,7 +4948,12 @@ void Aura::HandleModPowerRegen(bool apply, bool Real)       // drinking
         {
             if (Player* pCaster = ToPlayer(GetCaster()))
             {
-                m_modifier.m_amount = pCaster->GetManaRegen() * (m_modifier.m_amount / 100.0f) * 5;
+                float multiplier = (GetSpellProto()->CalculateSimpleValue(GetEffIndex()) / 100.0f) * 5;
+
+                if (pCaster != pTarget)
+                    m_modifier.m_amount = pCaster->GetManaRegen() * multiplier;
+                else
+                    m_modifier.m_amount = pCaster->GetRegenMPPerSpirit() * multiplier;
             }
         }
         pTarget->UpdateManaRegen();
@@ -6478,6 +6483,19 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             {
                 // cannibalize anim
                 target->HandleEmoteCommand(EMOTE_STATE_CANNIBALIZE);
+            }
+            else if (GetId() == 45408)
+            {
+                if (GetCasterGuid() != target->GetObjectGuid())
+                {
+                    if (Player* pCaster = target->GetMap()->GetPlayer(GetCasterGuid()))
+                    {
+                        float percent = GetSpellProto()->CalculateSimpleValue(GetEffIndex());
+                        percent = percent - std::min(percent, (percent / 3) * (int32(pCaster->GetDistance2d(target)) / 10));
+                        m_modifier.m_amount = pCaster->GetManaRegen() * (percent / 100.0f) * 5;
+                        target->UpdateManaRegen();
+                    }
+                }
             }
 
             // Anger Management

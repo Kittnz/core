@@ -406,7 +406,7 @@ class Unit : public WorldObject
         void SetCreateResistance(SpellSchools school, int32 val) { m_createResistances[school] = val; }
         void SetResistance(SpellSchools school, int32 val) { SetInt32Value(UNIT_FIELD_RESISTANCES + school, val); }
         float GetRegenHPPerSpirit() const;
-        float GetRegenMPPerSpirit() const;
+        
     public:
         // Data
         float m_modMeleeHitChance;
@@ -417,6 +417,7 @@ class Unit : public WorldObject
         float m_modAttackSpeedPct[3];
         float m_modRecalcDamagePct[3];
 
+        float GetRegenMPPerSpirit() const;
         float GetCreateStat(Stats stat) const { return m_createStats[stat]; }
         uint32 GetCreateHealth() const { return GetUInt32Value(UNIT_FIELD_BASE_HEALTH); }
         uint32 GetCreateMana() const { return GetUInt32Value(UNIT_FIELD_BASE_MANA); }
