@@ -330,8 +330,6 @@ class WorldSession
         void SetMasterPlayer(MasterPlayer *plr) { m_masterPlayer = plr; }
         void LoginPlayer(ObjectGuid playerGuid);
         WorldSocket* GetSocket() { return m_Socket; }
-        void SetFingerprintBanned() { m_fingerprintBanned = true; }
-        bool IsFingerprintBanned() const { return m_fingerprintBanned; }
 
         /// Session in auth.queue currently
         void SetInQueue(bool state) { m_inQueue = state; }
@@ -959,8 +957,6 @@ class WorldSession
         uint32          _gameBuild;
         uint32          _charactersCount;
         uint32          _characterMaxLevel;
-        bool m_fingerprintBanned = false;
-
         enum ClientHashStep
         {
             HASH_NOT_COMPUTED,

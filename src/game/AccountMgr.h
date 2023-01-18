@@ -101,16 +101,12 @@ class AccountMgr
         void Update(uint32 diff);
         void LoadIPBanList(bool silent=false);
         void LoadAccountBanList(bool silent=false);
-        void LoadFingerprintBanList(bool silent = false);
         void BanIP(std::string const& ip, uint32 unbandate) { m_ipBanned[ip] = unbandate; }
         void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
         void BanAccount(uint32 account, uint32 unbandate) { m_accountBanned[account] = unbandate; }
         void UnbanAccount(uint32 acc) { m_accountBanned.erase(acc); }
-        void BanFingerprint(uint32 fingerprint, uint32 unbandate) { m_fingerprintBanned[fingerprint] = unbandate; }
-        void UnbanFingerprint(uint32 fingerprint) { m_fingerprintBanned.erase(fingerprint); }
         bool IsIPBanned(std::string const& ip) const;
         bool IsAccountBanned(uint32 acc) const;
-        bool IsFingerprintBanned(uint32 fingerprint) const;
         // Max instance reset per account per hour
         bool CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 maxCount);
         void AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_t enterTime);
@@ -126,7 +122,6 @@ class AccountMgr
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;
         std::map<std::string, uint32> m_ipBanned;
-        std::map<uint32, uint32> m_fingerprintBanned;
         std::map<uint32, uint32> m_accountBanned;
         typedef std::map<uint32 /* instanceId */, time_t /* enter time */> InstanceEnterTimesMap;
         typedef std::map<uint32 /* accountId */, InstanceEnterTimesMap> AccountInstanceEnterTimesMap;
