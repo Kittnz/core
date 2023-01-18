@@ -78,7 +78,7 @@
 #include "PlayerBotAI.h"
 #include "AccountMgr.h"
 #include "MoveSpline.h"
-#include "Anticheat/Anticheat.hpp"
+#include "Anticheat/Anticheat.h"
 #include "Anticheat/Movement/Movement.hpp"
 #include "MovementBroadcaster.h"
 #include "PlayerBroadcaster.h"
@@ -197,6 +197,8 @@ void PlayerTaxi::LoadTaxiMask(const char* data)
     if (IsTaximaskNodeKnown(19) && !IsTaximaskNodeKnown(182)) SetTaximaskNode(182); // Lapidis
     if (IsTaximaskNodeKnown(7)  && !IsTaximaskNodeKnown(175)) SetTaximaskNode(175); // Hawk's Vigil
     if (IsTaximaskNodeKnown(6)  && !IsTaximaskNodeKnown(176)) SetTaximaskNode(176); // Ironforge Airfields
+    if (IsTaximaskNodeKnown(39) && !IsTaximaskNodeKnown(185)) SetTaximaskNode(185); // Tel'Abim, Alliance
+    if (IsTaximaskNodeKnown(40) && !IsTaximaskNodeKnown(185)) SetTaximaskNode(185); // Tel'Abim, Horde
 }
 
 void PlayerTaxi::AppendTaximaskTo(ByteBuffer& data, bool all)
@@ -469,7 +471,7 @@ UpdateMask Player::updateVisualBits;
 
 Player::Player(WorldSession *session) : Unit(),
     m_mover(this), m_camera(this), m_reputationMgr(this),
-    m_currentTicketCounter(0), m_castingSpell(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
+    m_currentTicketCounter(0), m_repopAtGraveyardPending(false), m_lastTransportTime(0),
     m_honorMgr(this), m_bNextRelocationsIgnored(0), m_standStateTimer(0), m_newStandState(MAX_UNIT_STAND_STATE), m_foodEmoteTimer(0), _transmogMgr(new TransmogMgr(this))
 {
     m_objectType |= TYPEMASK_PLAYER;
@@ -648,6 +650,7 @@ Player::Player(WorldSession *session) : Unit(),
 
     m_justBoarded = false;
 
+    m_cameraUpdateTimer = 0;
     m_longSightSpell = 0;
     m_longSightRange = 0.0f;
 
@@ -1358,6 +1361,18 @@ void Player::Update(uint32 update_diff, uint32 p_time)
             GetSession()->m_muteTime -= update_diff;
     }
 
+    if (m_cameraUpdateTimer)
+    {
+        if (m_cameraUpdateTimer <= update_diff)
+        {
+            SetGuidValue(PLAYER_FARSIGHT, m_pendingCameraUpdate);
+            m_pendingCameraUpdate.Clear();
+            m_cameraUpdateTimer = 0;
+        }
+        else
+            m_cameraUpdateTimer -= update_diff;
+    }
+
     if (!m_timedquests.empty())
     {
         QuestSet::iterator iter = m_timedquests.begin();
@@ -1381,10 +1396,10 @@ void Player::Update(uint32 update_diff, uint32 p_time)
 
     if (HasUnitState(UNIT_STAT_MELEE_ATTACKING))
     {
-        UpdateMeleeAttackingState();
+        bool attacked = UpdateMeleeAttackingState();
 
         Unit const* pVictim = GetVictim();
-        if (pVictim && !IsNonMeleeSpellCasted(false) && CanReachWithMeleeAutoAttack(pVictim))
+        if (pVictim && attacked && !IsNonMeleeSpellCasted(false) && CanReachWithMeleeAutoAttack(pVictim))
             TogglePlayerPvPFlagOnAttackVictim(pVictim);
     }
 
@@ -1673,6 +1688,9 @@ void Player::OnDisconnected()
 
         if (ObjectGuid lootGuid = GetLootGuid())
             GetSession()->DoLootRelease(lootGuid);
+
+        if (watching_cinematic_entry != 0)
+            CinematicEnd();
     }
 
      // If in active arena, immediately leave battleground.
@@ -2505,6 +2523,9 @@ void Player::AddToWorld()
             m_items[i]->AddToWorld();
     }
 
+    if (HasItemCount(ITEM_SHELL_COIN, 1, true))
+        sWorld.AddShellCoinOwner(GetObjectGuid());
+
     sPlayerBotMgr.OnPlayerInWorld(this);
 }
 
@@ -2531,7 +2552,7 @@ void Player::RemoveFromWorld()
     }
 
     // remove duel before calling Unit::RemoveFromWorld
-    // otherwise there will be an existing duel flag pointer but no entry in m_gameObj
+    // otherwise there will be an existing duel flag pointer but no entry in m_spellGameObjects
     DuelComplete(DUEL_INTERRUPTED);
 
     ///- Do not add/remove the player from the object storage
@@ -2544,6 +2565,7 @@ void Player::RemoveFromWorld()
     }
 
     SetEscortingGuid(ObjectGuid());
+    sWorld.RemoveShellCoinOwner(GetObjectGuid());
 
     Unit::RemoveFromWorld();
 }
@@ -3542,12 +3564,12 @@ void Player::InitStatsForLevel(bool reapplyMods)
 
     // cleanup unit flags (will be re-applied if need at aura load).
     RemoveFlag(UNIT_FIELD_FLAGS,
-               UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_DISABLE_MOVE | UNIT_FLAG_NOT_ATTACKABLE_1 |
-               UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC  | UNIT_FLAG_LOOTING          |
-               UNIT_FLAG_PET_IN_COMBAT  | UNIT_FLAG_SILENCED   | UNIT_FLAG_PACIFIED         |
-               UNIT_FLAG_STUNNED        | UNIT_FLAG_IN_COMBAT  | UNIT_FLAG_DISARMED         |
-               UNIT_FLAG_CONFUSED       | UNIT_FLAG_FLEEING    | UNIT_FLAG_NOT_SELECTABLE   |
-               UNIT_FLAG_SKINNABLE      | UNIT_FLAG_IMMUNE     | UNIT_FLAG_AURAS_VISIBLE    | UNIT_FLAG_TAXI_FLIGHT);
+               UNIT_FLAG_SPAWNING         | UNIT_FLAG_DISABLE_MOVE  | UNIT_FLAG_NOT_ATTACKABLE_1 |
+               UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_LOOTING          |
+               UNIT_FLAG_PET_IN_COMBAT    | UNIT_FLAG_SILENCED      | UNIT_FLAG_PACIFIED         |
+               UNIT_FLAG_STUNNED          | UNIT_FLAG_IN_COMBAT     | UNIT_FLAG_DISARMED         |
+               UNIT_FLAG_CONFUSED         | UNIT_FLAG_FLEEING       | UNIT_FLAG_NOT_SELECTABLE   |
+               UNIT_FLAG_SKINNABLE        | UNIT_FLAG_IMMUNE        | UNIT_FLAG_AURAS_VISIBLE    | UNIT_FLAG_TAXI_FLIGHT);
     SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);    // must be set
 
     // cleanup player flags (will be re-applied if need at aura load), to avoid have ghost flag without ghost aura, for example.
@@ -4274,56 +4296,66 @@ uint32 Player::GetResetTalentsCost() const
 
 bool Player::ResetTalents(bool no_cost)
 {
-    // not need after this call
+    // Not need after this call
     if (HasAtLoginFlag(AT_LOGIN_RESET_TALENTS))
+    {
         RemoveAtLoginFlag(AT_LOGIN_RESET_TALENTS, true);
+    }
 
     if (m_usedTalentCount == 0)
     {
-        UpdateFreeTalentPoints(false);                      // for fix if need counter
+        UpdateFreeTalentPoints(false); // For fix if need counter
+
         return false;
     }
 
-    uint32 cost = 0;
+    uint32 uiCost{};
 
     if (!no_cost)
     {
-        cost = GetResetTalentsCost();
+        uiCost = GetResetTalentsCost();
 
-        if (GetMoney() < cost)
+        if (GetMoney() < uiCost)
         {
             SendBuyError(BUY_ERR_NOT_ENOUGHT_MONEY, 0, 0, 0);
             return false;
         }
     }
 
-    for (uint32 i = 0; i < sTalentStore.GetNumRows(); ++i)
+    for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
     {
-        TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
+        TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
+        if (!talentInfo)
+            continue;
 
-        if (!talentInfo) continue;
-
-        TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
-
+        TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
         if (!talentTabInfo)
             continue;
 
-        // unlearn only talents for character class
-        // some spell learned by one class as normal spells or know at creation but another class learn it as talent,
+        // Unlearn only talents for character class
+        // Some spell learned by one class as normal spells or know at creation but another class learn it as talent,
         // to prevent unexpected lost normal learned spell skip another class talents
         if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
             continue;
 
-        for (uint32 j : talentInfo->RankID)
+        for (const uint32& j : talentInfo->RankID)
         {
-            SpellEntry const* pInfos = sSpellMgr.GetSpellEntry(j);
+            SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(j) };
             if (pInfos)
-                for (uint32 eff : pInfos->EffectTriggerSpell)
+            {
+                for (const uint32& eff : pInfos->EffectTriggerSpell)
+                {
                     if (eff)
+                    {
                         RemoveAurasDueToSpell(eff);
+                    }
+                }
+            }
 
             if (j)
+            {
                 RemoveSpell(j, !Spells::IsPassiveSpell(j), false);
+            }
         }
     }
 
@@ -4331,7 +4363,7 @@ bool Player::ResetTalents(bool no_cost)
 
     if (!no_cost)
     {
-        ModifyMoney(-(int32)cost);
+        ModifyMoney(-(int32)uiCost);
 
         ++m_resetTalentsMultiplier;
 
@@ -4343,12 +4375,15 @@ bool Player::ResetTalents(bool no_cost)
         m_resetTalentsTime = time(nullptr);
     }
 
-    // Warlock: remove Touch of Shadow aura:
+    // Warlock: Remove Touch of Shadow aura
     if (GetClass() == CLASS_WARLOCK && HasAura(18791))
+    {
         RemoveAurasDueToSpell(18791);
+    }
 
-    //FIXME: remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
+    //FIXME: Remove pet before or after unlearn spells? for now after unlearn to allow removing of talent related, pet affecting auras
     RemovePet(PET_SAVE_REAGENTS);
+
     return true;
 }
 
@@ -5120,6 +5155,9 @@ void Player::KillPlayer()
 
 void Player::SpawnHardcoreGravestone()
 {
+    if (GetLevel() < 10) // Some players keep creting level 1 characters with bad names to "leave a message".
+        return;
+
     std::ostringstream ss;
     ss << "Grave of " << m_name << " (level " << GetLevel() << ")";
 
@@ -6602,28 +6640,14 @@ void Player::SendCinematicStart(uint32 CinematicSequenceId)
 
 bool Player::HasAllZonesExplored()
 {
-    bool eligible_for_title = true;
-    uint32 real_full_mask[64] = 
-    {  
-     2145078847, 2943346647, 4092590079, 4157079371, 3321885599, 4294459278,
-     4294967295, 3737059326, 4026266751, 2013200879, 4284465151, 4244608767,
-     4294492159, 2138308607, 4291493880, 1019255775, 4292554614, 1970205687,
-     4225757133, 125532146, 4294967286, 26951655, 4290510684, 4018142783,
-     4259315711, 4239229439, 4294956799, 3748241370, 2146680833, 4293680125,
-     3226467263, 1644166143, 4294574071, 1835007, 0, 0, 0, 0, 0, 0, 0, 0,
-     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65536, 3670258    
-    };
+    uint32 const* fullExploreMask = sObjectMgr.GetCartographerExplorationMask();
 
     for (uint8 i = 0; i < PLAYER_EXPLORED_ZONES_SIZE; ++i)
     {
-        bool explored_chunk = ((GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) >= real_full_mask[i]));
-        if (!explored_chunk)
-        {
-            eligible_for_title = false;
-            break;
-        }
+        if ((GetUInt32Value(PLAYER_EXPLORED_ZONES_1 + i) & fullExploreMask[i]) != fullExploreMask[i])
+            return false;
     }
-    return eligible_for_title;
+    return true;
 }
 
 void Player::CheckAreaExploreAndOutdoor()
@@ -6703,21 +6727,19 @@ void Player::CheckAreaExploreAndOutdoor()
         const auto *p = AreaEntry::GetByAreaFlagAndMap(areaFlag, GetMapId());
         if (!p)
             sLog.outError("PLAYER: Player %u discovered unknown area (x: %f y: %f map: %u", GetGUIDLow(), GetPositionX(), GetPositionY(), GetMapId());
-        else if (p->AreaLevel > 0)
+        else
         {
             GetSession()->GetAntiCheat()->OnExplore(p);
             //GetCheatData()->OnExplore(p);
             uint32 area = p->Id;
-            // if (GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL))
-            // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
-            if ((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || (HasItemCount(50008, 1, false)) || !HasXPGainEnabled())
-                SendExplorationExperience(area, 0);
-            else
+            uint32 xp = 0;
+            if ((p->AreaLevel > 0) && !((GetLevel() >= sWorld.getConfig(CONFIG_UINT32_MAX_PLAYER_LEVEL)) || !HasXPGainEnabled()))
             {
+                // Additional check for Turtle WoW Twink Token, which prevents the wielder of getting experience.
                 int32 diff = int32(GetLevel()) - p->AreaLevel;
-                uint32 XP = 0;
+
                 if (diff < -5)
-                    XP = uint32(sObjectMgr.GetBaseXP(GetLevel() + 5) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
+                    xp = uint32(sObjectMgr.GetBaseXP(GetLevel() + 5) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
                 else if (diff > 5)
                 {
                     int32 exploration_percent = (100 - ((diff - 5) * 5));
@@ -6726,14 +6748,19 @@ void Player::CheckAreaExploreAndOutdoor()
                     else if (exploration_percent < 0)
                         exploration_percent = 0;
 
-                    XP = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * exploration_percent / 100 * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
+                    xp = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * exploration_percent / 100 * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
                 }
                 else
-                    XP = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
+                    xp = uint32(sObjectMgr.GetBaseXP(p->AreaLevel) * sWorld.getConfig(CONFIG_FLOAT_RATE_XP_EXPLORE));
 
-                GiveXP(XP, nullptr);
-                SendExplorationExperience(area, XP);
+                if (HasChallenge(CHALLENGE_WAR_MODE))
+                    xp = xp + (xp * 0.3f);
+
+                GiveXP(xp, nullptr);
             }
+
+            // Exploration packet should be sent even if no XP is gained.
+            SendExplorationExperience(area, xp);
             DETAIL_LOG("PLAYER: Player %u discovered a new area: %u", GetGUIDLow(), area);
         }
     }
@@ -7720,7 +7747,7 @@ void Player::UpdateEquipSpellsAtFormChange()
     }
 }
 
-void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType)
+void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float chanceMultiplier)
 {
     Item *item = GetWeaponForAttack(attType, true, true);
     if (!item)
@@ -7756,6 +7783,13 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType)
         if (GetExtraAttacks() && spellInfo->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
             return;
 
+        if (HasSpellCooldown(spellData.SpellId))
+        {
+            if (chanceMultiplier > 1.0f)
+                Spell::SendCastResult(this, spellInfo, SPELL_FAILED_NOT_READY);
+            continue;
+        }
+
         float chance = (float)spellInfo->procChance;
 
         if (spellData.SpellPPMRate)
@@ -7765,8 +7799,10 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType)
         else if (chance > 100.0f)
             chance = GetPPMProcChance(WeaponSpeed, 1.0f);   // default to 1 PPM for unknown proc rates
 
-        if (roll_chance_f(chance))
+        if (roll_chance_f(chance * chanceMultiplier))
             CastSpell(Target, spellInfo->Id, true, item);
+        else if (chanceMultiplier > 1.0f)
+            Spell::SendCastResult(this, spellInfo, SPELL_FAILED_TRY_AGAIN);
     }
 
     // item combat enchantments
@@ -7800,7 +7836,7 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType)
 
             ApplySpellMod(spellInfo->Id, SPELLMOD_CHANCE_OF_SUCCESS, chance);
 
-            if (roll_chance_f(chance) || HasOption(PLAYER_CHEAT_ALWAYS_PROC))
+            if (roll_chance_f(chance * chanceMultiplier) || HasOption(PLAYER_CHEAT_ALWAYS_PROC))
             {
                 uint32 charges = item->GetEnchantmentCharges(EnchantmentSlot(e_slot));
 
@@ -8209,84 +8245,10 @@ void Player::SendLoot(ObjectGuid guid, LootType loot_type, Player* pVictim)
                     uint32 level = pVictim->GetLevel();
                     bones->loot.gold = (uint32)(urand(50, 150) * 0.016f * pow(((float)level) / 5.76f, 2.5f) * sWorld.getConfig(CONFIG_FLOAT_RATE_DROP_MONEY));
                     bones->loot.m_personal = true; // Everyone can loot the corpse
-                    if (BattleGround* bg = GetBattleGround())
+                    if (BattleGround* pBG = pVictim->GetBattleGround())
                     {
-                        if (bg->GetTypeID() == BATTLEGROUND_AV)
-                        {
-                            uint8 race = pVictim->GetRace();
-                            uint32 rank = pVictim->GetHonorMgr().GetHighestRank().visualRank;
-                            uint32 raceItem = 0;
-                            uint32 rankItem = 0;
-                            uint32 questItem = 0;
-                            switch (race)
-                            {
-                            case RACE_HUMAN:
-                                raceItem = 18144;
-                                questItem = 17306;
-                                break;
-                            case RACE_DWARF:
-                                raceItem = 18206;
-                                questItem = 17306;
-                                break;
-                            case RACE_NIGHTELF:
-                                raceItem = 18142;
-                                questItem = 17306;
-                                break;
-                            case RACE_GNOME:
-                                raceItem = 18143;
-                                questItem = 17306;
-                                break;
-                            case RACE_ORC:
-                                raceItem = 18207;
-                                questItem = 17423;
-                                break;
-                            case RACE_UNDEAD:
-                                raceItem = 18147;
-                                questItem = 17423;
-                                break;
-                            case RACE_TAUREN:
-                                raceItem = 18145;
-                                questItem = 17423;
-                                break;
-                            case RACE_TROLL:
-                                raceItem = 18146;
-                                questItem = 17423;
-                                break;
-                            }
-                            if (rank < 6)
-                                if (pVictim->GetTeam() == ALLIANCE)
-                                    rankItem = 17326;
-                                else
-                                    rankItem = 17502;
-                            else if (rank < 10)
-                                if (pVictim->GetTeam() == ALLIANCE)
-                                    rankItem = 17327;
-                                else
-                                    rankItem = 17503;
-                            else if (pVictim->GetTeam() == ALLIANCE)
-                                rankItem = 17328;
-                            else
-                                rankItem = 17504;
-
-                            if (raceItem > 0)
-                            {
-                                LootStoreItem storeitem = LootStoreItem(raceItem, 100, 0, 0, 1, 1);
-                                bones->loot.AddItem(storeitem);
-                            }
-                            if (questItem > 0)
-                            {
-                                LootStoreItem storeitem = LootStoreItem(questItem, 100, 0, 0, 1, 1);
-                                bones->loot.AddItem(storeitem);
-                            }
-                            if (rankItem > 0)
-                            {
-                                LootStoreItem storeitem = LootStoreItem(rankItem, 75, 0, 0, 0, 1);
-                                bones->loot.AddItem(storeitem);
-                            }
-
-                            LootStoreItem storeitem = LootStoreItem(17422, 75, 0, 0, 0, 20);
-                            bones->loot.AddItem(storeitem);
-                        }
+                        if (uint32 refLootId = pBG->GetPlayerSkinRefLootId())
+                            loot->FillLoot(refLootId, LootTemplates_Reference, this, true);
                     }
                     else if (InGurubashiArena(false)) // For Turtle WoW Arena Tournament and daily PvP battles in STV (Gurubashi Arena)
                     {
@@ -11375,6 +11337,12 @@ void Player::DestroyItemCount(const uint32 item, const uint32 count, const bool 
         {
             if (pItem && pItem->GetEntry() == item && !pItem->IsInTrade())
             {
+                if (pItem->IsBag() && !((Bag*)pItem)->IsEmpty())
+                {
+                    sLog.outError("Skipped attempt to delete non empty bag %u from %s.", item, GetName());
+                    continue;
+                }
+
                 if (pItem->GetCount() + remcount <= count)
                 {
                     if (!unequip_check || CanUnequipItem(INVENTORY_SLOT_BAG_0 << 8 | i, false) == EQUIP_ERR_OK)
@@ -17797,13 +17765,13 @@ void Player::RemovePetActionBar()
 }
 
 // This will create a new creature and set the current unit as the controller of that new creature
-Creature* Player::SummonPossessedMinion(uint32 creatureId, uint32 spellId, float x, float y, float z, float ang)
+Creature* Player::SummonPossessedMinion(uint32 creatureId, uint32 spellId, float x, float y, float z, float ang, uint32 duration)
 {
     // Possess is a unique advertised charm, another advertised charm already exists: we should get rid of it first
     if (!GetCharmGuid().IsEmpty())
         return nullptr;
 
-    Creature* pCreature = SummonCreature(creatureId, x, y, z, ang, TEMPSUMMON_CORPSE_TIMED_DESPAWN, 5000);
+    Creature* pCreature = SummonCreature(creatureId, x, y, z, ang, TEMPSUMMON_TIMED_DEATH_AND_DEAD_DESPAWN, duration);
 
     if (!pCreature)
         return nullptr;
@@ -19295,6 +19263,17 @@ void Player::UpdateLongSight()
                          GetPositionZ());
 }
 
+void Player::ScheduleCameraUpdate(ObjectGuid guid)
+{
+    if (guid.IsEmpty() && m_pendingCameraUpdate.IsEmpty())
+        SetGuidValue(PLAYER_FARSIGHT, guid);
+    else
+    {
+        m_cameraUpdateTimer = CAMERA_UPDATE_DELAY;
+        m_pendingCameraUpdate = guid;
+    } 
+}
+
 void Player::InitPrimaryProfessions()
 {
     SetFreePrimaryProfessions(sWorld.getConfig(CONFIG_UINT32_MAX_PRIMARY_TRADE_SKILL));
@@ -19572,7 +19551,7 @@ void Player::LearnDefaultSpells()
         }
     }
 
-    if (GetSession()->GetSecurity() >= SEC_DEVELOPER)
+    if (GetSession()->GetSecurity() >= SEC_OBSERVER)
     {
         LearnGameMasterSpells(); // Add some GM-Spells to new created toons
     }
@@ -19668,7 +19647,7 @@ void Player::LearnQuestRewardedSpells()
 
 void Player::LearnGameMasterSpells()
 {
-    const std::list<std::uint32_t> aGameMasterSpellList =
+    const std::list<uint32> aGameMasterSpellList =
     {
         56043, // Debug: Next DisplayID
         56044, // Debug: Previous DisplayID
@@ -19676,13 +19655,11 @@ void Player::LearnGameMasterSpells()
         56046, // GM Flight Mode
         56047, // Toggle GM Visibility
         46028, // Teleport to GM Island
-        9454,  // GM tool to freeze players
-        1852,  // Silence
+//        9454,  // GM tool to freeze players
+//        1852,  // Silence
         46012, // Wormhole
         46001, // Portable Mailbox
-        5,     // Death Touch
         11,    // Swiftness
-        265,   // Area Death
         7      // Suicide
     };
 
@@ -19989,6 +19966,17 @@ void Player::UpdateForQuestWorldObjects()
     lock.unlock();
     if (count)
         upd.Send(GetSession());
+}
+
+void Player::SendSummonRequest(ObjectGuid summonerGuid, uint32 mapId, uint32 zoneId, float x, float y, float z)
+{
+    SetSummonPoint(mapId, x, y, z);
+
+    WorldPacket data(SMSG_SUMMON_REQUEST, 8 + 4 + 4);
+    data << summonerGuid;                    // summoner guid
+    data << uint32(zoneId);                  // summoner zone
+    data << uint32(MAX_PLAYER_SUMMON_DELAY * IN_MILLISECONDS); // auto decline after msecs
+    GetSession()->SendPacket(&data);
 }
 
 void Player::SummonIfPossible(bool agree)
@@ -21248,6 +21236,17 @@ void Player::ResummonPetTemporaryUnSummonedIfAny()
         delete NewPet;
 
     m_temporaryUnsummonedPetNumber = 0;
+}
+
+bool Player::IsPetNeedBeTemporaryUnsummoned() const
+{
+    if (!IsInWorld() || !IsAlive() || IsTaxiFlying())
+        return true;
+
+    if (IsMounted() && sWorld.getConfig(CONFIG_BOOL_PET_UNSUMMON_AT_MOUNT))
+        return true;
+
+    return false;
 }
 
 void Player::_SaveBGData()
@@ -23342,155 +23341,164 @@ void Player::RemoveWorldBuffsIfAlreadySuspended()
 }
 
 // Checks if player has primary or secondary spec saved
-bool Player::HasSavedTalentSpec(int primaryOrSecondary)
+bool Player::HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-	QueryResult *talents = CharacterDatabase.PQuery("SELECT spec FROM character_spell_dual_spec "
-		" WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+    const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spec` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
-	if (!talents)
-		return false;
-
-	delete talents;
-	return true;
+	return static_cast<bool>(talents);
 }
 
 // Outputs n/m/q (eg: 21/30/0) number of talents points spent in each tree
-std::string Player::SpecTalentPoints(int primaryOrSecondary)
+std::string Player::SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary)
 {
-
-    // mage trees are messed up, disable for them untill i find a fix
+    // Mage trees are messed up, disable for them untill i find a fix
     if (GetClass() == CLASS_MAGE)
         return "";
 
-	QueryResult *savedTalents = CharacterDatabase.PQuery("SELECT spell FROM character_spell_dual_spec "
-		" WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+    const std::unique_ptr<QueryResult> savedTalents(CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' and spec = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
 	if (!savedTalents)
 		return "";
 
-	int treeTalents[3] = { 0, 0, 0 };
+    std::vector<uint32> vTreeTalents = { 0, 0, 0 };
 
 	do
 	{
-		Field *fields = savedTalents->Fetch();
-		uint32 savedTalentID = fields[0].GetUInt32();
+        Field* fields{ savedTalents->Fetch() };
+        const uint32 uiSavedTalentID{ fields[0].GetUInt32() };
 
-		for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+        for (uint32 i{}; i < sTalentStore.GetNumRows(); ++i)
 		{
-			TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
-			if (!talentInfo) continue;
+            TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
+			if (!talentInfo)
+                continue;
 
-			TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
+            TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
 			if (!talentTabInfo)
 				continue;
+
 			if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
 				continue;
 
-			for (int j = 0; j < MAX_TALENT_RANK; ++j)
-               if (talentInfo->RankID[j] && talentInfo->RankID[j] == savedTalentID)
-                   treeTalents[talentTabInfo->tabpage] += j + 1;
+            for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
+            {
+                if (talentInfo->RankID[j] && talentInfo->RankID[j] == uiSavedTalentID)
+                {
+                    vTreeTalents[talentTabInfo->tabpage] += (j + 1);
+                }
+            }
 		}
 
 	} while (savedTalents->NextRow());
 
-
-	delete savedTalents;
-
-	return "(" + std::to_string(treeTalents[0]) + "/" + std::to_string(treeTalents[1]) + "/" + std::to_string(treeTalents[2]) + ")";
+	return "(" + std::to_string(vTreeTalents[0]) + "/" + std::to_string(vTreeTalents[1]) + "/" + std::to_string(vTreeTalents[2]) + ")";
 }
 
-// saves primary or secondary spec
-bool Player::SaveTalentSpec(int primaryOrSecondary)
+// Saves primary or secondary spec
+bool Player::SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-	// prevent untalented saves
+	// Prevent untalented saves
 	if (m_usedTalentCount == 0)
 	{
-		ChatHandler(this).PSendSysMessage("No learned talents found.");
+		ChatHandler(this).SendSysMessage("No learned talents found.");
 		return false;
 	}
 
-	// make sure dual spec table is empty for spec=primaryOrSecondary to avoid duplicates
-	CharacterDatabase.DirectPExecute("DELETE FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
-
+	// Make sure dual spec table is empty for spec = uiPrimaryOrSecondary to avoid duplicates
+	CharacterDatabase.DirectPExecute("DELETE FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary);
     CharacterDatabase.BeginTransaction();
 
-	for (unsigned int i = 0; i < sTalentStore.GetNumRows(); ++i)
+    for (std::size_t i{}; i < sTalentStore.GetNumRows(); ++i)
 	{
-		TalentEntry const *talentInfo = sTalentStore.LookupEntry(i);
+        TalentEntry const* talentInfo{ sTalentStore.LookupEntry(i) };
+		if (!talentInfo)
+            continue;
 
-		if (!talentInfo) continue;
-
-		TalentTabEntry const* talentTabInfo = sTalentTabStore.LookupEntry(talentInfo->TalentTab);
-
+        TalentTabEntry const* talentTabInfo{ sTalentTabStore.LookupEntry(talentInfo->TalentTab) };
 		if (!talentTabInfo)
 			continue;
 
 		if ((GetClassMask() & talentTabInfo->ClassMask) == 0)
 			continue;
 
-		for (int j = 0; j < MAX_TALENT_RANK; ++j)
+        for (std::uint8_t j{}; j < MAX_TALENT_RANK; ++j)
 		{
-			SpellEntry const* pInfos = sSpellMgr.GetSpellEntry(talentInfo->RankID[j]);
+            SpellEntry const* pInfos{ sSpellMgr.GetSpellEntry(talentInfo->RankID[j]) };
 
-			if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
-                CharacterDatabase.PExecute("INSERT INTO character_spell_dual_spec (guid, spell, spec) VALUES ('%u', '%u', '%i')", GetGUIDLow(), talentInfo->RankID[j], primaryOrSecondary);
+            if (talentInfo->RankID[j] && HasSpell(talentInfo->RankID[j]))
+            {
+                CharacterDatabase.PExecute("INSERT INTO `character_spell_dual_spec` (`guid`, `spell`, `spec`) VALUES ('%u', '%u', '%u')", GetGUIDLow(), talentInfo->RankID[j], uiPrimaryOrSecondary);
+            }
 		}
 	}
 
     CharacterDatabase.CommitTransaction();
 
-	if (primaryOrSecondary == 1)
-		ChatHandler(this).PSendSysMessage("Primary Specialization Saved.");
-	else
-		ChatHandler(this).PSendSysMessage("Secondary Specialization Saved.");
+    if (uiPrimaryOrSecondary == 1)
+    {
+        ChatHandler(this).SendSysMessage("Primary Specialization Saved.");
+    }
+    else if (uiPrimaryOrSecondary == 2)
+    {
+        ChatHandler(this).SendSysMessage("Secondary Specialization Saved.");
+    }
 
-	CastSpell(this, 14867, true); // visual
+	CastSpell(this, 14867, true); // Visual
 
 	return true;
 }
 
-// activates primary or secondary spec
-bool Player::ActivateTalentSpec(int primaryOrSecondary)
+// Activates primary or secondary spec
+bool Player::ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary)
 {
-
     ResetTalents(true);
 
-	QueryResult *talents = CharacterDatabase.PQuery("SELECT spell "
-		"FROM character_spell_dual_spec WHERE guid = '%u' and spec = '%i'", GetGUIDLow(), primaryOrSecondary);
+    const std::unique_ptr<QueryResult> talents( CharacterDatabase.PQuery("SELECT `spell` FROM `character_spell_dual_spec` WHERE `guid` = '%u' AND `spec` = '%u'", GetGUIDLow(), uiPrimaryOrSecondary));
 
 	if (!talents)
 	{
-		// should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
-		if (primaryOrSecondary == 1)
-			ChatHandler(this).PSendSysMessage("Primary Specialization not saved.");
-		else
-			ChatHandler(this).PSendSysMessage("Secondary Specialization not saved.");
+		// Should not get here because we check HasSavedTalentSpec(1/2) in go script, gossip
+        if (uiPrimaryOrSecondary == 1)
+        {
+            ChatHandler(this).SendSysMessage("Primary Specialization not saved.");
+        }
+        else if (uiPrimaryOrSecondary == 2)
+        {
+            ChatHandler(this).SendSysMessage("Secondary Specialization not saved.");
+        }
+
 		return false;
 	}
 
 	do
 	{
-		Field *fields = talents->Fetch();
-		uint32 talentSpellId = fields[0].GetUInt32();
+        Field* fields{ talents->Fetch() };
+        const uint32 uiTalentSpellId{ fields[0].GetUInt32() };
 
-		LearnSpell(talentSpellId, false, true);
+		LearnSpell(uiTalentSpellId, false, true);
 
 	} while (talents->NextRow());
 
-	delete talents;
+    if (uiPrimaryOrSecondary == 1)
+    {
+        ChatHandler(this).SendSysMessage("Primary Specialization Activated.");
+    }
+    else if (uiPrimaryOrSecondary == 2)
+    {
+        ChatHandler(this).SendSysMessage("Secondary Specialization Activated.");
+    }
 
-	if (primaryOrSecondary == 1)
-		ChatHandler(this).PSendSysMessage("Primary Specialization Activated.");
-	else
-		ChatHandler(this).PSendSysMessage("Secondary Specialization Activated.");
+	// Reset powers to avoid some bullshittery
+    if (GetPowerType() == POWER_RAGE)
+    {
+        SetPower(POWER_RAGE, 0);
+    }
+    else if (GetPowerType() == POWER_MANA)
+    {
+        SetPower(POWER_MANA, 0);
+    }
 
-	// reset powers to avoid some bullshittery
-	if (GetPowerType() == POWER_RAGE)
-		SetPower(POWER_RAGE, 0);
-	else if (GetPowerType() == POWER_MANA)
-		SetPower(POWER_MANA, 0);
-
-	// short stun
+	// Short stun
 	AddAura(27880);
 
 	SaveToDB();
@@ -23621,4 +23629,19 @@ uint32 Player::GetTotalQuestCount()
     return std::count_if(mQuestStatus.begin(), mQuestStatus.end(), [](decltype(mQuestStatus)::value_type value) -> bool {
         return value.second.uState != QUEST_DELETED && value.second.m_rewarded;
     });
+}
+
+void Player::ClearTemporaryWarWithFactions()
+{
+    if (!m_temporaryAtWarFactions.empty())
+    {
+        for (auto const& factionId : m_temporaryAtWarFactions)
+        {
+            if (FactionEntry const* pFactionEntry = sObjectMgr.GetFactionEntry(factionId))
+                if (GetReputationMgr().GetRank(pFactionEntry) > REP_HOSTILE)
+                    if (GetReputationMgr().SetAtWar(pFactionEntry->reputationListID, false))
+                        SendFactionAtWar(pFactionEntry->reputationListID, false);
+        }
+        m_temporaryAtWarFactions.clear();
+    }
 }

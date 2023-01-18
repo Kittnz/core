@@ -457,6 +457,8 @@ class Map : public GridRefManager<NGridType>
         void SendToPlayers(WorldPacket const* data, Team team = TEAM_NONE) const;
         // Send a Packet to all players in a zone. Return false if no player found
         bool SendToPlayersInZone(WorldPacket const* data, uint32 zoneId) const;
+        // Sends a Packet to all game masters not in the group
+        void SendToAllGMsNotInGroup(WorldPacket const* data, Group* pGroup) const;
 
         typedef MapRefManager PlayerList;
         PlayerList const& GetPlayers() const { return m_mapRefManager; }
@@ -499,6 +501,8 @@ class Map : public GridRefManager<NGridType>
         void IncrementSummonCountForObject(uint64 guid);
         void DecrementSummonCountForObject(uint64 guid);
         Creature* SummonCreature(uint32 entry, float x, float y, float z, float ang, TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN, uint32 despwtime = 25000, bool asActiveObject = false);
+        Creature* LoadCreatureSpawn(uint32 dbGuid, bool delaySpawn = false);
+        Creature* LoadCreatureSpawnWithGroup(uint32 leaderDbGuid, bool delaySpawn = false);
 
         Player* GetPlayer(ObjectGuid guid);
         GameObject* GetGameObject(ObjectGuid const& guid) { return GetObject<GameObject>(guid); }
@@ -559,7 +563,7 @@ class Map : public GridRefManager<NGridType>
         // Use navemesh to walk
         bool GetWalkHitPosition(Transport* t, float srcX, float srcY, float srcZ, float& destX, float& destY, float& destZ, 
             uint32 moveAllowedFlags = 0xF /*NAV_GROUND | NAV_WATER | NAV_MAGMA | NAV_SLIME*/, float zSearchDist = 20.0f, bool locatedOnSteepSlope = true) const;
-        bool GetWalkRandomPosition(Transport* t, float &x, float &y, float &z, float maxRadius, uint32 moveAllowedFlags = 0xF) const;
+        bool GetWalkRandomPosition(Transport* t, float &x, float &y, float &z, float maxRadius, bool allowStraightPath = false, uint32 moveAllowedFlags = 0xF) const;
         VMAP::ModelInstance* FindCollisionModel(float x1, float y1, float z1, float x2, float y2, float z2);
 
         void Balance() { _dynamicTree.balance(); }
@@ -852,6 +856,9 @@ class Map : public GridRefManager<NGridType>
         bool ScriptCommand_SendScriptEvent(ScriptInfo const& script, WorldObject* source, WorldObject* target);
         bool ScriptCommand_SetPvP(ScriptInfo const& script, WorldObject* source, WorldObject* target);
         bool ScriptCommand_ResetDoorOrButton(ScriptInfo const& script, WorldObject* source, WorldObject* target);
+        bool ScriptCommand_SetCommandState(ScriptInfo const& script, WorldObject* source, WorldObject* target);
+        bool ScriptCommand_PlayCustomAnim(ScriptInfo const& script, WorldObject* source, WorldObject* target);
+        bool ScriptCommand_StartScriptOnGroup(ScriptInfo const& script, WorldObject* source, WorldObject* target);
 
         // Add any new script command functions to the array.
         const ScriptCommandFunction m_ScriptCommands[SCRIPT_COMMAND_MAX] =
@@ -944,6 +951,9 @@ class Map : public GridRefManager<NGridType>
             &Map::ScriptCommand_SendScriptEvent,        // 85
             &Map::ScriptCommand_SetPvP,                 // 86
             &Map::ScriptCommand_ResetDoorOrButton,      // 87
+            &Map::ScriptCommand_SetCommandState,        // 88
+            &Map::ScriptCommand_PlayCustomAnim,         // 89
+            &Map::ScriptCommand_StartScriptOnGroup,     // 90
         };
 
     public:

@@ -169,6 +169,16 @@ void World::Shutdown()
         m_charDbWorkerThread->join();
 }
 
+AccountDataWrapper::~AccountDataWrapper()
+{
+    //relink lookuptable with normal table.
+    auto itr = sWorld.m_accountDataLookup.find(m_data->username);
+    if (itr != sWorld.m_accountDataLookup.end())
+        itr->second = std::cref(*m_data);
+    else
+        sWorld.m_accountDataLookup.emplace(m_data->username, std::cref(*m_data));
+}
+
 void World::InternalShutdown()
 {
 	///- Empty the kicked session set
@@ -698,9 +708,9 @@ void World::LoadConfigSettings(bool reload)
     setConfig(CONFIG_BOOL_SILENTLY_GM_JOIN_TO_CHANNEL, "Channel.SilentlyGMJoin", false);
     setConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS, "Channel.StrictLatinInGeneral", false);
 
-    setConfig(CONFIG_BOOL_CHAT_FAKE_MESSAGE_PREVENTING, "ChatFakeMessagePreventing", false);
+    setConfig(CONFIG_BOOL_CHAT_FAKE_MESSAGE_PREVENTING, "ChatFakeMessagePreventing", true);
 
-    setConfig(CONFIG_UINT32_CHAT_STRICT_LINK_CHECKING_SEVERITY, "ChatStrictLinkChecking.Severity", 0);
+    setConfig(CONFIG_UINT32_CHAT_STRICT_LINK_CHECKING_SEVERITY, "ChatStrictLinkChecking.Severity", 2);
     setConfig(CONFIG_UINT32_CHAT_STRICT_LINK_CHECKING_KICK,     "ChatStrictLinkChecking.Kick", 0);
 
     setConfig(CONFIG_BOOL_SEND_LOOT_ROLL_UPON_RECONNECT, "SendLootRollUponReconnect", false);
@@ -738,6 +748,13 @@ void World::LoadConfigSettings(bool reload)
     setConfigMinMax(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT,           "BattleGround.QueuesCount", 0, 0, 3);
     setConfig(CONFIG_BOOL_ENABLE_CROSSFACTION_BATTLEGROUNDS,           "BattleGround.Crossfaction", false);
     setConfig(CONFIG_BOOL_ENABLE_GEAR_RATING_QUEUE,                    "BattleGround.GearQueue", false);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AV,            "BattleGround.Rate.Reputation.AV", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_WS,            "BattleGround.Rate.Reputation.WS", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB,            "BattleGround.Rate.Reputation.AB", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AV,                 "BattleGround.Rate.Honor.AV", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_WS,                 "BattleGround.Rate.Honor.WS", 1);
+    setConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB,                 "BattleGround.Rate.Honor.AB", 1);
+    
 
         // If max bg queues is at 0, decide based on patch.
     if (getConfig(CONFIG_UINT32_BATTLEGROUND_QUEUES_COUNT) == 0)
@@ -1187,6 +1204,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 0);
 
+    setConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS, "AccountData.LastLoginDays", 60);
+
     setConfig(CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS, "ItemRestoreLog.QuestItems", false);
 
     setConfigMinMax(CONFIG_INT32_KALIMDOR_TIME_OFFSET, "KalimdorTimeOffset", 0, 0, 23);
@@ -1194,6 +1213,7 @@ void World::LoadConfigSettings(bool reload)
     m_minChatLevel = getConfig(CONFIG_UINT32_CHAT_MIN_LEVEL);
 
     m_timers[WUPDATE_CENSUS].SetInterval(60 * MINUTE * IN_MILLISECONDS);
+    m_timers[WUPDATE_SHELLCOIN].SetInterval(10 * MINUTE * IN_MILLISECONDS);
 
     // Migration for auto committing updates.
     setConfig(CONFIG_UINT32_AUTO_COMMIT_MINUTES, "AutoCommit.Minutes", 0);
@@ -1585,7 +1605,8 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading player corpses...");
 	sObjectMgr.LoadCorpses();
     sLog.outString("Loading loot tables...");    
-    LoadLootTables();
+    LootIdSet ids_set;
+    LoadLootTables(ids_set);
     sLog.outString("Loading custom character skins...");
     sObjectMgr.LoadCustomCharacterSkins();
     sLog.outString("Loading fishing base level requirements...");
@@ -1620,6 +1641,7 @@ void World::SetInitialWorldSettings()
     sObjectMgr.LoadGossipMenuItemsLocales();                // must be after gossip menu items loading
     sObjectMgr.LoadPointOfInterestLocales();                // must be after POI loading
     sObjectMgr.LoadAreaLocales();
+    sObjectMgr.LoadCartographerAreas();
     sLog.outString("Loading auction houses...");	
 	sAuctionMgr.LoadAuctionHouses();
     sLog.outString("Loading auction items...");
@@ -1682,6 +1704,9 @@ void World::SetInitialWorldSettings()
     sLog.outString("Loading mount manager...");
     sMountMgr->LoadFromDB();
 
+    sLog.outString("Loading cached Account data...");
+    LoadAccountData();
+
     ///- Initialize game time and timers
     m_gameTime = time(nullptr);
     m_startTime = m_gameTime;
@@ -1720,6 +1745,7 @@ void World::SetInitialWorldSettings()
     sMapMgr.Initialize();
     sLog.outString("Deleting expired bans...");
     sBattleGroundMgr.CreateInitialBattleGrounds();
+    CheckLootTemplates_Reference(ids_set);
     sLog.outString("Initiating zone scripts...");
     sZoneScriptMgr.InitZoneScripts();
     sLog.outString("Loading transport on continents...");
@@ -1774,6 +1800,10 @@ void World::SetInitialWorldSettings()
         sLog.outString("Restoring deleted items...");
         sObjectMgr.RestoreDeletedItems();
     }
+
+    sLog.outString("Loading shell coins...");
+    sObjectMgr.LoadShellCoinCount();
+    m_lastShellCoinPrice = sObjectMgr.GetShellCoinBuyPrice();
     
     m_broadcaster =
         std::make_unique<MovementBroadcaster>(sWorld.getConfig(CONFIG_UINT32_PACKET_BCAST_THREADS),
@@ -1981,6 +2011,40 @@ void World::Update(uint32 diff)
 
         WorldDatabase.PExecute("INSERT INTO `player_census` (`alliance_players`, `horde_players`, `total_players`, `date_time`) VALUES (%u, %u, %u, NOW())", alliancePlayers,
             hordePlayers, hordePlayers + alliancePlayers);
+    }
+
+    if (m_timers[WUPDATE_SHELLCOIN].Passed())
+    {
+        m_timers[WUPDATE_SHELLCOIN].Reset();
+
+        int32 buyPrice = sObjectMgr.GetShellCoinBuyPrice();
+        int32 coinCount = sObjectMgr.GetShellCoinCount();
+
+        if (m_lastShellCoinPrice)
+        {
+            std::string message;
+            if (buyPrice > m_lastShellCoinPrice)
+                message = "Shellcoin price has increased to " + std::to_string(buyPrice) + " copper (up " + std::to_string(int32((float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f - 100.0f)) + "%).";
+            else if (buyPrice < m_lastShellCoinPrice)
+                message = "Shellcoin price has decreased to " + std::to_string(buyPrice) + " copper (down " + std::to_string(int32(100.0f - (float(buyPrice) / float(m_lastShellCoinPrice)) * 100.0f)) + "%).";
+
+            if (!message.empty())
+            {
+                for (auto const& guid : m_shellCoinOwners)
+                {
+                    if (Player* pPlayer = sObjectAccessor.FindPlayer(guid))
+                    {
+                        if (pPlayer->IsInWorld())
+                            ChatHandler(pPlayer).SendSysMessage(message.c_str());
+                    }
+                }
+            }
+        }
+
+        CharacterDatabase.PExecute("INSERT INTO `logs_shellcoin` (`time`, `count`, `price`) VALUES (%u, %u, %u)",
+            m_gameTime, coinCount, buyPrice);
+
+        m_lastShellCoinPrice = buyPrice;
     }
 
     /// </ul>
@@ -2685,6 +2749,33 @@ void World::_UpdateRealmCharCount(QueryResult *resultCharCount, uint32 accountId
         LoginDatabase.PExecute("INSERT INTO realmcharacters (numchars, acctid, realmid) VALUES (%u, %u, %u)", charCount, accountId, realmID);
         LoginDatabase.CommitTransaction();
     }
+}
+
+void World::LoadAccountData()
+{
+    uint32 days = getConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS);
+    if (!days)
+        return;
+
+    std::unique_ptr<QueryResult> result{ LoginDatabase.PQuery("SELECT id, username, email FROM account WHERE last_login >= NOW() - INTERVAL %u DAY", days) };
+
+    uint32 count = 0;
+
+    if (!result)
+        return;
+
+    do {
+        auto fields = result->Fetch();
+
+        uint32 id = fields[0].GetUInt32();
+        auto accountData = GetAccountData(id);
+        accountData->id = id;
+        accountData->username = fields[1].GetCppString();
+        accountData->email = fields[2].GetCppString();
+        ++count;
+    } while (result->NextRow());
+
+    sLog.outString("Loaded %u cached accounts.", count);
 }
 
 void World::SetPlayerLimit(int32 limit, bool needUpdate)
@@ -3624,14 +3715,17 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
         stringType += "|GM";
     }
 
+    std::ostringstream ss;
+    ss << plr->GetName() << ":" << sess->GetAccountId();
+
     if (target)
-        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", stringType.c_str(), plr->GetName(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
-        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", stringType.c_str(), chanId, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", stringType.c_str(), chanId, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanStr)
-        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
-        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", stringType.c_str(), plr->GetName(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
 }
 
 void MigrationFile::SetAuthor(std::string const& author)
@@ -3700,7 +3794,7 @@ void MigrationFile::AddRowFormat(char const* format, ...)
 void MigrationFile::CommitUpdates()
 {
     hasChanges = false;
-    std::string command = "cd \"" + sWorld.GetWorldUpdatesDirectory() + "\" && git add --all && git commit -m \"Live changes.\" && git pull --rebase && git push";
+    std::string command = "cd \"" + sWorld.GetWorldUpdatesDirectory() + "\" && git add --all && git commit -m \"Direct world update.\" && git pull --rebase && git push";
     system(command.c_str());
 }
 

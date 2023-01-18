@@ -23,12 +23,12 @@ namespace nsArdaeus
 
     static constexpr float INCREASE_Z_AXIS{ 5.0f };               // Set new Z destination to move Sun upwards
     static constexpr float INCREASE_SPEED{ 5.0f };                // Set new speed
-    static constexpr std::uint32_t NPC_SUN{ 2000019 };
-    static constexpr std::uint32_t DAMAGE_DONE_TO_MOVE_UPWARDS{ 25000 }; // Required damage to move Sun upwards
-    static constexpr std::uint32_t SUN_SPEED_INCREASE_TIMER{ 10000 };    // Interval for speed update
+    static constexpr uint32 NPC_SUN{ 2000019 };
+    static constexpr uint32 DAMAGE_DONE_TO_MOVE_UPWARDS{ 25000 }; // Required damage to move Sun upwards
+    static constexpr uint32 SUN_SPEED_INCREASE_TIMER{ 10000 };    // Interval for speed update
 
     // Call for Help
-    static constexpr std::uint8_t MAX_SPAWN_POINTS{ 11 };
+    static constexpr uint8 MAX_SPAWN_POINTS{ 11 };
     static const Location vfStatueNPCsSpawnPoints[MAX_SPAWN_POINTS] = // Statue spawn points
     {
         { 273.846527f,  -89.212425f, 36.449623f }, // Admiral Barean Westwind
@@ -49,11 +49,11 @@ namespace nsArdaeus
         { 255.173981f, -99.994385f, 18.679367f, 6.263751f }   // Middle of the room
     };
 
-    static constexpr std::uint32_t VISUALSPELL_SUMMON_CALLFORHELP{ 7741 }; // TODO: Replace this spell since its already used in Boss Mariella's fight
-    static constexpr std::uint32_t CALLFORHELP_REPEAT_TIMER{ 30000 };
-    static constexpr std::uint32_t ARDAEUS_STATUE_NPC{ 2000031 };
+    static constexpr uint32 VISUALSPELL_SUMMON_CALLFORHELP{ 7741 }; // TODO: Replace this spell since its already used in Boss Mariella's fight
+    static constexpr uint32 CALLFORHELP_REPEAT_TIMER{ 30000 };
+    static constexpr uint32 ARDAEUS_STATUE_NPC{ 2000031 };
 
-    static const std::uint32_t vfCallForHelpNPCs[MAX_SPAWN_POINTS] = // Call for Help NPCs
+    static const uint32 vfCallForHelpNPCs[MAX_SPAWN_POINTS] = // Call for Help NPCs
     {
         2000030, // Admiral Barean Westwind
         2000029, // Harthal Truesight
@@ -69,7 +69,7 @@ namespace nsArdaeus
     };
 
     // Gossip Menu
-    static constexpr std::uint32_t GOSSIP_TEXT{ 1000001 };
+    static constexpr uint32 GOSSIP_TEXT{ 1000001 };
     static constexpr auto GOSSIP_ANSWER{ "Give us your worst, fanatic mage." };
 
     // Achievment
@@ -79,15 +79,15 @@ namespace nsArdaeus
     };
 
     static constexpr float ACHIEVEMENT_FAILED_BELOW{ 20.f };
-    static constexpr std::uint32_t ACHIEVEMENT_CHECK_TIMER{ 1000 };
-    static constexpr std::uint32_t GO_ACHIEVEMENT_CHEST{ 5000014 };              // Chest to loot the achievement reward
-    static constexpr std::uint32_t GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes
+    static constexpr uint32 ACHIEVEMENT_CHECK_TIMER{ 1000 };
+    static constexpr uint32 GO_ACHIEVEMENT_CHEST{ 5000014 };              // Chest to loot the achievement reward
+    static constexpr uint32 GO_ACHIEVEMENT_CHEST_DESPAWN_TIMER{ 900000 }; // 15 Minutes
 
     // Misc
     static constexpr float ROOM_DIAGONAL{ (54.0f / 2) }; // Room size
-    static constexpr std::uint32_t FACTION_SCARLET{ 67 };       // Scarlet Citadel Faction // TODO: Find proper ID
-    static constexpr std::uint32_t FACTION_NEUTRAL{ 189 };      // Neutral Faction
-    static constexpr std::uint32_t SEVEN_DAYS{ 604800 }; // 
+    static constexpr uint32 FACTION_SCARLET{ 67 };       // Scarlet Citadel Faction // TODO: Find proper ID
+    static constexpr uint32 FACTION_NEUTRAL{ 189 };      // Neutral Faction
+    static constexpr uint32 SEVEN_DAYS{ 604800 }; // 
 
     enum class CombatNotifications
     {
@@ -178,5 +178,6 @@ namespace nsArdaeus
                 return "Admiral! I have saved you some rum, tell me of Northern coasts again.";
             }
         }
+        return std::string();
     }
 }

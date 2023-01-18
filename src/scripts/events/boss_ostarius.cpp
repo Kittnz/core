@@ -116,13 +116,18 @@ struct boss_ostariusAI : public ScriptedAI
 
         // Reset to neutral for RP intro.
         me->SetFactionTemplateId(7); // Neutral (Creature)
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2);
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NON_ATTACKABLE_2);
     }
 
     void Reset()
     {
         SetDefaults();
 
+        DespawnSummons();
+    }
+
+    void OnRemoveFromWorld() override
+    {
         DespawnSummons();
     }
 
@@ -151,19 +156,23 @@ struct boss_ostariusAI : public ScriptedAI
     {
         for (const auto& guid : sentrySpawns)
             if (auto c = me->GetMap()->GetCreature(guid))
-                DeleteObject(c, sentrySpawns);
+                c->DespawnOrUnsummon();
+        sentrySpawns.clear();
 
         for (const auto& guid : constructSpawns)
             if (auto c = me->GetMap()->GetCreature(guid))
-                DeleteObject(c, constructSpawns);
+                c->DespawnOrUnsummon();
+        constructSpawns.clear();
 
         for (const auto& guid : portals)
             if (auto g = me->GetMap()->GetGameObject(guid))
-                DeleteObject(g, portals);
+                g->AddObjectToRemoveList();
+        portals.clear();
 
         for (const auto& guid : devices)
             if (auto g = me->GetMap()->GetGameObject(guid))
-                DeleteObject(g, devices);
+                g->AddObjectToRemoveList();
+        devices.clear();
     }
 
     void KilledUnit(Unit* victim) override
@@ -329,7 +338,7 @@ struct boss_ostariusAI : public ScriptedAI
             DoCast(me, SPELL_SANDSTORM, true);
 
             // Make attackable now once shield is up.
-            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2);
+            me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NON_ATTACKABLE_2);
             me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
             PlaySound(me, SOUND_PHASE_1, true);
@@ -494,7 +503,12 @@ struct boss_ostariusAI : public ScriptedAI
                 spawnX,
                 spawnY,
                 squareZ,
-                0.0f
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                5 * MINUTE
             );
             portals.push_back(portal->GetObjectGuid());
 
@@ -511,7 +525,9 @@ struct boss_ostariusAI : public ScriptedAI
                 sentryLocs[i][0],
                 sentryLocs[i][1],
                 sentryLocs[i][2],
-                sentryLocs[i][3]
+                sentryLocs[i][3],
+                TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN,
+                30 * MINUTE * IN_MILLISECONDS
             );
 
             sentrySpawns.push_back(sentry->GetObjectGuid());
@@ -535,7 +551,12 @@ struct boss_ostariusAI : public ScriptedAI
                 spawnX,
                 spawnY,
                 squareZ,
-                0.0f
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                0.0f,
+                5 * MINUTE
             );
 
             devices.push_back(device->GetObjectGuid());
@@ -619,9 +640,9 @@ struct mob_uldum_constructAI : public ScriptedAI
 };
 
 
-constexpr std::uint32_t SPELL_BLIZZARD = 21367;
-constexpr std::uint32_t SPELL_RAIN_OF_FIRE = 24669;
-constexpr std::uint32_t SPELL_FROST_BREATH = 22479;
+constexpr uint32 SPELL_BLIZZARD = 21367;
+constexpr uint32 SPELL_RAIN_OF_FIRE = 24669;
+constexpr uint32 SPELL_FROST_BREATH = 22479;
 
 
 struct mob_uldum_sentryAI : public ScriptedAI
@@ -637,7 +658,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
 
     void SetDefaults()
     {
-        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_STUNNED | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_DISABLE_MOVE);
+        me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_STUNNED | UNIT_FLAG_SPAWNING | UNIT_FLAG_NON_ATTACKABLE_2 | UNIT_FLAG_DISABLE_MOVE);
         me->ForceValuesUpdateAtIndex(UNIT_FIELD_FLAGS);
 
         // Needed so our channeled spells have no issues casting.
@@ -675,7 +696,7 @@ struct mob_uldum_sentryAI : public ScriptedAI
                 {
                     if (boss_ostariusAI* boss_ostarius{ dynamic_cast<boss_ostariusAI*>(pOstarius->AI()) })
                     {
-                        const std::uint32_t spellToCast{ boss_ostarius->IsFrostPhase() ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE };
+                        const uint32 spellToCast{ boss_ostarius->IsFrostPhase() ? SPELL_BLIZZARD : SPELL_RAIN_OF_FIRE };
                         DoCast(randomTarget, spellToCast, true);
                         if (spellToCast == SPELL_BLIZZARD)
                         {

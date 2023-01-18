@@ -485,3 +485,5 @@ inline uint32 BatchifyTimer(uint32 timer, uint32 interval)
         value++;
     return value * interval;
 }
+
+std::string MoneyToString(uint32 copper);

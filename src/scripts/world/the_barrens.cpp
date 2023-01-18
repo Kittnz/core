@@ -304,7 +304,7 @@ struct npc_taskmaster_fizzuleAI : public ScriptedAI
         m_creature->HandleEmoteCommand(EMOTE_ONESHOT_SALUTE);
     }
 
-    void SpellHit(Unit *caster, const SpellEntry *spell) override
+    void SpellHit(WorldObject* caster, const SpellEntry *spell) override
     {
         if (spell->Id == SPELL_FLARE || spell->Id == SPELL_FOLLY)
         {
@@ -444,7 +444,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
             }
 
             pCreature->SetFactionTemplateId(FACTION_FRIENDLY);
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             pCreature->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);
             AffrayChallenger[i] = pCreature->GetGUID();
         }
@@ -453,7 +453,7 @@ struct npc_twiggy_flatheadAI : public ScriptedAI
     void SetChallengerReady(Unit *pUnit)
     {
         pUnit->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-        pUnit->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        pUnit->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         pUnit->HandleEmoteCommand(EMOTE_ONESHOT_ROAR);
         pUnit->SetFactionTemplateId(FACTION_MONSTER);
     }
@@ -1385,7 +1385,7 @@ struct npc_mission_possible_but_not_probableAI : ScriptedAI
 
     }
 
-    void SpellHit(Unit* /*caster*/, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* /*caster*/, const SpellEntry* pSpell) override
     {
         uint32 spellId = 0;
 

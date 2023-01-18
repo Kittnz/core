@@ -55,6 +55,8 @@
 #include "GameEventMgr.h"
 #include "events/event_wareffort.h"
 #include "LFGMgr.h"
+#include "Geometry.h"
+#include "CreatureGroups.h"
 #include "Autoscaling/AutoScaler.hpp"
 
 Map::~Map()
@@ -458,6 +460,9 @@ Map::Add(T *obj)
 
     obj->GetViewPoint().Event_AddedToWorld(&(*grid)(cell.CellX(), cell.CellY()));
     UpdateObjectVisibility(obj, cell, p);
+
+    if (Creature* pCreature = obj->ToCreature())
+        pCreature->CastSpawnSpell();
 }
 
 template<>
@@ -1444,6 +1449,8 @@ bool Map::UnloadGrid(const uint32 &x, const uint32 &y, bool pForce)
 
 void Map::UnloadAll(bool pForce)
 {
+    volatile uint32 mapid_debug = GetId();
+
     m_unloading = true;
     RemoveCorpses(true);
 
@@ -1704,6 +1711,15 @@ bool Map::SendToPlayersInZone(WorldPacket const* data, uint32 zoneId) const
         }
     }
     return foundPlayer;
+}
+
+void Map::SendToAllGMsNotInGroup(WorldPacket const* data, Group* pGroup) const
+{
+    for (const auto& itr : m_mapRefManager)
+    {
+        if (itr.getSource()->IsGameMaster() && itr.getSource()->GetGroup() != pGroup)
+            itr.getSource()->GetSession()->SendPacket(data);
+    }
 }
 
 bool Map::ActiveObjectsNearGrid(uint32 x, uint32 y) const
@@ -2387,6 +2403,10 @@ bool Map::FindScriptInitialTargets(WorldObject*& source, WorldObject*& target, c
     if (target && !target->IsInWorld())
         target = nullptr;
 
+    if ((step.script->raw.data[4] & SF_GENERAL_SKIP_MISSING_TARGETS) &&
+        (!source && !step.sourceGuid.IsEmpty() || !target && !step.targetGuid.IsEmpty()))
+        return false;
+
     return true;
 }
 
@@ -2404,20 +2424,9 @@ bool Map::FindScriptFinalTargets(WorldObject*& source, WorldObject*& target, con
     {
         if (!(target = GetTargetByType(source, target, this, script.target_type, script.target_param1, script.target_param2)))
         {
-            switch (script.target_type)
-            {
-                case TARGET_T_NEAREST_CREATURE_WITH_ENTRY:
-                case TARGET_T_RANDOM_CREATURE_WITH_ENTRY:
-                case TARGET_T_CREATURE_WITH_GUID:
-                case TARGET_T_CREATURE_FROM_INSTANCE_DATA:
-                case TARGET_T_NEAREST_GAMEOBJECT_WITH_ENTRY:
-                case TARGET_T_GAMEOBJECT_WITH_GUID:
-                case TARGET_T_GAMEOBJECT_FROM_INSTANCE_DATA:
-                {
-                    sLog.outError("FindScriptTargets: Failed to find target for script with id %u (target_param1: %u), (target_param2: %u), (target_type: %u).", script.id, script.target_param1, script.target_param2, script.target_type);
-                    return false;
-                }
-            }
+            if (!(script.raw.data[4] & SF_GENERAL_SKIP_MISSING_TARGETS))
+                sLog.outError("FindScriptTargets: Failed to find target for script with id %u (target_param1: %u), (target_param2: %u), (target_type: %u).", script.id, script.target_param1, script.target_param2, script.target_type);
+            return false;
         }
     }
 
@@ -3105,50 +3114,79 @@ bool Map::GetWalkHitPosition(Transport* transport, float srcX, float srcY, float
 }
 
 
-bool Map::GetWalkRandomPosition(Transport* transport, float &x, float &y, float &z, float maxRadius, uint32 moveAllowedFlags) const
+bool Map::GetWalkRandomPosition(Transport* transport, float& x, float& y, float& z, float maxRadius, bool allowStraightPath, uint32 moveAllowedFlags) const
 {
     ASSERT(MaNGOS::IsValidMapCoord(x, y, z));
 
-    // Trouver le navMeshQuery
+    // Find the navMeshQuery.
     MMAP::MMapManager* mmap = MMAP::MMapFactory::createOrGetMMapManager();
-    const dtNavMeshQuery* m_navMeshQuery = transport ? mmap->GetModelNavMeshQuery(transport->GetDisplayId()) : mmap->GetNavMeshQuery(GetId());
+    dtNavMeshQuery const* m_navMeshQuery = transport ? mmap->GetModelNavMeshQuery(transport->GetDisplayId()) : mmap->GetNavMeshQuery(GetId());
     float radius = maxRadius * rand_norm_f();
-    if (!m_navMeshQuery)
-        return false;
-    // Trouver une position valide a cote.
-    float point[3] = {y, z, x};
+
+    // Find a valid position nearby.
+    float endPosition[3];
+    float point[3] = { y, z, x };
     if (transport)
         transport->CalculatePassengerOffset(point[2], point[0], point[1]);
 
-    // ATTENTION : Positions en Y,Z,X
-    float closestPoint[3] = {0.0f, 0.0f, 0.0f};
-    dtQueryFilter filter;
-    filter.setIncludeFlags(moveAllowedFlags);
-    filter.setExcludeFlags(NAV_STEEP_SLOPES);
-    dtPolyRef startRef = PathInfo::FindWalkPoly(m_navMeshQuery, point, filter, closestPoint);
-    if (!startRef)
-        return false;
+    bool mmapsCorrect = false;
 
-    dtPolyRef randomPosRef = 0;
-    dtStatus result = m_navMeshQuery->findRandomPointAroundCircle(startRef, closestPoint, maxRadius, &filter, rand_norm_f, &randomPosRef, point);
-    if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(point[2], point[0], point[1]))
-        return false;
+    if (m_navMeshQuery)
+    {
+        do 
+        {
+            mmapsCorrect = true;
+            // ATTENTION : Positions are Y,Z,X
+            float closestPoint[3] = { 0.0f, 0.0f, 0.0f };
+            dtQueryFilter filter;
+            filter.setIncludeFlags(moveAllowedFlags);
+            filter.setExcludeFlags(NAV_STEEP_SLOPES);
+            dtPolyRef startRef = PathInfo::FindWalkPoly(m_navMeshQuery, point, filter, closestPoint);
+            if (!startRef)
+            {
+                mmapsCorrect = false;
+                continue;
+            }
 
-    // Random point may be at a bigger distance than allowed
-    float d = sqrt(pow(x - point[2], 2) + pow(y - point[0], 2));
-    float endPosition[3] = {y + radius*(y - point[0]) / d, z, x + radius*(x - point[2]) / d};
-    float t = 0.0f;
-    dtPolyRef visited[10] = {0};
-    int visitedCount = 0;
-    float hitNormal[3] = {0}; // Normal of wall hit.
-    result = m_navMeshQuery->raycast(startRef, closestPoint, endPosition, &filter, &t, hitNormal, visited, &visitedCount, 10);
-    if (dtStatusFailed(result) || !visitedCount)
-        return false;
-    for (int i = 0; i < 3; ++i)
+            dtPolyRef randomPosRef = 0;
+            dtStatus result = m_navMeshQuery->findRandomPointAroundCircle(startRef, closestPoint, maxRadius, &filter, rand_norm_f, &randomPosRef, point);
+            if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(point[2], point[0], point[1]))
+            {
+                mmapsCorrect = false;
+                continue;
+            }
+
+            // Random point may be at a bigger distance than allowed
+            float d = sqrt(pow(x - point[2], 2) + pow(y - point[0], 2));
+            endPosition[0] = y + radius * (y - point[0]) / d;
+            endPosition[1] = z;
+            endPosition[2] = x + radius * (x - point[2]) / d;
+            float t = 0.0f;
+            dtPolyRef visited[10] = { 0 };
+            int visitedCount = 0;
+            float hitNormal[3] = { 0 }; // Normal of wall hit.
+            result = m_navMeshQuery->raycast(startRef, closestPoint, endPosition, &filter, &t, hitNormal, visited, &visitedCount, 10);
+            if (dtStatusFailed(result) || !visitedCount)
+            {
+                mmapsCorrect = false;
+                continue;
+            }
+            for (int i = 0; i < 3; ++i)
                 endPosition[i] += hitNormal[i] * 0.5f;
-    result = m_navMeshQuery->closestPointOnPoly(visited[visitedCount - 1], endPosition, endPosition, nullptr);
-    if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(endPosition[2], endPosition[0], endPosition[1]))
-        return false;
+            result = m_navMeshQuery->closestPointOnPoly(visited[visitedCount - 1], endPosition, endPosition, nullptr);
+            if (dtStatusFailed(result) || !MaNGOS::IsValidMapCoord(endPosition[2], endPosition[0], endPosition[1]))
+            {
+                mmapsCorrect = false;
+                continue;
+            }
+        } while (false);
+    }
+
+    if (!mmapsCorrect)
+    {
+        Geometry::GetNearPoint2DAroundPosition(point[2], point[0], endPosition[2], endPosition[0], radius, frand(0, M_PI_F * 2));
+        endPosition[1] = point[1];
+    }
 
     if (transport)
         transport->CalculatePassengerPosition(endPosition[2], endPosition[0], endPosition[1]);
@@ -3157,7 +3195,7 @@ bool Map::GetWalkRandomPosition(Transport* transport, float &x, float &y, float 
     x = endPosition[2];
     y = endPosition[0];
     z = endPosition[1];
-    // 2. On precise avec les vmaps (la premiere etape permet en gros de selectionner l'etage)
+    // 2. We specify with the vmaps (the first step basically allows you to select the floor)
     if (transport)
         z += 0.5f; // Allow us a little error (mmaps not very precise regarding height computations)
     else
@@ -3484,4 +3522,54 @@ GameObject* Map::SummonGameObject(uint32 entry, float x, float y, float z, float
     Add(go);
     go->SetWorldMask(worldMask);
     return go;
+}
+
+Creature* Map::LoadCreatureSpawn(uint32 dbGuid, bool delaySpawn)
+{
+    CreatureData const* pSpawnData = sObjectMgr.GetCreatureData(dbGuid);
+    if (!pSpawnData)
+        return nullptr;
+
+    Creature* pCreature;
+    ObjectGuid guid = pSpawnData->GetObjectGuid(dbGuid);
+    if (pCreature = GetCreature(guid))
+        return pCreature;
+
+    if (!IsLoaded(pSpawnData->position.x, pSpawnData->position.y))
+        return nullptr;
+
+    pCreature = new Creature();
+    if (!pCreature->LoadFromDB(dbGuid, this, true))
+    {
+        delete pCreature;
+        return nullptr;
+    }
+
+    if (delaySpawn)
+    {
+        pCreature->SetRespawnTime(pCreature->GetRespawnDelay());
+        if (sWorld.getConfig(CONFIG_BOOL_SAVE_RESPAWN_TIME_IMMEDIATELY) || pCreature->IsWorldBoss())
+            pCreature->SaveRespawnTime();
+    }
+
+    Add(pCreature);
+    return pCreature;
+}
+
+Creature* Map::LoadCreatureSpawnWithGroup(uint32 leaderDbGuid, bool delaySpawn)
+{
+    Creature* pLeader = LoadCreatureSpawn(leaderDbGuid);
+    if (!pLeader)
+        return nullptr;
+
+    if (CreatureGroup* pGroup = pLeader->GetCreatureGroup())
+    {
+        for (auto const& itr : pGroup->GetMembers())
+            LoadCreatureSpawn(itr.first.GetCounter());
+
+        if (pGroup->HasGroupFlag(OPTION_RESPAWN_TOGETHER) && pLeader->IsAlive())
+            pGroup->RespawnAll(pLeader);
+    }
+
+    return pLeader;
 }

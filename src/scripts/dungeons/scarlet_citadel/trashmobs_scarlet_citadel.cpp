@@ -26,9 +26,9 @@ private:
 
     bool m_bCastedDivineShieldOnce{};
 
-    std::uint32_t m_uiCounterSpell_Timer{};
-    std::uint32_t m_uiHolyNova_Timer{};
-    std::uint32_t m_uiGreaterHeal_Timer{};
+    uint32 m_uiCounterSpell_Timer{};
+    uint32 m_uiHolyNova_Timer{};
+    uint32 m_uiGreaterHeal_Timer{};
 
 public:
     void Reset() override
@@ -149,8 +149,8 @@ public:
 
 private:
 
-    std::uint32_t m_uiCharge_Timer{};
-    std::uint32_t m_uiCleave_Timer{};
+    uint32 m_uiCharge_Timer{};
+    uint32 m_uiCleave_Timer{};
 
 public:
     void Reset() override
@@ -233,8 +233,8 @@ public:
 
 private:
 
-    std::uint32_t m_uiDisarm_Timer{};
-    std::uint32_t m_uiFrenzy_Timer{};
+    uint32 m_uiDisarm_Timer{};
+    uint32 m_uiFrenzy_Timer{};
 
 public:
     void Reset() override
@@ -314,11 +314,11 @@ private:
     bool m_bAlreadyUsedFrenzy{};
     bool m_bAlreadyUsedEvasion{};
 
-    std::uint8_t m_uiSinisterStrikeHits{};
+    uint8 m_uiSinisterStrikeHits{};
 
-    std::uint32_t m_uiBlind_Timer{};
-    std::uint32_t m_uiGouge_Timer{};
-    std::uint32_t m_uiSinisterStrike_Timer{};
+    uint32 m_uiBlind_Timer{};
+    uint32 m_uiGouge_Timer{};
+    uint32 m_uiSinisterStrike_Timer{};
 
 public:
     void Reset() override
@@ -453,7 +453,7 @@ private:
 
     bool m_bEventStarted{};
 
-    std::uint32_t m_uiCHeckPulse_Timer{};
+    uint32 m_uiCHeckPulse_Timer{};
 
     instance_scarlet_citadel* m_pInstance{};
 
@@ -513,7 +513,7 @@ public:
         if (!pScarletSister)
             return;
 
-        static const std::uint32_t uiRndEvent{ urand(0, 1) };
+        static const uint32 uiRndEvent{ urand(0, 1) };
         DoAfterTime(pScarletChaplain, (2 * IN_MILLISECONDS), [chaplain = pScarletChaplain]()
         {
             if (chaplain)
@@ -597,14 +597,14 @@ public:
 
 private:
 
-    std::uint32_t m_uiCheckPulse{};
+    uint32 m_uiCheckPulse{};
 
 public:
     void Reset() override
     {
         m_uiCheckPulse = nsAntiExploit::PULSE_TIMER;
 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetVisibility(VISIBILITY_OFF);
     }
 

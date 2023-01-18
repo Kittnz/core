@@ -41,17 +41,17 @@ OFFSET_TEXTEMOTE_SOUND_LOAD_CHECK             = 0x00057C81, // Allows the game t
 
 bool fov_build = false;
 
-#define NEW_BUILD 7040u
-#define NEW_VISUAL_BUILD "7040"
-#define NEW_VISUAL_VERSION "1.16.4"
-#define NEW_BUILD_DATE "November 12 2022"
+#define NEW_BUILD 7060u
+#define NEW_VISUAL_BUILD "7060"
+#define NEW_VISUAL_VERSION "1.16.5"
+#define NEW_BUILD_DATE "Jan 03 2023"
 #define NEW_WEBSITE_FILTER "*.turtle-wow.org" 
 #define NEW_WEBSITE2_FILTER "*.discord.gg" 
 #define PATCH_FILE "Data\\patch-3.mpq"
 #define DISCORD_OVERLAY_FILE "DiscordOverlay.dll"
 #define DISCORD_GAME_SDK_FILE "discord_game_sdk.dll"
 #define LFT_ADDON_FILE "LFT.mpq"
-#define ADDITIONAL_GAME_BINARY "WoWFoV.mpq"
+#define ADDITIONAL_GAME_BINARY "WoWFoV.exe"
 
 const unsigned char LoadDLLShellcode[] =
 {
@@ -168,12 +168,17 @@ void PatchBinary(FILE* hWoW)
 	fseek(hWoW, OFFSET_NAMEPLATE_DISTANCE, SEEK_SET);
 	fwrite(patch_11, sizeof(patch_11), 1, hWoW);
 
+	// Increased value:
 	char patch_12[] = { 0x2F, 0x01 };
 	fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
 	fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
-	// Sound channel count original values:
+	// Original 1.12.1 value:
+	//char patch_12[] = { 0x0F, 0x01 };
+	//fseek(hWoW, OFFSET_LARGE_ADDRESS_AWARE, SEEK_SET);
+	//fwrite(patch_12, sizeof(patch_12), 1, hWoW);
 
+	// Sound channel count original values:
 	char patch_8[] = { 0x38, 0x5D, 0x83, 0x00 };
 	fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
 	fwrite(patch_8, sizeof(patch_8), 1, hWoW);
@@ -187,7 +192,6 @@ void PatchBinary(FILE* hWoW)
 	fwrite(patch_10, sizeof(patch_10), 1, hWoW);
 
 	// Sound in background, original value:
-
 	char patch_13[] = { 0x14 };
 	fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 	fwrite(patch_13, sizeof(patch_13), 1, hWoW);
@@ -207,19 +211,6 @@ void PatchBinary(FILE* hWoW)
 		char patch_13[] = { 0x27 };
 		fseek(hWoW, OFFSET_SOUND_IN_BACKGROUND, SEEK_SET);
 		fwrite(patch_13, sizeof(patch_13), 1, hWoW);
-
-		// Increased sound channel count
-		char patch_8[] = { 0x9C, 0x5C, 0x83, 0x00 };
-		fseek(hWoW, OFFSET_SOUND_SOFTWARE_CHANNELS, SEEK_SET);
-		fwrite(patch_8, sizeof(patch_8), 1, hWoW);
-
-		char patch_9[] = { 0x9C, 0x5C, 0x83, 0x00 };
-		fseek(hWoW, OFFSET_SOUND_HARDWARE_CHANNELS, SEEK_SET);
-		fwrite(patch_9, sizeof(patch_9), 1, hWoW);
-
-		char patch_10[] = { 0x9C, 0x5C, 0x83, 0x00 };
-		fseek(hWoW, OFFSET_SOUND_MEMORY_CACHE, SEEK_SET);
-		fwrite(patch_10, sizeof(patch_10), 1, hWoW);
 	}
 }
 
@@ -479,9 +470,24 @@ void PrintInstructions()
 	WriteLog(" ");
 	WriteLog("If everything is done right, your Data folder should have %s installed an your binary file should have revision %s", PATCH_FILE, NEW_VISUAL_VERSION);
 	WriteLog(" ");
-	WriteLog("If it still doesn't work please use a direct download from our website: https://www.turtle-archives.online/downloads/turtle_client_116.zip");
+	WriteLog("If it still doesn't work please use a direct download from our website.");
 	WriteLog(" ");
 	WriteLog("If you need help, join our Discord: https://discord.com/invite/mBGxmHy or contact us via e-mail help.turtlewow@gmail.com");
+}
+
+void ClearWDBCache()
+{
+	fs::path current_path = fs::current_path();
+
+	{
+		fs::path wdb = current_path / "WDB";
+
+		if (fs::exists(wdb))
+		{
+			WriteLog("Deleting client cache...");
+			fs::remove_all(wdb);
+		}	
+	}
 }
 
 void DeleteDeprecatedMPQ()
@@ -526,17 +532,12 @@ void DeleteDeprecatedMPQ()
 	}
 
 	{
-		std::string alphabet_patches[8] = { "patch-A.mpq",
-							        	    "patch-T.mpq",
-							        	    "patch-U.mpq",
-							        	    "patch-V.mpq",
-							        	    "patch-W.mpq",
-							        	    "patch-X.mpq",
-							        	    "patch-Y.mpq",
-							        	    "patch-Z.mpq" };
-
-		for (std::string i : alphabet_patches)
+		for (char let = 'A'; let <= 'Z'; ++let)
 		{
+			std::stringstream ss_n;
+			ss_n << "patch-" << let << ".mpq";
+			std::string i = ss_n.str();
+
 			WriteLog("Searching for %s...", i.c_str());
 
 			std::stringstream ss_r;
@@ -566,7 +567,6 @@ void DeleteDeprecatedMPQ()
 				WriteLog("%s not found.", i.c_str());
 			}
 		}
-
 	}
 }
 
@@ -635,6 +635,9 @@ int GuardedMain(HINSTANCE hInstance)
 
 	// Delete deprecated MPQ files:
 	DeleteDeprecatedMPQ();
+
+	// Delete WDB:
+	ClearWDBCache();
 
 
 	// unpack patch files
@@ -799,88 +802,88 @@ int GuardedMain(HINSTANCE hInstance)
 		}
 
 		// unpack mpq
-		if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
-		{
-			OnOpenFileLambda(PATCH_FILE);
-			std::unique_ptr<StormFile> patchData(pFile);
+		//if (StormFile* pFile = PatchFile.OpenFile(PATCH_FILE))
+		//{
+		//	OnOpenFileLambda(PATCH_FILE);
+		//	std::unique_ptr<StormFile> patchData(pFile);
 
-			// copy shit to target path
-			FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE);
-			if (hTargetFile == nullptr)
-			{
-				return 1;
-			}
+		//	// copy shit to target path
+		//	FILE* hTargetFile = OpenFileWithLogLambda(PATCH_FILE);
+		//	if (hTargetFile == nullptr)
+		//	{
+		//		return 1;
+		//	}
 
-			// split to chunks
-			const DWORD chunkSize = 4096;
-			DWORD chunks = patchData->Size.QuadPart / chunkSize;
-			chunks += (patchData->Size.QuadPart % chunkSize) != 0;
-			char ReadingBuffer[4096];
+		//	// split to chunks
+		//	const DWORD chunkSize = 4096;
+		//	DWORD chunks = patchData->Size.QuadPart / chunkSize;
+		//	chunks += (patchData->Size.QuadPart % chunkSize) != 0;
+		//	char ReadingBuffer[4096];
 
-			PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
+		//	PeekMessage(&msg, nullptr, 0U, 0U, PM_NOREMOVE);
 
-			DWORD ExtractProgress = 0;
+		//	DWORD ExtractProgress = 0;
 
-			for (DWORD i = 0; i < chunks; i++)
-			{
-				if (hDialog == NULL)
-				{
-					break;
-				}
+		//	for (DWORD i = 0; i < chunks; i++)
+		//	{
+		//		if (hDialog == NULL)
+		//		{
+		//			break;
+		//		}
 
-				DWORD ReadingQuota = std::min<DWORD>(patchData->Size.QuadPart - ((i + 1) * chunkSize), chunkSize);
+		//		DWORD ReadingQuota = std::min<DWORD>(patchData->Size.QuadPart - ((i + 1) * chunkSize), chunkSize);
 
-				patchData->ReadToBuffer(&ReadingBuffer[0], ReadingQuota);
+		//		patchData->ReadToBuffer(&ReadingBuffer[0], ReadingQuota);
 
-				fwrite(ReadingBuffer, ReadingQuota, 1, hTargetFile);
+		//		fwrite(ReadingBuffer, ReadingQuota, 1, hTargetFile);
 
-				// update progress
-				float progress = float(i) / float(chunks);
-				progress *= 100.0f;
+		//		// update progress
+		//		float progress = float(i) / float(chunks);
+		//		progress *= 100.0f;
 
-				DWORD NewExtractProgress = DWORD(progress);
+		//		DWORD NewExtractProgress = DWORD(progress);
 
-				for (; ExtractProgress < NewExtractProgress; ExtractProgress++)
-				{
-					SendMessage(hDialog, WM_SETPROGRESS, 0, 0);
-				}
+		//		for (; ExtractProgress < NewExtractProgress; ExtractProgress++)
+		//		{
+		//			SendMessage(hDialog, WM_SETPROGRESS, 0, 0);
+		//		}
 
-				while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
-				{
-					if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
-					{
-						TranslateMessage(&msg);
-						DispatchMessage(&msg);
-					}
-				}
-			}
+		//		while (PeekMessage(&msg, nullptr, 0U, 0U, PM_REMOVE))
+		//		{
+		//			if (!IsWindow(hDialog) || !IsDialogMessage(hDialog, &msg))
+		//			{
+		//				TranslateMessage(&msg);
+		//				DispatchMessage(&msg);
+		//			}
+		//		}
+		//	}
 
-			fclose(hTargetFile);
-		}
-		else
-		{
-			WriteLog("ERROR: Coudln't extract MPQ.");
-			ErrorBox("Your client is already updated.");
-			return 1;
-		}
+		//	fclose(hTargetFile);
+		//}
+		//else
+		//{
+		//	WriteLog("The file you're looking for is probably already installed!");
+		//	ErrorBox("Your client is already updated.");
+		//	return 1;
+		//}
 	}
 
-	if (hDialog == NULL)
-	{
-		WriteLog("INFO: User has cancelled update.");
-		if (fs::exists(PATCH_FILE))
-		{
-			WriteLog("Removing patch files...");
-			fs::remove(PATCH_FILE);
-		}
+	//if (hDialog == NULL)
+	//{
+	//	WriteLog("INFO: User has cancelled update.");
+	//	if (fs::exists(PATCH_FILE))
+	//	{
+	//		WriteLog("Removing patch files...");
+	//		fs::remove(PATCH_FILE);
+	//	}
 
-		return 0;
-	}
-	else
-	{
-		DestroyWindow(hDialog);
-		hDialog = NULL;
-	}
+	//	return 0;
+	//}
+	//else
+	//{
+	//	DestroyWindow(hDialog);
+	//	hDialog = NULL;
+	//}
 
 	WriteLog("Patching WoW.exe...");
 

@@ -182,6 +182,7 @@ BattleGround::BattleGround()
     m_LevelMin          = 0;
     m_LevelMax          = 0;
     m_InBGFreeSlotQueue = false;
+    m_playerSkinReflootId = 0;
 
     m_MaxPlayersPerTeam = 0;
     m_MaxPlayers        = 0;
@@ -519,6 +520,33 @@ void BattleGround::CastSpellOnTeam(uint32 SpellID, Team teamId)
 
 void BattleGround::RewardHonorToTeam(uint32 Honor, Team teamId)
 {
+    float rate;
+    switch (GetTypeID())
+    {
+        case BATTLEGROUND_AV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AV);
+            break;
+        }
+        case BATTLEGROUND_WS:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_WS);
+            break;
+        }
+        case BATTLEGROUND_AB:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB);
+            break;
+        }
+        default:
+        {
+            rate = 1.0f;
+            break;
+        }
+    }
+
+    Honor = std::max(1u, uint32(Honor * rate));
+
     for (const auto& itr : m_Players)
     {
         Player* pPlayer = sObjectMgr.GetPlayer(itr.first);
@@ -537,12 +565,37 @@ void BattleGround::RewardHonorToTeam(uint32 Honor, Team teamId)
     }
 }
 
-void BattleGround::RewardReputationToTeam(uint32 faction_id, uint32 Reputation, Team teamId)
+void BattleGround::RewardReputationToTeam(uint32 factionId, uint32 reputation, Team teamId)
 {
-    FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(faction_id);
-
+    FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(factionId);
     if (!factionEntry)
         return;
+
+    float rate;
+    switch (GetTypeID())
+    {
+        case BATTLEGROUND_AV:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AV);
+            break;
+        }
+        case BATTLEGROUND_WS:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_WS);
+            break;
+        }
+        case BATTLEGROUND_AB:
+        {
+            rate = sWorld.getConfig(CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB);
+            break;
+        }
+        default:
+        {
+            rate = 1.0f;
+            break;
+        }
+    }
+    reputation = std::max(1u, uint32(reputation * rate));
 
     for (const auto& itr : m_Players)
     {
@@ -559,9 +612,8 @@ void BattleGround::RewardReputationToTeam(uint32 faction_id, uint32 Reputation, 
 
         if (team == teamId)
         {
-            int32 rep_change;
-            rep_change = pPlayer->CalculateReputationGain(REPUTATION_SOURCE_SPELL, Reputation, faction_id);
-            pPlayer->GetReputationMgr().ModifyReputation(factionEntry, rep_change);
+            int32 repChange = pPlayer->CalculateReputationGain(REPUTATION_SOURCE_SPELL, reputation, factionId);
+            pPlayer->GetReputationMgr().ModifyReputation(factionEntry, repChange);
         }
     }
 }
@@ -1193,6 +1245,23 @@ void BattleGround::DoorOpen(ObjectGuid guid)
         sLog.outError("BattleGround: Door %s not found! - doors will be closed.", guid.GetString().c_str());
 }
 
+bool BattleGround::CanBeSpawned(Creature* creature) const
+{
+    std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
+
+    ASSERT(eventsVector.size());
+
+    if (eventsVector[0].event1 == BG_EVENT_NONE)
+        return true;
+
+    for (const auto& i : eventsVector)
+    {
+        if (!IsActiveEvent(i.event1, i.event2))
+            return false;
+    }
+    return true;
+}
+
 void BattleGround::OnObjectDBLoad(Creature* creature)
 {
     std::vector<BattleGroundEventIdx> const& eventsVector = sBattleGroundMgr.GetCreatureEventsVector(creature->GetGUIDLow());
@@ -1790,4 +1859,35 @@ void BattleGround::StopBattleGround()
 {
     m_PrematureCountDown      = true;
     m_PrematureCountDownTimer = 100;
+}
+
+void BattleGround::HandleCommand(Player* player, ChatHandler* handler, char* args)
+{
+    std::stringstream in(args);
+    std::string commandType;
+    in >> commandType;
+    if (commandType == "event")
+    {
+        in >> commandType;
+        bool spawn = false;
+        bool force = true;
+        int event1, event2;
+        if (commandType == "spawn")
+            spawn = true;
+        in >> event1 >> event2;
+        in >> commandType;
+        if (commandType == "respawn")
+            force = false;
+        SpawnEvent(event1, event2, spawn, force);
+        handler->PSendSysMessage("Event (%u, %u) %s", event1, event2, spawn ? "spawned" : "despawned");
+    }
+    else if (commandType == "eventi")
+    {
+        int eventIdx;
+        in >> eventIdx;
+        handler->PSendSysMessage("Event %u current status: %u", eventIdx, m_ActiveEvents[eventIdx]);
+        for (int j = 0; j < 0xFF; ++j)
+            if (!m_EventObjects[MAKE_PAIR32(eventIdx, j)].gameobjects.empty() || !m_EventObjects[MAKE_PAIR32(eventIdx, j)].creatures.empty())
+                handler->PSendSysMessage("Event (%u, %u): %u gobj / %u creatures", eventIdx, j, m_EventObjects[MAKE_PAIR32(eventIdx, j)].gameobjects.size(), m_EventObjects[MAKE_PAIR32(eventIdx, j)].creatures.size());
+    }
 }

@@ -210,19 +210,22 @@ namespace MMAP
             if (m_mapBuilder->m_cancel.load())
                 return;
 
-            m_mapBuilder->m_tileQueue.WaitAndPop(tileInfo);
+            
 
-            dtNavMesh* navMesh = dtAllocNavMesh();
-            if (!navMesh->init(&tileInfo.m_navMeshParams))
+            if (m_mapBuilder->m_tileQueue.WaitAndPop(tileInfo))
             {
-                printf("[Map %03i] Failed creating navmesh for tile %i,%i !\n", tileInfo.m_mapId, tileInfo.m_tileX, tileInfo.m_tileY);
+                dtNavMesh* navMesh = dtAllocNavMesh();
+                if (!navMesh->init(&tileInfo.m_navMeshParams))
+                {
+                    printf("[Map %03i] Failed creating navmesh for tile %i,%i !\n", tileInfo.m_mapId, tileInfo.m_tileX, tileInfo.m_tileY);
+                    dtFreeNavMesh(navMesh);
+                    return;
+                }
+
+                buildTile(tileInfo.m_mapId, tileInfo.m_tileX, tileInfo.m_tileY, navMesh, tileInfo.m_curTile, tileInfo.m_tileCount);
+
                 dtFreeNavMesh(navMesh);
-                return;
             }
-
-            buildTile(tileInfo.m_mapId, tileInfo.m_tileX, tileInfo.m_tileY, navMesh, tileInfo.m_curTile, tileInfo.m_tileCount);
-
-            dtFreeNavMesh(navMesh);
         }
     }
 
@@ -230,7 +233,6 @@ namespace MMAP
     {
         if (shouldSkipTile(mapID, tileX, tileY))
             return;
-
         printf("[Map %03i] Building tile [%02u,%02u] (%02u / %02u)    \n", mapID, tileX, tileY, curTile, tileCount);
 
         MeshData meshData;

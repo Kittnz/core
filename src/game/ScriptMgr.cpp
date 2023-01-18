@@ -124,9 +124,21 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
         if (!CheckScriptTargets(tmp.target_type, tmp.target_param1, tmp.target_param2, tablename, tmp.id))
             DisableScriptAction(tmp);
 
+        if (tmp.raw.data[4] != (tmp.raw.data[4] & ALL_DB_SCRIPT_FLAGS))
+        {
+            sLog.outErrorDb("Table `%s` has unknown script flags (data_flags = %u) for script id %u", tablename, tmp.raw.data[4], tmp.id);
+            continue;
+        }
+
         if (!tmp.target_type && (tmp.raw.data[4] & SF_GENERAL_SWAP_INITIAL_TARGETS) && (tmp.raw.data[4] & SF_GENERAL_SWAP_FINAL_TARGETS))
         {
-            sLog.outErrorDb("Table `%s` has nonsensical flag combination (data_flags = %u) without a buddy for script id %u", tablename, tmp.moveTo.flags, tmp.id);
+            sLog.outErrorDb("Table `%s` has nonsensical flag combination (data_flags = %u) without a buddy for script id %u", tablename, tmp.raw.data[4], tmp.id);
+            continue;
+        }
+
+        if (tmp.target_type && (tmp.raw.data[4] & SF_GENERAL_TARGET_SELF) && !(tmp.raw.data[4] & (SF_GENERAL_SWAP_INITIAL_TARGETS | SF_GENERAL_SWAP_FINAL_TARGETS)))
+        {
+            sLog.outErrorDb("Table `%s` has nonsensical flag and target combination (data_flags = %u) (target_type = %u) for script id %u", tablename, tmp.raw.data[4], tmp.target_type, tmp.id);
             continue;
         }
 
@@ -427,12 +439,12 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
             case SCRIPT_COMMAND_REMOVE_ITEM:
             case SCRIPT_COMMAND_CREATE_ITEM:
             {
-                if (!ObjectMgr::GetItemPrototype(tmp.createItem.itemEntry))
+                if (!ObjectMgr::GetItemPrototype(tmp.createItem.itemId))
                 {
-                    if (!sObjectMgr.IsExistingItemId(tmp.createItem.itemEntry))
+                    if (!sObjectMgr.IsExistingItemId(tmp.createItem.itemId))
                     {
                         sLog.outErrorDb("Table `%s` has nonexistent item (entry: %u) in SCRIPT_COMMAND_*_ITEM for script id %u",
-                            tablename, tmp.createItem.itemEntry, tmp.id);
+                            tablename, tmp.createItem.itemId, tmp.id);
                         continue;
                     }
                     else
@@ -461,7 +473,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                     {
                         if (!ObjectMgr::GetItemPrototype(tmp.setEquipment.slot[i]))
                         {
-                            if (!sObjectMgr.IsExistingItemId(tmp.createItem.itemEntry))
+                            if (!sObjectMgr.IsExistingItemId(tmp.createItem.itemId))
                             {
                                 sLog.outErrorDb("Table `%s` has nonexistent item (dataint%i: %u) in SCRIPT_COMMAND_SET_EQUIPMENT for script id %u",
                                     tablename, i, tmp.setEquipment.slot[i], tmp.id);
@@ -708,6 +720,7 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 break;
             }
             case SCRIPT_COMMAND_START_SCRIPT:
+            case SCRIPT_COMMAND_START_SCRIPT_ON_GROUP:
             {
                 if (100 < (tmp.startScript.chance[0] + tmp.startScript.chance[1] + tmp.startScript.chance[2] + tmp.startScript.chance[3]))
                 {
@@ -1137,6 +1150,16 @@ void ScriptMgr::LoadScripts(ScriptMapMap& scripts, const char* tablename)
                 }
                 break;
             }
+            case SCRIPT_COMMAND_PLAY_CUSTOM_ANIM:
+            {
+                if (tmp.playCustomAnim.animId > 3)
+                {
+                    sLog.outErrorDb("Table `%s` using invalid anim id in datalong (%u) in SCRIPT_COMMAND_PLAY_CUSTOM_ANIM for script id %u",
+                        tablename, tmp.setGoState.state, tmp.id);
+                    continue;
+                }
+                break;
+            }
         }
 
         if (scripts.find(tmp.id) == scripts.end())
@@ -1209,6 +1232,7 @@ bool ScriptMgr::CheckScriptTargets(uint32 targetType, uint32 targetParam1, uint3
             break;
         }
         case TARGET_T_NEAREST_GAMEOBJECT_WITH_ENTRY:
+        case TARGET_T_RANDOM_GAMEOBJECT_WITH_ENTRY:
         {
             if (!sObjectMgr.GetGameObjectInfo(targetParam1))
             {
@@ -2264,8 +2288,8 @@ void ScriptMgr::CollectPossibleGenericIds(std::set<uint32>& genericIds)
     Field* fields;
     for (const auto& script_table : script_tables)
     {
-        // From SCRIPT_COMMAND_START_SCRIPT.
-        std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `datalong`, `datalong2`, `datalong3`, `datalong4` FROM `%s` WHERE `command`=39", script_table));
+        // From SCRIPT_COMMAND_START_SCRIPT and SCRIPT_COMMAND_START_SCRIPT_ON_GROUP.
+        std::unique_ptr<QueryResult> result(WorldDatabase.PQuery("SELECT `datalong`, `datalong2`, `datalong3`, `datalong4` FROM `%s` WHERE `command` IN (39, 90)", script_table));
 
         if (result)
         {
@@ -2497,7 +2521,7 @@ void DoScriptText(int32 iTextEntry, WorldObject* pSource, Unit* pTarget, int32 c
             if(Type == CHAT_TYPE_ZONE_YELL)
             {
                 if(Map* pZone = pSource->GetMap())
-                    pZone->PlayDirectSoundToMap(SoundId);
+                    pZone->PlayDirectSoundToMap(SoundId, pZone->IsContinent() ? pSource->GetZoneId() : 0);
             }
             else
                 pSource->PlayDirectSound(SoundId);
@@ -2729,6 +2753,13 @@ WorldObject* GetTargetByType(WorldObject* pSource, WorldObject* pTarget, Map* pM
             if (!((pSearcher = pSource) || (pSearcher = pTarget)))
                 return nullptr;
             return pSearcher->FindNearestGameObject(param1, param2);
+        }
+        case TARGET_T_RANDOM_GAMEOBJECT_WITH_ENTRY:
+        {
+            WorldObject* pSearcher;
+            if (!((pSearcher = pSource) || (pSearcher = pTarget)))
+                return nullptr;
+            return pSearcher->FindRandomGameObject(param1, param2);
         }
         case TARGET_T_GAMEOBJECT_WITH_GUID:
         {

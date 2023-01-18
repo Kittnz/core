@@ -141,18 +141,19 @@ namespace MMAP
 
         printf("Using %u threads to generate mmaps\n", std::thread::hardware_concurrency());
         m_cancel.store(false);
-        std::vector<TileBuilder*> workers;
-        for (unsigned int i = 0; i < std::thread::hardware_concurrency(); ++i)
-        {
-            workers.push_back(new TileBuilder(this, false, m_bigBaseUnit, m_debugOutput));
-        }
-
         for (TileList::iterator it = m_tiles.begin(); it != m_tiles.end(); ++it)
         {
             uint32 mapID = (*it).first;
             if (!shouldSkipMap(mapID))
                 buildMap(mapID);
         }
+
+        std::vector<TileBuilder*> workers;
+        for (unsigned int i = 0; i < std::thread::hardware_concurrency(); ++i)
+        {
+            workers.push_back(new TileBuilder(this, false, m_quick, m_bigBaseUnit, m_debugOutput));
+        }
+
 
         while (!m_tileQueue.Empty())
         {
@@ -217,7 +218,7 @@ namespace MMAP
     /**************************************************************************/
     void MapBuilder::buildSingleTile(uint32 mapID, uint32 tileX, uint32 tileY)
     {
-        /*
+        
         // make sure we process maps which don't have tiles
         set<uint32>* tiles = getTileList(mapID);
         if (!tiles->size())
@@ -245,8 +246,39 @@ namespace MMAP
             return;
         }
 
-        buildTile(mapID, tileX, tileY, navMesh, 1, 1);
-        dtFreeNavMesh(navMesh);*/
+        printf("Adding %i, %i, %i", mapID, tileX, tileY);
+
+        TileInfo tileInfo;
+        tileInfo.m_mapId = mapID;
+        tileInfo.m_tileX = tileX;
+        tileInfo.m_tileY = tileY;
+        tileInfo.m_curTile = 0;
+        tileInfo.m_tileCount = uint32(tiles->size());
+        memcpy(&tileInfo.m_navMeshParams, navMesh->getParams(), sizeof(dtNavMeshParams));
+        m_tileQueue.Push(tileInfo);
+
+        std::vector<TileBuilder*> workers;
+        for (unsigned int i = 0; i < 1; ++i)
+        {
+            workers.push_back(new TileBuilder(this, false, m_quick, m_bigBaseUnit, m_debugOutput));
+        }
+
+
+        while (!m_tileQueue.Empty())
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        }
+
+        m_cancel.store(true);
+
+        m_tileQueue.Cancel();
+
+        for (auto& th : workers)
+            delete th;
+
+        dtFreeNavMesh(navMesh);
+
+        printf("DONE SINGLE TILE NIBBY.");
     }
 
     /**************************************************************************/

@@ -388,6 +388,7 @@ bool SpellAuraHolder::IsMoreImportantDebuffThan(SpellAuraHolder* other) const
 
 Aura::~Aura()
 {
+    delete m_spellmod;
 }
 
 AreaAura::AreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *currentBasePoints, SpellAuraHolder* holder, Unit* target,
@@ -984,7 +985,7 @@ void Aura::HandleAddModifier(bool apply, bool Real)
     ASSERT(m_spellmod);
     ((Player*)GetTarget())->AddSpellMod(m_spellmod, apply);
     if (!apply)
-        m_spellmod = nullptr; // Deja supprime par Player::AddSpellMod.
+        m_spellmod = nullptr; // Deleted in Player::AddSpellMod.
 
     ReapplyAffectedPassiveAuras();
 }
@@ -1628,29 +1629,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
             {
                 switch (GetId())
                 {
-                    case 45568: // Proclaim Champion (Custom)
-                    {
-                        auto caster = GetCaster();
-                        if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
-                        {
-                            //remove buff and their counterparts if something's wrong.
-                            if (target)
-                            {
-                                target->RemoveAurasDueToSpell(45563);
-                                target->RemoveAurasDueToSpell(45564);
-                                target->RemoveAurasDueToSpell(45565);
-                                target->RemoveAurasDueToSpell(45569);
-                                target->RemoveAurasDueToSpell(45568);
-                            }
-                            return;
-                        }
-
-                        auto playerCaster = caster->ToPlayer();
-                        playerCaster->SetChampion(target->GetGUID());
-
-                    }break;
-                    
-
                     case 1:
                     {
                         if (Unit* caster = GetCaster()) {
@@ -1704,6 +1682,22 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
 
                             caster->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                             caster->AddUnitState(UNIT_STAT_ROOT);
+                        }
+                        return;
+                    }
+                    case 12623:                             // Suppression
+                    {
+                        if (Creature* pCreature = target->ToCreature())
+                        {
+                            // Using script command to avoid including EventAI header.
+                            ScriptInfo si;
+                            si.command = SCRIPT_COMMAND_SET_PHASE;
+                            si.setPhase.phase = 1;
+                            if (apply)
+                                si.setPhase.mode = SO_SETPHASE_INCREMENT;
+                            else
+                                si.setPhase.mode = SO_SETPHASE_DECREMENT;
+                            pCreature->GetMap()->ScriptCommandStartDirect(si, pCreature, pCreature);
                         }
                         return;
                     }
@@ -1767,6 +1761,36 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         m_modifier.periodictime = 3000;
                         break;
                     }
+                    case 46433: // Tied Up (Horde) (Custom AV Quest)
+                    case 46432: // Tied Up (Alliance) (Custom AV Quest)
+                    {
+                        m_isPeriodic = true;
+                        m_modifier.periodictime = 1000;
+                        target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                        target->MonsterYell("Help! I'm being kidnapped!");
+                        break;
+                    }
+                    case 45568: // Proclaim Champion (Custom)
+                    {
+                        auto caster = GetCaster();
+                        if (!caster || !caster->IsPlayer() || !target || target->GetGUID() == caster->GetGUID() || !target->IsAlive())
+                        {
+                            //remove buff and their counterparts if something's wrong.
+                            if (target)
+                            {
+                                target->RemoveAurasDueToSpell(45563);
+                                target->RemoveAurasDueToSpell(45564);
+                                target->RemoveAurasDueToSpell(45565);
+                                target->RemoveAurasDueToSpell(45569);
+                                target->RemoveAurasDueToSpell(45568);
+                            }
+                            return;
+                        }
+
+                        auto playerCaster = caster->ToPlayer();
+                        playerCaster->SetChampion(target->GetGUID());
+                        break;
+                    }
                 }
                 break;
             }
@@ -1785,14 +1809,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 break;
             }
             case SPELLFAMILY_PALADIN:
-            {
                 break;
-            }
             case SPELLFAMILY_SHAMAN:
                 break;
-
-
-
             case SPELLFAMILY_PRIEST:
             {
                 switch (GetId())
@@ -1806,9 +1825,11 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                         auto playerCaster = caster->ToPlayer();
                         playerCaster->SetChampion(target->GetGUID());
 
-                    }break;
+                        break;
+                    }
                 }
-            }break;
+                break;
+            }
         }
     }
     // AT REMOVE
@@ -2039,7 +2060,6 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                     target->RemoveAurasDueToSpell(29660);
                 break;
             }
-
             case 45568: // Proclaim Champion (Custom)
             {
                 auto caster = GetCaster();
@@ -2052,8 +2072,20 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
                 target->RemoveAurasDueToSpell(45569);
                 auto playerCaster = caster->ToPlayer();
                 playerCaster->SetChampion(ObjectGuid{});
-
-            }break;
+                break;
+            }
+            case 46434: // Burning Blood Visual (Custom)
+            {
+                if (target->IsAlive())
+                    target->m_Events.AddLambdaEventAtOffset([target]() { target->CastSpell(target, 3240, true); }, 500);
+                break;
+            }
+            case 46433: // Tied Up (Horde) (Custom AV Quest)
+            case 46432: // Tied Up (Alliance) (Custom AV Quest)
+            {
+                target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                break;
+            }
         }
 
         if (m_removeMode == AURA_REMOVE_BY_DEATH) // redundant, AM is cancelled in aura holder removal
@@ -2314,6 +2346,9 @@ void Aura::HandleAuraFeatherFall(bool apply, bool Real)
         return;
 
     GetTarget()->SetFeatherFall(apply);
+
+    if (!apply && GetTarget()->GetTypeId() == TYPEID_PLAYER)
+        GetTarget()->ToPlayer()->SetFallInformation(0, GetTarget()->GetPositionZ());
 }
 
 void Aura::HandleAuraHover(bool apply, bool Real)
@@ -3170,6 +3205,10 @@ void Unit::ModPossess(Unit* pTarget, bool apply, AuraRemoveMode m_removeMode)
 
                 pCreature->AttackedBy(pCaster);
             }
+
+            // remove pvp flag on charm end if creature is not pvp flagged by default
+            if (pCreature->IsPvP() && !pCreature->HasExtraFlag(CREATURE_FLAG_EXTRA_PVP))
+                pCreature->SetPvP(false);
         }
         else
             pTarget->StopMoving(true);
@@ -3315,6 +3354,8 @@ void Aura::HandleModCharm(bool apply, bool Real)
 
         if (Creature* pCreatureTarget = target->ToCreature())
         {
+            pCreatureTarget->SetReactState(charmInfo->GetReactState());
+
             if (pCreatureTarget->AI() && pCreatureTarget->AI()->SwitchAiAtControl())
                 pCreatureTarget->AIM_Initialize();
 
@@ -3377,26 +3418,34 @@ void Aura::HandleModCharm(bool apply, bool Real)
             CreatureInfo const *cinfo = pCreatureTarget->GetCreatureInfo();
 
             // restore faction
-            if (target->IsPet())
+            if (pCreatureTarget->IsPet())
             {
-                if (Unit* owner = target->GetOwner())
-                    target->SetFactionTemplateId(owner->GetFactionTemplateId());
+                if (Unit* owner = pCreatureTarget->GetOwner())
+                    pCreatureTarget->SetFactionTemplateId(owner->GetFactionTemplateId());
                 else if (cinfo)
-                    target->SetFactionTemplateId(cinfo->faction);
+                    pCreatureTarget->SetFactionTemplateId(cinfo->faction);
             }
             else if (cinfo)                             // normal creature
-                target->SetFactionTemplateId(cinfo->faction);
+            {
+                pCreatureTarget->InitializeReactState();
+                pCreatureTarget->SetFactionTemplateId(cinfo->faction);
+
+                // remove pvp flag on charm end if creature is not pvp flagged by default
+                if (pCreatureTarget->IsPvP() && !pCreatureTarget->HasExtraFlag(CREATURE_FLAG_EXTRA_PVP))
+                    pCreatureTarget->SetPvP(false);
+
+            }
 
             // restore UNIT_FIELD_BYTES_0
             if (cinfo && caster && caster->IsPlayer() && caster->GetClass() == CLASS_WARLOCK && cinfo->type == CREATURE_TYPE_DEMON)
             {
                 // DB must have proper class set in field at loading, not req. restore, including workaround case at apply
-                // target->SetByteValue(UNIT_FIELD_BYTES_0, 1, cinfo->unit_class);
+                // pCreatureTarget->SetByteValue(UNIT_FIELD_BYTES_0, 1, cinfo->unit_class);
 
-                if (target->GetCharmInfo())
-                    target->GetCharmInfo()->SetPetNumber(0, true);
+                if (pCreatureTarget->GetCharmInfo())
+                    pCreatureTarget->GetCharmInfo()->SetPetNumber(0, true);
                 else
-                    sLog.outError("Aura::HandleModCharm: target (GUID: %u TypeId: %u) has a charm aura but no charm info!", target->GetGUIDLow(), target->GetTypeId());
+                    sLog.outError("Aura::HandleModCharm: target (GUID: %u TypeId: %u) has a charm aura but no charm info!", pCreatureTarget->GetGUIDLow(), pCreatureTarget->GetTypeId());
             }
         }
 
@@ -4076,18 +4125,7 @@ void Aura::HandleAuraModIncreaseSwimSpeed(bool /*apply*/, bool Real)
 
     if (Player* player = GetTarget()->ToPlayer(); GetId() == 30174 && player) // turtle mount swimming speed. Half of normal speed
     {
-        uint32 skillValue = player->GetSkillValue(762);
-
-        switch (skillValue)
-        {
-            case 0: m_modifier.m_amount = static_cast<int32>(ceil(player->GetLevel() / 4)); break;
-            case 75: m_modifier.m_amount = 30; break;
-            case 150: m_modifier.m_amount = 50; break;
-            default:
-                player->Unmount();
-                player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
-                return;
-        }
+        m_modifier.m_amount = static_cast<int32>(ceil(player->GetLevel() / 4));
     }
 
     GetTarget()->UpdateSpeed(MOVE_SWIM, false, GetTarget()->GetSpeedRatePersistance(MOVE_SWIM));
@@ -4151,20 +4189,27 @@ void Aura::HandleAuraModEffectImmunity(bool apply, bool /*Real*/)
 {
     Unit *target = GetTarget();
 
-    // when removing flag aura, handle flag drop
-    if (target->IsPlayer() && !target->HasAuraType(SPELL_AURA_MOD_POSSESS) && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION))
+    
+    if (target->IsPlayer())
     {
         Player* player = static_cast<Player*>(target);
 
-        if (apply)
-            player->pvpInfo.isPvPFlagCarrier = true;
-        else
+        // when removing flag aura, handle flag drop
+        if (!target->HasAuraType(SPELL_AURA_MOD_POSSESS) && (GetSpellProto()->AuraInterruptFlags & AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION))
         {
-            player->pvpInfo.isPvPFlagCarrier = false;
+            if (apply)
+                player->pvpInfo.isPvPFlagCarrier = true;
+            else
+            {
+                player->pvpInfo.isPvPFlagCarrier = false;
 
-            if (BattleGround* bg = player->GetBattleGround())
-                bg->EventPlayerDroppedFlag(player);
+                if (BattleGround* bg = player->GetBattleGround())
+                    bg->EventPlayerDroppedFlag(player);
+            }
         }
+        // Ryson's All Seeing Eye - drop the eye
+        if (!apply && GetId() == 21546 && player->GetMapId() == 30 && !player->FindNearestCreature(13151, 10.0f))
+            player->CastSpell(player, 21545, true);
     }
 
     target->ApplySpellImmune(GetId(), IMMUNITY_EFFECT, m_modifier.m_miscvalue, apply);
@@ -4903,10 +4948,12 @@ void Aura::HandleModPowerRegen(bool apply, bool Real)       // drinking
         {
             if (Player* pCaster = ToPlayer(GetCaster()))
             {
+                float multiplier = (GetSpellProto()->CalculateSimpleValue(GetEffIndex()) / 100.0f) * 5;
+
                 if (pCaster != pTarget)
-                    m_modifier.m_amount = pCaster->GetManaRegen() * (m_modifier.m_amount / 100.0f);
+                    m_modifier.m_amount = pCaster->GetManaRegen() * multiplier;
                 else
-                    m_modifier.m_amount = 0;
+                    m_modifier.m_amount = pCaster->GetRegenMPPerSpirit() * multiplier;
             }
         }
         pTarget->UpdateManaRegen();
@@ -6056,7 +6103,7 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
             uint32 heal = int32(new_damage * multiplier);
 
             int32 gain = pCaster->DealHeal(pCaster, heal, spellProto);
-            pCaster->GetHostileRefManager().threatAssist(pCaster, gain * 0.5f * sSpellMgr.GetSpellThreatMultiplier(spellProto), spellProto);
+            //pCaster->GetHostileRefManager().threatAssist(pCaster, gain * 0.5f * sSpellMgr.GetSpellThreatMultiplier(spellProto), spellProto);
             break;
         }
         case SPELL_AURA_PERIODIC_HEAL:
@@ -6437,6 +6484,19 @@ void Aura::PeriodicTick(SpellEntry const* sProto, AuraType auraType, uint32 data
                 // cannibalize anim
                 target->HandleEmoteCommand(EMOTE_STATE_CANNIBALIZE);
             }
+            else if (GetId() == 45408)
+            {
+                if (GetCasterGuid() != target->GetObjectGuid())
+                {
+                    if (Player* pCaster = target->GetMap()->GetPlayer(GetCasterGuid()))
+                    {
+                        float percent = GetSpellProto()->CalculateSimpleValue(GetEffIndex());
+                        percent = percent - std::min(percent, (percent / 3) * (int32(pCaster->GetDistance2d(target)) / 10));
+                        m_modifier.m_amount = pCaster->GetManaRegen() * (percent / 100.0f) * 5;
+                        target->UpdateManaRegen();
+                    }
+                }
+            }
 
             // Anger Management
             // amount = 1+ 16 = 17 = 3,4*5 = 10,2*5/3
@@ -6587,6 +6647,82 @@ void Aura::PeriodicDummyTick()
 
                     if (ribbonCount > 1)
                         target->CastSpell(GetCaster(), 29175, true); // Midsummer Pole Buff
+
+                    return;
+                }
+                case 46433: // Tied Up (Horde) (Custom AV Quest)
+                case 46432: // Tied Up (Alliance) (Custom AV Quest)
+                {
+                    if (Player* pCaster = ToPlayer(GetCaster()))
+                    {
+                        if (Creature* pCook = target->FindNearestCreature(39998, 10.0f))
+                        {
+                            target->StopMoving(true);
+
+                            float x, y, z;
+                            target->GetNearPoint(pCook, x, y, z, 0, 5.0f, target->GetAngle(pCook));
+                            pCook->MonsterMove(x, y, z);
+
+                            if (pCook->IsFriendlyTo(target))
+                            {
+                                pCook->m_Events.AddLambdaEventAtOffset([pCook, target]
+                                {
+                                    pCook->SetFacingToObject(target);
+                                    pCook->MonsterSay("Why have you brought me one of our own? Imbecile!");
+                                }, 1000);
+
+                                char const* text1 = (GetId() == 46433) ?
+                                    "Find me a gnome or we'll be eating idiot stew instead." :
+                                    "Big fat tauren! Don't come back until you've caught one.";
+
+                                pCook->m_Events.AddLambdaEventAtOffset([pCook, text1]
+                                {
+                                    pCook->MonsterSay(text1);
+                                    pCook->GetMotionMaster()->MoveTargetedHome();
+                                }, 3000);
+                            }
+                            else
+                            {
+                                char const* text2 = (GetId() == 46433) ?
+                                    "What a succulent piece of meat! In the pot you go!" :
+                                    "The beast is humongous! Quickly, put it down before it breaks free!";
+
+                                pCaster->AreaExploredOrEventHappens((GetId() == 46433) ? 40005 : 40006);
+
+                                pCook->m_Events.AddLambdaEventAtOffset([pCook, target, text2]
+                                {
+                                    pCook->SetFacingToObject(target);
+                                    pCook->MonsterSay(text2);
+                                    target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+                                    pCook->CastSpell(target, 13608, true);
+                                }, 1000);
+
+                                target->m_Events.AddLambdaEventAtOffset([target]
+                                {
+                                    if (target->IsDead())
+                                    {
+                                        if (Creature* pTroll = target->FindNearestCreature(10983, 30.0f))
+                                            pTroll->HandleEmote(EMOTE_ONESHOT_CHEER);
+
+                                        if (Creature* pMystic = target->FindNearestCreature(13956, 30.0f))
+                                            pMystic->HandleEmote(EMOTE_ONESHOT_CHEER);
+
+                                        if (Creature* pCook = target->FindNearestCreature(39998, 30.0f))
+                                            pCook->HandleEmote(EMOTE_ONESHOT_CHEER);
+                                    }
+                                }, 3000);
+                            }
+
+                            pCaster->InterruptSpell(CURRENT_CHANNELED_SPELL);
+                            return;
+                        }
+
+                        if (!pCaster->HasUnitMovementFlag(MOVEFLAG_JUMPING) && pCaster->GetDistance(target) > 8.0f)
+                        {
+                            target->MonsterMove(pCaster->GetPositionX(), pCaster->GetPositionY(), pCaster->GetPositionZ());
+                            return;
+                        }
+                    }
 
                     return;
                 }
@@ -7698,277 +7834,277 @@ void SpellAuraHolder::CalculateForDebuffLimit()
     switch (firstRank)
     {
         // Category 0 below
-    case 1604: // Dazed
-    case 2094: // Blind
-    case 3409: // Crippling Poison (Rank 1)
-    case 11201: // Crippling Poison (Rank 2)
-    case 3600: // Earthbind
-    case 4066: // Small Bronze Bomb
-    case 4067: // Big Bronze Bomb
-    case 4069: // Big Iron Bomb
-    case 4507: // Target Dummy Spawn Effect
-    case 5246: // Intimidating Shout
-    case 5530: // Mace Stun Effect
-    case 6358: // Seduction
-    case 6788: // Weakened Soul
-    case 9672: // Frostbolt (npc spell)
-    case 339: // Entangling Roots
-    case 2908: // Soothe Animal
-    case 8056: // Frost Shock
-    case 8122: // Psychic Scream
-    case 605: // Mind Control
-    case 6770: // Sap (Rank 1)
-    case 2070: // Sap (Rank 2)
-    case 11297: // Sap (rank 3)
-    case 18202: // Rend (item spell)
-    case 18075: // Rend (item spell)
-    case 17511: // Poison
-    case 17504: // Rend (item spell)
-    case 17484: // Skullforge Brand
-    case 17483: // Shadow Bolt (item spell)
-    case 17407: // Wound
-    case 17196: // Seeping Willow
-    case 16406: // Rend (item spell)
-    case 14914: // Holy Fire
-    case 21162: // Fireball (item spell)
-    case 13752: // Faerie Fire (item spell)
-    case 12328: // Death Wish
-    case 13526: // Corrosive Poison
-    case 13318: // Rend (item spell)
-    case 11366: // Pyroblast
-    case 133: // Fireball
-    case 12721: // Deep Wound
-    case 24388: // Brain Damage
-    case 21159: // Fireball (item spell)
-    case 21151: // Gutgore Ripper
-    case 12421: // Mithril Frag Bomb
-    case 12562: // The Big One
-    case 118: // Polymorph
-    case 13237: // Goblin Mortar
-    case 13327: // Reckless Charge
-    case 13747: // Slow
-    case 13808: // M73 Frag Grenade
-    case 14251: // Riposte
-    case 3355: // Freezing Trap Effect (Rank 1)
-    case 14308: // Freezing Trap Effect (Rank 2)
-    case 14309: // Freezing Trap Effect (Rank 3)
-    case 15235: // Crystal Yield
-    case 15487: // Silence
-    case 8034: // Frost Brand Attack
-    case 16454: // Searing Blast
-    case 17153: // Rend (item spell)
-    case 5484: // Howl of Terror
-    case 18093: // Pyroclasm
-    case 18118: // Aftermath
-    case 18223: // Curse of Exhaustion
-    case 710: // Banish
-    case 18798: // Freeze
-    case 19229: // Improved Wing Clip
-    case 19410: // Improved Concussive Shot
-    case 19755: // Frightalon
-    case 19784: // Dark Iron Bomb
-    case 19872: // Calm Dragonkin
-    case 19970: // Entangling Roots
-    case 20066: // Repentance
-    case 20586: // Windreaper
-    case 24375: // War Stomp
-    case 24394: // Intimidation
-        m_debuffLimitScore = 0;
-        return;
+        case 1604: // Dazed
+        case 2094: // Blind
+        case 3409: // Crippling Poison (Rank 1)
+        case 11201: // Crippling Poison (Rank 2)
+        case 3600: // Earthbind
+        case 4066: // Small Bronze Bomb
+        case 4067: // Big Bronze Bomb
+        case 4069: // Big Iron Bomb
+        case 4507: // Target Dummy Spawn Effect
+        case 5246: // Intimidating Shout
+        case 5530: // Mace Stun Effect
+        case 6358: // Seduction
+        case 6788: // Weakened Soul
+        case 9672: // Frostbolt (npc spell)
+        case 339: // Entangling Roots
+        case 2908: // Soothe Animal
+        case 8056: // Frost Shock
+        case 8122: // Psychic Scream
+        case 605: // Mind Control
+        case 6770: // Sap (Rank 1)
+        case 2070: // Sap (Rank 2)
+        case 11297: // Sap (rank 3)
+        case 18202: // Rend (item spell)
+        case 18075: // Rend (item spell)
+        case 17511: // Poison
+        case 17504: // Rend (item spell)
+        case 17484: // Skullforge Brand
+        case 17483: // Shadow Bolt (item spell)
+        case 17407: // Wound
+        case 17196: // Seeping Willow
+        case 16406: // Rend (item spell)
+        case 14914: // Holy Fire
+        case 21162: // Fireball (item spell)
+        case 13752: // Faerie Fire (item spell)
+        case 12328: // Death Wish
+        case 13526: // Corrosive Poison
+        case 13318: // Rend (item spell)
+        case 11366: // Pyroblast
+        case 133: // Fireball
+        case 12721: // Deep Wound
+        case 24388: // Brain Damage
+        case 21159: // Fireball (item spell)
+        case 21151: // Gutgore Ripper
+        case 12421: // Mithril Frag Bomb
+        case 12562: // The Big One
+        case 118: // Polymorph
+        case 13237: // Goblin Mortar
+        case 13327: // Reckless Charge
+        case 13747: // Slow
+        case 13808: // M73 Frag Grenade
+        case 14251: // Riposte
+        case 3355: // Freezing Trap Effect (Rank 1)
+        case 14308: // Freezing Trap Effect (Rank 2)
+        case 14309: // Freezing Trap Effect (Rank 3)
+        case 15235: // Crystal Yield
+        case 15487: // Silence
+        case 8034: // Frost Brand Attack
+        case 16454: // Searing Blast
+        case 17153: // Rend (item spell)
+        case 5484: // Howl of Terror
+        case 18093: // Pyroclasm
+        case 18118: // Aftermath
+        case 18223: // Curse of Exhaustion
+        case 710: // Banish
+        case 18798: // Freeze
+        case 19229: // Improved Wing Clip
+        case 19410: // Improved Concussive Shot
+        case 19755: // Frightalon
+        case 19784: // Dark Iron Bomb
+        case 19872: // Calm Dragonkin
+        case 19970: // Entangling Roots
+        case 20066: // Repentance
+        case 20586: // Windreaper
+        case 24375: // War Stomp
+        case 24394: // Intimidation
+            m_debuffLimitScore = 0;
+            return;
         // Category 1 below
-    case 1833: // Cheap Shot
-    case 5917: // Fumble
-    case 7922: // Charge Stun
-    case 9658: // Flame Buffet
-    case 10578: // Fireball (item spell)
-    case 2096: // Mind Vision
-    case 453: // Mind Soothe
-    case 1714: // Curse of Tongues
-    case 11103: // Impact (Rank 1)
-    case 12357: // Impact (Rank 2)
-    case 12358: // Impact (Rank 3)
-    case 12359: // Impact (Rank 4)
-    case 12360: // Impact (Rank 5)
-    case 11113: // Blast Wave
-    case 2974: // Wing Clip
-    case 3043: // Scorpid Sting
-    case 16413: // Fireball (item spell)
-    case 16415: // Fireball (item spell)
-    case 17330: // Poison
-    case 17506: // Soul Breaker
-    case 17639: // Wail of the Banshee
-    case 18289: // Creeping Mold
-    case 18425: // Kick - Silenced
-    case 18469: // Counterspell - Silenced
-    case 18498: // Shield Bash - Silenced
-    case 19821: // Arcane Bomb
-    case 20184: // Judgement of Justice
-    case 20511: // Intimidating Shout
-    case 22639: // Eskhandar's Rake
-    case 23023: // Conflagration
-    case 28272: // Polymorph Pig
-        m_debuffLimitScore = 1;
-        return;
+        case 1833: // Cheap Shot
+        case 5917: // Fumble
+        case 7922: // Charge Stun
+        case 9658: // Flame Buffet
+        case 10578: // Fireball (item spell)
+        case 2096: // Mind Vision
+        case 453: // Mind Soothe
+        case 1714: // Curse of Tongues
+        case 11103: // Impact (Rank 1)
+        case 12357: // Impact (Rank 2)
+        case 12358: // Impact (Rank 3)
+        case 12359: // Impact (Rank 4)
+        case 12360: // Impact (Rank 5)
+        case 11113: // Blast Wave
+        case 2974: // Wing Clip
+        case 3043: // Scorpid Sting
+        case 16413: // Fireball (item spell)
+        case 16415: // Fireball (item spell)
+        case 17330: // Poison
+        case 17506: // Soul Breaker
+        case 17639: // Wail of the Banshee
+        case 18289: // Creeping Mold
+        case 18425: // Kick - Silenced
+        case 18469: // Counterspell - Silenced
+        case 18498: // Shield Bash - Silenced
+        case 19821: // Arcane Bomb
+        case 20184: // Judgement of Justice
+        case 20511: // Intimidating Shout
+        case 22639: // Eskhandar's Rake
+        case 23023: // Conflagration
+        case 28272: // Polymorph Pig
+            m_debuffLimitScore = 1;
+            return;
         // Category 2 below
-    case 12579: // Winter's Chill
-    case 67: // Vindication (Rank 1)
-    case 26017: // Vindication (Rank 2)
-    case 26018: // Vindication (Rank 3)
-    case 23605: // Spell Vulnerability
-    case 702: // Curse of Weakness
-    case 11374: // Gift of Arthas
-    case 8921: // Moonfire
-    case 18265: // Siphon Life
-    case 980: // Curse of Agony
-    case 13797: // Immolation Trap Effect
-    case 1978: // Serpent Sting
-    case 21992: // Thunderfury
-    case 2818: // Deadly Poison
-    case 348: // Immolate
-    case 23577: // Expose Weakness
-    case 17315: // Puncture Armor
-    case 16928: // Armor Shatter
-    case 17877: // Shadowburn
-    case 23415: // Improved Blessing of Protection
-    case 9035: // Hex of Weakness
-    case 2944: // Devouring Plague
-    case 24640: // Scorpid Poison (Rank 1)
-    case 24583: // Scorpid Poison (Rank 2)
-    case 24586: // Scorpid Poison (Rank 3)
-    case 24587: // Scorpid Poison (Rank 4)
-    case 12766: // Poison Cloud
-    case 2943: // Touch of Weakness (Rank 1)
-    case 19249: // Touch of Weakness (Rank 2)
-    case 19251: // Touch of Weakness (Rank 3)
-    case 19252: // Touch of Weakness (Rank 4)
-    case 19253: // Touch of Weakness (Rank 5)
-    case 19254: // Touch of Weakness (Rank 6)
-    case 8050: // Flame Shock
-    case 172: // Corruption
-    case 16528: // Numbing Pain
-    case 15258: // Shadow Vulnerability
-    case 13003: // Shrink Ray
-    case 589: // Shadow Word: Pain
-    case 12654: // Ignite
-        m_debuffLimitScore = 2;
-        return;
+        case 12579: // Winter's Chill
+        case 67: // Vindication (Rank 1)
+        case 26017: // Vindication (Rank 2)
+        case 26018: // Vindication (Rank 3)
+        case 23605: // Spell Vulnerability
+        case 702: // Curse of Weakness
+        case 11374: // Gift of Arthas
+        case 8921: // Moonfire
+        case 18265: // Siphon Life
+        case 980: // Curse of Agony
+        case 13797: // Immolation Trap Effect
+        case 1978: // Serpent Sting
+        case 21992: // Thunderfury
+        case 2818: // Deadly Poison
+        case 348: // Immolate
+        case 23577: // Expose Weakness
+        case 17315: // Puncture Armor
+        case 17877: // Shadowburn
+        case 23415: // Improved Blessing of Protection
+        case 9035: // Hex of Weakness
+        case 2944: // Devouring Plague
+        case 24640: // Scorpid Poison (Rank 1)
+        case 24583: // Scorpid Poison (Rank 2)
+        case 24586: // Scorpid Poison (Rank 3)
+        case 24587: // Scorpid Poison (Rank 4)
+        case 12766: // Poison Cloud
+        case 2943: // Touch of Weakness (Rank 1)
+        case 19249: // Touch of Weakness (Rank 2)
+        case 19251: // Touch of Weakness (Rank 3)
+        case 19252: // Touch of Weakness (Rank 4)
+        case 19253: // Touch of Weakness (Rank 5)
+        case 19254: // Touch of Weakness (Rank 6)
+        case 8050: // Flame Shock
+        case 172: // Corruption
+        case 16528: // Numbing Pain
+        case 15258: // Shadow Vulnerability
+        case 13003: // Shrink Ray
+        case 589: // Shadow Word: Pain
+        case 12654: // Ignite
+            m_debuffLimitScore = 2;
+            return;
         // Category 3 below
-    case 355: // Taunt
-    case 603: // Curse of Doom
-    case 676: // Disarm
-    case 1161: // Challenging Shout
-    case 1543: // Flare
-    case 2855: // Detect Magic
-    case 4068: // Iron Grenade
-    case 5116: // Concussive Shot
-    case 5209: // Challenging Roar
-    case 5782: // Fear
-    case 770: // Faerie Fire
-    case 16857: // Faerie Fire (Feral)
-    case 120: // Cone of Cold
-    case 10: // Blizzard
-    case 2120: // Flamestrike
-    case 122: // Frost Nova
-    case 853: // Hammer of Justice
-    case 5760: // Mind-numbing Poison
-    case 8692: // Mind-numbing Poison II
-    case 11398: // Mind-numbing Poison III
-    case 1120: // Drain Soul
-    case 5740: // Rain of Fire
-    case 689: // Drain Life
-    case 5138: // Drain Mana
-    case 704: // Curse of Reclessness
-    case 1490: // Curse of the Elements
-    case 12323: // Piercing Howl
-    case 11071: // Forstbite (Rank 1)
-    case 12496: // Frostbite (Rank 2)
-    case 12497: // Frostbite (Rank 3)
-    case 12543: // Hi-Explosive Bomb
-    case 12798: // Revenge
-    case 12809: // Concussion Blow
-    case 13218: // Wound Poison
-    case 13810: // Frost Trap Aura
-    case 3034: // Viper Sting
-    case 1510: // Volley
-    case 13812: // Explosive Trap Effect
-    case 1130: // Hunter's Mark
-    case 15286: // Vampiric Embrace
-    case 15268: // Blackout (Rank 1)
-    case 15323: // Blackout (Rank 2)
-    case 15324: // Blackout (Rank 3)
-    case 15325: // Blackout (Rank 4)
-    case 15326: // Blackout (Rank 5)
-    case 15407: // Mind Flay
-    case 16922: // Starfire Stun
-    case 17364: // Stormstrike (Rank 1)
-    case 45521: // Stormstrike (Rank 2)
-    case 16914: // Hurricane
-    case 17794: // Shadow Vulnerability (Rank 1)
-    case 17798: // Shadow Vulnerability (Rank 2)
-    case 17797: // Shadow Vulnerability (Rank 3)
-    case 17799: // Shadow Vulnerability (Rank 4)
-    case 17800: // Shadow Vulnerability (Rank 5)
-    case 6789: // Death Coil
-    case 17862: // Curse of Shadow
-    case 18656: // Corruption (item spell)
-    case 2637: // Hibernate
-    case 19185: // Entrapment
-    case 10797: // Starshards
-    case 19503: // Scatter Shot
-    case 19675: // Feral Charge Effect
-    case 19769: // Thorium Grenade
-    case 20006: // Unholy Curse
-    case 21183: // Judgement of the Crusader (Rank 1)
-    case 20188: // Judgement of the Crusader (Rank 2)
-    case 20300: // Judgement of the Crusader (Rank 3)
-    case 20301: // Judgement of the Crusader (Rank 4)
-    case 20302: // Judgement of the Crusader (Rank 5)
-    case 20303: // Judgement of the Crusader (Rank 6)
-    case 20185: // Judgement of Light (Rank 1)
-    case 20344: // Judgement of Light (Rank 2)
-    case 20345: // Judgement of Light (Rank 3)
-    case 20346: // Judgement of Light (Rank 4)
-    case 20186: // Judgement of Wisdom (Rank 1)
-    case 20354: // Judgement of Wisdom (Rank 2)
-    case 20355: // Judgement of Wisdom (Rank 3)
-    case 20549: // War Stomp
-    case 20253: // Intercept Stun (Rank 1)
-    case 20614: // Intercept Stun (Rank 2)
-    case 20615: // Intercept Stun (Rank 3)
-    case 20116: // Consecration (-1.8)
-    case 26573: // Consecration (1.9+)
-    case 21152: // Earthshaker
-    case 22959: // Fire Vulnerability
-    case 23454: // Stun
-    case 23694: // Improved Hamstring
-    case 24423: // Screech (Rank 1)
-    case 24577: // Screech (Rank 2)
-    case 24578: // Screech (Rank 3)
-    case 24579: // Screech (Rank 4)
-    case 5570: // Insect Swarm
-    case 116: // Frostbolt
-    case 25999: // Boar Charge
-        m_debuffLimitScore = 3;
-        return;
+        case 355: // Taunt
+        case 603: // Curse of Doom
+        case 676: // Disarm
+        case 1161: // Challenging Shout
+        case 1543: // Flare
+        case 2855: // Detect Magic
+        case 4068: // Iron Grenade
+        case 5116: // Concussive Shot
+        case 5209: // Challenging Roar
+        case 5782: // Fear
+        case 770: // Faerie Fire
+        case 16857: // Faerie Fire (Feral)
+        case 120: // Cone of Cold
+        case 10: // Blizzard
+        case 2120: // Flamestrike
+        case 122: // Frost Nova
+        case 853: // Hammer of Justice
+        case 5760: // Mind-numbing Poison
+        case 8692: // Mind-numbing Poison II
+        case 11398: // Mind-numbing Poison III
+        case 1120: // Drain Soul
+        case 5740: // Rain of Fire
+        case 689: // Drain Life
+        case 5138: // Drain Mana
+        case 704: // Curse of Reclessness
+        case 1490: // Curse of the Elements
+        case 12323: // Piercing Howl
+        case 11071: // Forstbite (Rank 1)
+        case 12496: // Frostbite (Rank 2)
+        case 12497: // Frostbite (Rank 3)
+        case 12543: // Hi-Explosive Bomb
+        case 12798: // Revenge
+        case 12809: // Concussion Blow
+        case 13218: // Wound Poison
+        case 13810: // Frost Trap Aura
+        case 3034: // Viper Sting
+        case 1510: // Volley
+        case 13812: // Explosive Trap Effect
+        case 1130: // Hunter's Mark
+        case 15286: // Vampiric Embrace
+        case 15268: // Blackout (Rank 1)
+        case 15323: // Blackout (Rank 2)
+        case 15324: // Blackout (Rank 3)
+        case 15325: // Blackout (Rank 4)
+        case 15326: // Blackout (Rank 5)
+        case 15407: // Mind Flay
+        case 16922: // Starfire Stun
+        case 17364: // Stormstrike (Rank 1)
+        case 45521: // Stormstrike (Rank 2)
+        case 16914: // Hurricane
+        case 17794: // Shadow Vulnerability (Rank 1)
+        case 17798: // Shadow Vulnerability (Rank 2)
+        case 17797: // Shadow Vulnerability (Rank 3)
+        case 17799: // Shadow Vulnerability (Rank 4)
+        case 17800: // Shadow Vulnerability (Rank 5)
+        case 6789: // Death Coil
+        case 17862: // Curse of Shadow
+        case 18656: // Corruption (item spell)
+        case 2637: // Hibernate
+        case 19185: // Entrapment
+        case 10797: // Starshards
+        case 19503: // Scatter Shot
+        case 19675: // Feral Charge Effect
+        case 19769: // Thorium Grenade
+        case 20006: // Unholy Curse
+        case 21183: // Judgement of the Crusader (Rank 1)
+        case 20188: // Judgement of the Crusader (Rank 2)
+        case 20300: // Judgement of the Crusader (Rank 3)
+        case 20301: // Judgement of the Crusader (Rank 4)
+        case 20302: // Judgement of the Crusader (Rank 5)
+        case 20303: // Judgement of the Crusader (Rank 6)
+        case 20185: // Judgement of Light (Rank 1)
+        case 20344: // Judgement of Light (Rank 2)
+        case 20345: // Judgement of Light (Rank 3)
+        case 20346: // Judgement of Light (Rank 4)
+        case 20186: // Judgement of Wisdom (Rank 1)
+        case 20354: // Judgement of Wisdom (Rank 2)
+        case 20355: // Judgement of Wisdom (Rank 3)
+        case 20549: // War Stomp
+        case 20253: // Intercept Stun (Rank 1)
+        case 20614: // Intercept Stun (Rank 2)
+        case 20615: // Intercept Stun (Rank 3)
+        case 20116: // Consecration (-1.8)
+        case 26573: // Consecration (1.9+)
+        case 21152: // Earthshaker
+        case 22959: // Fire Vulnerability
+        case 23454: // Stun
+        case 23694: // Improved Hamstring
+        case 24423: // Screech (Rank 1)
+        case 24577: // Screech (Rank 2)
+        case 24578: // Screech (Rank 3)
+        case 24579: // Screech (Rank 4)
+        case 5570: // Insect Swarm
+        case 116: // Frostbolt
+        case 25999: // Boar Charge
+        case 16928: // Armor Shatter
+            m_debuffLimitScore = 3;
+            return;
         // Category 4 below
-    case 6136: // Chilled
-    case 6795: // Growl
-    case 17331: // Fang of the Crystal Spider
-    case 27648: // Thunderfury
-    case 24323: // Hakkar's Blood Siphon
-    case 24322: // Hakkar's Blood Siphon
-    case 28732: // Faerlina Widow's Embrace
-    case 25181: // Ossirian Arcane Weakness
-    case 25177: // Ossirian Fire Weakness
-    case 25178: // Ossirian Frost Weakness
-    case 25180: // Ossirian Nature Weakness
-    case 25183: // Ossirian Shadow Weakness
-    // Possibly an even higher category
-    case 7321: // Chilled
-    case 16597: // Curse of Shahram
-    case 20005: // Chilled
-        m_debuffLimitScore = 4;
-        return;
+        case 6136: // Chilled
+        case 6795: // Growl
+        case 17331: // Fang of the Crystal Spider
+        case 27648: // Thunderfury
+        case 24323: // Hakkar's Blood Siphon
+        case 24322: // Hakkar's Blood Siphon
+        case 28732: // Faerlina Widow's Embrace
+        case 25181: // Ossirian Arcane Weakness
+        case 25177: // Ossirian Fire Weakness
+        case 25178: // Ossirian Frost Weakness
+        case 25180: // Ossirian Nature Weakness
+        case 25183: // Ossirian Shadow Weakness
+        // Possibly an even higher category
+        case 7321: // Chilled
+        case 16597: // Curse of Shahram
+        case 20005: // Chilled
+            m_debuffLimitScore = 4;
+            return;
     }
 
     // Determine based on aura type

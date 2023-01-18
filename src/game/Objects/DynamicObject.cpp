@@ -119,6 +119,9 @@ bool DynamicObject::Create(uint32 guidlow, WorldObject* caster, uint32 spellId, 
     m_spellId = spellId;
     m_positive = spellProto->IsPositiveEffect(m_effIndex);
 
+    if (type == DYNAMIC_OBJECT_FARSIGHT_FOCUS)
+        m_isActiveObject = true;
+
     return true;
 }
 

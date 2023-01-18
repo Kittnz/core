@@ -71,35 +71,21 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
     CreatureEventAI_Event_Map::const_iterator creatureEventsItr = sEventAIMgr.GetCreatureEventAIMap().find(m_creature->GetEntry());
     if (creatureEventsItr != sEventAIMgr.GetCreatureEventAIMap().end())
     {
-        uint32 events_count = 0;
-
-        const CreatureEventAI_Event_Vec& creatureEvent = creatureEventsItr->second;
+        CreatureEventAI_Event_Vec const& creatureEvent = creatureEventsItr->second;
+        m_CreatureEventAIList.reserve(creatureEvent.size());
         for (const auto& i : creatureEvent)
         {
+
             //Debug check
 #ifndef _DEBUG
             if (i.event_flags & EFLAG_DEBUG_ONLY)
                 continue;
 #endif
 
-            ++events_count;
-        }
-        //EventMap had events but they were not added because they must be for instance
-        if (events_count == 0)
-            sLog.outError("CreatureEventAI: Creature %u has events but no events added to list because of instance flags.", m_creature->GetEntry());
-        else
-        {
-            m_CreatureEventAIList.reserve(events_count);
-            for (const auto& i : creatureEvent)
-            {
+            if (i.event_type == EVENT_T_OOC_LOS)
+                c->EnableMoveInLosEvent();
 
-                //Debug check
-#ifndef _DEBUG
-                if (i.event_flags & EFLAG_DEBUG_ONLY)
-                    continue;
-#endif
-                m_CreatureEventAIList.emplace_back(CreatureEventAIHolder(i));
-            }
+            m_CreatureEventAIList.push_back(CreatureEventAIHolder(i));
         }
     }
 
@@ -121,7 +107,7 @@ CreatureEventAI::CreatureEventAI(Creature *c) : CreatureAI(c)
     Reset();
 }
 
-bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, Unit* pActionInvoker)
+bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, WorldObject* pActionInvoker)
 {
     if (!pHolder.Enabled || pHolder.Time)
         return false;
@@ -442,7 +428,7 @@ bool CreatureEventAI::ProcessEvent(CreatureEventAIHolder& pHolder, Unit* pAction
     return true;
 }
 
-void CreatureEventAI::ProcessAction(ScriptMap* action, uint32 EventId, Unit* pActionInvoker)
+void CreatureEventAI::ProcessAction(ScriptMap* action, uint32 EventId, WorldObject* pActionInvoker)
 {
     if (!action)
         return;
@@ -677,7 +663,7 @@ void CreatureEventAI::MoveInLineOfSight(Unit *pWho)
         } 
     }
 
-    if (m_creature->HasExtraFlag(CREATURE_FLAG_EXTRA_NO_AGGRO) || m_creature->IsNeutralToAll())
+    if (m_creature->IsNeutralToAll())
         return;
 
     // Check this now to prevent calling expensive functions (IsInAccessablePlaceFor / IsWithinLOSInMap)
@@ -731,7 +717,7 @@ void CreatureEventAI::UpdateEventsOn_MoveInLineOfSight(Unit* pWho)
     }
 }
 
-void CreatureEventAI::SpellHit(Unit* pUnit, const SpellEntry* pSpell)
+void CreatureEventAI::SpellHit(WorldObject* pUnit, const SpellEntry* pSpell)
 {
     if (m_bEmptyList)
         return;

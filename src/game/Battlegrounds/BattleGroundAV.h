@@ -282,13 +282,15 @@ enum BG_AV_Events
     BG_AV_BOSS_H                = 62,
     BG_AV_NodeEventCaptainDead_A= 63,
     BG_AV_NodeEventCaptainDead_H= 64,
-    BG_AV_SNIVVLE                = 65,
 
     BG_AV_LANDMINES_HORDE       = 100,
     BG_AV_LANDMINES_ALLIANCE    = 101,
 
     BG_AV_BOSS_IVUS_A           = 102,
     BG_AV_BOSS_LOKHOLAR_H       = 103,
+
+    BG_AV_RYSONS_BEACON_H       = 104,
+    BG_AV_RYSONS_BEACON_A       = 105,
 };
 
 enum BG_AV_Graveyards
@@ -501,11 +503,9 @@ class BattleGroundAV : public BattleGround
         void HandleKillUnit(Creature *creature, Player *killer) override;
 
         /** Challenge handler : air or ground assault, world boss assault */
-        bool   isSnivvle;
-        uint32 m_ui_Snivvle;
-
         uint32 m_ui_buff_h;
         uint32 m_ui_buff_a;
+        bool m_blitzBuff;
 
         uint32 m_reinforcementLevel[BG_TEAMS_COUNT];
         uint32 m_challengeStatus[BG_TEAMS_COUNT][BG_AV_NB_CHALLENGES];

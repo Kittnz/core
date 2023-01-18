@@ -24,6 +24,7 @@
 #include "CreatureAIImpl.h"
 #include "NullCreatureAI.h"
 #include "GameEventMgr.h"
+#include "CreatureGroups.h" 
 
 // Script commands should return false by default.
 // If they return true the rest of the script is aborted.
@@ -276,6 +277,12 @@ bool Map::ScriptCommand_TeleportTo(const ScriptInfo& script, WorldObject* source
         return ShouldAbortScript(script);
     }
 
+    if (!pSource->FindMap())
+    {
+        sLog.outError("SCRIPT_COMMAND_TELEPORT_TO (script id %u) call for source unit not in map (%s).", script.id, source->GetGuidStr().c_str());
+        return ShouldAbortScript(script);
+    }
+
     if (pSource->GetTypeId() == TYPEID_PLAYER)
         (static_cast<Player*>(pSource))->TeleportTo(script.teleportTo.mapId, script.x, script.y, script.z, script.o, script.teleportTo.teleportOptions);
     else
@@ -361,7 +368,7 @@ bool Map::ScriptCommand_RespawnGameObject(const ScriptInfo& script, WorldObject*
 
     if (!pGo)
     {
-        sLog.outError("SCRIPT_COMMAND_RESPAWN_GAMEOBJECT (script id %u) failed for gameobject(guid: %u).", script.id, guidlow);
+        sLog.outError("SCRIPT_COMMAND_RESPAWN_GAMEOBJECT (script id %u) failed for gameobject (guid: %u).", script.id, guidlow);
         return ShouldAbortScript(script);
     }
 
@@ -479,7 +486,7 @@ bool Map::ScriptCommand_OpenDoor(const ScriptInfo& script, WorldObject* source, 
 
     if (!pDoor)
     {
-        sLog.outError("SCRIPT_COMMAND_OPEN_DOOR (script id %u) failed for gameobject(guid: %u).", script.id, guidlow);
+        sLog.outError("SCRIPT_COMMAND_OPEN_DOOR (script id %u) failed for gameobject (guid: %u).", script.id, guidlow);
         return ShouldAbortScript(script);
     }
 
@@ -523,7 +530,7 @@ bool Map::ScriptCommand_CloseDoor(const ScriptInfo& script, WorldObject* source,
 
     if (!pDoor)
     {
-        sLog.outError("SCRIPT_COMMAND_CLOSE_DOOR (script id %u) failed for gameobject(guid: %u).", script.id, guidlow);
+        sLog.outError("SCRIPT_COMMAND_CLOSE_DOOR (script id %u) failed for gameobject (guid: %u).", script.id, guidlow);
         return ShouldAbortScript(script);
     }
     if (pDoor->GetGoType() != GAMEOBJECT_TYPE_DOOR)
@@ -631,6 +638,8 @@ bool Map::ScriptCommand_PlaySound(const ScriptInfo& script, WorldObject* source,
 
     if (script.playSound.flags & SF_PLAYSOUND_DISTANCE_DEPENDENT)
         pSource->PlayDistanceSound(script.playSound.soundId, pTarget);
+    else if (script.playSound.flags & SF_PLAYSOUND_TO_ALL_IN_ZONE)
+        PlayDirectSoundToMap(script.playSound.soundId, IsContinent() ? pSource->GetZoneId() : 0);
     else
         pSource->PlayDirectSound(script.playSound.soundId, pTarget);
 
@@ -648,7 +657,7 @@ bool Map::ScriptCommand_CreateItem(const ScriptInfo& script, WorldObject* source
         return ShouldAbortScript(script);
     }
 
-    if (Item* pItem = pReceiver->StoreNewItemInInventorySlot(script.createItem.itemEntry, script.createItem.amount))
+    if (Item* pItem = pReceiver->StoreNewItemInInventorySlot(script.createItem.itemId, script.createItem.amount))
         pReceiver->SendNewItem(pItem, script.createItem.amount, true, false);
 
     return false;
@@ -668,7 +677,7 @@ bool Map::ScriptCommand_DespawnCreature(const ScriptInfo& script, WorldObject* s
     // Fix possible crash due to double aura deletion when creature is despawned on death.
     uint32 const despawnDelay = !pSource->IsAlive() && (script.despawn.despawnDelay == 0) ? 1 : script.despawn.despawnDelay;
 
-    pSource->DespawnOrUnsummon(despawnDelay);
+    pSource->DespawnOrUnsummon(despawnDelay, script.despawn.respawnDelay);
 
     return false;
 }
@@ -1249,21 +1258,20 @@ bool Map::ScriptCommand_SetData64(const ScriptInfo& script, WorldObject* source,
     return false;
 }
 
-// SCRIPT_COMMAND_START_SCRIPT (39)
-bool Map::ScriptCommand_StartScript(const ScriptInfo& script, WorldObject* source, WorldObject* target)
+static uint32 ChooseScriptIdToStart(ScriptInfo const& script)
 {
-    const uint32 roll = urand(1, 100);
+    uint32 const roll = urand(1, 100);
     uint32 sum = 0;
     uint32 chosenId = 0;
 
     for (int i = 0; i < 4; i++)
     {
-        const uint32 currentId = script.startScript.scriptId[i];
+        uint32 const currentId = script.startScript.scriptId[i];
 
         if (!currentId)
             continue;
 
-        const uint32 currentChance = script.startScript.chance[i];
+        uint32 const currentChance = script.startScript.chance[i];
 
         if ((roll > sum) && (roll <= (sum + currentChance)))
         {
@@ -1274,8 +1282,16 @@ bool Map::ScriptCommand_StartScript(const ScriptInfo& script, WorldObject* sourc
         sum += currentChance;
     }
 
-    if (chosenId)
-        ScriptsStart(sGenericScripts, chosenId, source, target);
+    return chosenId;
+}
+
+// SCRIPT_COMMAND_START_SCRIPT (39)
+bool Map::ScriptCommand_StartScript(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    uint32 const scriptId = ChooseScriptIdToStart(script);
+
+    if (scriptId)
+        ScriptsStart(sGenericScripts, scriptId, source, target);
     else
         return ShouldAbortScript(script);
 
@@ -1293,7 +1309,7 @@ bool Map::ScriptCommand_RemoveItem(const ScriptInfo& script, WorldObject* source
         return ShouldAbortScript(script);
     }
 
-    pPlayer->DestroyItemCount(script.createItem.itemEntry, script.createItem.amount, true);
+    pPlayer->DestroyItemCount(script.createItem.itemId, script.createItem.amount, true);
 
     return false;
 }
@@ -2264,7 +2280,7 @@ bool Map::ScriptCommand_DespawnGameObject(ScriptInfo const& script, WorldObject*
 
     if (!pGo)
     {
-        sLog.outError("SCRIPT_COMMAND_DESPAWN_GAMEOBJECT (script id %u) failed for gameobject(guid: %u).", script.id, guidlow);
+        sLog.outError("SCRIPT_COMMAND_DESPAWN_GAMEOBJECT (script id %u) failed for gameobject (guid: %u).", script.id, guidlow);
         return ShouldAbortScript(script);
     }
 
@@ -2293,7 +2309,7 @@ bool Map::ScriptCommand_LoadGameObject(ScriptInfo const& script, WorldObject* so
         return ShouldAbortScript(script); // already spawned
 
     GameObject* pGameobject = new GameObject;
-    if (!pGameobject->LoadFromDB(script.loadGo.goGuid, this))
+    if (!pGameobject->LoadFromDB(script.loadGo.goGuid, this, true))
         delete pGameobject;
     else
         Add(pGameobject);
@@ -2389,5 +2405,85 @@ bool Map::ScriptCommand_ResetDoorOrButton(ScriptInfo const& script, WorldObject*
     }
 
     pGo->ResetDoorOrButton();
+    return false;
+}
+
+// SCRIPT_COMMAND_SET_COMMAND_STATE (88)
+bool Map::ScriptCommand_SetCommandState(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    Creature* pSource = ToCreature(source);
+
+    if (!pSource)
+    {
+        sLog.outError("SCRIPT_COMMAND_SET_COMMAND_STATE (script id %u) call for a nullptr or non-creature source (TypeId: %u), skipping.", script.id, source ? source->GetTypeId() : 0);
+        return ShouldAbortScript(script);
+    }
+
+    pSource->HandlePetCommand((CommandStates)script.setCommandState.commandState, ToUnit(target));
+
+    return false;
+}
+
+// SCRIPT_COMMAND_PLAY_CUSTOM_ANIM (89)
+bool Map::ScriptCommand_PlayCustomAnim(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    GameObject* pGo = nullptr;
+
+    if (!((pGo = ToGameObject(target)) || (pGo = ToGameObject(source))))
+    {
+        sLog.outError("SCRIPT_COMMAND_PLAY_CUSTOM_ANIM (script id %u) call for a nullptr gameobject, skipping.", script.id);
+        return ShouldAbortScript(script);
+    }
+
+    pGo->SendGameObjectCustomAnim(script.playCustomAnim.animId);
+    return false;
+}
+
+// SCRIPT_COMMAND_START_SCRIPT_ON_GROUP (90)
+bool Map::ScriptCommand_StartScriptOnGroup(ScriptInfo const& script, WorldObject* source, WorldObject* target)
+{
+    Unit* pSource = ToUnit(source);
+
+    if (!pSource)
+    {
+        sLog.outError("SCRIPT_COMMAND_START_SCRIPT_ON_GROUP (script id %u) call for a nullptr or non-unit source (TypeId: %u), skipping.", script.id, source ? source->GetTypeId() : 0);
+        return ShouldAbortScript(script);
+    }
+
+    uint32 const scriptId = ChooseScriptIdToStart(script);
+    if (!scriptId)
+        return ShouldAbortScript(script);
+
+    ScriptsStart(sGenericScripts, scriptId, pSource, target);
+
+    if (Creature* pCreature = pSource->ToCreature())
+    {
+        if (CreatureGroup* pGroup = pCreature->GetCreatureGroup())
+        {
+            if (pGroup->GetLeaderGuid() != pCreature->GetObjectGuid())
+                ScriptsStart(sGenericScripts, scriptId, GetCreature(pGroup->GetLeaderGuid()), target);
+
+            for (auto const& itr : pGroup->GetMembers())
+            {
+                if (itr.first != pCreature->GetObjectGuid())
+                    ScriptsStart(sGenericScripts, scriptId, GetCreature(itr.first), target);
+            }
+        }
+    }
+    else if (Player* pPlayer = pSource->ToPlayer())
+    {
+        if (Group* pGroup = pPlayer->GetGroup())
+        {
+            for (GroupReference* itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
+            {
+                if (Player* pMember = itr->getSource())
+                {
+                    if (pMember->GetObjectGuid() != pPlayer->GetObjectGuid())
+                        ScriptsStart(sGenericScripts, scriptId, GetPlayer(pMember->GetObjectGuid()), target);
+                }
+            }
+        }
+    }
+
     return false;
 }

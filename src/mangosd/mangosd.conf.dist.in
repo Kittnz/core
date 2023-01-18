@@ -937,7 +937,7 @@ ChatFakeMessagePreventing = 1
 
 # ChatStrictLinkChecking.Severity. Check chat messages for ingame links to spells, items, quests, achievements etc.
 
-ChatStrictLinkChecking.Severity = 1
+ChatStrictLinkChecking.Severity = 2
 
 # ChatStrictLinkChecking.Kick. Defines, what should be done if a message is considered to contain invalid pipe commands.
 
@@ -1841,6 +1841,11 @@ BattleGround.RandomizeQueues = 0
 # If the group is bigger than this value, players are queued solo.
 
 BattleGround.GroupQueueLimit = 40
+
+# Reputation reward rates for battlegrounds
+BattleGround.Rate.Reputation.AV = 0.85
+BattleGround.Rate.Reputation.WS = 1.15
+BattleGround.Rate.Reputation.AB = 1.15
 
 # Alterac.MinPlayersInQueue. Minimum players in queue per faction before starting a match.
 

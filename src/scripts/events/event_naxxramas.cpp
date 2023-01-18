@@ -63,7 +63,7 @@ struct NecropolisProxyAI : public ScriptedAI
         _necropolisGuid = necropolis;
     }
 
-    void SpellHit(Unit* caster, const SpellEntry* spell) override
+    void SpellHit(WorldObject* caster, const SpellEntry* spell) override
     {
         if (spell->Id == SPELL_COMMUNICATION_TRIGGER && caster != m_creature)
             DoCastSpellIfCan(m_creature, SPELL_COMMUNICATION_TRIGGER);
@@ -129,7 +129,7 @@ struct NecropolisRelayAI : public ScriptedAI
         }
     }
     
-    void SpellHit(Unit* caster, const SpellEntry* spell) override
+    void SpellHit(WorldObject* caster, const SpellEntry* spell) override
     {
         if (spell->Id == SPELL_COMMUNICATION_CAMP_RELAY)
         {
@@ -317,7 +317,7 @@ struct npc_necrotic_shard : public ScriptedAI
         DespawnAdds();
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_COMMUNICATION_TRIGGER || pSpell->Id == SPELL_ZAP_CRYSTAL)
             DoCastSpellIfCan(m_creature, SPELL_CAMP_RECEIVES_COMMUNIQUE);
@@ -613,7 +613,7 @@ struct GhoulBerserker : public ScriptedAI
     {
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
     }
 

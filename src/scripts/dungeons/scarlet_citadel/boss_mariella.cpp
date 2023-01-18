@@ -29,13 +29,13 @@ private:
     bool m_bAchievementKillFailed{};
     bool m_bWasInFight{};
 
-    std::uint8_t m_uiSacrificePhase{};
+    uint8 m_uiSacrificePhase{};
 
-    std::uint32_t m_uiVoidZoneSpawn_Timer{};
-    std::uint32_t m_uiIncreaseHealth_Timer{};
-    std::uint32_t m_uiFelhoundSpawn_Timer{};
-    std::uint32_t m_uiEnrage_Timer{};
-    std::uint32_t m_uiShadowVolley_Timer{};
+    uint32 m_uiVoidZoneSpawn_Timer{};
+    uint32 m_uiIncreaseHealth_Timer{};
+    uint32 m_uiFelhoundSpawn_Timer{};
+    uint32 m_uiEnrage_Timer{};
+    uint32 m_uiShadowVolley_Timer{};
 
     ObjectGuid m_uiKillZoneGuid{};
 
@@ -98,7 +98,7 @@ public:
         m_bEnrage = false;
 
         // Trigger fight on gossip
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_STUNNED);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_STUNNED);
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         m_creature->SetFactionTemplateId(nsMariella::FACTION_NEUTRAL);
 
@@ -329,8 +329,11 @@ public:
 
     void SpawnKillZone(Creature* pCreature)
     {
-        if (Creature const* pKillZone{ pCreature->SummonCreature(nsMariella::NPC_KILLZONE, pCreature->GetPositionX(), pCreature->GetPositionY(),
-            (pCreature->GetPositionZ() + 0.25f), 0.f, TEMPSUMMON_MANUAL_DESPAWN) })
+        if (Creature const* pKillZone{ pCreature->SummonCreature(nsMariella::NPC_KILLZONE,
+            pCreature->GetPositionX(),
+            pCreature->GetPositionY(),
+            (pCreature->GetPositionZ() + .25f),
+            0.f, TEMPSUMMON_MANUAL_DESPAWN) })
         {
             m_uiKillZoneGuid = pKillZone->GetObjectGuid();
         }
@@ -407,7 +410,7 @@ public:
                     {
                         if (pPlayer && pPlayer->IsAlive() && !pPlayer->IsGameMaster() && (pPlayer->GetPowerType() == POWER_MANA))
                         {
-                            const std::uint32_t uiRnd{ urand(0, 3) }; // Choose a random spawn point
+                            const uint32 uiRnd{ urand(0, 3) }; // Choose a random spawn point
                             if (Creature* pFelhound{ m_creature->SummonCreature(nsMariella::NPC_FELHOUND,
                                 nsMariella::vfSpawnPoints[uiRnd].m_fX,
                                 nsMariella::vfSpawnPoints[uiRnd].m_fY,
@@ -587,7 +590,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiDamage_Timer{};
+    uint32 m_uiDamage_Timer{};
 
     instance_scarlet_citadel* m_pInstance;
 
@@ -600,7 +603,7 @@ public:
         // Void Zone shouldn't move
         m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->SetRooted(true);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
     }
 
     void DamageTimer(const uint32& uiDiff)
@@ -665,7 +668,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiKill_Timer{};
+    uint32 m_uiKill_Timer{};
 
     instance_scarlet_citadel* m_pInstance;
 
@@ -678,7 +681,7 @@ public:
         // Void Zone shouldn't move
         m_creature->AddUnitState(UNIT_STAT_ROOT);
         m_creature->SetRooted(true);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
     }
 
     void DamageTimer(const uint32& uiDiff)
@@ -730,7 +733,7 @@ public:
 
 private:
 
-    std::uint32_t m_uiManaDrain_Timer{};
+    uint32 m_uiManaDrain_Timer{};
 
 public:
     void Reset() override
@@ -836,7 +839,7 @@ bool GossipSelect_boss_mariella(Player* pPlayer, Creature* pCreature, uint32 /*u
 
                 DoAfterTime(pCreature, (10 * IN_MILLISECONDS), [creature = pCreature]()
                     {
-                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                        creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                         creature->SetFactionTemplateId(nsMariella::FACTION_SCARLET);
                         creature->SetInCombatWithZone();
                     });

@@ -177,7 +177,7 @@ struct npc_overlord_runthakAI : public ScriptedAI
         m_uiDialogueTimer = 2000;
         m_bRallyingCryEvent = false;
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
     }
 
     void StartRallyEvent(ObjectGuid playerGuid)
@@ -185,7 +185,7 @@ struct npc_overlord_runthakAI : public ScriptedAI
         m_playerGuid = playerGuid;
         m_bRallyingCryEvent = true;
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
     }
 
     void MovementInform(uint32 uiType, uint32 uiPointId)
@@ -382,7 +382,7 @@ struct npc_overlord_saurfangAI : public ScriptedAI
         m_uiDialogueTimer = 2000;
         m_bRallyingCryEvent = false;
         m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
     }
 
     void Aggro(Unit* pWho)
@@ -406,7 +406,7 @@ struct npc_overlord_saurfangAI : public ScriptedAI
         m_playerGuid = playerGuid;
         m_bRallyingCryEvent = true;
         m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP | UNIT_NPC_FLAG_QUESTGIVER);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
     }
 
     void MovementInform(uint32 uiType, uint32 uiPointId) override

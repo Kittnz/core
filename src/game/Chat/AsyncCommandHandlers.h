@@ -52,12 +52,14 @@ struct PInfoData
     LocaleConstant loc = LOCALE_enUS;
     ObjectGuid target_guid;
     uint32 m_accountId;
+    uint32 fingerprint = 0;
     bool online = false;
     bool isHardcore = false;
 
     bool hasAccount = false;
     std::string two_factor_enabled;
     std::string username;
+    std::string email;
     std::string last_ip;
     AccountTypes security = SEC_PLAYER;
     std::string last_login;

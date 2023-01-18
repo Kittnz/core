@@ -1260,6 +1260,48 @@ namespace MaNGOS
             uint32 i_spellId;
     };
 
+    class NearestAlivePlayerCheck
+    {
+        public:
+            NearestAlivePlayerCheck(WorldObject const* source, float dist) : me(source), m_range(dist) {}
+            bool operator() (Player* pPlayer)
+            {
+                if (me == pPlayer)
+                    return false;
+
+                if (pPlayer->IsGameMaster())
+                    return false;
+
+                if (!pPlayer->IsAlive())
+                    return false;
+
+                if (!me->IsWithinDistInMap(pPlayer, m_range))
+                    return false;
+
+                m_range = me->GetDistance(pPlayer);   // use found unit range as new range limit for next check
+                return true;
+            }
+
+        private:
+            WorldObject const* me;
+            float m_range;
+    };
+
+    class PlayerAtMinimumRangeAway
+    {
+        public:
+            PlayerAtMinimumRangeAway(Unit const* unit, float fMinRange) : pUnit(unit), fRange(fMinRange) {}
+            bool operator() (Player* pPlayer)
+            {
+                //No threat list check, must be done explicit if expected to be in combat with creature
+                return !pPlayer->IsGameMaster() && pPlayer->IsAlive() && !pUnit->IsWithinDist(pPlayer,fRange,false);
+            }
+
+        private:
+            Unit const* pUnit;
+            float fRange;
+    };
+
     // Prepare using Builder localized packets with caching and send to player
     template<class Builder>
     class LocalizedPacketDo
@@ -1349,6 +1391,21 @@ namespace MaNGOS
         float m_fRange;
     };
 
+    class AllCreaturesInRange
+    {
+    public:
+        AllCreaturesInRange(const WorldObject* pObject, float fMaxRange) : m_pObject(pObject), m_fRange(fMaxRange) {}
+        bool operator() (Unit* pUnit)
+        {
+            return m_pObject->IsWithinDist(pUnit, m_fRange, false);
+        }
+
+    private:
+        const WorldObject* m_pObject;
+        float m_fRange;
+
+    };
+
     class AllCreaturesMatchingOneEntryInRange
     {
     public:
@@ -1371,21 +1428,6 @@ namespace MaNGOS
         const WorldObject* m_pObject;
         std::vector<uint32> entries;
         float m_fRange;
-    };
-
-    class PlayerAtMinimumRangeAway
-    {
-        public:
-            PlayerAtMinimumRangeAway(Unit const* unit, float fMinRange) : pUnit(unit), fRange(fMinRange) {}
-            bool operator() (Player* pPlayer)
-            {
-                //No threat list check, must be done explicit if expected to be in combat with creature
-                return !pPlayer->IsGameMaster() && pPlayer->IsAlive() && !pUnit->IsWithinDist(pPlayer,fRange,false);
-            }
-
-        private:
-            Unit const* pUnit;
-            float fRange;
     };
 
     class NearestUnitCheck

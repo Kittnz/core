@@ -176,7 +176,7 @@ bool GOHello_go_greater_moonlight(Player* pPlayer, GameObject* pGo)
     if (!pPlayer || !pGo)
         return true;
 
-    const std::uint32_t zone = pPlayer->GetZoneId();
+    const uint32 zone = pPlayer->GetZoneId();
 
     if (zone == 493) // Moonglade
     {
@@ -540,7 +540,7 @@ public:
     void UpdateAI(const uint32 diff)
     {
         _events.Update(diff);
-        while (std::uint32_t eventId = _events.ExecuteEvent())
+        while (uint32 eventId = _events.ExecuteEvent())
         {
             switch (eventId)
             {

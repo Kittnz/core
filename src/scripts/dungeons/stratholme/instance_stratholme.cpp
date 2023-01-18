@@ -226,7 +226,7 @@ struct instance_stratholme : public ScriptedInstance
             case NPC_BARON:
                 m_uiBaronGUID = pCreature->GetGUID();
                 if (GetData(TYPE_RAMSTEIN) != DONE)
-                    pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                    pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
                 break;
             case NPC_YSIDA_TRIGGER:
                 m_uiYsidaTriggerGUID = pCreature->GetGUID();
@@ -255,7 +255,7 @@ struct instance_stratholme : public ScriptedInstance
                 m_uiDathrohanGUID = pCreature->GetGUID();
                 break;
             case NPC_MAGISTRATE:
-                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 break;
         }
 
@@ -334,18 +334,68 @@ struct instance_stratholme : public ScriptedInstance
         }
     }
 
-    void OnCreatureDeath(Creature *who) override
+    void OnCreatureDeath(Creature* pWho) override
     {
-        switch (who->GetEntry())
+        switch (pWho->GetEntry())
         {
             case NPC_BLACK_GUARD:
-                m_uiBlackguardCount--;
+            {
+                --m_uiBlackguardCount;
+
                 if (!m_uiBlackguardCount)
                 {
                     if (Creature* pBaron = instance->GetCreature(m_uiBaronGUID))
+                    {
                         DoScriptText(RIVENDARE_YELL_READY, pBaron);
+                    }
                 }
+
                 break;
+            }
+            case NPC_BARON: // Part of Scarlet Citadel Attunement Questchain
+            {
+                if (m_auiEncounter[TYPE_BARON_RUN] != FAIL)
+                {
+                    if (Creature* pBaron{ instance->GetCreature(m_uiBaronGUID) })
+                    {
+                        Map::PlayerList const& PlayerList{ pBaron->GetMap()->GetPlayers() };
+                        if (!PlayerList.isEmpty())
+                        {
+                            constexpr uint32 QUEST_SEEK_HELP_ELSEWHERE{ 20001 };
+                            constexpr uint32 QUEST_TO_WAKE_THE_ASHBRINGER{ 20002 };
+                            constexpr uint32 CHEST_TO_WAKE_THE_ASHBRINGER{ 5000050 };
+
+                            for (const auto& itr : PlayerList)
+                            {
+                                if (Player* pPlayer{ itr.getSource() })
+                                {
+                                    if ((pPlayer->GetQuestStatus(QUEST_TO_WAKE_THE_ASHBRINGER) == QUEST_STATUS_INCOMPLETE) &&
+                                        (pPlayer->GetQuestStatus(QUEST_SEEK_HELP_ELSEWHERE) == QUEST_STATUS_COMPLETE))
+                                    {
+                                        if (GameObject* pChest{ pBaron->SummonGameObject(CHEST_TO_WAKE_THE_ASHBRINGER,
+                                            4032.98f,  // X
+                                            -3350.54f, // Y
+                                            115.061f,  // Z
+                                            4.72157f,  // O
+                                            0.f,       // R0
+                                            0.f,       // R1
+                                            0.703852f, // R2
+                                            -0.710346f,// R3
+                                            900000) }) // Delete after 15 min
+                                        {
+                                            pChest->SetOwnerGuid(pPlayer->GetObjectGuid());
+                                        }
+
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
         }
     }
 
@@ -943,7 +993,7 @@ struct instance_stratholme : public ScriptedInstance
                         }
                         UpdateGoState(m_uiZiggurat4GUID, GO_STATE_ACTIVE, false);
                         UpdateGoState(m_uiZiggurat5GUID, GO_STATE_ACTIVE, false);
-                        pBaron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+                        pBaron->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
 
                         sLog.outDebug("Instance Stratholme: Black guard sentries spawned. Opening gates to baron.");
                     }

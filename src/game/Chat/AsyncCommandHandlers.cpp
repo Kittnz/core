@@ -35,7 +35,7 @@
 #include "GuildMgr.h"
 #include "ObjectGuid.h"
 #include "AsyncCommandHandlers.h"
-
+#include "Anticheat.h"
 void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, ObjectGuid& target_guid, std::string& name)
 {
     PInfoData* data = new PInfoData;
@@ -56,6 +56,9 @@ void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, Obj
         data->target_guid = target->GetObjectGuid();
         data->online = true;
         data->isHardcore = target->IsHardcore();
+        data->fingerprint = target->GetSession()->GetAntiCheat()->GetFingerprint();
+        if (session->GetSecurity() >= SEC_ADMINISTRATOR)
+            data->email = target->GetSession()->GetEmail();
 
         HandleDataAfterPlayerLookup(data);
     }
@@ -86,6 +89,10 @@ void PInfoHandler::HandlePlayerLookupResult(QueryResult *result, PInfoData *data
     data->class_ = fields[5].GetUInt8();
     uint32 mort_status = fields[6].GetUInt32();
     data->isHardcore = mort_status == HARDCORE_MODE_STATUS_ALIVE || mort_status == HARDCORE_MODE_STATUS_DEAD;
+    const auto accData = sWorld.FindAccountData(data->accId);
+    
+    if (accData)
+        data->email = accData->email;
 
     delete result;
 
@@ -203,7 +210,9 @@ void PInfoHandler::HandleResponse(WorldSession* session, PInfoData *data)
         data->security, cHandler.playerLink(data->last_ip).c_str(),
         sAccountMgr.IsIPBanned(data->last_ip) ? " [BANIP]" : "", data->last_login.c_str(),
         data->latency, localeNames[data->loc], data->two_factor_enabled.c_str());
-
+    if (!data->email.empty())
+        cHandler.PSendSysMessage("Email: %s", data->email.c_str());
+    cHandler.PSendSysMessage("Current Fingerprint: %u", data->fingerprint);
     cHandler.PSendSysMessage("Is Hardcore: %s", data->isHardcore ? "YES" : "NO");
 
     std::string timeStr = secsToTimeString(data->total_player_time, true, true);

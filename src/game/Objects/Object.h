@@ -85,7 +85,7 @@ enum TempSummonType
   TEMPSUMMON_MANUAL_DESPAWN = 8,                  // despawns when UnSummon() is called
   TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN = 9,    // despawns after a specified time (in or out of combat) OR when the creature disappears
   TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN = 10, // despawns after a specified time (in or out of combat) OR when the creature dies
-
+  TEMPSUMMON_TIMED_DEATH_AND_DEAD_DESPAWN = 11,   // dies after a specified time (in or out of combat) and despawns when creature disappears
 };
 
 inline bool IsRespawnableTempSummonType(TempSummonType type)
@@ -128,6 +128,7 @@ class Spell;
 
 typedef std::unordered_map<Player *, UpdateData> UpdateDataMapType;
 struct FactionTemplateEntry;
+struct FactionEntry;
 
 //use this class to measure time between world update ticks
 //essential for units updating their spells after cells become active
@@ -811,7 +812,7 @@ class WorldObject : public Object
         void UpdateAllowedPositionZ(float x, float y, float &z) const;
 
         // Valeur de retour : false si aucun point correct trouve.
-        bool GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const;
+        bool GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z, bool allowStraightPath = false) const;
     void GetPointBehindObject(WorldLocation& location, float distance) const;
 
     uint32 GetMapId() const { return m_mapId; }
@@ -973,6 +974,8 @@ class WorldObject : public Object
         virtual bool IsFriendlyTo(WorldObject const* target) const =0;
         virtual uint32 GetFactionTemplateId() const = 0;
         FactionTemplateEntry const* GetFactionTemplateEntry() const;
+        FactionEntry const* GetFactionEntry() const;
+        uint32 GetFactionId() const;
         virtual ReputationRank GetReactionTo(WorldObject const* target) const;
         ReputationRank static GetFactionReactionTo(FactionTemplateEntry const* factionTemplateEntry, WorldObject const* target);
         bool IsValidAttackTarget(Unit const* target, bool checkAlive = true) const;
@@ -1013,12 +1016,13 @@ class WorldObject : public Object
         void RemoveFromClientUpdateList() override;
         void BuildUpdateData(UpdateDataMapType &) override;
 
-        Creature* SummonCreature(uint32 id, float x, float y, float z, float ang,TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN,uint32 despwtime = 25000, bool asActiveObject = false, uint32 pacifiedTimer = 0, CreatureAiSetter pFuncAiSetter = nullptr);
+        Creature* SummonCreature(uint32 id, float x, float y, float z, float ang,TempSummonType spwtype = TEMPSUMMON_DEAD_DESPAWN,uint32 despwtime = 25000, bool asActiveObject = false, uint32 pacifiedTimer = 0, CreatureAiSetter pFuncAiSetter = nullptr, bool attach = true);
         GameObject* SummonGameObject(const uint32 entry, const float x, const float y, const float z, const float ang, const float rotation0 = 0.0f, const float rotation1 = 0.0f, const float rotation2 = 0.0f, const float rotation3 = 0.0f, const uint32 respawnTime = 25000, const bool attach = true);
 
         Creature* FindNearestCreature(uint32 entry, float range, bool alive = true, Creature const* except = nullptr) const;
         Creature* FindRandomCreature(uint32 entry, float range, bool alive = true, Creature const* except = nullptr) const;
         GameObject* FindNearestGameObject(uint32 entry, float range) const;
+        GameObject* FindRandomGameObject(uint32 entry, float range) const;
         Player* FindNearestPlayer(float range) const;
         void GetGameObjectListWithEntryInGrid(std::list<GameObject*>& lList, uint32 uiEntry, float fMaxSearchRange) const;
         void GetCreatureListWithEntryInGrid(std::list<Creature*>& lList, uint32 uiEntry, float fMaxSearchRange) const;

@@ -68,6 +68,7 @@ class MapReference;
 static constexpr uint8 PLAYER_MAX_SKILLS = 127;
 constexpr uint8 PLAYER_EXPLORED_ZONES_SIZE = 64;
 constexpr uint32 CORPSE_REPOP_TIME = (6 * MINUTE * IN_MILLISECONDS);
+constexpr uint32 CAMERA_UPDATE_DELAY = 400;
 
 // Note: SPELLMOD_* values is aura types in fact
 enum SpellModType
@@ -1478,7 +1479,7 @@ class Player final: public Unit
         void RemovePetActionBar();
 
         // Take possession of a new spawned creature
-        Creature* SummonPossessedMinion(uint32 creatureId, uint32 spellId, float x, float y, float z, float ang);
+        Creature* SummonPossessedMinion(uint32 creatureId, uint32 spellId, float x, float y, float z, float ang, uint32 duration);
         void UnsummonPossessedMinion();
 
         uint32 m_stableSlots;
@@ -1498,7 +1499,7 @@ class Player final: public Unit
         void SetTemporaryUnsummonedPetNumber(uint32 petnumber) { m_temporaryUnsummonedPetNumber = petnumber; }
         void UnsummonPetTemporaryIfAny();
         void ResummonPetTemporaryUnSummonedIfAny();
-        bool IsPetNeedBeTemporaryUnsummoned() const { return !IsInWorld() || !IsAlive() || IsMounted() /*+in flight*/; }
+        bool IsPetNeedBeTemporaryUnsummoned() const;
         
         /*********************************************************/
         /***                   SPELL SYSTEM                    ***/
@@ -1537,7 +1538,7 @@ class Player final: public Unit
         void LearnSpellHighRank(uint32 spellid);
         uint32 GetSpellRank(SpellEntry const* spellInfo) final;
 
-        void CastItemCombatSpell(Unit* Target, WeaponAttackType attType);
+        void CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float chanceMultiplier = 1.0f);
         void CastItemUseSpell(Item* item, SpellCastTargets const& targets);
 
         PlayerSpellMap const& GetSpellMap() const { return m_spells; }
@@ -1555,7 +1556,6 @@ class Player final: public Unit
         void DropModCharge(SpellModifier* mod, Spell* spell);
 
         std::vector<ItemSetEffect*> m_ItemSetEff;
-        uint32 m_castingSpell; // Last spell cast by client, or combo points if player is rogue
 
         /*********************************************************/
         /***                   TALENT SYSTEM                   ***/
@@ -1817,6 +1817,8 @@ class Player final: public Unit
         float  m_summon_z;
 
         Camera m_camera;
+        ObjectGuid m_pendingCameraUpdate;
+        uint32 m_cameraUpdateTimer;
         float m_longSightRange;
         uint32 m_longSightSpell;
 
@@ -1940,6 +1942,7 @@ class Player final: public Unit
         void UpdateVisibilityOf(WorldObject const* viewPoint, T* target, UpdateData& data, std::set<WorldObject*>& visibleNow);
 
         Camera& GetCamera() { return m_camera; }
+        void ScheduleCameraUpdate(ObjectGuid guid);
 
         uint32 GetLongSight() const { return m_longSightSpell; }
         void SetLongSight(const Aura* aura = nullptr);
@@ -1979,6 +1982,7 @@ class Player final: public Unit
         uint32 GetHomeBindMap() const { return m_homebindMapId; }
         uint16 GetHomeBindAreaId() const { return m_homebindAreaId; }
 
+        void SendSummonRequest(ObjectGuid summonerGuid, uint32 mapId, uint32 zoneId, float x, float y, float z);
         void SetSummonPoint(uint32 mapid, float x, float y, float z)
         {
             m_summon_expire = time(nullptr) + MAX_PLAYER_SUMMON_DELAY;
@@ -2175,6 +2179,7 @@ class Player final: public Unit
 
         uint32 GetTotalPlayedTime() const { return m_Played_time[PLAYED_TIME_TOTAL]; }
         uint32 GetLevelPlayedTime() const { return m_Played_time[PLAYED_TIME_LEVEL]; }
+        time_t GetLoginTime() const { return m_logintime; }
 
         void AddSkippedUpdateTime(uint32 t) { m_skippedUpdateTime += t; }
         uint32 GetSkippedUpdateTime() const { return m_skippedUpdateTime; }
@@ -2400,6 +2405,7 @@ public:
     private:
         Team m_team;
         ReputationMgr  m_reputationMgr;
+        std::set<uint32> m_temporaryAtWarFactions;
         bool m_DbSaveDisabled; // used for faction change
     public:
         static Team TeamForRace(uint8 race);
@@ -2414,6 +2420,8 @@ public:
         void RewardReputation(Unit* pVictim, float rate);
         void RewardReputation(Quest const* pQuest);
         int32 CalculateReputationGain(ReputationSource source, int32 rep, int32 faction, uint32 creatureOrQuestLevel = 0, bool noAuraBonus = false);
+        void SetTemporaryAtWarWithFaction(uint32 factionId) { m_temporaryAtWarFactions.insert(factionId); }
+        void ClearTemporaryWarWithFactions();
 
         bool ChangeRace(uint8 newRace);
         bool ChangeItemsForRace(uint8 oldRace, uint8 newRace);
@@ -2709,10 +2717,10 @@ public:
 
 		// Xerron Dual Spec
 	public:
-		bool HasSavedTalentSpec(int primaryOrSecondary);
-		std::string SpecTalentPoints(int primaryOrSecondary);
-		bool ActivateTalentSpec(int primaryOrSecondary);
-		bool SaveTalentSpec(int primaryOrSecondary);
+		bool HasSavedTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
+		std::string SpecTalentPoints(const std::uint8_t uiPrimaryOrSecondary);
+		bool ActivateTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
+		bool SaveTalentSpec(const std::uint8_t uiPrimaryOrSecondary);
 		// Xerron Dual Spec End
 
         // Tanatos Transmog

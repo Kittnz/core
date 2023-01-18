@@ -132,10 +132,11 @@ enum eScriptCommand
                                                             // datalong = sound_id
                                                             // datalong2 = ePlaySoundFlags
     SCRIPT_COMMAND_CREATE_ITEM              = 17,           // source = Player (from provided source or target)
-                                                            // datalong = item_entry
+                                                            // datalong = item_id
                                                             // datalong2 = amount
     SCRIPT_COMMAND_DESPAWN_CREATURE         = 18,           // source = Creature
                                                             // datalong = despawn_delay
+                                                            // datalong2 = respawn_delay
     SCRIPT_COMMAND_SET_EQUIPMENT            = 19,           // source = Creature
                                                             // datalong = (bool) reset_default
                                                             // dataint = main-hand item_id
@@ -166,7 +167,6 @@ enum eScriptCommand
                                                             // target = Player
     SCRIPT_COMMAND_UPDATE_ENTRY             = 27,           // source = Creature
                                                             // datalong = creature_entry
-                                                            // datalong2 = team for display_id (0 = alliance, 1 = horde)
     SCRIPT_COMMAND_STAND_STATE              = 28,           // source = Unit
                                                             // datalong = stand_state (enum UnitStandStateType)
     SCRIPT_COMMAND_MODIFY_THREAT            = 29,           // source = Creature
@@ -201,10 +201,10 @@ enum eScriptCommand
                                                             // datalong2 = data
                                                             // datalong3 = eSetInstData64Options
     SCRIPT_COMMAND_START_SCRIPT             = 39,           // source = Map
-                                                            // datalong1-4 = event_script id
+                                                            // datalong1-4 = generic_script id
                                                             // dataint1-4 = chance (total cant be above 100)
     SCRIPT_COMMAND_REMOVE_ITEM              = 40,           // source = Player (from provided source or target)
-                                                            // datalong = item_entry
+                                                            // datalong = item_id
                                                             // datalong2 = amount
     SCRIPT_COMMAND_REMOVE_OBJECT            = 41,           // source = GameObject
                                                             // target = Unit
@@ -349,6 +349,13 @@ enum eScriptCommand
     SCRIPT_COMMAND_SET_PVP                  = 86,           // source = Player
                                                             // datalong = (bool) 0 = off, 1 = on
     SCRIPT_COMMAND_RESET_DOOR_OR_BUTTON     = 87,           // source = GameObject
+    SCRIPT_COMMAND_SET_COMMAND_STATE        = 88,           // source = Creature
+                                                            // datalong = command_state (see enum CommandStates)
+    SCRIPT_COMMAND_PLAY_CUSTOM_ANIM         = 89,           // source = GameObject
+                                                            // datalong = anim_id
+    SCRIPT_COMMAND_START_SCRIPT_ON_GROUP    = 90,           // source = Unit
+                                                            // datalong1-4 = generic_script id
+                                                            // dataint1-4 = chance (total cant be above 100)
 
     SCRIPT_COMMAND_MAX,
 
@@ -385,7 +392,6 @@ enum eModifyFlagsOptions
 };
 
 // Flags used by SCRIPT_COMMAND_TEMP_SUMMON_CREATURE
-// Must start from 0x8 because of target selection flags.
 enum eSummonCreatureFlags
 {
     SF_SUMMONCREATURE_SET_RUN     = 0x01, // makes creature move at run speed
@@ -399,7 +405,8 @@ enum eSummonCreatureFlags
 enum ePlaySoundFlags
 {
     SF_PLAYSOUND_ONLY_TO_TARGET     = 0x1,
-    SF_PLAYSOUND_DISTANCE_DEPENDENT = 0x2
+    SF_PLAYSOUND_DISTANCE_DEPENDENT = 0x2,
+    SF_PLAYSOUND_TO_ALL_IN_ZONE     = 0x4
 };
 
 // Possible datalong values for SCRIPT_COMMAND_MODIFY_THREAT
@@ -510,11 +517,14 @@ enum eStartScriptForAllOptions
 
 enum eDataFlags
 {
-    SF_GENERAL_SWAP_INITIAL_TARGETS = 0x1,                  // Swaps the provided source and target, before buddy is checked.
-    SF_GENERAL_SWAP_FINAL_TARGETS   = 0x2,                  // Swaps the local source and target, after buddy is assigned.
-    SF_GENERAL_TARGET_SELF          = 0x4,                  // Replaces the provided target with the provided source.
-    SF_GENERAL_ABORT_ON_FAILURE     = 0x8                   // Terminates the script if the command fails.
+    SF_GENERAL_SWAP_INITIAL_TARGETS = 0x01,                 // Swaps the provided source and target, before buddy is checked.
+    SF_GENERAL_SWAP_FINAL_TARGETS   = 0x02,                 // Swaps the local source and target, after buddy is assigned.
+    SF_GENERAL_TARGET_SELF          = 0x04,                 // Replaces the provided target with the provided source.
+    SF_GENERAL_ABORT_ON_FAILURE     = 0x08,                 // Terminates the script if the command fails.
+    SF_GENERAL_SKIP_MISSING_TARGETS = 0x10,                 // Command is skipped if source or target is not found, without printing an error.
 };
+
+#define ALL_DB_SCRIPT_FLAGS (SF_GENERAL_SWAP_INITIAL_TARGETS | SF_GENERAL_SWAP_FINAL_TARGETS | SF_GENERAL_TARGET_SELF | SF_GENERAL_ABORT_ON_FAILURE | SF_GENERAL_SKIP_MISSING_TARGETS)
 
 struct ScriptInfo
 {
@@ -642,13 +652,14 @@ struct ScriptInfo
 
         struct                                              // SCRIPT_COMMAND_CREATE_ITEM (17)
         {
-            uint32 itemEntry;                               // datalong
+            uint32 itemId;                                  // datalong
             uint32 amount;                                  // datalong2
         } createItem;
 
         struct                                              // SCRIPT_COMMAND_DESPAWN_CREATURE (18)
         {
             uint32 despawnDelay;                            // datalong
+            uint32 respawnDelay;                            // datalong
         } despawn;
 
         struct                                              // SCRIPT_COMMAND_SET_EQUIPMENT (19)
@@ -707,7 +718,6 @@ struct ScriptInfo
         struct                                              // SCRIPT_COMMAND_UPDATE_ENTRY (27)
         {
             uint32 creatureEntry;                           // datalong
-            uint32 team;                                    // datalong2
         } updateEntry;
 
         struct                                              // SCRIPT_COMMAND_STAND_STATE (28)
@@ -770,7 +780,8 @@ struct ScriptInfo
             uint32 type;                                    // datalong3
         } setData64;
 
-        struct                                              // SCRIPT_COMMAND_START_SCRIPT (39)
+                                                            // SCRIPT_COMMAND_START_SCRIPT (39)
+        struct                                              // SCRIPT_COMMAND_START_SCRIPT_ON_GROUP (90)
         {
             uint32 scriptId[4];                             // datalong to datalong4
             uint32 unused;                                  // data_flags
@@ -779,7 +790,7 @@ struct ScriptInfo
 
         struct                                              // SCRIPT_COMMAND_REMOVE_ITEM (40)
         {
-            uint32 itemEntry;                               // datalong
+            uint32 itemId;                                  // datalong
             uint32 amount;                                  // datalong2
         } removeItem;
 
@@ -1050,6 +1061,16 @@ struct ScriptInfo
 
                                                             // SCRIPT_COMMAND_RESET_DOOR_OR_BUTTON (87)
 
+        struct                                              // SCRIPT_COMMAND_SET_COMMAND_STATE (88)
+        {
+            uint32 commandState;                            // datalong
+        } setCommandState;
+
+        struct                                              // SCRIPT_COMMAND_PLAY_CUSTOM_ANIM (89)
+        {
+            uint32 animId;                                  // datalong
+        } playCustomAnim;
+
         struct
         {
             uint32 data[9];
@@ -1216,6 +1237,9 @@ enum ScriptTarget
                                                             //Param1 = search-radius
     TARGET_T_RANDOM_CREATURE_WITH_ENTRY     = 26,           //Searches for random nearby creature with the given entry. Not Self.
                                                             //Param1 = creature_entry
+                                                            //Param2 = search_radius
+    TARGET_T_RANDOM_GAMEOBJECT_WITH_ENTRY   = 27,           //Searches for random nearby gameobject with the given entry.
+                                                            //Param1 = gameobject_entry
                                                             //Param2 = search_radius
     TARGET_T_END
 };

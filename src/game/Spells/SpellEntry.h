@@ -625,6 +625,11 @@ public:
     bool HasAttribute(SpellAttributesEx2 attribute) const { return AttributesEx2 & attribute; }
     bool HasAttribute(SpellAttributesEx3 attribute) const { return AttributesEx3 & attribute; }
     bool HasAttribute(SpellAttributesEx4 attribute) const { return AttributesEx4 & attribute; }
+
+    bool HasSpellInterruptFlag(SpellInterruptFlags flag) const { return InterruptFlags & flag; }
+    bool HasAuraInterruptFlag(SpellAuraInterruptFlags flag) const { return AuraInterruptFlags & flag; }
+    bool HasChannelInterruptFlag(SpellAuraInterruptFlags flag) const { return ChannelInterruptFlags & flag; }
+
     inline bool HasEffect(SpellEffects effect) const
     {
         for (uint32 i : Effect)
@@ -743,17 +748,20 @@ public:
 
     inline bool IsDeathOnlySpell() const
     {
-        return (AttributesEx3 & SPELL_ATTR_EX3_CAST_ON_DEAD) || (Id == 2584);
+        return HasAttribute(SPELL_ATTR_EX3_CAST_ON_DEAD) ||
+               (Targets & (TARGET_FLAG_PVP_CORPSE | TARGET_FLAG_UNIT_CORPSE | TARGET_FLAG_CORPSE)) ||
+               (Id == 2584);
     }
 
     inline bool CanTargetDeadTarget() const
     {
-        return HasAttribute(SPELL_ATTR_EX3_CAST_ON_DEAD) || HasAttribute(SPELL_ATTR_EX2_CAN_TARGET_DEAD);
+        return HasAttribute(SPELL_ATTR_EX2_CAN_TARGET_DEAD) ||
+               IsDeathOnlySpell();
     }
 
     inline bool CanTargetAliveState(bool alive) const
     {
-        if (HasAttribute(SPELL_ATTR_EX3_CAST_ON_DEAD))
+        if (IsDeathOnlySpell())
             return !alive;
 
         return alive || HasAttribute(SPELL_ATTR_EX2_CAN_TARGET_DEAD);

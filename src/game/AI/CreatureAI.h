@@ -215,7 +215,7 @@ class CreatureAI
         virtual void SummonedCreatureDespawn(Creature* /*unit*/) {}
 
         // Called when hit by a spell
-        virtual void SpellHit(Unit*, const SpellEntry*) {}
+        virtual void SpellHit(WorldObject*, const SpellEntry*) {}
 
         // Called when spell hits creature's target
         virtual void SpellHitTarget(Unit*, const SpellEntry*) {}

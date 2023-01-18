@@ -46,9 +46,6 @@ private:
 
 void AutoScaler::Scale(DungeonMap* map)
 {
-    //if (disabledScaling.find(map->GetId()) != disabledScaling.end())
-    //    return;
-
     uint32 playerCount = map->GetPlayersCountExceptGMs();
     uint32 maxCount = map->GetMaxPlayers();
 
@@ -87,104 +84,139 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     if (creature->IsDead())
         return;
 
-    float specificHPFactor = 1;
-    float specificPowerFactor = 1;
-    float specificDmgFactor = 1;
+    float specificHPFactor = 1.f;
+    float specificPowerFactor = 1.f;
+    float specificDmgFactor = 1.f;
 
-    switch (creature->GetEntry()) {
+    switch (creature->GetEntry())
+    {
         case 12057: // Garr
-            if (playerCount < 30) {
+        {
+            if (playerCount < 30)
+            {
                 specificHPFactor = 0.75f;
-                specificDmgFactor =  0.65f;
+                specificDmgFactor = 0.65f;
             }
+
             break;
+        }
         case 12099: // Firesworn, Garr add.
-            if (playerCount < 30) {
+        {
+            if (playerCount < 30)
+            {
                 specificHPFactor = 0.30f;
-                specificDmgFactor =  0.15f;
+                specificDmgFactor = 0.15f;
             }
+
             break;
+        }
         case 11661: // Flamewaker, Gehenass add.
         case 12119: // Flamewaker Protector, Lucifron add.
         case 11672: // Core Rager, Golemagg add
-            if (playerCount < 30) {
-                specificDmgFactor =  0.75f;
+        {
+            if (playerCount < 30)
+            {
+                specificDmgFactor = 0.75f;
             }
+
             break;
+        }
         case 11669: // Flame Imp
-            if (playerCount < 30) {
+        {
+            if (playerCount < 30)
+            {
                 specificHPFactor = 0.75f;
                 specificDmgFactor = 0.75f;
             }
             break;
+        }
         case 11662: // Flamewaker Priest, Sulfuron Harbringer add
         case 11663: // Majordomo Executus healer
         case 11664: // Majordomo Executus elite
-            if (playerCount < 30) {
+        {
+            if (playerCount < 30)
+            {
                 specificHPFactor = 0.75f;
                 specificDmgFactor = 0.5f;
             }
-            break;
 
+            break;
+        }
         case 11368: // Bloodseeker bat, Jeklik add
         case 15101: // Zulian Prowler
-            if (playerCount < 20) {
+        {
+            if (playerCount < 20)
+            {
                 specificHPFactor = 0.5f;
                 specificDmgFactor = 0.5f;
             }
+
             break;
+        }
         case 12422: // Razorgore the Untamed adds
         case 12420:
         case 12416:
-            if (playerCount < 30) {
+        {
+            if (playerCount < 30)
+            {
                 specificHPFactor = 0.75f;
                 specificDmgFactor = 0.35f;
             }
+
             break;
+        }
         case 14022: // Corrupted Dragon whelps
         case 14023:
         case 14024:
         case 14025:
-            if (playerCount < 30) {
+        {
+            if (playerCount < 30)
+            {
                 specificHPFactor = 0.5f;
                 specificDmgFactor = 0.75f;
             }
+
             break;
+        }
         case 14261: // Nefarian adds
         case 14262:
         case 14263:
         case 14264:
         case 14265:
-            if (playerCount < 30) {
+        {
+            if (playerCount < 30)
+            {
                 specificHPFactor = 0.65f;
                 specificDmgFactor = 0.5f;
             }
+
             break;
+        }
         case 15263:
+        {
             if (auto* imageAI = dynamic_cast<boss_skeramAI*>(creature->AI()))
+            {
                 if (imageAI->IsImage)
                     return;
+            }
+
             break;
+        }
     }
 
-    float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
+    const float hpPercentage = static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f;
     auto ScaleHp = [hpPercentage](float value)
     {
         return value / 100 * hpPercentage;
     };
-    /*float powerPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
-    auto ScalePower = [powerPercentage](float value)
-    {
-        return value / 100 * powerPercentage;
-    };*/
-    float dmgPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
+
+    const float dmgPercentage = (static_cast<float>(playerCount) / static_cast<float>(maxCount) * 100.f) + (maxCount - playerCount);
     auto ScaleDamage = [dmgPercentage](float value)
     {
         return value / 100 * dmgPercentage;
     };
 
-    creature->SetMaxHealth(static_cast<uint32>(ScaleHp(creature->GetCreateHealth()) * specificHPFactor));
-    //creature->SetMaxPower(POWER_MANA, static_cast<uint32>(ScalePower(creature->GetCreateMana()) * specificPowerFactor));
+    creature->SetMaxHealth(std::max(1u, static_cast<uint32>(ScaleHp(creature->GetCreateHealth()) * specificHPFactor)));
 
     if (creature->GetEntry() == 13020) // Valestrasz the Corrupt, set his health to 30% to avoid visual bug before the first pull
         creature->SetHealthPercent(30.0);
@@ -192,7 +224,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
     if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
     {
         //store base vals.
-        auto tup = std::make_tuple(
+        const auto tup = std::make_tuple(
                 std::make_pair(creature->GetWeaponDamageRange(BASE_ATTACK, MINDAMAGE), creature->GetWeaponDamageRange(BASE_ATTACK, MAXDAMAGE)),
                 std::make_pair(creature->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE), creature->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE)),
                 creature->GetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE));
@@ -216,7 +248,7 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
 void AutoScaler::GenerateScaledMoneyLoot(Creature* creature, Loot* loot)
 {
     uint32 playerCount = creature->GetMap()->GetPlayersCountExceptGMs();
-    uint32 maxCount = ((DungeonMap*)creature->GetMap())->GetMaxPlayers();
+    const uint32 maxCount = ((DungeonMap*)creature->GetMap())->GetMaxPlayers();
     if (maxCount > 10 && playerCount < maxCount)
     {
         if (maxCount == 20 && playerCount < 12)
@@ -225,7 +257,7 @@ void AutoScaler::GenerateScaledMoneyLoot(Creature* creature, Loot* loot)
             playerCount = 20;
     }
 
-    float gold_factor = static_cast<float>(playerCount) / static_cast<float>(maxCount);
+    const float gold_factor = static_cast<float>(playerCount) / static_cast<float>(maxCount);
     loot->GenerateMoneyLoot(static_cast<uint32>(creature->GetCreatureInfo()->gold_min * gold_factor),
                             static_cast<uint32>(creature->GetCreatureInfo()->gold_max * gold_factor));
 }
