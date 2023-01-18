@@ -3731,12 +3731,6 @@ bool ChatHandler::HandleBanFingerprintCommand(char* args)
         PSendSysMessage("Banning account %s...", username.c_str());
         sWorld.BanAccount(BAN_ACCOUNT, username, duration_secs, reason, m_session ? m_session->GetPlayerName() : "");
 
-        LoginDatabase.escape_string(reason);
-        std::string safe_author = m_session ? m_session->GetPlayerName() : "CONSOLE";
-        LoginDatabase.escape_string(safe_author);
-        LoginDatabase.PExecute("REPLACE INTO `fingerprint_banned` (`fingerprint`, `bandate`, `unbandate`, `bannedby`, `banreason`) VALUES (%u,UNIX_TIMESTAMP(),UNIX_TIMESTAMP()+%u,'%s','%s')", fingerprint, duration_secs, safe_author.c_str(), reason.c_str());
-        sAccountMgr.BanFingerprint(fingerprint, sWorld.GetGameTime() + duration_secs);
-
     } while (result->NextRow());
 
     return true;
@@ -3785,22 +3779,6 @@ bool ChatHandler::HandleUnBanCharacterCommand(char* args)
 bool ChatHandler::HandleUnBanIPCommand(char* args)
 {
     return HandleUnBanHelper(BAN_IP, args);
-}
-
-bool ChatHandler::HandleUnBanFingerprintCommand(char* args)
-{
-    if (!*args)
-        return false;
-
-    uint32 fingerprint;
-    if (!ExtractUInt32(&args, fingerprint))
-        return false;
-
-    LoginDatabase.PExecute("DELETE FROM `fingerprint_banned` WHERE `fingerprint`=%u", fingerprint);
-    sAccountMgr.UnbanFingerprint(fingerprint);
-    PSendSysMessage("Fingerprint %u unbanned.", fingerprint);
-
-    return true;
 }
 
 bool ChatHandler::HandleUnBanHelper(BanMode mode, char* args)

@@ -13,7 +13,6 @@
 #include "../libanticheat.hpp"
 #include "World.h"
 #include "../Config.hpp"
-#include "Language.h"
 
 #include "Unit.h"
 #include "Chat.h"
@@ -23,7 +22,6 @@
 #include "ByteBuffer.h"
 #include "Database/DatabaseEnv.h"
 #include "Player.h"
-#include "AccountMgr.h"
 
 #include <string>
 #include <vector>
@@ -2113,13 +2111,8 @@ void WardenWin::Update()
 
         LoginDatabase.CommitTransaction();
 
-        if (sAccountMgr.IsFingerprintBanned(_anticheat->GetFingerprint()))
-        {
-            _session->SetFingerprintBanned();
-            char message[128] = {};
-            snprintf(message, 127, "Account %s logins from client with banned fingerpint.", _session->GetUsername().c_str());
-            sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, "Fingerprint", message);
-        }
+
+
 
         _anticheat->CleanupFingerprintHistory();
 

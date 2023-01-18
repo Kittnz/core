@@ -469,7 +469,6 @@ class ChatHandler
         bool HandleUnBanAccountCommand(char* args);
         bool HandleUnBanCharacterCommand(char* args);
         bool HandleUnBanIPCommand(char* args);
-        bool HandleUnBanFingerprintCommand(char* args);
 
         bool HandleWpAddCommand(char* args);
         bool HandleWpModifyCommand(char* args);

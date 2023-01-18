@@ -55,7 +55,6 @@ struct PInfoData
     uint32 fingerprint = 0;
     bool online = false;
     bool isHardcore = false;
-    bool isFingerprintBanned = false;
 
     bool hasAccount = false;
     std::string two_factor_enabled;

@@ -6,7 +6,6 @@
 #include "Antispam/Antispam.hpp"
 #include "Player.h"
 #include "ObjectMgr.h"
-#include "AccountMgr.h"
 
 bool ChatHandler::HandleAnticheatInfoCommand(char* args)
 {
@@ -83,7 +82,7 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
 {
     uint32 fingerprintNum = 0;
 
-    if (!ExtractUInt32Base(&args, fingerprintNum, 10))
+    if (!ExtractUInt32Base(&args, fingerprintNum, 16))
     {
         return false;
     }
@@ -115,7 +114,7 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
         }
     }
 
-    PSendSysMessage("End of listing for fingerprint %u.  Found %d matches.", fingerprintNum, count);
+    PSendSysMessage("End of listing for fingerprint 0x%lx.  Found %d matches.", fingerprintNum, count);
     return true;
 }
 
@@ -123,12 +122,12 @@ bool ChatHandler::HandleAnticheatFingerprintHistoryCommand(char* args)
 {
     uint32 fingerprintNum = 0;
 
-    if (!ExtractUInt32Base(&args, fingerprintNum, 10))
+    if (!ExtractUInt32Base(&args, fingerprintNum, 16))
     {
         return false;
     }
 
-    PSendSysMessage("Listing history for fingerprint %u.  Maximum history length from config: %u", fingerprintNum, sAnticheatConfig.GetFingerprintHistory());
+    PSendSysMessage("Listing history for fingerprint 0x%lx.  Maximum history length from config: %u", fingerprintNum, sAnticheatConfig.GetFingerprintHistory());
 
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT account, ip, realm, time FROM system_fingerprint_usage WHERE fingerprint = %u ORDER BY `time` DESC", fingerprintNum));
 
@@ -150,7 +149,7 @@ bool ChatHandler::HandleAnticheatFingerprintHistoryCommand(char* args)
         } while (result->NextRow());
     }
 
-    PSendSysMessage("End of history for fingerprint %u.  Found %d matches", fingerprintNum, count);
+    PSendSysMessage("End of history for fingerprint 0x%lx.  Found %d matches", fingerprintNum, count);
     return true;
 }
 
@@ -180,7 +179,7 @@ bool ChatHandler::HandleAnticheatFingerprintAHistoryCommand(char* args)
             uint32 realm = fields[2].GetUInt32();
             std::string time = fields[3].GetCppString();
 
-            PSendSysMessage("Fingerprint: %u%s IP: %s Realm: %u Time: %s", fingerprint, sAccountMgr.IsFingerprintBanned(fingerprint) ? " (BANNED)" : "", ip.c_str(), realm, time.c_str());
+            PSendSysMessage("Fingerprint: 0x%lx IP: %s Realm: %u Time: %s", fingerprint, ip.c_str(), realm, time.c_str());
 
             ++count;
         } while (result->NextRow());

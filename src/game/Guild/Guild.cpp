@@ -583,12 +583,6 @@ void Guild::BroadcastToGuild(WorldSession *session, std::string const& msg, uint
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, msg.c_str(), Language(language), pPlayer->GetChatTag(), pPlayer->GetObjectGuid(), pPlayer->GetName());
 
-    if (session->IsFingerprintBanned())
-    {
-        session->SendPacket(&data);
-        return;
-    }
-
     for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
     {
         if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
