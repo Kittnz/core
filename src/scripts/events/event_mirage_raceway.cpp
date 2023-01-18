@@ -321,6 +321,7 @@ struct npc_race_sheep : public ScriptedAI
 	void Reset() override
 	{
 		checkTimer = CheckForRacersInterval;
+		m_creature->EnableMoveInLosEvent();
 	}
 
 	void MoveInLineOfSight(Unit* unit) override
@@ -449,6 +450,7 @@ struct npc_landing_siteAI : public ScriptedAI
 
     void Reset() override
     {
+		m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* pWho) override

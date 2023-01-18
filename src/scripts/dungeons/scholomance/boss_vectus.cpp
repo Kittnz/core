@@ -71,6 +71,8 @@ struct boss_vectusAI : public ScriptedAI
         m_uiBlastWave_Timer = 14000;
         m_uiFrenzy_Timer = 0;
         _fullAggroDone = false;
+
+        m_creature->EnableMoveInLosEvent();
     }
 
     void MoveInLineOfSight(Unit* pWho) override
@@ -218,7 +220,7 @@ struct npc_scholomance_studentAI : public ScriptedAI
 
     void Reset() override {}
 
-    void SpellHit(Unit *pCaster, const SpellEntry *pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry *pSpell) override
     {
         if (pSpell->Id == SPELL_VIEWING_ROOM_STUDENT_TRANSFORM_EFFECT)
         {

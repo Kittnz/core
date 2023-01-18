@@ -299,7 +299,7 @@ struct boss_majordomoAI : public ScriptedAI
             case 28:
                 if (Creature* Ragnaros = m_creature->SummonCreature(NPC_RAGNAROS, 842.237488f, -833.683105f, -231.916498f, M_PI + m_creature->GetAngle(842.237488f, -833.683105f), TEMPSUMMON_MANUAL_DESPAWN, 2 * HOUR * IN_MILLISECONDS))   // Ragnaros reste spawn 2heures
                 {
-                    Ragnaros->SetUInt64Value(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                    Ragnaros->SetUInt64Value(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                     m_creature->SetFacingToObject(Ragnaros);
                     Ragnaros->CastSpell(Ragnaros, SPELL_RAGNAROS_EMERGE, false);
                 }

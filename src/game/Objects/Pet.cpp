@@ -282,9 +282,6 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
     if (getPetType() == SUMMON_PET)
         petlevel = owner->GetLevel();
 
-    if (owner->IsPvP())
-        SetPvP(true);
-
     SetCanModifyStats(true);
     InitStatsForLevel(petlevel);
     SetUInt32Value(UNIT_FIELD_PET_NAME_TIMESTAMP, uint32(time(nullptr)));
@@ -387,6 +384,9 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
 
     if (owner->GetTypeId() == TYPEID_PLAYER)
     {
+        if (owner->IsMounted())
+            m_enabled = false;
+
         ((Player*)owner)->PetSpellInitialize();
         if (((Player*)owner)->GetGroup())
             ((Player*)owner)->SetGroupUpdateFlag(GROUP_UPDATE_PET);
@@ -420,11 +420,42 @@ bool Pet::LoadPetFromDB(Player* owner, uint32 petentry, uint32 petnumber, bool c
             RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
     }
 
+    if (owner->IsPvP())
+        SetPvP(true);
+
     // Save pet for resurrection by spirit healer.
     if (IsPermanentPetFor(owner))
     {
         owner->m_petEntry = GetEntry();
         owner->m_petSpell = GetUInt32Value(UNIT_CREATED_BY_SPELL);
+    }
+
+    //track overspent points, if too many then reset all.
+    if (getPetType() == HUNTER_PET && m_petSpells.size() > 1 && GetOwnerGuid().IsPlayer())
+    {
+        CharmInfo* charmInfo = GetCharmInfo();
+
+        const uint32 MaxTPForPet = GetLevel() * (LoyaltyLevel::BEST_FRIEND - 1);
+
+        if (charmInfo && GetOwner() && m_totalUsedTP > MaxTPForPet)
+        {
+            for (PetSpellMap::iterator itr = m_petSpells.begin(); itr != m_petSpells.end();)
+            {
+                uint32 spell_id = itr->first;
+                ++itr;
+                unlearnSpell(spell_id, false);
+            }
+
+            SetTP(GetLevel() * (GetLoyaltyLevel() - 1));
+
+            for (int i = 0; i < MAX_UNIT_ACTION_BAR_INDEX; ++i)
+                if (UnitActionBarEntry const* ab = charmInfo->GetActionBarEntry(i))
+                    if (ab->GetAction() && ab->IsActionBarForSpell())
+                        charmInfo->SetActionBar(i, 0, ACT_DISABLED);
+
+            LearnPetPassives();
+            GetOwner()->ToPlayer()->PetSpellInitialize();
+        }
     }
 
     m_pTmpCache = nullptr;
@@ -2029,6 +2060,11 @@ bool Pet::AddSpell(uint32 spell_id, ActiveStates active /*= ACT_DECIDE*/, PetSpe
         }
     }
 
+    //Needs to be before we add to m_petSpells because GetTPForSpell depends on it.
+    if (getPetType() == HUNTER_PET)
+        m_totalUsedTP += GetTPForSpell(spell_id);
+
+
     m_petSpells[spell_id] = newspell;
 
     if (spellInfo->IsPassiveSpell())
@@ -2097,6 +2133,9 @@ bool Pet::RemoveSpell(uint32 spell_id, bool learn_prev, bool clear_ab)
                     ((Player*)owner)->PetSpellInitialize();
         }
     }
+
+    if (uint32 tp = GetTPForSpell(spell_id); getPetType() == HUNTER_PET && tp <= m_totalUsedTP)
+        m_totalUsedTP -= tp;
 
     return true;
 }
@@ -2302,7 +2341,7 @@ bool Pet::Create(uint32 guidlow, CreatureCreatePos& cPos, CreatureInfo const* ci
     SetByteValue(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_UNK3 | UNIT_BYTE2_FLAG_AURAS | UNIT_BYTE2_FLAG_UNK5);
 
     if (getPetType() == MINI_PET)                           // always non-attackable
-        SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER | UNIT_FLAG_IMMUNE_TO_NPC);
 
     return true;
 }

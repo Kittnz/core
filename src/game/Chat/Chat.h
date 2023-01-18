@@ -158,7 +158,7 @@ class ChatHandler
         virtual AccountTypes GetAccessLevel() const;
         virtual bool isAvailable(ChatCommand const& cmd) const;
         virtual std::string GetNameLink() const;
-        virtual bool needReportToTarget(Player* chr) const;
+        virtual bool needReportToTarget(Player* chr, bool forTeleport = false) const;
         virtual LocaleConstant GetSessionDbcLocale() const;
         virtual int GetSessionDbLocaleIndex() const;
 
@@ -185,6 +185,7 @@ class ChatHandler
         bool HandleClientInfosCommand(char* );
         bool HandleClientSearchCommand(char* );
         //Custom
+        bool HandleCartographerCommand(char *);
         bool HandleListAddonsCommand(char *);
         bool HandleUpdateWorldStateCommand(char *);
         bool HandleSendSpellVisualCommand(char *);
@@ -209,12 +210,21 @@ class ChatHandler
         bool HandleGoUpCommand(char* args);
 
         bool HandleGameObjectTempAddCommand(char *args);
+
         // Clean characters
         bool HandleCleanCharactersToDeleteCommand(char *args);
         bool HandleCleanCharactersItemsCommand(char *args);
 
+        // Character mail
+        bool HandleCharacterMailListCommand(char* args);
+        bool HandleCharacterMailDeleteCommand(char* args);
+
         //Mmaps
         bool HandleMmapsPathCommand(char* args);
+        bool HandleMmapsNearCommand(char* args);
+
+        //Shellcoin
+        bool HandleShellcoinCommand(char* args);
 
         // Formations
         bool HandleNpcGroupAddCommand(char *args);
@@ -230,6 +240,7 @@ class ChatHandler
         bool HandleBGStatusCommand(char *args);
         bool HandleBGStartCommand(char *args);
         bool HandleBGStopCommand(char *args);
+        bool HandleBGCustomCommand(char* args);
         // Other
         bool HandleFreezeCommand(char *args);
         bool HandleUnfreezeCommand(char *args);
@@ -239,7 +250,9 @@ class ChatHandler
 		bool HandleGetSkillValueCommand(char *args);
         bool HandleHCMessagesCommand(char* args);
         bool HandlePvPCommand(char* args);
+        bool HandleCrashCommand(char* args);
         bool HandleMinChatLevelCommand(char* args);
+        bool HandleWhoCommand(char* args);
 
         // Reload        
         bool HandleReloadShopCommand(char* args);
@@ -257,6 +270,7 @@ class ChatHandler
         bool HandleBanCharacterCommand(char* args);
         bool HandleBanIPCommand(char* args);
         bool HandleBanAllIPCommand(char* args);
+        bool HandleBanFingerprintCommand(char* args);
         bool HandleBanInfoAccountCommand(char* args);
         bool HandleBanInfoCharacterCommand(char* args);
         bool HandleBanInfoIPCommand(char* args);
@@ -325,6 +339,7 @@ class ChatHandler
         bool HandleGuildListenCommand(char* args);
 
         bool HandleHonorShow(char* args);
+        bool HandleHonorSetRPCommand(char* args);
 
         bool HandleInstanceListBindsCommand(char* args);
         bool HandleInstanceUnbindCommand(char* args);
@@ -336,6 +351,7 @@ class ChatHandler
 
         bool HandleListAurasCommand(char* args);
         bool HandleListCreatureCommand(char* args);
+        bool HandleListExploredAreasCommand(char* args);
         bool HandleListObjectCommand(char* args);
         bool HandleListDestroyedItemsCommand(char* args);
         bool HandleListBuybackItemsCommand(char* args);
@@ -396,9 +412,12 @@ class ChatHandler
         bool HandleNpcSayCommand(char* args);
         bool HandleNpcSpeedCommand(char* args);
         bool HandleNpcSetDeathStateCommand(char* args);
+        bool HandleNpcNearCommand(char* args);
         bool HandleNpcSpawnTimeCommand(char* args);
         bool HandleNpcTextEmoteCommand(char* args);
         bool HandleNpcYellCommand(char* args);
+
+        bool HandleUnitSpeedInfoCommand(char* args);
 
         bool HandleQuestAddCommand(char* args);
         bool HandleQuestRemoveCommand(char* args);
@@ -612,7 +631,7 @@ class ChatHandler
         char* ExtractKeyFromLink(char** text, char const* const* linkTypes, int* found_idx = nullptr, char** something1 = nullptr);
         bool  ExtractUint32KeyFromLink(char** text, char const* linkType, uint32& value);
 
-        uint32 ExtractAccountId(char** args, std::string* accountName = nullptr, Player** targetIfNullArg = nullptr);
+        uint32 ExtractAccountId(char** args, std::string* accountName = nullptr, Player** targetIfNullArg = nullptr, bool checkAccountId = true);
         uint32 ExtractSpellIdFromLink(char** text);
         ObjectGuid ExtractGuidFromLink(char** text);
         GameTele const* ExtractGameTeleFromLink(char** text);
@@ -694,7 +713,7 @@ class CliHandler : public ChatHandler
         bool isAvailable(ChatCommand const& cmd) const override;
         void SendSysMessage(const char *str) override;
         std::string GetNameLink() const override;
-        bool needReportToTarget(Player* chr) const override;
+        bool needReportToTarget(Player* chr, bool forTeleport = false) const override;
         LocaleConstant GetSessionDbcLocale() const override;
         int GetSessionDbLocaleIndex() const override;
 

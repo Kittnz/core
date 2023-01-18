@@ -319,6 +319,8 @@ class WorldSession
         uint32 GetAccountId() const { return _accountId; }
         std::string GetUsername() const { return m_username; }
         void SetUsername(std::string const& s) { m_username = s; }
+        std::string GetEmail() const { return m_email; }
+        void SetEmail(std::string const& s) { m_email = s; }
         Player* GetPlayer() const { return _player; }
         char const* GetPlayerName() const;
         void SetSecurity(AccountTypes security) { _security = security; }
@@ -822,6 +824,7 @@ class WorldSession
         void HandlePushQuestToParty(WorldPacket& recvPacket);
         void HandleQuestPushResult(WorldPacket& recvPacket);
 
+        bool CheckChatMessageValidity(std::string&, uint32, uint32);
         bool ProcessChatMessageAfterSecurityCheck(std::string&, uint32, uint32);
         static bool IsLanguageAllowedForChatType(uint32 lang, uint32 msgType);
         void SendPlayerNotFoundNotice(std::string const& name);
@@ -943,7 +946,7 @@ class WorldSession
         bool _receivedPacketType[PACKET_PROCESS_MAX_TYPE];
 
         Anticheat::Movement* m_cheatData;
-        std::string m_username;
+        std::string m_username, m_email;
         uint32 _floodPacketsCount[FLOOD_MAX_OPCODES_TYPE];
         PlayerBotEntry* m_bot;
         uint32 m_lastReceivedPacketTime;

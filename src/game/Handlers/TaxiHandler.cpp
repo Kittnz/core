@@ -159,6 +159,8 @@ bool WorldSession::SendLearnNewTaxiNode(Creature* unit)
             GetPlayer()->m_taxi.SetTaximaskNode(175); // Hawk's Vigi
         else if (curloc == 6)  // Ironforge 
             GetPlayer()->m_taxi.SetTaximaskNode(176); // Ironforge Airfields
+        else if (curloc == 39 || curloc == 40)  // Tanaris
+            GetPlayer()->m_taxi.SetTaximaskNode(185); // Tel'Abim
 
         return true;
     }

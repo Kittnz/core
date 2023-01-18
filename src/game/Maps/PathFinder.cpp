@@ -24,12 +24,24 @@
 #include "Map.h"
 #include "Transport.h"
 
+#include <array>
+#include <tuple>
+
 #include "Detour/Include/DetourCommon.h"
 
 // Distance to target
 #define SMOOTH_PATH_SLOP 0.4f
 // Distance between path steps
 #define SMOOTH_PATH_STEP_SIZE 2.0f
+
+
+using restricted_movement_t = std::tuple<uint32, uint32, uint32>; // map id, area id, zone id
+
+auto NoMovementAreas = make_array<restricted_movement_t>(
+    std::make_tuple(1u, 5122u, 5121u), // The Shallow Strand, Tel'Abim
+    std::make_tuple(1u, 5128u, 5121u), // Jagged Isles, Tel'Abim
+    std::make_tuple(1u, 5129u, 5121u) // The Washing Shore, Tel'Abim
+);
 
 ////////////////// PathInfo //////////////////
 PathInfo::PathInfo(const Unit* owner) :
@@ -116,6 +128,31 @@ bool PathInfo::calculate(Vector3 const& start, Vector3 dest, bool forceDest, boo
     {
         // target moved, so we need to update the poly path
         BuildPolyPath(start, dest);
+
+        if (m_type & PATHFIND_NOPATH)
+        {
+            const Unit* owner = m_sourceUnit; // to pull into lambda without pulling in the full member.
+
+            bool ignoreMmaps = std::find_if(std::begin(NoMovementAreas), std::end(NoMovementAreas), [owner](const restricted_movement_t& t)
+                {
+                    const auto& [mapId, areaId, zoneId] = t;
+
+                    uint32 ownerZoneId = 0, ownerAreaId = 0;
+                    owner->GetZoneAndAreaId(ownerZoneId, ownerAreaId);
+
+                    if (owner->GetMapId() == mapId && ownerZoneId == zoneId && ownerAreaId == areaId)
+                        return true;
+
+                    return false;
+                }) != std::end(NoMovementAreas);
+
+            if (ignoreMmaps)
+            {
+                BuildShortcut();
+                m_type = PathType(PATHFIND_NORMAL | PATHFIND_NOT_USING_PATH);
+                return true;
+            }
+        }
         return true;
     }
 }

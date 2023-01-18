@@ -10,6 +10,7 @@
 #include "Opcodes.h"
 #include "Chat.h"
 #include "Util.h"
+#include "AddonHandler.h"
 
 #include <memory>
 #include <string>
@@ -76,6 +77,7 @@ class SessionAnticheatInterface
 
         // addon checksum verification
         virtual bool ReadAddonInfo(WorldPacket *, WorldPacket &) = 0;
+        virtual uint32 GetFingerprint() const { return 0; }
 
         // chat
         virtual void SendPlayerInfo(ChatHandler *) const = 0;
@@ -140,58 +142,62 @@ class NullSessionAnticheat : public SessionAnticheatInterface
     public:
         NullSessionAnticheat(WorldSession *session) : _session(session), _inKnockBack(false) {}
 
-        virtual void Update(uint32) {}
+        void Update(uint32) override {}
 
-        virtual bool IsSilenced() const { return false; }
+        bool IsSilenced() const { return false; }
 
         // character enum packet has been built and is ready to send
-        virtual void SendCharEnum(WorldPacket &&packet) { _session->SendPacket(&packet); }
+        void SendCharEnum(WorldPacket &&packet) override { _session->SendPacket(&packet); }
 
-        virtual void NewPlayer() {} 
-        virtual void LeaveWorld() {};
-        virtual void Disconnect() {};
+        void NewPlayer() override {}
+        void LeaveWorld() override {};
+        void Disconnect() override {};
 
         // addon checksum verification
-        virtual bool ReadAddonInfo(WorldPacket *, WorldPacket &) { return true; }
+        bool ReadAddonInfo(WorldPacket* source, WorldPacket& target) override
+        {
+            sAddOnHandler.BuildAddonPacket(source, &target);
+            return true;
+        }
 
         // chat
-        virtual void SendPlayerInfo(ChatHandler *) const {}
+        void SendPlayerInfo(ChatHandler *) const override {}
 
         // miscellaneous action
-        virtual void RecordCheat(uint32 actionMask, const char *detector, const char *format, ...)
+        void RecordCheat(uint32 actionMask, const char *detector, const char *format, ...) override
         {
             if (!!(actionMask & CHEAT_ACTION_KICK))
                 _session->KickPlayer();
         }
 
         // movement cheats
-        virtual bool Movement(MovementInfo &, const WorldPacket &packet)
+        bool Movement(MovementInfo &, const WorldPacket &packet) override
         {
             if (packet.GetOpcode() == MSG_MOVE_FALL_LAND)
                 _inKnockBack = false;
 
             return true;
         }
-        virtual void TimeSkipped(const ObjectGuid &mover, uint32 ms) {}
-        virtual bool ExtrapolateMovement(MovementInfo const& mi, uint32 diffMs, Position &pos) { return false; }
-        virtual bool SpeedChangeAck(MovementInfo &, const WorldPacket &, float) { return true; }
-        virtual bool IsInKnockBack() const { return _inKnockBack; }
-        virtual void KnockBack(float speedxy, float speedz, float cos, float sin) { _inKnockBack = true; }
-        virtual void OnExplore(const AreaEntry *) {}
-        virtual void Teleport(const Position &) {}
+        void TimeSkipped(const ObjectGuid &mover, uint32 ms) override {}
+        bool ExtrapolateMovement(MovementInfo const& mi, uint32 diffMs, Position &pos) override { return false; }
+        bool SpeedChangeAck(MovementInfo &, const WorldPacket &, float) override { return true; }
+        bool IsInKnockBack() const override { return _inKnockBack; }
+        void KnockBack(float speedxy, float speedz, float cos, float sin) override { _inKnockBack = true; }
+        void OnExplore(const AreaEntry *) override {}
+        void Teleport(const Position &) override {}
 
-        virtual void OrderSent(uint16, uint32) {}
-        virtual void OrderAck(uint16, uint32) {}
+        void OrderSent(uint16, uint32) override {}
+        void OrderAck(uint16, uint32) override {}
 
         // warden
-        virtual void WardenPacket(WorldPacket &) {}
+        void WardenPacket(WorldPacket &) override {}
 
         // antispam
-        virtual void Whisper(const std::string &msg, const ObjectGuid &to) {}
-        virtual void Say(const std::string &msg) {}
-        virtual void Yell(const std::string &msg) {}
-        virtual void Channel(const std::string &msg) {}
-        virtual void Mail(const std::string &subject, const std::string &body, const ObjectGuid &to) {}
+        void Whisper(const std::string &msg, const ObjectGuid &to) override {}
+        void Say(const std::string &msg) override {}
+        void Yell(const std::string &msg) override {}
+        void Channel(const std::string &msg) override {}
+        void Mail(const std::string &subject, const std::string &body, const ObjectGuid &to) override {}
 };
 
 #ifdef USE_ANTICHEAT

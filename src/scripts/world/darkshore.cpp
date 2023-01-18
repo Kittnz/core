@@ -70,6 +70,7 @@ struct npc_kerlonianAI : public FollowerAI
     void Reset() override
     {
         m_uiFallAsleepTimer = urand(10000, 45000);
+        m_creature->EnableMoveInLosEvent();
     }
 
     void JustRespawned() override
@@ -99,7 +100,7 @@ struct npc_kerlonianAI : public FollowerAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (HasFollowState(STATE_FOLLOW_INPROGRESS | STATE_FOLLOW_PAUSED) && pSpell->Id == SPELL_AWAKEN)
             ClearSleeping();
@@ -358,7 +359,10 @@ struct npc_threshwackonatorAI : public FollowerAI
         Reset();
     }
 
-    void Reset() override {}
+    void Reset() override
+    {
+        m_creature->EnableMoveInLosEvent();
+    }
 
     void MoveInLineOfSight(Unit* pWho) override
     {
@@ -553,6 +557,7 @@ struct npc_volcorAI : public npc_escortAI
             StealthDialogueStep = 0;
             StealthDialogueTimer = 0;
         }
+        m_creature->EnableMoveInLosEvent();
     }
 
     uint16 StealthDialogueStep;

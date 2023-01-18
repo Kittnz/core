@@ -96,10 +96,10 @@ struct boss_archaedasAI : public ScriptedAI
         bGuardiansAwake = false;
         bVaultWardersAwake = false;
 
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
     }
 
-    void SpellHit(Unit* /*caster*/, const SpellEntry* spell) override
+    void SpellHit(WorldObject* /*caster*/, const SpellEntry* spell) override
     {
         // Being woken up from the altar, start the awaken sequence
         if (spell->Id == SPELL_ARCHAEDAS_AWAKEN && !bWakingUp)
@@ -195,13 +195,13 @@ struct boss_archaedasAI : public ScriptedAI
             if (Creature* target = instance->GetMap()->GetCreature(instance->GetData64(1)))
             {
                 target->SetFactionTemplateId(FACTION_AWAKE);
-                target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 target->CastSpell(target, SPELL_STONE_DWARF_AWAKEN, false);
             }
             if (Creature* target = instance->GetMap()->GetCreature(instance->GetData64(2)))
             {
                 target->SetFactionTemplateId(FACTION_AWAKE);
-                target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 target->CastSpell(target, SPELL_STONE_DWARF_AWAKEN, false);
             }
             me->CastSpell(me, SPELL_AWAKEN_VAULT_WARDER, false);
@@ -285,6 +285,8 @@ struct mob_archaedas_minionsAI : public ScriptedAI
         bWokenUp = false;
         bWakingUp = false;
         bAwake = false;
+
+        m_creature->EnableMoveInLosEvent();
     }
     
     void EnterEvadeMode() override
@@ -313,7 +315,7 @@ struct mob_archaedas_minionsAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* /*caster*/, const SpellEntry* spell) override
+    void SpellHit(WorldObject* /*caster*/, const SpellEntry* spell) override
     {
         // time to wake up, start animation
         if (spell->Id == SPELL_AWAKEN_EARTHEN_DWARF

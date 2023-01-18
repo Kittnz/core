@@ -56,20 +56,12 @@ uint32 ShopMgr::GetBalance()
 std::string ShopMgr::BuyItem(uint32 itemID)
 {
 
-	bool found = false;
-	uint16 price = 0;
+	auto shopEntry = sObjectMgr.GetShopEntryInfo(itemID);
 
-	for (auto &itr : sObjectMgr.GetShopEntriesList())
-	{
-		if (itr.second.Item == itemID) {
-			price = itr.second.Price;
-			found = true;
-			break;
-		}
-	}
-
-	if (!found)
+	if (!shopEntry)
 		return "itemnotinshop";
+
+	uint32 price = shopEntry->Price;
 	
 	int32 count = 1;
 	ItemPosCountVec dest;

@@ -1248,6 +1248,17 @@ void ObjectMgr::CheckCreatureTemplates()
             }
         }
 
+        if (cInfo->spawn_spell_id)
+        {
+            SpellEntry const* pSpellEntry = sSpellMgr.GetSpellEntry(cInfo->spawn_spell_id);
+            if (!pSpellEntry || !pSpellEntry->HasEffect(SPELL_EFFECT_SPAWN))
+            {
+                sLog.outErrorDb("Creature (Entry: %u) has invalid spawn_spell_id (%u), set to 0", cInfo->entry, cInfo->spawn_spell_id);
+                sLog.out(LOG_DBERRFIX, "UPDATE creature_template SET `spawn_spell_id`=0 WHERE `entry`=%u;", cInfo->entry);
+                const_cast<CreatureInfo*>(cInfo)->spawn_spell_id = 0;
+            }
+        }
+
         for (int j = 0; j < CREATURE_MAX_SPELLS; ++j)
         {
             if (cInfo->spells[j] && !sSpellMgr.GetSpellEntry(cInfo->spells[j]))
@@ -1320,6 +1331,18 @@ void ObjectMgr::CheckCreatureTemplates()
                 sLog.outErrorDb("Creature (Entry: %u) has leash distance below detection distance (%f)", cInfo->entry, cInfo->leash_range);
                 const_cast<CreatureInfo*>(cInfo)->leash_range = 0.0f;
             }
+        }
+
+        if (cInfo->flags_extra & CREATURE_FLAG_EXTRA_DESPAWN_INSTANTLY)
+        {
+            if (cInfo->gold_min || cInfo->gold_max)
+                sLog.outErrorDb("Creature (Entry: %u) with despawn instantly flag has gold loot assigned. It will never be lootable.", cInfo->entry);
+
+            if (cInfo->loot_id)
+                sLog.outErrorDb("Creature (Entry: %u) with despawn instantly flag has corpse loot assigned. It will never be lootable.", cInfo->entry);
+
+            if (cInfo->skinning_loot_id)
+                sLog.outErrorDb("Creature (Entry: %u) with despawn instantly flag has skinning loot assigned. It will never be lootable.", cInfo->entry);
         }
 
         ConvertCreatureAurasField<CreatureInfo>(const_cast<CreatureInfo*>(cInfo), "creature_template", "Entry", cInfo->entry);
@@ -4787,6 +4810,9 @@ uint32 ObjectMgr::GetNearestTaxiNode(float x, float y, float z, uint32 mapid, Te
         uint8  field   = (uint8)((i - 1) / 32);
         uint32 submask = 1 << ((i - 1) % 32);
 
+        if (field >= sTaxiNodesMask.size())
+            continue;
+
         // skip not taxi network nodes
         if ((sTaxiNodesMask[field] & submask) == 0)
             continue;
@@ -7446,8 +7472,7 @@ bool ObjectMgr::AddGameTele(GameTele& tele)
 
     m_GameTeleMap[new_id] = tele;
 
-    return sWorld.ExecuteUpdate("INSERT INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (%u,%f,%f,%f,%f,%u,'%s')",
-                                     new_id, tele.x, tele.y, tele.z, tele.o, tele.mapId, tele.name.c_str());
+    return sWorld.ExecuteUpdate("REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (%u,%f,%f,%f,%f,%u,'%s')", new_id, tele.x, tele.y, tele.z, tele.o, tele.mapId, tele.name.c_str());
 }
 
 bool ObjectMgr::DeleteGameTele(std::string const& name)
@@ -7855,7 +7880,7 @@ void ObjectMgr::LoadGossipMenuItems()
         gMenuItem.box_text              = fields[12].GetCppString();
         gMenuItem.BoxBroadcastTextID    = fields[13].GetUInt32();
 
-        gMenuItem.conditionId           = fields[14].GetUInt16();
+        gMenuItem.conditionId           = fields[14].GetUInt32();
 
         if (gMenuItem.menu_id)                              // == 0 id is special and not have menu_id data
         {
@@ -8009,21 +8034,6 @@ bool ObjectMgr::IsVendorItemValid(bool isTemplate, char const* tableName, uint32
                 ChatHandler(pl).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
             else if (!IsExistingCreatureId(vendor_entry))
                 sLog.outErrorDb("Table `%s` has data for nonexistent creature (Entry: %u), ignoring", tableName, vendor_entry);
-            return false;
-        }
-
-        if (!(cInfo->npc_flags & UNIT_NPC_FLAG_VENDOR))
-        {
-            if (!skip_vendors || skip_vendors->count(vendor_entry) == 0)
-            {
-                if (pl)
-                    ChatHandler(pl).SendSysMessage(LANG_COMMAND_VENDORSELECTION);
-                else
-                    sLog.outErrorDb("Table `%s` has data for creature (Entry: %u) without vendor flag, ignoring", tableName, vendor_entry);
-
-                if (skip_vendors)
-                    skip_vendors->insert(vendor_entry);
-            }
             return false;
         }
     }
@@ -8822,6 +8832,49 @@ void ObjectMgr::LoadAreaLocales()
     while (result->NextRow());
 }
 
+void ObjectMgr::LoadCartographerAreas()
+{
+    memset(m_cartographerExploreMask, 0, sizeof(m_cartographerExploreMask));
+
+    std::unique_ptr<QueryResult> result(WorldDatabase.Query("SELECT `area_id` FROM `cartographer`"));
+
+    if (!result)
+    {
+        return;
+    }
+
+    do
+    {
+        Field* fields = result->Fetch();
+
+        uint32 entry = fields[0].GetUInt32();
+        AreaEntry const* pAreaEntry = AreaEntry::GetById(entry);
+
+        if (!pAreaEntry)
+        {
+            ERROR_DB_STRICT_LOG("Table `cartographer` has data for nonexistent area entry %u, skipped.", entry);
+            continue;
+        }
+
+        if (!pAreaEntry->ExploreFlag || pAreaEntry->ExploreFlag == 0xffff)
+        {
+            ERROR_DB_STRICT_LOG("Table `cartographer` has area %u with no explore flag, skipped.", entry);
+            continue;
+        }
+
+        int offset = pAreaEntry->ExploreFlag / 32;
+        if (offset >= PLAYER_EXPLORED_ZONES_SIZE)
+        {
+            ERROR_DB_STRICT_LOG("Table `cartographer` has area %u with invalid explore flag %u, skipped.", entry, pAreaEntry->ExploreFlag);
+            continue;
+        }
+
+        uint32 val = (uint32)(1 << (pAreaEntry->ExploreFlag % 32));
+        m_cartographerExploreMask[offset] |= val;
+
+    } while (result->NextRow());
+}
+
 void ObjectMgr::GetAreaLocaleString(uint32 entry, int32 loc_idx, std::string* namePtr) const
 {
     if (loc_idx >= 0)
@@ -8830,6 +8883,44 @@ void ObjectMgr::GetAreaLocaleString(uint32 entry, int32 loc_idx, std::string* na
             if (namePtr && al->Name.size() > size_t(loc_idx) && !al->Name[loc_idx].empty())
                 *namePtr = al->Name[loc_idx];
     }
+}
+
+AreaEntry const* ObjectMgr::GetAreaEntryByName(std::string const& name) const
+{
+    // explicit name case
+    std::wstring wname;
+    if (!Utf8toWStr(name, wname))
+        return 0;
+
+    // converting string that we try to find to lower case
+    wstrToLower(wname);
+
+    AreaEntry const* pAlt = nullptr;
+    // Alternative first area Id that contains wnameLow as substring in case no exact name found
+    for (auto itr = sAreaStorage.begin<AreaEntry>(); itr != sAreaStorage.end<AreaEntry>(); ++itr)
+    {
+        std::wstring areaName;
+        if (!Utf8toWStr(itr->Name, areaName))
+            continue;
+        wstrToLower(areaName);
+
+        if (areaName == wname)
+            return *itr;
+        else if (!pAlt && areaName.find(wname) != std::wstring::npos)
+            pAlt = *itr;
+    }
+
+    return pAlt;
+}
+
+AreaEntry const* ObjectMgr::GetAreaEntryByExploreFlag(uint32 flag) const
+{
+    for (auto itr = sAreaStorage.begin<AreaEntry>(); itr < sAreaStorage.end<AreaEntry>(); ++itr)
+    {
+        if (itr->ExploreFlag == flag)
+            return *itr;
+    }
+    return nullptr;
 }
 
 void ObjectMgr::LoadShop()
@@ -8889,7 +8980,19 @@ void ObjectMgr::LoadShop()
 		shopentry.Price = price;
 		shopentry.DescriptionLong = descriptionLong;
 
-		m_ShopEntriesMap[id] = shopentry;
+        if (!price)
+        {
+            sLog.outErrorDb("ERROR for item Id %u, price is 0, skipping.", id);
+            continue;
+        }
+
+        if (m_ShopEntriesMap.find(item) != m_ShopEntriesMap.end())
+        {
+            sLog.outErrorDb("ERROR for item Id %u, already has an entry in the shop for entry %u.", id, item);
+            continue;
+        }
+
+		m_ShopEntriesMap[item] = shopentry;
 
 	} while (result->NextRow());
 
@@ -9247,4 +9350,24 @@ uint32 ObjectMgr::GetPossibleTransmogs(uint8 pClass, uint32 itemClass, uint32 it
 
     return numItems;
 
+}
+
+void ObjectMgr::LoadShellCoinCount()
+{
+    std::unique_ptr<QueryResult> result(CharacterDatabase.PQuery("SELECT `count` FROM `item_instance` WHERE `itemEntry`=%u", ITEM_SHELL_COIN));
+
+    if (!result)
+        return;
+
+    int32 totalCount = 0;
+    do
+    {
+        Field* fields = result->Fetch();
+
+        int32 count = fields[0].GetInt32();
+        totalCount += count;
+
+    } while (result->NextRow());
+
+    m_shellCoinCount = std::min(totalCount, SHELL_COIN_MAX_COUNT);
 }

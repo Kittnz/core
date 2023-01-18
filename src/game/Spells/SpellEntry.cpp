@@ -114,7 +114,7 @@ SpellSpecific Spells::GetSpellSpecific(uint32 spellId)
             if (spellInfo->IsFitToFamilyMask(UI64LIT(0x0000000010000100)))
                 return SPELL_BLESSING;
 
-            if ((spellInfo->IsFitToFamilyMask(UI64LIT(0x0000000020180400))) && spellInfo->baseLevel != 0)
+            if ((spellInfo->IsFitToFamilyMask(UI64LIT(0x180400))) && spellInfo->baseLevel != 0)
                 return SPELL_JUDGEMENT;
 
             // Old Judgement of Command

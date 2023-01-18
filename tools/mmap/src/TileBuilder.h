@@ -77,7 +77,7 @@ namespace MMAP
             return true;
         }
 
-        void WaitAndPop(T& value)
+        bool WaitAndPop(T& value)
         {
             std::unique_lock<std::mutex> lock(_queueLock);
 
@@ -87,11 +87,12 @@ namespace MMAP
                 _condition.wait(lock);
 
             if (_queue.empty() || _shutdown)
-                return;
+                return false;
 
             value = _queue.front();
 
             _queue.pop();
+            return true;
         }
 
         void Cancel()
@@ -103,7 +104,6 @@ namespace MMAP
                 T& value = _queue.front();
 
                 DeleteQueuedObject(value);
-
                 _queue.pop();
             }
 
@@ -126,7 +126,7 @@ namespace MMAP
     class TileBuilder
     {
     public:
-        TileBuilder(MapBuilder* mapBuilder, bool skipLiquid, bool bigBaseUnit, bool debugOutput) :
+        TileBuilder(MapBuilder* mapBuilder, bool skipLiquid, bool quick, bool bigBaseUnit, bool debugOutput) :
             m_bigBaseUnit(bigBaseUnit),
             m_debugOutput(debugOutput),
             m_mapBuilder(mapBuilder),
@@ -134,7 +134,7 @@ namespace MMAP
             m_workerThread(&TileBuilder::WorkerThread, this),
             m_rcContext(nullptr)
         {
-            m_terrainBuilder = new TerrainBuilder(skipLiquid, false);
+            m_terrainBuilder = new TerrainBuilder(skipLiquid, quick);
             m_rcContext = new rcContext(false);
         }
 

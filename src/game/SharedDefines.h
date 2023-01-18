@@ -116,13 +116,6 @@ enum ReputationRank : uint32
 
 #define MAX_SPILLOVER_FACTIONS 4
 
-enum MoneyConstants
-{
-    COPPER = 1,
-    SILVER = COPPER*100,
-    GOLD   = SILVER*100
-};
-
 enum Stats
 {
     STAT_STRENGTH                      = 0,

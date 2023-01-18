@@ -17,145 +17,16 @@
 /* ScriptData
 SDName: Felwood
 SD%Complete: 95
-SDComment: Quest support: related to 4101/4102 (To obtain Cenarion Beacon), 4506, 7603 (Summon Pollo Grande)
+SDComment: Quest support: related to 4101/4102 (To obtain Cenarion Beacon), 7603 (Summon Pollo Grande)
 SDCategory: Felwood
 EndScriptData */
 
 /* ContentData
-npc_kitten
 npcs_riverbreeze_and_silversky
 npc_niby_the_almighty
 EndContentData */
 
 #include "scriptPCH.h"
-
-/*####
-# npc_kitten
-####*/
-
-enum
-{
-    EMOTE_SAB_JUMP = -1000541,
-    EMOTE_SAB_FOLLOW = -1000542,
-
-    SPELL_CORRUPT_SABER_VISUAL = 16510,
-
-    QUEST_CORRUPT_SABER = 4506,
-    NPC_WINNA = 9996,
-    NPC_CORRUPT_SABER = 10042
-};
-
-#define GOSSIP_ITEM_RELEASE "I want to release the corrupted saber to Winna."
-
-struct npc_kittenAI : public FollowerAI
-{
-    npc_kittenAI(Creature* pCreature) : FollowerAI(pCreature)
-    {
-        if (pCreature->GetOwner() && pCreature->GetOwner()->GetTypeId() == TYPEID_PLAYER)
-        {
-            StartFollow((Player*)pCreature->GetOwner());
-            SetFollowPaused(true);
-            DoScriptText(EMOTE_SAB_JUMP, m_creature);
-
-            pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-
-            //find a decent way to move to center of moonwell
-        }
-
-        m_uiMoonwellCooldown = 7500;
-        Reset();
-    }
-
-    uint32 m_uiMoonwellCooldown;
-
-    void Reset() override { }
-
-    void MoveInLineOfSight(Unit* pWho) override
-    {
-        //should not have npc_flags by default, so set when expected
-        if (!m_creature->GetVictim() && !m_creature->HasFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP) && HasFollowState(STATE_FOLLOW_INPROGRESS) && pWho->GetEntry() == NPC_WINNA)
-        {
-            if (m_creature->IsWithinDistInMap(pWho, INTERACTION_DISTANCE))
-                m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-        }
-    }
-
-    void UpdateFollowerAI(const uint32 uiDiff) override
-    {
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
-        {
-            if (HasFollowState(STATE_FOLLOW_PAUSED))
-            {
-                if (m_uiMoonwellCooldown < uiDiff)
-                {
-                    m_creature->CastSpell(m_creature, SPELL_CORRUPT_SABER_VISUAL, false);
-                    SetFollowPaused(false);
-                }
-                else
-                    m_uiMoonwellCooldown -= uiDiff;
-            }
-
-            return;
-        }
-
-        DoMeleeAttackIfReady();
-    }
-};
-
-CreatureAI* GetAI_npc_kitten(Creature* pCreature)
-{
-    return new npc_kittenAI(pCreature);
-}
-
-bool EffectDummyCreature_npc_kitten(WorldObject* /*pCaster*/, uint32 uiSpellId, SpellEffectIndex effIndex, Creature* pCreatureTarget)
-{
-    //always check spellid and effectindex
-    if (uiSpellId == SPELL_CORRUPT_SABER_VISUAL && effIndex == EFFECT_INDEX_0)
-    {
-        // Not nice way, however using UpdateEntry will not be correct.
-        if (CreatureInfo const* pTemp = sObjectMgr.GetCreatureTemplate(NPC_CORRUPT_SABER))
-        {
-            pCreatureTarget->SetEntry(pTemp->entry);
-            pCreatureTarget->SetDisplayId(Creature::ChooseDisplayId(pTemp));
-            pCreatureTarget->SetName(pTemp->name);
-            pCreatureTarget->SetFloatValue(OBJECT_FIELD_SCALE_X, pTemp->scale);
-        }
-
-        if (Unit* pOwner = pCreatureTarget->GetOwner())
-            DoScriptText(EMOTE_SAB_FOLLOW, pCreatureTarget, pOwner);
-
-        //always return true when we are handling this spell and effect
-        return true;
-    }
-    return false;
-}
-
-bool GossipHello_npc_corrupt_saber(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(QUEST_CORRUPT_SABER) == QUEST_STATUS_INCOMPLETE)
-    {
-        if (GetClosestCreatureWithEntry(pCreature, NPC_WINNA, INTERACTION_DISTANCE))
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM_RELEASE, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_corrupt_saber(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pPlayer->CLOSE_GOSSIP_MENU();
-
-        if (npc_kittenAI* pKittenAI = dynamic_cast<npc_kittenAI*>(pCreature->AI()))
-            pKittenAI->SetFollowComplete();
-
-        pPlayer->AreaExploredOrEventHappens(QUEST_CORRUPT_SABER);
-    }
-
-    return true;
-}
 
 /*######
 ## npcs_riverbreeze_and_silversky
@@ -348,7 +219,7 @@ struct npc_cursed_oozeAI : public ScriptedAI
         Reset();
     }
     uint32 SpellTimer;
-    void SpellHit(Unit *caster, const SpellEntry *spell) override
+    void SpellHit(WorldObject* caster, const SpellEntry *spell) override
     {
         if (spell && spell->Id == SPELL_QUEST_CURSED_JAR)
             m_creature->ForcedDespawn();
@@ -385,7 +256,7 @@ struct npc_tainted_oozeAI : public ScriptedAI
         Reset();
     }
     uint32 SpellTimer;
-    void SpellHit(Unit *caster, const SpellEntry *spell) override
+    void SpellHit(WorldObject* caster, const SpellEntry *spell) override
     {
         if (spell && spell->Id == SPELL_QUEST_TAINTED_JAR)
             m_creature->ForcedDespawn();
@@ -942,18 +813,6 @@ bool AreaTrigger_at_irontree_wood(Player* pPlayer, AreaTriggerEntry const* pAt)
 void AddSC_felwood()
 {
     Script* newscript;
-
-    newscript = new Script;
-    newscript->Name = "npc_kitten";
-    newscript->GetAI = &GetAI_npc_kitten;
-    newscript->pEffectDummyCreature = &EffectDummyCreature_npc_kitten;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_corrupt_saber";
-    newscript->pGossipHello = &GossipHello_npc_corrupt_saber;
-    newscript->pGossipSelect = &GossipSelect_npc_corrupt_saber;
-    newscript->RegisterSelf();
 
     newscript = new Script;
     newscript->Name = "npcs_riverbreeze_and_silversky";

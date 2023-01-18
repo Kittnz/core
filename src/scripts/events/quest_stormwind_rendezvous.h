@@ -194,7 +194,7 @@ struct npc_reginald_windsorAI : ScriptedAI
     void EndScene();
     void UpdateAI_corpse(uint32 const uiDiff) override;
     void MoveInLineOfSight(Unit* Victim) override;
-    void SpellHit(Unit* /*pCaster*/, SpellEntry const* pSpellEntry) override;
+    void SpellHit(WorldObject* /*pCaster*/, SpellEntry const* pSpellEntry) override;
     void UpdateAI(uint32 const uiDiff) override;
 };
 

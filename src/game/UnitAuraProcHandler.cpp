@@ -1426,6 +1426,13 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                 basepoints[0] = damage * triggerAmount / 100 / 3;
                 target = this;
             }
+            // Elune's Grace (custom mana gain on dodge)
+            else if (auraSpellInfo->SpellIconID == 1714)
+            {
+                int32 const manaAmount = GetStat(STAT_AGILITY);
+                CastCustomSpell(this, trigger_spell_id, &manaAmount, nullptr, nullptr, true);
+                return SPELL_AURA_PROC_OK;
+            }
             break;
         }
         case SPELLFAMILY_DRUID:
@@ -1484,16 +1491,24 @@ SpellAuraProcResult Unit::HandleProcTriggerSpellAuraProc(Unit* pVictim, uint32 d
                     return SPELL_AURA_PROC_FAILED;
 
                 // procspell is triggered spell but we need mana cost of original casted spell
-                // The casted spell is in a variable: Player::m_castingSpell. Otherwise we can not find the spell that caused the proc.
+                SpellEntry const* originalSpell = procSpell;
 
-                SpellEntry const *originalSpell = sSpellMgr.GetSpellEntry(pPlayer->m_castingSpell);
-                if (!originalSpell)
+                // Holy Shock
+                if (procSpell->IsFitToFamilyMask<CF_PALADIN_HOLY_SHOCK>())
                 {
-                    sLog.outError("Unit::HandleProcTriggerSpell: Spell %u unknown but selected as original in Illu", pPlayer->m_castingSpell);
-                    return SPELL_AURA_PROC_FAILED;
+                    uint32 originalSpellId;
+                    switch (procSpell->Id)
+                    {
+                    case 25914: originalSpellId = 20473; break;
+                    case 25913: originalSpellId = 20929; break;
+                    case 25903: originalSpellId = 20930; break;
+                    default:
+                        sLog.outError("Unit::HandleProcTriggerSpell: Spell %u not handled in HShock", procSpell->Id);
+                        return SPELL_AURA_PROC_FAILED;
+                    }
+                    originalSpell = sSpellMgr.GetSpellEntry(originalSpellId);
                 }
-                // Histoire de pas reproc une autre fois ... :S
-                pPlayer->m_castingSpell = 0;
+
                 basepoints[0] = originalSpell->manaCost;
                 trigger_spell_id = 20272;
                 target = this;
@@ -1821,26 +1836,8 @@ SpellAuraProcResult Unit::HandleAddTargetTriggerAuraProc(Unit *pVictim, uint32 /
     if (aurEntry->EffectBasePoints[0] != -1)
         chance = aurEntry->EffectBasePoints[0];
     else
-    {
-        switch (aurEntry->Id)
-        {
-            // Relentless Strikes
-            case 14179: // Rank 1 : 4%
-            {
-                if (Player* pPlayer = ToPlayer())
-                {
-                    chance = 20.0f * pPlayer->m_castingSpell;
-                    pPlayer->m_castingSpell = 0;
-                }
-                break;
-            }
-            default:
-            {
-                sLog.outError("Spell %u has chance = -1 but not handled in core ...", aurEntry->Id);
-                break;
-            }
-        }
-    }
+        sLog.outError("Spell %u has chance = -1 but not handled in core ...", aurEntry->Id);
+
     // Si il y a plusieurs ticks ...
     // Blizzard - 8 ticks (fix procs abuses de morsure de givre)
     if (aurEntry->IsFitToFamily<SPELLFAMILY_MAGE, CF_MAGE_BLIZZARD>())

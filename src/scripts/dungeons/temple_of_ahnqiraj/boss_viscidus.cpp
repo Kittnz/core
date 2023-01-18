@@ -309,7 +309,7 @@ struct boss_viscidusAI : public ScriptedAI
         m_creature->SetVisibility(VISIBILITY_ON);
         m_creature->ClearUnitState(UNIT_STAT_DIED);
         m_creature->RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         m_uiPhase = PHASE_NORMAL;
         m_uiHitCount = 0;
 
@@ -363,7 +363,7 @@ struct boss_viscidusAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
         if (pSpell->Id == SPELL_VISCIDUS_EXPLODE && m_uiPhase != PHASE_EXPLODED)
         {

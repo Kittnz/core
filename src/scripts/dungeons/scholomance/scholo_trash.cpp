@@ -153,12 +153,16 @@ struct npc_spectral_projectionAI : public ScriptedAI
 
     }
 
-    void SpellHit(Unit* pCaster, const SpellEntry* pSpell) override
+    void SpellHit(WorldObject* pCaster, const SpellEntry* pSpell) override
     {
+        Unit* pUnitCaster = ToUnit(pCaster);
+        if (!pUnitCaster)
+            return;
+
         if (pSpell->Id == SPELL_PROJECTION_LEECH)
         {
             // hack life leech effect
-            pCaster->SetHealth(pCaster->GetHealth() + 1000.0f);
+            pUnitCaster->SetHealth(pUnitCaster->GetHealth() + 1000.0f);
             // remove from world, or projections will respawn 
             m_creature->RemoveFromWorld();
         }

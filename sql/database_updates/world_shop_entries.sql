@@ -168,6 +168,9 @@ replace into shop_items values
 (256, 6, 81258, 'Spectral Cub', 200),
 (257, 6, 69004, 'Pengu', 200),
 (258, 6, 69006, 'Glitterwing', 200),
+(259, 6, 83300, 'Lil\' K.T', 300),
+(260, 6, 83301, 'Core Hound Pet', 300),
+(261, 6, 83302, 'Lil\' Ragnaros', 300),
 -- Tabards
 (271, 7, 81088, 'Tabard of Summer Skies', 180),
 (272, 7, 81087, 'Tabard of Summer Flames', 180),
@@ -198,6 +201,7 @@ replace into shop_items values
 (297, 8, 51253, 'Illusion: Furbolg', 120),
 (298, 8, 81145, 'Illusion: Pandaren', 120),
 (299, 8, 80694, 'Illusion: Scourge', 120),
+(300, 8, 51215, 'Illusion: Satyr', 120),
 (301, 8, 53008, 'Illusion: Ogre', 120);
 
 ALTER TABLE `shop_items` ADD `descriptionLong` VARCHAR(1024) NOT NULL DEFAULT '' AFTER `price`;

@@ -34,7 +34,7 @@
 #include "GameObjectAI.h"
 #include "World.h"
 #include "Util.h"
-#include "Anticheat.hpp"
+#include "Anticheat.h"
 
 void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
 {
@@ -469,7 +469,7 @@ void WorldSession::DoLootRelease(ObjectGuid lguid)
                 loot->clear();
                 corpse->RemoveFlag(CORPSE_FIELD_DYNAMIC_FLAGS, CORPSE_DYNFLAG_LOOTABLE);
             }
-            corpse->ForceValuesUpdateAtIndex(CORPSE_DYNFLAG_LOOTABLE);
+            corpse->ForceValuesUpdateAtIndex(CORPSE_FIELD_DYNAMIC_FLAGS);
             corpse->ExecuteDelayedActions();
             break;
         }

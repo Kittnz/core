@@ -1164,48 +1164,62 @@ bool GOHello_go_brainwashing_device(Player* pPlayer, GameObject* pGo)
 {
 	if (pPlayer->GetLevel() >= 10 && pPlayer->HasItemCount(51715, 1))
 	{
-		std::string activateText;
+        std::string activateText{};
 
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Reset my talents.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
-		// primary
+		// Primary
 		if (pPlayer->HasSavedTalentSpec(1))
 		{
-			activateText = "Activate Primary Specialization " + pPlayer->SpecTalentPoints(1);
+			activateText = ("Activate Primary Specialization " + pPlayer->SpecTalentPoints(1));
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 		}
+
 		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Primary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
 
-		// secondary
+		// Secondary
 		if (pPlayer->HasSavedTalentSpec(2))
 		{
-			activateText = "Activate Secondary Specialization " + pPlayer->SpecTalentPoints(2);
+			activateText = ("Activate Secondary Specialization " + pPlayer->SpecTalentPoints(2));
 			pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, activateText.c_str(), GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
 		}
-		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 
+		pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TRAINER, "Save Secondary Specialization.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
 	}
+
     pPlayer->SEND_GOSSIP_MENU(90350, pGo->GetGUID());
+
     return true;
 }
 
-bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
+bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uint32 uiSender, const uint32 uiAction)
 {
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        if (pPlayer->ResetTalents())
+        if (pPlayer->ResetTalents(false))
+        {
             pPlayer->AddAura(27880);
+        }
     }
-	else if (action == GOSSIP_ACTION_INFO_DEF + 2)
-		pPlayer->ActivateTalentSpec(1);
-	else if (action == GOSSIP_ACTION_INFO_DEF + 4)
-		pPlayer->ActivateTalentSpec(2);
-	else if (action == GOSSIP_ACTION_INFO_DEF + 3)
-		pPlayer->SaveTalentSpec(1);
-	else if (action == GOSSIP_ACTION_INFO_DEF + 5)
-		pPlayer->SaveTalentSpec(2);
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ActivateTalentSpec(1);
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->ActivateTalentSpec(2);
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->SaveTalentSpec(1);
+    }
+    else if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->SaveTalentSpec(2);
+    }
 
 	pPlayer->CLOSE_GOSSIP_MENU();
+
     return true;
 }
 
@@ -1643,8 +1657,7 @@ bool GossipSelect_npc_frosty(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        static const WorldLocation m_WinterVeilVale(0, -4746.845F, 622.921F, 401.9f, 2.49F);
-        pPlayer->TeleportTo(m_WinterVeilVale);
+        pPlayer->TeleportTo(813, -2568.90F, 1193.84F, 62.63F, 3.6F);
     }
 
     pPlayer->CLOSE_GOSSIP_MENU();
@@ -2105,20 +2118,28 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
 
 void SetFlying(Player* player, uint32 duration, uint32 mountDisplay, uint32 removeEntry = 0, uint32 count = 0)
 {
-    if(player->IsMounted())
-        player->Unmount();
-
-    player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
-    player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
-    player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
-    player->SetFlying(true);
-    if (removeEntry)
+    player->SetClientControl(player, 0);
+    if (player->IsMounted())
     {
-        player->DestroyItemCount(removeEntry, count ? count : 1, true);
-        player->SaveInventoryAndGoldToDB();
+        player->Unmount();
+        player->RemoveSpellsCausingAura(SPELL_AURA_MOUNTED);
     }
-    player->InterruptNonMeleeSpells(true);
-    player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+
+    player->m_Events.AddLambdaEventAtOffset([player, removeEntry, mountDisplay, count, duration]()
+        {
+            player->SetClientControl(player, 1);
+            player->GetSession()->SendNotification("You will be dismounted in %u seconds.", duration);
+            player->SetUInt32Value(UNIT_FIELD_MOUNTDISPLAYID, mountDisplay);
+            player->m_Events.AddEvent(new StopFlyingAfterTime(player->GetGUID()), player->m_Events.CalculateTime(duration * IN_MILLISECONDS));
+            player->SetFlying(true);
+            if (removeEntry)
+            {
+                player->DestroyItemCount(removeEntry, count ? count : 1, true);
+                player->SaveInventoryAndGoldToDB();
+            }
+            player->InterruptNonMeleeSpells(true);
+            player->UpdateSpeed(MOVE_SWIM, false, 6.0F);
+        }, 1500);
 }
 
 bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint32 /*uiSender*/, uint32 uiAction)
@@ -2182,7 +2203,7 @@ struct palkeoteAI : public ScriptedAI
     void Reset()
     {
         m_events.Reset();
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
         calfActive = false;
     }
@@ -2210,7 +2231,7 @@ struct palkeoteAI : public ScriptedAI
             m_creature->CombatStop(true);
             m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
 
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
@@ -3004,16 +3025,12 @@ bool GOSelect_go_fm_acquisition(Player* pPlayer, GameObject* pGo, uint32 sender,
 {
     if (action == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pPlayer->SetDisplayId(8011);
-        pPlayer->TeleportTo(1, 560.20F, -4576.21F, 142.0F, 4.08F);
-        pPlayer->m_Events.AddEvent(new DemorphAfterTime(pPlayer->GetGUID()), pPlayer->m_Events.CalculateTime(15000));
-        pPlayer->CastSpell(pPlayer, 130, true);
-
         if (pPlayer->HasItemCount(6948, 1, 0))
         {
             pPlayer->DestroyItemCount(6948, 1, true);
             pPlayer->SaveInventoryAndGoldToDB();
         }
+        pPlayer->ActivateTaxiPathTo(1619, 0, true); // Weeeee!
     }
     return true;
 }
@@ -3065,7 +3082,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Mister Gar'thok, may I introduce ya to my crew? We've all got nowhere else to go, and we hear that's as good a reason as any to join the Horde.", player);
+            creature->MonsterSayToPlayer("Gar'Thok, Chief! Allow me to introduce you to my crew. We've got nowhere else to go, and we're willing to lend a hand to the Horde in exchange for food and lodge!", player);
         });
 
         DoAfterTime(pPlayer, 13 * IN_MILLISECONDS,
@@ -3078,7 +3095,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Barely any different for me! I hear you orcs like bashin' skulls, I like bashin' skulls, we're gonna get along just fine.", player);
+            creature->MonsterSayToPlayer("Barely any difference to me. You like bashin' skulls, I like bashin' skulls... I was born for the Horde!", player);
         });
 
         DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
@@ -3091,7 +3108,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Is what I hear true? You guys use bows? Buddy, buddy. Get with the century! I'll show you some real weapons.", player);
+            creature->MonsterSayToPlayer("Is it true? You guys are using bows out here? Buddy, buddy, get with the century! I'll train your guys in how to use some real weapons!", player);
         });
 
         DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
@@ -3117,7 +3134,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Do ya even have a mage to help out around here? Well, I guess I can set up shop, conjure up some water. For a price, of course, but also for the Horde!", player);
+            creature->MonsterSayToPlayer("Do ya even have a Mage around here? It's 1000 degrees out here! I guess I can set up shop and conjure up some water. For a price, of course! ... Oh, and uh, for the Horde!", player);
         });
 
         DoAfterTime(pPlayer, 39 * IN_MILLISECONDS,
@@ -3130,7 +3147,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I've made some bad deals with demons, and I know you orcs have too. Thanks for takin' us in.", player);
+            creature->MonsterSayToPlayer("I've made some bad deals with demons, you orcs have made some bad deals with demons. You can sympathize, right? Thanks for takin' us in.", player);
         });
 
         DoAfterTime(pPlayer, 48 * IN_MILLISECONDS,
@@ -3143,7 +3160,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Who cares about honor? Where's the food!?", player);
+            creature->MonsterSayToPlayer("Who cares about honor? Where's the food?!", player);
         });
 
         DoAfterTime(pPlayer, 53 * IN_MILLISECONDS,
@@ -3157,7 +3174,7 @@ bool QuestComplete_npc_garthok(Player* pPlayer, Creature* pQuestGiver, Quest con
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
             creature->MonsterTextEmote("Gar'thok laughs.");
-            creature->MonsterSayToPlayer("Very well, goblins. I am giving you a chance to prove yourself worthy of the Horde. There is work for you here and further up the road in Orgrimmar. Earn the respect of your new allies. Go now all around Durotar and honor the Horde.", player);
+            creature->MonsterSayToPlayer("Very well, recruits. I'll give you the same chance as any orc or troll who arrives from the Valley of Trials. There is plenty of work for you in Razor Hill. Start here, earn the respect of your new allies, and bring honor to the Horde!", player);
         });
     }
     return false;
@@ -3183,10 +3200,10 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_NO);
-            creature->MonsterSayToPlayer("Alright, I'll be honest with you. The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
+            creature->MonsterSayToPlayer("Alright, I'll be honest with you guys: The boss isn't gonna be happy we're not bringing him back his treasure. But I've seen enough, and I think you have too, right?", player);
         });
 
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 8 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -3196,11 +3213,11 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_QUESTION);
-            creature->MonsterSayToPlayer("We can't go back to the Venture Co, or the boss'll find us. And there's no way the Steamwheedle Cartel will trust us, not after the Venture Co puts out the word that we took off with their loot, right?", player);
+            creature->MonsterSayToPlayer("We can't go back to the Venture Co. or we're all dead meat! There's no way the Steamwheedle Cartel will take us in. Not with all the bad blood between us already.", player);
         });
 
 
-        DoAfterTime(pPlayer, 17 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 14 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -3210,35 +3227,11 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
                 return;
 
             creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
-            creature->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. Who in the world would take us in?", player);
+            creature->MonsterSayToPlayer("So here we are. A bunch of smelly, grimy refugees without a single coin to our name. We've only got one chance left, and that's kissing Thrall's feet.", player);
         });
 
 
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid()]()
-        {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->MonsterTextEmote("Nert Blastentom smiles.");
-        });
-
-        DoAfterTime(pPlayer, 23 * IN_MILLISECONDS,
-            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(1);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->MonsterSayToPlayer("I think I have just the place... Get the team and hop in the plane.", player);
-        });
-
-        DoAfterTime(pPlayer, 21 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 18 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -3249,9 +3242,22 @@ bool QuestAccept_npc_nert_blastentom(Player* pPlayer, Creature* pQuestGiver, Que
 
             creature->SetWalk(true);
             creature->GetMotionMaster()->MovePoint(0, 1799.06F, 1349.06F, 144.95F, 4.04F, 1.7F);
+            creature->MonsterTextEmote("Nert Blastentom smiles.");
         });
 
-        DoAfterTime(pPlayer, 50 * IN_MILLISECONDS,
+        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
+            [CreatureGuid = pQuestGiver->GetObjectGuid(), player = pPlayer]()
+        {
+            Map* map = sMapMgr.FindMap(1);
+            Creature* creature = map->GetCreature(CreatureGuid);
+
+            if (!creature)
+                return;
+
+            creature->MonsterSayToPlayer("Hope you've all been practicing your zug-zugs, because we're going to Durotar. Everybody get in the plane!", player);
+        });
+
+        DoAfterTime(pPlayer, 35 * IN_MILLISECONDS,
             [CreatureGuid = pQuestGiver->GetObjectGuid()]()
         {
             Map* map = sMapMgr.FindMap(1);
@@ -4720,25 +4726,6 @@ bool QuestRewarded_npc_ilyara_skyvault(Player* pPlayer, Creature* pQuestGiver, Q
 
 bool GossipHello_npc_questions_and_answers(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(QUEST_YOUNG_AND_FOOLISH) == QUEST_STATUS_INCOMPLETE) // Young and Foolish
-    {
-        switch (pCreature->GetEntry())
-        {
-        case 341: 
-            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[0] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
-        case 956:
-            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[1] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
-        case 344:
-            if (pPlayer->GetQuestStatusData(QUEST_YOUNG_AND_FOOLISH)->m_creatureOrGOcount[2] == 0)
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Anything strange happen recently?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            break;
-        }
-    }
-
     if (pPlayer->GetQuestStatus(80721) == QUEST_STATUS_INCOMPLETE) // Grim News
         switch (pCreature->GetEntry())
         {
@@ -4772,22 +4759,6 @@ bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature
     {
         switch (pCreature->GetEntry())
         {
-        case 341: // Foreman Oslow
-            pCreature->HandleEmote(EMOTE_ONESHOT_POINT);
-            pCreature->MonsterSayToPlayer("Yes. A caravan with men and women dressed in scarlet passed through here. Many of our young ones followed them.", pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            break;
-        case 956: // Dorin Songblade
-            pCreature->MonsterSayToPlayer("Aye, our young ones left with them. Can you blame them? Look at this place.", pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50666))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            break;
-        case 344: // Magistrate Solomon
-            pCreature->MonsterSayToPlayer("It\'s regrettable that our children left with those foolish zealots of the crusade in the middle of the night! Please, don\'t harm them. Send them back home to us.", pPlayer);
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50667))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            break;
         case 1515: // Executor Zygand
             pCreature->MonsterSayToPlayer("I don't know how you obtained that information but yes, some Scarlet Remnants attacked one of my Deathguard patrols, some never made it back and the others are in a deep sleep. Before falling into this weird slumber one of the guards said they were heading for the Monastery.", pPlayer);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50665))
@@ -4812,139 +4783,63 @@ bool GossipSelect_npc_questions_and_answers(Player* pPlayer, Creature* pCreature
     return true;
 }
 
-bool GossipHello_search_for_clues(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 0)
-    {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-    }
-    pPlayer->SEND_GOSSIP_MENU(51680, pCreature->GetGUID());
-    return true;
-}
-
-bool GOHello_search_for_clues(Player* pPlayer, GameObject* pGo)
-{
-    if (pGo->GetEntry() == 1000167 && pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 1)
-    {
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-        pPlayer->SEND_GOSSIP_MENU(51681, pGo->GetGUID());
-        return true;
-    }
-    if (pGo->GetEntry() == 1000168)
-    {
-        if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] >= 2)
-        {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50668))
-                pPlayer->KilledMonster(cInfo, ObjectGuid());
-            if (!pPlayer->HasItemCount(53002, 1, 1))
-                pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT_12, "Take Scarlet Recruit\'s Insignia Ring.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-            pPlayer->SEND_GOSSIP_MENU(51682, pGo->GetGUID());
-            return true;
-        }
-        return false;
-    }
-    return true;
-}
-
-bool GOSelect_search_for_clues(Player* pPlayer, GameObject* pGo, uint32 sender, uint32 action)
-{
-    if (action == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        if (pPlayer->AddItem(53002))
-        {
-            pPlayer->CLOSE_GOSSIP_MENU();
-            return true;
-        }
-    }
-    return false;
-}
-
-bool GossipHello_npc_kixxle(Player* pPlayer, Creature* pCreature)
-{
-    if (pPlayer->GetQuestStatus(80730) == QUEST_STATUS_INCOMPLETE && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[1] == 0 && pPlayer->GetQuestStatusData(80730)->m_creatureOrGOcount[0] == 3)
-    {
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Were you the one to sell an oil canister to to a group of men dressed in scarlet?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-    }
-    if (pCreature->IsVendor())
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ACTION_TRADE, "I want to browse your goods.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 10);
-
-    if (pCreature->IsQuestGiver())
-        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
-
-    pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    return true;
-}
-
-bool GossipSelect_npc_kixxle(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
-{
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
-    {
-        pCreature->MonsterSayToPlayer("Yea boss, I sure did. I\'m a merchant, you know. If I got it, I sell it.", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Where did they go?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
-        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
-    {
-        pCreature->MonsterSayToPlayer("They went North I guess, following in the footsteps of that dwarven caravan. One of them said they\'d wait by the bridge for an ambush or something. He didn\'t look like the sharpest tool in the shed, you get me?", pPlayer);
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Why didn\'t you stop them?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
-        pPlayer->SEND_GOSSIP_MENU(pPlayer->GetGossipTextId(pCreature), pCreature->GetGUID());
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
-    {
-        pCreature->HandleEmote(EMOTE_ONESHOT_NO);
-        pCreature->MonsterSayToPlayer("You\'re joking, right, bub? There were like at least five of them!", pPlayer);
-        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50669))
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
-        pPlayer->CLOSE_GOSSIP_MENU();
-    }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 10)
-        pPlayer->SEND_VENDORLIST(pCreature->GetGUID());
-    return true;
-}
-
 struct npc_vladeus_springriverAI : public ScriptedAI
 {
-    npc_vladeus_springriverAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset()
+    npc_vladeus_springriverAI(Creature* c) : ScriptedAI(c)
     {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
-        m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
+        Reset();
     }
-    void UpdateAI(const uint32 diff)
+
+    ShortTimeTracker m_despawnCheckTimer;
+
+    void Reset() override
     {
-        if (m_creature->GetHealthPercent() < 10)
+        m_despawnCheckTimer.Reset(5000);
+    }
+
+    void DamageTaken(Unit* pAttacker, uint32& damage) override
+    {
+        if ((int32(m_creature->GetHealth()) - int32(damage)) < m_creature->GetMaxHealth() * 0.1f)
         {
+            damage = 0;
+
+            m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PLAYER);
+
+            ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
+            for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+            {
+                Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
+                if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
+                {
+                    if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
+                        pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
+                }
+            }
+
             m_creature->CombatStop(true);
-            m_creature->ClearInCombat();
             m_creature->SetFactionTemplateId(35);
         }
-        if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim()) return;
-        DoMeleeAttackIfReady();
     }
-    void EnterCombat()
-    {
-        m_creature->MonsterSay("For the Scarlet Crusade!");
-    }
-    void OnCombatStop()
-    {
-        m_creature->MonsterSay("Stop, I give up! Spare me, I will submit to imprisonment.");
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
 
-        ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
-        for (ThreatList::const_iterator i = tList.begin(); i != tList.end(); ++i)
+    void UpdateAI(uint32 const diff) override
+    {
+        ScriptedAI::UpdateAI(diff);
+
+        m_despawnCheckTimer.Update(diff);
+        if (m_despawnCheckTimer.Passed())
         {
-            Unit* pUnit = m_creature->GetMap()->GetUnit((*i)->getUnitGuid());
-            if (pUnit && (pUnit->GetTypeId() == TYPEID_PLAYER))
-            {
-                if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(50670))
-                    pUnit->ToPlayer()->KilledMonster(cInfo, ObjectGuid());
-            }
+            m_despawnCheckTimer.Reset(5000);
+            if (!m_creature->IsInCombat() && !m_creature->FindNearestPlayer(VISIBILITY_DISTANCE_NORMAL))
+                m_creature->DespawnOrUnsummon();
         }
     }
-    void JustRespawned() { Reset(); }
+
+    void EnterCombat(Unit* pVictim) override
+    {
+        if (pVictim && pVictim->IsPlayer())
+            m_creature->MonsterSay("For the Scarlet Crusade!");
+    }
 };
 
 CreatureAI* GetAI_npc_vladeus_springriver(Creature* _Creature) { return new npc_vladeus_springriverAI(_Creature); }
@@ -4997,8 +4892,9 @@ bool GossipSelect_npc_captain_stoutfist(Player* pPlayer, Creature* pCreature, ui
         if (Creature* prisoner = pPlayer->FindNearestCreature(50674, 30.0F))
         {
             prisoner->GetMotionMaster()->Clear();
-            prisoner->ForcedDespawn();
+            prisoner->DespawnOrUnsummon();
         }
+
         auto itr = std::find(followed_units.begin(), followed_units.end(), pPlayer->GetObjectGuid());
         if (itr != followed_units.end())
             followed_units.erase(itr);
@@ -5168,7 +5064,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
 
         maverick->SetWalk(true);
         maverick->GetMotionMaster()->MovePoint(0, 2545.8F, -651.11F, 78.8F);
-        maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        maverick->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
         DoAfterTime(pPlayer, 40 * IN_MILLISECONDS, [player = pPlayer, summoner = maverick]() {
             Map* map = sMapMgr.FindMap(0);
@@ -5196,7 +5092,7 @@ bool GossipSelect_npc_maverick(Player* pPlayer, Creature* maverick, uint32 /*uiS
             Map* map = sMapMgr.FindMap(0);
             summoner->SummonCreature(50681, 2546.42F, -643.44F, 80.20F, 4.6F, TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, 60 * IN_MILLISECONDS);
             summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            summoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
     }
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
@@ -5448,7 +5344,7 @@ bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const
 
     if (pQuest->GetQuestId() == 40166) // The Tower of Lapidis IV
     {
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
         pQuestGiver->CastSpell(pQuestGiver, 23017, false); // Arcane Channeling
 
         DoAfterTime(pPlayer, 18 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
@@ -5461,7 +5357,7 @@ bool QuestAccept_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest const
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60327))
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
 
         return true;
@@ -5484,6 +5380,47 @@ bool QuestRewarded_npc_ansirem(Player* pPlayer, Creature* pQuestGiver, Quest con
         pQuestGiver->CastSpell(pPlayer, 10157, false);
         pQuestGiver->MonsterSayToPlayer("Travel safely, friend!", pPlayer);
         return true;
+    }
+    return true;
+}
+
+bool GossipHello_npc_ansirem(Player* pPlayer, Creature* pCreature)
+{
+    if (pCreature->IsQuestGiver())
+        pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40561) == QUEST_STATUS_INCOMPLETE) // Preparation for Divination
+    {
+        Creature* ansirem = pPlayer->FindNearestCreature(2543, 10.0F);
+        if (ansirem && !pPlayer->HasItemCount(60815, 1))
+        {
+            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Greetings. I am in need of an Arcane Resonator for Magus Halister in Theramore, do you have one?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
+        }
+    }
+
+    pPlayer->SEND_GOSSIP_MENU(2543, pCreature->GetGUID());
+
+    return true;
+}
+
+bool GossipSelect_npc_ansirem(Player* pPlayer, Creature* pCreature, uint32 uiSender, uint32 uiAction)
+{
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
+    {
+        if (!pPlayer->HasItemCount(60815, 1))
+        {
+            pPlayer->AddItem(60815);
+        }
+        if (pPlayer->HasItemCount(60815, 1, false))
+        {
+            pCreature->MonsterSay("Halister? I haven't heard from him in ages. We need to meet, as there is much to discuss. As for the Arcane Resonator, I can lend you one. But tell Halister that he needs to bring it back to me in person!");
+            pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
+            pPlayer->CLOSE_GOSSIP_MENU();
+            return true;
+        }
+        else
+            pPlayer->GetSession()->SendNotification("Your bags are full!");
+        return false;
     }
     return true;
 }
@@ -5520,7 +5457,7 @@ struct npc_baxxilAI : public ScriptedAI
 
     void Reset()
     {
-        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         m_creature->SetFactionTemplateId(m_creature->GetCreatureInfo()->faction);
         m_dialogueOver = false;
         m_followCheckTimer = 1000;
@@ -5534,7 +5471,7 @@ struct npc_baxxilAI : public ScriptedAI
             m_creature->ClearInCombat();
             m_creature->DeleteThreatList();
             m_creature->SetFactionTemplateId(35);
-            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             m_creature->MonsterSay("Fine, FINE! Take me back to the hole, just don't kill me!");
 
@@ -5613,7 +5550,7 @@ bool GossipSelect_npc_baxxil(Player* pPlayer, Creature* pCreature, uint32 /*uiSe
         escortNPC->GetMotionMaster()->MoveFollow(pPlayer, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
         escortNPC->UpdateSpeed(MOVE_RUN, false, escortNPC->GetSpeedRate(MOVE_RUN) * 1.5);
         baxxil_following.insert(pPlayer->GetObjectGuid());
-        escortNPC->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+        escortNPC->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
         escortNPC->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
     }
 
@@ -5666,7 +5603,7 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
     {
         pQuestGiver->HandleEmote(69);
         pQuestGiver->MonsterSayToPlayer("First, we put this here, and then this... here...", pPlayer);
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
 
         DoAfterTime(pPlayer, 6 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->MonsterSayToPlayer("Then all it takes is, Ah! Damn thing!", player);
@@ -5674,7 +5611,7 @@ bool QuestAccept_npc_barthos(Player* pPlayer, Creature* pQuestGiver, Quest const
         DoAfterTime(pPlayer, 12 * IN_MILLISECONDS, [player = pPlayer, npc = pQuestGiver]() {
             npc->MonsterSayToPlayer("There it is, I've done it, here you are, my work is complete!", player);
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91301))
                 player->KilledMonster(cInfo, ObjectGuid());
             });
@@ -5708,7 +5645,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("After da combined forces of da Amani and da Horde failed da attack on de Elven Lands we didn't back down and me people and I paid da price.", pPlayer);
         DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, c = pCreature]() {
             c->MonsterSayToPlayer("Dey cornered me close to dat lake and been captured by a bashful elf named Brightwing.", player);
@@ -5748,7 +5685,7 @@ bool GossipSelect_npc_zuljin(Player* pPlayer, Creature* pCreature, uint32 uiSend
             if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(91320))
                 player->KilledMonster(cInfo, ObjectGuid());
             c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             }); 
     }
 
@@ -5978,7 +5915,7 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
         if (lord_rog)
         {
-            lord_rog->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+            lord_rog->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
             lord_rog->CastSpell(pQuestGiver, 13236, false);
 
             DoAfterTime(pPlayer, 10 * IN_MILLISECONDS, [player = pPlayer, npc = lord_rog]() {
@@ -5992,7 +5929,7 @@ bool QuestAccept_npc_ganzih(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
                 if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60313))
                     player->KilledMonster(cInfo, ObjectGuid());
-                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+                npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                 npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
                 });
@@ -6150,7 +6087,7 @@ bool QuestAccept_npc_zuljin(Player* pPlayer, Creature* pQuestGiver, Quest const*
 
         pQuestGiver->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER | UNIT_NPC_FLAG_GOSSIP);
         pQuestGiver->PMonsterSay("I am ready for the audience.");
-        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pQuestGiver->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
         Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
         GameObject* portal{ nullptr };
@@ -6256,13 +6193,13 @@ struct npc_zuljinAI : public ScriptedAI
             }
         }
 
-            switch (phase)
-            {
+        switch (phase)
+        {
 
             case 0: // Still in Tirisfall
             {
                 if (eventInProgress)
-                 m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                    m_creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                 else 
                     m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
@@ -6471,8 +6408,10 @@ struct npc_zuljinAI : public ScriptedAI
                 complete = true;
                 break;
             }
-            }
         }
+
+        ScriptedAI::UpdateAI(uiDiff);
+    }
 };
 
 bool QuestRewarded_npc_zul_jin(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
@@ -6485,37 +6424,1064 @@ bool QuestRewarded_npc_zul_jin(Player* pPlayer, Creature* pQuestGiver, Quest con
 
     switch (pQuest->GetQuestId())
     {
-    case 65008: // Da Banshees Favour in Undercity
-    {
+        case 65008: // Da Banshees Favour in Undercity
+        {
 
 
-            Quest const* pQuest = sObjectMgr.GetQuestTemplate(65013);
-            pPlayer->AddQuest(pQuest, pQuestGiver);
+                Quest const* pQuest = sObjectMgr.GetQuestTemplate(65013);
+                pPlayer->AddQuest(pQuest, pQuestGiver);
 
-            Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
-            Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
+                Creature* guard1 = pQuestGiver->FindNearestCreature(65144, 20, true);
+                Creature* guard2 = pQuestGiver->FindNearestCreature(65144, 20, true, guard1);
 
-            if (pPlayer)
-            {
-                DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [pPlayer, zuljin = pQuestGiver, guard1, guard2]() {
-                    zuljin->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
-                    guard1->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
-                    guard2->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+                if (!guard1 || !guard2)
+                    return false;
+
+                ObjectGuid guardGuid1 = guard1->GetObjectGuid();
+                ObjectGuid guardGuid2 = guard2->GetObjectGuid();
+                ObjectGuid zuljinGuid = pQuestGiver->GetObjectGuid();
+
+                if (pPlayer)
+                {
+                    DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [pPlayer, zuljinGuid, guardGuid1, guardGuid2]()
+                    {
+                        if (!pPlayer->IsInWorld())
+                            return;
+
+                        if (Creature* zuljin = pPlayer->GetMap()->GetCreature(zuljinGuid))
+                            zuljin->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+                        if (Creature* guard1 = pPlayer->GetMap()->GetCreature(guardGuid1))
+                            guard1->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
+                        if (Creature* guard2 = pPlayer->GetMap()->GetCreature(guardGuid2))
+                            guard2->GetMotionMaster()->MovePoint(0, zjmovement[7].x, zjmovement[7].y, zjmovement[7].z);
                     });
-            }
-        break;
-    }
-    case 65010: // The Horde's Council
-    {
+                }
+            break;
+        }
+        case 65010: // The Horde's Council
+        {
 
-        break;
-    }
+            break;
+        }
     }
 
     return false;
 }
 
 CreatureAI* GetAI_npc_zulJin(Creature* _Creature) { return new npc_zuljinAI(_Creature); }
+
+
+struct npc_guard_emoteAI : public ScriptedAI
+{
+    uint32 m_uiTimer;
+
+    npc_guard_emoteAI(Creature* m_creature) : ScriptedAI(m_creature)
+    {
+        Reset();
+    }
+
+    bool CheckEmoteCooldown()
+    {
+        if (m_uiTimer == 0) m_uiTimer = time(nullptr) + 0;
+        if (time(nullptr) >= m_uiTimer)
+        {
+            m_uiTimer = time(nullptr) + 120; // Cooldown time of Emote interaction
+            return true;
+        }
+        return false;
+    }
+
+    void ReceiveEmote(Player* pPlayer, const uint32 uiEmote) override
+
+    {
+        if (m_creature->GetGUID() && m_creature->IsAlive() && !m_creature->IsInCombat() && m_creature->IsWithinLOSInMap(pPlayer) && !pPlayer->HasStealthAura())
+        {
+            switch (pPlayer->GetTeam())
+            {
+                case ALLIANCE:
+                {
+                    // Human Guards
+                    if (m_creature->GetEntry() == 68)
+                    {
+                        switch (uiEmote)
+                        {
+
+                            // General greeting
+                            case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Welcome to Stormwind, Traveler! Stay safe!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Greetings!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Greetings, enjoy your stay in Stormwind!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("I'm here whenever you need help.", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("May the light protect you!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                            case 4: case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Salute
+                            case TEXTEMOTE_SALUTE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("For the Alliance!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("May the light protect you!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("In the name of the King.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("Stay safe, Traveler.", Language::LANG_COMMON); break; }
+                                            case 5: {break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Bye
+                            case TEXTEMOTE_BYE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Save travels, Friend!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("I hope you enjoyed your stay in Stormwind.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Make sure to stock up on rations before you leave Stormwind.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("Until next time.", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("May the light protect you on your journey!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Joke
+                            case TEXTEMOTE_JOKE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 6);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("I havn't heard this one in a while!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("That's a good one!", Language::LANG_COMMON); break; }
+                                            case 3: {break; }
+                                            case 4: {m_creature->MonsterSay("A duck walked into an Apothecary and said 'Give me some ChapStick... and put it on my bill!'", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("So, an orc walks into a bar with a parrot on his shoulder. The bartender says 'Hey, where'd you get that?' The parrot says 'Durotar. They've got them all over the place!'", Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay("You have to try harder to make me laugh.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 4: case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                            case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_POINT); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            //Flex
+                            case TEXTEMOTE_FLEX:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("HA! You seem strong! Look at this.", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Keep training and you'll be as strong as me some day. Haha!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("By the light, what strength!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("Good to see strong Travelers like you around Stormwind.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_FLEX); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_APPLAUD); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_BOW); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Taunt
+                            case TEXTEMOTE_TAUNT:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 3);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Show some respect to the guards of Stormwind!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("This does not work on me.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("You make a fool of yourself.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
+                                            case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Tickle
+                            case TEXTEMOTE_TICKLE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 3);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Hey, back off!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Hahaha! STOP! I'm working here!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("What... i am in full armor. Did you really expect that works?", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->HandleEmote(EMOTE_ONESHOT_ATTACK1H); break; }
+                                            case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    // Nightelf Guards
+                    if (m_creature->GetEntry() == 4262)
+                    {
+                        switch (uiEmote)
+                        {
+
+                            // General greeting
+                            case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 6);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Can i assist you?", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Welcome, Traveler. You must have countless battles. Please, stay as long as you wish and calm your body and mind under Mother Natures protection.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Ishnu-alah.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("What brings you here?", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("Elune be with you.", Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay("Ishnu-dal-dieb.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                            case 5: case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_BOW); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Salute
+                            case TEXTEMOTE_SALUTE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("For the high priestess.", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("May Elune guide you.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("For the Alliance.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("We will protect you during your rest here!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Bye
+                            case TEXTEMOTE_BYE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("May Elune protect you on your journey, Traveler!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Good bye, come back when ever you need a rest.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Till next we meet!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("You're already leaving? Stay safe.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Joke
+                            case TEXTEMOTE_JOKE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Haha! That's a good one!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Ha! Here is one for you. We are all Nightelves. But.. i'm more of a morning Elf.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Oh sorry, what was that? I was sunken in thoughts", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("By Elune, i have to remember that one!", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("Is this the point where i should... laugh?", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Flex
+                            case TEXTEMOTE_FLEX:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Wow! Mother Nature has truely blessed you!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("I am glad that someone as strong as you stays in here for a while.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("You are not the only strong here.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("Remember, with great strength comes great strength! No wait... With great strong... Ah, forget it! You look good!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_APPLAUD);  break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_FLEX);  break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_BOW); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Taunt
+                            case TEXTEMOTE_TAUNT:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("You'd better be carefull who you taunt.", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Your try is just a waste of our fresh air.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("You dare to pest the air around is with that foul mouth?!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("You should visit a priestess and cleansen your mind.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Tickle
+                            case TEXTEMOTE_TICKLE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 3);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Stop it!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("I need to focus and look for potential threats, don't distract me. Hahaha!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("HEY! Only looking, no touching!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_ATTACKUNARMED);  break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    // Dwarf Guards
+                    if (m_creature->GetEntry() == 5595)
+                    {
+                        switch (uiEmote)
+                        {
+
+                            // General greeting
+                            case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 6);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("I do hope the mountain is warm enough for ye.", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Stop by at the inn for some relaxation.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("The mountain, home of the dwarves, is open to all of the Alliance.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("Welcome to Ironforge, Traveler. Don't miss out a good beer in one of our Taverns.", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("Ha! It's good to see ye again. Pull up a chair by the hearth.", Language::LANG_COMMON); break; }
+                                            case 6: {m_creature->MonsterSay("Greetings, Pal. Come talk to me when you get lost!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: case 5: case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Salute
+                            case TEXTEMOTE_SALUTE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("For the Bronzebeards!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("For King Magni!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("At your service.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("We keep you protected. Be welcome in our City.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Bye
+                            case TEXTEMOTE_BYE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Come back if you crave for some beer in a warm inn, will ya?", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Well met, Travevller. Stay safe and kill some creatures out there!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Don't forget, the mountain welcomes everyone of the Alliance!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("Be blessed with fortune, friend!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Joke
+                            case TEXTEMOTE_JOKE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("That's one for the inn. Bahahaha!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("By King Magnis beard! BAHahaha. Where'd you got that one from?!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Hahaha! I don't drink anymore... 'course, I don't drink any less either! BAHAHAhahaha!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("Hm... Maybe i need more beer to laugh about that.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Flex
+                            case TEXTEMOTE_FLEX:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("What glorious muscles!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("Ironforge will be surely safe with you stoping by.", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("You try to impress a dwarf with muscles? Look, i am 50% muscles and 50% beer! BAHAHA!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("You are as slender as a straw of wheat!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_APPLAUD); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_FLEX); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Taunt
+                            case TEXTEMOTE_TAUNT:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("By the stinking fart of a Troll, you're lucky i am on duty right now!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("You should back off before i lose... My... TEMPER!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("You shouldn't put your bare hand in a forge, you might burn yourself.", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("My arms might be small but so is your brain!", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("I hope i misheared that.", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_ROAR); break; }
+                                            case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
+                                            case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Tickle
+                            case TEXTEMOTE_TICKLE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Bahaha! Stop it Pal!", Language::LANG_COMMON); break; }
+                                            case 2: {m_creature->MonsterSay("G-ggg... Bahahaha!", Language::LANG_COMMON); break; }
+                                            case 3: {m_creature->MonsterSay("Oi, Mate. You... can't... just... tickle the guards around here! HAHA!", Language::LANG_COMMON); break; }
+                                            case 4: {m_creature->MonsterSay("You... know i wear an armor with tickle-resistance + 10, right?", Language::LANG_COMMON); break; }
+                                            case 5: {m_creature->MonsterSay("Hey! Stay away from me!", Language::LANG_COMMON); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                            case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_ATTACKUNARMED); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+
+                    // EasterEgg
+                    if (m_creature->GetEntry() == 3296)
+                    {
+                        if (uiEmote == TEXTEMOTE_LAUGH)
+                        {
+                            if (m_creature->GetDistance3dToCenter(pPlayer) <= 40.f)
+                            {
+                                if (CheckEmoteCooldown())
+                                {
+                                    m_creature->MonsterSay("lol", Language::LANG_ORCISH); // "kek" for alliance
+                                    m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+
+                case HORDE:
+                {
+                    // Orc Guards
+                    if (m_creature->GetEntry() == 3296)
+                    {
+                        switch (uiEmote)
+                        {
+
+                            // General greeting
+                            case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 6);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Throm'ka!", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("Lok'tar!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("Lok'tar ogar!", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("Welcome, Traveler.", Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay("Don't stay to long, the path of war never ends!", Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay("Stay out of trouble.", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                            case 4: case 5: case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Salute
+                            case TEXTEMOTE_SALUTE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 6);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Strength and honor!", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("Victory and honor!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("My life for the Horde!", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("For the Warchief.", Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay("Blood and thunder!", Language::LANG_ORCISH); break; }
+                                            case 6: { break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: case 5: case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Bye
+                            case TEXTEMOTE_BYE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Don't die out there!", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("Next time you come back, me want to see scars on you!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("Always be on your guard.", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("Bring honor to the Horde!", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Joke
+                            case TEXTEMOTE_JOKE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Go away and slay some enemys! Don't waste your breath.", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("Tell your jokes someone else, i'm busy!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("BAHAHA!", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("I got no time for that! I will CRUSH and DESTROY and... uh... oooh... shiny...", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_NO); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_POINT); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Flex
+                            case TEXTEMOTE_FLEX:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("You must have fought many battles!", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("There should be more of your kind.", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("Think you strong? Me show you what strong! HAHAHA!", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("A true fighter! Good to have you on our side!", Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay("Ha! A Draenei has more muscles than you! Bahahahaaa", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_APPLAUD); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_FLEX); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                            case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Taunt
+                            case TEXTEMOTE_TAUNT:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Trust me... you no wanna start this.", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("Your weapon should break in combat!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("If i wouldn't be on duty i would snap your neck like a branch!", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("A gnome like you should not try to fight.", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Tickle
+                            case TEXTEMOTE_TICKLE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 3);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Why don't you lead an army instead of touching me!?", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("You no touch me!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("Are you done?", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
+                                            case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_ATTACKUNARMED); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+
+                        // Easteregg Poke (WC3)
+                        if (uiEmote == TEXTEMOTE_POKE)
+                        {
+                            if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                            {
+                                if (CheckEmoteCooldown())
+                                {
+                                    m_creature->MonsterSay("Poke poke poke - is that all you do?", Language::LANG_ORCISH);
+                                    m_creature->HandleEmote(EMOTE_ONESHOT_ROAR);
+                                }
+                            }
+                        }
+                    }
+
+                    // Bluffwatch
+                    if (m_creature->GetEntry() == 3084)
+                    {
+                        switch (uiEmote)
+                        {
+
+                            // General greeting
+                            case TEXTEMOTE_HAIL: case TEXTEMOTE_HELLO: case TEXTEMOTE_WAVE: case TEXTEMOTE_GREET:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 6);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Peace, friend.", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("The winds guide you.", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("How may I aid you?", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("Welcome to Thunderbluff, stay away from the cliffs!", Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay("The wind announced your arrival.", Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay("Earth Mother protects you.", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: case 5: case 6: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Salute
+                            case TEXTEMOTE_SALUTE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Ish-ne-alo Por-ah", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("May you find peace in the winds.", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("Relax a bit. We make sure to keep you safe. Well... if you stay away from the cliff.", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("Earth Mother shall keep you safe and cozzy here.", Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay("Strong as a rock and free as the wind. We protect you, Traveler.", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_SALUTE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Bye
+                            case TEXTEMOTE_BYE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 20.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 7);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Walk with the Earth Mother.", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("Winds be at your back.", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("May the eternal sun shine upon thee.", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("May the eternal sun shine upon thee.", Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay("Farewell!", Language::LANG_ORCISH); break; }
+                                            case 6: {m_creature->MonsterSay("Well met, Traveler", Language::LANG_ORCISH); break; }
+                                            case 7: {m_creature->MonsterSay("Stay victorious, Friend", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: case 5: case 6: case 7: {m_creature->HandleEmote(EMOTE_ONESHOT_WAVE); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Joke
+                            case TEXTEMOTE_JOKE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Hohohoho. You should tell that one the others!", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("I shouldn't laugh at this but... hm... hmhm.... Hoahahaha!", Language::LANG_ORCISH); break; }
+                                            case 3: {break; }
+                                            case 4: {m_creature->MonsterSay("Oh... that was a joke. Haha... ha... it wasn't that good.", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_TALK); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Flex
+                            case TEXTEMOTE_FLEX:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("And you took the lift up here? You could CLIMB up here without sweating!", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("By the Earth Mother, i feel sorry for who ever stands against you in battle!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("You call that strong? I show you what strength looks like!", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("Stop that, you make the other jealous.", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: {m_creature->HandleEmote(EMOTE_ONESHOT_APPLAUD); break; }
+                                            case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_FLEX); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Taunt
+                            case TEXTEMOTE_TAUNT:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 10.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 5);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("You know... a fall here is very deep.", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("The wind will remember your conceit!", Language::LANG_ORCISH); break; }
+                                            case 3: {m_creature->MonsterSay("Thunderbluff is a home for everyone. Don't make me do something else.", Language::LANG_ORCISH); break; }
+                                            case 4: {m_creature->MonsterSay("Moo'. Are you happy now?!", Language::LANG_ORCISH); break; }
+                                            case 5: {m_creature->MonsterSay("Ha, you make a fool of yourself.", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_RUDE); break; }
+                                            case 5: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+
+                            // Tickle
+                            case TEXTEMOTE_TICKLE:
+                            {
+                                if (m_creature->GetDistance3dToCenter(pPlayer) < 5.f)
+                                {
+                                    if (CheckEmoteCooldown())
+                                    {
+                                        const auto TextRandom = urand(1, 4);
+                                        switch (TextRandom)
+                                        {
+                                            case 1: {m_creature->MonsterSay("Hohohoho!", Language::LANG_ORCISH); break; }
+                                            case 2: {m_creature->MonsterSay("Your fingers are as fast as the wind. Hahaha!", Language::LANG_ORCISH); break; }
+                                            case 3: {break; }
+                                            case 4: {m_creature->MonsterSay("That doesn't work on me...", Language::LANG_ORCISH); break; }
+                                        }
+                                        switch (TextRandom)
+                                        {
+                                            case 1: case 2: case 3: {m_creature->HandleEmote(EMOTE_ONESHOT_LAUGH); break; }
+                                            case 4: {m_creature->HandleEmote(EMOTE_ONESHOT_NO); break; }
+                                        }
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    void Reset() {}
+};
+
+CreatureAI* GetAI_npc_guard_emote(Creature* m_creature)
+{
+    return new npc_guard_emoteAI(m_creature);
+}
 
 void AddSC_random_scripts_1()
 {
@@ -6624,6 +7590,8 @@ void AddSC_random_scripts_1()
     newscript->Name = "npc_ansirem";
     newscript->pQuestAcceptNPC = &QuestAccept_npc_ansirem;
     newscript->pQuestRewardedNPC = &QuestRewarded_npc_ansirem;
+    newscript->pGossipHello = &GossipHello_npc_ansirem;
+    newscript->pGossipSelect = &GossipSelect_npc_ansirem;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -6681,19 +7649,6 @@ void AddSC_random_scripts_1()
     newscript->pGossipHello = &GossipHello_npc_vladeus_springriver;
     newscript->pGossipSelect = &GossipSelect_npc_vladeus_springriver;
     newscript->GetAI = &GetAI_npc_vladeus_springriver;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_kixxle";
-    newscript->pGossipHello = &GossipHello_npc_kixxle;
-    newscript->pGossipSelect = &GossipSelect_npc_kixxle;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "search_for_clues";
-    newscript->pGossipHello = &GossipHello_search_for_clues;
-    newscript->pGOHello = &GOHello_search_for_clues;
-    newscript->pGOGossipSelect = &GOSelect_search_for_clues;
     newscript->RegisterSelf();
 
     newscript = new Script;
@@ -7167,4 +8122,8 @@ void AddSC_random_scripts_1()
 	newscript->pItemUseSpell = &ItemUseSpell_item_warlock_soulwell_ritual;
 	newscript->RegisterSelf();
     
+    newscript = new Script;
+    newscript->Name = "npc_guard_emote";
+    newscript->GetAI = &GetAI_npc_guard_emote;
+    newscript->RegisterSelf();
 }

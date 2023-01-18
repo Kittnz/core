@@ -86,7 +86,7 @@ struct ShopCategory
 	std::string Icon;
 };
 
-typedef std::map<uint32, ShopEntry> ShopEntriesMap;
+typedef std::unordered_map<uint32, ShopEntry> ShopEntriesMap;
 typedef std::map<uint8, ShopCategory> ShopCategoriesMap;
 
 struct BattlegroundEntranceTrigger
@@ -357,7 +357,7 @@ struct GossipMenuItems
     bool            box_coded;
     std::string     box_text;
     uint32          BoxBroadcastTextID;
-    uint16          conditionId;
+    uint32          conditionId;
 };
 
 struct GossipMenus
@@ -622,6 +622,8 @@ public:
 class PvPMaintenanceMaker;
 
 #define SHELL_COIN_BASE_PRICE 20
+#define SHELL_COIN_MAX_COUNT ((INT_MAX / SHELL_COIN_BASE_PRICE) - 1)
+#define ITEM_SHELL_COIN 81118
 
 class ObjectMgr
 {
@@ -929,6 +931,7 @@ class ObjectMgr
         void LoadConditions();
         void LoadAreaTemplate();
         void LoadAreaLocales();
+        void LoadCartographerAreas();
 		void LoadShop();
 
         void LoadNPCText();
@@ -1140,6 +1143,9 @@ class ObjectMgr
             if (itr == m_AreaLocaleMap.end()) return nullptr;
             return &itr->second;
         }
+        AreaEntry const* GetAreaEntryByName(std::string const& name) const;
+        AreaEntry const* GetAreaEntryByExploreFlag(uint32 flag) const;
+        uint32 const* GetCartographerExplorationMask() const { return m_cartographerExploreMask; }
 
         GameObjectDataPair const* GetGODataPair(uint32 guid) const
         {
@@ -1518,10 +1524,11 @@ class ObjectMgr
         void ResetOldMailCounter() { m_OldMailCounter = 0; }
         void IncrementOldMailCounter(uint32 count) { m_OldMailCounter += count; }
 
+        void LoadShellCoinCount();
         int32 GetShellCoinCount() const { return m_shellCoinCount; }
         int32 GetShellCoinSellPrice() const { return m_shellCoinCount * SHELL_COIN_BASE_PRICE; }
         int32 GetShellCoinBuyPrice() const { return (m_shellCoinCount + 1) * SHELL_COIN_BASE_PRICE; }
-        void IncreaseShellCoinCount() { if (m_shellCoinCount < ((INT_MAX / SHELL_COIN_BASE_PRICE) - 1)) m_shellCoinCount++; }
+        void IncreaseShellCoinCount() { if (m_shellCoinCount < SHELL_COIN_MAX_COUNT) m_shellCoinCount++; }
         void DecreaseShellCoinCount() { if (m_shellCoinCount > 0) m_shellCoinCount--; }
 
     protected:
@@ -1679,6 +1686,7 @@ class ObjectMgr
         GossipMenuItemsLocaleMap m_GossipMenuItemsLocaleMap;
         PointOfInterestLocaleMap m_PointOfInterestLocaleMap;
         AreaLocaleMap m_AreaLocaleMap;
+        uint32 m_cartographerExploreMask[PLAYER_EXPLORED_ZONES_SIZE];
 
         FactionsMap m_FactionsMap;
         FactionTemplatesMap m_FactionTemplatesMap;

@@ -78,6 +78,7 @@ enum CreatureFlagsExtra
     CREATURE_FLAG_EXTRA_NO_UNREACHABLE_EVADE         = 0x04000000,       // 67108864 Creature will not evade due to target being unreachable
     CREATURE_FLAG_EXTRA_APPEAR_DEAD                  = 0x08000000,       // 134217728 Creature will have UNIT_DYNFLAG_DEAD applied
     CREATURE_FLAG_EXTRA_NO_LEASH_EVADE               = 0x10000000,       // 268435456 Creature will not evade due to target running away
+    CREATURE_FLAG_EXTRA_DESPAWN_INSTANTLY            = 0x20000000,       // 536870912 CREATURE_STATIC_FLAG_DESPAWN_INSTANTLY (despawn on death)
 };
 
 // GCC have alternative #pragma pack(N) syntax and old gcc version not support pack(push,N), also any gcc version not support it at some platform
@@ -154,6 +155,7 @@ struct CreatureInfo
     uint32  spells[CREATURE_MAX_SPELLS];
     uint32  spell_list_id;
     uint32  pet_spell_list_id;
+    uint32  spawn_spell_id;
     uint32 const* auras;
     uint32  gold_min;
     uint32  gold_max;
@@ -698,7 +700,7 @@ class Creature : public Unit
         void SetDeathState(DeathState s) override;                   // overwrite virtual Unit::SetDeathState
         bool FallGround();
 
-        bool LoadFromDB(uint32 guid, Map *map);
+        bool LoadFromDB(uint32 guid, Map *map, bool force = false);
         void SaveToDB();
                                                             // overwrited in Pet
         virtual void SaveToDB(uint32 mapid);
@@ -774,8 +776,8 @@ class Creature : public Unit
         void RemoveCorpse();
         bool IsDeadByDefault() const;
 
-        void ForcedDespawn(uint32 timeMSToDespawn = 0);
-        void DespawnOrUnsummon(uint32 msTimeToDespawn = 0);
+        void ForcedDespawn(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
+        void DespawnOrUnsummon(uint32 msTimeToDespawn = 0, uint32 secsTimeToRespawn = 0);
 
         time_t const& GetRespawnTime() const { return m_respawnTime; }
         time_t GetRespawnTimeEx() const;
@@ -783,6 +785,7 @@ class Creature : public Unit
         void Respawn();
         void SaveRespawnTime() override;
         void ApplyDynamicRespawnDelay(uint32& delay, CreatureData const* data);
+        void CastSpawnSpell();
 
         uint32 GetRespawnDelay() const { return m_respawnDelay; }
         void SetRespawnDelay(uint32 delay) { m_respawnDelay = delay; }
@@ -902,6 +905,15 @@ class Creature : public Unit
         void GetSummonPoint(float &fX, float &fY, float &fZ, float &fOrient) const { fX = m_summonPos.x; fY = m_summonPos.y; fZ = m_summonPos.z; fOrient = m_summonPos.o; }
 
         void SetNoXP() { AddUnitState(UNIT_STAT_NO_KILL_REWARD); }
+        void EnableMoveInLosEvent()
+        {
+            if (HasUnitState(UNIT_STAT_NO_SEARCH_FOR_OTHERS))
+                ClearUnitState(UNIT_STAT_NO_SEARCH_FOR_OTHERS);
+            if (HasUnitState(UNIT_STAT_NO_BROADCAST_TO_OTHERS))
+                ClearUnitState(UNIT_STAT_NO_BROADCAST_TO_OTHERS);
+            if (!HasUnitState(UNIT_STAT_AI_USES_MOVE_IN_LOS))
+                AddUnitState(UNIT_STAT_AI_USES_MOVE_IN_LOS);
+        }
 
         void SetFactionTemporary(uint32 factionId, uint32 tempFactionFlags = TEMPFACTION_ALL);
         void ClearTemporaryFaction();
@@ -1083,11 +1095,12 @@ class AssistDelayEvent : public BasicEvent
 class ForcedDespawnDelayEvent : public BasicEvent
 {
     public:
-        explicit ForcedDespawnDelayEvent(Creature& owner) : BasicEvent(), m_owner(owner) { }
+        explicit ForcedDespawnDelayEvent(Creature& owner, uint32 secsTimeToRespawn = 0) : BasicEvent(), m_owner(owner), m_secsTimeToRespawn(secsTimeToRespawn) { }
         bool Execute(uint64 e_time, uint32 p_time) override;
 
     private:
         Creature& m_owner;
+        uint32 m_secsTimeToRespawn;
 };
 
 class TargetedEmoteEvent : public BasicEvent

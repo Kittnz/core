@@ -96,8 +96,7 @@ uint32 BattleGroundAV::getChallengeInvocationGoals(uint32 faction_id, uint32 cha
 
 void BattleGroundAV::initializeChallengeInvocationGoals(void)
 {
-    isSnivvle = false;
-    m_ui_Snivvle = 0;
+    m_blitzBuff = false;
     m_ui_buff_a = 120000 + urand(0,4)* 60000;
     m_ui_buff_h = 120000 + urand(0,4)* 60000;
 
@@ -812,16 +811,35 @@ DEBUG_LOG("BattleGroundAV: TeamIdx %i ", teamIdx);
 
 void BattleGroundAV::Update(uint32 diff)
 {
-    m_ui_Snivvle += diff;
-    if (m_ui_Snivvle >= 70000 && !isSnivvle)
-    {
-        SendYellToAll(791, LANG_UNIVERSAL, GetSingleCreatureGuid(BG_AV_SNIVVLE, 0));
-        isSnivvle = true;
-    }
-
-
     if (GetStatus() == STATUS_IN_PROGRESS)
     {
+        // Custom short buff for lesser faction.
+        if (!m_blitzBuff)
+        {
+            uint32 hordeCount = 0;
+            uint32 allianceCount = 0;
+
+            for (const auto& itr : m_Players)
+            {
+                switch (itr.second.PlayerTeam)
+                {
+                    case HORDE:
+                        hordeCount++;
+                        break;
+                    case ALLIANCE:
+                        allianceCount++;
+                        break;
+                }
+            }
+
+            if (hordeCount > allianceCount)
+                CastSpellOnTeam(46438, ALLIANCE);
+            else if (allianceCount > hordeCount)
+                CastSpellOnTeam(46438, HORDE);
+
+            m_blitzBuff = true;
+        }
+
         /** Horde Captain buff during battle */
         if (m_ui_buff_h < diff)
         {
@@ -1613,7 +1631,6 @@ void BattleGroundAV::Reset()
     m_ActiveEvents[BG_AV_CAPTAIN_A]           = 0;
     m_ActiveEvents[BG_AV_CAPTAIN_H]           = 0;
     m_ActiveEvents[BG_AV_HERALD]              = 0;
-    m_ActiveEvents[BG_AV_SNIVVLE]             = 0;
     m_ActiveEvents[BG_AV_BOSS_A]              = 0;
     m_ActiveEvents[BG_AV_BOSS_H]              = 0;
     m_ActiveEvents[BG_AV_LANDMINES_ALLIANCE]  = 0;
@@ -1622,6 +1639,8 @@ void BattleGroundAV::Reset()
     m_ActiveEvents[BG_AV_EXPLOSIVES_EXPERT_H] = 0;
     m_ActiveEvents[BG_AV_LIEUTENANT_A]        = 0;
     m_ActiveEvents[BG_AV_LIEUTENANT_H]        = 0;
+    m_ActiveEvents[BG_AV_RYSONS_BEACON_H]     = 0;
+    m_ActiveEvents[BG_AV_RYSONS_BEACON_A]     = 0;
 
     for (BG_AV_Nodes i = BG_AV_NODES_DUNBALDAR_SOUTH; i <= BG_AV_NODES_FROSTWOLF_WTOWER; ++i)  // towers
         m_ActiveEvents[BG_AV_COMMANDER_A_MORTIMER + i - BG_AV_NODES_DUNBALDAR_SOUTH] = 0; // Commanders are alive

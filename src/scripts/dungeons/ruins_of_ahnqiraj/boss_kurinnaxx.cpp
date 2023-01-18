@@ -26,7 +26,7 @@ EndScriptData */
 
 enum
 {
-    EMOTE_FRENZY = -1000002,
+    EMOTE_FRENZY = 10645,
 
     GO_TRAP = 180647,
 
@@ -64,6 +64,10 @@ struct boss_kurinnaxxAI : public ScriptedAI
         m_uiTrash_Timer = urand(1000, 5000);
         m_uiWideSlash_Timer = urand(10000, 15000);
         m_bHasEnraged = false;
+    }
+
+    void JustRespawned() override
+    {
         if (m_pInstance)
             m_pInstance->SetData(TYPE_KURINNAXX, NOT_STARTED);
     }

@@ -372,7 +372,8 @@ struct FactionTemplateEntry
 
         return hostileMask == 0 && friendlyMask == 0;
     }
-    bool IsContestedGuardFaction() const { return (factionFlags & FACTION_TEMPLATE_FLAG_CONTESTED_GUARD)!=0; }
+    bool IsContestedGuardFaction() const { return (factionFlags & FACTION_TEMPLATE_FLAG_ATTACK_PVP_ACTIVE_PLAYERS)!=0; }
+    bool HasFactionFlag(uint32 flag) const { return factionFlags & flag; }
 };
 
 struct GameObjectDisplayInfoEntry
@@ -600,7 +601,7 @@ struct StableSlotPricesEntry
     uint32 Price;                                           //          m_cost
 };
 
-#define MAX_TALENT_RANK 5
+constexpr std::uint8_t MAX_TALENT_RANK{ 5 };
 
 struct TalentEntry
 {

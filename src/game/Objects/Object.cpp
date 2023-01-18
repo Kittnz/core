@@ -1619,7 +1619,7 @@ bool WorldObject::IsFacingTarget(WorldObject const* target) const
     return (GetDistance2dToCenter(target) < NO_FACING_CHECKS_DISTANCE) || HasInArc(target, M_PI_F);
 }
 
-bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z) const
+bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, float &rand_x, float &rand_y, float &rand_z, bool allowStraightPath) const
 {
     if (distance < 0.1f)
     {
@@ -1657,7 +1657,7 @@ bool WorldObject::GetRandomPoint(float x, float y, float z, float distance, floa
         rand_x = x;
         rand_y = y;
         rand_z = z;
-        if (map->GetWalkRandomPosition(GetTransport(), rand_x, rand_y, rand_z, distance, moveAllowed))
+        if (map->GetWalkRandomPosition(GetTransport(), rand_x, rand_y, rand_z, distance, allowStraightPath, moveAllowed))
         {
             // Giant type creatures walk underwater
             if ((isType(TYPEMASK_UNIT) && !ToUnit()->CanSwim()) || (IsCreature() && ToCreature()->GetCreatureInfo()->type == CREATURE_TYPE_GIANT))
@@ -2081,7 +2081,7 @@ Creature *Map::SummonCreature(uint32 entry, float x, float y, float z, float ang
     return pCreature;
 }
 
-Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter)
+Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, float ang, TempSummonType spwtype, uint32 despwtime, bool asActiveObject, uint32 pacifiedTimer, CreatureAiSetter pFuncAiSetter, bool attach)
 {
     CreatureInfo const *cinfo = ObjectMgr::GetCreatureTemplate(id);
     if (!cinfo)
@@ -2091,7 +2091,7 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
     }
 
     uint32 const currentSummonCount = GetCreatureSummonCount();
-    if (currentSummonCount >= GetCreatureSummonLimit())
+    if (currentSummonCount >= GetCreatureSummonLimit() && attach)
     {
         sLog.outInfo("WorldObject::SummonCreature: %s in (map %u, instance %u) attempted to summon Creature (Entry: %u), but already has %u active summons",
             GetGuidStr().c_str(), GetMapId(), GetInstanceId(), id, currentSummonCount);
@@ -2148,7 +2148,8 @@ Creature* WorldObject::SummonCreature(uint32 id, float x, float y, float z, floa
         }
     }
 
-    IncrementSummonCounter();
+    if (attach)
+        IncrementSummonCounter();
     return pCreature;
 }
 
@@ -2612,7 +2613,7 @@ void WorldObject::DestroyForNearbyPlayers()
     }
 }
 
-Creature* WorldObject::FindNearestCreature(uint32 uiEntry, float range, bool alive, Creature const* except) const
+Creature* WorldObject::FindNearestCreature(uint32 entry, float range, bool alive, Creature const* except) const
 {
     Creature* pCreature = nullptr;
 
@@ -2620,7 +2621,7 @@ Creature* WorldObject::FindNearestCreature(uint32 uiEntry, float range, bool ali
     Cell cell(pair);
     cell.SetNoCreate();
 
-    MaNGOS::NearestCreatureEntryWithLiveStateInObjectRangeCheck creature_check(*this, uiEntry, alive, range, except);
+    MaNGOS::NearestCreatureEntryWithLiveStateInObjectRangeCheck creature_check(*this, entry, alive, range, except);
     MaNGOS::CreatureLastSearcher<MaNGOS::NearestCreatureEntryWithLiveStateInObjectRangeCheck> searcher(pCreature, creature_check);
 
     TypeContainerVisitor<MaNGOS::CreatureLastSearcher<MaNGOS::NearestCreatureEntryWithLiveStateInObjectRangeCheck>, GridTypeMapContainer> creature_searcher(searcher);
@@ -2630,10 +2631,10 @@ Creature* WorldObject::FindNearestCreature(uint32 uiEntry, float range, bool ali
     return pCreature;
 }
 
-Creature* WorldObject::FindRandomCreature(uint32 uiEntry, float range, bool alive, Creature const* except) const
+Creature* WorldObject::FindRandomCreature(uint32 entry, float range, bool alive, Creature const* except) const
 {
     std::list<Creature*> targets;
-    GetCreatureListWithEntryInGrid(targets, uiEntry, range);
+    GetCreatureListWithEntryInGrid(targets, entry, range);
 
     // remove current target
     if (except)
@@ -2664,7 +2665,7 @@ Creature* WorldObject::FindRandomCreature(uint32 uiEntry, float range, bool aliv
     return *tcIter;
 }
 
-GameObject* WorldObject::FindNearestGameObject(uint32 uiEntry, float fMaxSearchRange) const
+GameObject* WorldObject::FindNearestGameObject(uint32 entry, float range) const
 {
     GameObject* pGo = nullptr;
 
@@ -2672,21 +2673,51 @@ GameObject* WorldObject::FindNearestGameObject(uint32 uiEntry, float fMaxSearchR
     Cell cell(pair);
     cell.SetNoCreate();
 
-    MaNGOS::NearestGameObjectEntryInObjectRangeCheck go_check(*this, uiEntry, fMaxSearchRange);
+    MaNGOS::NearestGameObjectEntryInObjectRangeCheck go_check(*this, entry, range);
     MaNGOS::GameObjectLastSearcher<MaNGOS::NearestGameObjectEntryInObjectRangeCheck> searcher(pGo, go_check);
 
     TypeContainerVisitor<MaNGOS::GameObjectLastSearcher<MaNGOS::NearestGameObjectEntryInObjectRangeCheck>, GridTypeMapContainer> go_searcher(searcher);
 
-    cell.Visit(pair, go_searcher, *(GetMap()), *this, fMaxSearchRange);
+    cell.Visit(pair, go_searcher, *(GetMap()), *this, range);
 
     return pGo;
+}
+
+GameObject* WorldObject::FindRandomGameObject(uint32 entry, float range) const
+{
+    std::list<GameObject*> targets;
+    GetGameObjectListWithEntryInGrid(targets, entry, range);
+
+    for (std::list<GameObject*>::iterator tIter = targets.begin(); tIter != targets.end();)
+    {
+        if (!(*tIter)->isSpawned())
+        {
+            std::list<GameObject*>::iterator tIter2 = tIter;
+            ++tIter;
+            targets.erase(tIter2);
+        }
+        else
+            ++tIter;
+    }
+
+    // no appropriate targets
+    if (targets.empty())
+        return nullptr;
+
+    // select random
+    uint32 rIdx = urand(0, targets.size() - 1);
+    std::list<GameObject*>::const_iterator tcIter = targets.begin();
+    for (uint32 i = 0; i < rIdx; ++i)
+        ++tcIter;
+
+    return *tcIter;
 }
 
 Player* WorldObject::FindNearestPlayer(float range) const
 {
     Player* target = nullptr;
-    MaNGOS::NearestUnitCheck check(this, range);
-    MaNGOS::PlayerLastSearcher<MaNGOS::NearestUnitCheck> searcher(target, check);
+    MaNGOS::NearestAlivePlayerCheck check(this, range);
+    MaNGOS::PlayerLastSearcher<MaNGOS::NearestAlivePlayerCheck> searcher(target, check);
     Cell::VisitWorldObjects(this, searcher, range);
 
     return target;
@@ -3196,7 +3227,7 @@ Unit* WorldObject::SelectMagnetTarget(Unit *victim, Spell* spell, SpellEffectInd
         {
             if (Unit* magnet = magnetAura->GetCaster())
             {
-                if (magnet->IsAlive() && magnet->IsWithinLOSInMap(this) && spell->CheckTarget(magnet, eff))
+                if (magnet->IsAlive() && magnet->IsInMap(this) && spell->CheckTarget(magnet, eff))
                 {
                     if (SpellAuraHolder* holder = magnetAura->GetHolder())
                         if (holder->DropAuraCharge())
@@ -3251,6 +3282,22 @@ FactionTemplateEntry const* WorldObject::GetFactionTemplateEntry() const
         }
     }
     return entry;
+}
+
+FactionEntry const* WorldObject::GetFactionEntry() const
+{
+    if (FactionTemplateEntry const* pTemplate = GetFactionTemplateEntry())
+        return sObjectMgr.GetFactionEntry(pTemplate->faction);
+
+    return nullptr;
+}
+
+uint32 WorldObject::GetFactionId() const
+{
+    if (FactionTemplateEntry const* pTemplate = GetFactionTemplateEntry())
+        return pTemplate->faction;
+
+    return 0;
 }
 
 // function based on function Unit::UnitReaction from 13850 client
@@ -3331,7 +3378,7 @@ ReputationRank WorldObject::GetReactionTo(WorldObject const* target) const
                     if (targetFactionEntry->CanHaveReputation())
                     {
                         // check contested flags
-                        if (targetFactionTemplateEntry->factionFlags & FACTION_TEMPLATE_FLAG_CONTESTED_GUARD && selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
+                        if (targetFactionTemplateEntry->factionFlags & FACTION_TEMPLATE_FLAG_ATTACK_PVP_ACTIVE_PLAYERS && selfPlayerOwner->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
                             return REP_HOSTILE;
 
                         // if faction has reputation, hostile state depends only from AtWar state
@@ -3388,8 +3435,7 @@ ReputationRank WorldObject::GetFactionReactionTo(FactionTemplateEntry const* fac
         return REP_FRIENDLY;
     if (targetFactionTemplateEntry->IsFriendlyTo(*factionTemplateEntry))
         return REP_FRIENDLY;
-    if (factionTemplateEntry->factionFlags & FACTION_TEMPLATE_HOSTILE_BY_DEFAULT)
-        return REP_HOSTILE;
+
     // neutral by default
     return REP_NEUTRAL;
 }

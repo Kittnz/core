@@ -47,6 +47,9 @@ struct boss_ramstein_the_gorgerAI : public ScriptedAI
 
     void Reset() override
     {
+        if (!m_pInstance)
+            return;
+
         Trample_Timer = 3000;
         Knockout_Timer = 12000;
         if (Engaged)
@@ -56,6 +59,9 @@ struct boss_ramstein_the_gorgerAI : public ScriptedAI
 
     void Aggro(Unit *who) override
     {
+        if (!m_pInstance)
+            return;
+
         Engaged = true;
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAMSTEIN, IN_PROGRESS);
@@ -63,6 +69,8 @@ struct boss_ramstein_the_gorgerAI : public ScriptedAI
 
     void JustDied(Unit* Killer) override
     {
+        if (!m_pInstance)
+            return;
         if (m_pInstance)
             m_pInstance->SetData(TYPE_RAMSTEIN, DONE);
     }

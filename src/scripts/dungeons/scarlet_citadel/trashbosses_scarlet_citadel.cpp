@@ -21,15 +21,15 @@ public:
 
 private:
 
-    std::uint32_t m_uiLightningCloud_Timer{};
-    std::uint32_t m_uiLightningWave_Timer{};
-    std::uint32_t m_uiDrainMana_Timer{};
-    std::uint32_t m_uiEnergize_Timer{};
-    std::uint32_t m_uiRandomFightText_Timer{};
+    uint32 m_uiLightningCloud_Timer{};
+    uint32 m_uiLightningWave_Timer{};
+    uint32 m_uiDrainMana_Timer{};
+    uint32 m_uiEnergize_Timer{};
+    uint32 m_uiRandomFightText_Timer{};
 
     // Areatrigger
     bool m_bIsTrashAllowedToSpawn{};
-    std::uint32_t m_uiCheckPulse{};
+    uint32 m_uiCheckPulse{};
 
     std::vector<ObjectGuid> m_vSpawnedAdds;
 
@@ -270,7 +270,7 @@ public:
         if (m_uiRandomFightText_Timer < uiDiff)
         {
             std::string strRandomText{};
-            const std::uint32_t uiRnd{ urand(0, 3) };
+            const uint32 uiRnd{ urand(0, 3) };
             switch (uiRnd)
             {
                 case 0:
@@ -358,12 +358,12 @@ public:
 
 private:
 
-    std::uint32_t m_uiMindControl_Timer{};
-    std::uint32_t m_uiShadowVolley_Timer{};
-    std::uint32_t m_uiMindFlay_Timer{};
-    std::uint32_t m_uiImpendingDoom_Timer{};
+    uint32 m_uiMindControl_Timer{};
+    uint32 m_uiShadowVolley_Timer{};
+    uint32 m_uiMindFlay_Timer{};
+    uint32 m_uiImpendingDoom_Timer{};
 
-    std::uint32_t m_uiShadowformCheck_Timer{};
+    uint32 m_uiShadowformCheck_Timer{};
 
 public:
     void Reset() override

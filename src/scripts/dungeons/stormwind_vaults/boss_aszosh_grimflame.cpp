@@ -3,24 +3,29 @@
 
 using namespace std;
 
-struct boss_aszosh_grimbladeAI final : ScriptedAI {
-    explicit boss_aszosh_grimbladeAI(Creature *creature) : ScriptedAI(creature) {
+struct boss_aszosh_grimbladeAI final : ScriptedAI
+{
+    explicit boss_aszosh_grimbladeAI(Creature *creature) : ScriptedAI(creature)
+    {
         boss_aszosh_grimbladeAI::Reset();
     }
 
-    void Reset() override {
+    void Reset() override
+    {
         // TODO This is for debugging. SQL Patch required to fix NPC.
         me->SetMaxPower(POWER_MANA, 50000);
         me->SetPower(POWER_MANA, 50000);
 
         list<Creature *> risenLackeys;
         me->GetCreatureListWithEntryInGrid(risenLackeys, 10482, 500.f);
-        for (auto lackey: risenLackeys) {
+        for (auto lackey : risenLackeys)
+        {
             lackey->RemoveFromWorld();
         }
     }
 
-    void Aggro(Unit *) override {
+    void Aggro(Unit*) override
+    {
         _lastUpdateTick = 0;
 
         _lastMindBlastHealth = me->GetHealth();
@@ -36,22 +41,28 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI {
         me->MonsterSendTextToZone("I was amongst the first, and I will claim vengeance for Gul'dan!", CHAT_MSG_MONSTER_YELL);
     }
 
-    void JustDied(Unit *killer) override {
+    void JustDied(Unit* killer) override
+    {
         me->MonsterSendTextToZone("Your will is not your... *cough* ...own...", CHAT_MSG_MONSTER_SAY);
     }
 
-    void UpdateAI(const uint32_t diff) override {
+    void UpdateAI(const uint32_t diff) override
+    {
         _lastUpdateTick += diff;
 
-        if (!me->SelectHostileTarget() || !me->GetVictim()) {
+        if (!me->SelectHostileTarget() || !me->GetVictim())
+        {
             return;
         }
 
         _eventQueue.Update(diff);
 
-        switch (const auto nextEvent = PopEvent(); nextEvent) {
-            case eSpellCastEvents::EventCastCorruption: {
-                if (!EventCastCorruptionPredicate()) {
+        switch (const auto nextEvent = PopEvent(); nextEvent)
+        {
+            case eSpellCastEvents::EventCastCorruption:
+            {
+                if (!EventCastCorruptionPredicate())
+                {
                     _eventQueue.Repeat(Milliseconds(400));
                     break;
                 }
@@ -59,8 +70,10 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI {
                 EventCastCorruptionHandler();
                 break;
             }
-            case eSpellCastEvents::EventCastDrainLife: {
-                if (!EventCastDrainLifePredicate()) {
+            case eSpellCastEvents::EventCastDrainLife:
+            {
+                if (!EventCastDrainLifePredicate())
+                {
                     _eventQueue.Repeat(Milliseconds(400));
                     break;
                 }
@@ -68,8 +81,10 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI {
                 EventCastDrainLifeHandler();
                 break;
             }
-            case eSpellCastEvents::EventCastMindBlast: {
-                if (!EventCastMindBlastPredicate()) {
+            case eSpellCastEvents::EventCastMindBlast:
+            {
+                if (!EventCastMindBlastPredicate())
+                {
                     _eventQueue.Repeat(Milliseconds(400));
                     break;
                 }
@@ -77,8 +92,10 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI {
                 EventCastMindBlastHandler();
                 break;
             }
-            case eSpellCastEvents::EventCastRisenLackey: {
-                if (!EventCastRisenLackeyPredicate()) {
+            case eSpellCastEvents::EventCastRisenLackey:
+            {
+                if (!EventCastRisenLackeyPredicate())
+                {
                     _eventQueue.Repeat(Milliseconds(400));
                     break;
                 }
@@ -86,7 +103,8 @@ struct boss_aszosh_grimbladeAI final : ScriptedAI {
                 EventCastRisenLackeyHandler();
                 break;
             }
-            case eSpellCastEvents::EventNone: {
+            case eSpellCastEvents::EventNone:
+            {
                 DoMeleeAttackIfReady();
                 break;
             }
@@ -102,7 +120,8 @@ private:
     /**
      * \brief Contains all spell IDs for spells cast by Aszosh Grimflame.
      */
-    enum eSpellIds {
+    enum eSpellIds
+    {
         SpellRisenLackey = 17618,
         SpellMindBlast = 10947,
         SpellDrainLife = 11700,
@@ -112,7 +131,8 @@ private:
     /**
      * \brief Contains all script events for spell casts etc. for Aszosh Grimflame.
      */
-    enum class eSpellCastEvents {
+    enum class eSpellCastEvents
+    {
         EventNone,
         EventCastRisenLackey,
         EventCastMindBlast,
@@ -120,7 +140,8 @@ private:
         EventCastCorruption,
     };
 
-    enum class eDrainLifePhases {
+    enum class eDrainLifePhases
+    {
         PhaseOne,
         PhaseTwo,
         PhaseThree,
@@ -142,26 +163,32 @@ private:
      * \return The event to execute, or EventNone if no action should be taken.
      */
     [[nodiscard]]
-    eSpellCastEvents PopEvent() {
+    eSpellCastEvents PopEvent()
+    {
         // If we're popping events too quickly, return EventNone.
-        if (_lastUpdateTick - _lastEventProcessedAt < _minimumTicksBetweenEvents) {
+        if (_lastUpdateTick - _lastEventProcessedAt < _minimumTicksBetweenEvents)
+        {
             return eSpellCastEvents::EventNone;
         }
 
         const auto poppedEvent = static_cast<eSpellCastEvents>(_eventQueue.ExecuteEvent());
         // If we successfully popped an event, update the tick counter.
-        if (poppedEvent != eSpellCastEvents::EventNone) {
+        if (poppedEvent != eSpellCastEvents::EventNone)
+        {
             _lastEventProcessedAt = _lastUpdateTick;
         }
+
         return poppedEvent;
     }
 
     /**
      * \brief Event handler for the EventCastDrainLife event.
      */
-    void EventCastDrainLifeHandler() {
+    void EventCastDrainLifeHandler()
+    {
         DoCast(me->GetVictim(), SpellDrainLife);
-        switch (_drainLifePhase) {
+        switch (_drainLifePhase)
+        {
             case eDrainLifePhases::PhaseOne:
                 _drainLifePhase = eDrainLifePhases::PhaseTwo;
                 me->MonsterSendTextToZone("Your strength becomes my own!", CHAT_MSG_MONSTER_YELL);
@@ -178,7 +205,8 @@ private:
                 break;
         }
 
-        if (_drainLifePhase != eDrainLifePhases::Finished) {
+        if (_drainLifePhase != eDrainLifePhases::Finished)
+        {
             _eventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellCastEvents::EventCastDrainLife), Milliseconds(400));
         }
     }
@@ -188,12 +216,15 @@ private:
      * \return True if the event handler should fire, false if we should requeue the event.
      */
     [[nodiscard]]
-    bool EventCastDrainLifePredicate() const {
-        if (me->IsNonMeleeSpellCasted()) {
+    bool EventCastDrainLifePredicate() const
+    {
+        if (me->IsNonMeleeSpellCasted())
+        {
             return false;
         }
 
-        switch (_drainLifePhase) {
+        switch (_drainLifePhase)
+        {
             case eDrainLifePhases::PhaseOne:
                 return me->GetHealthPercent() <= 80;
             case eDrainLifePhases::PhaseTwo:
@@ -210,9 +241,15 @@ private:
     /**
      * \brief Event handler for the EventCastMindBlast event.
      */
-    void EventCastMindBlastHandler() {
+    void EventCastMindBlastHandler()
+    {
         DoCast(me->GetVictim(), SpellMindBlast);
-        me->MonsterSendTextToZone("Your own mind shall become your enemy.", CHAT_MSG_MONSTER_YELL);
+
+        if (urand(0, 1))
+        {
+            me->MonsterSendTextToZone("Your own mind shall become your enemy.", CHAT_MSG_MONSTER_YELL);
+        }
+
         _lastMindBlastHealth = me->GetHealth();
         _eventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellCastEvents::EventCastMindBlast), Milliseconds(400));
     }
@@ -222,8 +259,10 @@ private:
      * @return True if the event handler should fire, false if we should requeue the event.
      */
     [[nodiscard]]
-    bool EventCastMindBlastPredicate() const {
-        if (me->IsNonMeleeSpellCasted()) {
+    bool EventCastMindBlastPredicate() const
+    {
+        if (me->IsNonMeleeSpellCasted())
+        {
             return false;
         }
 
@@ -234,15 +273,22 @@ private:
     /**
      * @brief Event handler for the EventCastCorruption event.
      */
-    void EventCastCorruptionHandler() {
+    void EventCastCorruptionHandler()
+    {
         const auto victim = me->GetNearestVictimInRange(0.f, 40.f, false);
-        if (victim == nullptr) {
+        if (victim == nullptr)
+        {
             _eventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellCastEvents::EventCastCorruption), Milliseconds(400));
             return;
         }
 
         DoCast(victim, SpellCorruption);
-        me->MonsterSendTextToZone("Feel your blood boil.", CHAT_MSG_MONSTER_YELL);
+        
+        if (urand(0, 1))
+        {
+            me->MonsterSendTextToZone("Feel your blood boil.", CHAT_MSG_MONSTER_YELL);
+        }
+
         _eventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellCastEvents::EventCastCorruption), Seconds(30));
     }
 
@@ -251,16 +297,23 @@ private:
      * @return True if the event handler should fire, false if we should requeue the event.
      */
     [[nodiscard]]
-    bool EventCastCorruptionPredicate() const {
+    bool EventCastCorruptionPredicate() const
+    {
         return !me->IsNonMeleeSpellCasted();
     }
 
     /**
      * @brief Event handler for the EventCastRisenLackey event.
      */
-    void EventCastRisenLackeyHandler() {
+    void EventCastRisenLackeyHandler()
+    {
         DoCast(me, SpellRisenLackey);
-        me->MonsterSendTextToZone("Rise bones of misery and serve your new master!", CHAT_MSG_MONSTER_YELL);
+
+        if (urand(0, 1))
+        {
+            me->MonsterSendTextToZone("Rise bones of misery and serve your new master!", CHAT_MSG_MONSTER_YELL);
+        }
+
         _eventQueue.ScheduleEvent(static_cast<uint32_t>(eSpellCastEvents::EventCastRisenLackey), Milliseconds(400));
     }
 
@@ -269,15 +322,19 @@ private:
      * @return True if the event handler should fire, false if we should requeue the event.
      */
     [[nodiscard]]
-    bool EventCastRisenLackeyPredicate() const {
-        if (me->IsNonMeleeSpellCasted()) {
+    bool EventCastRisenLackeyPredicate() const
+    {
+        if (me->IsNonMeleeSpellCasted())
+        {
             return false;
         }
 
         list<Creature *> risenLackeys;
         me->GetCreatureListWithEntryInGrid(risenLackeys, 10482, 500.f);
-        for (auto lackey: risenLackeys) {
-            if (lackey->IsAlive()) {
+        for (auto lackey: risenLackeys)
+        {
+            if (lackey->IsAlive())
+            {
                 return false;
             }
         }
@@ -286,12 +343,14 @@ private:
     }
 };
 
-CreatureAI *GetAI_boss_aszosh_grimblade(Creature *creature) {
+CreatureAI *GetAI_boss_aszosh_grimblade(Creature* creature)
+{
     return new boss_aszosh_grimbladeAI(creature);
 }
 
-void AddSC_boss_aszosh_grimflame() {
-    Script *newscript = new Script;
+void AddSC_boss_aszosh_grimflame()
+{
+    Script* newscript = new Script;
     newscript->Name = "boss_aszosh_grimflame";
     newscript->GetAI = &GetAI_boss_aszosh_grimblade;
     newscript->RegisterSelf();

@@ -91,7 +91,8 @@ enum WorldTimers
     WUPDATE_SAVE_VAR    = 4,
     WUPDATE_GROUPS      = 5,
     WUPDATE_CENSUS      = 6,
-    WUPDATE_COUNT       = 7
+    WUPDATE_SHELLCOIN   = 7,
+    WUPDATE_COUNT       = 8
 };
 
 /// Configuration elements
@@ -354,6 +355,7 @@ enum eConfigUInt32Values
     CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY,
     CONFIG_UINT32_CHAT_MIN_LEVEL,
     CONFIG_UINT32_AUTO_COMMIT_MINUTES,
+    CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS,
     CONFIG_UINT32_VALUE_COUNT
 };
 
@@ -458,7 +460,12 @@ enum eConfigFloatValues
     CONFIG_FLOAT_TRANSMOG_REQ_MONEY_RATE,
     CONFIG_FLOAT_AC_MOVEMENT_CHEAT_TELEPORT_DISTANCE,
     CONFIG_FLOAT_AC_MOVEMENT_CHEAT_WALL_CLIMB_ANGLE,
-    CONFIG_BOOL_ANNIVERSARY,
+    CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AV,
+    CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_WS,
+    CONFIG_FLOAT_BATTLEGROUND_REPUTATION_RATE_AB,
+    CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AV,
+    CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_WS,
+    CONFIG_FLOAT_BATTLEGROUND_HONOR_RATE_AB,
     CONFIG_FLOAT_VALUE_COUNT
 };
 
@@ -607,6 +614,7 @@ enum eConfigBoolValues
     CONFIG_BOOL_PTR,
     CONFIG_BOOL_GM_START_ON_GM_ISLAND,
     CONFIG_BOOL_ITEM_LOG_RESTORE_QUEST_ITEMS,
+    CONFIG_BOOL_ANNIVERSARY,
     CONFIG_BOOL_VALUE_COUNT
 };
 
@@ -749,11 +757,39 @@ struct MigrationFile
     bool HasChanges() const { return hasChanges; }
 };
 
+struct AccountCacheData
+{
+    uint32 id;
+    std::string username;
+    std::string email;
+};
+
+
+class AccountDataWrapper
+{
+public:
+    AccountDataWrapper(AccountCacheData* data) : m_data(data) {}
+    AccountDataWrapper(const AccountDataWrapper&) = delete;
+    AccountDataWrapper(AccountDataWrapper&&) = delete;
+
+    ~AccountDataWrapper();
+
+
+    AccountCacheData* operator->()
+    {
+        return m_data;
+    }
+private:
+    AccountCacheData* m_data;
+};
+
 /// The World
 class World
 {
     public:
         static volatile uint32 m_worldLoopCounter;
+
+        friend class AccountDataWrapper;
 
         World();
         ~World();
@@ -997,6 +1033,9 @@ class World
         uint32 GetMinChatLevel() const { return m_minChatLevel; }
         void SetMinChatLevel(uint32 minLevel) { m_minChatLevel = minLevel; }
 
+        void LoadAccountData();
+
+
         /**
          * Async tasks, allow safe access to sessions (but not players themselves)
          * The tasks will be executed *while* maps are updated. So don't touch the mobs, pets, etc ...
@@ -1022,6 +1061,26 @@ class World
 
         // Invalidate player name, player guild info/roster and refresh some UI elements
         void InvalidatePlayerDataToAllClients(ObjectGuid guid);
+
+        // Shell Coin
+        void AddShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.insert(guid); }
+        void RemoveShellCoinOwner(ObjectGuid guid) { std::unique_lock<std::mutex> l{ m_shellcoinLock }; m_shellCoinOwners.erase(guid); }
+
+        //non-modifiable
+        const AccountCacheData* FindAccountData(uint32 accountId) const
+        {
+            auto itr = m_accountData.find(accountId);
+            if (itr != m_accountData.end())
+                return &itr->second;
+
+            return nullptr;
+        }
+
+        //modifiable and wrapped for proper lookup names
+        AccountDataWrapper GetAccountData(uint32 accountId)
+        {
+            return &m_accountData[accountId];
+        }
 
         // DBCache operations (Deny, Invalidate) - use for clear cache data only(!!!) at loading character before loading UI
         void SendSingleItemInvalidate(uint32 entry, WorldSession* self = nullptr);
@@ -1082,7 +1141,9 @@ class World
         uint32 m_gameDay;
         int32  m_timeZoneOffset;
         IntervalTimer m_timers[WUPDATE_COUNT];
-
+        int32 m_lastShellCoinPrice = 0;
+        ObjectGuidSet m_shellCoinOwners;
+        std::mutex m_shellcoinLock;
 
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;
@@ -1129,6 +1190,9 @@ class World
 
         // CLI command holder to be thread safe
         LockedQueue<CliCommandHolder*,std::mutex> cliCmdQueue;
+
+        std::unordered_map<uint32, AccountCacheData> m_accountData;
+        std::unordered_map<std::string, std::reference_wrapper<const AccountCacheData>> m_accountDataLookup; // lookup of above contained through username.
 
         //Player Queue
         Queue m_QueuedSessions;

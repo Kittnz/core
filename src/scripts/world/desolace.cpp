@@ -65,7 +65,7 @@ struct npc_aged_dying_ancient_kodoAI : ScriptedAI
 
     void Reset() override
     {
-
+        m_creature->EnableMoveInLosEvent();
     }
 
     void ResetCreature() override
@@ -102,8 +102,12 @@ struct npc_aged_dying_ancient_kodoAI : ScriptedAI
         }
     }
 
-    void SpellHit(Unit* pCaster, SpellEntry const* pSpell) override
+    void SpellHit(WorldObject* pCaster, SpellEntry const* pSpell) override
     {
+        Unit* pUnitCaster = ToUnit(pCaster);
+        if (!pUnitCaster)
+            return;
+
         if (pSpell->Id == SPELL_KODO_KOMBO_GOSSIP)
         {
             m_creature->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
@@ -113,20 +117,20 @@ struct npc_aged_dying_ancient_kodoAI : ScriptedAI
             return;
         }
         
-        if (pSpell->Id == SPELL_KODO_KOMBO_ITEM && !m_creature->HasAura(SPELL_KODO_KOMBO_DESPAWN_BUFF) && !pCaster->HasAura(SPELL_KODO_KOMBO_PLAYER_BUFF))
+        if (pSpell->Id == SPELL_KODO_KOMBO_ITEM && !m_creature->HasAura(SPELL_KODO_KOMBO_DESPAWN_BUFF) && !pUnitCaster->HasAura(SPELL_KODO_KOMBO_PLAYER_BUFF))
         {          
-            pCaster->CombatStop(true);
+            pUnitCaster->CombatStop(true);
             m_creature->CombatStop(true);
 
-            pCaster->CastSpell(pCaster, SPELL_KODO_KOMBO_PLAYER_BUFF, true);
+            pUnitCaster->CastSpell(pUnitCaster, SPELL_KODO_KOMBO_PLAYER_BUFF, true);
 
             m_creature->UpdateEntry(NPC_TAMED_KODO);
             m_creature->CastSpell(m_creature, SPELL_KODO_KOMBO_DESPAWN_BUFF, true);
 
             m_creature->GetMotionMaster()->Clear();
-            m_creature->GetMotionMaster()->MoveFollow(pCaster, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+            m_creature->GetMotionMaster()->MoveFollow(pUnitCaster, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
 
-            m_playerGuid = pCaster->ToPlayer()->GetObjectGuid();
+            m_playerGuid = pUnitCaster->ToPlayer()->GetObjectGuid();
 
             return;
         }
@@ -946,7 +950,7 @@ struct npc_cork_gizeltonAI : npc_escortAI
 
         for (uint8 i = 0; i < 5; ++i)
         {
-            if (m_creature->GetMap()->GetWalkRandomPosition(nullptr, x, y, z, 20.0f, NAV_GROUND))
+            if (m_creature->GetMap()->GetWalkRandomPosition(nullptr, x, y, z, 20.0f, false, NAV_GROUND))
                 break;
         }
 

@@ -171,7 +171,7 @@ bool GossipSelect_npc_lady_sylvanas_windrunner(Player* pPlayer, Creature* pCreat
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_IMMUNE_TO_NPC);
+        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING | UNIT_FLAG_IMMUNE_TO_NPC);
         pCreature->MonsterSayToPlayer("What manner of buffoonery is this?", pPlayer);
         if (pPlayer->HasItemCount(83020, 1, false))
         {
@@ -195,7 +195,7 @@ bool GossipSelect_npc_lady_sylvanas_windrunner(Player* pPlayer, Creature* pCreat
             c->HandleEmote(EMOTE_ONESHOT_TALK);
             player->AddItem(83024, 1);
             c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
+            c->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
             });
     }
     pPlayer->CLOSE_GOSSIP_MENU();

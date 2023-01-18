@@ -406,7 +406,7 @@ class Unit : public WorldObject
         void SetCreateResistance(SpellSchools school, int32 val) { m_createResistances[school] = val; }
         void SetResistance(SpellSchools school, int32 val) { SetInt32Value(UNIT_FIELD_RESISTANCES + school, val); }
         float GetRegenHPPerSpirit() const;
-        float GetRegenMPPerSpirit() const;
+        
     public:
         // Data
         float m_modMeleeHitChance;
@@ -417,6 +417,7 @@ class Unit : public WorldObject
         float m_modAttackSpeedPct[3];
         float m_modRecalcDamagePct[3];
 
+        float GetRegenMPPerSpirit() const;
         float GetCreateStat(Stats stat) const { return m_createStats[stat]; }
         uint32 GetCreateHealth() const { return GetUInt32Value(UNIT_FIELD_BASE_HEALTH); }
         uint32 GetCreateMana() const { return GetUInt32Value(UNIT_FIELD_BASE_MANA); }
@@ -726,8 +727,7 @@ class Unit : public WorldObject
         AuraList m_deletedAuras;                                       // auras removed while in ApplyModifier and waiting deleted
         SpellAuraHolderList m_deletedHolders;
         SingleCastSpellTargetMap m_singleCastSpellTargets;  // casted by unit single per-caster auras
-        typedef std::list<GameObject*> GameObjectList;
-        GameObjectList m_gameObj;
+        ObjectGuidSet m_spellGameObjects;
         AuraList m_modAuras[TOTAL_AURAS];
         uint32 m_lastManaUseSpellId;
         uint32 m_lastManaUseTimer;
@@ -1298,7 +1298,7 @@ class Unit : public WorldObject
         ObjectGuid m_possessorGuid; // Guid of unit possessing this one
     public:
         uint32 GetFactionTemplateId() const final { return GetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE); }
-        void SetFactionTemplateId(uint32 faction) { SetUInt32Value(UNIT_FIELD_FACTIONTEMPLATE, faction); }
+        void SetFactionTemplateId(uint32 faction);
         void RestoreFaction();
 
         bool IsHostileTo(WorldObject const* target) const override;
@@ -1329,6 +1329,7 @@ class Unit : public WorldObject
 
         CharmInfo* GetCharmInfo() const { return m_charmInfo; }
         CharmInfo* InitCharmInfo(Unit* charm);
+        void HandlePetCommand(CommandStates command, Unit* pTarget);
 
         Unit* GetOwner() const;
         Creature* GetOwnerCreature() const;
@@ -1378,6 +1379,7 @@ class Unit : public WorldObject
             return GetObjectGuid();
         }
         Player* GetCharmerOrOwnerPlayerOrPlayerItself() const;
+        Player* GetCharmerOrOwnerPlayer() const;
         Unit* GetCharmerOrOwner() const { return GetCharmerGuid() ? GetCharmer() : GetOwner(); }
         Unit* GetCharmerOrOwnerOrSelf()
         {

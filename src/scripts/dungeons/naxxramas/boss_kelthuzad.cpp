@@ -271,10 +271,14 @@ struct kt_p1AddAI : public ScriptedAI
         }
     }
 
-    void SpellHit(Unit* unit, const SpellEntry*) override 
+    void SpellHit(WorldObject* pCaster, const SpellEntry*) override
     {
+        Unit* pUnitCaster = ToUnit(pCaster);
+        if (!pUnitCaster)
+            return;
+
         if(!hasAggroed)
-            ActualAttack(unit);
+            ActualAttack(pUnitCaster);
     }
 };
 
@@ -326,7 +330,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         hasPutInCombat = false;
 
         m_creature->RemoveAurasDueToSpell(SPELL_VISUAL_CHANNEL);
-        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE|UNIT_FLAG_NOT_SELECTABLE);
+        m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING|UNIT_FLAG_NOT_SELECTABLE);
 
         EvadeAllGuardians();
 
@@ -378,14 +382,14 @@ struct boss_kelthuzadAI : public ScriptedAI
 
     void AttackStart(Unit* who) override
     {
-        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING))
             return;
         ScriptedAI::AttackStart(who);
     }
 
     void Aggro(Unit* pWho) override
     {
-        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING))
             return;
 
         m_creature->SetInCombatWithZone();
@@ -605,7 +609,7 @@ struct boss_kelthuzadAI : public ScriptedAI
                 events.ScheduleEvent(EVENT_FROST_BLAST,      Seconds(50));
                 events.ScheduleEvent(EVENT_CHAINS,           Seconds(60));
                 m_creature->RemoveAurasDueToSpell(SPELL_VISUAL_CHANNEL);
-                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE);
+                m_creature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_SELECTABLE);
                 //m_creature->CastStop();
                 m_creature->InterruptNonMeleeSpells(true);
                 
@@ -875,7 +879,7 @@ struct boss_kelthuzadAI : public ScriptedAI
         if (hasPutInCombat)
         {
             // won't have a victim if we are in p1, even if selectHostileTarget returns true, so check that before return
-            if (!m_creature->SelectHostileTarget() || (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE) && !m_creature->GetVictim()))
+            if (!m_creature->SelectHostileTarget() || (!m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING) && !m_creature->GetVictim()))
                 return;
         }
         
@@ -894,7 +898,7 @@ struct boss_kelthuzadAI : public ScriptedAI
 
         events.Update(diff);
 
-        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE))
+        if (m_creature->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING))
             UpdateP1(diff);
         else
         {
@@ -1026,7 +1030,7 @@ struct mob_guardian_icecrownAI : public ScriptedAI
             pC->RemoveAurasDueToSpell(10955);
     }
 
-    void SpellHit(Unit*, const SpellEntry* spell) override 
+    void SpellHit(WorldObject*, const SpellEntry* spell) override 
     {
         // if hit by any shackle spell we check how many other guardians are shackled.
         // If more than 3, we release everyone.
