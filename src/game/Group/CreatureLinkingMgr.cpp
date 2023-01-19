@@ -39,6 +39,7 @@
 #include "SharedDefines.h"
 #include "Creature.h"
 #include "CreatureAI.h"
+#include "Geometry.h"
 
 INSTANTIATE_SINGLETON_1(CreatureLinkingMgr);
 
@@ -421,9 +422,12 @@ void CreatureLinkingHolder::DoCreatureLinkingEvent(CreatureLinkingEvent eventTyp
                 BossGuidMapBounds finds = m_masterGuid.equal_range(pInfo->masterId);
                 for (BossGuidMap::const_iterator itr = finds.first; itr != finds.second; ++itr)
                 {
-                    pMaster = pSource->GetMap()->GetCreature(itr->second);
-                    if (pMaster && IsSlaveInRangeOfBoss(pSource, pMaster, pInfo->searchRange))
+                    Creature* master = pSource->GetMap()->GetCreature(itr->second);
+                    if (master && IsSlaveInRangeOfMaster(pSource, master, pInfo->searchRange))
+                    {
+                        pMaster = master;
                         break;
+                    }
                 }
             }
             else                                            // guid case
@@ -486,7 +490,7 @@ void CreatureLinkingHolder::ProcessSlaveGuidList(CreatureLinkingEvent eventType,
             continue;
 
         // Handle single slave
-        if (IsSlaveInRangeOfBoss(pSlave, pSource, searchRange))
+        if (IsSlaveInRangeOfMaster(pSlave, pSource, searchRange))
             ProcessSlave(eventType, pSource, flag, pSlave, pEnemy);
     }
 }
@@ -580,32 +584,29 @@ void CreatureLinkingHolder::SetFollowing(Creature* pWho, Creature* pWhom) const
 }
 
 // Function to check if a slave belongs to a boss by range-issue
-bool CreatureLinkingHolder::IsSlaveInRangeOfBoss(Creature const* pSlave, Creature const* pBoss, uint16 searchRange) const
+bool CreatureLinkingHolder::IsSlaveInRangeOfMaster(Creature const* pSlave, Creature const* pBoss, uint16 searchRange) const
 {
     float sX, sY, sZ;
     pSlave->GetRespawnCoord(sX, sY, sZ);
-    return IsSlaveInRangeOfBoss(pBoss, sX, sY, searchRange);
+    return IsSlaveInRangeOfMaster(pBoss, sX, sY, sZ, searchRange);
 }
-bool CreatureLinkingHolder::IsSlaveInRangeOfBoss(Creature const* pBoss, float sX, float sY, uint16 searchRange) const
+bool CreatureLinkingHolder::IsSlaveInRangeOfMaster(Creature const* pBoss, float sX, float sY, float sZ, uint16 searchRange) const
 {
     if (!searchRange)
         return true;
 
     // Do some calculations
-    float mX, mY, mZ, dx, dy;
+    float mX, mY, mZ;
     pBoss->GetRespawnCoord(mX, mY, mZ);
 
-    dx = sX - mX;
-    dy = sY - mY;
-
-    return dx * dx + dy * dy < searchRange * searchRange;
+    return Geometry::GetDistance3D(mX, mY, mZ, sX, sY, sZ) <= searchRange;
 }
 
 // helper function to check if a lowguid can respawn
 bool CreatureLinkingHolder::IsRespawnReady(uint32 dbLowGuid, Map* _map) const
 {
     time_t respawnTime = _map->GetPersistentState()->GetCreatureRespawnTime(dbLowGuid);
-    return (!respawnTime || respawnTime <= time(nullptr)) && CanSpawn(dbLowGuid, _map, nullptr, 0.0f, 0.0f);
+    return (!respawnTime || respawnTime <= time(nullptr)) && CanSpawn(dbLowGuid, _map, nullptr, 0.0f, 0.0f, 0.0f);
 }
 
 // Function to check if a passive spawning condition is met
@@ -617,7 +618,7 @@ bool CreatureLinkingHolder::CanSpawn(Creature* pCreature) const
 
     float sx, sy, sz;
     pCreature->GetRespawnCoord(sx, sy, sz);
-    return CanSpawn(0, pCreature->GetMap(), pInfo, sx, sy);
+    return CanSpawn(0, pCreature->GetMap(), pInfo, sx, sy, sz);
 }
 
 /** Worker function to check if a spawning condition is met
@@ -630,7 +631,7 @@ bool CreatureLinkingHolder::CanSpawn(Creature* pCreature) const
 *  @param pInfo (only shipped in case of initial use) -- used as marker of first use, also in first use filled directly
 *  @param sx, sy (spawn position of the checked npc with initial use)
 */
-bool CreatureLinkingHolder::CanSpawn(uint32 lowGuid, Map* _map, CreatureLinkingInfo const*  pInfo, float sx, float sy) const
+bool CreatureLinkingHolder::CanSpawn(uint32 lowGuid, Map* _map, CreatureLinkingInfo const*  pInfo, float sx, float sy, float sz) const
 {
     if (!pInfo)                                             // Prepare data for recursive use
     {
@@ -648,6 +649,7 @@ bool CreatureLinkingHolder::CanSpawn(uint32 lowGuid, Map* _map, CreatureLinkingI
 
         sx = data->position.x; // Fill position data
         sy = data->position.y;
+        sz = data->position.z;
     }
 
     if (pInfo->searchRange == 0)                            // Map wide case
@@ -668,7 +670,7 @@ bool CreatureLinkingHolder::CanSpawn(uint32 lowGuid, Map* _map, CreatureLinkingI
     for (BossGuidMap::const_iterator itr = finds.first; itr != finds.second; ++itr)
     {
         Creature* pMaster = _map->GetCreature(itr->second);
-        if (pMaster && IsSlaveInRangeOfBoss(pMaster, sx, sy, pInfo->searchRange))
+        if (pMaster && IsSlaveInRangeOfMaster(pMaster, sx, sy, sz, pInfo->searchRange))
         {
             if (pInfo->linkingFlag & FLAG_CANT_SPAWN_IF_BOSS_DEAD)
                 return pMaster->IsAlive();
@@ -696,7 +698,7 @@ bool CreatureLinkingHolder::TryFollowMaster(Creature* pCreature)
         for (BossGuidMap::const_iterator itr = finds.first; itr != finds.second; ++itr)
         {
             pMaster = pCreature->GetMap()->GetCreature(itr->second);
-            if (pMaster && IsSlaveInRangeOfBoss(pCreature, pMaster, pInfo->searchRange))
+            if (pMaster && IsSlaveInRangeOfMaster(pCreature, pMaster, pInfo->searchRange))
                 break;
         }
     }
