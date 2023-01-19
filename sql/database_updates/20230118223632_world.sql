@@ -8,8 +8,8 @@ REPLACE INTO `player_factionchange_reputations` (`alliance_id`, `horde_id`) VALU
 (269, 893), -- Silvermoon Remnant <> Revantusk Trolls
 (509, 510), -- League of Arathor <> The Defilers
 (730, 729), -- Stormpike Guard <> Frostwolf Clan
-(890, 889); -- Silverwing Sentinels <> Warsong Outriders
-
+(890, 889), -- Silverwing Sentinels <> Warsong Outriders
+(1001, 471); -- Durotar Labor Union <> Wildhammer Clan
 
 -- 47	Ironforge
 -- 54	Gnomeregan Exiles
