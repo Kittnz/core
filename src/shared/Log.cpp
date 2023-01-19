@@ -290,32 +290,32 @@ void Log::Initialize()
         }
     }
 
-    dberLogfile = openLogFile("DBErrorLogFile", nullptr, "a");
-    worldLogfile = openLogFile("WorldLogFile", "WorldLogTimestamp", "a");
-    nostalriusLogFile = openLogFile("NostalriusLogFile", "NostalriusLogTimestamp", "a");
-    honorLogfile = openLogFile("HonorLogFile", "HonorLogTimestamp", "a");
-    wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a");
-    anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a");
-    discordLogFile = openLogFile("DiscordLogFile", "DiscordLogTimestamp", "a");
-    logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a");
-    logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a");
-    logFiles[LOG_CHAR] = openLogFile("CharLogFile", "CharLogTimestamp", "a");
-    logFiles[LOG_RA] = openLogFile("RaLogFile", nullptr, "a");
+    dberLogfile = openLogFile("DBErrorLogFile", nullptr, "a+");
+    worldLogfile = openLogFile("WorldLogFile", "WorldLogTimestamp", "a+");
+    nostalriusLogFile = openLogFile("NostalriusLogFile", "NostalriusLogTimestamp", "a+");
+    honorLogfile = openLogFile("HonorLogFile", "HonorLogTimestamp", "a+");
+    wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a+");
+    anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a+");
+    discordLogFile = openLogFile("DiscordLogFile", "DiscordLogTimestamp", "a+");
+    logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a+");
+    logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a+");
+    logFiles[LOG_CHAR] = openLogFile("CharLogFile", "CharLogTimestamp", "a+");
+    logFiles[LOG_RA] = openLogFile("RaLogFile", nullptr, "a+");
     logFiles[LOG_DBERRFIX] = openLogFile("DBErrorFixFile", nullptr, "w+");
-    logFiles[LOG_CLIENT_IDS] = openLogFile("ClientIdsLogFile", nullptr, "a");
-    logFiles[LOG_LOOTS] = openLogFile("LootsLogFile", nullptr, "a");
-    logFiles[LOG_RARELOOTS] = openLogFile("RareLootsLogFile", nullptr, "a");
-    logFiles[LOG_LEVELUP] = openLogFile("LevelupLogFile", nullptr, "a");
-    logFiles[LOG_PERFORMANCE] = openLogFile("PerformanceLog.File", nullptr, "a");
-    logFiles[LOG_MONEY_TRADES] = openLogFile("LogMoneyTrades", nullptr, "a");
-    logFiles[LOG_ANTICHEAT_DEBUG] = openLogFile("AnticheatDebugLogFile", nullptr, "a");
-    logFiles[LOG_ANTICHEAT_BASIC] = openLogFile("AnticheatLogFile", nullptr, "a");
-    logFiles[LOG_MAIL_AH] = openLogFile("LogMailAH", nullptr, "a");
-    logFiles[LOG_GM_CRITICAL] = openLogFile("CriticalCommandsLogFile", nullptr, "a");
-    logFiles[LOG_CHAT_SPAM] = openLogFile("ChatSpamLogFile", nullptr, "a");
-    logFiles[LOG_EXPLOITS] = openLogFile("ExploitsLogFile", nullptr, "a");
-    logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a");
-    logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a");
+    logFiles[LOG_CLIENT_IDS] = openLogFile("ClientIdsLogFile", nullptr, "a+");
+    logFiles[LOG_LOOTS] = openLogFile("LootsLogFile", nullptr, "a+");
+    logFiles[LOG_RARELOOTS] = openLogFile("RareLootsLogFile", nullptr, "a+");
+    logFiles[LOG_LEVELUP] = openLogFile("LevelupLogFile", nullptr, "a+");
+    logFiles[LOG_PERFORMANCE] = openLogFile("PerformanceLog.File", nullptr, "a+");
+    logFiles[LOG_MONEY_TRADES] = openLogFile("LogMoneyTrades", nullptr, "a+");
+    logFiles[LOG_ANTICHEAT_DEBUG] = openLogFile("AnticheatDebugLogFile", nullptr, "a+");
+    logFiles[LOG_ANTICHEAT_BASIC] = openLogFile("AnticheatLogFile", nullptr, "a+");
+    logFiles[LOG_MAIL_AH] = openLogFile("LogMailAH", nullptr, "a+");
+    logFiles[LOG_GM_CRITICAL] = openLogFile("CriticalCommandsLogFile", nullptr, "a+");
+    logFiles[LOG_CHAT_SPAM] = openLogFile("ChatSpamLogFile", nullptr, "a+");
+    logFiles[LOG_EXPLOITS] = openLogFile("ExploitsLogFile", nullptr, "a+");
+    logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a+");
+    logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a+");
 
     timestampPrefix[LOG_DBERRFIX] = false;
 

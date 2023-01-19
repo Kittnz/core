@@ -125,9 +125,17 @@ enum LogType
 
 int const Color_count = int(WHITE)+1;
 
+namespace DiscordBot
+{
+    class GMCommandHandler;
+}
+
 class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::mutex> >
 {
     friend class MaNGOS::OperatorNew<Log>;
+
+    friend class DiscordBot::GMCommandHandler;
+
     Log();
 
     ~Log()

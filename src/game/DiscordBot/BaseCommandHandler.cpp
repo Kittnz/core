@@ -27,6 +27,9 @@ namespace DiscordBot
     void BaseCommandHandler::Register(const std::string& command, const parameter_registration_t& parameters,
         command_handler handler, const std::string& description, snowflake guild_id)
     {
+        if (guild_id.empty())
+            guild_id = 464719606632808469; // twow staff server ID by default.
+
         _commandHandler->add_command(command, parameters, std::move(handler), description, guild_id);
 
         auto itr = _commandLinks.find(command);
