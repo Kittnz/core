@@ -2,6 +2,7 @@
 #include "Bot.hpp"
 #include "World.h"
 #include "AuthManager.hpp"
+#include "Log.h"
 
 namespace DiscordBot
 {
@@ -23,6 +24,13 @@ namespace DiscordBot
 			"Executes a server command");
 
 
+        Register("logs",
+            {
+                {"logtype", dpp::param_info(dpp::pt_integer, false, "Type of logs to read.")},
+                {"chars", dpp::param_info(dpp::pt_integer, false, "Number of chars to read.")}
+            },
+            MakeCommandHandler(&GMCommandHandler::LogCommand),
+            "Shows logs");
 
         _commHandler = &registrar;
     }
@@ -49,6 +57,38 @@ namespace DiscordBot
 
         CliCommandHolder* cmd = new CliCommandHolder(authinfo->gameAccountId, (AccountTypes)authinfo->securityLevel, std::make_pair(this, src), commandParam.c_str(), &CommandPrint, &CommandFinished);
         sWorld.QueueCliCommand(cmd);
+    }
+
+    void GMCommandHandler::LogCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src)
+    {
+        auto authinfo = AuthManager::Instance()->GetAuthInfo(&src.issuer);
+        if (!authinfo)
+            return;
+
+        if (authinfo->securityLevel < SEC_DEVELOPER)
+            return;
+
+        if (parameters.empty())
+            return;
+
+        int64_t logType = std::get<int64_t>(parameters[0].second);
+        int64_t numChars = std::get<int64_t>(parameters[1].second);
+
+        auto logfile = sLog.logFiles[logType];
+
+        if (!logfile)
+            return;
+
+        int streamPos = ftell(logfile);
+
+        fseek(logfile, 0, SEEK_SET);
+
+        std::vector<char> buff;
+        buff.resize(numChars);
+        fread(buff.data(), sizeof(char), numChars, logfile);
+        fseek(logfile, streamPos, SEEK_SET);
+
+        _commHandler->reply(dpp::message(std::string(buff.begin(), buff.end())), src);
     }
 
 

@@ -19,6 +19,7 @@ namespace DiscordBot
         bool IsAuthorized(const dpp::user*) const override;
 
         void ExecuteGMCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src);
+        void LogCommand(const std::string& command, const dpp::parameter_list_t& parameters, dpp::command_source src);
 
         static void CommandPrint(std::any callbackArg, const char* output);
         static void CommandFinished(std::any callbackArg, bool sucess);
