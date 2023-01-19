@@ -2565,7 +2565,8 @@ void Player::RemoveFromWorld()
     }
 
     SetEscortingGuid(ObjectGuid());
-    sWorld.RemoveShellCoinOwner(GetObjectGuid());
+    if (m_uint32Values)
+        sWorld.RemoveShellCoinOwner(GetObjectGuid());
 
     Unit::RemoveFromWorld();
 }
