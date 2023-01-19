@@ -259,9 +259,6 @@ void WorldSession::HandleAcceptTradeOpcode(WorldPacket& recvPacket)
 {
     recvPacket.read_skip<uint32>();
 
-    if (IsFingerprintBanned())
-        return;
-
     TradeData* my_trade = _player->m_trade;
     if (!my_trade)
         return;
@@ -539,9 +536,6 @@ void WorldSession::HandleUnacceptTradeOpcode(WorldPacket& /*recvPacket*/)
 
 void WorldSession::HandleBeginTradeOpcode(WorldPacket& /*recvPacket*/)
 {
-    if (IsFingerprintBanned())
-        return;
-
     TradeData* my_trade = _player->m_trade;
     if (!my_trade)
         return;
@@ -569,9 +563,6 @@ void WorldSession::HandleInitiateTradeOpcode(WorldPacket& recvPacket)
 {
     ObjectGuid otherGuid;
     recvPacket >> otherGuid;
-
-    if (IsFingerprintBanned())
-        return;
 
     if (GetPlayer()->m_trade)
         return;

@@ -290,15 +290,6 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
     }
 }
 
-inline bool NoLootForLevel(uint32 level)
-{
-    if (level > 16)
-        return true;
-    if (level > 7)
-        return urand(0, 1) == 0;
-    return false;
-}
-
 void WorldSession::HandleLootOpcode(WorldPacket & recv_data)
 {
     DEBUG_LOG("WORLD: CMSG_LOOT");
@@ -309,18 +300,6 @@ void WorldSession::HandleLootOpcode(WorldPacket & recv_data)
     if (!guid.IsAnyTypeCreature() && !guid.IsPlayer() && !guid.IsCorpse())
     {
         ProcessAnticheatAction("ItemsCheck", "CMSG_LOOT on non-unit guid", CHEAT_ACTION_INFO_LOG);
-        return;
-    }
-
-    // mess with banned people who switch accounts
-    if (IsFingerprintBanned() && NoLootForLevel(_player->GetLevel()))
-    {
-        WorldPacket data(SMSG_LOOT_RESPONSE);
-        data << guid;
-        data << uint8(LOOT_CORPSE);
-        data << uint32(0); // money
-        data << uint8(0); // items
-        SendPacket(&data);
         return;
     }
 
