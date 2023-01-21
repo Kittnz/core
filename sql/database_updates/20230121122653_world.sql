@@ -106,4 +106,5 @@ REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61162, 30080, 0.5, 0, -30080, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61162, 30090, 2.5, 10, -30090, 1, 0);
 REPLACE INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (61162, 30103, 0.0025, 0, -30103, 1, 0);
-
+-- Mining veins appear on terrain that isnt accessible #2722
+update gameobject set position_x = -4848.66, position_y = -3956.44, position_z = 309.061 where guid = 5603;
