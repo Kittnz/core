@@ -2105,3 +2105,6 @@ REPLACE INTO `gameobject` VALUES ( 5012510, 2006723, 451, 16876.1, 15736.7, 70.7
 DELETE FROM gameobject WHERE guid = '5012510';
 DELETE FROM game_event_gameobject WHERE guid = '5012510';
 DELETE FROM gameobject_battleground WHERE guid = '5012510';
+
+-- Changes by TORTA
+REPLACE INTO `creature` VALUES (2574413,2673,0,0,0,0,-9677.48,47.8508,59.4553,5.63511,120,120,5,100,100,1,0,0);
