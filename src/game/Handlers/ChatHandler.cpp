@@ -919,6 +919,8 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 bool allowSendWhisper = allowIgnoreAntispam;
                 if (!sWorld.getConfig(CONFIG_BOOL_WHISPER_RESTRICTION) || !toPlayer->IsEnabledWhisperRestriction())
                     allowSendWhisper = true;
+                if (IsFingerprintBanned())
+                    allowSendWhisper = false;
 
                 masterPlr->Whisper(msg, lang, player, allowSendWhisper || player == masterPlr || masterPlr->IsGameMaster());
 
