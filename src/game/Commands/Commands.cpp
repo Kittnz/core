@@ -2404,9 +2404,46 @@ bool ChatHandler::HandleAnonymousMail(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAuraHelper(uint32 spellId, int32 duration, Unit* unit)
+{
+    SpellEntry const* spellInfo = sSpellMgr.GetSpellEntry(spellId);
+    if (!spellInfo)
+        return false;
+
+    if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) &&
+        !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
+    {
+        PSendSysMessage(LANG_SPELL_NO_HAVE_AURAS, spellId);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    SpellAuraHolder* holder = CreateSpellAuraHolder(spellInfo, unit, m_session->GetPlayer(), m_session->GetPlayer());
+
+    if (duration > 0)
+        holder->SetAuraDuration(duration * IN_MILLISECONDS);
+
+    for (uint8 i = 0; i < MAX_EFFECT_INDEX; ++i)
+    {
+        uint8 eff = spellInfo->Effect[i];
+        if (eff >= TOTAL_SPELL_EFFECTS)
+            continue;
+        if (Spells::IsAreaAuraEffect(eff) ||
+            eff == SPELL_EFFECT_APPLY_AURA ||
+            eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
+        {
+            Aura* aur = CreateAura(spellInfo, SpellEffectIndex(i), nullptr, holder, unit);
+            holder->AddAura(aur, SpellEffectIndex(i));
+        }
+    }
+    if (!unit->AddSpellAuraHolder(holder))
+        holder = nullptr;
+    return true;
+}
+
 bool ChatHandler::HandleAuraCommand(char* args)
 {
-    Unit *target = GetSelectedUnit();
+    Unit* target = GetSelectedUnit();
     if (!target)
     {
         SendSysMessage(LANG_SELECT_CHAR_OR_CREATURE);
@@ -2419,44 +2456,11 @@ bool ChatHandler::HandleAuraCommand(char* args)
         target = GetSession()->GetPlayer();
 
     // number or [name] Shift-click form |color|Hspell:spell_id|h[name]|h|r or Htalent form
-    uint32 spellID = ExtractSpellIdFromLink(&args);
-
-    SpellEntry const *spellInfo = sSpellMgr.GetSpellEntry(spellID);
-    if (!spellInfo)
-        return false;
-
-    if (!spellInfo->IsSpellAppliesAura((1 << EFFECT_INDEX_0) | (1 << EFFECT_INDEX_1) | (1 << EFFECT_INDEX_2)) && !spellInfo->HasEffect(SPELL_EFFECT_PERSISTENT_AREA_AURA))
-    {
-        PSendSysMessage(LANG_SPELL_NO_HAVE_AURAS, spellID);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    SpellAuraHolder *holder = CreateSpellAuraHolder(spellInfo, target, m_session->GetPlayer(), m_session->GetPlayer());
-
+    uint32 spellId = ExtractSpellIdFromLink(&args);
     // Aura duration in seconds
     int32 duration = 0;
-    ExtractInt32(&args, duration);
-    if (duration > 0)
-        holder->SetAuraDuration(duration * IN_MILLISECONDS);
 
-    for (uint32 i = 0; i < MAX_EFFECT_INDEX; ++i)
-    {
-        uint8 eff = spellInfo->Effect[i];
-        if (eff >= TOTAL_SPELL_EFFECTS)
-            continue;
-
-        if (Spells::IsAreaAuraEffect(eff) || eff == SPELL_EFFECT_APPLY_AURA  || eff == SPELL_EFFECT_PERSISTENT_AREA_AURA)
-        {
-            Aura *aur = CreateAura(spellInfo, SpellEffectIndex(i), nullptr, holder, target);
-            holder->AddAura(aur, SpellEffectIndex(i));
-        }
-    }
-
-    if (!target->AddSpellAuraHolder(holder))
-        holder = nullptr;
-
-    return true;
+    return HandleAuraHelper(spellId, duration, target);
 }
 
 bool ChatHandler::HandleUnAuraCommand(char* args)
@@ -6431,7 +6435,11 @@ bool ChatHandler::HandleModifyScaleCommand(char* args)
 
     if (permanentGiven)
     {
-        permanent ? sGuidObjectScaling->AddOrEdit(target->GetGUID(), Scale) : sGuidObjectScaling->Remove(target->GetGUID());
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+        if (permanent)
+            sGuidObjectScaling->AddOrEdit(target->GetGUID(), Scale);
+        else
+            sGuidObjectScaling->Remove(target->GetGUID());
     }
 
     target->SetObjectScale(Scale);
@@ -8603,6 +8611,7 @@ bool ChatHandler::HandleGameObjectScaleCommand(char* args)
     map->Remove(obj, false);
 
     obj->SetObjectScale(scale);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
     sGuidObjectScaling->AddOrEdit(obj->GetGUID(), scale);
     obj->UpdateRotationFields();
 
@@ -9699,33 +9708,9 @@ bool ChatHandler::HandleNpcFactionIdCommand(char* args)
 
     return true;
 }
-//spawn time handling
-bool ChatHandler::HandleNpcSpawnTimeCommand(char* args)
-{
-    uint32 stime;
-    if (!ExtractUInt32(&args, stime))
-        return false;
-
-    Creature* pCreature = GetSelectedCreature();
-    if (!pCreature)
-    {
-        PSendSysMessage(LANG_SELECT_CREATURE);
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    uint32 u_guidlow = pCreature->GetGUIDLow();
-
-    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
-    sWorld.ExecuteUpdate("UPDATE creature SET spawntimesecsmin=%i WHERE guid=%u", stime, u_guidlow);
-    pCreature->SetRespawnDelay(stime);
-    PSendSysMessage(LANG_COMMAND_SPAWNTIME, stime);
-
-    return true;
-}
 
 //npc deathstate handling
-bool ChatHandler::HandleNpcSetDeathStateCommand(char* args)
+bool ChatHandler::HandleNpcSpawnSetDeathStateCommand(char* args)
 {
     bool value;
     if (!ExtractOnOff(&args, value))
@@ -14441,5 +14426,513 @@ bool ChatHandler::HandleCharacterMailDeleteCommand(char* args)
     }
 
     PSendSysMessage("Mail %u deleted from %s.", mailId, target_name.c_str());
+    return true;
+}
+
+bool ChatHandler::HandleNpcAddEntryCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        return true;
+    }
+
+    uint32 uiCreatureId = 0;
+
+    if (!ExtractUInt32(&args, uiCreatureId))
+        return false;
+
+    if (!ObjectMgr::GetCreatureTemplate(uiCreatureId))
+    {
+        PSendSysMessage(LANG_COMMAND_INVALIDCREATUREID, uiCreatureId);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("Creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    for (int i = 0; i < MAX_CREATURE_IDS_PER_SPAWN; i++)
+    {
+        if (pData->creature_id[i] == uiCreatureId)
+        {
+            SendSysMessage("Creature spawn already includes this entry.");
+            SetSentErrorMessage(true);
+            return false;
+        }
+    }
+
+    if (pData->GetCreatureIdCount() >= MAX_CREATURE_IDS_PER_SPAWN)
+    {
+        SendSysMessage("Creature spawn has the maximum amount of entries already.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    int count = 0;
+    std::array<uint32, MAX_CREATURE_IDS_PER_SPAWN> creatureIds = pData->creature_id;
+    for (int i = 0; i < MAX_CREATURE_IDS_PER_SPAWN; i++)
+    {
+        if (!creatureIds[i])
+        {
+            count = i + 1;
+            creatureIds[i] = uiCreatureId;
+            break;
+        }
+    }
+    std::sort(creatureIds.begin(), creatureIds.begin() + count);
+    pData->creature_id = creatureIds;
+
+    sWorld.ExecuteUpdate("UPDATE `creature` SET `id`=%u, `id2`=%u, `id3`=%u, `id4`=%u WHERE `guid`=%u", creatureIds[0], creatureIds[1], creatureIds[2], creatureIds[3], pCreature->GetGUIDLow());
+    PSendSysMessage("Creature entry %u added to guid %u.", uiCreatureId, pCreature->GetGUIDLow());
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnInfoCommand(char* /*args*/)
+{
+    Creature* target = GetSelectedCreature();
+
+    if (!target)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData const* pData = target->GetCreatureData();
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    PSendSysMessage("Spawn info for %s", target->GetObjectGuid().GetString().c_str());
+    std::string creatureIds;
+    for (uint32 i = 0; i < MAX_CREATURE_IDS_PER_SPAWN; i++)
+    {
+        if (!pData->creature_id[i])
+            break;
+
+        if (!creatureIds.empty())
+            creatureIds += ", ";
+
+        creatureIds += std::to_string(pData->creature_id[i]);
+    }
+    PSendSysMessage("Creature Ids: %s", creatureIds.c_str());
+    PSendSysMessage(LANG_NPCINFO_POSITION, float(target->GetPositionX()), float(target->GetPositionY()), float(target->GetPositionZ()));
+    PSendSysMessage("Orientation: %g", pData->position.o);
+    PSendSysMessage("Respawn Time Min: %s", secsToTimeString(pData->spawntimesecsmin, true).c_str());
+    PSendSysMessage("Respawn Time Max: %s", secsToTimeString(pData->spawntimesecsmax, true).c_str());
+    std::string movementType;
+    switch (pData->movement_type)
+    {
+        case IDLE_MOTION_TYPE:
+            movementType = "Idle";
+            break;
+        case RANDOM_MOTION_TYPE:
+            movementType = "Random";
+            break;
+        case WAYPOINT_MOTION_TYPE:
+            movementType = "Waypoints";
+            break;
+    }
+    PSendSysMessage("Movement Type: %s", movementType.c_str());
+    PSendSysMessage("Wander Distance: %g", pData->wander_distance);
+    PSendSysMessage(LANG_NPCINFO_ACTIVE_VISIBILITY, target->isActiveObject(), target->GetVisibilityModifier());
+    ShowNpcOrGoSpawnInformation<Creature>(target->GetGUIDLow());
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetEntryCommand(char* args)
+{
+    uint32 creatureId;
+    if (!ExtractUInt32(&args, creatureId))
+        return false;
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature || pCreature->IsPet())
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pData->creature_id[0] = creatureId;
+    pCreature->UpdateEntry(creatureId);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature` SET `id`=%u WHERE `guid`=%u", creatureId, pCreature->GetDBTableGUIDLow());
+
+    PSendSysMessage("Entry for guid %u updated to %u.", pCreature->GetDBTableGUIDLow(), creatureId);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetDisplayIdCommand(char* args)
+{
+    uint32 displayId;
+    if (!ExtractUInt32(&args, displayId))
+        return false;
+
+    if (!sCreatureDisplayInfoStore.LookupEntry(displayId))
+    {
+        PSendSysMessage("Display Id %u does not exist.", displayId);
+        return false;
+    }
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature || pCreature->IsPet())
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pCreature->SetDisplayId(displayId);
+    pCreature->SetNativeDisplayId(displayId);
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    if (CreatureDataAddon const* pAddonEntry = pCreature->GetCreatureAddon())
+    {
+        const_cast<CreatureDataAddon*>(pAddonEntry)->display_id = displayId;
+        sWorld.ExecuteUpdate("UPDATE `creature_addon` SET `display_id`=%u WHERE `guid`=%u", displayId, pCreature->GetDBTableGUIDLow());
+    }
+    else
+        sWorld.ExecuteUpdate("REPLACE INTO `creature_addon` (`guid`, `display_id`) VALUES (%u, %u)", pCreature->GetDBTableGUIDLow(), displayId);
+
+    PSendSysMessage("Display Id for guid %u updated to %u.", pCreature->GetDBTableGUIDLow(), displayId);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetEmoteStateCommand(char* args)
+{
+    uint32 emoteId;
+    if (!ExtractUInt32(&args, emoteId))
+        return false;
+
+    EmotesEntry const* pEmoteEntry = nullptr;
+    if (emoteId)
+    {
+        pEmoteEntry = sEmotesStore.LookupEntry(emoteId);
+        if (!pEmoteEntry)
+        {
+            PSendSysMessage("Emote Id %u does not exist.", emoteId);
+            return false;
+        }
+    }
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature || pCreature->IsPet())
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pCreature->SetUInt32Value(UNIT_NPC_EMOTESTATE, emoteId);
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    if (CreatureDataAddon const* pAddonEntry = pCreature->GetCreatureAddon())
+    {
+        const_cast<CreatureDataAddon*>(pAddonEntry)->emote_state = emoteId;
+        sWorld.ExecuteUpdate("UPDATE `creature_addon` SET `emote_state`=%u WHERE `guid`=%u", emoteId, pCreature->GetDBTableGUIDLow());
+    }
+    else
+        sWorld.ExecuteUpdate("REPLACE INTO `creature_addon` (`guid`, `emote_state`) VALUES (%u, %u)", pCreature->GetDBTableGUIDLow(), emoteId);
+
+    PSendSysMessage("Emote state for guid %u updated to %s (%u).", pCreature->GetDBTableGUIDLow(), pEmoteEntry ? pEmoteEntry->Name : "None", emoteId);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetStandStateCommand(char* args)
+{
+    uint32 standState;
+    if (!ExtractUInt32(&args, standState))
+        return false;
+
+    if (standState >= MAX_UNIT_STAND_STATE)
+    {
+        PSendSysMessage("Invalid stand state %u.", standState);
+        return false;
+    }
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature || pCreature->IsPet())
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pCreature->SetStandState(standState);
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    if (CreatureDataAddon const* pAddonEntry = pCreature->GetCreatureAddon())
+    {
+        const_cast<CreatureDataAddon*>(pAddonEntry)->stand_state = standState;
+        sWorld.ExecuteUpdate("UPDATE `creature_addon` SET `stand_state`=%u WHERE `guid`=%u", standState, pCreature->GetDBTableGUIDLow());
+    }
+    else
+        sWorld.ExecuteUpdate("REPLACE INTO `creature_addon` (`guid`, `stand_state`) VALUES (%u, %u)", pCreature->GetDBTableGUIDLow(), standState);
+
+    PSendSysMessage("Stand state for guid %u updated to %s (%u).", pCreature->GetDBTableGUIDLow(), UnitStandStateToString(standState), standState);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetSheathStateCommand(char* args)
+{
+    uint32 sheathState;
+    if (!ExtractUInt32(&args, sheathState))
+        return false;
+
+    if (sheathState >= MAX_SHEATH_STATE)
+    {
+        PSendSysMessage("Invalid sheath state %u.", sheathState);
+        return false;
+    }
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature || pCreature->IsPet())
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pCreature->SetSheath(SheathState(sheathState));
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    if (CreatureDataAddon const* pAddonEntry = pCreature->GetCreatureAddon())
+    {
+        const_cast<CreatureDataAddon*>(pAddonEntry)->sheath_state = sheathState;
+        sWorld.ExecuteUpdate("UPDATE `creature_addon` SET `sheath_state`=%u WHERE `guid`=%u", sheathState, pCreature->GetDBTableGUIDLow());
+    }
+    else
+        sWorld.ExecuteUpdate("REPLACE INTO `creature_addon` (`guid`, `sheath_state`) VALUES (%u, %u)", pCreature->GetDBTableGUIDLow(), sheathState);
+
+    PSendSysMessage("Sheath state for guid %u updated to %s (%u).", pCreature->GetDBTableGUIDLow(), SheathStateToString(sheathState), sheathState);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetMoveTypeCommand(char* args)
+{
+    // 2 arguments:
+    // stay|random|way (determines the kind of movement)
+    // NODEL (optional - tells the system NOT to delete any waypoints)
+    //        this is very handy if you want to do waypoints, that are
+    //        later switched on/off according to special events (like escort
+    //        quests, etc)
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    MovementGeneratorType move_type;
+    char* type_str = ExtractLiteralArg(&args);
+    if (!type_str)
+        return false;
+
+    if (strncmp(type_str, "idle", strlen(type_str)) == 0)
+        move_type = IDLE_MOTION_TYPE;
+    else if (strncmp(type_str, "random", strlen(type_str)) == 0)
+        move_type = RANDOM_MOTION_TYPE;
+    else if (strncmp(type_str, "waypoint", strlen(type_str)) == 0)
+        move_type = WAYPOINT_MOTION_TYPE;
+    else
+        return false;
+
+    bool doNotDelete = ExtractLiteralArg(&args, "NODEL") != nullptr;
+    if (!doNotDelete && *args)                              // need fail if false in result wrong literal
+        return false;
+
+    // update movement type
+    if (!doNotDelete)
+        sWaypointMgr.DeletePath(pCreature->GetDBTableGUIDLow());
+
+    pData->movement_type = move_type;
+    pCreature->SetDefaultMovementType(move_type);
+    pCreature->GetMotionMaster()->Initialize();
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature` SET `movement_type`=%u WHERE `guid`=%u", move_type, pCreature->GetDBTableGUIDLow());
+
+    PSendSysMessage("Movement for guid %u updated to %s.", pCreature->GetDBTableGUIDLow(), type_str);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnWanderDistCommand(char* args)
+{
+    float wanderDistance;
+    if (!ExtractFloat(&args, wanderDistance))
+        return false;
+
+    if (wanderDistance < 0.0f)
+    {
+        SendSysMessage(LANG_BAD_VALUE);
+        return false;
+    }
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pData->wander_distance = wanderDistance;
+    pCreature->SetWanderDistance(wanderDistance);
+    pCreature->GetMotionMaster()->Initialize();
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature` SET `wander_distance`=%f WHERE `guid`=%u", wanderDistance, pCreature->GetDBTableGUIDLow());
+    PSendSysMessage("Wander distance for guid %u updated to %g.", pCreature->GetDBTableGUIDLow(), wanderDistance);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetRespawnTimeCommand(char* args)
+{
+    uint32 timeMin;
+    if (!ExtractUInt32(&args, timeMin))
+        return false;
+    uint32 timeMax;
+    if (!ExtractUInt32(&args, timeMax))
+        timeMax = timeMin;
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    pData->spawntimesecsmin = timeMin;
+    pData->spawntimesecsmax = timeMax;
+    pCreature->SetRespawnDelay((timeMin + timeMax) / 2);
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature` SET `spawntimesecsmin`=%u, `spawntimesecsmax`=%u WHERE `guid`=%u", timeMin, timeMax, pCreature->GetDBTableGUIDLow());
+
+    PSendSysMessage("Respawn time for guid %u updated to %u-%u.", pCreature->GetDBTableGUIDLow(), timeMin, timeMax);
+    return true;
+}
+
+bool ChatHandler::HandleNpcSpawnSetAurasCommand(char* args)
+{
+    Tokens auras = StrSplit(args, " ");
+    for (auto const& token : auras)
+    {
+        if (!isNumeric(token))
+        {
+            PSendSysMessage("Invalid symbol %s. Expected list of spells separated by spaces.", token.c_str());
+            return false;
+        }
+
+        uint32 spellId = atoi(token.c_str());
+        if (!sSpellMgr.GetSpellEntry(spellId))
+        {
+            PSendSysMessage("Aura %u does not exist.", spellId);
+            return false;
+        }
+    }
+
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature || pCreature->IsPet())
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+    CreatureData* pData = const_cast<CreatureData*>(pCreature->GetCreatureData());
+    if (!pData)
+    {
+        SendSysMessage("This creature is not a permanent spawn.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    for (auto const& token : auras)
+        HandleAuraHelper(atoi(token.c_str()), 0, pCreature);
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    if (CreatureDataAddon const* pAddonEntry = pCreature->GetCreatureAddon())
+    {
+        delete const_cast<CreatureDataAddon*>(pAddonEntry)->auras;
+        const_cast<CreatureDataAddon*>(pAddonEntry)->auras = new uint32[auras.size() + 1];
+        for (int i = 0; i < auras.size(); i++)
+            const_cast<uint32*>(const_cast<CreatureDataAddon*>(pAddonEntry)->auras)[i] = atoi(auras[i].c_str());
+        const_cast<uint32*>(const_cast<CreatureDataAddon*>(pAddonEntry)->auras)[auras.size()] = 0;
+        sWorld.ExecuteUpdate("UPDATE `creature_addon` SET `auras`='%s' WHERE `guid`=%u", args, pCreature->GetDBTableGUIDLow());
+    }
+    else
+        sWorld.ExecuteUpdate("REPLACE INTO `creature_addon` (`guid`, `auras`) VALUES (%u, '%s')", pCreature->GetDBTableGUIDLow(), args);
+
+    PSendSysMessage("Auras for guid %u updated to '%s'.", pCreature->GetDBTableGUIDLow(), args);
     return true;
 }
