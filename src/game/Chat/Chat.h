@@ -394,6 +394,7 @@ class ChatHandler
 
         //-----------------------Npc Commands-----------------------
         bool HandleNpcAddCommand(char* args);
+        bool HandleNpcAddEntryCommand(char* args);
         bool HandleNpcAddWeaponCommand(char* args);
         bool HandleNpcSummonCommand(char* args);
         bool HandleNpcAddVendorItemCommand(char* args);
@@ -405,15 +406,24 @@ class ChatHandler
         bool HandleNpcFactionIdCommand(char* args);
         bool HandleNpcFlagCommand(char* args);
         bool HandleNpcInfoCommand(char* args);
+        bool HandleNpcSpawnInfoCommand(char* args);
         bool HandleNpcMoveCommand(char* args);
         bool HandleNpcPlayEmoteCommand(char* args);
         bool HandleNpcSayCommand(char* args);
         bool HandleNpcSpeedCommand(char* args);
-        bool HandleNpcSetDeathStateCommand(char* args);
+        bool HandleNpcSpawnSetDeathStateCommand(char* args);
         bool HandleNpcNearCommand(char* args);
-        bool HandleNpcSpawnTimeCommand(char* args);
         bool HandleNpcTextEmoteCommand(char* args);
         bool HandleNpcYellCommand(char* args);
+        bool HandleNpcSpawnSetEntryCommand(char* args);
+        bool HandleNpcSpawnSetDisplayIdCommand(char* args);
+        bool HandleNpcSpawnSetEmoteStateCommand(char* args);
+        bool HandleNpcSpawnSetStandStateCommand(char* args);
+        bool HandleNpcSpawnSetSheathStateCommand(char* args);
+        bool HandleNpcSpawnSetMoveTypeCommand(char* args);
+        bool HandleNpcSpawnWanderDistCommand(char* args);
+        bool HandleNpcSpawnSetRespawnTimeCommand(char* args);
+        bool HandleNpcSpawnSetAurasCommand(char* args);
 
         bool HandleUnitSpeedInfoCommand(char* args);
 
@@ -658,6 +668,7 @@ class ChatHandler
         bool HandleGetValueHelper(Object* target, uint32 field, char* typeStr);
         bool HandlerDebugModValueHelper(Object* target, uint32 field, char* typeStr, char* valStr);
         bool HandleSetValueHelper(Object* target, uint32 field, char* typeStr, char* valStr);
+        bool HandleAuraHelper(uint32 spellId, int32 duration, Unit*);
 
         bool HandleSendItemsHelper(MailDraft& draft, char* args);
         bool HandleSendMailHelper(MailDraft& draft, char* args);

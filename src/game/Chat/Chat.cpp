@@ -334,6 +334,32 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand creatureSpawnsSetCommandTable[] =
+    {
+        { "entry",          SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetEntryCommand,       "", nullptr },
+        { "displayid",      SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetDisplayIdCommand,   "", nullptr },
+        { "emotestate",     SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetEmoteStateCommand,  "", nullptr },
+        { "standstate",     SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetStandStateCommand,  "", nullptr },
+        { "sheathstate",    SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetSheathStateCommand, "", nullptr },
+        { "movetype",       SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetMoveTypeCommand,    "", nullptr },
+        { "wanderdistance", SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnWanderDistCommand,     "", nullptr },
+        { "respawntime",    SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetRespawnTimeCommand, "", nullptr },
+        { "deathstate",     SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetDeathStateCommand,  "", nullptr },
+        { "auras",          SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetAurasCommand,       "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                           "", nullptr }
+    };
+
+    static ChatCommand creatureSpawnsCommandTable[] =
+    {
+        { "add",            SEC_DEVELOPER,      false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
+        { "addentry",       SEC_DEVELOPER,      false, &ChatHandler::HandleNpcAddEntryCommand,         "", nullptr },
+        { "delete",         SEC_DEVELOPER,      false, &ChatHandler::HandleNpcDeleteCommand,           "", nullptr },
+        { "info",           SEC_MODERATOR,      false, &ChatHandler::HandleNpcSpawnInfoCommand,        "", nullptr },
+        { "set",            SEC_DEVELOPER,      false, nullptr,                                        "", creatureSpawnsSetCommandTable },
+        { "move",           SEC_DEVELOPER,      false, &ChatHandler::HandleNpcMoveCommand,             "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand npcCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
@@ -350,15 +376,14 @@ ChatCommand * ChatHandler::getCommandTable()
         { "info",           SEC_DEVELOPER,      false, &ChatHandler::HandleNpcInfoCommand,             "", nullptr },
         { "move",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcMoveCommand,             "", nullptr },
         { "playemote",      SEC_DEVELOPER, false, &ChatHandler::HandleNpcPlayEmoteCommand,        "", nullptr },
-        { "spawntime",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSpawnTimeCommand,        "", nullptr },
         { "say",            SEC_DEVELOPER, false, &ChatHandler::HandleNpcSayCommand,              "", nullptr },
         { "speed",          SEC_DEVELOPER, false, &ChatHandler::HandleNpcSpeedCommand,              "", nullptr },
         { "textemote",      SEC_DEVELOPER, false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
         { "yell",           SEC_DEVELOPER, false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
-        { "setdeathstate",  SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
+        { "setdeathstate",  SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSpawnSetDeathStateCommand,    "", nullptr },
         { "near",           SEC_DEVELOPER, false, &ChatHandler::HandleNpcNearCommand,                "", nullptr},
         { "group",          SEC_ADMINISTRATOR,     false, nullptr,                                        "", creatureGroupsCommandTable },
-
+        { "spawn",          SEC_MODERATOR,      false, nullptr,                                        "", creatureSpawnsCommandTable },
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
