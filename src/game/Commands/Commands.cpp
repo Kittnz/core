@@ -9593,7 +9593,17 @@ bool ChatHandler::HandleNpcDeleteCommand(char* args)
 }
 
 //move selected creature
+bool ChatHandler::HandleNpcSpawnMoveCommand(char* args)
+{
+    return HandleNpcMoveHelperCommand(args, true);
+}
+
 bool ChatHandler::HandleNpcMoveCommand(char* args)
+{
+    return HandleNpcMoveHelperCommand(args, false);
+}
+
+bool ChatHandler::HandleNpcMoveHelperCommand(char* args, bool save)
 {
     uint32 lowguid = 0;
     Player* pPlayer = m_session->GetPlayer();
@@ -9633,17 +9643,29 @@ bool ChatHandler::HandleNpcMoveCommand(char* args)
     if (pCreature)
     {
         pCreature->SetHomePosition(x, y, z, o);
-
-        if (pCreature->IsAlive()) // Dead creature will reset movement generator at respawn
+        if (pCreature->IsAlive())                           // dead creature will reset movement generator at respawn
         {
             pCreature->SetDeathState(JUST_DIED);
             pCreature->Respawn();
         }
     }
 
-    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
-    sWorld.ExecuteUpdate("UPDATE creature SET position_x = '%f', position_y = '%f', position_z = '%f', orientation = '%f' WHERE guid = '%u'", x, y, z, o, lowguid);
-    PSendSysMessage(LANG_COMMAND_CREATUREMOVED);
+    if (save)
+    {
+        if (CreatureData* pData = const_cast<CreatureData*>(sObjectMgr.GetCreatureData(lowguid)))
+        {
+            pData->position.x = x;
+            pData->position.y = y;
+            pData->position.z = z;
+            pData->position.o = o;
+        }
+        sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+        sWorld.ExecuteUpdate("UPDATE `creature` SET `position_x` = %f, `position_y` = %f, `position_z` = %f, `orientation` = %f WHERE `guid` = %u", x, y, z, o, lowguid);
+        SendSysMessage(LANG_COMMAND_CREATUREMOVED);
+    }
+    else
+        SendSysMessage("Creature moved without saving.");
+    
     return true;
 }
 

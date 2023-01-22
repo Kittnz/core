@@ -408,6 +408,8 @@ class ChatHandler
         bool HandleNpcInfoCommand(char* args);
         bool HandleNpcSpawnInfoCommand(char* args);
         bool HandleNpcMoveCommand(char* args);
+        bool HandleNpcSpawnMoveCommand(char* args);
+        bool HandleNpcMoveHelperCommand(char* args, bool save);
         bool HandleNpcPlayEmoteCommand(char* args);
         bool HandleNpcSayCommand(char* args);
         bool HandleNpcSpeedCommand(char* args);
