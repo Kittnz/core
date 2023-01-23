@@ -1,525 +1,557 @@
-/*
- * Copyright (C) 2017-2018 namreeb (legal@namreeb.org)
- *
- * This is private software and may not be shared under any circumstances,
- * absent permission of namreeb.
- */
-
-#include "Antispam.hpp"
-#include "AntispamMgr.hpp"
-#include "../libanticheat.hpp"
-#include "Anticheat.h"
-#include "../Config.hpp"
-#include "../dldist.hpp"
-
-#include "AbstractPlayer.h"
-#include "Chat.h"
-#include "World.h"
-#include "Timer.h"
-#include "Database/DatabaseEnv.h"
-#include "Language.h"
-#include "Player.h"
-
+#include <regex>
 #include <string>
-#include <unordered_set>
-#include <mutex>
-#include <cstdarg>
-#include <cstdio>
-#include <sstream>
+#include <algorithm>
 
-namespace
+#include "Database/DatabaseEnv.h"
+#include "Util.h"
+#include "World.h"
+#include "ChannelMgr.h"
+#include "Chat.h"
+#include "Anticheat.h"
+#include "Antispam.h"
+
+Antispam& Antispam::Instance()
 {
-// gets the highest level toon on a given account, for enforcing anti spam max level, or 0 if not available
-uint32 GetAccountLevel(uint32 accountId)
-{
-    if (auto const session = sWorld.FindSession(accountId))
-    {
-        auto accountLevel = session->GetAccountMaxLevel();
-
-        // slight adjustment to account level logic to account for increasing character levels in the session
-        if (auto const player = session->GetPlayer())
-            if (player->GetLevel() > accountLevel)
-                accountLevel = player->GetLevel();
-
-        return accountLevel;
-    }
-
-    return 0;
-}
+    static Antispam antispam;
+    return antispam;
 }
 
-namespace Anticheat
+static inline void ReplaceAll(std::string &str, const std::string& from, const std::string& to)
 {
-float Antispam::Rate() const
-{
-    auto const seconds = static_cast<float>(WorldTimer::getMSTimeDiffToNow(_creationTime)) / IN_MILLISECONDS;
-
-    // if they have not been online long enough, return zero
-    if (seconds < sAnticheatConfig.GetAntispamRateGracePeriod())
-        return 0.f;
-
-    return Total() / (seconds * MINUTE);
+    size_t startPos = 0;
+    while ((startPos = str.find(from, startPos)) != std::string::npos)
+    {
+        str.replace(startPos, from.length(), to);
+        startPos += to.length();
+    }
 }
 
-void Antispam::Notify(const char *format, ...)
+static inline void ReplaceAllW(std::wstring &str, const std::wstring& from, const std::wstring& to)
 {
-    // if it is too soon, do nothing
-    if ((_lastNotification + sAnticheatConfig.GetAntispamBlacklistNotifyCooldown() * MINUTE * IN_MILLISECONDS) > WorldTimer::getMSTime())
-        return;
-
-    _lastNotification = WorldTimer::getMSTime();
-
-    auto const session = sWorld.FindSession(_account);
-
-    // do not log or notify GMs if the account is already silenced
-    if (!!session && sAntispamMgr.IsSilenced(session))
-        return;
-
-    char buffer[1024];
-
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
-
-    std::stringstream message;
-
-    message << "Possible spammer.  Account: " << _account;
-
-    if (!!session)
-        message << " Player: " << session->GetPlayerName();
-
-    message << ".  " << buffer << "\nMost blacklisted messages:";
-
-    for (auto const &msg : _topBlacklistedMessages)
-        message << "\n" << msg;
-
-    message << "\nRecent messages:";
-
-    for (auto const &msg : _recentMessages)
-        message << "\n" << msg;
-
-    static SqlStatementID logSilence;
-
-    CharacterDatabase.BeginTransaction();
-
-    auto ins = CharacterDatabase.CreateStatement(logSilence,
-        "INSERT INTO logs_spamdetect (realm, accountId, fromIP, fromFingerprint, comment) VALUES(?, ?, ?, ?, ?)");
-
-    ins.addUInt32(realmID);
-    ins.addUInt32(_account);
-
-    if (!!session)
+    size_t startPos = 0;
+    while ((startPos = str.find(from, startPos)) != std::wstring::npos)
     {
-        ins.addString(session->GetRemoteAddress());
-
-        if (auto const anticheat = dynamic_cast<const SessionAnticheat *>(session->GetAntiCheat()))
-            ins.addUInt32(anticheat->GetFingerprint());
-        else
-            ins.addUInt32(0);
+        str.replace(startPos, from.length(), to);
+        startPos += to.length();
     }
-    else
-    {
-        ins.addString("<unknown>");
-        ins.addUInt32(0);
-    }
-
-    ins.addString(message.str());
-
-    ins.Execute();
-
-    CharacterDatabase.CommitTransaction();
-
-    sWorld.SendGMTextFlags(ACCOUNT_FLAG_SHOW_ANTISPAM, LANG_GM_ANNOUNCE_COLOR, "AntiSpam", message.str().c_str());
 }
 
-void Antispam::Silence(const char *format, ...)
+void AntispamAsyncWorker(Antispam *antispam)
 {
-    auto const session = sWorld.FindSession(_account);
-
-    // do not log or notify GMs if the account is already silenced
-    if (!!session && sAntispamMgr.IsSilenced(session))
-        return;
-
-    char buffer[1024];
-
-    va_list args;
-    va_start(args, format);
-    vsnprintf(buffer, sizeof(buffer), format, args);
-
-    std::stringstream message;
-
-    message << "Flagrant spammer.  Account: " << _account;
-
-    if (!!session)
-        message << " Player: " << session->GetPlayerName();
-
-    if (sAnticheatConfig.EnableAntispamSilence())
+    using namespace std::chrono_literals;
+    LoginDatabase.ThreadStart();
+    auto prevNow = Clock::now();
+    while (!sWorld.IsStopped())
     {
-        sAntispamMgr.Silence(_account);
-        message << " (silenced)";
+        auto currNow = Clock::now();
+        auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(currNow - prevNow).count();
+        antispam->ProcessMessages(diff);
+        prevNow = currNow;
+        std::this_thread::sleep_for(100ms);
+    }
+    LoginDatabase.ThreadEnd();
+}
+
+Antispam::Antispam()
+    :   m_enabled(false), m_restrictionLevel(0), m_originalNormalizeMask(0), m_fullyNormalizeMask(0),
+        m_threshold(0), m_mutetime(0), m_chatMask(0), m_worker(), m_banEnabled(false), m_detectThreshold(3),
+        m_messageBlockSize(5), m_updateTimer(60000), m_messageRepeatCount(5), m_frequencyCount(5.0f), m_frequencyTime(6.0f),
+        m_mergeAllWhispers(false)
+{
+    m_frequencyCoeff = m_frequencyCount / m_frequencyTime;
+}
+
+void Antispam::LoadFromDB()
+{
+    sLog.outString("Loading table 'antispam_blacklist'");
+    m_blackList.clear();
+
+    QueryResult* result = LoginDatabase.Query("SELECT * FROM antispam_blacklist");
+    if (result)
+    {
+        do
+        {
+            auto fields = result->Fetch();
+            m_blackList.insert(fields[0].GetCppString());
+        }
+        while (result->NextRow());
+        delete result;
     }
 
-    message << ".  " << buffer << "\nMost blacklisted messages:";
+    sLog.outString(">> %u blacklist words loaded", m_blackList.size());
+    sLog.outString();
 
-    for (auto const &msg : _topBlacklistedMessages)
-        message << "\n" << msg;
+    sLog.outString("Loading table 'antispam_replacement'");
+    m_replacement.clear();
 
-    message << "\nRecent messages:";
-
-    for (auto const &msg : _recentMessages)
-        message << "\n" << msg;
-
-    static SqlStatementID logSilence;
-
-    CharacterDatabase.BeginTransaction();
-
-    auto ins = CharacterDatabase.CreateStatement(logSilence,
-        "INSERT INTO logs_spamdetect (realm, accountId, fromIP, fromFingerprint, comment) VALUES(?, ?, ?, ?, ?)");
-
-    ins.addUInt32(realmID);
-    ins.addUInt32(_account);
-
-    if (!!session)
+    result = LoginDatabase.Query("SELECT * FROM antispam_replacement");
+    if (result)
     {
-        ins.addString(session->GetRemoteAddress());
-
-        if (auto const anticheat = dynamic_cast<const SessionAnticheat *>(session->GetAntiCheat()))
-            ins.addUInt32(anticheat->GetFingerprint());
-        else
-            ins.addUInt32(0);
-    }
-    else
-    {
-        ins.addString("<unknown>");
-        ins.addUInt32(0);
+        do
+        {
+            auto fields = result->Fetch();
+            m_replacement[fields[0].GetCppString()] = fields[1].GetCppString();
+        }
+        while (result->NextRow());
+        delete result;
     }
 
-    ins.addString(message.str());
+    sLog.outString(">> %u replacements loaded", m_replacement.size());
+    sLog.outString();
 
-    ins.Execute();
+    sLog.outString("Loading table 'antispam_scores'");
 
-    CharacterDatabase.CommitTransaction();
+    m_scores[MSG_TYPE_NORMALIZED].clear();
+    m_scores[MSG_TYPE_ORIGINAL].clear();
+
+    result = LoginDatabase.Query("SELECT * FROM antispam_scores");
+    if (result)
+    {
+        do
+        {
+            auto fields = result->Fetch();
+            m_scores[fields[2].GetUInt8()][fields[0].GetCppString()] = fields[1].GetInt32();
+        }
+        while (result->NextRow());
+        delete result;
+    }
+
+    sLog.outString(">> %u scores loaded", m_scores[MSG_TYPE_NORMALIZED].size() + m_scores[MSG_TYPE_ORIGINAL].size());
+    sLog.outString();
     
-    sWorld.SendGMTextFlags(ACCOUNT_FLAG_SHOW_ANTISPAM, LANG_GM_ANNOUNCE_COLOR, "AntiSpam", message.str().c_str());
+    sLog.outString("Loading table 'antispam_unicode'");
+    m_unicode.clear();
+
+    result = LoginDatabase.Query("SELECT * FROM antispam_unicode");
+    if (result)
+    {
+        std::wostringstream wss;
+        do
+        {
+            auto fields = result->Fetch();
+            wss.str(std::wstring());
+            wss << wchar_t(fields[0].GetUInt32());
+            std::wstring key = wss.str();
+            wss.str(std::wstring());
+            wss << wchar_t(fields[1].GetUInt32());
+            std::wstring value = wss.str();
+            m_unicode[key] = value;
+        }
+        while (result->NextRow());
+        delete result;
+    }
+
+    sLog.outString(">> %u unicode symbols loaded", m_unicode.size());
+    sLog.outString();
 }
 
-Antispam::Antispam(uint32 account) :
-    _account(account), _creationTime(WorldTimer::getMSTime()), _whisperCount(0), _sayCount(0), _yellCount(0),
-    _channelCount(0), _mailCount(0), _blacklistCount(0), _lastNotification(0) {}
-
-std::string Antispam::GetInfo() const
+void Antispam::LoadConfig()
 {
-    std::stringstream ret;
-    std::lock_guard<std::mutex> guard(_mutex);
+    LoadFromDB(); // temporary solution for reload from game
 
-    auto const age = WorldTimer::getMSTimeDiffToNow(_creationTime);
+    m_enabled = sWorld.getConfig(CONFIG_BOOL_AC_ANTISPAM_ENABLED);
+    m_restrictionLevel = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_MAX_RESTRICTION_LEVEL);
+    m_originalNormalizeMask = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_ORIGINAL_NORMALIZE_MASK);
+    m_fullyNormalizeMask = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_FULLY_NORMALIZE_MASK);
+    m_threshold = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_SCORE_THRESHOLD);
+    m_mutetime = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_MUTETIME);
+    m_chatMask = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_CHAT_MASK);
 
-    bool silenced = false;
+    m_mergeAllWhispers = sWorld.getConfig(CONFIG_BOOL_AC_ANTISPAM_MERGE_ALL_WHISPERS);
+    m_banEnabled = sWorld.getConfig(CONFIG_BOOL_AC_ANTISPAM_BAN_ENABLED);
+    m_detectThreshold = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_DETECT_THRESHOLD);
+    m_messageRepeatCount = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_REPEAT_COUNT);
+    m_updateTimer = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_UPDATE_TIMER);
+    m_messageBlockSize = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_MESSAGE_BLOCK_SIZE);
+    m_frequencyTime = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_TIME);
+    m_frequencyCount = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_COUNT);
+    m_frequencyCoeff = m_frequencyCount / m_frequencyTime;
 
-    if (auto const session = sWorld.FindSession(_account))
+    if (!m_worker.joinable())
+        m_worker = std::thread(AntispamAsyncWorker, this);
+}
+
+bool Antispam::AddMessage(const std::string& msg, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, uint32 language)
+{
+    if (!m_enabled || from->IsGameMaster() || to && to->IsGameMaster())
+        return true;
+
+    if (from->GetLevel() > m_restrictionLevel)
+        return true;
+
+    uint8 chatType = GetConvertedChatType(type);
+
+    if (chatType == A_CHAT_TYPE_MAX)
+        return true;
+
+    if (m_chatMask && (m_chatMask & (1 << chatType)) == 0)
+        return true;
+
+    MessageBlock messageBlock;
+    messageBlock.fromGuid = from->GetObjectGuid();
+    messageBlock.fromAccount = from->GetSession()->GetAccountId();
+    messageBlock.toGuid = (to && !m_mergeAllWhispers ? to->GetObjectGuid() : ObjectGuid());
+    messageBlock.msg = msg;
+    messageBlock.language = language;
+    messageBlock.type = chatType;
+    messageBlock.count = 1;
+    messageBlock.time = time(nullptr);
+    messageBlock.channel = channel;
+
+    std::lock_guard<std::mutex> guard(m_messageMutex);
+    m_messageQueue.push_back(messageBlock);
+    return false;
+}
+
+struct FindMsg
+{
+    FindMsg(const std::string& m) : msg(m) {}
+    bool operator()(const std::string& s) { return s == msg; }
+
+    private:
+        const std::string& msg;
+};
+
+void Antispam::ProcessMessages(uint32 diff)
+{
+    if (m_updateTimer <= diff)
     {
-        ret << "Spam information for player " << session->GetPlayerName() << " account " << _account << ":\n"
-            << "Online: " << age / IN_MILLISECONDS << " seconds Distance traveled: " << GetDistanceTraveled()
-            << " Account level: " << session->GetAccountMaxLevel() << "\n";
+        m_updateTimer = sWorld.getConfig(CONFIG_UINT32_AC_ANTISPAM_UPDATE_TIMER);
+        m_mutedAccounts.clear();
 
-        silenced = sAntispamMgr.IsSilenced(session);
+        for (auto i = 0; i < A_CHAT_TYPE_MAX; ++i)
+        {
+            m_messageBlocks[i].clear();
+            m_messageCounters[i].clear();
+            m_messageRepeats[i].clear();
+        }
     }
     else
-    {
-        ret << "Spam information for account " << _account << ":\n";
+        m_updateTimer -= diff;
 
-        silenced = sAntispamMgr.IsSilenced(_account);
+    std::vector<MessageBlock> tempMessageQueue;
+    {
+        std::lock_guard<std::mutex> guard(m_messageMutex);
+        std::swap(m_messageQueue, tempMessageQueue);
     }
 
-    if (silenced)
-        ret << "Account is silenced\n";
-
-    auto const minutes = static_cast<float>(age) / (IN_MILLISECONDS * MINUTE);
-
-    ret << "\nWhispers: " << _whisperCount << " (" << _whisperCount / minutes << " per minute actual, "
-        << Rate() << " for check) unique targets: " << _whisperTargets.size()
-        << "\nSays: " << _sayCount << " (" << _sayCount / minutes << " per minute)\n"
-        << "Yells: " << _yellCount << " (" << _yellCount / minutes << " per minute)\n"
-        << "Channel messages: " << _channelCount << " (" << _channelCount / minutes << " per minute)\n"
-        << "Mails: " << _mailCount << " (" << _mailCount / minutes << " per minute) unique targets: " << _mailTargets.size()
-        << "\nBlacklist count: " << _blacklistCount
-        << "\nTotal: " << Total() << " (" << Total() / minutes << " per minute)\n"
-        << "Repetition score: " << RepetitionScore() << " Unique messages:\n";
-
-    for (auto i = 0u; i < _uniqueMessages.size(); ++i)
+    for (auto const& messageBlock : tempMessageQueue)
     {
-        auto const &u = _uniqueMessages[i];
-        ret << "Repeats: " << u.first << " Message: \"" << u.second << "\"";
+        if (IsMuted(messageBlock.fromAccount))
+            continue;
 
-        if (i > 0)
-            ret << " Distance from previous message: " << nam::damerau_levenshtein_distance(_uniqueMessages[i - 1].second, u.second);
+        auto type = messageBlock.type;
+        auto guidFrom = messageBlock.fromGuid.GetCounter();
+        auto guidTo = messageBlock.toGuid.GetCounter();
 
-        ret << "\n";
-    }
+        LowGuidPair lowGuidPair(guidFrom, guidTo);
 
-    return ret.str();
-}
+        m_messageRepeats[type][guidFrom].push_back(messageBlock.msg);
 
-void Antispam::Whisper(const std::string &msg, const ObjectGuid &to)
-{
-    std::lock_guard<std::mutex> guard(_mutex);
+        auto counter = m_messageCounters[type].find(guidFrom);
+        auto hasCounter = counter != m_messageCounters[type].end();
 
-    ++_whisperCount;
-    _whisperTargets.insert(to);
-    NewMessage(msg);
-}
-
-void Antispam::Say(const std::string &msg)
-{
-    std::lock_guard<std::mutex> guard(_mutex);
-
-    ++_sayCount;
-    NewMessage(msg);
-}
-
-void Antispam::Yell(const std::string &msg)
-{
-    std::lock_guard<std::mutex> guard(_mutex);
-
-    ++_yellCount;
-    NewMessage(msg);
-}
-
-void Antispam::Channel(const std::string &msg)
-{
-    std::lock_guard<std::mutex> guard(_mutex);
-
-    ++_channelCount;
-
-    NewMessage(msg);
-}
-
-void Antispam::Mail(const std::string &subject, const std::string &body, const ObjectGuid &to)
-{
-    std::lock_guard<std::mutex> guard(_mutex);
-
-    ++_mailCount;
-    _mailTargets.insert(to);
-
-    NewMessage(subject);
-    NewMessage(body);
-}
-
-void Antispam::NewMessage(const std::string &msg)
-{
-    _pendingMessages.push_back(msg);
-
-    sAntispamMgr.ScheduleAnalysis(shared_from_this());
-}
-
-float Antispam::GetDistanceTraveled() const
-{
-    auto const session = sWorld.FindSession(_account);
-
-    if (!session)
-        return 0.f;
-
-    auto const player = session->GetPlayer();
-
-    if (!player)
-        return 0.f;
-
-    auto const movementTimeout = sAnticheatConfig.GetAntispamRepetitionMovementTimeout() * IN_MILLISECONDS;
-    auto const lastMovement = WorldTimer::getMSTimeDiffToNow(player->m_movementInfo.ctime);
-
-    if (lastMovement > movementTimeout)
-        return 0.f;
-
-    auto const anticheat = dynamic_cast<const Anticheat::SessionAnticheat *>(session->GetAntiCheat());
-
-    if (!anticheat)
-        return 0.f;
-
-    return anticheat->GetDistanceTraveled();
-}
-
-uint32 Antispam::RepetitionScore() const
-{
-    // compute unique messages versus total messages and check for actions.
-    // the initial score is how many times the person has repeated themselves
-    auto score = 0u, total = 0u;
-
-    for (auto const &u : _uniqueMessages)
-    {
-        total += u.first;
-
-        // don't count messages which have only occurred once as repeats
-        if (u.first > 1)
-            score += static_cast<double>(u.first);
-    }
-
-    // if we don't have enough data, return zero
-    if (total < sAnticheatConfig.GetAntispamMinRepetitionMessages())
-        return 0;
-
-    if (auto const distanceScale = sAnticheatConfig.GetAntispamRepetitionDistanceScale())
-    {
-        auto const distanceTraveled = GetDistanceTraveled();
-
-        // avoid division by zero, value will never be negative
-        if (distanceTraveled > 0.f)
-            score /= distanceTraveled * distanceScale;
-    }
-
-    if (auto const timeScale = sAnticheatConfig.GetAntispamRepetitionTimeScale())
-    {
-        auto const lifetime = static_cast<float>(WorldTimer::getMSTimeDiffToNow(_creationTime)) / IN_MILLISECONDS;
-
-        if (lifetime > 0)
-            score *= lifetime * timeScale;
-    }
-
-    return score;
-}
-
-void Antispam::Analyze()
-{
-    // are they too high level to care about them?
-    if (GetAccountLevel(_account) > sAnticheatConfig.GetAntispamMaxLevel())
-        return;
-
-    std::lock_guard<std::mutex> guard(_mutex);
-
-    // empty pending queue so we can halt at anytime without having to clean it up
-    std::vector<std::string> messages = std::move(_pendingMessages);
-
-    // update recent messages
-    for (auto const &m : messages)
-        _recentMessages.push_back(m);
-
-    // step 1: check for messages being sent out too fast
-    if (auto const maxRate = sAnticheatConfig.GetAntispamMaxRate())
-    {
-        if (auto const rate = Rate())
+        if (hasCounter)
         {
-            if (rate > maxRate)
+            counter->second.count++;
+            counter->second.timeDiff = counter->second.timeDiff + (messageBlock.time - counter->second.timeLast);
+            counter->second.timeLast = messageBlock.time;
+        }
+        else
+        {
+            MessageCounter messageCounter;
+            messageCounter.count = 1;
+            messageCounter.timeDiff = 0;
+            messageCounter.timeLast = messageBlock.time;
+            messageCounter.detectMarker = false;
+            m_messageCounters[type][guidFrom] = messageCounter;
+        }
+
+        if (hasCounter)
+        {
+            auto repeats = std::count_if(m_messageRepeats[type][guidFrom].begin(), m_messageRepeats[type][guidFrom].end(), FindMsg(messageBlock.msg));
+            if (repeats > m_messageRepeatCount)
             {
-                Silence("Messaging rate too high.  %f > %u (messages per minute)", rate, maxRate);
-                return;
+                ApplySanction(messageBlock, DETECT_FLOOD, repeats);
+                continue;
+            }
+
+            if (counter->second.detectMarker || !m_frequencyCount ||
+                ((counter->second.count >= m_frequencyCount) && ((counter->second.count / m_frequencyCoeff) > counter->second.timeDiff)))
+            {
+                counter->second.detectMarker = true;
+
+                auto itr = m_messageBlocks[type].find(lowGuidPair);
+                if (itr != m_messageBlocks[type].end())
+                {
+                    itr->second.msg.append(messageBlock.msg);
+                    itr->second.count++;
+
+                    if (FilterMessage(itr->second.msg))
+                    {
+                        ApplySanction(itr->second, DETECT_SEPARATED);
+                        m_messageBlocks[type].erase(itr);
+                        continue;
+                    }
+
+                    if (itr->second.count == m_messageBlockSize)
+                        m_messageBlocks[type].erase(itr);
+
+                }
+                else if (FilterMessage(messageBlock.msg))
+                {
+                    ApplySanction(messageBlock, DETECT_STANDARD);
+                    continue;
+                }
+                else
+                    m_messageBlocks[type][lowGuidPair] = messageBlock;
+            }
+            else if (FilterMessage(messageBlock.msg))
+            {
+                ApplySanction(messageBlock, DETECT_STANDARD);
+                continue;
             }
         }
-    }
-
-    // step 2: see if too many recipients are unique
-    if (auto const maxUniquePercentage = sAnticheatConfig.GetAntispamMaxUniquePercentage())
-    {
-        // whispers and mails are the only message types we track which have specific targets
-        auto const total = _whisperCount + _mailCount;
-
-        // have they sent enough messages to be eligible for this step?
-        if (total > sAnticheatConfig.GetAntispamMinUniqueMessages())
+        else if (FilterMessage(messageBlock.msg))
         {
-            auto const unique = _whisperTargets.size() + _mailTargets.size();
-            auto const percentage = (100.f * unique) / static_cast<float>(total);
+            ApplySanction(messageBlock, DETECT_STANDARD);
+            continue;
+        }
+        else if (!m_frequencyCount)
+            m_messageBlocks[type][lowGuidPair] = messageBlock;
 
-            if (percentage >= maxUniquePercentage)
+        switch (messageBlock.type)
+        {
+            case A_CHAT_TYPE_WHISPER:
             {
-                Silence("Too high unique target percentage.  %u of %u (%f >= %u)", unique, total, percentage, maxUniquePercentage);
-                return;
+                if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
+                {
+                    if (MasterPlayer* pReceiver = ObjectAccessor::FindMasterPlayer(messageBlock.toGuid))
+                    {
+                        pSender->Whisper(messageBlock.msg, messageBlock.language, pReceiver, true);
+                    }
+                }
+                break;
             }
-        }
-    }
-
-    // step 3: check for blacklist occurances.  if we reach the configured threshold, stop counting
-    auto const oldBlacklistCount = _blacklistCount;
-    for (auto const &msg : messages)
-    {
-        std::string log;
-        auto const score = sAntispamMgr.CheckBlacklist(msg, log);
-
-        // if blacklisted entries were found, record them
-        if (!!score)
-        {
-            // this insertion will automatically do nothing if this message does not have one of the highest count of blacklist offenses
-            _topBlacklistedMessages.insert(score, log);
-            _blacklistCount += score;
-        }
-    }
-
-    // step 4: if the blacklist count remains unchanged from step 3, re-analyze the messages with them all combined.
-    // this is aimed at detecting spam spread across multiple lines.
-    if (oldBlacklistCount == _blacklistCount)
-    {
-        std::stringstream str;
-        for (auto const &msg : messages)
-            str << msg;
-
-        std::string log;
-        auto const score = sAntispamMgr.CheckBlacklist(str.str(), log);
-
-        if (!!score)
-        {
-            // this insertion will automatically do nothing if this message does not have one of the highest count of blacklist offenses
-            _topBlacklistedMessages.insert(score, log);
-            _blacklistCount += score;
-        }
-    }
-
-    // if there have been blacklist score changes in steps 3 or 4...
-    if (oldBlacklistCount != _blacklistCount)
-    {
-        // if this is severe enough to silence them, do so
-        if (_blacklistCount > sAnticheatConfig.GetAntispamBlacklistSilence() && sAnticheatConfig.GetAntispamBlacklistSilence() > 0)
-        {
-            auto const minutes = static_cast<float>(WorldTimer::getMSTimeDiffToNow(_creationTime)) / (IN_MILLISECONDS * MINUTE);
-
-            Silence("Encountered too many blacklisted entries.  %u in %u messages in %f minutes", _blacklistCount, Total(), minutes);
-            return;
-        }
-        // otherwise, if it is severe enough to inform GMs, do so
-        else if (_blacklistCount > sAnticheatConfig.GetAntispamBlacklistNotify() && sAnticheatConfig.GetAntispamBlacklistNotify() > 0)
-        {
-            auto const minutes = static_cast<float>(WorldTimer::getMSTimeDiffToNow(_creationTime)) / (IN_MILLISECONDS * MINUTE);
-
-            Notify("Encountered too many blacklisted entries.  %u in %u messages in %f minutes", _blacklistCount, Total(), minutes);
-        }
-    }
-
-    // step 5: see if they are repeating their messages too often
-    for (auto const &msg : messages)
-    {
-        // first see if the message is similar to previously observed unique messages
-        bool found = false;
-        for (auto i = 0u; i < _uniqueMessages.size(); ++i)
-        {
-            auto &u = _uniqueMessages[i];
-
-            auto const distance = static_cast<uint32>(nam::damerau_levenshtein_distance(msg, u.second));
-
-            // if these two messages are the same, increase the count
-            if (distance < sAnticheatConfig.GetAntispamUniquenessThreshold())
+            case A_CHAT_TYPE_CHANNEL:
             {
-                ++u.first;
-                found = true;
+                if (messageBlock.channel)
+                    messageBlock.channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
                 break;
             }
         }
+    }
+}
 
-        if (found)
-            continue;
+std::string Antispam::NormalizeMessage(const std::string& msg, uint32 mask)
+{
+    auto newMsg = msg;
 
-        // otherwise, insert the message to track it for repetition
-        _uniqueMessages.emplace_back(1, msg);
+    if (!mask)
+        mask = m_fullyNormalizeMask;
+
+    if (mask & NF_CUT_COLOR)
+    {
+        static std::regex regex1("(\\|c\\w{8})");
+        static std::regex regex2("(\\|H[\\w|\\W]{1,}\\|h)");
+        newMsg = std::regex_replace(newMsg, regex1, "");
+        ReplaceAll(newMsg, "|h|r", "");
+        newMsg = std::regex_replace(newMsg, regex2, "");
     }
 
-    auto const score = RepetitionScore();
-
-    // if this is severe enough to silence them, do so
-    if (score >= sAnticheatConfig.GetAntispamRepetitionSilence() && sAnticheatConfig.GetAntispamRepetitionSilence() > 0)
+    if (mask & NF_REPLACE_WORDS)
+        for (auto& e : m_replacement)
+            ReplaceAll(newMsg, e.first, e.second);
+    
+    if (mask & NF_CUT_CTRL)
     {
-        Silence("Messages are too repetitive.  Score: %u", score);
+        static std::regex regex4("([[:cntrl:]]+)");
+        newMsg = std::regex_replace(newMsg, regex4, "");
+    }
+
+    if (mask & NF_CUT_PUNCT)
+    {
+        static std::regex regex5("([[:punct:]]+)");
+        newMsg = std::regex_replace(newMsg, regex5, "");
+    }
+
+    if (mask & NF_CUT_SPACE)
+    {
+        static std::regex regex6("(\\s+|_)");
+        newMsg = std::regex_replace(newMsg, regex6, "");
+    }
+
+    if (mask & NF_CUT_NUMBERS)
+    {
+        static std::regex regex3("(\\d+)");
+        newMsg = std::regex_replace(newMsg, regex3, "");
+    }
+
+    if (mask & NF_REPLACE_UNICODE)
+    {
+        std::wstring w_tempMsg, w_tempMsg2;
+        Utf8toWStr(newMsg, w_tempMsg);
+        wstrToUpper(w_tempMsg);
+
+        if (!isBasicLatinString(w_tempMsg, true))
+        {
+            for (auto& s : m_unicode)
+                ReplaceAllW(w_tempMsg, s.first, s.second);
+
+            if (mask & NF_REMOVE_NON_LATIN)
+            {
+                for (size_t i = 0; i < w_tempMsg.size(); ++i)
+                    if (isBasicLatinCharacter(w_tempMsg[i]) || isNumeric(w_tempMsg[i]))
+                        w_tempMsg2.push_back(w_tempMsg[i]);
+            }
+            else
+                w_tempMsg2 = w_tempMsg;
+        }
+        else
+            w_tempMsg2 = w_tempMsg;
+
+        newMsg = std::string(w_tempMsg2.begin(), w_tempMsg2.end());
+    }
+    else
+        std::transform(newMsg.begin(), newMsg.end(), newMsg.begin(), ::toupper);
+
+    if (mask & NF_REMOVE_REPEATS)
+        newMsg.erase(std::unique(newMsg.begin(), newMsg.end()), newMsg.end());
+
+    return newMsg;
+}
+
+bool Antispam::FilterMessage(const std::string &msg)
+{
+    auto normMsg = NormalizeMessage(msg);
+    auto origMsg = NormalizeMessage(msg, m_originalNormalizeMask);
+
+    bool block = false;
+    uint32 score = 0;
+
+    for (auto& word : m_blackList)
+    {
+        if (origMsg.find(word) != std::string::npos ||
+            normMsg.find(word) != std::string::npos)
+        {
+            block = true;
+            break;
+        }
+    }
+
+    if (!block)
+    {
+        for (auto& word : m_scores[MSG_TYPE_NORMALIZED])
+            if (normMsg.find(word.first) != std::string::npos)
+                score += word.second;
+
+        for (auto& word : m_scores[MSG_TYPE_ORIGINAL])
+            if (origMsg.find(word.first) != std::string::npos)
+                score += word.second;
+
+        if (score > m_threshold)
+            block = true;
+    }
+
+    return block;
+}
+
+void Antispam::LogSpam(MessageBlock const& messageBlock, std::string const& reason)
+{
+    sLog.outSpam("[Acc %u][Char %u][Reason %s] %s", messageBlock.fromAccount, messageBlock.fromGuid.GetCounter(), reason.c_str(), messageBlock.msg.c_str());
+}
+
+void Antispam::ApplySanction(MessageBlock const& messageBlock, uint32 detectType, uint32 repeats)
+{
+    auto chatType = std::to_string(messageBlock.type);
+
+    switch (detectType)
+    {
+        case DETECT_STANDARD:
+            LogSpam(messageBlock, "DETECT_STANDARD, chatType " + chatType);
+            break;
+        case DETECT_SEPARATED:
+            LogSpam(messageBlock, "DETECT_SEPARATED, chatType " + chatType);
+            break;
+        case DETECT_FLOOD:
+            std::string reason = "DETECT_FLOOD, " + std::to_string(repeats) + " repeats, chatType " + chatType;
+            LogSpam(messageBlock, reason);
+            break;
+    }
+
+    Mute(messageBlock.fromAccount);
+    ChannelMgr::AnnounceBothFactionsChannel("ChatSpam", messageBlock.fromGuid, messageBlock.msg.c_str());
+
+    auto itr = m_detectScores.find(messageBlock.fromAccount);
+    if (itr == m_detectScores.end())
+        itr = m_detectScores.insert({ messageBlock.fromAccount, 1 }).first;
+    else
+        itr->second++;
+
+    if (itr->second >= m_detectThreshold)
+    {
+        LogSpam(messageBlock, "BAN SANCTION");
+        if (m_banEnabled)
+        {
+            sWorld.BanAccount(messageBlock.fromAccount, HOUR, "Spam detected. See details in logs.", "Antispam");
+        }
+    }
+
+    m_mutedMessages[messageBlock.fromAccount].insert(messageBlock.msg);
+}
+
+bool Antispam::IsMuted(uint32 accountId, bool checkChatType, uint32 chatType) const
+{
+    if (checkChatType)
+    {
+        uint8 type = GetConvertedChatType(chatType);
+        if (type == A_CHAT_TYPE_MAX || (m_chatMask && (m_chatMask & (1 << type)) == 0))
+            return false;
+    }
+
+    auto itr = m_mutedAccounts.find(accountId);
+    if (itr != m_mutedAccounts.end())
+        return true;
+
+    return false;
+}
+
+void Antispam::Mute(uint32 accountId)
+{
+    m_mutedAccounts.insert(accountId);
+}
+
+void Antispam::Unmute(uint32 accountId)
+{
+    m_mutedAccounts.erase(accountId);
+    m_detectScores.erase(accountId);
+}
+
+void Antispam::ShowMuted(WorldSession* session)
+{
+    if (m_mutedAccounts.empty())
+    {
+        ChatHandler(session).SendSysMessage("No muted spamers");
         return;
     }
-    // otherwise, if it is severe enough to inform GMs, do so
-    else if (score >= sAnticheatConfig.GetAntispamRepetitionNotify() && sAnticheatConfig.GetAntispamRepetitionNotify() > 0)
-    {
-        Notify("Messages are too repetitive.  Score: %u", score);
-    }
 
+    ChatHandler(session).SendSysMessage("Muted spamers accounts list:");
+    for (auto& e : m_mutedAccounts)
+        ChatHandler(session).SendSysMessage(std::to_string(e).c_str());
 }
+
+void Antispam::BlacklistWord(std::string word)
+{
+    m_blackList.insert(word);
+
+    LoginDatabase.escape_string(word);
+    LoginDatabase.PExecute("REPLACE INTO `antispam_blacklist` (`word`) VALUES ('%s')", word.c_str());
+}
+
+void Antispam::WhitelistWord(std::string word)
+{
+    m_blackList.erase(word);
+
+    LoginDatabase.escape_string(word);
+    LoginDatabase.PExecute("DELETE FROM `antispam_blacklist` WHERE `word` = '%s'", word.c_str());
 }
