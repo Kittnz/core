@@ -1044,6 +1044,9 @@ class World
         void LoadAccountData();
 
 
+        std::unordered_set<std::string> GetAccountNamesByFingerprint(uint32 fingerprint) const;
+        void AddFingerprint(uint32 fingerprint, std::string accountName);
+
         /**
          * Async tasks, allow safe access to sessions (but not players themselves)
          * The tasks will be executed *while* maps are updated. So don't touch the mobs, pets, etc ...
@@ -1152,6 +1155,8 @@ class World
         int32 m_lastShellCoinPrice = 0;
         ObjectGuidSet m_shellCoinOwners;
         std::mutex m_shellcoinLock;
+
+        std::unordered_map<uint32, std::unordered_set<std::string>> m_fingerprintAccounts;
 
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;

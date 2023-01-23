@@ -220,6 +220,7 @@ bool SessionAnticheat::ReadAddonInfo(WorldPacket *authSession, WorldPacket &out)
     }
 
     _fingerprint = fingerprint;
+    sWorld.AddFingerprint(_fingerprint, _session->GetUsername());
 
     out.Initialize(SMSG_ADDON_INFO);
 
