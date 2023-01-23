@@ -2779,6 +2779,20 @@ void World::LoadAccountData()
     sLog.outString("Loaded %u cached accounts.", count);
 }
 
+std::unordered_set<std::string> World::GetAccountNamesByFingerprint(uint32 fingerprint) const
+{
+    const auto itr = m_fingerprintAccounts.find(fingerprint);
+    if (itr == m_fingerprintAccounts.end())
+        return {};
+    return itr->second;
+}
+
+
+void World::AddFingerprint(uint32 fingerprint, std::string accountName)
+{
+    m_fingerprintAccounts[fingerprint].insert(accountName);
+}
+
 void World::SetPlayerLimit(int32 limit, bool needUpdate)
 {
     if (limit < -SEC_ADMINISTRATOR)
