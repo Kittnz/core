@@ -124,3 +124,5 @@ update quest_template set RewOrReqMoney = 325 where entry = 39001;
 update creature_template set display_id1 = 4492 where entry = 80918;
 -- Stonard Grunts mobs are not triggering World Defense channels (Stonard Scouts mobs do though) #2711.
 update creature_template set flags_extra = 524296 where entry = 866;
+-- HP decrease on lvl up #2708.
+update player_classlevelstats set basehp = 52 where class = 5 and level = 3;
