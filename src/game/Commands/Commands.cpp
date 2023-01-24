@@ -11967,6 +11967,46 @@ bool ChatHandler::HandleServerCorpsesCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleRemoveCorpsesCommand(char* args)
+{
+    float dist = 0.0f;
+
+    if (!ExtractFloat(&args, dist))
+        return false;
+
+    std::list<Corpse*> corpses;
+    auto player = GetPlayer();
+
+    if (!player)
+        return false;
+
+
+    MaNGOS::CorpseInRangeCheck check{player, dist};
+    MaNGOS::CorpseListSearcher<MaNGOS::CorpseInRangeCheck> searcher{ corpses, check };
+
+    //Visit world objects first, for corpses.
+    Cell::VisitWorldObjects(player, searcher, dist);
+    
+    //Visit Grid objects for corpse-bones.
+    Cell::VisitGridObjects(player, searcher, dist);
+
+
+    for (auto& corpse : corpses)
+    {
+        //mark all corpses expired and schedule a bone update so that bones are cleaned up too.
+        corpse->MarkExpired();
+    }
+
+    auto map = player->GetMap();
+    if (map)
+        map->ScheduleCorpseRemoval();
+
+    sObjectAccessor.RemoveOldCorpses();
+
+    return true;
+}
+
+
 bool ChatHandler::HandleRepairitemsCommand(char* args)
 {
     Player* target;
