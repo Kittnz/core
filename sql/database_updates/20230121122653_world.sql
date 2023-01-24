@@ -120,3 +120,5 @@ update quest_template set OfferRewardText = 'Sent by the Revantusk? They came to
 update creature_spells set spellid_1 = 15620 where entry = 180049;
 -- Curiosity Leads Us Forward giving too much money #2709.
 update quest_template set RewOrReqMoney = 325 where entry = 39001;
+-- Orgrimmar Guild Vault Keeper model changes periodically #2717.
+update creature_template set display_id1 = 4492 where entry = 80918;
