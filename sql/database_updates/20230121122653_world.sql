@@ -118,3 +118,5 @@ update area_template set name = 'Amani\'Alor' where entry = 2041;
 update quest_template set OfferRewardText = 'Sent by the Revantusk? They came to Kalimdor a few months ago and constructed a village in the hills of the Stonetalon Mountains under the order of Primal Torntusk.$B$BEstablishing a new home for yourself after struggling for so long is no easy task, one that the Darkspear sympathize with. When you\'re ready, I\'ll send you to Amani\'Alor so you can see how you can best be useful. I just hope the rest of them make the journey before it\'s too late.' where entry = 80300;
 -- Shadowforge Wyrm Hunters in Scalebane Ridge deal unreasonable damage #2700.
 update creature_spells set spellid_1 = 15620 where entry = 180049;
+-- Curiosity Leads Us Forward giving too much money #2709.
+update quest_template set RewOrReqMoney = 325 where entry = 39001;
