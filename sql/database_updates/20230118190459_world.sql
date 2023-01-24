@@ -2108,3 +2108,23 @@ DELETE FROM gameobject_battleground WHERE guid = '5012510';
 
 -- Changes by TORTA
 REPLACE INTO `creature` VALUES (2574413,2673,0,0,0,0,-9677.48,47.8508,59.4553,5.63511,120,120,5,100,100,1,0,0);
+DELETE FROM creature WHERE guid=2574413;
+DELETE FROM creature_addon WHERE guid=2574413;
+DELETE FROM creature_movement WHERE id=2574413;
+DELETE FROM game_event_creature WHERE guid=2574413;
+DELETE FROM game_event_creature_data WHERE guid=2574413;
+DELETE FROM creature_battleground WHERE guid=2574413;
+REPLACE INTO `creature` VALUES (2574414,2674,0,0,0,0,-9677.48,47.8508,59.4553,5.63511,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2574414;
+DELETE FROM creature_addon WHERE guid=2574414;
+DELETE FROM creature_movement WHERE id=2574414;
+DELETE FROM game_event_creature WHERE guid=2574414;
+DELETE FROM game_event_creature_data WHERE guid=2574414;
+DELETE FROM creature_battleground WHERE guid=2574414;
+REPLACE INTO `creature` VALUES (2574415,50516,0,0,0,0,-9677.48,47.8508,59.4553,5.63511,120,120,0,100,100,0,0,0);
+DELETE FROM creature WHERE guid=2574415;
+DELETE FROM creature_addon WHERE guid=2574415;
+DELETE FROM creature_movement WHERE id=2574415;
+DELETE FROM game_event_creature WHERE guid=2574415;
+DELETE FROM game_event_creature_data WHERE guid=2574415;
+DELETE FROM creature_battleground WHERE guid=2574415;
