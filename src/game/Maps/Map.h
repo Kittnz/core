@@ -605,6 +605,7 @@ class Map : public GridRefManager<NGridType>
         bool ShouldUpdateMap(uint32 now, uint32 inactiveTimeLimit);
         uint32 GetLastMapUpdate() const { return _lastMapUpdate; }
         void RemoveBones(Corpse* corpse);
+        void ScheduleCorpseRemoval();
 
     private:
         void LoadMapAndVMap(int gx, int gy);

@@ -3502,6 +3502,12 @@ void Map::RemoveOldBones(const uint32 diff)
     }
 }
 
+void Map::ScheduleCorpseRemoval()
+{
+    //explicitly set timer to interval timer so that RemoveOldBones() is called on next tick.
+    _bonesCleanupTimer = sWorld.GetWorldUpdateTimerInterval(WUPDATE_CORPSES);
+}
+
 GameObject* Map::SummonGameObject(uint32 entry, float x, float y, float z, float ang, float rotation0, float rotation1, float rotation2, float rotation3, uint32 respawnTime, uint32 worldMask)
 {
     GameObjectInfo const* goinfo = sObjectMgr.GetGameObjectInfo(entry);
