@@ -370,8 +370,9 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
     // not set flags if player can't free move to prevent lost state at logout cancel
     if (GetPlayer()->CanFreeMove())
     {
-        float height = GetPlayer()->GetMap()->GetHeight(GetPlayer()->GetPositionX(), GetPlayer()->GetPositionY(), GetPlayer()->GetPositionZ());
-        if ((GetPlayer()->GetPositionZ() < height + 0.1f) && !(GetPlayer()->IsInWater()) && GetPlayer()->GetStandState() == UNIT_STAND_STATE_STAND)
+        if (GetPlayer()->GetStandState() == UNIT_STAND_STATE_STAND &&
+           !GetPlayer()->IsMounted() &&
+           !(GetPlayer()->GetUnitMovementFlags() & (MOVEFLAG_SWIMMING | MOVEFLAG_SPLINE_ENABLED)))
             GetPlayer()->SetStandState(UNIT_STAND_STATE_SIT);
 
         GetPlayer()->SetRooted(true);
@@ -406,7 +407,8 @@ void WorldSession::HandleLogoutCancelOpcode(WorldPacket & /*recv_data*/)
         GetPlayer()->SetRooted(false);
 
         //! Stand Up
-        GetPlayer()->SetStandState(UNIT_STAND_STATE_STAND);
+        if (GetPlayer()->GetStandState() == UNIT_STAND_STATE_SIT)
+            GetPlayer()->SetStandState(UNIT_STAND_STATE_STAND);
 
         //! DISABLE_ROTATE
         GetPlayer()->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED);
