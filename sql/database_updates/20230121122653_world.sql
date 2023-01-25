@@ -242,3 +242,21 @@ Details = 'Ah, while you were off dealing with the mindless Scourge, this scroll
 RequestItemsText = 'You must know why I sent for you, $N. Seeing a fallen marksman rise again is such a rare glimmer of hope in this accursed land. Lady Sylvanas will no doubt be pleased that she may one day soon have ranks of ranger under her command again.$B$BI will see to it that you are molded into a proper vessel for fulfilling that dream. Embrace now your destiny as a Dark Ranger.',
 OfferRewardText = 'You carry that weapon well, but it is not enough to be an adequate marksman. The Dark Lady, Sylvanas Windrunner, freed you from the shackles that bound you to the will of the Lich King. You will return her gracious gift by giving of yourself for her cause.$B$BIf you cannot commit, I will see to it personally you are buried again in the hole you crawled out of. I will train you to be one of the many arrows that strike the hearts of her foes.$B$BCome to me often, that I may teach you new skills. I will be watching you carefully and gauging your growth here in Deathknell.'
 WHERE entry = 40220;
+-- Grammar fix for Greeting of https://database.turtle-wow.org/?npc=60488.
+update broadcast_text set male_text = 'The beasts of this world do not trust the undead. The Cult of Forgotten Shadow possesses a solution for this, however.' 
+where entry = 60488;
+-- Grammar fix for Greeting of https://database.turtle-wow.org/?npc=60484.
+update broadcast_text set male_text = 'The path of a Forsaken hunter differs from that of others. We do not adapt to nature, but bend nature to adapt to us.' 
+where entry = 60484;
+-- Add Greeting to https://database.turtle-wow.org/?npc=80855.
+set @gossip_menu_id = 41347; set @magic_number = 80855;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Don\'t underestimate what a gnome with a gun can do, $c!');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Add Greeting to https://database.turtle-wow.org/?npc=81050.
+set @gossip_menu_id = 41348; set @magic_number = 81050;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am truly privileged that the Dark Lady has entrusted me with sharing her knowledge.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
