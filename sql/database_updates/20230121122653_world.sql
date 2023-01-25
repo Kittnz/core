@@ -234,5 +234,5 @@ REPLACE INTO creature_loot_template VALUES (91965, 30080, 0.5, 0, -30080, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91965, 30082, 0.0025, 0, -30082, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91965, 30090, 2.5, 10, -30090, 1, 0);
 REPLACE INTO creature_loot_template VALUES (91965, 30103, 0.0025, 0, -30103, 1, 0);
-
-
+-- NPC Balos Jacken has unlimited leash distance (without kiting needed) #2692.
+update creature_template set leash_range = 100 where entry = 5089;
