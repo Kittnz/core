@@ -1838,6 +1838,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
     {
         if (IsQuestTameSpell(GetId()) && target->IsAlive())
         {
+            if (m_removeMode != AURA_REMOVE_BY_EXPIRE)
+                return;
+
             Unit* caster = GetCaster();
             if (!caster || !caster->IsAlive())
                 return;
