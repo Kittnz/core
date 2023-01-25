@@ -47,70 +47,69 @@ struct boss_ostariusAI : public ScriptedAI
         boss_ostariusAI::Reset();
     }
 
-    bool isFrostPhase{};
-
     EventMap m_events;
 
-    uint8 CurrentPhase{};
-    uint8 PhaseState{};
-    uint8 LastHealthPercentage{};
-    uint16 numOfPortalsToSpawn{};
-    uint16 numOfDevicesToSpawn{};
+    bool m_isFrostPhase = false;
+    uint8 m_currentPhase = 0;
+    uint8 m_phaseState = 0;
+    uint8 m_lastHealthPercent = 0;
+    uint16 m_numOfPortalsToSpawn = 0;
+    uint16 m_numOfDevicesToSpawn = 0;
 
-    uint32 PortalCheck_Timer{};
-    uint32 SonicBurst_Timer{};
-    uint32 ChainLightning_Timer{};
-    uint32 SpawnPortals_Timer{};
-    uint32 SpawnDevices_Timer{};
+    uint32 m_portalActivateTimer = 0;
+    uint32 m_sonicBurstTimer = 0;
+    uint32 m_chainLightningTimer = 0;
+    uint32 m_spawnPortalsTimer = 0;
+    uint32 m_spawnDevicesTimer = 0;
 
-    std::vector<ObjectGuid> constructSpawns;
-    std::vector<ObjectGuid> sentrySpawns;
-    std::vector<ObjectGuid> portals;
-    std::vector<ObjectGuid> devices;
+    std::vector<ObjectGuid> m_constructSpawns;
+    std::vector<ObjectGuid> m_sentrySpawns;
+    std::vector<ObjectGuid> m_portals;
+    std::vector<ObjectGuid> m_devices;
 
     std::vector<ObjectGuid>& ConstructSpawns()
     {
-        return constructSpawns;
+        return m_constructSpawns;
     }
 
     std::vector<ObjectGuid>& SentrySpawns()
     {
-        return sentrySpawns;
+        return m_sentrySpawns;
     }
 
     std::vector<ObjectGuid>& Portals()
     {
-        return portals;
+        return m_portals;
     }
 
     std::vector<ObjectGuid>& Devices()
     {
-        return devices;
+        return m_devices;
     }
 
     bool IsFrostPhase()
     {
-        return isFrostPhase;
+        return m_isFrostPhase;
     }
 
     void SetDefaults()
     {
         m_events.Reset();
 
-        PhaseState = 0;
-        CurrentPhase = 0;
-        isFrostPhase = false;
+        m_phaseState = 0;
+        m_currentPhase = 0;
+        m_isFrostPhase = false;
 
-        numOfPortalsToSpawn = 2;
-        numOfDevicesToSpawn = 2;
+        m_numOfPortalsToSpawn = 2;
+        m_numOfDevicesToSpawn = 2;
 
-        LastHealthPercentage = 100;
+        m_lastHealthPercent = 100;
 
-        PortalCheck_Timer = 30000;
-        SonicBurst_Timer = 10000;
-        ChainLightning_Timer = 15000;
-        SpawnPortals_Timer = 0;
-        SpawnDevices_Timer = 0;
+        m_sonicBurstTimer = 10000;
+        m_chainLightningTimer = 15000;
+        m_spawnPortalsTimer = 0;
+        m_spawnDevicesTimer = 0;
+        m_portalActivateTimer = 10000;
 
         me->SetAttackTimer(BASE_ATTACK, 1 * DAY); // never auto initially
 
@@ -154,25 +153,25 @@ struct boss_ostariusAI : public ScriptedAI
 
     void DespawnSummons()
     {
-        for (const auto& guid : sentrySpawns)
+        for (const auto& guid : m_sentrySpawns)
             if (auto c = me->GetMap()->GetCreature(guid))
                 c->DespawnOrUnsummon();
-        sentrySpawns.clear();
+        m_sentrySpawns.clear();
 
-        for (const auto& guid : constructSpawns)
+        for (const auto& guid : m_constructSpawns)
             if (auto c = me->GetMap()->GetCreature(guid))
                 c->DespawnOrUnsummon();
-        constructSpawns.clear();
+        m_constructSpawns.clear();
 
-        for (const auto& guid : portals)
+        for (const auto& guid : m_portals)
             if (auto g = me->GetMap()->GetGameObject(guid))
-                g->AddObjectToRemoveList();
-        portals.clear();
+                g->DeleteLater();
+        m_portals.clear();
 
-        for (const auto& guid : devices)
+        for (const auto& guid : m_devices)
             if (auto g = me->GetMap()->GetGameObject(guid))
-                g->AddObjectToRemoveList();
-        devices.clear();
+                g->DeleteLater();
+        m_devices.clear();
     }
 
     void KilledUnit(Unit* victim) override
@@ -316,7 +315,7 @@ struct boss_ostariusAI : public ScriptedAI
                 }
                 case EVENT_PHASE_1_DELAY:
                 {
-                    CurrentPhase = 1;
+                    m_currentPhase = 1;
                     break;
                 }
                 case EVENT_PHASE_3_DELAY:
@@ -333,7 +332,7 @@ struct boss_ostariusAI : public ScriptedAI
         }
 
         // Portal phase.
-        if (CurrentPhase == 1 && !(PhaseState & STATE_PHASE_1))
+        if (m_currentPhase == 1 && !(m_phaseState & STATE_PHASE_1))
         {
             DoCast(me, SPELL_SANDSTORM, true);
 
@@ -346,38 +345,39 @@ struct boss_ostariusAI : public ScriptedAI
 
             // Spawn portals so sentries enter battlefield.
             SpawnPortals();
+            m_portalActivateTimer = 2500;
 
-            PhaseState |= STATE_PHASE_1;
+            m_phaseState |= STATE_PHASE_1;
         }
 
         // Sentry phase (fire).
-        if (me->GetHealthPercent() < 70.f && !(PhaseState & STATE_PHASE_2))
+        if (me->GetHealthPercent() < 70.f && !(m_phaseState & STATE_PHASE_2))
         {
             PlaySound(me, SOUND_PHASE_2, true);
             me->MonsterSendTextToZone(PHASE_2_TEXT, CHAT_MSG_MONSTER_YELL);
 
             SummonSentries();
 
-            CurrentPhase = 2;
-            PhaseState |= STATE_PHASE_2;
+            m_currentPhase = 2;
+            m_phaseState |= STATE_PHASE_2;
         }
 
         // Frost phase (changes spells on sentries and summons suppression devices)
-        if (me->GetHealthPercent() < 50.f && !(PhaseState & STATE_PHASE_3))
+        if (me->GetHealthPercent() < 50.f && !(m_phaseState & STATE_PHASE_3))
         {
-            isFrostPhase = true;
+            m_isFrostPhase = true;
 
             PlaySound(me, SOUND_PHASE_3, true);
             me->MonsterSendTextToZone(PHASE_3_TEXT, CHAT_MSG_MONSTER_YELL);
 
             SpawnSupressionDevices();
 
-            CurrentPhase = 3;
-            PhaseState |= STATE_PHASE_3;
+            m_currentPhase = 3;
+            m_phaseState |= STATE_PHASE_3;
         }
 
         // Manual intervention phase.
-        if (me->GetHealthPercent() < 30.f && !(PhaseState & STATE_PHASE_4))
+        if (me->GetHealthPercent() < 30.f && !(m_phaseState & STATE_PHASE_4))
         {
             PlaySound(me, SOUND_PHASE_4, true);
             me->MonsterSendTextToZone(PHASE_4_TEXT, CHAT_MSG_MONSTER_YELL);
@@ -387,66 +387,83 @@ struct boss_ostariusAI : public ScriptedAI
             m_events.ScheduleEvent(EVENT_PHASE_3_DELAY, Seconds(5));
             me->RemoveAurasDueToSpell(SPELL_SANDSTORM); // Remove here so animation finishes before phase starts.
 
-            CurrentPhase = 4;
-            PhaseState |= STATE_PHASE_4;
+            m_currentPhase = 4;
+            m_phaseState |= STATE_PHASE_4;
         }
 
-        if (CurrentPhase == 1)
+        if (m_currentPhase > 0 && m_currentPhase < 4)
         {
-            if (SpawnPortals_Timer < diff)
+            if (!GetNearbyEnemyPlayer(me, 120.0f))
+            {
+                me->MonsterSendTextToZone(EVADE_TEXT, CHAT_MSG_MONSTER_YELL);
+                me->OnLeaveCombat();
+                return;
+            }
+
+            if (m_portalActivateTimer < diff)
+            {
+                ActivatePortals();
+                m_portalActivateTimer = (m_currentPhase > 1 ? 10 : 12) * IN_MILLISECONDS;
+            }
+            else
+                m_portalActivateTimer -= diff;
+        }
+
+        if (m_currentPhase == 1)
+        {
+            if (m_spawnPortalsTimer < diff)
             {
                 SpawnPortals();
 
                 // Spawn more next time.
-                numOfPortalsToSpawn += 1;
+                m_numOfPortalsToSpawn += 1;
 
-                SpawnPortals_Timer = 40 * IN_MILLISECONDS;
+                m_spawnPortalsTimer = 40 * IN_MILLISECONDS;
             }
             else
-                SpawnPortals_Timer -= diff;
+                m_spawnPortalsTimer -= diff;
         }
 
         // Frost phase
-        if (CurrentPhase == 3)
+        if (m_currentPhase == 3)
         {
-            if (SpawnDevices_Timer < diff)
+            if (m_spawnDevicesTimer < diff)
             {
                 SpawnSupressionDevices();
 
                 // Spawn more next time.
-                numOfDevicesToSpawn += 2;
+                m_numOfDevicesToSpawn += 2;
 
-                SpawnDevices_Timer = 20 * IN_MILLISECONDS;
+                m_spawnDevicesTimer = 20 * IN_MILLISECONDS;
             }
             else
-                SpawnDevices_Timer -= diff;
+                m_spawnDevicesTimer -= diff;
         }
 
-        if (CurrentPhase < 4)
+        if (m_currentPhase < 4)
             return;
 
-
         // Stomp and Earthquake every 10% HP loss.
-        if (LastHealthPercentage - me->GetHealthPercent() >= 10.f)
+        if (m_lastHealthPercent - me->GetHealthPercent() >= 10.f)
         {
             if (DoCastSpellIfCan(me->GetVictim(), SPELL_STOMP) == CAST_OK)
             {
                 DoCast(me, SPELL_EARTHQUAKE, true);
-                LastHealthPercentage = me->GetHealthPercent();
+                m_lastHealthPercent = me->GetHealthPercent();
             }
         }
 
         // Sonic Burst
-        if (SonicBurst_Timer < diff)
+        if (m_sonicBurstTimer < diff)
         {
             if (DoCastSpellIfCan(me, SPELL_SONIC_BURST) == CAST_OK)
-                SonicBurst_Timer = urand(25000, 53000);
+                m_sonicBurstTimer = urand(25000, 53000);
         }
         else
-            SonicBurst_Timer -= diff;
+            m_sonicBurstTimer -= diff;
         
         // Chain Lighting a far away target, but within their casting range.
-        if (ChainLightning_Timer < diff)
+        if (m_chainLightningTimer < diff)
         {
             // WTB built-in functions for this :sob:. MaNGOS is lacking them... Messy, but oh well.
             for (uint8 i = 0; i < 20; ++i)
@@ -465,34 +482,70 @@ struct boss_ostariusAI : public ScriptedAI
 
             // Reset timer even if our 20-attempt search fails.
             // Static so players can learn to avoid.
-            ChainLightning_Timer = 15000;
+            m_chainLightningTimer = 15000;
         }
         else
-            ChainLightning_Timer -= diff;
+            m_chainLightningTimer -= diff;
 
         // Reactivate all defenses at 15%
-        if (me->GetHealthPercent() < 15.f && !(PhaseState & STATE_ENRAGED))
+        if (me->GetHealthPercent() < 15.f && !(m_phaseState & STATE_ENRAGED))
         {
             me->MonsterTextEmote("Ostarius reactivates all defenses out of desperation!", nullptr, true);
             me->MonsterSendTextToZone(ENRAGE_TEXT, CHAT_MSG_MONSTER_YELL);
             PlaySound(me, SOUND_ENRAGE, true);
 
             SummonSentries();
-            SpawnPortals();
             SpawnSupressionDevices();
 
-            PhaseState |= STATE_ENRAGED;
+            m_phaseState |= STATE_ENRAGED;
         }
 
         DoMeleeAttackIfReady();
     }
 
+    void ActivatePortals()
+    {
+        for (auto const& guid : m_portals)
+        {
+            if (ConstructSpawns().size() >= MAX_SPAWNED_CONSTRUCTS)
+                return;
+
+            GameObject* pPortal = me->GetMap()->GetGameObject(guid);
+            if (!pPortal || !pPortal->isSpawned())
+                continue;
+
+            const float ground_z = me->GetMap()->GetHeight(pPortal->GetPositionX(), pPortal->GetPositionY(), MAX_HEIGHT);
+            
+            Creature* spawn = me->SummonCreature(
+                MOB_ULDUM_CONSTRUCT,
+                pPortal->GetPositionX(),
+                pPortal->GetPositionY(),
+                ground_z,
+                pPortal->GetOrientation(),
+                TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, // despawns after a specified time (out of combat) OR when the creature dies
+                10 * IN_MILLISECONDS,
+                true
+            );
+
+            ConstructSpawns().push_back(spawn->GetObjectGuid());
+
+            Unit* randomEnemy = GetNearbyEnemyPlayer(spawn, 100.f);
+            if (!randomEnemy)
+            {
+                if (!(randomEnemy = me->GetAttackerForHelper()))
+                    continue;
+            }
+
+            spawn->AI()->AttackStart(randomEnemy);
+        }
+    }
+
     void SpawnPortals()
     {
-        for (uint8 i = 0; i < numOfPortalsToSpawn; ++i)
+        for (uint8 i = 0; i < m_numOfPortalsToSpawn; ++i)
         {
             // Hit the limit. Try again later.
-            if (portals.size() >= MAX_OPEN_PORTALS)
+            if (m_portals.size() >= MAX_OPEN_PORTALS)
                 return;
 
             // Generates random spawn within a square on the floor.
@@ -510,7 +563,7 @@ struct boss_ostariusAI : public ScriptedAI
                 0.0f,
                 5 * MINUTE
             );
-            portals.push_back(portal->GetObjectGuid());
+            m_portals.push_back(portal->GetObjectGuid());
 
             portal->SetActiveObjectState(true);
         }
@@ -530,16 +583,16 @@ struct boss_ostariusAI : public ScriptedAI
                 30 * MINUTE * IN_MILLISECONDS
             );
 
-            sentrySpawns.push_back(sentry->GetObjectGuid());
+            m_sentrySpawns.push_back(sentry->GetObjectGuid());
         }
     }
 
     void SpawnSupressionDevices()
     {
-        for (uint8 i = 0; i < numOfDevicesToSpawn; ++i)
+        for (uint8 i = 0; i < m_numOfDevicesToSpawn; ++i)
         {
             // Hit the limit. Try again later.
-            if (devices.size() >= MAX_ACTIVE_DEVICES)
+            if (m_devices.size() >= MAX_ACTIVE_DEVICES)
                 return;
 
             // Generates random spawn within a square on the floor.
@@ -559,7 +612,7 @@ struct boss_ostariusAI : public ScriptedAI
                 5 * MINUTE
             );
 
-            devices.push_back(device->GetObjectGuid());
+            m_devices.push_back(device->GetObjectGuid());
         }
     }
 };
@@ -737,75 +790,6 @@ bool GOOpen_go_uldum_portal(Player* pPlayer, GameObject* pGo)
 
     return true;
 }
-
-struct go_uldum_portalAI : public GameObjectAI
-{
-    explicit go_uldum_portalAI(GameObject* object) : GameObjectAI(object)
-    {
-        go_uldum_portalAI::Reset();
-    }
-
-    uint32 Summon_Timer{};
-    uint8 PlayerSelect_Fails{};
-
-    void Reset()
-    {
-        Summon_Timer = 2500; // for portal to render
-    }
-
-    void UpdateAI(const uint32 diff) override
-    {
-        if (Summon_Timer < diff)
-        {
-            // Hit the limit. Try again later.
-            if (Creature* pOstarius{ GetClosestCreatureWithEntry(me, BOSS_OSTARIUS, 500.f) })
-            {
-                if (boss_ostariusAI* boss_ostarius{ dynamic_cast<boss_ostariusAI*>(pOstarius->AI()) })
-                {
-                    if (boss_ostarius->ConstructSpawns().size() >= MAX_SPAWNED_CONSTRUCTS)
-                        return;
-
-                    const float ground_z = me->GetMap()->GetHeight(me->GetPositionX(), me->GetPositionY(), MAX_HEIGHT);
-
-                    Creature* spawn = me->SummonCreature(
-                        MOB_ULDUM_CONSTRUCT,
-                        me->GetPositionX(),
-                        me->GetPositionY(),
-                        ground_z,
-                        me->GetOrientation(),
-                        TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN, // despawns after a specified time (out of combat) OR when the creature dies
-                        300
-                    );
-
-                    Player* randomPlayer = GetNearbyEnemyPlayer(spawn, 300.f);
-                    if (!randomPlayer)
-                    {
-                        // Hopefully we don't get here, but try to find a player a few more times before giving up.
-                        ++PlayerSelect_Fails;
-                        Summon_Timer = 100;
-                        spawn->DeleteLater();
-
-                        // If we're repeatedly failing to find players, delete portal.
-                        if (PlayerSelect_Fails >= 5)
-                            DeleteObject(me, boss_ostarius->Portals());
-
-                        return;
-                    }
-
-                    PlayerSelect_Fails = 0;
-                    boss_ostarius->ConstructSpawns().push_back(spawn->GetObjectGuid());
-
-                    spawn->SetInCombatWith(randomPlayer);
-                    spawn->GetMotionMaster()->MoveChase(randomPlayer);
-
-                    Summon_Timer = urand(16000, 25000);
-                }
-            }
-        }
-        else
-            Summon_Timer -= diff;
-    }
-};
 
 constexpr auto SPELL_PIERCING_COLD = 57003;
 
@@ -1010,11 +994,6 @@ CreatureAI* GetAI_mob_uldum_sentry(Creature* creature)
     return new mob_uldum_sentryAI(creature);
 }
 
-GameObjectAI* GetAI_go_uldum_portal(GameObject* gameobject)
-{
-    return new go_uldum_portalAI(gameobject);
-}
-
 GameObjectAI* GetAIgo_uldum_suppression(GameObject* pGo)
 {
     return new go_uldum_suppressionAI(pGo);
@@ -1170,7 +1149,6 @@ void AddSC_boss_ostarius()
 
     newscript = new Script;
     newscript->Name = "go_uldum_portal";
-    newscript->GOGetAI = &GetAI_go_uldum_portal;
     newscript->GOOpen = &GOOpen_go_uldum_portal;
     newscript->RegisterSelf();
 
