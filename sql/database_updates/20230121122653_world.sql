@@ -274,3 +274,7 @@ update broadcast_text set male_text = 'My name is Nazgrim Redbrand, Lord of the 
 where entry = 60925;
 -- Change respawn time of https://database.turtle-wow.org/?object=2010914 to instant down from 5 minutes. 
 update gameobject set spawntimesecsmin = 3, spawntimesecsmax = 3 where id = 2010914;
+-- https://database.turtle-wow.org/?npc=15871 has the wrong gossip text when clicking on Where is Elder Bladeswift?
+update gossip_menu set text_id = 8165 where entry = 6876;
+REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`)  
+VALUES (8165, 11555, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
