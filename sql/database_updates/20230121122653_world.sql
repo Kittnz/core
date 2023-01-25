@@ -236,3 +236,9 @@ REPLACE INTO creature_loot_template VALUES (91965, 30090, 2.5, 10, -30090, 1, 0)
 REPLACE INTO creature_loot_template VALUES (91965, 30103, 0.0025, 0, -30103, 1, 0);
 -- NPC Balos Jacken has unlimited leash distance (without kiting needed) #2692.
 update creature_template set leash_range = 100 where entry = 5089;
+-- Cleanup for https://database.turtle-wow.org/?quest=40220 by RMJ.
+UPDATE quest_template SET
+Details = 'Ah, while you were off dealing with the mindless Scourge, this scroll arrived for you. I would think it''s some matter of importance as it seems it bears the seal of the hunter trainer Morpheus Ribcage. I would take some time to read it before heading out again.',
+RequestItemsText = 'You must know why I sent for you, $N. Seeing a fallen marksman rise again is such a rare glimmer of hope in this accursed land. Lady Sylvanas will no doubt be pleased that she may one day soon have ranks of ranger under her command again.$B$BI will see to it that you are molded into a proper vessel for fulfilling that dream. Embrace now your destiny as a Dark Ranger.',
+OfferRewardText = 'You carry that weapon well, but it is not enough to be an adequate marksman. The Dark Lady, Sylvanas Windrunner, freed you from the shackles that bound you to the will of the Lich King. You will return her gracious gift by giving of yourself for her cause.$B$BIf you cannot commit, I will see to it personally you are buried again in the hole you crawled out of. I will train you to be one of the many arrows that strike the hearts of her foes.$B$BCome to me often, that I may teach you new skills. I will be watching you carefully and gauging your growth here in Deathknell.'
+WHERE entry = 40220;
