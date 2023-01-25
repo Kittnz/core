@@ -272,3 +272,5 @@ where entry = 61010;
 -- Grammar fix for Greeting of https://database.turtle-wow.org/?npc=60925.
 update broadcast_text set male_text = 'My name is Nazgrim Redbrand, Lord of the noble Redbrand family. The Redbrands have suffered many tragedies of late, with our namesake crumbling around us. I will not stand idly by and watch my family\'s legacy tarnished by misfortune.$B$BThe reputation of a dwarf means a great deal here in Khaz Modan, and so long as I stand as the head of the Redbrand family, I shall see its honor restored.' 
 where entry = 60925;
+-- Change respawn time of https://database.turtle-wow.org/?object=2010914 to instant down from 5 minutes. 
+update gameobject set spawntimesecsmin = 3, spawntimesecsmax = 3 where id = 2010914;
