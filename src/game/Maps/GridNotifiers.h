@@ -334,6 +334,20 @@ namespace MaNGOS
         template<class NOT_INTERESTED> void Visit(GridRefManager<NOT_INTERESTED> &) {}
     };
 
+    template <typename Check>
+    struct CorpseListSearcher
+    {
+        std::list<Corpse*>& objects;
+        Check& check;
+
+        CorpseListSearcher(std::list<Corpse*>& resultObjects, Check& check) : check(check), objects(resultObjects) {}
+
+        void Visit(CorpseMapType& m);
+
+
+        template<class NOT_INTERESTED> void Visit(GridRefManager<NOT_INTERESTED>&) {}
+    };
+
     template<class Do>
     struct UnitWorker
     {
@@ -568,6 +582,23 @@ namespace MaNGOS
         private:
             Unit const* i_fobj;
             float i_range;
+    };
+
+
+    class CorpseInRangeCheck
+    {
+    public:
+        CorpseInRangeCheck(Unit const* fobj, float range) : i_fobj(fobj), i_range(range) {}
+        WorldObject const& GetFocusObject() const { return *i_fobj; }
+        bool operator()(Corpse* u)
+        {
+            return i_fobj->IsWithinDistInMap(u, i_range);
+        }
+
+        template<class NOT_INTERESTED> bool operator()(NOT_INTERESTED*) { return false; }
+    private:
+        Unit const* i_fobj;
+        float i_range;
     };
 
     // WorldObject do classes

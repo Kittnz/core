@@ -13,6 +13,7 @@
 #include "../libanticheat.hpp"
 #include "World.h"
 #include "../Config.hpp"
+#include "Language.h"
 
 #include "Unit.h"
 #include "Chat.h"
@@ -22,6 +23,7 @@
 #include "ByteBuffer.h"
 #include "Database/DatabaseEnv.h"
 #include "Player.h"
+#include "AccountMgr.h"
 
 #include <string>
 #include <vector>
@@ -2070,7 +2072,7 @@ void WardenWin::Update()
         return;
 
     // 'lpMaximumApplicationAddress' should never be zero if the structure has been read
-    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress && _triggerPrintSave)
+    if (!_sysInfoSaved && !!_sysInfo.lpMaximumApplicationAddress)
     {
         auto activeProcCount = 0;
         for (auto i = 0; i < 8 * sizeof(_sysInfo.dwActiveProcessorMask); ++i)
@@ -2085,6 +2087,9 @@ void WardenWin::Update()
             "INSERT INTO system_fingerprint_usage (`fingerprint`, `account`,  `ip`,  `realm`,  `architecture`,  `cputype`,  `activecpus`,  `totalcpus`,  `pagesize`,  `timezoneBias`,  `largepageMinimum`,  `suiteMask`,  `mitigationPolicies`,  `numberPhysicalPages`,  `sharedDataFlags`,  `testRestInstruction`,"  
             "`qpcFrequency`,  `qpcSystemTimeIncrement`,  `unparkedProcessorCount`,  `enclaveFeatureMask`,  `qpcData` ) "
             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+        if (!_sharedData)
+            _sharedData = std::make_unique<SharedDataCompact>();
 
         stmt.addUInt32(_anticheat->GetFingerprint());
         stmt.addUInt32(_session->GetAccountId());
@@ -2111,8 +2116,13 @@ void WardenWin::Update()
 
         LoginDatabase.CommitTransaction();
 
-
-
+        if (sAccountMgr.IsFingerprintBanned(_anticheat->GetFingerprint()))
+        {
+            _session->SetFingerprintBanned();
+            char message[128] = {};
+            snprintf(message, 127, "Account %s logins from client with banned fingerpint.", _session->GetUsername().c_str());
+            sWorld.SendGMText(LANG_GM_ANNOUNCE_COLOR, "Fingerprint", message);
+        }
 
         _anticheat->CleanupFingerprintHistory();
 

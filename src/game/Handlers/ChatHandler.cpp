@@ -388,7 +388,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 		}
 	}
 
-
 	//guild bank
 	if (lang == LANG_ADDON && !msg.empty())
 	{
@@ -438,7 +437,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 return;
         }
 	}
-
 	
 	// buff/debuff system
 	if (lang == LANG_ADDON && type == CHAT_MSG_GUILD && !msg.empty())
@@ -724,12 +722,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         }
     }
 
-    if (lang != LANG_ADDON && type != CHAT_MSG_WHISPER)
-    {
-        //TODO regex checks.
-        //re2::RE2::FullMatch()
-    }
-
     // Message handling
     switch (type)
     {
@@ -765,14 +757,17 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         if (sWorld.getConfig(CONFIG_BOOL_STRICT_LATIN_IN_GENERAL_CHANNELS))
                         {
                             // remove color, punct, ctrl, space
-                            auto normMsg = sAnticheatLib->NormalizeString(msg, NF_CUT_PUNCT | NF_CUT_CTRL | NF_CUT_SPACE | NF_CUT_COLOR);
-                            std::wstring w_normMsg;
-                            if (!Utf8toWStr(normMsg, w_normMsg))
+                            if (AntispamInterface* a = sAnticheatLib->GetAntispam())
                             {
-                                if (!isBasicLatinString(w_normMsg, true))
+                                std::string normMsg = a->NormalizeMessage(msg, 0x1D);
+                                std::wstring w_normMsg;
+                                if (Utf8toWStr(normMsg, w_normMsg))
                                 {
-                                    ChatHandler(this).SendSysMessage("Sorry, only Latin characters are allowed in this channel.");
-                                    return;
+                                    if (!isBasicLatinString(w_normMsg, true))
+                                    {
+                                        ChatHandler(this).SendSysMessage("Sorry, only Latin characters are allowed in this channel.");
+                                        return;
+                                    }
                                 }
                             }
                         }
@@ -786,11 +781,11 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                         }
                     }
 
-                    chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
-                    SetLastPubChanMsgTime(time(nullptr));
+                    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+                    if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, type, GetPlayerPointer(), nullptr, chn, lang))
+                        chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
 
-                    if (lang != LANG_ADDON && chn->HasFlag(Channel::ChannelFlags::CHANNEL_FLAG_GENERAL))
-                        m_antiCheat->Channel(msg);
+                    SetLastPubChanMsgTime(time(nullptr));
                 }
             }
 
@@ -816,10 +811,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             GetPlayer()->Say(msg, lang);
 
-            if (lang != LANG_ADDON && !m_antiCheat->IsSilenced())
+            if (lang != LANG_ADDON)
             {
                 sWorld.LogChat(this, "Say", msg);
-                m_antiCheat->Say(msg);
             }
 
             break;
@@ -838,10 +832,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             GetPlayer()->TextEmote(msg);
 
-            if (lang != LANG_ADDON && !m_antiCheat->IsSilenced())
+            if (lang != LANG_ADDON)
             {
                 sWorld.LogChat(this, "Emote", msg);
-                m_antiCheat->Say(msg);
             }
 
             break;
@@ -860,10 +853,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
             GetPlayer()->Yell(msg, lang);
 
-            if (lang != LANG_ADDON && !m_antiCheat->IsSilenced())
+            if (lang != LANG_ADDON)
             {
                 sWorld.LogChat(this, "Yell", msg);
-                m_antiCheat->Yell(msg);
             }
             break;
         }
@@ -919,15 +911,18 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 bool allowSendWhisper = allowIgnoreAntispam;
                 if (!sWorld.getConfig(CONFIG_BOOL_WHISPER_RESTRICTION) || !toPlayer->IsEnabledWhisperRestriction())
                     allowSendWhisper = true;
+                if (IsFingerprintBanned())
+                    allowSendWhisper = false;
+                if (player == masterPlr || masterPlr->IsGameMaster())
+                    allowSendWhisper = true;
 
-                if (masterPlr->IsGameMaster() || allowSendWhisper)
-                    masterPlr->Whisper(msg, lang, player);
+                AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+                if (!allowSendWhisper || lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, type, GetPlayerPointer(), PlayerPointer(new PlayerWrapper<MasterPlayer>(player)), nullptr, lang))
+                    masterPlr->Whisper(msg, lang, player, allowSendWhisper);
 
-                if (lang != LANG_ADDON && !m_antiCheat->IsSilenced())
+                if (lang != LANG_ADDON)
                 {
                     sWorld.LogChat(this, "Whisp", msg, PlayerPointer(new PlayerWrapper<MasterPlayer>(player)));
-                    if (!allowIgnoreAntispam)
-                        m_antiCheat->Whisper(msg, toPlayer->GetObjectGuid());
                 }
             }
             break;

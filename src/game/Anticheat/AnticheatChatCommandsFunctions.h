@@ -9,6 +9,7 @@ bool HandleAnticheatSpaminfoCommand(char* args);
 bool HandleAnticheatCheatinformCommand(char* args);
 bool HandleAnticheatSpaminformCommand(char* args);
 bool HandleAnticheatBlacklistCommand(char* args);
+bool HandleAnticheatWhitelistCommand(char* args);
 bool HandleAnticheatDebugExtrapCommand(char* args);
 
 //fingerprint commands

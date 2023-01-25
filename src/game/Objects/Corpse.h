@@ -94,9 +94,14 @@ class Corpse : public WorldObject
         FactionTemplateEntry const* GetFactionTemplate() { return m_faction; }
         uint32 GetFactionTemplateId() const final;
         uint32 GetLevel() const final;
+
+        void MarkExpired() { m_expired = true; }
+
     private:
         GridReference<Corpse> m_gridRef;
         FactionTemplateEntry const* m_faction;
+
+        bool m_expired = false;
 
         CorpseType m_type;
         time_t m_time;
