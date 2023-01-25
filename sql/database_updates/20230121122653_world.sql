@@ -260,3 +260,15 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'I am truly privileged that the Dark Lady has entrusted me with sharing her knowledge.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Grammar fix for Greeting of https://database.turtle-wow.org/?npc=61011.
+update broadcast_text set male_text = 'I have been chosen as a champion of the Redbrands, to defend their kin and fight on their behalf.$B$BI suggest you do not cross them, $C.' 
+where entry = 61011;
+-- Grammar fix for Greeting of https://database.turtle-wow.org/?npc=61008.
+update broadcast_text set male_text = 'Why hello there. Is there anything I can do for you?' 
+where entry = 61008;
+-- Grammar fix for Greeting of https://database.turtle-wow.org/?npc=61010.
+update broadcast_text set male_text = 'Ours is a rich history, full of distinction and honor. We once served as the right hand to the Bronzebeards, but there have been many unfortunate incidents within the past few generations.$B$BI have been looking for assistance in collecting a number of our lost chronicles. Perhaps you could be of help?' 
+where entry = 61010;
+-- Grammar fix for Greeting of https://database.turtle-wow.org/?npc=60925.
+update broadcast_text set male_text = 'My name is Nazgrim Redbrand, Lord of the noble Redbrand family. The Redbrands have suffered many tragedies of late, with our namesake crumbling around us. I will not stand idly by and watch my family\'s legacy tarnished by misfortune.$B$BThe reputation of a dwarf means a great deal here in Khaz Modan, and so long as I stand as the head of the Redbrand family, I shall see its honor restored.' 
+where entry = 60925;
