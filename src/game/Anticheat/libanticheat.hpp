@@ -30,7 +30,6 @@ struct AreaEntry;
 namespace Anticheat
 {
 class Movement;
-class Antispam;
 
 enum CheatType
 {
@@ -68,8 +67,6 @@ class SessionAnticheat final : public SessionAnticheatInterface
 
         void Update(uint32 diff) override;
 
-        bool IsSilenced() const override;
-
         // character enum packet has been built and is ready to send
         void SendCharEnum(WorldPacket &&packet) override;
 
@@ -102,13 +99,6 @@ class SessionAnticheat final : public SessionAnticheatInterface
 
         // warden
         void WardenPacket(WorldPacket &packet) override;
-
-        // antispam
-        void Whisper(const std::string &msg, const ObjectGuid &to) override;
-        void Say(const std::string &msg) override;
-        void Yell(const std::string &msg) override;
-        void Channel(const std::string &msg) override;
-        void Mail(const std::string &subject, const std::string &body, const ObjectGuid &to);
 
     /*** END PUBLIC INTERFACE PORTION ***/
 
@@ -151,9 +141,6 @@ class SessionAnticheat final : public SessionAnticheatInterface
         // movement) possible; i.e. a session on the login screen, or transferring between maps.
         std::unique_ptr<Anticheat::Movement> _movementData;
 
-        // shared with antispam worker thread loop
-        std::shared_ptr<Anticheat::Antispam> _antispam;
-
         // called whenever the player enters the world (after the client has finished loading)
         void EnterWorld();
 
@@ -169,7 +156,6 @@ class SessionAnticheat final : public SessionAnticheatInterface
 
         // chat handlers
         void SendCheatInfo(ChatHandler *handler) const;
-        void SendSpamInfo(ChatHandler *handler) const;
 
         float GetDistanceTraveled() const;
 
@@ -190,8 +176,6 @@ class SessionAnticheat final : public SessionAnticheatInterface
 
         size_t PendingOrderCount() const;
         uint32 GetWorldEnterTime() const { return _worldEnterTime; }
-
-        std::shared_ptr<Antispam> GetAntispam() const { return _antispam; }
 
         // XXX debug logging
         void GetMovementDebugString(std::string &out) const;
@@ -224,8 +208,7 @@ class AnticheatLib : public AnticheatLibInterface
         virtual std::unique_ptr<SessionAnticheatInterface> NewSession(WorldSession *, const BigNumber &K);
 
         // anti spam
-        virtual bool ValidateGuildName(const std::string &name) const;
-        virtual std::string NormalizeString(const std::string &string, uint32 mask);
+        AntispamInterface* GetAntispam() const override;
 
         void EnableExtrapolationDebug(uint32 seconds);
         void OfferExtrapolationData(

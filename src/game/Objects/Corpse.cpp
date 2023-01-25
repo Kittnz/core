@@ -284,10 +284,15 @@ bool Corpse::IsFriendlyTo(WorldObject const* target) const
 
 bool Corpse::IsExpired(time_t t) const
 {
+    if (m_expired)
+        return true;
+
     if (m_type == CORPSE_BONES)
         return m_time < t - sWorld.getConfig(CONFIG_UINT32_BONES_EXPIRE_MINUTES) * MINUTE;
-    else
-        return m_time < t - 3 * DAY;
+    else if (m_objectTypeId == TYPEID_PLAYER && GetLevel() < 5) //Decrease for low levels
+        return m_time < t - 6 * MINUTE;
+
+    return m_time < t - 3 * DAY;
 }
 
 uint32 Corpse::GetFactionTemplateId() const 

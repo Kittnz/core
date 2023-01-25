@@ -334,6 +334,32 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand creatureSpawnsSetCommandTable[] =
+    {
+        { "entry",          SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetEntryCommand,       "", nullptr },
+        { "displayid",      SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetDisplayIdCommand,   "", nullptr },
+        { "emotestate",     SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetEmoteStateCommand,  "", nullptr },
+        { "standstate",     SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetStandStateCommand,  "", nullptr },
+        { "sheathstate",    SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetSheathStateCommand, "", nullptr },
+        { "movetype",       SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetMoveTypeCommand,    "", nullptr },
+        { "wanderdistance", SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnWanderDistCommand,     "", nullptr },
+        { "respawntime",    SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetRespawnTimeCommand, "", nullptr },
+        { "deathstate",     SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetDeathStateCommand,  "", nullptr },
+        { "auras",          SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnSetAurasCommand,       "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                           "", nullptr }
+    };
+
+    static ChatCommand creatureSpawnsCommandTable[] =
+    {
+        { "add",            SEC_DEVELOPER,      false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
+        { "addentry",       SEC_DEVELOPER,      false, &ChatHandler::HandleNpcAddEntryCommand,         "", nullptr },
+        { "delete",         SEC_DEVELOPER,      false, &ChatHandler::HandleNpcDeleteCommand,           "", nullptr },
+        { "info",           SEC_MODERATOR,      false, &ChatHandler::HandleNpcSpawnInfoCommand,        "", nullptr },
+        { "set",            SEC_DEVELOPER,      false, nullptr,                                        "", creatureSpawnsSetCommandTable },
+        { "move",           SEC_DEVELOPER,      false, &ChatHandler::HandleNpcSpawnMoveCommand,        "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand npcCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
@@ -341,25 +367,23 @@ ChatCommand * ChatHandler::getCommandTable()
         { "additem",        SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddVendorItemCommand,    "", nullptr },
         { "scale",          SEC_DEVELOPER,     false, &ChatHandler::HandleNpcScaleCommand,    "", nullptr },
         { "addweapon",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddWeaponCommand,        "", nullptr },
-        { "aiinfo",         SEC_ADMINISTRATOR,      false, &ChatHandler::HandleNpcAIInfoCommand,           "", nullptr },
+        { "aiinfo",         SEC_ADMINISTRATOR, false, &ChatHandler::HandleNpcAIInfoCommand,           "", nullptr },
         { "wander",         SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSetWanderDistanceCommand,    "", nullptr },
         { "delete",         SEC_DEVELOPER,     false, &ChatHandler::HandleNpcDeleteCommand,           "", nullptr },
         { "delitem",        SEC_DEVELOPER,     false, &ChatHandler::HandleNpcDelVendorItemCommand,    "", nullptr },
         { "factionid",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcFactionIdCommand,        "", nullptr },
         { "flag",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcFlagCommand,             "", nullptr },
-        { "info",           SEC_DEVELOPER,      false, &ChatHandler::HandleNpcInfoCommand,             "", nullptr },
+        { "info",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcInfoCommand,             "", nullptr },
         { "move",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcMoveCommand,             "", nullptr },
-        { "playemote",      SEC_DEVELOPER, false, &ChatHandler::HandleNpcPlayEmoteCommand,        "", nullptr },
-        { "spawntime",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSpawnTimeCommand,        "", nullptr },
-        { "say",            SEC_DEVELOPER, false, &ChatHandler::HandleNpcSayCommand,              "", nullptr },
-        { "speed",          SEC_DEVELOPER, false, &ChatHandler::HandleNpcSpeedCommand,              "", nullptr },
-        { "textemote",      SEC_DEVELOPER, false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
-        { "yell",           SEC_DEVELOPER, false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
-        { "setdeathstate",  SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSetDeathStateCommand,    "", nullptr },
-        { "near",           SEC_DEVELOPER, false, &ChatHandler::HandleNpcNearCommand,                "", nullptr},
-        { "group",          SEC_ADMINISTRATOR,     false, nullptr,                                        "", creatureGroupsCommandTable },
-
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "playemote",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcPlayEmoteCommand,        "", nullptr },
+        { "say",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSayCommand,              "", nullptr },
+        { "speed",          SEC_DEVELOPER,     false, &ChatHandler::HandleNpcSpeedCommand,              "", nullptr },
+        { "textemote",      SEC_DEVELOPER,     false, &ChatHandler::HandleNpcTextEmoteCommand,        "", nullptr },
+        { "yell",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcYellCommand,             "", nullptr },
+        { "near",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcNearCommand,                "", nullptr},
+        { "group",          SEC_ADMINISTRATOR, false, nullptr,                                        "", creatureGroupsCommandTable },
+        { "spawn",          SEC_MODERATOR,     false, nullptr,                                        "", creatureSpawnsCommandTable },
+        { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
     static ChatCommand unitCommandTable[] =
@@ -487,6 +511,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "account",        SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanAccountCommand,      "", nullptr },
         { "character",      SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanCharacterCommand,    "", nullptr },
         { "ip",             SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanIPCommand,           "", nullptr },
+        { "fingerprnt",     SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanFingerprintCommand,  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                      "", nullptr }
     };
 
@@ -702,6 +727,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "crash",          SEC_CONSOLE,         true, &ChatHandler::HandleCrashCommand,                "", nullptr},
         { "who",            SEC_OBSERVER,        true, &ChatHandler::HandleWhoCommand,                  "", nullptr },
         { "shellcoin",      SEC_PLAYER,          true, &ChatHandler::HandleShellcoinCommand,            "", nullptr},
+        { "removecorpses",  SEC_ADMINISTRATOR,   false, &ChatHandler::HandleRemoveCorpsesCommand,       "", nullptr },
         { nullptr,          0,                   false, nullptr,                                         "", nullptr }
     };
 

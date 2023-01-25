@@ -476,6 +476,16 @@ void MaNGOS::UnitLastSearcher<Check>::Visit(PlayerMapType& m)
     }
 }
 
+template <typename Check>
+void MaNGOS::CorpseListSearcher<Check>::Visit(CorpseMapType& m)
+{
+    for (auto& elem : m)
+    {
+        if (check(elem.getSource()))
+            objects.push_back(elem.getSource());
+    }
+}
+
 template<class Check>
 void MaNGOS::UnitListSearcher<Check>::Visit(PlayerMapType& m)
 {

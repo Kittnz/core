@@ -344,6 +344,18 @@ enum eConfigUInt32Values
     CONFIG_UINT32_AC_WARDEN_NUM_MEM_CHECKS,
     CONFIG_UINT32_AC_WARDEN_NUM_OTHER_CHECKS,
     CONFIG_UINT32_AC_WARDEN_DB_LOGLEVEL,
+    CONFIG_UINT32_AC_ANTISPAM_MAX_RESTRICTION_LEVEL,
+    CONFIG_UINT32_AC_ANTISPAM_ORIGINAL_NORMALIZE_MASK,
+    CONFIG_UINT32_AC_ANTISPAM_FULLY_NORMALIZE_MASK,
+    CONFIG_UINT32_AC_ANTISPAM_SCORE_THRESHOLD,
+    CONFIG_UINT32_AC_ANTISPAM_MUTETIME,
+    CONFIG_UINT32_AC_ANTISPAM_CHAT_MASK,
+    CONFIG_UINT32_AC_ANTISPAM_DETECT_THRESHOLD,
+    CONFIG_UINT32_AC_ANTISPAM_REPEAT_COUNT,
+    CONFIG_UINT32_AC_ANTISPAM_UPDATE_TIMER,
+    CONFIG_UINT32_AC_ANTISPAM_MESSAGE_BLOCK_SIZE,
+    CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_TIME,
+    CONFIG_UINT32_AC_ANTISPAM_FREQUENCY_COUNT,
     CONFIG_UINT32_BEGINNERS_GUILD_ALLIANCE,
     CONFIG_UINT32_BEGINNERS_GUILD_HORDE,
     CONFIG_UINT32_BG_SV_SPARK_MAX_COUNT,
@@ -605,6 +617,9 @@ enum eConfigBoolValues
     CONFIG_BOOL_AC_WARDEN_WIN_ENABLED,
     CONFIG_BOOL_AC_WARDEN_OSX_ENABLED,
     CONFIG_BOOL_AC_WARDEN_PLAYERS_ONLY,
+    CONFIG_BOOL_AC_ANTISPAM_ENABLED,
+    CONFIG_BOOL_AC_ANTISPAM_BAN_ENABLED,
+    CONFIG_BOOL_AC_ANTISPAM_MERGE_ALL_WHISPERS,
     CONFIG_BOOL_VISIBILITY_FORCE_ACTIVE_OBJECTS,
     CONFIG_BOOL_PTR,
     CONFIG_BOOL_GM_START_ON_GM_ISLAND,
@@ -1029,6 +1044,9 @@ class World
         void LoadAccountData();
 
 
+        std::unordered_set<std::string> GetAccountNamesByFingerprint(uint32 fingerprint) const;
+        void AddFingerprint(uint32 fingerprint, std::string accountName);
+
         /**
          * Async tasks, allow safe access to sessions (but not players themselves)
          * The tasks will be executed *while* maps are updated. So don't touch the mobs, pets, etc ...
@@ -1137,6 +1155,8 @@ class World
         int32 m_lastShellCoinPrice = 0;
         ObjectGuidSet m_shellCoinOwners;
         std::mutex m_shellcoinLock;
+
+        std::unordered_map<uint32, std::unordered_set<std::string>> m_fingerprintAccounts;
 
         uint32 m_lastDiff = 0;
         SessionMap m_sessions;
