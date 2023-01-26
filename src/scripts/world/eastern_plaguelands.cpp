@@ -618,68 +618,11 @@ struct npc_eris_havenfireAI : public ScriptedAI
         Reset();
     }
 
-    bool IsPlayerInterfering()
-    {
-        Player* questPlayer = GetPlayer();
-        if (!questPlayer)
-            return false;
-
-        Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
-        uint32 myArea = m_creature->GetAreaId();
-        if (!pl.isEmpty() && myArea && BeginQuete)
-        {
-            for (const auto& it : pl)
-            {
-                Player* currPlayer =  it.getSource();
-                if (currPlayer && m_creature->GetAreaId() == myArea && m_creature->IsWithinDist(currPlayer, 80.0f, false))
-                {
-                    if (currPlayer->IsGameMaster())
-                        continue;
-
-                    if (currPlayer->IsAlive() && questPlayer != currPlayer)
-                        return true;
-                }
-            }
-            return false;
-        }
-        else
-            return false;
-    }
-
-    void Cleaning()
-    {
-        Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
-        uint32 myArea = m_creature->GetAreaId();
-        if (!pl.isEmpty() && myArea && !CleanerSpawn)
-        {
-            if (Creature* Crea = m_creature->SummonCreature(NPC_CLEANER, 3358.1096f, -3049.8063f, 166.226f, 1.87f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
-            {
-                CleanerSpawn = true;
-                BeginQuete = false;
-                Player* player = GetPlayer();
-                EchecEvent(player, false);
-
-                for (const auto& it : pl)
-                {
-                    Player* currPlayer =  it.getSource();
-                    if (currPlayer && m_creature->GetAreaId() == myArea && m_creature->IsWithinDist(currPlayer, 80.0f, false))
-                        if (player && player != currPlayer && currPlayer->IsAlive() && !currPlayer->IsGameMaster())
-                            Crea->AddThreat(currPlayer, 1000.0f);
-                }
-            }
-        }
-    }
-
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!BeginQuete || CleanerSpawn)
             return;
 
-        if (IsPlayerInterfering())
-        {
-            Cleaning();
-            return;
-        }
         // Always keep player in combat
         if (Player* playerForQuest = GetPlayer())
             playerForQuest->SetCombatTimer(1500);
