@@ -123,7 +123,7 @@ enum ErisHavenfireData
     DEATH_POST_SPAWNS_COUNT = 14,
 
     SPELL_PESTE             = 23072,
-    SPELL_TIR_FLECHE        = 22121,
+    SPELL_TIR_FLECHE        = 23073,
     SPELL_ENTRE_LUMIERE     = 23107,
     SPELL_BUFF              = 23108,
     SPELL_INVOC_PAYSANTS    = 23119,
@@ -669,7 +669,6 @@ struct npc_eris_havenfireAI : public ScriptedAI
                     {
                         int Var = 0;
                         int var = 0;
-                        int Damage = urand(50, 100);
                         uint64 GUIDs[50];
 
                         for (uint64 & guid : GUIDs)
@@ -694,7 +693,7 @@ struct npc_eris_havenfireAI : public ScriptedAI
 
                         Unit* Target = m_creature->GetMap()->GetCreature(GUIDs[urand(0, var - 1)]);
                         if (Target)
-                            Crea->CastCustomSpell(Target, SPELL_TIR_FLECHE, &Damage, nullptr, nullptr, true);
+                            Crea->CastSpell(Target, SPELL_TIR_FLECHE, true);
                         TimerArcher[i] = urand(3000, 4400);
                     }
                 }
