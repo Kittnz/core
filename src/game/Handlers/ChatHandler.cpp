@@ -1135,7 +1135,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleEmoteOpcode(WorldPacket & recv_data)
 {
-    if (!GetPlayer()->IsAlive() || GetPlayer()->HasUnitState(UNIT_STAT_DIED))
+    if (!GetPlayer()->IsAlive() || GetPlayer()->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         return;
 
     if (!GetPlayer()->CanSpeak())
