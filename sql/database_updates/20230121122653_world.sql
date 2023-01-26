@@ -293,3 +293,6 @@ REPLACE INTO creature_involvedrelation VALUES (3038, 6070);
 REPLACE INTO creature_questrelation VALUES (3038, 6070);
 REPLACE INTO creature_involvedrelation VALUES (3038, 80330);
 REPLACE INTO creature_questrelation VALUES (3038, 80330);
+-- Add https://database.turtle-wow.org/?quest=40261 to NPC https://database.turtle-wow.org/?npc=60485 for parity.
+REPLACE INTO creature_involvedrelation VALUES (60485, 40261);
+REPLACE INTO creature_questrelation VALUES (60485, 40261);
