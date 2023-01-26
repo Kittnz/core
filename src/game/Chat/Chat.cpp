@@ -2546,6 +2546,11 @@ GameObject* ChatHandler::GetGameObjectWithGuid(uint32 lowguid, uint32 entry)
     return pl->GetMap()->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, entry, lowguid));
 }
 
+Player* ChatHandler::GetPlayer()
+{
+    return m_session->GetPlayer();
+}
+
 GameObject* ChatHandler::GetGameObjectWithGuidGlobal(uint32 lowguid, const GameObjectData* data) const
 {
     if (!m_session)
