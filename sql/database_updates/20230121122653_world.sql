@@ -278,3 +278,8 @@ update gameobject set spawntimesecsmin = 3, spawntimesecsmax = 3 where id = 2010
 update gossip_menu set text_id = 8165 where entry = 6876;
 REPLACE INTO `npc_text` (`ID`, `BroadcastTextID0`, `Probability0`, `BroadcastTextID1`, `Probability1`, `BroadcastTextID2`, `Probability2`, `BroadcastTextID3`, `Probability3`, `BroadcastTextID4`, `Probability4`, `BroadcastTextID5`, `Probability5`, `BroadcastTextID6`, `Probability6`, `BroadcastTextID7`, `Probability7`)  
 VALUES (8165, 11555, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+-- https://database.turtle-wow.org/?npc=52064 do not attack Horde on sight.
+update creature_template set flags_extra = 525312 where entry = 52064;
+-- https://database.turtle-wow.org/?npc=52065 do not attack Horde on sight, and are also incorrectly named "Calvaryman" (should be Cavalryman).
+update creature_template set name = 'Vigil Cavalryman', flags_extra = 525312 where entry = 52065;
+
