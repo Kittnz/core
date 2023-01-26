@@ -287,5 +287,9 @@ update quest_template set ReqItemId1 = 5438, ReqItemCount1 = 1 where entry = 400
 -- Increced drop chance of item 60682 and reduced spawn timer on 3 min for NPC 61027.
 update creature_loot_template set ChanceOrQuestChance = 100 where entry = 61027 and item = 60862;
 UPDATE creature SET spawntimesecsmin = 180, spawntimesecsmax = 180 WHERE id = 61027;
-
-
+-- https://database.turtle-wow.org/?quest=6070 should be offered by https://database.turtle-wow.org/?npc=3038.
+-- Add https://database.turtle-wow.org/?quest=80330 to NPC https://database.turtle-wow.org/?npc=3038 for parity.
+REPLACE INTO creature_involvedrelation VALUES (3038, 6070);
+REPLACE INTO creature_questrelation VALUES (3038, 6070);
+REPLACE INTO creature_involvedrelation VALUES (3038, 80330);
+REPLACE INTO creature_questrelation VALUES (3038, 80330);
