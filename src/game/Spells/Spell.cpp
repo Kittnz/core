@@ -4256,7 +4256,7 @@ void Spell::update(uint32 difftime)
                     // for succubus case
                     if (m_casterUnit->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
                     {
-                        if (m_casterUnit->HasUnitState(UNIT_STAT_DIED))
+                        if (m_casterUnit->HasUnitState(UNIT_STAT_FEIGN_DEATH))
                             cancel();
 
                         if (m_casterUnit->HasUnitState(UNIT_STAT_STUNNED) && !(m_spellInfo->IsChanneledSpell() && m_spellInfo->HasAura(SPELL_AURA_MOD_STUN)))

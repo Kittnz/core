@@ -1530,7 +1530,10 @@ namespace MaNGOS
                 if (!me->IsWithinDistInMap(u, m_range))
                     return false;
 
-                if (!me->CanAttack(u))
+                if (!me->IsHostileTo(u))
+                    return false;
+
+                if (!me->IsValidAttackTarget(u))
                     return false;
 
                 m_range = me->GetDistance(u);   // use found unit range as new range limit for next check
