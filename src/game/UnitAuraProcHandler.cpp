@@ -276,18 +276,6 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
             else
                 return SPELL_PROC_TRIGGER_FAILED;
         }
-        // Wrath of Cenarius - Spell Blasting
-        if (spellProto->Id == 25906)
-        {
-            // Should be able to proc when negative magical effect lands on a target.
-            if (!isVictim && (procSpell->DmgClass == SPELL_DAMAGE_CLASS_MAGIC) && !procSpell->IsPositiveSpell() && (procExtra & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT)) && !(procSpell->IsSpellAppliesAura() && (procFlag & PROC_FLAG_DEAL_HARMFUL_PERIODIC)))
-            {
-                if (roll_chance_f((float)spellProto->procChance))
-                    return SPELL_PROC_TRIGGER_OK;
-                else
-                    return SPELL_PROC_TRIGGER_ROLL_FAILED;
-            }
-        }
         // Zandalarian Hero Charm - Unstable Power
         if (spellProto->Id == 24658)
         {
