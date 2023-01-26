@@ -282,4 +282,5 @@ VALUES (8165, 11555, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 update creature_template set flags_extra = 525312 where entry = 52064;
 -- https://database.turtle-wow.org/?npc=52065 do not attack Horde on sight, and are also incorrectly named "Calvaryman" (should be Cavalryman).
 update creature_template set name = 'Vigil Cavalryman', flags_extra = 525312 where entry = 52065;
-
+-- https://database.turtle-wow.org/?item=5438 should be deleted upon completion of https://database.turtle-wow.org/?quest=40099.
+update quest_template set ReqItemId1 = 5438, ReqItemCount1 = 1 where entry = 40099;
