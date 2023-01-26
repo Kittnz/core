@@ -284,3 +284,8 @@ update creature_template set flags_extra = 525312 where entry = 52064;
 update creature_template set name = 'Vigil Cavalryman', flags_extra = 525312 where entry = 52065;
 -- https://database.turtle-wow.org/?item=5438 should be deleted upon completion of https://database.turtle-wow.org/?quest=40099.
 update quest_template set ReqItemId1 = 5438, ReqItemCount1 = 1 where entry = 40099;
+-- Increced drop chance of item 60682 and reduced spawn timer on 3 min for NPC 61027.
+update creature_loot_template set ChanceOrQuestChance = 100 where entry = 61027 and item = 60862;
+UPDATE creature SET spawntimesecsmin = 180, spawntimesecsmax = 180 WHERE id = 61027;
+
+
