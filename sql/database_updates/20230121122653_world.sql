@@ -298,3 +298,55 @@ REPLACE INTO creature_involvedrelation VALUES (60485, 40261);
 REPLACE INTO creature_questrelation VALUES (60485, 40261);
 -- Quest/gossip flags added to NPC Magus Palon.
 update creature_template set npc_flags = 3 where entry = 61065;
+-- Change the NPC Say bubbles dialogue to gossip steps instead in the following quests:
+-- Quest 40597 The Old Church of Westfall V.
+update creature_template set npc_flags = 3 where entry = 952;
+delete from npc_text where ID = 30062; delete from broadcast_text where entry = 30062;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30062, 30062);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30062, 'Well, where to begin? I traveled to Westfall and helped establish a church there. The locals were extremely friendly, religious folk themselves, and assisted in whatever manner they could. Me and them both brought the community together, created strong bonds and helped eachother when we were able.');
+delete from npc_text where ID = 30063; delete from broadcast_text where entry = 30063;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30063, 30063);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30063, 'There was trouble though, between two families, the Molsen and Easton, a land dispute of sorts that dated back a generation, marriage problems between them, who owned what, and which property belonged to who.\n\nThe Molsens got it in their head that they would inherit the Easton estate, especially a young one, went by the name Carver, a ruffian of a lad, who got himself into all sorts of trouble.');
+delete from npc_text where ID = 30064; delete from broadcast_text where entry = 30064;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30064, 30064);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30064, 'It was around this time that the thugs began to show up, the boy Carver was quick to join them. The Defias threatened families to leave their land with acts of violence and murder.\n\nSoon after the Easton family was murdered in cold blood, and many other families simply left, not wanting to face similar fates.');
+delete from npc_text where ID = 30065; delete from broadcast_text where entry = 30065;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30065, 30065);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30065, 'Less, and less showed up to my church, I had a small following, but the Defias made their presence known, threatened me to leave, and even beat me near death for refusing. I was stubborn, but not stubborn enough to die. So I left for Stormwind, where my tale continues now.');
+-- Quest 40529 Letter from Maltimor V.
+delete from npc_text where ID = 30066; delete from broadcast_text where entry = 30066;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30066, 30066);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30066, 'I... I should explain. Yes, I was lying to you all this time. I made the golems, with the help of Farad and some goblin machinery. We had lived here, in Moonbrook, many years ago.\n\nWe just wanted to escape this shithole. So we made the Harvest Golems, to help the farmers and, also, to get their money. But we knew that it was too expensive for an average farmer to buy one. So we were selling them for a low, low price. We were losing a lot of money on it.');
+delete from npc_text where ID = 30067; delete from broadcast_text where entry = 30067;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30067, 30067);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30067, 'You probably already know where it is going. I\'m not proud of this part. There was a catch. When everyone\'s fields were protected by golems, we would activate their true nature.\n\nThey would become murderous machines. We would blame it on some vile warlock, or anyone else, it didn\'t matter. Only important thing was that we would be the only ones who could fix them, for a very high price.');
+delete from npc_text where ID = 30068; delete from broadcast_text where entry = 30068;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30068, 30068);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30068, 'At least, that was the idea. In my greed, I activated the murderous killswitch when Farad was working with some golems in a workshop. I wanted him to die, so all the money would go to me.\n\nI learned later that he survived, and only got blinded. He hated me for it. But regardless, I saw the destruction I caused. I wanted to make the golems docile again… but our spell didn\'t work.');
+delete from npc_text where ID = 30069; delete from broadcast_text where entry = 30069;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30069, 30069);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30069, 'Some mistake we made during construction, or just lack of skill, I will never know. I couldn\'t fix them. Westfall became a wasteland. And then, came the Defias, with Farad on their side.\n\nAnd you know the rest of this story. You may judge me, think of me as a monster. The truth is, that you are probably right. I was a monster. But I did everything I could to fix it. And by the Light, I can only hope that it is enough.');
+-- Quest 80250 Assisting the Children of the Sun.
+delete from npc_text where ID = 30070; delete from broadcast_text where entry = 30070;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30070, 30070);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30070, 'I\'m glad that you wish to assist us. I will do my best to recap where we stand.');
+delete from npc_text where ID = 30071; delete from broadcast_text where entry = 30071;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30071, 30071);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30071, 'I will explain the situation. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second War, but now merely a citizen of Stormwind. After the loss of Quel\'Thalas, our people suffered deeply due to our addiction to magic.\n\nSome of us, led by our former prince, Kael\'thas, were seduced by dark magic, and, from what I\'ve heard, they betrayed the Alliance by siding with the creatures known as the Naga.');
+delete from npc_text where ID = 30072; delete from broadcast_text where entry = 30072;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30072, 30072);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30072, 'I\'ve heard other... more troubling accounts, but regardless, they are lost to us. We should focus on those who have chosen to remain in the Alliance. A few months ago, I managed to gather representatives of our people from all outlying settlements such as the Farstrider lodges.');
+delete from npc_text where ID = 30073; delete from broadcast_text where entry = 30073;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30073, 30073);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30073, 'There was a meeting where it was agreed upon that the time has come for our people to join their efforts so that we may create a home for ourselves. One where we could rebuild our people in time. Living in a military lodge or cities belonging to other races simply isn\'t the way to make progress in reforming our culture.');
+delete from npc_text where ID = 30074; delete from broadcast_text where entry = 30074;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30074, 30074);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30074, 'Thankfully Dalaran\'s surviving archives provided an opportunity. Roughly a century ago, an outpost was built on a peninsula near Quel\'Thalas. The outpost is powered by an arcane crystal infused with the energies of the Sunwell itself.');
+delete from npc_text where ID = 30075; delete from broadcast_text where entry = 30075;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30075, 30075);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30075, 'In other words, it\'s a way for us to cope with the addiction to magic that we\'ve been suffering from. The crystal will not last forever, but it will buy us time to find a cure.\n\nOur scouts have managed to find the site, and they\'ve confirmed that it is inhabitable. Our people have begun to settle the outpost, and they have named it Alah\'Thalas, the Land of Light in our tongue.');
+delete from npc_text where ID = 30076; delete from broadcast_text where entry = 30076;
+REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30076, 30076);
+REPLACE INTO broadcast_text (entry, male_text) VALUES (30076, 'However, the buildings are old and have not been maintained properly. We lack the reagents and materials to sustain the enchantments that protect the outpost.\n\nLikewise, the local mine has been infested with creatures. In other words, any help you provide would be greatly appreciated!');
+
+

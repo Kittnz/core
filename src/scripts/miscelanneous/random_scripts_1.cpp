@@ -2506,104 +2506,42 @@ bool GossipHello_npc_caledra(Player* pPlayer, Creature* pCreature)
 
 bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiSender*/, uint32 uiAction)
 {
+
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        DoAfterTime(pPlayer, 5 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I'm glad that you wish to assist us. I will do my best to recap where we stand.", player);
-        });
-
-        DoAfterTime(pPlayer, 10 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I will explain the situation. I am Caledra Dawnbreeze, formerly a Ranger-Captain of the Farstriders during the Second War, but now merely a citizen of Stormwind. After the loss of Quel\'Thalas, our people suffered deeply due to our addiction to magic. Some of us, led by our former prince, Kael\'thas, were seduced by dark magic, and, from what I\'ve heard, they betrayed the Alliance by siding with the creatures known as the Naga.", player);
-        });
-
-        DoAfterTime(pPlayer, 20 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("I've heard other... more troubling accounts, but regardless, they are lost to us. We should focus on those who have chosen to remain in the Alliance. A few months ago, I managed to gather representatives of our people from all outlying settlements such as the Farstrider lodges.", player);
-        });
-
-
-        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("There was a meeting where it was agreed upon that the time has come for our people to join their efforts so that we may create a home for ourselves. One where we could rebuild our people in time. Living in a military lodge or cities belonging to other races simply isn't the way to make progress in reforming our culture.", player);
-        });
-
-
-        DoAfterTime(pPlayer, 40 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("Thankfully Dalaran's surviving archives provided an opportunity. Roughly a century ago, an outpost was built on a peninsula near Quel'Thalas. The outpost is powered by an arcane crystal infused with the energies of the Sunwell itself.", player);
-        });
-
-        DoAfterTime(pPlayer, 50 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("In other words, it's a way for us to cope with the addiction to magic that we've been suffering from. The crystal will not last forever, but it will buy us time to find a cure. Our scouts have managed to find the site, and they've confirmed that it is inhabitable. Our people have begun to settle the outpost, and they have named it Alah'Thalas, the Land of Light in our tongue.", player);
-        });
-
-        DoAfterTime(pPlayer, 60 * IN_MILLISECONDS,
-            [CreatureGuid = pCreature->GetObjectGuid(), player = pPlayer]()
-        {
-            Map* map = sMapMgr.FindMap(0);
-            Creature* creature = map->GetCreature(CreatureGuid);
-
-            if (!creature)
-                return;
-
-            CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN);
-            if (cInfo != nullptr)
-                player->KilledMonster(cInfo, ObjectGuid());
-
-            creature->HandleEmote(EMOTE_ONESHOT_TALK);
-            creature->MonsterSayToPlayer("However, the buildings are old and have not been maintained properly. We lack the reagents and materials to sustain the enchantments that protect the outpost. Likewise, the local mine has been infested with creatures. In other words, any help you provide would be greatly appreciated!", player);
-        });
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30070, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30071, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 5);
+        pPlayer->SEND_GOSSIP_MENU(30072, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 5)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->SEND_GOSSIP_MENU(30073, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 6)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 7);
+        pPlayer->SEND_GOSSIP_MENU(30074, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 7)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 8);
+        pPlayer->SEND_GOSSIP_MENU(30075, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 8)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(NPC_CUSTOM_OBJECTIVE_ASSISTING_CHILDREN_OF_THE_SUN))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30076, pCreature->GetGUID());
     }
 
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
@@ -2935,9 +2873,9 @@ bool GossipSelect_npc_caledra(Player* pPlayer, Creature* pCreature, uint32 /*uiS
                 player->KilledMonster(cInfo, ObjectGuid());
             npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             });
+        pPlayer->CLOSE_GOSSIP_MENU();
     }
 
-    pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
 
