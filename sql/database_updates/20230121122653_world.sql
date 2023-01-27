@@ -348,5 +348,9 @@ REPLACE INTO broadcast_text (entry, male_text) VALUES (30075, 'In other words, i
 delete from npc_text where ID = 30076; delete from broadcast_text where entry = 30076;
 REPLACE INTO npc_text (ID, BroadcastTextID0) VALUES (30076, 30076);
 REPLACE INTO broadcast_text (entry, male_text) VALUES (30076, 'However, the buildings are old and have not been maintained properly. We lack the reagents and materials to sustain the enchantments that protect the outpost.\n\nLikewise, the local mine has been infested with creatures. In other words, any help you provide would be greatly appreciated!');
-
-
+-- Add Greeting to https://database.turtle-wow.org/?npc=3209.
+set @gossip_menu_id = 41349; set @magic_number = 3209;
+replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id, @magic_number, '0'); 
+replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You may rest easy, young one. The Earth Mother watches over all Mulgore\'s children, and we braves stand ever vigilant.');
+replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
+update creature_template set npc_flags = 3, gossip_menu_id = @gossip_menu_id where entry = @magic_number;
