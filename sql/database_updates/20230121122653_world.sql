@@ -354,3 +354,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'You may rest easy, young one. The Earth Mother watches over all Mulgore\'s children, and we braves stand ever vigilant.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set npc_flags = 3, gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Waters of Vision have no sell price #2749.
+update item_template set buy_price = 3500, sell_price = 700 where entry = 51861;
