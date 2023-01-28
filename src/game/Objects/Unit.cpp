@@ -9016,7 +9016,7 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* pTarget, uint32 procFlag, 
             continue;
 
         SpellProcEventEntry const* spellProcEvent = nullptr;
-        auto result = IsTriggeredAtSpellProcEvent(pTarget, itr.second, procSpell, procFlag, procExtra, attType, isVictim, spellProcEvent, (spell && spell->IsTriggeredByAura()));
+        auto result = IsTriggeredAtSpellProcEvent(pTarget, itr.second, procSpell, procFlag, procExtra, attType, isVictim, spellProcEvent, (spell && (spell->IsTriggeredByAura() || spell->IsTriggered() && spell->IsCastByItem())));
 
         if (result != SPELL_PROC_TRIGGER_OK)
         {
