@@ -557,7 +557,7 @@ void AreaAura::Update(uint32 diff)
                             Player* Target = itr->getSource();
                             if (Target && Target->IsAlive() && Target->GetSubGroup() == subgroup &&
                                (!Target->m_duel || owner == Target) && caster->IsFriendlyTo(Target) &&
-                               (caster->IsPvP() || !Target->IsPvP())) // auras dont affect pvp flagged targets if caster is not flagged
+                               (caster->IsPvP() || !Target->IsPvP() || (Target->GetMapId() > 1))) // auras dont affect pvp flagged targets if caster is not flagged
                             {
                                 if (caster->IsWithinDistInMap(Target, m_radius))
                                     targets.push_back(Target);
@@ -593,7 +593,7 @@ void AreaAura::Update(uint32 diff)
                             Player* Target = itr->getSource();
                             if (Target && Target->IsAlive() &&
                                 caster->IsFriendlyTo(Target) &&
-                               (caster->IsPvP() || !Target->IsPvP())) // auras dont affect pvp flagged targets if caster is not flagged
+                               (caster->IsPvP() || !Target->IsPvP() || (Target->GetMapId() > 1))) // auras dont affect pvp flagged targets if caster is not flagged
                             {
                                 if (caster->IsWithinDistInMap(Target, m_radius))
                                     targets.push_back(Target);
