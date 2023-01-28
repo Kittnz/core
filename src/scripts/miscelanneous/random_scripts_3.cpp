@@ -1720,7 +1720,7 @@ bool GossipHello_npc_lord_crukzogg(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(40272) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60345, 1, false)) // The Maul'ogg Crisis IX
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Lord Cruk'zogg, Haz'gorg has asked me to deliver this potion of strength to help enhance your mighty power!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
-    pPlayer->SEND_GOSSIP_MENU(92184, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(92180, pCreature->GetGUID());
 
     return true;
 }
