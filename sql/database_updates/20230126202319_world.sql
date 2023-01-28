@@ -88,3 +88,6 @@ UPDATE creature SET position_x = '-10097.541016', position_y = '-1179.768921', p
 UPDATE creature SET position_x = '-9851.421875', position_y = '-1798.472046', position_z = '22.168283', orientation = '0.458212' WHERE guid = '9664';
 UPDATE creature SET position_x = '-9832.435547', position_y = '-1811.232300', position_z = '24.255384', orientation = '1.899421' WHERE guid = '9664';
 UPDATE creature SET position_x = '-9776.907227', position_y = '-1782.487427', position_z = '38.085033', orientation = '4.019998' WHERE guid = '9664';
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5012506, 2004990, 451, 16900.5, 15640.5, 68.3599, 3.69279, 0, 0, 0.962262, -0.272123, 300, 300, 100, 1, 0, 0);
