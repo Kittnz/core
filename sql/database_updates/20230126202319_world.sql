@@ -91,3 +91,10 @@ UPDATE creature SET position_x = '-9776.907227', position_y = '-1782.487427', po
 
 -- Changes by GHEOR
 REPLACE INTO `gameobject` VALUES ( 5012506, 2004990, 451, 16900.5, 15640.5, 68.3599, 3.69279, 0, 0, 0.962262, -0.272123, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012506';
+DELETE FROM game_event_gameobject WHERE guid = '5012506';
+DELETE FROM gameobject_battleground WHERE guid = '5012506';
+REPLACE INTO `gameobject` VALUES ( 5012507, 2004157, 451, 16898.1, 15641.9, 67.9923, 5.55026, 0, 0, 0.358317, -0.9336, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012507';
+DELETE FROM game_event_gameobject WHERE guid = '5012507';
+DELETE FROM gameobject_battleground WHERE guid = '5012507';
