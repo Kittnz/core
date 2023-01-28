@@ -84,3 +84,7 @@ REPLACE INTO `creature` VALUES (2574082,61202,0,0,0,532,-11098.2,-1903.58,49.861
 
 -- Changes by JOE
 UPDATE creature SET position_x = '-10888.684570', position_y = '525.397644', position_z = '35.575523', orientation = '6.273341' WHERE guid = '6018';
+UPDATE creature SET position_x = '-10097.541016', position_y = '-1179.768921', position_z = '33.097984', orientation = '5.567266' WHERE guid = '5183';
+UPDATE creature SET position_x = '-9851.421875', position_y = '-1798.472046', position_z = '22.168283', orientation = '0.458212' WHERE guid = '9664';
+UPDATE creature SET position_x = '-9832.435547', position_y = '-1811.232300', position_z = '24.255384', orientation = '1.899421' WHERE guid = '9664';
+UPDATE creature SET position_x = '-9776.907227', position_y = '-1782.487427', position_z = '38.085033', orientation = '4.019998' WHERE guid = '9664';
