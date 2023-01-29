@@ -118,7 +118,7 @@ class ChatHandler
         GameObject* GetGameObjectWithGuidGlobal(uint32 lowguid, const GameObjectData* data) const;
 
         WorldSession* GetSession() { return m_session; }
-        Player* GetPlayer() { return m_session->GetPlayer(); }
+        Player* GetPlayer();
 
         void SendBanResult(BanMode mode, BanReturn result, std::string& banTarget, uint32 duration_secs, std::string& reason);
 

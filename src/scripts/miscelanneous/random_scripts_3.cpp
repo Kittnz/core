@@ -1720,7 +1720,7 @@ bool GossipHello_npc_lord_crukzogg(Player* pPlayer, Creature* pCreature)
     if (pPlayer->GetQuestStatus(40272) == QUEST_STATUS_INCOMPLETE && pPlayer->HasItemCount(60345, 1, false)) // The Maul'ogg Crisis IX
         pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Lord Cruk'zogg, Haz'gorg has asked me to deliver this potion of strength to help enhance your mighty power!", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
 
-    pPlayer->SEND_GOSSIP_MENU(92184, pCreature->GetGUID());
+    pPlayer->SEND_GOSSIP_MENU(92180, pCreature->GetGUID());
 
     return true;
 }
@@ -2414,21 +2414,26 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
         Creature* NPC_cheer2 = pPlayer->FindNearestCreature(60867, 40.0F);
         Creature* NPC_cheer3 = pPlayer->FindNearestCreature(60868, 40.0F);
 
-        if (NPC_cheer1)
+        if (NPC_cheer1 && NPC_cheer2 && NPC_cheer3)
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
-                npc->MonsterSayToPlayer("Ribbit!", player);
+                if (npc)
+                    npc->MonsterSayToPlayer("Ribbit!", player);
                 });
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
-                npc->MonsterSayToPlayer("Riiiibit", player);
+                if (npc)
+                    npc->MonsterSayToPlayer("Riiiibit!", player);
                 });
             DoAfterTime(pPlayer, 4 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer3]() {
-                npc->MonsterSayToPlayer("Riibit", player);
+                if (npc)
+                    npc->MonsterSayToPlayer("Riibit!", player);
                 });
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
-                npc->MonsterSayToPlayer("Ribit", player);                });
+                if (npc)
+                    npc->MonsterSayToPlayer("Ribit!", player);                });
             DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
-                npc->MonsterSayToPlayer("We are saved!", player);                });
+                if (npc)
+                    npc->MonsterSayToPlayer("We are saved!", player);                });
             return true;
         }
     }
@@ -3161,40 +3166,31 @@ bool GossipSelect_npc_maltimor_gartside(Player* pPlayer, Creature* pCreature, ui
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->MonsterSay("I... I should explain. Yes, I was lying to you all this time. I made the golems, with the help of Farad and some goblin machinery. We had lived here, in Moonbrook, many years ago. We just wanted to escape this shithole. So we made the Harvest Golems, to help the farmers and, also, to get their money. But we knew that it was too expensive for an average farmer to buy one. So we were selling them for a low, low price. We were losing a lot of money on it.");
-        pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-
-        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-            {
-                pCreature->MonsterSay("You probably already know where it is going. I'm not proud of this part. There was a catch. When everyone's fields were protected by golems, we would activate their true nature. They would become murderous machines. We would blame it on some vile warlock, or anyone else, it didn't matter. Only important thing was that we would be the only ones who could fix them, for a very high price.");
-                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-            }, 15000);
-
-        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-            {
-                pCreature->MonsterSay("At least, that was the idea. In my greed, I activated the murderous killswitch when Farad was working with some golems in a workshop. I wanted him to die, so all the money would go to me.I learned later that he survived, and only got blinded. He hated me for it. But regardless, I saw the destruction I caused. I wanted to make the golems docile again… but our spell didn't work.");
-                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-            }, 30000);
-
-        pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
-            {
-                pCreature->MonsterSay("Some mistake we made during construction, or just lack of skill, I will never know. I couldn't fix them. Westfall became a wasteland. And then, came the Defias, with Farad on their side. And you know the rest of this story. You may judge me, think of me as a monster. The truth is, that you are probably right. I was a monster. But I did everything I could to fix it. And by the Light, I can only hope that it is enough.");
-                pCreature->HandleEmote(EMOTE_ONESHOT_TALK);
-            }, 45000);
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30066, pCreature->GetGUID());
     }
-
-    DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-        player->DestroyItemCount(60767, 1, true);
-        player->SaveInventoryAndGoldToDB();
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30067, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30068, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        pPlayer->DestroyItemCount(60767, 1, true);
+        pPlayer->SaveInventoryAndGoldToDB();
 
         if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60381))
-            player->KilledMonster(cInfo, ObjectGuid());
-        });
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30069, pCreature->GetGUID());
+    }
 
-    pPlayer->CLOSE_GOSSIP_MENU();
     return true;
 }
-
 
 bool QuestRewarded_npc_franklin_hamar(Player* pPlayer, Creature* pQuestGiver, Quest const* pQuest)
 {
@@ -3836,11 +3832,11 @@ bool GossipSelect_npc_bert_mano(Player* pPlayer, Creature* pCreature, uint32 uiS
 
 bool GossipHello_npc_broter_neals(Player* pPlayer, Creature* pCreature)
 {
-    if (pPlayer->GetQuestStatus(40597) == QUEST_STATUS_INCOMPLETE) // The Old Church of Westfall V
-        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, what exactly happened in Westfall?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
-
     if (pCreature->IsQuestGiver())
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
+
+    if (pPlayer->GetQuestStatus(40597) == QUEST_STATUS_INCOMPLETE) // The Old Church of Westfall V
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "So, what exactly happened in Westfall?", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 1);
 
     pPlayer->SEND_GOSSIP_MENU(952, pCreature->GetGUID());
     return true;
@@ -3850,32 +3846,26 @@ bool GossipSelect_npc_broter_neals(Player* pPlayer, Creature* pCreature, uint32 
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
-        pCreature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_SPAWNING);
-
-        DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSay("Well, where to begin? I traveled to Westfall and helped establish a church there. The locals were extremely friendly, religious folk themselves, and assisted in whatever manner they could. Me and them both brought the community together, created strong bonds and helped eachother when we were able.");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 15 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSay("There was trouble though, between two families, the Molsen and Easton, a land dispute of sorts that dated back a generation, marriage problems between them, who owned what, and which property belonged to who. The Molsens got it in their head that they would inherit the Easton estate, especially a young one, went by the name Carver, a ruffian of a lad, who got himself into all sorts of trouble.");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 30 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSay("It was around this time that the thugs began to show up, the boy Carver was quick to join them. The Defias threatened families to leave their land with acts of violence and murder. Soon after the Easton family was murdered in cold blood, and many other families simply left, not wanting to face similar fates.");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 45 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            npc->MonsterSay("Less, and less showed up to my church, I had a small following, but the Defias made their presence known, threatened me to leave, and even beat me near death for refusing. I was stubborn, but not stubborn enough to die. So I left for Stormwind, where my tale continues now.");
-            npc->HandleEmote(EMOTE_ONESHOT_TALK);
-            });
-        DoAfterTime(pPlayer, 55 * IN_MILLISECONDS, [player = pPlayer, npc = pCreature]() {
-            if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60392))
-                player->KilledMonster(cInfo, ObjectGuid());
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
-            npc->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING);
-            });
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 2);
+        pPlayer->SEND_GOSSIP_MENU(30062, pCreature->GetGUID());
     }
-    pPlayer->CLOSE_GOSSIP_MENU();
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 3);
+        pPlayer->SEND_GOSSIP_MENU(30063, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
+    {
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_TALK, "Listen more.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 4);
+        pPlayer->SEND_GOSSIP_MENU(30064, pCreature->GetGUID());
+    }
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    {
+        if (CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(60392))
+            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->SEND_GOSSIP_MENU(30065, pCreature->GetGUID());
+    }
+
     return true;
 }
 
