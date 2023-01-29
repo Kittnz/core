@@ -5,6 +5,7 @@
 #include "Database/DatabaseEnv.h"
 #include "Util.h"
 #include "World.h"
+#include "ObjectAccessor.h"
 #include "ChannelMgr.h"
 #include "Chat.h"
 #include "Anticheat.h"
