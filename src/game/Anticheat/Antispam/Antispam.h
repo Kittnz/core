@@ -91,7 +91,6 @@ typedef std::unordered_map<uint32, std::list<std::string>> MessageRepeats;
 
 class Antispam : public AntispamInterface
 {
-    friend class ACE_Singleton<Antispam, ACE_Null_Mutex>;
     public:
         Antispam();
         ~Antispam()
