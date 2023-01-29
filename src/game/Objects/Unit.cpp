@@ -4279,14 +4279,20 @@ void Unit::DelaySpellAuraHolder(uint32 spellId, int32 delaytime, ObjectGuid cast
     for (SpellAuraHolderMap::iterator iter = bounds.first; iter != bounds.second; ++iter)
     {
         SpellAuraHolder* holder = iter->second;
-
         if (casterGuid != holder->GetCasterGuid())
             continue;
 
         if (holder->GetAuraDuration() < delaytime)
+        {
+            holder->AddSkippedTime(holder->GetAuraDuration());
             holder->SetAuraDuration(0);
+        }
         else
+        {
+            if (delaytime > 0)
+                holder->AddSkippedTime(delaytime);
             holder->SetAuraDuration(holder->GetAuraDuration() - delaytime);
+        }
 
         // push down the tick timer with the delay, otherwise we can still get max ticks even with pushback
         //holder->RefreshAuraPeriodicTimers();
