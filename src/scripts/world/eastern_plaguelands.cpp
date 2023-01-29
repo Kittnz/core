@@ -123,7 +123,7 @@ enum ErisHavenfireData
     DEATH_POST_SPAWNS_COUNT = 14,
 
     SPELL_PESTE             = 23072,
-    SPELL_TIR_FLECHE        = 22121,
+    SPELL_TIR_FLECHE        = 23073,
     SPELL_ENTRE_LUMIERE     = 23107,
     SPELL_BUFF              = 23108,
     SPELL_INVOC_PAYSANTS    = 23119,
@@ -618,68 +618,11 @@ struct npc_eris_havenfireAI : public ScriptedAI
         Reset();
     }
 
-    bool IsPlayerInterfering()
-    {
-        Player* questPlayer = GetPlayer();
-        if (!questPlayer)
-            return false;
-
-        Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
-        uint32 myArea = m_creature->GetAreaId();
-        if (!pl.isEmpty() && myArea && BeginQuete)
-        {
-            for (const auto& it : pl)
-            {
-                Player* currPlayer =  it.getSource();
-                if (currPlayer && m_creature->GetAreaId() == myArea && m_creature->IsWithinDist(currPlayer, 80.0f, false))
-                {
-                    if (currPlayer->IsGameMaster())
-                        continue;
-
-                    if (currPlayer->IsAlive() && questPlayer != currPlayer)
-                        return true;
-                }
-            }
-            return false;
-        }
-        else
-            return false;
-    }
-
-    void Cleaning()
-    {
-        Map::PlayerList const &pl = m_creature->GetMap()->GetPlayers();
-        uint32 myArea = m_creature->GetAreaId();
-        if (!pl.isEmpty() && myArea && !CleanerSpawn)
-        {
-            if (Creature* Crea = m_creature->SummonCreature(NPC_CLEANER, 3358.1096f, -3049.8063f, 166.226f, 1.87f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
-            {
-                CleanerSpawn = true;
-                BeginQuete = false;
-                Player* player = GetPlayer();
-                EchecEvent(player, false);
-
-                for (const auto& it : pl)
-                {
-                    Player* currPlayer =  it.getSource();
-                    if (currPlayer && m_creature->GetAreaId() == myArea && m_creature->IsWithinDist(currPlayer, 80.0f, false))
-                        if (player && player != currPlayer && currPlayer->IsAlive() && !currPlayer->IsGameMaster())
-                            Crea->AddThreat(currPlayer, 1000.0f);
-                }
-            }
-        }
-    }
-
     void UpdateAI(const uint32 uiDiff) override
     {
         if (!BeginQuete || CleanerSpawn)
             return;
 
-        if (IsPlayerInterfering())
-        {
-            Cleaning();
-            return;
-        }
         // Always keep player in combat
         if (Player* playerForQuest = GetPlayer())
             playerForQuest->SetCombatTimer(1500);
@@ -726,7 +669,6 @@ struct npc_eris_havenfireAI : public ScriptedAI
                     {
                         int Var = 0;
                         int var = 0;
-                        int Damage = urand(50, 100);
                         uint64 GUIDs[50];
 
                         for (uint64 & guid : GUIDs)
@@ -751,7 +693,7 @@ struct npc_eris_havenfireAI : public ScriptedAI
 
                         Unit* Target = m_creature->GetMap()->GetCreature(GUIDs[urand(0, var - 1)]);
                         if (Target)
-                            Crea->CastCustomSpell(Target, SPELL_TIR_FLECHE, &Damage, nullptr, nullptr, true);
+                            Crea->CastSpell(Target, SPELL_TIR_FLECHE, true);
                         TimerArcher[i] = urand(3000, 4400);
                     }
                 }

@@ -24,6 +24,7 @@
 #include "Database/Database.h"
 #include "Database/DatabaseImpl.h"
 #include "Database/SqlOperations.h"
+#include "WorldSession.h"
 #include "Language.h"
 #include "Chat.h"
 #include "GameEventMgr.h"
@@ -36,6 +37,7 @@
 #include "ObjectGuid.h"
 #include "AsyncCommandHandlers.h"
 #include "Anticheat.h"
+
 void PInfoHandler::HandlePInfoCommand(WorldSession *session, Player *target, ObjectGuid& target_guid, std::string& name)
 {
     PInfoData* data = new PInfoData;
