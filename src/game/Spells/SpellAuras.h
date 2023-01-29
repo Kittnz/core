@@ -179,6 +179,8 @@ class SpellAuraHolder
         void SetAuraMaxDuration(int32 duration);
         int32 GetAuraDuration() const { return m_duration; }
         void SetAuraDuration(int32 duration) { m_duration = duration; };
+        int32 GetSkippedTime() const { return m_skippedTime; }
+        void AddSkippedTime(int32 duration) { m_skippedTime += duration; }
 
         uint8 GetAuraSlot() const { return m_auraSlot; }
         void SetAuraSlot(uint8 slot) { m_auraSlot = slot; }
@@ -250,6 +252,7 @@ class SpellAuraHolder
         uint32 m_stackAmount;                               // Aura stack amount
         int32 m_maxDuration;                                // Max aura duration
         int32 m_duration;                                   // Current time
+        int32 m_skippedTime;                                // Reduced duration due to pushback
         int32 m_timeCla;                                    // Timer for power per sec calculation
 
         AuraRemoveMode m_removeMode:8;                      // Store info for know remove aura reason
@@ -447,13 +450,23 @@ class Aura
 
         int32 GetAuraMaxDuration() const { return GetHolder()->GetAuraMaxDuration(); }
         int32 GetAuraDuration() const { return GetHolder()->GetAuraDuration(); }
+        int32 GetSkippedTime() const { return GetHolder()->GetSkippedTime(); }
         time_t GetAuraApplyTime() const { return m_applyTime; }
         uint32 GetAuraTicks() const { return m_periodicTick; }
         int32 GetAuraPeriodicTimer() const { return m_periodicTimer; }
         uint32 GetAuraMaxTicks() const
         {
-            int32 maxDuration = GetAuraMaxDuration();
+            int32 maxDuration = GetAuraMaxDuration() - GetSkippedTime();
             return maxDuration > 0 && m_modifier.periodictime > 0 ? maxDuration / m_modifier.periodictime : 0;
+        }
+        uint32 GetRemainingTicks() const
+        {
+            uint32 maxTicks = GetAuraMaxTicks();
+
+            if (m_periodicTick < maxTicks)
+                return maxTicks - m_periodicTick;
+            
+            return 0;
         }
         uint32 GetStackAmount() const { return GetHolder()->GetStackAmount(); }
 
