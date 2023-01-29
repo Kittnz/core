@@ -8,7 +8,7 @@
 #include "libanticheat.hpp"
 #include "Config.hpp"
 #include "WorldPacket.h"
-
+#include "World.h"
 #include "Util.h"
 #include "Database/DatabaseImpl.h"
 #include "Database/DatabaseEnv.h"
