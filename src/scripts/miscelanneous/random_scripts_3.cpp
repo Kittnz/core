@@ -2414,21 +2414,26 @@ bool QuestRewarded_npc_nribbi(Player* pPlayer, Creature* pQuestGiver, Quest cons
         Creature* NPC_cheer2 = pPlayer->FindNearestCreature(60867, 40.0F);
         Creature* NPC_cheer3 = pPlayer->FindNearestCreature(60868, 40.0F);
 
-        if (NPC_cheer1)
+        if (NPC_cheer1 && NPC_cheer2 && NPC_cheer3)
         {
             DoAfterTime(pPlayer, 1 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
-                npc->MonsterSayToPlayer("Ribbit!", player);
+                if (npc)
+                    npc->MonsterSayToPlayer("Ribbit!", player);
                 });
             DoAfterTime(pPlayer, 3 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
-                npc->MonsterSayToPlayer("Riiiibit", player);
+                if (npc)
+                    npc->MonsterSayToPlayer("Riiiibit!", player);
                 });
             DoAfterTime(pPlayer, 4 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer3]() {
-                npc->MonsterSayToPlayer("Riibit", player);
+                if (npc)
+                    npc->MonsterSayToPlayer("Riibit!", player);
                 });
             DoAfterTime(pPlayer, 5 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer1]() {
-                npc->MonsterSayToPlayer("Ribit", player);                });
+                if (npc)
+                    npc->MonsterSayToPlayer("Ribit!", player);                });
             DoAfterTime(pPlayer, 7 * IN_MILLISECONDS, [player = pPlayer, npc = NPC_cheer2]() {
-                npc->MonsterSayToPlayer("We are saved!", player);                });
+                if (npc)
+                    npc->MonsterSayToPlayer("We are saved!", player);                });
             return true;
         }
     }
