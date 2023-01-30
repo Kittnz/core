@@ -818,6 +818,7 @@ class Unit : public WorldObject
         void RemoveAurasDueToSpell(uint32 spellId, SpellAuraHolder* except = nullptr, AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
         void RemoveAurasDueToItemSpell(Item* castItem, uint32 spellId);
         void RemoveAurasByCasterSpell(uint32 spellId, ObjectGuid casterGuid, AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
+        void RemoveAurasByChannelledSpell(uint32 spellId, ObjectGuid casterGuid, bool interrupted);
         void RemoveAurasDueToSpellByCancel(uint32 spellId);
 
         // removing unknown aura stacks by diff reasons and selections

@@ -3881,6 +3881,25 @@ void Unit::RemoveAurasByCasterSpell(uint32 spellId, ObjectGuid casterGuid, AuraR
     }
 }
 
+// Only need to remove the channel aura if its permanent aura or channel is interrupted.
+// Otherwise aura should be removed by its duration expiring (which should happen right after).
+void Unit::RemoveAurasByChannelledSpell(uint32 spellId, ObjectGuid casterGuid, bool interrupted)
+{
+    SpellAuraHolderBounds spair = GetSpellAuraHolderBounds(spellId);
+    for (SpellAuraHolderMap::iterator iter = spair.first; iter != spair.second;)
+    {
+        if (iter->second->GetCasterGuid() == casterGuid &&
+           (interrupted || iter->second->IsPermanent()))
+        {
+            RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEFAULT);
+            spair = GetSpellAuraHolderBounds(spellId);
+            iter = spair.first;
+        }
+        else
+            ++iter;
+    }
+}
+
 void Unit::RemoveSingleAuraFromSpellAuraHolder(uint32 spellId, SpellEffectIndex effindex, ObjectGuid casterGuid, AuraRemoveMode mode)
 {
     SpellAuraHolderBounds spair = GetSpellAuraHolderBounds(spellId);
