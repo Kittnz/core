@@ -366,3 +366,6 @@ update quest_template set questlevel = 23 where entry = 40679;
 update quest_template set questlevel = 27 where entry = 40680;
 -- quest 70053 rewards no xp upon completion, make it reward 1050 xp.
 update quest_template set rewxp = 1050 where entry = 70053;
+-- Item fixes by Dragunovi.
+update item_template set spellid_3 = 14521, spelltrigger_3 = 1 where entry = 83465; -- Shroud of Haunted Torment
+update item_template set spellid_2 = 9413, spelltrigger_2 = 1 where entry = 83468; -- Corpsekeeper's Charge
