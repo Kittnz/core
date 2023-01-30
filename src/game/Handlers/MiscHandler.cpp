@@ -763,7 +763,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
 
     uint32 triggerId;
     recv_data >> triggerId;
-    DEBUG_LOG("Trigger ID: %u", triggerId);
+    printf("Trigger ID: %u\n", triggerId);
 
     Player* const pPlayer = GetPlayer();
 
