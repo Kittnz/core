@@ -356,11 +356,3 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set npc_flags = 3, gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Waters of Vision have no sell price #2749.
 update item_template set buy_price = 3500, sell_price = 700 where entry = 51861;
--- Quest Hidden-Hidden Reward change zoneid to wetlands.
-update quest_template set zoneorsort = 11 where entry = 55035;
--- Quest Cursed Sagepaw! change level to 24.
-update quest_template set questlevel = 24 where entry = 40681;
--- Quest Reunite Tribe-Tribe! change level to 23.
-update quest_template set questlevel = 23 = 40679;
--- Quest The One Alpha change level to 27.
-update quest_template set questlevel = 27 = 40680;
