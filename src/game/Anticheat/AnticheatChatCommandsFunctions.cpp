@@ -70,7 +70,18 @@ bool ChatHandler::HandleAnticheatSpaminfoCommand(char* args)
         return true;
     }
 
-    uint32 accountId = target->GetSession()->GetAccountId();
+    uint32 accountId;
+    if (target)
+        accountId = target->GetSession()->GetAccountId();
+    else
+        accountId = sObjectMgr.GetPlayerAccountIdByGUID(playerGuid);
+
+    if (!accountId)
+    {
+        SendSysMessage("Can't find player account.");
+        return true;
+    }
+
     StringSet const* mutedMessages = pAntispam->GetMutedMessagesForAccount(accountId);
     if (!mutedMessages)
     {
