@@ -4914,16 +4914,17 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
             }
         }
 
-        m_casterUnit->RemoveAurasByCasterSpell(m_spellInfo->Id, m_caster->GetObjectGuid());
+        m_casterUnit->RemoveAurasByChannelledSpell(m_spellInfo->Id, m_caster->GetObjectGuid(), interrupted);
 
         ObjectGuid target_guid = m_casterUnit ? m_casterUnit->GetChannelObjectGuid() : ObjectGuid();
         if (target_guid != m_caster->GetObjectGuid() && target_guid.IsUnit())
         {
             if (Unit* target = ObjectAccessor::GetUnit(*m_caster, target_guid))
                 // Remove single target auras on target now if they expired
-                target->RemoveAurasByCasterSpell(m_spellInfo->Id, m_caster->GetObjectGuid());
+                target->RemoveAurasByChannelledSpell(m_spellInfo->Id, m_caster->GetObjectGuid(), interrupted);
         }
     }
+
     // Only modify/send values if we are the current channeled spell !
     if (m_caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL) && m_caster->GetCurrentSpell(CURRENT_CHANNELED_SPELL) != this)
         return;
@@ -4937,8 +4938,6 @@ void Spell::SendChannelUpdate(uint32 time, bool interrupted)
         // Else, we have some visual bugs (arcane projectile, last tick)
         ChannelResetEvent* event = new ChannelResetEvent(m_casterUnit);
         m_casterUnit->m_Events.AddEventAtOffset(event, 1000);
-	// Sources show that prior to Patch 1.9.0, AM could not trigger Clearcasting. After 1.9.0, it could.
-	// In Patch 3.0.8, this was changed to one chance per cast, meaning it was one chance per pulse between Patch 1.9.0 and Patch 3.0.8.
     }
     else if (Player* pPlayer = m_casterUnit->ToPlayer())
     {
