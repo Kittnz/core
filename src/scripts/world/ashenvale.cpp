@@ -284,7 +284,8 @@ bool QuestAccept_npc_muglash(Player* pPlayer, Creature* pCreature, const Quest* 
         if (npc_muglashAI* pEscortAI = dynamic_cast<npc_muglashAI*>(pCreature->AI()))
         {
             DoScriptText(SAY_MUG_START1, pCreature);
-            pCreature->SetFactionTemplateId(FACTION_ESCORT_H_PASSIVE);
+            pCreature->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC);
+            pCreature->SetFactionTemplateId(FACTION_ESCORT_H_NEUTRAL_PASSIVE);
 
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
         }
