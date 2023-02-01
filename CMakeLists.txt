@@ -339,10 +339,10 @@ else()
 endif()
 
 if(USE_DISCORD_BOT)
-  message(STATUS "Build Discord Bot    : Yes")
+  message(STATUS "Build Discord Bot     : Yes")
   add_compile_definitions(USING_DISCORD_BOT)
 else()
-  message(STATUS "Build Discord Bot    : No (default)")
+  message(STATUS "Build Discord Bot     : No (default)")
 endif()
 
 
