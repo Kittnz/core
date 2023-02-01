@@ -43,7 +43,7 @@ namespace DiscordBot
         template <typename T>
         dpp::command_handler MakeCommandHandler(T&& t)
         {
-            return std::bind(std::forward<T>(t), static_cast<detail::get_member_function_type<T>::type*>(this), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+            return std::bind(std::forward<T>(t), static_cast<typename detail::get_member_function_type<T>::type*>(this), std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
         }
 
 
