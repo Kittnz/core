@@ -28,7 +28,7 @@ namespace DiscordBot
     bool AuthManager::IsAuthenticated(const dpp::user* user) const
     {
         if (!user)
-            return nullptr;
+            return false;
 
         auto pairItr = _authData.find(user->id);
 
