@@ -3669,10 +3669,12 @@ void World::AddAsyncTask(std::function<void()> task)
 
 void World::StopDiscordBot()
 {
+#ifdef USING_DISCORD_BOT
     if (!m_bot)
         return;
 
     m_bot->GetCore()->shutdown();
+#endif
 }
 
 bool World::CanSkipQueue(WorldSession const* sess)
