@@ -782,7 +782,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     }
 
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
-                    if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, type, GetPlayerPointer(), nullptr, chn, lang))
+                    if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, chn, nullptr))
                         chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
 
                     SetLastPubChanMsgTime(time(nullptr));
@@ -917,7 +917,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     allowSendWhisper = true;
 
                 AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
-                if (!allowSendWhisper || lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, type, GetPlayerPointer(), PlayerPointer(new PlayerWrapper<MasterPlayer>(player)), nullptr, lang))
+                if (!allowSendWhisper || lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), PlayerPointer(new PlayerWrapper<MasterPlayer>(player)), nullptr, nullptr))
                     masterPlr->Whisper(msg, lang, player, allowSendWhisper);
 
                 if (lang != LANG_ADDON)
@@ -969,7 +969,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     }
                 }
 
-                guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
+                AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+                if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, nullptr, guild))
+                    guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
             }
 
             if (lang != LANG_ADDON)
