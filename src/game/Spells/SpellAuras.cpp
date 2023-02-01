@@ -418,9 +418,6 @@ AreaAura::AreaAura(SpellEntry const* spellproto, SpellEffectIndex eff, int32 *cu
                 m_areaAuraType = AREA_AURA_FRIEND;
             if (target->GetTypeId() == TYPEID_UNIT && ((Creature*)target)->IsTotem())
                 m_modifier.m_auraname = SPELL_AURA_NONE;
-            // Light's Beacon not applied to caster itself (TODO: more generic check for another similar spell if any?)
-            else if (target == caster_ptr && spellproto->Id == 53651)
-                m_modifier.m_auraname = SPELL_AURA_NONE;
             break;
         case SPELL_EFFECT_APPLY_AREA_AURA_FRIEND:
             m_areaAuraType = AREA_AURA_FRIEND;
@@ -504,15 +501,24 @@ void Aura::Update(uint32 diff)
 
         if (m_periodicTimer <= 0) // tick also at m_periodicTimer==0 to prevent lost last tick in case max m_duration == (max m_periodicTimer)*N
         {
-            // update before applying (aura can be removed in TriggerSpell or PeriodicTick calls)
             // dont allow timer to drift off to huge negative value over time for permanent periodic auras on mobs
             if (m_periodicTimer < -m_modifier.periodictime)
                 m_periodicTimer = 0;
             else
                 m_periodicTimer += m_modifier.periodictime;
 
-            ++m_periodicTick; // for some infinity auras in some cases can overflow and reset
-            PeriodicTick();
+            // if channel has expired, make sure we dont miss any ticks
+            uint32 neededTicks;
+            if (!GetHolder()->GetAuraDuration() && !GetHolder()->IsPermanent() && GetSpellProto()->IsChanneledSpell())
+                neededTicks = GetRemainingTicks();
+            else
+                neededTicks = 1;
+
+            for (uint32 i = 0; i < neededTicks; i++)
+            {
+                ++m_periodicTick; // for some infinity auras in some cases can overflow and reset
+                PeriodicTick();
+            }
         }
     }
 
@@ -558,7 +564,9 @@ void AreaAura::Update(uint32 diff)
                         for (GroupReference *itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
                         {
                             Player* Target = itr->getSource();
-                            if (Target && Target->IsAlive() && Target->GetSubGroup() == subgroup && (!Target->m_duel || owner == Target) && caster->IsFriendlyTo(Target))
+                            if (Target && Target->IsAlive() && Target->GetSubGroup() == subgroup &&
+                               (!Target->m_duel || owner == Target) && caster->IsFriendlyTo(Target) &&
+                               (caster->IsPvP() || !Target->IsPvP() || (Target->GetMapId() > 1))) // auras dont affect pvp flagged targets if caster is not flagged
                             {
                                 if (caster->IsWithinDistInMap(Target, m_radius))
                                     targets.push_back(Target);
@@ -592,7 +600,9 @@ void AreaAura::Update(uint32 diff)
                         for (GroupReference *itr = pGroup->GetFirstMember(); itr != nullptr; itr = itr->next())
                         {
                             Player* Target = itr->getSource();
-                            if (Target && Target->IsAlive() && caster->IsFriendlyTo(Target))
+                            if (Target && Target->IsAlive() &&
+                                caster->IsFriendlyTo(Target) &&
+                               (caster->IsPvP() || !Target->IsPvP() || (Target->GetMapId() > 1))) // auras dont affect pvp flagged targets if caster is not flagged
                             {
                                 if (caster->IsWithinDistInMap(Target, m_radius))
                                     targets.push_back(Target);
@@ -1837,6 +1847,9 @@ void Aura::HandleAuraDummy(bool apply, bool Real)
     {
         if (IsQuestTameSpell(GetId()) && target->IsAlive())
         {
+            if (m_removeMode != AURA_REMOVE_BY_EXPIRE)
+                return;
+
             Unit* caster = GetCaster();
             if (!caster || !caster->IsAlive())
                 return;
@@ -6798,7 +6811,7 @@ bool Aura::IsLastAuraOnHolder()
 
 SpellAuraHolder::SpellAuraHolder(SpellEntry const* spellproto, Unit *target, Unit *caster, Item *castItem, WorldObject* pRealCaster) :
     m_spellProto(spellproto), m_target(target), m_castItemGuid(castItem ? castItem->GetObjectGuid() : ObjectGuid()),
-    m_auraSlot(MAX_AURAS), m_auraLevel(1), m_procCharges(0),
+    m_auraSlot(MAX_AURAS), m_auraLevel(1), m_procCharges(0), m_skippedTime(0),
     m_stackAmount(1), m_removeMode(AURA_REMOVE_BY_DEFAULT), m_AuraDRGroup(DIMINISHING_NONE), m_timeCla(1000),
     m_permanent(false), m_isRemovedOnShapeLost(true), m_deleted(false), m_in_use(0),
     m_debuffLimitAffected(false), m_debuffLimitScore(0), _heartBeatRandValue(0), _pveHeartBeatData(nullptr),

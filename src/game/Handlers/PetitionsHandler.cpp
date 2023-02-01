@@ -80,7 +80,7 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
         return;
 
     // remove fake death
-    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
+    if (GetPlayer()->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
     // if tabard designer, then trying to buy a guild charter.
@@ -107,10 +107,14 @@ void WorldSession::HandlePetitionBuyOpcode(WorldPacket & recv_data)
     }
 
     // Check guild petition name (use whisper type - 6)
-    if (sAnticheatLib->ValidateGuildName(name))
+    if (AntispamInterface* a = sAnticheatLib->GetAntispam())
     {
-        SendGuildCommandResult(GUILD_CREATE_S, name, ERR_GUILD_NAME_INVALID);
-        return;
+        if (a->FilterMessage(name))
+        {
+            sWorld.LogChat(this, "Guild", "Attempt to create guild petition with spam name" + name);
+            SendGuildCommandResult(GUILD_CREATE_S, name, ERR_GUILD_NAME_INVALID);
+            return;
+        }
     }
 
     ItemPrototype const *pProto = ObjectMgr::GetItemPrototype(charterid);
@@ -575,7 +579,7 @@ void WorldSession::SendPetitionShowList(ObjectGuid& guid)
     }
 
     // remove fake death
-    if (GetPlayer()->HasUnitState(UNIT_STAT_DIED))
+    if (GetPlayer()->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         GetPlayer()->RemoveSpellsCausingAura(SPELL_AURA_FEIGN_DEATH);
 
     uint8 count = 1;

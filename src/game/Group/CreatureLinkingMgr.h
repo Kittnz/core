@@ -189,12 +189,12 @@ private:
     // Helper function to set following
     void SetFollowing(Creature* pWho, Creature* pWhom) const;
     // Helper function to return if a slave is in range of a boss
-    bool IsSlaveInRangeOfBoss(Creature const* pSlave, Creature const* pBoss, uint16 searchRange) const;
-    bool IsSlaveInRangeOfBoss(Creature const* pBoss, float slaveX, float slaveY, uint16 searchRange) const;
+    bool IsSlaveInRangeOfMaster(Creature const* pSlave, Creature const* pBoss, uint16 searchRange) const;
+    bool IsSlaveInRangeOfMaster(Creature const* pBoss, float slaveX, float slaveY, float slaveZ, uint16 searchRange) const;
     // Another helper function
     bool IsRespawnReady(uint32 dbLowGuid, Map* _map) const;
     // Helper function for recursive spawning-checks of an additional linked
-    bool CanSpawn(uint32 lowGuid, Map* _map, CreatureLinkingInfo const*  pInfo, float sx, float sy) const;
+    bool CanSpawn(uint32 lowGuid, Map* _map, CreatureLinkingInfo const*  pInfo, float sx, float sy, float sz) const;
 
     // Storage of Data (boss, flag, searchRange, GuidList) for action triggering
     HolderMap m_holderMap;

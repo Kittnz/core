@@ -920,6 +920,22 @@ void Log::outDiscord(char const* str, ...)
         fprintf(logfile, "\n");
         va_end(ap);
         fflush(logfile);
+void Log::outSpam(const char* wrd, ...)
+{
+    if (!wrd)
+        return;
+
+    if (logFiles[LOG_CHAT_SPAM])
+    {
+        outTimestamp(logFiles[LOG_CHAT_SPAM]);
+
+        va_list ap;
+        va_start(ap, wrd);
+        vfprintf(logFiles[LOG_CHAT_SPAM], wrd, ap);
+        va_end(ap);
+
+        fprintf(logFiles[LOG_CHAT_SPAM], "\n");
+        fflush(logFiles[LOG_CHAT_SPAM]);
     }
 }
 

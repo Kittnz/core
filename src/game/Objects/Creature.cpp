@@ -535,6 +535,9 @@ bool Creature::UpdateEntry(uint32 Entry, CreatureData const* data /*=nullptr*/, 
     else
         SetPvP(false);
 
+    if (CanAssistPlayers())
+        EnableMoveInLosEvent();
+
     for (int i = 0; i < CREATURE_MAX_SPELLS; ++i)
         m_spells[i] = GetCreatureInfo()->spells[i];
 
@@ -2244,7 +2247,7 @@ bool Creature::CanAssistTo(const Unit* u, const Unit* enemy, bool checkfaction /
 
 bool Creature::CanInitiateAttack()
 {
-    if (HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_DIED))
+    if (HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_FEIGN_DEATH))
         return false;
 
     if (HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_SPAWNING | UNIT_FLAG_NOT_SELECTABLE))
@@ -3502,7 +3505,7 @@ bool Creature::_IsTargetAcceptable(Unit const *target) const
     // if the target cannot be attacked, the target is not acceptable
     if (IsFriendlyTo(target)
         || !target->IsTargetable(true, IsCharmerOrOwnerPlayerOrPlayerItself())
-        || target->HasUnitState(UNIT_STAT_DIED))
+        || target->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         return false;
 
     Unit *myVictim = GetAttackerForHelper();
