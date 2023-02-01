@@ -15005,3 +15005,11 @@ bool ChatHandler::HandleNpcSpawnSetAurasCommand(char* args)
     PSendSysMessage("Auras for guid %u updated to '%s'.", pCreature->GetDBTableGUIDLow(), args);
     return true;
 }
+
+
+#ifndef USING_DISCORD_BOT
+bool ChatHandler::HandleDiscBotStopCommand(char* args)
+{
+    return true;
+}
+#endif
