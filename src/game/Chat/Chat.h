@@ -209,7 +209,7 @@ class ChatHandler
         // Deplacement
         bool HandleGoForwardCommand(char* args);
         bool HandleGoUpCommand(char* args);
-
+        bool HandleReloadHousingCommand(char* args);
         bool HandleGameObjectTempAddCommand(char *args);
 
         // Clean characters
@@ -338,6 +338,7 @@ class ChatHandler
         bool HandleGuildDeleteCommand(char* args);
         bool HandleGuildRenameCommand(char* args);
         bool HandleGuildListenCommand(char* args);
+        bool HandleGuildHouseCommand(char* args);
 
         bool HandleHonorShow(char* args);
         bool HandleHonorSetRPCommand(char* args);
