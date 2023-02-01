@@ -920,6 +920,9 @@ void Log::outDiscord(char const* str, ...)
         fprintf(logfile, "\n");
         va_end(ap);
         fflush(logfile);
+    }
+}
+
 void Log::outSpam(const char* wrd, ...)
 {
     if (!wrd)
