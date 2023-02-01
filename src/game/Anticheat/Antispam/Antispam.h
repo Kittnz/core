@@ -36,6 +36,7 @@ enum AntispamChatTypes
     A_CHAT_TYPE_SAY     = 0,
     A_CHAT_TYPE_WHISPER = 1,
     A_CHAT_TYPE_CHANNEL = 2,
+    A_CHAT_TYPE_GUILD   = 3,
     A_CHAT_TYPE_MAX
 };
 
@@ -62,6 +63,7 @@ struct MessageBlock
     uint8 count;
     time_t time;
     Channel* channel;
+    Guild* guild;
 };
 
 struct MessageCounter
@@ -107,7 +109,7 @@ class Antispam : public AntispamInterface
         std::string NormalizeMessage(const std::string& msg, uint32 mask = 0) override;
         bool FilterMessage(const std::string &msg) override;
         
-        bool AddMessage(const std::string& msg, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, uint32 language) override;
+        bool AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild) override;
 
         void ProcessMessages(uint32 diff);
         void ApplySanction(MessageBlock const& messageBlock, uint32 detectType, uint32 repeats = 0);
@@ -141,6 +143,8 @@ class Antispam : public AntispamInterface
                     return A_CHAT_TYPE_WHISPER;
                 case CHAT_MSG_CHANNEL:
                     return A_CHAT_TYPE_CHANNEL;
+                case CHAT_MSG_GUILD:
+                    return A_CHAT_TYPE_GUILD;
                 default:
                     return A_CHAT_TYPE_MAX;
             }

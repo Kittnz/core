@@ -271,6 +271,7 @@ class Guild
         bool LoadMembersFromDB(QueryResult *guildMembersResult);
 
         void BroadcastToGuild(WorldSession *session, std::string const& msg, uint32 language = LANG_UNIVERSAL);
+        void BroadcastToGuild(MasterPlayer* pPlayer, std::string const& msg, uint32 language = LANG_UNIVERSAL);
         void BroadcastToOfficers(WorldSession *session, std::string const& msg, uint32 language = LANG_UNIVERSAL);
         void BroadcastPacketToRank(WorldPacket *packet, uint32 rankId);
         void BroadcastPacket(WorldPacket *packet);
