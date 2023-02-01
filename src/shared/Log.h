@@ -25,6 +25,7 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include <mutex>
+#include <shared_mutex>
 
 class Config;
 class ByteBuffer;
