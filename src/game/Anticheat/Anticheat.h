@@ -14,6 +14,7 @@
 
 #include <memory>
 #include <string>
+#include <unordered_set>
 
 enum CheatAction
 {
@@ -41,22 +42,33 @@ enum CheatAction
     CHEAT_ACTION_SILENCE        = 0x20,
 };
 
-enum NormalizeFlags
-{
-    NF_CUT_COLOR            = 0x001,
-    NF_REPLACE_WORDS        = 0x002,
-    NF_CUT_SPACE            = 0x004,
-    NF_CUT_CTRL             = 0x008,
-    NF_CUT_PUNCT            = 0x010,
-    NF_CUT_NUMBERS          = 0x020,
-    NF_REPLACE_UNICODE      = 0x040,
-    NF_REMOVE_REPEATS       = 0x080,
-    NF_REMOVE_NON_LATIN     = 0x100
-};
-
 class WorldSession;
 class Player;
 struct AreaEntry;
+
+typedef std::unordered_set<std::string> StringSet;
+
+class AntispamInterface
+{
+public:
+    virtual ~AntispamInterface() {}
+
+    virtual void LoadConfig() {}
+
+    virtual std::string NormalizeMessage(std::string const& msg, uint32 mask = 0) { return msg; }
+    virtual bool FilterMessage(std::string const& msg) { return 0; }
+
+    virtual bool AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild) { return true; }
+
+    virtual bool IsMuted(uint32 accountId, bool checkChatType = false, uint32 chatType = 0) const { return false; }
+    virtual void Mute(uint32 accountId) {}
+    virtual void Unmute(uint32 accountId) {}
+    virtual void ShowMuted(WorldSession* session) {}
+    virtual StringSet const* GetMutedMessagesForAccount(uint32 accountId) { return nullptr; }
+
+    virtual void BlacklistWord(std::string word) {};
+    virtual void WhitelistWord(std::string word) {};
+};
 
 // interface to anticheat session (one for each world session)
 class SessionAnticheatInterface
@@ -65,8 +77,6 @@ class SessionAnticheatInterface
         virtual ~SessionAnticheatInterface() = default;
 
         virtual void Update(uint32 diff) = 0;
-
-        virtual bool IsSilenced() const = 0;
 
         // character enum packet has been built and is ready to send
         virtual void SendCharEnum(WorldPacket &&packet) = 0;
@@ -100,13 +110,6 @@ class SessionAnticheatInterface
 
         // warden
         virtual void WardenPacket(WorldPacket &packet) = 0;
-
-        // antispam
-        virtual void Whisper(const std::string &msg, const ObjectGuid &to) = 0;
-        virtual void Say(const std::string &msg) = 0;
-        virtual void Yell(const std::string &msg) = 0;
-        virtual void Channel(const std::string &msg) = 0;
-        virtual void Mail(const std::string &subject, const std::string &body, const ObjectGuid &to) = 0;
 };
 
 // interface to anticheat system
@@ -122,12 +125,10 @@ class AnticheatLibInterface
         // create anticheat session for a new world session
         virtual std::unique_ptr<SessionAnticheatInterface> NewSession(WorldSession *session, const BigNumber &K) = 0;
 
-        // anti spam
-        virtual bool ValidateGuildName(const std::string &name) const = 0;
-        virtual std::string NormalizeString(const std::string &message, uint32 mask) = 0;
-
         // GM .anticheat command handler
         //virtual bool ChatCommand(ChatHandler *handler, const std::string &args) = 0;
+
+        virtual AntispamInterface* GetAntispam() const { return nullptr; }
 };
 
 AnticheatLibInterface* GetAnticheatLib();
@@ -143,8 +144,6 @@ class NullSessionAnticheat : public SessionAnticheatInterface
         NullSessionAnticheat(WorldSession *session) : _session(session), _inKnockBack(false) {}
 
         void Update(uint32) override {}
-
-        bool IsSilenced() const { return false; }
 
         // character enum packet has been built and is ready to send
         void SendCharEnum(WorldPacket &&packet) override { _session->SendPacket(&packet); }
@@ -191,13 +190,6 @@ class NullSessionAnticheat : public SessionAnticheatInterface
 
         // warden
         void WardenPacket(WorldPacket &) override {}
-
-        // antispam
-        void Whisper(const std::string &msg, const ObjectGuid &to) override {}
-        void Say(const std::string &msg) override {}
-        void Yell(const std::string &msg) override {}
-        void Channel(const std::string &msg) override {}
-        void Mail(const std::string &subject, const std::string &body, const ObjectGuid &to) override {}
 };
 
 #ifdef USE_ANTICHEAT
@@ -213,11 +205,6 @@ class NullAnticheatLib : public AnticheatLibInterface
         {
             return std::make_unique<NullSessionAnticheat>(session);
         }
-
-        // anti spam
-        virtual bool ValidateGuildName(const std::string &) const { return false; }
-        virtual std::string NormalizeString(const std::string &message, uint32) { return message; }
-        virtual void AddMessage(const std::string &, uint32, PlayerPointer, PlayerPointer) {}
 
         // GM .anticheat command handler
         virtual bool ChatCommand(ChatHandler *, const std::string &) { return false; }

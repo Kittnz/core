@@ -663,7 +663,7 @@ struct npc_auriusAI : public ScriptedAI
             m_creature->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_UNK_29);
             m_creature->SetUInt32Value(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
             m_creature->SetStandState(UNIT_STAND_STATE_DEAD);
-            m_creature->AddUnitState(UNIT_STAT_DIED);
+            m_creature->AddUnitState(UNIT_STAT_FEIGN_DEATH);
             m_creature->CombatStop();
             //m_creature->RemoveAllAuras();
             //m_creature->DeleteThreatList();

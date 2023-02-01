@@ -298,7 +298,7 @@ void Unit::Update(uint32 update_diff, uint32 p_time)
         {
             // Pet in combat ?
             Pet* myPet = GetPet();
-            if (HasUnitState(UNIT_STAT_DIED) || !myPet || myPet->GetHostileRefManager().isEmpty())
+            if (HasUnitState(UNIT_STAT_FEIGN_DEATH) || !myPet || myPet->GetHostileRefManager().isEmpty())
             {
                 if (m_HostileRefManager.isEmpty() && !HasAuraType(SPELL_AURA_INTERRUPT_REGEN))
                     ClearInCombat();
@@ -3881,6 +3881,25 @@ void Unit::RemoveAurasByCasterSpell(uint32 spellId, ObjectGuid casterGuid, AuraR
     }
 }
 
+// Only need to remove the channel aura if its permanent aura or channel is interrupted.
+// Otherwise aura should be removed by its duration expiring (which should happen right after).
+void Unit::RemoveAurasByChannelledSpell(uint32 spellId, ObjectGuid casterGuid, bool interrupted)
+{
+    SpellAuraHolderBounds spair = GetSpellAuraHolderBounds(spellId);
+    for (SpellAuraHolderMap::iterator iter = spair.first; iter != spair.second;)
+    {
+        if (iter->second->GetCasterGuid() == casterGuid &&
+           (interrupted || iter->second->IsPermanent()))
+        {
+            RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEFAULT);
+            spair = GetSpellAuraHolderBounds(spellId);
+            iter = spair.first;
+        }
+        else
+            ++iter;
+    }
+}
+
 void Unit::RemoveSingleAuraFromSpellAuraHolder(uint32 spellId, SpellEffectIndex effindex, ObjectGuid casterGuid, AuraRemoveMode mode)
 {
     SpellAuraHolderBounds spair = GetSpellAuraHolderBounds(spellId);
@@ -4279,14 +4298,20 @@ void Unit::DelaySpellAuraHolder(uint32 spellId, int32 delaytime, ObjectGuid cast
     for (SpellAuraHolderMap::iterator iter = bounds.first; iter != bounds.second; ++iter)
     {
         SpellAuraHolder* holder = iter->second;
-
         if (casterGuid != holder->GetCasterGuid())
             continue;
 
         if (holder->GetAuraDuration() < delaytime)
+        {
+            holder->AddSkippedTime(holder->GetAuraDuration());
             holder->SetAuraDuration(0);
+        }
         else
+        {
+            if (delaytime > 0)
+                holder->AddSkippedTime(delaytime);
             holder->SetAuraDuration(holder->GetAuraDuration() - delaytime);
+        }
 
         // push down the tick timer with the delay, otherwise we can still get max ticks even with pushback
         //holder->RefreshAuraPeriodicTimers();
@@ -5254,7 +5279,7 @@ bool Unit::CanAttack(Unit const* target, bool force) const
     else if (!IsHostileTo(target))
         return false;
 
-    if (!target->IsTargetable(true, IsCharmerOrOwnerPlayerOrPlayerItself()) || target->HasUnitState(UNIT_STAT_DIED))
+    if (!target->IsTargetable(true, IsCharmerOrOwnerPlayerOrPlayerItself()) || target->HasUnitState(UNIT_STAT_FEIGN_DEATH))
         return false;
 
     // shaman totem quests: spell 8898, shaman can detect elementals but elementals cannot see shaman
@@ -6378,7 +6403,7 @@ bool Unit::IsTargetable(bool forAttack, bool isAttackerPlayer, bool forAoE, bool
         if (!forAoE && !CanBeDetected())
             return false;
 
-        if (!isAttackerPlayer && !forAoE && HasUnitState(UNIT_STAT_DIED))
+        if (!isAttackerPlayer && !forAoE && HasUnitState(UNIT_STAT_FEIGN_DEATH))
             return false;
 
         // check flags
@@ -7699,7 +7724,7 @@ bool Unit::SelectHostileTarget()
     if (target)
     {
         // Nostalrius : Correction bug sheep/fear
-        if (!HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_DIED | UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING | UNIT_STAT_CANT_ROTATE) && (!HasAuraType(SPELL_AURA_MOD_FEAR) || HasAuraType(SPELL_AURA_PREVENTS_FLEEING)) && !HasAuraType(SPELL_AURA_MOD_CONFUSE))
+        if (!HasUnitState(UNIT_STAT_STUNNED | UNIT_STAT_PENDING_STUNNED | UNIT_STAT_FEIGN_DEATH | UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING | UNIT_STAT_CANT_ROTATE) && (!HasAuraType(SPELL_AURA_MOD_FEAR) || HasAuraType(SPELL_AURA_PREVENTS_FLEEING)) && !HasAuraType(SPELL_AURA_MOD_CONFUSE))
         {
             SetInFront(target);
             ((Creature*)this)->AI()->AttackStart(target);
@@ -9016,7 +9041,7 @@ void Unit::ProcDamageAndSpellFor(bool isVictim, Unit* pTarget, uint32 procFlag, 
             continue;
 
         SpellProcEventEntry const* spellProcEvent = nullptr;
-        auto result = IsTriggeredAtSpellProcEvent(pTarget, itr.second, procSpell, procFlag, procExtra, attType, isVictim, spellProcEvent, (spell && spell->IsTriggeredByAura()));
+        auto result = IsTriggeredAtSpellProcEvent(pTarget, itr.second, procSpell, procFlag, procExtra, attType, isVictim, spellProcEvent, (spell && (spell->IsTriggeredByAura() || spell->IsTriggered() && spell->IsCastByItem())));
 
         if (result != SPELL_PROC_TRIGGER_OK)
         {
@@ -9268,7 +9293,7 @@ void Unit::SetFeignDeath(bool apply, ObjectGuid casterGuid, bool success)
         {
             InterruptSpellsCastedOnMe();
 
-            AddUnitState(UNIT_STAT_DIED);
+            AddUnitState(UNIT_STAT_FEIGN_DEATH);
             CombatStop();
             RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_IMMUNE_OR_LOST_SELECTION);
 
@@ -9303,7 +9328,7 @@ void Unit::SetFeignDeath(bool apply, ObjectGuid casterGuid, bool success)
 
         RemoveFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
 
-        ClearUnitState(UNIT_STAT_DIED);
+        ClearUnitState(UNIT_STAT_FEIGN_DEATH);
 
         RestoreMovement();
     }

@@ -2,10 +2,10 @@
 #include "World.h"
 #include "libanticheat.hpp"
 #include "Config.hpp"
-#include "Antispam/AntispamMgr.hpp"
-#include "Antispam/Antispam.hpp"
 #include "Player.h"
 #include "ObjectMgr.h"
+#include "AccountMgr.h"
+#include "Antispam/Antispam.h"
 
 bool ChatHandler::HandleAnticheatInfoCommand(char* args)
 {
@@ -42,7 +42,14 @@ bool ChatHandler::HandleAnticheatSilenceCommand(char* args)
         return false;
     }
 
-    sAntispamMgr.Silence(AccountId);
+    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+    if (!pAntispam)
+    {
+        SendSysMessage("Core is not compiled with antispam.");
+        return true;
+    }
+
+    pAntispam->Mute(AccountId);
 
     PSendSysMessage("Silenced account %u", AccountId);
     return true;
@@ -56,24 +63,37 @@ bool ChatHandler::HandleAnticheatSpaminfoCommand(char* args)
     if (!ExtractPlayerTarget(&args, &target, &playerGuid))
         return false;
 
-    std::shared_ptr<Anticheat::Antispam> antispam;
-
-    if (target)
-        if (auto const anticheat = dynamic_cast<const Anticheat::SessionAnticheat *>(target->GetSession()->GetAntiCheat()))
-            antispam = anticheat->GetAntispam();
-
-    if (!antispam)
+    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+    if (!pAntispam)
     {
-        // if we reach here, lookup cached information instead
-        auto const playerData = sObjectMgr.GetPlayerDataByGUID(playerGuid.GetCounter());
-
-        antispam = sAntispamMgr.CheckCache(playerData->uiAccount);
+        SendSysMessage("Core is not compiled with antispam.");
+        return true;
     }
 
-    if (!antispam)
-        SendSysMessage("No antispam info available");
+    uint32 accountId;
+    if (target)
+        accountId = target->GetSession()->GetAccountId();
     else
-        SendSysMessage(antispam->GetInfo().c_str());
+        accountId = sObjectMgr.GetPlayerAccountIdByGUID(playerGuid);
+
+    if (!accountId)
+    {
+        SendSysMessage("Can't find player account.");
+        return true;
+    }
+
+    StringSet const* mutedMessages = pAntispam->GetMutedMessagesForAccount(accountId);
+    if (!mutedMessages)
+    {
+        SendSysMessage("No muted messages for player.");
+        return true;
+    }
+
+    PSendSysMessage("Listing muted messages for account %u:", accountId);
+    for (auto const& message : *mutedMessages)
+    {
+        SendSysMessage(message.c_str());
+    }
 
     return true;
 }
@@ -82,7 +102,7 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
 {
     uint32 fingerprintNum = 0;
 
-    if (!ExtractUInt32Base(&args, fingerprintNum, 16))
+    if (!ExtractUInt32Base(&args, fingerprintNum, 10))
     {
         return false;
     }
@@ -114,7 +134,7 @@ bool ChatHandler::HandleAnticheatFingerprintListCommand(char* args)
         }
     }
 
-    PSendSysMessage("End of listing for fingerprint 0x%lx.  Found %d matches.", fingerprintNum, count);
+    PSendSysMessage("End of listing for fingerprint %u.  Found %d matches.", fingerprintNum, count);
     return true;
 }
 
@@ -122,12 +142,12 @@ bool ChatHandler::HandleAnticheatFingerprintHistoryCommand(char* args)
 {
     uint32 fingerprintNum = 0;
 
-    if (!ExtractUInt32Base(&args, fingerprintNum, 16))
+    if (!ExtractUInt32Base(&args, fingerprintNum, 10))
     {
         return false;
     }
 
-    PSendSysMessage("Listing history for fingerprint 0x%lx.  Maximum history length from config: %u", fingerprintNum, sAnticheatConfig.GetFingerprintHistory());
+    PSendSysMessage("Listing history for fingerprint %u.  Maximum history length from config: %u", fingerprintNum, sAnticheatConfig.GetFingerprintHistory());
 
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT account, ip, realm, time FROM system_fingerprint_usage WHERE fingerprint = %u ORDER BY `time` DESC", fingerprintNum));
 
@@ -149,7 +169,7 @@ bool ChatHandler::HandleAnticheatFingerprintHistoryCommand(char* args)
         } while (result->NextRow());
     }
 
-    PSendSysMessage("End of history for fingerprint 0x%lx.  Found %d matches", fingerprintNum, count);
+    PSendSysMessage("End of history for fingerprint %u.  Found %d matches", fingerprintNum, count);
     return true;
 }
 
@@ -179,7 +199,7 @@ bool ChatHandler::HandleAnticheatFingerprintAHistoryCommand(char* args)
             uint32 realm = fields[2].GetUInt32();
             std::string time = fields[3].GetCppString();
 
-            PSendSysMessage("Fingerprint: 0x%lx IP: %s Realm: %u Time: %s", fingerprint, ip.c_str(), realm, time.c_str());
+            PSendSysMessage("Fingerprint: %u%s IP: %s Realm: %u Time: %s", fingerprint, sAccountMgr.IsFingerprintBanned(fingerprint) ? " (BANNED)" : "", ip.c_str(), realm, time.c_str());
 
             ++count;
         } while (result->NextRow());
@@ -237,9 +257,33 @@ bool ChatHandler::HandleAnticheatSpaminformCommand(char* args)
 
 bool ChatHandler::HandleAnticheatBlacklistCommand(char* args)
 {
-    sAntispamMgr.BlacklistAdd(args);
+    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+    if (!pAntispam)
+    {
+        SendSysMessage("Core is not compiled with antispam.");
+        return true;
+    }
 
-    SendSysMessage("Blacklist add submitted");
+    strToUpper(args, strlen(args));
+    pAntispam->BlacklistWord(args);
+
+    PSendSysMessage("Added '%s' to antispam blacklist.", args);
+    return true;
+}
+
+bool ChatHandler::HandleAnticheatWhitelistCommand(char* args)
+{
+    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+    if (!pAntispam)
+    {
+        SendSysMessage("Core is not compiled with antispam.");
+        return true;
+    }
+
+    strToUpper(args, strlen(args));
+    pAntispam->WhitelistWord(args);
+
+    PSendSysMessage("Removed '%s' from antispam blacklist.", args);
     return true;
 }
 
@@ -251,7 +295,14 @@ bool ChatHandler::HandleAnticheatUnsilenceCommand(char* args)
         return false;
     }
 
-    sAntispamMgr.Unsilence(AccountId);
+    AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
+    if (!pAntispam)
+    {
+        SendSysMessage("Core is not compiled with antispam.");
+        return true;
+    }
+
+    pAntispam->Unmute(AccountId);
 
     PSendSysMessage("Unsilenced account %u", AccountId);
     return true;

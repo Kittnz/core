@@ -23,8 +23,7 @@
 #include "Language.h"
 #include "ObjectMgr.h"
 
-#include "Antispam/AntispamMgr.hpp"
-#include "Antispam/Antispam.hpp"
+#include "Antispam/Antispam.h"
 #include "Movement/Movement.hpp"
 #include "Warden/Warden.hpp"
 #include "Warden/WardenWin.hpp"
@@ -220,8 +219,8 @@ void AnticheatLib::Reload()
     // will affect how the database data is interpreted (i.e. normalization of antispam blacklist entries)
     sAnticheatConfig.loadConfigSettings();
 
-    sLog.outString("Loading antispam system...");
-    sAntispamMgr.LoadFromDB();
+    sLog.outString("Loading antispam system ...");
+    sAntispam.LoadConfig();
 
     sLog.outString("Loading Warden scan database...");
     sWardenScanMgr.loadFromDB();
@@ -244,15 +243,9 @@ std::unique_ptr<SessionAnticheatInterface> AnticheatLib::NewSession(WorldSession
     return std::make_unique<NullSessionAnticheat>(session);
 }
 
-bool AnticheatLib::ValidateGuildName(const std::string &name) const
+AntispamInterface* AnticheatLib::GetAntispam() const
 {
-    std::string log;
-    return !!sAntispamMgr.CheckBlacklist(name, log);
-}
-
-std::string AnticheatLib::NormalizeString(const std::string &msg, uint32 mask)
-{
-    return sAntispamMgr.NormalizeString(msg, mask);
+    return &sAntispam;
 }
 
 void AnticheatLib::EnableExtrapolationDebug(uint32 seconds)
@@ -665,8 +658,7 @@ bool AnticheatLib::ChatCommand(ChatHandler *handler, const std::string &origArgs
 
 SessionAnticheat::SessionAnticheat(WorldSession *session, const BigNumber &K) :
     _session(session), _warden(CreateWarden(session, K, this)), _inWorld(false),_fingerprint(0), _tickTimer(0),
-    _cheatsReported(0), _kickTimer(0), _banTimer(0), _banAccount(false), _banIP(false), _worldEnterTime(0),
-    _antispam(sAntispamMgr.GetSession(session->GetAccountId()))
+    _cheatsReported(0), _kickTimer(0), _banTimer(0), _banAccount(false), _banIP(false), _worldEnterTime(0)
 {
     memset(_cheatOccuranceTick, 0, sizeof(_cheatOccuranceTick));
     memset(_cheatOccuranceTotal, 0, sizeof(_cheatOccuranceTotal));
@@ -674,14 +666,6 @@ SessionAnticheat::SessionAnticheat(WorldSession *session, const BigNumber &K) :
 
 SessionAnticheat::~SessionAnticheat()
 {
-    // when the session is destroyed we want to move the antispam information for the session into a temporary cache.
-    // this way, if the session reconnects within the configured amount of time, we can restore their statistics rather than reset them.
-    if (_antispam)
-    {
-        sAntispamMgr.CacheSession(_antispam);
-        _antispam.reset();
-    }
-
     // if the kick timer is running, kick them right away.  this is probably redundant but
     // may prove useful if they are disconnecting from this realm and connecting to another
     // with the same session id with the auth server.
@@ -786,11 +770,6 @@ void SessionAnticheat::SendCharEnum(WorldPacket &&packet)
     _warden->SetCharEnumPacket(std::move(packet));
 }
 
-bool SessionAnticheat::IsSilenced() const
-{
-    return sAntispamMgr.IsSilenced(_session);
-}
-
 void SessionAnticheat::NewPlayer()
 {
     auto const player = _session->GetPlayer();
@@ -809,16 +788,7 @@ void SessionAnticheat::LeaveWorld()
 
 void SessionAnticheat::Disconnect()
 {
-    // when the session is destroyed we want to move the antispam information for the session into a temporary cache.
-    // this way, if the session reconnects within the configured amount of time, we can restore their statistics rather than reset them.
 
-    // NOTE: we deliberately do nothing here besides caching antispam results.  this is because it is possible either
-    // now or in the future that some session teardown will trigger the anticheat and we will want to still have it up and running.
-    if (_antispam)
-    {
-        sAntispamMgr.CacheSession(_antispam);
-        _antispam.reset();
-    }
 }
 
 void SessionAnticheat::SendPlayerInfo(ChatHandler *handler) const
@@ -850,12 +820,6 @@ void SessionAnticheat::SendCheatInfo(ChatHandler *handler) const
     handler->PSendSysMessage("Over speed distance total = %f", _movementData->overSpeedDistanceTotal);
 
     SendPlayerInfo(handler);
-}
-
-void SessionAnticheat::SendSpamInfo(ChatHandler *handler) const
-{
-    if (_antispam)
-        handler->SendSysMessage(_antispam->GetInfo().c_str());
 }
 
 void SessionAnticheat::RecordCheat(uint32 actionMask, const char *detector, const char *format, ...)
@@ -995,36 +959,6 @@ void SessionAnticheat::OrderAck(uint16 opcode, uint32 counter)
 void SessionAnticheat::WardenPacket(WorldPacket &packet)
 {
     _warden->HandlePacket(packet);
-}
-
-void SessionAnticheat::Whisper(const std::string &msg, const ObjectGuid &to)
-{
-    if (!!_antispam && !sAntispamMgr.IsSilenced(_session))
-        _antispam->Whisper(msg, to);
-}
-
-void SessionAnticheat::Say(const std::string &msg)
-{
-    if (!!_antispam && !sAntispamMgr.IsSilenced(_session))
-        _antispam->Say(msg);
-}
-
-void SessionAnticheat::Yell(const std::string &msg)
-{
-    if (!!_antispam && !sAntispamMgr.IsSilenced(_session))
-        _antispam->Yell(msg);
-}
-
-void SessionAnticheat::Channel(const std::string &msg)
-{
-    if (!!_antispam && !sAntispamMgr.IsSilenced(_session))
-        _antispam->Channel(msg);
-}
-
-void SessionAnticheat::Mail(const std::string &subject, const std::string &body, const ObjectGuid &to)
-{
-    if (!!_antispam && !sAntispamMgr.IsSilenced(_session))
-        _antispam->Mail(subject, body, to);
 }
 
 void SessionAnticheat::RecordCheatInternal(CheatType cheat, const char *format, ...)

@@ -485,6 +485,10 @@ GmLogPerAccount = 0
 
 CriticalCommandsLogFile = "gm_critical.log"
 
+# Log file for spam detected by antispam.
+
+ChatSpamLogFile = "chatspam.log"
+
 # Log file for possible exploits for abuse detection.
 
 ExploitsLogFile = ""

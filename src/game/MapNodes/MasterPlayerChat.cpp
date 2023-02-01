@@ -39,14 +39,17 @@ void MasterPlayer::UpdateSpeakTime()
     m_speakTime = current + sWorld.getConfig(CONFIG_UINT32_CHATFLOOD_MESSAGE_DELAY);
 }
 
-void MasterPlayer::Whisper(std::string const& text, uint32 language, MasterPlayer* receiver)
+void MasterPlayer::Whisper(std::string const& text, uint32 language, MasterPlayer* receiver, bool allowWhisper)
 {
     if (language != LANG_ADDON)                             // if not addon data
         language = LANG_UNIVERSAL;                          // whispers should always be readable
 
     WorldPacket data;
-    ChatHandler::BuildChatPacket(data, CHAT_MSG_WHISPER, text.c_str(), Language(language), GetChatTag(), GetObjectGuid(), GetName());
-    receiver->GetSession()->SendPacket(&data);
+    if (allowWhisper)
+    {
+        ChatHandler::BuildChatPacket(data, CHAT_MSG_WHISPER, text.c_str(), Language(language), GetChatTag(), GetObjectGuid(), GetName());
+        receiver->GetSession()->SendPacket(&data);
+    }
 
     // not send confirmation for addon messages
     if (language != LANG_ADDON)
@@ -55,6 +58,9 @@ void MasterPlayer::Whisper(std::string const& text, uint32 language, MasterPlaye
         ChatHandler::BuildChatPacket(data, CHAT_MSG_WHISPER_INFORM, text.c_str(), Language(language), receiver->GetChatTag(), receiver->GetObjectGuid());
         GetSession()->SendPacket(&data);
     }
+
+    if (!allowWhisper)
+        return;
 
     ALL_SESSION_SCRIPTS(receiver->GetSession(), OnWhispered(GetObjectGuid()));
 

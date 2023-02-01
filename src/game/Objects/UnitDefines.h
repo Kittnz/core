@@ -87,6 +87,32 @@ enum UnitStandStateType
 
 #define MAX_UNIT_STAND_STATE 9
 
+static char const* UnitStandStateToString(uint32 state)
+{
+    switch (state)
+    {
+        case UNIT_STAND_STATE_STAND:
+            return "Stand";
+        case UNIT_STAND_STATE_SIT:
+            return "Sit";
+        case UNIT_STAND_STATE_SIT_CHAIR:
+            return "Sit Chair";
+        case UNIT_STAND_STATE_SLEEP:
+            return "Sleep";
+        case UNIT_STAND_STATE_SIT_LOW_CHAIR:
+            return "Sit Low Chair";
+        case UNIT_STAND_STATE_SIT_MEDIUM_CHAIR:
+            return "Sit Medium Chair";
+        case UNIT_STAND_STATE_SIT_HIGH_CHAIR:
+            return "Sit High Chair";
+        case UNIT_STAND_STATE_DEAD:
+            return "Dead";
+        case UNIT_STAND_STATE_KNEEL:
+            return "Kneel";
+    }
+    return "UNKNOWN";
+}
+
 /* byte flag value not exist in 1.12, moved/merged in (UNIT_FIELD_BYTES_1,3), in post-1.x it's in (UNIT_FIELD_BYTES_1,2)
 enum UnitStandFlags
 */
@@ -109,6 +135,20 @@ enum SheathState
 };
 
 #define MAX_SHEATH_STATE 3
+
+static char const* SheathStateToString(uint32 state)
+{
+    switch (state)
+    {
+        case SHEATH_STATE_UNARMED:
+            return "Unarmed";
+        case SHEATH_STATE_MELEE:
+            return "Melee";
+        case SHEATH_STATE_RANGED:
+            return "Ranged";
+    }
+    return "UNKNOWN";
+}
 
 // byte flags value (UNIT_FIELD_BYTES_2,1)
 enum UnitBytes2_Flags
@@ -274,7 +314,7 @@ enum UnitState
     // persistent state (applied by aura/etc until expire)
     UNIT_STAT_MELEE_ATTACKING = 0x00000001,                     // unit is melee attacking someone Unit::Attack
     UNIT_STAT_NO_KILL_REWARD  = 0x00000002,                     // Unit should yield no reward (Honor/XP/Rep) on kill
-    UNIT_STAT_DIED            = 0x00000004,                     // Unit::SetFeignDeath
+    UNIT_STAT_FEIGN_DEATH     = 0x00000004,                     // Unit::SetFeignDeath
     UNIT_STAT_STUNNED         = 0x00000008,                     // Aura::HandleAuraModStun
     UNIT_STAT_ROOT            = 0x00000010,                     // Aura::HandleAuraModRoot
     UNIT_STAT_ISOLATED        = 0x00000020,                     // area auras do not affect other players, Aura::HandleAuraModSchoolImmunity
@@ -319,19 +359,19 @@ enum UnitState
     // masks (only for check)
 
     // can't move currently
-    UNIT_STAT_CAN_NOT_MOVE    = UNIT_STAT_ROOT | UNIT_STAT_STUNNED | UNIT_STAT_DIED,
+    UNIT_STAT_CAN_NOT_MOVE    = UNIT_STAT_ROOT | UNIT_STAT_STUNNED | UNIT_STAT_FEIGN_DEATH,
 
     // stay by different reasons
-    UNIT_STAT_NOT_MOVE        = UNIT_STAT_ROOT | UNIT_STAT_STUNNED | UNIT_STAT_DIED |
+    UNIT_STAT_NOT_MOVE        = UNIT_STAT_ROOT | UNIT_STAT_STUNNED | UNIT_STAT_FEIGN_DEATH |
                                 UNIT_STAT_DISTRACTED,
 
     // stay or scripted movement for effect( = in player case you can't move by client command)
-    UNIT_STAT_NO_FREE_MOVE    = UNIT_STAT_ROOT | UNIT_STAT_STUNNED | UNIT_STAT_DIED |
+    UNIT_STAT_NO_FREE_MOVE    = UNIT_STAT_ROOT | UNIT_STAT_STUNNED |
                                 UNIT_STAT_TAXI_FLIGHT |
                                 UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING,
 
     // not react at move in sight or other
-    UNIT_STAT_CAN_NOT_REACT   = UNIT_STAT_STUNNED | UNIT_STAT_DIED |
+    UNIT_STAT_CAN_NOT_REACT   = UNIT_STAT_STUNNED | UNIT_STAT_FEIGN_DEATH |
                                 UNIT_STAT_CONFUSED | UNIT_STAT_FLEEING,
 
     // AI disabled by some reason

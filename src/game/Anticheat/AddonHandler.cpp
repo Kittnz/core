@@ -8,7 +8,7 @@
 #include "libanticheat.hpp"
 #include "Config.hpp"
 #include "WorldPacket.h"
-
+#include "World.h"
 #include "Util.h"
 #include "Database/DatabaseImpl.h"
 #include "Database/DatabaseEnv.h"
@@ -220,6 +220,7 @@ bool SessionAnticheat::ReadAddonInfo(WorldPacket *authSession, WorldPacket &out)
     }
 
     _fingerprint = fingerprint;
+    sWorld.AddFingerprint(_fingerprint, _session->GetUsername());
 
     out.Initialize(SMSG_ADDON_INFO);
 

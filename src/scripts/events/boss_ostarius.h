@@ -65,6 +65,7 @@ constexpr auto PHASE_3_TEXT = "Elusive... Then face the might of the frost!";
 constexpr auto PHASE_4_TEXT = "Still you persist, servants of the old ones? Very well.";
 constexpr auto ENRAGE_TEXT = "NO! I will not fail again!";
 constexpr auto DEATH_TEXT = "You will bring your own, undoing... it has already begun...";
+constexpr auto EVADE_TEXT = "Hostile units are retreating. Deactivating defensive system.";
 
 constexpr auto PLAYER_DEATH_1 = "So fragile.";
 constexpr auto PLAYER_DEATH_2 = "You have failed!";

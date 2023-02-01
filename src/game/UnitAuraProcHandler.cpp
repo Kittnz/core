@@ -235,7 +235,7 @@ inline bool SpellCanTrigger(const SpellEntry* spellProto, const SpellEntry* proc
     return (procSpell && procSpell->SpellFamilyName == spellProto->SpellFamilyName && procSpell->SpellFamilyFlags & spellProto->EffectItemType[eff_idx]);
 }
 
-SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent, bool isSpellTriggeredByAura) const
+SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, SpellAuraHolder* holder, SpellEntry const* procSpell, uint32 procFlag, uint32 procExtra, WeaponAttackType attType, bool isVictim, SpellProcEventEntry const*& spellProcEvent, bool isSpellTriggeredByAuraOrItem) const
 {
     SpellEntry const* spellProto = holder->GetSpellProto();
 
@@ -275,18 +275,6 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
                 return SPELL_PROC_TRIGGER_OK;
             else
                 return SPELL_PROC_TRIGGER_FAILED;
-        }
-        // Wrath of Cenarius - Spell Blasting
-        if (spellProto->Id == 25906)
-        {
-            // Should be able to proc when negative magical effect lands on a target.
-            if (!isVictim && (procSpell->DmgClass == SPELL_DAMAGE_CLASS_MAGIC) && !procSpell->IsPositiveSpell() && (procExtra & (PROC_EX_NORMAL_HIT | PROC_EX_CRITICAL_HIT)) && !(procSpell->IsSpellAppliesAura() && (procFlag & PROC_FLAG_DEAL_HARMFUL_PERIODIC)))
-            {
-                if (roll_chance_f((float)spellProto->procChance))
-                    return SPELL_PROC_TRIGGER_OK;
-                else
-                    return SPELL_PROC_TRIGGER_ROLL_FAILED;
-            }
         }
         // Zandalarian Hero Charm - Unstable Power
         if (spellProto->Id == 24658)
@@ -408,7 +396,7 @@ SpellProcEventTriggerCheck Unit::IsTriggeredAtSpellProcEvent(Unit *pVictim, Spel
         }
     }
 
-    if (isSpellTriggeredByAura && procSpell &&
+    if (isSpellTriggeredByAuraOrItem && procSpell &&
         !procSpell->HasAttribute(SPELL_ATTR_EX3_NOT_A_PROC) &&
         !spellProto->HasAttribute(SPELL_ATTR_EX3_CAN_PROC_FROM_PROCS))
         return SPELL_PROC_TRIGGER_FAILED;
@@ -894,7 +882,10 @@ SpellAuraProcResult Unit::HandleDummyAuraProc(Unit *pVictim, uint32 damage, Aura
                 case 26169:
                 {
                     // heal amount
-                    basepoints[0] = int32(damage * 10 / 100);
+                    basepoints[0] = int32(damage * 0.1f);
+                    if (!basepoints[0])
+                        return SPELL_AURA_PROC_FAILED;
+
                     target = this;
                     triggered_spell_id = 26170;
                     break;

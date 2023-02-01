@@ -19,6 +19,7 @@ static ChatCommand anticheatCommandTable[] =
     { "cheatinform",  SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatCheatinformCommand,    "", nullptr },
     { "spaminform",   SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatSpaminformCommand,     "", nullptr },
     { "blacklist",    SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatBlacklistCommand,      "", nullptr },
+    { "whitelist",    SEC_DEVELOPER,    false, &ChatHandler::HandleAnticheatWhitelistCommand,      "", nullptr },
     { "debugextrap",  SEC_ADMINISTRATOR, true,  &ChatHandler::HandleAnticheatDebugExtrapCommand,    "", nullptr },
     { nullptr,   0,                  false, nullptr,                                             "", nullptr },
 };
