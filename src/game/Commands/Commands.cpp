@@ -91,6 +91,12 @@ bool ChatHandler::HandleReloadMangosStringCommand(char* /*args*/)
     return true;
 }
 
+bool ChatHandler::HandleReloadHousingCommand(char* /*args*/)
+{
+    sObjectMgr.LoadGuildHouses();
+    SendSysMessage("DB table `guild_house` reloaded.");
+    return true;
+}
 bool ChatHandler::HandleReloadConfigCommand(char* /*args*/)
 {
     sWorld.LoadConfigSettings(true);
@@ -2010,6 +2016,52 @@ bool ChatHandler::HandleGuildDeleteCommand(char* args)
     targetGuild->Disband();
     delete targetGuild;
 
+    return true;
+}
+
+bool ChatHandler::HandleGuildHouseCommand(char* args)
+{
+    if (!*args)
+    {
+        SendSysMessage("Syntax: .guild house on / off");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    bool value;
+
+    if (!ExtractOnOff(&args, value))
+    {
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    Player* player = m_session->GetPlayer();
+
+    if (!player)
+        return false;
+
+    uint32 guild_id = player->GetGuildId();
+
+    if (!guild_id)
+    {
+        SendSysMessage("You must be in the guild to add a guild house.");
+        return false;
+    }
+
+    if (value)
+    {
+        CharacterDatabase.PExecute("REPLACE INTO guild_house VALUES (%u, %u, %f, %f, %f, %f);",
+            guild_id, player->GetMapId(), player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), player->GetOrientation());
+        PSendSysMessage("The guild house teleport for %s was created.", sGuildMgr.GetGuildNameById(guild_id));
+    }
+    else
+    {
+        CharacterDatabase.PExecute("DELETE FROM guild_house WHERE guild_id = %u", guild_id);
+        SendSysMessage("The guild house teleport was removed.");
+    }
+
+    SendSysMessage("Type .reload housing to reload guild houses.");
     return true;
 }
 
