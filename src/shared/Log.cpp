@@ -411,6 +411,8 @@ std::string Log::GetTimestampStr()
 
 void Log::outString()
 {
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_includeTime)
         outTime(stdout);
     printf( "\n" );
@@ -428,6 +430,8 @@ void Log::outString( const char * str, ... )
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(true,m_colors[LogNormal]);
@@ -465,6 +469,10 @@ void Log::outInfo( const char * str, ...)
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
+
     va_list ap;
     va_start(ap, str);
     vutf8printf(stdout, str, &ap);
@@ -490,6 +498,8 @@ void Log::outHonor(const char *str, ...)
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (!HasLogFilter(LOG_FILTER_HONOR))
     {
@@ -534,6 +544,8 @@ void Log::out(LogFile type, const char* str, ...)
     if (!str)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (logFiles[type])
     {
         if (timestampPrefix[type])
@@ -555,6 +567,8 @@ void Log::outError( const char * err, ... )
 {
     if (!err)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(false,m_colors[LogError]);
@@ -590,6 +604,8 @@ void Log::outError( const char * err, ... )
 
 void Log::outErrorDb()
 {
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_includeTime)
         outTime(stderr);
 
@@ -616,6 +632,8 @@ void Log::outErrorDb( const char * err, ... )
 {
     if (!err)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(false,m_colors[LogError]);
@@ -668,6 +686,8 @@ void Log::outBasic( const char * str, ... )
     if (!str)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_logLevel >= LOG_LVL_BASIC)
     {
         if (m_colored)
@@ -705,6 +725,8 @@ void Log::outDetail( const char * str, ... )
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_logLevel >= LOG_LVL_DETAIL)
     {
@@ -747,6 +769,8 @@ void Log::outDebug( const char * str, ... )
     if (!str)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_logLevel >= LOG_LVL_DEBUG)
     {
         if (m_colored)
@@ -786,6 +810,8 @@ void Log::outWarden(const char *wrd, ...)
 {
     if (!wrd)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(true, m_colors[LogWarden]);
@@ -827,6 +853,8 @@ void Log::outWardenDebug(const char *wrd, ...)
 {
     if (!m_wardenDebug)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (!wrd)
         return;
@@ -871,6 +899,8 @@ void Log::outAnticheat(const char* detector, const char* player, const char* rea
 {
     if (!detector || !player || !reason || !penalty)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(true, m_colors[LogWarden]);
@@ -947,6 +977,8 @@ void Log::outCommand( uint32 account, const char * str, ... )
     if (!str)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_logLevel >= LOG_LVL_DETAIL)
     {
         if (m_colored)
@@ -1010,6 +1042,8 @@ void Log::outWorldPacketDump(ACE_HANDLE socketHandle, uint32 opcode,
 {
     if (!worldLogfile)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     outTimestamp(worldLogfile);
 

@@ -79,7 +79,11 @@ namespace DiscordBot
         if (!logfile)
             return;
 
+        //we're going to edit writing positions to find what to read. Start locking exclusive access from here on out.
+        std::unique_lock<std::shared_mutex> l{ sLog.logLock };
+
         int streamPos = ftell(logfile);
+
 
         fseek(logfile, 0, SEEK_SET);
 

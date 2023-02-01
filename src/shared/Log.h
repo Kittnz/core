@@ -236,6 +236,8 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* logFiles[LOG_MAX_FILES];
         bool  timestampPrefix[LOG_MAX_FILES];
 
+        std::shared_mutex logLock;
+
         bool m_bIsChatLogFileActivated;
 
         // log/console control

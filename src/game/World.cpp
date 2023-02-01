@@ -1838,8 +1838,13 @@ void World::SetInitialWorldSettings()
 
 #ifdef USING_DISCORD_BOT
     sLog.outString("Loading Discord Bot...");
-    m_bot = new DiscordBot::Bot();
-    m_bot->Setup("");
+
+    auto token = sConfig.GetStringDefault("DiscordBot.Token", "");
+    if (!token.empty())
+    {
+        m_bot = new DiscordBot::Bot();
+        m_bot->Setup(token);
+    }
 #endif
 
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
