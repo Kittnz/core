@@ -6955,7 +6955,7 @@ void Unit::ResolvePendingMovementChanges(bool sendToClient, bool includingTelepo
         if ((change->movementChangeType != TELEPORT || includingTeleport) &&
             change->movementCounter == GetLastCounterForMovementChangeType(change->movementChangeType))
             ResolvePendingMovementChange(*change, sendToClient);
-        m_pendingMovementChanges.erase(change);
+        m_pendingMovementChanges.pop_front();
     }
 }
 
