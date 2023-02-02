@@ -86,3 +86,14 @@ update creature_template set gossip_menu_id = @gossip_menu_id where entry = @mag
 update creature_loot_template set chanceorquestchance = 25 where item = 81400 and entry in (1033,1031,1032);
 -- Set respawn time of https://database.turtle-wow.org/?object=1000510 to instant.
 update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 1000510;
+-- Make Hawk's Vigil chain an actual chain.
+UPDATE quest_template SET NextQuestInChain = 55216 WHERE entry = 55215;
+UPDATE quest_template SET NextQuestInChain = 55217 WHERE entry = 55216;
+UPDATE quest_template SET NextQuestInChain = 55218 WHERE entry = 55217;
+UPDATE quest_template SET NextQuestInChain = 55219 WHERE entry = 55218;
+UPDATE quest_template SET NextQuestInChain = 55220 WHERE entry = 55219;
+UPDATE quest_template SET NextQuestInChain = 55221 WHERE entry = 55220;
+UPDATE quest_template SET NextQuestInChain = 55222 WHERE entry = 55221;
+UPDATE quest_template SET NextQuestInChain = 55223 WHERE entry = 55222;
+UPDATE quest_template SET NextQuestInChain = 55224 WHERE entry = 55223;
+UPDATE quest_template SET NextQuestInChain = 55225 WHERE entry = 55224;
