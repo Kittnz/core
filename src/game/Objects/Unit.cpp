@@ -6959,7 +6959,7 @@ void Unit::ResolvePendingMovementChanges(bool sendToClient, bool includingTelepo
     }
 }
 
-void Unit::ResolvePendingMovementChange(PlayerMovementPendingChange& change, bool sendToClient)
+void Unit::ResolvePendingMovementChange(const PlayerMovementPendingChange& change, bool sendToClient)
 {
     // returns true if heartbeat required
     switch (change.movementChangeType)
