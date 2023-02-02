@@ -99,3 +99,5 @@ UPDATE quest_template SET NextQuestInChain = 55225 WHERE entry = 55224;
 update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 1000510;
 -- Set respawn time of https://database.turtle-wow.org/?object=142076 to instant.
 update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 142076;
+-- Set respawn time of https://database.turtle-wow.org/?object=1000511 to instant.
+update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 1000511;
