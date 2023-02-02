@@ -84,8 +84,6 @@ replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_numbe
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
 -- Change Sticky Ooze-Tar drop rate from Monstrous Ooze, Crimson Ooze and Black Ooze to 25%.
 update creature_loot_template set chanceorquestchance = 25 where item = 81400 and entry in (1033,1031,1032);
--- Set respawn time of https://database.turtle-wow.org/?object=1000510 to instant.
-update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 1000510;
 -- Make Hawk's Vigil chain an actual chain.
 UPDATE quest_template SET NextQuestInChain = 55216 WHERE entry = 55215;
 UPDATE quest_template SET NextQuestInChain = 55217 WHERE entry = 55216;
@@ -97,3 +95,7 @@ UPDATE quest_template SET NextQuestInChain = 55222 WHERE entry = 55221;
 UPDATE quest_template SET NextQuestInChain = 55223 WHERE entry = 55222;
 UPDATE quest_template SET NextQuestInChain = 55224 WHERE entry = 55223;
 UPDATE quest_template SET NextQuestInChain = 55225 WHERE entry = 55224;
+-- Set respawn time of https://database.turtle-wow.org/?object=1000510 to instant.
+update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 1000510;
+-- Set respawn time of https://database.turtle-wow.org/?object=142076 to instant.
+update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 142076;
