@@ -101,3 +101,6 @@ update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 1000
 update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 142076;
 -- Set respawn time of https://database.turtle-wow.org/?object=1000511 to instant.
 update gameobject set spawntimesecsmin = 1, spawntimesecsmax = 1 where ID = 1000511;
+-- New NPC Deviate Coiler Hatchling.
+REPLACE INTO creature_template VALUES
+(61197, 1742, 0, 0, 0, 0, 'Deviate Coiler Hatchling', NULL, 0, 11, 11, 666, 666, 0, 0, 538, 14, 0, 1, 1.14286, 0.7, 20, 5, 0, 1, 1, 52, 68, 0, 64, 1, 2000, 2000, 1, 0, 0, 27, 0, 0, 0, 0, 17.732, 24.3815, 100, 1, 1, 3630, 0, 3630, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
