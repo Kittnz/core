@@ -82,3 +82,5 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Thank the Sunwell you made it here in one piece, $N. We have much to do.');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id where entry = @magic_number;
+-- Change Sticky Ooze-Tar drop rate from Monstrous Ooze, Crimson Ooze and Black Ooze to 25%.
+update creature_loot_template set chanceorquestchance = 25 where item = 81400 and entry in (1033,1031,1032);
