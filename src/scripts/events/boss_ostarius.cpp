@@ -527,6 +527,12 @@ struct boss_ostariusAI : public ScriptedAI
                 true
             );
 
+            if (!spawn)
+            {
+                m_creature->MonsterSay("Malfunction. Unable to create more constructs.");
+                return;
+            }
+
             ConstructSpawns().push_back(spawn->GetObjectGuid());
 
             Unit* randomEnemy = GetNearbyEnemyPlayer(spawn, 100.f);
