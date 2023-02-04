@@ -111,3 +111,8 @@ UPDATE quest_template SET MinLevel = 20, QuestLevel = 22, RewXP = 950 WHERE entr
 UPDATE item_template SET Armor = 100, Max_count = 1 WHERE entry = 50189;
 -- Set respawn timers to newly-spawned Leprous Workers in Blacksand Oil Fields (RMJ).
 UPDATE creature SET spawntimesecsmin = 180, spawntimesecsmax = 180 WHERE guid BETWEEN 2574448 AND 2574455;
+-- Swap completely ridiculous money rewards for Silvermoon daily quests (RMJ).
+UPDATE quest_template SET RewOrReqMoney = 50 WHERE entry = 80252;
+UPDATE quest_template SET RewOrReqMoney = 500 WHERE entry = 80258;
+UPDATE quest_template SET RewOrReqMoney = 2000 WHERE entry = 80253;
+UPDATE quest_template SET RewOrReqMoney = 5000 WHERE entry = 80254;
