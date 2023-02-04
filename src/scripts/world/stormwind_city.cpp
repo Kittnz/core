@@ -621,34 +621,39 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
         m_uiEventPhase = 0;
     }
 
+    void RespawnInvolvedCreatures()
+    {
+        if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
+        {
+            pGuard1->ForcedDespawn(0);
+            pGuard1->Respawn();
+        }
+        if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
+        {
+            pGuard2->ForcedDespawn(0);
+            pGuard2->Respawn();
+        }
+        if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
+            pPriestress->Respawn();
+    }
+
     void JustDied(Unit* /*pKiller*/) override
     {
         if (m_creature->GetFactionTemplateId() == FACTION_ENEMYY)
             m_creature->SetFactionTemplateId(FACTION_NORMAL_LESCOVAR);
 
-        if (Creature* pMarzon = m_creature->GetMap()->GetCreature(m_guidMarzon))
-            if (!pMarzon->IsAlive())
-            {
-                if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-                {
-                    pGuard1->ForcedDespawn(0);
-                    pGuard1->Respawn();
-                }
-                if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-                {
-                    pGuard2->ForcedDespawn(0);
-                    pGuard2->Respawn();
-                }
-                if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-                    pPriestress->Respawn();
+        Creature* pMarzon = m_creature->GetMap()->GetCreature(m_guidMarzon);
+        if (!pMarzon || !pMarzon->IsAlive())
+        {
+            RespawnInvolvedCreatures();
 
-                if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
-                {
-                    pTyrion->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
-                    if (npc_tyrionAI* ptyrionAI = dynamic_cast<npc_tyrionAI*>(pTyrion->AI()))
-                        ptyrionAI->Reset();
-                }
+            if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
+            {
+                pTyrion->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                if (npc_tyrionAI* ptyrionAI = dynamic_cast<npc_tyrionAI*>(pTyrion->AI()))
+                    ptyrionAI->Reset();
             }
+        }
     }
 
     void SummonedCreatureJustDied(Creature* pSummoned) override
@@ -658,18 +663,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
 
         if (!m_creature->IsAlive())
         {
-            if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-            {
-                pGuard1->ForcedDespawn(0);
-                pGuard1->Respawn();
-            }
-            if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-            {
-                pGuard2->ForcedDespawn(0);
-                pGuard2->Respawn();
-            }
-            if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-                pPriestress->Respawn();
+            RespawnInvolvedCreatures();
 
             if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
             {
@@ -696,20 +690,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
         if (pSummoned->GetEntry() != NPC_MARZON_THE_SILENT_BLADE)
             return;
 
-        if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-        {
-            pGuard1->ForcedDespawn(0);
-            pGuard1->Respawn();
-        }
-
-        if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-        {
-            pGuard2->ForcedDespawn(0);
-            pGuard2->Respawn();
-        }
-
-        if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-            pPriestress->Respawn();
+        RespawnInvolvedCreatures();
 
         if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
         {
@@ -755,18 +736,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
                 }
                 break;
             case 21:
-                if (Creature* pGuard1 = m_creature->GetMap()->GetCreature(m_guidGuard1))
-                {
-                    pGuard1->ForcedDespawn(0);
-                    pGuard1->Respawn();
-                }
-                if (Creature* pGuard2 = m_creature->GetMap()->GetCreature(m_guidGuard2))
-                {
-                    pGuard2->ForcedDespawn(0);
-                    pGuard2->Respawn();
-                }
-                if (Creature* pPriestress = m_creature->GetMap()->GetCreature(m_guidPriestress))
-                    pPriestress->Respawn();
+                RespawnInvolvedCreatures();
 
                 if (Creature* pTyrion = m_creature->GetMap()->GetCreature(m_guidTyrion))
                 {
@@ -882,6 +852,7 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
                         break;
                     case 13:
                         if (Player* pPlayer = GetPlayerForEscort())
+                        {
                             if (pPlayer->IsDead())
                             {
                                 SetEscortPaused(false);
@@ -889,7 +860,9 @@ struct npc_lord_gregor_lescovarAI : public npc_escortAI
                                 if (Creature* pMarzon = m_creature->GetMap()->GetCreature(m_guidMarzon))
                                     if (!pMarzon->IsDead() && pMarzon->GetFactionTemplateId() == FACTION_ENEMYY)
                                         pMarzon->SetFactionTemplateId(FACTION_NORMAL_MARZON);
+                                RespawnInvolvedCreatures();
                             }
+                        }
                         if (!m_creature->IsInCombat())
                             SetEscortPaused(false);
                         break;
