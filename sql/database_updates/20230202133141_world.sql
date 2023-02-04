@@ -124,3 +124,5 @@ UPDATE quest_template SET RewXP = 1450 WHERE entry = 80391;
 -- No reason for this not to chain in from the same NPC. Same requirements, same NPC (RMJ).
 UPDATE quest_template SET NextQuestInChain = 3519 WHERE entry = 4495;
 UPDATE quest_template SET NextQuestInChain = 2498 WHERE entry = 923;
+-- Greeting edit for https://database.turtle-wow.org/?npc=60474.
+update broadcast_text set male_text = 'Welcome to Darnassus, crown jewel of Teldrassil.$B$BThis city serves as the heart and soul of the Kaldorei, and for good reason. Its grace and beauty mirrors that of our culture, our legacy.' where entry = 60474;
