@@ -126,3 +126,7 @@ UPDATE quest_template SET NextQuestInChain = 3519 WHERE entry = 4495;
 UPDATE quest_template SET NextQuestInChain = 2498 WHERE entry = 923;
 -- Greeting edit for https://database.turtle-wow.org/?npc=60474.
 update broadcast_text set male_text = 'Welcome to Darnassus, crown jewel of Teldrassil.$B$BThis city serves as the heart and soul of the Kaldorei, and for good reason. Its grace and beauty mirrors that of our culture, our legacy.' where entry = 60474;
+-- Turn these quests into chains. 40201 to 40203, 40204 to 40205 (RMJ).
+UPDATE quest_template SET NextQuestInChain = 40202 WHERE entry = 40201;
+UPDATE quest_template SET NextQuestInChain = 40203 WHERE entry = 40202;
+UPDATE quest_template SET NextQuestInChain = 40205 WHERE entry = 40204;
