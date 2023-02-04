@@ -109,3 +109,5 @@ REPLACE INTO `pet_spell_data` (`entry`, `spell_id1`, `spell_id2`, `spell_id3`, `
 UPDATE quest_template SET MinLevel = 20, QuestLevel = 22, RewXP = 950 WHERE entry = 40368;
 -- Nerf to Ring of Authority, non-unique >> unique, Armor from 350 to 100 (RMJ).
 UPDATE item_template SET Armor = 100, Max_count = 1 WHERE entry = 50189;
+-- Set respawn timers to newly-spawned Leprous Workers in Blacksand Oil Fields (RMJ).
+UPDATE creature SET spawntimesecsmin = 180, spawntimesecsmax = 180 WHERE guid BETWEEN 2574448 AND 2574455;
