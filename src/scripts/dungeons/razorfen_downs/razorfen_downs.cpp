@@ -389,7 +389,6 @@ bool QuestAccept_npc_belnistrasz(Player* pPlayer, Creature* pCreature, const Que
             pEscortAI->Start(false, pPlayer->GetGUID(), pQuest);
             DoScriptText(SAY_BELNISTRASZ_READY, pCreature, pPlayer);
             pCreature->SetFactionTemplateId(FACTION_ESCORT_N_NEUTRAL_ACTIVE);
-            pCreature->SetPvP(true);
         }
     }
     return true;
