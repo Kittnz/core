@@ -116,6 +116,8 @@ UPDATE quest_template SET RewOrReqMoney = 50 WHERE entry = 80252;
 UPDATE quest_template SET RewOrReqMoney = 500 WHERE entry = 80258;
 UPDATE quest_template SET RewOrReqMoney = 2000 WHERE entry = 80253;
 UPDATE quest_template SET RewOrReqMoney = 5000 WHERE entry = 80254;
--- Silvermoon daily quest fixes.
+-- Silvermoon daily quest fixes (RMJ).
 UPDATE quest_template SET PrevQuestId = 80256 WHERE entry IN (80252, 80253, 80258);
 UPDATE quest_template SET RewMoneyMaxLevel = 0, RewXP = 0 WHERE entry = 80252;
+-- Fix for https://database.turtle-wow.org/?quest=80391 (RMJ).
+UPDATE quest_template SET RewXP = 1450 WHERE entry = 80391;
