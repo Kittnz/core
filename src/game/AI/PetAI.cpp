@@ -182,6 +182,10 @@ void PetAI::UpdateAI(const uint32 diff)
     if (playerControlled)
         return;
 
+    // Creature could have died upon attacking (thorns aura for example), and lost charm aura. Abort.
+    if (!m_creature->IsAlive() || !m_creature->GetCharmInfo() || m_creature->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
+        return;
+
     // Autocast (casted only in combat or persistent spells in any state)
     if (!m_creature->IsNonMeleeSpellCasted(false))
     {
@@ -622,22 +626,12 @@ void PetAI::DoAttack(Unit* target, bool chase)
             m_creature->GetMotionMaster()->MoveIdle();
         }
 
-        Unit* pOwner = m_creature->GetCharmerOrOwner();
-        if (pOwner)
+        if (m_creature->GetCharmerOrOwnerGuid().IsCreature())
         {
-            if (pOwner->IsPlayer())
-            {
-                // Flag owner for PvP if owner is player and target is flagged
-                if (!pOwner->IsPvP())
-                    pOwner->TogglePlayerPvPFlagOnAttackVictim(target);
-            }
-            else
-            {
-                // Creature pet should instantly enter combat with target
-                m_creature->AddThreat(target);
-                m_creature->SetInCombatWith(target);
-                target->SetInCombatWith(m_creature);
-            }
+            // Creature pet should instantly enter combat with target
+            m_creature->AddThreat(target);
+            m_creature->SetInCombatWith(target);
+            target->SetInCombatWith(m_creature);
         }
     }
 }

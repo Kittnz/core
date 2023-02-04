@@ -824,7 +824,7 @@ class Unit : public WorldObject
         // removing unknown aura stacks by diff reasons and selections
         void RemoveNotOwnSingleTargetAuras();
         void RemoveAurasAtMechanicImmunity(uint32 mechMask, uint32 exceptSpellId, bool non_positive = false);
-        void RemoveSpellsCausingAura(AuraType auraType);
+        void RemoveSpellsCausingAura(AuraType auraType, AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
         void RemoveSpellsCausingAura(AuraType auraType, SpellAuraHolder* except);\
         void RemoveNegativeSpellsCausingAura(AuraType auraType);
         void RemoveNonPassiveSpellsCausingAura(AuraType auraType);
@@ -912,6 +912,8 @@ class Unit : public WorldObject
         bool IsInRoots() const { return HasAuraType(SPELL_AURA_MOD_ROOT); }
         bool IsImmuneToMechanic(Mechanics mechanic) const;
         bool IsFrozen() const { return HasAuraState(AURA_STATE_FROZEN); }
+        bool IsFeigningDeath() const { return ((HasFlag(UNIT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD) || IsFeigningDeathSuccessfully()) && IsAlive()); }
+        bool IsFeigningDeathSuccessfully() const { return HasUnitState(UNIT_STAT_FEIGN_DEATH); }
 
         bool HasBreakableByDamageCrowdControlAura(Unit* excludeCasterChannel = nullptr) const;
         bool HasBreakableByDamageAuraType(AuraType type, uint32 excludeAura) const;
@@ -1398,7 +1400,7 @@ class Unit : public WorldObject
         Unit* GetCharm() const;
         void SetCharm(Unit* pet);
         void Uncharm();
-        void RemoveCharmAuras();
+        void RemoveCharmAuras(AuraRemoveMode mode = AURA_REMOVE_BY_DEFAULT);
         ObjectGuid const& GetCharmGuid() const { return GetGuidValue(UNIT_FIELD_CHARM); }
         void SetCharmGuid(ObjectGuid charm) { SetGuidValue(UNIT_FIELD_CHARM, charm); }
 

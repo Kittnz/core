@@ -9549,6 +9549,8 @@ bool ChatHandler::HandleNpcAIInfoCommand(char* /*args*/)
     PSendSysMessage(LANG_NPC_AI_ATTACK, GetOnOffStr(pTarget->AI()->IsMeleeAttackEnabled()));
     MovementGeneratorType moveType = pTarget->GetMotionMaster()->GetCurrentMovementGeneratorType();
     PSendSysMessage(LANG_NPC_MOTION_TYPE, MotionMaster::GetMovementGeneratorTypeName(moveType), moveType);
+    if (!pTarget->movespline->Finalized())
+        PSendSysMessage("Spline Origin: %s", pTarget->movespline->GetMovementOrigin());
     pTarget->AI()->GetAIInformation(*this);
 
     return true;
