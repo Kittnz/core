@@ -107,3 +107,5 @@ REPLACE INTO creature_template VALUES
 REPLACE INTO `pet_spell_data` (`entry`, `spell_id1`, `spell_id2`, `spell_id3`, `spell_id4`) VALUES (61197, 24844, 0, 0, 0);
 -- Quest fix 40368 (RMJ).
 UPDATE quest_template SET MinLevel = 20, QuestLevel = 22, RewXP = 950 WHERE entry = 40368;
+-- Nerf to Ring of Authority, non-unique >> unique, Armor from 350 to 100 (RMJ).
+UPDATE item_template SET Armor = 100, Max_count = 1 WHERE entry = 50189;
