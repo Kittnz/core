@@ -351,6 +351,7 @@ enum CreatureStateFlag : uint16
     CSTATE_ESCORTABLE            = 0x0080,
     CSTATE_DESPAWNING            = 0x0100,
     CSTATE_TARGETED_EMOTE        = 0x0200,
+    CSTATE_INIT_AI_ON_UPDATE     = 0x0800,
 };
 
 // Vendors
