@@ -909,19 +909,18 @@ struct npc_tyrion_spybotAI : public npc_escortAI
 
     uint32 m_uiEventTimer;
     uint8 m_uiEventPhase;
-    float m_fDefaultScaleSize;
 
     void Reset() override
     {
+        m_creature->SetDisplayId(MODEL_SPYBOT);
+        m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 0.3f);
 
         if (HasEscortState(STATE_ESCORT_ESCORTING))
             return;
 
-        m_fDefaultScaleSize = 0.30f;
         m_uiEventTimer = 0;
         m_uiEventPhase = 0;
         m_uiGardenGuardsCounter = 0;
-        m_creature->SetDisplayId(MODEL_SPYBOT);
 
         if (Creature* tyrion = GetClosestCreatureWithEntry(m_creature, NPC_TYRION, VISIBLE_RANGE))
         {
@@ -1019,7 +1018,6 @@ struct npc_tyrion_spybotAI : public npc_escortAI
                     pTyrion->SetFacingToObject(m_creature);
                     pTyrion->HandleEmote(EMOTE_STATE_USESTANDING);
                 }
-                m_fDefaultScaleSize = m_creature->GetFloatValue(OBJECT_FIELD_SCALE_X);
                 m_creature->SetDisplayId(MODEL_TYRIANA);
                 m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, 1.00f);
 
@@ -1117,8 +1115,6 @@ struct npc_tyrion_spybotAI : public npc_escortAI
                                     pGregorEscortAI->m_guidTyrion = m_guidTyrion;
                                     pGregorEscortAI->m_guidPriestress = m_guidPriestress;
                                 }
-                        m_creature->SetDisplayId(MODEL_SPYBOT);
-                        m_creature->SetFloatValue(OBJECT_FIELD_SCALE_X, m_fDefaultScaleSize);
                         ++m_uiEventPhase;
                         m_uiEventTimer = 1000;
                         break;
