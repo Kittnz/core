@@ -121,3 +121,6 @@ UPDATE quest_template SET PrevQuestId = 80256 WHERE entry IN (80252, 80253, 8025
 UPDATE quest_template SET RewMoneyMaxLevel = 0, RewXP = 0 WHERE entry = 80252;
 -- Fix for https://database.turtle-wow.org/?quest=80391 (RMJ).
 UPDATE quest_template SET RewXP = 1450 WHERE entry = 80391;
+-- No reason for this not to chain in from the same NPC. Same requirements, same NPC (RMJ).
+UPDATE quest_template SET NextQuestInChain = 3519 WHERE entry = 4495;
+UPDATE quest_template SET NextQuestInChain = 2498 WHERE entry = 923;
