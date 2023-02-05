@@ -70,3 +70,6 @@ DELETE FROM gameobject WHERE guid = '5012680';
 DELETE FROM game_event_gameobject WHERE guid = '5012680';
 DELETE FROM gameobject_battleground WHERE guid = '5012680';
 REPLACE INTO `gameobject` VALUES ( 5012681, 2010997, 0, 3079.27, 1236.2, 0.529536, 2.43743, 0, 0, 0.938657, 0.344854, 300, 300, 100, 1, 0, 0);
+
+-- Changes by GURKY
+REPLACE INTO `gameobject` VALUES ( 5012682, 2000259, 1, -5206.77, 1884.38, 177.341, 2.65446, 0, 0, 0.970484, 0.241164, 300, 300, 100, 1, 0, 0);
