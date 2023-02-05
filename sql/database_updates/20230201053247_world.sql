@@ -73,3 +73,22 @@ REPLACE INTO `gameobject` VALUES ( 5012681, 2010997, 0, 3079.27, 1236.2, 0.52953
 
 -- Changes by GURKY
 REPLACE INTO `gameobject` VALUES ( 5012682, 2000259, 1, -5206.77, 1884.38, 177.341, 2.65446, 0, 0, 0.970484, 0.241164, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012682';
+DELETE FROM game_event_gameobject WHERE guid = '5012682';
+DELETE FROM gameobject_battleground WHERE guid = '5012682';
+REPLACE INTO `gameobject` VALUES ( 5012683, 2007331, 1, -5229.78, 1900.45, 189.728, 0.0344076, 0, 0, 0.017203, 0.999852, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012683';
+DELETE FROM game_event_gameobject WHERE guid = '5012683';
+DELETE FROM gameobject_battleground WHERE guid = '5012683';
+REPLACE INTO `gameobject` VALUES ( 5012684, 2007329, 1, -5228.86, 1899.45, 189.729, 0.154573, 0, 0, 0.0772097, 0.997015, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012684';
+DELETE FROM game_event_gameobject WHERE guid = '5012684';
+DELETE FROM gameobject_battleground WHERE guid = '5012684';
+REPLACE INTO `gameobject` VALUES ( 5012685, 2004837, 1, -5229.62, 1900.37, 189.729, 6.27282, 0, 0, 0.00518239, -0.999987, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012685';
+DELETE FROM game_event_gameobject WHERE guid = '5012685';
+DELETE FROM gameobject_battleground WHERE guid = '5012685';
+REPLACE INTO `gameobject` VALUES ( 5012686, 177387, 1, -5168.84, 1889.2, 177.078, 2.99141, 0, 0, 0.997182, 0.0750195, 300, 300, 100, 1, 0, 0);
+DELETE FROM gameobject WHERE guid = '5012686';
+DELETE FROM game_event_gameobject WHERE guid = '5012686';
+DELETE FROM gameobject_battleground WHERE guid = '5012686';
