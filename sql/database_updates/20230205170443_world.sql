@@ -53,3 +53,6 @@ WHERE entry = 60110;
 
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2806
 UPDATE `item_template` SET `display_id` = 13120 WHERE `entry` = 60859;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2805
+UPDATE `item_template` SET `spellid_1` = 0, `spelltrigger_1` = 0 WHERE `entry` = 61079;
