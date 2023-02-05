@@ -44,3 +44,8 @@ DELETE FROM creature_movement WHERE id=2570061;
 DELETE FROM game_event_creature WHERE guid=2570061;
 DELETE FROM game_event_creature_data WHERE guid=2570061;
 DELETE FROM creature_battleground WHERE guid=2570061;
+
+-- Changes by TAMMO
+DELETE FROM gameobject WHERE guid = '5012508';
+DELETE FROM game_event_gameobject WHERE guid = '5012508';
+DELETE FROM gameobject_battleground WHERE guid = '5012508';
