@@ -50,3 +50,6 @@ RewXP = 500,
 RewRepValue1 = 150,
 RewMoneyMaxLevel = 300
 WHERE entry = 60110;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2806
+UPDATE `item_template` SET `display_id` = 13120 WHERE `entry` = 60859;
