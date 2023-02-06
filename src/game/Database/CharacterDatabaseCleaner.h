@@ -42,6 +42,9 @@ namespace CharacterDatabaseCleaner
 
     void CleanCharacterSkills();
     void CleanCharacterSpell();
+
+    void FreeInactiveCharacterNames();
+    void DeleteInactiveCharacters();
 }
 
 #endif

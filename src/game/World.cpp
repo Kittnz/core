@@ -1423,6 +1423,9 @@ void World::SetInitialWorldSettings()
         exit(1);
     }
 
+    sLog.outInfo("Beginning character name cleanup...");
+    CharacterDatabaseCleaner::FreeInactiveCharacterNames();
+
     ///- Loading shop tables
     sLog.outString("Loading shop...");
     sObjectMgr.LoadShop();
@@ -1812,6 +1815,10 @@ void World::SetInitialWorldSettings()
     sSpellMgr.LoadSpellGroups();
     sLog.outString("Loading spell group stack rules...");
     sSpellMgr.LoadSpellGroupStackRules();
+
+    sLog.outInfo("Beginning inactive character deletion...");
+    CharacterDatabaseCleaner::DeleteInactiveCharacters();
+
     if (getConfig(CONFIG_BOOL_RESTORE_DELETED_ITEMS))
     {
         sLog.outString("Restoring deleted items...");
