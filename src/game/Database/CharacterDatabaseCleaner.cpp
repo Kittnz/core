@@ -35,7 +35,7 @@ void CharacterDatabaseCleaner::CleanDatabase()
     sLog.outString("Cleaning character database...");
 
     // check flags which clean ups are necessary
-    QueryResult* result = CharacterDatabase.PQuery("SELECT cleaning_flags FROM saved_variables");
+    QueryResult* result = CharacterDatabase.Query("SELECT cleaning_flags FROM saved_variables");
     if (!result)
         return;
     uint32 flags = (*result)[0].GetUInt32();
@@ -106,4 +106,201 @@ bool CharacterDatabaseCleaner::SpellCheck(uint32 spell_id)
 void CharacterDatabaseCleaner::CleanCharacterSpell()
 {
     CheckUnique("spell", "character_spell", &SpellCheck);
+}
+
+void CharacterDatabaseCleaner::FreeInactiveCharacterNames()
+{
+    sLog.outInfo("NameCleanup #1: Loading banned accounts...");
+    std::set<uint32> bannedAccounts;
+    std::unique_ptr<QueryResult> pQuery(LoginDatabase.Query("SELECT `id` FROM `account_banned` WHERE `active` = 1 AND (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
+
+    if (pQuery)
+    {
+        do
+        {
+            Field* fields = pQuery->Fetch();
+            uint32 accountId = fields[0].GetUInt32();
+            bannedAccounts.insert(accountId);
+        } while (pQuery->NextRow());
+    }
+    else
+        sLog.outInfo("No banned accounts found.");
+
+    std::set<uint32> notPlayedHyjalAccounts;
+
+    sLog.outInfo("NameCleanup #2: Loading Hyjal and Gurubashi accounts...");
+    pQuery.reset(LoginDatabase.Query("SELECT `id` FROM `account` WHERE `last_login` = '0000-00-00' && ((`username` LIKE '%gw') || (`username` LIKE '%hy'))"));
+
+    if (pQuery)
+    {
+        do
+        {
+            Field* fields = pQuery->Fetch();
+            uint32 accountId = fields[0].GetUInt32();
+            notPlayedHyjalAccounts.insert(accountId);
+        } while (pQuery->NextRow());
+    }
+    else
+        sLog.outInfo("No Hyjal or Gurubashi accounts found.");
+
+    std::set<uint32> charsToRename;
+
+    uint32 const now = time(nullptr);
+    uint32 const sixMonthsAgo = now - 6 * MONTH;
+    uint32 const oneYearAgo = now - 1 * YEAR;
+    uint32 const twoYearsAgo = now - 2 * YEAR;
+
+    sLog.outInfo("NameCleanup #3: Loading characters...");
+    pQuery.reset(CharacterDatabase.Query("SELECT `guid`, `account`, `name`, `logout_time`, `level` FROM `characters` WHERE `name` != ''"));
+    if (!pQuery)
+    {
+        sLog.outInfo("No characters found. Database is empty.");
+        return;
+    }
+
+    do
+    {
+        Field* fields = pQuery->Fetch();
+        uint32 guid = fields[0].GetUInt32();
+        uint32 accountId = fields[1].GetUInt32();
+        std::string name = fields[2].GetCppString();
+        uint32 logoutTime = fields[3].GetUInt32();
+        uint32 level = fields[4].GetUInt32();
+
+        // already renamed
+        if (isNumeric(name[0]))
+            continue;
+
+        // skip banned accounts
+        if (bannedAccounts.find(accountId) != bannedAccounts.end())
+            continue;
+
+        if ((notPlayedHyjalAccounts.find(accountId) != notPlayedHyjalAccounts.end()) ||
+            (logoutTime < sixMonthsAgo && level < 10) ||
+            (logoutTime < oneYearAgo && level < 20) ||
+            (logoutTime < twoYearsAgo && level < 40))
+        {
+            sLog.outInfo("Character %s (guid %u) will be renamed.", name.c_str(), guid);
+            charsToRename.insert(guid);
+        }
+
+    } while (pQuery->NextRow());
+
+    if (charsToRename.empty())
+    {
+        sLog.outInfo("No characters need to be renamed.");
+        return;
+    }
+
+    std::string guidsList;
+    for (auto const& guid : charsToRename)
+    {
+        if (!guidsList.empty())
+            guidsList += ",";
+        guidsList += std::to_string(guid);
+    }
+
+    sLog.outInfo("NameCleanup #4: Renaming %u characters...", (uint32)charsToRename.size());
+    CharacterDatabase.PExecute("UPDATE `characters` SET `name` = `guid`, `at_login` = (`at_login` | 1) WHERE `guid` IN (%s)", guidsList.c_str());
+}
+
+void CharacterDatabaseCleaner::DeleteInactiveCharacters()
+{
+    sLog.outInfo("CharCleanup #1: Loading banned accounts...");
+    std::set<uint32> bannedAccounts;
+    std::unique_ptr<QueryResult> pQuery(LoginDatabase.Query("SELECT `id` FROM `account_banned` WHERE `active` = 1 AND (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
+
+    if (pQuery)
+    {
+        do
+        {
+            Field* fields = pQuery->Fetch();
+            uint32 accountId = fields[0].GetUInt32();
+            bannedAccounts.insert(accountId);
+        } while (pQuery->NextRow());
+    }
+    else
+        sLog.outInfo("No banned accounts found.");
+
+    sLog.outInfo("CharCleanup #2: Loading item count per character...");
+    pQuery.reset(CharacterDatabase.Query("SELECT `guid`, COUNT(`item`) FROM `character_inventory` GROUP BY `guid`"));
+    std::set<uint32> lessThanTenItemsChars;
+    if (pQuery)
+    {
+        do
+        {
+            Field* fields = pQuery->Fetch();
+            uint32 guid = fields[0].GetUInt32();
+            uint32 itemsCount = fields[1].GetUInt32();
+            if (itemsCount < 10)
+                lessThanTenItemsChars.insert(guid);
+
+        } while (pQuery->NextRow());
+    }
+    else
+        sLog.outInfo("No items found. Database is empty.");
+
+    uint32 const twoYearsAgo = time(nullptr) - 2 * YEAR;
+    std::set<std::string> bannedNames;
+    std::set<uint32> charsToDelete;
+
+    sLog.outInfo("CharCleanup #3: Loading characters...");
+    //                                             0       1          2       3        4
+    pQuery.reset(CharacterDatabase.PQuery("SELECT `guid`, `account`, `name`, `level`, `money` FROM `characters` WHERE `name` != '' && `logout_time` < %u", twoYearsAgo));
+
+    if (!pQuery)
+    {
+        sLog.outInfo("No inactive characters found.");
+        return;
+    }   
+
+    do
+    {
+        Field* fields = pQuery->Fetch();
+        uint32 guid = fields[0].GetUInt32();
+        uint32 accountId = fields[1].GetUInt32();
+        std::string name = fields[2].GetCppString();
+        uint32 level = fields[3].GetUInt32();
+        uint32 money = fields[4].GetUInt32();
+
+        // prevent banned names from being used again
+        if (bannedAccounts.find(accountId) != bannedAccounts.end())
+        {
+            if (!isNumeric(name[0]))
+                bannedNames.insert(name);
+
+            charsToDelete.insert(guid);
+            sLog.outInfo("Inactive character %s (guid %u) will be deleted because its banned.", name.c_str(), guid);
+        }
+        else if (money < 1 * GOLD && level < 10 &&
+                 lessThanTenItemsChars.find(guid) != lessThanTenItemsChars.end())
+        {
+            charsToDelete.insert(guid);
+            sLog.outInfo("Inactive character %s (guid %u) will be deleted because its low level.", name.c_str(), guid);
+        }
+
+    } while (pQuery->NextRow());
+
+    if (charsToDelete.empty())
+    {
+        sLog.outInfo("No characters need to be deleted.");
+        return;
+    }
+
+    sLog.outInfo("CharCleanup #4: Deleting %u characters...", (uint32)charsToDelete.size());
+    for (auto const& guidLow : charsToDelete)
+    {
+        ObjectGuid guid(HIGHGUID_PLAYER, guidLow);
+        Player::DeleteFromDB(guid, 0, false, true);
+    }
+
+    if (!bannedNames.empty())
+    {
+        sLog.outInfo("CharCleanup #5: Reserving banned names...");
+        for (auto name : bannedNames)
+        {
+            WorldDatabase.escape_string(name);
+            WorldDatabase.PExecute("INSERT IGNORE INTO `reserved_name` (`name`) VALUES ('%s')", name.c_str());
+        }
+    }
 }
