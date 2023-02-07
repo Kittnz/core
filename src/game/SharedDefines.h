@@ -1822,6 +1822,11 @@ struct WorldLocation
         z = other.z;
         o = other.o;
     }
+
+    bool IsEmpty() const
+    {
+        return mapId == 0 && x == 0 && y == 0 && z == 0 && o == 0;
+    }
 };
 
 #endif
