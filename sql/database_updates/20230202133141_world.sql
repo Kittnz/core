@@ -158,3 +158,5 @@ update broadcast_text set male_text = 'We have many allies across the Great Sea,
 update broadcast_text set male_text = 'Greetings traveler. If you are looking to reach our ancient homeland of Kalimdor to the west, you will need passage by boat. One of our ships from Auberdine makes regular stops here in Stormwind.$B$BDo not fret if the boat is not here; it will arrive in due time.' where entry = 60549;
 -- As per @Woji 🇵🇱's request, add 20 silver sell price to all 3 rewards of https://database.turtle-wow.org/?quest=55225 (RMJ).
 UPDATE item_template SET sell_price = 2000 WHERE entry IN (81416, 81417, 81418);
+-- As per @Woji 🇵🇱's request, change respawn time of Refined Gem Shipment to 5 seconds https://database.turtle-wow.org/?object=2010843 (RMJ).
+UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 5000113;
