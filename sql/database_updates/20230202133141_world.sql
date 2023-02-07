@@ -152,3 +152,7 @@ UPDATE quest_template SET Details = 'I spent much time among the keepers on Ston
 update broadcast_text set male_text = 'What brings a young $r all the way up here? I can only assume you seek my counsel.' where entry = 60465;
 -- As per @Shang's request, update name of https://database.turtle-wow.org/?npc=80244 (RMJ).
 UPDATE creature_template SET name = 'Andalideth Suncaller' WHERE entry = 80244;
+-- Greeting edit for Aerla Goldenmoon https://database.turtle-wow.org/?npc=60621.
+update broadcast_text set male_text = 'We have many allies across the Great Sea, located far to the east within the Eastern Kingdoms. The boat that arrives at this dock leads to the harbor of the human city of Stormwind, the heart of the Alliance.$B$BIf the boat is not here, have patience. It shall arrive shortly.' where entry = 60621;
+-- Greeting edit for Gallen Grahamsift https://database.turtle-wow.org/?npc=60549.
+update broadcast_text set male_text = 'Greetings traveler. If you are looking to reach our ancient homeland of Kalimdor to the west, you will need passage by boat. One of our ships from Auberdine makes regular stops here in Stormwind.$B$BDo not fret if the boat is not here; it will arrive in due time.' where entry = 60549;
