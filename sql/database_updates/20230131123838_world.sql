@@ -166,3 +166,27 @@ INSERT INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`,
 (180753, 0, -12286.6, 3648.35, 38.7969, 1.86238, 0, 0, 0.802332, 0.596878, 300, 300, 100, 1, 0, 0),
 (180712, 0, -12290.6, 3623.39, 38.7969, 3.05322, 0, 0, 0.999024, 0.0441717, 300, 300, 100, 1, 0, 0),
 (180712, 0, -12262.8, 3578.93, 38.7969, 2.01605, 0, 0, 0.845781, 0.533531, 300, 300, 100, 1, 0, 0);
+-- Missing loot tables for Fishing in Gillijim's Isle #2780.
+-- Gillijim's Isle general fish loottable.
+REPLACE INTO `fishing_loot_template` VALUES (5121, 6358, 9.6802, 1, 1, 1, 0);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 10096, 0.1155, 1, 1, 1, 0);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13443, 0.2889, 1, 1, 1, 0);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13757, 9.589, 1, 1, 1, 81);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13758, 5.4795, 1, 1, 1, 0);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13759, 12.3288, 1, 1, 1, 82);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13760, 16.4384, 1, 1, 1, 81);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13889, 0.05, 1, 1, 1, 0);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13890, 14.3836, 1, 1, 1, 82);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13901, 0.1733, 1, 1, 1, 0);
+REPLACE INTO `fishing_loot_template` VALUES (5121, 13903, 0.1155, 1, 1, 1, 0);
+-- Gillijim's Isle Fishing pools.
+--delete from gameobject where position_z between -0.0015 and -0.0013 and id in (180751,180752,180712,180750);
+--INSERT INTO `gameobject` (`id`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecsmin`, `spawntimesecsmax`, `animprogress`, `state`, `spawn_flags`, `visibility_mod`) VALUES
+
+-- (180751, 0, -14310.5, 2632.94, -0.0014, 1.98454, 0, 0, 0.837268, 0.546792, 300, 300, 100, 1, 0, 0),
+-- 
+-- (180752, 0, -14338.8, 2556.92, -0.0014, 3.53001, 0, 0, 0.981201, -0.192989, 300, 300, 100, 1, 0, 0),
+-- 
+-- (180750, 0,   -12889, 2576.93, -0.0014, 1.93437, 0, 0, 0.823292, 0.567618, 300, 300, 100, 1, 0, 0),
+-- 
+-- (180712, 0, -12262.8, 3578.93, -0.0014, 2.01605, 0, 0, 0.845781, 0.533531, 300, 300, 100, 1, 0, 0);
