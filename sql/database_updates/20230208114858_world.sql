@@ -34,14 +34,5 @@ RewMoneyMaxLevel = 390,
 RewXP = 670,
 Objectives = 'Brave Windfeather in Red Cloud Mesa has asked you to find the strategist of the Bristleback hidden somewhere in Brambleblade Ravine. Slay this quillboar and bring back proof of the kill.',
 Details = 'Aside from Sharptusk, there is another threat among the Bristleback that cannot go unaddressed. Our scouts have reported a strategist among the quillboars, hidden away in a cave in Brambleblade Ravine and devising attacks against our people.$B$BThe quillboars are a vicious foe enough without having carefully-laid plans against Mulgore. All the more reason this tactician cannot be allowed to live. Go, find this cunning Bristleback, put him down, and bring back proof of his demise.$B$BIf possible, be vigilant of any documents that may give us insight on the sort of tactics and knowledge the quillboars have been developing.',
-OfferRewardText = 'Already I feel that our people are safer thanks to your decisive blow against the Bristlebacks, $N. Your actions speak highly of your dedication to protecting our tribe.$B$BMay the Earth Mother guide your path.',
-WHERE entry = 60115;
-
-UPDATE quest_template SET
-ReqCreatureOrGOId1 = 0,
-RewMoneyMaxLevel = 390,
-RewXP = 670,
-Objectives = 'Brave Windfeather in Red Cloud Mesa has asked you to find the strategist of the Bristleback hidden somewhere in Brambleblade Ravine. Slay this quillboar and bring back proof of the kill.',
-Details = 'Aside from Sharptusk, there is another threat among the Bristleback that cannot go unaddressed. Our scouts have reported a strategist among the quillboars, hidden away in a cave in Brambleblade Ravine and devising attacks against our people.$B$BThe quillboars are a vicious foe enough without having carefully-laid plans against Mulgore. All the more reason this tactician cannot be allowed to live. Go, find this cunning Bristleback, put him down, and bring back proof of his demise.$B$BIf possible, be vigilant of any documents that may give us insight on the sort of tactics and knowledge the quillboars have been developing.',
 OfferRewardText = 'Already I feel that our people are safer thanks to your decisive blow against the Bristlebacks, $N. Your actions speak highly of your dedication to protecting our tribe.$B$BMay the Earth Mother guide your path.'
 WHERE entry = 60115;
