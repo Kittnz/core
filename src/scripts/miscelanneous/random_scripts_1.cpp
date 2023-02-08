@@ -2111,6 +2111,10 @@ bool GossipHello_npc_flying_mount(Player* pPlayer, Creature* pCreature)
         pPlayer->PrepareQuestMenu(pCreature->GetGUID());
         pPlayer->SEND_GOSSIP_MENU(60539, pCreature->GetGUID());
         return true;
+    case 61217: // Zephyra
+        pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Take me out of here.", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF + 6);
+        pPlayer->SEND_GOSSIP_MENU(61217, pCreature->GetGUID());
+        return true;
     }
     return false;
 }
@@ -2152,7 +2156,7 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
             p_Player->GetSession()->SendNotification("Requires Dwarven Mild.");
 
     }
-    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2 || uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4)
+    if (uiAction == GOSSIP_ACTION_INFO_DEF + 2 || uiAction == GOSSIP_ACTION_INFO_DEF + 3 || uiAction == GOSSIP_ACTION_INFO_DEF + 4 || uiAction == GOSSIP_ACTION_INFO_DEF + 6)
     {
         uint32 mountId = 0;
         switch (uiAction)
@@ -2160,6 +2164,7 @@ bool GossipSelect_npc_flying_mount(Player* p_Player, Creature* p_Creature, uint3
         case GOSSIP_ACTION_INFO_DEF + 2: mountId = 295;   break; // Gryphon
         case GOSSIP_ACTION_INFO_DEF + 3: mountId = 18274; break; // Wywern
         case GOSSIP_ACTION_INFO_DEF + 4: mountId = 18279; break; // Bronze Drake
+        case GOSSIP_ACTION_INFO_DEF + 6: mountId = 1936; break; // Zephyra
         }
 
         SetFlying(p_Player, 45, mountId);
