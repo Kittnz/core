@@ -298,3 +298,5 @@ UPDATE quest_template SET
 RequestItemsText = 'I have spoken with the Alliance representative and they have agreed to exchange information, though I fear the news we must deliver.$B$BI hope your diplomacy is better than mine. It''s customary to speak in their tongue if you are to call the meeting, but we''ve only learned some of their language in internment camps. Bah!$B$BNow that I think about it, you don''t talk much do you? We''re doomed.',
 OfferRewardText = 'I''m afraid that the human won''t act rationally when we tell them about the death of their comrades. They will think of us as savages.'
 WHERE entry = 40582;
+-- Change respawn time of MacGrann's Meat Locker to 5 seconds https://database.turtle-wow.org/?object=272 (RMJ).
+UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 10027;
