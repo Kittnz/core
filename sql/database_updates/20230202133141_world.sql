@@ -289,3 +289,8 @@ UPDATE quest_template SET NextQuestInChain = 40579 WHERE entry = 40578;
 UPDATE quest_template SET
 Details = 'You remember the orc, right? He wants us to talk. He knows something that we don''t.$B$B$N, please remain calm, and try not to provoke them. I know it may be difficult, given our history, but they are much like you and me.$B$BJust perhaps a bit more green.'
 WHERE entry = 40558;
+-- Text edits for https://database.turtle-wow.org/?quest=40573 (RMJ).
+UPDATE quest_template SET
+Details = 'Krog''s suspicions were founded, he was right to believe the quilboar may have had something to do with the burning of the inn.$B$BBefore you arrived, so did I. I followed a track, or should I say smell towards a pack of quilboar, they donned the colour of war and were headed towards the Razorfen Kraul, their main den.$B$BLuckily for us, they have stopped in their trails close to it, conveniently near the road.$B$BYour task will be to extract information from them, if any. Although I highly trust my tracking skills, I find my brute force lacking. Judge me if you must, but see the deed done.$B$BAnd the human... He is here to investigate, too. Better leave him alone, for now.'
+WHERE entry = 40573;
+ 
