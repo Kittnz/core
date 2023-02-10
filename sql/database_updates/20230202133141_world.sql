@@ -274,3 +274,7 @@ Details = 'So, $N, the footprints were definitely quillboar hooves. I followed t
 WHERE entry = 40549;
 -- Add item level and disenchant ID to https://database.turtle-wow.org/?item=81341 (RMJ).
 UPDATE item_template SET item_level = 29,disenchant_id = 7 WHERE entry = 81341;
+-- Text edits for https://database.turtle-wow.org/?quest=40553 (RMJ).
+UPDATE quest_template SET
+Details = 'Go and report our findings to Captain Vimes. I will stay here for some time, to watch over the inn. I can''t leave the orc alone with the evidence. I still don''t trust him.'
+WHERE entry = 40553;
