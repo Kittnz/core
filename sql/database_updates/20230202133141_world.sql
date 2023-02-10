@@ -266,3 +266,5 @@ UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid BETWE
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 5008158;
 -- Set respawn time of Sealed Documents Crate to 5 seconds object=1000510 (RMJ).
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 4011321;
+-- Quest=9025 does not correctly chain off of quest=9024 (RMJ).
+UPDATE quest_template SET NextQuestInChain = 9025 WHERE entry = 9024;
