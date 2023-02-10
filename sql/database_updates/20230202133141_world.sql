@@ -260,3 +260,5 @@ update item_template set bonding = 2 where entry = 12782; -- Corruption
 update item_template set required_skill = 197, required_skill_rank = 300 where entry = 14154; -- Truefaith Vestments
 update item_template set required_skill = 197, required_skill_rank = 300 where entry = 14153; -- Robe of the Void
 update item_template set required_skill = 197, required_skill_rank = 300 where entry = 14152; -- Robe of the Archmage
+-- For quest 299 adjust respawn time of object 331, 333, 334, 35252 to 5 seconds (RMJ).
+UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid BETWEEN 15208 AND 15211;
