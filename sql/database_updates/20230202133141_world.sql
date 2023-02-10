@@ -278,3 +278,7 @@ UPDATE item_template SET item_level = 29,disenchant_id = 7 WHERE entry = 81341;
 UPDATE quest_template SET
 Details = 'Go and report our findings to Captain Vimes. I will stay here for some time, to watch over the inn. I can''t leave the orc alone with the evidence. I still don''t trust him.'
 WHERE entry = 40553;
+-- Text edits for https://database.turtle-wow.org/?quest=40557 (RMJ).
+UPDATE quest_template SET
+Details = 'Lieutenant Caldwell still hasn''t returned from his mission to find Paval Reethe. I fear the worst. But, alas, we can only wait.$B$BWhen it comes to our investigation. Well, another dead end.$B$BHowever, Falgran reported that the horde has been causing some trouble. Please, assist him with this matter. He is where you met him before.'
+WHERE entry = 40557;
