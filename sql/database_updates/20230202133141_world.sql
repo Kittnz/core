@@ -272,3 +272,5 @@ UPDATE quest_template SET NextQuestInChain = 9025 WHERE entry = 9024;
 UPDATE quest_template SET
 Details = 'So, $N, the footprints were definitely quillboar hooves. I followed them well into the Barrens, thinking they would lead me to the Kraul. I was wrong. The raiding party actually stopped just outside Bael Modan, which makes your job easier.$B$BVenturing into the Kraul... The mere thought makes me shudder.$B$BBack to the topic. The camp is north of Bael Modan, close to the road. You should have no trouble finding it. Try to sneak in, or kill them all. Doesn''t matter to me. What is important - find some evidence, maybe some items that could''ve been taken from the inn.$B$BAnd to adress the elephant in the room: the orc. He said that he is here to investigate the inn too. I''m keeping an eye on him- I don''t trust him. I feel like the Horde is trying to cover up something. Good luck.'
 WHERE entry = 40549;
+-- Add item level and disenchant ID to https://database.turtle-wow.org/?item=81341 (RMJ).
+UPDATE item_template SET item_level = 29,disenchant_id = 7 WHERE entry = 81341;
