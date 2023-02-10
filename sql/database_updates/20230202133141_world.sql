@@ -304,3 +304,5 @@ UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 100
 update creature set spawntimesecsmin = 300,spawntimesecsmax = 300 WHERE id in (3123,3127);
 -- https://database.turtle-wow.org/?npc=80242 Ashylah Starcaller should be changed to faction 69 (Darnassus).
 update creature_template set faction = 69 where entry = 80242;
+-- https://database.turtle-wow.org/?npc=60712 and https://database.turtle-wow.org/?npc=60734 are Mechanical and should be immune to Bleed effects.
+update creature_template set mechanic_immune_mask = 16384 where entry in (60712,60734);
