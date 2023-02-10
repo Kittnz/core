@@ -285,3 +285,7 @@ WHERE entry = 40557;
 -- Fix quest requirement of https://database.turtle-wow.org/?quest=40579 and add proper chaining behavior (RMJ).
 UPDATE quest_template SET PrevQuestId = 40578 WHERE entry = 40579;
 UPDATE quest_template SET NextQuestInChain = 40579 WHERE entry = 40578;
+-- Text edits for https://database.turtle-wow.org/?quest=40558 (RMJ).
+UPDATE quest_template SET
+Details = 'You remember the orc, right? He wants us to talk. He knows something that we don''t.$B$B$N, please remain calm, and try not to provoke them. I know it may be difficult, given our history, but they are much like you and me.$B$BJust perhaps a bit more green.'
+WHERE entry = 40558;
