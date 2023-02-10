@@ -300,3 +300,5 @@ OfferRewardText = 'I''m afraid that the human won''t act rationally when we tell
 WHERE entry = 40582;
 -- Change respawn time of MacGrann's Meat Locker to 5 seconds https://database.turtle-wow.org/?object=272 (RMJ).
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 10027;
+-- Bloodtalon Scythemaw and Venomtail Scorpid should not have a 25 seconds respawntimer, please set it to 5 minutes.
+update creature set spawntimesecsmin = 300,spawntimesecsmax = 300 WHERE id in (3123,3127);
