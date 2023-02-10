@@ -293,4 +293,8 @@ WHERE entry = 40558;
 UPDATE quest_template SET
 Details = 'Krog''s suspicions were founded, he was right to believe the quilboar may have had something to do with the burning of the inn.$B$BBefore you arrived, so did I. I followed a track, or should I say smell towards a pack of quilboar, they donned the colour of war and were headed towards the Razorfen Kraul, their main den.$B$BLuckily for us, they have stopped in their trails close to it, conveniently near the road.$B$BYour task will be to extract information from them, if any. Although I highly trust my tracking skills, I find my brute force lacking. Judge me if you must, but see the deed done.$B$BAnd the human... He is here to investigate, too. Better leave him alone, for now.'
 WHERE entry = 40573;
- 
+-- Text edits for https://database.turtle-wow.org/?quest=40582 (RMJ).
+UPDATE quest_template SET
+RequestItemsText = 'I have spoken with the Alliance representative and they have agreed to exchange information, though I fear the news we must deliver.$B$BI hope your diplomacy is better than mine. It''s customary to speak in their tongue if you are to call the meeting, but we''ve only learned some of their language in internment camps. Bah!$B$BNow that I think about it, you don''t talk much do you? We''re doomed.',
+OfferRewardText = 'I''m afraid that the human won''t act rationally when we tell them about the death of their comrades. They will think of us as savages.'
+WHERE entry = 40582;
