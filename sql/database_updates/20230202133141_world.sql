@@ -264,3 +264,5 @@ update item_template set required_skill = 197, required_skill_rank = 300 where e
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid BETWEEN 15208 AND 15211;
 -- Set respawn time of Sealed Documents Container to 5 seconds object=2010902 (RMJ).
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 5008158;
+-- Set respawn time of Sealed Documents Crate to 5 seconds object=1000510 (RMJ).
+UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 4011321;
