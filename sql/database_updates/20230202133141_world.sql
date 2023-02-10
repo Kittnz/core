@@ -302,3 +302,5 @@ WHERE entry = 40582;
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 10027;
 -- Bloodtalon Scythemaw and Venomtail Scorpid should not have a 25 seconds respawntimer, please set it to 5 minutes.
 update creature set spawntimesecsmin = 300,spawntimesecsmax = 300 WHERE id in (3123,3127);
+-- https://database.turtle-wow.org/?npc=80242 Ashylah Starcaller should be changed to faction 69 (Darnassus).
+update creature_template set faction = 69 where entry = 80242;
