@@ -254,3 +254,9 @@ replace into gossip_menu (entry, text_id, condition_id) VALUES (@gossip_menu_id,
 replace into broadcast_text (entry, Male_Text) values (@magic_number, 'Yauur?');
 replace into npc_text (ID, BroadcastTextID0) values (@magic_number, @magic_number);
 update creature_template set gossip_menu_id = @gossip_menu_id, npc_flags = 1, script_name = 'npc_flying_mount' where entry = @magic_number;
+-- Makes Corruption Bind on Equip, there's currently no special occasion that mandates that it stays a BoP, its not even an epic.
+update item_template set bonding = 2 where entry = 12782; -- Corruption
+-- BoP Crafteds requiring their skill to wear to avoid gaming the system
+update item_template set required_skill = 197, required_skill_rank = 300 where entry = 14154; -- Truefaith Vestments
+update item_template set required_skill = 197, required_skill_rank = 300 where entry = 14153; -- Robe of the Void
+update item_template set required_skill = 197, required_skill_rank = 300 where entry = 14152; -- Robe of the Archmage
