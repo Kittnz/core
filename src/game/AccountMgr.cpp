@@ -31,6 +31,7 @@
 #include "Chat.h"
 #include "WorldSession.h"
 #include "Chat.h"
+#include "Guild.h"
 #include "MasterPlayer.h"
 #include "Anticheat.h"
 
