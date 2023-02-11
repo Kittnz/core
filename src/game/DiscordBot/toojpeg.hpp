@@ -15,6 +15,7 @@
 // => let's go !
 // TooJpeg::writeJpeg(myOutput, mypixels, 1024, 768);
 
+#include <functional>
 #pragma once
 
 namespace TooJpeg
