@@ -26,6 +26,8 @@
 #include "SharedDefines.h"
 #include "ObjectGuid.h"
 
+#include <any>
+
 struct AreaTriggerTeleport;
 struct AreaTriggerEntry;
 struct FactionEntry;
@@ -207,7 +209,7 @@ class ChatHandler
         // Deplacement
         bool HandleGoForwardCommand(char* args);
         bool HandleGoUpCommand(char* args);
-
+        bool HandleReloadHousingCommand(char* args);
         bool HandleGameObjectTempAddCommand(char *args);
 
         // Clean characters
@@ -336,6 +338,7 @@ class ChatHandler
         bool HandleGuildDeleteCommand(char* args);
         bool HandleGuildRenameCommand(char* args);
         bool HandleGuildListenCommand(char* args);
+        bool HandleGuildHouseCommand(char* args);
 
         bool HandleHonorShow(char* args);
         bool HandleHonorSetRPCommand(char* args);
@@ -549,6 +552,8 @@ class ChatHandler
         bool HandleDeleteItemCommand(char* args);
         bool HandleAddItemSetCommand(char* args);
 
+        bool HandleDiscBotStopCommand(char* args);
+
         bool HandleBankCommand(char* args);
         bool HandleChangeWeatherCommand(char* args);
         bool HandleKickPlayerCommand(char* args);
@@ -715,8 +720,8 @@ class ChatHandler
 class CliHandler : public ChatHandler
 {
     public:
-        typedef void Print(void*, char const*);
-        explicit CliHandler(uint32 accountId, AccountTypes accessLevel, void* callbackArg, Print* zprint)
+        typedef void Print(std::any, char const*);
+        explicit CliHandler(uint32 accountId, AccountTypes accessLevel, std::any callbackArg, Print* zprint)
             : m_accountId(accountId), m_loginAccessLevel(accessLevel), m_callbackArg(callbackArg), m_print(zprint) {}
 
         // overwrite functions
@@ -733,7 +738,7 @@ class CliHandler : public ChatHandler
     private:
         uint32 m_accountId;
         AccountTypes m_loginAccessLevel;
-        void* m_callbackArg;
+        std::any m_callbackArg;
         Print* m_print;
 };
 

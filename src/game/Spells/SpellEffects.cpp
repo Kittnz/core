@@ -3332,6 +3332,10 @@ void Spell::EffectHeal(SpellEffectIndex eff_idx)
             addhealth += tickheal * tickcount;
         }
 
+        // Alchemists Stone
+        if (m_spellInfo->Category == SPELLCATEGORY_ITEM_COMBAT_CONSUMABLE_POTION && unitTarget->HasAura(17619))
+            addhealth *= 1.33f;
+
         // JoL - Extra heal stored in m_triggeredByAuraBasePoints
         if (m_spellInfo->SpellIconID == 299 && m_spellInfo->SpellVisual == 5560 && m_spellInfo->SpellFamilyFlags == 0 && m_triggeredByAuraBasePoints > 0)
             addhealth += m_triggeredByAuraBasePoints;
@@ -3555,6 +3559,10 @@ void Spell::EffectEnergize(SpellEffectIndex eff_idx)
 
     if (m_spellInfo->Id == 2687)
         unitTarget->SetInCombatState();
+
+    // Alchemists Stone
+    if (m_spellInfo->Category == SPELLCATEGORY_ITEM_COMBAT_CONSUMABLE_POTION && unitTarget->HasAura(17619))
+        damage *= 1.33f;
 
     m_caster->EnergizeBySpell(unitTarget, m_spellInfo->Id, damage, power);
 }

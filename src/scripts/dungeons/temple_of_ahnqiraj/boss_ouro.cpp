@@ -207,7 +207,7 @@ struct boss_ouroAI : public Scripted_NoMovementAI
         }
         else
         {
-            m_uiSubmergeTimer = 2000; // try again in a moment
+            m_uiSubmergeTimer = SUBMERGE_TIMER; // try again in a moment
         }
     }
 

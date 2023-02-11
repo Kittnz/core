@@ -290,31 +290,32 @@ void Log::Initialize()
         }
     }
 
-    dberLogfile = openLogFile("DBErrorLogFile", nullptr, "a");
-    worldLogfile = openLogFile("WorldLogFile", "WorldLogTimestamp", "a");
-    nostalriusLogFile = openLogFile("NostalriusLogFile", "NostalriusLogTimestamp", "a");
-    honorLogfile = openLogFile("HonorLogFile", "HonorLogTimestamp", "a");
-    wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a");
-    anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a");
-    logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a");
-    logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a");
-    logFiles[LOG_CHAR] = openLogFile("CharLogFile", "CharLogTimestamp", "a");
-    logFiles[LOG_RA] = openLogFile("RaLogFile", nullptr, "a");
+    dberLogfile = openLogFile("DBErrorLogFile", nullptr, "a+");
+    worldLogfile = openLogFile("WorldLogFile", "WorldLogTimestamp", "a+");
+    nostalriusLogFile = openLogFile("NostalriusLogFile", "NostalriusLogTimestamp", "a+");
+    honorLogfile = openLogFile("HonorLogFile", "HonorLogTimestamp", "a+");
+    wardenLogfile = openLogFile("WardenLogFile", "WardenLogTimestamp", "a+");
+    anticheatLogfile = openLogFile("AnticheatLogFile", "AnticheatLogTimestamp", "a+");
+    discordLogFile = openLogFile("DiscordLogFile", "DiscordLogTimestamp", "a+");
+    logFiles[LOG_CHAT] = openLogFile("ChatLogFile", "ChatLogTimestamp", "a+");
+    logFiles[LOG_BG] = openLogFile("BgLogFile", "BgLogTimestamp", "a+");
+    logFiles[LOG_CHAR] = openLogFile("CharLogFile", "CharLogTimestamp", "a+");
+    logFiles[LOG_RA] = openLogFile("RaLogFile", nullptr, "a+");
     logFiles[LOG_DBERRFIX] = openLogFile("DBErrorFixFile", nullptr, "w+");
-    logFiles[LOG_CLIENT_IDS] = openLogFile("ClientIdsLogFile", nullptr, "a");
-    logFiles[LOG_LOOTS] = openLogFile("LootsLogFile", nullptr, "a");
-    logFiles[LOG_RARELOOTS] = openLogFile("RareLootsLogFile", nullptr, "a");
-    logFiles[LOG_LEVELUP] = openLogFile("LevelupLogFile", nullptr, "a");
-    logFiles[LOG_PERFORMANCE] = openLogFile("PerformanceLog.File", nullptr, "a");
-    logFiles[LOG_MONEY_TRADES] = openLogFile("LogMoneyTrades", nullptr, "a");
-    logFiles[LOG_ANTICHEAT_DEBUG] = openLogFile("AnticheatDebugLogFile", nullptr, "a");
-    logFiles[LOG_ANTICHEAT_BASIC] = openLogFile("AnticheatLogFile", nullptr, "a");
-    logFiles[LOG_MAIL_AH] = openLogFile("LogMailAH", nullptr, "a");
-    logFiles[LOG_GM_CRITICAL] = openLogFile("CriticalCommandsLogFile", nullptr, "a");
-    logFiles[LOG_CHAT_SPAM] = openLogFile("ChatSpamLogFile", nullptr, "a");
-    logFiles[LOG_EXPLOITS] = openLogFile("ExploitsLogFile", nullptr, "a");
-    logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a");
-    logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a");
+    logFiles[LOG_CLIENT_IDS] = openLogFile("ClientIdsLogFile", nullptr, "a+");
+    logFiles[LOG_LOOTS] = openLogFile("LootsLogFile", nullptr, "a+");
+    logFiles[LOG_RARELOOTS] = openLogFile("RareLootsLogFile", nullptr, "a+");
+    logFiles[LOG_LEVELUP] = openLogFile("LevelupLogFile", nullptr, "a+");
+    logFiles[LOG_PERFORMANCE] = openLogFile("PerformanceLog.File", nullptr, "a+");
+    logFiles[LOG_MONEY_TRADES] = openLogFile("LogMoneyTrades", nullptr, "a+");
+    logFiles[LOG_ANTICHEAT_DEBUG] = openLogFile("AnticheatDebugLogFile", nullptr, "a+");
+    logFiles[LOG_ANTICHEAT_BASIC] = openLogFile("AnticheatLogFile", nullptr, "a+");
+    logFiles[LOG_MAIL_AH] = openLogFile("LogMailAH", nullptr, "a+");
+    logFiles[LOG_GM_CRITICAL] = openLogFile("CriticalCommandsLogFile", nullptr, "a+");
+    logFiles[LOG_CHAT_SPAM] = openLogFile("ChatSpamLogFile", nullptr, "a+");
+    logFiles[LOG_EXPLOITS] = openLogFile("ExploitsLogFile", nullptr, "a+");
+    logFiles[LOG_HARDCORE_MODE] = openLogFile("HardcoreModeLogFile", nullptr, "a+");
+    logFiles[LOG_AUTOUPDATER] = openLogFile("DBUpdaterLogFile", nullptr, "a+");
 
     timestampPrefix[LOG_DBERRFIX] = false;
 
@@ -410,6 +411,8 @@ std::string Log::GetTimestampStr()
 
 void Log::outString()
 {
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_includeTime)
         outTime(stdout);
     printf( "\n" );
@@ -427,6 +430,8 @@ void Log::outString( const char * str, ... )
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(true,m_colors[LogNormal]);
@@ -464,6 +469,10 @@ void Log::outInfo( const char * str, ...)
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
+
     va_list ap;
     va_start(ap, str);
     vutf8printf(stdout, str, &ap);
@@ -489,6 +498,8 @@ void Log::outHonor(const char *str, ...)
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (!HasLogFilter(LOG_FILTER_HONOR))
     {
@@ -533,6 +544,8 @@ void Log::out(LogFile type, const char* str, ...)
     if (!str)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (logFiles[type])
     {
         if (timestampPrefix[type])
@@ -554,6 +567,8 @@ void Log::outError( const char * err, ... )
 {
     if (!err)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(false,m_colors[LogError]);
@@ -589,6 +604,8 @@ void Log::outError( const char * err, ... )
 
 void Log::outErrorDb()
 {
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_includeTime)
         outTime(stderr);
 
@@ -615,6 +632,8 @@ void Log::outErrorDb( const char * err, ... )
 {
     if (!err)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(false,m_colors[LogError]);
@@ -667,6 +686,8 @@ void Log::outBasic( const char * str, ... )
     if (!str)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_logLevel >= LOG_LVL_BASIC)
     {
         if (m_colored)
@@ -704,6 +725,8 @@ void Log::outDetail( const char * str, ... )
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_logLevel >= LOG_LVL_DETAIL)
     {
@@ -746,6 +769,8 @@ void Log::outDebug( const char * str, ... )
     if (!str)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_logLevel >= LOG_LVL_DEBUG)
     {
         if (m_colored)
@@ -785,6 +810,8 @@ void Log::outWarden(const char *wrd, ...)
 {
     if (!wrd)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_colored)
         SetColor(true, m_colors[LogWarden]);
@@ -826,6 +853,8 @@ void Log::outWardenDebug(const char *wrd, ...)
 {
     if (!m_wardenDebug)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (!wrd)
         return;
@@ -871,6 +900,8 @@ void Log::outAnticheat(const char* detector, const char* player, const char* rea
     if (!detector || !player || !reason || !penalty)
         return;
 
+    std::shared_lock<std::shared_mutex> l{ logLock };
+
     if (m_colored)
         SetColor(true, m_colors[LogWarden]);
 
@@ -893,6 +924,33 @@ void Log::outAnticheat(const char* detector, const char* player, const char* rea
     }
 
     fflush(stdout);
+}
+
+void Log::outDiscord(char const* str, ...)
+{
+    if (!str)
+        return;
+
+    if (m_includeTime)
+        outTime(stdout);
+
+    va_list ap;
+    va_start(ap, str);
+    vutf8printf(stdout, str, &ap);
+    va_end(ap);
+
+    printf("\n");
+
+    if (discordLogFile)
+    {
+        va_list ap;
+        outTimestamp(logfile);
+        va_start(ap, str);
+        vfprintf(logfile, str, ap);
+        fprintf(logfile, "\n");
+        va_end(ap);
+        fflush(logfile);
+    }
 }
 
 void Log::outSpam(const char* wrd, ...)
@@ -918,6 +976,8 @@ void Log::outCommand( uint32 account, const char * str, ... )
 {
     if (!str)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     if (m_logLevel >= LOG_LVL_DETAIL)
     {
@@ -982,6 +1042,8 @@ void Log::outWorldPacketDump(ACE_HANDLE socketHandle, uint32 opcode,
 {
     if (!worldLogfile)
         return;
+
+    std::shared_lock<std::shared_mutex> l{ logLock };
 
     outTimestamp(worldLogfile);
 

@@ -25,6 +25,7 @@
 #include "Common.h"
 #include "Policies/Singleton.h"
 #include <mutex>
+#include <shared_mutex>
 
 class Config;
 class ByteBuffer;
@@ -109,6 +110,7 @@ enum LogFile
     LOG_AUTOUPDATER,
     LOG_ANTICHEAT_BASIC,
     LOG_ANTICHEAT_DEBUG,
+    LOG_DISCORD,
     LOG_MAX_FILES
 };
 
@@ -124,9 +126,17 @@ enum LogType
 
 int const Color_count = int(WHITE)+1;
 
+namespace DiscordBot
+{
+    class GMCommandHandler;
+}
+
 class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::mutex> >
 {
     friend class MaNGOS::OperatorNew<Log>;
+
+    friend class DiscordBot::GMCommandHandler;
+
     Log();
 
     ~Log()
@@ -154,6 +164,9 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         if (honorLogfile != nullptr)
             fclose(honorLogfile);
         honorLogfile = nullptr;
+
+        if (discordLogFile)
+            fclose(discordLogFile);
 
         for (auto& logFile : logFiles)
         {
@@ -184,6 +197,7 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void outWarden(char const* wrd, ...) ATTR_PRINTF(2,3);
         void outWardenDebug(const char * wrd, ...) ATTR_PRINTF(2,3);
         void outAnticheat(const char* detector, const char* player, const char* reason, const char* penalty);
+        void outDiscord(char const* str, ...) ATTR_PRINTF(2, 3);
         void outSpam(char const* wrd, ...) ATTR_PRINTF(2, 3);
         void outErrorDb(); // any log level
         void outErrorDb(char const* str, ...) ATTR_PRINTF(2,3); // any log level
@@ -216,11 +230,14 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         FILE* dberLogfile;
         FILE* wardenLogfile;
         FILE* anticheatLogfile;
+        FILE* discordLogFile;
         FILE* worldLogfile;
         FILE* nostalriusLogFile;
         FILE* honorLogfile;
         FILE* logFiles[LOG_MAX_FILES];
         bool  timestampPrefix[LOG_MAX_FILES];
+
+        std::shared_mutex logLock;
 
         bool m_bIsChatLogFileActivated;
 

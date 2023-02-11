@@ -3206,25 +3206,24 @@ void Unit::ModPossess(Unit* pTarget, bool apply, AuraRemoveMode m_removeMode)
         pTarget->CombatStop(true);
         pTarget->UpdateControl();
         pTarget->SetWalk(false);
+        pTarget->StopMoving();
 
         if (Creature* pCreature = pTarget->ToCreature())
         {
-            if (!pCreature->HasUnitState(UNIT_STAT_CAN_NOT_REACT))
-            {
-                pTarget->StopMoving(true);
+            bool canAttack; // never attack if we needed to switch AI but couldn't
+            if (pCreature->AI() && pCreature->AI()->SwitchAiAtControl())
+                canAttack = pCreature->AIM_Initialize();
+            else
+                canAttack = true;
 
-                if (pCreature->AI() && pCreature->AI()->SwitchAiAtControl())
-                    pCreature->AIM_Initialize();
-
+            if (canAttack && m_removeMode != AURA_REMOVE_BY_DEATH &&
+                pCaster->IsValidAttackTarget(pCreature))
                 pCreature->AttackedBy(pCaster);
-            }
 
             // remove pvp flag on charm end if creature is not pvp flagged by default
             if (pCreature->IsPvP() && !pCreature->HasExtraFlag(CREATURE_FLAG_EXTRA_PVP))
                 pCreature->SetPvP(false);
         }
-        else
-            pTarget->StopMoving(true);
     
         if (pTarget->IsPlayer() && pTarget->IsRooted())
             MovementPacketSender::AddMovementFlagChangeToController(pTarget, MOVEFLAG_ROOT, true);
@@ -3467,6 +3466,10 @@ void Aura::HandleModCharm(bool apply, bool Real)
             caster->SetCharm(nullptr);
             if (caster->IsPlayer())
                 static_cast<Player*>(caster)->RemovePetActionBar();
+
+            // Clear threat generated when charm ends.
+            if (pCreatureTarget)
+                pCreatureTarget->RemoveAttackersThreat(caster);
         }
         
         target->UpdateControl();
@@ -3504,10 +3507,14 @@ void Aura::HandleModCharm(bool apply, bool Real)
 
         if (pCreatureTarget)
         {
+            bool canAttack; // never attack if we needed to switch AI but couldn't
             if (pCreatureTarget->AI() && pCreatureTarget->AI()->SwitchAiAtControl())
-                pCreatureTarget->AIM_Initialize();
+                canAttack = pCreatureTarget->AIM_Initialize();
+            else
+                canAttack = true;
 
-            if (caster)
+            if (canAttack && m_removeMode != AURA_REMOVE_BY_DEATH &&
+                caster && caster->IsValidAttackTarget(pCreatureTarget))
                 pCreatureTarget->AttackedBy(caster);
         }
         else if (pPlayerTarget)

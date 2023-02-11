@@ -43,6 +43,7 @@
 #include <memory>
 #include <unordered_map>
 #include <thread>
+#include <any>
 
 class Object;
 class WorldSession;
@@ -50,6 +51,10 @@ class Player;
 class SqlResultQueue;
 class QueryResult;
 class World;
+namespace DiscordBot
+{
+    class Bot;
+}
 class MovementBroadcaster;
 struct CreatureInfo;
 
@@ -710,17 +715,17 @@ struct PlayerTransactionData
 /// Storage class for commands issued for delayed execution
 struct CliCommandHolder
 {
-    typedef void Print(void*, const char*);
-    typedef void CommandFinished(void*, bool success);
+    typedef void Print(std::any, const char*);
+    typedef void CommandFinished(std::any, bool success);
 
     uint32 m_cliAccountId;                                  // 0 for console and real account id for RA/soap
     AccountTypes m_cliAccessLevel;
-    void* m_callbackArg;
+    std::any m_callbackArg;
     char *m_command;
     Print* m_print;
     CommandFinished* m_commandFinished;
 
-    CliCommandHolder(uint32 accountId, AccountTypes cliAccessLevel, void* callbackArg, const char *command, Print* zprint, CommandFinished* commandFinished)
+    CliCommandHolder(uint32 accountId, AccountTypes cliAccessLevel, std::any callbackArg, const char *command, Print* zprint, CommandFinished* commandFinished)
         : m_cliAccountId(accountId), m_cliAccessLevel(cliAccessLevel), m_callbackArg(callbackArg), m_print(zprint), m_commandFinished(commandFinished)
     {
         size_t len = strlen(command)+1;
@@ -806,6 +811,8 @@ class World
 
 		// basically a destructor
 		void InternalShutdown();
+
+        void StopDiscordBot();
 
         typedef std::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
@@ -1173,6 +1180,9 @@ class World
         bool m_configBoolValues[CONFIG_BOOL_VALUE_COUNT];
 
         int32 m_playerLimit;
+#ifdef USING_DISCORD_BOT
+        DiscordBot::Bot* m_bot;
+#endif
 
         LocaleConstant m_defaultDbcLocale;                     // from config for one from loaded DBC locales
         uint32 m_availableDbcLocaleMask = 0;                   // by loaded DBC

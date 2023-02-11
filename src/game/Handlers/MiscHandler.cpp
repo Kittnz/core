@@ -763,7 +763,7 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
 
     uint32 triggerId;
     recv_data >> triggerId;
-    DEBUG_LOG("Trigger ID: %u", triggerId);
+    printf("Trigger ID: %u\n", triggerId);
 
     Player* const pPlayer = GetPlayer();
 
@@ -900,12 +900,12 @@ void WorldSession::HandleAreaTriggerOpcode(WorldPacket & recv_data)
             return;
         }
 
-        // Turtle: Don't allow leaving raid while in combat (let's disable til lwednesday)
-        //if (pPlayer->IsInCombat() && pTargetMap->IsContinent() && pPlayer->GetMap()->IsRaid())
-        //{
-        //    SendAreaTriggerMessage("You are in combat.");
-        //    return;
-        //}
+        // Turtle: Don't allow leaving raid while in combat.
+        if (pPlayer->IsInCombat() && pTargetMap->IsContinent() && pPlayer->GetMap()->IsRaid())
+        {
+            SendAreaTriggerMessage("You are in combat.");
+            return;
+        }
     }
 
     pPlayer->TeleportTo(pTeleTrigger->destination);

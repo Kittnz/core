@@ -281,17 +281,22 @@ struct npc_eris_havenfireAI : public ScriptedAI
 
     void MoveInLineOfSight(Unit* who) override
     {
-        if ((who->GetTypeId() == TYPEID_PLAYER || who->IsPet()) && !CleanerSpawn && BeginQuete)
+        if (!who->IsMoving() || !who->IsAlive())
+            return;
+
+        if (!CleanerSpawn && BeginQuete && who->GetGUID() != PlayerGUID)
         {
-            if (who->GetGUID() != PlayerGUID || who->IsPet())
-            {   
-                if (Creature* Crea = m_creature->SummonCreature(NPC_CLEANER, 3358.1096f, -3049.8063f, 166.226f, 1.87f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
+            if (Player* pPlayer = who->GetCharmerOrOwnerPlayerOrPlayerItself())
+            {
+                if (pPlayer->GetGUID() != PlayerGUID && !pPlayer->IsGameMaster())
                 {
-                    Crea->SetInCombatWith(who);
-                    Crea->GetMotionMaster()->MoveChase(who);
-                    BeginQuete = false;
-                    CleanerSpawn = true;
-                    EchecEvent(GetPlayer(), false);
+                    if (Creature* pCleaner = m_creature->SummonCreature(NPC_CLEANER, pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), 1.87f, TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN, MINUTE * IN_MILLISECONDS))
+                    {
+                        pCleaner->AI()->AttackStart(pPlayer);
+                        BeginQuete = false;
+                        CleanerSpawn = true;
+                        EchecEvent(GetPlayer(), false);
+                    }
                 }
             }
         }
@@ -777,9 +782,9 @@ struct npc_eris_havenfire_peasantAI : public ScriptedAI
             {
                 if (pPlayer->GetGUID() != pErisEventAI->PlayerGUID && pErisEventAI->BeginQuete && !pErisEventAI->CleanerSpawn)
                 {
-                    if (Creature* Crea = m_creature->SummonCreature(NPC_CLEANER, 3358.1096f, -3049.8063f, 166.226f, 1.87f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
+                    if (Creature* pCleaner = m_creature->SummonCreature(NPC_CLEANER, 3358.1096f, -3049.8063f, 166.226f, 1.87f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 1000))
                     {
-                        Crea->AI()->AttackStart(pPlayer);
+                        pCleaner->AI()->AttackStart(pPlayer);
                         pErisEventAI->BeginQuete = false;
                         pErisEventAI->CleanerSpawn = true;
                         pErisEventAI->EchecEvent(pErisEventAI->GetPlayer(), false);
