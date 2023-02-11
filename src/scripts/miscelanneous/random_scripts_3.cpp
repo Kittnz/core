@@ -3820,7 +3820,7 @@ bool GossipSelect_npc_bert_mano(Player* pPlayer, Creature* pCreature, uint32 uiS
 
             pCreature->m_Events.AddLambdaEventAtOffset([pCreature]()
                 {
-                    pCreature->SummonCreature(60954, pCreature->GetPositionX() + 2, pCreature->GetPositionY() + 2, pCreature->GetPositionZ() + 2, pCreature->GetOrientation() + 3.14, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0.1 * MINUTE * IN_MILLISECONDS);
+                    pCreature->SummonCreature(60954, pCreature->GetPositionX() + 2, pCreature->GetPositionY() + 2, pCreature->GetPositionZ() + 2, pCreature->GetOrientation() + 3.14, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 0.5 * MINUTE * IN_MILLISECONDS);
                 }, 3000);
 
         }

@@ -7,6 +7,7 @@
 #include "World.h"
 #include "ObjectAccessor.h"
 #include "ChannelMgr.h"
+#include "Guild.h"
 #include "Chat.h"
 #include "Anticheat.h"
 #include "Antispam.h"
@@ -172,7 +173,7 @@ void Antispam::LoadConfig()
         m_worker = std::thread(AntispamAsyncWorker, this);
 }
 
-bool Antispam::AddMessage(const std::string& msg, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, uint32 language)
+bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, PlayerPointer from, PlayerPointer to, Channel* channel, Guild* guild)
 {
     if (!m_enabled || from->IsGameMaster() || to && to->IsGameMaster())
         return true;
@@ -198,6 +199,7 @@ bool Antispam::AddMessage(const std::string& msg, uint32 type, PlayerPointer fro
     messageBlock.count = 1;
     messageBlock.time = time(nullptr);
     messageBlock.channel = channel;
+    messageBlock.guild = guild;
 
     std::lock_guard<std::mutex> guard(m_messageMutex);
     m_messageQueue.push_back(messageBlock);
@@ -338,6 +340,15 @@ void Antispam::ProcessMessages(uint32 diff)
             {
                 if (messageBlock.channel)
                     messageBlock.channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                break;
+            }
+            case A_CHAT_TYPE_GUILD:
+            {
+                if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
+                {
+                    if (messageBlock.guild)
+                        messageBlock.guild->BroadcastToGuild(pSender, messageBlock.msg, LANG_UNIVERSAL);
+                }
                 break;
             }
         }

@@ -212,13 +212,14 @@ ChatCommand * ChatHandler::getCommandTable()
     static ChatCommand guildCommandTable[] =
     {
         { "create",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildCreateCommand,         "", nullptr },
-        { "delete",         SEC_DEVELOPER,    true,  &ChatHandler::HandleGuildDeleteCommand,         "", nullptr },
+        { "delete",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildDeleteCommand,         "", nullptr },
         { "invite",         SEC_MODERATOR,     true,  &ChatHandler::HandleGuildInviteCommand,         "", nullptr },
         { "uninvite",       SEC_MODERATOR,     true,  &ChatHandler::HandleGuildUninviteCommand,       "", nullptr },
         { "rank",           SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildRankCommand,           "", nullptr },
-        { "rename",         SEC_DEVELOPER,    true,  &ChatHandler::HandleGuildRenameCommand,         "", nullptr },
-        { "listen",         SEC_DEVELOPER, false, &ChatHandler::HandleGuildListenCommand, "", nullptr},
-        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+        { "rename",         SEC_DEVELOPER,     true,  &ChatHandler::HandleGuildRenameCommand,         "", nullptr },
+        { "listen",         SEC_DEVELOPER,     false, &ChatHandler::HandleGuildListenCommand,         "", nullptr },
+        { "house",          SEC_DEVELOPER,     false, &ChatHandler::HandleGuildHouseCommand,          "", nullptr },
+        { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
     static ChatCommand honorCommandTable[] =
@@ -423,6 +424,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "mangos_string",                SEC_ADMINISTRATOR,    true,  &ChatHandler::HandleReloadMangosStringCommand,            "", nullptr },
         { "bgplayers",                    SEC_ADMINISTRATOR,    true, &ChatHandler::HandleReloadBgAmounts,                      "", nullptr},
         { "gmlevels",                     SEC_ADMINISTRATOR,    true, &ChatHandler::HandleReloadGmLevelsCommand,                   "", nullptr},
+        { "housing",                      SEC_DEVELOPER,        true, &ChatHandler::HandleReloadHousingCommand,                  "", nullptr},
         { nullptr,                       0,                     false, nullptr,                                                  "", nullptr }
     };
 
@@ -594,6 +596,13 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,             0,                     false, nullptr,                                       "", nullptr }
     };
 
+    static ChatCommand discBotCommandTable[] =
+    {
+        { "stop",             SEC_ADMINISTRATOR,       true, &ChatHandler::HandleDiscBotStopCommand,         "", nullptr},
+        { nullptr,             0,                     false, nullptr,                                       "", nullptr }
+    };
+
+
     static ChatCommand commandTable[] =
     {
         { "account",        SEC_PLAYER,          true,  nullptr,                                        "", accountCommandTable  },
@@ -721,6 +730,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "getskillvalue",  SEC_DEVELOPER,       false, &ChatHandler::HandleGetSkillValueCommand,       "", nullptr},
         { "anonymous",      SEC_DEVELOPER,       false, nullptr,                                        "", anonymousCommandTable},
         { "hcmessages",     SEC_PLAYER,          false, &ChatHandler::HandleHCMessagesCommand,          "", nullptr },
+        { "discbot",        SEC_ADMINISTRATOR,   true,  nullptr,                                        "", discBotCommandTable},
         { "minchatlevel",   SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleMinChatLevelCommand,        "", nullptr },
         { "pvp",            SEC_DEVELOPER,       false, &ChatHandler::HandlePvPCommand,                 "", nullptr},
         { "mmaps",          SEC_DEVELOPER,       false, nullptr,                                        "", mmapsCommandTable },

@@ -513,11 +513,11 @@ void Unit::ResetAttackTimer(WeaponAttackType type)
     m_attackTimer[type] = uint32(GetAttackTime(type) * m_modAttackSpeedPct[type]);
 }
 
-void Unit::RemoveSpellsCausingAura(AuraType auraType)
+void Unit::RemoveSpellsCausingAura(AuraType auraType, AuraRemoveMode mode)
 {
     for (AuraList::const_iterator iter = m_modAuras[auraType].begin(); iter != m_modAuras[auraType].end();)
     {
-        RemoveAurasDueToSpell((*iter)->GetId());
+        RemoveAurasDueToSpell((*iter)->GetId(), nullptr, mode);
         iter = m_modAuras[auraType].begin();
     }
 }
@@ -1182,13 +1182,6 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
 
     DEBUG_FILTER_LOG(LOG_FILTER_DAMAGE, "DealDamageAttackStop");
 
-    // before the stop of combat, the auras of type CM are withdrawn. We must be able to redirect the mobs to the caster.
-    // You should specify 'AURA_REMOVE_BY_DEATH', but this is not useful for these auras.
-    pVictim->RemoveCharmAuras();
-    // stop combat
-    pVictim->CombatStop();
-    pVictim->GetHostileRefManager().deleteReferences();
-
     bool damageFromSpiritOfRedemtionTalent = (spellProto && spellProto->Id == 27795);
 
     // if talent known but not triggered (check priest class for speedup check)
@@ -1222,6 +1215,15 @@ void Unit::Kill(Unit* pVictim, SpellEntry const *spellProto, bool durabilityLoss
         if (pPlayerVictim && pVictim->GetUInt32Value(PLAYER_SELF_RES_SPELL))
             pVictim->DirectSendPublicValueUpdate(PLAYER_SELF_RES_SPELL);
         pVictim->DirectSendPublicValueUpdate(UNIT_FIELD_HEALTH);
+    }
+    else
+    {
+        // Before the stop of combat, the auras of type MC are removed. We must be able to redirect the mobs to the caster.
+        pVictim->RemoveCharmAuras(AURA_REMOVE_BY_DEATH);
+
+        // stop combat
+        pVictim->CombatStop();
+        pVictim->GetHostileRefManager().deleteReferences();
     }
 
     // outdoor pvp things, do these after setting the death state, else the player activity notify won't work... doh...
@@ -3881,6 +3883,25 @@ void Unit::RemoveAurasByCasterSpell(uint32 spellId, ObjectGuid casterGuid, AuraR
     }
 }
 
+// Only need to remove the channel aura if its permanent aura or channel is interrupted.
+// Otherwise aura should be removed by its duration expiring (which should happen right after).
+void Unit::RemoveAurasByChannelledSpell(uint32 spellId, ObjectGuid casterGuid, bool interrupted)
+{
+    SpellAuraHolderBounds spair = GetSpellAuraHolderBounds(spellId);
+    for (SpellAuraHolderMap::iterator iter = spair.first; iter != spair.second;)
+    {
+        if (iter->second->GetCasterGuid() == casterGuid &&
+           (interrupted || iter->second->IsPermanent()))
+        {
+            RemoveSpellAuraHolder(iter->second, AURA_REMOVE_BY_DEFAULT);
+            spair = GetSpellAuraHolderBounds(spellId);
+            iter = spair.first;
+        }
+        else
+            ++iter;
+    }
+}
+
 void Unit::RemoveSingleAuraFromSpellAuraHolder(uint32 spellId, SpellEffectIndex effindex, ObjectGuid casterGuid, AuraRemoveMode mode)
 {
     SpellAuraHolderBounds spair = GetSpellAuraHolderBounds(spellId);
@@ -5176,11 +5197,11 @@ void Unit::Uncharm()
     }
 }
 
-void Unit::RemoveCharmAuras()
+void Unit::RemoveCharmAuras(AuraRemoveMode mode)
 {
-    RemoveSpellsCausingAura(SPELL_AURA_MOD_POSSESS);
-    RemoveSpellsCausingAura(SPELL_AURA_MOD_CHARM);
-    RemoveSpellsCausingAura(SPELL_AURA_AOE_CHARM);
+    RemoveSpellsCausingAura(SPELL_AURA_MOD_POSSESS, mode);
+    RemoveSpellsCausingAura(SPELL_AURA_MOD_CHARM, mode);
+    RemoveSpellsCausingAura(SPELL_AURA_AOE_CHARM, mode);
 }
 
 void Unit::SetPet(Pet* pet)
@@ -6272,7 +6293,10 @@ void Unit::SetInCombatWithAggressor(Unit* pAggressor, bool touchOnly/* = false*/
             pCreature->UpdateLeashExtensionTime();
 
         if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
-            pOwner->SetInCombatWithAggressor(pAggressor, false);
+        {
+            if (pOwner->IsTargetable(true, pAggressor->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
+                pOwner->SetInCombatWithAggressor(pAggressor, false);
+        }
     }
 }
 
@@ -6348,7 +6372,14 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
         SetInCombatState(combatTimer, pVictim);
 
         if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
+        {
+            if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
+            {
+                pVictim->AddThreat(pOwner);
+                pVictim->SetInCombatWithAggressor(pOwner, false);
+            }
             pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER);
+        }
     }
 }
 
@@ -6936,11 +6967,11 @@ void Unit::ResolvePendingMovementChanges(bool sendToClient, bool includingTelepo
         if ((change->movementChangeType != TELEPORT || includingTeleport) &&
             change->movementCounter == GetLastCounterForMovementChangeType(change->movementChangeType))
             ResolvePendingMovementChange(*change, sendToClient);
-        m_pendingMovementChanges.erase(change);
+        m_pendingMovementChanges.pop_front();
     }
 }
 
-void Unit::ResolvePendingMovementChange(PlayerMovementPendingChange& change, bool sendToClient)
+void Unit::ResolvePendingMovementChange(const PlayerMovementPendingChange& change, bool sendToClient)
 {
     // returns true if heartbeat required
     switch (change.movementChangeType)
@@ -7466,6 +7497,10 @@ void Unit::SetDeathState(DeathState s)
 {
     if (s != ALIVE && s != JUST_ALIVED)
     {
+        // should be before combat stop so threat is transferred in case of MC
+        if (s == JUST_DIED)
+            RemoveCharmAuras(AURA_REMOVE_BY_DEATH);
+
         CombatStop();
         DeleteThreatList();
         ClearComboPointHolders();                           // any combo points pointed to unit lost at it death

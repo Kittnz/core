@@ -84,6 +84,10 @@
 #include "Anticheat/libanticheat.hpp"
 #include "Anticheat/Config.hpp"
 
+#ifdef USING_DISCORD_BOT
+#include "DiscordBot/Bot.hpp"
+#endif
+
 #include <filesystem>
 #include <fstream>
 #include <regex>
@@ -203,6 +207,12 @@ void World::InternalShutdown()
 
     if (m_autoCommitThread.joinable())
         m_autoCommitThread.join();
+
+
+#ifdef USING_DISCORD_BOT
+    if (m_bot)
+        delete m_bot;
+#endif
 }
 
 /// Find a session by its id
@@ -1209,7 +1219,7 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_ITEM_LOG_RESTORE_QUALITY, "ItemRestoreLog.MinQuality", 3);
 
-    setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 0);
+    setConfig(CONFIG_UINT32_CHAT_MIN_LEVEL, "Chat.MinLevel", 5);
 
     setConfig(CONFIG_UINT32_ACCOUNT_DATA_LAST_LOGIN_DAYS, "AccountData.LastLoginDays", 60);
 
@@ -1412,6 +1422,9 @@ void World::SetInitialWorldSettings()
         Log::WaitBeforeContinueIfNeed();
         exit(1);
     }
+
+    sLog.outInfo("Beginning character name cleanup...");
+    CharacterDatabaseCleaner::FreeInactiveCharacterNames();
 
     ///- Loading shop tables
     sLog.outString("Loading shop...");
@@ -1802,6 +1815,10 @@ void World::SetInitialWorldSettings()
     sSpellMgr.LoadSpellGroups();
     sLog.outString("Loading spell group stack rules...");
     sSpellMgr.LoadSpellGroupStackRules();
+
+    sLog.outInfo("Beginning inactive character deletion...");
+    CharacterDatabaseCleaner::DeleteInactiveCharacters();
+
     if (getConfig(CONFIG_BOOL_RESTORE_DELETED_ITEMS))
     {
         sLog.outString("Restoring deleted items...");
@@ -1825,6 +1842,17 @@ void World::SetInitialWorldSettings()
 	sObjectMgr.FillPossibleTransmogs();
 	uint32 uTransmogFillDuration = WorldTimer::getMSTimeDiff(uTransmogFillStartTime, WorldTimer::getMSTime());
 	sLog.outString("Loading possible transmogs: %i minutes %i seconds", uTransmogFillDuration / 60000, (uTransmogFillDuration % 60000) / 1000);
+
+#ifdef USING_DISCORD_BOT
+    sLog.outString("Loading Discord Bot...");
+
+    auto token = sConfig.GetStringDefault("DiscordBot.Token", "");
+    if (!token.empty())
+    {
+        m_bot = new DiscordBot::Bot();
+        m_bot->Setup(token);
+    }
+#endif
 
     uint32 uStartInterval = WorldTimer::getMSTimeDiff(uStartTime, WorldTimer::getMSTime());
     sLog.outString("World server is up and running! Loading time: %i minutes %i seconds", uStartInterval / 60000, (uStartInterval % 60000) / 1000);
@@ -2708,7 +2736,7 @@ void World::ProcessCliCommands()
     {
         DEBUG_LOG("CLI command under processing...");
         CliCommandHolder::Print* zprint = command->m_print;
-        void* callbackArg = command->m_callbackArg;
+        std::any callbackArg = command->m_callbackArg;
         CliHandler handler(command->m_cliAccountId, command->m_cliAccessLevel, callbackArg, zprint);
         handler.ParseCommands(command->m_command);
 
@@ -3644,6 +3672,16 @@ void World::AddAsyncTask(std::function<void()> task)
 {
     std::lock_guard<std::mutex> lock(m_asyncTaskQueueMutex);
     _asyncTasks.push_back(task);
+}
+
+void World::StopDiscordBot()
+{
+#ifdef USING_DISCORD_BOT
+    if (!m_bot)
+        return;
+
+    m_bot->GetCore()->shutdown();
+#endif
 }
 
 bool World::CanSkipQueue(WorldSession const* sess)

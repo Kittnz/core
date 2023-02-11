@@ -106,10 +106,17 @@ else()
     #scripts
     shared
     framework
-    g3dlite
+    g3dlite 
     ${ACE_LIBRARIES}
   )
 endif()
+
+if(USE_DISCORD_BOT)
+    target_link_libraries(${EXECUTABLE_NAME}
+	dpp
+  )
+endif()
+
 
 if(WIN32)
   target_link_libraries(${EXECUTABLE_NAME}

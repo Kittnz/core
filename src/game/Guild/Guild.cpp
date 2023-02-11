@@ -573,30 +573,29 @@ bool Guild::DelMember(ObjectGuid guid, bool isDisbanding)
 
 void Guild::BroadcastToGuild(WorldSession *session, std::string const& msg, uint32 language)
 {
-    if (!session)
+    if (!session || session->IsFingerprintBanned())
         return;
 
     MasterPlayer* pPlayer = session->GetMasterPlayer();
+    BroadcastToGuild(pPlayer, msg, language);
+}
+
+void Guild::BroadcastToGuild(MasterPlayer* pPlayer, std::string const& msg, uint32 language)
+{
     if (!pPlayer || !HasRankRight(pPlayer->GetRank(), GR_RIGHT_GCHATSPEAK))
         return;
 
     WorldPacket data;
     ChatHandler::BuildChatPacket(data, CHAT_MSG_GUILD, msg.c_str(), Language(language), pPlayer->GetChatTag(), pPlayer->GetObjectGuid(), pPlayer->GetName());
 
-    if (session->IsFingerprintBanned())
-    {
-        session->SendPacket(&data);
-        return;
-    }
-
     for (MemberList::const_iterator itr = members.begin(); itr != members.end(); ++itr)
     {
         if (!HasRankRight(itr->second.RankId, GR_RIGHT_GCHATLISTEN))
             continue;
 
-        MasterPlayer *pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
+        MasterPlayer* pl = ObjectAccessor::FindMasterPlayer(ObjectGuid(HIGHGUID_PLAYER, itr->first));
 
-        if (pl && pl->GetSession() && !pl->GetSocial()->HasIgnore(session->GetMasterPlayer()->GetObjectGuid()))
+        if (pl && pl->GetSession() && !pl->GetSocial()->HasIgnore(pPlayer->GetObjectGuid()))
             pl->GetSession()->SendPacket(&data);
     }
 

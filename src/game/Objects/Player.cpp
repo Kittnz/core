@@ -18960,13 +18960,9 @@ void Player::SetBattleGroundEntryPoint(Player* leader /*= nullptr*/, bool queued
             return;
         }
 
-        // If flying at the time we enter, return to flight destination afterwards.
-        if (leader->IsTaxiFlying())
-        {
-            m_bgData.joinPos = WorldLocation(leader->GetMapId(), leader->movespline->FinalDestination().x, leader->movespline->FinalDestination().y, movespline->FinalDestination().z, leader->GetOrientation());
-            m_bgData.m_needSave = true;
+        // If flying at the time we enter, return to queue position.
+        if (IsTaxiFlying() && !m_bgData.joinPos.IsEmpty() && m_bgData.joinPos.mapId == GetMapId())
             return;
-        }
         
         // If map is dungeon find linked graveyard
         if (leader->GetMap()->IsDungeon())
