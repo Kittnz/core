@@ -14,6 +14,7 @@
 
 namespace DiscordBot
 {
+    class Bot;
 
     namespace detail
     {
