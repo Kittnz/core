@@ -272,7 +272,7 @@ struct EquipmentInfo
     uint32  equipentry[3];
 };
 
-#define MAX_CREATURE_IDS_PER_SPAWN 4
+#define MAX_CREATURE_IDS_PER_SPAWN 5
 
 // from `creature` table
 struct CreatureData
@@ -456,6 +456,7 @@ enum CreatureStateFlag : uint16
     CSTATE_DESPAWNING            = 0x0100,
     CSTATE_TARGETED_EMOTE        = 0x0200,
     CSTATE_IMPOSED_COOLDOWN      = 0x0400,
+    CSTATE_INIT_AI_ON_UPDATE     = 0x0800,
 };
 
 // Vendors
