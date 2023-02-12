@@ -108,6 +108,7 @@ class AccountMgr
         // Max instance reset per account per hour
         bool CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 maxCount);
         void AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_t enterTime);
+        void ResetPasswordForEmptyAccountPasswords();
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
     protected:

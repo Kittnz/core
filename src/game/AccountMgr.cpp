@@ -558,3 +558,56 @@ bool AccountPersistentData::CanMail(uint32 targetAccount)
     uint32 allowedScore = sWorld.getConfig(CONFIG_UINT32_MAILSPAM_MAX_MAILS);
     return totalScore < allowedScore;
 }
+
+void AccountMgr::ResetPasswordForEmptyAccountPasswords()
+{
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `username`, `v` FROM `account`"));
+
+    if (!result)
+    {
+        BarGoLink bar(1);
+        bar.step();
+
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> 0 accounts found");
+        return;
+    }
+
+    Field* fields = nullptr;
+    BarGoLink bar(result->GetRowCount());
+    do
+    {
+        bar.step();
+        fields = result->Fetch();
+        uint32 accid = fields[0].GetUInt32();
+        std::string username = fields[1].GetString();
+        std::string v = fields[2].GetString();
+
+        if (v.empty())
+        {
+            normalizeString(username);                       // account doesn't exist
+
+            std::string new_passwd = username;
+
+            if (utf8length(new_passwd) > MAX_ACCOUNT_STR)
+                sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, ">> password to long for %s", username);
+
+            normalizeString(new_passwd);
+
+            SRP6 srp;
+
+            srp.CalculateVerifier(CalculateShaPassHash(username, new_passwd));
+
+            const char* s_hex = srp.GetSalt().AsHexStr();
+            const char* v_hex = srp.GetVerifier().AsHexStr();
+
+            LoginDatabase.PExecute(
+                "UPDATE `account` SET `v`='%s', `s`='%s' WHERE `id`='%u'",
+                v_hex, s_hex, accid);
+
+            OPENSSL_free((void*)s_hex);
+            OPENSSL_free((void*)v_hex);
+        }
+        
+    } while (result->NextRow());
+}

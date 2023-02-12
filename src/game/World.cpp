@@ -1182,6 +1182,8 @@ void World::LoadConfigSettings(bool reload)
 
     setConfig(CONFIG_UINT32_CREATURE_SUMMON_LIMIT, "MaxCreatureSummonLimit", DEFAULT_CREATURE_SUMMON_LIMIT);
 
+    setConfig(CONFIG_BOOL_RESET_EMPTY_PASSWORD_ACCOUNT, "ResetEmptyPasswords", true);
+
     // Smartlog data
     sLog.InitSmartlogEntries(sConfig.GetStringDefault("Smartlog.ExtraEntries", ""));
     sLog.InitSmartlogGuids(sConfig.GetStringDefault("Smartlog.ExtraGuids", ""));
@@ -1809,6 +1811,13 @@ void World::SetInitialWorldSettings()
     {
         sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Restoring deleted items to players ...");
         sObjectMgr.RestoreDeletedItems();
+    }
+
+    if (getConfig(CONFIG_BOOL_RESET_EMPTY_PASSWORD_ACCOUNT))
+    {
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "");
+        sLog.Out(LOG_BASIC, LOG_LVL_MINIMAL, "Resetting empty password accounts ...");
+        sAccountMgr.ResetPasswordForEmptyAccountPasswords();
     }
 
     StartLFGQueueThread();
