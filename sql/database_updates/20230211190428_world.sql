@@ -32,3 +32,4 @@ DELETE FROM gameobject_battleground WHERE guid = '5012981';
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (872,-1223.229004,2724.196289,32.392223,5.903499,0,'blackthornecamp');
 REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (873,-1202.511841,2725.758057,32.438938,0.256487,0,'blackthorncamp');
 DELETE FROM `game_tele` WHERE `name` = 'blackthornecamp';
+REPLACE INTO `gameobject` VALUES ( 4004364, 2002392, 0, -5651.89, -4262.7, 407.722, 3, 0, 0, 0.997495, 0.0707372, 25, 25, 100, 1, 0, 0);
