@@ -336,3 +336,7 @@ WHERE entry = 60110;
 UPDATE quest_template SET
 RequestItemsText = 'Have you found Sellick Voss?'
 WHERE entry = 40565;
+-- Text edit for https://database.turtle-wow.org/?quest=60143 (RMJ).
+UPDATE quest_template SET
+OfferRewardText = 'Oh, you''ve found it! You have my eternal gratitude, $N!$B$BWill a well-tailored shirt suffice as compensation for your efforts? I keep a number of different colors in stock to suit any taste. Please, take your pick.$B$BIf a shirt is not to your liking, perhaps I could interest you in some raw material for your own purposes?'
+WHERE entry = 60143;
