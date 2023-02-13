@@ -344,3 +344,5 @@ WHERE entry = 60143;
 UPDATE quest_template SET
 OfferRewardText = 'Yes, Malos and I have spoken on occasion. He has been studying the corruption of nature for some time now, and has even offered his assistance in understanding and, perhaps someday, reversing the corruption of my kind.$B$BHe is a good and kind soul, and if he needs my help, then I will do whatever is in my power.'
 WHERE entry = 40201;
+-- Name fix for https://database.turtle-wow.org/?quest=40202 (RMJ).
+UPDATE quest_template SET title = 'Tesala''s Word' WHERE entry = 40202;
