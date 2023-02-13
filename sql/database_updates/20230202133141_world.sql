@@ -306,3 +306,68 @@ update creature set spawntimesecsmin = 300,spawntimesecsmax = 300 WHERE id in (3
 update creature_template set faction = 69 where entry = 80242;
 -- https://database.turtle-wow.org/?npc=60712 and https://database.turtle-wow.org/?npc=60734 are Mechanical and should be immune to Bleed effects.
 update creature_template set mechanic_immune_mask = 16384 where entry in (60712,60734);
+-- https://database.turtle-wow.org/?quest=40662 should be updated with the following text.
+UPDATE quest_template SET
+Details = 'Who would suspect a Kul Tiran sailor to show so much affection? Those that many call crass, blunt, and overly loud at that.$B$BHe has surpised me, in a rather nice way; to be remembered after such a long time really is a compliment.$B$BHere, I prepared a letter for him, and -just- for him. Do not think to pry it open, my magic will know if you do.$B$B<She gives a wicked stare, and lets out a laugh to ease her feigned threat.>$B$BTake it to the sailor, and let him know his actions are appreciated.'
+WHERE entry = 40662;
+-- https://database.turtle-wow.org/?quest=40663 should be updated with the following text (RMJ).
+UPDATE quest_template SET
+Details = 'All this time stationed around and yet we hardly have any ale to tide over the boredom.$B$BSay mainlander, you must have freedom to walk the streets of the city without a job looming over your head, how about a favor?$B$BWe are currently busy with tasks during the day, but we could use some loosening up during the night, if you catch my drift.$B$BHead into the city, it should be ripe with ale, find me 3 Flasks of Port, that should do quite well.',
+Objectives = 'Find 3 Flasks of Port for Sailor Valia at the Kul Tiran Embassy in Stormwind Harbor.',
+RequestItemsText = 'So, you find the port...?$B$BLike the ale.',
+OfferRewardText = 'Ahh, this is the good stuff.$B$BWell, from one sailor to, whatever you are mainlander, thanks a bunch.'
+WHERE entry = 40663;
+-- Change display ID of item 60859 to 26771.
+update item_template set display_id = 26771 where entry = 60859; 
+-- Fix item names for DB display (RMJ).
+UPDATE item_template SET Name = 'Ranger''s Letter' WHERE entry = 80226;
+UPDATE item_template SET Name = 'Magister''s Letter' WHERE entry = 80227;
+UPDATE item_template SET Name = 'Paladin''s Letter' WHERE entry = 80228;
+UPDATE item_template SET Name = 'Priest''s Letter' WHERE entry = 80229;
+UPDATE item_template SET Name = 'Swordsman''s Letter' WHERE entry = 80231;
+-- Text edit for https://database.turtle-wow.org/?quest=40564 (RMJ).
+UPDATE quest_template SET OfferRewardText = 'What did you learn, soldier?' WHERE entry = 40564;
+-- Text edit for https://database.turtle-wow.org/?quest=60110 (RMJ).
+UPDATE quest_template SET
+Objectives = 'Kill Githyiss the Vile and collect her Venom Sac, then return to Gilshalan Windwalker.',
+OfferRewardText = 'Do not be troubled by what needed be done, $N. Githyiss was aggressive beyond our ability to manage. The reason for this, I do not know, but one I hope to uncover in my research.$B$BHold your head with pride; you have ensured the continued safety of Shadowglen.'
+WHERE entry = 60110;
+-- Text edit for https://database.turtle-wow.org/?quest=40565 (RMJ).
+UPDATE quest_template SET
+RequestItemsText = 'Have you found Sellick Voss?'
+WHERE entry = 40565;
+-- Text edit for https://database.turtle-wow.org/?quest=60143 (RMJ).
+UPDATE quest_template SET
+OfferRewardText = 'Oh, you''ve found it! You have my eternal gratitude, $N!$B$BWill a well-tailored shirt suffice as compensation for your efforts? I keep a number of different colors in stock to suit any taste. Please, take your pick.$B$BIf a shirt is not to your liking, perhaps I could interest you in some raw material for your own purposes?'
+WHERE entry = 60143;
+-- Text edit for https://database.turtle-wow.org/?quest=40201 (RMJ).
+UPDATE quest_template SET
+OfferRewardText = 'Yes, Malos and I have spoken on occasion. He has been studying the corruption of nature for some time now, and has even offered his assistance in understanding and, perhaps someday, reversing the corruption of my kind.$B$BHe is a good and kind soul, and if he needs my help, then I will do whatever is in my power.'
+WHERE entry = 40201;
+-- Name fix for https://database.turtle-wow.org/?quest=40202 (RMJ).
+UPDATE quest_template SET title = 'Tesala''s Word' WHERE entry = 40202;
+-- Text fix for https://database.turtle-wow.org/?quest=40203 (RMJ).
+UPDATE quest_template SET
+Details = 'I fear there is no recourse but to destroy the treant lest it cause harm to our people or the creatures of Teldrassil. From the information Tesala provided, we can safely assume that it will be patrolling the eastern banks of the Wellspring Lake.$B$BSeek the Distorted Treant out, give it a merciful end, and bring back a sample of its roots that I may better understand what possessed it. Exercise caution: a Protector is not likely to go without a fight.$B$BGo quickly now. That treant may hold answers to what lies at the heart of nature''s unrest here in Teldrassil.',
+OfferRewardText = '<Malos contemplates the roots you hand him with a look of great concern.>$B$BThese roots appear decayed, as if the treant was already dead by the time you found it. What a horrible fate for a forest protector... No, for any of nature''s creatures. I cannot begin to fathom how this could have happened.$B$BThis is a disturbing revelation indeed, and I am afraid that it raises more questions than answers. My research continues without the breakthrough we had hope for. Nonetheless, you have done both myself and the forests a great service. Please, take one of these items as a token of my gratitude.'
+WHERE entry = 40203;
+-- Text fix for https://database.turtle-wow.org/?quest=40204 (RMJ).
+UPDATE quest_template SET
+OfferRewardText = 'Have you come to aid in securing the Darnassus perimeter?$B$BThat is good to hear. We are in need of all the assistance available with the sentinel forces spread so thin. Recent events have strained our resources, and we now defend not only Ashenvale and Darkshore, but our homes here in Teldrassil as well.'
+WHERE entry = 40204;
+-- Text fix for https://database.turtle-wow.org/?quest=40205 (RMJ).
+UPDATE quest_template SET
+OfferRewardText = 'You have done a great service to the Kaldorei today, $N. Though I weep for the fate of our former allies, sorrow cannot give way to weakness.$B$BElune guided your hand in defending our people''s lands, and for carrying out her will, you are to be rewarded.'
+WHERE entry = 40205;
+-- NPC GUID 2567483, 2567482 set respawn time to 10 hrs.
+update creature set spawntimesecsmin = 36000, spawntimesecsmax = 36000 where guid in (2567483,2567482);
+-- Rew money and rew reputation added for quests 40704 and 40705.
+update quest_template set rewmoneymaxlevel = 630, rewrepfaction1 = 470, rewrepvalue1 = 150 where entry in (40704,40705);
+-- Fixes for new Alliance Stonetalon quests (RMJ).
+UPDATE quest_template SET NextQuestInChain = 40695 WHERE entry = 40694;
+UPDATE quest_template SET NextQuestInChain = 40696 WHERE entry = 40695;
+UPDATE quest_template SET NextQuestInChain = 40701 WHERE entry = 40700;
+-- Rew money added for quests 40608,40694,40695,40696,40700,40701,40702.
+update quest_template set rewmoneymaxlevel = 650 where entry in (40608,40694,40695,40696);
+update quest_template set rewmoneymaxlevel = 500 where entry in (40700,40701);
+update quest_template set rewmoneymaxlevel = 780 where entry = 40702;

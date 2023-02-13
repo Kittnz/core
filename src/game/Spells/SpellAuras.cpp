@@ -3361,9 +3361,6 @@ void Aura::HandleModCharm(bool apply, bool Real)
         target->AttackStop();
         target->InterruptNonMeleeSpells(false);
 
-        if (caster->IsPlayer()) // Units will make the controlled player attack (MoveChase)
-            target->GetMotionMaster()->MoveFollow(caster, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
-
         if (Creature* pCreatureTarget = target->ToCreature())
         {
             pCreatureTarget->SetReactState(charmInfo->GetReactState());
@@ -3416,7 +3413,13 @@ void Aura::HandleModCharm(bool apply, bool Real)
         target->UpdateControl();
 
         if (caster->IsPlayer())
+        {
+            target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
             static_cast<Player*>(caster)->CharmSpellInitialize();
+            target->GetMotionMaster()->MoveFollow(caster, PET_FOLLOW_DIST, PET_FOLLOW_ANGLE);
+        }
+        else
+            target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
     }
     else
     {
@@ -3507,6 +3510,8 @@ void Aura::HandleModCharm(bool apply, bool Real)
 
         if (pCreatureTarget)
         {
+            target->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+
             bool canAttack; // never attack if we needed to switch AI but couldn't
             if (pCreatureTarget->AI() && pCreatureTarget->AI()->SwitchAiAtControl())
                 canAttack = pCreatureTarget->AIM_Initialize();
@@ -3519,6 +3524,8 @@ void Aura::HandleModCharm(bool apply, bool Real)
         }
         else if (pPlayerTarget)
         {
+            target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PLAYER_CONTROLLED);
+
             pPlayerTarget->RemoveAI();
 
             // Charmed players are seen as hostile and not in the group for other clients, restore

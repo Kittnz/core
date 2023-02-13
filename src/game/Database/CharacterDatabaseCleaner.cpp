@@ -224,7 +224,24 @@ void CharacterDatabaseCleaner::DeleteInactiveCharacters()
     else
         sLog.outInfo("No banned accounts found.");
 
-    sLog.outInfo("CharCleanup #2: Loading item count per character...");
+    sLog.outInfo("CharCleanup #2: Loading inactive accounts...");
+    std::set<uint32> inactiveAccounts;
+    pQuery.reset(LoginDatabase.Query("SELECT `id` FROM `account` WHERE `last_login` < date_sub(now(), interval 2 year)"));
+
+    if (!pQuery)
+    {
+        sLog.outInfo("No inactive accounts found.");
+        return;
+    }
+
+    do
+    {
+        Field* fields = pQuery->Fetch();
+        uint32 accountId = fields[0].GetUInt32();
+        inactiveAccounts.insert(accountId);
+    } while (pQuery->NextRow());
+
+    sLog.outInfo("CharCleanup #3: Loading item count per character...");
     pQuery.reset(CharacterDatabase.Query("SELECT `guid`, COUNT(`item`) FROM `character_inventory` GROUP BY `guid`"));
     std::set<uint32> lessThanTenItemsChars;
     if (pQuery)
@@ -246,7 +263,7 @@ void CharacterDatabaseCleaner::DeleteInactiveCharacters()
     std::set<std::string> bannedNames;
     std::set<uint32> charsToDelete;
 
-    sLog.outInfo("CharCleanup #3: Loading characters...");
+    sLog.outInfo("CharCleanup #4: Loading characters...");
     //                                             0       1          2       3        4
     pQuery.reset(CharacterDatabase.PQuery("SELECT `guid`, `account`, `name`, `level`, `money` FROM `characters` WHERE `name` != '' && `logout_time` < %u", twoYearsAgo));
 
@@ -265,6 +282,10 @@ void CharacterDatabaseCleaner::DeleteInactiveCharacters()
         uint32 level = fields[3].GetUInt32();
         uint32 money = fields[4].GetUInt32();
 
+        // only if whole account is inactive
+        if (inactiveAccounts.find(accountId) == inactiveAccounts.end())
+            continue;
+
         // prevent banned names from being used again
         if (bannedAccounts.find(accountId) != bannedAccounts.end())
         {
@@ -274,7 +295,7 @@ void CharacterDatabaseCleaner::DeleteInactiveCharacters()
             charsToDelete.insert(guid);
             sLog.outInfo("Inactive character %s (guid %u) will be deleted because its banned.", name.c_str(), guid);
         }
-        else if (money < 1 * GOLD && level < 10 &&
+        else if (money < 5 * GOLD && level < 10 &&
                  lessThanTenItemsChars.find(guid) != lessThanTenItemsChars.end())
         {
             charsToDelete.insert(guid);
@@ -289,7 +310,7 @@ void CharacterDatabaseCleaner::DeleteInactiveCharacters()
         return;
     }
 
-    sLog.outInfo("CharCleanup #4: Deleting %u characters...", (uint32)charsToDelete.size());
+    sLog.outInfo("CharCleanup #5: Deleting %u characters...", (uint32)charsToDelete.size());
     for (auto const& guidLow : charsToDelete)
     {
         ObjectGuid guid(HIGHGUID_PLAYER, guidLow);
@@ -298,7 +319,7 @@ void CharacterDatabaseCleaner::DeleteInactiveCharacters()
 
     if (!bannedNames.empty())
     {
-        sLog.outInfo("CharCleanup #5: Reserving banned names...");
+        sLog.outInfo("CharCleanup #6: Reserving banned names...");
         for (auto name : bannedNames)
         {
             WorldDatabase.escape_string(name);
