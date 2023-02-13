@@ -371,3 +371,5 @@ UPDATE quest_template SET NextQuestInChain = 40701 WHERE entry = 40700;
 update quest_template set rewmoneymaxlevel = 650 where entry in (40608,40694,40695,40696);
 update quest_template set rewmoneymaxlevel = 500 where entry in (40700,40701);
 update quest_template set rewmoneymaxlevel = 780 where entry = 40702;
+-- Item 60976, 60977, 60978 add required level 55.
+update item_template set required_level = 55 where entry in (60976,60977,60978);
