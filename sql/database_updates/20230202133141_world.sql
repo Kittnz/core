@@ -325,3 +325,5 @@ UPDATE item_template SET Name = 'Magister''s Letter' WHERE entry = 80227;
 UPDATE item_template SET Name = 'Paladin''s Letter' WHERE entry = 80228;
 UPDATE item_template SET Name = 'Priest''s Letter' WHERE entry = 80229;
 UPDATE item_template SET Name = 'Swordsman''s Letter' WHERE entry = 80231;
+-- Text edit for https://database.turtle-wow.org/?quest=40564 (RMJ).
+UPDATE quest_template SET OfferRewardText = 'What did you learn, soldier?' WHERE entry = 40564;
