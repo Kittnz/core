@@ -363,3 +363,7 @@ WHERE entry = 40205;
 update creature set spawntimesecsmin = 36000, spawntimesecsmax = 36000 where guid in (2567483,2567482);
 -- Rew money and rew reputation added for quests 40704 and 40705.
 update quest_template set reworreqmoney = 630, rewrepfaction1 = 470, rewrepvalue1 = 150 where entry in (40704,40705);
+-- Fixes for new Alliance Stonetalon quests (RMJ).
+UPDATE quest_template SET NextQuestInChain = 40695 WHERE entry = 40694;
+UPDATE quest_template SET NextQuestInChain = 40696 WHERE entry = 40695;
+UPDATE quest_template SET NextQuestInChain = 40701 WHERE entry = 40700;
