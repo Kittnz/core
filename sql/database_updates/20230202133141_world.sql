@@ -332,3 +332,7 @@ UPDATE quest_template SET
 Objectives = 'Kill Githyiss the Vile and collect her Venom Sac, then return to Gilshalan Windwalker.',
 OfferRewardText = 'Do not be troubled by what needed be done, $N. Githyiss was aggressive beyond our ability to manage. The reason for this, I do not know, but one I hope to uncover in my research.$B$BHold your head with pride; you have ensured the continued safety of Shadowglen.'
 WHERE entry = 60110;
+-- Text edit for https://database.turtle-wow.org/?quest=40565 (RMJ).
+UPDATE quest_template SET
+RequestItemsText = 'Have you found Sellick Voss?'
+WHERE entry = 40565;
