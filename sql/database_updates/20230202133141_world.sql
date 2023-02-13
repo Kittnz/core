@@ -306,3 +306,7 @@ update creature set spawntimesecsmin = 300,spawntimesecsmax = 300 WHERE id in (3
 update creature_template set faction = 69 where entry = 80242;
 -- https://database.turtle-wow.org/?npc=60712 and https://database.turtle-wow.org/?npc=60734 are Mechanical and should be immune to Bleed effects.
 update creature_template set mechanic_immune_mask = 16384 where entry in (60712,60734);
+-- https://database.turtle-wow.org/?quest=40662 should be updated with the following text.
+UPDATE quest_template SET
+Details = 'Who would suspect a Kul Tiran sailor to show so much affection? Those that many call crass, blunt, and overly loud at that.$B$BHe has surpised me, in a rather nice way; to be remembered after such a long time really is a compliment.$B$BHere, I prepared a letter for him, and -just- for him. Do not think to pry it open, my magic will know if you do.$B$B<She gives a wicked stare, and lets out a laugh to ease her feigned threat.>$B$BTake it to the sailor, and let him know his actions are appreciated.'
+WHERE entry = 40662;
