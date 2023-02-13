@@ -355,4 +355,7 @@ WHERE entry = 40203;
 UPDATE quest_template SET
 OfferRewardText = 'Have you come to aid in securing the Darnassus perimeter?$B$BThat is good to hear. We are in need of all the assistance available with the sentinel forces spread so thin. Recent events have strained our resources, and we now defend not only Ashenvale and Darkshore, but our homes here in Teldrassil as well.'
 WHERE entry = 40204;
-
+-- Text fix for https://database.turtle-wow.org/?quest=40205 (RMJ).
+UPDATE quest_template SET
+OfferRewardText = 'You have done a great service to the Kaldorei today, $N. Though I weep for the fate of our former allies, sorrow cannot give way to weakness.$B$BElune guided your hand in defending our people''s lands, and for carrying out her will, you are to be rewarded.'
+WHERE entry = 40205;
