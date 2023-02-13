@@ -359,3 +359,5 @@ WHERE entry = 40204;
 UPDATE quest_template SET
 OfferRewardText = 'You have done a great service to the Kaldorei today, $N. Though I weep for the fate of our former allies, sorrow cannot give way to weakness.$B$BElune guided your hand in defending our people''s lands, and for carrying out her will, you are to be rewarded.'
 WHERE entry = 40205;
+-- NPC GUID 2567483, 2567482 set respawn time to 10 hrs.
+update creature set spawntimesecsmin = 36000, spawntimesecsmax = 36000 where guid in (2567483,2567482);
