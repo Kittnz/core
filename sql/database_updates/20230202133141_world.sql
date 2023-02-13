@@ -310,3 +310,10 @@ update creature_template set mechanic_immune_mask = 16384 where entry in (60712,
 UPDATE quest_template SET
 Details = 'Who would suspect a Kul Tiran sailor to show so much affection? Those that many call crass, blunt, and overly loud at that.$B$BHe has surpised me, in a rather nice way; to be remembered after such a long time really is a compliment.$B$BHere, I prepared a letter for him, and -just- for him. Do not think to pry it open, my magic will know if you do.$B$B<She gives a wicked stare, and lets out a laugh to ease her feigned threat.>$B$BTake it to the sailor, and let him know his actions are appreciated.'
 WHERE entry = 40662;
+-- https://database.turtle-wow.org/?quest=40663 should be updated with the following text (RMJ).
+UPDATE quest_template SET
+Details = 'All this time stationed around and yet we hardly have any ale to tide over the boredom.$B$BSay mainlander, you must have freedom to walk the streets of the city without a job looming over your head, how about a favor?$B$BWe are currently busy with tasks during the day, but we could use some loosening up during the night, if you catch my drift.$B$BHead into the city, it should be ripe with ale, find me 3 Flasks of Port, that should do quite well.',
+Objectives = 'Find 3 Flasks of Port for Sailor Valia at the Kul Tiran Embassy in Stormwind Harbor.',
+RequestItemsText = 'So, you find the port...?$B$BLike the ale.',
+OfferRewardText = 'Ahh, this is the good stuff.$B$BWell, from one sailor to, whatever you are mainlander, thanks a bunch.'
+WHERE entry = 40663;
