@@ -361,3 +361,5 @@ OfferRewardText = 'You have done a great service to the Kaldorei today, $N. Thou
 WHERE entry = 40205;
 -- NPC GUID 2567483, 2567482 set respawn time to 10 hrs.
 update creature set spawntimesecsmin = 36000, spawntimesecsmax = 36000 where guid in (2567483,2567482);
+-- Rew money and rew reputation added for quests 40704 and 40705.
+update quest_template set reworreqmoney = 630, rewrepfaction1 = 470, rewrepvalue1 = 150 where entry in (40704,40705);
