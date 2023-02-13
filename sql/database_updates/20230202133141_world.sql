@@ -340,3 +340,7 @@ WHERE entry = 40565;
 UPDATE quest_template SET
 OfferRewardText = 'Oh, you''ve found it! You have my eternal gratitude, $N!$B$BWill a well-tailored shirt suffice as compensation for your efforts? I keep a number of different colors in stock to suit any taste. Please, take your pick.$B$BIf a shirt is not to your liking, perhaps I could interest you in some raw material for your own purposes?'
 WHERE entry = 60143;
+-- Text edit for https://database.turtle-wow.org/?quest=40201 (RMJ).
+UPDATE quest_template SET
+OfferRewardText = 'Yes, Malos and I have spoken on occasion. He has been studying the corruption of nature for some time now, and has even offered his assistance in understanding and, perhaps someday, reversing the corruption of my kind.$B$BHe is a good and kind soul, and if he needs my help, then I will do whatever is in my power.'
+WHERE entry = 40201;
