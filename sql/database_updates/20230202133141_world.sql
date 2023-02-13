@@ -317,3 +317,6 @@ Objectives = 'Find 3 Flasks of Port for Sailor Valia at the Kul Tiran Embassy in
 RequestItemsText = 'So, you find the port...?$B$BLike the ale.',
 OfferRewardText = 'Ahh, this is the good stuff.$B$BWell, from one sailor to, whatever you are mainlander, thanks a bunch.'
 WHERE entry = 40663;
+-- Change display ID of item 60859 to 26771.
+update item_template set display_id = 26771 where entry = 60859; 
+
