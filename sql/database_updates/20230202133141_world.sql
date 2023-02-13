@@ -319,4 +319,9 @@ OfferRewardText = 'Ahh, this is the good stuff.$B$BWell, from one sailor to, wha
 WHERE entry = 40663;
 -- Change display ID of item 60859 to 26771.
 update item_template set display_id = 26771 where entry = 60859; 
-
+-- Fix item names for DB display (RMJ).
+UPDATE item_template SET Name = 'Ranger''s Letter' WHERE entry = 80226;
+UPDATE item_template SET Name = 'Magister''s Letter' WHERE entry = 80227;
+UPDATE item_template SET Name = 'Paladin''s Letter' WHERE entry = 80228;
+UPDATE item_template SET Name = 'Priest''s Letter' WHERE entry = 80229;
+UPDATE item_template SET Name = 'Swordsman''s Letter' WHERE entry = 80231;
