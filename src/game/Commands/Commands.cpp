@@ -3778,17 +3778,22 @@ bool ChatHandler::HandleBanFingerprintCommand(char* args)
         return false;
     }
 
-    do
+    if (result)
     {
-        Field* fields = result->Fetch();
+        do
+        {
+            Field* fields = result->Fetch();
 
-        std::string username = fields[0].GetCppString();
-        if (!AccountMgr::normalizeString(username))
-            continue;
+            std::string username = fields[0].GetCppString();
+            if (!AccountMgr::normalizeString(username))
+                continue;
 
-        accountNames.insert(username);
+            accountNames.insert(username);
 
-    } while (result->NextRow());
+        } while (result->NextRow());
+
+    }
+
 
     for (const auto& accountName : accountNames)
     {
