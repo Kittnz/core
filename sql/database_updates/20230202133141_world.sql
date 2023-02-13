@@ -346,3 +346,10 @@ OfferRewardText = 'Yes, Malos and I have spoken on occasion. He has been studyin
 WHERE entry = 40201;
 -- Name fix for https://database.turtle-wow.org/?quest=40202 (RMJ).
 UPDATE quest_template SET title = 'Tesala''s Word' WHERE entry = 40202;
+-- Text fix for https://database.turtle-wow.org/?quest=40203 (RMJ).
+UPDATE quest_template SET
+Details = 'I fear there is no recourse but to destroy the treant lest it cause harm to our people or the creatures of Teldrassil. From the information Tesala provided, we can safely assume that it will be patrolling the eastern banks of the Wellspring Lake.$B$BSeek the Distorted Treant out, give it a merciful end, and bring back a sample of its roots that I may better understand what possessed it. Exercise caution: a Protector is not likely to go without a fight.$B$BGo quickly now. That treant may hold answers to what lies at the heart of nature''s unrest here in Teldrassil.',
+OfferRewardText = '<Malos contemplates the roots you hand him with a look of great concern.>$B$BThese roots appear decayed, as if the treant was already dead by the time you found it. What a horrible fate for a forest protector... No, for any of nature''s creatures. I cannot begin to fathom how this could have happened.$B$BThis is a disturbing revelation indeed, and I am afraid that it raises more questions than answers. My research continues without the breakthrough we had hope for. Nonetheless, you have done both myself and the forests a great service. Please, take one of these items as a token of my gratitude.'
+WHERE entry = 40203;
+ 
+
