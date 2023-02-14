@@ -3684,6 +3684,16 @@ void World::StopDiscordBot()
 #endif
 }
 
+void World::SendDiscordMessage(uint64 channelId, std::string message)
+{
+#ifdef USING_DISCORD_BOT
+    if (!m_bot)
+        return;
+
+    m_bot->SendMessageToChannel(channelId, message);
+#endif
+}
+
 bool World::CanSkipQueue(WorldSession const* sess)
 {
     if (sess->GetSecurity() > SEC_PLAYER)
