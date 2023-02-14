@@ -61,6 +61,9 @@ void AutoScaler::Scale(DungeonMap* map)
     if (map->GetId() == 533 && playerCount < 35)
         playerCount = 35;
 
+    if (map->GetId() == 532) // kara, dont scale
+        return;
+
     auto& lock = map->GetObjectLock();
     Read_Mutex_Guard guard{ lock };
     auto& container = const_cast<TypeUnorderedMapContainer<AllMapStoredObjectTypes, ObjectGuid>&>(map->GetObjectStore());
