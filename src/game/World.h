@@ -813,6 +813,7 @@ class World
 		void InternalShutdown();
 
         void StopDiscordBot();
+        void SendDiscordMessage(uint64 channelId, std::string message);
 
         typedef std::unordered_map<uint32, WorldSession*> SessionMap;
         typedef std::set<WorldSession*> SessionSet;
