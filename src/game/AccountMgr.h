@@ -106,11 +106,17 @@ class AccountMgr
         void UnbanIP(std::string const& ip) { m_ipBanned.erase(ip); }
         void BanAccount(uint32 account, uint32 unbandate) { m_accountBanned[account] = unbandate; }
         void UnbanAccount(uint32 acc) { m_accountBanned.erase(acc); }
+        
         void BanFingerprint(uint32 fingerprint, uint32 unbandate) { m_fingerprintBanned[fingerprint] = unbandate; }
+        bool BanFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler);
         void UnbanFingerprint(uint32 fingerprint) { m_fingerprintBanned.erase(fingerprint); }
         bool IsIPBanned(std::string const& ip) const;
         bool IsAccountBanned(uint32 acc) const;
         bool IsFingerprintBanned(uint32 fingerprint) const;
+        void AddAutobanFingerprint(uint32 fingerprint) { m_fingerprintAutoban.insert(fingerprint); }
+        void RemoveAutobanFingerprint(uint32 fingerprint) { m_fingerprintAutoban.erase(fingerprint); }
+        bool ShouldAutoBanFingerprint(uint32 fingerprint) const { return m_fingerprintAutoban.find(fingerprint) != m_fingerprintAutoban.end(); };
+
         // Max instance reset per account per hour
         bool CheckInstanceCount(uint32 accountId, uint32 instanceId, uint32 maxCount);
         void AddInstanceEnterTime(uint32 accountId, uint32 instanceId, time_t enterTime);
@@ -125,8 +131,10 @@ class AccountMgr
     protected:
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;
+        uint32 m_fingerprintAutobanTimer;
         std::map<std::string, uint32> m_ipBanned;
         std::map<uint32, uint32> m_fingerprintBanned;
+        std::set<uint32> m_fingerprintAutoban;
         std::map<uint32, uint32> m_accountBanned;
         typedef std::map<uint32 /* instanceId */, time_t /* enter time */> InstanceEnterTimesMap;
         typedef std::map<uint32 /* accountId */, InstanceEnterTimesMap> AccountInstanceEnterTimesMap;
