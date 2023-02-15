@@ -1,10 +1,18 @@
 //This file included in Anticheat.h. This private table information
 
+static ChatCommand anticheatFingerprintAutobanCommandTable[] =
+{
+    { "add",      SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintAutobanAddCommand,      "", nullptr },
+    { "remove",   SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand,   "", nullptr },
+    { nullptr,   0,                  false, nullptr,                                             "", nullptr },
+};
+
 static ChatCommand anticheatFingerprintCommandTable[] =
 {
     { "list",      SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintListCommand,      "", nullptr },
     { "history",   SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintHistoryCommand,      "", nullptr },
     { "ahistory",  SEC_ADMINISTRATOR, false, &ChatHandler::HandleAnticheatFingerprintAHistoryCommand,      "", nullptr },
+    { "autoban",  SEC_ADMINISTRATOR, false, nullptr,                                            "", anticheatFingerprintAutobanCommandTable },
     { nullptr,   0,                  false, nullptr,                                             "", nullptr },
 };
 

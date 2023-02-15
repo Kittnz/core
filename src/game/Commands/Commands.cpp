@@ -3767,47 +3767,7 @@ bool ChatHandler::HandleBanFingerprintCommand(char* args)
 
     std::string reason(cReason);
 
-    auto accountNames = sWorld.GetAccountNamesByFingerprint(fingerprint);
-
-    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `username` FROM `account` WHERE `id` IN (SELECT `account` FROM `system_fingerprint_usage` WHERE `fingerprint`=%u)", fingerprint));
-
-    if (!result && accountNames.empty())
-    {
-        SendSysMessage("No accounts with that fingerprint found.");
-        SetSentErrorMessage(true);
-        return false;
-    }
-
-    if (result)
-    {
-        do
-        {
-            Field* fields = result->Fetch();
-
-            std::string username = fields[0].GetCppString();
-            if (!AccountMgr::normalizeString(username))
-                continue;
-
-            accountNames.insert(username);
-
-        } while (result->NextRow());
-
-    }
-
-
-    for (const auto& accountName : accountNames)
-    {
-        PSendSysMessage("Banning account %s...", accountName.c_str());
-        sWorld.BanAccount(BAN_ACCOUNT, accountName, duration_secs, reason, m_session ? m_session->GetPlayerName() : "");
-
-        LoginDatabase.escape_string(reason);
-        std::string safe_author = m_session ? m_session->GetPlayerName() : "CONSOLE";
-        LoginDatabase.escape_string(safe_author);
-        LoginDatabase.PExecute("REPLACE INTO `fingerprint_banned` (`fingerprint`, `bandate`, `unbandate`, `bannedby`, `banreason`) VALUES (%u,UNIX_TIMESTAMP(),UNIX_TIMESTAMP()+%u,'%s','%s')", fingerprint, duration_secs, safe_author.c_str(), reason.c_str());
-        sAccountMgr.BanFingerprint(fingerprint, sWorld.GetGameTime() + duration_secs);
-    }
-
-    return true;
+    return sAccountMgr.BanFingerprint(fingerprint, duration_secs, reason, this);
 }
 
 void ChatHandler::SendBanResult(BanMode mode, BanReturn result, std::string& banTarget, uint32 duration_secs, std::string& reason)
