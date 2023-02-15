@@ -37,7 +37,7 @@
 
 INSTANTIATE_SINGLETON_1(AccountMgr);
 
-AccountMgr::AccountMgr() : m_banlistUpdateTimer(0)
+AccountMgr::AccountMgr() : m_banlistUpdateTimer(0), m_fingerprintAutobanTimer(0)
 {}
 
 AccountMgr::~AccountMgr()
@@ -310,6 +310,18 @@ void AccountMgr::Update(uint32 diff)
     }
     else
         m_banlistUpdateTimer -= diff;
+
+    if (m_fingerprintAutobanTimer < diff)
+    {
+        sLog.outInfo("Auto banning %u fingerprints.", (uint32)m_fingerprintAutoban.size());
+        m_fingerprintAutobanTimer = 60 * MINUTE * IN_MILLISECONDS;
+        for (auto const& fingerprint : m_fingerprintAutoban)
+        {
+            BanFingerprint(fingerprint, -1, "Fingerprint Autoban", nullptr);
+        }
+    }
+    else
+        m_fingerprintAutobanTimer -= diff;
 }
 
 void AccountMgr::LoadIPBanList(bool silent)
@@ -361,21 +373,74 @@ void AccountMgr::LoadFingerprintBanList(bool silent)
 {
     std::unique_ptr<QueryResult> banresult(LoginDatabase.PQuery("SELECT `fingerprint`, `unbandate`, `bandate` FROM `fingerprint_banned` WHERE (`unbandate` > UNIX_TIMESTAMP() OR `bandate` = `unbandate`)"));
 
-    if (!banresult)
+    if (banresult)
     {
-        return;
+        m_fingerprintBanned.clear();
+        do
+        {
+            Field* fields = banresult->Fetch();
+            uint32 unbandate = fields[1].GetUInt32();
+            uint32 bandate = fields[2].GetUInt32();
+            if (unbandate == bandate)
+                unbandate = 0xFFFFFFFF;
+            m_fingerprintBanned[fields[0].GetUInt32()] = unbandate;
+        } while (banresult->NextRow());
     }
 
-    m_fingerprintBanned.clear();
+    banresult.reset(LoginDatabase.PQuery("SELECT `fingerprint` FROM `fingerprint_autoban`"));
+
+    if (banresult)
+    {
+        m_fingerprintAutoban.clear();
+        do
+        {
+            Field* fields = banresult->Fetch();
+            uint32 fingerprint = fields[0].GetUInt32();
+            m_fingerprintAutoban.insert(fingerprint);
+        } while (banresult->NextRow());
+    }
+}
+
+bool AccountMgr::BanFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler)
+{
+    auto accountNames = sWorld.GetAccountNamesByFingerprint(fingerprint);
+
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `username` FROM `account` WHERE `id` IN (SELECT `account` FROM `system_fingerprint_usage` WHERE `fingerprint`=%u)", fingerprint));
+
+    if (!result && accountNames.empty())
+    {
+        if (chatHandler)
+            chatHandler->SendSysMessage("No accounts with that fingerprint found.");
+
+        return false;
+    }
+
     do
     {
-        Field* fields = banresult->Fetch();
-        uint32 unbandate = fields[1].GetUInt32();
-        uint32 bandate = fields[2].GetUInt32();
-        if (unbandate == bandate)
-            unbandate = 0xFFFFFFFF;
-        m_fingerprintBanned[fields[0].GetUInt32()] = unbandate;
-    } while (banresult->NextRow());
+        Field* fields = result->Fetch();
+
+        std::string username = fields[0].GetCppString();
+        if (!AccountMgr::normalizeString(username))
+            continue;
+
+        accountNames.insert(username);
+
+    } while (result->NextRow());
+
+    for (const auto& accountName : accountNames)
+    {
+        if (chatHandler)
+            chatHandler->PSendSysMessage("Banning account %s...", accountName.c_str());
+        sWorld.BanAccount(BAN_ACCOUNT, accountName, duration_secs, reason, chatHandler && chatHandler->GetSession() ? chatHandler->GetSession()->GetPlayerName() : "");
+
+        LoginDatabase.escape_string(reason);
+        std::string safe_author = chatHandler && chatHandler->GetSession() ? chatHandler->GetSession()->GetPlayerName() : "CONSOLE";
+        LoginDatabase.escape_string(safe_author);
+        LoginDatabase.PExecute("REPLACE INTO `fingerprint_banned` (`fingerprint`, `bandate`, `unbandate`, `bannedby`, `banreason`) VALUES (%u,UNIX_TIMESTAMP(),UNIX_TIMESTAMP()+%u,'%s','%s')", fingerprint, duration_secs, safe_author.c_str(), reason.c_str());
+        sAccountMgr.BanFingerprint(fingerprint, sWorld.GetGameTime() + duration_secs);
+    }
+
+    return true;
 }
 
 bool AccountMgr::IsIPBanned(std::string const& ip) const

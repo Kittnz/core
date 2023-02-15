@@ -209,6 +209,52 @@ bool ChatHandler::HandleAnticheatFingerprintAHistoryCommand(char* args)
     return true;
 }
 
+bool ChatHandler::HandleAnticheatFingerprintAutobanAddCommand(char* args)
+{
+    uint32 fingerprint = 0;
+    if (!ExtractUInt32(&args, fingerprint))
+        return false;
+
+    if (!fingerprint)
+        return false;
+
+    char* cReason = ExtractArg(&args);
+    if (!cReason)
+        return false;
+
+    std::string reason(cReason);
+    LoginDatabase.escape_string(reason);
+
+    LoginDatabase.PExecute("REPLACE INTO `fingerprint_autoban` (`fingerprint`, `banreason`) VALUES (%u, '%s')", fingerprint, reason.c_str());
+    sAccountMgr.AddAutobanFingerprint(fingerprint);
+    PSendSysMessage("Accounts that connect with fingerprint %u will be automatically banned periodically.", fingerprint);
+
+    return true;
+}
+
+bool ChatHandler::HandleAnticheatFingerprintAutobanRemoveCommand(char* args)
+{
+    uint32 fingerprint = 0;
+    if (!ExtractUInt32(&args, fingerprint))
+        return false;
+
+    if (!fingerprint)
+        return false;
+
+    char* cReason = ExtractArg(&args);
+    if (!cReason)
+        return false;
+
+    std::string reason(cReason);
+    LoginDatabase.escape_string(reason);
+
+    LoginDatabase.PExecute("DELETE FROM `fingerprint_autoban` WHERE `fingerprint`=%u", fingerprint);
+    sAccountMgr.RemoveAutobanFingerprint(fingerprint);
+    PSendSysMessage("Removed fingerprint %u from auto ban list.", fingerprint);
+
+    return true;
+}
+
 bool ChatHandler::HandleAnticheatCheatinformCommand(char* args)
 {
     WorldSession* session = GetSession();
