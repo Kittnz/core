@@ -2671,3 +2671,6 @@ REPLACE INTO `creature` VALUES (2574463,50516,0,0,0,1,-5111.25,1948.19,170.302,4
 
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = 629.043030, `position_y` = -1778.224609, `position_z` = 36.824902, `orientation` = 1.366774 WHERE `guid` = 16635;
+
+-- Changes by GHEOR
+REPLACE INTO `gameobject` VALUES ( 5013226, 2007581, 1, -2239.56, 2835.79, 143.532, 5.62877, 0, 0, 0.321402, -0.946943, 300, 300, 100, 1, 0, 0);
