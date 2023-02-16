@@ -108,7 +108,7 @@ class AccountMgr
         void UnbanAccount(uint32 acc) { m_accountBanned.erase(acc); }
         
         void BanFingerprint(uint32 fingerprint, uint32 unbandate) { m_fingerprintBanned[fingerprint] = unbandate; }
-        bool BanFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler);
+        bool BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler);
         void UnbanFingerprint(uint32 fingerprint) { m_fingerprintBanned.erase(fingerprint); }
         bool IsIPBanned(std::string const& ip) const;
         bool IsAccountBanned(uint32 acc) const;
