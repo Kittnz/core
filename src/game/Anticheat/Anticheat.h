@@ -44,6 +44,7 @@ enum CheatAction
 
 class WorldSession;
 class Player;
+class Guild;
 struct AreaEntry;
 
 typedef std::unordered_set<std::string> StringSet;
