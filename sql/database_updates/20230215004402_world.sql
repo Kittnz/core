@@ -5675,3 +5675,4 @@ DELETE FROM creature_movement WHERE id=2574479;
 DELETE FROM game_event_creature WHERE guid=2574479;
 DELETE FROM game_event_creature_data WHERE guid=2574479;
 DELETE FROM creature_battleground WHERE guid=2574479;
+REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orientation`, `map`, `name`) VALUES (877,5793.489258,-1502.536499,659.431152,0.507115,1,'gheortwb');
