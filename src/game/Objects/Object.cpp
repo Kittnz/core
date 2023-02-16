@@ -662,7 +662,7 @@ void Object::BuildValuesUpdate(uint8 updatetype, ByteBuffer * data, UpdateMask *
                     if (!owner)
                         owner = ToPlayer();
                     bool forceFriendly = false;
-                    if (owner)
+                    if (owner && owner->IsPlayer())
                     {
                         FactionTemplateEntry const *ft1, *ft2;
                         ft1 = owner->GetFactionTemplateEntry();
