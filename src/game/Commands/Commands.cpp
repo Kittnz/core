@@ -3767,7 +3767,13 @@ bool ChatHandler::HandleBanFingerprintCommand(char* args)
 
     std::string reason(cReason);
 
-    return sAccountMgr.BanFingerprint(fingerprint, duration_secs, reason, this);
+    LoginDatabase.escape_string(reason);
+    std::string safe_author = GetSession() ? GetSession()->GetPlayerName() : "CONSOLE";
+    LoginDatabase.escape_string(safe_author);
+    LoginDatabase.PExecute("REPLACE INTO `fingerprint_banned` (`fingerprint`, `bandate`, `unbandate`, `bannedby`, `banreason`) VALUES (%u,UNIX_TIMESTAMP(),UNIX_TIMESTAMP()+%u,'%s','%s')", fingerprint, duration_secs, safe_author.c_str(), reason.c_str());
+    sAccountMgr.BanFingerprint(fingerprint, sWorld.GetGameTime() + duration_secs);
+
+    return sAccountMgr.BanAccountsWithFingerprint(fingerprint, duration_secs, reason, this);
 }
 
 void ChatHandler::SendBanResult(BanMode mode, BanReturn result, std::string& banTarget, uint32 duration_secs, std::string& reason)
