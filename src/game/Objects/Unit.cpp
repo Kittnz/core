@@ -6374,10 +6374,7 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
         if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
         {
             if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
-            {
                 pVictim->AddThreat(pOwner);
-                pVictim->SetInCombatWithAggressor(pOwner, false);
-            }
             pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER);
         }
     }
