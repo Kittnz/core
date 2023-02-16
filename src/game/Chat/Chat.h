@@ -430,6 +430,14 @@ class ChatHandler
         bool HandleNpcSpawnWanderDistCommand(char* args);
         bool HandleNpcSpawnSetRespawnTimeCommand(char* args);
         bool HandleNpcSpawnSetAurasCommand(char* args);
+        bool HandleNpcTemplateSetDisplayIdCommand(char* args);
+        bool HandleNpcTemplateSetMountDisplayIdCommand(char* args);
+        bool HandleNpcTemplateSetLevelCommand(char* args);
+        bool HandleNpcTemplateSetFactionCommand(char* args);
+        bool HandleNpcTemplateSetScaleCommand(char* args);
+        bool HandleNpcTemplateSetDetectionRangeCommand(char* args);
+        bool HandleNpcTemplateSetCallForHelpRangeCommand(char* args);
+        bool HandleNpcTemplateSetLeashRangeCommand(char* args);
 
         bool HandleUnitSpeedInfoCommand(char* args);
 
