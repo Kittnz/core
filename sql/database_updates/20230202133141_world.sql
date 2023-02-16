@@ -378,3 +378,8 @@ UPDATE quest_template SET NextQuestInChain = 40698 WHERE entry = 40697;
 UPDATE quest_template SET NextQuestInChain = 40692 WHERE entry = 40691;
 -- Remove redundant requirement from https://database.turtle-wow.org/?quest=40692 (RMJ).
 UPDATE quest_template SET ReqCreatureOrGOId1 = 0 WHERE entry = 40692;
+-- Fixes for https://database.turtle-wow.org/?quest=40197 (RMJ).
+UPDATE quest_template SET
+MinLevel = 18,
+QuestLevel = 20
+WHERE entry = 40197;
