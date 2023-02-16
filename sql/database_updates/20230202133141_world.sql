@@ -373,3 +373,6 @@ update quest_template set rewmoneymaxlevel = 500 where entry in (40700,40701);
 update quest_template set rewmoneymaxlevel = 780 where entry = 40702;
 -- Item 60976, 60977, 60978 add required level 55.
 update item_template set required_level = 55 where entry in (60976,60977,60978);
+-- Quest chain fix for new Stonetalon quests (RMJ).
+UPDATE quest_template SET NextQuestInChain = 40698 WHERE entry = 40697;
+UPDATE quest_template SET NextQuestInChain = 40692 WHERE entry = 40691;
