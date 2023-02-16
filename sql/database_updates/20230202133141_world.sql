@@ -392,3 +392,5 @@ Objectives = 'Gather 5 Ghostpaw Pelts from the local Ghostpaw Wolf population an
 WHERE entry = 40120;
 -- Striker's Pauldrons proc update (RMJ).
 UPDATE item_template SET spellid_1 = 9415,spellid_2 = 0 WHERE entry = 21367;
+-- Change respawn time of Razlik's Tools to 5 seconds https://database.turtle-wow.org/?object=1000250 (RMJ).
+UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 4011315;
