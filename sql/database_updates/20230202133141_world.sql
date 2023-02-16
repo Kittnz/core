@@ -383,3 +383,10 @@ UPDATE quest_template SET
 MinLevel = 18,
 QuestLevel = 20
 WHERE entry = 40197;
+-- Fixes for https://database.turtle-wow.org/?quest=40120 (RMJ).
+UPDATE quest_template SET
+MinLevel = 18,
+QuestLevel = 20,
+Title = 'Aggressive Wildlife',
+Objectives = 'Gather 5 Ghostpaw Pelts from the local Ghostpaw Wolf population and bring them to Ardaen Evermoon in Ashenvale.'
+WHERE entry = 40120;
