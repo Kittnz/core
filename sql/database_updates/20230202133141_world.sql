@@ -394,3 +394,5 @@ WHERE entry = 40120;
 UPDATE item_template SET spellid_1 = 9415,spellid_2 = 0 WHERE entry = 21367;
 -- Change respawn time of Razlik's Tools to 5 seconds https://database.turtle-wow.org/?object=1000250 (RMJ).
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 4011315;
+-- Change faction of https://database.turtle-wow.org/?npc=80242 to Darnassus (nice job changing it from Silvermoon to Ratchet, guys) (RMJ).
+UPDATE creature_template SET faction = 69 WHERE entry = 80242;
