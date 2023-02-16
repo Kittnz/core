@@ -5744,3 +5744,17 @@ REPLACE INTO `creature` VALUES (2574480,6145,0,0,0,451,15708.1,16574.5,48.6117,2
 
 -- Changes by DRAGUNOVI
 UPDATE `creature` SET `position_x` = -11117.446289, `position_y` = -1961.190186, `position_z` = 49.888195, `orientation` = 3.476245 WHERE `guid` = 2574095;
+UPDATE `creature` SET `position_x` = -11120.029297, `position_y` = -1962.062744, `position_z` = 49.889107, `orientation` = 0.337936 WHERE `guid` = 2574096;
+UPDATE `creature` SET `position_x` = -11164.292969, `position_y` = -1939.961914, `position_z` = 74.399849, `orientation` = 5.072752 WHERE `guid` = 2574216;
+UPDATE `creature` SET `position_x` = -11163.391602, `position_y` = -1943.805908, `position_z` = 74.396523, `orientation` = 1.796553 WHERE `guid` = 2574217;
+UPDATE `creature` SET `position_x` = -11165.883789, `position_y` = -1943.280273, `position_z` = 74.391609, `orientation` = 3.701145 WHERE `guid` = 2574218;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
+UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
+UPDATE `creature` SET `position_x` = -11063.363281, `position_y` = -1951.853394, `position_z` = 77.513481, `orientation` = 5.755302 WHERE `guid` = 2574224;
+UPDATE `creature` SET `position_x` = -11059.666992, `position_y` = -1949.816650, `position_z` = 77.514282, `orientation` = 4.952421 WHERE `guid` = 2574223;
+UPDATE `creature` SET `position_x` = -11063.122070, `position_y` = -1966.672852, `position_z` = 77.268738, `orientation` = 6.224754 WHERE `guid` = 2574232;
