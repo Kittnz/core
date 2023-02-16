@@ -376,3 +376,5 @@ update item_template set required_level = 55 where entry in (60976,60977,60978);
 -- Quest chain fix for new Stonetalon quests (RMJ).
 UPDATE quest_template SET NextQuestInChain = 40698 WHERE entry = 40697;
 UPDATE quest_template SET NextQuestInChain = 40692 WHERE entry = 40691;
+-- Remove redundant requirement from https://database.turtle-wow.org/?quest=40692 (RMJ).
+UPDATE quest_template SET ReqCreatureOrGOId1 = 0 WHERE entry = 40692;
