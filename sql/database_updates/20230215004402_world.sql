@@ -5741,3 +5741,6 @@ REPLACE INTO `game_tele` (`id`, `position_x`, `position_y`, `position_z`, `orien
 
 -- Changes by SHANG
 REPLACE INTO `creature` VALUES (2574480,6145,0,0,0,451,15708.1,16574.5,48.6117,2.283,120,120,5,100,100,1,0,0);
+
+-- Changes by DRAGUNOVI
+UPDATE `creature` SET `position_x` = -11117.446289, `position_y` = -1961.190186, `position_z` = 49.888195, `orientation` = 3.476245 WHERE `guid` = 2574095;
