@@ -390,3 +390,5 @@ QuestLevel = 20,
 Title = 'Aggressive Wildlife',
 Objectives = 'Gather 5 Ghostpaw Pelts from the local Ghostpaw Wolf population and bring them to Ardaen Evermoon in Ashenvale.'
 WHERE entry = 40120;
+-- Striker's Pauldrons proc update (RMJ).
+UPDATE item_template SET spellid_1 = 9415,spellid_2 = 0 WHERE entry = 21367;
