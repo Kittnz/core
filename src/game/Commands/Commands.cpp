@@ -15072,3 +15072,313 @@ bool ChatHandler::HandleDiscBotStopCommand(char* args)
     return true;
 }
 #endif
+
+bool ChatHandler::HandleNpcTemplateSetDisplayIdCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+
+    uint32 displayId;
+    for (uint32 i = 1; i <= MAX_DISPLAY_IDS_PER_CREATURE && ExtractUInt32(&args, displayId); i++)
+    {
+        if (displayId && !sCreatureDisplayInfoStore.LookupEntry(displayId))
+        {
+            PSendSysMessage("Display Id %u does not exist.", displayId);
+            return false;
+        }
+
+        pTemplate->display_id[i - 1] = displayId;
+        sWorld.ExecuteUpdate("UPDATE `creature_template` SET `display_id%u`=%u WHERE `entry`=%u", i, displayId, pTemplate->entry);
+        PSendSysMessage("Updated template display_id%u of %s to %u.", i, pCreature->GetName(), displayId);
+    }
+    
+    return true;
+}
+
+bool ChatHandler::HandleNpcTemplateSetMountDisplayIdCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 mountDisplayId = 0;
+    if (!ExtractUInt32(&args, mountDisplayId))
+        return false;
+
+    if (mountDisplayId && !sCreatureDisplayInfoStore.LookupEntry(mountDisplayId))
+    {
+        PSendSysMessage("Display Id %u does not exist.", mountDisplayId);
+        return false;
+    }
+
+    pTemplate->mount_display_id = mountDisplayId;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` SET `mount_display_id`=%u WHERE `entry`=%u", mountDisplayId, pTemplate->entry);
+    PSendSysMessage("Updated template mount_display_id of %s to %u.", pCreature->GetName(), mountDisplayId);
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcTemplateSetLevelCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 levelMin = 0;
+    if (!ExtractUInt32(&args, levelMin))
+        return false;
+
+    if (levelMin <= 0 || levelMin >= MAX_LEVEL)
+    {
+        PSendSysMessage("Invalid level %u.", levelMin);
+        return false;
+    }
+
+    uint32 levelMax = levelMin;
+    if (ExtractUInt32(&args, levelMax))
+    {
+        if (levelMax <= 0 || levelMax >= MAX_LEVEL)
+        {
+            PSendSysMessage("Invalid level %u.", levelMax);
+            return false;
+        }
+    }
+
+    if (levelMin > levelMax)
+        std::swap(levelMin, levelMax);
+
+    pTemplate->level_min = levelMin;
+    pTemplate->level_max = levelMax;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` SET `level_min`=%u, `level_max`=%u WHERE `entry`=%u", levelMin, levelMax, pTemplate->entry);
+    PSendSysMessage("Updated template level range of %s to %u-%u.", pCreature->GetName(), levelMin, levelMax);
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcTemplateSetFactionCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    uint32 factionTemplateId = 0;
+    if (!ExtractUInt32(&args, factionTemplateId))
+        return false;
+
+    FactionTemplateEntry const* pFaction = sObjectMgr.GetFactionTemplateEntry(factionTemplateId);
+    if (!pFaction)
+    {
+        PSendSysMessage("Faction Template Id %u does not exist.", factionTemplateId);
+        return false;
+    }
+
+    pTemplate->faction = factionTemplateId;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` SET `faction`=%u WHERE `entry`=%u", factionTemplateId, pTemplate->entry);
+    PSendSysMessage("Updated template faction of %s to %s (%u).", pCreature->GetName(), sObjectMgr.GetFactionEntry(pFaction->faction)->name[0].c_str(), factionTemplateId);
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcTemplateSetScaleCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float scale = 0;
+    if (!ExtractFloat(&args, scale))
+        return false;
+
+    if (scale <= 0 || scale > 10)
+    {
+        PSendSysMessage("Invalid scale %g.", scale);
+        return false;
+    }
+
+    pTemplate->scale = scale;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` SET `scale`=%g WHERE `entry`=%u", scale, pTemplate->entry);
+    PSendSysMessage("Updated template scale of %s to %g.", pCreature->GetName(), scale);
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcTemplateSetDetectionRangeCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float range = 0;
+    if (!ExtractFloat(&args, range))
+        return false;
+
+    if (range < 0 || range > MAX_VISIBILITY_DISTANCE)
+    {
+        PSendSysMessage("Invalid detection range %g.", range);
+        return false;
+    }
+
+    pCreature->SetDetectionDistance(range); // update for current creature too
+
+    pTemplate->detection_range = range;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` SET `detection_range`=%g WHERE `entry`=%u", range, pTemplate->entry);
+    PSendSysMessage("Updated template detection_range of %s to %g.", pCreature->GetName(), range);
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcTemplateSetCallForHelpRangeCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float range = 0;
+    if (!ExtractFloat(&args, range))
+        return false;
+
+    if (range < 0 || range > MAX_VISIBILITY_DISTANCE)
+    {
+        PSendSysMessage("Invalid call for help range %g.", range);
+        return false;
+    }
+
+    pCreature->SetCallForHelpDist(range); // update for current creature too
+
+    pTemplate->call_for_help_range = range;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` SET `call_for_help_range`=%g WHERE `entry`=%u", range, pTemplate->entry);
+    PSendSysMessage("Updated template call_for_help_range of %s to %g.", pCreature->GetName(), range);
+
+    return true;
+}
+
+bool ChatHandler::HandleNpcTemplateSetLeashRangeCommand(char* args)
+{
+    Creature* pCreature = GetSelectedCreature();
+    if (!pCreature)
+    {
+        SendSysMessage(LANG_SELECT_CREATURE);
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    CreatureInfo* pTemplate = const_cast<CreatureInfo*>(pCreature->GetCreatureInfo());
+    if (!pTemplate)
+    {
+        SendSysMessage("Can't find creature template.");
+        SetSentErrorMessage(true);
+        return false;
+    }
+
+    float range = 0;
+    if (!ExtractFloat(&args, range))
+        return false;
+
+    if (range < 0 || range > MAX_VISIBILITY_DISTANCE)
+    {
+        PSendSysMessage("Invalid leash range %g.", range);
+        return false;
+    }
+
+    pCreature->SetLeashDistance(range); // update for current creature too
+
+    pTemplate->leash_range = range;
+    sWorld.GetMigration().SetAuthor(m_session->GetUsername());
+    sWorld.ExecuteUpdate("UPDATE `creature_template` SET `leash_range`=%g WHERE `entry`=%u", range, pTemplate->entry);
+    PSendSysMessage("Updated template leash_range of %s to %g.", pCreature->GetName(), range);
+
+    return true;
+}
