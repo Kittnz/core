@@ -976,14 +976,18 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                     {
                         guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
 
-                        try {
-                            PlayerPointer plr = GetPlayerPointer();
-                            std::ostringstream ss;
-                            ss << plr->GetName() << ":" << GetAccountId();
-                            sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
-                                ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
+
+                        if (lang != LANG_ADDON)
+                        {
+                            try {
+                                PlayerPointer plr = GetPlayerPointer();
+                                std::ostringstream ss;
+                                ss << plr->GetName() << ":" << GetAccountId();
+                                sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
+                                    ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
+                            }
+                            catch (const std::exception&) {}
                         }
-                        catch (const std::exception&) {}
                     }
                 }
                 else
