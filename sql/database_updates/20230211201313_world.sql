@@ -54,3 +54,20 @@ update creature_template set equipment_id = @equip_template where entry = @creat
 set @equip_template = 20281; set @weapon_1 = 15811; set @weapon_2 = 0; set @weapon_3 = 0; set @creature = 61198;
 replace into creature_equip_template values (@equip_template, @weapon_1, @weapon_2, @weapon_3);
 update creature_template set equipment_id = @equip_template where entry = @creature;
+-- Brood Queen Araxxna display ID  15937, level 63, boss, faction 16, scale 2.5, beast , 166562 HP, 91000 mana, 3044 armor, 45 nature resistance(Damage 1380-1930)
+-- Lord Blackwald II, display ID 19136, level 63, boss, faction 16, scale 1.5, humanoid, 208170 HP, 91000 mana, 4325 armor, 50 shadow resistance (Damage 2134-2894)
+-- Clawlord Howlfang, display ID 19125, level 63, boss, faction 16, scale 2.7, humanoid, 185328 HP, 3892 armor, 25 shadow resistance (Damage 1388-1892 with a 1.5 attack speed)
+-- Grizikil, display ID 1015, level 63, boss, faction 16, scale 3, demon, 159900 HP, 102312 mana, 50 fire resistance (1233-1822 damage with a 1.8 attack speed)
+-- Moroes, display ID 3695, level 63, boss, faction 16, scale 1.2, undead, 148914 HP, 81321 mana, 50 shadow resistance (1671-2433 damage with a 1.8 attack speed)
+-- Moroes, display ID 3695, level 63, boss, faction 16, scale 1.2, undead, 288963 HP, 81321 mana, 50 shadow resistance (1671-2433 damage with a 1.8 attack speed)
+REPLACE INTO creature_template VALUES
+(61221, 15937, 0, 0, 0, 0, 'Brood Queen Araxxna', NULL, 0, 63, 63, 166562, 166562, 91000, 91000, 3044, 16, 0, 1, 1.14286, 2.5, 20, 5, 0, 1, 1, 1380, 1930, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 1, 0, 61221, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61222, 19136, 0, 0, 0, 0, 'Lord Blackwald II', NULL, 0, 63, 63, 208170, 208170, 91000, 91000, 4325, 16, 0, 1, 1.14286, 1.5, 20, 5, 0, 1, 1, 2134, 1930, 0, 284, 1, 2000, 2000, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 61222, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 2142, 2803, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61223, 19125, 0, 0, 0, 0, 'Clawlord Howlfang', NULL, 0, 63, 63, 185328, 185328, 0, 0, 3892, 16, 0, 1, 1.14286, 2.7, 20, 5, 0, 1, 1, 1388, 1892, 0, 284, 1, 1500, 1500, 1, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 7, 0, 61223, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 2142, 2803, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61224, 1015, 0, 0, 0, 0, 'Grizikil', NULL, 0, 63, 63, 159900, 159900, 102312, 102312, 3044, 16, 0, 1, 1.14286, 3, 20, 5, 0, 1, 1, 1233, 1822, 0, 284, 1, 1800, 1800, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 3, 0, 61224, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 0, 0, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61225, 3695, 0, 0, 0, 0, 'Moroes', NULL, 0, 63, 63, 148914, 148914, 81321,81321, 3892, 16, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 1671, 2433, 0, 284, 1, 1800, 1800, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 61225, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 2142, 2803, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, ''),
+(61226, 3695, 0, 0, 0, 0, 'Moroes', NULL, 0, 63, 63, 288963, 288963, 81321,81321, 3892, 16, 0, 1, 1.14286, 1.2, 20, 5, 0, 1, 1, 1671, 2433, 0, 284, 1, 1800, 1800, 2, 0, 0, 0, 0, 0, 0, 0, 203.77, 289.86, 100, 6, 0, 61226, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NULL, 2142, 2803, 'EventAI', 0, 3, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, '');
+-- NPC Phantom Guardsman needs to be scale 1.0
+update creature_template set scale = 0 where entry = 61200;
+-- NPC Phantom Servant needs the ghost visual.
+update creature_template set auras = '9617' where entry = 61205;
