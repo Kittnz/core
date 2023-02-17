@@ -404,3 +404,5 @@ UPDATE quest_template SET RewMoneyMaxLevel = 37200 WHERE entry in (40464,40467);
 delete from creature_questrelation where id = 80605 and quest = 80303;
 -- Add RewMoneyMaxLevel and Darnassus rep to https://database.turtle-wow.org/?quest=40706 and https://database.turtle-wow.org/?quest=40707.
 UPDATE quest_template SET RewMoneyMaxLevel = 1867 WHERE entry in (40706,40707);
+-- Add money reward at max level to https://database.turtle-wow.org/?quest=40697 and https://database.turtle-wow.org/?quest=40698.
+UPDATE quest_template SET RewMoneyMaxLevel = 1200 WHERE entry in (40697,40698);
