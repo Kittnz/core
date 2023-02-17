@@ -398,3 +398,5 @@ UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 401
 UPDATE creature_template SET faction = 69 WHERE entry = 80242;
 -- The fist weapon Willbreaker attaches strangely while sheathed #2821.
 update item_template set sheath = 7 where entry = 60410;
+-- Quest 40464 and quest 40467 give way too little RewMoneyMaxLevel. Compare to quest=4264.
+UPDATE quest_template SET RewMoneyMaxLevel = 37200 WHERE entry in (40464,40467);
