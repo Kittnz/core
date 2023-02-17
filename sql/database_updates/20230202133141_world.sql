@@ -396,3 +396,5 @@ UPDATE item_template SET spellid_1 = 9415,spellid_2 = 0 WHERE entry = 21367;
 UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 4011315;
 -- Change faction of https://database.turtle-wow.org/?npc=80242 to Darnassus (nice job changing it from Silvermoon to Ratchet, guys) (RMJ).
 UPDATE creature_template SET faction = 69 WHERE entry = 80242;
+-- The fist weapon Willbreaker attaches strangely while sheathed #2821.
+update item_template set sheath = 7 where entry = 60410;
