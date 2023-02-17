@@ -400,3 +400,5 @@ UPDATE creature_template SET faction = 69 WHERE entry = 80242;
 update item_template set sheath = 7 where entry = 60410;
 -- Quest 40464 and quest 40467 give way too little RewMoneyMaxLevel. Compare to quest=4264.
 UPDATE quest_template SET RewMoneyMaxLevel = 37200 WHERE entry in (40464,40467);
+-- Npc 80605 should NOT offer quest 80303.
+delete from creature_questrelation where id = 80605 and quest = 80303;
