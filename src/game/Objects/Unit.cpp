@@ -6366,16 +6366,17 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
 
     if (!touchOnly)
     {
-        if (pVictim->IsCharmerOrOwnerPlayerOrPlayerItself() && (combatTimer < UNIT_PVP_COMBAT_TIMER))
-            combatTimer = UNIT_PVP_COMBAT_TIMER;
+        SetInCombatState(pVictim->IsCharmerOrOwnerPlayerOrPlayerItself() && (combatTimer < UNIT_PVP_COMBAT_TIMER) ? UNIT_PVP_COMBAT_TIMER : combatTimer, pVictim);
 
-        SetInCombatState(combatTimer, pVictim);
-
-        if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
+        // pet owner should not enter combat on spell missile launching
+        if (!combatTimer)
         {
-            if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
-                pVictim->AddThreat(pOwner);
-            pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER);
+            if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
+            {
+                if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
+                    pVictim->AddThreat(pOwner);
+                pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER);
+            }
         }
     }
 }
@@ -9315,13 +9316,8 @@ void Unit::SetFeignDeath(bool apply, ObjectGuid casterGuid, bool success)
             // you should remain in combat with pet's victim
             if (Pet* pPet = GetPet())
             {
-                if (pPet->IsInCombat())
-                {
-                    if (Unit* pVictim = pPet->GetVictim())
-                    {
-                        SetInCombatWithVictim(pVictim, false, 6000);
-                    }
-                }
+                if (pPet->IsInCombat() && pPet->GetVictim())
+                    SetInCombatWithVictim(pPet->GetVictim(), false, 6000);
             }
         }
 
