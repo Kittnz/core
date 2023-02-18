@@ -1,4 +1,4 @@
-INSERT INTO `instance_buff_removal` (`map_id`, `spell_id`, `enabled`, `flags`, `comment`) VALUES
+REPLACE INTO `instance_buff_removal` (`map_id`, `spell_id`, `enabled`, `flags`, `comment`) VALUES
 -- Naxxramas
 (533, 22888, 0, 0, "Naxxramas - Rallying Cry"),
 (533, 16609, 0, 0, "Naxxramas - Warchief's blessing"),
@@ -88,5 +88,23 @@ INSERT INTO `instance_buff_removal` (`map_id`, `spell_id`, `enabled`, `flags`, `
 (469, 23766, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Intelligence"),
 (469, 23767, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Armor"),
 (469, 23768, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Damage"),
-(469, 23769, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Resistance");
+(469, 23769, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Resistance"),
+-- Blackwing Lair
+(409, 22888, 0, 0, "Molten Core - Rallying Cry"),
+(409, 16609, 0, 0, "Molten Core - Warchief's blessing"),
+(409, 24425, 0, 0, "Molten Core - Spirit of Zandalar"),
+(409, 26393, 0, 0, "Molten Core - Elune's Blessing"),
+(409, 15366, 0, 0, "Molten Core - Songflower Serenade"),
+(409, 22818, 0, 0, "Molten Core - Mol'dar's Moxie (15% stam)"),
+(409, 22820, 0, 0, "Molten Core - Slip'kik's Savvy (3% spellcrit)"),
+(409, 22817, 0, 0, "Molten Core - Fengus' Ferocity (200 AP)"),
+(409, 28681, 0, 0, "Molten Core - Soul Revival (Scourge Invasion Buff)"),
+(409, 23735, 0, 0, "Molten Core - Sayge's Dark Fortune of Strength"),
+(409, 23736, 0, 0, "Molten Core - Sayge's Dark Fortune of Agility"),
+(409, 23737, 0, 0, "Molten Core - Sayge's Dark Fortune of Stamina"),
+(409, 23738, 0, 0, "Molten Core - Sayge's Dark Fortune of Spirit"),
+(409, 23766, 0, 0, "Molten Core - Sayge's Dark Fortune of Intelligence"),
+(409, 23767, 0, 0, "Molten Core - Sayge's Dark Fortune of Armor"),
+(409, 23768, 0, 0, "Molten Core - Sayge's Dark Fortune of Damage"),
+(409, 23769, 0, 0, "Molten Core - Sayge's Dark Fortune of Resistance");
 UPDATE `instance_buff_removal` SET `enabled`=1 WHERE `enabled`=0;
