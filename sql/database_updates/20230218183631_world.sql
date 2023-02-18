@@ -17,3 +17,5 @@ update item_template set stat_value4 = 22, stat_type4 = 7, stat_value5 = 0, spel
 update item_template set stat_value4 = 22, stat_type4 = 7, stat_value5 = 0, spellid_1 = 18050, spellid_3 = 23727, spelltrigger_3 = 1 where entry = 21372; -- Stormcaller's Diadem
 update item_template set stat_value4 = 15, stat_type4 = 7, stat_value5 = 0, spellid_2 = 21618 where entry = 21376; -- Stormcaller's Pauldrons
 update item_template set stat_value4 = 24, stat_type4 = 7, stat_value5 = 0, spellid_4 = 23727, spelltrigger_4 = 1 where entry = 21374; -- Stormcaller's Hauberk
+
+

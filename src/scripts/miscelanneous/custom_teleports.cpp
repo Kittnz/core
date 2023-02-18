@@ -35,7 +35,7 @@ struct custom_dungeon_portal : public GameObjectAI
                     }
                     case 112923: // Caverns of Time Placeholder Portal I  (Entrance)
                     case 112924: // Caverns of Time Placeholder Portal II (Entrance)
-                    case 112915: // Black Morass
+                    // case 112915: // Black Morass
                     {
                         player->GetSession()->SendNotification("This dungeon is currently not available.");
                         available = false;
