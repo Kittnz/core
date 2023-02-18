@@ -124,3 +124,7 @@ UPDATE `quest_template` SET `ReqCreatureOrGOCount1` = 5 WHERE `entry` = 40608;
 UPDATE `quest_template` SET `Objectives` = 'Travel to the farm at Bael Hardul beneath the town, slay 5 Plateau Fleshrippers, and gather 4 Bundled Crop Harvest for Segwar Ironback in Stonetalon Mountains.' WHERE `entry` = 40608;
 
 UPDATE `creature` SET `spawntimesecsmin` = 120, `spawntimesecsmax` = 120 WHERE `id` = 61018;
+
+-- Add more instances of https://database.turtle-wow.org/?item=60850 or lower the respawn time. 4 required for quest, only 6 available with what appears to be a 5 minute respawn.
+
+UPDATE `gameobject` SET `spawntimesecsmin` = 60, `spawntimesecsmax` = 120 WHERE `id` = 2010930;
