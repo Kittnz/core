@@ -73,7 +73,7 @@ Objectives = 'Seek audience with all four Alliance leaders and represent Alah''t
 OfferRewardText = 'The stories about Tyrande Whisperwind were true after all.$B$BIn her letter, she writes she was not only honored to stand with Prince Kael''thas, but once fought beside Dath''remar Sunstrider himself, the founder of our great kingdom!$B$BBut it seems not all Kaldorei think as she does. We shall soon work to prove ourselves in their eyes as well.$B$BFor now, with the approval of most of the Alliance''s leaders, our future grows more secure.$B$BI hope we can count on you again, should such need arise. And $N, thank you for all you have done.'
 WHERE entry = 40371;
 
-update item_template set stacking = 12 where entry = 81335;
+update item_template set stackable = 12 where entry = 81335;
 
 UPDATE quest_template SET
 Title = 'Raiding Quel''Lithien Lodge',
@@ -83,3 +83,7 @@ WHERE entry = 80303;
 UPDATE quest_template SET
 Objectives = 'Slay 15 Mangy Wolves around Elwynn Forest, then return to Lulu in Goldshire.'
 WHERE entry = 60007;
+
+DELETE FROM creature WHERE id = 7846;
+
+REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (300380, 7846, 0, 0, 0, 0, -11391.4, -2829.08, -2.36521, 2.19519, 72000, 72000, 0, 100, 100, 2, 1, 0);
