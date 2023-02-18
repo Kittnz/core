@@ -93,4 +93,5 @@ update item_template set stat_value3 = 0, stat_type1 = 7, stat_type2 = 6, spelli
 UPDATE `creature_template` SET `faction` = 79 WHERE `entry` = 80242;
 
 -- Make all spawned houses to be visible from a long distance:
-UPDATE `gameobject` SET `visibility_mod` = 533.333 WHERE `id` = 1000008;
+UPDATE `gameobject` SET `visibility_mod` = 5000, spawn_flags = 1 WHERE `id` = 1000008;
+UPDATE `gameobject` SET `visibility_mod` = 5000, spawn_flags = 1 WHERE `id` = 2007523;
