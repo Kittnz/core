@@ -1066,7 +1066,7 @@ class World
         std::vector<std::function<void()>> _asyncTasksBusy;
 
         void LogChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target = nullptr, uint32 chanId = 0, const char* chanStr = nullptr);
-        std::string FormatLoggedChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr)
+        std::string FormatLoggedChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr);
         void Shutdown();
         void AddSessionToSessionsMap(WorldSession* sess);
 
