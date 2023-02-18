@@ -4,3 +4,7 @@ UPDATE `quest_template` SET `Details` = '$C! I thought I would die out here with
 
 -- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2786
 UPDATE `quest_template` SET `RequiredRaces` = 434 WHERE `entry` = 40583;
+
+-- Fixes https://github.com/slowtorta/turtlewow-bug-tracker/issues/2854
+UPDATE `creature_template` SET `type` = 1 WHERE `entry` = 7768;
+UPDATE `creature_template` SET `beast_family` = 3 WHERE `entry` = 7768;
