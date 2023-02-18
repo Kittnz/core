@@ -1002,7 +1002,7 @@ void Aura::HandleAddModifier(bool apply, bool Real)
 
 void Aura::TriggerSpell()
 {
-    ObjectGuid casterGUID = GetCasterGuid();
+    ObjectGuid casterGUID = GetSpellProto()->HasAttribute(SPELL_ATTR_WEARER_CASTS_PROC_TRIGGER) ? GetTarget()->GetObjectGuid() : GetCasterGuid();
     Unit* triggerTarget = GetTriggerTarget();
 
     if (!casterGUID || !triggerTarget)
@@ -6933,9 +6933,9 @@ void SpellAuraHolder::_AddSpellAuraHolder()
     // will be < MAX_AURAS slot (if find free) with !secondaura
     if (IsNeedVisibleSlot(caster))
     {
-        if (IsPositive())                                   // empty positive slot
+        if (!IsPositive())                                  // empty negative slot
         {
-            for (uint8 i = 0; i < MAX_POSITIVE_AURAS; i++)
+            for (uint8 i = MAX_POSITIVE_AURAS; i < MAX_AURAS; i++)
             {
                 if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
                 {
@@ -6943,10 +6943,15 @@ void SpellAuraHolder::_AddSpellAuraHolder()
                     break;
                 }
             }
+
+            // allow storing debuffs in buff slots when debuffs are full
+            if (slot == NULL_AURA_SLOT)
+                m_target->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_AURAS_VISIBLE);
         }
-        else                                                // empty negative slot
+
+        if (slot == NULL_AURA_SLOT)                         // empty positive slot
         {
-            for (uint8 i = MAX_POSITIVE_AURAS; i < MAX_AURAS; i++)
+            for (uint8 i = 0; i < MAX_POSITIVE_AURAS; i++)
             {
                 if (m_target->GetUInt32Value((uint16)(UNIT_FIELD_AURA + i)) == 0)
                 {

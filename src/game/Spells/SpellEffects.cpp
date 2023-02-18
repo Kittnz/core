@@ -6114,11 +6114,16 @@ void Spell::EffectSanctuary(SpellEffectIndex eff_idx)
     bool no_guards = true;
 
     unitTarget->InterruptSpellsCastedOnMe(true);
-    unitTarget->CombatStop();
+    unitTarget->InterruptAttacksOnMe(0.0f, guard_check);
+    unitTarget->m_lastSanctuaryTime = WorldTimer::getMSTime();
 
     // Flask of Petrification does not cause mobs to stop attacking.
-    if (!m_spellInfo->HasAttribute(SPELL_ATTR_EX2_FOOD_BUFF))
+    // Aspect of Arlokk should not cause Hakkar to evade.
+    if (m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_VANISH>())
     {
+        // Vanish allows to remove all threat and cast regular stealth so other spells can be used
+        unitTarget->CombatStop();
+
         HostileReference* pReference = unitTarget->GetHostileRefManager().getFirst();
         while (pReference)
         {
@@ -6133,22 +6138,12 @@ void Spell::EffectSanctuary(SpellEffectIndex eff_idx)
 
             pReference = pNextRef;
         }
-    }
-    
-    unitTarget->m_lastSanctuaryTime = WorldTimer::getMSTime();
 
-    // Vanish allows to remove all threat and cast regular stealth so other spells can be used
-    if (m_spellInfo->IsFitToFamily<SPELLFAMILY_ROGUE, CF_ROGUE_VANISH>())
-    {
-        unitTarget->RemoveSpellsCausingAura(SPELL_AURA_MOD_ROOT);
-        unitTarget->InterruptAttacksOnMe(0.0f, guard_check);
-
-        if (Player* pPlayer = m_caster->ToPlayer())
-        {
-            if (no_guards)
-                pPlayer->SetCannotBeDetectedTimer(1000);
-        }
+        if (no_guards && unitTarget->IsPlayer())
+            static_cast<Player*>(unitTarget)->SetCannotBeDetectedTimer(1000);
     }
+    else
+        unitTarget->DoResetThreat();
 
     AddExecuteLogInfo(eff_idx, ExecuteLogInfo(unitTarget->GetObjectGuid()));
 }
@@ -6543,7 +6538,7 @@ void Spell::EffectEnchantHeldItem(SpellEffectIndex eff_idx)
         return;
 
     // Nostalrius (INTERFACTION) : Totem furie-des-vents ecrase les benes de puissance et des rois Paladin.
-    if (m_spellInfo->SpellFamilyName == SPELLFAMILY_SHAMAN)
+    /*if (m_spellInfo->SpellFamilyName == SPELLFAMILY_SHAMAN)
     {
         Unit::AuraList const& auras = unitTarget->GetAurasByType(SPELL_AURA_MOD_ATTACK_POWER);
         for (const auto aura : auras)
@@ -6568,6 +6563,7 @@ void Spell::EffectEnchantHeldItem(SpellEffectIndex eff_idx)
             }
         }
     }
+    */
 
     if (m_spellInfo->EffectMiscValue[eff_idx])
     {

@@ -783,7 +783,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
                     if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, chn, nullptr))
+                    {
                         chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
+
+                        if (channel == u8"World" && lang != LANG_ADDON)
+                        {
+                            std::string logChat = sWorld.FormatLoggedChat(this, "Chan", msg, nullptr, 0, channel.c_str());
+                            sWorld.SendDiscordMessage(1075224002013962250, logChat);
+                        }
+                    }
 
                     SetLastPubChanMsgTime(time(nullptr));
                 }
@@ -973,7 +981,22 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 {
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
                     if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, nullptr, guild))
+                    {
                         guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);
+
+
+                        if (lang != LANG_ADDON)
+                        {
+                            try {
+                                PlayerPointer plr = GetPlayerPointer();
+                                std::ostringstream ss;
+                                ss << plr->GetName() << ":" << GetAccountId();
+                                sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", GetMasterPlayer()->GetGuildId(),
+                                    ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str()));
+                            }
+                            catch (const std::exception&) {}
+                        }
+                    }
                 }
                 else
                     guild->BroadcastToGuild(this, msg, lang == LANG_ADDON ? LANG_ADDON : LANG_UNIVERSAL);

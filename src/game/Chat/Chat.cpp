@@ -361,6 +361,25 @@ ChatCommand * ChatHandler::getCommandTable()
         { nullptr,          0,                  false, nullptr,                                        "", nullptr }
     };
 
+    static ChatCommand creatureTemplateSetCommandTable[] =
+    {
+        { "displayid",        SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetDisplayIdCommand,        "", nullptr },
+        { "mountdisplayid",   SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetMountDisplayIdCommand,   "", nullptr },
+        { "level",            SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetLevelCommand,            "", nullptr },
+        { "faction",          SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetFactionCommand,          "", nullptr },
+        { "scale",            SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetScaleCommand,            "", nullptr },
+        { "detectionrange",   SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetDetectionRangeCommand,   "", nullptr },
+        { "callforhelprange", SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetCallForHelpRangeCommand, "", nullptr },
+        { "leashrange",       SEC_DEVELOPER,    false, &ChatHandler::HandleNpcTemplateSetLeashRangeCommand,       "", nullptr },
+        { nullptr,          0,                  false, nullptr,                                                   "", nullptr }
+    };
+
+    static ChatCommand creatureTemplateCommandTable[] =
+    {
+        { "set",            SEC_DEVELOPER,      false, nullptr,                                        "", creatureTemplateSetCommandTable },
+        { nullptr,          0,                  false, nullptr,                                        "", nullptr }
+    };
+
     static ChatCommand npcCommandTable[] =
     {
         { "add",            SEC_DEVELOPER,     false, &ChatHandler::HandleNpcAddCommand,              "", nullptr },
@@ -384,6 +403,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "near",           SEC_DEVELOPER,     false, &ChatHandler::HandleNpcNearCommand,                "", nullptr},
         { "group",          SEC_ADMINISTRATOR, false, nullptr,                                        "", creatureGroupsCommandTable },
         { "spawn",          SEC_MODERATOR,     false, nullptr,                                        "", creatureSpawnsCommandTable },
+        { "template",       SEC_DEVELOPER,     false, nullptr,                                        "", creatureTemplateCommandTable },
         { nullptr,          0,                 false, nullptr,                                        "", nullptr }
     };
 
@@ -1192,6 +1212,18 @@ void ChatHandler::ExecuteCommand(const char* text)
                     sLog.outCommand(GetAccountId(), "Command: %s [Player: %s (Group Leader \"%s\", Account: %u) X: %f Y: %f Z: %f O: %f Map: %u Selected: %s]",
                         realCommandFull.c_str(), p->GetName(), p->GetGroup() ? p->GetGroup()->GetLeaderGuid().GetString().c_str() : "NULL", GetAccountId(), p->GetPositionX(), p->GetPositionY(), p->GetPositionZ(), p->GetOrientation(), p->GetMapId(),
                         sel_guid.GetString().c_str());
+
+#ifdef USING_DISCORD_BOT
+
+                    try {
+                        std::string message = string_format("Command: %s [Player: %s (Group Leader \"%s\", Account: %u) X: %f Y: %f Z: %f O: %f Map: %u Selected: %s]",
+                            realCommandFull.c_str(), p->GetName(), p->GetGroup() ? p->GetGroup()->GetLeaderGuid().GetString().c_str() : "NULL", GetAccountId(), p->GetPositionX(), p->GetPositionY(), p->GetPositionZ(), p->GetOrientation(), p->GetMapId(),
+                            sel_guid.GetString().c_str());
+
+                        sWorld.SendDiscordMessage(1075085609737142352, message); // default chn id for now, move to config later.
+                    }
+                    catch (const std::exception& e) {}
+#endif
                 }
                 else                                        // 0 account -> console
                 {

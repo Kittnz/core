@@ -3956,9 +3956,7 @@ bool GOHello_go_spirit_pyre(Player* pPlayer, GameObject* pGo)
             GoAI->SetData(1, 1);
         }
 
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80803);
-        if (cInfo != nullptr)
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->CastedCreatureOrGO(pGo->GetEntry(), pGo->GetObjectGuid(), 0);
     }
     return false;
 }
@@ -5711,24 +5709,6 @@ bool QuestRewarded_npc_ardaen_evermoon(Player* pPlayer, Creature* pQuestGiver, Q
     return false;
 }
 
-struct npc_bannorAI : public ScriptedAI
-{
-    npc_bannorAI(Creature* c) : ScriptedAI(c) { Reset(); }
-
-    void Reset() {}
-    void UpdateAI(const uint32 diff)
-    {
-        DoMeleeAttackIfReady();
-    }
-    void Aggro(Unit* who)
-    {
-        m_creature->MonsterSay("Another fool walks into his death. Come then, let me show you what happens to those who oppose the Bloodsail!");
-    }
-    void JustRespawned() { Reset(); }
-};
-
-CreatureAI* GetAI_npc_bannor(Creature* _Creature) { return new npc_bannorAI(_Creature); }
-
 struct npc_naxiarAI : public ScriptedAI
 {
     npc_naxiarAI(Creature* c) : ScriptedAI(c) { Reset(); }
@@ -7474,11 +7454,6 @@ void AddSC_random_scripts_1()
     newscript = new Script;
     newscript->Name = "npc_naxiar";
     newscript->GetAI = &GetAI_npc_naxiar;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "npc_bannor";
-    newscript->GetAI = &GetAI_npc_bannor;
     newscript->RegisterSelf();
 
     newscript = new Script;

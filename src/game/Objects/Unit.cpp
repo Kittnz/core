@@ -719,8 +719,8 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
             }
             if (damagetype != DOT)
             {
-                SetInCombatWithVictim(pVictim);
                 pVictim->SetInCombatWithAggressor(this);
+                SetInCombatWithVictim(pVictim);
             }
         }
         return 0;
@@ -749,8 +749,8 @@ uint32 Unit::DealDamage(Unit* pVictim, uint32 damage, CleanDamage const* cleanDa
        (!spellProto || (!spellProto->HasAura(SPELL_AURA_DAMAGE_SHIELD) && !spellProto->HasAttribute(SPELL_ATTR_EX_NO_THREAT))) &&
        (!spell || !spell->IsTriggeredByProc()))
     {
-        SetInCombatWithVictim(pVictim);
         pVictim->SetInCombatWithAggressor(this);
+        SetInCombatWithVictim(pVictim);
     }
 
     if (pVictim->IsCreature())
@@ -6366,19 +6366,17 @@ void Unit::SetInCombatWithVictim(Unit* pVictim, bool touchOnly/* = false*/, uint
 
     if (!touchOnly)
     {
-        if (pVictim->IsCharmerOrOwnerPlayerOrPlayerItself() && (combatTimer < UNIT_PVP_COMBAT_TIMER))
-            combatTimer = UNIT_PVP_COMBAT_TIMER;
+        SetInCombatState(pVictim->IsCharmerOrOwnerPlayerOrPlayerItself() && (combatTimer < UNIT_PVP_COMBAT_TIMER) ? UNIT_PVP_COMBAT_TIMER : combatTimer, pVictim);
 
-        SetInCombatState(combatTimer, pVictim);
-
-        if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
+        // pet owner should not enter combat on spell missile launching
+        if (!combatTimer)
         {
-            if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
+            if (Player* pOwner = ::ToPlayer(GetCharmerOrOwner()))
             {
-                pVictim->AddThreat(pOwner);
-                pVictim->SetInCombatWithAggressor(pOwner, false);
+                if (pOwner->IsTargetable(true, pVictim->IsCharmerOrOwnerPlayerOrPlayerItself()) && !pOwner->IsFeigningDeathSuccessfully())
+                    pVictim->AddThreat(pOwner);
+                pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER);
             }
-            pOwner->SetInCombatWithVictim(pVictim, false, combatTimer >= UNIT_PVP_COMBAT_TIMER ? combatTimer : UNIT_PVP_COMBAT_TIMER);
         }
     }
 }
@@ -9318,13 +9316,8 @@ void Unit::SetFeignDeath(bool apply, ObjectGuid casterGuid, bool success)
             // you should remain in combat with pet's victim
             if (Pet* pPet = GetPet())
             {
-                if (pPet->IsInCombat())
-                {
-                    if (Unit* pVictim = pPet->GetVictim())
-                    {
-                        SetInCombatWithVictim(pVictim, false, 6000);
-                    }
-                }
+                if (pPet->IsInCombat() && pPet->GetVictim())
+                    SetInCombatWithVictim(pPet->GetVictim(), false, 6000);
             }
         }
 
@@ -10937,6 +10930,25 @@ void Unit::RemoveAttackersThreat(Unit* owner)
         itr->GetThreatManager().modifyThreatPercent(this, -100);
         if (owner)
             itr->AddThreat(owner, 1.0f);
+    }
+}
+
+void Unit::DoResetThreat()
+{
+    if (!CanHaveThreatList() || GetThreatManager().isThreatListEmpty())
+    {
+        if (IsCreature())
+            sLog.outError("DoResetThreat called for creature that either cannot have threat list or has empty threat list (entry = %d)", GetEntry());
+        return;
+    }
+
+    ThreatList const& tList = GetThreatManager().getThreatList();
+    for (const auto itr : tList)
+    {
+        Unit* pUnit = GetMap()->GetUnit(itr->getUnitGuid());
+
+        if (pUnit && GetThreatManager().getThreat(pUnit))
+            GetThreatManager().modifyThreatPercent(pUnit, -100);
     }
 }
 
