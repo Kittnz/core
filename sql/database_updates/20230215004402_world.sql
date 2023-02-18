@@ -5758,3 +5758,6 @@ UPDATE `creature_template` set `scale` = 1.000000 where entry = 61200;
 UPDATE `creature` SET `position_x` = -11063.363281, `position_y` = -1951.853394, `position_z` = 77.513481, `orientation` = 5.755302 WHERE `guid` = 2574224;
 UPDATE `creature` SET `position_x` = -11059.666992, `position_y` = -1949.816650, `position_z` = 77.514282, `orientation` = 4.952421 WHERE `guid` = 2574223;
 UPDATE `creature` SET `position_x` = -11063.122070, `position_y` = -1966.672852, `position_z` = 77.268738, `orientation` = 6.224754 WHERE `guid` = 2574232;
+
+-- Changes by GHEOR
+REPLACE INTO `creature` VALUES (2574481,60654,0,0,0,451,15752.2,16570.7,48.6113,3.80903,120,120,0,100,100,0,0,0);
