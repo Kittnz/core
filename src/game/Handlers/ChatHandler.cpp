@@ -783,7 +783,15 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
                     AntispamInterface* pAntispam = sAnticheatLib->GetAntispam();
                     if (lang == LANG_ADDON || !pAntispam || pAntispam->AddMessage(msg, lang, type, GetPlayerPointer(), nullptr, chn, nullptr))
+                    {
                         chn->Say(playerPointer->GetObjectGuid(), msg.c_str(), lang);
+
+                        if (channel == u8"World" && lang != LANG_ADDON)
+                        {
+                            std::string logChat = sWorld.FormatLoggedChat(this, "Chan", msg, nullptr, 0, channel.c_str());
+                            sWorld.SendDiscordMessage(1075224002013962250, logChat);
+                        }
+                    }
 
                     SetLastPubChanMsgTime(time(nullptr));
                 }

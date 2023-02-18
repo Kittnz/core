@@ -3763,6 +3763,21 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
     PlayerPointer plr = sess->GetPlayerPointer();
     ASSERT(plr);
 
+    std::string log = FormatLoggedChat(sess, type, msg, target, chanId, chanStr);
+
+    if (sess->GetSecurity() >= SEC_MODERATOR || (target && target->GetSession() && target->GetSession()->GetSecurity() >= SEC_MODERATOR))
+        SendDiscordMessage(1075085609737142352, log); // always log GM chats to a seperate chn too
+    
+
+    sLog.out(LOG_CHAT, "%s", log.c_str());
+}
+
+std::string World::FormatLoggedChat(WorldSession* sess, const char* type, std::string const& msg, PlayerPointer target, uint32 chanId, const char* chanStr)
+{
+    ASSERT(sess);
+    PlayerPointer plr = sess->GetPlayerPointer();
+    ASSERT(plr);
+
     std::string stringType = type;
 
     if (sess->GetSecurity() >= SEC_MODERATOR || (target && target->GetSession() && target->GetSession()->GetSecurity() >= SEC_MODERATOR))
@@ -3774,14 +3789,15 @@ void World::LogChat(WorldSession* sess, const char* type, std::string const& msg
     ss << plr->GetName() << ":" << sess->GetAccountId();
 
     if (target)
-        sLog.out(LOG_CHAT, "[%s] %s:%u -> %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[%s] %s:%u -> %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), target->GetName(), target->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanId)
-        sLog.out(LOG_CHAT, "[%s:%u] %s:%u : %s", stringType.c_str(), chanId, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[%s:%u] %s:%u : %s", stringType.c_str(), chanId, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else if (chanStr)
-        sLog.out(LOG_CHAT, "[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[%s:%s] %s:%u : %s", stringType.c_str(), chanStr, ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
     else
-        sLog.out(LOG_CHAT, "[%s] %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
+        return string_format("[%s] %s:%u : %s", stringType.c_str(), ss.str().c_str(), plr->GetObjectGuid().GetCounter(), msg.c_str());
 }
+
 
 void MigrationFile::SetAuthor(std::string const& author)
 {
