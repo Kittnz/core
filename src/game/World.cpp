@@ -951,10 +951,7 @@ void World::LoadConfigSettings(bool reload)
     sPlayerBotMgr.LoadConfig();
 
     setConfigMinMax(CONFIG_UINT32_SPELLS_CCDELAY, "Spells.CCDelay", 200, 0, 20000);
-    setConfigMinMax(CONFIG_UINT32_DEBUFF_LIMIT, "DebuffLimit", 0, 0, 40);
-
-    if (getConfig(CONFIG_UINT32_DEBUFF_LIMIT) == 0)
-        setConfig(CONFIG_UINT32_DEBUFF_LIMIT, 16);
+    setConfigMinMax(CONFIG_UINT32_DEBUFF_LIMIT, "DebuffLimit", 16, 1, 40);
 
     setConfig(CONFIG_UINT32_ANTICRASH_OPTIONS, "Anticrash.Options", 0);
     setConfig(CONFIG_UINT32_ANTICRASH_REARM_TIMER, "Anticrash.Rearm.Timer", 0);
