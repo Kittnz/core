@@ -98,3 +98,7 @@ UPDATE `gameobject` SET `visibility_mod` = 5000, spawn_flags = 1 WHERE `id` = 20
 
 -- https://database.turtle-wow.org/?item=83502 is not consumed on use:
 UPDATE `item_template` SET `spellcharges_1` = -1 WHERE `entry` = 83502;
+
+-- Add a 0.5 second cast time to interaction with https://database.turtle-wow.org/?object=3000242 so players can't spam-click and get all 3 credits on a single pyre. Make Spirit Pyres usable only when player is on the quest.
+UPDATE `gameobject_template` SET `flags`=36 WHERE `entry`= 3000242;
+UPDATE `quest_template` SET `ReqCreatureOrGOId1`=-3000242 WHERE `entry`= 80301;
