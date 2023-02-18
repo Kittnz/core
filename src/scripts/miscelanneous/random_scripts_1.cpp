@@ -3956,9 +3956,7 @@ bool GOHello_go_spirit_pyre(Player* pPlayer, GameObject* pGo)
             GoAI->SetData(1, 1);
         }
 
-        CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(80803);
-        if (cInfo != nullptr)
-            pPlayer->KilledMonster(cInfo, ObjectGuid());
+        pPlayer->CastedCreatureOrGO(pGo->GetEntry(), pGo->GetObjectGuid(), 0);
     }
     return false;
 }
