@@ -91,3 +91,6 @@ REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`,
 update item_template set stat_value3 = 0, stat_type1 = 7, stat_type2 = 6, spellid_1 = 0, spellid_2 = 0 where entry = 13503; -- Alchemists' Stone
 
 UPDATE `creature_template` SET `faction` = 79 WHERE `entry` = 80242;
+
+-- Make all spawned houses to be visible from a long distance:
+UPDATE `gameobject` SET `visibility_mod` = 533.333 WHERE `id` = 1000008;
