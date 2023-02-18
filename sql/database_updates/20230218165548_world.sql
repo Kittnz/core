@@ -89,3 +89,5 @@ DELETE FROM creature WHERE id = 7846;
 REPLACE INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (300380, 7846, 0, 0, 0, 0, -11391.4, -2829.08, -2.36521, 2.19519, 72000, 72000, 0, 100, 100, 2, 1, 0);
 
 update item_template set stat_value3 = 0, stat_type1 = 7, stat_type2 = 6, spellid_1 = 0, spellid_2 = 0 where entry = 13503; -- Alchemists' Stone
+
+UPDATE `creature_template` SET `faction` = 79 WHERE `entry` = 80242;
