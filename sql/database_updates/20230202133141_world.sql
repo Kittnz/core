@@ -371,3 +371,38 @@ UPDATE quest_template SET NextQuestInChain = 40701 WHERE entry = 40700;
 update quest_template set rewmoneymaxlevel = 650 where entry in (40608,40694,40695,40696);
 update quest_template set rewmoneymaxlevel = 500 where entry in (40700,40701);
 update quest_template set rewmoneymaxlevel = 780 where entry = 40702;
+-- Item 60976, 60977, 60978 add required level 55.
+update item_template set required_level = 55 where entry in (60976,60977,60978);
+-- Quest chain fix for new Stonetalon quests (RMJ).
+UPDATE quest_template SET NextQuestInChain = 40698 WHERE entry = 40697;
+UPDATE quest_template SET NextQuestInChain = 40692 WHERE entry = 40691;
+-- Remove redundant requirement from https://database.turtle-wow.org/?quest=40692 (RMJ).
+UPDATE quest_template SET ReqCreatureOrGOId1 = 0 WHERE entry = 40692;
+-- Fixes for https://database.turtle-wow.org/?quest=40197 (RMJ).
+UPDATE quest_template SET
+MinLevel = 18,
+QuestLevel = 20
+WHERE entry = 40197;
+-- Fixes for https://database.turtle-wow.org/?quest=40120 (RMJ).
+UPDATE quest_template SET
+MinLevel = 18,
+QuestLevel = 20,
+Title = 'Aggressive Wildlife',
+Objectives = 'Gather 5 Ghostpaw Pelts from the local Ghostpaw Wolf population and bring them to Ardaen Evermoon in Ashenvale.'
+WHERE entry = 40120;
+-- Striker's Pauldrons proc update (RMJ).
+UPDATE item_template SET spellid_1 = 9415,spellid_2 = 0 WHERE entry = 21367;
+-- Change respawn time of Razlik's Tools to 5 seconds https://database.turtle-wow.org/?object=1000250 (RMJ).
+UPDATE gameobject SET spawntimesecsmin = 5,spawntimesecsmax = 5 WHERE guid = 4011315;
+-- Change faction of https://database.turtle-wow.org/?npc=80242 to Darnassus (nice job changing it from Silvermoon to Ratchet, guys) (RMJ).
+UPDATE creature_template SET faction = 69 WHERE entry = 80242;
+-- The fist weapon Willbreaker attaches strangely while sheathed #2821.
+update item_template set sheath = 7 where entry = 60410;
+-- Quest 40464 and quest 40467 give way too little RewMoneyMaxLevel. Compare to quest=4264.
+UPDATE quest_template SET RewMoneyMaxLevel = 37200 WHERE entry in (40464,40467);
+-- Npc 80605 should NOT offer quest 80303.
+delete from creature_questrelation where id = 80605 and quest = 80303;
+-- Add RewMoneyMaxLevel and Darnassus rep to https://database.turtle-wow.org/?quest=40706 and https://database.turtle-wow.org/?quest=40707.
+UPDATE quest_template SET RewMoneyMaxLevel = 1867 WHERE entry in (40706,40707);
+-- Add money reward at max level to https://database.turtle-wow.org/?quest=40697 and https://database.turtle-wow.org/?quest=40698.
+UPDATE quest_template SET RewMoneyMaxLevel = 1200 WHERE entry in (40697,40698);

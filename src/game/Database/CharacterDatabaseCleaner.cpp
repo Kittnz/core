@@ -26,7 +26,10 @@
 #include "DBCStores.h"
 #include "SpellMgr.h"
 #include "Util.h"
+#include "Player.h"
+#include "Util.h"
 #include "Guild.h"
+
 
 void CharacterDatabaseCleaner::CleanDatabase()
 {
@@ -194,16 +197,24 @@ void CharacterDatabaseCleaner::FreeInactiveCharacterNames()
         return;
     }
 
+    sLog.outInfo("NameCleanup #4: Renaming %u characters...", (uint32)charsToRename.size());
+
+    uint32 guidCounter = 0;
     std::string guidsList;
     for (auto const& guid : charsToRename)
     {
         if (!guidsList.empty())
             guidsList += ",";
         guidsList += std::to_string(guid);
-    }
 
-    sLog.outInfo("NameCleanup #4: Renaming %u characters...", (uint32)charsToRename.size());
-    CharacterDatabase.PExecute("UPDATE `characters` SET `name` = `guid`, `at_login` = (`at_login` | 1) WHERE `guid` IN (%s)", guidsList.c_str());
+        ++guidCounter;
+        if (guidCounter >= 1000)
+        {
+            CharacterDatabase.PExecute("UPDATE `characters` SET `name` = `guid`, `at_login` = (`at_login` | 1) WHERE `guid` IN (%s)", guidsList.c_str());
+            guidCounter = 0;
+            guidsList.clear();
+        }
+    }
 }
 
 void CharacterDatabaseCleaner::DeleteInactiveCharacters()
