@@ -89,7 +89,7 @@ REPLACE INTO `instance_buff_removal` (`map_id`, `spell_id`, `enabled`, `flags`, 
 (469, 23767, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Armor"),
 (469, 23768, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Damage"),
 (469, 23769, 0, 0, "Blackwing Lair - Sayge's Dark Fortune of Resistance"),
--- Blackwing Lair
+-- Molten Core
 (409, 22888, 0, 0, "Molten Core - Rallying Cry"),
 (409, 16609, 0, 0, "Molten Core - Warchief's blessing"),
 (409, 24425, 0, 0, "Molten Core - Spirit of Zandalar"),
