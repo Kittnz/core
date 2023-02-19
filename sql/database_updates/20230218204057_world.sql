@@ -9,3 +9,4 @@ REPLACE INTO `gameobject` VALUES ( 5013376, 2010997, 0, 2511.85, 2439.43, 1.2622
 
 -- Changes by JOE
 UPDATE `creature` SET `position_x` = -652.160706, `position_y` = 695.482971, `position_z` = -329.113892, `orientation` = 2.859456 WHERE `guid` = 33491;
+REPLACE INTO `gameobject` VALUES ( 374694, 180248, 0, -12393.1, 298.543, -1.0622, 5.41052, 0, 0, -0.422618, 0.906308, 180, 180, 100, 1, 0, 0);
