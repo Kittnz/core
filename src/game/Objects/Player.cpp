@@ -23186,16 +23186,11 @@ bool Player::RestoreSuspendedWorldBuffs()
 		GetSession()->SendNotification("You can't use that while in a Battleground.");
 		return false;
 	}
-	else if (GetMap() && GetMap()->IsRaid() && GetInstanceData() && GetInstanceData()->IsEncounterInProgress())
+	else if (GetMap() && GetMap()->IsRaid())
 	{
-		GetSession()->SendNotification("You can't use that during raid encounters.");
+		GetSession()->SendNotification("You can't use that in raid dungeons.");
 		return false;
 	}
-    else if (GetMapId() == 45) // Don't allow in Scarlet Citadel
-    {
-        GetSession()->SendNotification("You can't use that here.");
-        return false;
-    }
 
 	QueryResult *auras = CharacterDatabase.PQuery("SELECT caster_guid,item_guid,spell,stackcount,remaincharges,basepoints0,basepoints1,"
 		"basepoints2,periodictime0,periodictime1,periodictime2,maxduration,remaintime,effIndexMask "
