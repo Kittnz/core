@@ -533,7 +533,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "account",        SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanAccountCommand,      "", nullptr },
         { "character",      SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanCharacterCommand,    "", nullptr },
         { "ip",             SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanIPCommand,           "", nullptr },
-        { "fingerprnt",     SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanFingerprintCommand,  "", nullptr },
+        { "fingerprint",    SEC_DEVELOPER,  true,  &ChatHandler::HandleUnBanFingerprintCommand,  "", nullptr },
         { nullptr,          0,                  false, nullptr,                                      "", nullptr }
     };
 
