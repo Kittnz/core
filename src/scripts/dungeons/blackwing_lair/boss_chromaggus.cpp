@@ -362,7 +362,7 @@ struct boss_chromaggusAI : public ScriptedAI
             std::vector<ObjectGuid> m_vPossibleVictim;
             ThreatList const& tList = m_creature->GetThreatManager().getThreatList();
             for (const auto itr : tList)
-                if (Player* target = m_creature->GetMap()->GetPlayer(itr->getUnitGuid()))
+                if (Player* target = m_creature->GetMap()->GetPlayer(itr->getUnitGuid()); target && target->IsAlive())
                     m_vPossibleVictim.push_back(target->GetObjectGuid());
 
             int affli_rand = urand(0, 18);
