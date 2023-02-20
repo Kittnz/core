@@ -406,25 +406,28 @@ bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_
 
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `username` FROM `account` WHERE `id` IN (SELECT `account` FROM `system_fingerprint_usage` WHERE `fingerprint`=%u)", fingerprint));
 
-    if (!result && accountNames.empty())
+    if (result)
+    {
+        do
+        {
+            Field* fields = result->Fetch();
+
+            std::string username = fields[0].GetCppString();
+            if (!AccountMgr::normalizeString(username))
+                continue;
+
+            accountNames.insert(username);
+
+        } while (result->NextRow());
+    }
+
+    if (accountNames.empty())
     {
         if (chatHandler)
             chatHandler->SendSysMessage("No accounts with that fingerprint found.");
 
         return false;
     }
-
-    do
-    {
-        Field* fields = result->Fetch();
-
-        std::string username = fields[0].GetCppString();
-        if (!AccountMgr::normalizeString(username))
-            continue;
-
-        accountNames.insert(username);
-
-    } while (result->NextRow());
 
     for (const auto& accountName : accountNames)
     {
