@@ -360,6 +360,7 @@ void GameObject::Update(uint32 update_diff, uint32 /*p_time*/)
                         return;
                     }
                     m_lootState = GO_READY;
+                    break;
                 }
                 default:
                     m_lootState = GO_READY;                 // for other GO is same switched without delay to GO_READY
