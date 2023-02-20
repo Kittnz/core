@@ -2511,6 +2511,7 @@ bool ChatHandler::HandleAuraCommand(char* args)
     uint32 spellId = ExtractSpellIdFromLink(&args);
     // Aura duration in seconds
     int32 duration = 0;
+    ExtractInt32(&args, duration);
 
     return HandleAuraHelper(spellId, duration, target);
 }
