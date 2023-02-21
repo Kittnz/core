@@ -7780,10 +7780,6 @@ void Player::CastItemCombatSpell(Unit* Target, WeaponAttackType attType, float c
             continue;
         }
 
-        // not allow proc extra attack spell at extra attack
-        if (GetExtraAttacks() && spellInfo->HasEffect(SPELL_EFFECT_ADD_EXTRA_ATTACKS))
-            return;
-
         if (HasSpellCooldown(spellData.SpellId))
         {
             if (chanceMultiplier > 1.0f)
