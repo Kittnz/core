@@ -2251,12 +2251,13 @@ enum
     VAR_KWEE_THRALL     = 2200,
     VAR_KWEE_CAIRNE     = 2201,
     VAR_KWEE_SYLVANAS   = 2202,
-    VAR_KWEE_HORDE      = 2207,
 
     VAR_KWEE_BOLVAR     = 2203,
     VAR_KWEE_MAGNI      = 2204,
     VAR_KWEE_TYRANDE    = 2205,
+
     VAR_KWEE_ALLIANCE   = 2206,
+    VAR_KWEE_HORDE      = 2207,
 
     TEXT_ID_VICTORY_A   = 8315,
     TEXT_ID_VICTORY_H   = 8316,
@@ -2409,7 +2410,7 @@ CreatureAI* GetAI_npc_kwee_peddlefeet(Creature* pCreature)
 
 bool GossipHello_npc_kwee_peddlefeet(Player* pPlayer, Creature* pCreature)
 {
-    for (uint32 i = VAR_KWEE_THRALL; i < VAR_KWEE_HORDE; i++)
+    for (uint32 i = VAR_KWEE_THRALL; i <= VAR_KWEE_HORDE; i++)
     {
         pPlayer->SendUpdateWorldState(i, sObjectMgr.GetSavedVariable(i, 0));
     }
