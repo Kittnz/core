@@ -33,26 +33,7 @@ void instance_black_morass::OnPlayerEnter(Player* pPlayer)
 
 void instance_black_morass::Update(uint32 uiDiff)
 {
-    bool bDoOnce{ false };
 
-    if (!bDoOnce)
-    {
-        bDoOnce = true;
-
-        if (Creature* pPortal{ instance->SummonCreature(81048, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000) })
-        {
-            DoAfterTime(pPortal, 2 * IN_MILLISECONDS, [Instance = instance]()
-            {
-                if (Creature* pChromie{ Instance->SummonCreature(91003, -1593.85f, 7111.85f, 23.72f, 0, TEMPSUMMON_DEAD_DESPAWN) })
-                {
-                    pChromie->CastSpell(pChromie, 26638, false); // Teleport
-                    pChromie->SetFacingTo(6.18f);
-                    pChromie->HandleEmote(EMOTE_ONESHOT_WAVE);
-                    pChromie->PMonsterSay("You did it!");
-                }
-            });
-        }
-    }
 }
 
 InstanceData* GetInstanceData_instance_black_morass(Map* pMap)

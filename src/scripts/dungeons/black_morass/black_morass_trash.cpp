@@ -1444,6 +1444,20 @@ public:
         {
             pBarrier->AddObjectToRemoveList();
         }
+
+        if (Creature * pPortal{ m_creature->SummonCreature(81048, -1595.23f, 7112.18f, 23.72f, 0, TEMPSUMMON_TIMED_DESPAWN, 5000) })
+        {
+            DoAfterTime(pPortal, 2 * IN_MILLISECONDS, [portal = pPortal]()
+                {
+                    if (Creature * pChromie{ portal->SummonCreature(91003, -1593.85f, 7111.85f, 23.72f, 0, TEMPSUMMON_DEAD_DESPAWN) })
+                    {
+                        pChromie->CastSpell(pChromie, 26638, false); // Teleport
+                        pChromie->SetFacingTo(6.18f);
+                        pChromie->HandleEmote(EMOTE_ONESHOT_WAVE);
+                        pChromie->PMonsterYell("You did it! Come over here, quick!");
+                    }
+                });
+        }
     }
 
     void UpdateAI(const uint32 uiDiff) override
