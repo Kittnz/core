@@ -5733,32 +5733,44 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                             {105, {27248, 27513}}   // Thunderbluff
                     };
 
-                    uint32 AdorationOrFriendship = loveAirSpellsMapForFaction[m_caster->GetFactionTemplateId()][0];
-                    uint32 AdoredOrBroken = 26680;      // Adored as default.
+                    auto itr = loveAirSpellsMapForFaction.find(m_caster->GetFactionTemplateId());
+                    if (itr == loveAirSpellsMapForFaction.end())
+                        return;
 
-                    if (loveAirSpellsMapForFaction.count(m_caster->GetFactionTemplateId()))
+                    if (itr->second.size() < 2)
+                        return;
+
+                    uint32 adorationOrFriendship = itr->second[0];
+                    uint32 adoredOrBroken = 26680;      // Adored as default.
+
+                    static ObjectGuidSet talkedToPlayers1;
+
+                    // Sets 1 in 6 chance to cast Heartbroken.
+                    if (!urand(0, 5) && !unitTarget->HasAura(26680) &&
+                        talkedToPlayers1.find(unitTarget->GetObjectGuid()) != talkedToPlayers1.end())
                     {
-                        if (!urand(0, 5))               // Sets 1 in 6 chance to cast Heartbroken.
-                        {
-                            AdoredOrBroken = 26898;     // Heartbroken.
-                        }
-                        else if (!unitTarget->HasAura(26680))
-                        {
-                            AdorationOrFriendship = loveAirSpellsMapForFaction[m_caster->GetFactionTemplateId()][1];    // Pledge of Adoration for related faction.
-                        }
-                        else
-                        {
-                            AdorationOrFriendship = loveAirSpellsMapForFaction[m_caster->GetFactionTemplateId()][0];    // Pledge of Friendship for related faction.
-                        }
-
-                        unitTarget->CastSpell(unitTarget, AdoredOrBroken, false);           // Cast Adored or Broken.
-
-                        if (AdoredOrBroken == 26898)
-                            return;
-
-                        unitTarget->CastSpell(unitTarget, AdorationOrFriendship, true);     // Get a Pledge.
-                        unitTarget->CastSpell(unitTarget, 26879, true);                     // Remove Amorous.
+                        adoredOrBroken = 26898;     // Heartbroken.
                     }
+                    else if (!unitTarget->HasAura(26680))
+                    {
+                        adorationOrFriendship = itr->second[1];    // Pledge of Adoration for related faction.
+                    }
+                    else
+                    {
+                        adorationOrFriendship = itr->second[0];    // Pledge of Friendship for related faction.
+                    }
+
+                    talkedToPlayers1.insert(unitTarget->GetObjectGuid());
+
+                    if (!unitTarget->HasAura(adoredOrBroken))
+                        unitTarget->CastSpell(unitTarget, adoredOrBroken, false);           // Cast Adored or Broken.
+
+                    if (adoredOrBroken == 26898)
+                        return;
+
+                    unitTarget->CastSpell(unitTarget, adorationOrFriendship, true);     // Get a Pledge.
+                    unitTarget->CastSpell(unitTarget, 26879, true);                     // Remove Amorous.
+
                     return;
                 }
                 case 26663:                     // Valentine (Citizens)
@@ -5793,7 +5805,11 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                     uint32 adorationOrFriendship = itr->second[0];
                     uint32 adoredOrBroken = 26680;      // Adored as default.
 
-                    if (!urand(0, 5))               // Sets 1 in 6 chance to cast Heartbroken.
+                    static ObjectGuidSet talkedToPlayers2;
+
+                    // Sets 1 in 6 chance to cast Heartbroken.
+                    if (!urand(0, 5) && !unitTarget->HasAura(26680) &&
+                        talkedToPlayers2.find(unitTarget->GetObjectGuid()) != talkedToPlayers2.end())
                     {
                         adoredOrBroken = 26898;     // Heartbroken.
                     }
@@ -5806,7 +5822,10 @@ void Spell::EffectScriptEffect(SpellEffectIndex eff_idx)
                         adorationOrFriendship = itr->second[0];    // Gift of Friendship for related faction
                     }
 
-                    unitTarget->CastSpell(unitTarget, adoredOrBroken, false);           // Cast Adored or Broken.
+                    talkedToPlayers2.insert(unitTarget->GetObjectGuid());
+
+                    if (!unitTarget->HasAura(adoredOrBroken))
+                        unitTarget->CastSpell(unitTarget, adoredOrBroken, false);           // Cast Adored or Broken.
 
                     if (adoredOrBroken == 26898)
                         return;
