@@ -3656,6 +3656,10 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
 
     bool isAreaAura = spellProto->HasEffect(SPELL_EFFECT_APPLY_AREA_AURA_PARTY);
     SpellAuraHolderMap::iterator i, next;
+
+    uint32 idxCount = 0;
+    const uint32 MaxCount = m_spellAuraHolders.size() * 2;
+
     for (i = m_spellAuraHolders.begin(); i != m_spellAuraHolders.end(); i = next)
     {
         next = i;
@@ -3668,6 +3672,18 @@ bool Unit::RemoveNoStackAurasDueToAuraHolder(SpellAuraHolder *holder)
             continue;
 
         uint32 i_spellId = i_spellProto->Id;
+
+
+        ++idxCount;
+
+        if (idxCount >= MaxCount)
+        { 
+            //For some specific auras this loop seems to never end.
+            //TODO: Find out what auras and why below conditionals trigger next =  m_spellAuraHolders.begin(); multiple times.
+            //For now just hackily safeguard deathlooping
+            DETAIL_LOG("[STACK] Deathloop with holder spell ID / holder loop spell ID [%u/%u].", spellId, i_spellId);
+            return false;
+        }
 
         bool is_triggered_by_spell = false;
         // prevent triggering aura of removing aura that triggered it
