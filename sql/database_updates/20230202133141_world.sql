@@ -408,3 +408,5 @@ UPDATE quest_template SET RewMoneyMaxLevel = 1867 WHERE entry in (40706,40707);
 UPDATE quest_template SET RewMoneyMaxLevel = 1200 WHERE entry in (40697,40698);
 -- Fix vendor option for https://database.turtle-wow.org/?npc=10857 (Hax).
 UPDATE `gossip_menu_option` SET `action_menu_id` = 0, `action_script_id` = 0, `condition_id` = 0 WHERE `menu_id` = 3421 AND `id` = 1;
+-- Change the health of: npc=14888, npc=14889, npc=14887 to 832750.
+update creature_template set health_min = 832750, health_max = 832750 where entry in (14887,14888,14889);
