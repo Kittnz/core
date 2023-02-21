@@ -11,6 +11,6 @@ replace into mangos_string (entry, content_default) values
 
 ('50003', 'Keep up to date with the news and join our Discord server!'),
 
-('50004', 'We encourage everyone to change their password regularly. Accounts with simple passwords or passwords used elsewhere are easy targets for malicious actors.'),
+('50004', 'We encourage everyone to change their password regularly. Accounts with simple passwords or passwords used elsewhere are easy targets for malicious actors.');
 
 replace into autobroadcast (string_Id) values ('50000'),('50001'),('50002'),('50003'),('50004');
