@@ -71,3 +71,9 @@ REPLACE INTO creature_template VALUES
 update creature_template set scale = 0 where entry = 61200;
 -- NPC Phantom Servant needs the ghost visual.
 update creature_template set auras = '9617' where entry = 61205;
+-- Rename item 60239 to Murloc Shell Necklace.
+update item_template set name = 'Murloc Shell Necklace' where entry = 60239;
+-- Rename NPC 92145 to Smallgill.
+update creature_template set name = 'Smallgill' where entry = 92145;
+-- Quest 40162, change all mention of 'Tinyfin' to 'Smallgill' in short description, and main description.
+update quest_template set details = 'Hello! My name is Smallgill, I was once apart of the Murlocs, all until we came here, and they joined with the slithery naga! They go by the name Deeptide now, and attack any who come near, they even stole my necklaces!$B$BThose were mine, that I made, and that I gave to friends, and they stole each and every one of them. I tried to ask nicely but they hurt me, and I want them back. Could you please, oh very please get me some my necklaces back? I don\'t need all of them, just a few, maybe six? I know that the other murlocs around here have them, so, make sure you ask nicely.', Objectives = 'Collect 6 Lovely Shell Necklace\'s for Smallgill in Gillijim\'s Island.' where entry = 40162;
