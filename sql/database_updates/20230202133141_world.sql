@@ -406,3 +406,5 @@ delete from creature_questrelation where id = 80605 and quest = 80303;
 UPDATE quest_template SET RewMoneyMaxLevel = 1867 WHERE entry in (40706,40707);
 -- Add money reward at max level to https://database.turtle-wow.org/?quest=40697 and https://database.turtle-wow.org/?quest=40698.
 UPDATE quest_template SET RewMoneyMaxLevel = 1200 WHERE entry in (40697,40698);
+-- Fix vendor option for https://database.turtle-wow.org/?npc=10857 (Hax).
+UPDATE `gossip_menu_option` SET `action_menu_id` = 0, `action_script_id` = 0, `condition_id` = 0 WHERE `menu_id` = 3421 AND `id` = 1;
