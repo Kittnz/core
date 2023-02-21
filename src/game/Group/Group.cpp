@@ -507,7 +507,7 @@ uint32 Group::RemoveMember(ObjectGuid guid, uint8 removeMethod)
     }
     // if group before remove <= 2 disband it
     else
-        Disband(true);
+        Disband(true, guid);
 
     return m_memberSlots.size();
 }
@@ -526,9 +526,10 @@ void Group::ChangeLeader(ObjectGuid guid)
     SendUpdate();
 }
 
-void Group::Disband(bool hideDestroy)
+void Group::Disband(bool hideDestroy, ObjectGuid initiator)
 {
-    Player *player;
+    Player* player;
+    Player* remainingPlayer = nullptr;
 
     for (const auto& itr : m_memberSlots)
     {
@@ -583,8 +584,13 @@ void Group::Disband(bool hideDestroy)
             }
         }
 
-        _homebindIfInstance(player);
+        // only the person who initiated the disband should be kicked from instance, as he left by choice
+        if (initiator.IsEmpty() || initiator == player->GetObjectGuid())
+            _homebindIfInstance(player);
+        else
+            remainingPlayer = player;
     }
+
     RollId.clear();
     m_memberSlots.clear();
 
@@ -596,6 +602,21 @@ void Group::Disband(bool hideDestroy)
         CharacterDatabase.PExecute("DELETE FROM `groups` WHERE groupId='%u'", m_Id);
         CharacterDatabase.PExecute("DELETE FROM group_member WHERE groupId='%u'", m_Id);
         CharacterDatabase.CommitTransaction();
+
+        if (remainingPlayer)
+        {
+            BoundInstancesMap::iterator itr = m_boundInstances.find(remainingPlayer->GetMapId());
+            if (itr != m_boundInstances.end() && !itr->second.perm &&
+                !remainingPlayer->GetBoundInstance(remainingPlayer->GetMapId()))
+            {
+                remainingPlayer->BindToInstance(itr->second.state, itr->second.perm, false);
+                CharacterDatabase.PExecute("DELETE FROM group_instance WHERE leaderGuid = '%u' AND instance = '%u'",
+                    GetLeaderGuid().GetCounter(), itr->second.state->GetInstanceId());
+                itr->second.state->RemoveGroup(this);               // save can become invalid
+                m_boundInstances.erase(itr);
+            }
+        }
+
         ResetInstances(INSTANCE_RESET_GROUP_DISBAND, nullptr);
     }
 
