@@ -6989,18 +6989,9 @@ void Spell::EffectAddExtraAttacks(SpellEffectIndex eff_idx)
     if (!unitTarget->IsAlive()|| unitTarget->IsExtraAttacksLocked())
         return;
 
-    if (m_spellInfo->Id == 20178) // Reckoning
-    {
-        if (unitTarget->GetExtraAttacks() < 4)
-            unitTarget->AddExtraAttack();
-        return;
-    }
-
-    if (unitTarget->GetExtraAttacks())
-        return;
-
+    uint32 const attacks = std::min(5u, damage + unitTarget->GetExtraAttacks());
     unitTarget->AddExtraAttackOnUpdate();
-    unitTarget->SetExtraAttaks(damage);
+    unitTarget->SetExtraAttaks(attacks);
 
     ExecuteLogInfo info(unitTarget->GetObjectGuid());
     info.extraAttacks.count = damage;
