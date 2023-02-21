@@ -201,7 +201,6 @@ void AddSC_boss_celebras_the_cursed();               //maraudon
 void AddSC_boss_landslide();
 void AddSC_boss_noxxion();
 void AddSC_boss_ptheradras();
-void AddSC_maraudon();
 void AddSC_instance_maraudon();
 void AddSC_instance_onyxia_lair();
 void AddSC_boss_onyxia();                            //onyxias_lair
@@ -513,7 +512,6 @@ void AddScripts()
     AddSC_boss_landslide();
     AddSC_boss_noxxion();
     AddSC_boss_ptheradras();
-    AddSC_maraudon();
     AddSC_instance_maraudon();
     AddSC_instance_onyxia_lair();
     AddSC_boss_onyxia();                                    //onyxias_lair

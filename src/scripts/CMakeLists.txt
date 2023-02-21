@@ -89,7 +89,6 @@ dungeons/maraudon/boss_landslide.cpp
 dungeons/maraudon/boss_noxxion.cpp
 dungeons/maraudon/boss_princess_theradras.cpp
 dungeons/maraudon/instance_maraudon.cpp
-dungeons/maraudon/maraudon.cpp
 dungeons/maraudon/maraudon.h
 dungeons/molten_core/boss_baron_geddon.cpp
 dungeons/molten_core/boss_garr.cpp
