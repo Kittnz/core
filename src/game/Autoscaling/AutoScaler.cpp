@@ -13,7 +13,7 @@ using namespace AutoScaling;
 // Unused
 void AutoScaler::LoadFromDB()
 {
-    std::unique_ptr<QueryResult> result{ WorldDatabase.Query("SELECT * FROM disabled_dungeon_scaling") };
+    std::unique_ptr<QueryResult> result{ WorldDatabase.Query("SELECT * FROM `disabled_dungeon_scaling`") };
 
     if (!result)
         return;
@@ -226,8 +226,8 @@ void AutoScaler::ScaleCreature(Creature* creature, uint32 playerCount, uint32 ma
 
     if (baseDamages.find(creature->GetEntry()) == baseDamages.end())
     {
-        //store base vals.
-        const auto tup = std::make_tuple(
+        // store base vals.
+        auto tup = std::make_tuple(
                 std::make_pair(creature->GetWeaponDamageRange(BASE_ATTACK, MINDAMAGE), creature->GetWeaponDamageRange(BASE_ATTACK, MAXDAMAGE)),
                 std::make_pair(creature->GetFloatValue(UNIT_FIELD_MINRANGEDDAMAGE), creature->GetFloatValue(UNIT_FIELD_MAXRANGEDDAMAGE)),
                 creature->GetModifierValue(UNIT_MOD_ATTACK_POWER, BASE_VALUE));
