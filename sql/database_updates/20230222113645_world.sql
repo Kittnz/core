@@ -5,4 +5,5 @@ update item_template set required_skill = 0, required_skill_rank = 0 where entry
 update item_template set required_skill = 0, required_skill_rank = 0 where entry = 14153; -- Robe of the Void
 update item_template set required_skill = 0, required_skill_rank = 0 where entry = 14152; -- Robe of the Archmage
 
-
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2880
+UPDATE `creature_template` SET `armor` = 4248 WHERE `entry` = 6352;
