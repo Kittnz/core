@@ -1,5 +1,5 @@
 delete from mangos_string where entry between 50000 and 50005;
-delete from autobroadcast where string_id between 50000 and 50005;
+delete from autobroadcast where string_id between 50000 and 50004;
 
 replace into mangos_string (entry, content_default) values 
 
