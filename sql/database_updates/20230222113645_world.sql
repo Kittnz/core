@@ -9,3 +9,8 @@ update item_template set required_skill = 0, required_skill_rank = 0 where entry
 UPDATE `creature_template` SET `armor` = 4248 WHERE `entry` = 6352;
 
 update item_template set max_count = 1 where entry = 65105; -- Scale of the Wakener
+
+-- Add RaceMasks to Call of Earth quests
+
+UPDATE quest_template SET RequiredRaces = 130 WHERE entry = 1516;
+UPDATE quest_template SET RequiredRaces = 32 WHERE entry = 1519;
