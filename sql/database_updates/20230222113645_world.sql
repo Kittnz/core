@@ -7,3 +7,5 @@ update item_template set required_skill = 0, required_skill_rank = 0 where entry
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2880
 UPDATE `creature_template` SET `armor` = 4248 WHERE `entry` = 6352;
+
+update item_template set max_count = 1 where entry = 65105; -- Scale of the Wakener
