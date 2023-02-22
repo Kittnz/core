@@ -262,10 +262,7 @@ struct npc_dashel_stonefistAI : public ScriptedAI
     {
         switch (m_eventPhase)
         {
-        default: // MDQP_NONE
-            ScriptedAI::UpdateAI(uiDiff);
-            break;
-        case MDQP_SAY1: // Occurs only if thugs are alive
+            case MDQP_SAY1: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -277,8 +274,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_SAY2: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_SAY2: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -293,8 +291,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_SAY3: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_SAY3: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -309,8 +308,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_THUG_WALK_AWAY_1: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_THUG_WALK_AWAY_1: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -321,8 +321,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_THUG_WALK_AWAY_2: // Occurs only if thugs are alive
+                break;
+            }
+            case MDQP_THUG_WALK_AWAY_2: // Occurs only if thugs are alive
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -334,8 +335,9 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
-        case MDQP_QUEST_COMPLETE:
+                break;
+            }
+            case MDQP_QUEST_COMPLETE:
             {
                 if (m_nextPhaseDelayTimer < uiDiff)
                 {
@@ -348,7 +350,11 @@ struct npc_dashel_stonefistAI : public ScriptedAI
                 }
                 else
                     m_nextPhaseDelayTimer -= uiDiff;
-            } break;
+                break;
+            }
+            default: // MDQP_NONE
+                ScriptedAI::UpdateAI(uiDiff);
+                break;
         }
     }
 
