@@ -414,3 +414,5 @@ update creature_template set health_min = 832750, health_max = 832750 where entr
 update item_template set spellid_1 = 20888, spelltrigger_1 = 1 where entry = 5007; -- Band of Thorns
 -- Make https://database.turtle-wow.org/?npc=6508 tamable with the Raptor pet family.
 update creature_template set beast_family = 11, type_flags = 1 where entry = 6508;
+-- https://database.turtle-wow.org/?quest=1101 shouldnt reward mage eye blunderbuss as an extra reward.
+update quest_template set rewitemid1 = 0, rewitemcount1 = 0 where entry = 1101;
