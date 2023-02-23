@@ -751,7 +751,12 @@ enum FoulwealdTotemMoundData
     SPELL_DESTROY_KARANG_S_BANNER_1 = 20786,
     SPELL_DESTROY_KARANG_S_BANNER_2 = 20783,
 
-    SAY_ATTACK_BANNER = 8398
+    SAY_ATTACK_BANNER = 8398,
+
+    PHASE_1 = 1,
+    PHASE_2 = 2,
+    PHASE_3 = 3,
+    PHASE_4 = 4
 };
 
 static float foulwealdSpawnCoords[4][3] =
@@ -772,25 +777,29 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
     }
 
     uint8 m_uiEventPhase; // 0 nothing, 1 repoping enraged foulwealds, 2 wait, 3 chief_murgut, 4 done
-    uint32 m_uiPhaseTimer{};
+    uint32 m_uiPhaseTimer;
+    bool phaseStart;
     std::list<ObjectGuid> m_lGuidCurrentEnragedFoulweald;
 
     void Reset()
     {
-        m_uiEventPhase = 0;
+        phaseStart = false;
+        m_uiEventPhase = PHASE_1;
         m_uiPhaseTimer = 170000;
     }
 
     bool EventStart(ObjectGuid playerGuid)
     {
-        if (m_uiEventPhase != 0)
+        if (phaseStart)
             return false;
 
-        m_uiEventPhase = 1;
+        m_uiEventPhase = PHASE_1;
+
+        phaseStart = true;
 
         for (uint8 i{} ; i < 2; ++i)
         {
-            if (Creature* pFoulweald{ me->SummonCreature(NPC_ENRAGED_FOULWEALD, foulwealdSpawnCoords[i][0], foulwealdSpawnCoords[i][1], foulwealdSpawnCoords[i][2], 0.f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 900) })
+            if (Creature* pFoulweald{ me->SummonCreature(NPC_ENRAGED_FOULWEALD, foulwealdSpawnCoords[i][0], foulwealdSpawnCoords[i][1], foulwealdSpawnCoords[i][2], 0.f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000) })
             {
                 m_lGuidCurrentEnragedFoulweald.push_back(pFoulweald->GetGUIDLow());
 
@@ -817,11 +826,16 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
         }
 
         go_foulweald_totem_moundAI::Reset();
+
+        phaseStart = false;
     }
 
     void EnragedFoulwealdJustDied(uint64 creatureGUID)
     {
-        if (m_uiEventPhase != 1)
+        if (!phaseStart)
+            return;
+
+        if (m_uiEventPhase != PHASE_1)
             return;
 
         for (auto& guid : m_lGuidCurrentEnragedFoulweald)
@@ -833,8 +847,9 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                 if (Creature* pFoulweald{ me->SummonCreature(NPC_ENRAGED_FOULWEALD,
                     foulwealdSpawnCoords[uiPos][0],
                     foulwealdSpawnCoords[uiPos][1],
-                    foulwealdSpawnCoords[uiPos][2], 0.f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 900) })
+                    foulwealdSpawnCoords[uiPos][2], 0.f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000) })
                 {
+                    m_lGuidCurrentEnragedFoulweald.push_back(pFoulweald->GetGUIDLow());
                     float fX{}, fY{}, fZ{};
                     me->GetPosition(fX, fY, fZ);
 
@@ -851,7 +866,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        if (m_uiEventPhase == 0 || m_uiEventPhase > 4)
+        if (!phaseStart)
             return;
 
         if (m_uiPhaseTimer < uiDiff)
@@ -860,12 +875,12 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
 
             switch (m_uiEventPhase)
             {
-                case 2:
+                case PHASE_2:
                 {
                     m_uiPhaseTimer = 10000;
                     break;
                 }
-                case 3:
+                case PHASE_3:
                 {
                     if (Creature* pMurgut{ me->SummonCreature(NPC_CHIEF_MURGUT, foulwealdSpawnCoords[3][0], foulwealdSpawnCoords[3][1], foulwealdSpawnCoords[3][2], 0.0f, TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 120000) })
                     {
@@ -887,7 +902,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
                     m_uiPhaseTimer = 120000;
                     break;
                 }
-                case 4:
+                case PHASE_4:
                 {
                     EventEnded();
                     break;
@@ -895,9 +910,7 @@ struct go_foulweald_totem_moundAI: public GameObjectAI
             }
         }
         else
-        {
             m_uiPhaseTimer -= uiDiff;
-        }
     }
 };
 
@@ -930,7 +943,7 @@ struct npc_enraged_foulwealdAI : public ScriptedAI
         {
             if (go_foulweald_totem_moundAI* pMoundAI{ dynamic_cast<go_foulweald_totem_moundAI*>(pGO->AI()) })
             {
-                pMoundAI->EnragedFoulwealdJustDied(m_creature->GetGUID());
+                pMoundAI->EnragedFoulwealdJustDied(m_creature->GetGUIDLow());
             }
         }
     }
