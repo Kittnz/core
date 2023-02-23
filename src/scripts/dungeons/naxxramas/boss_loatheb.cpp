@@ -75,12 +75,15 @@ struct mob_rottingMaggotAI : public ScriptedAI
         ScriptedAI(pCreature),
         isDiseased(isDiseased)
     {
+        m_pInstance = (instance_naxxramas*)pCreature->GetInstanceData();
         m_creature->SetNoCallAssistance(true);
         Reset();
     }
     const bool isDiseased;
     WorldLocation aggroPossition;
     static constexpr uint32 SPELL_RETCHING_PLAGUE = 30079;
+
+    instance_naxxramas* m_pInstance;
 
     void Reset() override
     {
@@ -118,6 +121,11 @@ struct mob_rottingMaggotAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        if (m_pInstance->GetData(TYPE_HEIGAN) == DONE)
+        {
+            m_creature->ForcedDespawn();
+        }
+
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
 
@@ -143,12 +151,16 @@ struct mob_eyeStalkAI : public ScriptedAI
     mob_eyeStalkAI(Creature* pCreature) :
         ScriptedAI(pCreature)
     {
+        m_pInstance = (instance_naxxramas*)pCreature->GetInstanceData();
         m_creature->SetNoCallAssistance(true);
         SetCombatMovement(false);
         timeSinceSpawn = 0;
         haveSubmerged = false;
         haveCastSubmerge = false;
     }
+
+    instance_naxxramas* m_pInstance;
+
     uint32 timeSinceSpawn;
     bool haveSubmerged;
     bool haveCastSubmerge;
@@ -191,6 +203,11 @@ struct mob_eyeStalkAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
+        if (m_pInstance->GetData(TYPE_HEIGAN) == DONE)
+        {
+            m_creature->ForcedDespawn();
+        }
+
         m_creature->SetNoCallAssistance(true);
         timeSinceSpawn += std::min(uiDiff, std::numeric_limits<uint32>::max() - timeSinceSpawn);
 
@@ -420,7 +437,10 @@ struct boss_loathebAI : public ScriptedAI
 
     void UpdateAI(const uint32 uiDiff) override
     {
-        WhackAStalk(uiDiff);
+        if (m_pInstance->GetData(TYPE_HEIGAN) != DONE)
+        {
+            WhackAStalk(uiDiff);
+        }
 
         if (!m_creature->SelectHostileTarget() || !m_creature->GetVictim())
             return;
