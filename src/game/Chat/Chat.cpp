@@ -657,7 +657,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { "god",            SEC_DEVELOPER,       false, &ChatHandler::HandleGodCommand,                 "", nullptr },
         { "aura",           SEC_DEVELOPER,       false, &ChatHandler::HandleAuraCommand,                "", nullptr },
         { "unaura",         SEC_DEVELOPER,       false, &ChatHandler::HandleUnAuraCommand,              "", nullptr },
-        { "announce",       SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleAnnounceCommand,            "", nullptr },
+        { "broadcast",      SEC_ADMINISTRATOR,  true,  &ChatHandler::HandleAnnounceCommand,            "", nullptr },
         { "notify",         SEC_ADMINISTRATOR,   true,  &ChatHandler::HandleNotifyCommand,              "", nullptr },
         { "goname",         SEC_OBSERVER,        false, &ChatHandler::HandleGonameCommand,              "", nullptr },
         { "summon",         SEC_DEVELOPER,       false, &ChatHandler::HandleSummonCommand,              "", nullptr },
