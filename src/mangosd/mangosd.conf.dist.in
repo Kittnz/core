@@ -751,6 +751,10 @@ MinPetitionSigns = 9
 
 MaxGroupXPDistance = 74
 
+# PasswordChangeRewardItem. Item that will be sent to players when they change password.
+
+PasswordChangeRewardItem = 13342
+
 # MailDeliveryDelay. Mail delivery delay time for item sending.
 
 MailDeliveryDelay = 3600
