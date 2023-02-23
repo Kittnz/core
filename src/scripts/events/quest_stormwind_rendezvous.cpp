@@ -27,6 +27,7 @@ void npc_reginald_windsorAI::ResetCreature()
     Tick = 0;
     playerGUID = 0;
     GreetPlayer = false;
+    unmountReginald = false;
     QuestAccepted = false;
     BeginQuest = false;
     Begin = true;
@@ -258,6 +259,22 @@ void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
                 GuardTimer[i] -= uiDiff;
         }
     }
+
+    if (unmountReginald)
+    {
+        if (Timer <= uiDiff) {
+            unmountReginald = false;
+            if (Creature* pMercutio = m_creature->FindNearestCreature(NPC_MERCUTIO, 10.0f))
+            {
+                DoScriptText(SAY_WINDSOR1, m_creature);
+                pMercutio->GetMotionMaster()->MovePoint(MERCUTIO_END_POINT, -9148.395508f, 371.322174f, 90.543655f);
+            }
+            GreetPlayer = true;
+            Timer = 5000;
+        } else
+            Timer -= uiDiff;
+    }
+
     if (Begin)
     {
         if (m_creature->GetDistance2d(WindsorWaypoints[0].x, WindsorWaypoints[0].y) < 2.0f)
@@ -272,47 +289,10 @@ void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
                     pRowe->HandleEmote(EMOTE_ONESHOT_SALUTE);
 
                 Timer = 2000;
-                SummonHorse = true;
             }
             else
                 Timer -= uiDiff;
         }
-    }
-
-    if (SummonHorse)
-    {
-        if (Timer <= uiDiff)
-        {
-            SummonHorse = false;
-            m_creature->Unmount();
-            DoCast(m_creature, SPELL_WINDSOR_DISMISS_HORSE, true);
-            if (Creature* pMercutio = m_creature->FindNearestCreature(NPC_MERCUTIO, 10.0f))
-            {
-                pMercutio->SetWalk(false);
-                m_creature->SetFacingToObject(pMercutio);
-            }
-            ShooHorse = true;
-            Timer = 2000;
-        }
-        else
-            Timer -= uiDiff;
-    }
-
-    if (ShooHorse)
-    {
-        if (Timer <= uiDiff)
-        {
-            ShooHorse = false;
-            if (Creature* pMercutio = m_creature->FindNearestCreature(NPC_MERCUTIO, 10.0f))
-            {
-                DoScriptText(SAY_WINDSOR1, m_creature);
-                pMercutio->GetMotionMaster()->MovePoint(0, -9148.395508f, 371.322174f, 90.543655f);
-            }
-            GreetPlayer = true;
-            Timer = 5000;
-        }
-        else
-            Timer -= uiDiff;
     }
 
     if (!BeginQuest)
@@ -789,6 +769,28 @@ void npc_reginald_windsorAI::UpdateAI(uint32 const uiDiff)
         Timer -= uiDiff;
 }
 
+void npc_reginald_windsorAI::MovementInform(uint32 uiType, uint32 uiPointId)
+{
+    if (uiType != POINT_MOTION_TYPE)
+        return;
+
+    if (uiPointId == REGINALD_WINDSOR_END_POINT)
+    {
+        m_creature->Unmount();
+        DoCast(m_creature, SPELL_WINDSOR_DISMISS_HORSE, true);
+
+        if (Creature* pMercutio = m_creature->FindNearestCreature(NPC_MERCUTIO, 10.0f))
+        {
+            pMercutio->SetWalk(false);
+            m_creature->SetFacingToObject(pMercutio);
+        }
+
+        unmountReginald = true;
+        Timer = 2000;
+        return;
+    }
+}
+
 bool QuestAccept_npc_reginald_windsor(Player* pPlayer, Creature* pCreature, Quest const* pQuest)
 {
     if (pQuest->GetQuestId() == QUEST_THE_GREAT_MASQUERADE)
@@ -926,7 +928,7 @@ void npc_squire_roweAI::UpdateAI(uint32 const uiDiff)
                     pWindsor->Mount(MOUNT_WINDSOR);
                     pWindsor->SetWalk(false);
                     pWindsor->SetSpeedRate(MOVE_RUN, 1.0f);
-                    pWindsor->GetMotionMaster()->MovePoint(0, WindsorWaypoints[0].x, WindsorWaypoints[0].y, WindsorWaypoints[0].z, MOVE_PATHFINDING);
+                    pWindsor->GetMotionMaster()->MovePoint(REGINALD_WINDSOR_END_POINT, WindsorWaypoints[0].x, WindsorWaypoints[0].y, WindsorWaypoints[0].z, MOVE_PATHFINDING);
                     pWindsor->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                 }
                 ++m_uiStep;
@@ -1007,6 +1009,32 @@ bool AreaTrigger_at_stormwind_gates(Player* pPlayer, AreaTriggerEntry const* /*p
         return false;
 }
 
+/*
+* Mercutio
+*/
+
+npc_mercutioAI::npc_mercutioAI(Creature* pCreature) : ScriptedAI(pCreature)
+{
+    npc_mercutioAI::Reset();
+}
+
+void npc_mercutioAI::MovementInform(uint32 uiType, uint32 uiPointId)
+{
+    if (uiType != POINT_MOTION_TYPE)
+        return;
+
+    if (uiPointId == MERCUTIO_END_POINT)
+    {
+        m_creature->ForcedDespawn();
+        return;
+    }
+}
+
+CreatureAI* GetAI_npc_mercutio(Creature* pCreature)
+{
+    return new npc_mercutioAI(pCreature);
+}
+
 void AddSC_quest_stormwind_rendezvous()
 {
     Script* pNewScript;
@@ -1029,5 +1057,10 @@ void AddSC_quest_stormwind_rendezvous()
     pNewScript = new Script;
     pNewScript->Name = "at_stormwind_gates";
     pNewScript->pAreaTrigger = &AreaTrigger_at_stormwind_gates;
+    pNewScript->RegisterSelf();
+
+    pNewScript = new Script;
+    pNewScript->Name = "npc_mercutio";
+    pNewScript->GetAI = &GetAI_npc_mercutio;
     pNewScript->RegisterSelf();
 }

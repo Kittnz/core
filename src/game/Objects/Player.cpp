@@ -23063,16 +23063,6 @@ bool Player::SuspendWorldBuffs()
 		GetSession()->SendNotification("You can't use that while in a Battleground.");
 		return false;
 	}
-	else if (GetMap() && GetMap()->IsRaid() && GetInstanceData() && GetInstanceData()->IsEncounterInProgress())
-	{
-		GetSession()->SendNotification("You can't use that during raid encounters.");
-		return false;
-	}
-    else if (GetMapId() == 45) // Don't allow in Scarlet Citadel
-    {
-        GetSession()->SendNotification("You can't use that here.");
-        return false;
-    }
 
     std::string suspendMessage{};
 
@@ -23098,15 +23088,15 @@ bool Player::SuspendWorldBuffs()
 				if (!suspended_cleared)
 				{
 					// found at least one world buff, clear character_aura_suspended 
-					CharacterDatabase.DirectPExecute("DELETE FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+					CharacterDatabase.DirectPExecute("DELETE FROM `character_aura_suspended` WHERE `guid` = '%u'", GetGUIDLow());
 					ChatHandler(this).PSendSysMessage("All previously suspended world effects have been cleared.");
 					suspended_cleared = true;
 				}
 
 				static SqlStatementID insertAuras;
 
-				SqlStatement stmt = CharacterDatabase.CreateStatement(insertAuras, "INSERT INTO character_aura_suspended (guid, caster_guid, item_guid, spell, stackcount, remaincharges, "
-					"basepoints0, basepoints1, basepoints2, periodictime0, periodictime1, periodictime2, maxduration, remaintime, effIndexMask) "
+				SqlStatement stmt = CharacterDatabase.CreateStatement(insertAuras, "INSERT INTO `character_aura_suspended` (`guid`, `caster_guid`, `item_guid`, `spell`, `stackcount`, `remaincharges`, "
+					"`basepoints0`, `basepoints1`, `basepoints2`, `periodictime0`, `periodictime1`, `periodictime2`, `maxduration`, `remaintime`, `effIndexMask`) "
 					"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
 				stmt.addUInt32(GetGUIDLow());
@@ -23188,9 +23178,9 @@ bool Player::RestoreSuspendedWorldBuffs()
 		return false;
 	}
 
-	QueryResult *auras = CharacterDatabase.PQuery("SELECT caster_guid,item_guid,spell,stackcount,remaincharges,basepoints0,basepoints1,"
-		"basepoints2,periodictime0,periodictime1,periodictime2,maxduration,remaintime,effIndexMask "
-		"FROM character_aura_suspended WHERE guid = '%u'", GetGUIDLow());
+	QueryResult *auras = CharacterDatabase.PQuery("SELECT `caster_guid`, `item_guid`, `spell`, `stackcount`, `remaincharges`, `basepoints0`, `basepoints1`,"
+		" `basepoints2`, `periodictime0`, `periodictime1`, `periodictime2`, `maxduration`, `remaintime`, `effIndexMask` "
+		"FROM `character_aura_suspended` WHERE `guid` = '%u'", GetGUIDLow());
 
 	if (!auras)
 	{
@@ -23223,7 +23213,7 @@ bool Player::RestoreSuspendedWorldBuffs()
 
 		LoadAura(s, s.remaintime);
 
-		CharacterDatabase.PExecute("DELETE FROM character_aura_suspended WHERE guid = %u and spell = %u", s.caster_guid, s.spellid);
+		CharacterDatabase.PExecute("DELETE FROM `character_aura_suspended` WHERE `guid` = %u and `spell` = %u", s.caster_guid, s.spellid);
 
 		std::string fortunePercent = "";
 		if (s.spellid == 23768)
@@ -23278,9 +23268,7 @@ void Player::RemoveWorldBuffsIfAlreadySuspended()
 					if (s.spellid == WorldBuffs[i])
 					{
 						// Check if its alreayd suspended
-						QueryResult *auras = CharacterDatabase.PQuery("SELECT spell "
-							"FROM character_aura_suspended "
-							"WHERE guid = '%u' and spell = '%u'", GetGUIDLow(), s.spellid);
+						QueryResult *auras = CharacterDatabase.PQuery("SELECT `spell` FROM `character_aura_suspended` WHERE `guid` = '%u' and `spell` = '%u'", GetGUIDLow(), s.spellid);
 
 						if (!auras)
 							continue;

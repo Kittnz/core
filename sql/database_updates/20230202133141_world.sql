@@ -410,3 +410,31 @@ UPDATE quest_template SET RewMoneyMaxLevel = 1200 WHERE entry in (40697,40698);
 UPDATE `gossip_menu_option` SET `action_menu_id` = 0, `action_script_id` = 0, `condition_id` = 0 WHERE `menu_id` = 3421 AND `id` = 1;
 -- Change the health of: npc=14888, npc=14889, npc=14887 to 832750.
 update creature_template set health_min = 832750, health_max = 832750 where entry in (14887,14888,14889);
+-- Fix for item 5007. Adds 1 damage reflect to band of thorns, solely for flavor purpose and that's it. (Dragunovi)
+update item_template set spellid_1 = 20888, spelltrigger_1 = 1 where entry = 5007; -- Band of Thorns
+-- Make https://database.turtle-wow.org/?npc=6508 tamable with the Raptor pet family.
+update creature_template set beast_family = 11, type_flags = 1 where entry = 6508;
+-- https://database.turtle-wow.org/?quest=1101 shouldnt reward mage eye blunderbuss as an extra reward.
+update quest_template set rewitemid1 = 0, rewitemcount1 = 0 where entry = 1101;
+-- Replace https://database.turtle-wow.org/?item=51810 with new.
+replace into item_template values
+ ('51810', '2', '4', 'Gnoll Slammer', '', '19613', '2', '0', '1', '2562', '512', '21', '-1', '-1', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '1', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '0',
+ '0', '11', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '45', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
+-- Parity fix for the following enchant items. Change icon and add a "Use Spell" text similar to other Enchant Formulas. item 60966 and 60969.
+update item_template set display_id = 7798 where entry in (60966,60969);
+-- Add item IDs 65100 and 65101 to loot group 12 for Emeriss (ID 14889) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30404, 65100, 0, 1, 1, 1, 0);
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30404, 65101, 0, 1, 1, 1, 0);
+-- Add item ID 65102 to loot group 11 for Lethon (ID 14888) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30402, 65102, 0, 1, 1, 1, 0);
+-- Add item IDs 65103 and 65104 to loot group 10 for Ysondre (ID 14887) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30400, 65103, 0, 1, 1, 1, 0);
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30400, 65104, 0, 1, 1, 1, 0);
+-- Add item ID 65105 to loot group 12 for Taerar (ID 14890) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30405, 65105, 0, 1, 1, 1, 0);

@@ -290,13 +290,9 @@ struct boss_ouroAI : public Scripted_NoMovementAI
             // Sand Blast
             if (m_uiSandBlastTimer < uiDiff)
             {
-                auto target = SelectTarget(SelectTargetMethod::MaxThreat);
-                
-
-                if (target && DoCastSpellIfCan(target, SPELL_SANDBLAST) == CAST_OK)
-                {
-                    m_uiSandBlastTimer = urand(SANDBLAST_TIMER_MIN, SANDBLAST_TIMER_MAX);
-                }
+                if (Unit* pTarget = m_creature->SelectAttackingTarget(ATTACKING_TARGET_TOPAGGRO, 0, SPELL_SANDBLAST, SELECT_FLAG_PLAYER))
+                    if (DoCastSpellIfCan(pTarget, SPELL_SANDBLAST) == CAST_OK)
+                        m_uiSandBlastTimer = urand(SANDBLAST_TIMER_MIN, SANDBLAST_TIMER_MAX);
             }
             else
                 m_uiSandBlastTimer -= uiDiff;
