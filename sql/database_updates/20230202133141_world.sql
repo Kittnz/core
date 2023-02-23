@@ -426,3 +426,5 @@ replace into item_template values
  '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
  '-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '45', '0', '0', '0', '0', '1', '0', '0', '0',
  '0', '1', NULL);
+-- Parity fix for the following enchant items. Change icon and add a "Use Spell" text similar to other Enchant Formulas. item 60966 and 60969.
+update item_template set display_id = 7798 where entry in (60966,60969);
