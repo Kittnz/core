@@ -428,3 +428,13 @@ replace into item_template values
  '0', '1', NULL);
 -- Parity fix for the following enchant items. Change icon and add a "Use Spell" text similar to other Enchant Formulas. item 60966 and 60969.
 update item_template set display_id = 7798 where entry in (60966,60969);
+-- Add item IDs 65100 and 65101 to loot group 12 for Emeriss (ID 14889) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30404, 65100, 0, 1, 1, 1, 0);
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30404, 65101, 0, 1, 1, 1, 0);
+-- Add item ID 65102 to loot group 11 for Lethon (ID 14888) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30402, 65102, 0, 1, 1, 1, 0);
+-- Add item IDs 65103 and 65104 to loot group 10 for Ysondre (ID 14887) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30400, 65103, 0, 1, 1, 1, 0);
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30400, 65104, 0, 1, 1, 1, 0);
+-- Add item ID 65105 to loot group 12 for Taerar (ID 14890) and make sure all items have equal drop chances.
+REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30405, 65105, 0, 1, 1, 1, 0);
