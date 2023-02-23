@@ -5666,18 +5666,50 @@ bool ChatHandler::HandleAccountPasswordCommand(char* args)
 
     switch (result)
     {
-    case AOR_OK:
-        SendSysMessage(LANG_COMMAND_PASSWORD);
-        break;
-    case AOR_PASS_TOO_LONG:
-        SendSysMessage(LANG_PASSWORD_TOO_LONG);
-        SetSentErrorMessage(true);
-        return false;
-    case AOR_NAME_NOT_EXIST:                            // not possible case, don't want get account name for output
-    default:
-        SendSysMessage(LANG_COMMAND_NOTCHANGEPASSWORD);
-        SetSentErrorMessage(true);
-        return false;
+        case AOR_OK:
+        {
+            SendSysMessage(LANG_COMMAND_PASSWORD);
+            if (m_session->GetAccountFlags() & ACCOUNT_FLAG_PASSWORD_CHANGE_REWARD)
+            {
+                if (ItemPrototype const* itemProto = sObjectMgr.GetItemPrototype(sWorld.getConfig(CONFIG_UINT32_PASSWORD_CHANGE_REWARD_ITEM)))
+                {
+                    std::list<PlayerCacheData*> characters;
+                    sObjectMgr.GetPlayerDataForAccount(GetAccountId(), characters);
+                    for (auto const& pChar : characters)
+                    {
+                        ObjectGuid playerGuid = ObjectGuid(HIGHGUID_PLAYER, pChar->uiGuid);
+                        Player* pPlayer = (pChar->uiGuid == GetPlayer()->GetGUIDLow()) ? GetPlayer() : nullptr;
+                        if (Item* restoredItem = Item::CreateItem(itemProto->ItemId, 1, pPlayer))
+                        {
+                            // save new item before send
+                            restoredItem->SaveToDB();
+
+                            // subject
+                            std::string subject = itemProto->Name1;
+
+                            // text
+                            std::string body = "Thank you for taking account security seriously and changing your password. Here is your reward.";
+
+                            MailDraft(subject, body)
+                                .AddItem(restoredItem)
+                                .SendMailTo(MailReceiver(playerGuid), MailSender(MAIL_NORMAL, playerGuid.GetCounter(), MAIL_STATIONERY_GM), MAIL_CHECK_MASK_COPIED, 0, 30 * DAY);
+                        }
+                    }
+                    m_session->SetAccountFlags(m_session->GetAccountFlags() & ~ACCOUNT_FLAG_PASSWORD_CHANGE_REWARD);
+                    LoginDatabase.PExecute("UPDATE account SET flags = flags & ~0x%x WHERE id = %u", ACCOUNT_FLAG_PASSWORD_CHANGE_REWARD, GetAccountId());
+                }
+            }
+            break;
+        }
+        case AOR_PASS_TOO_LONG:
+            SendSysMessage(LANG_PASSWORD_TOO_LONG);
+            SetSentErrorMessage(true);
+            return false;
+        case AOR_NAME_NOT_EXIST:                            // not possible case, don't want get account name for output
+        default:
+            SendSysMessage(LANG_COMMAND_NOTCHANGEPASSWORD);
+            SetSentErrorMessage(true);
+            return false;
     }
     SetSentErrorMessage(true);   
     return false;
