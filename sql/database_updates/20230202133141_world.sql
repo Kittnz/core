@@ -412,4 +412,5 @@ UPDATE `gossip_menu_option` SET `action_menu_id` = 0, `action_script_id` = 0, `c
 update creature_template set health_min = 832750, health_max = 832750 where entry in (14887,14888,14889);
 -- Fix for item 5007. Adds 1 damage reflect to band of thorns, solely for flavor purpose and that's it. (Dragunovi)
 update item_template set spellid_1 = 20888, spelltrigger_1 = 1 where entry = 5007; -- Band of Thorns
-
+-- Make https://database.turtle-wow.org/?npc=6508 tamable with the Raptor pet family.
+update creature_template set beast_family = 11, type_flags = 1 where entry = 6508;
