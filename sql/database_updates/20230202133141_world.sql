@@ -416,3 +416,13 @@ update item_template set spellid_1 = 20888, spelltrigger_1 = 1 where entry = 500
 update creature_template set beast_family = 11, type_flags = 1 where entry = 6508;
 -- https://database.turtle-wow.org/?quest=1101 shouldnt reward mage eye blunderbuss as an extra reward.
 update quest_template set rewitemid1 = 0, rewitemcount1 = 0 where entry = 1101;
+-- Replace https://database.turtle-wow.org/?item=51810 with new.
+replace into item_template values
+ ('51810', '2', '4', 'Gnoll Slammer', '', '19613', '2', '0', '1', '2562', '512', '21', '-1', '-1', '13',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '1', '0', '4', '1', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '2200', '0',
+ '0', '11', '20', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
+ '0', '0', '0', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0',
+ '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0', '-1', '0', '0', '0', '0', '-1', '0',
+ '-1', '1', '0', '0', '0', '0', '0', '2', '3', '0', '0', '45', '0', '0', '0', '0', '1', '0', '0', '0',
+ '0', '1', NULL);
