@@ -27,6 +27,7 @@ void npc_reginald_windsorAI::ResetCreature()
     Tick = 0;
     playerGUID = 0;
     GreetPlayer = false;
+    unmountReginald = false;
     QuestAccepted = false;
     BeginQuest = false;
     Begin = true;
