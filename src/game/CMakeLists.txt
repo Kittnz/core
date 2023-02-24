@@ -431,6 +431,7 @@ endif()
 
 if(USE_DISCORD_BOT)
     list(APPEND game_SRCS
+      DiscordBot/CommandRegistrar.cpp
       DiscordBot/GMCommandHandler.cpp
       DiscordBot/GMCommandHandler.hpp
       DiscordBot/LoginCommandHandler.cpp

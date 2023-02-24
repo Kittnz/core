@@ -26,6 +26,7 @@
 #include "Policies/Singleton.h"
 #include <mutex>
 #include <shared_mutex>
+#include "Util.h"
 
 class Config;
 class ByteBuffer;
@@ -184,7 +185,37 @@ class Log : public MaNGOS::Singleton<Log, MaNGOS::ClassLevelLockable<Log, std::m
         void InitSmartlogEntries(std::string const& str);
         void InitSmartlogGuids(std::string const& str);
 
-        void out(LogFile t, char const* format, ...) ATTR_PRINTF(3,4);
+        void LogDiscord(LogFile type, std::string log);
+
+        template<typename... Args>
+        void out(LogFile type, const char* str, Args... args)
+        {
+            if (!str)
+                return;
+
+            std::shared_lock<std::shared_mutex> l{ logLock };
+
+
+            std::string log = string_format(str, args...);
+
+#ifdef USING_DISCORD_BOT
+            LogDiscord(type, log);
+#endif
+
+            if (logFiles[type])
+            {
+                if (timestampPrefix[type])
+                    outTimestamp(logFiles[type]);
+
+                fprintf(logFiles[type], "%s", log.c_str());
+                fprintf(logFiles[type], "\n");
+                fflush(logFiles[type]);
+
+                fflush(logFiles[type]);
+            }
+            fflush(stdout);
+        }
+
         void outCommand(uint32 account, char const* str, ...) ATTR_PRINTF(3,4);
         void outString(); // any log level
         void outString(char const* str, ...) ATTR_PRINTF(2,3);

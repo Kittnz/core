@@ -93,7 +93,6 @@ if(USE_DISCORD_BOT)
     list(APPEND shared_SRCS
       DiscordBot/BaseCommandHandler.hpp
       DiscordBot/BaseCommandHandler.cpp
-      DiscordBot/CommandRegistrar.cpp
       DiscordBot/AuthManager.cpp
       DiscordBot/AuthManager.hpp
       DiscordBot/Bot.cpp
