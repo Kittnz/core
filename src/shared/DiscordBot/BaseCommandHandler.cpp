@@ -3,16 +3,9 @@
 #include "AuthManager.hpp"
 #include "Bot.hpp"
 #include "Log.h"
-#include "Chat.h"
 
 #include <sstream>
 
-
-bool ChatHandler::HandleDiscBotStopCommand(char* args)
-{
-    sWorld.StopDiscordBot();
-    return true;
-}
 
 namespace DiscordBot
 {

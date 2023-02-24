@@ -13,7 +13,7 @@ namespace DiscordBot
         uint32_t gameAccountId = 0;
         bool authenticated = false;
         dpp::snowflake discordId = 0;
-        uint32 securityLevel = 0;
+        uint32_t securityLevel = 0;
     };
 
     enum class AuthResult : uint8_t
@@ -52,7 +52,7 @@ namespace DiscordBot
         AuthResult Authenticate(std::string username, std::string password, const dpp::user* user);
 
         std::unordered_map<dpp::snowflake, AuthenticationInfo> _authData;
-        std::unordered_map<uint32, std::reference_wrapper<AuthenticationInfo>> _authDataLookup;
+        std::unordered_map<uint32_t, std::reference_wrapper<AuthenticationInfo>> _authDataLookup;
 
     };
 }

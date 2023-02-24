@@ -1,12 +1,43 @@
 #pragma once
 
 #include "AuthManager.hpp"
+#include "Util.h"
+#include "Auth/Sha1.h"
 
-#include "AccountMgr.h"
 #include "Database/DatabaseEnv.h"
 
 namespace DiscordBot
 {
+    bool NormalizeString(std::string& utf8str)
+    {
+        std::wstring wstr_buf;
+        if (!Utf8toWStr(utf8str, wstr_buf))
+            return false;
+
+        if (wstr_buf.size() > 16)
+            return false;
+
+        std::transform(wstr_buf.begin(), wstr_buf.end(), wstr_buf.begin(), wcharToUpperOnlyLatin);
+
+        return WStrToUtf8(wstr_buf, utf8str);
+    }
+
+    std::string CalculateShaPassHash(std::string& name, std::string& password)
+    {
+        Sha1Hash sha;
+        sha.Initialize();
+        sha.UpdateData(name);
+        sha.UpdateData(":");
+        sha.UpdateData(password);
+        sha.Finalize();
+
+        std::string encoded;
+        hexEncodeByteArray(sha.GetDigest(), sha.GetLength(), encoded);
+
+        return encoded;
+    }
+
+
     std::string AuthManager::AuthResultToString(AuthResult res)
     {
         switch (res)
@@ -24,6 +55,7 @@ namespace DiscordBot
             return "Unkown Error.";
         }
     }
+
 
     bool AuthManager::IsAuthenticated(const dpp::user* user) const
     {
@@ -75,7 +107,7 @@ namespace DiscordBot
         std::string safeUsername = username;
         LoginDatabase.escape_string(safeUsername);
 
-        if (!sAccountMgr.normalizeString(username) || !sAccountMgr.normalizeString(password))
+        if (!NormalizeString(username) || !NormalizeString(password))
             return AuthResult::WrongCredentials;
 
         std::unique_ptr<QueryResult> result = 
@@ -93,7 +125,7 @@ namespace DiscordBot
         if (!accountId)
             return AuthResult::WrongCredentials;
 
-        auto userHash = sAccountMgr.CalculateShaPassHash(username, password);
+        auto userHash = CalculateShaPassHash(username, password);
 
 
         if (userHash != fields[1].GetCppString())
