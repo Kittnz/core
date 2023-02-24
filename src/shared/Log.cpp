@@ -25,6 +25,7 @@
 #include "Config/Config.h"
 #include "Util.h"
 #include "ByteBuffer.h"
+#include "DiscordBot/Bot.hpp"
 
 #include <stdarg.h>
 #include <fstream>
@@ -126,6 +127,19 @@ void Log::InitSmartlogGuids(const std::string& str)
         ss >> entry;
         m_smartlogExtraGuids.push_back(entry);
     }
+}
+
+void Log::LogDiscord(LogFile type, std::string log)
+{
+    static const std::unordered_map<LogFile, uint64_t> ChannelLookup =
+    {
+        {LOG_MONEY_TRADES, 1078715732013105252}
+    };
+
+    if (ChannelLookup.find(type) == ChannelLookup.end())
+        return;
+
+    sDiscordBot->SendMessageToChannel(ChannelLookup.find(type)->second, std::move(log));
 }
 
 void Log::SetColor(bool stdout_stream, Color color)
@@ -536,31 +550,6 @@ void Log::outHonor(const char *str, ...)
         fprintf(honorLogfile, "\n" );
         fflush(honorLogfile);
     }
-}
-
-void Log::out(LogFile type, const char* str, ...)
-{
-    ASSERT(type < LOG_MAX_FILES)
-    if (!str)
-        return;
-
-    std::shared_lock<std::shared_mutex> l{ logLock };
-
-    if (logFiles[type])
-    {
-        if (timestampPrefix[type])
-            outTimestamp(logFiles[type]);
-
-        va_list ap;
-        va_start(ap, str);
-        vfprintf(logFiles[type], str, ap);
-        fprintf(logFiles[type], "\n");
-        fflush(logFiles[type]);
-        va_end(ap);
-
-        fflush(logFiles[type]);
-    }
-    fflush(stdout);
 }
 
 void Log::outError( const char * err, ... )
