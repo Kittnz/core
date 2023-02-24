@@ -13,8 +13,6 @@ namespace DiscordBot
     using namespace dpp;
 
 
-    void RegisterHandlers();
-
     Bot::~Bot()
     {
         for (auto handler : _handlers)
@@ -72,7 +70,6 @@ namespace DiscordBot
             });
 
         _core->on_ready([this](const ready_t& event) {
-            RegisterHandlers();
             BaseCommandHandler::RegisterAll(*this);
         });
 

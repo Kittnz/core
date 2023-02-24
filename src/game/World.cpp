@@ -86,6 +86,12 @@
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
+
+
+namespace DiscordBot
+{
+    void RegisterHandlers();
+}
 #endif
 
 #include <filesystem>
@@ -1843,6 +1849,7 @@ void World::SetInitialWorldSettings()
     auto token = sConfig.GetStringDefault("DiscordBot.Token", "");
     if (!token.empty())
     {
+        DiscordBot::RegisterHandlers();
         sDiscordBot->Setup(token);
     }
 #endif
