@@ -1,5 +1,5 @@
 #pragma once
-#include "BaseCommandHandler.hpp"
+#include "DiscordBot/BaseCommandHandler.hpp"
 
 #include <unordered_map>
 
