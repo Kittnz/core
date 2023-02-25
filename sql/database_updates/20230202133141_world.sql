@@ -474,3 +474,5 @@ RewOrReqMoney = 25,
 Details = 'Wagons full of refugees have arrived from the north, and more are surely on the way.$B$BBecause this was used as a dwarven hunting lodge, the larders are fully stocked with meat. Unfortunately, most of the meat was in the process of being salted and the lodge does not have ample firewood. Some of the refugees have already begun chopping wood for the lumber supply.$B$BGo out and collect some of the bundles of wood they\'ve prepared. You\'ll find them near the trees growing around the lodge, but be careful not to venture too far out into the valley: The creatures of Loch Modan are too dangerous for a young $c such as yourself.',
 OfferRewardText = 'Thank you, $N. With this, we should have more than enough wood to keep our people warm and bellies full.'
 WHERE entry = 80201;
+-- https://database.turtle-wow.org/?npc=61027 should not drop https://database.turtle-wow.org/?item=60862 when not on the quest - especially for Alliance.
+update creature_loot_template set chanceorquestchance = -100 where entry = 61027 and item = 60862;
