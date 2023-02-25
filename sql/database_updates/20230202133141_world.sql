@@ -446,3 +446,5 @@ UPDATE item_template SET flags = 2048 WHERE entry = 81315;
 UPDATE quest_template SET NextQuestInChain = 0 WHERE entry = 7625;
 -- Fix racemask on both pointer quests to Tome of Divinity (Paladin Res Quest) only being for humans.
 UPDATE quest_template SET RequiredRaces = 515 WHERE entry IN (2998, 3681);
+-- Set react of  https://database.turtle-wow.org/?npc=2044 to Hostile.
+update creature_template set faction = 16 where entry = 2044;
