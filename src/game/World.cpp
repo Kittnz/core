@@ -214,7 +214,9 @@ void World::InternalShutdown()
     if (m_autoCommitThread.joinable())
         m_autoCommitThread.join();
 
+#ifdef USING_DISCORD_BOT
     sDiscordBot->Stop();
+#endif
 }
 
 /// Find a session by its id

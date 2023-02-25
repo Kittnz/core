@@ -131,6 +131,7 @@ void Log::InitSmartlogGuids(const std::string& str)
 
 void Log::LogDiscord(LogFile type, std::string log)
 {
+#ifdef USING_DISCORD_BOT
     static const std::unordered_map<LogFile, uint64_t> ChannelLookup =
     {
         {LOG_MONEY_TRADES, 1078715732013105252}
@@ -140,6 +141,7 @@ void Log::LogDiscord(LogFile type, std::string log)
         return;
 
     sDiscordBot->SendMessageToChannel(ChannelLookup.find(type)->second, std::move(log));
+#endif
 }
 
 void Log::SetColor(bool stdout_stream, Color color)
