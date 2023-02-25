@@ -45,7 +45,7 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
 
     if (cMgr)
     {
-        if (Channel *chn = cMgr->GetJoinChannel(channelname))
+        if (Channel *chn = cMgr->GetOrCreateChannel(channelname))
             chn->Join(player->GetObjectGuid(), pass.c_str());
     }
 
@@ -53,7 +53,7 @@ void WorldSession::HandleJoinChannelOpcode(WorldPacket& recvPacket)
     {
         if (ChannelMgr* cMgr = channelMgr(_player->GetTeam() == ALLIANCE ? HORDE : ALLIANCE))
         {
-            if (Channel *chn = cMgr->GetJoinChannel(channelname))
+            if (Channel *chn = cMgr->GetOrCreateChannel(channelname))
             {
                 if (!chn->GetSecurityLevel()) // Special both factions channel
                 {
