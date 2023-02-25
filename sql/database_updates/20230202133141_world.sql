@@ -438,3 +438,5 @@ REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30400, 65104, 0, 1, 1, 1, 0);
 -- Add item ID 65105 to loot group 12 for Taerar (ID 14890) and make sure all items have equal drop chances.
 REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30405, 65105, 0, 1, 1, 1, 0);
+-- https://database.turtle-wow.org/?object=13873  respawn immediately, set respawn time to 5 minutes.
+update gameobject set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 13873;
