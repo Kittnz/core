@@ -1,4 +1,6 @@
 #pragma once
+#ifdef USING_DISCORD_BOT
+
 #include "dpp/dpp.h"
 #include "Common.h"
 #include "Platform/Define.h"
@@ -51,3 +53,5 @@ namespace DiscordBot
 }
 
 #define sDiscordBot DiscordBot::Bot::Instance()
+
+#endif
