@@ -444,3 +444,5 @@ update gameobject set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 
 UPDATE item_template SET flags = 2048 WHERE entry = 81315;
 -- Remove Blizzlike chaining of quest=7625 into Imp Delivery. Imp Delivery requires TWO prereq quests, and if Arcanite isn't completed, you'll be offered a quest you can't accept, only for it to vanish. Blizzlike or not, this is less than ideal behavior.
 UPDATE quest_template SET NextQuestInChain = 0 WHERE entry = 7625;
+-- Fix racemask on both pointer quests to Tome of Divinity (Paladin Res Quest) only being for humans.
+UPDATE quest_template SET RequiredRaces = 515 WHERE entry IN (2998, 3681);
