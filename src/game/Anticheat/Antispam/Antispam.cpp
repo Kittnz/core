@@ -198,7 +198,7 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     messageBlock.type = chatType;
     messageBlock.count = 1;
     messageBlock.time = time(nullptr);
-    messageBlock.channel = channel;
+    messageBlock.channelName = channel->GetName();
     messageBlock.guild = guild;
 
     std::lock_guard<std::mutex> guard(m_messageMutex);
@@ -338,8 +338,11 @@ void Antispam::ProcessMessages(uint32 diff)
             }
             case A_CHAT_TYPE_CHANNEL:
             {
-                if (messageBlock.channel)
-                    messageBlock.channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                if (!messageBlock.channelName.empty())
+                {
+                    if (Channel* channel = channelMgr(ALLIANCE)->GetChannel(messageBlock.channelName, nullptr, false))
+                        channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                }
                 break;
             }
             case A_CHAT_TYPE_GUILD:
