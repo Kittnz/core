@@ -69,7 +69,7 @@ Channel *ChannelMgr::GetOrCreateChannel(std::string const& name, bool allowAreaD
     return channels[wname];
 }
 
-Channel *ChannelMgr::GetChannel(std::string const& name, PlayerPointer p, bool pkt)
+Channel *ChannelMgr::GetChannel(std::string const& name, PlayerPointer p, bool sendPacket)
 {
     std::wstring wname;
     Utf8toWStr(name, wname);
@@ -79,9 +79,12 @@ Channel *ChannelMgr::GetChannel(std::string const& name, PlayerPointer p, bool p
 
     if (i == channels.end())
     {
-		WorldPacket data;
-		Channel::MakeNotOnPacket(&data, name);
-		p->GetSession()->SendPacket(&data);
+        if (sendPacket)
+        {
+            WorldPacket data;
+            Channel::MakeNotOnPacket(&data, name);
+            p->GetSession()->SendPacket(&data);
+        }
 
         return nullptr;
     }
