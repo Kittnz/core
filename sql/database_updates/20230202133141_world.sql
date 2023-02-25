@@ -440,3 +440,5 @@ REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30405, 65105, 0, 1, 1, 1, 0);
 -- https://database.turtle-wow.org/?object=13873  respawn immediately, set respawn time to 5 minutes.
 update gameobject set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 13873;
+-- Fix quest item for quest=55005 not allowing all party members to loot (1 per party per run rather than 1 for whole party).
+UPDATE item_template SET flags = 2048 WHERE entry = 81315;
