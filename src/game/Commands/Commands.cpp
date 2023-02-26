@@ -10091,10 +10091,11 @@ bool ChatHandler::HandleWhoCommand(char* args)
     {
         for (auto const& itr : playersByOnlineTime)
         {
-            PSendSysMessage("- %s - lvl %u - acc %s - Online for %s",
+            PSendSysMessage("- %s - %u - %s - %s - Online for %s",
                 GetNameLink(itr.second).c_str(),
                 itr.second->GetLevel(),
                 itr.second->GetSession()->GetUsername().c_str(),
+                itr.second->GetSession()->GetEmail().c_str(),
                 secsToTimeString(now - itr.first, true).c_str());
         }
     }
