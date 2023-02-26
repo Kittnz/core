@@ -1,0 +1,1 @@
+update `quest_template` set `RequiredRaces` = 589 where `entry` between 40593 and 40603;
