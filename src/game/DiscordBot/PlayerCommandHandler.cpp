@@ -1,10 +1,10 @@
 #include "PlayerCommandHandler.hpp"
-#include "Discordbot/toojpeg.hpp"
-#include "Discordbot/QrCodeGen.hpp"
+#include "DiscordBot/toojpeg.hpp"
+#include "DiscordBot/QrCodeGen.hpp"
 
-#include "Discordbot/AuthManager.hpp"
+#include "DiscordBot/AuthManager.hpp"
 #include "Util.h"
-#include "Discordbot/MiscUtil.hpp"
+#include "DiscordBot/MiscUtil.hpp"
 
 #include "Auth/base32.h"
 
