@@ -431,24 +431,13 @@ endif()
 
 if(USE_DISCORD_BOT)
     list(APPEND game_SRCS
-      DiscordBot/Bot.cpp
-      DiscordBot/Bot.hpp
-      DiscordBot/BaseCommandHandler.hpp
-	  DiscordBot/BaseCommandHandler.cpp
+      DiscordBot/CommandRegistrar.cpp
       DiscordBot/GMCommandHandler.cpp
       DiscordBot/GMCommandHandler.hpp
-	  DiscordBot/CommandRegistrar.cpp
-	  DiscordBot/AuthManager.cpp
-	  DiscordBot/AuthManager.hpp
-	  DiscordBot/LoginCommandHandler.cpp
-	  DiscordBot/LoginCommandHandler.hpp
-	  DiscordBot/PlayerCommandHandler.cpp
-	  DiscordBot/PlayerCommandHandler.hpp
-	  DiscordBot/MiscUtil.hpp
-	  DiscordBot/toojpeg.hpp
-	  DiscordBot/toojpeg.cpp
-	  DiscordBot/QrCodeGen.hpp
-	  DiscordBot/QrCodeGen.cpp	 
+      DiscordBot/LoginCommandHandler.cpp
+      DiscordBot/LoginCommandHandler.hpp
+      DiscordBot/PlayerCommandHandler.cpp
+      DiscordBot/PlayerCommandHandler.hpp 
     )
 endif()
 
@@ -592,7 +581,7 @@ target_link_libraries(game
 )
 
 if(USE_DISCORD_BOT)
-    target_link_libraries(game 
+    target_link_libraries(game
 	dpp
   )
   target_compile_definitions(game PUBLIC USING_DISCORD_BOT)

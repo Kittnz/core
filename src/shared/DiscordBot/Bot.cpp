@@ -3,17 +3,15 @@
 
 #include <thread>
 
-#include "World.h"
 #include "BaseCommandHandler.hpp"
 #include "AuthManager.hpp"
+#include "Log.h"
 
 namespace DiscordBot
 {
     using namespace std::literals::string_literals;
     using namespace dpp;
 
-
-    void RegisterHandlers();
 
     Bot::~Bot()
     {
@@ -36,7 +34,16 @@ namespace DiscordBot
         if (!_core)
             return;
 
+        //Fix callback check for rate limiting
         _core->message_create(dpp::message(channelId, message));
+    }
+
+    void Bot::Stop()
+    {
+        if (!_core)
+            return;
+
+        _core->shutdown();
     }
 
     void Bot::Setup(std::string token)
@@ -63,7 +70,6 @@ namespace DiscordBot
             });
 
         _core->on_ready([this](const ready_t& event) {
-            RegisterHandlers();
             BaseCommandHandler::RegisterAll(*this);
         });
 

@@ -88,6 +88,23 @@ set (shared_SRCS
     Database/SQLStorage.cpp
 )
 
+
+if(USE_DISCORD_BOT)
+    list(APPEND shared_SRCS
+      DiscordBot/BaseCommandHandler.hpp
+      DiscordBot/BaseCommandHandler.cpp
+      DiscordBot/AuthManager.cpp
+      DiscordBot/AuthManager.hpp
+      DiscordBot/Bot.cpp
+      DiscordBot/Bot.hpp
+      DiscordBot/MiscUtil.hpp
+      DiscordBot/toojpeg.hpp
+      DiscordBot/toojpeg.cpp
+      DiscordBot/QrCodeGen.hpp
+      DiscordBot/QrCodeGen.cpp	 
+    )
+endif()
+
 if(USE_LIBCURL)
   set (shared_SRCS 
     ${shared_SRCS}
@@ -146,6 +163,10 @@ source_group("Log"
   REGULAR_EXPRESSION Log
 )
 
+source_group("DiscordBot"
+  REGULAR_EXPRESSION DiscordBot
+)
+
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_SOURCE_DIR}/dep/include
@@ -165,6 +186,14 @@ endif()
 add_library(shared STATIC
   ${shared_SRCS}
 )
+
+if(USE_DISCORD_BOT)
+    target_link_libraries(shared PUBLIC
+	dpp
+  )
+  target_compile_definitions(shared PUBLIC USING_DISCORD_BOT)
+endif()
+
 
 if(UNIX)
   find_package(Threads)

@@ -1,4 +1,6 @@
 #pragma once
+#ifdef USING_DISCORD_BOT
+
 #include "dpp/dpp.h"
 #include "Common.h"
 #include "Platform/Define.h"
@@ -18,11 +20,19 @@ namespace DiscordBot
     class Bot
     {
     public:
-        Bot() noexcept = default;
+        static Bot* Instance()
+        {
+            static Bot instance;
+            return &instance;
+        }
+
         ~Bot();
+        Bot(const Bot&) = delete;
+        Bot(Bot&&) = delete;
 
         void Setup(std::string token);
         void SendMessageToChannel(uint64_t channelId, std::string message);
+        void Stop();
 
 
 
@@ -31,6 +41,8 @@ namespace DiscordBot
         void AddHandler(BaseCommandHandler* handler);
 
     private:
+        Bot() = default;
+
         std::unique_ptr<dpp::cluster> _core;
 
         std::unordered_map<std::string, BaseCommandHandler*> _commandLinks;
@@ -39,3 +51,7 @@ namespace DiscordBot
         std::string _commandOutput;
     };
 }
+
+#define sDiscordBot DiscordBot::Bot::Instance()
+
+#endif

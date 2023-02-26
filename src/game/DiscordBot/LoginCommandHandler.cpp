@@ -1,6 +1,6 @@
 #include "LoginCommandHandler.hpp"
 
-#include "AuthManager.hpp"
+#include "DiscordBot/AuthManager.hpp"
 
 namespace DiscordBot
 {

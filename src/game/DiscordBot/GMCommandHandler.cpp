@@ -1,8 +1,15 @@
 #include "GMCommandHandler.hpp"
-#include "Bot.hpp"
+#include "DiscordBot/Bot.hpp"
 #include "World.h"
-#include "AuthManager.hpp"
+#include "DiscordBot/AuthManager.hpp"
 #include "Log.h"
+#include "Chat.h"
+
+bool ChatHandler::HandleDiscBotStopCommand(char* args)
+{
+    sWorld.StopDiscordBot();
+    return true;
+}
 
 namespace DiscordBot
 {

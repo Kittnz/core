@@ -29,6 +29,7 @@ include_directories(../../src/game/Commands/)
 include_directories(../../dep/include/g3dlite/)
 include_directories(../../src/framework/)
 include_directories(${ACE_INCLUDE_DIR})
+include_directories(${OPENSSL_INCLUDE_DIR})
 
 add_library(vmap
     ../../src/game/vmap/BIH.cpp
@@ -52,7 +53,15 @@ endif(UNIX)
 
 add_executable(vmap_assembler vmap_assembler.cpp)
 SET_TARGET_PROPERTIES (vmap_assembler PROPERTIES FOLDER Extractors)
-target_link_libraries(vmap_assembler 
+
+if(USE_DISCORD_BOT)
+    target_link_libraries(vmap_assembler PUBLIC
+    ${OPENSSL_LIBRARIES}
+	dpp
+  )
+endif()
+
+target_link_libraries(vmap_assembler PUBLIC
                     vmap
                     g3dlite
                     ${ACE_LIBRARIES}
