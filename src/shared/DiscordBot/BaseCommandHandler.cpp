@@ -3,8 +3,6 @@
 #include "AuthManager.hpp"
 #include "Bot.hpp"
 #include "Log.h"
-#include "Chat.h"
-#include "World.h"
 #include <sstream>
 
 
