@@ -157,6 +157,10 @@ AccountOpResult AccountMgr::ChangePassword(uint32 accid, std::string new_passwd,
 
 uint32 AccountMgr::GetId(std::string username)
 {
+    auto itr = m_accountNameToId.find(username);
+    if (itr != m_accountNameToId.end())
+        return itr->second;
+
     LoginDatabase.escape_string(username);
     QueryResult *result = LoginDatabase.PQuery("SELECT id FROM account WHERE username = '%s'", username.c_str());
     if (!result)
@@ -201,9 +205,31 @@ void AccountMgr::Load()
         }
     } while (result->NextRow());
 
+    LoadAccountNames();
     LoadAccountBanList();
     LoadIPBanList();
     LoadFingerprintBanList();
+}
+
+void AccountMgr::LoadAccountNames()
+{
+    std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `username` FROM `account`"));
+
+    if (result)
+    {
+        m_accountNameToId.clear();
+        do
+        {
+            Field* fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            std::string username = fields[1].GetCppString();
+            if (username.empty())
+                continue;
+
+            m_accountNameToId.insert({ username, id });
+
+        } while (result->NextRow());
+    }
 }
 
 AccountTypes AccountMgr::GetSecurity(uint32 acc_id)
@@ -316,7 +342,7 @@ void AccountMgr::Update(uint32 diff)
         m_fingerprintAutobanTimer = 1 * MINUTE * IN_MILLISECONDS;
         for (auto const& fingerprint : m_fingerprintAutoban)
         {
-            BanAccountsWithFingerprint(fingerprint, -1, "Fingerprint Autoban", nullptr);
+            BanAccountsWithFingerprint(fingerprint, 0, "Fingerprint Autoban", nullptr);
         }
     }
     else
@@ -403,10 +429,21 @@ void AccountMgr::LoadFingerprintBanList(bool silent)
 bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_secs, std::string reason, ChatHandler* chatHandler)
 {
     auto accountNames = sWorld.GetAccountNamesByFingerprint(fingerprint);
+    for (auto it = accountNames.begin(); it != accountNames.end(); )
+    {
+        uint32 id = GetId(*it);
+        if (IsAccountBanned(id))
+        {
+            it = accountNames.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
 
     std::unique_ptr<QueryResult> result(LoginDatabase.PQuery("SELECT `id`, `username` FROM `account` WHERE `id` IN (SELECT `account` FROM `system_fingerprint_usage` WHERE `fingerprint`=%u)", fingerprint));
 
-    std::set<uint32> accountIds;
     if (result)
     {
         do
@@ -414,7 +451,8 @@ bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_
             Field* fields = result->Fetch();
 
             uint32 accountId = fields[0].GetUInt32();
-            accountIds.insert(accountId);
+            if (IsAccountBanned(accountId))
+                continue;
 
             std::string username = fields[1].GetCppString();
             if (!AccountMgr::normalizeString(username))
@@ -440,9 +478,6 @@ bool AccountMgr::BanAccountsWithFingerprint(uint32 fingerprint, uint32 duration_
         
         sWorld.BanAccount(BAN_ACCOUNT, accountName, duration_secs, reason, chatHandler && chatHandler->GetSession() ? chatHandler->GetSession()->GetPlayerName() : "");
     }
-
-    for (auto const& accountId : accountIds)
-        m_accountBanned.insert({ accountId, 0xFFFFFFFF });
 
     return true;
 }

@@ -99,6 +99,7 @@ class AccountMgr
         static bool normalizeString(std::string& utf8str);
         // Nostalrius
         void Update(uint32 diff);
+        void LoadAccountNames();
         void LoadIPBanList(bool silent=false);
         void LoadAccountBanList(bool silent=false);
         void LoadFingerprintBanList(bool silent = false);
@@ -129,6 +130,7 @@ class AccountMgr
 
         AccountPersistentData& GetAccountPersistentData(uint32 accountId) { return m_accountPersistentData[accountId]; }
     protected:
+        std::map<std::string, uint32> m_accountNameToId;
         std::map<uint32, AccountTypes> m_accountSecurity;
         uint32 m_banlistUpdateTimer;
         uint32 m_fingerprintAutobanTimer;
