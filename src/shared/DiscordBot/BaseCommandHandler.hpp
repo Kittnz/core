@@ -3,7 +3,6 @@
 
 #include "Common.h"
 #include "Platform/Define.h"
-
 #include <memory>
 #include <any>
 #include <vector>

@@ -86,6 +86,12 @@
 
 #ifdef USING_DISCORD_BOT
 #include "DiscordBot/Bot.hpp"
+
+
+namespace DiscordBot
+{
+    void RegisterHandlers();
+}
 #endif
 
 #include <filesystem>
@@ -208,10 +214,8 @@ void World::InternalShutdown()
     if (m_autoCommitThread.joinable())
         m_autoCommitThread.join();
 
-
 #ifdef USING_DISCORD_BOT
-    if (m_bot)
-        delete m_bot;
+    sDiscordBot->Stop();
 #endif
 }
 
@@ -1847,8 +1851,8 @@ void World::SetInitialWorldSettings()
     auto token = sConfig.GetStringDefault("DiscordBot.Token", "");
     if (!token.empty())
     {
-        m_bot = new DiscordBot::Bot();
-        m_bot->Setup(token);
+        DiscordBot::RegisterHandlers();
+        sDiscordBot->Setup(token);
     }
 #endif
 
@@ -3675,20 +3679,14 @@ void World::AddAsyncTask(std::function<void()> task)
 void World::StopDiscordBot()
 {
 #ifdef USING_DISCORD_BOT
-    if (!m_bot)
-        return;
-
-    m_bot->GetCore()->shutdown();
+    sDiscordBot->GetCore()->shutdown();
 #endif
 }
 
 void World::SendDiscordMessage(uint64 channelId, std::string message)
 {
 #ifdef USING_DISCORD_BOT
-    if (!m_bot)
-        return;
-
-    m_bot->SendMessageToChannel(channelId, message);
+    sDiscordBot->SendMessageToChannel(channelId, message);
 #endif
 }
 

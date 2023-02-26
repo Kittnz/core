@@ -198,7 +198,7 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     messageBlock.type = chatType;
     messageBlock.count = 1;
     messageBlock.time = time(nullptr);
-    messageBlock.channel = channel;
+    messageBlock.channelName = channel->GetName();
     messageBlock.guild = guild;
 
     std::lock_guard<std::mutex> guard(m_messageMutex);
@@ -338,8 +338,23 @@ void Antispam::ProcessMessages(uint32 diff)
             }
             case A_CHAT_TYPE_CHANNEL:
             {
-                if (messageBlock.channel)
-                    messageBlock.channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                if (!messageBlock.channelName.empty())
+                {
+                    if (Channel* channel = channelMgr(ALLIANCE)->GetChannel(messageBlock.channelName, nullptr, false))
+                    {
+                        if (channel->GetName() == u8"World")
+                        {
+                            if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
+                            {
+                                std::string logChat = sWorld.FormatLoggedChat(pSender->GetSession(), "Chan", messageBlock.msg, nullptr, 0, channel->GetName().c_str());
+                                sWorld.SendDiscordMessage(1075224002013962250, logChat);
+                            }
+                        }
+
+
+                        channel->Say(messageBlock.fromGuid, messageBlock.msg.c_str(), messageBlock.language);
+                    }
+                }
                 break;
             }
             case A_CHAT_TYPE_GUILD:
@@ -347,7 +362,20 @@ void Antispam::ProcessMessages(uint32 diff)
                 if (MasterPlayer* pSender = ObjectAccessor::FindMasterPlayer(messageBlock.fromGuid))
                 {
                     if (messageBlock.guild)
+                    {
+                        if (messageBlock.guild->GetId() == GUILD_HARDCORE || messageBlock.guild->GetId() == GUILD_NEWCOMERS)
+                        {
+                            try {
+                                std::ostringstream ss;
+                                ss << pSender->GetName() << ":" << pSender->GetSession()->GetAccountId();
+                                sWorld.SendDiscordMessage(1075217752240959538, string_format("[%s:%u] %s:%u : %s", "Guild", pSender->GetGuildId(),
+                                    ss.str().c_str(), pSender->GetObjectGuid().GetCounter(), messageBlock.msg.c_str()));
+                            }
+                            catch (const std::exception&) {}
+                        }
+
                         messageBlock.guild->BroadcastToGuild(pSender, messageBlock.msg, LANG_UNIVERSAL);
+                    }
                 }
                 break;
             }

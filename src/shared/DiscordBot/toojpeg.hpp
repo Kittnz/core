@@ -1,6 +1,7 @@
 // //////////////////////////////////////////////////////////
 // toojpeg.h
 // written by Stephan Brumme, 2018-2019
+#include <functional>
 // see https://create.stephan-brumme.com/toojpeg/
 //
 

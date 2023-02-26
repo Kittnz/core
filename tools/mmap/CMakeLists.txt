@@ -33,6 +33,7 @@ include_directories(
     ../../dep/include/g3dlite
     ../../src/framework
     ${ACE_INCLUDE_DIR}
+    ${OPENSSL_INCLUDE_DIR}
     ../../dep/recastnavigation/
     ../../dep/recastnavigation/Detour/Include
     ../../dep/recastnavigation/Recast/Include
@@ -51,7 +52,14 @@ set(SOURCES
 add_executable(MoveMapGen ${SOURCES})
 SET_TARGET_PROPERTIES (MoveMapGen PROPERTIES FOLDER Extractors)
 
-target_link_libraries(MoveMapGen 
+if(USE_DISCORD_BOT)
+    target_link_libraries(MoveMapGen PUBLIC
+    ${OPENSSL_LIBRARIES}
+	dpp
+  )
+endif()
+
+target_link_libraries(MoveMapGen PUBLIC 
                         vmap 
                         Detour
                         Recast

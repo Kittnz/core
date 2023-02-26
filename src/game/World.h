@@ -1183,9 +1183,6 @@ class World
         bool m_configBoolValues[CONFIG_BOOL_VALUE_COUNT];
 
         int32 m_playerLimit;
-#ifdef USING_DISCORD_BOT
-        DiscordBot::Bot* m_bot;
-#endif
 
         LocaleConstant m_defaultDbcLocale;                     // from config for one from loaded DBC locales
         uint32 m_availableDbcLocaleMask = 0;                   // by loaded DBC

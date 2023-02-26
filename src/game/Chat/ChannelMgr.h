@@ -41,7 +41,7 @@ class ChannelMgr
         }
         ~ChannelMgr();
 
-        Channel *GetJoinChannel(std::string const& name, bool allowAreaDependantChans = true);
+        Channel *GetOrCreateChannel(std::string const& name, bool allowAreaDependantChans = true);
         Channel *GetChannel(std::string const& name, PlayerPointer p, bool pkt = true);
         void LeftChannel(std::string const& name);
         void CreateDefaultChannels();

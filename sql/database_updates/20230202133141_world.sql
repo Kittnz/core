@@ -438,3 +438,41 @@ REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, 
 REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30400, 65104, 0, 1, 1, 1, 0);
 -- Add item ID 65105 to loot group 12 for Taerar (ID 14890) and make sure all items have equal drop chances.
 REPLACE INTO `reference_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `groupid`, `mincountOrRef`, `maxcount`, `condition_id`) VALUES (30405, 65105, 0, 1, 1, 1, 0);
+-- https://database.turtle-wow.org/?object=13873  respawn immediately, set respawn time to 5 minutes.
+update gameobject set spawntimesecsmin = 300, spawntimesecsmax = 300 where id = 13873;
+-- Fix quest item for quest=55005 not allowing all party members to loot (1 per party per run rather than 1 for whole party).
+UPDATE item_template SET flags = 2048 WHERE entry = 81315;
+-- Remove Blizzlike chaining of quest=7625 into Imp Delivery. Imp Delivery requires TWO prereq quests, and if Arcanite isn't completed, you'll be offered a quest you can't accept, only for it to vanish. Blizzlike or not, this is less than ideal behavior.
+UPDATE quest_template SET NextQuestInChain = 0 WHERE entry = 7625;
+-- Fix racemask on both pointer quests to Tome of Divinity (Paladin Res Quest) only being for humans.
+UPDATE quest_template SET RequiredRaces = 515 WHERE entry IN (2998, 3681);
+-- Set react of  https://database.turtle-wow.org/?npc=2044 to Hostile.
+update creature_template set faction = 16 where entry = 2044;
+-- Edits for Farstrider.
+UPDATE quest_template SET
+ZoneOrSort = 147,
+PrevQuestId = 80201
+WHERE entry BETWEEN 80211 AND 80216;
+
+UPDATE quest_template SET
+ZoneOrSort = 147,
+RewRepValue1 = 50,
+RewMoneyMaxLevel = 30,
+RewXP = 40,
+NextQuestInChain = 80201,
+Details = 'At last, $N, you are awake. It would seem that we survived the perilous journey south from the remnants of Lordaeron. We will have to make the best of our situation and work to make this our new home.$B$BThere is much to be done if we are to make this more than a temporary settlement for our people, $N. This lodge has only had to accommodate a handful of hunters and hasn''t seen much traffic since the Second War, thus why its maintenance is questionable at best.$B$BVyrin Swiftwind resides in the lodge and has held station here much longer than any of us. If we are to make a home for ourselves here, then we should seek her counsel and ask where to focus our efforts.',
+RequestItemsText = '',
+OfferRewardText = 'You wish to assist?$B$BWell, your offer is welcome, $c. I have been the lone ranger at this lodge for years, so you can imagine my shock at seeing so many of my kind arriving with news that my homeland has fallen. Now, I have to contend with a hundred refugees.$B$BWe have much work to do, friend, but the burden will be lessened with the refugees assisting. We Quel''dorei must stand united now more than ever; we only have each other now.'
+WHERE entry = 80200;
+
+UPDATE quest_template SET
+ZoneOrSort = 147,
+RewRepValue1 = 100,
+RewMoneyMaxLevel = 170,
+RewXP = 90,
+RewOrReqMoney = 25,
+Details = 'Wagons full of refugees have arrived from the north, and more are surely on the way.$B$BBecause this was used as a dwarven hunting lodge, the larders are fully stocked with meat. Unfortunately, most of the meat was in the process of being salted and the lodge does not have ample firewood. Some of the refugees have already begun chopping wood for the lumber supply.$B$BGo out and collect some of the bundles of wood they\'ve prepared. You\'ll find them near the trees growing around the lodge, but be careful not to venture too far out into the valley: The creatures of Loch Modan are too dangerous for a young $c such as yourself.',
+OfferRewardText = 'Thank you, $N. With this, we should have more than enough wood to keep our people warm and bellies full.'
+WHERE entry = 80201;
+-- https://database.turtle-wow.org/?npc=61027 should not drop https://database.turtle-wow.org/?item=60862 when not on the quest - especially for Alliance.
+update creature_loot_template set chanceorquestchance = -100 where entry = 61027 and item = 60862;
