@@ -69,10 +69,16 @@ struct npc_daphne_stilwellAI : public npc_escortAI
     {
         m_uiWPHolder = 0;
         Reset();
+        firstWave = false;
+        secondWave = false;
+        lastWave = false;
     }
 
     uint32 m_uiWPHolder;
     uint32 m_uiShootTimer;
+    bool firstWave;
+    bool secondWave;
+    bool lastWave;
 
     GuidList m_lSummonedRaidersGUIDs;
 
@@ -111,6 +117,9 @@ struct npc_daphne_stilwellAI : public npc_escortAI
         else
         {
             m_uiWPHolder = 0;
+            firstWave = false;
+            secondWave = false;
+            lastWave = false;
         }
 
         m_uiShootTimer = 0;
@@ -213,6 +222,9 @@ struct npc_daphne_stilwellAI : public npc_escortAI
                     }
                 }
 
+                firstWave = true;
+                SetEscortPaused(true);
+
                 break;
             }
             case Wave::SECOND:
@@ -225,6 +237,9 @@ struct npc_daphne_stilwellAI : public npc_escortAI
                     }
                 }
 
+                secondWave = true;
+                SetEscortPaused(true);
+
                 break;
             }
             case Wave::THIRD:
@@ -236,6 +251,8 @@ struct npc_daphne_stilwellAI : public npc_escortAI
                         pAdd->GetMotionMaster()->MovePoint(counter, RaiderCoords[uiFirstWPOffset + counter][0], RaiderCoords[uiFirstWPOffset + counter][1], RaiderCoords[uiFirstWPOffset + counter][2]);
                     }
                 }
+
+                lastWave = true;
 
                 break;
             }
@@ -309,9 +326,13 @@ struct npc_daphne_stilwellAI : public npc_escortAI
     {
         m_lSummonedRaidersGUIDs.remove(pSummoned->GetObjectGuid());
 
-        if (m_uiWPHolder >= 10 && m_lSummonedRaidersGUIDs.empty())
+        if (m_lSummonedRaidersGUIDs.empty())
         {
-            SetEscortPaused(false);
+            if ((firstWave && m_uiWPHolder == 8) || (secondWave && m_uiWPHolder == 9) || (lastWave && m_uiWPHolder >= 10))
+            {
+                SetEscortPaused(false);
+                SetRun(false);
+            }
         }
     }
 
