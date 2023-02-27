@@ -71,3 +71,4 @@ UPDATE `creature_template` set `scale` = 1.100000 where entry = 61227;
 UPDATE `creature_template` set `scale` = 1.300000 where entry = 61228;
 UPDATE `creature_template` set `scale` = 1.400000 where entry = 61236;
 UPDATE `creature_template` set `scale` = 1.600000 where entry = 61237;
+REPLACE INTO `creature` VALUES (2574567,61248,0,0,0,0,-1908.3,1614.86,53.9194,6.1769,120,120,0,100,100,0,0,0);
