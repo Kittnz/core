@@ -1222,7 +1222,7 @@ void ChatHandler::ExecuteCommand(const char* text)
 
                         sWorld.SendDiscordMessage(1075085609737142352, message); // default chn id for now, move to config later.
                     }
-                    catch (const std::exception& e) {}
+                    catch ([[maybe_unused]] const std::exception& e) {}
 #endif
                 }
                 else                                        // 0 account -> console
