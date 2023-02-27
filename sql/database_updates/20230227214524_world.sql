@@ -60,3 +60,14 @@ REPLACE INTO `creature` VALUES (2574563,61250,0,0,0,0,-899.883,1578.06,41.1645,4
 REPLACE INTO `creature` VALUES (2574564,61251,0,0,0,0,-896.935,1577.84,41.3847,4.67705,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2574565,61252,0,0,0,0,-893.369,1577.34,41.6909,4.5294,120,120,0,100,100,0,0,0);
 REPLACE INTO `creature` VALUES (2574566,61253,0,0,0,0,-889.702,1576.77,41.0672,4.52547,120,120,0,100,100,0,0,0);
+UPDATE `creature_template` set `scale` = 1.500000 where entry = 61249;
+UPDATE `creature_template` set `scale` = 1.600000 where entry = 61248;
+UPDATE `creature_template` set `scale` = 1.600000 where entry = 61245;
+UPDATE `creature_template` set `scale` = 1.800000 where entry = 61244;
+UPDATE `creature_template` set `scale` = 1.700000 where entry = 61243;
+UPDATE `creature_template` set `scale` = 1.800000 where entry = 61246;
+UPDATE `creature_template` set `scale` = 1.900000 where entry = 61247;
+UPDATE `creature_template` set `scale` = 1.100000 where entry = 61227;
+UPDATE `creature_template` set `scale` = 1.300000 where entry = 61228;
+UPDATE `creature_template` set `scale` = 1.400000 where entry = 61236;
+UPDATE `creature_template` set `scale` = 1.600000 where entry = 61237;
