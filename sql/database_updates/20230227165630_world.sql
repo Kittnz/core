@@ -47,3 +47,8 @@ UPDATE `quest_template` SET `SpecialFlags` = 0 WHERE `entry` = 40709;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2724
 UPDATE `creature_display_info_addon` SET `combat_reach` = 1.4375, `bounding_radius` = 1.15 WHERE `display_id` in (18177, 18008, 18005, 18007, 18007, 18006, 18008, 18004, 18004, 18244, 18244, 18493, 18773);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2640
+UPDATE `creature_template` SET `loot_id` = 0 WHERE `entry` = 2673;
+UPDATE `creature_template` SET `loot_id` = 0 WHERE `entry` = 2674;
+UPDATE `creature_template` SET `loot_id` = 0 WHERE `entry` = 12426;
