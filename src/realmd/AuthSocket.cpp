@@ -398,7 +398,7 @@ bool AuthSocket::_HandleLogonChallenge()
             if (requireEmailSince > 0)
             {
                 uint32 t = (*result)[10].GetUInt32();
-                requireVerification = requireVerification && (t >= requireEmailSince);
+                requireVerification = requireVerification && (t >= static_cast<uint32>(requireEmailSince));
             }
 
             if (requireVerification && !verified)
@@ -524,7 +524,7 @@ bool AuthSocket::_HandleLogonChallenge()
                         {
                             auto fields = result->Fetch();
                             uint64 expiresAt = fields[0].GetUInt64();
-                            if (expiresAt < time(nullptr)) // expired.
+                            if (static_cast<time_t>(expiresAt) < time(nullptr)) // expired.
                             {
                                 LoginDatabase.DirectPExecute("DELETE FROM `account_twofactor_allowed` WHERE `ip_address` = '%s' AND `account_id` = %u", address.c_str(), account_id);
                                 promptPin = true;

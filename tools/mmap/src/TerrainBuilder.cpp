@@ -781,7 +781,7 @@ namespace MMAP
             for (int j = 0; j < 3; ++j)
             {
                 vertIdx[j]     = meshData.solidTris[i*3+j];
-                if (vertIdx[j] < mapVertsCount)
+                if (vertIdx[j] < static_cast<uint32>(mapVertsCount))
                     insideModel[j] = (terrainInsideModelsVerts[vertIdx[j]] >= 0.1f);
                 tri[j]         = Vector3(meshData.solidVerts[3*vertIdx[j]+2], meshData.solidVerts[3*vertIdx[j]], meshData.solidVerts[3*vertIdx[j]+1]);
             }
