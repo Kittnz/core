@@ -198,7 +198,7 @@ bool Antispam::AddMessage(std::string const& msg, uint32 language, uint32 type, 
     messageBlock.type = chatType;
     messageBlock.count = 1;
     messageBlock.time = time(nullptr);
-    messageBlock.channelName = channel->GetName();
+    messageBlock.channelName = channel != nullptr ? channel->GetName() : "";
     messageBlock.guild = guild;
 
     std::lock_guard<std::mutex> guard(m_messageMutex);
