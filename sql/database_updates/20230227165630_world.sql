@@ -39,3 +39,8 @@ UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60898;
 
 -- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2899
 UPDATE `gameobject` SET `spawntimesecsmin` = 5, `spawntimesecsmax` = 10 WHERE `id` in (2010893, 2010894, 2010895);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2789
+UPDATE `quest_template` SET `SpecialFlags` = 0 WHERE `entry` = 40710;
+UPDATE `quest_template` SET `SpecialFlags` = 0 WHERE `entry` = 40711;
+UPDATE `quest_template` SET `SpecialFlags` = 0 WHERE `entry` = 40709;
