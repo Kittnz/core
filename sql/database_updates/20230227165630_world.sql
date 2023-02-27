@@ -36,3 +36,6 @@ UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60894;
 UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60895;
 UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60898;
 UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60898;
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2899
+UPDATE `gameobject` SET `spawntimesecsmin` = 5, `spawntimesecsmax` = 10 WHERE `id` in (2010893, 2010894, 2010895);
