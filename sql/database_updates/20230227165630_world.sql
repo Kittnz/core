@@ -26,3 +26,13 @@ INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, 
 -- INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (32583, 4158, 0, 0, 0, 1, -6040.3, -4084.69, -58.625, 2.36436, 300, 300, 30, 100, 0, 1, 0, 0);
 -- INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (32584, 4158, 0, 0, 0, 1, -6290.34, -3564.31, -58.625, 0.90427, 300, 300, 30, 100, 0, 1, 0, 0);
 -- INSERT INTO `creature` (`guid`, `id`, `id2`, `id3`, `id4`, `map`, `position_x`, `position_y`, `position_z`, `orientation`, `spawntimesecsmin`, `spawntimesecsmax`, `wander_distance`, `health_percent`, `mana_percent`, `movement_type`, `spawn_flags`, `visibility_mod`) VALUES (32585, 4158, 0, 0, 0, 1, -6582.02, -3923.57, -58.625, 5.82247, 300, 300, 0, 100, 0, 0, 0, 0);
+
+-- https://github.com/slowtorta/turtlewow-bug-tracker/issues/2901
+-- Custom expedition mobs have a massive stealth touch radius #2901
+
+UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60893;
+UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60896;
+UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60894;
+UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60895;
+UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60898;
+UPDATE `creature_template` SET `detection_range` = 18 WHERE `entry` = 60898;
