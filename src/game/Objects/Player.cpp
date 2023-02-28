@@ -11106,8 +11106,6 @@ void Player::DestroyItem(uint8 bag, uint8 slot, bool update)
     {
         DEBUG_LOG("STORAGE: DestroyItem bag = %u, slot = %u, item = %u", bag, slot, pItem->GetEntry());
 
-        sScriptMgr.OnItemDestroy(this, pItem);
-
         // start from destroy contained items (only equipped bag can have its)
         // This if () prevents item saving crashes if the condition for a bag to be empty before being destroyed was bypassed somehow.
         if (pItem->IsBag())

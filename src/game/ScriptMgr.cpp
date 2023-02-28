@@ -2001,16 +2001,6 @@ bool ScriptMgr::OnItemUseSpell(Player* pPlayer, Item* pItem, SpellCastTargets co
     return pTempScript->pItemUseSpell(pPlayer, pItem, targets);
 }
 
-bool ScriptMgr::OnItemDestroy(Player* pPlayer, Item* pItem)
-{
-    Script* pTempScript = m_NPC_scripts[pItem->GetProto()->ScriptId];
-
-    if (!pTempScript || !pTempScript->pItemDestroy)
-        return false;
-
-    return pTempScript->pItemDestroy(pPlayer, pItem);
-}
-
 bool ScriptMgr::OnAreaTrigger(Player* pPlayer, AreaTriggerEntry const* atEntry)
 {
     Script* pTempScript = m_NPC_scripts[GetAreaTriggerScriptId(atEntry->id)];
