@@ -451,43 +451,6 @@ bool QuestAccept_npc_kinelory(Player* pPlayer, Creature* pCreature, const Quest*
     return true;
 }
 
-enum
-{
-    NPC_SUMMONED_GUARDIAN = 2794
-};
-
-static float m_afElementals[5][6] =
-{
-    { NPC_SUMMONED_GUARDIAN, -1762.679f, -1541.748f, 64.800f, 1.93f, 11683},
-    { NPC_SUMMONED_GUARDIAN, -1760.524f, -1540.173f, 64.804f, 2.06f, 11652},
-    { NPC_SUMMONED_GUARDIAN, -1759.291f, -1539.630f, 64.798f, 2.21f, 11658},
-    { NPC_SUMMONED_GUARDIAN, -1757.589f, -1537.987f, 64.808f, 2.35f, 11651},
-    { NPC_SUMMONED_GUARDIAN, -1756.658f, -1537.056f, 64.812f, 2.45f, 11663},
-};
-
-bool ItemUseSpell_item_enchanted_agate(Player* pPlayer, Item* pItem)
-{
-    if (!pPlayer)
-        return false;
-
-    if (pPlayer->GetQuestStatus(QUEST_ATTACK_ON_THE_TOWER) == QUEST_STATUS_INCOMPLETE)
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            auto& elementalCoord = m_afElementals[i];
-
-            if (Creature* summonedElemental = pPlayer->SummonCreature(elementalCoord[0], elementalCoord[1], elementalCoord[2], elementalCoord[3], elementalCoord[4], TEMPSUMMON_TIMED_OR_DEAD_DESPAWN, 300000))
-            {
-                if (CreatureData const* data = sObjectMgr.GetCreatureData(elementalCoord[5]))
-                    summonedElemental->AI()->AttackStart(pPlayer->GetMap()->GetCreature(data->GetObjectGuid(elementalCoord[5])));
-            }
-        }
-        return true;
-    }
-
-    return false;
-}
-
 void AddSC_arathi_highlands()
 {
     Script * newscript;
@@ -509,10 +472,4 @@ void AddSC_arathi_highlands()
     newscript->GetAI = &GetAI_npc_kinelory;
     newscript->pQuestAcceptNPC = &QuestAccept_npc_kinelory;
     newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "item_enchanted_agate";
-    newscript->pItemDestroy = &ItemUseSpell_item_enchanted_agate;
-    newscript->RegisterSelf();
-
 }
