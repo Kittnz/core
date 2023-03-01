@@ -26,13 +26,10 @@ go_cat_figurine (the "trap" version of GO, two different exist)
 go_northern_crystal_pylon
 go_eastern_crystal_pylon
 go_western_crystal_pylon
-go_barov_journal
 go_field_repair_bot_74A
 go_orb_of_command
 go_resonite_cask
-go_tablet_of_madness
 go_silithyste
-go_restes_sha_ni
 go_Hive_Regal_Glyphed_Crystal
 go_Hive_Ashi_Glyphed_Crystal
 go_Hive_Zora_Glyphed_Crystal
@@ -118,50 +115,6 @@ bool GOHello_go_northern_crystal_pylon(Player* pPlayer, GameObject* pGo)
     if (pPlayer->GetQuestStatus(4285) == QUEST_STATUS_INCOMPLETE)
     {
         pPlayer->AreaExploredOrEventHappens(4285);
-    }
-
-    return true;
-}
-
-
-/*######
-## go_barov_journal
-######*/
-
-bool GOHello_go_barov_journal(Player* pPlayer, GameObject* pGo)
-{
-    if (!pPlayer || !pGo)
-        return true;
-
-    if (pPlayer->HasSkill(SKILL_TAILORING) && pPlayer->GetSkillValueBase(SKILL_TAILORING) >= 285)
-    {
-        if (!pPlayer->HasSpell(26086))
-        {
-            pPlayer->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Learn recipe Felcloth Bag", GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF);
-            pPlayer->SEND_GOSSIP_MENU(8121, pGo->GetObjectGuid());
-        }
-        else
-        {
-            pPlayer->SEND_GOSSIP_MENU(8122, pGo->GetObjectGuid());
-        }
-    }
-    else
-    {
-        pPlayer->SEND_GOSSIP_MENU(8120, pGo->GetObjectGuid());
-    }
-
-    return true;
-}
-
-bool GossipSelect_go_barov_journal(Player* pPlayer, GameObject* /*pGo*/, uint32 uiSender, uint32 uiAction)
-{
-    if (!pPlayer)
-        return true;
-
-    if (uiAction == GOSSIP_ACTION_INFO_DEF)
-    {
-        pPlayer->CastSpell(pPlayer, 26095, false);
-        pPlayer->CLOSE_GOSSIP_MENU();
     }
 
     return true;
@@ -291,23 +244,6 @@ bool GOHello_go_resonite_cask(Player* /*pPlayer*/, GameObject* pGO)
     return true;
 }
 
-/*######
-## go_tablet_of_madness
-######*/
-
-bool GOHello_go_tablet_of_madness(Player* pPlayer, GameObject* /*pGo*/)
-{
-    if (!pPlayer)
-        return true;
-
-    if (pPlayer->HasSkill(SKILL_ALCHEMY) && pPlayer->GetSkillValue(SKILL_ALCHEMY) >= 300 && !pPlayer->HasSpell(24266))
-    {
-        pPlayer->CastSpell(pPlayer, 24267, false);
-    }
-
-    return true;
-}
-
 // go_silithyste
 bool GOHello_go_silithyste(Player* pPlayer, GameObject* pGo)
 {
@@ -333,36 +269,6 @@ bool GOHello_go_silithyste(Player* pPlayer, GameObject* pGo)
     else
     {
         pGo->SetLootState(GO_JUST_DEACTIVATED);
-    }
-
-    return true;
-}
-
-/*######
-## go_restes_sha_ni
-######
-SQL :
-UPDATE quest_template SET QuestFlags = QuestFlags | 2, SpecialFlags = SpecialFlags | 2 WHERE entry = 3821;
-UPDATE gameobject_template SET script_name="go_restes_sha_ni" WHERE entry=160445;
-UPDATE creature_template SET npc_flags = 0 WHERE entry=9136;
-*/
-
-bool GOHello_go_restes_sha_ni(Player* pPlayer, GameObject* pGo)
-{
-    if (!pPlayer || !pGo)
-        return true;
-
-    if (pPlayer->GetQuestStatus(3821) == QUEST_STATUS_INCOMPLETE)
-    {
-        pPlayer->AreaExploredOrEventHappens(3821);
-    }
-
-    if (!pGo->FindNearestCreature(9136, 10.0f, true))
-    {
-        if (pPlayer->GetQuestStatus(3821) == QUEST_STATUS_INCOMPLETE || pPlayer->GetQuestStatus(3821) == QUEST_STATUS_COMPLETE)
-        {
-            pGo->SummonCreature(9136, -7919.9f, -2603.8f, 223.345f, 5.13f, TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT, 60000);
-        }
     }
 
     return true;
@@ -641,12 +547,6 @@ void AddSC_go_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_barov_journal";
-    newscript->pGOHello = &GOHello_go_barov_journal;
-    newscript->pGOGossipSelect = &GossipSelect_go_barov_journal;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "go_field_repair_bot_74A";
     newscript->pGOHello = &GOHello_go_field_repair_bot_74A;
     newscript->RegisterSelf();
@@ -662,18 +562,8 @@ void AddSC_go_scripts()
     newscript->RegisterSelf();
 
     newscript = new Script;
-    newscript->Name = "go_tablet_of_madness";
-    newscript->pGOHello = &GOHello_go_tablet_of_madness;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
     newscript->Name = "go_silithyste";
     newscript->pGOHello = &GOHello_go_silithyste;
-    newscript->RegisterSelf();
-
-    newscript = new Script;
-    newscript->Name = "go_restes_sha_ni";
-    newscript->pGOHello = &GOHello_go_restes_sha_ni;
     newscript->RegisterSelf();
 
     newscript = new Script;

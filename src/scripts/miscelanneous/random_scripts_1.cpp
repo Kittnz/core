@@ -1196,6 +1196,7 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uin
 {
     if (uiAction == GOSSIP_ACTION_INFO_DEF + 1)
     {
+        pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_DISARM);
         if (pPlayer->ResetTalents(false))
         {
             pPlayer->AddAura(27880);
@@ -1203,10 +1204,12 @@ bool GOSelect_go_brainwashing_device(Player* pPlayer, GameObject* pGo, const uin
     }
     else if (uiAction == GOSSIP_ACTION_INFO_DEF + 2)
     {
+        pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_DISARM);
         pPlayer->ActivateTalentSpec(1);
     }
     else if (uiAction == GOSSIP_ACTION_INFO_DEF + 4)
     {
+        pPlayer->RemoveSpellsCausingAura(SPELL_AURA_MOD_DISARM);
         pPlayer->ActivateTalentSpec(2);
     }
     else if (uiAction == GOSSIP_ACTION_INFO_DEF + 3)
